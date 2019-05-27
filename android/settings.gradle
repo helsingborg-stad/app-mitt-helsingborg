@@ -1,0 +1,3 @@
+rootProject.name = 'mitt_helsingborg_playground'
+
+include ':app'
