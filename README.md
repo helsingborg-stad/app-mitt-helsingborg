@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="">
+  <a href="https://github.com/helsingborg-stad/app-mitt-helsingborg/blob/develop/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Mitt Helsingborg is released under the MIT license." />
   </a>
   <a href="https://www.npmjs.org/package/react-native">
