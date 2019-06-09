@@ -1,0 +1,168 @@
+version: 2
+jobs:
+  node:
+    # Directory for running steps, will default to ~/projects if explicitly stated.
+    working_directory: ~/$WORKING_DIRECTORY_PATH
+    docker:
+      - image: circleci/node:12.3.1
+
+    steps:
+      # Check out the code in the project directory.
+      - checkout
+
+      - restore_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+
+      - restore_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+
+      - run: yarn install
+
+      # Cache dependencies, faster job on rerun.
+      - save_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+          paths:
+            - ~/.cache/yarn
+
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+          paths:
+            - node_modules
+
+      - run:
+          name: Run jest test
+          command: |
+            mkdir -p test-results/jest
+            yarn run test
+      #          environment:
+      #              JEST_JUNIT_OUTPUT: test-results/jest/junit.xml
+
+      # Persist temporary files (stored up to 30 days).
+      - persist_to_workspace:
+          root: ~/$WORKING_DIRECTORY_PATH
+          paths:
+            - node_modules
+
+      # Store logs.
+      - store_test_results:
+          path: test-results
+
+      # Store artifacts (example logs, binaries, etc).
+      - store_artifacts:
+          path: test-results
+
+    #android:
+    # Not yet implemented, todo.
+
+  ios:
+    macos:
+      xcode: "10.2.1"
+    environment:
+      FASTLANE_LANE: test
+
+      # Fastlane env. variables. Must be set before uploading builds.
+      LC_ALL: en_US.UTF-8
+      LANG: en_US.UTF-8
+
+    working_directory: ~/$WORKING_DIRECTORY_PATH
+
+    shell: /bin/bash --login -o pipefail
+
+    steps:
+      - checkout
+
+      - run:
+          name: set Ruby version
+          command: echo "ruby-2.4" > ~/.ruby-version
+
+      - restore_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+
+      - restore_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+
+      - run: yarn install
+
+      - save_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+          paths:
+            - ~/.cache/yarn
+
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+          paths:
+            - node_modules
+
+      - restore_cache:
+          key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
+
+      - run:
+          name: Install all gemes for Fastlane
+          command: bundle install
+          working_directory: ios
+
+      - save_cache:
+          key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
+          paths:
+            - vendor/bundle
+
+      - run:
+          command: bundle exec fastlane $FASTLANE_LANE
+          working_directory: ios
+
+      - run:
+          name: Set up Fastlane test results
+          working_directory: ios
+          when: always
+          command: |
+            mkdir -p test-results/fastlane test-results/xcode
+            mv fastlane/report.xml test-results/fastlane
+            mv fastlane/test_output/report.junit test-results/xcode/junit.xml
+
+      - store_test_results:
+          path: ios/test-results
+
+      - store_artifacts:
+          path: ios/test-results
+
+  set_pkg_number:
+    docker:
+      - image: circleci/node:12.3.1
+    working_directory: ~/$WORKING_DIRECTORY_PATH
+
+    steps:
+      # Add SSH key used for pushing code to GIT repo.
+      - add_ssh_keys:
+          fingerprints:
+            - "0f:a2:ca:b1:2e:28:00:08:cb:c9:51:86:43:a6:a4:bb"
+
+      - checkout
+
+      - run:
+          name: Bump package version
+          command: |
+            git config user.name "CircleCI bot"
+            git config user.email "circleci@circleci"
+
+            npm version prerelease --preid=beta -m "Bumped version number to %s [ci skip]"
+
+            git push origin master
+            git push --tags
+
+workflows:
+  version: 2
+  node-ios-jobs:
+    jobs:
+      build:
+        branches:
+          only:
+            - beta
+        - node
+        - ios:
+            requires:
+              - node
+        - set_pkg_number:
+            requires:
+              - node
+              - ios
+
