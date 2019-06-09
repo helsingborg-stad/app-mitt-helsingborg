@@ -2,7 +2,7 @@ version: 2
 jobs:
   node:
     # Directory for running steps, will default to ~/projects if explicitly stated.
-    working_directory: ~/$WORKING_DIRECTORY_PATH
+    working_directory: ~/app_mitt_helsingborg
     docker:
       - image: circleci/node:12.3.1
 
@@ -39,7 +39,7 @@ jobs:
 
       # Persist temporary files (stored up to 30 days).
       - persist_to_workspace:
-          root: ~/$WORKING_DIRECTORY_PATH
+          root: ~/app_mitt_helsingborg
           paths:
             - node_modules
 
@@ -64,7 +64,7 @@ jobs:
       LC_ALL: en_US.UTF-8
       LANG: en_US.UTF-8
 
-    working_directory: ~/$WORKING_DIRECTORY_PATH
+    working_directory: ~/app_mitt_helsingborg
 
     shell: /bin/bash --login -o pipefail
 
@@ -128,7 +128,7 @@ jobs:
   set_pkg_number:
     docker:
       - image: circleci/node:12.3.1
-    working_directory: ~/$WORKING_DIRECTORY_PATH
+    working_directory: ~/app_mitt_helsingborg
 
     steps:
       # Add SSH key used for pushing code to GIT repo.
