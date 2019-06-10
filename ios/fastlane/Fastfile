@@ -23,7 +23,21 @@ platform :ios do
     # Set up log and test result paths to be easily collectible.
     setup_circle_ci
   end
-  
+
+  desc "Generate new localized screenshots"
+  lane :screenshots do
+    capture_screenshots(scheme: "mitt_helsingborg_playground")
+  end
+
+  desc "Run all tests"
+  lane :test do
+    run_tests(
+        # Note "ʀ" != "R" in device name. Copy device name from Xcode -> "Devices and Simulators" if unsure.
+        devices: ["iPhone Xʀ"],
+        scheme: "mitt_helsingborg_playground"
+    )
+  end
+
   desc "Push a new beta build to TestFlight"
   lane :beta do
     increment_build_number(xcodeproj: "mitt_helsingborg_playground.xcodeproj")
