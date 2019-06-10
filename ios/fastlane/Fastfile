@@ -16,6 +16,14 @@
 default_platform(:ios)
 
 platform :ios do
+  before_all do
+    # Shall always be run! setup_circle_ci will:
+    # Create a new temporary keychain.
+    # Switch match to readonly mode to make sure CI does not create new code signing certificates or provisioning profiles.
+    # Set up log and test result paths to be easily collectible.
+    setup_circle_ci
+  end
+  
   desc "Push a new beta build to TestFlight"
   lane :beta do
     increment_build_number(xcodeproj: "mitt_helsingborg_playground.xcodeproj")
