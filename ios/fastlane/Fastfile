@@ -39,10 +39,16 @@ platform :ios do
   end
 
   desc "Push a new beta build to TestFlight"
-  lane :beta do
-    increment_build_number(xcodeproj: "mitt_helsingborg_playground.xcodeproj")
-    build_app(scheme: "mitt_helsingborg_playground")
+    lane :beta do
+      increment_build_number(xcodeproj: "mitt_helsingborg_playground.xcodeproj")
+      build_app(
+          scheme: "mitt_helsingborg_playground",
+          export_xcargs: "-allowProvisioningUpdates",
+          export_method: "development",
+          include_bitcode: false
+      )
 
-    # upload_to_testflight
+      # Don't upload, waiting for approval in App Store.
+      # upload_to_testflight
   end
 end
