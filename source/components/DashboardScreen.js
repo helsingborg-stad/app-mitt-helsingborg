@@ -6,21 +6,26 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'whitesmoke',
     },
     header: {
         fontSize: 20
     },
 });
 
-class Home extends Component {
+class DashboardScreen extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
+        const { user } = this.props;
+
         return (
             <View style={styles.container}>
-                <Text style={styles.header}>Home screen</Text>
+                <Text style={styles.header}>Greetings {user.givenName}!</Text>
             </View>
         );
     }
 }
 
-export default Home;
+export default DashboardScreen;
