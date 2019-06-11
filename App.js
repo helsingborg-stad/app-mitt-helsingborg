@@ -14,10 +14,9 @@ import Routes from "./source/navigation/Routes";
 const styles = StyleSheet.create({
     body: {
         flex: 1,
-        marginTop: 25,
+        marginTop: 30,
     },
     nav: {
-        backgroundColor: '#F5FCFF',
         flexDirection: "row",
         justifyContent: "space-around"
     },
@@ -36,17 +35,19 @@ const styles = StyleSheet.create({
 });
 class App extends Component {
     render() {
-        console.log("hej");
 
         return (
             <NativeRouter>
                 <View style={styles.body}>
                     <View style={styles.nav}>
-                        <Link to="/" underlayColor="#f0f4f7" style={styles.navItem}>
-                            <Text>Home</Text>
-                        </Link>
                         <Link to="/login" underlayColor="#f0f4f7" style={styles.navItem}>
-                            <Text>Login</Text>
+                            <Text>Logga in</Text>
+                        </Link>
+                        <Link to="/editlogin" underlayColor="#f0f4f7" style={styles.navItem}>
+                            <Text>Ändra inlogg</Text>
+                        </Link>
+                        <Link to="/" underlayColor="#f0f4f7" style={styles.navItem}>
+                            <Text>Start</Text>
                         </Link>
                     </View>
 
