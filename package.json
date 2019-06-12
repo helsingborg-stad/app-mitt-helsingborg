@@ -1,6 +1,6 @@
 {
   "name": "mitt_helsingborg_playground",
-  "version": "0.0.2-beta.0",
+  "version": "0.0.2-beta.1",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
