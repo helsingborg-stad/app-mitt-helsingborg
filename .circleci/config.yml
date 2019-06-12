@@ -146,7 +146,7 @@ jobs:
 
             npm version prerelease --preid=beta -m "Bumped version number to %s [ci skip]"
 
-            git push origin master
+            git push origin beta
             git push --tags
 
 workflows:
