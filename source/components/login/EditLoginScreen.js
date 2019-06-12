@@ -1,9 +1,20 @@
 import React, { Component } from 'react';
-import { StyleSheet, TextInput, Text, View, Switch } from 'react-native';
+import { StyleSheet, TextInput, Text, View, Switch, Alert } from 'react-native';
+import { validatePno } from "../../helpers/ValidationHelper";
 
 class EditLoginScreen extends Component {
     constructor(props) {
         super(props);
+    }
+
+    /**
+     * Validate personal number
+    */
+    validatePno = () => {
+        const { appSettings } = this.props;
+        if (!validatePno(appSettings.pno)) {
+            Alert.alert("Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.");
+        }
     }
 
     render() {
@@ -13,7 +24,12 @@ class EditLoginScreen extends Component {
                 <Text style={styles.label}>Personnummer</Text>
                 <TextInput
                     style={styles.inputField}
+                    keyboardType='number-pad'
+                    returnKeyType='done'
+                    maxLength={12}
+                    placeholder={'ÅÅÅÅMMDDXXXX'}
                     onChangeText={(value) => this.props.setPno(value)}
+                    onSubmitEditing={this.validatePno}
                     value={this.props.appSettings.pno}
                 />
 

@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { NativeRouter } from 'react-router-native';
 import Routes from "../navigation/Routes";
 import Navigation from "./shared/Navigation";
+import { sanitizePno } from "../helpers/ValidationHelper";
 
 class App extends Component {
     constructor(props) {
@@ -18,10 +19,11 @@ class App extends Component {
     }
 
     setPno(pno) {
-        console.log(pno);
+        pno = sanitizePno(pno);
+
         this.setState({
             appSettings: {
-                pno: pno
+                pno
             }
         });
     }

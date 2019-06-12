@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { Link } from 'react-router-native';
-import { validatePno } from "../../helpers/ValidationHelper";
 import { authorizeUser } from "../../services/UserService";
 
 class LoginScreen extends Component {
@@ -13,28 +12,17 @@ class LoginScreen extends Component {
         };
     }
 
-    authenticateUser = () => {
+    authenticateUser = async () => {
         this.setState({ isLoading: true });
-
         const { appSettings } = this.props;
 
-        // validate personal number.
-        if (validatePno(appSettings.pno)) {
-            setTimeout(() => {
-                console.log("PNO regex validated");
-                // send auth request to api.
-                this.sendAuthorizeRequest(appSettings.pno);
-            }, 1000);
-        } else {
-            console.log("PNO regex Failed");
+        if (!appSettings.pno) {
+            Alert.alert("Personnummer saknas.");
             this.setState({ isLoading: false });
-            Alert.alert("Felaktigt format.");
+            return;
         }
-    };
 
-    sendAuthorizeRequest = async (personalNumber) => {
-
-        await authorizeUser(personalNumber)
+        await authorizeUser(appSettings.pno)
             .then(authResponse => {
                 console.log("authResponse ok", authResponse);
                 console.log("USER", authResponse.data.user);
@@ -132,6 +120,6 @@ const styles = StyleSheet.create({
     },
     editLoginLink: {
         alignSelf: 'flex-end',
-        marginTop: 8,
+        marginTop: 16,
     }
 });
