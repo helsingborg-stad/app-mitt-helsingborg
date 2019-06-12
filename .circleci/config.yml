@@ -134,7 +134,7 @@ jobs:
       # Add SSH key used for pushing code to GIT repo.
       - add_ssh_keys:
           fingerprints:
-            - "0f:a2:ca:b1:2e:28:00:08:cb:c9:51:86:43:a6:a4:bb"
+            - "7b:cd:43:39:07:e5:19:96:ac:36:7d:bb:0d:ce:1d:bd"
 
       - checkout
 
