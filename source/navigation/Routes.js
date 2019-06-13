@@ -6,7 +6,7 @@ import LoginScreen from "../components/login/LoginScreen";
 class Routes extends Component {
 
     render() {
-        const { isAuthed, user, appSettings, setPno, setUser } = this.props;
+        const { isAuthed, validPno, user, appSettings, setPno, setUser } = this.props;
 
         return (
             <>
@@ -26,6 +26,7 @@ class Routes extends Component {
                             isAuthed={isAuthed}
                             user={user}
                             appSettings={appSettings}
+                            validPno={validPno}
                             setUser={setUser}
                             setPno={setPno} />
                     ) : (<Redirect to="/" />)

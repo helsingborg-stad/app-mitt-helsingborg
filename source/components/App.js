@@ -4,6 +4,7 @@ import { NativeRouter } from 'react-router-native';
 import Routes from "../navigation/Routes";
 import Navigation from "./shared/Navigation";
 import { sanitizePno } from "../helpers/ValidationHelper";
+import { validatePno } from "../helpers/ValidationHelper";
 
 class App extends Component {
     constructor(props) {
@@ -12,14 +13,33 @@ class App extends Component {
         this.state = {
             isAuthed: false,
             user: {},
+            validPno: false,
             appSettings: {
                 pno: ''
             }
         }
     }
 
+    componentDidMount() {
+        const { appSettings } = this.state;
+        this.validatePno(appSettings.pno);
+    }
+
+    /**
+     * Validate personal number
+    */
+    validatePno = (pno) => {
+        if (validatePno(pno)) {
+            this.setState({ validPno: true });
+        } else {
+            this.setState({ validPno: false });
+        }
+    }
+
     setPno(pno) {
         pno = sanitizePno(pno);
+
+        this.validatePno(pno);
 
         this.setState({
             appSettings: {

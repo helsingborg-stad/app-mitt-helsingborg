@@ -2,20 +2,26 @@ import React, { Component } from 'react';
 import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, Linking, TextInput } from 'react-native';
 import { Link } from 'react-router-native';
 import { authorizeUser } from "../../services/UserService";
-import { validatePno } from "../../helpers/ValidationHelper";
 
 class LoginScreen extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            validPno: false,
+            authLocalMachine: false,
             isLoading: false,
         };
     }
 
     componentDidMount() {
-        // TODO: Check if personal number is already set
+        // Set to true if BankID should be triggered from local machine
+        const { validPno } = this.props;
+
+        if (validPno) {
+            this.setState({
+                authLocalMachine: true
+            })
+        }
     }
 
     authenticateUser = async () => {
@@ -50,21 +56,16 @@ class LoginScreen extends Component {
         this.setState({ isLoading: false });
     }
 
-    /**
-     * Validate personal number
-    */
-    validatePno = () => {
-        const { appSettings } = this.props;
-        if (validatePno(appSettings.pno)) {
-            this.setState({ validPno: true });
-        } else {
-            this.setState({ validPno: false });
+    checkPno = () => {
+        const { validPno } = this.props;
+        if (!validPno) {
             Alert.alert("Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.");
         }
     }
 
     render() {
-        const { isLoading, validPno } = this.state;
+        const { validPno } = this.props;
+        const { isLoading, authLocalMachine } = this.state;
 
         return (
             <>
@@ -76,17 +77,23 @@ class LoginScreen extends Component {
 
                         <View style={styles.loginContainer}>
                             <View>
-                                <Text style={styles.label}>Personnummer</Text>
-                                <TextInput
-                                    style={styles.inputField}
-                                    keyboardType='number-pad'
-                                    returnKeyType='done'
-                                    maxLength={12}
-                                    placeholder={'ÅÅÅÅMMDDXXXX'}
-                                    onChangeText={(value) => this.props.setPno(value)}
-                                    onSubmitEditing={this.validatePno}
-                                    value={this.props.appSettings.pno}
-                                />
+                                {!authLocalMachine &&
+                                    <>
+                                        <Text style={styles.label}>Personnummer</Text>
+
+                                        <TextInput
+                                            style={styles.inputField}
+                                            keyboardType='number-pad'
+                                            returnKeyType='done'
+                                            maxLength={12}
+                                            placeholder={'ÅÅÅÅMMDDXXXX'}
+                                            onChangeText={(value) => this.props.setPno(value)}
+                                            onSubmitEditing={this.checkPno}
+                                            value={this.props.appSettings.pno}
+                                        />
+                                    </>
+                                }
+
                                 <TouchableOpacity
                                     style={[styles.button, !validPno ? styles.buttonDisabled : '']}
                                     onPress={this.authenticateUser}
