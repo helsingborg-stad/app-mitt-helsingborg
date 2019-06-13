@@ -58,6 +58,6 @@ const styles = StyleSheet.create({
     body: {
         flex: 1,
         paddingTop: 30,
-        backgroundColor: 'whitesmoke',
+        backgroundColor: '#C7C7CC',
     }
 });

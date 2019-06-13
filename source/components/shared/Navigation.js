@@ -13,9 +13,6 @@ class Navigation extends Component {
                 <Link to="/login" underlayColor="#f0f4f7" style={styles.navItem}>
                     <Text>Logga in</Text>
                 </Link>
-                <Link to="/editlogin" underlayColor="#f0f4f7" style={styles.navItem}>
-                    <Text>Ändra inlogg</Text>
-                </Link>
                 <Link to="/" underlayColor="#f0f4f7" style={styles.navItem}>
                     <Text>Dashboard</Text>
                 </Link>

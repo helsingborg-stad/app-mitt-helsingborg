@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-native';
 import DashboardScreen from "../components/DashboardScreen";
 import LoginScreen from "../components/login/LoginScreen";
-import EditLoginScreen from "../components/login/EditLoginScreen";
 
 class Routes extends Component {
 
@@ -27,18 +26,12 @@ class Routes extends Component {
                             isAuthed={isAuthed}
                             user={user}
                             appSettings={appSettings}
-                            setUser={setUser} />
+                            setUser={setUser}
+                            setPno={setPno} />
                     ) : (<Redirect to="/" />)
                     )
                 } />
 
-                <Route path="/editlogin" render={(props) =>
-                    <EditLoginScreen {...props}
-                        isAuthed={isAuthed}
-                        user={user}
-                        appSettings={appSettings}
-                        setPno={setPno} />
-                } />
             </>
         );
     }
