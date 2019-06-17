@@ -3,8 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { NativeRouter } from 'react-router-native';
 import Routes from "../navigation/Routes";
 import Navigation from "./shared/Navigation";
-import { sanitizePno } from "../helpers/ValidationHelper";
-import { validatePno } from "../helpers/ValidationHelper";
+import { sanitizePno, validatePno } from "../helpers/ValidationHelper";
 
 class App extends Component {
     constructor(props) {
@@ -16,6 +15,7 @@ class App extends Component {
             validPno: false,
             appSettings: {
                 pno: ''
+                //pno: '195711260629'
             }
         }
     }

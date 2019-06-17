@@ -1,32 +1,37 @@
 import React, { Component } from 'react';
 import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, Linking, TextInput } from 'react-native';
-import { Link } from 'react-router-native';
-import { authorizeUser } from "../../services/UserService";
+import { authorizeUser, openBankId } from "../../services/UserService";
 
 class LoginScreen extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            authLocalMachine: false,
+            hasBankId: false,
             isLoading: false,
         };
     }
 
     componentDidMount() {
-        // Set to true if BankID should be triggered from local machine
-        const { validPno } = this.props;
-
-        if (validPno) {
-            this.setState({
-                authLocalMachine: true
+        // Test if BankID is installed
+        Linking.canOpenURL('bankid:///')
+            .then((supported) => {
+                if (supported) {
+                    console.log("Has bankid");
+                    this.setState({
+                        hasBankId: true
+                    });
+                } else {
+                    console.log("Can't open url: bankid:///");
+                }
             })
-        }
+            .catch((err) => console.error('An error occurred', err));
     }
 
     authenticateUser = async () => {
         this.setState({ isLoading: true });
         const { appSettings } = this.props;
+        const { hasBankId } = this.state;
 
         if (!appSettings.pno) {
             Alert.alert("Personnummer saknas");
@@ -34,18 +39,23 @@ class LoginScreen extends Component {
             return;
         }
 
-        // TODO: Open BankID app on same machine if installed
-        // Linking.openURL('maps://app?saddr=Cupertino&San+Francisco');
+        if (hasBankId) {
+            /**
+             * TODO:
+             * Get autostart token
+             * Also fix redirect param, it fails when autostarttoken is added
+             */
+            const autoStartToken = '';
+            openBankId(autoStartToken);
+        }
 
         await authorizeUser(appSettings.pno)
             .then(authResponse => {
-                console.log("authResponse ok", authResponse);
-                console.log("USER", authResponse.data.user);
-
+                console.log("Token", authResponse.data.token);
                 this.props.setUser(authResponse.data.user);
             })
             .catch(error => {
-                // TODO: show error message
+                // TODO: Fix error notice
                 console.log("authResponse Fail", error);
                 this.setState({ isLoading: false });
                 Alert.alert("Något fick fel");
@@ -65,7 +75,7 @@ class LoginScreen extends Component {
 
     render() {
         const { validPno } = this.props;
-        const { isLoading, authLocalMachine } = this.state;
+        const { isLoading } = this.state;
 
         return (
             <>
@@ -77,22 +87,18 @@ class LoginScreen extends Component {
 
                         <View style={styles.loginContainer}>
                             <View>
-                                {!authLocalMachine &&
-                                    <>
-                                        <Text style={styles.label}>Personnummer</Text>
+                                <Text style={styles.label}>Personnummer</Text>
 
-                                        <TextInput
-                                            style={styles.inputField}
-                                            keyboardType='number-pad'
-                                            returnKeyType='done'
-                                            maxLength={12}
-                                            placeholder={'ÅÅÅÅMMDDXXXX'}
-                                            onChangeText={(value) => this.props.setPno(value)}
-                                            onSubmitEditing={this.checkPno}
-                                            value={this.props.appSettings.pno}
-                                        />
-                                    </>
-                                }
+                                <TextInput
+                                    style={styles.inputField}
+                                    keyboardType='number-pad'
+                                    returnKeyType='done'
+                                    maxLength={12}
+                                    placeholder={'ÅÅÅÅMMDDXXXX'}
+                                    onChangeText={(value) => this.props.setPno(value)}
+                                    onSubmitEditing={this.checkPno}
+                                    value={this.props.appSettings.pno}
+                                />
 
                                 <TouchableOpacity
                                     style={[styles.button, !validPno ? styles.buttonDisabled : '']}
