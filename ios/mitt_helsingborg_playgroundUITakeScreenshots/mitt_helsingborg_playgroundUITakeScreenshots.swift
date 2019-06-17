@@ -32,9 +32,7 @@ class mitt_helsingborg_playgroundUITakeScreenshots: XCTestCase {
     func testExample() {
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        XCUIApplication()/*@START_MENU_TOKEN@*/.staticTexts["Welcome to React Native!"].swipeRight()/*[[".otherElements.matching(identifier: \"Welcome to React Native! (Now with react-navigation 🤘) To get started, edit App.js Press Cmd+R to reload,\\nCmd+D or shake for dev menu\").staticTexts[\"Welcome to React Native!\"]",".swipeDown()",".swipeRight()",".staticTexts[\"Welcome to React Native!\"]"],[[[-1,3,1],[-1,0,1]],[[-1,2],[-1,1]]],[0,0]]@END_MENU_TOKEN@*/
         snapshot("01WelcomeScreen")
-        
     }
 
 }

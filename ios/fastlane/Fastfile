@@ -33,7 +33,7 @@ platform :ios do
   lane :test do
     run_tests(
         # Note "ʀ" != "R" in device name. Copy device name from Xcode -> "Devices and Simulators" if unsure.
-        devices: ["iPhone Xʀ"],
+        devices: ["iPhone X"],
         scheme: "mitt_helsingborg_playground"
     )
   end

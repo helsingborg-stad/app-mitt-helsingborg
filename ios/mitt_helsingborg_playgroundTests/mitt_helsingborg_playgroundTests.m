@@ -11,8 +11,8 @@
 #import <React/RCTLog.h>
 #import <React/RCTRootView.h>
 
-#define TIMEOUT_SECONDS 600
-#define TEXT_TO_LOOK_FOR @"Welcome to React Native!"
+#define TIMEOUT_SECONDS 60*3
+#define TEXT_TO_LOOK_FOR @"Personnummer"
 
 @interface mitt_helsingborg_playgroundTests : XCTestCase
 
