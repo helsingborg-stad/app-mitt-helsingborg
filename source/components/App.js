@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { NativeRouter } from 'react-router-native';
 import Routes from "../navigation/Routes";
 import Navigation from "./shared/Navigation";
-import { sanitizePno, validatePno } from "../helpers/ValidationHelper";
 
 class App extends Component {
     constructor(props) {
@@ -12,46 +11,19 @@ class App extends Component {
         this.state = {
             isAuthed: false,
             user: {},
-            validPno: false,
-            appSettings: {
-                pno: ''
-                //pno: '195711260629'
-            }
         }
-    }
-
-    componentDidMount() {
-        const { appSettings } = this.state;
-        this.validatePno(appSettings.pno);
-    }
-
-    /**
-     * Validate personal number
-    */
-    validatePno = (pno) => {
-        if (validatePno(pno)) {
-            this.setState({ validPno: true });
-        } else {
-            this.setState({ validPno: false });
-        }
-    }
-
-    setPno(pno) {
-        pno = sanitizePno(pno);
-
-        this.validatePno(pno);
-
-        this.setState({
-            appSettings: {
-                pno
-            }
-        });
     }
 
     setUser(user) {
         this.setState({
             user,
             isAuthed: true
+        });
+    }
+
+    setPno(pno) {
+        this.setState({
+            pno
         });
     }
 
@@ -63,7 +35,6 @@ class App extends Component {
                     <Navigation />
                     <Routes
                         {...this.state}
-                        setPno={this.setPno.bind(this)}
                         setUser={this.setUser.bind(this)}
                     />
                 </View>

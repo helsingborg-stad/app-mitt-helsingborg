@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
 import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, Linking, TextInput } from 'react-native';
 import { authorizeUser, openBankId } from "../../services/UserService";
+import { sanitizePno, validatePno } from "../../helpers/ValidationHelper";
 
 class LoginScreen extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            validPno: false,
             hasBankId: false,
             isLoading: false,
+            appSettings: {
+                pno: '',
+                autoStartToken: ''
+            }
         };
     }
 
     componentDidMount() {
+        const { appSettings } = this.state;
+        this.validatePno(appSettings.pno);
+
         // Test if BankID is installed
         Linking.canOpenURL('bankid:///')
             .then((supported) => {
@@ -28,10 +37,32 @@ class LoginScreen extends Component {
             .catch((err) => console.error('An error occurred', err));
     }
 
+    /**
+     * Validate personal number
+    */
+    validatePno = (pno) => {
+        if (validatePno(pno)) {
+            this.setState({ validPno: true });
+        } else {
+            this.setState({ validPno: false });
+        }
+    }
+
+    setPno(pno) {
+        pno = sanitizePno(pno);
+
+        this.validatePno(pno);
+
+        this.setState({
+            appSettings: {
+                pno
+            }
+        });
+    }
+
     authenticateUser = async () => {
         this.setState({ isLoading: true });
-        const { appSettings } = this.props;
-        const { hasBankId } = this.state;
+        const { hasBankId, appSettings } = this.state;
 
         if (!appSettings.pno) {
             Alert.alert("Personnummer saknas");
@@ -42,11 +73,10 @@ class LoginScreen extends Component {
         if (hasBankId) {
             /**
              * TODO:
-             * Get autostart token
+             * Get valid autostart token
              * Also fix redirect param, it fails when autostarttoken is added
              */
-            const autoStartToken = '';
-            openBankId(autoStartToken);
+            openBankId(appSettings.autoStartToken);
         }
 
         await authorizeUser(appSettings.pno)
@@ -67,15 +97,14 @@ class LoginScreen extends Component {
     }
 
     checkPno = () => {
-        const { validPno } = this.props;
+        const { validPno } = this.state;
         if (!validPno) {
             Alert.alert("Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.");
         }
     }
 
     render() {
-        const { validPno } = this.props;
-        const { isLoading } = this.state;
+        const { isLoading, validPno, appSettings } = this.state;
 
         return (
             <>
@@ -95,9 +124,9 @@ class LoginScreen extends Component {
                                     returnKeyType='done'
                                     maxLength={12}
                                     placeholder={'ÅÅÅÅMMDDXXXX'}
-                                    onChangeText={(value) => this.props.setPno(value)}
+                                    onChangeText={(value) => this.setPno(value)}
                                     onSubmitEditing={this.checkPno}
-                                    value={this.props.appSettings.pno}
+                                    value={appSettings.pno}
                                 />
 
                                 <TouchableOpacity
