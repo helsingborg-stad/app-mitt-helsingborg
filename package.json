@@ -1,6 +1,6 @@
 {
     "name": "mitt_helsingborg_playground",
-    "version": "0.0.2-beta.1",
+    "version": "0.0.2-beta.2",
     "private": true,
     "scripts": {
         "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -25,11 +25,11 @@
     },
     "jest": {
         "preset": "react-native",
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|react-router-native|react-clone-referenced-element|@react-native-community|react-navigation-header-buttons|react-navigation-stack|@react-navigation)"
-    ],
-    "setupFiles": [
-      "./node_modules/react-native-gesture-handler/jestSetup.js"
-    ]
-  }
+        "transformIgnorePatterns": [
+            "node_modules/(?!(jest-)?react-native|react-router-native|react-clone-referenced-element|@react-native-community|react-navigation-header-buttons|react-navigation-stack|@react-navigation)"
+        ],
+        "setupFiles": [
+            "./node_modules/react-native-gesture-handler/jestSetup.js"
+        ]
+    }
 }
