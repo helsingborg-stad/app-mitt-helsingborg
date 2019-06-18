@@ -1,6 +1,7 @@
 import env from 'react-native-config';
 import axios from "axios";
 import { Linking } from 'react-native';
+import { NetworkInfo } from 'react-native-network-info';
 
 /**
  * Open BankID app
@@ -39,14 +40,15 @@ openURL = (url) => {
  * Used to trigger BankID from other devices.
  * @param {string} pno
  */
-export const authorizeUser = (pno) => {
+export const authorizeUser = async (pno) => {
     const host = env.MYPAGES_API_URL;
     const endpoint = "/auth/";
     const apiUrl = `${host}${endpoint}`;
+    const ipAddress = await NetworkInfo.getIPAddress(ip => ip);
 
     const params = {
         pno,
-        endUserIp: "0.0.0.0", // TODO: Need a way to capture the user ip address either here or move it to the backend.
+        endUserIp: ipAddress,
     };
 
     console.log("apiUrl", apiUrl);
