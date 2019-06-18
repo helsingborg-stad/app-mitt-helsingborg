@@ -40,8 +40,24 @@
 #endif
 }
 
+/**
+* Custom code below
+*/
+
+// Keep app alive for a short time while in the background
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+  UIBackgroundTaskIdentifier taskId = [application beginBackgroundTaskWithExpirationHandler:nil];
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    // do nothing for 60 seconds
+    [NSThread sleepForTimeInterval:60];
+    [application endBackgroundTask:taskId];
+  });
+}
+
+// Activates custom URl schemes
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
-    sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
 
 return [RCTLinkingManager application:application openURL:url
