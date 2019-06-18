@@ -12,6 +12,7 @@
         "react-native": "0.59.8",
         "react-native-config": "^0.11.7",
         "react-native-gesture-handler": "^1.2.1",
+        "react-native-network-info": "^5.0.1",
         "react-native-screens": "^1.0.0-alpha.22",
         "react-router-native": "^5.0.0"
     },
