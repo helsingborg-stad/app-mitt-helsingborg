@@ -14,16 +14,32 @@ class App extends Component {
         }
     }
 
-    setUser(user) {
+    signOut = (e) => {
+        e.preventDefault();
+        console.log("Sign out");
+        this.setState({
+            isAuthed: false
+        });
+    }
+
+    /**
+     * Login a user
+     * TODO:
+     * - Save user to db and create a session
+     */
+    loginUser = (user) => {
+        console.log(user);
+
         this.setState({
             user,
             isAuthed: true
         });
     }
 
-    setPno(pno) {
+    resetUser = () => {
+        console.log("reset user");
         this.setState({
-            pno
+            user: {}
         });
     }
 
@@ -32,10 +48,13 @@ class App extends Component {
             <NativeRouter>
                 <View style={styles.body}>
                     {/* Nav for dev purposes, delete me later */}
-                    <Navigation />
+                    <Navigation
+                        signOut={this.signOut}
+                    />
                     <Routes
                         {...this.state}
-                        setUser={this.setUser.bind(this)}
+                        loginUser={this.loginUser}
+                        resetUser={this.resetUser}
                     />
                 </View>
             </NativeRouter>
