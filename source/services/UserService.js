@@ -38,6 +38,26 @@ openURL = (url) => {
 };
 
 /**
+ * Test of URL can be opened
+ */
+canOpenUrl = async (url) => {
+    return Linking.canOpenURL(url)
+        .then((supported) => {
+            if (supported) {
+                console.log("BankID app is installed");
+                return true;
+            } else {
+                console.log("BankID is not installed");
+                return false;
+            }
+        })
+        .catch((err) => {
+            console.error('An error occurred', err);
+            return false;
+        });
+}
+
+/**
  * Make a request to BankID API.
  * Used to trigger BankID from other devices.
  *
@@ -63,19 +83,14 @@ export const authorizeUser = async (pno) => {
     console.log("apiUrl", apiUrl);
     console.log('params', params);
 
-    // Test if BankID is installed
-    Linking.canOpenURL('bankid:///')
-        .then((supported) => {
-            if (supported) {
-                console.log("BankID app is installed");
-                // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbm8iOiIxOTU3MTEyNjA2MjkiLCJpYXQiOjE1NjA4NTgzNDQsImV4cCI6MTU2MDk0NDc0NH0.qOEKtIG8wMgjN_RlWF7KuRFU85Tc1nrxBtUXeqG8aBQ';
-                // this.openBankId(token);
-                this.openBankId();
-            } else {
-                console.log("BankID is not installed");
-            }
-        })
-        .catch((err) => console.error('An error occurred', err));
+    const canOpenUrl = await this.canOpenUrl('bankid:///');
+
+    console.log("canOpenUrl", canOpenUrl);
+
+    if (canOpenUrl) {
+        //const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbm8iOiIxOTU3MTEyNjA2MjkiLCJpYXQiOjE1NjA4NTgzNDQsImV4cCI6MTU2MDk0NDc0NH0.qOEKtIG8wMgjN_RlWF7KuRFU85Tc1nrxBtUXeqG8aBQ';
+        this.openBankId();
+    }
 
     return axiosClient.post(
         apiUrl,
