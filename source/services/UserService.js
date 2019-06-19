@@ -2,16 +2,20 @@ import env from 'react-native-config';
 import axios from "axios";
 import { Linking } from 'react-native';
 import { NetworkInfo } from 'react-native-network-info';
+import { canOpenUrl } from '../helpers/LinkHelper';
 
 /**
  * Open BankID app
  * @param {string} bankIdClientUrl
  */
-openBankId = (autoStartToken = null) => {
+openBankIdApp = async (autoStartToken = null) => {
     const bankIdClientUrl = this.buildBankIdClientUrl(autoStartToken);
-    console.log(bankIdClientUrl);
+    console.log("bankIdClientUrl", bankIdClientUrl);
 
-    return this.openURL(bankIdClientUrl);
+    const isBankidInstalled = await canOpenUrl('bankid:///');
+    console.log("isBankidInstalled", isBankidInstalled);
+
+    return isBankidInstalled ? this.openURL(bankIdClientUrl) : false;
 };
 
 /**
@@ -36,26 +40,6 @@ openURL = (url) => {
         .then(() => true)
         .catch(() => false);
 };
-
-/**
- * Test of URL can be opened
- */
-canOpenUrl = async (url) => {
-    return Linking.canOpenURL(url)
-        .then((supported) => {
-            if (supported) {
-                console.log("BankID app is installed");
-                return true;
-            } else {
-                console.log("BankID is not installed");
-                return false;
-            }
-        })
-        .catch((err) => {
-            console.error('An error occurred', err);
-            return false;
-        });
-}
 
 /**
  * Make a request to BankID API.
@@ -83,14 +67,7 @@ export const authorizeUser = async (pno) => {
     console.log("apiUrl", apiUrl);
     console.log('params', params);
 
-    const canOpenUrl = await this.canOpenUrl('bankid:///');
-
-    console.log("canOpenUrl", canOpenUrl);
-
-    if (canOpenUrl) {
-        //const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbm8iOiIxOTU3MTEyNjA2MjkiLCJpYXQiOjE1NjA4NTgzNDQsImV4cCI6MTU2MDk0NDc0NH0.qOEKtIG8wMgjN_RlWF7KuRFU85Tc1nrxBtUXeqG8aBQ';
-        this.openBankId();
-    }
+    this.openBankIdApp();
 
     return axiosClient.post(
         apiUrl,
@@ -107,7 +84,6 @@ export const authorizeUser = async (pno) => {
             return Promise.reject(error);
         });
 };
-
 
 const axiosClient = axios.create({
     headers: {

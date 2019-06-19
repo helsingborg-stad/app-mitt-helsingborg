@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput } from 'react-native';
+import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput, Linking, Button } from 'react-native';
 import { authorizeUser } from "../../services/UserService";
+import { canOpenUrl } from "../../helpers/LinkHelper";
 import { sanitizePno, validatePno } from "../../helpers/ValidationHelper";
 
 class LoginScreen extends Component {
@@ -8,9 +9,10 @@ class LoginScreen extends Component {
         super(props);
 
         this.state = {
+            isBankidInstalled: false,
             validPno: false,
             isLoading: false,
-            personalNumber: '',
+            personalNumberInput: '',
         };
     }
 
@@ -18,11 +20,22 @@ class LoginScreen extends Component {
         const { user } = this.props;
         const personalNumber = typeof user.personalNumber !== 'undefined' && user.personalNumber ? user.personalNumber : '';
 
+        this.setState({
+            personalNumberInput: personalNumber
+        });
+
         this.validatePno(personalNumber);
 
-        this.setState({
-            personalNumber
-        })
+        this.isBankidInstalled();
+    }
+
+    isBankidInstalled = async () => {
+        const isBankidInstalled = await canOpenUrl('bankid:///');
+        console.log("isBankidInstalled", isBankidInstalled);
+
+        if (isBankidInstalled) {
+            this.setState({ isBankidInstalled: true });
+        }
     }
 
     /**
@@ -42,21 +55,21 @@ class LoginScreen extends Component {
         this.validatePno(pno);
 
         this.setState({
-            personalNumber: pno
+            personalNumberInput: pno
         });
     }
 
     authenticateUser = async () => {
         this.setState({ isLoading: true });
-        const { personalNumber } = this.state;
+        const { personalNumberInput } = this.state;
 
-        if (!personalNumber) {
+        if (!personalNumberInput) {
             Alert.alert("Personnummer saknas");
             this.setState({ isLoading: false });
             return;
         }
 
-        await authorizeUser(personalNumber)
+        await authorizeUser(personalNumberInput)
             .then(authResponse => {
                 console.log("Token", authResponse.data.token);
                 this.props.loginUser(authResponse.data.user);
@@ -82,7 +95,7 @@ class LoginScreen extends Component {
 
     render() {
         const { user, resetUser } = this.props;
-        const { isLoading, validPno, personalNumber } = this.state;
+        const { isLoading, validPno, personalNumberInput, isBankidInstalled } = this.state;
 
         return (
             <>
@@ -105,12 +118,16 @@ class LoginScreen extends Component {
                                         <Text style={[styles.buttonText, !validPno ? styles.buttonTextDisabled : '']}>Logga in</Text>
                                     </TouchableOpacity>
                                     <View style={styles.loginFooter}>
-                                        <Text onPress={resetUser}>Logga in som en annan användare</Text>
+                                        <Button
+                                            title="Logga in som en annan användare"
+                                            color="#000"
+                                            onPress={resetUser}
+                                        />
                                     </View>
                                 </>
                             ) : (
                                     <>
-                                        <Text style={styles.loginText}>Logga in med BankID</Text>
+                                        <Text style={styles.infoText}>Logga in med BankID</Text>
                                         <View style={styles.paper}>
                                             <Text style={styles.label}>Personnummer</Text>
                                             <TextInput
@@ -121,7 +138,7 @@ class LoginScreen extends Component {
                                                 placeholder={'ÅÅÅÅMMDDXXXX'}
                                                 onChangeText={(value) => this.setPno(value)}
                                                 onSubmitEditing={this.checkPno}
-                                                value={personalNumber}
+                                                value={personalNumberInput}
                                             />
 
                                             <TouchableOpacity
@@ -135,7 +152,14 @@ class LoginScreen extends Component {
                                         </View>
 
                                         <View style={styles.loginFooter}>
-                                            <Text>Läs mer om hur du skaffar mobilt BankID</Text>
+                                            <Button
+                                                title="Läs mer om hur du skaffar mobilt BankID"
+                                                color="#000"
+                                                onPress={() => {
+                                                    Linking.openURL("https://support.bankid.com/sv/bankid/mobilt-bankid")
+                                                        .catch(() => console.log("Couldnt open url"));
+                                                }}
+                                            />
                                         </View>
                                     </>
                                 )}
@@ -145,6 +169,9 @@ class LoginScreen extends Component {
                         <View style={styles.container}>
                             <View style={styles.content}>
                                 <ActivityIndicator size="large" color="slategray" />
+                                {!isBankidInstalled &&
+                                    <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
+                                }
                             </View>
                             <View style={styles.loginContainer}>
                                 <TouchableOpacity
@@ -217,10 +244,11 @@ const styles = StyleSheet.create({
         fontSize: 35,
         textAlign: 'center',
     },
-    loginText: {
-        fontSize: 16,
+    infoText: {
+        fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'center',
+        marginTop: 24,
         marginBottom: 24
     },
     label: {
