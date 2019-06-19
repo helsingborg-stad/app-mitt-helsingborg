@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, Linking, TextInput } from 'react-native';
-import { authorizeUser, openBankId } from "../../services/UserService";
+import { authorizeUser } from "../../services/UserService";
 import { sanitizePno, validatePno } from "../../helpers/ValidationHelper";
 
 class LoginScreen extends Component {
@@ -9,11 +9,9 @@ class LoginScreen extends Component {
 
         this.state = {
             validPno: false,
-            hasBankId: false,
             isLoading: false,
             appSettings: {
-                pno: '',
-                autoStartToken: ''
+                pno: '195711260629',
             }
         };
     }
@@ -21,20 +19,6 @@ class LoginScreen extends Component {
     componentDidMount() {
         const { appSettings } = this.state;
         this.validatePno(appSettings.pno);
-
-        // Test if BankID is installed
-        Linking.canOpenURL('bankid:///')
-            .then((supported) => {
-                if (supported) {
-                    console.log("Has bankid");
-                    this.setState({
-                        hasBankId: true
-                    });
-                } else {
-                    console.log("Can't open url: bankid:///");
-                }
-            })
-            .catch((err) => console.error('An error occurred', err));
     }
 
     /**
@@ -62,21 +46,12 @@ class LoginScreen extends Component {
 
     authenticateUser = async () => {
         this.setState({ isLoading: true });
-        const { hasBankId, appSettings } = this.state;
+        const { appSettings } = this.state;
 
         if (!appSettings.pno) {
             Alert.alert("Personnummer saknas");
             this.setState({ isLoading: false });
             return;
-        }
-
-        if (hasBankId) {
-            /**
-             * TODO:
-             * Get valid autostart token
-             * Also fix redirect param, it fails when autostarttoken is added
-             */
-            openBankId(appSettings.autoStartToken);
         }
 
         await authorizeUser(appSettings.pno)
