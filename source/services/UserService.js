@@ -81,25 +81,25 @@ export const authorizeUser = (personalNumber) =>
 
         // Poll /collect/ endpoint every 2nd second until auth either success or fails
         const interval = setInterval(async () => {
-            const { status, hintCode, completionData } = await axiosClient.post(
+            const { status, hintCode, completionData, error } = await axiosClient.post(
                 `${env.BANKID_API_URL}/collect/`,
                 { orderRef }
             ).then(result => {
-                console.log(result);
                 return result.data.data;
             }).catch(error => {
                 // Implement error handling here
-                console.error('Error in call');
-                console.error(error.request);
+                console.log('Error in call');
+                console.log(error.request);
                 if (error.response && error.response.data) {
-                    console.error(error.response.data);
+                    console.log(error.response.data);
                     if (error.response.data.errorCode === 'alreadyInProgress') {
                         // TODO: Cancel the euqest here
-                        console.error('Call cancel on this orderRef before retrying');
-                        console.error('The order should now have been automatically cancelled by this retry');
+                        console.log('Call cancel on this orderRef before retrying');
+                        console.log('The order should now have been automatically cancelled by this retry');
                     }
                 }
-                return { error };
+
+                return { error: error };
             });
 
             if (status === 'failed') {
@@ -110,6 +110,10 @@ export const authorizeUser = (personalNumber) =>
                 console.log("Collect complete");
                 clearInterval(interval);
                 resolve({ ok: true, status: completionData });
+            } else if (error) {
+                console.log("Collect error");
+                clearInterval(interval);
+                reject(error);
             }
 
         }, 2000);

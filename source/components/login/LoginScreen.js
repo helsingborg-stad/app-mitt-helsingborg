@@ -75,7 +75,7 @@ class LoginScreen extends Component {
                     console.log("authResponse success", authResponse);
                     this.props.loginUser(authResponse.status.user);
                 } else {
-                    console.log("authResponse Fail", error);
+                    console.log("authResponse Fail", authResponse);
                     this.setState({ isLoading: false });
                     Alert.alert("Något fick fel");
                 }
