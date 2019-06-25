@@ -5,25 +5,22 @@ import { NetworkInfo } from 'react-native-network-info';
 import { canOpenUrl } from '../helpers/LinkHelper';
 
 /**
- * Open BankID app
+ * Launch BankID app
  * @param {string} bankIdClientUrl
  */
-openBankIdApp = async (autoStartToken = null) => {
+launchBankIdApp = async (autoStartToken) => {
     const bankIdClientUrl = this.buildBankIdClientUrl(autoStartToken);
     console.log("bankIdClientUrl", bankIdClientUrl);
 
-    const isBankidInstalled = await canOpenUrl('bankid:///');
-    console.log("isBankidInstalled", isBankidInstalled);
-
-    return isBankidInstalled ? this.openURL(bankIdClientUrl) : false;
+    return this.openURL(bankIdClientUrl);
 };
 
 /**
  * Builds the BankID client URL
+ * @param {string} autoStartToken
  */
-buildBankIdClientUrl = (autoStartToken = null) => {
-    let params = autoStartToken ? `?autostarttoken=<${autoStartToken}>` : '';
-    params += params ? `&redirect=${env.APP_SCHEME}://` : `?redirect=${env.APP_SCHEME}://`;
+buildBankIdClientUrl = (autoStartToken) => {
+    const params = `?autostarttoken=${autoStartToken}&redirect=${env.APP_SCHEME}://`;
 
     // For Android, use url "bankid:///"
     const clientUrl = `https://app.bankid.com/${params}`;
@@ -34,6 +31,7 @@ buildBankIdClientUrl = (autoStartToken = null) => {
 
 /**
  * Open requested URL
+ * @param {string} url
  */
 openURL = (url) => {
     return Linking.openURL(url)
@@ -42,48 +40,80 @@ openURL = (url) => {
 };
 
 /**
- * Make a request to BankID API.
- * Used to trigger BankID from other devices.
- *
- * TODO:
- * Change the auth flow:
- * - When BankID is installed, make auth request first to get 'atuostarttoken'
- * - Then, open bankid app including 'atuostarttoken'
- * - Fix redirect param, it breaks when autostarttoken is added to url
- *
- * @param {string} pno
+ * Make an auth request to BankID API and poll until done
+ * @param {string} personalNumber
  */
-export const authorizeUser = async (pno) => {
-    const host = env.MYPAGES_API_URL;
-    const endpoint = "/auth/";
-    const apiUrl = `${host}${endpoint}`;
-    const ipAddress = await NetworkInfo.getIPAddress(ip => ip);
+export const authorizeUser = (personalNumber) =>
+    new Promise(async (resolve, reject) => {
 
-    const params = {
-        pno,
-        endUserIp: ipAddress,
-    };
+        const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
+        const params = {
+            personalNumber,
+            endUserIp,
+        };
 
-    console.log("apiUrl", apiUrl);
-    console.log('params', params);
-
-    this.openBankIdApp();
-
-    return axiosClient.post(
-        apiUrl,
-        params
-    )
-        .then(result => {
-            console.log("Result", result);
-            return Promise.resolve(result);
-        })
-        .catch(error => {
+        const { autoStartToken, orderRef } = await axiosClient.post(
+            `${env.BANKID_API_URL}/auth/`,
+            params
+        ).then(result => {
+            if (result.data.data) {
+                console.log("Result", result.data.data);
+                return result.data.data;
+            } else {
+                return new Error('Auth request error')
+            }
+        }).catch(error => {
             console.log("Error", error);
             console.log("Error request", error.request);
-
-            return Promise.reject(error);
+            return error;
         });
-};
+
+        if (!autoStartToken || !orderRef) {
+            return reject(new Error('Auth request failed'));
+        }
+
+        // Launch BankID app if it's installed on this machine
+        const launchNativeApp = await canOpenUrl('bankid:///');
+        console.log("launchNativeApp", launchNativeApp);
+        if (launchNativeApp) {
+            this.launchBankIdApp(autoStartToken);
+        }
+
+        // Poll /collect/ endpoint every 2nd second until auth either success or fails
+        const interval = setInterval(async () => {
+            const { status, hintCode, completionData } = await axiosClient.post(
+                `${env.BANKID_API_URL}/collect/`,
+                { orderRef }
+            ).then(result => {
+                console.log(result);
+                return result.data.data;
+            }).catch(error => {
+                // Implement error handling here
+                console.error('Error in call');
+                console.error(error.request);
+                if (error.response && error.response.data) {
+                    console.error(error.response.data);
+                    if (error.response.data.errorCode === 'alreadyInProgress') {
+                        // TODO: Cancel the euqest here
+                        console.error('Call cancel on this orderRef before retrying');
+                        console.error('The order should now have been automatically cancelled by this retry');
+                    }
+                }
+                return { error };
+            });
+
+            if (status === 'failed') {
+                console.log("Collect failed");
+                clearInterval(interval);
+                resolve({ ok: false, status: hintCode });
+            } else if (status === 'complete') {
+                console.log("Collect complete");
+                clearInterval(interval);
+                resolve({ ok: true, status: completionData });
+            }
+
+        }, 2000);
+    });
 
 const axiosClient = axios.create({
     headers: {
@@ -92,11 +122,11 @@ const axiosClient = axios.create({
     }
 });
 
-export const bypassBankid = async (pno) => {
+export const bypassBankid = async (pnr) => {
     return {
         'name': 'Gandalf Stål',
         'givenName': 'Gandalf',
         'surname': 'Stål',
-        'personalNumber': pno
+        'personalNumber': pnr
     };
 };

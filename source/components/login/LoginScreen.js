@@ -71,8 +71,14 @@ class LoginScreen extends Component {
 
         await authorizeUser(personalNumberInput)
             .then(authResponse => {
-                console.log("Token", authResponse.data.token);
-                this.props.loginUser(authResponse.data.user);
+                if (authResponse.ok === true) {
+                    console.log("authResponse success", authResponse);
+                    this.props.loginUser(authResponse.status.user);
+                } else {
+                    console.log("authResponse Fail", error);
+                    this.setState({ isLoading: false });
+                    Alert.alert("Något fick fel");
+                }
             })
             .catch(error => {
                 // TODO: Fix error notice
