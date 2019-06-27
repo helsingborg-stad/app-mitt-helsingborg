@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Route, Redirect } from 'react-router-native';
 import DashboardScreen from "../components/DashboardScreen";
 import LoginScreen from "../components/login/LoginScreen";
 

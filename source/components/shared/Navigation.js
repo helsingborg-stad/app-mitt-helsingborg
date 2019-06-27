@@ -2,8 +2,7 @@
 // This is for dev purposes, delete me later
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import { Link } from 'react-router-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 class Navigation extends Component {
     render() {

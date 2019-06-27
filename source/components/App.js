@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { NativeRouter } from 'react-router-native';
 import Routes from "../navigation/Routes";
 import Navigation from "./shared/Navigation";
 
@@ -20,7 +19,7 @@ class App extends Component {
         this.setState({
             isAuthed: false
         });
-    }
+    };
 
     /**
      * Login a user
@@ -34,14 +33,14 @@ class App extends Component {
             user,
             isAuthed: true
         });
-    }
+    };
 
     resetUser = () => {
         console.log("reset user");
         this.setState({
             user: {}
         });
-    }
+    };
 
     render() {
         return (
