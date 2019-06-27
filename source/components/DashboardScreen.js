@@ -23,7 +23,7 @@ class DashboardScreen extends Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.header}>Greetings {user.givenName}!</Text>
-                <Text style={{ fontSize: 70 }}>🧙‍♂️</Text>
+                <Text style={{ fontSize: 60 }}>🦄</Text>
             </View >
         );
     }

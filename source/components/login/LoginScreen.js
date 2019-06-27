@@ -1,51 +1,87 @@
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, Linking, TextInput } from 'react-native';
-import { Link } from 'react-router-native';
+import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput, Linking, Button } from 'react-native';
 import { authorizeUser } from "../../services/UserService";
+import { canOpenUrl } from "../../helpers/LinkHelper";
+import { sanitizePno, validatePno } from "../../helpers/ValidationHelper";
 
 class LoginScreen extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            authLocalMachine: false,
+            isBankidInstalled: false,
+            validPno: false,
             isLoading: false,
+            personalNumberInput: '',
         };
     }
 
     componentDidMount() {
-        // Set to true if BankID should be triggered from local machine
-        const { validPno } = this.props;
+        const { user } = this.props;
+        const personalNumber = typeof user.personalNumber !== 'undefined' && user.personalNumber ? user.personalNumber : '';
 
-        if (validPno) {
-            this.setState({
-                authLocalMachine: true
-            })
+        this.setState({
+            personalNumberInput: personalNumber
+        });
+
+        this.validatePno(personalNumber);
+
+        this.isBankidInstalled();
+    }
+
+    isBankidInstalled = async () => {
+        const isBankidInstalled = await canOpenUrl('bankid:///');
+        console.log("isBankidInstalled", isBankidInstalled);
+
+        if (isBankidInstalled) {
+            this.setState({ isBankidInstalled: true });
         }
+    }
+
+    /**
+     * Validate personal number
+    */
+    validatePno = (pno) => {
+        if (validatePno(pno)) {
+            this.setState({ validPno: true });
+        } else {
+            this.setState({ validPno: false });
+        }
+    }
+
+    setPno(pno) {
+        pno = sanitizePno(pno);
+
+        this.validatePno(pno);
+
+        this.setState({
+            personalNumberInput: pno
+        });
     }
 
     authenticateUser = async () => {
         this.setState({ isLoading: true });
-        const { appSettings } = this.props;
+        const { personalNumberInput } = this.state;
 
-        if (!appSettings.pno) {
+        if (!personalNumberInput) {
             Alert.alert("Personnummer saknas");
             this.setState({ isLoading: false });
             return;
         }
 
-        // TODO: Open BankID app on same machine if installed
-        // Linking.openURL('maps://app?saddr=Cupertino&San+Francisco');
-
-        await authorizeUser(appSettings.pno)
+        await authorizeUser(personalNumberInput)
             .then(authResponse => {
-                console.log("authResponse ok", authResponse);
-                console.log("USER", authResponse.data.user);
-
-                this.props.setUser(authResponse.data.user);
+                if (authResponse.ok === true) {
+                    console.log("authResponse success", authResponse);
+                    this.props.loginUser(authResponse.status.user);
+                } else {
+                    console.log("authResponse Fail", authResponse);
+                    this.setState({ isLoading: false });
+                    Alert.alert("Något fick fel");
+                }
             })
             .catch(error => {
-                // TODO: show error message
+                // TODO: Fix error notice
                 console.log("authResponse Fail", error);
                 this.setState({ isLoading: false });
                 Alert.alert("Något fick fel");
@@ -57,15 +93,15 @@ class LoginScreen extends Component {
     }
 
     checkPno = () => {
-        const { validPno } = this.props;
+        const { validPno } = this.state;
         if (!validPno) {
             Alert.alert("Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.");
         }
     }
 
     render() {
-        const { validPno } = this.props;
-        const { isLoading, authLocalMachine } = this.state;
+        const { user, resetUser } = this.props;
+        const { isLoading, validPno, personalNumberInput, isBankidInstalled } = this.state;
 
         return (
             <>
@@ -76,45 +112,72 @@ class LoginScreen extends Component {
                         </View>
 
                         <View style={styles.loginContainer}>
-                            <View>
-                                {!authLocalMachine &&
-                                    <>
-                                        <Text style={styles.label}>Personnummer</Text>
 
-                                        <TextInput
-                                            style={styles.inputField}
-                                            keyboardType='number-pad'
-                                            returnKeyType='done'
-                                            maxLength={12}
-                                            placeholder={'ÅÅÅÅMMDDXXXX'}
-                                            onChangeText={(value) => this.props.setPno(value)}
-                                            onSubmitEditing={this.checkPno}
-                                            value={this.props.appSettings.pno}
+                            {user.personalNumber !== 'undefined' && user.personalNumber ? (
+                                <>
+                                    <TouchableOpacity
+                                        style={[styles.button, !validPno ? styles.buttonDisabled : '']}
+                                        onPress={this.authenticateUser}
+                                        underlayColor='#fff'
+                                        disabled={!validPno}
+                                    >
+                                        <Text style={[styles.buttonText, !validPno ? styles.buttonTextDisabled : '']}>Logga in</Text>
+                                    </TouchableOpacity>
+                                    <View style={styles.loginFooter}>
+                                        <Button
+                                            title="Logga in som en annan användare"
+                                            color="#000"
+                                            onPress={resetUser}
                                         />
+                                    </View>
+                                </>
+                            ) : (
+                                    <>
+                                        <Text style={styles.infoText}>Logga in med BankID</Text>
+                                        <View style={styles.paper}>
+                                            <Text style={styles.label}>Personnummer</Text>
+                                            <TextInput
+                                                style={styles.inputField}
+                                                keyboardType='number-pad'
+                                                returnKeyType='done'
+                                                maxLength={12}
+                                                placeholder={'ÅÅÅÅMMDDXXXX'}
+                                                onChangeText={(value) => this.setPno(value)}
+                                                onSubmitEditing={this.checkPno}
+                                                value={personalNumberInput}
+                                            />
+
+                                            <TouchableOpacity
+                                                style={[styles.button, !validPno ? styles.buttonDisabled : '']}
+                                                onPress={this.authenticateUser}
+                                                underlayColor='#fff'
+                                                disabled={!validPno}
+                                            >
+                                                <Text style={[styles.buttonText, !validPno ? styles.buttonTextDisabled : '']}>Logga in</Text>
+                                            </TouchableOpacity>
+                                        </View>
+
+                                        <View style={styles.loginFooter}>
+                                            <Button
+                                                title="Läs mer om hur du skaffar mobilt BankID"
+                                                color="#000"
+                                                onPress={() => {
+                                                    Linking.openURL("https://support.bankid.com/sv/bankid/mobilt-bankid")
+                                                        .catch(() => console.log("Couldnt open url"));
+                                                }}
+                                            />
+                                        </View>
                                     </>
-                                }
-
-                                <TouchableOpacity
-                                    style={[styles.button, !validPno ? styles.buttonDisabled : '']}
-                                    onPress={this.authenticateUser}
-                                    underlayColor='#fff'
-                                    disabled={!validPno}
-                                >
-                                    <Text style={[styles.buttonText, !validPno ? styles.buttonTextDisabled : '']}>
-                                        {validPno ? 'Logga in' : 'Logga in med BankID'}
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View style={styles.loginFooter}>
-                                <Text>Läs mer om hur du skaffar mobilt BankID</Text>
-                            </View>
+                                )}
                         </View>
-                    </KeyboardAvoidingView>
+                    </KeyboardAvoidingView >
                 ) : (
                         <View style={styles.container}>
                             <View style={styles.content}>
                                 <ActivityIndicator size="large" color="slategray" />
+                                {!isBankidInstalled &&
+                                    <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
+                                }
                             </View>
                             <View style={styles.loginContainer}>
                                 <TouchableOpacity
@@ -135,6 +198,15 @@ class LoginScreen extends Component {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
+    paper: {
+        backgroundColor: '#fff',
+        padding: 24,
+        borderRadius: 7,
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        shadowColor: '#000',
+        shadowOffset: { height: 5, width: 0 },
+    },
     container: {
         flex: 1,
         alignItems: 'stretch',
@@ -178,17 +250,23 @@ const styles = StyleSheet.create({
         fontSize: 35,
         textAlign: 'center',
     },
+    infoText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 24,
+        marginBottom: 24
+    },
     label: {
         fontSize: 16,
         marginBottom: 8,
     },
     inputField: {
-        height: 48,
-        borderColor: '#D3D3D3',
-        borderWidth: 1,
-        marginBottom: 16,
-        borderRadius: 7,
-        paddingLeft: 8,
-        backgroundColor: '#D3D3D3'
+        height: 40,
+        borderColor: 'transparent',
+        borderBottomColor: '#D3D3D3',
+        borderWidth: 0.5,
+        marginBottom: 24,
+        color: '#555',
     },
 });

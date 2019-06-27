@@ -3,8 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { NativeRouter } from 'react-router-native';
 import Routes from "../navigation/Routes";
 import Navigation from "./shared/Navigation";
-import { sanitizePno } from "../helpers/ValidationHelper";
-import { validatePno } from "../helpers/ValidationHelper";
 
 class App extends Component {
     constructor(props) {
@@ -13,45 +11,35 @@ class App extends Component {
         this.state = {
             isAuthed: false,
             user: {},
-            validPno: false,
-            appSettings: {
-                pno: ''
-            }
         }
     }
 
-    componentDidMount() {
-        const { appSettings } = this.state;
-        this.validatePno(appSettings.pno);
-    }
-
-    /**
-     * Validate personal number
-    */
-    validatePno = (pno) => {
-        if (validatePno(pno)) {
-            this.setState({ validPno: true });
-        } else {
-            this.setState({ validPno: false });
-        }
-    }
-
-    setPno(pno) {
-        pno = sanitizePno(pno);
-
-        this.validatePno(pno);
-
+    signOut = (e) => {
+        e.preventDefault();
+        console.log("Sign out");
         this.setState({
-            appSettings: {
-                pno
-            }
+            isAuthed: false
         });
     }
 
-    setUser(user) {
+    /**
+     * Login a user
+     * TODO:
+     * - Save user to db and create a session
+     */
+    loginUser = (user) => {
+        console.log(user);
+
         this.setState({
             user,
             isAuthed: true
+        });
+    }
+
+    resetUser = () => {
+        console.log("reset user");
+        this.setState({
+            user: {}
         });
     }
 
@@ -60,11 +48,13 @@ class App extends Component {
             <NativeRouter>
                 <View style={styles.body}>
                     {/* Nav for dev purposes, delete me later */}
-                    <Navigation />
+                    <Navigation
+                        signOut={this.signOut}
+                    />
                     <Routes
                         {...this.state}
-                        setPno={this.setPno.bind(this)}
-                        setUser={this.setUser.bind(this)}
+                        loginUser={this.loginUser}
+                        resetUser={this.resetUser}
                     />
                 </View>
             </NativeRouter>
