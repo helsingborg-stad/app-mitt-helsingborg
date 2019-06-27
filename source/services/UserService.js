@@ -75,7 +75,7 @@ export const authorizeUser = (personalNumber) =>
 
         // Poll /collect/ endpoint every 2nd second until auth either success or fails
         const interval = setInterval(async () => {
-            const { status, hintCode, completionData, error } = await request(
+            const { status, hintCode, completionData, errorCode, error } = await request(
                 'collect',
                 { orderRef }
             ).catch(
@@ -84,7 +84,7 @@ export const authorizeUser = (personalNumber) =>
 
             console.log("status", status);
             console.log("hintCode", hintCode);
-            console.log("error", error);
+            console.log("errorCode", errorCode);
 
             if (status === 'failed') {
                 console.log("Collect failed");
@@ -94,8 +94,12 @@ export const authorizeUser = (personalNumber) =>
                 console.log("Collect complete");
                 clearInterval(interval);
                 resolve({ ok: true, status: completionData });
+            } else if (errorCode) {
+                // Probably has the user clicked abort login in the app
+                console.log("Collect errorCode");
+                clearInterval(interval);
+                resolve({ ok: false, status: errorCode });
             } else if (error) {
-                console.log("Collect error");
                 clearInterval(interval);
                 reject(error);
             }
