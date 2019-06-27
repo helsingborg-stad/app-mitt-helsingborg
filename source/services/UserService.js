@@ -4,6 +4,8 @@ import { Linking } from 'react-native';
 import { NetworkInfo } from 'react-native-network-info';
 import { canOpenUrl } from '../helpers/LinkHelper';
 
+let orderReference = '';
+
 /**
  * Launch BankID app
  * @param {string} bankIdClientUrl
@@ -45,32 +47,24 @@ openURL = (url) => {
  */
 export const authorizeUser = (personalNumber) =>
     new Promise(async (resolve, reject) => {
-
         const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
-        const params = {
-            personalNumber,
-            endUserIp,
-        };
 
-        const { autoStartToken, orderRef } = await axiosClient.post(
-            `${env.BANKID_API_URL}/auth/`,
-            params
-        ).then(result => {
-            if (result.data.data) {
-                console.log("Result", result.data.data);
-                return result.data.data;
-            } else {
-                return new Error('Auth request error')
-            }
-        }).catch(error => {
-            console.log("Error", error);
-            console.log("Error request", error.request);
-            return error;
+        const { autoStartToken, orderRef } = await request(
+            'auth',
+            { personalNumber, endUserIp }
+        ).catch(error => {
+            console.log("das error", error);
+            console.log(error.response);
+            console.log(error.request);
         });
 
         if (!autoStartToken || !orderRef) {
-            return reject(new Error('Auth request failed'));
+            return reject(new Error('Missing token or orderref'));
         }
+
+        // Set the order ref
+        orderReference = orderRef;
+        console.log("orderReference", orderReference);
 
         // Launch BankID app if it's installed on this machine
         const launchNativeApp = await canOpenUrl('bankid:///');
@@ -81,26 +75,16 @@ export const authorizeUser = (personalNumber) =>
 
         // Poll /collect/ endpoint every 2nd second until auth either success or fails
         const interval = setInterval(async () => {
-            const { status, hintCode, completionData, error } = await axiosClient.post(
-                `${env.BANKID_API_URL}/collect/`,
+            const { status, hintCode, completionData, error } = await request(
+                'collect',
                 { orderRef }
-            ).then(result => {
-                return result.data.data;
-            }).catch(error => {
-                // Implement error handling here
-                console.log('Error in call');
-                console.log(error.request);
-                if (error.response && error.response.data) {
-                    console.log(error.response.data);
-                    if (error.response.data.errorCode === 'alreadyInProgress') {
-                        // TODO: Cancel the euqest here
-                        console.log('Call cancel on this orderRef before retrying');
-                        console.log('The order should now have been automatically cancelled by this retry');
-                    }
-                }
+            ).catch(
+                error => console.log("Auth collect error", error)
+            );
 
-                return { error: error };
-            });
+            console.log("status", status);
+            console.log("hintCode", hintCode);
+            console.log("error", error);
 
             if (status === 'failed') {
                 console.log("Collect failed");
@@ -118,6 +102,41 @@ export const authorizeUser = (personalNumber) =>
 
         }, 2000);
     });
+
+export const cancelRequest = async () => {
+    console.log("Cancel order: ", orderReference);
+
+    return await request(
+        'cancel',
+        { orderRef: orderReference }
+    ).catch(
+        error => console.log(error)
+    );
+}
+
+/**
+ * Make request to BankID API
+ * @param {string} method
+ * @param {array} params
+ */
+request = async (method, params) => {
+    return await axiosClient.post(
+        `${env.BANKID_API_URL}/${method}/`,
+        params
+    )
+        .then(result => {
+            console.log(result);
+            if (result.data.data) {
+                return result.data.data;
+            }
+            return { error: new Error('Error in request call, missing returned data') };
+        })
+        .catch(err => {
+            console.log('Error in request call');
+            console.log("err", err.request);
+            return { error: err };
+        });
+}
 
 const axiosClient = axios.create({
     headers: {
