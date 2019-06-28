@@ -50,22 +50,18 @@ export const authorize = (personalNumber) =>
             'auth',
             { personalNumber, endUserIp }
         ).catch(error => {
-            console.log("das error", error);
-            console.log(error.response);
-            console.log(error.request);
+            console.log("Auth error", error);
         });
 
         if (!autoStartToken || !orderRef) {
             return reject(new Error('Missing token or orderref'));
         }
 
-        // Set the order ref
+        // Set the order reference
         orderReference = orderRef;
-        console.log("orderReference", orderReference);
 
         // Launch BankID app if it's installed on this machine
         const launchNativeApp = await canOpenUrl('bankid:///');
-        console.log("launchNativeApp", launchNativeApp);
         if (launchNativeApp) {
             this.launchBankIdApp(autoStartToken);
         }
@@ -79,21 +75,71 @@ export const authorize = (personalNumber) =>
                 error => console.log("Auth collect error", error)
             );
 
-            console.log("status", status);
-            console.log("hintCode", hintCode);
-            console.log("errorCode", errorCode);
-
             if (status === 'failed') {
-                console.log("Collect failed");
                 clearInterval(interval);
                 resolve({ ok: false, data: hintCode });
             } else if (status === 'complete') {
-                console.log("Collect complete");
                 clearInterval(interval);
                 resolve({ ok: true, data: completionData.user });
             } else if (errorCode) {
                 // Probably has the user clicked abort login in the app
-                console.log("Collect errorCode");
+                clearInterval(interval);
+                resolve({ ok: false, data: errorCode });
+            } else if (error) {
+                clearInterval(interval);
+                reject(error);
+            }
+
+        }, 2000);
+    });
+
+/**
+* Make a sign request to BankID API and poll until done
+* @param {string} personalNumber
+*/
+export const sign = (personalNumber, text) =>
+    new Promise(async (resolve, reject) => {
+        const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
+        const { autoStartToken, orderRef } = await request(
+            'sign', {
+                personalNumber,
+                endUserIp,
+                userVisibleData: 'Sign some stuff plx',
+            }
+        ).catch(error => {
+            console.log("Sign error", error);
+        });
+
+        if (!autoStartToken || !orderRef) {
+            return reject(new Error('Missing token or orderref'));
+        }
+
+        // Set the order ref
+        orderReference = orderRef;
+
+        // Launch BankID app if it's installed on this machine
+        const launchNativeApp = await canOpenUrl('bankid:///');
+        if (launchNativeApp) {
+            this.launchBankIdApp(autoStartToken);
+        }
+
+        // Poll /collect/ endpoint every 2nd second until sign either success or fails
+        const interval = setInterval(async () => {
+            const { status, hintCode, completionData, errorCode, error } = await request(
+                'collect',
+                { orderRef }
+            ).catch(
+                error => console.log("Auth collect error", error)
+            );
+
+            if (status === 'failed') {
+                clearInterval(interval);
+                resolve({ ok: false, data: hintCode });
+            } else if (status === 'complete') {
+                clearInterval(interval);
+                resolve({ ok: true, data: completionData.user });
+            } else if (errorCode) {
+                // Probably has the user clicked abort login in the app
                 clearInterval(interval);
                 resolve({ ok: false, data: errorCode });
             } else if (error) {
@@ -128,19 +174,15 @@ request = async (method, params) => {
     return await axiosClient.post(
         `${env.BANKID_API_URL}/${method}/`,
         params
-    )
-        .then(result => {
-            console.log(result);
-            if (result.data.data) {
-                return result.data.data;
-            }
-            return { error: new Error('Error in request call, missing returned data') };
-        })
-        .catch(err => {
-            console.log('Error in request call');
-            console.log("err", err.request);
-            return { error: err };
-        });
+    ).then(result => {
+        if (result.data.data) {
+            return result.data.data;
+        }
+        return { error: new Error('Error in request call, missing returned data') };
+    }).catch(err => {
+        console.log("Error in request call", err.request);
+        return { error: err };
+    });
 }
 
 /**
