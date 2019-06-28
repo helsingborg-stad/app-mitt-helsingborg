@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput, Linking, Button } from 'react-native';
-import { authorizeUser, cancelRequest } from "../../services/UserService";
+import { authorize, bypassBankid, cancelRequest } from "../../services/UserService";
 import { canOpenUrl } from "../../helpers/LinkHelper";
 import { sanitizePno, validatePno } from "../../helpers/ValidationHelper";
 
@@ -69,15 +69,24 @@ class LoginScreen extends Component {
             return;
         }
 
-        await authorizeUser(personalNumberInput)
+        // TODO: For testing only, remove me later
+        console.log(personalNumberInput);
+        if (personalNumberInput === '201111111111') {
+            bypassBankid(personalNumberInput).then(res => {
+                this.props.loginUser(res.data)
+            }).catch(error => console.log(error));
+            return;
+        }
+
+        await authorize(personalNumberInput)
             .then(authResponse => {
                 if (authResponse.ok === true) {
                     console.log("authResponse success", authResponse);
-                    this.props.loginUser(authResponse.status.user);
+                    this.props.loginUser(authResponse.data);
                 } else {
                     console.log("authResponse failed", authResponse);
                     this.setState({ isLoading: false });
-                    Alert.alert(authResponse.status);
+                    Alert.alert(authResponse.data);
                 }
             })
             .catch(error => {
