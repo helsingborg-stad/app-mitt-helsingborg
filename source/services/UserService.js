@@ -97,14 +97,14 @@ export const authorize = (personalNumber) =>
 * Make a sign request to BankID API and poll until done
 * @param {string} personalNumber
 */
-export const sign = (personalNumber, text) =>
+export const sign = (personalNumber, userVisibleData) =>
     new Promise(async (resolve, reject) => {
         const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
         const { autoStartToken, orderRef } = await request(
             'sign', {
                 personalNumber,
                 endUserIp,
-                userVisibleData: 'Sign some stuff plx',
+                userVisibleData,
             }
         ).catch(error => {
             console.log("Sign error", error);
