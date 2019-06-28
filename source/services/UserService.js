@@ -12,7 +12,6 @@ let orderReference = '';
  */
 launchBankIdApp = async (autoStartToken) => {
     const bankIdClientUrl = this.buildBankIdClientUrl(autoStartToken);
-    console.log("bankIdClientUrl", bankIdClientUrl);
 
     return this.openURL(bankIdClientUrl);
 };
@@ -23,12 +22,10 @@ launchBankIdApp = async (autoStartToken) => {
  */
 buildBankIdClientUrl = (autoStartToken) => {
     const params = `?autostarttoken=${autoStartToken}&redirect=${env.APP_SCHEME}://`;
+    const androidUrl = 'bankid:///';
+    const iosUrl = 'https://app.bankid.com/';
 
-    // For Android, use url "bankid:///"
-    const clientUrl = `https://app.bankid.com/${params}`;
-    console.log("clientUrl", clientUrl);
-
-    return clientUrl;
+    return `${iosUrl}${params}`;
 };
 
 /**
@@ -45,7 +42,7 @@ openURL = (url) => {
  * Make an auth request to BankID API and poll until done
  * @param {string} personalNumber
  */
-export const authorizeUser = (personalNumber) =>
+export const authorize = (personalNumber) =>
     new Promise(async (resolve, reject) => {
         const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
 
@@ -89,16 +86,16 @@ export const authorizeUser = (personalNumber) =>
             if (status === 'failed') {
                 console.log("Collect failed");
                 clearInterval(interval);
-                resolve({ ok: false, status: hintCode });
+                resolve({ ok: false, data: hintCode });
             } else if (status === 'complete') {
                 console.log("Collect complete");
                 clearInterval(interval);
-                resolve({ ok: true, status: completionData });
+                resolve({ ok: true, data: completionData.user });
             } else if (errorCode) {
                 // Probably has the user clicked abort login in the app
                 console.log("Collect errorCode");
                 clearInterval(interval);
-                resolve({ ok: false, status: errorCode });
+                resolve({ ok: false, data: errorCode });
             } else if (error) {
                 clearInterval(interval);
                 reject(error);
@@ -107,19 +104,23 @@ export const authorizeUser = (personalNumber) =>
         }, 2000);
     });
 
-export const cancelRequest = async () => {
-    console.log("Cancel order: ", orderReference);
+/**
+ * Cancels a started BankID request
+ * @param {string} order
+ */
+export const cancelRequest = async (order) => {
+    const orderRef = order ? order : orderReference;
 
     return await request(
         'cancel',
-        { orderRef: orderReference }
+        { orderRef }
     ).catch(
         error => console.log(error)
     );
 }
 
 /**
- * Make request to BankID API
+ * Send request to BankID API
  * @param {string} method
  * @param {array} params
  */
@@ -142,6 +143,9 @@ request = async (method, params) => {
         });
 }
 
+/**
+ * Creates an Axios request client
+ */
 const axiosClient = axios.create({
     headers: {
         'Accept': 'application/json',
@@ -149,11 +153,18 @@ const axiosClient = axios.create({
     }
 });
 
-export const bypassBankid = async (pnr) => {
+/**
+ * Bypasses the BankID authentication steps
+ * @param {string} personalNumber
+ */
+export const bypassBankid = async (personalNumber) => {
     return {
-        'name': 'Gandalf Stål',
-        'givenName': 'Gandalf',
-        'surname': 'Stål',
-        'personalNumber': pnr
+        ok: true,
+        data: {
+            'name': 'Gandalf Stål',
+            'givenName': 'Gandalf',
+            'surname': 'Stål',
+            'personalNumber': personalNumber
+        }
     };
 };
