@@ -12,12 +12,14 @@ class LoginScreen extends Component {
             isBankidInstalled: false,
             validPno: false,
             isLoading: false,
-            personalNumberInput: '',
+            personalNumberInput: ''
         };
     }
 
     componentDidMount() {
-        const { user } = this.props;
+        const { navigation } = this.props;
+        const user = navigation.getParam('user');
+
         const personalNumber = typeof user.personalNumber !== 'undefined' && user.personalNumber ? user.personalNumber : '';
 
         this.setState({
@@ -40,7 +42,7 @@ class LoginScreen extends Component {
 
     /**
      * Validate personal number
-    */
+     */
     validatePno = (pno) => {
         if (validatePno(pno)) {
             this.setState({ validPno: true });
@@ -73,7 +75,12 @@ class LoginScreen extends Component {
             .then(authResponse => {
                 if (authResponse.ok === true) {
                     console.log("authResponse success", authResponse);
-                    this.props.loginUser(authResponse.status.user);
+                    // this.props.loginUser(authResponse.status.user);
+                    const { navigation } = this.props;
+                    const loginUser = navigation.getParam('loginUser');
+
+                    loginUser(authResponse.status.user);
+
                 } else {
                     console.log("authResponse Fail", authResponse);
                     this.setState({ isLoading: false });
@@ -100,7 +107,9 @@ class LoginScreen extends Component {
     };
 
     render() {
-        const { user, resetUser } = this.props;
+        const { navigation } = this.props;
+        const user = navigation.getParam('user');
+        const resetUser = navigation.getParam('resetUser');
         const { isLoading, validPno, personalNumberInput, isBankidInstalled } = this.state;
 
         return (
@@ -132,65 +141,66 @@ class LoginScreen extends Component {
                                     </View>
                                 </>
                             ) : (
-                                    <>
-                                        <Text style={styles.infoText}>Logga in med BankID</Text>
-                                        <View style={styles.paper}>
-                                            <Text style={styles.label}>Personnummer</Text>
-                                            <TextInput
-                                                style={styles.inputField}
-                                                keyboardType='number-pad'
-                                                returnKeyType='done'
-                                                maxLength={12}
-                                                placeholder={'ÅÅÅÅMMDDXXXX'}
-                                                onChangeText={(value) => this.setPno(value)}
-                                                onSubmitEditing={this.checkPno}
-                                                value={personalNumberInput}
-                                            />
+                                <>
+                                    <Text style={styles.infoText}>Logga in med BankID</Text>
+                                    <View style={styles.paper}>
+                                        <Text style={styles.label}>Personnummer</Text>
+                                        <TextInput
+                                            style={styles.inputField}
+                                            keyboardType='number-pad'
+                                            returnKeyType='done'
+                                            maxLength={12}
+                                            placeholder={'ÅÅÅÅMMDDXXXX'}
+                                            onChangeText={(value) => this.setPno(value)}
+                                            onSubmitEditing={this.checkPno}
+                                            value={personalNumberInput}
+                                        />
 
-                                            <TouchableOpacity
-                                                style={[styles.button, !validPno ? styles.buttonDisabled : '']}
-                                                onPress={this.authenticateUser}
-                                                underlayColor='#fff'
-                                                disabled={!validPno}
-                                            >
-                                                <Text style={[styles.buttonText, !validPno ? styles.buttonTextDisabled : '']}>Logga in</Text>
-                                            </TouchableOpacity>
-                                        </View>
+                                        <TouchableOpacity
+                                            style={[styles.button, !validPno ? styles.buttonDisabled : '']}
+                                            onPress={this.authenticateUser}
+                                            underlayColor='#fff'
+                                            disabled={!validPno}
+                                        >
+                                            <Text style={[styles.buttonText, !validPno ? styles.buttonTextDisabled : '']}>Logga in</Text>
+                                        </TouchableOpacity>
+                                    </View>
 
-                                        <View style={styles.loginFooter}>
-                                            <Button
-                                                title="Läs mer om hur du skaffar mobilt BankID"
-                                                color="#000"
-                                                onPress={() => {
-                                                    Linking.openURL("https://support.bankid.com/sv/bankid/mobilt-bankid")
-                                                        .catch(() => console.log("Couldnt open url"));
-                                                }}
-                                            />
-                                        </View>
-                                    </>
-                                )}
+                                    <View style={styles.loginFooter}>
+                                        <Button
+                                            title="Läs mer om hur du skaffar mobilt BankID"
+                                            color="#000"
+                                            onPress={() => {
+                                                Linking.openURL("https://support.bankid.com/sv/bankid/mobilt-bankid")
+                                                    .catch(() => console.log("Couldnt open url"));
+                                            }}
+                                        />
+                                    </View>
+                                </>
+                            )}
                         </View>
                     </KeyboardAvoidingView >
                 ) : (
-                        <View style={styles.container}>
-                            <View style={styles.content}>
-                                <ActivityIndicator size="large" color="slategray" />
-                                {!isBankidInstalled &&
-                                    <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
-                                }
-                            </View>
-                            <View style={styles.loginContainer}>
-                                <TouchableOpacity
-                                    style={styles.button}
-                                    onPress={this.abortLogin}
-                                    underlayColor='#fff'>
-                                    <Text style={styles.buttonText}>Avbryt</Text>
-                                </TouchableOpacity>
-                            </View>
+                    <View style={styles.container}>
+                        <View style={styles.content}>
+                            <ActivityIndicator size="large" color="slategray" />
+                            {!isBankidInstalled &&
+                            <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
+                            }
                         </View>
-                    )
+                        <View style={styles.loginContainer}>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={this.abortLogin}
+                                underlayColor='#fff'>
+                                <Text style={styles.buttonText}>Avbryt</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                )
                 }
             </>
+
         );
     }
 }

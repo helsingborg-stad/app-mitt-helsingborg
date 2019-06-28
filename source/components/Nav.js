@@ -13,6 +13,27 @@ class HomeScreen extends React.Component {
         };
     };
 
+    /**
+     * Login a user
+     * TODO:
+     * - Save user to db and create a session
+     */
+    loginUser = (user) => {
+        console.log(user);
+
+        this.setState({
+            user,
+            isAuthed: true
+        });
+    };
+
+    resetUser = () => {
+        console.log("reset user");
+        this.setState({
+            user: {}
+        });
+    };
+
     static navigationOptions = ({ navigation }) => {
         return {
             headerTitle: 'Home ' + navigation.getParam('extra', ''),
@@ -27,6 +48,9 @@ class HomeScreen extends React.Component {
     };
 
     render() {
+        console.log('user defined in nav:');
+        console.log(this.state.user);
+
         const { navigation } = this.props;
         const extraReturned = navigation.getParam('extra', '👾');    // Get extra or default to 👾
 
@@ -50,7 +74,11 @@ class HomeScreen extends React.Component {
                 <Button
                     title="Go to login screen"
                     onPress={() => {
-                        this.props.navigation.navigate('Login');
+                        this.props.navigation.navigate('Login', {
+                            user: this.state.user,
+                            loginUser: this.loginUser,
+                            resetUser: this.resetUser
+                        });
                     }}
                 />
             </View>
@@ -96,7 +124,7 @@ class DetailScreen extends React.Component {
 class BlankScreen extends React.Component {
     render() {
         return (
-            <View></View>
+            <View> </View>
         );
     }
 }
@@ -116,7 +144,7 @@ class InvertHeaderScreen extends React.Component {
 
     render() {
         return (
-            <View></View>
+            <View> </View>
         );
     }
 }
