@@ -19,6 +19,7 @@ class NavigationScreen extends React.Component {
         }
     };
 
+    // Used when testing for direct navigation between screens.
     render() {
         return (
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -40,7 +41,7 @@ const MainStack = createStackNavigator(
         Dashboard: DashboardScreen
     },
     {
-        initialRouteName: "Navigation",
+        initialRouteName: "Login",
     },
 );
 
