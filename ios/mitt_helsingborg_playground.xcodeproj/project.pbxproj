@@ -27,6 +27,7 @@
 		2EC5A0FE82ED47E8925C971D /* libRNNetworkInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC8F5935C5F8461D9207A497 /* libRNNetworkInfo.a */; };
 		6AFCAEB0F5BD41D89B69E901 /* libReactNativeConfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FA6A249D65346DB99FA8C9D /* libReactNativeConfig.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		883EBFF3C8BD409F9F5E9312 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 35C0B3D916C447C79031555A /* libRNCAsyncStorage.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		B560083FD8794E8F81875AB1 /* libRNScreens.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73F171F0703F48EDBE22015C /* libRNScreens.a */; };
 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
@@ -264,6 +265,20 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		88273BEC22C9E82300F34DF3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 70F825F6D7414527A1D990D5 /* RNNetworkInfo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A051C2C322B1C080001E1191;
+			remoteInfo = "RNNetworkInfo-tvOS";
+		};
+		88273BF422C9E8F400F34DF3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 47974076D1104B16B2D9AE7F /* RNCAsyncStorage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNCAsyncStorage;
+		};
 		88C0CB3722B28BF1000AE9CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
@@ -366,6 +381,8 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		254885F809CC494D87EFB782 /* RNScreens.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNScreens.xcodeproj; path = "../node_modules/react-native-screens/ios/RNScreens.xcodeproj"; sourceTree = "<group>"; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		35C0B3D916C447C79031555A /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCAsyncStorage.a; sourceTree = "<group>"; };
+		47974076D1104B16B2D9AE7F /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCAsyncStorage.xcodeproj; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		67A9592A96684CAA8AC26E6C /* ReactNativeConfig.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeConfig.xcodeproj; path = "../node_modules/react-native-config/ios/ReactNativeConfig.xcodeproj"; sourceTree = "<group>"; };
 		6FA6A249D65346DB99FA8C9D /* libReactNativeConfig.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libReactNativeConfig.a; sourceTree = "<group>"; };
@@ -412,6 +429,7 @@
 				B560083FD8794E8F81875AB1 /* libRNScreens.a in Frameworks */,
 				6AFCAEB0F5BD41D89B69E901 /* libReactNativeConfig.a in Frameworks */,
 				2EC5A0FE82ED47E8925C971D /* libRNNetworkInfo.a in Frameworks */,
+				883EBFF3C8BD409F9F5E9312 /* libRNCAsyncStorage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -581,6 +599,7 @@
 				254885F809CC494D87EFB782 /* RNScreens.xcodeproj */,
 				67A9592A96684CAA8AC26E6C /* ReactNativeConfig.xcodeproj */,
 				70F825F6D7414527A1D990D5 /* RNNetworkInfo.xcodeproj */,
+				47974076D1104B16B2D9AE7F /* RNCAsyncStorage.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -618,6 +637,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		88273BF122C9E8F400F34DF3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				88273BF522C9E8F400F34DF3 /* libRNCAsyncStorage.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		88C0CB1122B28BEF000AE9CC /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -627,6 +654,7 @@
 				0745B0952C9B4AE3828B7496 /* libRNGestureHandler-tvOS.a */,
 				E2415A714DCD42DD8BB8F9A9 /* libReactNativeConfig-tvOS.a */,
 				FC8F5935C5F8461D9207A497 /* libRNNetworkInfo.a */,
+				35C0B3D916C447C79031555A /* libRNCAsyncStorage.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -661,6 +689,7 @@
 			isa = PBXGroup;
 			children = (
 				88C0CCF922B909AC000AE9CC /* libRNNetworkInfo.a */,
+				88273BED22C9E82300F34DF3 /* libRNNetworkInfo-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -796,6 +825,10 @@
 				{
 					ProductGroup = 88C0CB3F22B28BF4000AE9CC /* Products */;
 					ProjectRef = 67A9592A96684CAA8AC26E6C /* ReactNativeConfig.xcodeproj */;
+				},
+				{
+					ProductGroup = 88273BF122C9E8F400F34DF3 /* Products */;
+					ProjectRef = 47974076D1104B16B2D9AE7F /* RNCAsyncStorage.xcodeproj */;
 				},
 				{
 					ProductGroup = 88C0CB4122B28BF4000AE9CC /* Products */;
@@ -1043,6 +1076,20 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		88273BED22C9E82300F34DF3 /* libRNNetworkInfo-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNNetworkInfo-tvOS.a";
+			remoteRef = 88273BEC22C9E82300F34DF3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		88273BF522C9E8F400F34DF3 /* libRNCAsyncStorage.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNCAsyncStorage.a;
+			remoteRef = 88273BF422C9E8F400F34DF3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		88C0CB3822B28BF1000AE9CC /* libjsi.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1214,12 +1261,14 @@
 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
 					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
 					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
+					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 				);
 				INFOPLIST_FILE = mitt_helsingborg_playgroundTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1249,12 +1298,14 @@
 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
 					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
 					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
+					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 				);
 				INFOPLIST_FILE = mitt_helsingborg_playgroundTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1285,6 +1336,7 @@
 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
 					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
 					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
+					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 				);
 				INFOPLIST_FILE = mitt_helsingborg_playground/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1311,6 +1363,7 @@
 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
 					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
 					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
+					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 				);
 				INFOPLIST_FILE = mitt_helsingborg_playground/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

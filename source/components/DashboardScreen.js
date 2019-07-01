@@ -28,7 +28,8 @@ class DashboardScreen extends Component {
     signWithBankid = async () => {
         this.setState({ isLoading: true });
 
-        const { user } = this.props;
+        const { navigation } = this.props;
+        const user = navigation.getParam('user');
 
         await sign(
             user.personalNumber,
@@ -48,7 +49,8 @@ class DashboardScreen extends Component {
     render() {
 
         const { isLoading, isBankidInstalled } = this.state;
-        const { user } = this.props;
+        const { navigation } = this.props;
+        const user = navigation.getParam('user');
 
         return (
             <>
