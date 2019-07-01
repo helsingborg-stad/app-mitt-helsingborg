@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput, Linking, Button } from 'react-native';
-import { authorizeUser } from "../../services/UserService";
+import { authorize, bypassBankid, cancelRequest } from "../../services/UserService";
 import { canOpenUrl } from "../../helpers/LinkHelper";
 import { sanitizePno, validatePno } from "../../helpers/ValidationHelper";
 
@@ -71,7 +71,16 @@ class LoginScreen extends Component {
             return;
         }
 
-        await authorizeUser(personalNumberInput)
+        // TODO: For testing only, remove me later
+        console.log(personalNumberInput);
+        if (personalNumberInput === '201111111111') {
+            bypassBankid(personalNumberInput).then(res => {
+                this.props.loginUser(res.data)
+            }).catch(error => console.log(error));
+            return;
+        }
+
+        await authorize(personalNumberInput)
             .then(authResponse => {
                 if (authResponse.ok === true) {
                     console.log("authResponse success", authResponse);
@@ -82,20 +91,21 @@ class LoginScreen extends Component {
                     loginUser(authResponse.status.user);
 
                 } else {
-                    console.log("authResponse Fail", authResponse);
+                    console.log("authResponse failed", authResponse);
                     this.setState({ isLoading: false });
-                    Alert.alert("Något fick fel");
+                    Alert.alert(authResponse.data);
                 }
             })
             .catch(error => {
                 // TODO: Fix error notice
-                console.log("authResponse Fail", error);
+                console.log("authResponse error", error);
                 this.setState({ isLoading: false });
                 Alert.alert("Något fick fel");
             });
     };
 
-    abortLogin = () => {
+    cancelLogin = () => {
+        cancelRequest().catch(error => console.log(error));
         this.setState({ isLoading: false });
     };
 
@@ -181,13 +191,21 @@ class LoginScreen extends Component {
                         </View>
                     </KeyboardAvoidingView >
                 ) : (
-                    <View style={styles.container}>
-                        <View style={styles.content}>
-                            <ActivityIndicator size="large" color="slategray" />
-                            {!isBankidInstalled &&
-                            <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
-                            }
-                        </View>
+                        <View style={styles.container}>
+                            <View style={styles.content}>
+                                <ActivityIndicator size="large" color="slategray" />
+                                {!isBankidInstalled &&
+                                    <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
+                                }
+                            </View>
+                            <View style={styles.loginContainer}>
+                                <TouchableOpacity
+                                    style={styles.button}
+                                    onPress={this.cancelLogin}
+                                    underlayColor='#fff'>
+                                    <Text style={styles.buttonText}>Avbryt</Text>
+                                </TouchableOpacity>
+                            </View>
                         <View style={styles.loginContainer}>
                             <TouchableOpacity
                                 style={styles.button}
