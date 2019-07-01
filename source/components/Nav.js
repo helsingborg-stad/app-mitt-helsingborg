@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Button } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import LoginScreen from "./screens/LoginScreen";
+import DashboardScreen from './DashboardScreen';
 
 class NavigationScreen extends React.Component {
     constructor(props) {
@@ -9,29 +10,7 @@ class NavigationScreen extends React.Component {
 
         this.state = {
             isAuthed: false,
-            user: {}
         };
-    };
-
-    /**
-     * Login a user
-     * TODO:
-     * - Save user to db and create a session
-     */
-    loginUser = (user) => {
-        console.log(user);
-
-        this.setState({
-            user,
-            isAuthed: true
-        });
-    };
-
-    resetUser = () => {
-        console.log("reset user");
-        this.setState({
-            user: {}
-        });
     };
 
     static navigationOptions = () => {
@@ -46,11 +25,7 @@ class NavigationScreen extends React.Component {
                 <Button
                     title="Go to login screen"
                     onPress={() => {
-                        this.props.navigation.navigate('Login', {
-                            user: this.state.user,
-                            loginUser: this.loginUser,
-                            resetUser: this.resetUser
-                        });
+                        this.props.navigation.navigate('Login');
                     }}
                 />
             </View>
@@ -61,7 +36,8 @@ class NavigationScreen extends React.Component {
 const MainStack = createStackNavigator(
     {
         Navigation: NavigationScreen,
-        Login: LoginScreen
+        Login: LoginScreen,
+        Dashboard: DashboardScreen
     },
     {
         initialRouteName: "Navigation",

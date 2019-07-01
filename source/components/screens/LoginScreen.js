@@ -9,6 +9,7 @@ class LoginScreen extends Component {
         super(props);
 
         this.state = {
+            user: {},
             isBankidInstalled: false,
             validPno: false,
             isLoading: false,
@@ -17,16 +18,16 @@ class LoginScreen extends Component {
     }
 
     componentDidMount() {
-        const { navigation } = this.props;
-        const user = navigation.getParam('user');
+        // const { navigation } = this.props;
+        // const user = navigation.getParam('user');
 
-        const personalNumber = typeof user.personalNumber !== 'undefined' && user.personalNumber ? user.personalNumber : '';
+        // const personalNumber = typeof user.personalNumber !== 'undefined' && user.personalNumber ? user.personalNumber : '';
 
-        this.setState({
-            personalNumberInput: personalNumber
-        });
+        // this.setState({
+        //     personalNumberInput: personalNumber
+        // });
 
-        this.validatePno(personalNumber);
+        // this.validatePno(personalNumber);
 
         this.isBankidInstalled();
     }
@@ -38,6 +39,19 @@ class LoginScreen extends Component {
         if (isBankidInstalled) {
             this.setState({ isBankidInstalled: true });
         }
+    };
+
+    /**
+     * Login a user
+     * TODO:
+     * - Save user to db and create a session
+     */
+    loginUser = (user) => {
+        console.log("The user", user);
+
+        this.props.navigation.navigate('Dashboard', {
+            user: user,
+        });
     };
 
     /**
@@ -75,7 +89,7 @@ class LoginScreen extends Component {
         console.log(personalNumberInput);
         if (personalNumberInput === '201111111111') {
             bypassBankid(personalNumberInput).then(res => {
-                this.props.loginUser(res.data)
+                this.loginUser(res.data)
             }).catch(error => console.log(error));
             return;
         }
@@ -84,11 +98,8 @@ class LoginScreen extends Component {
             .then(authResponse => {
                 if (authResponse.ok === true) {
                     console.log("authResponse success", authResponse);
-                    // this.props.loginUser(authResponse.status.user);
-                    const { navigation } = this.props;
-                    const loginUser = navigation.getParam('loginUser');
 
-                    loginUser(authResponse.status.user);
+                    this.loginUser(authResponse.data);
 
                 } else {
                     console.log("authResponse failed", authResponse);
@@ -118,7 +129,8 @@ class LoginScreen extends Component {
 
     render() {
         const { navigation } = this.props;
-        const user = navigation.getParam('user');
+        //const user = navigation.getParam('user');
+        const user = {};
         const resetUser = navigation.getParam('resetUser');
         const { isLoading, validPno, personalNumberInput, isBankidInstalled } = this.state;
 
@@ -206,15 +218,7 @@ class LoginScreen extends Component {
                                     <Text style={styles.buttonText}>Avbryt</Text>
                                 </TouchableOpacity>
                             </View>
-                        <View style={styles.loginContainer}>
-                            <TouchableOpacity
-                                style={styles.button}
-                                onPress={this.abortLogin}
-                                underlayColor='#fff'>
-                                <Text style={styles.buttonText}>Avbryt</Text>
-                            </TouchableOpacity>
                         </View>
-                    </View>
                 )
                 }
             </>
