@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Button } from 'react-native';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator, createAppContainer, createBottomTabNavigator } from 'react-navigation';
 import LoginScreen from "./screens/LoginScreen";
+import UserSettingsScreen from "./screens/UserSettingsScreen"
 import DashboardScreen from './DashboardScreen';
 
 class NavigationScreen extends React.Component {
@@ -13,12 +14,7 @@ class NavigationScreen extends React.Component {
         };
     };
 
-    static navigationOptions = () => {
-        return {
-            headerTitle: 'Navigation'
-        }
-    };
-
+    // Used when testing for direct navigation between screens.
     render() {
         return (
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -33,29 +29,50 @@ class NavigationScreen extends React.Component {
     }
 }
 
-const MainStack = createStackNavigator(
+const MittHbgStack = createStackNavigator(
     {
         Navigation: NavigationScreen,
         Login: LoginScreen,
         Dashboard: DashboardScreen
     },
     {
-        initialRouteName: "Navigation",
+        initialRouteName: "Login",
+        defaultNavigationOptions : {
+            headerStyle: {
+                //backgroundColor: '#f4511e'
+            }
+        }
     },
 );
 
-const RootStack = createStackNavigator(
+const SettingStack = createStackNavigator(
     {
-        Main: {
-            screen: MainStack
-        }
+        Settings: UserSettingsScreen
     },
     {
-        headerMode: 'none',
+        initialRouteName: "Settings",
+        defaultNavigationOptions: {
+            headerTitle: "Inställningar"
+        }
     }
 );
 
-const AppContainer = createAppContainer(RootStack);
+const MainTabs = createBottomTabNavigator({
+    MittHelsingborg: {
+        screen: MittHbgStack,
+        navigationOptions: {
+            tabBarLabel: 'Mitt HBG'
+        }
+    },
+    Nav: {
+        screen: SettingStack,
+        navigationOptions: {
+            tabBarLabel: 'Inställningar'
+        }
+    }
+});
+
+const AppContainer = createAppContainer(MainTabs);
 
 export default class App extends React.Component {
     render() {

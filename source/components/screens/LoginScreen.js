@@ -180,7 +180,11 @@ class LoginScreen extends Component {
 
                                         <TouchableOpacity
                                             style={[styles.button, !validPno ? styles.buttonDisabled : '']}
-                                            onPress={this.authenticateUser}
+                                            onPress={() => {
+                                                const { navigation } = this.props;
+
+                                                navigation.navigate('MyModal')
+                                            }}
                                             underlayColor='#fff'
                                             disabled={!validPno}
                                         >
