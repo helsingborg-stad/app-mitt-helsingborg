@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
-import { sign, cancelRequest } from "../services/UserService";
-import { canOpenUrl } from "../helpers/LinkHelper";
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Alert, Button } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import { sign, cancelRequest } from "../../services/UserService";
+import { canOpenUrl } from "../../helpers/LinkHelper";
 
 class DashboardScreen extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            user: {},
             isBankidInstalled: false,
             isLoading: false,
         }
     }
 
     componentDidMount() {
+        this.setUserAsync();
         this.isBankidInstalled();
     }
 
@@ -25,11 +28,22 @@ class DashboardScreen extends Component {
         }
     }
 
-    signWithBankid = async () => {
-        this.setState({ isLoading: true });
+    setUserAsync = async () => {
+        try {
+            const user = await AsyncStorage.getItem('user');
+            console.log("getUserAsync", user);
+            if (user) {
+                this.setState({ user: JSON.parse(user) });
+            }
+        } catch (error) {
+            console.log("Something went wrong", error);
+        }
+    }
 
-        const { navigation } = this.props;
-        const user = navigation.getParam('user');
+    signWithBankid = async () => {
+        const { user } = this.state;
+
+        this.setState({ isLoading: true });
 
         await sign(
             user.personalNumber,
@@ -46,11 +60,13 @@ class DashboardScreen extends Component {
         this.setState({ isLoading: false });
     }
 
-    render() {
+    signOut = async () => {
+        await AsyncStorage.removeItem('accessToken');
+        this.props.navigation.navigate('AuthLoading');
+    }
 
-        const { isLoading, isBankidInstalled } = this.state;
-        const { navigation } = this.props;
-        const user = navigation.getParam('user');
+    render() {
+        const { user, isLoading, isBankidInstalled } = this.state;
 
         return (
             <>
@@ -83,6 +99,12 @@ class DashboardScreen extends Component {
                             >
                                 <Text style={styles.buttonText}>Sign me plx</Text>
                             </TouchableOpacity>
+
+                            <Button
+                                onPress={this.signOut}
+                                title="Sign out"
+                            />
+
                         </View >
                     )
                 }

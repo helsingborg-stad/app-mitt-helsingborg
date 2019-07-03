@@ -80,7 +80,10 @@ export const authorize = (personalNumber) =>
                 resolve({ ok: false, data: hintCode });
             } else if (status === 'complete') {
                 clearInterval(interval);
-                resolve({ ok: true, data: completionData.user });
+                resolve({
+                    ok: true,
+                    data: { user: completionData.user }
+                });
             } else if (errorCode) {
                 // Probably has the user clicked abort login in the app
                 clearInterval(interval);
@@ -137,7 +140,7 @@ export const sign = (personalNumber, userVisibleData) =>
                 resolve({ ok: false, data: hintCode });
             } else if (status === 'complete') {
                 clearInterval(interval);
-                resolve({ ok: true, data: completionData.user });
+                resolve({ ok: true, data: completionData });
             } else if (errorCode) {
                 // Probably has the user clicked abort login in the app
                 clearInterval(interval);
@@ -203,10 +206,12 @@ export const bypassBankid = async (personalNumber) => {
     return {
         ok: true,
         data: {
-            'name': 'Gandalf Stål',
-            'givenName': 'Gandalf',
-            'surname': 'Stål',
-            'personalNumber': personalNumber
+            user: {
+                'name': 'Gandalf Stål',
+                'givenName': 'Gandalf',
+                'surname': 'Stål',
+                'personalNumber': personalNumber
+            },
         }
-    };
+    }
 };
