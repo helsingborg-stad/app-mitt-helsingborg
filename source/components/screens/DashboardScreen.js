@@ -61,8 +61,9 @@ class DashboardScreen extends Component {
     }
 
     signOut = async () => {
-        await AsyncStorage.removeItem('accessToken');
-        this.props.navigation.navigate('AuthLoading');
+        await AsyncStorage.removeItem('accessToken').then(() => {
+            this.props.navigation.navigate('AuthLoading');
+        });
     }
 
     render() {

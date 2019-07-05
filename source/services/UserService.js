@@ -46,19 +46,24 @@ export const authorize = (personalNumber) =>
     new Promise(async (resolve, reject) => {
         const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
 
-        const { autoStartToken, orderRef } = await request(
+        const { user, token } = await request(
             'auth',
-            { personalNumber, endUserIp }
+            {
+                personalNumber,
+                endUserIp
+            }
         ).catch(error => {
             console.log("Auth error", error);
         });
 
-        if (!autoStartToken || !orderRef) {
-            return reject(new Error('Missing token or orderref'));
+        console.log("token", token);
+
+        if (!user || !user.autoStartToken || !user.orderRef) {
+            return reject(new Error('Missing autoStartToken or orderRef'));
         }
 
         // Set the order reference
-        orderReference = orderRef;
+        orderReference = user.orderRef;
 
         // Launch BankID app if it's installed on this machine
         const launchNativeApp = await canOpenUrl('bankid:///');
@@ -68,12 +73,17 @@ export const authorize = (personalNumber) =>
 
         // Poll /collect/ endpoint every 2nd second until auth either success or fails
         const interval = setInterval(async () => {
-            const { status, hintCode, completionData, errorCode, error } = await request(
-                'collect',
-                { orderRef }
+            const data = await request(
+                `auth/${orderReference}`,
+                { orderReference },
+                token
             ).catch(
                 error => console.log("Auth collect error", error)
             );
+
+            const { status, hintCode, completionData } = data.data;
+            const { token } = data;
+            // console.log("collect", data);
 
             if (status === 'failed') {
                 clearInterval(interval);
@@ -173,13 +183,22 @@ export const cancelRequest = async (order) => {
  * @param {string} method
  * @param {array} params
  */
-request = async (method, params) => {
-    return await axiosClient.post(
-        `${env.BANKID_API_URL}/${method}/`,
-        params
+request = async (method, data, token) => {
+    console.log("data", data);
+    return await axios({
+        method: 'POST',
+        url: `${env.MITTHELSINGBORG_IO}/${method}`,
+        data: data,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+    }
     ).then(result => {
-        if (result.data.data) {
-            return result.data.data;
+        console.log("request result", result);
+        if (result.data) {
+            return result.data;
         }
         return { error: new Error('Error in request call, missing returned data') };
     }).catch(err => {
@@ -187,16 +206,6 @@ request = async (method, params) => {
         return { error: err };
     });
 }
-
-/**
- * Creates an Axios request client
- */
-const axiosClient = axios.create({
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    }
-});
 
 /**
  * Bypasses the BankID authentication steps

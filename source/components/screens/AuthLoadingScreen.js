@@ -12,13 +12,20 @@ class AuthLoadingScreen extends React.Component {
         this.bootstrapAsync();
     }
 
-    // Fetch the token from storage then navigate to our appropriate place
-    bootstrapAsync = async () => {
+    // TODO: Validate access token
+    isLoggedIn = async () => {
         const accessToken = await AsyncStorage.getItem('accessToken');
-        // TODO: Validate access token
         console.log("accessToken", accessToken);
 
-        this.props.navigation.navigate(accessToken ? 'App' : 'Auth');
+        return !!accessToken;
+    }
+
+    // Fetch the token from storage then navigate to our appropriate place
+    bootstrapAsync = async () => {
+        const isLoggedIn = await this.isLoggedIn();
+        console.log("isLoggedIn", isLoggedIn);
+
+        this.props.navigation.navigate(isLoggedIn ? 'App' : 'Auth');
     };
 
     render() {

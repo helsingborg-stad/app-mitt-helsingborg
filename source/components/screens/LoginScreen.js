@@ -34,15 +34,14 @@ class LoginScreen extends Component {
 
     /**
      * Log in user
+     * TODO:
+     *  - Get access token from an external API
+     *  - Save user data to CRM
      */
     loginUser = async (user) => {
-        // TODO: Get / generate access token
-        const accessToken = 'some-token';
-
         await AsyncStorage.multiSet([
             ['user', JSON.stringify(user)],
-            ['accessToken', accessToken],
-            ['lastLogin', + new Date()]
+            ['accessToken', "some-token"],
         ]);
 
         this.props.navigation.navigate('App');
