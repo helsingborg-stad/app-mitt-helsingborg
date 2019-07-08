@@ -4,7 +4,10 @@ import {
     StyleSheet,
     View,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import StorageService from '../../services/StorageService';
+
+const USERKEY = 'user';
+const TOKENKEY = 'accessToken';
 
 class AuthLoadingScreen extends React.Component {
     constructor(props) {
@@ -14,7 +17,7 @@ class AuthLoadingScreen extends React.Component {
 
     // TODO: Validate access token
     isLoggedIn = async () => {
-        const accessToken = await AsyncStorage.getItem('accessToken');
+        const accessToken = await StorageService.getData(TOKENKEY);
         console.log("accessToken", accessToken);
 
         return !!accessToken;

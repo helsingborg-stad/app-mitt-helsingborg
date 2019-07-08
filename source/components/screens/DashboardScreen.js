@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Alert, Button } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import StorageService from '../../services/StorageService';
 import { sign, cancelRequest } from "../../services/UserService";
 import { canOpenUrl } from "../../helpers/LinkHelper";
 
+const USERKEY = 'user';
+const TOKENKEY = 'accessToken';
 class DashboardScreen extends Component {
     constructor(props) {
         super(props);
@@ -30,10 +32,10 @@ class DashboardScreen extends Component {
 
     setUserAsync = async () => {
         try {
-            const user = await AsyncStorage.getItem('user');
-            console.log("getUserAsync", user);
+            const user = await StorageService.getData(USERKEY);
+            console.log("getUserAsync dashboard", user);
             if (user) {
-                this.setState({ user: JSON.parse(user) });
+                this.setState({ user });
             }
         } catch (error) {
             console.log("Something went wrong", error);
@@ -61,7 +63,7 @@ class DashboardScreen extends Component {
     }
 
     signOut = async () => {
-        await AsyncStorage.removeItem('accessToken').then(() => {
+        await StorageService.removeData(TOKENKEY).then(() => {
             this.props.navigation.navigate('AuthLoading');
         });
     }

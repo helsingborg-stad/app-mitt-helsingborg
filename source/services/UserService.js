@@ -3,8 +3,7 @@ import axios from "axios";
 import { Linking } from 'react-native';
 import { NetworkInfo } from 'react-native-network-info';
 import { canOpenUrl } from '../helpers/LinkHelper';
-
-let orderReference = '';
+import StorageService from './StorageService';
 
 /**
  * Launch BankID app
@@ -56,15 +55,14 @@ export const authorize = (personalNumber) =>
             console.log("Auth error", error);
         });
 
-        console.log("token", token);
+        const { autoStartToken, orderRef } = user;
 
-        if (!user || !user.autoStartToken || !user.orderRef) {
+        if (!user || !autoStartToken || !orderRef) {
             return reject(new Error('Missing autoStartToken or orderRef'));
         }
 
-        // TODO: Save order ref async
-        // Set the order reference
-        orderReference = user.orderRef;
+        // Save order reference to async storage
+        StorageService.saveData('orderRef', orderRef);
 
         // Launch BankID app if it's installed on this machine
         const launchNativeApp = await canOpenUrl('bankid:///');
@@ -75,8 +73,8 @@ export const authorize = (personalNumber) =>
         // Poll /collect/ endpoint every 2nd second until auth either success or fails
         const interval = setInterval(async () => {
             const collectData = await request(
-                `auth/${orderReference}`,
-                { orderReference },
+                `auth/${orderRef}`,
+                { orderRef },
                 token
             ).catch(
                 error => console.log("Auth collect error", error)
@@ -96,7 +94,10 @@ export const authorize = (personalNumber) =>
                 clearInterval(interval);
                 resolve({
                     ok: true,
-                    data: { user: completionData.user }
+                    data: {
+                        user: completionData.user,
+                        accessToken: token
+                    }
                 });
             } else if (error) {
                 clearInterval(interval);
@@ -167,10 +168,11 @@ export const sign = (personalNumber, userVisibleData) =>
 
 /**
  * Cancels a started BankID request
+ * TODO: Fix the cancel endpoint when API is done
  * @param {string} order
  */
-export const cancelRequest = async (order) => {
-    const orderRef = order ? order : orderReference;
+export const cancelRequest = async () => {
+    const orderRef = await StorageService.getData('orderRef');
 
     return await request(
         'cancel',

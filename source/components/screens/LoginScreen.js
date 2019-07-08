@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput, Linking, Button } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import StorageService from '../../services/StorageService';
 import { authorize, bypassBankid, cancelRequest } from "../../services/UserService";
 import { canOpenUrl } from "../../helpers/LinkHelper";
 import { sanitizePno, validatePno } from "../../helpers/ValidationHelper";
 
+const USERKEY = 'user';
+const TOKENKEY = 'accessToken';
 class LoginScreen extends Component {
     constructor(props) {
         super(props);
@@ -35,16 +37,18 @@ class LoginScreen extends Component {
     /**
      * Log in user
      * TODO:
-     *  - Get access token from an external API
-     *  - Save user data to CRM
+     *  - Save user data to CRM / Mock server
      */
-    loginUser = async (user) => {
-        await AsyncStorage.multiSet([
-            ['user', JSON.stringify(user)],
-            ['accessToken', "some-token"],
-        ]);
+    loginUser = async (user, accessToken) => {
+        const data = [
+            [USERKEY, JSON.stringify(user)],
+            [TOKENKEY, accessToken],
+        ];
 
-        this.props.navigation.navigate('App');
+        await StorageService.multiSaveData(data)
+            .then(() => {
+                this.props.navigation.navigate('App');
+            });
     };
 
     /**
@@ -69,7 +73,6 @@ class LoginScreen extends Component {
     }
 
     authenticateUser = async (personalNumber) => {
-
         console.log("personalNumber authenticateUser", personalNumber);
         this.setState({ isLoading: true });
 
@@ -96,8 +99,8 @@ class LoginScreen extends Component {
             .then(authResponse => {
                 if (authResponse.ok === true) {
                     console.log("authResponse success", authResponse);
-                    const { user } = authResponse.data;
-                    this.loginUser(user);
+                    const { user, accessToken } = authResponse.data;
+                    this.loginUser(user, accessToken);
                 } else {
                     console.log("authResponse failed", authResponse);
                     this.setState({ isLoading: false });
@@ -126,10 +129,10 @@ class LoginScreen extends Component {
 
     setUserAsync = async () => {
         try {
-            const user = await AsyncStorage.getItem('user');
+            const user = await StorageService.getData(USERKEY);
             console.log("getUserAsync", user);
             if (user) {
-                this.setState({ user: JSON.parse(user) });
+                this.setState({ user: user });
             }
         } catch (error) {
             console.log("Something went wrong", error);
@@ -137,7 +140,6 @@ class LoginScreen extends Component {
     }
 
     resetUser = async () => {
-        await AsyncStorage.removeItem('user');
         this.setState({ user: {} });
     }
 
