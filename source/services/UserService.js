@@ -62,6 +62,7 @@ export const authorize = (personalNumber) =>
             return reject(new Error('Missing autoStartToken or orderRef'));
         }
 
+        // TODO: Save order ref async
         // Set the order reference
         orderReference = user.orderRef;
 
@@ -73,7 +74,7 @@ export const authorize = (personalNumber) =>
 
         // Poll /collect/ endpoint every 2nd second until auth either success or fails
         const interval = setInterval(async () => {
-            const data = await request(
+            const collectData = await request(
                 `auth/${orderReference}`,
                 { orderReference },
                 token
@@ -81,9 +82,12 @@ export const authorize = (personalNumber) =>
                 error => console.log("Auth collect error", error)
             );
 
-            const { status, hintCode, completionData } = data.data;
-            const { token } = data;
-            // console.log("collect", data);
+            console.log("collectData", collectData);
+
+            const { error } = collectData;
+            const { status, hintCode, completionData } = collectData.data;
+
+            // TODO: Fix error handling when mitt-helsingborg-io API is done
 
             if (status === 'failed') {
                 clearInterval(interval);
@@ -94,10 +98,6 @@ export const authorize = (personalNumber) =>
                     ok: true,
                     data: { user: completionData.user }
                 });
-            } else if (errorCode) {
-                // Probably has the user clicked abort login in the app
-                clearInterval(interval);
-                resolve({ ok: false, data: errorCode });
             } else if (error) {
                 clearInterval(interval);
                 reject(error);
@@ -107,9 +107,9 @@ export const authorize = (personalNumber) =>
     });
 
 /**
+ * TODO: Fix Sign request when API is done
 * Make a sign request to BankID API and poll until done
 * @param {string} personalNumber
-*/
 export const sign = (personalNumber, userVisibleData) =>
     new Promise(async (resolve, reject) => {
         const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
@@ -138,12 +138,14 @@ export const sign = (personalNumber, userVisibleData) =>
 
         // Poll /collect/ endpoint every 2nd second until sign either success or fails
         const interval = setInterval(async () => {
-            const { status, hintCode, completionData, errorCode, error } = await request(
+            const collectData = await request(
                 'collect',
                 { orderRef }
             ).catch(
                 error => console.log("Auth collect error", error)
             );
+
+            const { status, hintCode, completionData } = collectData.user;
 
             if (status === 'failed') {
                 clearInterval(interval);
@@ -156,12 +158,12 @@ export const sign = (personalNumber, userVisibleData) =>
                 clearInterval(interval);
                 resolve({ ok: false, data: errorCode });
             } else if (error) {
-                clearInterval(interval);
-                reject(error);
+                console.log(hintCode);
             }
 
         }, 2000);
     });
+*/
 
 /**
  * Cancels a started BankID request
@@ -180,14 +182,14 @@ export const cancelRequest = async (order) => {
 
 /**
  * Send request to BankID API
- * @param {string} method
+ * @param {string} endpoint
  * @param {array} params
  */
-request = async (method, data, token) => {
+request = async (endpoint, data, token) => {
     console.log("data", data);
     return await axios({
         method: 'POST',
-        url: `${env.MITTHELSINGBORG_IO}/${method}`,
+        url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
         data: data,
         headers: {
             'Accept': 'application/json',
@@ -196,11 +198,8 @@ request = async (method, data, token) => {
         }
     }
     ).then(result => {
-        console.log("request result", result);
-        if (result.data) {
-            return result.data;
-        }
-        return { error: new Error('Error in request call, missing returned data') };
+        console.log("Request result", result);
+        return result.data;
     }).catch(err => {
         console.log("Error in request call", err.request);
         return { error: err };
