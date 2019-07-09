@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput, Linking, Button } from 'react-native';
 import StorageService from '../../services/StorageService';
+import Auth from '../../helpers/AuthHelper';
 import { authorize, bypassBankid, cancelRequest } from "../../services/UserService";
 import { canOpenUrl } from "../../helpers/LinkHelper";
-import { sanitizePno, validatePno } from "../../helpers/ValidationHelper";
+import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
 
 const USERKEY = 'user';
-const TOKENKEY = 'accessToken';
 class LoginScreen extends Component {
     constructor(props) {
         super(props);
@@ -14,7 +14,7 @@ class LoginScreen extends Component {
         this.state = {
             user: {},
             isBankidInstalled: false,
-            validPno: false,
+            validPin: false,
             isLoading: false,
             personalNumberInput: ''
         };
@@ -25,6 +25,23 @@ class LoginScreen extends Component {
         this.isBankidInstalled();
     }
 
+    /**
+     * Get user from async storage and add to state
+     */
+    setUserAsync = async () => {
+        try {
+            const user = await StorageService.getData(USERKEY);
+            if (typeof user !== 'undefined' && user !== null) {
+                this.setState({ user });
+            }
+        } catch (error) {
+            console.log("Something went wrong", error);
+        }
+    }
+
+    /**
+     * Check if BankID app is installed on this machine
+     */
     isBankidInstalled = async () => {
         const isBankidInstalled = await canOpenUrl('bankid:///');
         console.log("isBankidInstalled", isBankidInstalled);
@@ -35,45 +52,22 @@ class LoginScreen extends Component {
     };
 
     /**
-     * Log in user
-     * TODO:
-     *  - Save user data to CRM / Mock server
+     * Sanitize and save personal identity number to state
+     * @param {string} personalNumber
      */
-    loginUser = async (user, accessToken) => {
-        const data = [
-            [USERKEY, JSON.stringify(user)],
-            [TOKENKEY, accessToken],
-        ];
-
-        await StorageService.multiSaveData(data)
-            .then(() => {
-                this.props.navigation.navigate('App');
-            });
-    };
-
-    /**
-     * Validate personal number
-     */
-    validatePno = (pno) => {
-        if (validatePno(pno)) {
-            this.setState({ validPno: true });
-        } else {
-            this.setState({ validPno: false });
-        }
-    };
-
-    setPno(pno) {
-        pno = sanitizePno(pno);
-
-        this.validatePno(pno);
+    setPin(personalNumber) {
+        personalNumber = sanitizePin(personalNumber);
 
         this.setState({
-            personalNumberInput: pno
+            validPin: validatePin(personalNumber),
+            personalNumberInput: personalNumber
         });
     }
 
+    /**
+     * Make authenticate request and log in user
+     */
     authenticateUser = async (personalNumber) => {
-        console.log("personalNumber authenticateUser", personalNumber);
         this.setState({ isLoading: true });
 
         if (!personalNumber) {
@@ -85,8 +79,6 @@ class LoginScreen extends Component {
         // TODO: For testing only, remove me later
         console.log(personalNumber);
         if (personalNumber === '201111111111') {
-            console.log("bypass login");
-
             bypassBankid(personalNumber).then(res => {
                 const { user } = res.data;
                 this.loginUser(user);
@@ -96,11 +88,14 @@ class LoginScreen extends Component {
         }
 
         await authorize(personalNumber)
-            .then(authResponse => {
+            .then(async authResponse => {
                 if (authResponse.ok === true) {
                     console.log("authResponse success", authResponse);
                     const { user, accessToken } = authResponse.data;
-                    this.loginUser(user, accessToken);
+                    Auth.logIn(user, accessToken)
+                        .then(() => {
+                            this.props.navigation.navigate('App');
+                        });
                 } else {
                     console.log("authResponse failed", authResponse);
                     this.setState({ isLoading: false });
@@ -115,36 +110,33 @@ class LoginScreen extends Component {
             });
     };
 
+    /**
+     * Cancel any ongoing BankID request
+     */
     cancelLogin = () => {
         cancelRequest().catch(error => console.log(error));
         this.setState({ isLoading: false });
     };
 
-    checkPno = () => {
-        const { validPno } = this.state;
-        if (!validPno) {
+    /**
+     * Check PIN (Personal identity number)
+     */
+    checkPin = () => {
+        const { validPin } = this.state;
+        if (!validPin) {
             Alert.alert("Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.");
         }
     };
 
-    setUserAsync = async () => {
-        try {
-            const user = await StorageService.getData(USERKEY);
-            console.log("getUserAsync", user);
-            if (user) {
-                this.setState({ user: user });
-            }
-        } catch (error) {
-            console.log("Something went wrong", error);
-        }
-    }
-
+    /**
+     * Remove user from state, to be able to login as another user
+     */
     resetUser = async () => {
         this.setState({ user: {} });
     }
 
     render() {
-        const { user, isLoading, validPno, personalNumberInput, isBankidInstalled } = this.state;
+        const { user, isLoading, validPin, personalNumberInput, isBankidInstalled } = this.state;
 
         return (
             <>
@@ -184,18 +176,18 @@ class LoginScreen extends Component {
                                                 returnKeyType='done'
                                                 maxLength={12}
                                                 placeholder={'ÅÅÅÅMMDDXXXX'}
-                                                onChangeText={(value) => this.setPno(value)}
-                                                onSubmitEditing={this.checkPno}
+                                                onChangeText={(value) => this.setPin(value)}
+                                                onSubmitEditing={this.checkPin}
                                                 value={personalNumberInput}
                                             />
 
                                             <TouchableOpacity
-                                                style={[styles.button, !validPno ? styles.buttonDisabled : '']}
+                                                style={[styles.button, !validPin ? styles.buttonDisabled : '']}
                                                 onPress={() => this.authenticateUser(personalNumberInput)}
                                                 underlayColor='#fff'
-                                                disabled={!validPno}
+                                                disabled={!validPin}
                                             >
-                                                <Text style={[styles.buttonText, !validPno ? styles.buttonTextDisabled : '']}>Logga in</Text>
+                                                <Text style={[styles.buttonText, !validPin ? styles.buttonTextDisabled : '']}>Logga in</Text>
                                             </TouchableOpacity>
                                         </View>
 
