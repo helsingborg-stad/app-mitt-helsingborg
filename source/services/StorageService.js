@@ -18,21 +18,17 @@ export default class StorageService extends Component {
      * @returns {Promise}
      */
     static async getData(key) {
-        try {
-            return await AsyncStorage.getItem(key).then(value => {
-                try {
-                    var jsonObject = JSON.parse(value);
-                    if (jsonObject && typeof jsonObject === "object") {
-                        return jsonObject;
-                    }
+        return await AsyncStorage.getItem(key).then(value => {
+            try {
+                var jsonObject = JSON.parse(value);
+                if (jsonObject && typeof jsonObject === "object") {
+                    return jsonObject;
                 }
-                catch (e) {
-                    return value;
-                }
-            });
-        } catch (err) {
-            console.log(err);
-        }
+            }
+            catch (e) {
+                return value;
+            }
+        });
     }
 
     /**

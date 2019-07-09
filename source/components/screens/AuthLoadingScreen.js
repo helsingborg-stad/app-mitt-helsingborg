@@ -15,16 +15,13 @@ class AuthLoadingScreen extends React.Component {
 
     authAsync = async () => {
         const loggedIn = await Auth.loggedIn();
-        console.log("loggedIn", loggedIn);
 
         if (!loggedIn) {
             this.props.navigation.navigate('Auth');
         } else {
-
             await Auth.confirmUser()
                 .then(() => this.props.navigation.navigate('App'))
                 .catch(() => {
-                    console.log("Confirmation error");
                     Auth.logout();
                     this.props.navigation.navigate('Auth');
                 });

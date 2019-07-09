@@ -80,8 +80,6 @@ export const authorize = (personalNumber) =>
                 error => console.log("Auth collect error", error)
             );
 
-            console.log("collectData", collectData);
-
             const { error } = collectData;
             const { status, hintCode, completionData } = collectData.data;
 
@@ -188,7 +186,6 @@ export const cancelRequest = async () => {
  * @param {array} params
  */
 request = async (endpoint, data, token) => {
-    console.log("data", data);
     return await axios({
         method: 'POST',
         url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
