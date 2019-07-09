@@ -4,32 +4,32 @@ import {
     StyleSheet,
     View,
 } from 'react-native';
-import StorageService from '../../services/StorageService';
-
-const USERKEY = 'user';
-const TOKENKEY = 'accessToken';
+import Auth from '../../helpers/AuthHelper';
 
 class AuthLoadingScreen extends React.Component {
+
     constructor(props) {
         super(props);
-        this.bootstrapAsync();
+        this.authAsync();
     }
 
-    // TODO: Validate access token
-    isLoggedIn = async () => {
-        const accessToken = await StorageService.getData(TOKENKEY);
-        console.log("accessToken", accessToken);
+    authAsync = async () => {
+        const loggedIn = await Auth.loggedIn();
+        console.log("loggedIn", loggedIn);
 
-        return !!accessToken;
+        if (!loggedIn) {
+            this.props.navigation.navigate('Auth');
+        } else {
+
+            await Auth.confirmUser()
+                .then(() => this.props.navigation.navigate('App'))
+                .catch(() => {
+                    console.log("Confirmation error");
+                    Auth.logout();
+                    this.props.navigation.navigate('Auth');
+                });
+        }
     }
-
-    // Fetch the token from storage then navigate to our appropriate place
-    bootstrapAsync = async () => {
-        const isLoggedIn = await this.isLoggedIn();
-        console.log("isLoggedIn", isLoggedIn);
-
-        this.props.navigation.navigate(isLoggedIn ? 'App' : 'Auth');
-    };
 
     render() {
         return (
