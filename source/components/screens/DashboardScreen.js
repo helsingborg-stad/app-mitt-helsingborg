@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Alert, Button } from 'react-native';
+import Auth from '../../helpers/AuthHelper';
 import StorageService from '../../services/StorageService';
 import { sign, cancelRequest } from "../../services/UserService";
 import { canOpenUrl } from "../../helpers/LinkHelper";
@@ -62,8 +63,8 @@ class DashboardScreen extends Component {
         this.setState({ isLoading: false });
     }
 
-    signOut = async () => {
-        await StorageService.removeData(TOKENKEY).then(() => {
+    logOut = async () => {
+        await Auth.logOut().then(() => {
             this.props.navigation.navigate('AuthLoading');
         });
     }
@@ -104,7 +105,7 @@ class DashboardScreen extends Component {
                             </TouchableOpacity>
 
                             <Button
-                                onPress={this.signOut}
+                                onPress={this.logOut}
                                 title="Sign out"
                             />
 
