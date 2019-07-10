@@ -71,8 +71,7 @@ class LoginScreen extends Component {
         this.setState({ isLoading: true });
 
         if (!personalNumber) {
-            Alert.alert("Personnummer saknas");
-            this.setState({ isLoading: false });
+            this.displayError('Personnummer saknas');
             return;
         }
 
@@ -81,7 +80,16 @@ class LoginScreen extends Component {
         if (personalNumber === '201111111111') {
             bypassBankid(personalNumber).then(res => {
                 const { user } = res.data;
-                this.loginUser(user);
+                Auth.logIn(
+                    user,
+                    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjFlZDcyYzJjLWQ5OGUtNGZjMC04ZGY2LWY5NjRkOTYxMTVjYSIsImlhdCI6MTU2Mjc0NzM2NiwiZXhwIjoxNTYyNzUwOTc0fQ.iwmUMm51j-j2BYui9v9371DkY5LwLGATWn4LepVxmNk' // fake token
+                )
+                    .then(() => {
+                        this.props.navigation.navigate('App');
+                    }).catch(() => {
+                        this.displayError('Login failed');
+                    });
+
             }).catch(error => console.log(error));
 
             return;
@@ -92,23 +100,31 @@ class LoginScreen extends Component {
                 if (authResponse.ok === true) {
                     console.log("authResponse success", authResponse);
                     const { user, accessToken } = authResponse.data;
-                    Auth.logIn(user, accessToken)
+                    return Auth.logIn(user, accessToken)
                         .then(() => {
                             this.props.navigation.navigate('App');
+                        }).catch(() => {
+                            throw "Login failed";
                         });
                 } else {
                     console.log("authResponse failed", authResponse);
-                    this.setState({ isLoading: false });
-                    Alert.alert(authResponse.data);
+                    this.displayError(authResponse.data);
                 }
             })
             .catch(error => {
-                // TODO: Fix error notice
+                // TODO: Add dynamic error messages
                 console.log("authResponse error", error);
-                this.setState({ isLoading: false });
-                Alert.alert("Något fick fel");
+                this.displayError('Något fick fel');
             });
     };
+
+    /**
+     * Display error notice
+     */
+    displayError = message => {
+        this.setState({ isLoading: false });
+        Alert.alert(message);
+    }
 
     /**
      * Cancel any ongoing BankID request
@@ -124,7 +140,7 @@ class LoginScreen extends Component {
     checkPin = () => {
         const { validPin } = this.state;
         if (!validPin) {
-            Alert.alert("Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.");
+            this.displayError('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.');
         }
     };
 

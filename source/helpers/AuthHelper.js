@@ -10,12 +10,22 @@ export default class AuthHelper {
      * Login user. Saves user and token to storage
      */
     static logIn = async (user, token) => {
-        const data = [
-            [USERKEY, JSON.stringify(user)],
-            [TOKENKEY, token],
-        ];
+        return new Promise(async (resolve, reject) => {
+            // Check if token is valid
+            if (this.isTokenExpired(token)) {
+                reject();
+            }
 
-        return await StorageService.multiSaveData(data);
+            // Store user data
+            const data = [
+                [USERKEY, JSON.stringify(user)],
+                [TOKENKEY, token],
+            ];
+
+            return await StorageService.multiSaveData(data)
+                .then(() => resolve())
+                .catch(() => reject());
+        });
     };
 
     /**
@@ -30,6 +40,7 @@ export default class AuthHelper {
      */
     static loggedIn = async () => {
         const token = await this.getToken();
+
         return !!token && !this.isTokenExpired(token);
     };
 
@@ -39,12 +50,12 @@ export default class AuthHelper {
     static isTokenExpired = token => {
         try {
             const decoded = decode(token);
-            if (decoded.exp < Date.now() / 1000) {
-                return true;
-            } else return false;
+            if (decoded.exp > Math.floor(Date.now() / 1000)) {
+                return false;
+            } else return true;
         } catch (err) {
             console.log("Token is expired!");
-            return false;
+            return true;
         }
     };
 

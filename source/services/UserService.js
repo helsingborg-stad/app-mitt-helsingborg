@@ -214,8 +214,8 @@ export const bypassBankid = async (personalNumber) => {
         ok: true,
         data: {
             user: {
-                'name': 'Gandalf Stål',
-                'givenName': 'Gandalf',
+                'name': 'Saruman Stål',
+                'givenName': 'Saruman',
                 'surname': 'Stål',
                 'personalNumber': personalNumber
             },

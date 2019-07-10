@@ -6,7 +6,6 @@ import { sign, cancelRequest } from "../../services/UserService";
 import { canOpenUrl } from "../../helpers/LinkHelper";
 
 const USERKEY = 'user';
-const TOKENKEY = 'accessToken';
 class DashboardScreen extends Component {
     constructor(props) {
         super(props);
