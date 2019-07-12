@@ -3,8 +3,7 @@ import axios from "axios";
 import { Linking } from 'react-native';
 import { NetworkInfo } from 'react-native-network-info';
 import { canOpenUrl } from '../helpers/LinkHelper';
-
-let orderReference = '';
+import StorageService from './StorageService';
 
 /**
  * Launch BankID app
@@ -46,19 +45,24 @@ export const authorize = (personalNumber) =>
     new Promise(async (resolve, reject) => {
         const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
 
-        const { autoStartToken, orderRef } = await request(
+        const { user, token } = await request(
             'auth',
-            { personalNumber, endUserIp }
+            {
+                personalNumber,
+                endUserIp
+            }
         ).catch(error => {
             console.log("Auth error", error);
         });
 
-        if (!autoStartToken || !orderRef) {
-            return reject(new Error('Missing token or orderref'));
+        const { autoStartToken, orderRef } = user;
+
+        if (!user || !autoStartToken || !orderRef) {
+            return reject(new Error('Missing autoStartToken or orderRef'));
         }
 
-        // Set the order reference
-        orderReference = orderRef;
+        // Save order reference to async storage
+        StorageService.saveData('orderRef', orderRef);
 
         // Launch BankID app if it's installed on this machine
         const launchNativeApp = await canOpenUrl('bankid:///');
@@ -68,23 +72,31 @@ export const authorize = (personalNumber) =>
 
         // Poll /collect/ endpoint every 2nd second until auth either success or fails
         const interval = setInterval(async () => {
-            const { status, hintCode, completionData, errorCode, error } = await request(
-                'collect',
-                { orderRef }
+            const collectData = await request(
+                `auth/${orderRef}`,
+                { orderRef },
+                token
             ).catch(
                 error => console.log("Auth collect error", error)
             );
+
+            const { error } = collectData;
+            const { status, hintCode, completionData } = collectData.data;
+
+            // TODO: Fix error handling when mitt-helsingborg-io API is done
 
             if (status === 'failed') {
                 clearInterval(interval);
                 resolve({ ok: false, data: hintCode });
             } else if (status === 'complete') {
                 clearInterval(interval);
-                resolve({ ok: true, data: completionData.user });
-            } else if (errorCode) {
-                // Probably has the user clicked abort login in the app
-                clearInterval(interval);
-                resolve({ ok: false, data: errorCode });
+                resolve({
+                    ok: true,
+                    data: {
+                        user: completionData.user,
+                        accessToken: token
+                    }
+                });
             } else if (error) {
                 clearInterval(interval);
                 reject(error);
@@ -94,9 +106,9 @@ export const authorize = (personalNumber) =>
     });
 
 /**
+ * TODO: Fix Sign request when API is done
 * Make a sign request to BankID API and poll until done
 * @param {string} personalNumber
-*/
 export const sign = (personalNumber, userVisibleData) =>
     new Promise(async (resolve, reject) => {
         const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
@@ -125,37 +137,40 @@ export const sign = (personalNumber, userVisibleData) =>
 
         // Poll /collect/ endpoint every 2nd second until sign either success or fails
         const interval = setInterval(async () => {
-            const { status, hintCode, completionData, errorCode, error } = await request(
+            const collectData = await request(
                 'collect',
                 { orderRef }
             ).catch(
                 error => console.log("Auth collect error", error)
             );
 
+            const { status, hintCode, completionData } = collectData.user;
+
             if (status === 'failed') {
                 clearInterval(interval);
                 resolve({ ok: false, data: hintCode });
             } else if (status === 'complete') {
                 clearInterval(interval);
-                resolve({ ok: true, data: completionData.user });
+                resolve({ ok: true, data: completionData });
             } else if (errorCode) {
                 // Probably has the user clicked abort login in the app
                 clearInterval(interval);
                 resolve({ ok: false, data: errorCode });
             } else if (error) {
-                clearInterval(interval);
-                reject(error);
+                console.log(hintCode);
             }
 
         }, 2000);
     });
+*/
 
 /**
  * Cancels a started BankID request
+ * TODO: Fix the cancel endpoint when API is done
  * @param {string} order
  */
-export const cancelRequest = async (order) => {
-    const orderRef = order ? order : orderReference;
+export const cancelRequest = async () => {
+    const orderRef = await StorageService.getData('orderRef');
 
     return await request(
         'cancel',
@@ -167,33 +182,28 @@ export const cancelRequest = async (order) => {
 
 /**
  * Send request to BankID API
- * @param {string} method
+ * @param {string} endpoint
  * @param {array} params
  */
-request = async (method, params) => {
-    return await axiosClient.post(
-        `${env.BANKID_API_URL}/${method}/`,
-        params
-    ).then(result => {
-        if (result.data.data) {
-            return result.data.data;
+request = async (endpoint, data, token) => {
+    return await axios({
+        method: 'POST',
+        url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
+        data: data,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
-        return { error: new Error('Error in request call, missing returned data') };
+    }
+    ).then(result => {
+        console.log("Request result", result);
+        return result.data;
     }).catch(err => {
         console.log("Error in request call", err.request);
         return { error: err };
     });
 }
-
-/**
- * Creates an Axios request client
- */
-const axiosClient = axios.create({
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    }
-});
 
 /**
  * Bypasses the BankID authentication steps
@@ -203,10 +213,12 @@ export const bypassBankid = async (personalNumber) => {
     return {
         ok: true,
         data: {
-            'name': 'Gandalf Stål',
-            'givenName': 'Gandalf',
-            'surname': 'Stål',
-            'personalNumber': personalNumber
+            user: {
+                'name': 'Saruman Stål',
+                'givenName': 'Saruman',
+                'surname': 'Stål',
+                'personalNumber': personalNumber
+            },
         }
-    };
+    }
 };

@@ -17,10 +17,18 @@ export default class StorageService extends Component {
      * @param key
      * @returns {Promise}
      */
-    static getData(key) {
-        return AsyncStorage.getItem(key).then(value => {
-            return JSON.parse(value);
-        })
+    static async getData(key) {
+        return await AsyncStorage.getItem(key).then(value => {
+            try {
+                var jsonObject = JSON.parse(value);
+                if (jsonObject && typeof jsonObject === "object") {
+                    return jsonObject;
+                }
+            }
+            catch (e) {
+                return value;
+            }
+        });
     }
 
     /**
@@ -32,5 +40,26 @@ export default class StorageService extends Component {
      */
     static saveData(key, value) {
         return AsyncStorage.setItem(key, JSON.stringify(value));
+    }
+
+    /**
+     * Save multiple values with key pair to storage.
+     *
+     * @param key
+     * @param value
+     * @returns {Promise}
+     */
+    static multiSaveData(key, value) {
+        return AsyncStorage.multiSet(key, value);
+    }
+
+    /**
+     * Remove data from storage
+     *
+     * @param key
+     * @returns {Promise}
+     */
+    static removeData(key) {
+        return AsyncStorage.removeItem(key);
     }
 }

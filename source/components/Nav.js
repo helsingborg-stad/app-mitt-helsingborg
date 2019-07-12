@@ -1,43 +1,22 @@
 import React from 'react';
-import { View, Button } from 'react-native';
-import { createStackNavigator, createAppContainer, createBottomTabNavigator } from 'react-navigation';
+import {
+    createStackNavigator,
+    createAppContainer,
+    createBottomTabNavigator,
+    createSwitchNavigator
+} from 'react-navigation';
+import AuthLoadingScreen from "./screens/AuthLoadingScreen";
 import LoginScreen from "./screens/LoginScreen";
 import UserSettingsScreen from "./screens/UserSettingsScreen"
-import DashboardScreen from './DashboardScreen';
-
-class NavigationScreen extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            isAuthed: false,
-        };
-    };
-
-    // Used when testing for direct navigation between screens.
-    render() {
-        return (
-            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                <Button
-                    title="Go to login screen"
-                    onPress={() => {
-                        this.props.navigation.navigate('Login');
-                    }}
-                />
-            </View>
-        );
-    }
-}
+import DashboardScreen from './screens/DashboardScreen';
 
 const MittHbgStack = createStackNavigator(
     {
-        Navigation: NavigationScreen,
-        Login: LoginScreen,
         Dashboard: DashboardScreen
     },
     {
-        initialRouteName: "Login",
-        defaultNavigationOptions : {
+        initialRouteName: "Dashboard",
+        defaultNavigationOptions: {
             headerStyle: {
                 //backgroundColor: '#f4511e'
             }
@@ -72,10 +51,23 @@ const MainTabs = createBottomTabNavigator({
     }
 });
 
-const AppContainer = createAppContainer(MainTabs);
+const AuthStack = createStackNavigator({
+    SignIn: LoginScreen
+});
+
+const AppContainer = createAppContainer(createSwitchNavigator(
+    {
+        AuthLoading: AuthLoadingScreen,
+        Auth: AuthStack,
+        App: MainTabs,
+    },
+    {
+        initialRouteName: 'AuthLoading',
+    }
+));
 
 export default class App extends React.Component {
     render() {
-        return <AppContainer/>;
+        return <AppContainer />;
     }
 }
