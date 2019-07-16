@@ -11,4 +11,4 @@ export const sanitizePin = (pin) => {
     pin = (pin.length === 2 && pin < 19) ? 20 + pin : pin;
 
     return pin;
-}
+};
