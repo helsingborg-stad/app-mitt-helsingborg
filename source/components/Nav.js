@@ -4,6 +4,7 @@ import { createStackNavigator, createAppContainer, createBottomTabNavigator } fr
 import LoginScreen from "./screens/LoginScreen";
 import UserSettingsScreen from "./screens/UserSettingsScreen"
 import DashboardScreen from './DashboardScreen';
+import PushNotificationService from "../services/PushNotificationService";
 
 class NavigationScreen extends React.Component {
     constructor(props) {
@@ -18,6 +19,7 @@ class NavigationScreen extends React.Component {
     render() {
         return (
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <PushNotificationService />
                 <Button
                     title="Go to login screen"
                     onPress={() => {
