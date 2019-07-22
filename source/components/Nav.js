@@ -66,7 +66,7 @@ const AppContainer = createAppContainer(createSwitchNavigator(
     }
 ));
 
-export default class App extends React.Component {
+export default class Nav extends React.Component {
     render() {
         return <AppContainer />;
     }
