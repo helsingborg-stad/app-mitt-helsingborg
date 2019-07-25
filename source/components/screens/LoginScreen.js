@@ -37,7 +37,7 @@ class LoginScreen extends Component {
         } catch (error) {
             console.log("Something went wrong", error);
         }
-    }
+    };
 
     /**
      * Check if BankID app is installed on this machine
@@ -124,7 +124,7 @@ class LoginScreen extends Component {
     displayError = message => {
         this.setState({ isLoading: false });
         Alert.alert(message);
-    }
+    };
 
     /**
      * Cancel any ongoing BankID request
@@ -149,7 +149,7 @@ class LoginScreen extends Component {
      */
     resetUser = async () => {
         this.setState({ user: {} });
-    }
+    };
 
     render() {
         const { user, isLoading, validPin, personalNumberInput, isBankidInstalled } = this.state;
@@ -162,7 +162,10 @@ class LoginScreen extends Component {
                             <Text style={styles.header}>Mitt{"\n"}Helsingborg</Text>
                         </View>
 
-                        <View style={styles.loginContainer}>
+                        <View
+                            style={styles.loginContainer}
+                            testID={"ViewLogin"}
+                        >
 
                             {user.personalNumber !== 'undefined' && user.personalNumber ? (
                                 <>
@@ -171,10 +174,19 @@ class LoginScreen extends Component {
                                         onPress={() => this.authenticateUser(user.personalNumber)}
                                         underlayColor='#fff'
                                     >
-                                        <Text style={styles.buttonText}>Logga in</Text>
+                                        <Text
+                                            style={styles.buttonText}
+                                            accessible={true}
+                                            testID={"LoginButton"}
+                                        >Logga in</Text>
                                     </TouchableOpacity>
-                                    <View style={styles.loginFooter}>
+                                    <View
+                                        style={styles.loginFooter}
+                                        testID={"ChangeLogInUser"}
+                                    >
                                         <Button
+                                            accessible={true}
+                                            testID={"ChangeLogInUser"}
                                             title="Logga in som en annan användare"
                                             color="#000"
                                             onPress={() => this.resetUser()}
