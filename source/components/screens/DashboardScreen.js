@@ -28,7 +28,7 @@ class DashboardScreen extends Component {
         if (isBankidInstalled) {
             this.setState({ isBankidInstalled: true });
         }
-    }
+    };
 
     setUserAsync = async () => {
         try {
@@ -40,7 +40,7 @@ class DashboardScreen extends Component {
         } catch (error) {
             console.log("Something went wrong", error);
         }
-    }
+    };
 
     signWithBankid = async () => {
         const { user } = this.state;
@@ -55,18 +55,18 @@ class DashboardScreen extends Component {
         }).catch(error => console.log(error));
 
         this.setState({ isLoading: false });
-    }
+    };
 
     cancelSign = () => {
         cancelRequest().catch(error => console.log(error));
         this.setState({ isLoading: false });
-    }
+    };
 
     logOut = async () => {
         await Auth.logOut().then(() => {
             this.props.navigation.navigate('AuthLoading');
         });
-    }
+    };
 
     render() {
         const { user, isLoading, isBankidInstalled } = this.state;
@@ -91,7 +91,11 @@ class DashboardScreen extends Component {
                         </View>
                     </View>
                 ) : (
-                        <View style={styles.container} >
+                        <View
+                            style={styles.container}
+                            accessible={false}
+                            testID={"ViewGreetings"}
+                        >
                             <Text style={styles.header}>Greetings {user.givenName}!</Text>
                             <Text style={{ fontSize: 60 }}>🦄</Text>
 
@@ -104,6 +108,8 @@ class DashboardScreen extends Component {
                             </TouchableOpacity>
 
                             <Button
+                                accessible={true}
+                                testID={'ButtonSignOut'}
                                 onPress={this.logOut}
                                 title="Sign out"
                             />
