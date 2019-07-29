@@ -57,3 +57,6 @@ buck-out/
 
 # Local environment files
 .env
+
+# Editor
+.vscode
