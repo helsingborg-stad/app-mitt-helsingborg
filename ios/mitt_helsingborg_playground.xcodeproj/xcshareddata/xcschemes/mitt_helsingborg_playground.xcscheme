@@ -54,7 +54,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "NO">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -63,6 +63,16 @@
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
                BuildableName = "mitt_helsingborg_playgroundTests.xctest"
                BlueprintName = "mitt_helsingborg_playgroundTests"
+               ReferencedContainer = "container:mitt_helsingborg_playground.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F67F368D22E9D2910061B31F"
+               BuildableName = "LoginAndCheckWelcomeView.xctest"
+               BlueprintName = "LoginAndCheckWelcomeView"
                ReferencedContainer = "container:mitt_helsingborg_playground.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -76,6 +86,12 @@
             ReferencedContainer = "container:mitt_helsingborg_playground.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "TEST_USER_PNO"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

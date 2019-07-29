@@ -93,6 +93,7 @@ class DashboardScreen extends Component {
                 ) : (
                         <View
                             style={styles.container}
+                            accessible={false}
                             testID={"ViewGreetings"}
                         >
                             <Text style={styles.header}>Greetings {user.givenName}!</Text>
@@ -107,6 +108,8 @@ class DashboardScreen extends Component {
                             </TouchableOpacity>
 
                             <Button
+                                accessible={true}
+                                testID={'ButtonSignOut'}
                                 onPress={this.logOut}
                                 title="Sign out"
                             />
