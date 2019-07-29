@@ -39,6 +39,9 @@ class LoginAndCheckWelcomeView: XCTestCase {
         if (greetingsPage) {
             XCUIApplication().buttons["Sign out"].tap()
         }
+        
+        // Wait for view to load.
+        sleep(5)
 
         // Check if civic number saved from previous login and change user if so.
         let changeUserElem = XCUIApplication().otherElements["ChangeLogInUser"]
