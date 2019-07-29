@@ -9,6 +9,7 @@ import AuthLoadingScreen from "./screens/AuthLoadingScreen";
 import LoginScreen from "./screens/LoginScreen";
 import UserSettingsScreen from "./screens/UserSettingsScreen"
 import DashboardScreen from './screens/DashboardScreen';
+import ChatScreen from './screens/ChatScreen';
 
 const MittHbgStack = createStackNavigator(
     {
@@ -36,6 +37,18 @@ const SettingStack = createStackNavigator(
     }
 );
 
+const ChatStack = createStackNavigator(
+    {
+        Chat: ChatScreen
+    },
+    {
+        initialRouteName: "Chat",
+        defaultNavigationOptions: {
+            headerTitle: "Chat Widget"
+        }
+    },
+);
+
 const MainTabs = createBottomTabNavigator({
     MittHelsingborg: {
         screen: MittHbgStack,
@@ -47,6 +60,12 @@ const MainTabs = createBottomTabNavigator({
         screen: SettingStack,
         navigationOptions: {
             tabBarLabel: 'Inställningar'
+        }
+    },
+    Chat: {
+        screen: ChatStack,
+        navigationOptions: {
+            tabBarLabel: 'Chat'
         }
     }
 });
