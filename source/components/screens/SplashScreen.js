@@ -17,33 +17,30 @@ export default class SplashScreen extends Component {
     /**
      * Navigate to AuthLoading if splash screen disabled.
      */
-    showSplash() {
+    showSplash = () => {
         AsyncStorage.getItem(SHOW_SPLASH_SCREEN).then((value => {
             let showSplash = true;
-
-            if (value) {
-                showSplash = JSON.parse(value);
-            }
+            if (value) showSplash = JSON.parse(value);
 
             if (!showSplash) {
                 this.props.navigation.navigate('AuthLoading');
             }
         }))
-    }
+    };
 
     /**
      * Set state disable for splash screen.
      */
-    disableSplash() {
+     disableSplash = () => {
         AsyncStorage.setItem(SHOW_SPLASH_SCREEN, JSON.stringify(false));
 
         this.props.navigation.navigate('AuthLoading');
-    }
+    };
 
     /**
      * Button for disabling splash screen.
      */
-    buttonDisableSplash() {
+    buttonDisableSplash = () => {
         return (
             <View>
                 <TouchableOpacity
@@ -54,7 +51,7 @@ export default class SplashScreen extends Component {
                 </TouchableOpacity>
             </View>
         )
-    }
+    };
 
     render() {
         return (
@@ -65,7 +62,7 @@ export default class SplashScreen extends Component {
                 <View style={styles.slide2}>
                     <Text style={styles.textTitle}>Personuppgifter</Text>
                     <Text style={styles.text}>Vi använder dina personuppgifter för specifika ändamål som vi har informerat dig om eller som du har samtyckt till. Vi samlar inte in fler uppgifter än de som vi behöver för att kunna leverera de tjänster du vill ha, eller de som lagen kräver att vi samlar in.</Text>
-                    {this.buttonDisableSplash()}
+                    { this.buttonDisableSplash() }
                 </View>
             </Swiper>
         )
