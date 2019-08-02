@@ -40,7 +40,7 @@ export default class SplashScreen extends Component {
     /**
      * Button for disabling splash screen.
      */
-    buttonDisableSplash = () => {
+    ButtonDisableSplash = () => {
         return (
             <View>
                 <TouchableOpacity
@@ -54,6 +54,7 @@ export default class SplashScreen extends Component {
     };
 
     render() {
+        const {ButtonDisableSplash} = this;
         return (
             <Swiper showsButtons={true}>
                 <View style={styles.slide1}>
@@ -62,7 +63,7 @@ export default class SplashScreen extends Component {
                 <View style={styles.slide2}>
                     <Text style={styles.textTitle}>Personuppgifter</Text>
                     <Text style={styles.text}>Vi använder dina personuppgifter för specifika ändamål som vi har informerat dig om eller som du har samtyckt till. Vi samlar inte in fler uppgifter än de som vi behöver för att kunna leverera de tjänster du vill ha, eller de som lagen kräver att vi samlar in.</Text>
-                    { this.buttonDisableSplash() }
+                    <ButtonDisableSplash />
                 </View>
             </Swiper>
         )
