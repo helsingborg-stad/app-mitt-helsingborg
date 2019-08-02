@@ -21,8 +21,6 @@ export default class SplashScreen extends Component {
         AsyncStorage.getItem(SHOW_SPLASH_SCREEN).then((value => {
             let showSplash = true;
 
-            console.log('splash value: ', value);
-
             if (value) {
                 showSplash = JSON.parse(value);
             }
