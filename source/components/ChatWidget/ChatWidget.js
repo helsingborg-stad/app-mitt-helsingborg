@@ -73,7 +73,7 @@ const ChatBubble = props => {
                 reactiveChatBubbleStyles
             ]}
         >
-            <Text style={props.currentUser ? {color: 'rgb(255,255,255)', textAlign: 'right'} : {}}>{props.content}</Text>
+            <Text style={props.currentUser ? {color: 'rgb(255,255,255)', textAlign: 'right'} : {}}>{props.body}</Text>
         </View>
     );
 }
