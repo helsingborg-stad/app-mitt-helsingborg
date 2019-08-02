@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
 import { Text, View } from 'react-native'
-import ChatWidget from './ChatWidget';
+import { withNavigation } from 'react-navigation'
+import ChatWidget from './ChatWidget'
 
-export default class ChatWidgetContainer extends Component {
+import ChatSocket from '../../services/ChatSocket'
+
+
+const { joinChat, subscribeToMessages, disconnect, message } = ChatSocket()
+export default withNavigation(class ChatWidgetContainer extends Component {
     state = {
         users: [],
         currentRoomId: 0,
@@ -14,7 +19,27 @@ export default class ChatWidgetContainer extends Component {
 
     componentWillMount()
     {
-        this.setState({messages: mockMessages, users: users});
+     
+        joinChat({agentId: 2, message: 'lol'}, (response, status) => {
+            const {messages, members, conversationId} = response.data;
+            console.log("TCL: ChatWidgetContainer -> response", response)
+
+            this.setState({
+                users: members,
+                messages: messages,
+                currentRoomId: conversationId
+            });
+
+            subscribeToMessages(response => {
+                this.setState({messages: response.data.messages})
+            });
+        });
+    }
+
+    componentWillUnmount()
+    {
+        unsubscribeToMessages();
+        disconnect();
     }
 
     handleChange = (value) => {
@@ -22,16 +47,17 @@ export default class ChatWidgetContainer extends Component {
     };
 
     handleSubmit = event => {
-        const { newMessage, currentUserId, messages } = this.state;
+        const { newMessage, currentUserId, messages, users, currentRoomId } = this.state;
 
         if (typeof newMessage === 'string' && newMessage.length > 0) {
-            messages.push({
-                userId: currentUserId,
-                content: newMessage,
-                timestamp: Date.now()
+            message({
+                conversationId: currentRoomId,
+                from: currentUserId,
+                to: users.map(user => user.id).filter(id => id != currentUserId),
+                body: newMessage,
             });
 
-            this.setState({ newMessage: '' , messages: messages});
+            this.setState({ newMessage: ''});
         }
     }
 
@@ -41,29 +67,29 @@ export default class ChatWidgetContainer extends Component {
             <ChatWidget
                 messages={messages.map(message => {
                     message.currentUser = false;
-                    if (message.userId === currentUserId) {
+                    if (message.from == currentUserId) {
                         message.currentUser = true;
                     }
 
                     return message;
                 })}
-                currentUserId={0}
+                currentUserId={currentUserId}
                 inputValue={newMessage}
                 changeHandler={this.handleChange}
                 submitHandler={this.handleSubmit}
             />
         )
     }
-}
+});
 
 const mockMessages = [
     {
-        userId: 1,
+        id: 1,
         timestamp: 1563997170,
         content: 'Hej',
     },
     {
-        userId: 2,
+        id: 2,
         timestamp: 1563997549,
         content: 'Hej vad kan jag hjälpa dig med?',
     },
@@ -71,11 +97,11 @@ const mockMessages = [
 
 const users = [
     {
-        userId: 1,
+        id: 1,
         userName: 'Nikolas'
     },
     {
-        userId: 2,
+        id: 2,
         userName: 'Random Hero'
     }
 ];
