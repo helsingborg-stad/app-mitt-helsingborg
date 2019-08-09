@@ -5,10 +5,11 @@ import {
     createBottomTabNavigator,
     createSwitchNavigator
 } from 'react-navigation';
-import AuthLoadingScreen from "./screens/AuthLoadingScreen";
+import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import LoginScreen from "./screens/LoginScreen";
 import UserSettingsScreen from "./screens/UserSettingsScreen"
 import DashboardScreen from './screens/DashboardScreen';
+import SplashScreen from './screens/SplashScreen';
 
 const MittHbgStack = createStackNavigator(
     {
@@ -60,9 +61,10 @@ const AppContainer = createAppContainer(createSwitchNavigator(
         AuthLoading: AuthLoadingScreen,
         Auth: AuthStack,
         App: MainTabs,
+        Splash: SplashScreen,
     },
     {
-        initialRouteName: 'AuthLoading',
+        initialRouteName: 'Splash',
     }
 ));
 

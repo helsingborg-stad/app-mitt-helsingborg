@@ -8,7 +8,7 @@ import React, { Component } from 'react'
 import AsyncStorage from "@react-native-community/async-storage";
 
 // Storage key definitions
-export const USER_SETTINGS_SWITCH = "@app:user_settings_switch";    // Example, will be removed.
+export const SHOW_SPLASH_SCREEN = '@app:show_splash_screen';
 
 export default class StorageService extends Component {
     /**
