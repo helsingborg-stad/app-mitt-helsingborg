@@ -24,6 +24,8 @@ export default class StorageService extends Component {
                 if (jsonObject && typeof jsonObject === "object") {
                     return jsonObject;
                 }
+
+                return value;
             }
             catch (e) {
                 return value;
