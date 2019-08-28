@@ -127,11 +127,18 @@ class LoginScreen extends Component {
     };
 
     /**
-     * Cancel any ongoing BankID request
+     * Cancel BankID login request
      */
-    cancelLogin = () => {
-        cancelRequest().catch(error => console.log(error));
-        this.setState({ isLoading: false });
+    cancelLogin = async () => {
+        try {
+            await cancelRequest();
+        } catch (error) {
+            console.log(error);
+        } finally {
+            // Clears access token and reset state
+            Auth.logOut();
+            this.setState({ isLoading: false });
+        }
     };
 
     /**
