@@ -95,27 +95,30 @@ class LoginScreen extends Component {
             return;
         }
 
-        await authorize(personalNumber)
-            .then(async authResponse => {
-                if (authResponse.ok === true) {
-                    console.log("authResponse success", authResponse);
-                    const { user, accessToken } = authResponse.data;
-                    return Auth.logIn(user, accessToken)
-                        .then(() => {
-                            this.props.navigation.navigate('App');
-                        }).catch(() => {
-                            throw "Login failed";
-                        });
-                } else {
-                    console.log("authResponse failed", authResponse);
-                    this.displayError(authResponse.data);
+        try {
+            const authResponse = await authorize(personalNumber);
+            if (authResponse.ok === true) {
+                console.log("authResponse success", authResponse);
+                const { user, accessToken } = authResponse.data;
+                try {
+                    console.log("Try login");
+                    await Auth.logIn(user, accessToken);
+                    this.props.navigation.navigate('App');
+                } catch (error) {
+                    throw "Login failed";
                 }
-            })
-            .catch(error => {
-                // TODO: Add dynamic error messages
-                console.log("authResponse error", error);
-                this.displayError('Något fick fel');
-            });
+
+            } else {
+                console.log("authResponse failed", authResponse);
+                throw authResponse.data;
+            }
+
+        } catch (error) {
+            // TODO: Add dynamic error messages
+            console.log("authResponse error", error);
+            this.cancelLogin();
+            this.displayError('Något fick fel');
+        }
     };
 
     /**

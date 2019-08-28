@@ -44,25 +44,31 @@ openURL = (url) => {
 export const authorize = (personalNumber) =>
     new Promise(async (resolve, reject) => {
         const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
+        let user = {};
+        let token = '';
 
-        const { user, token } = await request(
-            'auth',
-            {
-                personalNumber,
-                endUserIp
-            }
-        ).catch(error => {
+        // Make initial auth request to retrieve user details and access token
+        try {
+            const auth = await request(
+                'auth',
+                { personalNumber, endUserIp }
+            );
+            user = auth.user;
+            token = auth.token;
+        } catch (error) {
             console.log("Auth error", error);
-        });
+            return reject(error);
+        }
 
         const { autoStartToken, orderRef } = user;
 
-        if (!user || !autoStartToken || !orderRef) {
+        if (!autoStartToken || !orderRef) {
             return reject(new Error('Missing autoStartToken or orderRef'));
         }
 
-        // Save order reference to async storage
+        // Save order reference + temporary access token to async storage
         StorageService.saveData('orderRef', orderRef);
+        StorageService.saveData('tempAccessToken', token);
 
         // Launch BankID app if it's installed on this machine
         const launchNativeApp = await canOpenUrl('bankid:///');
@@ -72,34 +78,40 @@ export const authorize = (personalNumber) =>
 
         // Poll /collect/ endpoint every 2nd second until auth either success or fails
         const interval = setInterval(async () => {
-            const collectData = await request(
-                `auth/${orderRef}`,
-                { orderRef },
-                token
-            ).catch(
-                error => console.log("Auth collect error", error)
-            );
+            let collectData = {};
 
-            const { error } = collectData;
-            const { status, hintCode, completionData } = collectData.data;
+            try {
+                const response = await request(
+                    `auth/${orderRef}`,
+                    { orderRef },
+                    token
+                );
 
-            // TODO: Fix error handling when mitt-helsingborg-io API is done
+                collectData = response.data;
+            } catch (error) {
+                clearInterval(interval);
+                reject(error);
+            }
+
+            const { status, hintCode, completionData } = collectData;
 
             if (status === 'failed') {
                 clearInterval(interval);
                 resolve({ ok: false, data: hintCode });
             } else if (status === 'complete') {
                 clearInterval(interval);
-                resolve({
-                    ok: true,
-                    data: {
-                        user: completionData.user,
-                        accessToken: token
-                    }
-                });
-            } else if (error) {
-                clearInterval(interval);
-                reject(error);
+
+                if (completionData.user) {
+                    resolve({
+                        ok: true,
+                        data: {
+                            user: completionData.user,
+                            accessToken: token
+                        }
+                    });
+                }
+
+                resolve({ ok: false, data: hintCode });
             }
 
         }, 2000);
@@ -171,13 +183,20 @@ export const sign = (personalNumber, userVisibleData) =>
  */
 export const cancelRequest = async () => {
     const orderRef = await StorageService.getData('orderRef');
+    const token = await StorageService.getData('tempAccessToken');
 
-    return await request(
-        'cancel',
-        { orderRef }
-    ).catch(
-        error => console.log(error)
-    );
+    console.log("Cancel order", orderRef);
+    console.log("Cancel order with temporary accessToken", token);
+
+    try {
+        await request(
+            `auth/cancel`,
+            { orderRef },
+            token
+        );
+    } catch (err) {
+        console.log("Cancel err", err)
+    }
 }
 
 /**
@@ -186,22 +205,24 @@ export const cancelRequest = async () => {
  * @param {array} params
  */
 request = async (endpoint, data, token) => {
-    return await axios({
-        method: 'POST',
-        url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
-        data: data,
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
+    return new Promise(async (resolve, reject) => {
+        await axios({
+            method: 'POST',
+            url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
+            data: data,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
         }
-    }
-    ).then(result => {
-        console.log("Request result", result);
-        return result.data;
-    }).catch(err => {
-        console.log("Error in request call", err.request);
-        return { error: err };
+        ).then(result => {
+            console.log("Request result", result);
+            return resolve(result.data);
+        }).catch(err => {
+            console.log("Error in request call", err.request);
+            return reject(err);
+        });
     });
 }
 
