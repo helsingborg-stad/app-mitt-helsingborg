@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput, Linking, Button } from 'react-native';
 import StorageService from '../../services/StorageService';
 import Auth from '../../helpers/AuthHelper';
-import { authorize, bypassBankid, cancelRequest } from "../../services/UserService";
+import { authorize, bypassBankid, cancelRequest, resetCancel } from "../../services/UserService";
 import { canOpenUrl } from "../../helpers/LinkHelper";
 import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
 
@@ -118,12 +118,14 @@ class LoginScreen extends Component {
             console.log("authResponse error", error);
 
             this.setState({ isLoading: false });
-            // Don't show error if request was cancelled by the user
+
             if (error !== 'cancelled') {
-                this.cancelLogin();
                 this.displayError(error);
             }
         }
+
+        // Reset cancel variable when done
+        resetCancel();
     };
 
     /**

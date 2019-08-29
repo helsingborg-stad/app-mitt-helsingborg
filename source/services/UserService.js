@@ -5,6 +5,15 @@ import { NetworkInfo } from 'react-native-network-info';
 import { canOpenUrl } from '../helpers/LinkHelper';
 import StorageService from './StorageService';
 
+let cancelled = false;
+
+/**
+ * Reset cancel flag
+ */
+export const resetCancel = () => {
+    cancelled = false;
+}
+
 /**
  * Launch BankID app
  * @param {string} bankIdClientUrl
@@ -78,6 +87,13 @@ export const authorize = (personalNumber) =>
 
         // Poll /collect/ endpoint every 2nd second until auth either success or fails
         const interval = setInterval(async () => {
+            // Bail if cancel button is triggered by the user
+            if (cancelled === true) {
+                clearInterval(interval);
+                resetCancel();
+                return resolve({ ok: false, data: "cancelled" });
+            }
+
             let collectData = {};
 
             try {
@@ -87,13 +103,7 @@ export const authorize = (personalNumber) =>
                     token
                 );
 
-                if (response.data) {
-                    collectData = response.data;
-                } else {
-                    // Order does not exist, probably it was cancelled
-                    clearInterval(interval);
-                    resolve({ ok: false, data: 'cancelled' });
-                }
+                collectData = response.data;
 
             } catch (error) {
                 clearInterval(interval);
@@ -120,8 +130,8 @@ export const authorize = (personalNumber) =>
 
                 resolve({ ok: false, data: hintCode });
             }
-
         }, 2000);
+
     });
 
 /**
@@ -194,6 +204,10 @@ export const cancelRequest = async () => {
     console.log("Cancel order", orderRef);
     console.log("Cancel order with temporary accessToken", token);
 
+    // Stop polling auth/sign requests
+    cancelled = true;
+
+    // Send cancel request
     try {
         await request(
             `auth/cancel/${orderRef}`,
