@@ -116,8 +116,13 @@ class LoginScreen extends Component {
         } catch (error) {
             // TODO: Add dynamic error messages
             console.log("authResponse error", error);
-            this.cancelLogin();
-            this.displayError('Något fick fel');
+
+            this.setState({ isLoading: false });
+            // Don't show error if request was cancelled by the user
+            if (error !== 'cancelled') {
+                this.cancelLogin();
+                this.displayError(error);
+            }
         }
     };
 
@@ -134,7 +139,7 @@ class LoginScreen extends Component {
      */
     cancelLogin = async () => {
         try {
-            await cancelRequest();
+            cancelRequest();
         } catch (error) {
             console.log(error);
         } finally {

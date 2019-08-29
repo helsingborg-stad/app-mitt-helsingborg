@@ -87,7 +87,14 @@ export const authorize = (personalNumber) =>
                     token
                 );
 
-                collectData = response.data;
+                if (response.data) {
+                    collectData = response.data;
+                } else {
+                    // Order does not exist, probably it was cancelled
+                    clearInterval(interval);
+                    resolve({ ok: false, data: 'cancelled' });
+                }
+
             } catch (error) {
                 clearInterval(interval);
                 reject(error);
@@ -178,7 +185,6 @@ export const sign = (personalNumber, userVisibleData) =>
 
 /**
  * Cancels a started BankID request
- * TODO: Fix the cancel endpoint when API is done
  * @param {string} order
  */
 export const cancelRequest = async () => {
@@ -190,8 +196,8 @@ export const cancelRequest = async () => {
 
     try {
         await request(
-            `auth/cancel`,
-            { orderRef },
+            `auth/cancel/${orderRef}`,
+            {},
             token
         );
     } catch (err) {
