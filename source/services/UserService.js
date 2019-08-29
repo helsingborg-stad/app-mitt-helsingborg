@@ -5,6 +5,8 @@ import { NetworkInfo } from 'react-native-network-info';
 import { canOpenUrl } from '../helpers/LinkHelper';
 import StorageService from './StorageService';
 
+const TOKENKEY = 'accessToken';
+
 let cancelled = false;
 
 /**
@@ -53,8 +55,8 @@ openURL = (url) => {
 export const authorize = (personalNumber) =>
     new Promise(async (resolve, reject) => {
         const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
-        let user = {};
-        let token = '';
+        let user = {},
+            token = '';
 
         // Make initial auth request to retrieve user details and access token
         try {
@@ -99,7 +101,7 @@ export const authorize = (personalNumber) =>
             try {
                 const response = await request(
                     `auth/${orderRef}`,
-                    { orderRef },
+                    {},
                     token
                 );
 
@@ -131,32 +133,45 @@ export const authorize = (personalNumber) =>
                 resolve({ ok: false, data: hintCode });
             }
         }, 2000);
-
     });
 
 /**
- * TODO: Fix Sign request when API is done
 * Make a sign request to BankID API and poll until done
 * @param {string} personalNumber
+*/
 export const sign = (personalNumber, userVisibleData) =>
     new Promise(async (resolve, reject) => {
         const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
-        const { autoStartToken, orderRef } = await request(
-            'sign', {
-                personalNumber,
-                endUserIp,
-                userVisibleData,
-            }
-        ).catch(error => {
-            console.log("Sign error", error);
-        });
+        const token = await StorageService.getData(TOKENKEY);
+        console.log("token", token);
 
-        if (!autoStartToken || !orderRef) {
-            return reject(new Error('Missing token or orderref'));
+        let signResponse = {};
+
+        // Make initial auth request to retrieve user details and access token
+        try {
+            signResponse = await request(
+                'auth/sign',
+                {
+                    personalNumber,
+                    endUserIp,
+                    userVisibleData,
+                },
+                token
+            );
+            console.log("signResponse", signResponse);
+        } catch (error) {
+            console.log("Sign error", error);
+            return reject(error);
         }
 
-        // Set the order ref
-        orderReference = orderRef;
+        const { autoStartToken, orderRef } = signResponse;
+
+        if (!autoStartToken || !orderRef) {
+            return reject(new Error('Missing autoStartToken or orderRef'));
+        }
+
+        // Save order reference to async storage
+        StorageService.saveData('orderRef', orderRef);
 
         // Launch BankID app if it's installed on this machine
         const launchNativeApp = await canOpenUrl('bankid:///');
@@ -164,34 +179,110 @@ export const sign = (personalNumber, userVisibleData) =>
             this.launchBankIdApp(autoStartToken);
         }
 
-        // Poll /collect/ endpoint every 2nd second until sign either success or fails
+        // Poll /collect/ endpoint every 2nd second until auth either success or fails
         const interval = setInterval(async () => {
-            const collectData = await request(
-                'collect',
-                { orderRef }
-            ).catch(
-                error => console.log("Auth collect error", error)
-            );
+            // Bail if cancel button is triggered by the user
+            if (cancelled === true) {
+                clearInterval(interval);
+                resetCancel();
+                return resolve({ ok: false, data: "cancelled" });
+            }
 
-            const { status, hintCode, completionData } = collectData.user;
+            let collectData = {};
+
+            try {
+                const response = await request(
+                    `auth/${orderRef}`,
+                    {},
+                    token
+                );
+
+                collectData = response.data;
+
+            } catch (error) {
+                clearInterval(interval);
+                reject(error);
+            }
+
+            const { status, hintCode, completionData } = collectData;
 
             if (status === 'failed') {
                 clearInterval(interval);
                 resolve({ ok: false, data: hintCode });
             } else if (status === 'complete') {
                 clearInterval(interval);
-                resolve({ ok: true, data: completionData });
-            } else if (errorCode) {
-                // Probably has the user clicked abort login in the app
-                clearInterval(interval);
-                resolve({ ok: false, data: errorCode });
-            } else if (error) {
-                console.log(hintCode);
-            }
 
+                if (completionData.user) {
+                    resolve({
+                        ok: true,
+                        data: {
+                            user: completionData.user,
+                            accessToken: token
+                        }
+                    });
+                }
+
+                resolve({ ok: false, data: hintCode });
+            }
         }, 2000);
     });
-*/
+
+
+
+
+// new Promise(async (resolve, reject) => {
+//     const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
+//     const { autoStartToken, orderRef } = await request(
+//         'sign', {
+//             personalNumber,
+//             endUserIp,
+//             userVisibleData,
+//         }
+//     ).catch(error => {
+//         console.log("Sign error", error);
+//     });
+
+//     if (!autoStartToken || !orderRef) {
+//         return reject(new Error('Missing token or orderref'));
+//     }
+
+//     // Set the order ref
+//     orderReference = orderRef;
+
+//     // Launch BankID app if it's installed on this machine
+//     const launchNativeApp = await canOpenUrl('bankid:///');
+//     if (launchNativeApp) {
+//         this.launchBankIdApp(autoStartToken);
+//     }
+
+//     // Poll /collect/ endpoint every 2nd second until sign either success or fails
+//     const interval = setInterval(async () => {
+//         const collectData = await request(
+//             'collect',
+//             { orderRef }
+//         ).catch(
+//             error => console.log("Auth collect error", error)
+//         );
+
+//         const { status, hintCode, completionData } = collectData.user;
+
+//         if (status === 'failed') {
+//             clearInterval(interval);
+//             resolve({ ok: false, data: hintCode });
+//         } else if (status === 'complete') {
+//             clearInterval(interval);
+//             resolve({ ok: true, data: completionData });
+//         } else if (errorCode) {
+//             // Probably has the user clicked abort login in the app
+//             clearInterval(interval);
+//             resolve({ ok: false, data: errorCode });
+//         } else if (error) {
+//             console.log(hintCode);
+//         }
+
+//     }, 2000);
+
+
 
 /**
  * Cancels a started BankID request

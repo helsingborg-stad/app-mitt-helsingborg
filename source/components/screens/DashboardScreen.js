@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Alert, Button } from 'react-native';
 import Auth from '../../helpers/AuthHelper';
 import StorageService from '../../services/StorageService';
-import { sign, cancelRequest } from "../../services/UserService";
+import { sign, cancelRequest, resetCancel } from "../../services/UserService";
 import { canOpenUrl } from "../../helpers/LinkHelper";
 
 const USERKEY = 'user';
@@ -55,11 +55,17 @@ class DashboardScreen extends Component {
         }).catch(error => console.log(error));
 
         this.setState({ isLoading: false });
+        resetCancel();
     };
 
     cancelSign = () => {
-        cancelRequest().catch(error => console.log(error));
-        this.setState({ isLoading: false });
+        try {
+            cancelRequest();
+        } catch (error) {
+            console.log(error);
+        } finally {
+            this.setState({ isLoading: false });
+        }
     };
 
     logOut = async () => {
