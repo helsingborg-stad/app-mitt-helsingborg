@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput, Linking, Button } from 'react-native';
 import StorageService from '../../services/StorageService';
 import Auth from '../../helpers/AuthHelper';
-import { authorize, bypassBankid, cancelRequest } from "../../services/UserService";
+import { authorize, bypassBankid, cancelRequest, resetCancel } from "../../services/UserService";
 import { canOpenUrl } from "../../helpers/LinkHelper";
 import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
 
@@ -95,27 +95,37 @@ class LoginScreen extends Component {
             return;
         }
 
-        await authorize(personalNumber)
-            .then(async authResponse => {
-                if (authResponse.ok === true) {
-                    console.log("authResponse success", authResponse);
-                    const { user, accessToken } = authResponse.data;
-                    return Auth.logIn(user, accessToken)
-                        .then(() => {
-                            this.props.navigation.navigate('App');
-                        }).catch(() => {
-                            throw "Login failed";
-                        });
-                } else {
-                    console.log("authResponse failed", authResponse);
-                    this.displayError(authResponse.data);
+        try {
+            const authResponse = await authorize(personalNumber);
+            if (authResponse.ok === true) {
+                console.log("authResponse success", authResponse);
+                const { user, accessToken } = authResponse.data;
+                try {
+                    console.log("Try login");
+                    await Auth.logIn(user, accessToken);
+                    this.props.navigation.navigate('App');
+                } catch (error) {
+                    throw "Login failed";
                 }
-            })
-            .catch(error => {
-                // TODO: Add dynamic error messages
-                console.log("authResponse error", error);
-                this.displayError('Något fick fel');
-            });
+
+            } else {
+                console.log("authResponse failed", authResponse);
+                throw authResponse.data;
+            }
+
+        } catch (error) {
+            // TODO: Add dynamic error messages
+            console.log("authResponse error", error);
+
+            this.setState({ isLoading: false });
+
+            if (error !== 'cancelled') {
+                this.displayError(error);
+            }
+        }
+
+        // Reset cancel variable when done
+        resetCancel();
     };
 
     /**
@@ -127,11 +137,18 @@ class LoginScreen extends Component {
     };
 
     /**
-     * Cancel any ongoing BankID request
+     * Cancel BankID login request
      */
-    cancelLogin = () => {
-        cancelRequest().catch(error => console.log(error));
-        this.setState({ isLoading: false });
+    cancelLogin = async () => {
+        try {
+            cancelRequest();
+        } catch (error) {
+            console.log(error);
+        } finally {
+            // Clears access token and reset state
+            Auth.logOut();
+            this.setState({ isLoading: false });
+        }
     };
 
     /**

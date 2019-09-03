@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Alert, Button } from 'react-native';
 import Auth from '../../helpers/AuthHelper';
 import StorageService from '../../services/StorageService';
-import { sign, cancelRequest } from "../../services/UserService";
+import { sign, cancelRequest, resetCancel } from "../../services/UserService";
 import { canOpenUrl } from "../../helpers/LinkHelper";
 
 const USERKEY = 'user';
@@ -47,19 +47,36 @@ class DashboardScreen extends Component {
 
         this.setState({ isLoading: true });
 
-        await sign(
-            user.personalNumber,
-            'Sign me please'
-        ).then(response => {
-            response.ok ? Alert.alert("Great success 🤘") : Alert.alert("Sign failed 🙈");
-        }).catch(error => console.log(error));
+        try {
+            const signResponse = await sign(
+                user.personalNumber,
+                'Sign some stuff please'
+            );
 
-        this.setState({ isLoading: false });
+            if (signResponse.ok === true) {
+                this.setState({ isLoading: false });
+                Alert.alert("Great success 🤘");
+            } else {
+                throw (signResponse.data);
+            }
+        } catch (error) {
+            this.setState({ isLoading: false });
+            if (error !== 'cancelled') {
+                Alert.alert(error);
+            }
+        }
+
+        resetCancel();
     };
 
     cancelSign = () => {
-        cancelRequest().catch(error => console.log(error));
-        this.setState({ isLoading: false });
+        try {
+            cancelRequest();
+        } catch (error) {
+            console.log(error);
+        } finally {
+            this.setState({ isLoading: false });
+        }
     };
 
     logOut = async () => {
@@ -104,7 +121,7 @@ class DashboardScreen extends Component {
                                 onPress={this.signWithBankid}
                                 underlayColor='#fff'
                             >
-                                <Text style={styles.buttonText}>Sign me plx</Text>
+                                <Text style={styles.buttonText}>Sign some stuff</Text>
                             </TouchableOpacity>
 
                             <Button
