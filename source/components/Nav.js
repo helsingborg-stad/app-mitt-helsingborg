@@ -7,6 +7,7 @@ import {
 } from 'react-navigation';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import LoginScreen from "./screens/LoginScreen";
+import LoginChatScreen from "./screens/LoginChatScreen";
 import UserSettingsScreen from "./screens/UserSettingsScreen"
 import DashboardScreen from './screens/DashboardScreen';
 import SplashScreen from './screens/SplashScreen';
@@ -53,7 +54,7 @@ const MainTabs = createBottomTabNavigator({
 });
 
 const AuthStack = createStackNavigator({
-    SignIn: LoginScreen
+    SignIn: LoginChatScreen
 });
 
 const AppContainer = createAppContainer(createSwitchNavigator(
