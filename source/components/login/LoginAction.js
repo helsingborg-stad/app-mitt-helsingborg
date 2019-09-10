@@ -1,53 +1,22 @@
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput, Linking, Button, FlatList, SafeAreaView } from 'react-native';
+import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput, Linking, Button, FlatList } from 'react-native';
 import StorageService from '../../services/StorageService';
 import Auth from '../../helpers/AuthHelper';
 import { authorize, bypassBankid, cancelRequest, resetCancel } from "../../services/UserService";
 import { canOpenUrl } from "../../helpers/LinkHelper";
 import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
-import ConversationList from '../login/ConversationList';
+import { withNavigation } from 'react-navigation';
 
 const USERKEY = 'user';
 
-const AUTOMATED_MESSAGES = [
-    {
-        type: 'string',
-        size: 'xl',
-        value: "Hej!",
-    },
-    {
-        type: 'string',
-        size: 'lg',
-        value: "Välkommen till Mitt Helsingborg!"
-    },
-    {
-        type: 'string',
-        size: 'md',
-        value: "Jag heter Sally!"
-    },
-    {
-        type: 'separator',
-        size: 'sm',
-        value: "Hur vill du fortsätta?"
-    },
-    {
-        type: 'component',
-        size: 'md',
-        value: "moreInfo"
-    },
-    {
-        type: 'component',
-        size: 'md',
-        value: "login"
-    },
-]
+class LoginAction extends Component {
 
-class LoginChatScreen extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             messages: [],
+            serviceId: 1,
             user: {},
             isBankidInstalled: false,
             validPin: false,
@@ -57,19 +26,8 @@ class LoginChatScreen extends Component {
     }
 
     componentDidMount() {
-        this.setUserAsync();
+        //this.setUserAsync();
         this.isBankidInstalled();
-        this.initConversation();
-    }
-
-    initConversation = () => {
-        for (let i = 0; i < AUTOMATED_MESSAGES.length; i++) {
-            setTimeout(() => {
-                let { messages } = this.state;
-                messages.push(AUTOMATED_MESSAGES[i]);
-                this.setState({ messages })
-            }, 300 * i);
-        }
     }
 
     /**
@@ -122,25 +80,6 @@ class LoginChatScreen extends Component {
             return;
         }
 
-        // TODO: For testing only, remove me later
-        if (personalNumber === '201111111111') {
-            bypassBankid(personalNumber).then(res => {
-                const { user } = res.data;
-                Auth.logIn(
-                    user,
-                    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjFlZDcyYzJjLWQ5OGUtNGZjMC04ZGY2LWY5NjRkOTYxMTVjYSIsImlhdCI6MTU2Mjc0NzM2NiwiZXhwIjoxNTYyNzUwOTc0fQ.iwmUMm51j-j2BYui9v9371DkY5LwLGATWn4LepVxmNk' // fake token
-                )
-                    .then(() => {
-                        this.props.navigation.navigate('App');
-                    }).catch(() => {
-                        this.displayError('Login failed');
-                    });
-
-            }).catch(error => console.log(error));
-
-            return;
-        }
-
         try {
             const authResponse = await authorize(personalNumber);
             if (authResponse.ok === true) {
@@ -148,7 +87,10 @@ class LoginChatScreen extends Component {
                 const { user, accessToken } = authResponse.data;
                 try {
                     console.log("Try login");
-                    await Auth.logIn(user, accessToken);
+                    console.log("user", user);
+                    console.log("accessToken", accessToken);
+                    const stuff = await Auth.logIn(user, accessToken);
+                    console.log("stuff", stuff);
                     this.props.navigation.navigate('App');
                 } catch (error) {
                     throw "Login failed";
@@ -215,45 +157,83 @@ class LoginChatScreen extends Component {
     };
 
     render() {
-        const { user, isLoading, validPin, personalNumberInput, isBankidInstalled, messages } = this.state;
+        const { user, isLoading, validPin, personalNumberInput, isBankidInstalled } = this.state;
 
         return (
-            <SafeAreaView style={{ flex: 1 }}>
-                {isLoading === false ? (
-                    <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+            <View
+                style={styles.loginContainer}
+                testID={"ViewLogin"}
+            >
 
-                        {/* List conversation items */}
+                {/* Is loading */}
+                {isLoading &&
+                    <View style={styles.container}>
                         <View style={styles.content}>
-                            <ConversationList
-                                listItems={messages} />
+                            <ActivityIndicator size="large" color="slategray" />
+                            {!isBankidInstalled &&
+                                <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
+                            }
                         </View>
-
-                    </KeyboardAvoidingView >
-                ) : (
-                        <View style={styles.container}>
-                            <View style={styles.content}>
-                                <ActivityIndicator size="large" color="slategray" />
-                                {!isBankidInstalled &&
-                                    <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
-                                }
-                            </View>
-                            <View style={styles.loginContainer}>
-                                <TouchableOpacity
-                                    style={styles.button}
-                                    onPress={this.cancelLogin}
-                                    underlayColor='#fff'>
-                                    <Text style={styles.buttonText}>Avbryt</Text>
-                                </TouchableOpacity>
-                            </View>
+                        <View style={styles.loginContainer}>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={this.cancelLogin}
+                                underlayColor='#fff'>
+                                <Text style={styles.buttonText}>Avbryt</Text>
+                            </TouchableOpacity>
                         </View>
-                    )
+                    </View>
                 }
-            </SafeAreaView>
+
+                {/* First time user */}
+                {!isLoading && (user.personalNumber === 'undefined' || !user.personalNumber) &&
+                    <TouchableOpacity
+                        style={[styles.button]}
+                        //style={[styles.button, !validPin ? styles.buttonDisabled : '']}
+                        onPress={() => this.authenticateUser(personalNumberInput)}
+                        underlayColor='#fff'
+                    //disabled={!validPin}
+                    >
+                        <Text
+                            style={styles.buttonText}
+                        //style={[styles.buttonText, !validPin ? styles.buttonTextDisabled : '']}
+                        >
+                            Logga in med Mobilt BankID
+                        </Text>
+                    </TouchableOpacity>
+                }
+
+                {/* Returnung user */}
+                {!isLoading && user.personalNumber !== 'undefined' && user.personalNumber &&
+                    <>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => this.authenticateUser(user.personalNumber)}
+                            underlayColor='#fff'
+                        >
+                            <Text
+                                style={styles.buttonText}
+                                accessible={true}
+                                testID={"LoginButton"}
+                            >Logga in</Text>
+                        </TouchableOpacity>
+
+                        <View
+                            style={styles.loginFooter}
+                            testID={"ChangeLogInUser"}
+                        >
+
+                        </View>
+                    </>
+                }
+
+
+            </View>
         );
     }
 }
 
-export default LoginChatScreen;
+export default withNavigation(LoginAction);
 
 const styles = StyleSheet.create({
     paper: {
@@ -276,13 +256,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'blue',
         flex: 1,
-        //alignItems: 'center',
-        //justifyContent: 'center',
-    },
-    loginContainer: {
-        flex: 0,
-        width: '100%',
-        marginBottom: 30
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     loginFooter: {
         marginTop: 42,
@@ -290,19 +265,30 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     button: {
+        marginBottom: 15,
         paddingTop: 16,
         paddingBottom: 16,
-        backgroundColor: '#007AFF',
+        backgroundColor: '#fff',
         borderRadius: 7,
+        shadowOpacity: 0.3,
+        shadowRadius: 7,
+        shadowColor: '#000',
+        shadowOffset: { height: 1, width: 0 },
+    },
+    buttonPrimary: {
+        backgroundColor: '#007AFF',
     },
     buttonDisabled: {
         backgroundColor: '#E5E5EA',
     },
     buttonText: {
         fontSize: 18,
-        color: '#fff',
+        color: '#005C86',
         textAlign: 'center',
         fontWeight: 'bold',
+    },
+    buttonPrimaryText: {
+        color: '#fff',
     },
     buttonTextDisabled: {
         color: '#C7C7CC',
@@ -318,14 +304,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 8,
     },
-    inputField: {
+    input: {
+        borderWidth: 1,
         height: 40,
-        borderColor: 'transparent',
-        borderBottomColor: '#D3D3D3',
+        borderColor: '#D3D3D3',
         borderWidth: 0.5,
         marginBottom: 24,
         color: '#555',
     },
 });
-
-
