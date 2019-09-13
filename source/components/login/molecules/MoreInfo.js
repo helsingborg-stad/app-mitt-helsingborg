@@ -12,42 +12,22 @@ const AUTOMATED_MESSAGES = [
         size: 'md',
         value: "Med Mitt Helsingborg kommunicerar du med staden och får tillgång till alla tjänster du behöver."
     },
-    {
-        type: 'string',
-        size: 'md',
-        value: "Absolut!"
-    },
-    {
-        type: 'string',
-        size: 'md',
-        value: "Allt samlat i mobilen!"
-    },
-    {
-        type: 'separator',
-        size: 'sm',
-        value: "Hur vill du fortsätta?"
-    },
-    {
-        type: 'component',
-        size: 'md',
-        value: "login"
-    },
 ];
 
-class MoreInfoAction extends Component {
+class MoreInfo extends Component {
     constructor(props) {
         super(props);
     }
 
-
     showMoreInfo = () => {
-        this.props.addListItems(
+        this.props.addMessages(
             AUTOMATED_MESSAGES,
-            'moreInfo'
         );
     }
 
     render() {
+        //console.log("index", this.props.index);
+
         return (
             <TouchableOpacity
                 style={[styles.button, styles.buttonPrimary]}
@@ -63,7 +43,7 @@ class MoreInfoAction extends Component {
     }
 };
 
-export default MoreInfoAction;
+export default MoreInfo;
 
 const styles = StyleSheet.create({
     button: {

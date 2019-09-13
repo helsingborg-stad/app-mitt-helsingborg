@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput, Linking, Button, FlatList } from 'react-native';
-import StorageService from '../../services/StorageService';
-import Auth from '../../helpers/AuthHelper';
-import { authorize, bypassBankid, cancelRequest, resetCancel } from "../../services/UserService";
-import { canOpenUrl } from "../../helpers/LinkHelper";
-import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
+import StorageService from '../../../services/StorageService';
+import Auth from '../../../helpers/AuthHelper';
+import { authorize, bypassBankid, cancelRequest, resetCancel } from "../../../services/UserService";
+import { canOpenUrl } from "../../../helpers/LinkHelper";
+import { sanitizePin, validatePin } from "../../../helpers/ValidationHelper";
 import { withNavigation } from 'react-navigation';
 
 const USERKEY = 'user';
 
-class LoginAction extends Component {
+class Login extends Component {
 
     constructor(props) {
         super(props);
@@ -227,13 +227,12 @@ class LoginAction extends Component {
                     </>
                 }
 
-
             </View>
         );
     }
 }
 
-export default withNavigation(LoginAction);
+export default withNavigation(Login);
 
 const styles = StyleSheet.create({
     paper: {
@@ -254,7 +253,6 @@ const styles = StyleSheet.create({
     },
     content: {
         borderWidth: 1,
-        borderColor: 'blue',
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
