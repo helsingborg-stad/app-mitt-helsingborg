@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import { KeyboardAvoidingView, StyleSheet, SafeAreaView } from 'react-native';
-import MessageContainer from '../login/MessageContainer';
-import ActionContainer from '../login/ActionContainer';
+import ChatComponentsContainer from '../login/ChatComponentsContainer';
 
 const MESSAGES = [
     {
         type: 'string',
+        modifier: 'automated',
         size: 'xl',
         value: "Hej!",
     },
     {
         type: 'string',
+        modifier: 'automated',
         size: 'lg',
         value: "Välkommen till Mitt Helsingborg!"
     },
     {
         type: 'string',
+        modifier: 'automated',
         size: 'lg',
         value: "Jag heter Sally!"
     },
@@ -50,9 +52,11 @@ class LoginChatScreen extends Component {
     }
 
     addMessages = (objects) => {
+        const { messages } = this.state;
+        const newMessages = messages.concat(objects);
         this.setState({
-            messages: this.state.messages.concat(objects)
-        })
+            messages: newMessages
+        });
     }
 
     setActions = (actions) => {
@@ -63,16 +67,19 @@ class LoginChatScreen extends Component {
 
     render() {
         const { messages, actions } = this.state;
+        console.log("MESSAGES", messages);
 
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-                    <MessageContainer listObjects={messages} />
-                    <ActionContainer
+
+                    <ChatComponentsContainer listObjects={messages} />
+                    <ChatComponentsContainer
                         listObjects={actions}
                         setActions={this.setActions.bind(this)}
                         addMessages={this.addMessages.bind(this)}
                     />
+
                 </KeyboardAvoidingView>
             </SafeAreaView>
         );

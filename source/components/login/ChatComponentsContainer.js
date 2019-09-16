@@ -1,24 +1,26 @@
 import React, { Component } from 'react';
-import { Text, View, FlatList } from 'react-native';
+import { FlatList } from 'react-native';
 import Login from './molecules/Login';
 import MoreInfo from './molecules/MoreInfo';
 import MoreInfoExpanded from './molecules/MoreInfoExpanded';
+import Message from './atoms/Message';
 import Separator from './atoms/Separator';
 
-class ActionContainer extends Component {
+class ChatComponentsContainer extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            listObjects: []
-        }
+        // this.state = {
+        //     listObjects: []
+        // }
     }
 
-    componentDidMount() {
-        this.setState(
-            { listObjects: this.props.listObjects }
-        );
-    }
+    // componentDidMount() {
+    //     const { listObjects } = this.props;
+    //     if (listObjects) {
+    //         this.delayListItems(listObjects);
+    //     }
+    // }
 
     getCustomComponent = (key) => {
         const components = {
@@ -29,27 +31,36 @@ class ActionContainer extends Component {
         return components[key];
     }
 
-    renderItem = ({ item, index }) => {
-        console.log(item.value);
+    // delayListItems = (listObjects) => {
+    //     for (let i = 0; i < listObjects.length; i++) {
+    //         setTimeout(() => {
+    //             let objects = this.state.listObjects;
+    //             console.log("Delay new object", objects);
+    //             objects.push(listObjects[i]);
+    //             this.setState({ listObjects: objects })
+    //         }, 300 * i);
+    //     }
+    // }
 
+    renderItem = ({ item }) => {
         switch (item.type) {
             case 'component':
                 const CustomComponent = this.getCustomComponent(item.value);
                 return (
                     <CustomComponent
-                        index
                         {...item}
                         addMessages={this.props.addMessages}
+                        setActions={this.props.setActions}
                     />);
             case 'separator':
                 return <Separator content={item.value} />
             default:
-                return <Text style={{ marginBottom: 15, borderRadius: 3, padding: 10, backgroundColor: '#D35098', color: 'white', fontSize: 18 }} >{item.value}</Text>
+                return <Message content={item.value} modifier={item.modifier} />
         }
     }
 
     render() {
-        const { listObjects } = this.state;
+        const { listObjects } = this.props;
 
         return (
             <FlatList
@@ -63,4 +74,4 @@ class ActionContainer extends Component {
     }
 }
 
-export default ActionContainer;
+export default ChatComponentsContainer;
