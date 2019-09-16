@@ -19,6 +19,7 @@
 ## Contents
 - [Requirements](#-requirements)
 - [Getting started](#-getting-started)
+- [Component library](#-component-library)
 
 ## 📋 Requirements
 Mitt Helsingborg targets iOS 9.0. Android support is currently missing.
@@ -26,3 +27,9 @@ Mitt Helsingborg targets iOS 9.0. Android support is currently missing.
 ## 🚀 Getting started
 1) Clone repo and run "npm install".
 2) For testing; launch application in simulator by running command "react-native run-ios".
+
+## Component library (Storybook)
+1) Set env variabel IS_STORYBOOK to true in .env
+2) Launch storybook server by running command "npm run storybook" or "yarn stroybook
+3) Launch application in simulator by running command "react-native run-ios".
+4) Now you should se storybook running in the simulator.
