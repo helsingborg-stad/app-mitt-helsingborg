@@ -1,18 +1,50 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import Button from '../atoms/Button';
 
-const AUTOMATED_MESSAGES = [
+const MESSAGES = [
     {
         type: 'string',
+        modifier: 'user',
+        size: 'md',
+        value: "Berätta mer"
+    },
+    {
+        type: 'string',
+        modifier: 'automated',
         size: 'lg',
         value: "Absolut!"
     },
     {
         type: 'string',
+        modifier: 'automated',
+        size: 'md',
+        value: "Med Mitt Helsingborg kommunicerar du med staden och får tillgång till alla tjänster du behöver."
+    },
+    {
+        type: 'string',
+        modifier: 'automated',
         size: 'md',
         value: "Med Mitt Helsingborg kommunicerar du med staden och får tillgång till alla tjänster du behöver."
     },
 ];
+
+const ACTIONS = [
+    {
+        type: 'separator',
+        size: 'sm',
+        value: "Hur vill du fortsätta?"
+    },
+    {
+        type: 'component',
+        size: 'md',
+        value: "login"
+    },
+    {
+        type: 'component',
+        size: 'md',
+        value: "moreInfoExpanded"
+    },
+]
 
 class MoreInfo extends Component {
     constructor(props) {
@@ -20,59 +52,22 @@ class MoreInfo extends Component {
     }
 
     showMoreInfo = () => {
+        console.log("LELLELE");
         this.props.addMessages(
-            AUTOMATED_MESSAGES,
+            MESSAGES
+        );
+
+        this.props.setActions(
+            ACTIONS
         );
     }
 
     render() {
-        //console.log("index", this.props.index);
-
-        return (
-            <TouchableOpacity
-                style={[styles.button, styles.buttonPrimary]}
-                onPress={() => this.showMoreInfo()}
-                underlayColor='#fff'
-            >
-                <Text
-                    style={[styles.buttonText, styles.buttonPrimaryText]}
-                    accessible={true}
-                >Berätta mer</Text>
-            </TouchableOpacity >
-        );
+        return <Button
+            value={'Berätta mer'}
+            modifier={'primary'}
+            onClick={this.showMoreInfo} />;
     }
 };
 
 export default MoreInfo;
-
-const styles = StyleSheet.create({
-    button: {
-        marginBottom: 15,
-        paddingTop: 16,
-        paddingBottom: 16,
-        backgroundColor: '#fff',
-        borderRadius: 7,
-        shadowOpacity: 0.3,
-        shadowRadius: 7,
-        shadowColor: '#000',
-        shadowOffset: { height: 1, width: 0 },
-    },
-    buttonPrimary: {
-        backgroundColor: '#007AFF',
-    },
-    buttonDisabled: {
-        backgroundColor: '#E5E5EA',
-    },
-    buttonText: {
-        fontSize: 18,
-        color: '#005C86',
-        textAlign: 'center',
-        fontWeight: 'bold',
-    },
-    buttonPrimaryText: {
-        color: '#fff',
-    },
-    buttonTextDisabled: {
-        color: '#C7C7CC',
-    },
-});
