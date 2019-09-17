@@ -1,78 +1,50 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-
-const AUTOMATED_MESSAGES = [
-    {
-        type: 'string',
-        size: 'lg',
-        value: "Even more info!"
-    },
-    {
-        type: 'component',
-        size: 'md',
-        value: "login"
-    },
-];
+import { Button } from '../Components';
 
 class MoreInfoExpanded extends Component {
     constructor(props) {
         super(props);
     }
 
-    showMoreInfo = () => {
-        this.props.addListItems(
-            AUTOMATED_MESSAGES,
-            'moreInfo'
+    onClick = () => {
+        this.props.addMessages(
+            MESSAGES
+        );
+
+        this.props.setActions(
+            ACTIONS
         );
     }
 
     render() {
-
-        return (
-            <TouchableOpacity
-                style={[styles.button, styles.buttonPrimary]}
-                onPress={() => this.showMoreInfo()}
-                underlayColor='#fff'
-            >
-                <Text
-                    style={[styles.buttonText, styles.buttonPrimaryText]}
-                    accessible={true}
-                >Berätta ännu mer!</Text>
-            </TouchableOpacity >
-        );
+        return <Button
+            value={'Berätta ännu mer!'}
+            onClick={this.onClick} />;
     }
 };
 
 export default MoreInfoExpanded;
 
-const styles = StyleSheet.create({
-    button: {
-        marginBottom: 15,
-        paddingTop: 16,
-        paddingBottom: 16,
-        backgroundColor: '#fff',
-        borderRadius: 7,
-        shadowOpacity: 0.3,
-        shadowRadius: 7,
-        shadowColor: '#000',
-        shadowOffset: { height: 1, width: 0 },
+const MESSAGES = [
+    {
+        type: 'string',
+        modifiers: ['user'],
+        value: "Berätta ännu mer"
     },
-    buttonPrimary: {
-        backgroundColor: '#007AFF',
+    {
+        type: 'string',
+        modifiers: ['automated'],
+        value: "Här kommer ännu mer info!"
+    }
+];
+
+const ACTIONS = [
+    {
+        type: 'separator',
+        value: "Hur vill du fortsätta?"
     },
-    buttonDisabled: {
-        backgroundColor: '#E5E5EA',
-    },
-    buttonText: {
-        fontSize: 18,
-        color: '#005C86',
-        textAlign: 'center',
-        fontWeight: 'bold',
-    },
-    buttonPrimaryText: {
-        color: '#fff',
-    },
-    buttonTextDisabled: {
-        color: '#C7C7CC',
-    },
-});
+    {
+        type: 'component',
+        value: "loginAction"
+    }
+];

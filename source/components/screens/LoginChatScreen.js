@@ -1,51 +1,15 @@
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, StyleSheet, SafeAreaView } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, SafeAreaView, View, TextInput } from 'react-native';
 import ChatComponentsContainer from '../login/ChatComponentsContainer';
-
-const MESSAGES = [
-    {
-        type: 'string',
-        modifier: 'automated',
-        size: 'xl',
-        value: "Hej!",
-    },
-    {
-        type: 'string',
-        modifier: 'automated',
-        size: 'lg',
-        value: "Välkommen till Mitt Helsingborg!"
-    },
-    {
-        type: 'string',
-        modifier: 'automated',
-        size: 'lg',
-        value: "Jag heter Sally!"
-    },
-]
-
-const ACTIONS = [
-    {
-        type: 'separator',
-        size: 'sm',
-        value: "Hur vill du fortsätta?"
-    },
-    {
-        type: 'component',
-        size: 'md',
-        value: "moreInfo"
-    },
-    {
-        type: 'component',
-        size: 'md',
-        value: "login"
-    },
-]
+import { LoginInput } from '../login/Components';
+import { Header } from 'react-navigation';
 
 class LoginChatScreen extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            displayFormInput: false,
             messages: MESSAGES,
             actions: ACTIONS,
         };
@@ -65,21 +29,45 @@ class LoginChatScreen extends Component {
         })
     }
 
+    activateFormInput = (value) => {
+        this.setState({
+            displayFormInput: true
+        })
+    }
+
     render() {
-        const { messages, actions } = this.state;
-        console.log("MESSAGES", messages);
+        const { messages, actions, displayFormInput } = this.state;
 
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+                <KeyboardAvoidingView
+                    style={styles.chatContainer}
+                    behavior="padding"
+                    keyboardVerticalOffset={Header.HEIGHT} // FIXME: Header.HEIGHT is deprecated & does not account for orientation or iphoneX
+                    enabled
+                >
 
-                    <ChatComponentsContainer listObjects={messages} />
-                    <ChatComponentsContainer
-                        listObjects={actions}
-                        setActions={this.setActions.bind(this)}
-                        addMessages={this.addMessages.bind(this)}
-                    />
+                    <View style={styles.chatBody}>
 
+                        {/* Messages */}
+                        <ChatComponentsContainer
+                            listObjects={messages}
+                            setActions={this.setActions.bind(this)}
+                            addMessages={this.addMessages.bind(this)}
+                            activateFormInput={this.activateFormInput.bind(this)}
+                        />
+                        {/* Actions */}
+                        <ChatComponentsContainer
+                            listObjects={actions}
+                            setActions={this.setActions.bind(this)}
+                            addMessages={this.addMessages.bind(this)}
+                            activateFormInput={this.activateFormInput.bind(this)}
+                        />
+                        {/* Input form */}
+                        {displayFormInput &&
+                            <LoginInput />
+                        }
+                    </View>
                 </KeyboardAvoidingView>
             </SafeAreaView>
         );
@@ -88,7 +76,51 @@ class LoginChatScreen extends Component {
 
 export default LoginChatScreen;
 
+const MESSAGES = [
+    {
+        type: 'string',
+        modifiers: ['automated'],
+        value: "Hej!",
+    },
+    {
+        type: 'string',
+        modifiers: ['automated'],
+        value: "Välkommen till Mitt Helsingborg!"
+    },
+    {
+        type: 'string',
+        modifiers: ['automated'],
+        value: "Jag heter Sally!"
+    },
+]
+
+const ACTIONS = [
+    {
+        type: 'separator',
+        value: "Hur vill du fortsätta?"
+    },
+    {
+        type: 'component',
+        value: "moreInfo"
+    },
+    {
+        type: 'component',
+        value: "loginAction"
+    },
+]
+
 const styles = StyleSheet.create({
+    chatContainer: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
+        paddingBottom: 0
+    },
+    chatBody: {
+        flex: 1,
+        backgroundColor: 'rgb(255, 255, 255)'
+    },
     paper: {
         backgroundColor: '#fff',
         padding: 24,

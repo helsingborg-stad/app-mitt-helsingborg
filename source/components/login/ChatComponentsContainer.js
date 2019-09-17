@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { FlatList } from 'react-native';
-import Login from './molecules/Login';
-import MoreInfo from './molecules/MoreInfo';
-import MoreInfoExpanded from './molecules/MoreInfoExpanded';
-import Message from './atoms/Message';
-import Separator from './atoms/Separator';
+import { Message, Separator, LoginAction, MoreInfo, MoreInfoExpanded, ChatForm, PersonalInfoAction } from './Components';
 
 class ChatComponentsContainer extends Component {
+
     constructor(props) {
         super(props);
 
@@ -24,9 +21,11 @@ class ChatComponentsContainer extends Component {
 
     getCustomComponent = (key) => {
         const components = {
-            login: Login,
+            loginAction: LoginAction,
             moreInfo: MoreInfo,
             moreInfoExpanded: MoreInfoExpanded,
+            chatForm: ChatForm,
+            personalInfoAction: PersonalInfoAction,
         };
         return components[key];
     }
@@ -51,11 +50,12 @@ class ChatComponentsContainer extends Component {
                         {...item}
                         addMessages={this.props.addMessages}
                         setActions={this.props.setActions}
+                        activateFormInput={this.props.activateFormInput}
                     />);
             case 'separator':
-                return <Separator content={item.value} />
+                return <Separator content={item.value} modifiers={item.modifiers} />
             default:
-                return <Message content={item.value} modifier={item.modifier} />
+                return <Message content={item.value} modifiers={item.modifiers} />
         }
     }
 

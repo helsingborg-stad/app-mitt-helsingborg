@@ -1,58 +1,12 @@
 import React, { Component } from 'react';
-import Button from '../atoms/Button';
-
-const MESSAGES = [
-    {
-        type: 'string',
-        modifier: 'user',
-        size: 'md',
-        value: "Berätta mer"
-    },
-    {
-        type: 'string',
-        modifier: 'automated',
-        size: 'lg',
-        value: "Absolut!"
-    },
-    {
-        type: 'string',
-        modifier: 'automated',
-        size: 'md',
-        value: "Med Mitt Helsingborg kommunicerar du med staden och får tillgång till alla tjänster du behöver."
-    },
-    {
-        type: 'string',
-        modifier: 'automated',
-        size: 'md',
-        value: "Med Mitt Helsingborg kommunicerar du med staden och får tillgång till alla tjänster du behöver."
-    },
-];
-
-const ACTIONS = [
-    {
-        type: 'separator',
-        size: 'sm',
-        value: "Hur vill du fortsätta?"
-    },
-    {
-        type: 'component',
-        size: 'md',
-        value: "login"
-    },
-    {
-        type: 'component',
-        size: 'md',
-        value: "moreInfoExpanded"
-    },
-]
+import { Button } from '../Components';
 
 class MoreInfo extends Component {
     constructor(props) {
         super(props);
     }
 
-    showMoreInfo = () => {
-        console.log("LELLELE");
+    onClick = () => {
         this.props.addMessages(
             MESSAGES
         );
@@ -65,9 +19,47 @@ class MoreInfo extends Component {
     render() {
         return <Button
             value={'Berätta mer'}
-            modifier={'primary'}
-            onClick={this.showMoreInfo} />;
+            modifiers={['primary']}
+            onClick={this.onClick} />;
     }
 };
 
 export default MoreInfo;
+
+const MESSAGES = [
+    {
+        type: 'string',
+        modifiers: ['user'],
+        value: "Berätta mer"
+    },
+    {
+        type: 'string',
+        modifiers: ['automated'],
+        value: "Absolut!"
+    },
+    {
+        type: 'string',
+        modifiers: ['automated'],
+        value: "Med Mitt Helsingborg kommunicerar du med staden och får tillgång till alla tjänster du behöver."
+    },
+    {
+        type: 'string',
+        modifiers: ['automated'],
+        value: "Allt samlat i mobilen!"
+    },
+];
+
+const ACTIONS = [
+    {
+        type: 'separator',
+        value: "Hur vill du fortsätta?"
+    },
+    {
+        type: 'component',
+        value: "loginAction"
+    },
+    {
+        type: 'component',
+        value: "moreInfoExpanded"
+    },
+]

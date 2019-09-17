@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const Button = ({ value, onClick, modifier = '' }) =>
+const Button = ({ value, onClick, modifiers }) =>
     <TouchableOpacity
         style={[styles.button, styles.buttonPrimary]}
         underlayColor='#fff'

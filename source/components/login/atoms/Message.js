@@ -1,10 +1,11 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 
-const Message = ({ content, modifier = 'automated' }) =>
-    <View style={[styles.chatBubble, styles[modifier]]}>
+const Message = ({ content, modifiers }) => {
+    return (<View style={[styles.chatBubble, styles[modifiers]]}>
         <Text style={styles.text}>{content}</Text>
-    </View>;
+    </View >);
+}
 
 export default Message;
 
