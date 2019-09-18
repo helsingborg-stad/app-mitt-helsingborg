@@ -3,6 +3,7 @@ import Button from './atoms/Button';
 import ChatBubble from './atoms/ChatBubble';
 import ChatSectionTitle from './atoms/ChatSectionTitle';
 import ChatSubmitButton from './atoms/ChatSubmitButton';
+import Sally from './atoms/Sally';
 
 // Molecules
 import ChatForm from './molecules/ChatForm';
@@ -27,4 +28,5 @@ export {
     MoreInfo,
     MoreInfoExpanded,
     PersonalInfoAction,
+    Sally
 };
