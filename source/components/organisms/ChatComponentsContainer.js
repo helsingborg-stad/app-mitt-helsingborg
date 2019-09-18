@@ -70,6 +70,10 @@ class ChatComponentsContainer extends Component {
         const { listObjects } = this.props;
 
         return <FlatList
+            ref={ref => this.scrollView = ref}
+            onContentSizeChange={(contentWidth, contentHeight) => {
+                this.scrollView.scrollToEnd({ animated: true });
+            }}
             style={this.props.style}
             inverted={false}
             data={listObjects}
