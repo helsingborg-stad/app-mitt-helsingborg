@@ -18,7 +18,6 @@ class LoginInput extends Component {
         this.state = {
             user: {},
             isBankidInstalled: false,
-            validPin: false,
             isLoading: false,
             personalNumberInput: ''
         };
@@ -91,7 +90,6 @@ class LoginInput extends Component {
         personalNumber = sanitizePin(personalNumber);
 
         this.setState({
-            validPin: validatePin(personalNumber),
             personalNumberInput: personalNumber
         });
     }
@@ -104,6 +102,11 @@ class LoginInput extends Component {
 
         if (!personalNumber) {
             this.displayError('Personnummer saknas');
+            return;
+        }
+
+        if (!validatePin(personalNumber)) {
+            this.displayError('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.');
             return;
         }
 
@@ -167,16 +170,6 @@ class LoginInput extends Component {
     };
 
     /**
-     * Check PIN (Personal identity number)
-     */
-    checkPin = () => {
-        const { validPin } = this.state;
-        if (!validPin) {
-            this.displayError('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.');
-        }
-    };
-
-    /**
      * Remove user from state, to be able to login as another user
      */
     resetUser = async () => {
@@ -184,13 +177,13 @@ class LoginInput extends Component {
     };
 
     render() {
-        const { user, isLoading, validPin, personalNumberInput, isBankidInstalled } = this.state;
+        const { user, isLoading, personalNumberInput, isBankidInstalled } = this.state;
 
         return (
             <View>
                 {/* Loading */}
                 {isLoading &&
-                    <View>
+                    <View style={{ padding: 16 }}>
                         <ActivityIndicator size="large" color="slategray" />
                         {!isBankidInstalled &&
                             <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
@@ -208,11 +201,9 @@ class LoginInput extends Component {
                         autoFocus={true}
                         keyboardType='number-pad'
                         maxLength={12}
-                        disabled={!validPin}
                         submitText={'Logga in'}
                         placeholder={'Ange ditt personnummer'}
                         inputValue={personalNumberInput}
-                        onSubmitEditing={this.checkPin}
                         changeHandler={(value) => this.setPin(value)}
                         submitHandler={() => this.authenticateUser(personalNumberInput)}
                     />
@@ -220,10 +211,12 @@ class LoginInput extends Component {
 
                 {/* Returning users */}
                 {!isLoading && (user.personalNumber !== 'undefined' && user.personalNumber) &&
-                    <Button
-                        onClick={() => this.authenticateUser(user.personalNumber)}
-                        value="Logga in med Mobilt BankID"
-                    />
+                    <View style={{ padding: 16 }}>
+                        <Button
+                            onClick={() => this.authenticateUser(user.personalNumber)}
+                            value="Logga in med Mobilt BankID"
+                        />
+                    </View>
                 }
             </View>
         );
@@ -286,14 +279,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     infoText: {
-        fontSize: 18,
+        fontSize: 15,
         fontWeight: 'bold',
         textAlign: 'center',
         marginTop: 24,
         marginBottom: 24
     },
     label: {
-        fontSize: 16,
+        fontSize: 15,
         marginBottom: 8,
     },
     inputField: {
