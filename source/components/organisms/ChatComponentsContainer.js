@@ -70,6 +70,7 @@ class ChatComponentsContainer extends Component {
         const { listObjects } = this.props;
 
         return <FlatList
+            style={this.props.style}
             inverted={false}
             data={listObjects}
             renderItem={(item, index) => this.renderChatComponent(item, index)}

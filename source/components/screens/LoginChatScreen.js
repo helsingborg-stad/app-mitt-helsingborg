@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { KeyboardAvoidingView, StyleSheet, SafeAreaView, View } from 'react-native';
-import { ChatComponentsContainer, LoginInput } from '../Components';
+import { ChatComponentsContainer, LoginInput, ChatHeader } from '../Components';
 
 class LoginChatScreen extends Component {
     constructor(props) {
@@ -46,20 +46,36 @@ class LoginChatScreen extends Component {
                 >
 
                     <View style={styles.chatBody}>
+                        {/* Header */}
+                        <ChatHeader />
+
                         {/* Messages */}
-                        <ChatComponentsContainer
-                            listObjects={messages}
-                            setActions={this.setActions.bind(this)}
-                            addMessages={this.addMessages.bind(this)}
-                            activateFormInput={this.activateFormInput.bind(this)}
-                        />
+                        {messages.length > 0 &&
+                            <ChatComponentsContainer
+                                style={{
+                                    padding: 16,
+                                }}
+                                listObjects={messages}
+                                setActions={this.setActions.bind(this)}
+                                addMessages={this.addMessages.bind(this)}
+                                activateFormInput={this.activateFormInput.bind(this)}
+                            />
+                        }
+
                         {/* Actions */}
-                        <ChatComponentsContainer
-                            listObjects={actions}
-                            setActions={this.setActions.bind(this)}
-                            addMessages={this.addMessages.bind(this)}
-                            activateFormInput={this.activateFormInput.bind(this)}
-                        />
+                        {actions.length > 0 &&
+                            <ChatComponentsContainer
+                                style={{
+                                    flexShrink: 0,
+                                    padding: 16,
+                                }}
+                                listObjects={actions}
+                                setActions={this.setActions.bind(this)}
+                                addMessages={this.addMessages.bind(this)}
+                                activateFormInput={this.activateFormInput.bind(this)}
+                            />
+                        }
+
                         {/* Input form */}
                         {displayFormInput &&
                             <LoginInput />
@@ -116,7 +132,7 @@ const styles = StyleSheet.create({
     },
     chatBody: {
         flex: 1,
-        backgroundColor: 'rgb(255, 255, 255)'
+        backgroundColor: '#F5F5F5',
     },
     paper: {
         backgroundColor: '#fff',
