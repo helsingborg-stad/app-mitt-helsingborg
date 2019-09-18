@@ -7,6 +7,7 @@ import Sally from './atoms/Sally';
 
 // Molecules
 import ChatForm from './molecules/ChatForm';
+import ChatHeader from './molecules/ChatHeader';
 import LoginAction from './molecules/LoginAction';
 import LoginInput from './molecules/LoginInput';
 import MoreInfo from './molecules/MoreInfo';
@@ -21,6 +22,7 @@ export {
     ChatBubble,
     ChatComponentsContainer,
     ChatForm,
+    ChatHeader,
     ChatSectionTitle,
     ChatSubmitButton,
     LoginAction,
