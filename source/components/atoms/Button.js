@@ -22,14 +22,14 @@ const styles = StyleSheet.create({
         paddingTop: 16,
         paddingBottom: 16,
         backgroundColor: '#fff',
-        borderRadius: 7,
+        borderRadius: 17,
         shadowOpacity: 0.3,
-        shadowRadius: 7,
+        shadowRadius: 3,
         shadowColor: '#000',
-        shadowOffset: { height: 1, width: 0 },
+        shadowOffset: { height: 2, width: 0 },
     },
     buttonPrimary: {
-        backgroundColor: '#007AFF',
+        backgroundColor: '#0095DB',
     },
     buttonDisabled: {
         backgroundColor: '#E5E5EA',

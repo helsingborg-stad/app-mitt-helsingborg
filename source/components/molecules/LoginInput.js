@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { Alert, ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import StorageService from '../../services/StorageService';
 import Auth from '../../helpers/AuthHelper';
 import { authorize, cancelRequest, resetCancel } from "../../services/UserService";
@@ -28,6 +28,9 @@ class LoginInput extends Component {
         this.isBankidInstalled();
     }
 
+    /**
+     * On login click handler
+     */
     loginClicked = () => {
         this.props.addMessages(
             [
@@ -169,18 +172,11 @@ class LoginInput extends Component {
         }
     };
 
-    /**
-     * Remove user from state, to be able to login as another user
-     */
-    resetUser = async () => {
-        this.setState({ user: {} });
-    };
-
     render() {
         const { user, isLoading, personalNumberInput, isBankidInstalled } = this.state;
 
         return (
-            <View>
+            <View style={{ borderTopColor: 'gainsboro', borderTopWidth: 1, }}>
                 {/* Loading */}
                 {isLoading &&
                     <View style={{ padding: 16 }}>
@@ -226,75 +222,11 @@ class LoginInput extends Component {
 export default withNavigation(LoginInput);
 
 const styles = StyleSheet.create({
-    paper: {
-        backgroundColor: '#fff',
-        padding: 24,
-        borderRadius: 7,
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
-        shadowColor: '#000',
-        shadowOffset: { height: 5, width: 0 },
-    },
-    container: {
-        flex: 1,
-        alignItems: 'stretch',
-        padding: 16,
-    },
-    content: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    loginContainer: {
-        flex: 0,
-        width: '100%',
-        marginBottom: 30
-    },
-    loginFooter: {
-        marginTop: 42,
-        marginBottom: 26,
-        alignItems: 'center',
-    },
-    button: {
-        paddingTop: 16,
-        paddingBottom: 16,
-        backgroundColor: '#007AFF',
-        borderRadius: 7,
-    },
-    buttonDisabled: {
-        backgroundColor: '#E5E5EA',
-    },
-    buttonText: {
-        fontSize: 18,
-        color: '#fff',
-        textAlign: 'center',
-        fontWeight: 'bold',
-    },
-    buttonTextDisabled: {
-        color: '#C7C7CC',
-    },
-    header: {
-        fontWeight: 'bold',
-        fontSize: 35,
-        textAlign: 'center',
-    },
     infoText: {
         fontSize: 15,
         fontWeight: 'bold',
         textAlign: 'center',
         marginTop: 24,
         marginBottom: 24
-    },
-    label: {
-        fontSize: 15,
-        marginBottom: 8,
-    },
-    inputField: {
-        height: 40,
-        borderColor: 'transparent',
-        borderBottomColor: '#D3D3D3',
-        borderWidth: 0.5,
-        marginBottom: 24,
-        color: '#555',
-    },
+    }
 });
