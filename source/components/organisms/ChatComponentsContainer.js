@@ -7,7 +7,8 @@ import {
     MoreInfo,
     MoreInfoExpanded,
     ChatForm,
-    PersonalInfoAction
+    PersonalInfoAction,
+    AcceptingOnLoginAction
 } from '../Components';
 
 class ChatComponentsContainer extends Component {
@@ -34,6 +35,7 @@ class ChatComponentsContainer extends Component {
             moreInfoExpanded: MoreInfoExpanded,
             chatForm: ChatForm,
             personalInfoAction: PersonalInfoAction,
+            acceptingOnLoginAction: AcceptingOnLoginAction,
         };
         return components[key];
     }

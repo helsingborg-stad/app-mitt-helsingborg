@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from '../Components';
 
-class PersonalInfoAction extends Component {
+class AcceptingOnLoginAction extends Component {
     constructor(props) {
         super(props);
     }
@@ -18,23 +18,23 @@ class PersonalInfoAction extends Component {
 
     render() {
         return <Button
-            value={'Mina personuppgifter?'}
+            value={'Vad godkänner jag när jag loggar in?'}
             onClick={this.onClick} />;
     }
 };
 
-export default PersonalInfoAction;
+export default AcceptingOnLoginAction;
 
 const MESSAGES = [
     {
         type: 'chatBubble',
         modifiers: ['user'],
-        value: "Berätta mer om mina personuppgifter"
+        value: "Vad godkänner jag när jag loggar in?"
     },
     {
         type: 'chatBubble',
         modifiers: ['automated'],
-        value: "Info om personuppgifter kommer här"
+        value: "Du godkänner ditten och datten"
     }
 ];
 
@@ -45,6 +45,6 @@ const ACTIONS = [
     },
     {
         type: 'component',
-        value: 'acceptingOnLoginAction'
+        value: 'personalInfoAction'
     }
 ]

@@ -6,6 +6,7 @@ import ChatSubmitButton from './atoms/ChatSubmitButton';
 import Sally from './atoms/Sally';
 
 // Molecules
+import AcceptingOnLoginAction from './molecules/AcceptingOnLoginAction';
 import ChatForm from './molecules/ChatForm';
 import ChatHeader from './molecules/ChatHeader';
 import LoginAction from './molecules/LoginAction';
@@ -18,6 +19,7 @@ import PersonalInfoAction from './molecules/PersonalInfoAction';
 import ChatComponentsContainer from "./organisms/ChatComponentsContainer";
 
 export {
+    AcceptingOnLoginAction,
     Button,
     ChatBubble,
     ChatComponentsContainer,

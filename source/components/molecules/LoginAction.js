@@ -47,5 +47,9 @@ const ACTIONS = [
     {
         type: 'component',
         value: 'personalInfoAction'
+    },
+    {
+        type: 'component',
+        value: 'acceptingOnLoginAction'
     }
 ]
