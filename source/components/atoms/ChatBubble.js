@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         shadowOffset: { height: 2, width: 0 },
     },
     text: {
-        fontSize: 18,
+        fontSize: 16,
         color: 'white',
     },
     automated: {

@@ -223,7 +223,7 @@ export default withNavigation(LoginInput);
 
 const styles = StyleSheet.create({
     infoText: {
-        fontSize: 15,
+        fontSize: 14,
         fontWeight: 'bold',
         textAlign: 'center',
         marginTop: 24,

@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     },
     sectionTitle: {
         color: '#565656',
-        fontSize: 15,
+        fontSize: 14,
         fontWeight: 'bold',
     },
 });
