@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, Animated } from 'react-native';
 import {
     ChatBubble,
     ChatSectionTitle,
@@ -12,21 +12,21 @@ import {
 } from '../Components';
 
 class ChatComponentsContainer extends Component {
-
     constructor(props) {
         super(props);
-
-        // this.state = {
-        //     listObjects: []
-        // }
+        this.delayValue = 500;
+        this.state = {
+            animatedValue: new Animated.Value(0),
+        }
     }
 
-    // componentDidMount() {
-    //     const { listObjects } = this.props;
-    //     if (listObjects) {
-    //         this.delayListItems(listObjects);
-    //     }
-    // }
+    componentDidMount = () => {
+        Animated.spring(this.state.animatedValue, {
+            toValue: 1,
+            tension: 20,
+            useNativeDriver: true
+        }).start();
+    }
 
     getCustomComponent = (key) => {
         const components = {
@@ -40,18 +40,13 @@ class ChatComponentsContainer extends Component {
         return components[key];
     }
 
-    // delayListItems = (listObjects) => {
-    //     for (let i = 0; i < listObjects.length; i++) {
-    //         setTimeout(() => {
-    //             let objects = this.state.listObjects;
-    //             console.log("Delay new object", objects);
-    //             objects.push(listObjects[i]);
-    //             this.setState({ listObjects: objects })
-    //         }, 300 * i);
-    //     }
-    // }
-
     renderChatComponent = ({ item }) => {
+        this.delayValue = this.delayValue + 500;
+        const translateX = this.state.animatedValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [this.delayValue, 1]
+        });
+
         switch (item.type) {
             case 'component':
                 const CustomChatComponent = this.getCustomComponent(item.value);
@@ -64,7 +59,11 @@ class ChatComponentsContainer extends Component {
             case 'chatSectionTitle':
                 return <ChatSectionTitle content={item.value} modifiers={item.modifiers} />
             case 'chatBubble':
-                return <ChatBubble content={item.value} modifiers={item.modifiers} />
+                return (
+                    <Animated.View style={{ transform: [{ translateX }] }}>
+                        <ChatBubble content={item.value} modifiers={item.modifiers} />
+                    </Animated.View>
+                );
         }
     }
 
