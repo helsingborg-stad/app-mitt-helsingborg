@@ -3,7 +3,7 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 const Button = ({ value, onClick, modifiers }) =>
     <TouchableOpacity
-        style={[styles.button, styles.buttonPrimary]}
+        style={[styles.button, styles.buttonPrimary, styles.buttonAlignRight]}
         onPress={onClick}
     >
         <Text
@@ -19,14 +19,16 @@ export default Button;
 const styles = StyleSheet.create({
     button: {
         marginBottom: 15,
-        paddingTop: 16,
-        paddingBottom: 16,
+        padding: 16,
         backgroundColor: '#fff',
         borderRadius: 17,
         shadowOpacity: 0.3,
         shadowRadius: 3,
         shadowColor: '#000',
         shadowOffset: { height: 2, width: 0 },
+    },
+    buttonAlignRight: {
+        alignSelf: 'flex-end',
     },
     buttonPrimary: {
         backgroundColor: '#0095DB',
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: 18,
         color: '#005C86',
-        textAlign: 'center',
+        textAlign: 'left',
         fontWeight: 'bold',
     },
     buttonPrimaryText: {
