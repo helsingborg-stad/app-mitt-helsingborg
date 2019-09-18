@@ -13,16 +13,18 @@ import MoreInfoExpanded from './molecules/MoreInfoExpanded';
 import PersonalInfoAction from './molecules/PersonalInfoAction';
 
 // Organisms
+import ChatComponentsContainer from "./organisms/ChatComponentsContainer";
 
 export {
+    Button,
+    ChatBubble,
+    ChatComponentsContainer,
+    ChatForm,
+    ChatSectionTitle,
+    ChatSubmitButton,
     LoginAction,
     LoginInput,
     MoreInfo,
     MoreInfoExpanded,
-    ChatBubble,
-    ChatSectionTitle,
-    Button,
-    ChatForm,
     PersonalInfoAction,
-    ChatSubmitButton
 };

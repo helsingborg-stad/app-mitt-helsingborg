@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import StorageService from '../../../services/StorageService';
-import Auth from '../../../helpers/AuthHelper';
-import { authorize, cancelRequest, resetCancel } from "../../../services/UserService";
-import { canOpenUrl } from "../../../helpers/LinkHelper";
-import { sanitizePin, validatePin } from "../../../helpers/ValidationHelper";
+import StorageService from '../../services/StorageService';
+import Auth from '../../helpers/AuthHelper';
+import { authorize, cancelRequest, resetCancel } from "../../services/UserService";
+import { canOpenUrl } from "../../helpers/LinkHelper";
+import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
 import { withNavigation } from 'react-navigation';
 import { Button, ChatForm } from '../Components';
 
@@ -221,7 +221,7 @@ class LoginInput extends Component {
                                     keyboardType='number-pad'
                                     maxLength={12}
                                     disabled={!validPin}
-                                    placeholder={'ÅÅÅÅMMDDXXXX'}
+                                    placeholder={'Ange ditt personnummer'}
                                     inputValue={personalNumberInput}
                                     onSubmitEditing={this.checkPin}
                                     changeHandler={(value) => this.setPin(value)}

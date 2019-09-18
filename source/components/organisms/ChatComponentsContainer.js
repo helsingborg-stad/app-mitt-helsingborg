@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import { FlatList } from 'react-native';
-import { ChatBubble, ChatSectionTitle, LoginAction, MoreInfo, MoreInfoExpanded, ChatForm, PersonalInfoAction } from './Components';
+import {
+    ChatBubble,
+    ChatSectionTitle,
+    LoginAction,
+    MoreInfo,
+    MoreInfoExpanded,
+    ChatForm,
+    PersonalInfoAction
+} from '../Components';
 
 class ChatComponentsContainer extends Component {
 

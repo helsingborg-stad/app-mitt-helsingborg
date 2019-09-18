@@ -10,6 +10,8 @@ class PersonalInfoAction extends Component {
         this.props.addMessages(
             MESSAGES
         );
+
+        this.props.setActions([]);
     }
 
     render() {
@@ -24,7 +26,12 @@ export default PersonalInfoAction;
 const MESSAGES = [
     {
         type: 'chatBubble',
+        modifiers: ['user'],
+        value: "Berätta mer om mina personuppgifter"
+    },
+    {
+        type: 'chatBubble',
         modifiers: ['automated'],
-        value: "Info om personuppgifter"
+        value: "Info om personuppgifter kommer här"
     }
 ];

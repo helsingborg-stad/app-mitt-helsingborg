@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, StyleSheet, SafeAreaView, View, TextInput } from 'react-native';
-import ChatComponentsContainer from '../login/ChatComponentsContainer';
-import { LoginInput } from '../login/Components';
-import { Header } from 'react-navigation';
+import { KeyboardAvoidingView, StyleSheet, SafeAreaView, View } from 'react-native';
+import { ChatComponentsContainer, LoginInput } from '../Components';
 
 class LoginChatScreen extends Component {
     constructor(props) {
@@ -43,12 +41,11 @@ class LoginChatScreen extends Component {
                 <KeyboardAvoidingView
                     style={styles.chatContainer}
                     behavior="padding"
-                    keyboardVerticalOffset={Header.HEIGHT} // FIXME: Header.HEIGHT is deprecated & does not account for orientation or iphoneX
+                    keyboardVerticalOffset={88} // TODO: remove hard coded offset
                     enabled
                 >
 
                     <View style={styles.chatBody}>
-
                         {/* Messages */}
                         <ChatComponentsContainer
                             listObjects={messages}
