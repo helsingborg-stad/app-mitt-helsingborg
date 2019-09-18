@@ -52,6 +52,7 @@ class LoginChatScreen extends Component {
                         {messages.length > 0 &&
                             <ChatComponentsContainer
                                 style={{
+                                    flexBasis: '100%',
                                     paddingHorizontal: 16,
                                 }}
                                 listObjects={messages}
