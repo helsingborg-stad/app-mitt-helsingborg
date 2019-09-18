@@ -85,6 +85,13 @@ class DashboardScreen extends Component {
         });
     };
 
+    removeUser = async () => {
+        await StorageService.removeData('accessToken');
+        await StorageService.removeData('user');
+
+        this.props.navigation.navigate('AuthLoading');
+    };
+
     render() {
         const { user, isLoading, isBankidInstalled } = this.state;
 
@@ -129,6 +136,13 @@ class DashboardScreen extends Component {
                                 testID={'ButtonSignOut'}
                                 onPress={this.logOut}
                                 title="Sign out"
+                            />
+
+                            <Button
+                                accessible={true}
+                                testID={'ButtonRemoveUser'}
+                                onPress={this.removeUser}
+                                title="Remove this user"
                             />
 
                         </View >
