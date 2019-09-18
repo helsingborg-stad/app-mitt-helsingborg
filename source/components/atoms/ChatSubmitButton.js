@@ -5,7 +5,7 @@ const ChatSubmitButton = props => {
     return (
         <View style={styles.SubmitButtonWrapper}>
             <TouchableOpacity onPress={props.submitHandler} style={styles.SubmitButtonInner}>
-                <Text style={styles.SubmitButtonText}>Send</Text>
+                <Text style={styles.SubmitButtonText}>{props.submitText ? props.submitText : 'Send'}</Text>
             </TouchableOpacity>
         </View>
     );
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1,
         padding: 16,
-        width: 80
+        width: 90
     },
     SubmitButtonText: {
         color: 'rgb(41, 128, 185)',

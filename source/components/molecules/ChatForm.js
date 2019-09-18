@@ -12,7 +12,7 @@ const ChatForm = props => {
                 onChangeText={props.changeHandler}
                 onSubmitEditing={props.submitHandler}
             />
-            <ChatSubmitButton submitHandler={props.submitHandler} />
+            <ChatSubmitButton submitHandler={props.submitHandler} submitText={props.submitText} />
         </View>
     );
 }

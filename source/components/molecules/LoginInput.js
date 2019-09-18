@@ -25,7 +25,7 @@ class LoginInput extends Component {
     }
 
     componentDidMount() {
-        //this.setUserAsync();
+        this.setUserAsync();
         this.isBankidInstalled();
     }
 
@@ -63,6 +63,8 @@ class LoginInput extends Component {
             const user = await StorageService.getData(USERKEY);
             if (typeof user !== 'undefined' && user !== null) {
                 this.setState({ user });
+                // Login the user automatically
+                this.authenticateUser(user.personalNumber);
             }
         } catch (error) {
             console.log("Something went wrong", error);
@@ -185,105 +187,45 @@ class LoginInput extends Component {
         const { user, isLoading, validPin, personalNumberInput, isBankidInstalled } = this.state;
 
         return (
-            <>
-                {isLoading === false ? (
+            <View>
+                {/* Loading */}
+                {isLoading &&
                     <View>
-
-                        {user.personalNumber !== 'undefined' && user.personalNumber ? (
-                            <>
-                                <TouchableOpacity
-                                    style={styles.button}
-                                    onPress={() => this.authenticateUser(user.personalNumber)}
-                                    underlayColor='#fff'
-                                >
-                                    <Text
-                                        style={styles.buttonText}
-                                        accessible={true}
-                                        testID={"LoginButton"}
-                                    >Logga in</Text>
-                                </TouchableOpacity>
-                                <View
-                                    style={styles.loginFooter}
-                                    testID={"ChangeLogInUser"}
-                                >
-                                    <Button
-                                        accessible={true}
-                                        testID={"ChangeLogInUser"}
-                                        title="Logga in som en annan användare"
-                                        color="#000"
-                                        onPress={() => this.resetUser()}
-                                    />
-                                </View>
-                            </>
-                        ) : (
-                                <ChatForm
-                                    autoFocus={true}
-                                    keyboardType='number-pad'
-                                    maxLength={12}
-                                    disabled={!validPin}
-                                    placeholder={'Ange ditt personnummer'}
-                                    inputValue={personalNumberInput}
-                                    onSubmitEditing={this.checkPin}
-                                    changeHandler={(value) => this.setPin(value)}
-                                    submitHandler={() => this.authenticateUser(personalNumberInput)} />
-                                // <>
-                                //     <Text style={styles.infoText}>Logga in med BankID</Text>
-                                //     <View style={styles.paper}>
-                                //         <Text style={styles.label}>Personnummer</Text>
-                                //         <TextInput
-                                //             style={styles.inputField}
-                                //             keyboardType='number-pad'
-                                //             returnKeyType='done'
-                                //             maxLength={12}
-                                //             placeholder={'ÅÅÅÅMMDDXXXX'}
-                                //             onChangeText={(value) => this.setPin(value)}
-                                //             onSubmitEditing={this.checkPin}
-                                //             value={personalNumberInput}
-                                //         />
-
-                                //         <TouchableOpacity
-                                //             style={[styles.button, !validPin ? styles.buttonDisabled : '']}
-                                //             onPress={() => this.authenticateUser(personalNumberInput)}
-                                //             underlayColor='#fff'
-                                //             disabled={!validPin}
-                                //         >
-                                //             <Text style={[styles.buttonText, !validPin ? styles.buttonTextDisabled : '']}>Logga in</Text>
-                                //         </TouchableOpacity>
-                                //     </View>
-
-                                //     <View style={styles.loginFooter}>
-                                //         <Button
-                                //             title="Läs mer om hur du skaffar mobilt BankID"
-                                //             color="#000"
-                                //             onPress={() => {
-                                //                 Linking.openURL("https://support.bankid.com/sv/bankid/mobilt-bankid")
-                                //                     .catch(() => console.log("Couldnt open url"));
-                                //             }}
-                                //         />
-                                //     </View>
-                                // </>
-                            )}
+                        <ActivityIndicator size="large" color="slategray" />
+                        {!isBankidInstalled &&
+                            <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
+                        }
+                        <Button
+                            onClick={this.cancelLogin}
+                            value="Avbryt"
+                        />
                     </View>
-                ) : (
-                        <View style={styles.container}>
-                            <View style={styles.content}>
-                                <ActivityIndicator size="large" color="slategray" />
-                                {!isBankidInstalled &&
-                                    <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
-                                }
-                            </View>
-                            <View style={styles.loginContainer}>
-                                <TouchableOpacity
-                                    style={styles.button}
-                                    onPress={this.cancelLogin}
-                                    underlayColor='#fff'>
-                                    <Text style={styles.buttonText}>Avbryt</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    )
                 }
-            </>
+
+                {/* First time users */}
+                {!isLoading && (user.personalNumber === 'undefined' || !user.personalNumber) &&
+                    <ChatForm
+                        autoFocus={true}
+                        keyboardType='number-pad'
+                        maxLength={12}
+                        disabled={!validPin}
+                        submitText={'Logga in'}
+                        placeholder={'Ange ditt personnummer'}
+                        inputValue={personalNumberInput}
+                        onSubmitEditing={this.checkPin}
+                        changeHandler={(value) => this.setPin(value)}
+                        submitHandler={() => this.authenticateUser(personalNumberInput)}
+                    />
+                }
+
+                {/* Returning users */}
+                {!isLoading && (user.personalNumber !== 'undefined' && user.personalNumber) &&
+                    <Button
+                        onClick={() => this.authenticateUser(user.personalNumber)}
+                        value="Logga in med Mobilt BankID"
+                    />
+                }
+            </View>
         );
     }
 }
