@@ -78,17 +78,17 @@ export default LoginChatScreen;
 
 const MESSAGES = [
     {
-        type: 'string',
+        type: 'chatBubble',
         modifiers: ['automated'],
         value: "Hej!",
     },
     {
-        type: 'string',
+        type: 'chatBubble',
         modifiers: ['automated'],
         value: "Välkommen till Mitt Helsingborg!"
     },
     {
-        type: 'string',
+        type: 'chatBubble',
         modifiers: ['automated'],
         value: "Jag heter Sally!"
     },
@@ -96,7 +96,7 @@ const MESSAGES = [
 
 const ACTIONS = [
     {
-        type: 'separator',
+        type: 'chatSectionTitle',
         value: "Hur vill du fortsätta?"
     },
     {

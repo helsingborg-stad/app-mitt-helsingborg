@@ -27,12 +27,12 @@ export default MoreInfoExpanded;
 
 const MESSAGES = [
     {
-        type: 'string',
+        type: 'chatBubble',
         modifiers: ['user'],
         value: "Berätta ännu mer"
     },
     {
-        type: 'string',
+        type: 'chatBubble',
         modifiers: ['automated'],
         value: "Här kommer ännu mer info!"
     }
@@ -40,7 +40,7 @@ const MESSAGES = [
 
 const ACTIONS = [
     {
-        type: 'separator',
+        type: 'chatSectionTitle',
         value: "Hur vill du fortsätta?"
     },
     {

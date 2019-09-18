@@ -23,7 +23,7 @@ export default PersonalInfoAction;
 
 const MESSAGES = [
     {
-        type: 'string',
+        type: 'chatBubble',
         modifiers: ['automated'],
         value: "Info om personuppgifter"
     }

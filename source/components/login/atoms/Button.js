@@ -4,7 +4,6 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 const Button = ({ value, onClick, modifiers }) =>
     <TouchableOpacity
         style={[styles.button, styles.buttonPrimary]}
-        underlayColor='#fff'
         onPress={onClick}
     >
         <Text

@@ -28,12 +28,12 @@ export default LoginAction;
 
 const MESSAGES = [
     {
-        type: 'string',
+        type: 'chatBubble',
         modifiers: ['user'],
         value: "Logga in med Mobilt BankID"
     },
     {
-        type: 'string',
+        type: 'chatBubble',
         modifiers: ['automated'],
         value: "Eftersom det är första gången du loggar in behöver du ange ditt personnummer"
     },
@@ -41,7 +41,7 @@ const MESSAGES = [
 
 const ACTIONS = [
     {
-        type: 'separator',
+        type: 'chatSectionTitle',
         value: "Eller lär dig mer om Mitt Helsingborg"
     },
     {

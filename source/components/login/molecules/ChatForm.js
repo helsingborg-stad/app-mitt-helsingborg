@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextInput, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { ChatSubmitButton } from '../Components';
 
 const ChatForm = props => {
     return (
@@ -11,17 +12,7 @@ const ChatForm = props => {
                 onChangeText={props.changeHandler}
                 onSubmitEditing={props.submitHandler}
             />
-            <SubmitButton submitHandler={props.submitHandler} />
-        </View>
-    );
-}
-
-const SubmitButton = props => {
-    return (
-        <View style={styles.SubmitButtonWrapper}>
-            <TouchableOpacity onPress={props.submitHandler} style={styles.SubmitButtonInner}>
-                <Text style={styles.SubmitButtonText}>Send</Text>
-            </TouchableOpacity>
+            <ChatSubmitButton submitHandler={props.submitHandler} />
         </View>
     );
 }
@@ -46,19 +37,4 @@ const styles = StyleSheet.create({
         borderTopWidth: 0,
         borderRadius: 4
     },
-    SubmitButtonWrapper: {
-        height: 56,
-    },
-    SubmitButtonInner: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flex: 1,
-        padding: 16,
-        width: 80
-    },
-    SubmitButtonText: {
-        color: 'rgb(41, 128, 185)',
-        fontWeight: 'bold'
-    }
 });

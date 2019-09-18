@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList } from 'react-native';
-import { Message, Separator, LoginAction, MoreInfo, MoreInfoExpanded, ChatForm, PersonalInfoAction } from './Components';
+import { ChatBubble, ChatSectionTitle, LoginAction, MoreInfo, MoreInfoExpanded, ChatForm, PersonalInfoAction } from './Components';
 
 class ChatComponentsContainer extends Component {
 
@@ -41,21 +41,20 @@ class ChatComponentsContainer extends Component {
     //     }
     // }
 
-    renderItem = ({ item }) => {
+    renderChatComponent = ({ item }) => {
         switch (item.type) {
             case 'component':
-                const CustomComponent = this.getCustomComponent(item.value);
-                return (
-                    <CustomComponent
-                        {...item}
-                        addMessages={this.props.addMessages}
-                        setActions={this.props.setActions}
-                        activateFormInput={this.props.activateFormInput}
-                    />);
-            case 'separator':
-                return <Separator content={item.value} modifiers={item.modifiers} />
-            default:
-                return <Message content={item.value} modifiers={item.modifiers} />
+                const CustomChatComponent = this.getCustomComponent(item.value);
+                return <CustomChatComponent
+                    {...item}
+                    addMessages={this.props.addMessages}
+                    setActions={this.props.setActions}
+                    activateFormInput={this.props.activateFormInput}
+                />
+            case 'chatSectionTitle':
+                return <ChatSectionTitle content={item.value} modifiers={item.modifiers} />
+            case 'chatBubble':
+                return <ChatBubble content={item.value} modifiers={item.modifiers} />
         }
     }
 
@@ -66,7 +65,7 @@ class ChatComponentsContainer extends Component {
             <FlatList
                 inverted={false}
                 data={listObjects}
-                renderItem={(item, index) => this.renderItem(item, index)}
+                renderItem={(item, index) => this.renderChatComponent(item, index)}
                 keyExtractor={(item, index) => index.toString()}
                 contentContainerStyle={{ paddingTop: 10, paddingBottom: 10 }}
             />

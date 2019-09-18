@@ -28,22 +28,22 @@ export default MoreInfo;
 
 const MESSAGES = [
     {
-        type: 'string',
+        type: 'chatBubble',
         modifiers: ['user'],
         value: "Berätta mer"
     },
     {
-        type: 'string',
+        type: 'chatBubble',
         modifiers: ['automated'],
         value: "Absolut!"
     },
     {
-        type: 'string',
+        type: 'chatBubble',
         modifiers: ['automated'],
         value: "Med Mitt Helsingborg kommunicerar du med staden och får tillgång till alla tjänster du behöver."
     },
     {
-        type: 'string',
+        type: 'chatBubble',
         modifiers: ['automated'],
         value: "Allt samlat i mobilen!"
     },
@@ -51,7 +51,7 @@ const MESSAGES = [
 
 const ACTIONS = [
     {
-        type: 'separator',
+        type: 'chatSectionTitle',
         value: "Hur vill du fortsätta?"
     },
     {

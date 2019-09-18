@@ -1,18 +1,17 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 
-const Message = ({ content, modifiers }) => {
-    return (<View style={[styles.chatBubble, styles[modifiers]]}>
+const ChatBubble = ({ content, modifiers }) =>
+    <View style={[styles.chatBubble, styles[modifiers]]}>
         <Text style={styles.text}>{content}</Text>
-    </View >);
-}
+    </View >
 
-export default Message;
+export default ChatBubble;
 
 const styles = StyleSheet.create({
     chatBubble: {
         marginBottom: 15,
-        borderRadius: 7,
+        borderRadius: 12,
         padding: 10,
         backgroundColor: 'gray',
     },
