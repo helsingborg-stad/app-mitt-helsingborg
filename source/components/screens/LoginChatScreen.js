@@ -55,6 +55,7 @@ class LoginChatScreen extends Component {
                                     flexBasis: '100%',
                                     paddingHorizontal: 16,
                                 }}
+                                inverted={true}
                                 listObjects={messages}
                                 setActions={this.setActions.bind(this)}
                                 addMessages={this.addMessages.bind(this)}
