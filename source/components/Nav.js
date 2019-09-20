@@ -11,7 +11,7 @@ import LoginChatScreen from "./screens/LoginChatScreen";
 import UserSettingsScreen from "./screens/UserSettingsScreen"
 import DashboardScreen from './screens/DashboardScreen';
 import SplashScreen from './screens/SplashScreen';
-import ChatScreen from './screens/ChatScreen';
+//import ChatScreen from './screens/ChatScreen';
 
 const MittHbgStack = createStackNavigator(
     {
@@ -39,17 +39,17 @@ const SettingStack = createStackNavigator(
     }
 );
 
-const ChatStack = createStackNavigator(
-    {
-        Chat: ChatScreen
-    },
-    {
-        initialRouteName: "Chat",
-        defaultNavigationOptions: {
-            headerTitle: "Chat Widget"
-        }
-    },
-);
+// const ChatStack = createStackNavigator(
+//     {
+//         Chat: ChatScreen
+//     },
+//     {
+//         initialRouteName: "Chat",
+//         defaultNavigationOptions: {
+//             headerTitle: "Chat Widget"
+//         }
+//     },
+// );
 
 const MainTabs = createBottomTabNavigator({
     MittHelsingborg: {
@@ -64,12 +64,12 @@ const MainTabs = createBottomTabNavigator({
             tabBarLabel: 'Inställningar'
         }
     },
-    Chat: {
-        screen: ChatStack,
-        navigationOptions: {
-            tabBarLabel: 'Chat'
-        }
-    }
+    // Chat: {
+    //     screen: ChatStack,
+    //     navigationOptions: {
+    //         tabBarLabel: 'Chat'
+    //     }
+    // }
 });
 
 const AuthStack = createStackNavigator({
