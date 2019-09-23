@@ -9,6 +9,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 
 // Storage key definitions
 export const SHOW_SPLASH_SCREEN = '@app:show_splash_screen';
+export const TOKEN_KEY = '@app:accessToken';
 
 export default class StorageService extends Component {
     /**

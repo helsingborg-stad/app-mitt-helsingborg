@@ -1,8 +1,7 @@
 import decode from "jwt-decode";
-import StorageService from './../services/StorageService';
+import StorageService, { TOKEN_KEY } from './../services/StorageService';
 
 const USERKEY = 'user';
-const TOKENKEY = 'accessToken';
 
 export default class AuthHelper {
 
@@ -19,7 +18,7 @@ export default class AuthHelper {
             // Store user data
             const data = [
                 [USERKEY, JSON.stringify(user)],
-                [TOKENKEY, token],
+                [TOKEN_KEY, token],
             ];
 
             return await StorageService.multiSaveData(data)
@@ -32,7 +31,7 @@ export default class AuthHelper {
      * Clear access token
      */
     static logOut = async () => {
-        await StorageService.removeData(TOKENKEY);
+        await StorageService.removeData(TOKEN_KEY);
     };
 
     /**
@@ -63,7 +62,7 @@ export default class AuthHelper {
      * Retrieves the access token from async storage
      */
     static getToken = async () => {
-        return await StorageService.getData(TOKENKEY);
+        return await StorageService.getData(TOKEN_KEY);
     };
 
     /**
