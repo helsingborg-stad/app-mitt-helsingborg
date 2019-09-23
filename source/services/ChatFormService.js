@@ -23,8 +23,7 @@ export const getAllFormTemplates = () => {
 export const constructGetFormTemplate = (endpoint) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const token = await StorageService.getData(TOKEN_KEY);
-            const reqChatResult = await reqService(endpoint, token);
+            const reqChatResult = await reqService(endpoint);
 
             return resolve(reqChatResult);
         } catch (error) {
@@ -33,8 +32,53 @@ export const constructGetFormTemplate = (endpoint) => {
     })
 };
 
-const reqService = async (endpoint, token) => {
+export const sendChatMsg = (workspaceId, textInput) => {
+    console.log('Called sendChatMsg.');
+    const endpoint = 'chatbot/message';
+
     return new Promise(async (resolve, reject) => {
+        const token = await StorageService.getData(TOKEN_KEY);
+        const data = {
+            workspaceId,
+            textInput
+        };
+
+        try {
+            const reqChatResult = await postService(endpoint, data, token);
+
+            return resolve(reqChatResult);
+        } catch (error) {
+            return reject(error.message);
+        }
+    })
+};
+
+const postService = async (endpoint, data, token) => {
+    return new Promise(async (resolve, reject) => {
+        await axios({
+                method: 'POST',
+                url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
+                data: data,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            }
+        ).then(result => {
+            console.log("Request result", result);
+            return resolve(result.data);
+        }).catch(err => {
+            console.log("Error in request call", err.request);
+            return reject(err);
+        });
+    });
+};
+
+const reqService = async (endpoint) => {
+    return new Promise(async (resolve, reject) => {
+        const token = await StorageService.getData(TOKEN_KEY);
+
         await axios({
                 method: 'GET',
                 url: endpoint,
