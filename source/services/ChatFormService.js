@@ -9,11 +9,21 @@ import env from "react-native-config";
 import StorageService, { TOKEN_KEY } from "../services/StorageService";
 
 export const getFormTemplate = (formId) => {
+    const endpoint = `${env.MITTHELSINGBORG_IO}/form/getFormTemplate/${formId}`;
+
+    return constructGetFormTemplate(endpoint);
+};
+
+export const getAllFormTemplates = () => {
+    const endpoint = `${env.MITTHELSINGBORG_IO}/form/forms`;
+
+    return constructGetFormTemplate(endpoint);
+};
+
+export const constructGetFormTemplate = (endpoint) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const endpoint = `${env.MITTHELSINGBORG_IO}/form/getFormTemplate/${formId}`;
             const token = await StorageService.getData(TOKEN_KEY);
-
             const reqChatResult = await reqService(endpoint, token);
 
             return resolve(reqChatResult);
@@ -31,8 +41,8 @@ const reqService = async (endpoint, token) => {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    // 'Authorization': 'Bearer ' + token
-                    'Authorization': 'Bearer '
+                    'Authorization': 'Bearer ' + token
+                    // 'Authorization': 'Bearer '
                 }
             }
         ).then(result => {
