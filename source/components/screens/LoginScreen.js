@@ -1,53 +1,30 @@
 import React, { Component } from 'react';
 import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput, Linking, Button } from 'react-native';
-import StorageService from '../../services/StorageService';
-import Auth from '../../helpers/AuthHelper';
-import { authorize, bypassBankid, cancelRequest, resetCancel } from "../../services/UserService";
-import { canOpenUrl } from "../../helpers/LinkHelper";
 import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
+import withAuthentication from '../organisms/withAuthentication';
 
-const USERKEY = 'user';
 class LoginScreen extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            user: {},
-            isBankidInstalled: false,
             validPin: false,
-            isLoading: false,
             personalNumberInput: ''
         };
     }
 
-    componentDidMount() {
-        this.setUserAsync();
-        this.isBankidInstalled();
-    }
-
     /**
-     * Get user from async storage and add to state
+     * Authenticate user and navigate on success
      */
-    setUserAsync = async () => {
+    authenticateUser = async (personalNumber) => {
         try {
-            const user = await StorageService.getData(USERKEY);
-            if (typeof user !== 'undefined' && user !== null) {
-                this.setState({ user });
+            const {loginUser} = this.props.authentication;
+            await loginUser(personalNumber);
+            this.props.navigation.navigate('App');
+        } catch (e) {
+            if (e !== 'cancelled') {
+                Alert.alert(message);
             }
-        } catch (error) {
-            console.log("Something went wrong", error);
-        }
-    };
-
-    /**
-     * Check if BankID app is installed on this machine
-     */
-    isBankidInstalled = async () => {
-        const isBankidInstalled = await canOpenUrl('bankid:///');
-        console.log("isBankidInstalled", isBankidInstalled);
-
-        if (isBankidInstalled) {
-            this.setState({ isBankidInstalled: true });
         }
     };
 
@@ -65,93 +42,6 @@ class LoginScreen extends Component {
     }
 
     /**
-     * Make authenticate request and log in user
-     */
-    authenticateUser = async (personalNumber) => {
-        this.setState({ isLoading: true });
-
-        if (!personalNumber) {
-            this.displayError('Personnummer saknas');
-            return;
-        }
-
-        // TODO: For testing only, remove me later
-        console.log(personalNumber);
-        if (personalNumber === '201111111111') {
-            bypassBankid(personalNumber).then(res => {
-                const { user } = res.data;
-                Auth.logIn(
-                    user,
-                    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjFlZDcyYzJjLWQ5OGUtNGZjMC04ZGY2LWY5NjRkOTYxMTVjYSIsImlhdCI6MTU2Mjc0NzM2NiwiZXhwIjoxNTYyNzUwOTc0fQ.iwmUMm51j-j2BYui9v9371DkY5LwLGATWn4LepVxmNk' // fake token
-                )
-                    .then(() => {
-                        this.props.navigation.navigate('App');
-                    }).catch(() => {
-                        this.displayError('Login failed');
-                    });
-
-            }).catch(error => console.log(error));
-
-            return;
-        }
-
-        try {
-            const authResponse = await authorize(personalNumber);
-            if (authResponse.ok === true) {
-                console.log("authResponse success", authResponse);
-                const { user, accessToken } = authResponse.data;
-                try {
-                    console.log("Try login");
-                    await Auth.logIn(user, accessToken);
-                    this.props.navigation.navigate('App');
-                } catch (error) {
-                    throw "Login failed";
-                }
-
-            } else {
-                console.log("authResponse failed", authResponse);
-                throw authResponse.data;
-            }
-
-        } catch (error) {
-            // TODO: Add dynamic error messages
-            console.log("authResponse error", error);
-
-            this.setState({ isLoading: false });
-
-            if (error !== 'cancelled') {
-                this.displayError(error);
-            }
-        }
-
-        // Reset cancel variable when done
-        resetCancel();
-    };
-
-    /**
-     * Display error notice
-     */
-    displayError = message => {
-        this.setState({ isLoading: false });
-        Alert.alert(message);
-    };
-
-    /**
-     * Cancel BankID login request
-     */
-    cancelLogin = async () => {
-        try {
-            cancelRequest();
-        } catch (error) {
-            console.log(error);
-        } finally {
-            // Clears access token and reset state
-            Auth.logOut();
-            this.setState({ isLoading: false });
-        }
-    };
-
-    /**
      * Check PIN (Personal identity number)
      */
     checkPin = () => {
@@ -161,15 +51,9 @@ class LoginScreen extends Component {
         }
     };
 
-    /**
-     * Remove user from state, to be able to login as another user
-     */
-    resetUser = async () => {
-        this.setState({ user: {} });
-    };
-
     render() {
-        const { user, isLoading, validPin, personalNumberInput, isBankidInstalled } = this.state;
+        const {validPin, personalNumberInput } = this.state;
+        const {isLoading, cancelLogin, resetUser, user, isBankidInstalled} = this.props.authentication;
 
         return (
             <>
@@ -206,7 +90,7 @@ class LoginScreen extends Component {
                                             testID={"ChangeLogInUser"}
                                             title="Logga in som en annan användare"
                                             color="#000"
-                                            onPress={() => this.resetUser()}
+                                            onPress={() => resetUser()}
                                         />
                                     </View>
                                 </>
@@ -261,7 +145,7 @@ class LoginScreen extends Component {
                             <View style={styles.loginContainer}>
                                 <TouchableOpacity
                                     style={styles.button}
-                                    onPress={this.cancelLogin}
+                                    onPress={cancelLogin}
                                     underlayColor='#fff'>
                                     <Text style={styles.buttonText}>Avbryt</Text>
                                 </TouchableOpacity>
@@ -275,7 +159,7 @@ class LoginScreen extends Component {
     }
 }
 
-export default LoginScreen;
+export default withAuthentication(LoginScreen);
 
 const styles = StyleSheet.create({
     paper: {
