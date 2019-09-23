@@ -70,6 +70,7 @@ class LoginChatScreen extends Component {
                                     flexShrink: 0,
                                     padding: 16,
                                 }}
+                                scrollEnabled={false}
                                 listObjects={actions}
                                 setActions={this.setActions.bind(this)}
                                 addMessages={this.addMessages.bind(this)}

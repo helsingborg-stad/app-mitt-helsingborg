@@ -68,11 +68,12 @@ class ChatComponentsContainer extends Component {
     }
 
     render() {
-        const { listObjects, inverted } = this.props;
+        const { listObjects, inverted, scrollEnabled } = this.props;
 
         return <FlatList
             style={this.props.style}
             inverted={inverted}
+            scrollEnabled={scrollEnabled}
             data={inverted ? [...listObjects].reverse() : listObjects}
             renderItem={(item, index) => this.renderChatComponent(item, index)}
             keyExtractor={(item, index) => index.toString()}
