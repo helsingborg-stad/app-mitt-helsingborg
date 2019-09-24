@@ -68,7 +68,7 @@ export const authorize = (personalNumber) =>
             token = auth.token;
         } catch (error) {
             console.log("Auth error", error);
-            return reject(error.message);
+            return reject(error);
         }
 
         const { autoStartToken, orderRef } = user;
@@ -159,7 +159,7 @@ export const sign = (personalNumber, userVisibleData) =>
             user = signResponse.user;
         } catch (error) {
             console.log("Sign error", error.message);
-            return reject(error.message);
+            return reject(error);
         }
 
         const { autoStartToken, orderRef } = user;
