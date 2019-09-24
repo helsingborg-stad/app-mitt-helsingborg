@@ -9,13 +9,13 @@ import env from "react-native-config";
 import StorageService, { TOKEN_KEY } from "../services/StorageService";
 
 export const getFormTemplate = (formId) => {
-    const endpoint = `${env.MITTHELSINGBORG_IO}/form/getFormTemplate/${formId}`;
+    const endpoint = `form/getFormTemplate/${formId}`;
 
     return constructGetFormTemplate(endpoint);
 };
 
 export const getAllFormTemplates = () => {
-    const endpoint = `${env.MITTHELSINGBORG_IO}/form/forms`;
+    const endpoint = 'form/forms';
 
     return constructGetFormTemplate(endpoint);
 };
@@ -23,7 +23,7 @@ export const getAllFormTemplates = () => {
 export const constructGetFormTemplate = (endpoint) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const reqChatResult = await reqService(endpoint);
+            const reqChatResult = await getService(endpoint);
 
             return resolve(reqChatResult);
         } catch (error) {
@@ -75,18 +75,17 @@ const postService = async (endpoint, data, token) => {
     });
 };
 
-const reqService = async (endpoint) => {
+const getService = async (endpoint) => {
     return new Promise(async (resolve, reject) => {
         const token = await StorageService.getData(TOKEN_KEY);
 
         await axios({
                 method: 'GET',
-                url: endpoint,
+                url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token
-                    // 'Authorization': 'Bearer '
                 }
             }
         ).then(result => {
