@@ -5,10 +5,14 @@
 // https://github.com/elderfo/react-native-storybook-loader.git
 
 function loadStories() {
+  require('../source/components/atoms/Heading.stories');
+  require('../source/components/atoms/Text.stories');
   
 }
 
 const stories = [
+  '../source/components/atoms/Heading.stories',
+  '../source/components/atoms/Text.stories',
   
 ];
 

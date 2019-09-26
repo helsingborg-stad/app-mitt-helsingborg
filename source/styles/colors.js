@@ -1,76 +1,59 @@
 const palette = {
-    black: "#1D1D1D",
-    white: "#FFF",
-    grey: {
-      light: "#C8D1D4",
-      origin: "#808080",
-      dark: "#373F47"
-    },
-    blue: {
-      light: "#A6E6FC",
-      origin: "#13A3D3",
-      dark: "#165B72"
-    },
-    green: {
-      light: "#F4FFFD",
-      origin: "#96D7CE",
-      dark: "#009a6b"
-    },
-    orange: {
-      light: "#fcd0a4",
-      origin: "#faaa5a",
-      dark: "#f88410"
-    },
-    red: {
-      light: "#f79686",
-      origin: "#f2583e",
-      dark: "#f03819"
-    },
-    purple: {
-      light: "#8a73d9",
-      origin: "#5737c9",
-      dark: "#3d268d"
-    },
-    lightWhite: "#F4F5F7",
-    pink: {
-      light: "#E8BACA",
-      origin: "#D496A7"
-    },
-    yellow: {
-      light: "#F9F9BB",
-      origin: "#FFEE93"
-    }
+  mono: {
+    black: "#000000",
+    darkest: "#3D3D3D",
+    darker: "#565656",
+    gray: "#707070",
+    light: "#A3A3A3",
+    lighter: "#E5E5E5",
+    lightest: "#FCFCFC",
+    white: "#FFFFFF",
+  },
+  red: {
+    1: "#F7A600",
+    2: "#CB0050",
+    3: "#EC6701",
+    4: "#AE0B05",
+    5: "#E3000F",
+  },
+  purple: {
+    1: "#D35098",
+    2: "#712082",
+    3: "#A84C98",
+    4: "#7B075E",
+    5: "#A61380",
+  },
+  blue: {
+    1: "#4DB4E7",
+    2: "#0069B4",
+    3: "#5BA1D8",
+    4: "#005C86",
+    5: "#0095DB",
+  },
+  green: {
+    1: "#AFCA05",
+    2: "#11A636",
+    3: "#A0C855",
+    4: "#50811B",
+    5: "#76B828",
+  },
+  state: {
+    danger: "#D73640"
+  }
 };
-  
+
 const colors = {
-    title: palette.black,
-    text: palette.purple.dark,
-    anchor: palette.green.dark,
-    input: {
-      normal: palette.blue.light,
-      focus: palette.blue.origin,
-      invalid: palette.red.origin,
-      disabled: palette.grey.light
-    },
-    base: {
-      primary: palette.green.origin,
-      secondary: palette.green.origin,
-      accent: palette.orange.origin,
-      grey: palette.grey.light,
-    },
-    button: {
-      primary: palette.green.origin,
-      secondary: palette.blue.origin,
-      accent: palette.orange.origin,
-      disabled: palette.grey.light,
-      danger: palette.red.origin
-    },
-    status: {
-      neutral: palette.grey.dark,
-      warning: palette.orange.origin,
-      error: palette.red.origin,
-      success: palette.green.origin
-    }
+  title: palette.black,
+  text: palette.red[1],
+  anchor: palette.green.dark,
+  input: {
+  },
+  base: {
+  },
+  button: {
+  },
+  status: {
+  }
 };
 
 export default colors;
