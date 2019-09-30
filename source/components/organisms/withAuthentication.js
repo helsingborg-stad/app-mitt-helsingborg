@@ -13,28 +13,28 @@ const USERKEY = 'user';
 
 /**
  * Wraps a react component with user authentication component.
- * 
- * @param {*} WrappedComponent 
- * 
- * example usage: 
+ *
+ * @param {*} WrappedComponent
+ *
+ * example usage:
  *  export default withAuthentication(LoginScreen)
- *  
+ *
  * from within the WrappedComponent (eg. LoginScreen) we can use:
  *  props.authentication.loginUser(), props.authentication.isLoading etc
- * 
+ *
  */
 const withAuthentication = (WrappedComponent) => {
     return class WithAuthentication extends PureComponent {
         constructor(props) {
             super(props);
-    
+
             this.state = {
                 user: {},
                 isLoading: false,
                 isBankidInstalled: false,
             };
         }
-    
+
         componentDidMount() {
             this._setUserAsync();
             this._isBankidInstalled();
@@ -52,16 +52,15 @@ const withAuthentication = (WrappedComponent) => {
                 }
 
                 const authResponse = await authorize(personalNumber);
-                 
                 if (authResponse.ok !== true) {
-                    throw authResponse.data;
+                    throw new Error(authResponse.data);
                 }
 
                 try {
                     const { user, accessToken } = authResponse.data;
                     await Auth.logIn(user, accessToken);
                 } catch (error) {
-                    throw "Login failed";
+                    throw new Error("Login failed");
                 }
 
                 return authResponse.data;
@@ -106,20 +105,20 @@ const withAuthentication = (WrappedComponent) => {
         _fakeLogin = async (personalNumber) => {
             try {
                 const response = await bypassBankid(personalNumber);
-                const {user} = response.data;
+                const { user } = response.data;
 
                 try {
                     await Auth.logIn(
                         user,
                         FAKE_TOKEN
-                    ); 
+                    );
                 } catch (e) {
                     // BY PASS REJECTION
                     // throw "Login failed";
                 }
 
-                return {user, FAKE_TOKEN};
-            } catch(e) {
+                return { user, FAKE_TOKEN };
+            } catch (e) {
                 throw (e);
             }
         }
@@ -132,6 +131,8 @@ const withAuthentication = (WrappedComponent) => {
                 const user = await StorageService.getData(USERKEY);
                 if (typeof user !== 'undefined' && user !== null) {
                     this.setState({ user });
+                    // Login the user automatically
+                    this.loginUser(user.personalNumber);
                 }
             } catch (error) {
                 console.log("Something went wrong", error);
@@ -150,12 +151,12 @@ const withAuthentication = (WrappedComponent) => {
         };
 
         render() {
-            const {state, props, loginUser, cancelLogin, resetUser} = this;
-            const instanceMethods = {loginUser, cancelLogin, resetUser};
-            const injectProps = {...instanceMethods, ...state};
+            const { state, props, loginUser, cancelLogin, resetUser } = this;
+            const instanceMethods = { loginUser, cancelLogin, resetUser };
+            const injectProps = { ...instanceMethods, ...state };
 
             return (
-                <WrappedComponent authentication={{...injectProps}} {...props} />
+                <WrappedComponent authentication={{ ...injectProps }} {...props} />
             )
         }
     };
