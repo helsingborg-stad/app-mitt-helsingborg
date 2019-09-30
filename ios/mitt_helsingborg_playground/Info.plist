@@ -73,6 +73,8 @@
 	<array>
 		<string>Roboto-Regular.ttf</string>
 		<string>Roboto-Bold.ttf</string>
+        <string>Roboto-Regular.ttf</string>
+		<string>Roboto-Bold.ttf</string>
 		<string>Roboto-Italic</string>
 		<string>Roboto-Light</string>
 		<string>Roboto-LightItalic</string>
