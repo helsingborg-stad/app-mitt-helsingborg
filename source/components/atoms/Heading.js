@@ -13,6 +13,7 @@ const Heading = styled.Text`
     font-style: normal;
     font-weight: 900;
     font-size: ${props => (fontSizes[props.type || 'h1'])}px;
+    font-family: 'Roboto';
 `;
 
 Heading.propTypes = {
