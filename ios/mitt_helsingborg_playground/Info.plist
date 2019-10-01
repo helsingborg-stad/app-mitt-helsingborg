@@ -73,6 +73,14 @@
 	<array>
 		<string>Roboto-Regular.ttf</string>
 		<string>Roboto-Bold.ttf</string>
+		<string>Roboto-Italic</string>
+		<string>Roboto-Light</string>
+		<string>Roboto-LightItalic</string>
+		<string>Roboto-Medium</string>
+		<string>Roboto-MediumItalic</string>
+		<string>Roboto-Thin</string>
+		<string>Roboto-Black</string>
+		<string>Roboto-BoldItalic</string>
 	</array>
 </dict>
 </plist>
