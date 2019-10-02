@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 
+import ChatBubble from '../atoms/ChatBubble';
+
 const withChatForm = (WrappedComponent) => {
     return class WithChatForm extends Component {
         static propTypes = {
