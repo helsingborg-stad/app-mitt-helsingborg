@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from '../Components';
+import Button from '../atoms/Button';
 
 class PersonalInfoAction extends Component {
     constructor(props) {

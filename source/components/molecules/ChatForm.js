@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextInput, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { ChatSubmitButton } from '../Components';
+import ChatSubmitButton from '../atoms/ChatSubmitButton';
 
 const ChatForm = props => {
     return (
