@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 import { AppRegistry } from "react-native";
 import { getStorybookUI, configure } from "@storybook/react-native";
 import { loadStories } from "./storyLoader";
@@ -14,4 +15,10 @@ const StorybookUI = getStorybookUI({
   shouldDisableKeyboardAvoidingView: true
 });
 
-    export { StorybookUI as default };
+class StorybookUIHMRRoot extends Component {
+  render() {
+    return <StorybookUI />;
+  }
+}
+
+export { StorybookUIHMRRoot as default };
