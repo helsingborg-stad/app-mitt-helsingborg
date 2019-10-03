@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { KeyboardAvoidingView, StyleSheet, SafeAreaView, View } from 'react-native';
-import { ChatComponentsContainer, LoginInput, ChatHeader } from '../Components';
+import ChatComponentsContainer from '../organisms/ChatComponentsContainer';
+import LoginInput from '../molecules/LoginInput';
+import ChatHeader from '../molecules/ChatHeader';
 
 class LoginChatScreen extends Component {
     constructor(props) {

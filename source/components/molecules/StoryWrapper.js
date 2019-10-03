@@ -4,7 +4,8 @@ import ScreenWrapper from './ScreenWrapper';
 import styled from 'styled-components/native';
 
 const EnhancedSafeAreaView = styled.SafeAreaView`
-    flex: 1
+    flex: 1;
+    margin-bottom: 18px;
 `;
 
 const StoryWrapper = props => (

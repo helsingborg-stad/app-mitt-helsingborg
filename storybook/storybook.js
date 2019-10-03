@@ -10,7 +10,8 @@ import { AppRegistry } from "react-native";
       port: 7007,
       host: "localhost",
       onDeviceUI: true,
-      resetStorybook: true
+      resetStorybook: true,
+      shouldDisableKeyboardAvoidingView: true
     });
 
     export { StorybookUI as default };
