@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 
+import withForm from './withForm';
+
 import ChatBubble from '../atoms/ChatBubble';
 
 const withChatForm = (WrappedComponent) => {
@@ -10,39 +12,25 @@ const withChatForm = (WrappedComponent) => {
                 addMessages: PropTypes.func.isRequired,
             })
         }
-
-        state = {
-            inputValue: ''  
-        };
     
-        changeHandler = value => {
-            this.setState({inputValue: value});
-        }
-    
-        submitHandler = () => {
+        onSubmit = (inputValue) => {
             const { chat } = this.props;
-            const { inputValue } = this.state;
-    
-            if (inputValue.length <= 0) {
-                return;
-            }
-    
-            this.setState({ inputValue: '' }, () => {
-                chat.addMessages({
-                    Component: ChatBubble,
-                    componentProps: {
-                        content: inputValue,
-                        modifiers: ['human'],
-                    }
-                });
+
+            chat.addMessages({
+                Component: ChatBubble,
+                componentProps: {
+                    content: inputValue,
+                    modifiers: ['human'],
+                }
             });
         }
     
         render() {
-            const { submitHandler, changeHandler } = this;
-            const instanceMethods = { submitHandler, changeHandler };
+            const { onSubmit } = this;
 
-            return <WrappedComponent {...instanceMethods} {...this.props} {...this.state} />;
+            const WrappedComponentWithForm = withForm(WrappedComponent, onSubmit);
+
+            return <WrappedComponentWithForm {...this.props} />;
         }
     }
 }
