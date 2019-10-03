@@ -15,21 +15,21 @@ import ChatBubble from '../atoms/ChatBubble';
 
 let COUNTER = 0;
 
-class ExampleAgent extends Component {
+class WatsonAgentOne extends Component {
     componentDidMount() {
         const { chat } = this.props;
 
         chat.addMessages({
             Component: ChatBubble,
             componentProps: {
-                content: 'Hello from agent 1',
+                content: 'Hello from Watson agent 1',
                 modifiers: ['automated'],
             }
         });
 
         setTimeout(() => {
             COUNTER++;
-            chat.switchAgent(ExampleAgentTwo);
+            chat.switchAgent(WatsonAgentTwo);
         }, 1000);
     }
 
@@ -38,7 +38,7 @@ class ExampleAgent extends Component {
     }
 }
 
-class ExampleAgentTwo extends Component {
+class WatsonAgentTwo extends Component {
     componentDidMount() {
         const { chat } = this.props;
 
@@ -49,14 +49,14 @@ class ExampleAgentTwo extends Component {
         chat.addMessages({
             Component: ChatBubble,
             componentProps: {
-                content: 'Hello from agent 2!',
+                content: 'Hello from Watson agent 2!',
                 modifiers: ['automated'],
             }
         });
 
         setTimeout(() => {
             COUNTER++;
-            chat.switchAgent(ExampleAgent);
+            chat.switchAgent(WatsonAgentOne);
         }, 1000);
     }
 
@@ -69,7 +69,7 @@ class ChatScreen extends Component {
     state = {
         messages: [],
         ChatUserInput: withChatForm(ChatForm),
-        ChatAgent: ExampleAgent
+        ChatAgent: WatsonAgentOne,
     };
 
     addMessages = (objects) => {
@@ -81,19 +81,19 @@ class ChatScreen extends Component {
 
             return {messages};
         });
-    }
+    };
 
     switchAgent = (AgentComponent) => {
         this.setState({
             ChatAgent: AgentComponent
         });
-    }
+    };
 
     switchUserInput = (UserInputComponent) => {
         this.setState({
             ChatUserInput: UserInputComponent
         });
-    }
+    };
 
     render() {
         const { messages, ChatAgent, ChatUserInput } = this.state;
@@ -122,6 +122,6 @@ class ChatScreen extends Component {
 }
 
 storiesOf('Chat', module)
-    .add('default', () => (
+    .add('Watson agent', () => (
         <ChatScreen />
     ));
