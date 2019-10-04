@@ -7,20 +7,15 @@ import { PropTypes } from 'prop-types';
 
 const Container = styled.View`
     flex: 1;
-    align-items: stretch;
-    padding: ${props => props.padd};
+    padding: 16px;
 `;
 
 const ScreenWrapper = props => (
     <ThemeProvider theme={theme}>
-        <Container padd={props.padding}>
+        <Container style={props.style}>
             {props.children}
         </Container>
     </ThemeProvider>
 );
-
-ScreenWrapper.defaultProps = {
-    padding: '16px'
-}
 
 export default ScreenWrapper;
