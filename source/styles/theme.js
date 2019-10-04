@@ -7,6 +7,9 @@ const theme = {
     input: {
         ...colors.input
     },
+    text: {
+        ...colors.text
+    }
 }
 
 export default theme

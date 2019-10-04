@@ -44,7 +44,11 @@ const palette = {
 
 const colors = {
   title: palette.black,
-  text: palette.red[1],
+  text: {
+    default: palette.mono.black,
+    dark: palette.mono.black,
+    light: palette.mono.white
+  },
   anchor: palette.green.dark,
   input: {
     background: palette.mono.white,
@@ -53,6 +57,18 @@ const colors = {
   base: {
   },
   button: {
+    purple: {
+      background: palette.purple[2],
+      text: palette.mono.white
+    },
+    blue: {
+      background: palette.blue[2],
+      text: palette.mono.white
+    },
+    white: {
+      background: palette.mono.white,
+      text: palette.mono.darker
+    },
   },
   status: {
   }
