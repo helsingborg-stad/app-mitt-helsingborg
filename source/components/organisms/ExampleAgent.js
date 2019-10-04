@@ -9,7 +9,7 @@ export default class ExampleAgent extends Component {
     componentDidMount() {
         const { chat } = this.props;
 
-        if (COUNTER > 10) {
+        if (COUNTER > 0 && chat) {
             return;
         }
 
