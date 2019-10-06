@@ -33,7 +33,6 @@ export const constructGetFormTemplate = (endpoint) => {
 };
 
 export const sendChatMsg = (workspaceId, textInput) => {
-    console.log('Called sendChatMsg.');
     const endpoint = 'chatbot/message';
 
     return new Promise(async (resolve, reject) => {
@@ -66,7 +65,6 @@ const postService = async (endpoint, data, token) => {
                 }
             }
         ).then(result => {
-            console.log("Request result", result);
             return resolve(result.data);
         }).catch(err => {
             console.log("Error in request call", err.request);
