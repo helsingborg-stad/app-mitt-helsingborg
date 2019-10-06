@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react-native';
 
+import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
+
 import withChatForm from '../organisms/withChatForm';
 
 import StoryWrapper from '../molecules/StoryWrapper';
@@ -12,53 +14,71 @@ import ChatWrapper from '../atoms/ChatWrapper';
 import ChatFooter from '../atoms/ChatFooter';
 import ChatBubble from '../atoms/ChatBubble';
 
-
-let COUNTER = 0;
-
-class WatsonAgentOne extends Component {
+class WatsonAgent extends Component {
     componentDidMount() {
         const { chat } = this.props;
 
         chat.addMessages({
             Component: ChatBubble,
             componentProps: {
-                content: 'Hello from Watson agent 1',
+                content: 'Hello from Watson.',
                 modifiers: ['automated'],
             }
         });
 
-        setTimeout(() => {
-            COUNTER++;
-            chat.switchAgent(WatsonAgentTwo);
-        }, 1000);
+        EventHandler.subscribe(EVENT_USER_MESSAGE, (message) => this.handleHumanChatMessage(message));
     }
+
+    componentWillUnmount(): void {
+        EventHandler.unSubscribe(EVENT_USER_MESSAGE);
+    }
+
+    handleHumanChatMessage = (message) => {
+        console.log('from watson: ',message);
+
+    };
 
     render() {
         return null;
     }
 }
 
-class WatsonAgentTwo extends Component {
+class ParrotAgent extends Component {
     componentDidMount() {
         const { chat } = this.props;
 
-        if (COUNTER > 0) {
-            return;
+        chat.addMessages({
+            Component: ChatBubble,
+            componentProps: {
+                content: 'Do not say Watson!',
+                modifiers: ['automated'],
+            }
+        });
+
+        EventHandler.subscribe(EVENT_USER_MESSAGE, (message) => this.handleHumanChatMessage(message));
+    }
+
+    componentWillUnmount(): void {
+        EventHandler.unSubscribe(EVENT_USER_MESSAGE);
+    }
+
+    handleHumanChatMessage = (message) => {
+        const { chat } = this.props;
+
+        if (message.search('Watson') !== -1) {
+            chat.switchAgent(WatsonAgent);
+
+            message = 'Switching to agent Watson.';
         }
 
         chat.addMessages({
             Component: ChatBubble,
             componentProps: {
-                content: 'Hello from Watson agent 2!',
+                content: 'Parrot: ' + message,
                 modifiers: ['automated'],
             }
-        });
-
-        setTimeout(() => {
-            COUNTER++;
-            chat.switchAgent(WatsonAgentOne);
-        }, 1000);
-    }
+        })
+    };
 
     render() {
         return null;
@@ -69,7 +89,7 @@ class ChatScreen extends Component {
     state = {
         messages: [],
         ChatUserInput: withChatForm(ChatForm),
-        ChatAgent: WatsonAgentOne,
+        ChatAgent: ParrotAgent,
     };
 
     addMessages = (objects) => {
@@ -80,6 +100,14 @@ class ChatScreen extends Component {
             array.forEach(object => { messages.push(object) });
 
             return {messages};
+        }, () => {
+            const lastMsg = this.state.messages.slice(-1)[0].componentProps;
+
+            if (lastMsg.modifiers[0] === 'human') {
+                // console.log(lastMsg.content);
+                EventHandler.dispatch(EVENT_USER_MESSAGE, lastMsg.content);
+            }
+
         });
     };
 

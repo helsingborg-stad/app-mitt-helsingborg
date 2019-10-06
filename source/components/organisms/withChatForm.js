@@ -12,21 +12,21 @@ const withChatForm = (WrappedComponent) => {
         }
 
         state = {
-            inputValue: ''  
+            inputValue: ''
         };
-    
+
         changeHandler = value => {
             this.setState({inputValue: value});
         }
-    
+
         submitHandler = () => {
             const { chat } = this.props;
             const { inputValue } = this.state;
-    
+
             if (inputValue.length <= 0) {
                 return;
             }
-    
+
             this.setState({ inputValue: '' }, () => {
                 chat.addMessages({
                     Component: ChatBubble,
@@ -36,8 +36,8 @@ const withChatForm = (WrappedComponent) => {
                     }
                 });
             });
-        }
-    
+        };
+
         render() {
             const { submitHandler, changeHandler } = this;
             const instanceMethods = { submitHandler, changeHandler };

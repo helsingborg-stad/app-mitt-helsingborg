@@ -33,6 +33,10 @@ class ExampleAgent extends Component {
         }, 1000);
     }
 
+    componentWillUnmount(): void {
+        console.log('unmounting', COUNTER);
+    }
+
     render() {
         return null;
     }
@@ -42,7 +46,7 @@ class ExampleAgentTwo extends Component {
     componentDidMount() {
         const { chat } = this.props;
 
-        if (COUNTER > 0) {
+        if (COUNTER > 10) {
             return;
         }
 
