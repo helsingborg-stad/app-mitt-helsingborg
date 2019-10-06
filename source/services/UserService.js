@@ -3,9 +3,7 @@ import axios from "axios";
 import { Linking } from 'react-native';
 import { NetworkInfo } from 'react-native-network-info';
 import { canOpenUrl } from '../helpers/LinkHelper';
-import StorageService from './StorageService';
-
-const TOKENKEY = 'accessToken';
+import StorageService, { TOKEN_KEY } from './StorageService';
 
 let cancelled = false;
 
@@ -142,7 +140,7 @@ export const authorize = (personalNumber) =>
 export const sign = (personalNumber, userVisibleData) =>
     new Promise(async (resolve, reject) => {
         const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
-        const token = await StorageService.getData(TOKENKEY);
+        const token = await StorageService.getData(TOKEN_KEY);
         let user = {};
 
         // Make initial auth request to retrieve user details and access token
