@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import env from 'react-native-config';
 import { storiesOf } from '@storybook/react-native';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 
 import withChatForm from '../organisms/withChatForm';
-import { sendChatMsg } from '../../services/ChatFormService';
 
 import StoryWrapper from '../molecules/StoryWrapper';
 import ChatForm from '../molecules/ChatForm';
@@ -15,7 +13,6 @@ import ChatBody from '../atoms/ChatBody';
 import ChatWrapper from '../atoms/ChatWrapper';
 import ChatFooter from '../atoms/ChatFooter';
 import ChatBubble from '../atoms/ChatBubble';
-import {Alert} from "react-native";
 
 class WatsonAgent extends Component {
     componentDidMount() {
@@ -24,7 +21,7 @@ class WatsonAgent extends Component {
         chat.addMessages({
             Component: ChatBubble,
             componentProps: {
-                content: 'Hej mitt namn är Watson.',
+                content: 'Hello from Watson.',
                 modifiers: ['automated'],
             }
         });
@@ -36,40 +33,9 @@ class WatsonAgent extends Component {
         EventHandler.unSubscribe(EVENT_USER_MESSAGE);
     }
 
-    handleHumanChatMessage = async (message) => {
-        const { chat } = this.props;
-        const workspaceId = env.WATSON_WORKSPACEID;
+    handleHumanChatMessage = (message) => {
+        console.log('from watson: ',message);
 
-        if (workspaceId === undefined) {
-            Alert.alert('Missing Watson workspace ID');
-        } else {
-            let responseText;
-
-            try {
-                await sendChatMsg(workspaceId, message).then((response) => {
-                    const responseGeneric = response.data.attributes.output.generic;
-
-                    responseGeneric.forEach(elem => {
-                        if (elem.response_type === 'text') {
-                            responseText = elem.text;
-                            // this.responseText = 'Ny response';
-                            console.log(responseText);
-                        }
-                    })
-                })
-            } catch (e) {
-                console.log('SendChat error: ', e);
-                responseText = 'Kan ej svara på frågan. Vänta och prova igen senare.'
-            }
-
-            chat.addMessages({
-                Component: ChatBubble,
-                componentProps: {
-                    content: responseText,
-                    modifiers: ['automated'],
-                }
-            });
-        }
     };
 
     render() {
@@ -84,7 +50,7 @@ class ParrotAgent extends Component {
         chat.addMessages({
             Component: ChatBubble,
             componentProps: {
-                content: 'Skriv Watson för att byta agent.',
+                content: 'Do not say Watson!',
                 modifiers: ['automated'],
             }
         });
@@ -102,13 +68,13 @@ class ParrotAgent extends Component {
         if (message.search('Watson') !== -1) {
             chat.switchAgent(WatsonAgent);
 
-            message = 'Byter till agent Watson.';
+            message = 'Switching to agent Watson.';
         }
 
         chat.addMessages({
             Component: ChatBubble,
             componentProps: {
-                content: 'Papegoja säger: ' + message,
+                content: 'Parrot: ' + message,
                 modifiers: ['automated'],
             }
         })
