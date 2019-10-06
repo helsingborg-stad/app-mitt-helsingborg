@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import env from 'react-native-config';
 import { storiesOf } from '@storybook/react-native';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 
 import withChatForm from '../organisms/withChatForm';
+import { sendChatMsg } from '../../services/ChatFormService';
 
 import StoryWrapper from '../molecules/StoryWrapper';
 import ChatForm from '../molecules/ChatForm';
@@ -21,7 +23,7 @@ class WatsonAgent extends Component {
         chat.addMessages({
             Component: ChatBubble,
             componentProps: {
-                content: 'Hello from Watson.',
+                content: 'Hej mitt namn är Watson.',
                 modifiers: ['automated'],
             }
         });
@@ -34,8 +36,18 @@ class WatsonAgent extends Component {
     }
 
     handleHumanChatMessage = (message) => {
-        console.log('from watson: ',message);
+        const { chat } = this.props;
+        const workspaceId = env.WATSON_WORKSPACEID;
 
+        sendChatMsg(workspaceId, message).then((response) => {
+            chat.addMessages({
+                Component: ChatBubble,
+                componentProps: {
+                    content: response.output.generic[0].text,
+                    modifiers: ['automated'],
+                }
+            })
+        });
     };
 
     render() {
@@ -50,7 +62,7 @@ class ParrotAgent extends Component {
         chat.addMessages({
             Component: ChatBubble,
             componentProps: {
-                content: 'Do not say Watson!',
+                content: 'Skriv Watson för att byta agent.',
                 modifiers: ['automated'],
             }
         });
@@ -68,13 +80,13 @@ class ParrotAgent extends Component {
         if (message.search('Watson') !== -1) {
             chat.switchAgent(WatsonAgent);
 
-            message = 'Switching to agent Watson.';
+            message = 'Byter till agent Watson.';
         }
 
         chat.addMessages({
             Component: ChatBubble,
             componentProps: {
-                content: 'Parrot: ' + message,
+                content: 'Papegoja säger: ' + message,
                 modifiers: ['automated'],
             }
         })
