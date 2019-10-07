@@ -17,9 +17,13 @@ export default class ExampleAgentTwo extends Component {
             }
         });
 
-        setTimeout(() => {
+        this.timeout = setTimeout(() => {
             chat.switchAgent(ExampleAgent);
         }, 1000);
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.timeout);
     }
 
     render() {
