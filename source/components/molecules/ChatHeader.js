@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
-import { Sally } from '../Components'
+import Sally from '../atoms/Sally';
+
 
 const ChatHeader = () =>
     <View style={styles.chatHeader}>

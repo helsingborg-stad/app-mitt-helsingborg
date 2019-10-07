@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { FlatList, Animated } from 'react-native';
-import {
-    ChatBubble,
-    ChatSectionTitle,
-    LoginAction,
-    MoreInfo,
-    MoreInfoExpanded,
-    ChatForm,
-    PersonalInfoAction,
-    AcceptingOnLoginAction
-} from '../Components';
+import ChatBubble from '../atoms/ChatBubble';
+import ChatSectionTitle from '../atoms/ChatSectionTitle';
+import LoginAction from '../molecules/LoginAction';
+import MoreInfo from '../molecules/MoreInfo';
+import MoreInfoExpanded from '../molecules/MoreInfoExpanded';
+import ChatForm from '../molecules/ChatForm';
+import PersonalInfoAction from '../molecules/PersonalInfoAction';
+import AcceptingOnLoginAction from '../molecules/AcceptingOnLoginAction';
 
 class ChatComponentsContainer extends Component {
     constructor(props) {

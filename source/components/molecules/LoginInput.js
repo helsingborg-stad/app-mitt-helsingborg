@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { Alert, ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
 import { withNavigation } from 'react-navigation';
-import { Button, ChatForm } from '../Components';
+
 import withAuthentication from '../organisms/withAuthentication';
+import Button from '../atoms/Button';
+import ChatForm from './ChatForm';
+
 
 class LoginInput extends Component {
 
