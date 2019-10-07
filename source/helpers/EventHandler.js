@@ -2,7 +2,6 @@ export const EVENT_USER_MESSAGE = 'user_input';
 
 const EventHandler = {
     events: {},
-    idEvents: {},
 
     dispatch: function (event, data) {
         if (!this.events[event]) {
