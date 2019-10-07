@@ -47,6 +47,8 @@ const colors = {
   text: palette.red[1],
   anchor: palette.green.dark,
   input: {
+    background: palette.mono.white,
+    border: palette.mono.lighter
   },
   base: {
   },
