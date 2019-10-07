@@ -36,7 +36,7 @@ const withChatForm = (WrappedComponent) => {
                     }
                 });
             });
-        };
+        }
 
         render() {
             const { submitHandler, changeHandler } = this;
