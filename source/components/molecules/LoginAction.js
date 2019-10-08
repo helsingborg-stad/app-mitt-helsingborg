@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Button from '../atoms/Button';
+import Button from '../atoms/ButtonDeprecated';
 
 class LoginAction extends Component {
     loginClicked = () => {

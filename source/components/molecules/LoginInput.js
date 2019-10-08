@@ -4,7 +4,7 @@ import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
 import { withNavigation } from 'react-navigation';
 
 import withAuthentication from '../organisms/withAuthentication';
-import Button from '../atoms/Button';
+import Button from '../atoms/ButtonDeprecated';
 import ChatForm from './ChatForm';
 
 

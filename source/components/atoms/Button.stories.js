@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from '../molecules/StoryWrapper';
-import Button from './ButtonNew';
+import Button from './Button';
 import styled, { css } from 'styled-components/native';
 import Text from './Text';
 import Icon from './Icon';
