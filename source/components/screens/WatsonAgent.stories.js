@@ -40,10 +40,18 @@ class WatsonAgent extends Component {
         const workspaceId = env.WATSON_WORKSPACEID;
 
         sendChatMsg(workspaceId, message).then((response) => {
+            let textResponse;
+            try {
+                textResponse = response.data.attributes.output.a.generic[0].text;
+            } catch (e) {
+                console.log(e);
+                textResponse = 'Kan ej svara på frågan. Vänta och prova lite senare.'
+            }
+
             chat.addMessages({
                 Component: ChatBubble,
                 componentProps: {
-                    content: response.output.generic[0].text,
+                    content: textResponse,
                     modifiers: ['automated'],
                 }
             })
