@@ -45,9 +45,7 @@ class WatsonAgent extends Component {
         } else {
             sendChatMsg(workspaceId, message).then((response) => {
                 let textResponse;
-                console.log('response: ', response);
                 try {
-                    console.log('response text: ', response.data.attributes.output.generic[0].text);
                     textResponse = response.data.attributes.output.generic[0].text;
                 } catch (e) {
                     console.log(e);
