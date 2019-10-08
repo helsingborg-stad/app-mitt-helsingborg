@@ -15,6 +15,7 @@ import ChatBody from '../atoms/ChatBody';
 import ChatWrapper from '../atoms/ChatWrapper';
 import ChatFooter from '../atoms/ChatFooter';
 import ChatBubble from '../atoms/ChatBubble';
+import {Alert} from "react-native";
 
 class WatsonAgent extends Component {
     componentDidMount() {
@@ -39,23 +40,29 @@ class WatsonAgent extends Component {
         const { chat } = this.props;
         const workspaceId = env.WATSON_WORKSPACEID;
 
-        sendChatMsg(workspaceId, message).then((response) => {
-            let textResponse;
-            try {
-                textResponse = response.data.attributes.output.a.generic[0].text;
-            } catch (e) {
-                console.log(e);
-                textResponse = 'Kan ej svara på frågan. Vänta och prova lite senare.'
-            }
-
-            chat.addMessages({
-                Component: ChatBubble,
-                componentProps: {
-                    content: textResponse,
-                    modifiers: ['automated'],
+        if (workspaceId === undefined) {
+            Alert.alert('Missing Watson workspace ID');
+        } else {
+            sendChatMsg(workspaceId, message).then((response) => {
+                let textResponse;
+                console.log('response: ', response);
+                try {
+                    console.log('response text: ', response.data.attributes.output.generic[0].text);
+                    textResponse = response.data.attributes.output.generic[0].text;
+                } catch (e) {
+                    console.log(e);
+                    textResponse = 'Kan ej svara på frågan. Vänta och prova lite senare.'
                 }
-            })
-        });
+
+                chat.addMessages({
+                    Component: ChatBubble,
+                    componentProps: {
+                        content: textResponse,
+                        modifiers: ['automated'],
+                    }
+                })
+            });
+        }
     };
 
     render() {
