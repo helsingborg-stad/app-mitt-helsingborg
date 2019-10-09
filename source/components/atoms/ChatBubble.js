@@ -4,6 +4,7 @@ import styled, {css} from 'styled-components/native';
 import Text from './Text';
 import Heading from './Heading';
 import shadow from '../../styles/shadow';
+import PropTypes from 'prop-types';
 
 const ChatBubble = props => {
     const { content, modifiers, style } = props;
@@ -41,6 +42,15 @@ const ChatBubble = props => {
         </Bubble>
     );
 }
+
+ChatBubble.PropTypes = {
+    modifiers: PropTypes.arrayOf(PropTypes.oneOf(['automated', 'sally', 'user'])),
+    content: PropTypes.string,
+};
+
+ChatBubble.defaultProps = {
+    modifiers: ['user']
+};
 
 export default ChatBubble;
 
