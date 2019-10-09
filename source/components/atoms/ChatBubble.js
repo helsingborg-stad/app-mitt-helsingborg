@@ -2,18 +2,42 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import styled, {css} from 'styled-components/native';
 import Text from './Text';
+import Heading from './Heading';
 import shadow from '../../styles/shadow';
 
-const ChatBubble = ({ content, modifiers, style }) => {
+const ChatBubble = props => {
+    const { content, modifiers, style } = props;
+
     const avalibleColorModifiers = ['automated', 'sally', 'user'];
     let colorTheme = modifiers ? modifiers.find(modifier => (avalibleColorModifiers.includes(modifier))) : undefined;
     colorTheme = colorTheme ? colorTheme : 'user'; // Default theme
 
     const alignment = colorTheme === 'user' ? 'right' : 'left';
 
+    /** Override child components */
+    const children = React.Children.map(props.children, (child, index) => {
+        /** Heading */
+        if (child.type === Heading) {
+            return React.createElement(BubbleHeading, {...child.props, colorTheme: colorTheme});
+        }
+
+        /** Text */
+        if (child.type === Text) {
+            return React.createElement(BubbleText, {...child.props, colorTheme: colorTheme});
+        }
+
+        return child;
+    });
+
     return (
         <Bubble alignment={alignment} colorTheme={colorTheme} style={style}>
-            <BubbleText colorTheme={colorTheme}>{content}</BubbleText>
+                {children ? 
+                    children
+                : content ?
+                    <BubbleText colorTheme={colorTheme}>
+                        {content}
+                    </BubbleText>
+                : null}
         </Bubble>
     );
 }
@@ -28,9 +52,13 @@ const Bubble = styled.View`
     border-radius: 17.5px;
     align-self: flex-start;
     background-color: ${props => (props.theme.chatBubble[props.colorTheme].background)};
-    
+
     ${props => ((props.alignment && CSS[props.alignment]) ? CSS[props.alignment] : null)}
     ${props => (shadow[1])}
+`;
+
+const BubbleHeading = styled(Heading)`
+    color: ${props => (props.theme.chatBubble[props.colorTheme].text)};
 `;
 
 const BubbleText = styled(Text)`
