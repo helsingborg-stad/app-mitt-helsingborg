@@ -129,7 +129,7 @@ const colors = {
       background: palette.purple[3],
       text: palette.mono.white,
     },
-    sally: { // "Sally"
+    human: { // "Sally"
       background: palette.mono.white,
       text: palette.mono.gray,
     }, 

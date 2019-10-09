@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 const ChatBubble = props => {
     const { content, modifiers, style } = props;
 
-    const avalibleColorModifiers = ['automated', 'sally', 'user'];
+    const avalibleColorModifiers = ['automated', 'human', 'user'];
     let colorTheme = modifiers ? modifiers.find(modifier => (avalibleColorModifiers.includes(modifier))) : undefined;
     colorTheme = colorTheme ? colorTheme : 'user'; // Default theme
 
@@ -44,7 +44,7 @@ const ChatBubble = props => {
 }
 
 ChatBubble.PropTypes = {
-    modifiers: PropTypes.arrayOf(PropTypes.oneOf(['automated', 'sally', 'user'])),
+    modifiers: PropTypes.arrayOf(PropTypes.oneOf(['automated', 'human', 'user'])),
     content: PropTypes.string,
 };
 
