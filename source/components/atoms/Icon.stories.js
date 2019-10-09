@@ -5,25 +5,35 @@ import StoryWrapper from '../molecules/StoryWrapper';
 import styled from 'styled-components/native';
 
 import Icon from './Icon';
+import Heading from './Heading';
 
-const Flex = styled.View`
-    flex-direction: row;
-`;
-
-const Square = styled.View`
-    height: 32px;
-    width: 32px;
-    background: #F7A600;
-`;
+import { categories } from '../../assets/material-icons.json';
 
 storiesOf('Icon', module)
     .add('Material Icons', props => (
         <StoryWrapper {...props}>
             <Flex>
-                <Icon size={16} name="sentiment-very-satisfied"/>
-                <Icon size={24} name="sentiment-very-satisfied"/>
-                <Icon size={32} name="sentiment-very-satisfied"/>
-                <Icon size={48} name="sentiment-very-satisfied"/>
+                <IconCategory {...categories.find(category => (category.name === 'navigation'))} />
             </Flex>
         </StoryWrapper>
     ))
+
+
+const Flex = styled.View`
+    flex-direction: row;
+    flex-wrap: wrap;
+`;
+
+const IconCategory = (props) => (
+    <>
+        <Flex>
+            <Heading type={'h3'}>{props.name.charAt(0).toUpperCase() + props.name.slice(1)}</Heading>
+        </Flex>
+        <Flex> 
+            {props.icons.map(({name}) => (
+                <Icon size={48} name={name.split(' ').join('-')} key={name.split(' ').join('-')} />
+            ))}
+        </Flex>
+    </>
+
+);
