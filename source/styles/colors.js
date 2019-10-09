@@ -58,7 +58,8 @@ const colors = {
     ...palette.mono,
   },
   text: {
-    default: palette.mono.black,
+    default: palette.mono.darker,
+    heading: palette.mono.darkest,
     ...palette.mono,
     purple: {
       ...palette.purple

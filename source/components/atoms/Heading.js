@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
-import { Text } from 'react-native';
 import styled from 'styled-components/native';
 import { PropTypes } from 'prop-types';
+import Text from './Text';
 
 const fontSizes = {
     h1: 48,
@@ -9,10 +9,11 @@ const fontSizes = {
     h3: 22
 };
 
-const Heading = styled.Text`
+const Heading = styled(Text)`
     font-style: normal;
     font-weight: 900;
     font-size: ${props => (fontSizes[props.type || 'h1'])}px;
+    color: ${props => (props.theme.text.heading)};
 `;
 
 Heading.propTypes = {

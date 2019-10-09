@@ -7,15 +7,9 @@ storiesOf('Heading', module)
     .add('default', () => (
         <StoryWrapper>
             <Heading>Heading</Heading>
-            <Heading style={{fontFamily: 'Roboto'}}>Heading Roboto</Heading>
-        </StoryWrapper>
-    ))
-    .add('Sizes', () => (
-        <StoryWrapper>
             <Heading type="h1">H1</Heading>
             <Heading type="h2">H2</Heading>
             <Heading type="h3">H3</Heading>
         </StoryWrapper>
-    ));
-
+));
 
