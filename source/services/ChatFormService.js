@@ -32,7 +32,7 @@ export const constructGetFormTemplate = (endpoint) => {
     })
 };
 
-export const sendChatMsg = (workspaceId, textInput) => {
+export const sendChatMsg = async (workspaceId, textInput) => {
     const endpoint = 'chatbot/message';
 
     return new Promise(async (resolve, reject) => {
