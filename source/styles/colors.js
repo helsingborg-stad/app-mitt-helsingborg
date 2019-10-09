@@ -44,15 +44,82 @@ const palette = {
 
 const colors = {
   title: palette.black,
-  text: palette.red[1],
   anchor: palette.green.dark,
   input: {
     background: palette.mono.white,
     border: palette.mono.lighter
   },
-  base: {
+  background: {
+    default: palette.mono.lightest,
+    ...palette.mono
+  },
+  border: {
+    default: palette.mono.lighter,
+    ...palette.mono,
+  },
+  text: {
+    default: palette.mono.black,
+    ...palette.mono,
+    purple: {
+      ...palette.purple
+    },
+    blue: {
+      ...palette.blue
+    }
+  },
+  icon: {
+    default: palette.mono.black,
+    ...palette.mono,
+    purple: {
+      ...palette.purple
+    },
+    blue: {
+      ...palette.blue
+    }
   },
   button: {
+    purple: {
+      background: palette.purple[2],
+      text: palette.mono.white,
+      icon: palette.mono.white,
+      iconRight: palette.mono.white,
+      shadow: palette.purple[2],
+    },
+    blue: {
+      background: palette.blue[2],
+      text: palette.mono.white,
+      icon: palette.mono.white,
+      iconRight: palette.mono.white,
+      shadow: palette.blue[2],
+    },
+    white: {
+      background: palette.mono.white,
+      text: palette.mono.darker,
+      icon: palette.purple[1],
+      iconRight: palette.mono.light,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    },
+    light: {
+      background: palette.mono.lightest,
+      text: palette.mono.darker,
+      icon: palette.purple[1],
+      iconRight: palette.mono.light,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    },
+    gray: {
+      background: palette.mono.lighter,
+      text: palette.mono.darker,
+      icon: palette.mono.light,
+      iconRight: palette.mono.light,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    },
+    dark: {
+      background: palette.mono.darkest,
+      text: palette.mono.lightest,
+      icon: palette.mono.light,
+      iconRight: palette.mono.light,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    },
   },
   status: {
   }
