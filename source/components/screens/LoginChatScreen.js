@@ -3,6 +3,8 @@ import { KeyboardAvoidingView, StyleSheet, SafeAreaView, View } from 'react-nati
 import ChatComponentsContainer from '../organisms/ChatComponentsContainer';
 import LoginInput from '../molecules/LoginInput';
 import ChatHeader from '../molecules/ChatHeader';
+import ScreenWrapper from '../molecules/ScreenWrapper';
+import styled from 'styled-components/native';
 
 class LoginChatScreen extends Component {
     constructor(props) {
@@ -39,61 +41,67 @@ class LoginChatScreen extends Component {
         const { messages, actions, displayFormInput } = this.state;
 
         return (
-            <SafeAreaView style={{ flex: 1 }}>
-                <KeyboardAvoidingView
-                    style={styles.chatContainer}
-                    behavior="padding"
-                    keyboardVerticalOffset={88} // TODO: remove hard coded offset
-                    enabled
-                >
-                    <View style={styles.chatBody}>
-                        {/* Header */}
-                        <ChatHeader />
+            <EnhancedScreenWrapper>
+                <SafeAreaView style={{ flex: 1 }}>
+                    <KeyboardAvoidingView
+                        style={styles.chatContainer}
+                        behavior="padding"
+                        keyboardVerticalOffset={88} // TODO: remove hard coded offset
+                        enabled
+                    >
+                        <View style={styles.chatBody}>
+                            {/* Header */}
+                            <ChatHeader />
 
-                        {/* Messages */}
-                        {messages.length > 0 &&
-                            <ChatComponentsContainer
-                                style={{
-                                    flexBasis: '100%',
-                                    paddingHorizontal: 16,
-                                }}
-                                scrollEnabled={true}
-                                inverted={true}
-                                listObjects={messages}
-                                setActions={this.setActions.bind(this)}
-                                addMessages={this.addMessages.bind(this)}
-                                activateFormInput={this.activateFormInput.bind(this)}
-                            />
-                        }
+                            {/* Messages */}
+                            {messages.length > 0 &&
+                                <ChatComponentsContainer
+                                    style={{
+                                        flexBasis: '100%',
+                                        paddingHorizontal: 16,
+                                    }}
+                                    scrollEnabled={true}
+                                    inverted={true}
+                                    listObjects={messages}
+                                    setActions={this.setActions.bind(this)}
+                                    addMessages={this.addMessages.bind(this)}
+                                    activateFormInput={this.activateFormInput.bind(this)}
+                                />
+                            }
 
-                        {/* Actions */}
-                        {actions.length > 0 &&
-                            <ChatComponentsContainer
-                                style={{
-                                    flexShrink: 0,
-                                    padding: 16,
-                                }}
-                                scrollEnabled={false}
-                                inverted={false}
-                                listObjects={actions}
-                                setActions={this.setActions.bind(this)}
-                                addMessages={this.addMessages.bind(this)}
-                                activateFormInput={this.activateFormInput.bind(this)}
-                            />
-                        }
+                            {/* Actions */}
+                            {actions.length > 0 &&
+                                <ChatComponentsContainer
+                                    style={{
+                                        flexShrink: 0,
+                                        padding: 16,
+                                    }}
+                                    scrollEnabled={false}
+                                    inverted={false}
+                                    listObjects={actions}
+                                    setActions={this.setActions.bind(this)}
+                                    addMessages={this.addMessages.bind(this)}
+                                    activateFormInput={this.activateFormInput.bind(this)}
+                                />
+                            }
 
-                        {/* Input form */}
-                        {displayFormInput &&
-                            <LoginInput />
-                        }
-                    </View>
-                </KeyboardAvoidingView>
-            </SafeAreaView>
+                            {/* Input form */}
+                            {displayFormInput &&
+                                <LoginInput />
+                            }
+                        </View>
+                    </KeyboardAvoidingView>
+                </SafeAreaView>
+            </EnhancedScreenWrapper>
         );
     }
 }
 
 export default LoginChatScreen;
+
+const EnhancedScreenWrapper = styled(ScreenWrapper)`
+    padding: 0px;
+`;
 
 const MESSAGES = [
     {

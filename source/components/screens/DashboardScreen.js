@@ -4,6 +4,7 @@ import Auth from '../../helpers/AuthHelper';
 import StorageService from '../../services/StorageService';
 import { sign, cancelRequest, resetCancel } from "../../services/UserService";
 import { canOpenUrl } from "../../helpers/LinkHelper";
+import ScreenWrapper from '../molecules/ScreenWrapper';
 
 const USERKEY = 'user';
 class DashboardScreen extends Component {
@@ -96,7 +97,7 @@ class DashboardScreen extends Component {
         const { user, isLoading, isBankidInstalled } = this.state;
 
         return (
-            <>
+            <ScreenWrapper>
                 {isLoading ? (
                     <View style={styles.container}>
                         <View style={styles.content}>
@@ -148,7 +149,7 @@ class DashboardScreen extends Component {
                         </View >
                     )
                 }
-            </>
+            </ScreenWrapper>
         );
     }
 }
@@ -160,7 +161,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 16
     },
     content: {
         flex: 1,

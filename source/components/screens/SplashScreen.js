@@ -3,6 +3,9 @@ import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { SHOW_SPLASH_SCREEN } from "../../services/StorageService";
 import AsyncStorage from '@react-native-community/async-storage';
 import Swiper from "react-native-swiper";
+import ScreenWrapper from '../molecules/ScreenWrapper';
+import styled from 'styled-components/native';
+
 
 /**
  * Splash screen that shall be displayed during first app initiation or after an app update.
@@ -56,19 +59,26 @@ export default class SplashScreen extends Component {
     render() {
         const {ButtonDisableSplash} = this;
         return (
-            <Swiper showsButtons={true}>
-                <View style={styles.slide1}>
-                    <Text style={styles.textTitle}>Swipa on!</Text>
-                </View>
-                <View style={styles.slide2}>
-                    <Text style={styles.textTitle}>Personuppgifter</Text>
-                    <Text style={styles.text}>Vi använder dina personuppgifter för specifika ändamål som vi har informerat dig om eller som du har samtyckt till. Vi samlar inte in fler uppgifter än de som vi behöver för att kunna leverera de tjänster du vill ha, eller de som lagen kräver att vi samlar in.</Text>
-                    <ButtonDisableSplash />
-                </View>
-            </Swiper>
+            <EnhancedScreenWrapper>
+                <Swiper showsButtons={true}>
+                    <View style={styles.slide1}>
+                        <Text style={styles.textTitle}>Swipa on!</Text>
+                    </View>
+                    <View style={styles.slide2}>
+                        <Text style={styles.textTitle}>Personuppgifter</Text>
+                        <Text style={styles.text}>Vi använder dina personuppgifter för specifika ändamål som vi har informerat dig om eller som du har samtyckt till. Vi samlar inte in fler uppgifter än de som vi behöver för att kunna leverera de tjänster du vill ha, eller de som lagen kräver att vi samlar in.</Text>
+                        <ButtonDisableSplash />
+                    </View>
+                </Swiper>
+            </EnhancedScreenWrapper>
         )
     }
 }
+
+const EnhancedScreenWrapper = styled(ScreenWrapper)`
+    padding: 0px;
+`;
+
 
 const styles = StyleSheet.create({
     slide1: {

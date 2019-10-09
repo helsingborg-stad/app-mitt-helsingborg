@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput, Linking, Button } from 'react-native';
 import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
 import withAuthentication from '../organisms/withAuthentication';
+import ScreenWrapper from '../molecules/ScreenWrapper';
 
 class LoginScreen extends Component {
     constructor(props) {
@@ -56,7 +57,7 @@ class LoginScreen extends Component {
         const {isLoading, cancelLogin, resetUser, user, isBankidInstalled} = this.props.authentication;
 
         return (
-            <>
+            <ScreenWrapper>
                 {isLoading === false ? (
                     <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
                         <View style={styles.content}>
@@ -153,8 +154,7 @@ class LoginScreen extends Component {
                         </View>
                     )
                 }
-            </>
-
+            </ScreenWrapper>
         );
     }
 }
@@ -174,7 +174,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'stretch',
-        padding: 16,
     },
     content: {
         flex: 1,

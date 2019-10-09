@@ -5,6 +5,7 @@ import {
     View,
 } from 'react-native';
 import Auth from '../../helpers/AuthHelper';
+import ScreenWrapper from '../molecules/ScreenWrapper';
 
 class AuthLoadingScreen extends React.Component {
 
@@ -30,11 +31,11 @@ class AuthLoadingScreen extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <ScreenWrapper>
                 <View style={styles.content}>
                     <ActivityIndicator size="large" color="slategray" />
                 </View>
-            </View>
+            </ScreenWrapper>
         );
     }
 }
@@ -42,11 +43,6 @@ class AuthLoadingScreen extends React.Component {
 export default AuthLoadingScreen;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'stretch',
-        padding: 16,
-    },
     content: {
         flex: 1,
         alignItems: 'center',
