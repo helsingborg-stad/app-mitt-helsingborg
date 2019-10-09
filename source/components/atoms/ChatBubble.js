@@ -1,41 +1,52 @@
 import React from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import styled, {css} from 'styled-components/native';
+import Text from './Text';
+import shadow from '../../styles/shadow';
 
-const ChatBubble = ({ content, modifiers }) =>
-    <View style={[styles.chatBubble, styles[modifiers]]}>
-        <Text style={styles.text}>{content}</Text>
-    </View >
+const ChatBubble = ({ content, modifiers, style }) => {
+    const avalibleColorModifiers = ['automated', 'sally', 'user'];
+    let colorTheme = modifiers ? modifiers.find(modifier => (avalibleColorModifiers.includes(modifier))) : undefined;
+    colorTheme = colorTheme ? colorTheme : 'user'; // Default theme
+
+    const alignment = colorTheme === 'user' ? 'right' : 'left';
+
+    return (
+        <Bubble alignment={alignment} colorTheme={colorTheme} style={style}>
+            <BubbleText colorTheme={colorTheme}>{content}</BubbleText>
+        </Bubble>
+    );
+}
 
 export default ChatBubble;
 
-const styles = StyleSheet.create({
-    chatBubble: {
-        marginTop: 6,
-        marginBottom: 6,
-        borderRadius: 17,
-        padding: 16,
-        backgroundColor: 'gray',
-        alignSelf: 'flex-start',
-        shadowOpacity: 0.3,
-        shadowRadius: 3,
-        shadowColor: '#000',
-        shadowOffset: { height: 2, width: 0 },
-    },
-    text: {
-        fontSize: 16,
-        color: 'white',
-    },
-    automated: {
-        borderBottomLeftRadius: 4,
-        backgroundColor: '#EC6701',
-    },
-    human: {
-        borderBottomLeftRadius: 4,
-        backgroundColor: '#D35098',
-    },
-    user: {
-        alignSelf: 'flex-end',
-        borderBottomRightRadius: 4,
-        backgroundColor: '#0095DB',
-    },
-});
+const Bubble = styled.View`  
+    margin-top: 6px;
+    margin-bottom: 6px;
+    padding: 14px 18px 12px 18px;
+    background-color: gray;
+    border-radius: 17.5px;
+    align-self: flex-start;
+    background-color: ${props => (props.theme.chatBubble[props.colorTheme].background)};
+    
+    ${props => ((props.alignment && CSS[props.alignment]) ? CSS[props.alignment] : null)}
+    ${props => (shadow[1])}
+`;
+
+const BubbleText = styled(Text)`
+    color: ${props => (props.theme.chatBubble[props.colorTheme].text)};
+    font-size: 16px;
+`;
+
+const CSS = {};
+
+CSS.left = css`
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    margin-left: 24px;
+`;
+CSS.right = css`
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+    margin-right: 24px;
+`;
