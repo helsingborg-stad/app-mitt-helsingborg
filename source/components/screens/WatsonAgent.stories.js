@@ -36,29 +36,38 @@ class WatsonAgent extends Component {
         EventHandler.unSubscribe(EVENT_USER_MESSAGE);
     }
 
-    handleHumanChatMessage = (message) => {
+    handleHumanChatMessage = async (message) => {
         const { chat } = this.props;
         const workspaceId = env.WATSON_WORKSPACEID;
 
         if (workspaceId === undefined) {
             Alert.alert('Missing Watson workspace ID');
         } else {
-            sendChatMsg(workspaceId, message).then((response) => {
-                let textResponse;
-                try {
-                    textResponse = response.data.attributes.output.generic[0].text;
-                } catch (e) {
-                    console.log(e);
-                    textResponse = 'Kan ej svara på frågan. Vänta och prova lite senare.'
-                }
+            let responseText;
 
-                chat.addMessages({
-                    Component: ChatBubble,
-                    componentProps: {
-                        content: textResponse,
-                        modifiers: ['automated'],
-                    }
+            try {
+                await sendChatMsg(workspaceId, message).then((response) => {
+                    const responseGeneric = response.data.attributes.output.generic;
+
+                    responseGeneric.forEach(elem => {
+                        if (elem.response_type === 'text') {
+                            responseText = elem.text;
+                            // this.responseText = 'Ny response';
+                            console.log(responseText);
+                        }
+                    })
                 })
+            } catch (e) {
+                console.log('SendChat error: ', e);
+                responseText = 'Kan ej svara på frågan. Vänta och prova igen senare.'
+            }
+
+            chat.addMessages({
+                Component: ChatBubble,
+                componentProps: {
+                    content: responseText,
+                    modifiers: ['automated'],
+                }
             });
         }
     };
