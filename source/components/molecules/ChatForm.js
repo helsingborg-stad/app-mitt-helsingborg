@@ -21,7 +21,7 @@ const ChatForm = props => {
         />
         <ChatSubmitButton submitHandler={props.submitHandler} submitText={props.submitText} />
       </View>
-      {props.chat.inputActions &&
+      {props.chat && props.chat.inputActions &&
         <View>
           <FlatList
             scrollEnabled={false}
