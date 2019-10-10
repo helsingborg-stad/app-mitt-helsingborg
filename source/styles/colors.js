@@ -146,6 +146,10 @@ const colors = {
   },
   shadow: {
     default: palette.mono.darker
+  },
+  divider: {
+    title: palette.mono.lighter,
+    info: palette.mono.gray,
   }
 };
 
