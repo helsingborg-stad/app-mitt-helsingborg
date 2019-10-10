@@ -132,7 +132,8 @@ const withAuthentication = (WrappedComponent) => {
                 if (typeof user !== 'undefined' && user !== null) {
                     this.setState({ user });
                     // Login the user automatically
-                    this.loginUser(user.personalNumber);
+                    // TODO: Fix if user is already logged in
+                    // this.loginUser(user.personalNumber);
                 }
             } catch (error) {
                 console.log("Something went wrong", error);
