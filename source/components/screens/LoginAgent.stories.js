@@ -21,6 +21,9 @@ import Button from '../atoms/Button';
 import Text from '../atoms/Text';
 import Icon from '../atoms/Icon';
 
+import withAuthentication from '../organisms/withAuthentication';
+import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
+
 class LoginAgent extends Component {
   componentDidMount() {
     const { chat } = this.props;
@@ -87,15 +90,72 @@ class LoginAgent extends Component {
     EventHandler.unSubscribe(EVENT_USER_MESSAGE);
   }
 
+  /**
+   * Authenticate user
+   */
+  authenticateUser = async (personalNumber) => {
+    const { chat } = this.props;
+
+    if (!personalNumber) {
+      Alert.alert('Personnummer saknas');
+      return;
+    }
+
+    // if (!validatePin(personalNumber)) {
+    //   Alert.alert('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.');
+    //   return;
+    // }
+
+    try {
+      const { loginUser } = this.props.authentication;
+      await loginUser(personalNumber);
+      chat.switchAgent(FakeAgent);
+    } catch (e) {
+      if (e.message !== 'cancelled') {
+        Alert.alert(e.message);
+      }
+    }
+  };
+
+  /**
+ * Sanitize and save personal identity number to state
+ * @param {string} personalNumber
+ */
+  setPin(personalNumber) {
+    personalNumber = sanitizePin(personalNumber);
+
+    this.setState({
+      personalNumberInput: personalNumber
+    });
+  }
+
+
   // TODO: Implementera Watson för att hantera svaren
   handleHumanChatMessage = (message) => {
     const { chat } = this.props;
 
-    console.log("show some");
-
     // TODO: Run login logic here
     if (message.search('Logga in') !== -1) {
-      chat.switchAgent(FakeAgent);
+      //chat.switchAgent(FakeAgent);
+      // TODO: Lägg in numpaden
+      const ChatFormTest = (props) => {
+        return <ChatForm
+          {...props}
+          autoFocus={true}
+          keyboardType='number-pad'
+          maxLength={12}
+          submitText={'Logga in'}
+          placeholder={'Ange ditt personnummer'}
+          // TODO: fix input value
+          inputValue=''
+          changeHandler={(value) => this.setPin(value)}
+          submitHandler={() => this.authenticateUser(message)}
+        />
+      }
+      chat.switchUserInput(withChatForm(ChatFormTest));
+
+      //this.authenticateUser('197406027826');
+
       return;
     }
 
@@ -156,7 +216,7 @@ class ChatScreen extends Component {
   state = {
     messages: [],
     ChatUserInput: withChatForm(ChatForm),
-    ChatAgent: LoginAgent,
+    ChatAgent: withAuthentication(LoginAgent),
     inputActions: []
   };
 
