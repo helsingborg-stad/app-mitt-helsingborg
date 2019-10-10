@@ -12,8 +12,9 @@ function loadStories() {
   require('../source/components/atoms/Input.stories');
   require('../source/components/atoms/Text.stories');
   require('../source/components/organisms/Chat.stories');
-  require('../source/components/screens/WatsonAgent.stories');
   require('../source/components/screens/LoginAgent.stories');
+  require('../source/components/screens/WatsonAgent.stories');
+  
 }
 
 const stories = [
@@ -24,6 +25,7 @@ const stories = [
   '../source/components/atoms/Input.stories',
   '../source/components/atoms/Text.stories',
   '../source/components/organisms/Chat.stories',
+  '../source/components/screens/LoginAgent.stories',
   '../source/components/screens/WatsonAgent.stories',
   
 ];
