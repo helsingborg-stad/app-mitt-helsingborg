@@ -15,20 +15,26 @@ const ChatForm = props => {
 
   return (
     <ChatFormWrapper>
-      <UserInputWrapper>
-        <Input
-          {...props}
-          value={props.inputValue}
-          onChangeText={props.changeHandler}
-          onSubmitEditing={props.submitHandler}
-          keyboardType={props.keyboardType ? props.keyboardType : 'default'}
-        />
-        <Button onClick={props.submitHandler} z={0}>
-        {props.submitText ? 
-          <Text>{props.submitText}</Text>
-            : <Icon name="send"/>}
-        </Button>
-      </UserInputWrapper>
+      {
+        !props.hideUserInput ?
+          <UserInputWrapper>
+            <Input
+              value={props.inputValue}
+              onChangeText={props.changeHandler}
+              onSubmitEditing={props.submitHandler}
+              placeholder={'Skriv något... '}
+              keyboardType={'default'}
+              {...props}
+            />
+            <Button onClick={props.submitHandler} z={0}>
+            {props.submitText ? 
+              <Text>{props.submitText}</Text>
+                : <Icon name="send"/>}
+            </Button>
+        </UserInputWrapper>
+        : null
+      }
+
       {props.chat && props.chat.inputActions &&
         <View>
           <FlatList
