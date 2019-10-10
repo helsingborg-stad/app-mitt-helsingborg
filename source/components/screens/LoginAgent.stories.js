@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
+import { StyleSheet, View, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+
 import env from 'react-native-config';
 import { storiesOf } from '@storybook/react-native';
 import styled from 'styled-components/native'
-import { StyleSheet, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 
 import withChatForm from '../organisms/withChatForm';
-import { sendChatMsg } from '../../services/ChatFormService';
 
 import StoryWrapper from '../molecules/StoryWrapper';
 import ChatForm from '../molecules/ChatForm';
@@ -17,10 +17,10 @@ import ChatBody from '../atoms/ChatBody';
 import ChatWrapper from '../atoms/ChatWrapper';
 import ChatFooter from '../atoms/ChatFooter';
 import ChatBubble from '../atoms/ChatBubble';
-import { Alert } from "react-native";
 
 import Button from '../atoms/Button';
 import Text from '../atoms/Text';
+import Heading from '../atoms/Heading';
 import Icon from '../atoms/Icon';
 
 import withAuthentication from '../organisms/withAuthentication';
@@ -29,18 +29,9 @@ import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
 
 import WatsonAgent from '../organisms/WatsonAgent';
 
-const BankIdLoading = props => (  
-<View style={styles.container}>
-  <View style={styles.content}>
-      <ActivityIndicator size="large" color="slategray" />
-      {!props.isBankidInstalled &&
-          <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
-      }
-  </View>
-  <View style={styles.loginContainer}>
-    <Button block color={'purple'}><Text>Avbryt</Text></Button>
-  </View>
-</View>);
+let months = {};
+months[9] = "Oktober";
+months[10] = "November";
 
 class LoginAgent extends Component {
   componentDidMount() {
@@ -48,7 +39,7 @@ class LoginAgent extends Component {
 
     chat.addMessages([
       {
-        Component: ChatBubble,
+        Component: props => (<ChatBubble {...props}><Heading>Hej!</Heading></ChatBubble>),
         componentProps: {
           content: 'Hej!',
           modifiers: ['automated'],
@@ -78,6 +69,142 @@ class LoginAgent extends Component {
     EventHandler.unSubscribe(EVENT_USER_MESSAGE);
   }
 
+  handleHumanChatMessage = (message) => {
+    const { chat } = this.props;
+    if (message.search('Jag vill logga in med Mobilt BankID') !== -1) {
+      this.showLoginForm();
+      return;
+    }
+
+    if (message.search('Jag vill veta mer om Mitt Helsingborg')  !== -1) {
+
+      chat.switchUserInput(props => (<ChatForm {...props} hideUserInput />));
+
+      chat.addMessages([
+        {
+          Component: props => (<ChatBubble {...props}><Heading>Absolut!</Heading></ChatBubble>),
+          componentProps: {
+            modifiers: ['automated'],
+          }
+        },
+        {
+          Component: ChatBubble,
+          componentProps: {
+            content: 'Med Mitt Helsingborg kommunicerar du med staden och får tillgång till alla tjänster du behöver.',
+            modifiers: ['automated'],
+          }
+        },
+        {
+          Component: ChatBubble,
+          componentProps: {
+            content: 'Allt samlat i mobilen!',
+            modifiers: ['automated'],
+          }
+        }
+      ]);
+
+      chat.setInputActions([
+        {
+          Component: InputAction,
+          componentProps: {
+            label: 'Jag vill logga in med Mobilt BankID',
+            messages: [{
+              Component: ChatBubble,
+              componentProps: {
+                content: 'Jag vill logga in med Mobilt BankID',
+                modifiers: ['user'],
+  
+              }
+            }]
+          },
+        },
+      ]);
+    }
+  };
+
+  showInitialUserInput = () => {
+    const { chat } = this.props;
+
+    chat.switchUserInput(props => (<ChatForm {...props} hideUserInput />));
+
+    chat.setInputActions([
+      {
+        Component: InputAction,
+        componentProps: {
+          label: 'Jag vill logga in med Mobilt BankID',
+          messages: [{
+            Component: ChatBubble,
+            componentProps: {
+              content: 'Jag vill logga in med Mobilt BankID',
+              modifiers: ['user'],
+
+            }
+          }]
+        },
+      },
+      {
+        Component: InputAction,
+        componentProps: {
+          label: 'Jag vill veta mer om Mitt Helsingborg',
+          messages: [{
+            Component: ChatBubble,
+            componentProps: {
+              content: 'Jag vill veta mer om Mitt Helsingborg',
+              modifiers: ['user'],
+
+            }
+          }]
+        },
+      },
+    ]);
+  }
+
+  showLoginForm = () => {
+    const { chat } = this.props;
+
+
+    chat.addMessages([
+      {
+        Component: ChatBubble,
+        componentProps: {
+          content: 'Eftersom det är första gången du loggar in behöver du ange ditt personnummer.',
+          modifiers: ['automated'],
+        }
+      }
+    ]);
+    
+
+    chat.switchUserInput(withChatForm((props) => (
+      <ChatForm
+        {...props}
+        autoFocus={true}
+        keyboardType='numeric'
+        maxLength={12}
+        submitText={'Logga in'}
+        placeholder={'Ange ditt personnummer'}
+      />
+    ), {
+      onSubmit: this.authenticateUser
+    }));
+
+    chat.setInputActions([
+      {
+        Component: InputAction,
+        componentProps: {
+          label: 'Jag vill veta mer om Mitt Helsingborg',
+          messages: [{
+            Component: ChatBubble,
+            componentProps: {
+              content: 'Jag vill veta mer om Mitt Helsingborg',
+              modifiers: ['user'],
+
+            }
+          }]
+        },
+      },
+    ]);
+  }
+
   /**
    * Authenticate user
    */
@@ -94,14 +221,33 @@ class LoginAgent extends Component {
       return;
     }
 
-    chat.switchUserInput(() => (<BankIdLoading {...this.props.authentication } cancelLogin={() => {
-      this.props.authentication.cancelLogin();
-      this.showInitialUserInput();
-    }} />));
+    chat.switchUserInput(() => (
+      <BankIdLoading 
+        {...this.props.authentication } 
+        cancelLogin={() => {
+          this.props.authentication.cancelLogin();
+          this.showInitialUserInput();
+    
+        }} 
+      />
+    ));
 
     try {
       const { loginUser } = this.props.authentication;
       await loginUser(personalNumber);
+
+      const today = new Date();
+
+      chat.addMessages([
+        {
+          Component: ChatDivider,
+          componentProps: {
+            title: `${new Date().getDay()} ${months[new Date().getMonth()]}`,
+            info: 'Loggade in med Mobilt BankID',
+          }
+        }
+      ]);
+
       chat.switchAgent(WatsonAgent);
       chat.switchUserInput(withChatForm(ChatForm));
       chat.setInputActions([]);
@@ -109,78 +255,6 @@ class LoginAgent extends Component {
       if (e.message !== 'cancelled') {
         Alert.alert(e.message);
       }
-    }
-  };
-
-  showInitialUserInput = () => {
-    const { chat } = this.props;
-    chat.switchUserInput(withChatForm(ChatForm));
-    chat.setInputActions([
-      {
-        Component: InputAction,
-        componentProps: {
-          label: 'Jag vill logga in med Mobilt BankID',
-          messages: [{
-            Component: ChatBubble,
-            componentProps: {
-              content: 'Logga in',
-              modifiers: ['user'],
-
-            }
-          }]
-        },
-      },
-      {
-        Component: InputAction,
-        componentProps: {
-          label: 'Jag vill veta mer om Mitt Helsingborg',
-          messages: [{
-            Component: ChatBubble,
-            componentProps: {
-              content: 'Berätta mer',
-              modifiers: ['user'],
-
-            }
-          }]
-        },
-      },
-    ]);
-  }
-
-  showLoginForm = () => {
-    const { chat } = this.props;
-    chat.switchUserInput(withChatForm((props) => (
-      <ChatForm
-        {...props}
-        autoFocus={true}
-        keyboardType='numeric'
-        maxLength={12}
-        submitText={'Logga in'}
-        placeholder={'Ange ditt personnummer'}
-      />
-    ), {
-      onSubmit: this.authenticateUser
-    }));
-  }
-
-  /**
- * Sanitize and save personal identity number to state
- * @param {string} personalNumber
- */
-  setPin(personalNumber) {
-    personalNumber = sanitizePin(personalNumber);
-
-    this.setState({
-      personalNumberInput: personalNumber
-    });
-  }
-
-
-  // TODO: Implementera Watson för att hantera svaren
-  handleHumanChatMessage = (message) => {
-    if (message.search('Logga in') !== -1) {
-      this.showLoginForm();
-      return;
     }
   };
 
@@ -194,26 +268,6 @@ InputAction = (props) => {
     <Icon name="message" />
     <Text>{props.label}</Text>
   </Button >;
-}
-
-class FakeAgent extends Component {
-  componentDidMount() {
-    const { chat } = this.props;
-
-    chat.addMessages({
-      Component: ChatBubble,
-      componentProps: {
-        content: 'Välkommen!',
-        modifiers: ['automated'],
-      }
-    });
-
-    chat.setInputActions([]);
-  }
-
-  render() {
-    return null;
-  }
 }
 
 class ChatScreen extends Component {
@@ -235,7 +289,7 @@ class ChatScreen extends Component {
     }, () => {
       const lastMsg = this.state.messages.slice(-1)[0].componentProps;
 
-      if (lastMsg.modifiers[0] === 'user') {
+      if (Array.isArray(lastMsg.modifiers) && lastMsg.modifiers[0] === 'user') {
         // console.log(lastMsg.content);
         EventHandler.dispatch(EVENT_USER_MESSAGE, lastMsg.content);
       }
@@ -294,27 +348,62 @@ const ModifiedStoryWrapper = styled(StoryWrapper)`
   padding-right: 0;
 `;
 
-storiesOf('Chat', module)
-  .add('Login agent', () => (
-    <ChatScreen />
-  ));
 
+const ChatDivider = props => (
+  <DividerWrapper>
+      <DividerTitle>{props.title}</DividerTitle>
+      <DividerLine/>
+      <DividerInfo>{props.info}</DividerInfo>
+  </DividerWrapper>
+);
 
+const DividerLine = styled.View`
+  height: 1px;
+  width: 100%;
+  flex: 1;
+  background-color: ${props => props.theme.border.default};
+  align-self: stretch;
+  margin-vertical: 6px;
+  flex-shrink: 0;
+`;
 
+const DividerWrapper = styled.View`
+  flex: 1;
+  align-items: center;
+  margin-top: 48px;
+  margin-bottom: 24px;
+  margin-left: 16px;
+  margin-right: 16px;
+`;
+const DividerTitle = styled(Text)`
+  text-align: center;
+  flex: 1;
+  flex-shrink: 0;
+  margin-bottom: 4px;
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 400;
+`;
+const DividerInfo = styled(Text)`
+  flex: 1;
+  flex-shrink: 0;
+  font-size: 12px;
+`;
 
-
-
+const BankIdLoading = props => (  
+<View style={styles.container}>
+  <View style={styles.content}>
+      <ActivityIndicator size="large" color="slategray" />
+      {!props.isBankidInstalled &&
+          <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
+      }
+  </View>
+  <View style={styles.loginContainer}>
+    <Button block color={'purple'}><Text>Avbryt</Text></Button>
+  </View>
+</View>);
 
 const styles = StyleSheet.create({
-  paper: {
-      backgroundColor: '#fff',
-      padding: 24,
-      borderRadius: 7,
-      shadowOpacity: 0.2,
-      shadowRadius: 2,
-      shadowColor: '#000',
-      shadowOffset: { height: 5, width: 0 },
-  },
   container: {
       alignItems: 'stretch',
   },
@@ -328,34 +417,6 @@ const styles = StyleSheet.create({
       width: '100%',
       marginBottom: 30
   },
-  loginFooter: {
-      marginTop: 42,
-      marginBottom: 26,
-      alignItems: 'center',
-  },
-  button: {
-      paddingTop: 16,
-      paddingBottom: 16,
-      backgroundColor: '#007AFF',
-      borderRadius: 7,
-  },
-  buttonDisabled: {
-      backgroundColor: '#E5E5EA',
-  },
-  buttonText: {
-      fontSize: 18,
-      color: '#fff',
-      textAlign: 'center',
-      fontWeight: 'bold',
-  },
-  buttonTextDisabled: {
-      color: '#C7C7CC',
-  },
-  header: {
-      fontWeight: 'bold',
-      fontSize: 35,
-      textAlign: 'center',
-  },
   infoText: {
       fontSize: 18,
       fontWeight: 'bold',
@@ -363,16 +424,11 @@ const styles = StyleSheet.create({
       marginTop: 24,
       marginBottom: 24
   },
-  label: {
-      fontSize: 16,
-      marginBottom: 8,
-  },
-  inputField: {
-      height: 40,
-      borderColor: 'transparent',
-      borderBottomColor: '#D3D3D3',
-      borderWidth: 0.5,
-      marginBottom: 24,
-      color: '#555',
-  },
 });
+
+
+
+storiesOf('Chat', module)
+  .add('Login agent', () => (
+    <ChatScreen />
+  ));
