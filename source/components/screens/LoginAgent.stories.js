@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import env from 'react-native-config';
 import { storiesOf } from '@storybook/react-native';
+import { StyleSheet, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 
@@ -23,6 +24,27 @@ import Icon from '../atoms/Icon';
 
 import withAuthentication from '../organisms/withAuthentication';
 import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
+
+
+import WatsonAgent from '../organisms/WatsonAgent';
+
+const BankIdLoading = props => (  
+<View style={styles.container}>
+  <View style={styles.content}>
+      <ActivityIndicator size="large" color="slategray" />
+      {!props.isBankidInstalled &&
+          <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
+      }
+  </View>
+  <View style={styles.loginContainer}>
+      <TouchableOpacity
+          style={styles.button}
+          onPress={props.cancelLogin}
+          underlayColor='#fff'>
+          <Text style={styles.buttonText}>Avbryt</Text>
+      </TouchableOpacity>
+  </View>
+</View>);
 
 class LoginAgent extends Component {
   componentDidMount() {
@@ -53,7 +75,50 @@ class LoginAgent extends Component {
     ]);
 
     EventHandler.subscribe(EVENT_USER_MESSAGE, (message) => this.handleHumanChatMessage(message));
+    this.showInitialUserInput();
+  }
 
+  componentWillUnmount(): void {
+    EventHandler.unSubscribe(EVENT_USER_MESSAGE);
+  }
+
+  /**
+   * Authenticate user
+   */
+  authenticateUser = async (personalNumber) => {
+    const { chat } = this.props;
+
+    if (!personalNumber) {
+      Alert.alert('Personnummer saknas');
+      return;
+    }
+
+    if (!validatePin(personalNumber)) {
+      Alert.alert('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.');
+      return;
+    }
+
+    chat.switchUserInput(() => (<BankIdLoading {...this.props.authentication } cancelLogin={() => {
+      this.props.authentication.cancelLogin();
+      this.showInitialUserInput();
+    }} />));
+
+    try {
+      const { loginUser } = this.props.authentication;
+      await loginUser(personalNumber);
+      chat.switchAgent(WatsonAgent);
+      chat.switchUserInput(withChatForm(ChatForm));
+      chat.setInputActions([]);
+    } catch (e) {
+      if (e.message !== 'cancelled') {
+        Alert.alert(e.message);
+      }
+    }
+  };
+
+  showInitialUserInput = () => {
+    const { chat } = this.props;
+    chat.switchUserInput(withChatForm(ChatForm));
     chat.setInputActions([
       {
         Component: InputAction,
@@ -86,36 +151,21 @@ class LoginAgent extends Component {
     ]);
   }
 
-  componentWillUnmount(): void {
-    EventHandler.unSubscribe(EVENT_USER_MESSAGE);
-  }
-
-  /**
-   * Authenticate user
-   */
-  authenticateUser = async (personalNumber) => {
+  showLoginForm = () => {
     const { chat } = this.props;
-
-    if (!personalNumber) {
-      Alert.alert('Personnummer saknas');
-      return;
-    }
-
-    // if (!validatePin(personalNumber)) {
-    //   Alert.alert('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.');
-    //   return;
-    // }
-
-    try {
-      const { loginUser } = this.props.authentication;
-      await loginUser(personalNumber);
-      chat.switchAgent(FakeAgent);
-    } catch (e) {
-      if (e.message !== 'cancelled') {
-        Alert.alert(e.message);
-      }
-    }
-  };
+    chat.switchUserInput(withChatForm((props) => (
+      <ChatForm
+        {...props}
+        autoFocus={true}
+        keyboardType='numeric'
+        maxLength={12}
+        submitText={'Logga in'}
+        placeholder={'Ange ditt personnummer'}
+      />
+    ), {
+      onSubmit: this.authenticateUser
+    }));
+  }
 
   /**
  * Sanitize and save personal identity number to state
@@ -132,52 +182,10 @@ class LoginAgent extends Component {
 
   // TODO: Implementera Watson för att hantera svaren
   handleHumanChatMessage = (message) => {
-    const { chat } = this.props;
-
-    // TODO: Run login logic here
     if (message.search('Logga in') !== -1) {
-      //chat.switchAgent(FakeAgent);
-      // TODO: Lägg in numpaden
-      const ChatFormTest = (props) => {
-        return <ChatForm
-          {...props}
-          autoFocus={true}
-          keyboardType='number-pad'
-          maxLength={12}
-          submitText={'Logga in'}
-          placeholder={'Ange ditt personnummer'}
-          // TODO: fix input value
-          inputValue=''
-          changeHandler={(value) => this.setPin(value)}
-          submitHandler={() => this.authenticateUser(message)}
-        />
-      }
-      chat.switchUserInput(withChatForm(ChatFormTest));
-
-      //this.authenticateUser('197406027826');
-
+      this.showLoginForm();
       return;
     }
-
-    if (message.search('Berätta mer') !== -1) {
-      chat.addMessages({
-        Component: ChatBubble,
-        componentProps: {
-          content: 'Watson berättar mer',
-          modifiers: ['automated'],
-        }
-      })
-      return;
-    }
-
-    chat.addMessages({
-      Component: ChatBubble,
-      componentProps: {
-        content: 'Dumb watson response: ' + message,
-        modifiers: ['automated'],
-      }
-    })
-
   };
 
   render() {
@@ -215,7 +223,7 @@ class FakeAgent extends Component {
 class ChatScreen extends Component {
   state = {
     messages: [],
-    ChatUserInput: withChatForm(ChatForm),
+    ChatUserInput: false,
     ChatAgent: withAuthentication(LoginAgent),
     inputActions: []
   };
@@ -240,6 +248,7 @@ class ChatScreen extends Component {
   };
 
   switchAgent = (AgentComponent) => {
+    console.log(AgentComponent);
     this.setState({
       ChatAgent: AgentComponent
     });
@@ -287,3 +296,81 @@ storiesOf('Chat', module)
   .add('Login agent', () => (
     <ChatScreen />
   ));
+
+
+
+
+
+
+
+const styles = StyleSheet.create({
+  paper: {
+      backgroundColor: '#fff',
+      padding: 24,
+      borderRadius: 7,
+      shadowOpacity: 0.2,
+      shadowRadius: 2,
+      shadowColor: '#000',
+      shadowOffset: { height: 5, width: 0 },
+  },
+  container: {
+      alignItems: 'stretch',
+  },
+  content: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+  },
+  loginContainer: {
+      flex: 0,
+      width: '100%',
+      marginBottom: 30
+  },
+  loginFooter: {
+      marginTop: 42,
+      marginBottom: 26,
+      alignItems: 'center',
+  },
+  button: {
+      paddingTop: 16,
+      paddingBottom: 16,
+      backgroundColor: '#007AFF',
+      borderRadius: 7,
+  },
+  buttonDisabled: {
+      backgroundColor: '#E5E5EA',
+  },
+  buttonText: {
+      fontSize: 18,
+      color: '#fff',
+      textAlign: 'center',
+      fontWeight: 'bold',
+  },
+  buttonTextDisabled: {
+      color: '#C7C7CC',
+  },
+  header: {
+      fontWeight: 'bold',
+      fontSize: 35,
+      textAlign: 'center',
+  },
+  infoText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      marginTop: 24,
+      marginBottom: 24
+  },
+  label: {
+      fontSize: 16,
+      marginBottom: 8,
+  },
+  inputField: {
+      height: 40,
+      borderColor: 'transparent',
+      borderBottomColor: '#D3D3D3',
+      borderWidth: 0.5,
+      marginBottom: 24,
+      color: '#555',
+  },
+});
