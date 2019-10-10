@@ -368,8 +368,7 @@ const DividerLine = styled.View`
 `;
 
 const DividerWrapper = styled.View`
-  flex: 1;
-  align-items: center;
+  align-self: stretch;
   margin-top: 48px;
   margin-bottom: 24px;
   margin-left: 16px;
@@ -385,6 +384,7 @@ const DividerTitle = styled(Text)`
   font-weight: 400;
 `;
 const DividerInfo = styled(Text)`
+  text-align: center;
   flex: 1;
   flex-shrink: 0;
   font-size: 12px;
