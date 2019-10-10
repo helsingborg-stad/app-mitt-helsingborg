@@ -43,7 +43,7 @@ const ChatBubble = props => {
     );
 }
 
-ChatBubble.PropTypes = {
+ChatBubble.propTypes = {
     modifiers: PropTypes.arrayOf(PropTypes.oneOf(['automated', 'human', 'user'])),
     content: PropTypes.string,
 };
