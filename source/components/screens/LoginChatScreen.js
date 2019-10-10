@@ -58,7 +58,6 @@ class LoginChatScreen extends Component {
                                 <ChatComponentsContainer
                                     style={{
                                         flexBasis: '100%',
-                                        paddingHorizontal: 16,
                                     }}
                                     scrollEnabled={true}
                                     inverted={true}

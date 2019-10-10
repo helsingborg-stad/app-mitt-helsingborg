@@ -20,7 +20,7 @@ const withChatForm = (WrappedComponent) => {
                 Component: ChatBubble,
                 componentProps: {
                     content: inputValue,
-                    modifiers: ['human'],
+                    modifiers: ['user'],
                 }
             });
         }

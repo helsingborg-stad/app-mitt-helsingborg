@@ -57,6 +57,8 @@ export default ChatBubble;
 const Bubble = styled.View`  
     margin-top: 6px;
     margin-bottom: 6px;
+    margin-left: 16px;
+    margin-right: 16px;
     padding: 14px 18px 12px 18px;
     background-color: gray;
     border-radius: 17.5px;
@@ -81,10 +83,10 @@ const CSS = {};
 CSS.left = css`
     align-self: flex-start;
     border-bottom-left-radius: 4px;
-    margin-left: 24px;
+    margin-right: 96px;
 `;
 CSS.right = css`
     align-self: flex-end;
     border-bottom-right-radius: 4px;
-    margin-right: 24px;
+    margin-left: 96px;
 `;
