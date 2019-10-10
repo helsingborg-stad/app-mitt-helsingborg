@@ -5,16 +5,23 @@ import withForm from './withForm';
 
 import ChatBubble from '../atoms/ChatBubble';
 
-const withChatForm = (WrappedComponent) => {
+const withChatForm = (WrappedComponent, options = {}) => {
     return class WithChatForm extends Component {
         static propTypes = {
             chat: PropTypes.shape({
                 addMessages: PropTypes.func.isRequired,
-            })
+            }),
+            onSubmit: PropTypes.func
         }
 
         onSubmit = (inputValue) => {
             const { chat } = this.props;
+            const { onSubmit } = options;
+
+            if (typeof onSubmit === 'function') {
+                onSubmit(inputValue);
+                return;
+            }
 
             chat.addMessages({
                 Component: ChatBubble,
@@ -22,7 +29,7 @@ const withChatForm = (WrappedComponent) => {
                     content: inputValue,
                     modifiers: ['user'],
                 }
-            });
+            });    
         }
 
         render() {
