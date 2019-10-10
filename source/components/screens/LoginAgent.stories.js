@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import env from 'react-native-config';
 import { storiesOf } from '@storybook/react-native';
+import styled from 'styled-components/native'
 import { StyleSheet, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
@@ -37,12 +38,7 @@ const BankIdLoading = props => (
       }
   </View>
   <View style={styles.loginContainer}>
-      <TouchableOpacity
-          style={styles.button}
-          onPress={props.cancelLogin}
-          underlayColor='#fff'>
-          <Text style={styles.buttonText}>Avbryt</Text>
-      </TouchableOpacity>
+    <Button block color={'purple'}><Text>Avbryt</Text></Button>
   </View>
 </View>);
 
@@ -273,7 +269,7 @@ class ChatScreen extends Component {
     const instanceMethods = { addMessages, switchAgent, switchUserInput, setInputActions };
 
     return (
-      <StoryWrapper>
+      <ModifiedStoryWrapper>
         <ChatWrapper keyboardVerticalOffset={24} >
           {ChatAgent ?
             <ChatAgent chat={{ ...instanceMethods, ...this.state }} />
@@ -287,10 +283,16 @@ class ChatScreen extends Component {
               : null}
           </ChatFooter>
         </ChatWrapper>
-      </StoryWrapper>
+      </ModifiedStoryWrapper>
     );
   }
 }
+
+
+const ModifiedStoryWrapper = styled(StoryWrapper)`
+  padding-left: 0;
+  padding-right: 0;
+`;
 
 storiesOf('Chat', module)
   .add('Login agent', () => (
