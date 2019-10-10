@@ -123,6 +123,20 @@ const colors = {
     },
   },
   status: {
+  },
+  chatBubble: {
+    user: { // "User"
+      background: palette.purple[3],
+      text: palette.mono.white,
+    },
+    human: { // "Sally"
+      background: palette.mono.white,
+      text: palette.mono.gray,
+    }, 
+    automated: { // "KC"
+      background: palette.mono.white,
+      text: palette.mono.gray,
+    }
   }
 };
 
