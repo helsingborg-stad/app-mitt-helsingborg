@@ -18,6 +18,7 @@ const ChatForm = props => {
           value={props.inputValue}
           onChangeText={props.changeHandler}
           onSubmitEditing={props.submitHandler}
+          keyboardType={props.keyboardType ? props.keyboardType : false}
         />
         <ChatSubmitButton submitHandler={props.submitHandler} submitText={props.submitText} />
       </View>
