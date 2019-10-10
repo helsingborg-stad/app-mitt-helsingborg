@@ -17,65 +17,8 @@ import ChatFooter from '../atoms/ChatFooter';
 import ChatBubble from '../atoms/ChatBubble';
 import {Alert} from "react-native";
 
-class WatsonAgent extends Component {
-    componentDidMount() {
-        const { chat } = this.props;
 
-        chat.addMessages({
-            Component: ChatBubble,
-            componentProps: {
-                content: 'Hej mitt namn är Watson.',
-                modifiers: ['automated'],
-            }
-        });
-
-        EventHandler.subscribe(EVENT_USER_MESSAGE, (message) => this.handleHumanChatMessage(message));
-    }
-
-    componentWillUnmount(): void {
-        EventHandler.unSubscribe(EVENT_USER_MESSAGE);
-    }
-
-    handleHumanChatMessage = async (message) => {
-        const { chat } = this.props;
-        const workspaceId = env.WATSON_WORKSPACEID;
-
-        if (workspaceId === undefined) {
-            Alert.alert('Missing Watson workspace ID');
-        } else {
-            let responseText;
-
-            try {
-                await sendChatMsg(workspaceId, message).then((response) => {
-                    const responseGeneric = response.data.attributes.output.generic;
-
-                    responseGeneric.forEach(elem => {
-                        if (elem.response_type === 'text') {
-                            responseText = elem.text;
-                            // this.responseText = 'Ny response';
-                            console.log(responseText);
-                        }
-                    })
-                })
-            } catch (e) {
-                console.log('SendChat error: ', e);
-                responseText = 'Kan ej svara på frågan. Vänta och prova igen senare.'
-            }
-
-            chat.addMessages({
-                Component: ChatBubble,
-                componentProps: {
-                    content: responseText,
-                    modifiers: ['automated'],
-                }
-            });
-        }
-    };
-
-    render() {
-        return null;
-    }
-}
+import WatsonAgent from '../organisms/WatsonAgent';
 
 class ParrotAgent extends Component {
     componentDidMount() {
@@ -137,7 +80,7 @@ class ChatScreen extends Component {
         }, () => {
             const lastMsg = this.state.messages.slice(-1)[0].componentProps;
 
-            if (lastMsg.modifiers[0] === 'human') {
+            if (lastMsg.modifiers[0] === 'user') {
                 // console.log(lastMsg.content);
                 EventHandler.dispatch(EVENT_USER_MESSAGE, lastMsg.content);
             }
