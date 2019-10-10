@@ -12,7 +12,7 @@ const withChatForm = (WrappedComponent) => {
                 addMessages: PropTypes.func.isRequired,
             })
         }
-    
+
         onSubmit = (inputValue) => {
             const { chat } = this.props;
 
@@ -24,7 +24,7 @@ const withChatForm = (WrappedComponent) => {
                 }
             });
         }
-    
+
         render() {
             const { onSubmit } = this;
 
