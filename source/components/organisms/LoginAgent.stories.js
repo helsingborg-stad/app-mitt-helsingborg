@@ -25,6 +25,7 @@ import { sanitizePin } from "../../helpers/ValidationHelper";
 
 import LoginAgent from './LoginAgent';
 
+// TODO: Replace ChatScreen with general Chat Organism
 class ChatScreen extends Component {
   state = {
     messages: [],
@@ -65,6 +66,7 @@ class ChatScreen extends Component {
     });
   };
 
+  // TODO: Implement setInputActions functionality outside of Chat organism
   setInputActions = (inputActions) => {
     this.setState({
       inputActions

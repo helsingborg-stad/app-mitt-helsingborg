@@ -179,6 +179,7 @@ export default class LoginAgent extends Component {
       return;
     }
 
+    // TODO: Cancel not working
     chat.switchUserInput(() => (<ChatBankIdLoading {...this.props.authentication} cancelLogin={() => {
       this.props.authentication.cancelLogin();
       this.showInitialUserInput();
