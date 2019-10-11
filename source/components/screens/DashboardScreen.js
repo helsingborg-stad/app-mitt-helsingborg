@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Alert, But
 import Auth from '../../helpers/AuthHelper';
 import StorageService from '../../services/StorageService';
 import { sign, cancelRequest, resetCancel } from "../../services/UserService";
-import { canOpenUrl } from "../../helpers/LinkHelper";
+import { canOpenUrl } from "../../helpers/UrlHelper";
 import ScreenWrapper from '../molecules/ScreenWrapper';
 
 const USERKEY = 'user';

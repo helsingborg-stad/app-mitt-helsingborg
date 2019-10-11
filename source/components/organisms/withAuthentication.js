@@ -4,7 +4,7 @@ import env from 'react-native-config';
 import StorageService from '../../services/StorageService';
 import Auth from '../../helpers/AuthHelper';
 import { authorize, bypassBankid, cancelRequest, resetCancel } from "../../services/UserService";
-import { canOpenUrl } from "../../helpers/LinkHelper";
+import { canOpenUrl } from "../../helpers/UrlHelper";
 
 const FAKE_PERSONAL_NUMBER = '201111111111';
 const FAKE_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjFlZDcyYzJjLWQ5OGUtNGZjMC04ZGY2LWY5NjRkOTYxMTVjYSIsImlhdCI6MTU2Mjc0NzM2NiwiZXhwIjoxNTYyNzUwOTc0fQ.iwmUMm51j-j2BYui9v9371DkY5LwLGATWn4LepVxmNk';
