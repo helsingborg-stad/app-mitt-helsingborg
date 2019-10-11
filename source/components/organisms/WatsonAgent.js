@@ -19,7 +19,7 @@ export default class WatsonAgent extends Component {
         });
         EventHandler.subscribe(EVENT_USER_MESSAGE, (message) => this.handleHumanChatMessage(message));
     }
-    componentWillUnmount(): void {
+    componentWillUnmount() {
         EventHandler.unSubscribe(EVENT_USER_MESSAGE);
     }
     handleHumanChatMessage = async (message) => {

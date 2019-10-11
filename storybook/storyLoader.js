@@ -12,8 +12,8 @@ function loadStories() {
   require('../source/components/atoms/Input.stories');
   require('../source/components/atoms/Text.stories');
   require('../source/components/organisms/Chat.stories');
-  require('../source/components/screens/LoginAgent.stories');
-  require('../source/components/screens/WatsonAgent.stories');
+  require('../source/components/organisms/LoginAgent.stories');
+  require('../source/components/organisms/WatsonAgent.stories');
   
 }
 

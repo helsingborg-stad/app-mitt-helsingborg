@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react-native';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 
-import withChatForm from '../organisms/withChatForm';
+import withChatForm from './withChatForm';
 import { sendChatMsg } from '../../services/ChatFormService';
 
 import StoryWrapper from '../molecules/StoryWrapper';
@@ -18,7 +18,7 @@ import ChatBubble from '../atoms/ChatBubble';
 import {Alert} from "react-native";
 
 
-import WatsonAgent from '../organisms/WatsonAgent';
+import WatsonAgent from './WatsonAgent';
 
 class ParrotAgent extends Component {
     componentDidMount() {
@@ -35,7 +35,7 @@ class ParrotAgent extends Component {
         EventHandler.subscribe(EVENT_USER_MESSAGE, (message) => this.handleHumanChatMessage(message));
     }
 
-    componentWillUnmount(): void {
+    componentWillUnmount() {
         EventHandler.unSubscribe(EVENT_USER_MESSAGE);
     }
 
