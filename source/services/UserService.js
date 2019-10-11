@@ -1,8 +1,7 @@
-import env from 'react-native-config';
 import axios from "axios";
 import { Linking } from 'react-native';
 import { NetworkInfo } from 'react-native-network-info';
-import { canOpenUrl } from '../helpers/LinkHelper';
+import { canOpenUrl, buildServiceUrl, buildBankIdClientUrl } from '../helpers/UrlHelper';
 import StorageService from './StorageService';
 
 const TOKENKEY = 'accessToken';
@@ -21,21 +20,9 @@ export const resetCancel = () => {
  * @param {string} bankIdClientUrl
  */
 launchBankIdApp = async (autoStartToken) => {
-  const bankIdClientUrl = this.buildBankIdClientUrl(autoStartToken);
+  const bankIdClientUrl = buildBankIdClientUrl(autoStartToken);
 
   return this.openURL(bankIdClientUrl);
-};
-
-/**
- * Builds the BankID client URL
- * @param {string} autoStartToken
- */
-buildBankIdClientUrl = (autoStartToken) => {
-  const params = `?autostarttoken=${autoStartToken}&redirect=${env.APP_SCHEME}://`;
-  const androidUrl = 'bankid:///';
-  const iosUrl = 'https://app.bankid.com/';
-
-  return `${iosUrl}${params}`;
 };
 
 /**
@@ -263,9 +250,11 @@ export const cancelRequest = async () => {
  */
 request = async (endpoint, data, token) => {
   return new Promise(async (resolve, reject) => {
+    const url = buildServiceUrl(endpoint);
+
     await axios({
       method: 'POST',
-      url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
+      url,
       data: data,
       headers: {
         'Accept': 'application/json',
