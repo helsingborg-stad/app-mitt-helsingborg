@@ -127,7 +127,7 @@ CSS.buttonSharp = css`
 
 /** Button child component overrides */
 const ButtonText = styled(Text)`
-    font-size: 18px;
+    font-size: 16px;
     color: ${(props) => (props.theme.button[props.buttonTheme].text)};
 `;
 
@@ -159,7 +159,7 @@ const ButtonWrapper = styled.View`
 const ButtonTouchable = styled.TouchableOpacity`
     ${props => (props.block ? 'flex: 1;' : null)};
     ${props => (CSS.z[props.z])}
-    shadow-color: #000;
+    shadow-color: ${(props) => (props.theme.shadow.default)};
 `;
 
 export default ButtonNew;

@@ -6,6 +6,8 @@ import ChatBody from '../atoms/ChatBody';
 import ChatWrapper from '../atoms/ChatWrapper';
 import ChatFooter from '../atoms/ChatFooter';
 
+import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
+
 export default class Chat extends Component {
     state = {
         messages: [],
@@ -15,14 +17,22 @@ export default class Chat extends Component {
 
     addMessages = (objects) => {
         const array = Array.isArray(objects) ? objects : [objects];
-
+    
         this.setState((state, props) => {
-            let { messages } = state;
-            array.forEach(object => { messages.push(object) });
+          let { messages } = state;
+          array.forEach(object => { messages.push(object) });
+    
+          return { messages };
+        }, () => {
+          const lastMsg = this.state.messages.slice(-1)[0].componentProps;
+    
+          if (Array.isArray(lastMsg.modifiers) && lastMsg.modifiers[0] === 'user') {
+            // console.log(lastMsg.content);
+            EventHandler.dispatch(EVENT_USER_MESSAGE, lastMsg.content);
+          }
 
-            return {messages};
         });
-    }
+      };
 
     switchAgent = (AgentComponent) => {
         this.setState({

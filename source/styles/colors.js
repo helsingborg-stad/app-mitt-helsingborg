@@ -137,6 +137,19 @@ const colors = {
       background: palette.mono.white,
       text: palette.mono.gray,
     }
+  },
+  chatBody: {
+      background: palette.mono.lightest
+  },
+  chatForm: {
+      background: palette.mono.lightest
+  },
+  shadow: {
+    default: palette.mono.darker
+  },
+  divider: {
+    title: palette.mono.lighter,
+    info: palette.mono.gray,
   }
 };
 

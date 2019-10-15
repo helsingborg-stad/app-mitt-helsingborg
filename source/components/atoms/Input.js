@@ -4,6 +4,7 @@ import { TextInput } from 'react-native';
 import styled from 'styled-components/native';
 
 const Input = styled(TextInput)`
+    flex: 1;
     background-color: ${({theme}) => theme.input.background};
     border-radius: 15px;
     border: solid 1px ${({theme}) => theme.input.border};

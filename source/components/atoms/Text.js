@@ -4,10 +4,12 @@ import styled from 'styled-components/native';
 
 const Text = styled(RNText)`
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 18px;
     font-family: Roboto;
     color: ${props => (props.theme.text.default)};
+    flexShrink: 1;
 `;
 
 export default Text;
+
