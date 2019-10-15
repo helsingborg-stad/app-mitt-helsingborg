@@ -1,5 +1,5 @@
 import axios from "axios";
-import StorageService from '../services/StorageService';
+import StorageService, { TOKEN_KEY } from '../services/StorageService';
 import { buildServiceUrl } from './UrlHelper';
 
 export const get = (endpoint = '', headers = undefined) => {
@@ -18,8 +18,6 @@ export const put = (endpoint = '', body = undefined, headers = undefined) => {
   return request(endpoint, "put", body, headers);
 }
 
-const TOKENKEY = 'accessToken';
-
 /**
  * Axios request
  * @param {string} endpoint
@@ -36,8 +34,7 @@ const request = (
   return new Promise(async (resolve, reject) => {
     // Build complete api url
     const url = buildServiceUrl(endpoint);
-    // Get
-    const token = await StorageService.getData(TOKENKEY);
+    const token = await StorageService.getData(TOKEN_KEY);
     const bearer = token ? "Bearer " + token : "";
 
     // Merge custom headers
@@ -66,20 +63,8 @@ const request = (
         }
       })
       .catch(error => {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          return reject(error.response);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the
-          // browser and an instance of
-          // http.ClientRequest in node.js
-          return reject(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          return reject(error.request);
-        }
+        console.log("API request error", error);
+        return reject(error);
       });
 
     return req;
