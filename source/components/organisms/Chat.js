@@ -8,12 +8,19 @@ import ChatFooter from '../atoms/ChatFooter';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 
-export default class Chat extends Component {
+class Chat extends Component {
     state = {
         messages: [],
-        ChatUserInput: this.props.ChatUserInput,
-        ChatAgent: this.props.ChatAgent
+        ChatUserInput: false,
+        ChatAgent: false,
+        // TODO: Move inputActions state outside of Chat organism
+        inputActions: []
     };
+
+    componentDidMount() {
+        const {ChatUserInput, ChatAgent} = this.props;
+        this.setState({ChatUserInput, ChatAgent});
+    }
 
     addMessages = (objects) => {
         const array = Array.isArray(objects) ? objects : [objects];
@@ -46,11 +53,18 @@ export default class Chat extends Component {
         });
     }
 
+    // TODO: Implement setInputActions functionality outside of Chat organism
+    setInputActions = (inputActions) => {
+        this.setState({
+            inputActions
+        });
+    }
+
     render() {
         const { messages, ChatAgent, ChatUserInput } = this.state;
-        const { addMessages, switchAgent, switchUserInput } = this;
+        const { addMessages, switchAgent, switchUserInput, setInputActions } = this;
 
-        const instanceMethods = { addMessages, switchAgent, switchUserInput };
+        const instanceMethods = { addMessages, switchAgent, switchUserInput, setInputActions };
 
         return (
             <ChatWrapper keyboardVerticalOffset={24} >
@@ -69,3 +83,5 @@ export default class Chat extends Component {
         )
     }
 }
+
+export default Chat;
