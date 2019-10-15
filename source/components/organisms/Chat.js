@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types';
 
 import ChatMessages from '../molecules/ChatMessages';
 
@@ -83,5 +84,15 @@ class Chat extends Component {
         )
     }
 }
+
+Chat.propTypes = {
+    ChatAgent: PropTypes.oneOfType([PropTypes.oneOf([false]), PropTypes.elementType, PropTypes.func]).isRequired,
+    ChatUserInput: PropTypes.oneOfType([PropTypes.oneOf([false]), PropTypes.elementType, PropTypes.func]).isRequired
+};
+
+Chat.defaultProps = {
+    ChatAgent: false,
+    ChatUserInput: false
+};
 
 export default Chat;
