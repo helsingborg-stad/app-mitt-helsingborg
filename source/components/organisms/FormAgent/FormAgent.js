@@ -53,11 +53,11 @@ class FormAgent extends Component {
 
     handleUserInput = async (message, state) => {
         this.setState((state, props) => {
-            const {chat} = props
+            const { chat } = props
             const { questions, activeQuestion } = state;
 
-            const question = this.getNextQuestion(questions, activeQuestion)
-            if (questions.indexOf(question) == state.questions.length -1){
+            const nextQuestion = this.getNextQuestion(questions, activeQuestion)
+            if (questions.indexOf(nextQuestion) == state.questions.length -1){
                 chat.addMessages({
                     Component: ChatBubble,
                     componentProps: {
@@ -71,12 +71,12 @@ class FormAgent extends Component {
                 chat.addMessages({
                     Component: ChatBubble,
                     componentProps: {
-                        content: question.question_name,
+                        content: nextQuestion.question_name,
                         modifiers: ['automated'],
                     }
                 });
     
-                return { ...state, activeQuestion: question };
+                return { ...state, activeQuestion: nextQuestion };
             }
 
         })
