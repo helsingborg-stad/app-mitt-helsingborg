@@ -48,9 +48,9 @@ export default class Chat extends Component {
 
     render() {
         const { messages, ChatAgent, ChatUserInput } = this.state;
-        const { addMessages, switchAgent } = this;
+        const { addMessages, switchAgent, switchUserInput } = this;
 
-        const instanceMethods = { addMessages, switchAgent };
+        const instanceMethods = { addMessages, switchAgent, switchUserInput };
 
         return (
             <ChatWrapper keyboardVerticalOffset={24} >
