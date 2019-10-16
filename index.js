@@ -32,4 +32,3 @@ export default class MittHbg extends Component {
 // const componentToRegister = (Config.IS_STORYBOOK === 'true') ? StorybookUIRoot : MittHbg
 
 AppRegistry.registerComponent(appName, () => MittHbg);
- 

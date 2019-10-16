@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-    createStackNavigator,
     createAppContainer,
-    createBottomTabNavigator,
     createSwitchNavigator
 } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator } from 'react-navigation-stack';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import LoginChatScreen from "./screens/LoginChatScreen";
 import UserSettingsScreen from "./screens/UserSettingsScreen"
