@@ -56,6 +56,7 @@ const Service = styled(Text)`
 `;
 
 const TaskIcon = styled(Icon)`
+  color: #A3A3A3;
   margin-left: auto;
 `;
 
