@@ -170,27 +170,6 @@
 			remoteGlobalIDString = A39873CE1EA65EE60051E01A;
 			remoteInfo = "RNVectorIcons-tvOS";
 		};
-		17E44C17235852BC0010F37E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 254885F809CC494D87EFB782 /* RNScreens.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = B5C32A4F220C6379000FFB8D;
-			remoteInfo = "RNScreens-tvOS";
-		};
-		17E44C1F235852BC0010F37E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FF0F067C8E4A47B7B050AE1D /* RNReanimated.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNReanimated;
-		};
-		17E44C21235852BC0010F37E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FF0F067C8E4A47B7B050AE1D /* RNReanimated.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = FDBB176E229BF04900D1E455;
-			remoteInfo = "RNReanimated-tvOS";
-		};
 		2D16E6711FA4F8DC00B85C8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */;
@@ -372,6 +351,27 @@
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNCAsyncStorage;
+		};
+		886A60CE23586B2900BDCEF2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FF0F067C8E4A47B7B050AE1D /* RNReanimated.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNReanimated;
+		};
+		886A60D023586B2900BDCEF2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FF0F067C8E4A47B7B050AE1D /* RNReanimated.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FDBB176E229BF04900D1E455;
+			remoteInfo = "RNReanimated-tvOS";
+		};
+		886A60D423586B2900BDCEF2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 254885F809CC494D87EFB782 /* RNScreens.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B5C32A4F220C6379000FFB8D;
+			remoteInfo = "RNScreens-tvOS";
 		};
 		88C0CB3722B28BF1000AE9CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -729,15 +729,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		17E44C1B235852BC0010F37E /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				17E44C20235852BC0010F37E /* libRNReanimated.a */,
-				17E44C22235852BC0010F37E /* libRNReanimated-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -862,6 +853,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		886A609C2358655800BDCEF2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				886A60CF23586B2900BDCEF2 /* libRNReanimated.a */,
+				886A60D123586B2900BDCEF2 /* libRNReanimated-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		88C0CB1122B28BEF000AE9CC /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -900,7 +900,7 @@
 			isa = PBXGroup;
 			children = (
 				88C0CB5322B28BF5000AE9CC /* libRNScreens.a */,
-				17E44C18235852BC0010F37E /* libRNScreens-tvOS.a */,
+				886A60D523586B2900BDCEF2 /* libRNScreens-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1124,7 +1124,7 @@
 					ProjectRef = 70F825F6D7414527A1D990D5 /* RNNetworkInfo.xcodeproj */;
 				},
 				{
-					ProductGroup = 17E44C1B235852BC0010F37E /* Products */;
+					ProductGroup = 886A609C2358655800BDCEF2 /* Products */;
 					ProjectRef = FF0F067C8E4A47B7B050AE1D /* RNReanimated.xcodeproj */;
 				},
 				{
@@ -1242,27 +1242,6 @@
 			fileType = archive.ar;
 			path = "libRNVectorIcons-tvOS.a";
 			remoteRef = 17D2D4EB2347984100A03144 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		17E44C18235852BC0010F37E /* libRNScreens-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libRNScreens-tvOS.a";
-			remoteRef = 17E44C17235852BC0010F37E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		17E44C20235852BC0010F37E /* libRNReanimated.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNReanimated.a;
-			remoteRef = 17E44C1F235852BC0010F37E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		17E44C22235852BC0010F37E /* libRNReanimated-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libRNReanimated-tvOS.a";
-			remoteRef = 17E44C21235852BC0010F37E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		2D16E6721FA4F8DC00B85C8A /* libRCTBlob-tvOS.a */ = {
@@ -1445,6 +1424,27 @@
 			fileType = archive.ar;
 			path = libRNCAsyncStorage.a;
 			remoteRef = 88273BF422C9E8F400F34DF3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		886A60CF23586B2900BDCEF2 /* libRNReanimated.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNReanimated.a;
+			remoteRef = 886A60CE23586B2900BDCEF2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		886A60D123586B2900BDCEF2 /* libRNReanimated-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNReanimated-tvOS.a";
+			remoteRef = 886A60D023586B2900BDCEF2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		886A60D523586B2900BDCEF2 /* libRNScreens-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNScreens-tvOS.a";
+			remoteRef = 886A60D423586B2900BDCEF2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		88C0CB3822B28BF1000AE9CC /* libjsi.a */ = {
