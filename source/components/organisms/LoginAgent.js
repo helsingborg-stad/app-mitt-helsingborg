@@ -16,8 +16,9 @@ import Button from '../atoms/Button';
 import Text from '../atoms/Text';
 import Icon from '../atoms/Icon';
 import ChatBankIdLoading from '../atoms/ChatBankIdLoading';
+import withAuthentication from './withAuthentication';
 
-export default class LoginAgent extends Component {
+export default withAuthentication(class LoginAgent extends Component {
   componentDidMount() {
     const { chat } = this.props;
     chat.addMessages([
