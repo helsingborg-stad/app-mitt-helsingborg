@@ -5,7 +5,6 @@
 	};
 	objectVersion = 51;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -61,6 +60,7 @@
 		F67F369122E9D2910061B31F /* LoginAndCheckWelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F67F369022E9D2910061B31F /* LoginAndCheckWelcomeView.swift */; };
 		F6C90312234B87A1007F721A /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F6169DEC234250F000810612 /* Roboto-Regular.ttf */; };
 		FEC2A9D7B51A4AC59286C7D4 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35E9310979E740C39B0E70FC /* FontAwesome5_Regular.ttf */; };
+		05DB8DC5217B4ED68C331ADA /* libRNReanimated.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9920026DBD20457887073616 /* libRNReanimated.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -519,6 +519,8 @@
 		F6D299B222D493BC00AEAA6A /* mitt_helsingborg_playground.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = mitt_helsingborg_playground.entitlements; path = mitt_helsingborg_playground/mitt_helsingborg_playground.entitlements; sourceTree = "<group>"; };
 		FA628468D56C4DBA93725810 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		FC8F5935C5F8461D9207A497 /* libRNNetworkInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNNetworkInfo.a; sourceTree = "<group>"; };
+		FF0F067C8E4A47B7B050AE1D /* RNReanimated.xcodeproj */ = {isa = PBXFileReference; name = "RNReanimated.xcodeproj"; path = "../node_modules/react-native-reanimated/ios/RNReanimated.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		9920026DBD20457887073616 /* libRNReanimated.a */ = {isa = PBXFileReference; name = "libRNReanimated.a"; path = "libRNReanimated.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -554,6 +556,7 @@
 				2EC5A0FE82ED47E8925C971D /* libRNNetworkInfo.a in Frameworks */,
 				883EBFF3C8BD409F9F5E9312 /* libRNCAsyncStorage.a in Frameworks */,
 				731C7DCB343A4CA7AB29EB20 /* libRNVectorIcons.a in Frameworks */,
+				05DB8DC5217B4ED68C331ADA /* libRNReanimated.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -785,6 +788,7 @@
 				70F825F6D7414527A1D990D5 /* RNNetworkInfo.xcodeproj */,
 				47974076D1104B16B2D9AE7F /* RNCAsyncStorage.xcodeproj */,
 				49D5B12CDC5D4DA2B0B5E750 /* RNVectorIcons.xcodeproj */,
+				FF0F067C8E4A47B7B050AE1D /* RNReanimated.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1612,6 +1616,7 @@
 					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/react-native-reanimated/ios/**",
 				);
 				INFOPLIST_FILE = mitt_helsingborg_playgroundTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1622,6 +1627,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1655,6 +1661,7 @@
 					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/react-native-reanimated/ios/**",
 				);
 				INFOPLIST_FILE = mitt_helsingborg_playgroundTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1665,6 +1672,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1701,6 +1709,7 @@
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"\"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj\"",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/react-native-reanimated/ios/**",
 				);
 				INFOPLIST_FILE = mitt_helsingborg_playground/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
@@ -1735,6 +1744,7 @@
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"\"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj\"",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/react-native-reanimated/ios/**",
 				);
 				INFOPLIST_FILE = mitt_helsingborg_playground/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
@@ -1878,6 +1888,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1915,6 +1926,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				MTL_FAST_MATH = YES;
