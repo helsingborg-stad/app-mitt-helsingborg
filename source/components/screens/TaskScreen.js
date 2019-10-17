@@ -4,6 +4,7 @@ import { View, ScrollView } from 'react-native';
 import GroupedList from '../molecules/GroupedList';
 import Header from '../molecules/Header';
 import StorageService, { USER_KEY } from '../../services/StorageService';
+import ScreenWrapper from '../molecules/ScreenWrapper';
 
 class TaskScreen extends Component {
     constructor(props) {
@@ -30,7 +31,7 @@ class TaskScreen extends Component {
         const { givenName } = this.state.user;
 
         return (
-            <View>
+            <TaskScreenWrapper>
                 <Header
                     title="Mitt Helsingborg"
                     message={givenName ? `Hej ${givenName}!` : 'Hej!'}
@@ -44,12 +45,18 @@ class TaskScreen extends Component {
                         items={COMPLETED_TASKS}
                     />
                 </Container>
-            </View>
+            </TaskScreenWrapper>
         );
     }
 }
 
 export default TaskScreen;
+
+const TaskScreenWrapper = styled(ScreenWrapper)`
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+`;
 
 const Container = styled(ScrollView)`
     padding: 16px;
