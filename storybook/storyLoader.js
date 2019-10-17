@@ -10,12 +10,12 @@ function loadStories() {
   require('../source/components/atoms/Heading.stories');
   require('../source/components/atoms/Icon.stories');
   require('../source/components/atoms/Input.stories');
+  require('../source/components/atoms/Select.stories');
   require('../source/components/atoms/Text.stories');
   require('../source/components/organisms/Chat.stories');
   require('../source/components/organisms/LoginAgent.stories');
   require('../source/components/organisms/WatsonAgent.stories');
-  require('../source/components/organisms/NavigationTabs.story');
-
+  
 }
 
 const stories = [
@@ -24,11 +24,12 @@ const stories = [
   '../source/components/atoms/Heading.stories',
   '../source/components/atoms/Icon.stories',
   '../source/components/atoms/Input.stories',
+  '../source/components/atoms/Select.stories',
   '../source/components/atoms/Text.stories',
   '../source/components/organisms/Chat.stories',
-  '../source/components/screens/LoginAgent.stories',
-  '../source/components/screens/WatsonAgent.stories',
-
+  '../source/components/organisms/LoginAgent.stories',
+  '../source/components/organisms/WatsonAgent.stories',
+  
 ];
 
 module.exports = {
