@@ -10,6 +10,7 @@ import styled from "styled-components/native/dist/styled-components.native.esm";
 import ScreenWrapper from "../molecules/ScreenWrapper";
 import {Icon} from 'react-native-elements'
 import ParrotAgent from "../organisms/ParrotAgent";
+import TaskScreen from "../screens/TaskScreen";
 
 class ChatScreen extends Component {
     render() {
@@ -25,17 +26,6 @@ class ChatScreen extends Component {
 const ModifiedScreenWrapper = styled(ScreenWrapper)`
    padding: 0px;
 `;
-
-class UserEvents extends Component {
-    render() {
-        return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text>Placeholder for events screen</Text>
-            </View>
-        );
-    }
-}
-
 
 class Profile extends Component {
     render() {
@@ -85,7 +75,7 @@ const TabNavigator = createMaterialTopTabNavigator({
         }
     },
     UserEvents: {
-        screen: UserEvents,
+        screen: props => <ModifiedScreenWrapper><TaskScreen /></ModifiedScreenWrapper>,
         navigationOptions: {
             title: 'Mitt HBG',
             tabBarIcon: tabBarIcon('home', '#A61380')
