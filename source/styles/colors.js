@@ -150,6 +150,13 @@ const colors = {
   divider: {
     title: palette.mono.lighter,
     info: palette.mono.gray,
+  },
+  picker: {
+    background: palette.mono.lighter,
+    accessory: {
+      background: palette.mono.lighter,
+      border: palette.mono.lightest,
+    }
   }
 };
 
