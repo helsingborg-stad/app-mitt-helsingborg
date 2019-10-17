@@ -157,7 +157,18 @@ const colors = {
       background: palette.mono.lighter,
       border: palette.mono.lightest,
     }
-  }
+  },
+  heading: {
+      default: palette.mono.darker,
+      heading: palette.mono.darkest,
+      ...palette.mono,
+      purple: {
+          ...palette.purple
+        },
+        blue: {
+          ...palette.blue
+        }
+   }
 };
 
 export default colors;
