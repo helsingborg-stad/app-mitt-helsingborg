@@ -13,6 +13,7 @@ import UserSettingsScreen from "./screens/UserSettingsScreen"
 import DashboardScreen from './screens/DashboardScreen';
 import SplashScreen from './screens/SplashScreen';
 import ChatScreen from './screens/ChatScreen';
+import TaskScreen from './screens/TaskScreen';
 
 import {Icon} from 'react-native-elements';
 
@@ -112,10 +113,7 @@ const TabNavigator = createMaterialTopTabNavigator({
         }
     },
     UserEvents: {
-        screen: () => ((
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text>Placeholder for events screen</Text>
-            </View>)),
+        screen: TaskScreen,
         navigationOptions: {
             title: 'Mitt HBG',
             tabBarIcon: tabBarIcon('home', '#A61380')
