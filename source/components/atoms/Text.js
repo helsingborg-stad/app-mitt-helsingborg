@@ -9,6 +9,9 @@ const Text = styled(RNText)`
     font-family: Roboto;
     color: ${props => (props.theme.text.default)};
     flexShrink: 1;
+    ${({ small }) => small && `
+      font-size: 12px;
+    `}
 `;
 
 export default Text;
