@@ -27,10 +27,6 @@ export default class Select extends Component {
         showPicker: false
     };
 
-    componentDidMount() {
-        const { items } = this.props;
-    }
-
     render() {
         const { items, style, onValueChange, placeholder } = this.props;
         const { currentValue, showPicker } = this.state;
