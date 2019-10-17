@@ -16,6 +16,6 @@ const ModifiedStoryWrapper = styled(StoryWrapper)`
 storiesOf('Chat', module)
   .add('Login agent', () => (
     <ModifiedStoryWrapper>
-      <Chat ChatAgent={withAuthentication(LoginAgent)}  />
+      <Chat ChatAgent={LoginAgent}  />
     </ModifiedStoryWrapper>
   ));

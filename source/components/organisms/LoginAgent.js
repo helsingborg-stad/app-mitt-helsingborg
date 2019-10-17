@@ -16,8 +16,9 @@ import Button from '../atoms/Button';
 import Text from '../atoms/Text';
 import Icon from '../atoms/Icon';
 import ChatBankIdLoading from '../atoms/ChatBankIdLoading';
+import withAuthentication from './withAuthentication';
 
-export default class LoginAgent extends Component {
+export default withAuthentication(class LoginAgent extends Component {
   componentDidMount() {
     const { chat } = this.props;
     chat.addMessages([
@@ -167,7 +168,7 @@ export default class LoginAgent extends Component {
    * Authenticate user
    */
   authenticateUser = async (personalNumber) => {
-    const { chat } = this.props;
+    const { chat, onUserLogin } = this.props;
 
     if (!personalNumber) {
       Alert.alert('Personnummer saknas');
@@ -203,6 +204,10 @@ export default class LoginAgent extends Component {
       chat.switchAgent(WatsonAgent);
       chat.switchUserInput(withChatForm(ChatForm));
       chat.setInputActions([]);
+
+      if (typeof onUserLogin === 'function') {
+        onUserLogin();
+      } 
     } catch (e) {
       if (e.message !== 'cancelled') {
         Alert.alert(e.message);
@@ -214,7 +219,7 @@ export default class LoginAgent extends Component {
   render() {
     return null;
   }
-}
+});
 
 const InputAction = (props) => {
   return <Button onClick={() => props.addMessages(props.messages)} color={'light'} rounded>
