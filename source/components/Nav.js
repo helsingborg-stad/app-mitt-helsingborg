@@ -112,14 +112,20 @@ const TabNavigator = createMaterialTopTabNavigator({
         }
     },
     UserEvents: {
-        screen: DashboardScreen,
+        screen: () => ((
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <Text>Placeholder for events screen</Text>
+            </View>)),
         navigationOptions: {
             title: 'Mitt HBG',
             tabBarIcon: tabBarIcon('home', '#A61380')
         }
     },
     Profile: {
-        screen: UserSettingsScreen,
+        screen: () => ((
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <Text>Placeholder for profile screen</Text>
+            </View>)),
         navigationOptions: {
             title: 'Profil',
             tabBarIcon: tabBarIcon('contacts', 'blue'),
