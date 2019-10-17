@@ -9,6 +9,19 @@ import Button from './Button';
 import Input from './Input';
 
 export default class Select extends Component {
+    static propTypes = {
+        items: PropTypes.arrayOf(PropTypes.shape({
+            label: PropTypes.string,
+            value: PropTypes.string
+        })).isRequired,
+        onValueChange: PropTypes.func,
+        placeholder: PropTypes.string.isRequired
+    }
+    
+    static defaultProps = {
+        placeholder: 'Select an item'
+    };
+
     state = {
         currentValue: '',
         showPicker: false
@@ -84,16 +97,3 @@ const PickerAcessoryWrapper = styled.View`
     background: ${props => (props.theme.picker.accessory.background)};
     border-color: ${props => (props.theme.picker.accessory.border)};
 `;
-
-Select.propTypes = {
-    items: PropTypes.arrayOf(PropTypes.shape({
-        label: PropTypes.string,
-        value: PropTypes.string
-    })).isRequired,
-    onValueChange: PropTypes.func,
-    placeholder: PropTypes.string.isRequired
-}
-
-Select.defaultProps = {
-    placeholder: 'Select an item'
-};
