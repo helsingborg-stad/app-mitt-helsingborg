@@ -16,7 +16,7 @@ function loadStories() {
   require('../source/components/organisms/Chat.stories');
   require('../source/components/organisms/LoginAgent.stories');
   require('../source/components/organisms/WatsonAgent.stories');
-  
+  require('../source/components/organisms/NavigationTabs.story');
 }
 
 const stories = [
@@ -31,7 +31,7 @@ const stories = [
   '../source/components/organisms/Chat.stories',
   '../source/components/organisms/LoginAgent.stories',
   '../source/components/organisms/WatsonAgent.stories',
-  
+
 ];
 
 module.exports = {
