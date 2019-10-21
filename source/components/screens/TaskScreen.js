@@ -36,6 +36,7 @@ class TaskScreen extends Component {
                     title="Mitt Helsingborg"
                     message={givenName ? `Hej ${givenName}!` : 'Hej!'}
                     themeColor="purple"
+                    navItems={NAV_ITEMS}
                 />
                 <Container>
                     <GroupedList
@@ -61,6 +62,24 @@ const TaskScreenWrapper = styled(ScreenWrapper)`
 const Container = styled(ScrollView)`
     padding: 16px;
 `;
+
+const NAV_ITEMS = [
+    {
+        title: 'Översikt',
+        route: '',
+        active: false
+    },
+    {
+        title: 'Ärenden',
+        route: '',
+        active: true
+    },
+    {
+        title: 'Händelser',
+        route: '',
+        active: false
+    },
+]
 
 const COMPLETED_TASKS = [
     {
