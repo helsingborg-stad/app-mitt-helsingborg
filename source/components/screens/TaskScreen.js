@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
-import { View, ScrollView } from 'react-native';
+import { FlatList, ScrollView, View } from 'react-native';
 import GroupedList from '../molecules/GroupedList';
 import Header from '../molecules/Header';
 import StorageService, { USER_KEY } from '../../services/StorageService';
 import ScreenWrapper from '../molecules/ScreenWrapper';
+import Button from '../atoms/Button';
+import Icon from '../atoms/Icon';
+import Text from '../atoms/Text';
+import Heading from '../atoms/Heading';
 
 class TaskScreen extends Component {
     constructor(props) {
@@ -39,12 +43,23 @@ class TaskScreen extends Component {
                     navItems={NAV_ITEMS}
                 />
                 <Container>
-                    <GroupedList
-                        heading="Avslutade"
-                        icon="chevron-right"
-                        iconPosition="right"
-                        items={COMPLETED_TASKS}
-                    />
+                    <List>
+                        <FlatList
+                            ListHeaderComponent={<ListHeading type="h3">Aktiva</ListHeading>}
+                            data={ACTIVE_TASKS}
+                            scrollEnabled={false}
+                            renderItem={item => <ListButton color={'light'} />}
+                            keyExtractor={item => item.id}
+                        />
+                    </List>
+                    <List>
+                        <GroupedList
+                            heading="Avslutade"
+                            icon="chevron-right"
+                            iconPosition="right"
+                            items={COMPLETED_TASKS}
+                        />
+                    </List>
                 </Container>
             </TaskScreenWrapper>
         );
@@ -52,6 +67,56 @@ class TaskScreen extends Component {
 }
 
 export default TaskScreen;
+
+
+const ListButton = ({ }) => {
+    return (
+        <TaskButton color={'light'} block>
+            <LeftIconWrapper>
+                <LeftIcon name="message" />
+            </LeftIconWrapper>
+
+            <ButtonContent>
+                <Text small>Ansökan</Text>
+                <Text>Borgerlig vigsel</Text>
+            </ButtonContent>
+
+            <RightIcon name="chevron-right" />
+        </TaskButton>
+    );
+}
+
+const TaskButton = styled(Button)`
+    padding: 0px;
+    margin-bottom: 12px;
+    justify-content: space-between;
+    background-color: white;
+`;
+
+const LeftIconWrapper = styled(View)`
+    background: #F8F8F8;
+    padding: 16px;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 12.5px;
+    border-bottom-left-radius: 12.5px;
+`;
+
+const ButtonContent = styled(View)`
+    flex: 1;
+    padding-left: 16px;
+`;
+
+const LeftIcon = styled(Icon)`
+    color: #565656;
+`;
+
+const RightIcon = styled(Icon)`
+    color: #A3A3A3;
+    margin-right: 16px;
+`;
+
+
 
 const TaskScreenWrapper = styled(ScreenWrapper)`
     padding-left: 0;
@@ -61,6 +126,15 @@ const TaskScreenWrapper = styled(ScreenWrapper)`
 
 const Container = styled(ScrollView)`
     padding: 16px;
+`;
+
+const List = styled.View`
+    margin-top: 24px;
+`;
+
+const ListHeading = styled(Heading)`
+  margin-left: 4px;
+  margin-bottom: 8px;
 `;
 
 const NAV_ITEMS = [
@@ -80,6 +154,14 @@ const NAV_ITEMS = [
         active: false
     },
 ]
+
+const ACTIVE_TASKS = [
+    {
+        id: 'bd7acbea',
+        title: 'Ansökan',
+        text: 'Borgerlig vigsel',
+    },
+];
 
 const COMPLETED_TASKS = [
     {

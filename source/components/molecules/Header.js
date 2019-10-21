@@ -32,7 +32,6 @@ export default Header = ({ message, title, themeColor, navItems }) => {
 
 const HeaderContainer = styled.View`
     padding: 16px;
-    margin-bottom: 8px;
     justify-content: flex-end;
     background-color: white;
     ${props => (shadow[1])}
