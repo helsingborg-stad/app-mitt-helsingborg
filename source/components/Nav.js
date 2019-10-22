@@ -3,7 +3,7 @@ import {
     createAppContainer,
     createSwitchNavigator
 } from 'react-navigation';
-import {View, Text, SafeAreaView} from 'react-native';
+import {View, Text, SafeAreaView, Image} from 'react-native';
 import {createMaterialTopTabNavigator, MaterialTopTabBar} from 'react-navigation-tabs';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -122,7 +122,10 @@ const TabNavigator = createMaterialTopTabNavigator({
     Profile: {
         screen: () => ((
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text>Placeholder for profile screen</Text>
+                <Image
+                  style={styles.ProfileMockImage}
+                  source={require('../assets/screenshot_profile.png')}
+                />
             </View>)),
         navigationOptions: {
             title: 'Profil',
@@ -149,3 +152,10 @@ export default class Nav extends React.Component {
         return <AppContainer />;
     }
 }
+
+const styles = StyleSheet.create({
+    ProfileMockImage: {
+        width: '100%',
+        height: '100%'
+    }
+});
