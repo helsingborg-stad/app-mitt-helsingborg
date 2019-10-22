@@ -1,32 +1,13 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
 
 import { filterPropetiesByKeys } from '../../helpers/Objects';
 
 import withChatForm from './withChatForm';
-import ChatFormDeprecated from '../molecules/ChatFormDeprecated';
 import ChatForm from '../molecules/ChatForm';
 import Input from '../atoms/Input';
 import styled from 'styled-components/native';
 
 import ButtonStack from '../molecules/ButtonStack';
-
-import Heading from '../atoms/Heading';
-import Button from '../atoms/Button';
-import Text from '../atoms/Text';
-import Icon from '../atoms/Icon';
-
-
-import ChatBubble from '../atoms/ChatBubble';
-
-const ChatUserInputWrapper = styled.View`
-  background-color: ${props => props.theme.chatForm.background};
-  overflow: visible;
-  border-top-width: 1px;
-  border-color: ${props => props.theme.border.default};
-  margin-top 16px;
-  padding-bottom: 8px;
-`;
 
 const withChatController = (WrappedComponent, onSubmit) => {
     return class WithChatController extends Component {
@@ -36,7 +17,7 @@ const withChatController = (WrappedComponent, onSubmit) => {
             const inputArray = !Array.isArray(inputArr) ? [inputArr] : inputArr;
 
             chat.switchUserInput(withChatForm(props => (
-                <ChatUserInputWrapper>
+                <ChatUserInput>
                     {
                         inputArray
                         .map(this.mapInputComponent)
@@ -46,7 +27,7 @@ const withChatController = (WrappedComponent, onSubmit) => {
                             : null
                         ))
                     }
-                </ChatUserInputWrapper>             
+                </ChatUserInput>             
             )));
         }
 
@@ -81,21 +62,7 @@ const withChatController = (WrappedComponent, onSubmit) => {
                     inputComponent =  {
                         Component: ButtonStack, 
                         ComponentProps: {
-                            items: input.options.map(option => (
-                                {
-                                    Component: ActionButton,
-                                    componentProps: {
-                                        label: option.value,
-                                        messages: [{
-                                        Component: ChatBubble,
-                                        componentProps: {
-                                            content: option.value,
-                                            modifiers: ['user'],
-                                        }
-                                        }]
-                                    },
-                                }
-                            ))
+                            items: input.options
                         }
                     };
     
@@ -141,17 +108,6 @@ const withChatController = (WrappedComponent, onSubmit) => {
 
 export default withChatController;
 
-
-const ActionButton = (props) => {
-    return (
-        <Button onClick={() => props.addMessages(props.messages)} color={'light'} rounded>
-            <Icon name="message" />
-            <Text>{props.label}</Text>
-        </Button>
-    );
-  }
-  
-
 const InputForm = props => {
     return (
         <ChatForm {...filterPropetiesByKeys(props, ['submitHandler', 'changeHandler', 'inputValue'])}>
@@ -159,3 +115,12 @@ const InputForm = props => {
         </ChatForm>
     );
 };
+
+const ChatUserInput = styled.View`
+  background-color: ${props => props.theme.chatForm.background};
+  overflow: visible;
+  border-top-width: 1px;
+  border-color: ${props => props.theme.border.default};
+  margin-top 16px;
+  padding-bottom: 8px;
+`;
