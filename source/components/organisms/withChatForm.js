@@ -35,6 +35,7 @@ const withChatForm = (WrappedComponent, options = {}) => {
         render() {
             const { onSubmit } = this;
 
+            // withForm provides submitHandler, changeHandler & inputValue
             const WrappedComponentWithForm = withForm(WrappedComponent, onSubmit);
 
             return <WrappedComponentWithForm {...this.props} />;
