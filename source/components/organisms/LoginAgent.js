@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Alert, TouchableOpacity  } from 'react-native';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 import withChatForm from './withChatForm';
-import ChatForm from '../molecules/ChatForm';
+import ChatForm from '../molecules/ChatFormDeprecated';
 
 import { validatePin } from "../../helpers/ValidationHelper";
 import WatsonAgent from './WatsonAgent';

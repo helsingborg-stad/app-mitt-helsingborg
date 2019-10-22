@@ -8,7 +8,7 @@ import Chat from '../Chat';
 import WatsonAgent from '../WatsonAgent/WatsonAgent';
 import FormAgent from './';
 import withChatForm from '../withChatForm';
-import ChatForm from '../../molecules/ChatForm';
+import ChatForm from '../../molecules/ChatFormDeprecated';
 import StorageService from '../../../services/StorageService';
 import { getFormTemplate } from '../../../services/ChatFormService';
 

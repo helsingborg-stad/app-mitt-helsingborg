@@ -7,7 +7,7 @@ import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 import withChatForm from './withChatForm';
 
 import StoryWrapper from '../molecules/StoryWrapper';
-import ChatForm from '../molecules/ChatForm';
+import ChatForm from '../molecules/ChatFormDeprecated';
 import ChatMessages from '../molecules/ChatMessages';
 
 import ChatBody from '../atoms/ChatBody';

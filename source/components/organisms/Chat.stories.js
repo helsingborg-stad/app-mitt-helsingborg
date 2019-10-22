@@ -5,7 +5,7 @@ import Chat from './Chat';
 import withChatForm from './withChatForm';
 
 import StoryWrapper from '../molecules/StoryWrapper';
-import ChatForm from '../molecules/ChatForm';
+import ChatForm from '../molecules/ChatFormDeprecated';
 
 import FormAgent from './FormAgent/FormAgent';
 import WatsonAgent from './WatsonAgent/WatsonAgent';
