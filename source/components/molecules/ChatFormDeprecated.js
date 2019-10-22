@@ -68,6 +68,13 @@ const ActionItemWrapper = styled.View`
   margin-bottom: 6px;
 `;
 
-const ChatUserInputWrapper = styled.View``;
+const ChatUserInputWrapper = styled.View`
+  background-color: ${props => props.theme.chatForm.background};
+  overflow: visible;
+  border-top-width: 1px;
+  border-color: ${props => props.theme.border.default};
+  margin-top 16px;
+  padding-bottom: 8px;
+`;
 
 export default ChatFormDeprecated;
