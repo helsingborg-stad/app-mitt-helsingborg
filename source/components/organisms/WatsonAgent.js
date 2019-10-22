@@ -5,6 +5,9 @@ import { sendChatMsg } from '../../services/ChatFormService';
 import ChatBubble from '../atoms/ChatBubble';
 import { Alert } from "react-native";
 
+let firstRun = true;
+let conversationId;
+
 export default class WatsonAgent extends Component {
     componentDidMount() {
 
@@ -31,13 +34,22 @@ export default class WatsonAgent extends Component {
         else {
             let responseText;
             try {
-                await sendChatMsg(workspaceId, message).then((response) => {
+                await sendChatMsg(workspaceId, message, conversationId).then((response) => {
                     const responseGeneric = response.data.attributes.output.generic;
+
+                    if (firstRun) {
+                        conversationId = {conversation_id: response.data.attributes.context.conversation_id};
+
+                        firstRun = false;
+                    }
+
                     responseGeneric.forEach(elem => {
                         if (elem.response_type === 'text') {
                             responseText = elem.text;
-                            // this.responseText = 'Ny response';
-                            console.log(responseText);
+
+                            if (responseText.indexOf('[forms]') !== -1) {
+                                chat.switchAgent()
+                            }
                         }
                     });
                 });
