@@ -38,7 +38,7 @@ export default class WatsonAgent extends Component {
                     const responseGeneric = response.data.attributes.output.generic;
 
                     if (firstRun) {
-                        conversationId = {conversation_id: response.data.attributes.context.conversation_id};
+                        conversationId = response.data.attributes.context.conversation_id;
 
                         firstRun = false;
                     }
@@ -48,7 +48,7 @@ export default class WatsonAgent extends Component {
                             responseText = elem.text;
 
                             if (responseText.indexOf('[agent:forms]') !== -1) {
-                                chat.switchAgent('FormAgent', {formId: "1"});
+                                // chat.switchAgent(FormAgent, {formId: "1"});
                             }
                         }
                     });
