@@ -47,8 +47,8 @@ export default class WatsonAgent extends Component {
                         if (elem.response_type === 'text') {
                             responseText = elem.text;
 
-                            if (responseText.indexOf('[forms]') !== -1) {
-                                chat.switchAgent()
+                            if (responseText.indexOf('[agent:forms]') !== -1) {
+                                chat.switchAgent('FormAgent', {formId: "1"});
                             }
                         }
                     });
