@@ -1,19 +1,32 @@
 import React, { Component } from 'react';
+import { View } from 'react-native';
+
+import { filterPropetiesByKeys } from '../../helpers/Objects';
 
 import withChatForm from './withChatForm';
-import ChatForm from '../molecules/ChatFormDeprecated';
+import ChatFormDeprecated from '../molecules/ChatFormDeprecated';
+import ChatForm from '../molecules/ChatForm';
 import Input from '../atoms/Input';
+import styled from 'styled-components/native';
 
-const TestInput = props => {
-       return (
-        <Input
-            {...props}
-            value={props.inputValue}
-            onChangeText={props.changeHandler}
-            onSubmitEditing={props.submitHandler}
-        />
-    );
-};
+import ButtonStack from '../molecules/ButtonStack';
+
+import Heading from '../atoms/Heading';
+import Button from '../atoms/Button';
+import Text from '../atoms/Text';
+import Icon from '../atoms/Icon';
+
+
+import ChatBubble from '../atoms/ChatBubble';
+
+const ChatUserInputWrapper = styled.View`
+  background-color: ${props => props.theme.chatForm.background};
+  overflow: visible;
+  border-top-width: 1px;
+  border-color: ${props => props.theme.border.default};
+  margin-top 16px;
+  padding-bottom: 8px;
+`;
 
 const withChatController = (WrappedComponent, onSubmit) => {
     return class WithChatController extends Component {
@@ -23,7 +36,7 @@ const withChatController = (WrappedComponent, onSubmit) => {
             const inputArray = !Array.isArray(inputArr) ? [inputArr] : inputArr;
 
             chat.switchUserInput(withChatForm(props => (
-                <ChatForm {...props}>
+                <ChatUserInputWrapper>
                     {
                         inputArray
                         .map(this.mapInputComponent)
@@ -33,13 +46,11 @@ const withChatController = (WrappedComponent, onSubmit) => {
                             : null
                         ))
                     }
-                </ChatForm>             
+                </ChatUserInputWrapper>             
             )));
         }
 
         mapInputComponent = (input, index) => {
-            const { filterPropetiesByKeys } = this;
-
             let inputComponent = {
                 Component: false,
                 ComponentProps: false
@@ -48,7 +59,7 @@ const withChatController = (WrappedComponent, onSubmit) => {
             switch(input.type) {
                 case 'text':
                     inputComponent = {
-                       Component: TestInput, 
+                       Component: InputForm, 
                        ComponentProps: {
                            ...filterPropetiesByKeys(input, ['placeholder', 'autoFocus', 'maxLength', 'submitText'])
                        }
@@ -57,7 +68,7 @@ const withChatController = (WrappedComponent, onSubmit) => {
 
                 case 'number':
                     inputComponent =  {
-                        Component: TestInput, 
+                        Component: InputForm, 
                         ComponentProps: {
                             ...filterPropetiesByKeys(input, ['placeholder', 'autoFocus', 'maxLength', 'submitText']), 
                             keyboardType: 'numeric',
@@ -67,41 +78,26 @@ const withChatController = (WrappedComponent, onSubmit) => {
                     break;
                     
                 case 'radio':
-
-                    // const radioComponent =  {
-                    //     Component: ButtonGroup, 
-                    //     ComponentProps: {
-                    //         ...filterPropetiesByKeys(input, ['placeholder', 'autoFocus', 'maxLength', 'submitText']), 
-                    //         keyboardType: 'numeric',
-                    //         autoFocus: true
-                    //     }
-                    // };
-                    // return null;
-
-                    // return {
-                    //     Component: OptionButtons,
-                    //     ComponentProps: {
-                    //         items: {
-
-                    //         }
-                    //     }
-                    // };
-                    // chat.switchUserInput(props => (<ChatForm {...props} hideUserInput />));
-                    // chat.setInputActions(input.options.map(option => (
-                    //     {
-                    //         Component: InputAction,
-                    //         componentProps: {
-                    //             label: option.value,
-                    //             messages: [{
-                    //             Component: ChatBubble,
-                    //             componentProps: {
-                    //                 content: option.value,
-                    //                 modifiers: ['user'],
-                    //             }
-                    //             }]
-                    //         },
-                    //     }
-                    // )));
+                    inputComponent =  {
+                        Component: ButtonStack, 
+                        ComponentProps: {
+                            items: input.options.map(option => (
+                                {
+                                    Component: ActionButton,
+                                    componentProps: {
+                                        label: option.value,
+                                        messages: [{
+                                        Component: ChatBubble,
+                                        componentProps: {
+                                            content: option.value,
+                                            modifiers: ['user'],
+                                        }
+                                        }]
+                                    },
+                                }
+                            ))
+                        }
+                    };
     
                     break;
                 case 'select':
@@ -134,18 +130,6 @@ const withChatController = (WrappedComponent, onSubmit) => {
               return inputComponent;
         }
 
-        filterPropetiesByKeys = (object = {}, keys = []) => (
-            Object.entries(object)
-            .reduce((accumulator, [itemKey, itemValue]) => {
-                let optionsObject = accumulator;
-                if (keys.includes(itemKey)) {
-                    optionsObject[itemKey] = itemValue;
-                }
-
-                return optionsObject;
-            }, {})
-        );
-
         render() {
             const { switchInput } = this;
             const instanceMethods = {};
@@ -156,3 +140,22 @@ const withChatController = (WrappedComponent, onSubmit) => {
 }
 
 export default withChatController;
+
+
+const ActionButton = (props) => {
+    return (
+        <Button onClick={() => props.addMessages(props.messages)} color={'light'} rounded>
+            <Icon name="message" />
+            <Text>{props.label}</Text>
+        </Button>
+    );
+  }
+  
+
+const InputForm = props => {
+    return (
+        <ChatForm {...filterPropetiesByKeys(props, ['submitHandler', 'changeHandler', 'inputValue'])}>
+            <Input {...props} />
+        </ChatForm>
+    );
+};
