@@ -1,90 +1,90 @@
 import React, { Component } from 'react';
-import env from 'react-native-config';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
+import forms from '../../../assets/forms.js';
 
 import ChatBubble from '../../atoms/ChatBubble';
-import { getFormTemplate } from '../../../services/ChatFormService';
-import withAuthentication from '../withAuthentication';
+
+import withChatController from '../withChatController';
 
 class FormAgent extends Component {
     state = {
+        formName: '',
         questions: [],
-        activeQuestion: undefined,
+        answers: {},
+        currentQuestion: undefined,
     };
 
     componentDidMount() {
-        const { chat } = this.props;
-        this.setFormQuestionsToState()
-        chat.addMessages({
-            Component: ChatBubble,
-            componentProps: {
-                content: 'Låt oss börja med några frågor.',
-                modifiers: ['automated'],
-            }
-        });
+        const { formId } = this.props;
+        const form = forms.find(form => (form.id === formId));
 
-        EventHandler.subscribe(EVENT_USER_MESSAGE, (message) => this.handleUserInput(message, this.state));
+        if (!form) {
+            console.error(`FormAgent: Cannot find Form with ID ${formId}.`);
+            return;
+        }
+
+        EventHandler.subscribe(EVENT_USER_MESSAGE, this.handleUserInput);
+
+        // Let the form party begin
+        this.setState({questions: form.questions, formName: form.name}, this.nextQuestion);   
     }
 
     componentWillUnmount() {
         EventHandler.unSubscribe(EVENT_USER_MESSAGE);
     }
 
-    setFormQuestionsToState = async () => {
-        const { formId } = this.props
-        if (this.state.questions.length === 0) {
-            const apiResponse  = await getFormTemplate(formId);
-            this.setState({questions: apiResponse.data.attributes.questions})
-        }
-    }
-
-    getNextQuestion = (questions, activeQuestion) => {
-        if (activeQuestion === undefined) {
-            return  questions[0]
-        }
-
-        const currentQuestionIndex = questions.indexOf(activeQuestion);
-        const questionIndex = currentQuestionIndex + 1
-        const question = questions[questionIndex]
-
-        return question
-    }
-
-    handleUserInput = async (message, state) => {
-        this.setState((state, props) => {
-            const { chat } = props
-            const { questions, activeQuestion } = state;
-
-            const nextQuestion = this.getNextQuestion(questions, activeQuestion)
-            if (questions.indexOf(nextQuestion) == state.questions.length -1){
-                chat.addMessages({
-                    Component: ChatBubble,
-                    componentProps: {
-                        content: "The end, bye bye.",
-                        modifiers: ['automated'],
-                    }
-                });
-
-                return state;
-            } else {
-                chat.addMessages({
-                    Component: ChatBubble,
-                    componentProps: {
-                        content: nextQuestion.question_name,
-                        modifiers: ['automated'],
-                    }
-                });
-    
-                return { ...state, activeQuestion: nextQuestion };
+    handleUserInput = message => {
+        this.setState(prevState => {
+            const { currentQuestion } = prevState;
+            let { answers } = prevState;
+            
+            if (!currentQuestion) {
+                return prevState;
             }
 
-        })
+            answers[currentQuestion] = message;
+
+            return { answers };
+        }, this.nextQuestion);
     };
+    
+    nextQuestion = () => {
+        const { chat } = this.props;
+        const { questions, answers } = this.state;
+
+        const nextQuestion = questions.find(question => typeof answers[question.key] === 'undefined');
+
+        chat.setInputActions([]);
+
+        if (!nextQuestion) {
+            chat.switchUserInput(false);
+            
+            return;
+        }
+
+        this.setState({currentQuestion: nextQuestion.key}, () => {
+            const messages = Array.isArray(nextQuestion.question) 
+            ? nextQuestion.question 
+            : [nextQuestion.question];
+
+            messages.forEach(message => {
+                chat.addMessages({
+                    Component: ChatBubble,
+                    componentProps: {
+                        content: typeof message === 'function' ? message(this.state) : message,
+                        modifiers: ['automated'],
+                    }
+                });
+            });
+
+            chat.switchInput(nextQuestion.input);
+        });
+    }
 
     render() {
         return null;
     }
 }
 
-export default FormAgent;
+export default withChatController(FormAgent);
