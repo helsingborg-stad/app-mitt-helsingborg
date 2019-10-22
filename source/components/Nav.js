@@ -3,7 +3,7 @@ import {
     createAppContainer,
     createSwitchNavigator
 } from 'react-navigation';
-import {View, Text, SafeAreaView, Image} from 'react-native';
+import {View, Text, SafeAreaView, Image, StyleSheet} from 'react-native';
 import {createMaterialTopTabNavigator, MaterialTopTabBar} from 'react-navigation-tabs';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
