@@ -58,7 +58,7 @@ Header.propTypes = {
     themeColor: PropTypes.string,
     message: PropTypes.string,
     title: PropTypes.string,
-    navItems: PropTypes.object
+    navItems: PropTypes.array
 };
 
 Header.defaultProps = {

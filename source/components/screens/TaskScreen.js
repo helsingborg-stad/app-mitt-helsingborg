@@ -139,16 +139,19 @@ const ListHeading = styled(Heading)`
 
 const NAV_ITEMS = [
     {
+        id: '3ac68afc',
         title: 'Översikt',
         route: '',
         active: false
     },
     {
+        id: 'bd7acbea',
         title: 'Ärenden',
         route: '',
         active: true
     },
     {
+        id: '58694a0f',
         title: 'Händelser',
         route: '',
         active: false
@@ -160,6 +163,11 @@ const ACTIVE_TASKS = [
         id: 'bd7acbea',
         title: 'Ansökan',
         text: 'Borgerlig vigsel',
+    },
+    {
+        id: '3ac68afc',
+        title: 'Lorem',
+        text: 'Something foo bar',
     },
 ];
 

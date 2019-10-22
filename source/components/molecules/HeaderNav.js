@@ -7,7 +7,7 @@ export default HeaderNav = ({ themeColor, navItems }) => {
     return (
         <Nav>
             {navItems.map(item =>
-                <NavItem>
+                <NavItem key={item.id}>
                     <NavTitleWrapper>
                         <NavTitle active={item.active}>{item.title}</NavTitle>
                     </NavTitleWrapper>
@@ -48,7 +48,7 @@ const ActiveItemBar = styled.View`
 
 HeaderNav.propTypes = {
     themeColor: PropTypes.string,
-    navItems: PropTypes.object
+    navItems: PropTypes.array
 };
 
 HeaderNav.defaultProps = {
