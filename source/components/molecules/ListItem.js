@@ -41,7 +41,10 @@ const ListItem = props => {
     }
 
     return (
-        <DefaultItem underlayColor="transparent" onPress={() => console.log(id)}>
+        <DefaultItem
+            underlayColor="transparent"
+            onPress={() => console.log(id)}
+            >
             {renderContent()}
         </DefaultItem>
     );
@@ -49,8 +52,20 @@ const ListItem = props => {
 
 export default ListItem;
 
+ListItem.propTypes = {
+    color: PropTypes.oneOf(['blue', 'purple', 'red', 'green']),
+    highlighted: PropTypes.bool,
+    iconName: PropTypes.string,
+    title: PropTypes.string,
+    text: PropTypes.string,
+    id: PropTypes.string,
+};
+
+ListItem.defaultProps = {
+    highlighted: false,
+};
+
 const DefaultItem = styled.TouchableHighlight`
-    borderTopWidth: 1;
     borderBottomWidth: 1;
     borderColor: ${props => (props.theme.background.lighter)};
 `;
@@ -75,7 +90,7 @@ const IconContainer = styled.View`
     width: 64px;
     background: ${props =>
          props.highlighted && props.color && props.theme.icon.hasOwnProperty(props.color) && props.theme.icon[props.color][1] ||
-         props.highlighted && !props.color && props.theme.icon.lighter ||
+         props.highlighted && !props.color && props.theme.icon.lightest ||
          'transparent' 
          };
     border-top-left-radius: 12.5px;
@@ -94,7 +109,7 @@ const ItemIcon = styled(Icon)`
 
 const Content = styled.View`
     flex: 1;
-    padding: 16px 8px 16px 8px;
+    padding: 16px 0px 16px 8px;
 `;
 
 const Chevron = styled(Icon)`
