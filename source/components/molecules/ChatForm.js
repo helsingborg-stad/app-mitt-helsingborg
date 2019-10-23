@@ -16,10 +16,10 @@ const ChatForm = props => {
             }
 
             if (child.type === Input) {
-                return React.createElement(child.type, {...child.props, onChangeText: changeHandler, value: inputValue, onSubmitEditing: submitHandler }) 
+                return React.createElement(child.type, {onChangeText: changeHandler, value: inputValue, onSubmitEditing: submitHandler, ...child.props }) 
             }
 
-            return React.createElement(child.type, {...child.props, form: {...formProps}});
+            return React.createElement(child.type, {form: {...formProps}, ...child.props});
         }) 
         : false;
 
