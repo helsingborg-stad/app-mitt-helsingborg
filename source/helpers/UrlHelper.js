@@ -56,7 +56,7 @@ const encodeQueryData = (queryParams) => {
  * Builds the BankID client URL
  * @param {string} autoStartToken
  */
-buildBankIdClientUrl = (autoStartToken) => {
+export const buildBankIdClientUrl = (autoStartToken) => {
   const params = `?autostarttoken=${autoStartToken}&redirect=${env.APP_SCHEME}://`;
   const androidUrl = 'bankid:///';
   const iosUrl = 'https://app.bankid.com/';

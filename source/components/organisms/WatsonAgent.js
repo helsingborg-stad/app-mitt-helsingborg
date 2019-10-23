@@ -54,7 +54,7 @@ export default class WatsonAgent extends Component {
 
                             if (responseText.indexOf('[agent:forms]') !== -1) {
                                 this.setState({disableAgent: true});
-                                chat.switchAgent(FormAgent, {formId: "1"});
+                                chat.switchAgent(FormAgent, {formId: 1});
                             }
                         }
                     });
