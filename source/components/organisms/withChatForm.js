@@ -5,7 +5,7 @@ import withForm from './withForm';
 
 import ChatBubble from '../atoms/ChatBubble';
 
-const withChatForm = (WrappedComponent, options = {}) => {
+const withChatForm = (WrappedComponent, onSubmit) => {
     return class WithChatForm extends Component {
         static propTypes = {
             chat: PropTypes.shape({
@@ -14,14 +14,8 @@ const withChatForm = (WrappedComponent, options = {}) => {
             onSubmit: PropTypes.func
         }
 
-        onSubmit = (inputValue) => {
+        messageOnSubmit = (inputValue) => {
             const { chat } = this.props;
-            const { onSubmit } = options;
-
-            if (typeof onSubmit === 'function') {
-                onSubmit(inputValue);
-                return;
-            }
 
             chat.addMessages({
                 Component: ChatBubble,
@@ -29,14 +23,18 @@ const withChatForm = (WrappedComponent, options = {}) => {
                     content: inputValue,
                     modifiers: ['user'],
                 }
-            });    
+            }); 
+            
+            if (typeof onSubmit === 'function') {
+                onSubmit(inputValue);
+            }
         }
 
         render() {
-            const { onSubmit } = this;
+            const { messageOnSubmit } = this;
 
-            // withForm provides submitHandler, changeHandler & inputValue
-            const WrappedComponentWithForm = withForm(WrappedComponent, onSubmit);
+            // provides form props to WrappedComponent: submitHandler, changeHandler inputValue
+            const WrappedComponentWithForm = withForm(WrappedComponent, messageOnSubmit);
 
             return <WrappedComponentWithForm {...this.props} />;
         }

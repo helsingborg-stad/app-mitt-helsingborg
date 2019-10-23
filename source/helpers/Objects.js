@@ -1,13 +1,19 @@
+/**
+ * 
+ * @param { object } object 
+ * @param { array } keys 
+ * @return { object }
+ */
 const filterPropetiesByKeys = (object = {}, keys = []) => (
     Object.entries(object)
     .reduce((accumulator, [itemKey, itemValue]) => {
-        let optionsObject = accumulator;
+        let filteredObject = accumulator;
         if (keys.includes(itemKey)) {
-            optionsObject[itemKey] = itemValue;
+            filteredObject[itemKey] = itemValue;
         }
 
-        return optionsObject;
+        return filteredObject;
     }, {})
 );
 
-export {filterPropetiesByKeys};
+export { filterPropetiesByKeys };

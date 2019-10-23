@@ -65,8 +65,8 @@ const withChatController = (WrappedComponent, onSubmit) => {
                             items: input.options
                         }
                     };
-    
                     break;
+
                 case 'select':
                     //     return null;
                     // Object.entries(input).forEach(propety => {
@@ -88,9 +88,11 @@ const withChatController = (WrappedComponent, onSubmit) => {
                      
                     // )));
                     break;
+
                 case 'dateTime':
                     // null
                     break;
+
                 default:
                   // code block
               }
@@ -99,9 +101,16 @@ const withChatController = (WrappedComponent, onSubmit) => {
 
         render() {
             const { switchInput } = this;
-            const instanceMethods = {};
+            const instanceMethods = { switchInput };
 
-            return <WrappedComponent {...instanceMethods} {...this.props} {...this.state} chat={{...this.props.chat, switchInput}}  />;
+            return (
+                <WrappedComponent 
+                    {...this.props} 
+                    {...this.state} 
+                    // Override or/and append chat props
+                    chat={{...this.props.chat, ...instanceMethods}}  
+                />
+            );
         }
     }
 }

@@ -31,9 +31,7 @@ const ButtonStack = props => {
         };
 
         return (
-            <ActionItemWrapper key={`${item}-${index}`}>
-                <ActionButton {...buttonProps} addMessages={props.chat.addMessages} />
-            </ActionItemWrapper>
+            <ActionButton {...buttonProps} addMessages={props.chat.addMessages} key={`${item}-${index}`} />
         );
     }
 
@@ -57,14 +55,10 @@ const ActionButton = (props) => {
 
 const ButtonStackWrapper = styled.View``;
 
-const ActionItemWrapper = styled.View`
-  margin-left: 16px;
-  margin-right: 16px;
-  margin-top: 6px;
-  margin-bottom: 6px;
-`;
-
-
 const ModifiedButton = styled(Button)`
     justify-content: flex-start;
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-top: 6px;
+    margin-bottom: 6px;
 `;

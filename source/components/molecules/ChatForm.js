@@ -27,20 +27,24 @@ const ChatForm = props => {
     return (
         <ChatFormWrapper>
             <ChatFormBody style={style}>
-                {children ?
-                children
-                : <Input
-                    value={inputValue}
-                    onChangeText={changeHandler}
-                    onSubmitEditing={submitHandler}
-                    placeholder={'Skriv något... '}
-                    keyboardType={'default'}
-                />}
+                {
+                    children 
+                    ? children
+                    : <Input
+                        value={inputValue}
+                        onChangeText={changeHandler}
+                        onSubmitEditing={submitHandler}
+                        placeholder={'Skriv något... '}
+                        keyboardType={'default'}
+                    />
+                }
                 
                 <Button onClick={submitHandler} z={0}>
-                {props.submitText 
-                    ? <Text>{props.submitText}</Text>
-                    : <Icon name="send"/>}
+                    {
+                        props.submitText 
+                        ? <Text>{props.submitText}</Text>
+                        : <Icon name="send"/>
+                    }
                 </Button>
             </ChatFormBody>
 
@@ -58,6 +62,8 @@ const ChatForm = props => {
     );
 }
 
+export default ChatForm;
+
 const ChatFormWrapper = styled.View``;
 const ChatFormFooter = styled.View``;
 const ChatFormBody = styled.View`
@@ -67,5 +73,3 @@ const ChatFormBody = styled.View`
   margin-right: 16px;
   flex-direction: row;
 `;
-
-export default ChatForm;

@@ -33,29 +33,12 @@ class FormAgent extends Component {
     componentWillUnmount() {
         EventHandler.unSubscribe(EVENT_USER_MESSAGE);
     }
-
-    handleUserInput = message => {
-        this.setState(prevState => {
-            const { currentQuestion } = prevState;
-            let { answers } = prevState;
-            
-            if (!currentQuestion) {
-                return prevState;
-            }
-
-            answers[currentQuestion] = message;
-
-            return { answers };
-        }, this.nextQuestion);
-    };
     
     nextQuestion = () => {
         const { chat } = this.props;
         const { questions, answers } = this.state;
 
         const nextQuestion = questions.find(question => typeof answers[question.key] === 'undefined');
-
-        chat.setInputActions([]);
 
         if (!nextQuestion) {
             chat.switchUserInput(false);
@@ -81,6 +64,21 @@ class FormAgent extends Component {
             chat.switchInput(nextQuestion.input);
         });
     }
+
+    handleUserInput = message => {
+        this.setState(prevState => {
+            const { currentQuestion } = prevState;
+            let { answers } = prevState;
+            
+            if (!currentQuestion) {
+                return prevState;
+            }
+
+            answers[currentQuestion] = message;
+
+            return { answers };
+        }, this.nextQuestion);
+    };
 
     render() {
         return null;
