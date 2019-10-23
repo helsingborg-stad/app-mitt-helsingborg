@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
-import { ScrollView } from 'react-native';
+import { NavItems, CompletedTasks, ActiveTasks } from '../../assets/dashboard';
 import GroupedList from '../molecules/GroupedList';
 import Header from '../molecules/Header';
 import StorageService, { USER_KEY } from '../../services/StorageService';
@@ -37,12 +37,12 @@ class TaskScreen extends Component {
                     title="Mitt Helsingborg"
                     message={givenName ? `Hej ${givenName}!` : 'Hej!'}
                     themeColor="purple"
-                    navItems={NAV_ITEMS}
+                    navItems={NavItems}
                 />
                 <Container>
                     <List>
                         <ListHeading type="h3">Aktiva</ListHeading>
-                        {ACTIVE_TASKS.map(item =>
+                        {ActiveTasks.map(item =>
                             <ListItem
                                 key={item.id}
                                 {...item}
@@ -52,7 +52,7 @@ class TaskScreen extends Component {
                     <List>
                         <GroupedList
                             heading="Avslutade"
-                            items={COMPLETED_TASKS}
+                            items={CompletedTasks}
                         />
                     </List>
                 </Container>
@@ -67,7 +67,7 @@ const TaskScreenWrapper = styled(ScreenWrapper)`
     padding-left: 0;
     padding-right: 0;
     padding-top: 0;
-    background-color: ${props => (props.theme.background.lightest)};
+    background-color: #FCFCFC;
 `;
 
 const Container = styled.ScrollView`
@@ -83,62 +83,3 @@ const ListHeading = styled(Heading)`
   margin-left: 4px;
   margin-bottom: 8px;
 `;
-
-const NAV_ITEMS = [
-    {
-        id: 'bd7acbea',
-        title: 'Ärenden',
-        route: '',
-        active: true
-    },
-    {
-        id: '3ac68afc',
-        title: 'Översikt',
-        route: '',
-        active: false
-    },
-    {
-        id: '58694a0f',
-        title: 'Händelser',
-        route: '',
-        active: false
-    },
-]
-
-const ACTIVE_TASKS = [
-    {
-        id: 'bd7acbea',
-        title: 'Ansökan',
-        text: 'Borgerlig vigsel',
-        iconName: 'wc',
-        highlighted: true
-    },
-];
-
-const COMPLETED_TASKS = [
-    {
-        heading: 'TISDAG 3 NOVEMBER',
-        data: [
-            {
-                id: 'bd7acbea',
-                title: 'Skolskjuts',
-                text: 'Skolskjuts beställd',
-            }
-        ]
-    },
-    {
-        heading: 'FREDAG 10 NOVEMBER',
-        data: [
-            {
-                id: '3ac68afc',
-                title: 'Avfallshämtning',
-                text: 'Avfallshämtning beställd',
-            },
-            {
-                id: '58694a0f',
-                title: 'Bygglov',
-                text: 'Bygglov godkänt',
-            },
-        ]
-    },
-];

@@ -7,9 +7,10 @@ import Text from '../atoms/Text';
 import ListItem from './ListItem'
 
 export default GroupedList = props => {
+    const { heading, items, onClick} = props;
     return (
         <SectionList
-            ListHeaderComponent={props.heading ? <Header type="h3">{props.heading}</Header> : null}
+            ListHeaderComponent={heading ? <Header type="h3">{heading}</Header> : null}
             renderSectionHeader={({ section: { heading, data } }) => (
                 <View>
                     <SectionHeader small>{heading}</SectionHeader>
@@ -19,9 +20,9 @@ export default GroupedList = props => {
                 </View>
             )}
             scrollEnabled={false}
-            sections={props.items}
-            renderItem={item => <ListItem {...item.item} />}
-            keyExtractor={item => item.id}
+            sections={items}
+            renderItem={(item) => <ListItem onClick={onClick} {...item.item} />}
+            keyExtractor={(item, index) => index}
         />
     );
 }
@@ -46,4 +47,5 @@ const Separator = styled(View)`
 GroupedList.propTypes = {
     heading: PropTypes.string,
     items: PropTypes.array,
+    onClick: PropTypes.func,
 };

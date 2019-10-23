@@ -7,7 +7,7 @@ import Icon from '../atoms/Icon';
 import Button from '../atoms/Button';
 
 const ListItem = props => {
-    const { highlighted, iconName, title, text, id, color } = props;
+    const { highlighted, iconName, title, text, id, color, onClick } = props;
     const background =
         props.highlighted && props.color && props.theme.icon.hasOwnProperty(props.color) && props.theme.icon[props.color][1] ||
         props.highlighted && !props.color && props.theme.icon.lightest ||
@@ -38,7 +38,7 @@ const ListItem = props => {
 
     if (highlighted) {
         return (
-            <HighlightedItem block>
+            <HighlightedItem onClick={onClick} block>
                 {renderContent()}
             </HighlightedItem >
         );
@@ -47,7 +47,7 @@ const ListItem = props => {
     return (
         <DefaultItem
             underlayColor="transparent"
-            onPress={() => console.log(id)}
+            onPress={onClick}
         >
             {renderContent()}
         </DefaultItem>
