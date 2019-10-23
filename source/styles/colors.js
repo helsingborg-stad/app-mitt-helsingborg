@@ -77,8 +77,11 @@ const colors = {
     blue: {
       ...palette.blue
     },
-      red: {
+    red: {
       ...palette.red
+    },
+    green: {
+      ...palette.green
     }
   },
   button: {
