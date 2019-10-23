@@ -6,6 +6,7 @@ import forms from '../../../assets/forms.js';
 import ChatBubble from '../../atoms/ChatBubble';
 
 import withChatController from '../withChatController';
+import ChatDivider from '../../atoms/ChatDivider';
 
 class FormAgent extends Component {
     state = {
@@ -16,7 +17,7 @@ class FormAgent extends Component {
     };
 
     componentDidMount() {
-        const { formId } = this.props;
+        const { formId, chat } = this.props;
         const form = forms.find(form => (form.id === formId));
 
         if (!form) {
@@ -25,6 +26,20 @@ class FormAgent extends Component {
         }
 
         EventHandler.subscribe(EVENT_USER_MESSAGE, this.handleUserInput);
+
+        let months = {};
+        months[9] = "Oktober";
+        months[10] = "November";
+
+        chat.addMessages([
+            {
+              Component: ChatDivider,
+              componentProps: {
+                title: `${new Date().getDay()} ${months[new Date().getMonth()]}`,
+                info: form.name,
+              }
+            }
+        ]);
 
         // Let the form party begin
         this.setState({questions: form.questions, formName: form.name}, this.nextQuestion);   

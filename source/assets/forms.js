@@ -1,7 +1,7 @@
 const forms = [
   {
       id: 1,
-      name: 'Borgerlig vigsel',
+      name: 'Bokning av borgerlig vigsel - Om er',
       trigger: 'Vill boka borgerlig vigsel',
       questions: [
           {
