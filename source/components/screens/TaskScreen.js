@@ -124,8 +124,6 @@ const COMPLETED_TASKS = [
                 id: 'bd7acbea',
                 title: 'Skolskjuts',
                 text: 'Skolskjuts beställd',
-                iconName: 'directions-bus',
-                highlighted: false,
             }
         ]
     },
@@ -136,16 +134,9 @@ const COMPLETED_TASKS = [
                 id: '3ac68afc',
                 title: 'Avfallshämtning',
                 text: 'Avfallshämtning beställd',
-                iconName: 'perm-contact-calendar',
-                highlighted: true,
             },
             {
                 id: '58694a0f',
-                title: 'Bygglov',
-                text: 'Bygglov godkänt',
-            },
-            {
-                id: '5869ea0f',
                 title: 'Bygglov',
                 text: 'Bygglov godkänt',
             },
