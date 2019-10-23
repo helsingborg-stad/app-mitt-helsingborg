@@ -31,7 +31,6 @@ class TaskScreen extends Component {
 
     render() {
         const { givenName } = this.state.user;
-
         return (
             <TaskScreenWrapper>
                 <Header

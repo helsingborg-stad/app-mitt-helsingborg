@@ -1,19 +1,23 @@
 import React from 'react';
 import { View, SectionList, TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
+import styled, { withTheme } from 'styled-components/native';
 import Text from '../atoms/Text';
 import Icon from '../atoms/Icon';
 import Button from '../atoms/Button';
 
 const ListItem = props => {
     const { highlighted, iconName, title, text, id, color } = props;
+    const background =
+        props.highlighted && props.color && props.theme.icon.hasOwnProperty(props.color) && props.theme.icon[props.color][1] ||
+        props.highlighted && !props.color && props.theme.icon.lightest ||
+        'transparent';
 
     const renderContent = () => {
         return (
             <Flex>
                 {iconName &&
-                    <IconContainer highlighted={highlighted} color={color}>
+                    <IconContainer highlighted={highlighted} background={background}>
                         <IconFlex>
                             <ItemIcon name={iconName} color={color} />
                         </IconFlex>
@@ -44,13 +48,13 @@ const ListItem = props => {
         <DefaultItem
             underlayColor="transparent"
             onPress={() => console.log(id)}
-            >
+        >
             {renderContent()}
         </DefaultItem>
     );
 }
 
-export default ListItem;
+export default withTheme(ListItem);
 
 ListItem.propTypes = {
     color: PropTypes.oneOf(['blue', 'purple', 'red', 'green']),
@@ -66,8 +70,8 @@ ListItem.defaultProps = {
 };
 
 const DefaultItem = styled.TouchableHighlight`
-    borderBottomWidth: 1;
-    borderColor: ${props => (props.theme.background.lighter)};
+    border-bottom-width: 1;
+    border-color: ${props => (props.theme.background.lighter)};
 `;
 
 const HighlightedItem = styled(Button)`
@@ -77,22 +81,18 @@ const HighlightedItem = styled(Button)`
 `;
 
 const Flex = styled.View`
-  flex-direction: row;
-  align-items: center;
+    flex-direction: row;
+    align-items: center;
 `;
 
 const Title = styled(Text)`
-  color: ${props => (props.theme.background.darkest)};
-  margin-bottom: 4px;
+    color: ${props => (props.theme.background.darkest)};
+    margin-bottom: 4px;
 `;
 
 const IconContainer = styled.View`
     width: 64px;
-    background: ${props =>
-         props.highlighted && props.color && props.theme.icon.hasOwnProperty(props.color) && props.theme.icon[props.color][1] ||
-         props.highlighted && !props.color && props.theme.icon.lightest ||
-         'transparent' 
-         };
+    background: ${props => props.background};
     border-top-left-radius: 12.5px;
     border-bottom-left-radius: 12.5px;
 `;
@@ -113,6 +113,6 @@ const Content = styled.View`
 `;
 
 const Chevron = styled(Icon)`
-color: #A3A3A3;
-margin - right: 16px;
+    color: #A3A3A3;
+    margin - right: 16px;
 `;
