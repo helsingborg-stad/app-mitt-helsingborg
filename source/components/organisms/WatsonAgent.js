@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import env from 'react-native-config';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 import { sendChatMsg } from '../../services/ChatFormService';
@@ -54,7 +54,7 @@ export default class WatsonAgent extends Component {
 
                             if (responseText.indexOf('[agent:forms]') !== -1) {
                                 this.setState({disableAgent: true});
-                                chat.switchAgent(FormAgent, {formId: 1});
+                                chat.switchAgent(props => (<FormAgent {...props} formId={1} />));
                             }
                         }
                     });
