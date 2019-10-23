@@ -1,5 +1,4 @@
 import React from 'react';
-import { View, SectionList, TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components/native';
 import Text from '../atoms/Text';
@@ -7,7 +6,7 @@ import Icon from '../atoms/Icon';
 import Button from '../atoms/Button';
 
 const ListItem = props => {
-    const { highlighted, iconName, title, text, id, color, onClick } = props;
+    const { highlighted, iconName, title, text, color, onClick } = props;
     const background =
         props.highlighted && props.color && props.theme.icon.hasOwnProperty(props.color) && props.theme.icon[props.color][1] ||
         props.highlighted && !props.color && props.theme.icon.lightest ||
@@ -24,12 +23,8 @@ const ListItem = props => {
                     </IconContainer>
                 }
                 <Content>
-                    {title &&
-                        <Title small>{title}</Title>
-                    }
-                    {text &&
-                        <Text>{text}</Text>
-                    }
+                    {title && <Title small>{title}</Title>}
+                    {text && <Text>{text}</Text>}
                 </Content>
                 <Chevron name="chevron-right" />
             </Flex>
@@ -45,10 +40,7 @@ const ListItem = props => {
     }
 
     return (
-        <DefaultItem
-            underlayColor="transparent"
-            onPress={onClick}
-        >
+        <DefaultItem underlayColor="transparent" onPress={onClick}>
             {renderContent()}
         </DefaultItem>
     );
@@ -62,7 +54,7 @@ ListItem.propTypes = {
     iconName: PropTypes.string,
     title: PropTypes.string,
     text: PropTypes.string,
-    id: PropTypes.string,
+    onCLick: PropTypes.func
 };
 
 ListItem.defaultProps = {
