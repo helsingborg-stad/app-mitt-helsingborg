@@ -75,7 +75,7 @@ const forms = [
               question: 'Hur många gäster kommer till er vigsel?',
               input: [
                   {
-                      type: 'select',
+                      type: 'number',
                       placeholder: 'Ange antal gäster',
                       options: [
                           {
