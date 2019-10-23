@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Alert, TouchableOpacity  } from 'react-native';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
+import withForm from './withForm';
 import withChatForm from './withChatForm';
-import ChatForm from '../molecules/ChatForm';
+import ChatForm from '../molecules/ChatFormDeprecated';
 
 import { validatePin } from "../../helpers/ValidationHelper";
 import WatsonAgent from './WatsonAgent';
@@ -144,9 +145,18 @@ export default withAuthentication(class LoginAgent extends Component {
         }
       }
     ]);
-    chat.switchUserInput(withChatForm((props) => (<ChatForm {...props} autoFocus={true} keyboardType='numeric' maxLength={12} submitText={'Logga in'} placeholder={'Ange ditt personnummer'} />), {
-      onSubmit: this.authenticateUser
-    }));
+    chat.switchUserInput(
+      withForm((props) => (
+        <ChatForm 
+          {...props} 
+          autoFocus={true} 
+          keyboardType='numeric' 
+          maxLength={12} 
+          submitText={'Logga in'} 
+          placeholder={'Ange ditt personnummer'}
+        />
+      ), this.authenticateUser)
+    );
     chat.setInputActions([
       {
         Component: InputAction,

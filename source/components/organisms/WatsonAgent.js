@@ -1,11 +1,19 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import env from 'react-native-config';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 import { sendChatMsg } from '../../services/ChatFormService';
 import ChatBubble from '../atoms/ChatBubble';
 import { Alert } from "react-native";
+import FormAgent from "./FormAgent";
+
+let firstRun = true;
+let conversationId;
 
 export default class WatsonAgent extends Component {
+    state = {
+        disableAgent: false
+    };
+
     componentDidMount() {
 
         console.log('Watson');
@@ -31,13 +39,23 @@ export default class WatsonAgent extends Component {
         else {
             let responseText;
             try {
-                await sendChatMsg(workspaceId, message).then((response) => {
+                await sendChatMsg(workspaceId, message, conversationId).then((response) => {
                     const responseGeneric = response.data.attributes.output.generic;
+
+                    if (firstRun) {
+                        conversationId = response.data.attributes.context.conversation_id;
+
+                        firstRun = false;
+                    }
+
                     responseGeneric.forEach(elem => {
                         if (elem.response_type === 'text') {
                             responseText = elem.text;
-                            // this.responseText = 'Ny response';
-                            console.log(responseText);
+
+                            if (responseText.indexOf('[agent:forms]') !== -1) {
+                                this.setState({disableAgent: true});
+                                chat.switchAgent(props => (<FormAgent {...props} formId={1} />));
+                            }
                         }
                     });
                 });
@@ -46,13 +64,16 @@ export default class WatsonAgent extends Component {
                 console.log('SendChat error: ', e);
                 responseText = 'Kan ej svara på frågan. Vänta och prova igen senare.';
             }
-            chat.addMessages({
-                Component: ChatBubble,
-                componentProps: {
-                    content: responseText,
-                    modifiers: ['automated'],
-                }
-            });
+
+            if (!this.state.disableAgent) {
+                chat.addMessages({
+                    Component: ChatBubble,
+                    componentProps: {
+                        content: responseText,
+                        modifiers: ['automated'],
+                    }
+                });
+            }
         }
     };
     render() {

@@ -132,7 +132,7 @@ const ButtonText = styled(Text)`
 `;
 
 const ButtonIcon = styled(Icon)`
-    color: ${(props) => (props.theme.button[props.buttonTheme].icon)};
+    color: ${(props) => (props.color ? props.color : props.theme.button[props.buttonTheme].icon)};
     font-size: 26px;
     height: 26px;
     width: 26px;

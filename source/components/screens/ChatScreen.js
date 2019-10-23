@@ -3,7 +3,7 @@ import ScreenWrapper from '../molecules/ScreenWrapper'
 import Chat from '../organisms/Chat';
 import LoginAgent from '../organisms/LoginAgent';
 import withChatForm from '../organisms/withChatForm';
-import ChatForm from '../molecules/ChatForm';
+import ChatForm from '../molecules/ChatFormDeprecated';
 import styled from 'styled-components/native';
 class ChatScreen extends Component {
     static navigationOptions = ({ navigation }) => ({

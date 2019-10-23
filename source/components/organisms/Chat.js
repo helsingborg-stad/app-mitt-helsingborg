@@ -25,22 +25,22 @@ class Chat extends Component {
 
     addMessages = (objects) => {
         const array = Array.isArray(objects) ? objects : [objects];
-    
-        this.setState((state, props) => {
-          let { messages } = state;
-          array.forEach(object => { messages.push(object) });
-    
-          return { messages };
-        }, () => {
-          const lastMsg = this.state.messages.slice(-1)[0].componentProps;
-    
-          if (Array.isArray(lastMsg.modifiers) && lastMsg.modifiers[0] === 'user') {
-            // console.log(lastMsg.content);
-            EventHandler.dispatch(EVENT_USER_MESSAGE, lastMsg.content);
-          }
 
-        });
-      };
+        this.setState(prevState => {
+          let { messages } = prevState;
+          // TODO: loop through message array & setState for each separately (or dispatch will fail if more then 1 message)
+          array.forEach(object => { messages.push(object) });
+          return { messages };
+        }, this.dispatchMessageEvents);
+    };
+
+    dispatchMessageEvents = () => {
+        const lastMsg = this.state.messages.slice(-1)[0].componentProps;
+    
+        if (Array.isArray(lastMsg.modifiers) && lastMsg.modifiers[0] === 'user') {
+          EventHandler.dispatch(EVENT_USER_MESSAGE, lastMsg.content);
+        }
+    }
 
     switchAgent = (AgentComponent) => {
         this.setState({

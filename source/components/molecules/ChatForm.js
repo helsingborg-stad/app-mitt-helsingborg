@@ -1,76 +1,75 @@
 import React from 'react';
 import { TextInput, View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import ChatSubmitButton from '../atoms/ChatSubmitButton';
 import Input from '../atoms/Input';
 import styled from 'styled-components/native';
 import Button from '../atoms/Button';
 import Icon from '../atoms/Icon';
 
 const ChatForm = props => {
+    const { style, renderFooter, submitHandler, changeHandler, inputValue } = props;
+    const formProps = {submitHandler, changeHandler, inputValue};
 
-  renderItem = ({ item, index }) => {
-    const { Component, componentProps } = item;
-    return <ActionItemWrapper><Component {...componentProps} addMessages={props.chat.addMessages} /></ActionItemWrapper>;
-  }
+    const children = props.children
+        ? React.Children.map(props.children, (child, index) => {
+            if (!child.type) {
+                return child;
+            }
 
-  return (
-    <ChatFormWrapper>
-      {
-        !props.hideUserInput ?
-          <UserInputWrapper>
-            <Input
-              value={props.inputValue}
-              onChangeText={props.changeHandler}
-              onSubmitEditing={props.submitHandler}
-              placeholder={'Skriv något... '}
-              keyboardType={'default'}
-              {...props}
-            />
-            <Button onClick={props.submitHandler} z={0}>
-            {props.submitText ? 
-              <Text>{props.submitText}</Text>
-                : <Icon name="send"/>}
-            </Button>
-        </UserInputWrapper>
-        : null
-      }
+            if (child.type === Input) {
+                return React.createElement(child.type, {onChangeText: changeHandler, value: inputValue, onSubmitEditing: submitHandler, ...child.props }) 
+            }
 
-      {props.chat && props.chat.inputActions &&
-        <View>
-          <FlatList
-            scrollEnabled={false}
-            data={props.chat.inputActions} renderItem={(item, index) => this.renderItem(item, index)}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
-      }
-    </ChatFormWrapper>
-  );
+            return React.createElement(child.type, {form: {...formProps}, ...child.props});
+        }) 
+        : false;
+
+
+    return (
+        <ChatFormWrapper>
+            <ChatFormBody style={style}>
+                {
+                    children 
+                    ? children
+                    : <Input
+                        value={inputValue}
+                        onChangeText={changeHandler}
+                        onSubmitEditing={submitHandler}
+                        placeholder={'Skriv något... '}
+                        keyboardType={'default'}
+                    />
+                }
+                
+                <Button onClick={submitHandler} z={0}>
+                    {
+                        props.submitText 
+                        ? <Text>{props.submitText}</Text>
+                        : <Icon name="send"/>
+                    }
+                </Button>
+            </ChatFormBody>
+
+            {
+                renderFooter ?
+                (
+                    <ChatFormFooter>
+                        {renderFooter()}
+                    </ChatFormFooter>
+                )
+                : null
+            }
+        </ChatFormWrapper>
+
+    );
 }
 
-const UserInputWrapper = styled.View`
+export default ChatForm;
+
+const ChatFormWrapper = styled.View``;
+const ChatFormFooter = styled.View``;
+const ChatFormBody = styled.View`
   margin-top: 12px;
   margin-bottom: 6px;
   margin-left: 16px;
   margin-right: 16px;
   flex-direction: row;
 `;
-
-
-const ActionItemWrapper = styled.View`
-  margin-left: 16px;
-  margin-right: 16px;
-  margin-top: 6px;
-  margin-bottom: 6px;
-`;
-
-const ChatFormWrapper = styled.View`
-  background-color: ${props => props.theme.chatForm.background};
-  overflow: visible;
-  border-top-width: 1px;
-  border-color: ${props => props.theme.border.default};
-  margin-top 16px;
-  padding-bottom: 8px;
-`;
-
-export default ChatForm;

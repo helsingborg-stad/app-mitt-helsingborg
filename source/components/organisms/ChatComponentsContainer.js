@@ -5,7 +5,7 @@ import ChatSectionTitle from '../atoms/ChatSectionTitle';
 import LoginAction from '../molecules/LoginAction';
 import MoreInfo from '../molecules/MoreInfo';
 import MoreInfoExpanded from '../molecules/MoreInfoExpanded';
-import ChatForm from '../molecules/ChatForm';
+import ChatForm from '../molecules/ChatFormDeprecated';
 import PersonalInfoAction from '../molecules/PersonalInfoAction';
 import AcceptingOnLoginAction from '../molecules/AcceptingOnLoginAction';
 

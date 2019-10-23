@@ -5,7 +5,7 @@ import { withNavigation } from 'react-navigation';
 
 import withAuthentication from '../organisms/withAuthentication';
 import Button from '../atoms/ButtonDeprecated';
-import ChatForm from './ChatForm';
+import ChatForm from './ChatFormDeprecated';
 
 
 class LoginInput extends Component {
