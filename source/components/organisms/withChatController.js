@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { DatePickerIOS } from 'react-native';
 
 import { filterPropetiesByKeys } from '../../helpers/Objects';
 
@@ -90,7 +91,12 @@ const withChatController = (WrappedComponent, onSubmit) => {
                     break;
 
                 case 'dateTime':
-                    // null
+                    inputComponent = {
+                        Component: DateTimePickerForm, 
+                        ComponentProps: {
+                            ...filterPropetiesByKeys(input, ['placeholder'])
+                        }
+                    };
                     break;
 
                 default:
@@ -116,6 +122,36 @@ const withChatController = (WrappedComponent, onSubmit) => {
 }
 
 export default withChatController;
+
+const DateTimePickerForm = props => {
+    const { changeHandler, submitHandler, inputValue } = props;
+
+    const date = typeof inputValue.getMonth === 'function' ? inputValue : new Date();
+    const dateString = typeof inputValue.getMonth === 'function' ? inputValue.toLocaleString() : '';
+
+    const enhancedSubmitHandler = () => {dateString.length > 0 ? submitHandler(dateString) : null};
+
+    return (
+        <ChatForm 
+            {...filterPropetiesByKeys(props, ['changeHandler', 'inputValue'])}
+            submitHandler={enhancedSubmitHandler}
+            renderFooter={() => (
+                <DatePickerIOS 
+                    date={date} 
+                    onDateChange={changeHandler} 
+                />
+            )}
+        >
+            <Input 
+                placeholder={'Välj ett datum'} 
+                {...props} 
+                editable={false} 
+                value={dateString} 
+                onSubmitEditing={enhancedSubmitHandler} 
+            />
+        </ChatForm>
+    );
+}
 
 const InputForm = props => {
     return (
