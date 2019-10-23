@@ -10,6 +10,7 @@ import ChatDivider from '../../atoms/ChatDivider';
 
 class FormAgent extends Component {
     state = {
+        form: {},
         formName: '',
         questions: [],
         answers: {},
@@ -42,7 +43,7 @@ class FormAgent extends Component {
         ]);
 
         // Let the form party begin
-        this.setState({questions: form.questions, formName: form.name}, this.nextQuestion);   
+        this.setState({form: form, questions: form.questions, formName: form.name}, this.nextQuestion);   
     }
 
     componentWillUnmount() {
@@ -51,32 +52,40 @@ class FormAgent extends Component {
     
     nextQuestion = () => {
         const { chat } = this.props;
-        const { questions, answers } = this.state;
+        const { questions, answers, form } = this.state;
 
         const nextQuestion = questions.find(question => typeof answers[question.key] === 'undefined');
 
         if (!nextQuestion) {
             chat.switchUserInput(false);
+
+            if (form.doneMessage) {
+                this.outputMessages(form.doneMessage);
+            }
             
             return;
         }
 
         this.setState({currentQuestion: nextQuestion.key}, () => {
-            const messages = Array.isArray(nextQuestion.question) 
-            ? nextQuestion.question 
-            : [nextQuestion.question];
-
-            messages.forEach(message => {
-                chat.addMessages({
-                    Component: ChatBubble,
-                    componentProps: {
-                        content: typeof message === 'function' ? message(this.state) : message,
-                        modifiers: ['automated'],
-                    }
-                });
-            });
-
+            this.outputMessages(nextQuestion.question);
             chat.switchInput(nextQuestion.input);
+        });
+    }
+
+    outputMessages = (messages, modifier = 'automated') => {
+        const { chat } = this.props;
+        const arrayOfmessages = Array.isArray(messages) 
+        ? messages
+        : [messages];
+        
+        arrayOfmessages.forEach(message => {
+            chat.addMessages({
+                Component: ChatBubble,
+                componentProps: {
+                    content: typeof message === 'function' ? message(this.state) : message,
+                    modifiers: [modifier],
+                }
+            });
         });
     }
 

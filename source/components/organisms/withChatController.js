@@ -14,6 +14,10 @@ const withChatController = (WrappedComponent, onSubmit) => {
     return class WithChatController extends Component {
         
         switchInput = (inputArr) => {
+            if (inputArr === false) {
+                chat.switchUserInput(false);
+            }
+
             const { chat } = this.props;
             const inputArray = !Array.isArray(inputArr) ? [inputArr] : inputArr;
 
