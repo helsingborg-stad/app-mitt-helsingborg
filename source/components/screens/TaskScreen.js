@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
-import { FlatList, ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import GroupedList from '../molecules/GroupedList';
 import Header from '../molecules/Header';
 import StorageService, { USER_KEY } from '../../services/StorageService';
 import ScreenWrapper from '../molecules/ScreenWrapper';
-import Button from '../atoms/Button';
-import Icon from '../atoms/Icon';
-import Text from '../atoms/Text';
 import Heading from '../atoms/Heading';
+import ListItem from '../molecules/ListItem'
 
 class TaskScreen extends Component {
     constructor(props) {
@@ -44,19 +42,17 @@ class TaskScreen extends Component {
                 />
                 <Container>
                     <List>
-                        <FlatList
-                            ListHeaderComponent={<ListHeading type="h3">Aktiva</ListHeading>}
-                            data={ACTIVE_TASKS}
-                            scrollEnabled={false}
-                            renderItem={item => <ListButton color={'light'} />}
-                            keyExtractor={item => item.id}
-                        />
+                        <ListHeading type="h3">Aktiva</ListHeading>
+                        {ACTIVE_TASKS.map(item =>
+                            <ListItem
+                                key={item.id}
+                                {...item}
+                            />
+                        )}
                     </List>
                     <List>
                         <GroupedList
                             heading="Avslutade"
-                            icon="chevron-right"
-                            iconPosition="right"
                             items={COMPLETED_TASKS}
                         />
                     </List>
@@ -68,64 +64,16 @@ class TaskScreen extends Component {
 
 export default TaskScreen;
 
-
-const ListButton = ({ }) => {
-    return (
-        <TaskButton color={'light'} block>
-            <LeftIconWrapper>
-                <LeftIcon name="message" />
-            </LeftIconWrapper>
-
-            <ButtonContent>
-                <Text small>Ansökan</Text>
-                <Text>Borgerlig vigsel</Text>
-            </ButtonContent>
-
-            <RightIcon name="chevron-right" />
-        </TaskButton>
-    );
-}
-
-const TaskButton = styled(Button)`
-    padding: 0px;
-    margin-bottom: 12px;
-    justify-content: space-between;
-    background-color: white;
-`;
-
-const LeftIconWrapper = styled(View)`
-    background: #F8F8F8;
-    padding: 16px;
-    justify-content: center;
-    align-items: center;
-    border-top-left-radius: 12.5px;
-    border-bottom-left-radius: 12.5px;
-`;
-
-const ButtonContent = styled(View)`
-    flex: 1;
-    padding-left: 16px;
-`;
-
-const LeftIcon = styled(Icon)`
-    color: #565656;
-`;
-
-const RightIcon = styled(Icon)`
-    color: #A3A3A3;
-    margin-right: 16px;
-`;
-
-
-
 const TaskScreenWrapper = styled(ScreenWrapper)`
     padding-left: 0;
     padding-right: 0;
     padding-top: 0;
+    background-color: ${props => (props.theme.background.lightest)};
 `;
 
-const Container = styled(ScrollView)`
-    padding: 16px;
+const Container = styled.ScrollView`
+    padding-left: 16px;
+    padding-right: 16px;
 `;
 
 const List = styled.View`
@@ -139,16 +87,16 @@ const ListHeading = styled(Heading)`
 
 const NAV_ITEMS = [
     {
-        id: '3ac68afc',
-        title: 'Översikt',
-        route: '',
-        active: false
-    },
-    {
         id: 'bd7acbea',
         title: 'Ärenden',
         route: '',
         active: true
+    },
+    {
+        id: '3ac68afc',
+        title: 'Översikt',
+        route: '',
+        active: false
     },
     {
         id: '58694a0f',
@@ -163,11 +111,8 @@ const ACTIVE_TASKS = [
         id: 'bd7acbea',
         title: 'Ansökan',
         text: 'Borgerlig vigsel',
-    },
-    {
-        id: '3ac68afc',
-        title: 'Lorem',
-        text: 'Something foo bar',
+        iconName: 'wc',
+        highlighted: true
     },
 ];
 
@@ -179,6 +124,8 @@ const COMPLETED_TASKS = [
                 id: 'bd7acbea',
                 title: 'Skolskjuts',
                 text: 'Skolskjuts beställd',
+                iconName: 'directions-bus',
+                highlighted: false,
             }
         ]
     },
@@ -189,9 +136,16 @@ const COMPLETED_TASKS = [
                 id: '3ac68afc',
                 title: 'Avfallshämtning',
                 text: 'Avfallshämtning beställd',
+                iconName: 'perm-contact-calendar',
+                highlighted: true,
             },
             {
                 id: '58694a0f',
+                title: 'Bygglov',
+                text: 'Bygglov godkänt',
+            },
+            {
+                id: '5869ea0f',
                 title: 'Bygglov',
                 text: 'Bygglov godkänt',
             },
