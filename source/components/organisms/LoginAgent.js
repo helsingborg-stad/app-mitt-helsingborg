@@ -190,11 +190,15 @@ export default withAuthentication(class LoginAgent extends Component {
       return;
     }
 
-    // TODO: Cancel not working
-    chat.switchUserInput(() => (<ChatBankIdLoading {...this.props.authentication} cancelLogin={() => {
-      this.props.authentication.cancelLogin();
-      this.showInitialUserInput();
-    }} />));
+    chat.switchUserInput(() =>
+        <ChatBankIdLoading
+            {...this.props.authentication}
+            onClick={() => {
+                this.props.authentication.cancelLogin();
+                this.showInitialUserInput();
+            }
+        }/>
+    );
 
     try {
       const { loginUser } = this.props.authentication;
