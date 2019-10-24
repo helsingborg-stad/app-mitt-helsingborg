@@ -76,6 +76,12 @@ const colors = {
     },
     blue: {
       ...palette.blue
+    },
+    red: {
+      ...palette.red
+    },
+    green: {
+      ...palette.green
     }
   },
   button: {
@@ -132,7 +138,7 @@ const colors = {
     human: { // "Sally"
       background: palette.mono.white,
       text: palette.mono.gray,
-    }, 
+    },
     automated: { // "KC"
       background: palette.mono.white,
       text: palette.mono.gray,

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
-import { View, ScrollView } from 'react-native';
+import { NavItems, CompletedTasks, ActiveTasks } from '../../assets/dashboard';
 import GroupedList from '../molecules/GroupedList';
 import Header from '../molecules/Header';
 import StorageService, { USER_KEY } from '../../services/StorageService';
 import ScreenWrapper from '../molecules/ScreenWrapper';
+import Heading from '../atoms/Heading';
+import ListItem from '../molecules/ListItem'
 
 class TaskScreen extends Component {
     constructor(props) {
@@ -29,21 +31,30 @@ class TaskScreen extends Component {
 
     render() {
         const { givenName } = this.state.user;
-
         return (
             <TaskScreenWrapper>
                 <Header
                     title="Mitt Helsingborg"
                     message={givenName ? `Hej ${givenName}!` : 'Hej!'}
                     themeColor="purple"
+                    navItems={NavItems}
                 />
                 <Container>
-                    <GroupedList
-                        heading="Avslutade"
-                        icon="chevron-right"
-                        iconPosition="right"
-                        items={COMPLETED_TASKS}
-                    />
+                    <List>
+                        <ListHeading type="h3">Aktiva</ListHeading>
+                        {ActiveTasks.map(item =>
+                            <ListItem
+                                key={item.id}
+                                {...item}
+                            />
+                        )}
+                    </List>
+                    <List>
+                        <GroupedList
+                            heading="Avslutade"
+                            items={CompletedTasks}
+                        />
+                    </List>
                 </Container>
             </TaskScreenWrapper>
         );
@@ -56,36 +67,19 @@ const TaskScreenWrapper = styled(ScreenWrapper)`
     padding-left: 0;
     padding-right: 0;
     padding-top: 0;
+    background-color: #FCFCFC;
 `;
 
-const Container = styled(ScrollView)`
-    padding: 16px;
+const Container = styled.ScrollView`
+    padding-left: 16px;
+    padding-right: 16px;
 `;
 
-const COMPLETED_TASKS = [
-    {
-        heading: 'TISDAG 3 NOVEMBER',
-        data: [
-            {
-                id: 'bd7acbea',
-                title: 'Skolskjuts',
-                text: 'Skolskjuts beställd',
-            }
-        ]
-    },
-    {
-        heading: 'FREDAG 10 NOVEMBER',
-        data: [
-            {
-                id: '3ac68afc',
-                title: 'Avfallshämtning',
-                text: 'Avfallshämtning beställd',
-            },
-            {
-                id: '58694a0f',
-                title: 'Bygglov',
-                text: 'Bygglov godkänt',
-            },
-        ]
-    },
-];
+const List = styled.View`
+    margin-top: 24px;
+`;
+
+const ListHeading = styled(Heading)`
+  margin-left: 4px;
+  margin-bottom: 8px;
+`;
