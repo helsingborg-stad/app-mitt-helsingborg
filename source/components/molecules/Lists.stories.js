@@ -16,7 +16,7 @@ storiesOf('Lists', module)
     .add('Highlight colors', props => (
         <StoryWrapper {...props}>
             {HighlightedData.map(item =>
-                <ListItem key={item.id} {...item} />
+                <ListItem highlighted key={item.id} {...item} />
             )}
         </StoryWrapper>
     ))
@@ -59,14 +59,12 @@ const HighlightedData = [
         title: 'Default',
         text: 'Default',
         iconName: 'wc',
-        highlighted: true,
     },
     {
         id: 'bd7acbea',
         title: 'Blue',
         text: 'Lorem ipsum',
         iconName: 'wc',
-        highlighted: true,
         color: 'blue'
     },
     {
@@ -74,7 +72,6 @@ const HighlightedData = [
         title: 'Green',
         text: 'Lorem ipsum',
         iconName: 'wc',
-        highlighted: true,
         color: 'green'
     },
     {
@@ -82,7 +79,6 @@ const HighlightedData = [
         title: 'Purple',
         text: 'Lorem ipsum',
         iconName: 'wc',
-        highlighted: true,
         color: 'purple'
     },
     {
@@ -90,7 +86,6 @@ const HighlightedData = [
         title: 'Red',
         text: 'Lorem ipsum',
         iconName: 'wc',
-        highlighted: true,
         color: 'red'
     },
 ];
