@@ -1,22 +1,22 @@
-import React, {Component} from 'react';
-import {View, Text, SafeAreaView} from 'react-native';
-import {createAppContainer} from 'react-navigation';
-import {createMaterialTopTabNavigator, MaterialTopTabBar} from 'react-navigation-tabs';
-import {storiesOf} from '@storybook/react-native';
-import Chat from "../organisms/Chat";
-import withChatForm from "../organisms/withChatForm";
+import React, { Component } from 'react';
+import { View, Text, SafeAreaView } from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigation-tabs';
+import { storiesOf } from '@storybook/react-native';
+import Chat from "./Chat";
+import withChatForm from "./withChatForm";
 import ChatForm from "../molecules/ChatForm";
 import styled from "styled-components/native/dist/styled-components.native.esm";
 import ScreenWrapper from "../molecules/ScreenWrapper";
-import {Icon} from 'react-native-elements'
-import ParrotAgent from "../organisms/ParrotAgent";
+import { Icon } from 'react-native-elements'
+import ParrotAgent from "./ParrotAgent";
 import TaskScreen from "../screens/TaskScreen";
 
 class ChatScreen extends Component {
     render() {
         return (
             <ModifiedScreenWrapper>
-                <Chat ChatAgent={ParrotAgent} ChatUserInput={withChatForm(ChatForm)}/>
+                <Chat ChatAgent={ParrotAgent} ChatUserInput={withChatForm(ChatForm)} />
             </ModifiedScreenWrapper>
         );
     }
@@ -30,7 +30,7 @@ const ModifiedScreenWrapper = styled(ScreenWrapper)`
 class Profile extends Component {
     render() {
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Text>Placeholder for profile screen</Text>
             </View>
         );
@@ -39,14 +39,14 @@ class Profile extends Component {
 
 class MaterialTopTabBarWrapper extends React.Component {
     render() {
-        const {index} = this.props.navigationState;
+        const { index } = this.props.navigationState;
         const color =
             index === 0 ? '#EC6701' : index === 1 ? '#A61380' : '#2196f3';
 
         return (
             <SafeAreaView
-                style={{backgroundColor: '#2196f3'}}
-                forceInset={{top: 'always', horizontal: 'never', bottom: 'never'}}>
+                style={{ backgroundColor: '#2196f3' }}
+                forceInset={{ top: 'always', horizontal: 'never', bottom: 'never' }}>
                 <MaterialTopTabBar
                     {...this.props}
                     activeTintColor={color}
@@ -54,7 +54,7 @@ class MaterialTopTabBarWrapper extends React.Component {
                         backgroundColor: color,
                         position: 0
                     }}
-                    style={{backgroundColor: '#fff'}}
+                    style={{ backgroundColor: '#fff' }}
                     inactiveTintColor='gray'
                 />
             </SafeAreaView>
@@ -62,8 +62,8 @@ class MaterialTopTabBarWrapper extends React.Component {
     }
 }
 
-const tabBarIcon = (iconName, colorFocused) => ({focused}) => (
-    <Icon name={iconName} color={focused ? colorFocused : 'gray'}/>
+const tabBarIcon = (iconName, colorFocused) => ({ focused }) => (
+    <Icon name={iconName} color={focused ? colorFocused : 'gray'} />
 );
 
 const TabNavigator = createMaterialTopTabNavigator({
@@ -106,5 +106,6 @@ const AppContainer = createAppContainer(TabNavigator);
 
 storiesOf('Chat', module)
     .add('Tab navigation', () => (
-        <AppContainer/>
+        <AppContainer />
     ));
+
