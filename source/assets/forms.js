@@ -3,6 +3,7 @@ const forms = [
       id: 1,
       name: 'Bokning av borgerlig vigsel - Om er',
       trigger: 'Vill boka borgerlig vigsel',
+      doneMessage: 'Då har jag tagit emot er bokning. Du kan när som helst se eller redigera din bokning under fliken Ärenden.',
       questions: [
           {
               key: 'partnerName',
@@ -75,7 +76,7 @@ const forms = [
               question: 'Hur många gäster kommer till er vigsel?',
               input: [
                   {
-                      type: 'select',
+                      type: 'number',
                       placeholder: 'Ange antal gäster',
                       options: [
                           {
@@ -152,6 +153,29 @@ const forms = [
                   },
               ],
           },
+          {
+            key: 'confirmBooking',
+            question: [
+                'Du har nu gått igenom alla steg för att boka borgerlig vigsel.',
+                ({answers}) => (`Du och ${answers.partnerName.split(' ')[0]} vill gifta er i ${answers.weddingLocation} ${answers.weddingDate}. Ni kommer ha ${answers.guestsTotal} gäster, inklusive era vittnen ${answers.firstWitness.split(' ')[0]} och ${answers.secondWitness.split(' ')[0]}.`),
+                'Vill du boka vigsel?'
+            ],
+            input: [
+                {
+                    type: 'radio',
+                    options: [
+                        {
+                            value: 'Ja, boka vigsel',
+                            icon: 'check',
+                        },
+                        {
+                            value: 'Nej, spara bokning och vänta till senare',
+                            icon: 'close',
+                        },
+                    ],
+                },
+            ],
+        },
       ],
   },
 ];
