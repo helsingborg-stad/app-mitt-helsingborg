@@ -55,10 +55,12 @@ const forms = [
                 },
             ],
             dependency: {
+                relation: 'AND',
                 conditions: [
                     {
                         'key': 'partnerSameAddress',
-                        'value': 'Nej'
+                        'value': 'Nej',
+                        'compare': '='
                     }
                 ]
             }
