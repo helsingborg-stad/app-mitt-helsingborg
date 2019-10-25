@@ -5,6 +5,7 @@ import { sendChatMsg } from '../../services/ChatFormService';
 import ChatBubble from '../atoms/ChatBubble';
 import { Alert } from "react-native";
 import FormAgent from "./FormAgent";
+import StorageService, {USER_KEY} from "../../services/StorageService";
 
 let firstRun = true;
 let conversationId;
@@ -15,16 +16,27 @@ export default class WatsonAgent extends Component {
     };
 
     componentDidMount() {
-
-        console.log('Watson');
         const { chat } = this.props;
-        chat.addMessages({
-            Component: ChatBubble,
-            componentProps: {
-                content: 'Hej mitt namn är Watson.',
-                modifiers: ['automated'],
-            }
+
+        StorageService.getData(USER_KEY).then(({name}) => {
+            chat.addMessages({
+                Component: ChatBubble,
+                componentProps: {
+                    content: `Hej ${name}!`,
+                    modifiers: ['automated'],
+                }
+            });
+
+            chat.addMessages({
+                Component: ChatBubble,
+                componentProps: {
+                    content: 'Vad kan jag hjälpa dig med?',
+                    modifiers: ['automated'],
+                }
+            });
+
         });
+
         EventHandler.subscribe(EVENT_USER_MESSAGE, (message) => this.handleHumanChatMessage(message));
     }
     componentWillUnmount() {
