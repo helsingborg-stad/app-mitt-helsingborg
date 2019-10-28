@@ -79,16 +79,17 @@ class FormAgent extends Component {
         if (dependency === undefined
             || !dependency.conditions 
             || dependency.conditions.length <= 0) {
-            return typeof answers[question.key] === 'undefined';
+            return answers[question.key] === undefined;
         }
 
-        // TODO: Lift out reduce method to this.reduceConditions and implement switch cases using condition.compare propety
         return dependency.conditions.reduce((accumulator, condition) => {
             if (accumulator === false) {
                 return false;
             }
 
-            return answers[condition.key] !== undefined && answers[condition.key] === condition.value;
+            return answers[condition.key] !== undefined 
+            && answers[condition.key] === condition.value 
+            && answers[question.key] === undefined;
         }, true);
     }
 
