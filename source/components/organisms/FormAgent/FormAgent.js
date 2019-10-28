@@ -1,83 +1,115 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
-import forms from '../../../assets/forms.js';
 
 import ChatBubble from '../../atoms/ChatBubble';
 
 import withChatController from '../withChatController';
-import ChatDivider from '../../atoms/ChatDivider';
+import { getFormTemplate } from '../../../services/ChatFormService';
 
+const convertToArray = (value)  => {
+    const array = Array.isArray(value) ? value : [value];
+    return array
+}
 class FormAgent extends Component {
     state = {
-        formName: '',
         questions: [],
         answers: {},
         currentQuestion: undefined,
     };
 
-    componentDidMount() {
-        const { formId, chat } = this.props;
-        const form = forms.find(form => (form.id === formId));
+    async componentDidMount() {
+        const { formId } = this.props;
 
-        if (!form) {
-            console.error(`FormAgent: Cannot find Form with ID ${formId}.`);
-            return;
-        }
+        // Setting state from api request
+        const formQuestions = await getFormTemplate(formId)
+        const validations = formQuestions.included.filter(i => i.type === "validation");
+        const options = formQuestions.included.filter(i => i.type === "option");
+        const questions = formQuestions.data.map(data => ({
+            id: data.id,
+            ...data.attributes, 
+            validations: data.relationships.validations.data,
+            options: data.relationships.options.data,
+        }))
 
         EventHandler.subscribe(EVENT_USER_MESSAGE, this.handleUserInput);
 
-        let months = {};
-        months[9] = "Oktober";
-        months[10] = "November";
-
-        chat.addMessages([
-            {
-              Component: ChatDivider,
-              componentProps: {
-                title: `${new Date().getDay()} ${months[new Date().getMonth()]}`,
-                info: form.name,
-              }
-            }
-        ]);
-
-        // Let the form party begin
-        this.setState({questions: form.questions, formName: form.name}, this.nextQuestion);   
+        this.setState({questions, validations, options}, this.nextQuestion);   
     }
 
     componentWillUnmount() {
         EventHandler.unSubscribe(EVENT_USER_MESSAGE);
     }
+
+    getOutputQuestions = (currentQuestion, questions) => {
+        const currentQuestionIndex = questions.indexOf(currentQuestion)
+        const nextQuestionInArray = questions[currentQuestionIndex + 1]
+        
+        let questionsToRender = [nextQuestionInArray];
+
+        if (!nextQuestionInArray){
+            return {nextInputQuestion: undefined, questionsToRender: []};
+        }
+
+        if (nextQuestionInArray.question_type === 'info') {
+            const questionIndex = questions.indexOf(nextQuestionInArray);
+            questionsToRender.push(questions[questionIndex + 1])
+        }
+
+        const nextInputQuestion = questionsToRender[questionsToRender.length - 1]
+        return {nextInputQuestion, questionsToRender}
+    }
+
+    getOptionsForQuestion = (question, options) => {
+        if (!question.options) { return undefined }
+
+        // retrives realted options for a question from options state.
+        const questionOptions = question.options.map(questionOption => 
+            options.filter(option => option.id === questionOption.id)
+        )
+
+        // concats array of arrays [[obj], [obj]] to array of objects [obj, obj].
+        const arrayOfOptionObjects = [].concat.apply([], questionOptions);
+
+        return arrayOfOptionObjects
+    }
     
     nextQuestion = () => {
         const { chat } = this.props;
-        const { questions, answers } = this.state;
+        const { currentQuestion, questions, options } = this.state;
+        const { nextInputQuestion, questionsToRender } = this.getOutputQuestions(currentQuestion, questions)
 
-        const nextQuestion = questions.find(question => typeof answers[question.key] === 'undefined');
-
-        if (!nextQuestion) {
+        if (!nextInputQuestion) {
             chat.switchUserInput(false);
             
             return;
         }
 
-        this.setState({currentQuestion: nextQuestion.key}, () => {
-            const messages = Array.isArray(nextQuestion.question) 
-            ? nextQuestion.question 
-            : [nextQuestion.question];
-
-            messages.forEach(message => {
+        this.setState({currentQuestion: nextInputQuestion}, () => {
+            questionsToRender.forEach(question => {
                 chat.addMessages({
                     Component: ChatBubble,
                     componentProps: {
-                        content: typeof message === 'function' ? message(this.state) : message,
+                        content: question.question_name,
                         modifiers: ['automated'],
                     }
                 });
             });
+        
+            const questionOptions = this.getOptionsForQuestion(nextInputQuestion, options);
 
-            chat.switchInput(nextQuestion.input);
+            chat.switchInput([this.createInputObject(nextInputQuestion.question_type, "Test placeholder", questionOptions )]);
         });
+    }
+
+    createInputObject = (type, placeholder, options) => {
+        let inputObject = {type, placeholder}
+
+        if (options) {
+            inputObject.options = options.map(o => ({value: o.attributes.option_choice_name}))
+        }
+
+        return inputObject
     }
 
     handleUserInput = message => {
