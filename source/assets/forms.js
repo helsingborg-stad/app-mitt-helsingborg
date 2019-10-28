@@ -46,6 +46,26 @@ const forms = [
               ],
           },
           {
+            key: 'partnerAddress',
+            question: ({ answers }) => `Vilken adress är ${answers.partnerName.split(' ')[0]} folkbokförd på?`,
+            input: [
+                {
+                    type: 'text',
+                    placeholder: 'Adress',
+                },
+            ],
+            dependency: {
+                relation: 'AND',
+                conditions: [
+                    {
+                        'key': 'partnerSameAddress',
+                        'value': 'Nej',
+                        'compare': '='
+                    }
+                ]
+            }
+        },
+          {
               key: 'weddingLocation',
               question: 'Var vill ni gifta er?',
               input: [

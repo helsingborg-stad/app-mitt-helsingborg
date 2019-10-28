@@ -52,9 +52,9 @@ class FormAgent extends Component {
     
     nextQuestion = () => {
         const { chat } = this.props;
-        const { questions, answers, form } = this.state;
+        const { questions, form } = this.state;
 
-        const nextQuestion = questions.find(question => typeof answers[question.key] === 'undefined');
+        const nextQuestion = questions.find(this.isNextQuestion);
 
         if (!nextQuestion) {
             chat.switchUserInput(false);
@@ -70,6 +70,27 @@ class FormAgent extends Component {
             this.outputMessages(nextQuestion.question);
             chat.switchInput(nextQuestion.input);
         });
+    }
+
+    isNextQuestion = question => {
+        const { answers } = this.state;
+        const { dependency } = question;
+
+        if (dependency === undefined
+            || !dependency.conditions 
+            || dependency.conditions.length <= 0) {
+            return answers[question.key] === undefined;
+        }
+
+        return dependency.conditions.reduce((accumulator, condition) => {
+            if (accumulator === false) {
+                return false;
+            }
+
+            return answers[condition.key] !== undefined 
+            && answers[condition.key] === condition.value 
+            && answers[question.key] === undefined;
+        }, true);
     }
 
     outputMessages = (messages, modifier = 'automated') => {
