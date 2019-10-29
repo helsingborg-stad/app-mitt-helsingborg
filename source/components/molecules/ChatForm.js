@@ -29,7 +29,7 @@ const ChatForm = props => {
 
                 {isFocused &&
                     <ChatFormButton onClick={Keyboard.dismiss} z={0}>
-                        <ChatFormButtonIcon name="keyboard" />
+                        <ChatFormButtonIcon name="keyboard-hide" />
                     </ChatFormButton>
                 }
 
