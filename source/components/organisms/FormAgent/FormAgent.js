@@ -17,8 +17,9 @@ class FormAgent extends Component {
     };
 
     componentDidMount() {
-        const { formId, chat } = this.props;
-        const form = forms.find(form => (form.id === formId));
+        const { formId, chat, answers } = this.props;
+
+        const form = this.props.form ? this.props.form : forms.find(form => (form.id === formId));
 
         if (!form) {
             console.error(`FormAgent: Cannot find Form with ID ${formId}.`);
