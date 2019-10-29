@@ -14,7 +14,7 @@ const DateTimePickerForm = props => {
 
     return (
         <ChatForm 
-            {...includePropetiesWithKey(props, ['changeHandler', 'inputValue'])}
+            {...includePropetiesWithKey(props, ['isFocused', 'changeHandler', 'inputValue'])}
             submitHandler={enhancedSubmitHandler}
             renderFooter={() => (
                 <DatePickerIOS 

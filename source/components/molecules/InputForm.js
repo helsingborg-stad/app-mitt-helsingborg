@@ -5,7 +5,7 @@ import Input from '../atoms/Input';
 
 const InputForm = props => {
     return (
-        <ChatForm {...filterPropetiesByKeys(props, ['submitHandler', 'changeHandler', 'inputValue'])}>
+        <ChatForm {...filterPropetiesByKeys(props, ['isFocused', 'submitHandler', 'changeHandler', 'inputValue'])}>
             <Input {...props} />
         </ChatForm>
     );
