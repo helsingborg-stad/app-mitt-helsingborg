@@ -78,11 +78,11 @@ class FormAgent extends Component {
         const { answers } = this.state;
         const { dependency } = question;
 
-        let isValid = true;
+        let coniditionsIsValid = true;
 
         if (dependency && dependency.conditions && dependency.conditions.length > 0) {
             // Valdate conditions with 'AND' ... 'OR' has yet to be implemented
-            isValid = dependency.conditions.reduce((accumulator, condition) => {
+            coniditionsIsValid = dependency.conditions.reduce((accumulator, condition) => {
                 if (!accumulator) {
                     return accumulator;
                 }
@@ -91,7 +91,7 @@ class FormAgent extends Component {
             }, true);
         }
 
-        return isValid && answers[question.key] === undefined;
+        return coniditionsIsValid && answers[question.key] === undefined;
     }
 
     outputMessages = (messages, modifier = 'automated') => {
