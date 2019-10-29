@@ -28,8 +28,8 @@ const ChatForm = props => {
             <ChatFormBody style={style}>
 
                 {isFocused &&
-                    <ChatFormButton onClick={Keyboard.dismiss} block={false} z={0}>
-                        <Icon name="keyboard" />
+                    <ChatFormButton onClick={Keyboard.dismiss} z={0}>
+                        <ChatFormButtonIcon name="keyboard" />
                     </ChatFormButton>
                 }
 
@@ -81,7 +81,10 @@ const ChatFormBody = styled.View`
   flex-direction: row;
 `;
 const ChatFormButton = styled(Button)`
-    padding: 0px 16px 0px 0px;
+    min-width: auto;
+    padding: 0px 8px 0px 0px;
     background: transparent;
 `;
-
+const ChatFormButtonIcon = styled(Icon)`
+    color: ${props => props.theme.icon.light};
+`;
