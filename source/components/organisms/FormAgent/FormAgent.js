@@ -5,7 +5,6 @@ import forms from '../../../assets/forms.js';
 
 import ChatBubble from '../../atoms/ChatBubble';
 
-import withChatController from '../withChatController';
 import ChatDivider from '../../atoms/ChatDivider';
 
 class FormAgent extends Component {
@@ -130,4 +129,4 @@ class FormAgent extends Component {
     }
 }
 
-export default withChatController(FormAgent);
+export default FormAgent;
