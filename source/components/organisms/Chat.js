@@ -9,18 +9,44 @@ import ChatFooter from '../atoms/ChatFooter';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 
+import ChatUserInput from '../molecules/ChatUserInput';
+
 class Chat extends Component {
+    static propTypes = {
+        ChatAgent: PropTypes.oneOfType([PropTypes.oneOf([false]), PropTypes.elementType, PropTypes.func]).isRequired,
+        ChatUserInput: PropTypes.oneOfType([PropTypes.oneOf([false]), PropTypes.elementType, PropTypes.func]),
+        inputComponents: PropTypes.array
+    };
+    
+    static defaultProps = {
+        ChatAgent: false,
+        ChatUserInput: false,
+        inputComponents: []
+    };
+
     state = {
         messages: [],
-        ChatUserInput: false,
         ChatAgent: false,
+        inputComponents: [],
         // TODO: Move inputActions state outside of Chat organism
         inputActions: []
     };
 
     componentDidMount() {
-        const {ChatUserInput, ChatAgent} = this.props;
-        this.setState({ChatUserInput, ChatAgent});
+        const { ChatAgent, ChatUserInput, inputComponents } = this.props;
+        
+        if (ChatAgent) {
+            this.switchAgent(ChatAgent);
+        }
+
+        if (inputComponents) {
+            this.switchInput(inputComponents);
+        }
+
+        // Fix for components using old API to prevent breaking app
+        if (ChatUserInput) {
+            this.switchUserInput(ChatUserInput);
+        }
     }
 
     addMessages = (objects) => {
@@ -48,10 +74,27 @@ class Chat extends Component {
         });
     }
 
-    switchUserInput = (UserInputComponent) => {
-        this.setState({
-            ChatUserInput: UserInputComponent
-        });
+    switchInput = (inputArr) => {
+        if (inputArr === false) {
+            this.setState({inputComponents: []});
+            return;
+        }
+
+        const inputArray = !Array.isArray(inputArr) ? [inputArr] : inputArr;
+
+        this.setState({inputComponents: inputArray});
+    }
+
+    /**
+     * switchUserInput will be removed in favor of switchInput
+     * @deprecated
+     */
+    switchUserInput = (Component, componentProps = {}) => {
+        this.switchInput(Component ? {
+            type: 'custom',
+            Component,
+            componentProps
+        } : false);
     }
 
     // TODO: Implement setInputActions functionality outside of Chat organism
@@ -62,10 +105,10 @@ class Chat extends Component {
     }
 
     render() {
-        const { messages, ChatAgent, ChatUserInput } = this.state;
-        const { addMessages, switchAgent, switchUserInput, setInputActions } = this;
+        const { messages, ChatAgent, inputComponents } = this.state;
+        const { addMessages, switchAgent, switchUserInput, switchInput, setInputActions } = this;
 
-        const instanceMethods = { addMessages, switchAgent, switchUserInput, setInputActions };
+        const instanceMethods = { addMessages, switchAgent, switchUserInput, switchInput, setInputActions };
 
         return (
             <ChatWrapper keyboardVerticalOffset={24} >
@@ -76,23 +119,13 @@ class Chat extends Component {
                     <ChatMessages messages={messages} />
                 </ChatBody>
                 <ChatFooter>
-                    {ChatUserInput ?
-                        <ChatUserInput chat={{...instanceMethods, ...this.state}} /> 
+                    {inputComponents && inputComponents.length > 0 ?
+                        <ChatUserInput inputArray={inputComponents} chat={{...instanceMethods, ...this.state}} /> 
                     : null}
                 </ChatFooter>
             </ChatWrapper>
         )
     }
 }
-
-Chat.propTypes = {
-    ChatAgent: PropTypes.oneOfType([PropTypes.oneOf([false]), PropTypes.elementType, PropTypes.func]).isRequired,
-    ChatUserInput: PropTypes.oneOfType([PropTypes.oneOf([false]), PropTypes.elementType, PropTypes.func]).isRequired
-};
-
-Chat.defaultProps = {
-    ChatAgent: false,
-    ChatUserInput: false
-};
 
 export default Chat;
