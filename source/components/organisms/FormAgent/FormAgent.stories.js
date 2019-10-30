@@ -137,7 +137,7 @@ class FormAgentInitiatorWithRequest extends Component {
     handleMessage = (message) => {
         const { chat } = this.props;
         const { form } = this.state
-        chat.switchAgent(props => (<FormAgent {...props} formId={form.id} />));
+        chat.switchAgent(props => (<FormAgent {...props} form={form} formId={form.id} />));
     };
 
     render() {
