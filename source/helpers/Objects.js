@@ -36,4 +36,23 @@ const includePropetiesWithKey = (object = {}, keys = []) => (filterPropetiesByKe
  */
 const excludePropetiesWithKey = (object = {}, keys = []) => (filterPropetiesByKeys(object, keys, false));
 
-export { filterPropetiesByKeys, includePropetiesWithKey, excludePropetiesWithKey };
+
+/**
+ * Changes the names for keys that matches a specific string.
+ * 
+ * @param { object } object Target to change
+ * @param { match } match String to match
+ */
+const renameMatchedKeysInObject = (obj = {}, match = "") => {
+    Object.keys(obj).forEach(key => {
+        if (key.includes(match)){
+            const newObjectKey = key.replace(match, '');
+            obj[newObjectKey] = obj[key]
+            delete obj[key]
+        }
+    })
+
+    return obj
+}
+
+export { filterPropetiesByKeys, includePropetiesWithKey, excludePropetiesWithKey, renameMatchedKeysInObject };
