@@ -52,7 +52,7 @@ export default class ChatUserInput extends PureComponent {
                 // SelectForm
                 break;
 
-            case 'dateTime':
+            case 'datetime':
                 data = {
                     Component: withChatForm(DateTimePickerForm), 
                     componentProps: {
