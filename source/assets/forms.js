@@ -42,7 +42,7 @@ const forms = [
                 relation: 'AND',
                 conditions: [
                     {
-                        'id': 'partnerSameAddress',
+                        'key': 'partnerSameAddress',
                         'value': 'Nej',
                         'compare': '='
                     }
