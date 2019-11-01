@@ -33,27 +33,34 @@ export const constructGetFormTemplate = (endpoint) => {
     })
 };
 
-export const sendChatMsg = async (workspaceId, textInput, conversationId) => {
-  const endpoint = 'chatbot/message';
+export const sendChatMsg = async (workspaceId, textInput, context, intents = undefined, entities = undefined) => {
+    const endpoint = 'chatbot/message';
 
-  return new Promise(async (resolve, reject) => {
-    let data = {
-      workspaceId,
-      textInput
-    };
+    return new Promise(async (resolve, reject) => {
+        let data = {
+            workspaceId,
+            textInput
+        };
 
-    if (conversationId) {
-      data.context = {conversation_id: conversationId};
-    }
+        if (context) {
+            data.context = context;
+        }
 
-    try {
-      const reqChatResult = await post(endpoint, data);
+        if (intents) {
+            data.intents = intents;
+        }
 
-      return resolve(reqChatResult.data);
-    } catch (error) {
-      return reject(error.message);
-    }
-  })
+        if (entities) {
+            data.entities = entities;
+        }
+
+        try {
+            const reqChatResult = await post(endpoint, data);
+
+            return resolve(reqChatResult.data);
+        } catch (error) {
+            return reject(error.message);
+    })
 };
 
 const postService = async (endpoint, data, token) => {
