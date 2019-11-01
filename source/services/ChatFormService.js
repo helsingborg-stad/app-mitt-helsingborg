@@ -60,21 +60,22 @@ export const sendChatMsg = async (workspaceId, textInput, context, intents = und
             return resolve(reqChatResult.data);
         } catch (error) {
             return reject(error.message);
+        }
     })
 };
 
 const postService = async (endpoint, data, token) => {
     return new Promise(async (resolve, reject) => {
         await axios({
-                method: 'POST',
-                url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
-                data: data,
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                }
+            method: 'POST',
+            url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
+            data: data,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
             }
+        }
         ).then(result => {
             return resolve(result.data);
         }).catch(err => {
@@ -89,14 +90,14 @@ const getService = async (endpoint) => {
         const token = await StorageService.getData(TOKEN_KEY);
 
         await axios({
-                method: 'GET',
-                url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                }
+            method: 'GET',
+            url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
             }
+        }
         ).then(result => {
             return resolve(result.data);
         }).catch(err => {
