@@ -10,8 +10,7 @@ import { Alert, View } from "react-native";
 import FormAgent from "./FormAgent";
 import StorageService, { USER_KEY } from "../../services/StorageService";
 
-let firstRun = true;
-let conversationId;
+let context;
 
 export default class WatsonAgent extends Component {
     state = {
@@ -78,15 +77,11 @@ export default class WatsonAgent extends Component {
             let responseText;
             let options = [];
             try {
-                await sendChatMsg(workspaceId, message, conversationId).then((response) => {
-                    console.log(response);
+                await sendChatMsg(workspaceId, message, context).then((response) => {
+                    // Set context for every response
+                    context = response.data.attributes.context;
+
                     const responseGeneric = response.data.attributes.output.generic;
-
-                    if (firstRun) {
-                        conversationId = response.data.attributes.context.conversation_id;
-
-                        firstRun = false;
-                    }
 
                     responseGeneric.forEach(elem => {
                         if (elem.response_type === 'text') {
