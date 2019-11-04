@@ -30,12 +30,12 @@ class TaskScreen extends Component {
     };
 
     render() {
-        const { givenName } = this.state.user;
+        const { user } = this.state;
         return (
             <TaskScreenWrapper>
                 <Header
                     title="Mitt Helsingborg"
-                    message={givenName ? `Hej ${givenName}!` : 'Hej!'}
+                    message={user && user.givenName ? `Hej ${user.givenName}!` : 'Hej!'}
                     themeColor="purple"
                     navItems={NavItems}
                 />
