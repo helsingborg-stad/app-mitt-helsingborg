@@ -69,7 +69,10 @@ class FormAgent extends Component {
 
         // Set currentQuestion then output messages & render input
         this.setState({currentQuestion: nextQuestion.key}, () => {
-            this.outputMessages(nextQuestion.question);
+            if (nextQuestion.question) {
+                this.outputMessages(nextQuestion.question);
+            }
+
             chat.switchInput(nextQuestion.input);
         });
     }
