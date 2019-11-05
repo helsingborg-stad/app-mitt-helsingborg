@@ -171,9 +171,15 @@ const colors = {
       purple: {
           ...palette.purple
         },
-        blue: {
+      blue: {
           ...palette.blue
-        }
+      },
+      red: {
+          ...palette.red
+      },
+      green: {
+          ...palette.green
+      },
    }
 };
 
