@@ -2,7 +2,7 @@ const forms = [{
     id: 1,
     name: 'Bokning borgerlig vigsel startad',
     trigger: 'Vill boka borgerlig vigsel',
-    doneMessage: 'Då har jag tagit emot er bokning. Du kan när som helst se eller redigera din bokning under fliken Ärenden.',
+    doneMessage: 'Då har jag tagit emot er bokning, du kan när som helst se eller redigera din bokning under fliken Ärenden',
     questions: [{
             key: 'partnerName',
             question: 'Vem ska du gifta dig med?',
@@ -26,7 +26,7 @@ const forms = [{
             key: 'partnerSameAddress',
             question: ({
                 answers
-            }) => `Har ${answers.partnerName.split(' ')[0]} samma adress som du?`,
+            }) => `Bor ${answers.partnerName.split(' ')[0]} på samma adress som du?`,
             input: [{
                 type: 'radio',
                 options: [{
@@ -44,10 +44,10 @@ const forms = [{
             key: 'partnerAddress',
             question: ({
                 answers
-            }) => `Vilken adress har ${answers.partnerName.split(' ')[0]}?`,
+            }) => `Vilken gatuadress har ${answers.partnerName.split(' ')[0]}?`,
             input: [{
                 type: 'text',
-                placeholder: 'Gata',
+                placeholder: 'Gatuadress',
             }, ],
             dependency: {
                 relation: 'AND',
@@ -60,10 +60,11 @@ const forms = [{
         },
         {
             key: 'partnerPostal',
-            question: false,
+            question: 'Vilket postnummer?',
             input: [{
-                type: 'text',
+                type: 'number',
                 placeholder: 'Postnummer',
+                maxLength: 5
             }, ],
             dependency: {
                 relation: 'AND',
@@ -76,7 +77,7 @@ const forms = [{
         },
         {
             key: 'partnerCity',
-            question: false,
+            question: 'Ort?',
             input: [{
                 type: 'text',
                 placeholder: 'Ort',
@@ -96,7 +97,7 @@ const forms = [{
             input: [{
                 type: 'radio',
                 options: [{
-                        value: 'På Rådhuset',
+                        value: 'På Rådhuset i Helsingborg',
                     },
                     {
                         value: 'Annan plats',
@@ -133,11 +134,11 @@ const forms = [{
             input: [{
                 type: 'radio',
                 options: [{
-                        value: 'Ja, jag vill ange det nu.',
+                        value: 'Ja',
                         icon: 'check',
                     },
                     {
-                        value: 'Nej, jag vill komplettera det senare.',
+                        value: 'Nej jag vill komplettera senare',
                         icon: 'close',
                     },
                 ],
@@ -157,7 +158,7 @@ const forms = [{
                 relation: 'AND',
                 conditions: [{
                     'key': 'hasWitness',
-                    'value': 'Ja, jag vill ange det nu.',
+                    'value': 'Ja',
                     'compare': '='
                 }]
             }
@@ -173,7 +174,7 @@ const forms = [{
                 relation: 'AND',
                 conditions: [{
                     'key': 'hasWitness',
-                    'value': 'Ja, jag vill ange det nu.',
+                    'value': 'Ja',
                     'compare': '='
                 }]
             }
@@ -193,7 +194,7 @@ const forms = [{
                 relation: 'AND',
                 conditions: [{
                     'key': 'weddingLocation',
-                    'value': 'På Rådhuset',
+                    'value': 'På Rådhuset i Helsingborg',
                     'compare': '='
                 }]
             }
@@ -233,7 +234,7 @@ const forms = [{
         {
             key: 'hindersProvning',
             question: [
-                'Innan ni gifter er måste Skatteverket intyga att det inte finns några hinder för giftermål.',
+                'Innan ni gifter er måste Skatteverket intyga att det inte finns några hinder för giftemål',
                 'Har ni intyg för hindersprövning från Skatteverket?'
             ],
             input: [{
@@ -252,10 +253,10 @@ const forms = [{
         {
             key: 'confirmBooking',
             question: [
-                'Då har jag följande uppgifter om din bokning.',
+                'Då har jag följande uppgifter om din bokning',
                 ({
                     answers
-                }) => (`Du och ${answers.partnerName.split(' ')[0]} vill gifta er i ${answers.weddingLocationCustom ? answers.weddingLocationCustom : answers.weddingLocation} ${answers.weddingDate}.`),
+                }) => (`Du och ${answers.partnerName.split(' ')[0]} vill gifta er ${answers.weddingLocationCustom ? answers.weddingLocationCustom : answers.weddingLocation} ${answers.weddingDate}`),
                 'Vill du skicka bokningsförfrågan?'
             ],
             input: [{
