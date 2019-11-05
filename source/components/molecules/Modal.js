@@ -1,38 +1,95 @@
-import React, { Component } from 'react';
-import { Modal as RNModal, Text, TouchableHighlight, View, Alert } from 'react-native';
-import styled from 'styled-components/native';
+import React from 'react';
+import RnModal from 'react-native-modal';
+import { TouchableHighlight, TouchableOpacity, ScrollView, View } from 'react-native';
+import PropTypes from 'prop-types';
+import styled, { withTheme } from 'styled-components/native';
+import shadow from '../../styles/shadow';
+import Text from '../atoms/Text';
+import Heading from '../atoms/Heading';
 
-const Modal = (props) =>
+const Modal = ({ visible, heading, content, changeModal, color }) =>
     <ModalContainer
-        animationType="slide"
-        transparent={false}
-        visible={props.visible}
-        onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-        }}>
-        <ModalContent>
-            <View>
-                <Text>Sup World!</Text>
-
-                <TouchableHighlight
-                    onPress={() => {
-                        props.setModalVisibility(!props.visible);
-                    }}>
-                    <Text>Hide Modal</Text>
-                </TouchableHighlight>
-
-            </View>
-        </ModalContent>
+        scrollHorizontal
+        backdropOpacity={0}
+        propagateSwipe
+        swipeDirection="down"
+        isVisible={visible}
+        onSwipeComplete={() => { changeModal(false); }}
+    >
+        <View>
+            <Header>
+                <FlexOuter></FlexOuter>
+                <FlexInner>
+                    <Title type="h4" color={color}>{heading}</Title>
+                </FlexInner>
+                <FlexOuter>
+                    <TouchableHighlight
+                        onPress={() => { changeModal(!visible) }}
+                        underlayColor={'white'}>
+                        <Text>Klar</Text>
+                    </TouchableHighlight>
+                </FlexOuter>
+            </Header>
+            <Content>
+                {/* TouchableOpacity = Hack to make scrolling work inside swipeable modal */}
+                <TouchableOpacity activeOpacity={1}>
+                    <ModalText style={{ paddingTop: 32 }}>{content}</ModalText>
+                </TouchableOpacity>
+            </Content>
+        </View>
     </ModalContainer>;
 
+Modal.propTypes = {
+    visible: PropTypes.bool.isRequired,
+    heading: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+    changeModal: PropTypes.func.isRequired,
+    color: PropTypes.oneOf(['blue', 'purple', 'red', 'green']),
+};
 
-export default Modal;
+Modal.defaultProps = {
+    color: 'purple',
+}
 
-const ModalContainer = styled(RNModal)`
-    border: 1px solid green;
+export default withTheme(Modal);
+
+const ModalContainer = styled(RnModal)`
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 56px;
+    border-top-left-radius: 17.5px;
+    border-top-right-radius: 17.5px;
 `;
 
-const ModalContent = styled(View)`
-    margin-top: 24px;
-    border: 1px solid blue;
+const Header = styled.View`
+    flex-direction: row;
+    border: 1px solid ${props => (props.theme.background.lighter)};
+    border-bottom-width: 2;
+    border-top-left-radius: 17.5px;
+    border-top-right-radius: 17.5px;
+    background-color: white;
+    padding: 16px 16px 12px 16px;
+`;
+
+const FlexInner = styled.View`
+    flex: 1;
+`;
+
+const FlexOuter = styled.View`
+    flex: 1;
+    align-items: flex-end;
+`;
+
+const Title = styled(Heading)`
+    text-align: center;
+    color: ${props => (props.theme.heading[props.color][1])};
+`;
+
+const Content = styled.ScrollView`
+    background-color: ${props => (props.theme.background.lightest)};
+    height: 100%;
+`;
+
+const ModalText = styled(Text)`
+    padding: 32px 16px 32px 16px;
 `;
