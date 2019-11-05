@@ -4,11 +4,6 @@ import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from '../molecules/StoryWrapper';
 import ChatBubble from './ChatBubble';
 import Text from './Text';
-import Icon from './Icon';
-
-import styled from 'styled-components/native';
-
-import Button from './Button';
 
 storiesOf('Chat', module)
     .add('ChatBubble', () => (
