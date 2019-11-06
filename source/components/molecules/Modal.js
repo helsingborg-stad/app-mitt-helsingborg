@@ -9,19 +9,20 @@ import Heading from '../atoms/Heading';
 
 const Modal = ({ visible, heading, content, changeModal, color }) =>
     <ModalContainer
-        scrollHorizontal
+        animationInTiming={400}
+        animationOutTiming={400}
         backdropOpacity={0}
         propagateSwipe
         swipeDirection="down"
         isVisible={visible}
         onSwipeComplete={() => { changeModal(false); }}
     >
-        <View>
+        <Flex>
             <Header>
                 <FlexOuter></FlexOuter>
-                <FlexInner>
+                <Flex>
                     <Title type="h4" color={color}>{heading}</Title>
-                </FlexInner>
+                </Flex>
                 <FlexOuter>
                     <TouchableHighlight
                         onPress={() => { changeModal(!visible) }}
@@ -33,10 +34,10 @@ const Modal = ({ visible, heading, content, changeModal, color }) =>
             <Content>
                 {/* TouchableOpacity = Hack to make scrolling work inside swipeable modal */}
                 <TouchableOpacity activeOpacity={1}>
-                    <ModalText style={{ paddingTop: 32 }}>{content}</ModalText>
+                    <ModalText>{content}</ModalText>
                 </TouchableOpacity>
             </Content>
-        </View>
+        </Flex>
     </ModalContainer>;
 
 Modal.propTypes = {
@@ -56,7 +57,8 @@ export default withTheme(Modal);
 const ModalContainer = styled(RnModal)`
     margin-left: 0px;
     margin-right: 0px;
-    margin-top: 56px;
+    margin-bottom: 0px;
+    margin-top: 32px;
     border-top-left-radius: 17.5px;
     border-top-right-radius: 17.5px;
 `;
@@ -71,7 +73,7 @@ const Header = styled.View`
     padding: 16px 16px 12px 16px;
 `;
 
-const FlexInner = styled.View`
+const Flex = styled.View`
     flex: 1;
 `;
 
@@ -87,7 +89,6 @@ const Title = styled(Heading)`
 
 const Content = styled.ScrollView`
     background-color: ${props => (props.theme.background.lightest)};
-    height: 100%;
 `;
 
 const ModalText = styled(Text)`
