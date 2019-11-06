@@ -71,16 +71,6 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Roboto-Regular.ttf</string>
-		<string>Roboto-Bold.ttf</string>
-		<string>Roboto-Italic</string>
-		<string>Roboto-Light</string>
-		<string>Roboto-LightItalic</string>
-		<string>Roboto-Medium</string>
-		<string>Roboto-MediumItalic</string>
-		<string>Roboto-Thin</string>
-		<string>Roboto-Black</string>
-		<string>Roboto-BoldItalic</string>
 		<string>AntDesign.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>EvilIcons.ttf</string>
@@ -97,6 +87,30 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Roboto-Black.ttf</string>
+		<string>Roboto-BlackItalic.ttf</string>
+		<string>Roboto-Bold.ttf</string>
+		<string>Roboto-BoldItalic.ttf</string>
+		<string>Roboto-Italic.ttf</string>
+		<string>Roboto-Light.ttf</string>
+		<string>Roboto-LightItalic.ttf</string>
+		<string>Roboto-Medium.ttf</string>
+		<string>Roboto-MediumItalic.ttf</string>
+		<string>Roboto-Regular.ttf</string>
+		<string>Roboto-Thin.ttf</string>
+		<string>Roboto-ThinItalic.ttf</string>
+		<string>RobotoCondensed-Bold.ttf</string>
+		<string>RobotoCondensed-BoldItalic.ttf</string>
+		<string>RobotoCondensed-Italic.ttf</string>
+		<string>RobotoCondensed-Light.ttf</string>
+		<string>RobotoCondensed-LightItalic.ttf</string>
+		<string>RobotoCondensed-Regular.ttf</string>
+		<string>Sarpanch-Black.ttf</string>
+		<string>Sarpanch-Bold.ttf</string>
+		<string>Sarpanch-ExtraBold.ttf</string>
+		<string>Sarpanch-Medium.ttf</string>
+		<string>Sarpanch-Regular.ttf</string>
+		<string>Sarpanch-SemiBold.ttf</string>
 	</array>
 </dict>
 </plist>

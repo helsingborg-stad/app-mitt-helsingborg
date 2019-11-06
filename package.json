@@ -59,5 +59,11 @@
       "pattern": "**/*.stories.js",
       "outputFile": "./storybook/storyLoader.js"
     }
+  },
+  "rnpm": {
+    "assets": [
+      "./source/assets/fonts/Roboto",
+      "./source/assets/fonts/Sarpanch"
+    ]
   }
 }
