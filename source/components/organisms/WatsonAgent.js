@@ -115,7 +115,7 @@ export default class WatsonAgent extends Component {
 
             if (!this.state.disableAgent) {
                 chat.addMessages({
-                    Component: props => (<ChatBubble {...props}><Markdown styles={markdownStyles}>{responseText}</Markdown></ChatBubble>),
+                    Component:  ChatBubble,
                     componentProps: {
                         content: responseText,
                         modifiers: ['automated'],
