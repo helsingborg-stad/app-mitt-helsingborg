@@ -19,6 +19,8 @@ class ChatMessages extends Component {
         forwardProps: PropTypes.object
     }
 
+    // TODO: Ange proptypes för Chat prop
+
     // Required to scroll FlatList
     flatListRef = React.createRef();
 
