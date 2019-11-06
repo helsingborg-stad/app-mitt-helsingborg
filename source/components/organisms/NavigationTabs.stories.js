@@ -11,12 +11,13 @@ import ScreenWrapper from "../molecules/ScreenWrapper";
 import { Icon } from 'react-native-elements'
 import ParrotAgent from "./ParrotAgent";
 import TaskScreen from "../screens/TaskScreen";
+import WatsonAgent from './WatsonAgent';
 
 class ChatScreen extends Component {
     render() {
         return (
             <ModifiedScreenWrapper>
-                <Chat ChatAgent={ParrotAgent} ChatUserInput={withChatForm(ChatForm)} />
+                <Chat ChatAgent={WatsonAgent} ChatUserInput={withChatForm(ChatForm)} />
             </ModifiedScreenWrapper>
         );
     }
