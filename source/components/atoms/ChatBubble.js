@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import styled, {css} from 'styled-components/native';
+import styled, {css, withTheme} from 'styled-components/native';
 import Text from './Text';
 import Heading from './Heading';
 import shadow from '../../styles/shadow';
@@ -9,8 +9,9 @@ import PropTypes from 'prop-types';
 import Icon from './Icon';
 import Button from './Button';
 
+
 const ChatBubble = props => {
-    const { content, modifiers, style, iconRight, onClickIconRight } = props;
+    const { content, modifiers, style, iconRight, onClickIconRight, theme } = props;
 
     const avalibleColorModifiers = ['automated', 'human', 'user'];
     let colorTheme = modifiers ? modifiers.find(modifier => (avalibleColorModifiers.includes(modifier))) : undefined;
@@ -48,7 +49,7 @@ const ChatBubble = props => {
                     {
                         iconRight && onClickIconRight ?
                             <Aside>
-                                <IconButton onClick={onClickIconRight} z={0}><Icon color={"#000000"} name={iconRight} /></IconButton>
+                                <IconButton onClick={onClickIconRight} z={0}><Icon color={theme.chatBubble[colorTheme].asideIcon} name={iconRight} /></IconButton>
                             </Aside>
                         : null
                     }
@@ -70,7 +71,7 @@ ChatBubble.defaultProps = {
     iconRight: 'help-outline'
 };
 
-export default ChatBubble;
+export default withTheme(ChatBubble);
 
 const Bubble = styled.View`  
     margin-top: 6px;
