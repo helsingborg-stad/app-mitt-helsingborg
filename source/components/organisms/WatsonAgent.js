@@ -5,7 +5,6 @@ import { sendChatMsg } from '../../services/ChatFormService';
 import ChatBubble from '../atoms/ChatBubble';
 import { Alert, } from "react-native";
 import StorageService, { USER_KEY } from "../../services/StorageService";
-import Markdown from "react-native-simple-markdown";
 
 let context;
 
