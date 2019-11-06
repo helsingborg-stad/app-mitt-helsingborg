@@ -26,6 +26,8 @@ export default class WatsonAgent extends Component {
                 componentProps: {
                     content: `Hej ${name}!`,
                     modifiers: ['automated'],
+                    explainerHeading: 'Title',
+                    explainerContent: 'Content',
                 }
             });
 

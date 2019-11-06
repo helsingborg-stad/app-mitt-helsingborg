@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 
 import ChatMessages from '../molecules/ChatMessages';
+import Modal from '../molecules/Modal';
 
 import ChatBody from '../atoms/ChatBody';
 import ChatWrapper from '../atoms/ChatWrapper';
@@ -17,7 +18,7 @@ class Chat extends Component {
         ChatUserInput: PropTypes.oneOfType([PropTypes.oneOf([false]), PropTypes.elementType, PropTypes.func]),
         inputComponents: PropTypes.array
     };
-    
+
     static defaultProps = {
         ChatAgent: false,
         ChatUserInput: false,
@@ -29,12 +30,17 @@ class Chat extends Component {
         ChatAgent: false,
         inputComponents: [],
         // TODO: Move inputActions state outside of Chat organism
-        inputActions: []
+        inputActions: [],
+        modal: {
+            visible: false,
+            heading: '',
+            content: ''
+        }
     };
 
     componentDidMount() {
         const { ChatAgent, ChatUserInput, inputComponents } = this.props;
-        
+
         if (ChatAgent) {
             this.switchAgent(ChatAgent);
         }
@@ -53,18 +59,18 @@ class Chat extends Component {
         const array = Array.isArray(objects) ? objects : [objects];
 
         this.setState(prevState => {
-          let { messages } = prevState;
-          // TODO: loop through message array & setState for each separately (or dispatch will fail if more then 1 message)
-          array.forEach(object => { messages.push(object) });
-          return { messages };
+            let { messages } = prevState;
+            // TODO: loop through message array & setState for each separately (or dispatch will fail if more then 1 message)
+            array.forEach(object => { messages.push(object) });
+            return { messages };
         }, this.dispatchMessageEvents);
     };
 
     dispatchMessageEvents = () => {
         const lastMsg = this.state.messages.slice(-1)[0].componentProps;
-    
+
         if (Array.isArray(lastMsg.modifiers) && lastMsg.modifiers[0] === 'user') {
-          EventHandler.dispatch(EVENT_USER_MESSAGE, lastMsg.content);
+            EventHandler.dispatch(EVENT_USER_MESSAGE, lastMsg.content);
         }
     }
 
@@ -76,13 +82,13 @@ class Chat extends Component {
 
     switchInput = (inputArr) => {
         if (inputArr === false) {
-            this.setState({inputComponents: []});
+            this.setState({ inputComponents: [] });
             return;
         }
 
         const inputArray = !Array.isArray(inputArr) ? [inputArr] : inputArr;
 
-        this.setState({inputComponents: inputArray});
+        this.setState({ inputComponents: inputArray });
     }
 
     /**
@@ -104,25 +110,42 @@ class Chat extends Component {
         });
     }
 
-    render() {
-        const { messages, ChatAgent, inputComponents } = this.state;
-        const { addMessages, switchAgent, switchUserInput, switchInput, setInputActions } = this;
+    changeModal = (visible, heading = '', content = '') => {
+        this.setState({
+            modal: {
+                visible,
+                heading,
+                content
+            }
+        });
+    }
 
-        const instanceMethods = { addMessages, switchAgent, switchUserInput, switchInput, setInputActions };
+    render() {
+        const { messages, ChatAgent, inputComponents, modal } = this.state;
+        const { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal } = this;
+        const { visible, heading, content } = modal;
+
+        const instanceMethods = { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal };
 
         return (
             <ChatWrapper keyboardVerticalOffset={24} >
                 {ChatAgent ?
-                    <ChatAgent chat={{...instanceMethods, ...this.state}} /> 
-                : null}
-                <ChatBody> 
-                    <ChatMessages messages={messages} />
+                    <ChatAgent chat={{ ...instanceMethods, ...this.state }} />
+                    : null}
+                <ChatBody>
+                    <ChatMessages messages={messages} chat={{ ...instanceMethods, ...this.state }} />
                 </ChatBody>
                 <ChatFooter>
                     {inputComponents && inputComponents.length > 0 ?
-                        <ChatUserInput inputArray={inputComponents} chat={{...instanceMethods, ...this.state}} /> 
-                    : null}
+                        <ChatUserInput inputArray={inputComponents} chat={{ ...instanceMethods, ...this.state }} />
+                        : null}
                 </ChatFooter>
+                <Modal
+                    visible={visible}
+                    heading={heading}
+                    content={content}
+                    changeModal={(visible) => this.changeModal(visible)}
+                />
             </ChatWrapper>
         )
     }
