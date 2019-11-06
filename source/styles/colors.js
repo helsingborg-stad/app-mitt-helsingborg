@@ -92,6 +92,13 @@ const colors = {
       iconRight: palette.mono.white,
       shadow: palette.purple[2],
     },
+    purpleLight: {
+      background: palette.purple[1],
+      text: palette.mono.white,
+      icon: palette.mono.white,
+      iconRight: palette.mono.white,
+      shadow: palette.purple[1],
+    },
     blue: {
       background: palette.blue[2],
       text: palette.mono.white,
