@@ -3,11 +3,7 @@ import env from 'react-native-config';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 import { sendChatMsg } from '../../services/ChatFormService';
 import ChatBubble from '../atoms/ChatBubble';
-import Button from '../atoms/Button';
-import Text from '../atoms/Text';
-import Icon from '../atoms/Icon';
-import { Alert, View } from "react-native";
-import FormAgent from "./FormAgent";
+import { Alert, } from "react-native";
 import StorageService, { USER_KEY } from "../../services/StorageService";
 
 let context;
@@ -18,26 +14,38 @@ export default class WatsonAgent extends Component {
     };
 
     componentDidMount() {
-        const { chat } = this.props;
+        const { chat, initialMessages} = this.props;
 
-        StorageService.getData(USER_KEY).then(({ name }) => {
-            chat.addMessages({
-                Component: ChatBubble,
-                componentProps: {
-                    content: `Hej ${name}!`,
-                    modifiers: ['automated'],
-                }
+        if (initialMessages !== undefined) {
+            initialMessages.forEach((message) => {
+                chat.addMessages({
+                    Component: ChatBubble,
+                    componentProps: {
+                        content: message,
+                        modifiers: ['automated'],
+                    }
+                });
+            })
+        } else {
+            StorageService.getData(USER_KEY).then(({name}) => {
+                chat.addMessages({
+                    Component: ChatBubble,
+                    componentProps: {
+                        content: `Hej ${name}!`,
+                        modifiers: ['automated'],
+                    }
+                });
+
+                chat.addMessages({
+                    Component: ChatBubble,
+                    componentProps: {
+                        content: 'Vad kan jag hjälpa dig med?',
+                        modifiers: ['automated'],
+                    }
+                });
+
             });
-
-            chat.addMessages({
-                Component: ChatBubble,
-                componentProps: {
-                    content: 'Vad kan jag hjälpa dig med?',
-                    modifiers: ['automated'],
-                }
-            });
-
-        });
+        }
 
         EventHandler.subscribe(EVENT_USER_MESSAGE, (message) => this.handleHumanChatMessage(message));
     }
@@ -107,7 +115,7 @@ export default class WatsonAgent extends Component {
 
             if (!this.state.disableAgent) {
                 chat.addMessages({
-                    Component: ChatBubble,
+                    Component: props => (<ChatBubble {...props}><Markdown styles={markdownStyles}>{responseText}</Markdown></ChatBubble>),
                     componentProps: {
                         content: responseText,
                         modifiers: ['automated'],
@@ -134,3 +142,14 @@ export default class WatsonAgent extends Component {
         return null;
     }
 }
+
+const markdownStyles = {
+    text: {
+        color: '#707070',
+        fontSize: 16,
+        fontStyle: 'normal',
+        fontWeight: '500',
+        fontFamily: 'Roboto'
+    }
+};
+
