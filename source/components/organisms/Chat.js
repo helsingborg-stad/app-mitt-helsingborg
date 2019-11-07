@@ -110,6 +110,13 @@ class Chat extends Component {
         });
     }
 
+    /**
+     * Changes modal state
+     *
+     * @param {bool} visible
+     * @param {string} heading
+     * @param {string} content
+     */
     changeModal = (visible, heading = '', content = '') => {
         this.setState({
             modal: {
@@ -123,8 +130,6 @@ class Chat extends Component {
     render() {
         const { messages, ChatAgent, inputComponents, modal } = this.state;
         const { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal } = this;
-        const { visible, heading, content } = modal;
-
         const instanceMethods = { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal };
 
         return (
@@ -141,9 +146,7 @@ class Chat extends Component {
                         : null}
                 </ChatFooter>
                 <Modal
-                    visible={visible}
-                    heading={heading}
-                    content={content}
+                    {...modal}
                     changeModal={(visible) => this.changeModal(visible)}
                 />
             </ChatWrapper>

@@ -16,25 +16,35 @@ class ChatMessages extends Component {
             })
         ),
         forwardProps: PropTypes.object,
+        chat: PropTypes.object
     }
-
-    // TODO: Ange proptypes för Chat prop
 
     // Required to scroll FlatList
     flatListRef = React.createRef();
 
-    renderItem = ({ item, index }) => {
+    /**
+     * Adds custom actions to component props
+     * @param {obj} props
+     */
+    mapComponentProps = (props) => {
         const { chat } = this.props;
-        const { Component, componentProps } = item;
 
-        // TODO: Snygga till
-        if (componentProps.explainerHeading && componentProps.explainerContent) {
-            componentProps.onClickIconRight = () => {
+        // Modal click event handler
+        if (props.explainerHeading && props.explainerContent) {
+            props.onClickIconRight = () => {
                 chat.changeModal(
-                    true, componentProps.explainerHeading, componentProps.explainerContent
+                    true, props.explainerHeading, props.explainerContent
                 )
             }
         }
+
+        return props;
+    }
+
+    renderItem = ({ item, index }) => {
+        const { Component } = item;
+        let { componentProps } = item;
+        componentProps = this.mapComponentProps(componentProps);
 
         return <Component {...componentProps} />;
     }
