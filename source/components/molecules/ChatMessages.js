@@ -24,21 +24,22 @@ class ChatMessages extends Component {
 
     /**
      * Adds custom actions to component props
-     * @param {obj} props
+     * @param {obj} componentProps
      */
-    mapComponentProps = (props) => {
+    mapComponentProps = (componentProps) => {
         const { chat } = this.props;
+        const { explainer } = componentProps;
 
         // Modal click event handler
-        if (props.explainerHeading && props.explainerContent) {
-            props.onClickIconRight = () => {
+        if (typeof explainer !== 'undefined' && explainer.heading && explainer.content) {
+            componentProps.onClickIconRight = () => {
                 chat.changeModal(
-                    true, props.explainerHeading, props.explainerContent
+                    true, explainer.heading, explainer.content
                 )
             }
         }
 
-        return props;
+        return componentProps;
     }
 
     renderItem = ({ item, index }) => {
