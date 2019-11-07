@@ -22,8 +22,31 @@ class ChatMessages extends Component {
     // Required to scroll FlatList
     flatListRef = React.createRef();
 
-    renderItem = ({item, index}) => {
-        const {Component, componentProps} = item;
+    /**
+     * Adds custom actions to component props
+     * @param {obj} componentProps
+     */
+    mapComponentProps = (componentProps) => {
+        const { chat } = this.props;
+        const { explainer } = componentProps;
+
+        // Modal click event handler
+        if (typeof explainer !== 'undefined' && explainer.heading && explainer.content) {
+            componentProps.onClickIconRight = () => {
+                chat.changeModal(
+                    true, explainer.heading, explainer.content
+                )
+            }
+        }
+
+        return componentProps;
+    }
+
+    renderItem = ({ item, index }) => {
+        const { Component } = item;
+        let { componentProps } = item;
+        componentProps = this.mapComponentProps(componentProps);
+
         return <Component {...componentProps} />;
     }
 
