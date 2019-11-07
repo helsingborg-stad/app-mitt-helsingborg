@@ -15,26 +15,38 @@ export default class WatsonAgent extends Component {
     };
 
     componentDidMount() {
-        const { chat } = this.props;
+        const { chat, initialMessages} = this.props;
 
-        StorageService.getData(USER_KEY).then(({ name }) => {
-            chat.addMessages({
-                Component: ChatBubble,
-                componentProps: {
-                    content: `Hej ${name}!`,
-                    modifiers: ['automated'],
-                }
+        if (initialMessages !== undefined) {
+            initialMessages.forEach((message) => {
+                chat.addMessages({
+                    Component: ChatBubble,
+                    componentProps: {
+                        content: message,
+                        modifiers: ['automated'],
+                    }
+                });
+            })
+        } else {
+            StorageService.getData(USER_KEY).then(({name}) => {
+                chat.addMessages({
+                    Component: ChatBubble,
+                    componentProps: {
+                        content: `Hej ${name}!`,
+                        modifiers: ['automated'],
+                    }
+                });
+
+                chat.addMessages({
+                    Component: ChatBubble,
+                    componentProps: {
+                        content: 'Vad kan jag hjälpa dig med?',
+                        modifiers: ['automated'],
+                    }
+                });
+
             });
-
-            chat.addMessages({
-                Component: ChatBubble,
-                componentProps: {
-                    content: 'Vad kan jag hjälpa dig med?',
-                    modifiers: ['automated'],
-                }
-            });
-
-        });
+        }
 
         EventHandler.subscribe(EVENT_USER_MESSAGE, (message) => this.handleHumanChatMessage(message));
     }
