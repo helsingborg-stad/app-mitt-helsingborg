@@ -13,6 +13,11 @@ storiesOf('Button', module)
             <ButtonColors />
         </StoryWrapper>
     ))
+    .add('Small', props => (
+        <StoryWrapper {...props}>
+            <ButtonColors size="small" />
+        </StoryWrapper>
+    ))
     .add('Rounded', props => (
         <StoryWrapper {...props}>
             <ButtonColors rounded />
