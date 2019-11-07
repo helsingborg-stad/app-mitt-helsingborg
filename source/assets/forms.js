@@ -2,7 +2,7 @@ const forms = [{
     id: 1,
     name: 'Bokning borgerlig vigsel startad',
     trigger: 'Vill boka borgerlig vigsel',
-    doneMessage: 'Då har jag tagit emot er bokning, du kan när som helst se eller redigera din bokning under fliken Ärenden',
+    doneMessage: 'Då har jag tagit emot er bokning, du kan när som helst se eller redigera din bokning under fliken Mitt HBG',
     questions: [{
             key: 'partnerName',
             question: 'Vem ska du gifta dig med?',

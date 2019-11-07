@@ -5,6 +5,7 @@ import { sendChatMsg } from '../../services/ChatFormService';
 import ChatBubble from '../atoms/ChatBubble';
 import { Alert, } from "react-native";
 import StorageService, { USER_KEY } from "../../services/StorageService";
+import Markdown from "react-native-simple-markdown";
 
 let context;
 
@@ -115,7 +116,7 @@ export default class WatsonAgent extends Component {
 
             if (!this.state.disableAgent) {
                 chat.addMessages({
-                    Component:  ChatBubble,
+                    Component: props => (<ChatBubble {...props}><Markdown styles={markdownStyles}>{responseText}</Markdown></ChatBubble>),
                     componentProps: {
                         content: responseText,
                         modifiers: ['automated'],
@@ -152,4 +153,3 @@ const markdownStyles = {
         fontFamily: 'Roboto'
     }
 };
-

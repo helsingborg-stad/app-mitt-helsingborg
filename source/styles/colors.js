@@ -134,14 +134,17 @@ const colors = {
     user: { // "User"
       background: palette.purple[3],
       text: palette.mono.white,
+      asideIcon: palette.mono.white
     },
     human: { // "Sally"
       background: palette.mono.white,
       text: palette.mono.gray,
+      asideIcon: palette.mono.darkest
     },
     automated: { // "KC"
       background: palette.mono.white,
       text: palette.mono.gray,
+      asideIcon: palette.mono.darkest
     }
   },
   chatBody: {
@@ -171,9 +174,15 @@ const colors = {
       purple: {
           ...palette.purple
         },
-        blue: {
+      blue: {
           ...palette.blue
-        }
+      },
+      red: {
+          ...palette.red
+      },
+      green: {
+          ...palette.green
+      },
    }
 };
 

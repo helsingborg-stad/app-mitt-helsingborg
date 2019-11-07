@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from '../molecules/StoryWrapper';
 import ChatBubble from './ChatBubble';
@@ -14,6 +15,12 @@ storiesOf('Chat', module)
             <ChatBubble modifiers={['human']}>
                 <Text>Human modifier</Text>
             </ChatBubble>
+            <ChatBubble 
+                modifiers={['human']} 
+                content={'Icon right example with callback'} 
+                onClickIconRight={() => {console.info('clicked')}} 
+            />
         </StoryWrapper>
 ));
+
 

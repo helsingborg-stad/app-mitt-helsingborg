@@ -6,7 +6,8 @@ import Text from './Text';
 const fontSizes = {
     h1: 48,
     h2: 37,
-    h3: 22
+    h3: 22,
+    h4: 18
 };
 
 const Heading = styled(Text)`
