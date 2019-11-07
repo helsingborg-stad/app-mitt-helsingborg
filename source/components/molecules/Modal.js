@@ -20,9 +20,9 @@ const Modal = ({ visible, heading, content, changeModal, color }) =>
         <Flex>
             <Header>
                 <FlexOuter></FlexOuter>
-                <Flex>
+                <FlexInner>
                     <Title type="h4" color={color}>{heading}</Title>
-                </Flex>
+                </FlexInner>
                 <FlexOuter>
                     <TouchableHighlight
                         onPress={() => { changeModal(!visible) }}
@@ -75,6 +75,10 @@ const Header = styled.View`
 
 const Flex = styled.View`
     flex: 1;
+`;
+
+const FlexInner = styled.View`
+    flex: 3;
 `;
 
 const FlexOuter = styled.View`
