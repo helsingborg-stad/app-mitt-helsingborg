@@ -3,7 +3,8 @@ import { Alert, TouchableOpacity  } from 'react-native';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 import withForm from './withForm';
 import withChatForm from './withChatForm';
-import ChatForm from '../molecules/ChatFormDeprecated';
+import ChatFormDeprecated from '../molecules/ChatFormDeprecated';
+import InputForm from '../molecules/InputForm';
 
 import { validatePin } from "../../helpers/ValidationHelper";
 import WatsonAgent from './WatsonAgent';
@@ -60,7 +61,7 @@ export default withAuthentication(class LoginAgent extends Component {
       return;
     }
     if (message.search('Jag vill veta mer om Mitt Helsingborg') !== -1) {
-      chat.switchUserInput(props => (<ChatForm {...props} hideUserInput />));
+      chat.switchUserInput(props => (<ChatFormDeprecated {...props} hideUserInput />));
       chat.addMessages([
         {
           Component: props => (<ChatBubble {...props}><Heading>Absolut!</Heading></ChatBubble>),
@@ -103,7 +104,7 @@ export default withAuthentication(class LoginAgent extends Component {
 
   showInitialUserInput = () => {
     const { chat } = this.props;
-    chat.switchUserInput(props => (<ChatForm {...props} hideUserInput />));
+    chat.switchUserInput(props => (<ChatFormDeprecated {...props} hideUserInput />));
     chat.setInputActions([
       {
         Component: InputAction,
@@ -147,7 +148,7 @@ export default withAuthentication(class LoginAgent extends Component {
     ]);
     chat.switchUserInput(
       withForm((props) => (
-        <ChatForm 
+        <InputForm 
           {...props} 
           autoFocus={true} 
           keyboardType='numeric' 
@@ -216,7 +217,7 @@ export default withAuthentication(class LoginAgent extends Component {
         }
       ]);
       chat.switchAgent(WatsonAgent);
-      chat.switchUserInput(withChatForm(ChatForm));
+      chat.switchInput({type: 'text', placeholder: 'Skriv något...'});
       chat.setInputActions([]);
 
       if (typeof onUserLogin === 'function') {
