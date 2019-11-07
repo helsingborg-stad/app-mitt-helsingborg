@@ -47,7 +47,8 @@ const colors = {
   anchor: palette.green.dark,
   input: {
     background: palette.mono.white,
-    border: palette.mono.lighter
+    border: palette.mono.lighter,
+    placeholder: palette.mono.gray
   },
   background: {
     default: palette.mono.lightest,
