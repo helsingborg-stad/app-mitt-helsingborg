@@ -81,7 +81,12 @@ class FormAgent extends Component {
         // Set currentQuestion then output messages & render input
         this.setState({currentQuestion: nextQuestion.key}, () => {
             if (nextQuestion.question) {
-                this.outputMessages(nextQuestion.question);
+
+                this.outputMessages(
+                    nextQuestion.question,
+                    'automated',
+                    nextQuestion.explainer,
+                );
             }
 
             chat.switchInput(nextQuestion.input);
@@ -108,18 +113,33 @@ class FormAgent extends Component {
         return coniditionsIsValid && answers[question.key] === undefined;
     };
 
-    outputMessages = (messages, modifier = 'automated') => {
+    outputMessages = (messages, modifier = 'automated', explainer = undefined) => {
         const { chat } = this.props;
         const arrayOfmessages = Array.isArray(messages)
-            ? messages
-            : [messages];
+        ? messages
+        : [messages];
 
-        arrayOfmessages.forEach(message => {
+        arrayOfmessages.forEach((message, index) => {
+            let messageExplainer = undefined;
+
+            // Map explainer with the message
+            if (typeof explainer === 'object') {
+                let foundExplainer = explainer.filter(({key}) => key === index);
+                foundExplainer = typeof foundExplainer[0] !== 'undefined'
+                    ? foundExplainer[0] : {};
+
+                messageExplainer = {
+                    heading: foundExplainer.heading || undefined,
+                    content: foundExplainer.content || undefined
+                }
+            }
+
             chat.addMessages({
                 Component: ChatBubble,
                 componentProps: {
                     content: typeof message === 'function' ? message(this.state) : message,
                     modifiers: [modifier],
+                    explainer: messageExplainer,
                 }
             });
         });
