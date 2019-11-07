@@ -47,7 +47,8 @@ const colors = {
   anchor: palette.green.dark,
   input: {
     background: palette.mono.white,
-    border: palette.mono.lighter
+    border: palette.mono.lighter,
+    placeholder: palette.mono.gray
   },
   background: {
     default: palette.mono.lightest,
@@ -91,6 +92,13 @@ const colors = {
       icon: palette.mono.white,
       iconRight: palette.mono.white,
       shadow: palette.purple[2],
+    },
+    purpleLight: {
+      background: palette.purple[1],
+      text: palette.mono.white,
+      icon: palette.mono.white,
+      iconRight: palette.mono.white,
+      shadow: palette.purple[1],
     },
     blue: {
       background: palette.blue[2],
