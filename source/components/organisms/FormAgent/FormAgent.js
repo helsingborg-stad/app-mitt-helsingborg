@@ -8,6 +8,9 @@ import forms from '../../../assets/forms.js';
 import ChatBubble from '../../atoms/ChatBubble';
 
 import ChatDivider from '../../atoms/ChatDivider';
+import WatsonAgent from "../WatsonAgent";
+import withChatForm from "../withChatForm";
+import ChatForm from "../../molecules/ChatFormDeprecated";
 
 class FormAgent extends Component {
     state = {
@@ -31,26 +34,26 @@ class FormAgent extends Component {
 
         chat.addMessages([
             {
-              Component: ChatDivider,
-              componentProps: {
-                title: `${new Date().getDay()} ${MONTHS.SE[new Date().getMonth()]}`,
-                info: form.name,
-              }
+                Component: ChatDivider,
+                componentProps: {
+                    title: `${new Date().getDay()} ${MONTHS.SE[new Date().getMonth()]}`,
+                    info: form.name,
+                }
             }
         ]);
 
         // Let the form party begin
         this.setState({
-            answers: answers ? answers : {}, 
-            form: form, 
+            answers: answers ? answers : {},
+            form: form,
             questions: form.questions
-        }, this.nextQuestion);   
+        }, this.nextQuestion);
     }
 
     componentWillUnmount() {
         EventHandler.unSubscribe(EVENT_USER_MESSAGE);
     }
-    
+
     nextQuestion = () => {
         const { chat } = this.props;
         const { questions, form, answers } = this.state;
@@ -62,8 +65,16 @@ class FormAgent extends Component {
 
             if (form.doneMessage) {
                 this.outputMessages(form.doneMessage);
+
+                chat.switchAgent(props => <WatsonAgent {...props}
+                                                       initialMessages={['Bokning av vigsel klar. Något annat jag kan hjälpa med?']}/>)
+                chat.switchInput({
+                    autoFocus: false,
+                    type: 'text',
+                    placeholder: 'Skriv något...'
+                });
             }
-            
+
             return;
         }
 
@@ -75,7 +86,7 @@ class FormAgent extends Component {
 
             chat.switchInput(nextQuestion.input);
         });
-    }
+    };
 
     isNextQuestion = question => {
         const { answers } = this.state;
@@ -89,20 +100,20 @@ class FormAgent extends Component {
                 if (!accumulator) {
                     return accumulator;
                 }
-                
+
                 return answers[condition.key] !== undefined && answers[condition.key] === condition.value;
             }, true);
         }
 
         return coniditionsIsValid && answers[question.key] === undefined;
-    }
+    };
 
     outputMessages = (messages, modifier = 'automated') => {
         const { chat } = this.props;
-        const arrayOfmessages = Array.isArray(messages) 
-        ? messages
-        : [messages];
-        
+        const arrayOfmessages = Array.isArray(messages)
+            ? messages
+            : [messages];
+
         arrayOfmessages.forEach(message => {
             chat.addMessages({
                 Component: ChatBubble,
@@ -112,7 +123,7 @@ class FormAgent extends Component {
                 }
             });
         });
-    }
+    };
 
     handleUserInput = message => {
         const { chat } = this.props;
@@ -130,3 +141,4 @@ class FormAgent extends Component {
 }
 
 export default FormAgent;
+
