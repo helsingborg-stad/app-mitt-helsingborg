@@ -68,8 +68,11 @@ class FormAgent extends Component {
 
                 chat.switchAgent(props => <WatsonAgent {...props}
                                                        initialMessages={['Bokning av vigsel klar. Något annat jag kan hjälpa med?']}/>)
-                chat.switchUserInput(withChatForm(ChatForm));
-                chat.setInputActions([]);
+                chat.switchInput({
+                    autoFocus: false,
+                    type: 'text',
+                    placeholder: 'Skriv något...'
+                });
             }
 
             return;
