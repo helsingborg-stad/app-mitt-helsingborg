@@ -17,6 +17,15 @@ export default class ChatUserInput extends Component {
         return JSON.stringify(this.props) !== JSON.stringify(nextProps);
     }
 
+    avalibleComponents = {
+        text: withChatForm(InputForm),
+        number: withChatForm(InputForm),
+        radio: ButtonStack,
+        select: {},
+        dateTime: withChatForm(DateTimePickerForm),
+        custom: {},
+    };
+
     componentController = (input, index) => {
         let data = {
             Component: false,
@@ -26,7 +35,7 @@ export default class ChatUserInput extends Component {
         switch(input.type) {
             case 'text':
                 data = {
-                    Component: withChatForm(InputForm),
+                    Component: this.avalibleComponents.text, 
                     componentProps: {
                         blurOnSubmit: false,
                         autoFocus: true,
@@ -37,7 +46,7 @@ export default class ChatUserInput extends Component {
 
             case 'number':
                 data =  {
-                    Component: withChatForm(InputForm),
+                    Component: this.avalibleComponents.number, 
                     componentProps: {
                         blurOnSubmit: false,
                         autoFocus: true,
@@ -49,7 +58,7 @@ export default class ChatUserInput extends Component {
 
             case 'radio':
                 data =  {
-                    Component: ButtonStack,
+                    Component: this.avalibleComponents.radio, 
                     componentProps: {
                         items: input.options
                     }
@@ -62,7 +71,7 @@ export default class ChatUserInput extends Component {
 
             case 'dateTime':
                 data = {
-                    Component: withChatForm(DateTimePickerForm),
+                    Component: this.avalibleComponents.dateTime, 
                     componentProps: {
                         ...includePropetiesWithKey(input, ['placeholder'])
                     }
@@ -98,9 +107,9 @@ export default class ChatUserInput extends Component {
 
                     // render JSX element
                     .map(({Component, componentProps}, index) => (
-                        Component ?
-                            <Component
-                                chat={chat}
+                        Component ? 
+                            <Component 
+                                chat={excludePropetiesWithKey(chat, ['messages'])} 
                                 key={`${Component}-${index}`}
 
                                 {...componentProps}
