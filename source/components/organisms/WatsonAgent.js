@@ -3,6 +3,7 @@ import env from 'react-native-config';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 import { sendChatMsg } from '../../services/ChatFormService';
 import ChatBubble from '../atoms/ChatBubble';
+import ButtonStack from '../molecules/ButtonStack';
 import { Alert, } from "react-native";
 import StorageService, { USER_KEY } from "../../services/StorageService";
 import Markdown from "react-native-simple-markdown";
@@ -15,7 +16,7 @@ export default class WatsonAgent extends Component {
     };
 
     componentDidMount() {
-        const { chat, initialMessages} = this.props;
+        const { chat, initialMessages } = this.props;
 
         if (initialMessages !== undefined) {
             initialMessages.forEach((message) => {
@@ -28,11 +29,11 @@ export default class WatsonAgent extends Component {
                 });
             })
         } else {
-            StorageService.getData(USER_KEY).then(({name}) => {
+            StorageService.getData(USER_KEY).then(({ name }) => {
                 chat.addMessages({
                     Component: ChatBubble,
                     componentProps: {
-                        content: `Hej ${name}!`,
+                        content: `Hej ${name}!\nKul att du har loggat in i Mitt Helsingborg.`,
                         modifiers: ['automated'],
                     }
                 });
@@ -40,10 +41,25 @@ export default class WatsonAgent extends Component {
                 chat.addMessages({
                     Component: ChatBubble,
                     componentProps: {
-                        content: 'Vad kan jag hjälpa dig med?',
+                        content: 'Här kan du använda tjänster och få information från kommunen.\nVad vill du göra?',
                         modifiers: ['automated'],
                     }
                 });
+
+                chat.addMessages({
+                    Component: ButtonStack,
+                    componentProps: {
+                        items: [
+                            {
+                                value: 'Boka eller få reda på mer om borgerlig vigsel',
+                            },
+                            {
+                                value: 'Ställ en fråga om borgerlig vigsel',
+                            }
+                        ]
+                    }
+                });
+
 
             });
         }
@@ -115,13 +131,15 @@ export default class WatsonAgent extends Component {
             }
 
             if (!this.state.disableAgent) {
-                chat.addMessages({
-                    Component: props => (<ChatBubble {...props}><Markdown styles={markdownStyles}>{responseText}</Markdown></ChatBubble>),
-                    componentProps: {
-                        content: responseText,
-                        modifiers: ['automated'],
+                chat.addMessages(
+                    {
+                        Component: props => (<ChatBubble {...props}><Markdown styles={markdownStyles}>{responseText}</Markdown></ChatBubble>),
+                        componentProps: {
+                            content: responseText,
+                            modifiers: ['automated'],
+                        }
                     }
-                });
+                );
 
                 let inputArray = [{
                     type: 'text',
