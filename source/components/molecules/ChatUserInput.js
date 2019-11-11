@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 import styled from 'styled-components/native';
 
@@ -10,7 +10,22 @@ import ButtonStack from './ButtonStack';
 import DateTimePickerForm from './DateTimePickerForm';
 import InputForm from './InputForm';
 
-export default class ChatUserInput extends PureComponent {
+export default class ChatUserInput extends Component {
+
+    shouldComponentUpdate(nextProps, nextState) {
+        // Re-render only if props has changed
+        return JSON.stringify(this.props) !== JSON.stringify(nextProps);
+    }
+
+    avalibleComponents = {
+        text: withChatForm(InputForm),
+        number: withChatForm(InputForm),
+        radio: ButtonStack,
+        select: {},
+        dateTime: withChatForm(DateTimePickerForm),
+        custom: {},
+    };
+
     componentController = (input, index) => {
         let data = {
             Component: false,
@@ -20,8 +35,9 @@ export default class ChatUserInput extends PureComponent {
         switch(input.type) {
             case 'text':
                 data = {
-                    Component: withChatForm(InputForm), 
+                    Component: this.avalibleComponents.text, 
                     componentProps: {
+                        blurOnSubmit: false,
                         autoFocus: true,
                         ...includePropetiesWithKey(input, ['placeholder', 'autoFocus', 'maxLength', 'submitText']),
                     }
@@ -30,18 +46,19 @@ export default class ChatUserInput extends PureComponent {
 
             case 'number':
                 data =  {
-                    Component: withChatForm(InputForm), 
+                    Component: this.avalibleComponents.number, 
                     componentProps: {
+                        blurOnSubmit: false,
                         autoFocus: true,
                         keyboardType: 'numeric',
-                        ...includePropetiesWithKey(input, ['placeholder', 'autoFocus', 'maxLength', 'submitText']), 
+                        ...includePropetiesWithKey(input, ['placeholder', 'autoFocus', 'maxLength', 'submitText']),
                     }
                 };
                 break;
-                
+
             case 'radio':
                 data =  {
-                    Component: ButtonStack, 
+                    Component: this.avalibleComponents.radio, 
                     componentProps: {
                         items: input.options
                     }
@@ -54,7 +71,7 @@ export default class ChatUserInput extends PureComponent {
 
             case 'dateTime':
                 data = {
-                    Component: withChatForm(DateTimePickerForm), 
+                    Component: this.avalibleComponents.dateTime, 
                     componentProps: {
                         ...includePropetiesWithKey(input, ['placeholder'])
                     }
@@ -63,7 +80,7 @@ export default class ChatUserInput extends PureComponent {
 
             case 'custom':
                 data = {
-                    Component: input.Component, 
+                    Component: input.Component,
                     componentProps: {
                         ...includePropetiesWithKey(input, ['componentProps'])
                     }
@@ -87,12 +104,12 @@ export default class ChatUserInput extends PureComponent {
 
                     // Component data
                     .map(this.componentController)
-                    
+
                     // render JSX element
                     .map(({Component, componentProps}, index) => (
                         Component ? 
                             <Component 
-                                chat={chat} 
+                                chat={excludePropetiesWithKey(chat, ['messages'])} 
                                 key={`${Component}-${index}`}
 
                                 {...componentProps}
@@ -100,7 +117,7 @@ export default class ChatUserInput extends PureComponent {
                         : null
                     ))
                 }
-            </ChatUserInputWrapper>    
+            </ChatUserInputWrapper>
         )
     }
 };
