@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, FlatList } from 'react-native';
 import styled from 'styled-components/native';
-import ChatBubble from '../atoms/ChatBubble';
 import { PropTypes } from 'prop-types';
 
 const ChatMessagesFlatList = styled.FlatList`
@@ -13,10 +12,11 @@ class ChatMessages extends Component {
         messages: PropTypes.arrayOf(
             PropTypes.shape({
                 Component: PropTypes.elementType,
-                componentProps: PropTypes.object
+                componentProps: PropTypes.object,
             })
         ),
-        forwardProps: PropTypes.object
+        forwardProps: PropTypes.object,
+        chat: PropTypes.object
     }
 
     // Required to scroll FlatList
@@ -51,17 +51,17 @@ class ChatMessages extends Component {
     }
 
     render() {
-        const {messages, forwardProps} = this.props;
-        
+        const { messages, forwardProps } = this.props;
+
         return (
-            <ChatMessagesFlatList 
+            <ChatMessagesFlatList
                 ref={(flatListRef) => { this.flatListRef = flatListRef }}
                 scrollEnabled={true}
                 inverted={false}
                 data={[...messages]}
                 renderItem={this.renderItem}
-                onContentSizeChange={() => {this.flatListRef.scrollToEnd()}}
-                onLayout={() => {this.flatListRef.scrollToEnd()}}
+                onContentSizeChange={() => { this.flatListRef.scrollToEnd() }}
+                onLayout={() => { this.flatListRef.scrollToEnd() }}
                 keyExtractor={(item, index) => index.toString()}
                 {...forwardProps}
             />
