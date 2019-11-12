@@ -1,13 +1,17 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import styled, {css} from 'styled-components/native';
+import styled, {css, withTheme} from 'styled-components/native';
 import Text from './Text';
 import Heading from './Heading';
 import shadow from '../../styles/shadow';
 import PropTypes from 'prop-types';
 
+import Icon from './Icon';
+import Button from './Button';
+
+
 const ChatBubble = props => {
-    const { content, modifiers, style } = props;
+    const { content, modifiers, style, iconRight, onClickIconRight, theme } = props;
 
     const avalibleColorModifiers = ['automated', 'human', 'user'];
     let colorTheme = modifiers ? modifiers.find(modifier => (avalibleColorModifiers.includes(modifier))) : undefined;
@@ -32,13 +36,25 @@ const ChatBubble = props => {
 
     return (
         <Bubble alignment={alignment} colorTheme={colorTheme} style={style}>
-                {children ? 
-                    children
-                : content ?
-                    <BubbleText colorTheme={colorTheme}>
-                        {content}
-                    </BubbleText>
-                : null}
+                <ContentWrapper>
+                    <Body>
+                        {children ? 
+                            children
+                        : content ?
+                            <BubbleText colorTheme={colorTheme}>
+                                {content}
+                            </BubbleText>
+                        : null}
+                    </Body>
+                    {
+                        iconRight && onClickIconRight ?
+                            <Aside>
+                                <IconButton onClick={onClickIconRight} z={0}><Icon color={theme.chatBubble[colorTheme].asideIcon} name={iconRight} /></IconButton>
+                            </Aside>
+                        : null
+                    }
+                </ContentWrapper>
+
         </Bubble>
     );
 }
@@ -46,13 +62,16 @@ const ChatBubble = props => {
 ChatBubble.propTypes = {
     modifiers: PropTypes.arrayOf(PropTypes.oneOf(['automated', 'human', 'user'])),
     content: PropTypes.string,
+    onClickIconRight: PropTypes.func,
+    iconRight: PropTypes.string
 };
 
 ChatBubble.defaultProps = {
-    modifiers: ['user']
+    modifiers: ['user'],
+    iconRight: 'help-outline'
 };
 
-export default ChatBubble;
+export default withTheme(ChatBubble);
 
 const Bubble = styled.View`  
     margin-top: 6px;
@@ -68,6 +87,7 @@ const Bubble = styled.View`
     ${props => ((props.alignment && CSS[props.alignment]) ? CSS[props.alignment] : null)}
     ${props => (shadow[1])}
 `;
+
 
 const BubbleHeading = styled(Heading)`
     color: ${props => (props.theme.chatBubble[props.colorTheme].text)};
@@ -89,4 +109,26 @@ CSS.right = css`
     align-self: flex-end;
     border-bottom-right-radius: 4px;
     margin-left: 96px;
+`;
+
+const IconButton = styled(Button)`
+    padding: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    min-height: auto;
+`;
+const ContentWrapper = styled.View`
+    flex-direction: row;
+    flex-wrap: nowrap;
+`;
+
+const Body = styled.View`
+    flex-shrink: 1;
+`;
+const Aside = styled.View`
+    flex-basis: 42px;
+    border-left-width: 1px;
+    border-left-color: ${props => (props.theme.border.default)};
+    align-items: flex-end;
+    margin-left: 16px;
 `;

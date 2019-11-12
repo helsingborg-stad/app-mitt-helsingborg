@@ -13,6 +13,7 @@ function loadStories() {
   require('../source/components/atoms/Select.stories');
   require('../source/components/atoms/Text.stories');
   require('../source/components/molecules/Lists.stories');
+  require('../source/components/molecules/Modal.stories');
   require('../source/components/organisms/FormAgent/FormAgent.stories');
   require('../source/components/organisms/LoginAgent.stories');
   require('../source/components/organisms/NavigationTabs.stories');
@@ -29,6 +30,7 @@ const stories = [
   '../source/components/atoms/Select.stories',
   '../source/components/atoms/Text.stories',
   '../source/components/molecules/Lists.stories',
+  '../source/components/molecules/Modal.stories',
   '../source/components/organisms/FormAgent/FormAgent.stories',
   '../source/components/organisms/LoginAgent.stories',
   '../source/components/organisms/NavigationTabs.stories',

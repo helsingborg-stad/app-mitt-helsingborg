@@ -1,13 +1,18 @@
 import React from 'react';
-import { filterPropetiesByKeys } from '../../helpers/Objects';
+import { includePropetiesWithKey, excludePropetiesWithKey } from '../../helpers/Objects';
 import ChatForm from './ChatForm';
+import { Keyboard, TextInput, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import Input from '../atoms/Input';
+import styled, { withTheme } from 'styled-components/native';
 
 const InputForm = props => {
+    const chatFormProps = ['isFocused', 'submitHandler', 'changeHandler', 'inputValue', 'submitText'];
     return (
-        <ChatForm {...filterPropetiesByKeys(props, ['isFocused', 'submitHandler', 'changeHandler', 'inputValue'])}>
-            <Input {...props} />
+        <ChatForm {...includePropetiesWithKey(props, chatFormProps)}>
+            <Input placeholderTextColor={props.theme.input.placeholder} {...excludePropetiesWithKey(props, chatFormProps)} />
         </ChatForm>
     );
 };
-export default InputForm;
+
+
+export default withTheme(InputForm);

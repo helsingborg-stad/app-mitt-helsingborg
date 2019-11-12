@@ -1,37 +1,45 @@
 import React from 'react';
-import { View, Text } from 'react-native';
 import styled from 'styled-components/native';
 
+import FormAgent from '../organisms/FormAgent/FormAgent';
 import Button from '../atoms/Button';
 import Icon from '../atoms/Icon';
+import Text from '../atoms/Text';
 import ChatBubble from '../atoms/ChatBubble';
-import Input from '../atoms/Input';
 
 const ButtonStack = props => {
     const { items, children } = props;
 
     renderItem = (item, index) => {
-        const { icon, value } = item;
+        const { icon, value, action } = item;
 
         const buttonProps = {
             label: value,
-            messages: [{
-                Component: ChatBubble,
-                componentProps: {
-                    content: value,
-                    modifiers: ['user'],
-                }
-            }],
-            iconColor: icon === 'check' 
-                ? '#50811B' 
-                : icon === 'close' 
-                    ? '#AE0B05' 
+            iconColor: icon === 'check'
+                ? '#50811B'
+                : icon === 'close'
+                    ? '#AE0B05'
                     : undefined,
-            icon: icon ? icon : 'message'
+            icon: icon ? icon : 'message',
+            clickAction: () => {
+                const message = [{
+                    Component: ChatBubble,
+                    componentProps: {
+                        content: value,
+                        modifiers: ['user'],
+                    }
+                }];
+                // Add message
+                props.chat.addMessages(message);
+                // Trigger custom actions
+                if (action && action.type === 'form') {
+                    props.chat.switchAgent(props => <FormAgent {...props} formId={action.value} />);
+                }
+            }
         };
 
         return (
-            <ActionButton {...buttonProps} addMessages={props.chat.addMessages} key={`${item}-${index}`} />
+            <ActionButton {...buttonProps} key={`${item}-${index}`} />
         );
     }
 
@@ -46,7 +54,7 @@ export default ButtonStack;
 
 const ActionButton = (props) => {
     return (
-        <ModifiedButton onClick={() => props.addMessages(props.messages)} color={'light'} rounded block>
+        <ModifiedButton onClick={props.clickAction} color={'light'} rounded block>
             <Icon color={props.iconColor} name={props.icon} />
             <Text>{props.label}</Text>
         </ModifiedButton>
