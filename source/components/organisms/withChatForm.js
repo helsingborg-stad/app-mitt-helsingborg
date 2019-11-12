@@ -29,13 +29,12 @@ const withChatForm = (WrappedComponent, onSubmit) => {
                 onSubmit(inputValue);
             }
         }
+        
+        // provides form props to WrappedComponent: submitHandler, changeHandler inputValue
+        WrappedComponentWithForm = withForm(WrappedComponent, this.messageOnSubmit);
 
         render() {
-            const { messageOnSubmit } = this;
-
-            // provides form props to WrappedComponent: submitHandler, changeHandler inputValue
-            const WrappedComponentWithForm = withForm(WrappedComponent, messageOnSubmit);
-
+            const { WrappedComponentWithForm } = this;
             return <WrappedComponentWithForm {...this.props} />;
         }
     }

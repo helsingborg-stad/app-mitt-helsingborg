@@ -1,14 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { TextInput } from 'react-native';
-import styled from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 
-const Input = styled(TextInput)`
+const input = css`
     flex: 1;
     background-color: ${({theme}) => theme.input.background};
-    border-radius: 15px;
+    border-radius: 17.5px;
     border: solid 1px ${({theme}) => theme.input.border};
     padding: 16px;
+`;
+
+const Input = styled(TextInput)`
+    ${input}
 `;
 
 Input.propTypes = {}
@@ -23,3 +27,4 @@ Input.defaultProps = {
 };
 
 export default Input
+export { input };

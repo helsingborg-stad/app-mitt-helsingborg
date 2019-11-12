@@ -9,7 +9,7 @@ import Text from './Text';
 import Icon from './Icon';
 
 const ButtonNew = (props) => {
-    const { value, onClick, style, color, block, rounded, pill, sharp, icon, z } = props;
+    const { value, onClick, style, color, block, rounded, pill, sharp, icon, z, size } = props;
     
     const childrenTotal = React.Children.count(props.children);
     
@@ -38,7 +38,7 @@ const ButtonNew = (props) => {
         /** Text */
         if (child.type === Text) {
             textComponentsTotal++;
-            return React.createElement(ButtonText, {...child.props, buttonTheme: color});
+            return React.createElement(ButtonText, {...child.props, buttonTheme: color, buttonSize: size});
         }
 
         return child;
@@ -53,6 +53,7 @@ const ButtonNew = (props) => {
             >
                 <ButtonBase
                     buttonTheme={color}
+                    buttonSize={size}
                     rounded={rounded}
                     pill={pill}
                     style={style}
@@ -84,7 +85,8 @@ ButtonNew.defaultProps = {
     pill: false,
     icon: false,
     sharp: false,
-    z: 1
+    z: 1,
+    size: 'medium'
 };
 
 /** Button styles */
@@ -105,6 +107,8 @@ const ButtonBase = styled.View`
     ${props => (props.rounded ? CSS.buttonRounded : null)}
     ${props => (props.pill ? CSS.buttonPill : null)}
     ${props => (props.sharp ? CSS.buttonSharp : null)}
+    
+    ${props => (props.buttonSize === 'small' ? CSS.buttonSmall : null)}
 
     ${props => (CSS.z[props.z])}
     shadow-color: ${props => (props.theme.button[props.buttonTheme].shadow)};
@@ -125,10 +129,18 @@ CSS.buttonSharp = css`
     border-radius: 0px;
 `;
 
+CSS.buttonSmall = css`
+    padding: 10px 12px;
+    min-height: 36px;
+    min-width: 74px;
+`;
+
 /** Button child component overrides */
 const ButtonText = styled(Text)`
-    font-size: 16px;
+    font-size: ${(props) => (props.buttonSize === 'small' ? '14px' : '16px')};
     color: ${(props) => (props.theme.button[props.buttonTheme].text)};
+    
+    ${(props) => (props.buttonSize === 'small' ? 'font-weight: bold;' : null)};
 `;
 
 const ButtonIcon = styled(Icon)`

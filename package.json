@@ -18,10 +18,12 @@
     "react-native-config": "^0.11.7",
     "react-native-elements": "^1.2.6",
     "react-native-gesture-handler": "^1.4.1",
+    "react-native-modal": "^11.5.1",
     "react-native-network-info": "^5.0.1",
     "react-native-push-notification": "^3.1.3",
     "react-native-reanimated": "^1.3.0",
     "react-native-screens": "^1.0.0-alpha.23",
+    "react-native-simple-markdown": "^1.1.0",
     "react-native-swiper": "^1.5.14",
     "react-native-vector-icons": "^6.6.0",
     "react-navigation": "^4.0.10",
@@ -58,5 +60,11 @@
       "pattern": "**/*.stories.js",
       "outputFile": "./storybook/storyLoader.js"
     }
+  },
+  "rnpm": {
+    "assets": [
+      "./source/assets/fonts/Roboto",
+      "./source/assets/fonts/Sarpanch"
+    ]
   }
 }

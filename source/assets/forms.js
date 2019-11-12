@@ -1,3 +1,4 @@
+
 const forms = [
   {
       id: 1,
@@ -40,13 +41,57 @@ const forms = [
             placeholder: 'Adress',
             dependency: {
                 relation: 'AND',
-                conditions: [
+                conditions: [{
+                    'key': 'weddingLocation',
+                    'value': 'På Rådhuset i Helsingborg',
+                    'compare': '='
+                }]
+            },
+            explainer: [
+                {
+                    key: 0,
+                    heading: 'Gäster',
+                    content: 'I Rådhusets vigselsal får det max vara 20 personer samtidigt. Ni kan därför som mest ha 17 gäster till er vigsel, inklusive barn och era vittnen.',
+                }
+            ]
+        },
+        {
+            key: 'hasSpecialRequests',
+            question: 'Har ni några speciella önskemål för er vigsel?',
+            input: [{
+                type: 'radio',
+                options: [{
+                        value: 'Ja',
+                        icon: 'check',
+                    },
                     {
-                        'key': 'partnerSameAddress',
-                        'value': 'Nej',
-                        'compare': '='
-                    }
-                ]
+                        value: 'Nej',
+                        icon: 'close',
+                    },
+                ],
+            }, ],
+            explainer: [
+                {
+                    key: 0,
+                    heading: 'Önskemål',
+                    content: 'Önskemål för er vigsel kan till exempel vara att ni vill ha musik vid vigseln, att ni vill ha ert vigselbevis på engelska eller om ni vill ha en specifik vigselförrättare.\nEfter er bokningsbekräftelse kan ni kan kontakta er vigselförrättare om ni har särskilda önskemål.Det går också bra att kontakta Helsingborgs kontaktcenter här i appen, via telefon eller mejl.',
+                }
+            ]
+        },
+        {
+            key: 'speciaRequests',
+            question: false,
+            input: [{
+                type: 'text',
+                placeholder: 'Ange önskemål',
+            }, ],
+            dependency: {
+                relation: 'AND',
+                conditions: [{
+                    'key': 'hasSpecialRequests',
+                    'value': 'Ja',
+                    'compare': '='
+                }]
             }
         },
         {
@@ -147,8 +192,19 @@ const forms = [
                     icon: 'close',
                 },
             ],
+            input: [{
+                type: 'radio',
+                options: [{
+                        value: 'Ja, skicka bokningsförfrågan',
+                        icon: 'check',
+                    },
+                    {
+                        value: 'Nej, spara bokning och vänta till senare',
+                        icon: 'close',
+                    },
+                ],
+            }, ],
         },
-      ],
-  },
-];
+    ],
+}, ];
 export default forms;

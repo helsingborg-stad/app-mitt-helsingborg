@@ -47,7 +47,8 @@ const colors = {
   anchor: palette.green.dark,
   input: {
     background: palette.mono.white,
-    border: palette.mono.lighter
+    border: palette.mono.lighter,
+    placeholder: palette.mono.gray
   },
   background: {
     default: palette.mono.lightest,
@@ -92,6 +93,13 @@ const colors = {
       iconRight: palette.mono.white,
       shadow: palette.purple[2],
     },
+    purpleLight: {
+      background: palette.purple[1],
+      text: palette.mono.white,
+      icon: palette.mono.white,
+      iconRight: palette.mono.white,
+      shadow: palette.purple[1],
+    },
     blue: {
       background: palette.blue[2],
       text: palette.mono.white,
@@ -134,14 +142,17 @@ const colors = {
     user: { // "User"
       background: palette.purple[3],
       text: palette.mono.white,
+      asideIcon: palette.mono.white
     },
     human: { // "Sally"
       background: palette.mono.white,
       text: palette.mono.gray,
+      asideIcon: palette.mono.darkest
     },
     automated: { // "KC"
       background: palette.mono.white,
       text: palette.mono.gray,
+      asideIcon: palette.mono.darkest
     }
   },
   chatBody: {
@@ -171,9 +182,15 @@ const colors = {
       purple: {
           ...palette.purple
         },
-        blue: {
+      blue: {
           ...palette.blue
-        }
+      },
+      red: {
+          ...palette.red
+      },
+      green: {
+          ...palette.green
+      },
    }
 };
 
