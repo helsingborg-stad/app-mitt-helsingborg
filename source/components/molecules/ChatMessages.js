@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
 import { Text, View, FlatList } from 'react-native';
 import styled from 'styled-components/native';
-import ChatBubble from '../atoms/ChatBubble';
 import { PropTypes } from 'prop-types';
 
-const ChatMessagesFlatListWrapper = styled.View`
-    flex: 1;
-`;
-
 const ChatMessagesFlatList = styled.FlatList`
-    flex-grow: 0;
-    margin-bottom: 24px;
+    flex-basis: 100%;
 `;
 
 class ChatMessages extends Component {
@@ -18,16 +12,17 @@ class ChatMessages extends Component {
         messages: PropTypes.arrayOf(
             PropTypes.shape({
                 Component: PropTypes.elementType,
-                componentProps: PropTypes.object
+                componentProps: PropTypes.object,
             })
         ),
-        forwardProps: PropTypes.object
+        forwardProps: PropTypes.object,
+        chat: PropTypes.object
     }
 
     // Required to scroll FlatList
     flatListRef = React.createRef();
 
- /**
+    /**
      * Adds custom actions to component props
      * @param {obj} componentProps
      */
@@ -56,27 +51,20 @@ class ChatMessages extends Component {
     }
 
     render() {
-        const {messages, forwardProps} = this.props;
+        const { messages, forwardProps } = this.props;
 
         return (
-            <ChatMessagesFlatListWrapper>
-            <ChatMessagesFlatList 
+            <ChatMessagesFlatList
                 ref={(flatListRef) => { this.flatListRef = flatListRef }}
                 scrollEnabled={true}
-                keyExtractor={(item, index) => index.toString()}
-                inverted
-
-                onLayout={() => {this.flatListRef.scrollToOffset({offset: 0, animted: true})}}
-                onContentSizeChange={() => {this.flatListRef.scrollToOffset({offset: 0, animted: true})}}
-                
-                // data={[...messages]}                
-                data={[...messages].reverse()}                
-                
+                inverted={false}
+                data={[...messages]}
                 renderItem={this.renderItem}
-                
+                onContentSizeChange={() => { this.flatListRef.scrollToEnd() }}
+                onLayout={() => { this.flatListRef.scrollToEnd() }}
+                keyExtractor={(item, index) => index.toString()}
                 {...forwardProps}
             />
-            </ChatMessagesFlatListWrapper>
         )
     }
 }
