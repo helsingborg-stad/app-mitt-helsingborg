@@ -147,6 +147,11 @@ export default class WatsonAgent extends Component {
                     );
                 });
 
+                let inputArray = [{
+                    type: 'text',
+                    placeholder: 'Skriv något...',
+                }];
+
                 if (options.length > 0) {
                     inputArray = [
                         {
@@ -159,6 +164,8 @@ export default class WatsonAgent extends Component {
                             options,
                         }];
                 }
+
+                chat.switchInput(inputArray);
             }
         }
     };
