@@ -101,7 +101,7 @@ export default class WatsonAgent extends Component {
             Alert.alert('Missing Watson workspace ID');
         }
         else {
-            let responseText;
+            let responseMessages = [];
             let options = [];
             try {
                 await sendChatMsg(workspaceId, message, context).then((response) => {
@@ -112,15 +112,17 @@ export default class WatsonAgent extends Component {
 
                     responseGeneric.forEach(elem => {
                         if (elem.response_type === 'text') {
-                            responseText = elem.text;
+                            responseMessages.push(elem.text);
                         }
 
                         if (elem.response_type === 'option' && elem.options) {
                             elem.options.forEach((option) => {
-                                const action = this.captureMetaData(option.value.input.text);
+                                const { action, icon, iconColor } = this.captureMetaData(option.value.input.text);
                                 options.push({
                                     value: option.label,
-                                    action: action
+                                    action: action || undefined,
+                                    icon: icon || undefined,
+                                    iconColor: iconColor || undefined,
                                 })
                             });
                         }
@@ -129,28 +131,35 @@ export default class WatsonAgent extends Component {
             }
             catch (e) {
                 console.log('SendChat error: ', e);
-                responseText = 'Kan ej svara på frågan. Vänta och prova igen senare.';
+                responseMessages = ['Kan ej svara på frågan. Vänta och prova igen senare.'];
             }
 
             if (!this.state.disableAgent) {
-                chat.addMessages(
-                    {
-                        Component: props => (<ChatBubble {...props}><Markdown styles={markdownStyles}>{responseText}</Markdown></ChatBubble>),
-                        componentProps: {
-                            content: responseText,
-                            modifiers: ['automated'],
+                responseMessages.forEach(message => {
+                    chat.addMessages(
+                        {
+                            Component: props => (<ChatBubble {...props}><Markdown styles={markdownStyles}>{message}</Markdown></ChatBubble>),
+                            componentProps: {
+                                content: message,
+                                modifiers: ['automated'],
+                            }
                         }
-                    }
-                );
+                    );
+                });
+
+                let inputArray = [{
+                    type: 'text',
+                    placeholder: 'Skriv något...',
+                }];
 
                 if (options.length > 0) {
-                    chat.addMessages({
-                        Component: (props) => <ButtonStack {...props} chat={chat} />,
-                        componentProps: {
-                            items: options
-                        }
-                    });
+                    inputArray = [{
+                        type: 'radio',
+                        options,
+                    }];
                 }
+
+                chat.switchInput(inputArray);
             }
         }
     };
