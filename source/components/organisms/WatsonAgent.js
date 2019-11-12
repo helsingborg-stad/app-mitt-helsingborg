@@ -47,11 +47,11 @@ export default class WatsonAgent extends Component {
                 });
 
                 chat.addMessages({
-                    Component: ButtonStack,
+                    Component: (props) => <ButtonStack {...props} chat={chat} />,
                     componentProps: {
                         items: [
                             {
-                                value: 'Boka eller få reda på mer om borgerlig vigsel',
+                                value: 'Boka borgerlig vigsel',
                             },
                             {
                                 value: 'Ställ en fråga om borgerlig vigsel',
@@ -77,16 +77,16 @@ export default class WatsonAgent extends Component {
      */
     captureMetaData(value) {
         if (typeof value !== 'string') {
-            return undefined;
+            return {};
         }
 
-        const match = /{([a-z0-9.,_\'"\[\]:{}]+)}/g.exec(value);
+        const match = /{([a-z0-9\s.,_\'"\[\]:{}]+)}/g.exec(value);
         let meta = match && typeof match[1] !== 'undefined' ? match[1] : undefined;
 
         try {
             meta = JSON.parse(meta);
         } catch (error) {
-            // Cannot parse json
+            return {};
         }
 
         return meta;
@@ -141,19 +141,14 @@ export default class WatsonAgent extends Component {
                     }
                 );
 
-                let inputArray = [{
-                    type: 'text',
-                    placeholder: 'Skriv något...',
-                }];
-
                 if (options.length > 0) {
-                    inputArray = [{
-                        type: 'radio',
-                        options,
-                    }];
+                    chat.addMessages({
+                        Component: (props) => <ButtonStack {...props} chat={chat} />,
+                        componentProps: {
+                            items: options
+                        }
+                    });
                 }
-
-                chat.switchInput(inputArray);
             }
         }
     };
