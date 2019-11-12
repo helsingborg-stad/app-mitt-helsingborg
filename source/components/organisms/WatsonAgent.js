@@ -52,9 +52,11 @@ export default class WatsonAgent extends Component {
                         items: [
                             {
                                 value: 'Boka borgerlig vigsel',
+                                icon: 'wc'
                             },
                             {
-                                value: 'Ställ en fråga om borgerlig vigsel',
+                                value: 'Fråga om borgerlig vigsel',
+                                icon: 'helper'
                             }
                         ]
                     }
