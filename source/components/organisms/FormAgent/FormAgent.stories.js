@@ -60,11 +60,9 @@ class FormAgentInitiatorWithRequest extends Component {
     async componentDidMount() {
         const { chat } = this.props;
 
-        const formId = 1
-        const formQuestionsData = await getFormTemplate(formId)
-        const formObject = this.convertFromJsonApiDataToFormObject(formQuestionsData)
-
-        console.log(formObject);
+        const formId = 1;
+        const formQuestionsData = await getFormTemplate(formId);
+        const formObject = this.convertFromJsonApiDataToFormObject(formQuestionsData);
 
         chat.addMessages({
             Component: ChatBubble,
