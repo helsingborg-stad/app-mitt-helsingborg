@@ -79,23 +79,23 @@ class FormAgent extends Component {
         }
 
         // Set currentQuestion then output messages & render input
-        this.setState({currentQuestion: nextQuestion.key}, () => {
-            if (nextQuestion.question) {
+        this.setState({currentQuestion: nextQuestion.id}, () => {
+            if (nextQuestion.name) {
 
                 this.outputMessages(
-                    nextQuestion.question,
+                    nextQuestion.name,
                     'automated',
                     nextQuestion.explainer,
                 );
             }
 
-            chat.switchInput(nextQuestion.input);
+            chat.switchInput(nextQuestion);
         });
     };
 
     isNextQuestion = question => {
         const { answers } = this.state;
-        const { dependency } = question;
+        const { dependency, id } = question;
 
         let coniditionsIsValid = true;
 
@@ -110,7 +110,7 @@ class FormAgent extends Component {
             }, true);
         }
 
-        return coniditionsIsValid && answers[question.key] === undefined;
+        return coniditionsIsValid && answers[id] === undefined;
     };
 
     outputMessages = (messages, modifier = 'automated', explainer = undefined) => {

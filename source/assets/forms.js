@@ -1,54 +1,43 @@
-const forms = [{
-    id: 1,
-    name: 'Bokning borgerlig vigsel startad',
-    trigger: 'Vill boka borgerlig vigsel',
-    doneMessage: 'Då har jag tagit emot er bokning, du kan när som helst se eller redigera din bokning under fliken Mitt HBG',
-    questions: [{
-            key: 'partnerName',
-            question: 'Vem ska du gifta dig med?',
-            input: [{
-                type: 'text',
-                placeholder: 'För- och efternamn',
-            }, ],
+const forms = [
+  {
+      id: 1,
+      name: 'Bokning av borgerlig vigsel - Om er',
+      trigger: 'Vill boka borgerlig vigsel',
+      doneMessage: 'Då har jag tagit emot er bokning. Du kan när som helst se eller redigera din bokning under fliken Ärenden.',
+      questions: [
+        {
+              id: 'partnerName',
+              name: 'Vem ska du gifta dig med?',
+              type: 'text',
+              placeholder: 'För- och efternamn',
         },
         {
-            key: 'partnerSocialNumber',
-            question: ({
-                answers
-            }) => `Vilket personnummer har ${answers.partnerName.split(' ')[0]}?`,
-            input: [{
-                type: 'number',
-                placeholder: 'Personnummer',
-                maxLength: 12,
-            }, ],
+              id: 'partnerSocialNumber',
+              name: ({ answers }) => `Vilket personnummer har ${answers.partnerName.split(' ')[0]}?`,
+              type: 'number',
+              placeholder: 'Personnummer',
+              maxLength: 12,
         },
         {
-            key: 'partnerSameAddress',
-            question: ({
-                answers
-            }) => `Bor ${answers.partnerName.split(' ')[0]} på samma adress som du?`,
-            input: [{
-                type: 'radio',
-                options: [{
-                        value: 'Ja',
-                        icon: 'check',
-                    },
-                    {
-                        value: 'Nej',
-                        icon: 'close',
-                    },
-                ],
-            }, ],
+              id: 'partnerSameAddress',
+              name: ({ answers }) => `Är ${answers.partnerName.split(' ')[0]} folkbokförd på samma adress som du?`,
+              type: 'radio',
+              options: [
+                {
+                    value: 'Ja',
+                    icon: 'check',
+                },
+                {
+                    value: 'Nej',
+                    icon: 'close',
+                },
+              ],
         },
         {
-            key: 'partnerAddress',
-            question: ({
-                answers
-            }) => `Vilken gatuadress har ${answers.partnerName.split(' ')[0]}?`,
-            input: [{
-                type: 'text',
-                placeholder: 'Gatuadress',
-            }, ],
+            id: 'partnerAddress',
+            name: ({ answers }) => `Vilken adress är ${answers.partnerName.split(' ')[0]} folkbokförd på?`,
+            type: 'text',
+            placeholder: 'Adress',
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -59,13 +48,10 @@ const forms = [{
             }
         },
         {
-            key: 'partnerPostal',
-            question: 'Vilket postnummer?',
-            input: [{
-                type: 'number',
-                placeholder: 'Postnummer',
-                maxLength: 5
-            }, ],
+            id: 'partnerPostal',
+            name: 'Vilket postnummer?',
+            type: 'number',
+            placeholder: 'Postnummer',
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -76,12 +62,10 @@ const forms = [{
             }
         },
         {
-            key: 'partnerCity',
-            question: 'Ort?',
-            input: [{
-                type: 'text',
-                placeholder: 'Ort',
-            }, ],
+            id: 'partnerCity',
+            name: 'Ort?',
+            type: 'text',
+            placeholder: 'Ort',
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -92,26 +76,22 @@ const forms = [{
             }
         },
         {
-            key: 'weddingLocation',
-            question: 'Var vill ni gifta er?',
-            input: [{
-                type: 'radio',
-                options: [{
-                        value: 'På Rådhuset i Helsingborg',
-                    },
-                    {
-                        value: 'Annan plats',
-                    },
-                ],
-            }, ],
-        },
+            id: 'weddingLocation',
+            name: 'Var vill ni gifta er?',
+            type: 'radio',
+            options: [{
+                    value: 'På Rådhuset i Helsingborg',
+                },
+                {
+                    value: 'Annan plats',
+                },
+            ],
+        }, 
         {
-            key: 'weddingLocationCustom',
-            question: 'Var vill ni gifta er?',
-            input: [{
-                type: 'text',
-                placeholder: 'Val av plats',
-            }, ],
+            id: 'weddingLocationCustom',
+            name: 'Var vill ni gifta er?',
+            type: 'text',
+            placeholder: 'Val av plats',
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -122,11 +102,9 @@ const forms = [{
             }
         },
         {
-            key: 'weddingDate',
-            question: 'Vilket datum vill ni gifta er?',
-            input: [{
-                type: 'dateTime',
-            }, ],
+            id: 'weddingDate',
+            name: 'Vilket datum vill ni gifta er?',
+            type: 'datetime',
             explainer: [
                 {
                     key: 0,
@@ -136,20 +114,19 @@ const forms = [{
             ]
         },
         {
-            key: 'hasWitness',
-            question: 'Ni behöver ha två vittnen under er vigsel. Har ni bestämt vilka vittnen ni vill ha?',
-            input: [{
-                type: 'radio',
-                options: [{
-                        value: 'Ja',
-                        icon: 'check',
-                    },
-                    {
-                        value: 'Nej jag vill komplettera senare',
-                        icon: 'close',
-                    },
-                ],
-            }, ],
+            id: 'hasWitness',
+            name: 'Ni behöver ha två vittnen under er vigsel. Har ni bestämt vilka vittnen ni vill ha?',
+            type: 'radio',
+            options: [
+              {
+                  value: 'Ja',
+                  icon: 'check',
+              },
+              {
+                  value: 'Nej jag vill komplettera senare',
+                  icon: 'close',
+              },
+            ],
             explainer: [
                 {
                     key: 0,
@@ -158,16 +135,14 @@ const forms = [{
                 }
             ]
         },
-        {
-            key: 'firstWitness',
-            question: [
+         {
+            id: 'firstWitness',
+            name: [
                 'Under vigseln behöver ni ha två vittnen. För att jag ska kunna boka er vigsel behöver jag veta vad de heter.',
                 'Vad heter ert första vittne?',
             ],
-            input: [{
-                type: 'text',
-                placeholder: 'Vittne 1: För- och efternamn',
-            }, ],
+            type: 'text',
+            placeholder: 'Vittne 1: För- och efternamn',
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -178,12 +153,10 @@ const forms = [{
             }
         },
         {
-            key: 'secondWitness',
-            question: 'Vad heter ert andra vittne?',
-            input: [{
-                type: 'text',
-                placeholder: 'Vittne 2: För- och efternamn',
-            }, ],
+            id: 'secondWitness',
+            name: 'Vad heter ert andra vittne?',
+            type: 'text',
+            placeholder: 'Vittne 2: För- och efternamn',
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -192,17 +165,14 @@ const forms = [{
                     'compare': '='
                 }]
             }
-
         },
         {
-            key: 'guestsTotal',
-            question: [
+            id: 'guestsTotal',
+            name: [
                 'Hur många gäster kommer till er vigsel?'
             ],
-            input: [{
-                type: 'number',
-                placeholder: 'Ange antal gäster',
-            }, ],
+            type: 'number',
+            placeholder: 'Ange antal gäster',
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -220,20 +190,34 @@ const forms = [{
             ]
         },
         {
-            key: 'hasSpecialRequests',
-            question: 'Har ni några speciella önskemål för er vigsel?',
-            input: [{
-                type: 'radio',
-                options: [{
-                        value: 'Ja',
-                        icon: 'check',
-                    },
-                    {
-                        value: 'Nej',
-                        icon: 'close',
-                    },
-                ],
-            }, ],
+            id: 'hindersProvning',
+            name: 'Har ni intyg för hindersprövning från Skatteverket? ',
+            type: 'radio',
+            options: [
+                {
+                    value: 'Ja',
+                    icon: 'check',
+                },
+                {
+                    value: 'Nej',
+                    icon: 'close',
+                },
+            ],
+        },
+        {
+            id: 'specialRequests',
+            name: 'Har ni några speciella önskemål för er vigsel?',
+            type: 'radio',
+            options: [
+                {
+                    value: 'Ja',
+                    icon: 'check',
+                },
+                {
+                    value: 'Nej',
+                    icon: 'close',
+                },
+            ],
             explainer: [
                 {
                     key: 0,
@@ -243,69 +227,24 @@ const forms = [{
             ]
         },
         {
-            key: 'speciaRequests',
-            question: false,
-            input: [{
-                type: 'text',
-                placeholder: 'Ange önskemål',
-            }, ],
-            dependency: {
-                relation: 'AND',
-                conditions: [{
-                    'key': 'hasSpecialRequests',
-                    'value': 'Ja',
-                    'compare': '='
-                }]
-            }
-        },
-        {
-            key: 'hindersProvning',
-            question: [
-                'Innan ni gifter er måste Skatteverket intyga att det inte finns några hinder för giftemål',
-                'Har ni intyg för hindersprövning från Skatteverket?'
+            id: 'confirmBooking',
+            name: [
+                'Du har nu gått igenom alla steg för att boka borgerlig vigsel.',
+                ({answers}) => (`Du och ${answers.partnerName.split(' ')[0]} vill gifta er i ${answers.weddingLocation} ${answers.weddingDate}. Ni kommer ha ${answers.guestsTotal} gäster, inklusive era vittnen ${answers.firstWitness.split(' ')[0]} och ${answers.secondWitness.split(' ')[0]}.`),
+                'Vill du boka vigsel?'
             ],
-            input: [{
-                type: 'radio',
-                options: [{
-                        value: 'Ja',
-                        icon: 'check',
-                    },
-                    {
-                        value: 'Nej',
-                        icon: 'close',
-                    },
-                ],
-            }, ],
-            explainer: [
+            type: 'radio',
+            options: [
                 {
-                    key: 0,
-                    heading: 'Hindersprövning',
-                    content: 'Innan ni gifter er måste Skatteverket göra en hindersprövning, för att se till att det inte finns några hinder för äktenskapet. Ni ansöker om hindersprövning genom att fylla i en blankett som ni skickar till Skatteverket. Du hittar blanketten, och mer information om hindersprövning, på Skatteverkets webbplats.',
-                }
+                    value: 'Ja, boka vigsel',
+                    icon: 'check',
+                },
+                {
+                    value: 'Nej, spara bokning och vänta till senare',
+                    icon: 'close',
+                },
             ]
-        },
-        {
-            key: 'confirmBooking',
-            question: [
-                'Då har jag följande uppgifter om din bokning',
-                ({
-                    answers
-                }) => (`Du och ${answers.partnerName.split(' ')[0]} vill gifta er ${answers.weddingLocationCustom ? answers.weddingLocationCustom : answers.weddingLocation} ${answers.weddingDate}`),
-                'Vill du skicka bokningsförfrågan?'
-            ],
-            input: [{
-                type: 'radio',
-                options: [{
-                        value: 'Ja, skicka bokningsförfrågan',
-                        icon: 'check',
-                    },
-                    {
-                        value: 'Nej, spara bokning och vänta till senare',
-                        icon: 'close',
-                    },
-                ],
-            }, ],
-        },
+        }
     ],
 }, ];
 export default forms;

@@ -63,7 +63,7 @@ export default class ChatUserInput extends Component {
                 // SelectForm
                 break;
 
-            case 'dateTime':
+            case 'datetime':
                 data = {
                     Component: this.avalibleComponents.dateTime, 
                     componentProps: {
