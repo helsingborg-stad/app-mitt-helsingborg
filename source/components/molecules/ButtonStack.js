@@ -8,7 +8,11 @@ import Text from '../atoms/Text';
 import ChatBubble from '../atoms/ChatBubble';
 
 const ButtonStack = props => {
-    const { items, children } = props;
+    const { items, children, isFocused } = props;
+
+    if (isFocused) {
+        return null;
+    }
 
     renderItem = (item, index) => {
         const { icon, value, action } = item;
