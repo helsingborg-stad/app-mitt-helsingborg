@@ -14,7 +14,7 @@ export default class ChatUserInput extends Component {
     avalibleComponents = {
         text: withChatForm(InputForm),
         number: withChatForm(InputForm),
-        radio: ButtonStack,
+        radio: withChatForm(ButtonStack),
         select: {},
         dateTime: withChatForm(DateTimePickerForm),
         custom: {},
