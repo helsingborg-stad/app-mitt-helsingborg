@@ -37,7 +37,7 @@ class FormAgent extends Component {
                 Component: ChatDivider,
                 componentProps: {
                     title: `${new Date().getDay()} ${MONTHS.SE[new Date().getMonth()]}`,
-                    info: form.name,
+                    info: `Bokning ${form.name.toLowerCase()} startad`,
                 }
             }
         ]);
@@ -66,8 +66,17 @@ class FormAgent extends Component {
             if (form.doneMessage) {
                 this.outputMessages(form.doneMessage);
 
+                chat.addMessages([
+                    {
+                        Component: ChatDivider,
+                        componentProps: {
+                            info: `Bokning ${form.name.toLowerCase()} avslutad`,
+                        }
+                    }
+                ]);
+
                 chat.switchAgent(props => <WatsonAgent {...props}
-                                                       initialMessages={['Bokning av vigsel klar. Något annat jag kan hjälpa med?']}/>)
+                    initialMessages={['Kan jag hjälpa dig med någon annat?']} />)
                 chat.switchInput({
                     autoFocus: false,
                     type: 'text',
