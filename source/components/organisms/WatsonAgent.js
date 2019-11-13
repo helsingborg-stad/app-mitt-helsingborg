@@ -153,10 +153,16 @@ export default class WatsonAgent extends Component {
                 }];
 
                 if (options.length > 0) {
-                    inputArray = [{
-                        type: 'radio',
-                        options,
-                    }];
+                    inputArray = [
+                        {
+                            type: 'text',
+                            placeholder: 'Skriv något...',
+                            autoFocus: false,
+                        },
+                        {
+                            type: 'radio',
+                            options,
+                        }];
                 }
 
                 chat.switchInput(inputArray);
