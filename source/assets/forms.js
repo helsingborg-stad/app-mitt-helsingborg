@@ -1,7 +1,7 @@
 const forms = [
   {
       id: 1,
-      name: 'Bokning av borgerlig vigsel - Om er',
+      name: 'Borgerlig vigsel',
       trigger: 'Vill boka borgerlig vigsel',
       doneMessage: 'Då har jag tagit emot er bokning. Du kan när som helst se eller redigera din bokning under fliken Ärenden.',
       questions: [
