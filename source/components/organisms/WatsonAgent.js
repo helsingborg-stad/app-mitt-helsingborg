@@ -82,7 +82,7 @@ export default class WatsonAgent extends Component {
             return {};
         }
 
-        const match = /{([a-z0-9\s.,_\'"\[\]:{}]+)}/g.exec(value);
+        const match = /{([a-z0-9\s.,_\'"-\[\]:{}]+)}/g.exec(value);
         let meta = match && typeof match[1] !== 'undefined' ? match[1] : undefined;
 
         try {
