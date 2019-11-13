@@ -35,7 +35,8 @@ class Chat extends Component {
             visible: false,
             heading: '',
             content: ''
-        }
+        },
+        isTyping: false
     };
 
     componentDidMount() {
@@ -53,6 +54,10 @@ class Chat extends Component {
         if (ChatUserInput) {
             this.switchUserInput(ChatUserInput);
         }
+    }
+
+    toggleTyping = async () => {
+        await this.setState(prevState => ({isTyping: !prevState.isTyping}));
     }
 
     addMessages = async (objects) => {
@@ -128,9 +133,9 @@ class Chat extends Component {
     }
 
     render() {
-        const { messages, ChatAgent, inputComponents, modal } = this.state;
-        const { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal } = this;
-        const instanceMethods = { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal };
+        const { messages, ChatAgent, inputComponents, modal, isTyping } = this.state;
+        const { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal, toggleTyping } = this;
+        const instanceMethods = { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal, toggleTyping };
 
         return (
             <ChatWrapper keyboardVerticalOffset={24} >
