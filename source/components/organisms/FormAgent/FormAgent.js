@@ -80,7 +80,7 @@ class FormAgent extends Component {
 
         // Set currentQuestion then output messages & render input
         this.setState({currentQuestion: nextQuestion.id}, () => {
-            if (nextQuestion.question) {
+            if (nextQuestion.name) {
 
                 this.outputMessages(
                     nextQuestion.name,
@@ -95,7 +95,7 @@ class FormAgent extends Component {
 
     isNextQuestion = question => {
         const { answers } = this.state;
-        const { dependency } = question;
+        const { dependency, id } = question;
 
         let coniditionsIsValid = true;
 
@@ -109,8 +109,9 @@ class FormAgent extends Component {
                 return answers[condition.key] !== undefined && answers[condition.key] === condition.value;
             }, true);
         }
-        return coniditionsIsValid && answers[question.id] === undefined;
-    }
+
+        return coniditionsIsValid && answers[id] === undefined;
+    };
 
     outputMessages = (messages, modifier = 'automated', explainer = undefined) => {
         const { chat } = this.props;

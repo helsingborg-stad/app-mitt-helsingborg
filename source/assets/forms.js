@@ -49,7 +49,7 @@ const forms = [
         },
         {
             id: 'partnerPostal',
-            question: 'Vilket postnummer?',
+            name: 'Vilket postnummer?',
             type: 'number',
             placeholder: 'Postnummer',
             dependency: {
@@ -63,7 +63,7 @@ const forms = [
         },
         {
             id: 'partnerCity',
-            question: 'Ort?',
+            name: 'Ort?',
             type: 'text',
             placeholder: 'Ort',
             dependency: {
@@ -77,7 +77,7 @@ const forms = [
         },
         {
             id: 'weddingLocation',
-            question: 'Var vill ni gifta er?',
+            name: 'Var vill ni gifta er?',
             type: 'radio',
             options: [{
                     value: 'På Rådhuset i Helsingborg',
@@ -89,7 +89,7 @@ const forms = [
         }, 
         {
             id: 'weddingLocationCustom',
-            question: 'Var vill ni gifta er?',
+            name: 'Var vill ni gifta er?',
             type: 'text',
             placeholder: 'Val av plats',
             dependency: {
@@ -103,7 +103,7 @@ const forms = [
         },
         {
             id: 'weddingDate',
-            question: 'Vilket datum vill ni gifta er?',
+            name: 'Vilket datum vill ni gifta er?',
             type: 'datetime',
             explainer: [
                 {
@@ -115,7 +115,7 @@ const forms = [
         },
         {
             id: 'hasWitness',
-            question: 'Ni behöver ha två vittnen under er vigsel. Har ni bestämt vilka vittnen ni vill ha?',
+            name: 'Ni behöver ha två vittnen under er vigsel. Har ni bestämt vilka vittnen ni vill ha?',
             type: 'radio',
             options: [
               {
@@ -137,7 +137,7 @@ const forms = [
         },
          {
             id: 'firstWitness',
-            question: [
+            name: [
                 'Under vigseln behöver ni ha två vittnen. För att jag ska kunna boka er vigsel behöver jag veta vad de heter.',
                 'Vad heter ert första vittne?',
             ],
@@ -154,7 +154,7 @@ const forms = [
         },
         {
             id: 'secondWitness',
-            question: 'Vad heter ert andra vittne?',
+            name: 'Vad heter ert andra vittne?',
             type: 'text',
             placeholder: 'Vittne 2: För- och efternamn',
             dependency: {
@@ -168,7 +168,7 @@ const forms = [
         },
         {
             id: 'guestsTotal',
-            question: [
+            name: [
                 'Hur många gäster kommer till er vigsel?'
             ],
             type: 'number',
@@ -244,71 +244,7 @@ const forms = [
                     icon: 'close',
                 },
             ]
-        },
-        {
-            id: 'speciaRequests',
-            question: false,
-            input: [{
-                type: 'text',
-                placeholder: 'Ange önskemål',
-            }, ],
-            dependency: {
-                relation: 'AND',
-                conditions: [{
-                    'key': 'hasSpecialRequests',
-                    'value': 'Ja',
-                    'compare': '='
-                }]
-            }
-        },
-        {
-            id: 'hindersProvning',
-            question: [
-                'Innan ni gifter er måste Skatteverket intyga att det inte finns några hinder för giftemål',
-                'Har ni intyg för hindersprövning från Skatteverket?'
-            ],
-            input: [{
-                type: 'radio',
-                options: [{
-                        value: 'Ja',
-                        icon: 'check',
-                    },
-                    {
-                        value: 'Nej',
-                        icon: 'close',
-                    },
-                ],
-            }, ],
-            explainer: [
-                {
-                    key: 0,
-                    heading: 'Hindersprövning',
-                    content: 'Innan ni gifter er måste Skatteverket göra en hindersprövning, för att se till att det inte finns några hinder för äktenskapet. Ni ansöker om hindersprövning genom att fylla i en blankett som ni skickar till Skatteverket. Du hittar blanketten, och mer information om hindersprövning, på Skatteverkets webbplats.',
-                }
-            ]
-        },
-        {
-            key: 'confirmBooking',
-            question: [
-                'Då har jag följande uppgifter om din bokning',
-                ({
-                    answers
-                }) => (`Du och ${answers.partnerName.split(' ')[0]} vill gifta er ${answers.weddingLocationCustom ? answers.weddingLocationCustom : answers.weddingLocation} ${answers.weddingDate}`),
-                'Vill du skicka bokningsförfrågan?'
-            ],
-            input: [{
-                type: 'radio',
-                options: [{
-                        value: 'Ja, skicka bokningsförfrågan',
-                        icon: 'check',
-                    },
-                    {
-                        value: 'Nej, spara bokning och vänta till senare',
-                        icon: 'close',
-                    },
-                ],
-            }, ],
-        },
+        }
     ],
 }, ];
 export default forms;

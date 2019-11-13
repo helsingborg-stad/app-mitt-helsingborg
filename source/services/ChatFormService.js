@@ -10,7 +10,7 @@ import env from "react-native-config";
 import StorageService, { TOKEN_KEY } from "../services/StorageService";
 
 export const getFormTemplate = (formId) => {
-    const endpoint = `api/v1/forms/${formId}/questions`;
+    const endpoint = `forms/${formId}/questions`;
 
     return constructGetFormTemplate(endpoint);
 };
