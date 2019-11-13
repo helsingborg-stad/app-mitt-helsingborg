@@ -56,7 +56,7 @@ export default class WatsonAgent extends Component {
                             },
                             {
                                 value: 'Fråga om borgerlig vigsel',
-                                icon: 'helper'
+                                icon: 'help-outline'
                             }
                         ]
                     }
