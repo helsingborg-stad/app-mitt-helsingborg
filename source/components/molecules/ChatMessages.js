@@ -5,6 +5,7 @@ import { PropTypes } from 'prop-types';
 
 const ChatMessagesFlatList = styled.FlatList`
     flex-basis: 100%;
+    margin-bottom: 24px;
 `;
 
 class ChatMessages extends Component {
@@ -60,8 +61,8 @@ class ChatMessages extends Component {
                 inverted={false}
                 data={[...messages]}
                 renderItem={this.renderItem}
-                onContentSizeChange={() => { this.flatListRef.scrollToEnd() }}
-                onLayout={() => { this.flatListRef.scrollToEnd() }}
+                onContentSizeChange={() => {this.flatListRef.scrollToOffset({offset: [...messages].length * 500, animted: true})}}
+                onLayout={() => {this.flatListRef.scrollToOffset({offset: [...messages].length * 500, animted: true})}}
                 keyExtractor={(item, index) => index.toString()}
                 {...forwardProps}
             />

@@ -11,12 +11,6 @@ import DateTimePickerForm from './DateTimePickerForm';
 import InputForm from './InputForm';
 
 export default class ChatUserInput extends Component {
-
-    shouldComponentUpdate(nextProps, nextState) {
-        // Re-render only if props has changed
-        return JSON.stringify(this.props) !== JSON.stringify(nextProps);
-    }
-
     avalibleComponents = {
         text: withChatForm(InputForm),
         number: withChatForm(InputForm),
@@ -69,7 +63,7 @@ export default class ChatUserInput extends Component {
                 // SelectForm
                 break;
 
-            case 'dateTime':
+            case 'datetime':
                 data = {
                     Component: this.avalibleComponents.dateTime, 
                     componentProps: {

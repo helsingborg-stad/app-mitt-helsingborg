@@ -37,7 +37,7 @@ class FormAgent extends Component {
                 Component: ChatDivider,
                 componentProps: {
                     title: `${new Date().getDay()} ${MONTHS.SE[new Date().getMonth()]}`,
-                    info: form.name,
+                    info: `Bokning ${form.name.toLowerCase()} startad`,
                 }
             }
         ]);
@@ -66,8 +66,17 @@ class FormAgent extends Component {
             if (form.doneMessage) {
                 this.outputMessages(form.doneMessage);
 
+                chat.addMessages([
+                    {
+                        Component: ChatDivider,
+                        componentProps: {
+                            info: `Bokning ${form.name.toLowerCase()} avslutad`,
+                        }
+                    }
+                ]);
+
                 chat.switchAgent(props => <WatsonAgent {...props}
-                                                       initialMessages={['Bokning av vigsel klar. Något annat jag kan hjälpa med?']}/>)
+                    initialMessages={['Kan jag hjälpa dig med någon annat?']} />)
                 chat.switchInput({
                     autoFocus: false,
                     type: 'text',
@@ -79,23 +88,23 @@ class FormAgent extends Component {
         }
 
         // Set currentQuestion then output messages & render input
-        this.setState({currentQuestion: nextQuestion.key}, () => {
-            if (nextQuestion.question) {
+        this.setState({currentQuestion: nextQuestion.id}, () => {
+            if (nextQuestion.name) {
 
                 this.outputMessages(
-                    nextQuestion.question,
+                    nextQuestion.name,
                     'automated',
                     nextQuestion.explainer,
                 );
             }
 
-            chat.switchInput(nextQuestion.input);
+            chat.switchInput(nextQuestion);
         });
     };
 
     isNextQuestion = question => {
         const { answers } = this.state;
-        const { dependency } = question;
+        const { dependency, id } = question;
 
         let coniditionsIsValid = true;
 
@@ -110,7 +119,7 @@ class FormAgent extends Component {
             }, true);
         }
 
-        return coniditionsIsValid && answers[question.key] === undefined;
+        return coniditionsIsValid && answers[id] === undefined;
     };
 
     outputMessages = (messages, modifier = 'automated', explainer = undefined) => {

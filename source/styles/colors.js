@@ -39,6 +39,10 @@ const palette = {
   },
   state: {
     danger: "#D73640"
+  },
+  bg: {
+    default: "#F5F5F5",
+    header: "#F8F8F8"
   }
 };
 
@@ -156,10 +160,10 @@ const colors = {
     }
   },
   chatBody: {
-      background: palette.mono.lightest
+      background: palette.bg.default
   },
   chatForm: {
-      background: palette.mono.lightest
+      background: palette.bg.header
   },
   shadow: {
     default: palette.mono.darker
