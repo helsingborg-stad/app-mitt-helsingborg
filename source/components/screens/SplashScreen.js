@@ -202,9 +202,9 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     dot: {
-        width: 10,
-        height: 10,
-        borderWidth: 1,
+        width: 15,
+        height: 15,
+        borderWidth: 2,
         borderColor: '#610839',
         borderRadius: 8,
         marginLeft: 10,
@@ -214,8 +214,8 @@ const styles = StyleSheet.create({
     },
     activeDot: {
         backgroundColor: '#610839',
-        width: 10,
-        height: 10,
+        width: 15,
+        height: 15,
         borderRadius: 8,
         marginLeft: 10,
         marginRight: 10,
