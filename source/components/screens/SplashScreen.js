@@ -51,9 +51,9 @@ export default class SplashScreen extends Component {
      */
     ButtonDisableSplash = () => {
         return (
-            <View style={{paddingStart: 205, paddingTop: 590}}>
-                <Button color={'purple'} pill>
-                    <Text>Nu vill jag testa!</Text>
+            <View style={{paddingStart: 170, paddingTop: 40}}>
+                <Button onClick={() => this.props.navigation.navigate('Chat')} color={'purple'} pill>
+                    <Text style={{color: 'white'}}>Nu vill jag testa!</Text>
                 </Button>
             </View>
         )
@@ -62,13 +62,13 @@ export default class SplashScreen extends Component {
     slideEasy = () => {
         return (
             <View style={styles.slideEasy}>
-                <View style={{flex: 5, justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{flex: 4, justifyContent: 'center', alignItems: 'center'}}>
                     <ImageBackground
                         source={require('../../assets/slides/slideEasy.png')}
                         style={{width: 250, height: 250}}
                     />
                 </View>
-                <View style={{flex: 3}}>
+                <View style={{flex: 2}}>
                     <Heading type="h2">Enkelt</Heading>
                     <Text>
                         {'\n'}
@@ -84,13 +84,13 @@ export default class SplashScreen extends Component {
     slideAccessible = () => {
         return (
             <View style={styles.slideEasy}>
-                <View style={{flex: 5, justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{flex: 4, justifyContent: 'center', alignItems: 'center'}}>
                     <ImageBackground
                         source={require('../../assets/slides/slideEasy.png')}
                         style={{width: 250, height: 250}}
                     />
                 </View>
-                <View style={{flex: 3}}>
+                <View style={{flex: 2}}>
                     <Heading type="h2">Tillgängligt</Heading>
                     <Text>
                         {'\n'}
@@ -116,21 +116,28 @@ export default class SplashScreen extends Component {
         const { ButtonDisableSplash } = this;
         return (
             <View style={styles.slideEasy}>
-                <View style={{flex: 5, justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{flex: 4, justifyContent: 'center', alignItems: 'center'}}>
                     <ImageBackground
                         source={require('../../assets/slides/slideEasy.png')}
                         style={{width: 250, height: 250}}
                     />
                 </View>
-                <View style={{flex: 3}}>
+                <View style={{flex: 2}}>
                     <Heading type="h2">Personligt</Heading>
+
                     <Text>
                         {'\n'}
                         Inloggad ger mer.{'\n\n'}
                         Som inloggad får du en personblig upplevelse anpassad för dig.
                     </Text>
+
                 </View>
-                <View style={{flex: 1}} />
+
+                <View style={{flex: 1}}>
+
+                    <ButtonDisableSplash/>
+
+                </View>
             </View>
         )
     };
@@ -158,6 +165,7 @@ export default class SplashScreen extends Component {
                     activeDot={<View style={styles.activeDot} />}
                     paginationStyle={{paddingEnd: 200}}
                     onIndexChanged={(index) => this.swipeAction(index)}
+                    loop={false}
                 >
 
                     { this.slideEasy() }
