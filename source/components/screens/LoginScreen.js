@@ -21,7 +21,7 @@ class LoginScreen extends Component {
         try {
             const {loginUser} = this.props.authentication;
             await loginUser(personalNumber);
-            this.props.navigation.navigate('App');
+            this.props.navigation.navigate('Chat');
         } catch (e) {
             if (e !== 'cancelled') {
                 Alert.alert(message);

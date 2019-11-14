@@ -16,6 +16,9 @@ import ChatScreen from './screens/ChatScreen';
 import TaskScreen from './screens/TaskScreen';
 
 import {Icon} from 'react-native-elements';
+import LoginScreen from './screens/LoginScreen';
+
+
 
 // const MittHbgStack = createStackNavigator(
 //     {
@@ -115,7 +118,7 @@ const TabNavigator = createMaterialTopTabNavigator({
             tabBarIcon: tabBarIcon('message', '#EC6701')
         },
         params: {
-            tabBarVisible: false
+            tabBarVisible: true
         }
     },
     UserEvents: {
@@ -155,6 +158,7 @@ const TabNavigator = createMaterialTopTabNavigator({
 const AppContainer = createAppContainer(createSwitchNavigator(
     {
         MainApp: TabNavigator,
+        LoginScreen: LoginScreen,
         SplashIntro: SplashScreen,
     },
     {
