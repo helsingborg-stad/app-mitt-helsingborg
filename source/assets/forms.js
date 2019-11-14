@@ -211,7 +211,7 @@ const forms = [
             ]
         },
         {
-            key: 'speciaRequests',
+            id: 'specialRequests',
             name: false,
             type: 'text',
             placeholder: 'Ange önskemål',
