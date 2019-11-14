@@ -118,7 +118,7 @@ const TabNavigator = createMaterialTopTabNavigator({
             tabBarIcon: tabBarIcon('message', '#EC6701')
         },
         params: {
-            tabBarVisible: false
+            tabBarVisible: true
         }
     },
     UserEvents: {
