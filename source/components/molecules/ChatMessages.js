@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, FlatList } from 'react-native';
 import styled from 'styled-components/native';
 import { PropTypes } from 'prop-types';
+import ChatBubble from '../atoms/ChatBubble';
 
 const ChatMessagesFlatList = styled.FlatList`
     flex-basis: 100%;
@@ -52,7 +53,7 @@ class ChatMessages extends Component {
     }
 
     render() {
-        const { messages, forwardProps } = this.props;
+        const { messages, forwardProps, chat } = this.props;
 
         return (
             <ChatMessagesFlatList
@@ -64,10 +65,13 @@ class ChatMessages extends Component {
                 onContentSizeChange={() => {this.flatListRef.scrollToOffset({offset: [...messages].length * 500, animted: true})}}
                 onLayout={() => {this.flatListRef.scrollToOffset({offset: [...messages].length * 500, animted: true})}}
                 keyExtractor={(item, index) => index.toString()}
+                ListFooterComponent={chat.isTyping ? TypeIndicator : null}
                 {...forwardProps}
             />
         )
     }
 }
+
+const TypeIndicator = props => (<ChatBubble modifiers={['automated']}><Text>•••</Text></ChatBubble>);
 
 export default ChatMessages;

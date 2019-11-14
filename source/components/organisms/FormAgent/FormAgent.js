@@ -23,6 +23,8 @@ class FormAgent extends Component {
     componentDidMount() {
         const { formId, chat, answers } = this.props;
 
+        chat.switchInput(false);
+
         const form = this.props.form ? this.props.form : forms.find(form => (form.id === formId));
 
         if (!form) {
@@ -43,18 +45,20 @@ class FormAgent extends Component {
         ]);
 
         // Let the form party begin
-        this.setState({
-            answers: answers ? answers : {},
-            form: form,
-            questions: form.questions
-        }, this.nextQuestion);
+        new Promise(resolve => setTimeout(resolve, 500)).then(() => {
+            this.setState({
+                answers: answers ? answers : {},
+                form: form,
+                questions: form.questions
+            }, this.nextQuestion);
+        });
     }
 
     componentWillUnmount() {
         EventHandler.unSubscribe(EVENT_USER_MESSAGE);
     }
 
-    nextQuestion = () => {
+    nextQuestion = async () => {
         const { chat } = this.props;
         const { questions, form, answers } = this.state;
 
@@ -64,9 +68,9 @@ class FormAgent extends Component {
             this.setState({currentQuestion: undefined});
 
             if (form.doneMessage) {
-                this.outputMessages(form.doneMessage);
+                await this.outputMessages(form.doneMessage);
 
-                chat.addMessages([
+                await chat.addMessages([
                     {
                         Component: ChatDivider,
                         componentProps: {
@@ -77,6 +81,7 @@ class FormAgent extends Component {
 
                 chat.switchAgent(props => <WatsonAgent {...props}
                     initialMessages={['Kan jag hjälpa dig med någon annat?']} />)
+                
                 chat.switchInput({
                     autoFocus: false,
                     type: 'text',
@@ -88,15 +93,21 @@ class FormAgent extends Component {
         }
 
         // Set currentQuestion then output messages & render input
-        this.setState({currentQuestion: nextQuestion.id}, () => {
+        this.setState({currentQuestion: nextQuestion.id}, async () => {
             if (nextQuestion.name) {
 
-                this.outputMessages(
+                await this.outputMessages(
                     nextQuestion.name,
                     'automated',
-                    nextQuestion.explainer,
+                    nextQuestion.explainer
                 );
-            }
+
+                await new Promise(resolve => setTimeout(resolve, 50));
+
+                chat.switchInput(nextQuestion);
+
+                return
+            } 
 
             chat.switchInput(nextQuestion);
         });
@@ -122,14 +133,30 @@ class FormAgent extends Component {
         return coniditionsIsValid && answers[id] === undefined;
     };
 
-    outputMessages = (messages, modifier = 'automated', explainer = undefined) => {
+    outputMessages = async (messages, modifier = 'automated', explainer = undefined) => {
         const { chat } = this.props;
         const arrayOfmessages = Array.isArray(messages)
         ? messages
         : [messages];
 
-        arrayOfmessages.forEach((message, index) => {
+
+        await chat.toggleTyping();
+
+        await arrayOfmessages.reduce(async (previousPromise, msg, index) => {
+            await previousPromise;
+            
+
+            const message = typeof msg === 'function' ? msg(this.state) : msg;
+            const caluclatedDelay = message.length * 16 + ((index + 1)  * 400);
+            const minDelayMs = 600; // 0.6 sec
+            const maxDelayMs = 1000 * 2; // 2sec
+
+            const delay = caluclatedDelay > maxDelayMs ? maxDelayMs : caluclatedDelay;
+
             let messageExplainer = undefined;
+
+
+            await new Promise(resolve => setTimeout(resolve, delay >= minDelayMs ? delay : minDelayMs));
 
             // Map explainer with the message
             if (typeof explainer === 'object') {
@@ -143,24 +170,27 @@ class FormAgent extends Component {
                 }
             }
 
-            chat.addMessages({
+            return chat.addMessages({
                 Component: ChatBubble,
                 componentProps: {
-                    content: typeof message === 'function' ? message(this.state) : message,
+                    content: message,
                     modifiers: [modifier],
                     explainer: messageExplainer,
                 }
             });
-        });
+        }, Promise.resolve()).catch(e => {console.log(e);});
+
+        await chat.toggleTyping();
     };
 
-    handleUserInput = message => {
+    handleUserInput = async message => {
         const { chat } = this.props;
         const { currentQuestion, answers } = this.state;
 
         if (currentQuestion) {
-            chat.switchUserInput(false);
-            this.setState({answers: {...answers, [currentQuestion]: message}}, this.nextQuestion);
+            await chat.switchUserInput(false);
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await this.setState({answers: {...answers, [currentQuestion]: message}}, this.nextQuestion);
         }
     };
 

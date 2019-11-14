@@ -35,7 +35,8 @@ class Chat extends Component {
             visible: false,
             heading: '',
             content: ''
-        }
+        },
+        isTyping: false
     };
 
     componentDidMount() {
@@ -55,10 +56,14 @@ class Chat extends Component {
         }
     }
 
-    addMessages = (objects) => {
+    toggleTyping = async () => {
+        await this.setState(prevState => ({isTyping: !prevState.isTyping}));
+    }
+
+    addMessages = async (objects) => {
         const array = Array.isArray(objects) ? objects : [objects];
 
-        this.setState(prevState => {
+        await this.setState(prevState => {
             let { messages } = prevState;
             // TODO: loop through message array & setState for each separately (or dispatch will fail if more then 1 message)
             array.forEach(object => { messages.push(object) });
@@ -74,29 +79,29 @@ class Chat extends Component {
         }
     }
 
-    switchAgent = (AgentComponent) => {
-        this.setState({
+    switchAgent = async (AgentComponent) => {
+        await this.setState({
             ChatAgent: AgentComponent
         });
     }
 
-    switchInput = (inputArr) => {
+    switchInput = async (inputArr) => {
         if (inputArr === false) {
-            this.setState({ inputComponents: [] });
+            await this.setState({ inputComponents: [] });
             return;
         }
 
         const inputArray = !Array.isArray(inputArr) ? [inputArr] : inputArr;
 
-        this.setState({ inputComponents: inputArray });
+        await this.setState({ inputComponents: inputArray });
     }
 
     /**
      * switchUserInput will be removed in favor of switchInput
      * @deprecated
      */
-    switchUserInput = (Component, componentProps = {}) => {
-        this.switchInput(Component ? {
+    switchUserInput = async (Component, componentProps = {}) => {
+        await this.switchInput(Component ? {
             type: 'custom',
             Component,
             componentProps
@@ -128,9 +133,9 @@ class Chat extends Component {
     }
 
     render() {
-        const { messages, ChatAgent, inputComponents, modal } = this.state;
-        const { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal } = this;
-        const instanceMethods = { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal };
+        const { messages, ChatAgent, inputComponents, modal, isTyping } = this.state;
+        const { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal, toggleTyping } = this;
+        const instanceMethods = { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal, toggleTyping };
 
         return (
             <ChatWrapper keyboardVerticalOffset={24} >

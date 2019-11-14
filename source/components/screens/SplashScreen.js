@@ -43,7 +43,7 @@ export default class SplashScreen extends Component {
      disableSplash = () => {
         AsyncStorage.setItem(SHOW_SPLASH_SCREEN, JSON.stringify(false));
 
-        this.props.navigation.navigate('Chat');
+        this.props.navigation.navigate('LoginScreen');
     };
 
     /**
@@ -52,7 +52,7 @@ export default class SplashScreen extends Component {
     ButtonDisableSplash = () => {
         return (
             <View style={{paddingStart: 180, paddingTop: 35, width: 500}}>
-                <Button onClick={() => this.props.navigation.navigate('Chat')} color={'purpleLight'} pill>
+                <Button onClick={() => this.props.navigation.navigate('LoginScreen')} color={'purpleLight'} pill>
                     <Text style={{color: 'white', fontSize: 16, fontFamily: 'Roboto', fontWeight: '500'}}>Nu vill jag testa!</Text>
                 </Button>
             </View>

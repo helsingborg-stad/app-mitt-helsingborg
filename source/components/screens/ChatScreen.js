@@ -5,6 +5,8 @@ import LoginAgent from '../organisms/LoginAgent';
 import withChatForm from '../organisms/withChatForm';
 import ChatForm from '../molecules/ChatFormDeprecated';
 import styled from 'styled-components/native';
+import WatsonAgent from '../organisms/WatsonAgent';
+
 class ChatScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
         tabBarVisible: navigation.state.params.tabBarVisible
@@ -19,8 +21,9 @@ class ChatScreen extends Component {
         return (
             <ChatScreenWrapper>
                 <Chat 
-                    ChatAgent={props => (<LoginAgent {...props} 
-                    onUserLogin={this.toggleTabs} />)} 
+                    ChatAgent={WatsonAgent} 
+                    inputComponents={{type: 'text', placeholder: 'Skriv något...'}}
+                    // onUserLogin={this.toggleTabs} />)} 
                     ChatUserInput={false} 
                 />       
             </ChatScreenWrapper>
