@@ -103,15 +103,6 @@ export default class SplashScreen extends Component {
         )
     };
 
-    // slidePersonal = () => {
-    //     const { ButtonDisableSplash } = this;
-    //     return (
-    //         <View >
-    //             <ButtonDisableSplash />
-    //         </View>
-    //     )
-    // };
-
     slidePersonal = () => {
         const { ButtonDisableSplash } = this;
         return (

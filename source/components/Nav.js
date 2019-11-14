@@ -102,12 +102,12 @@ const MaterialTopTabBarWrapper = props => {
 };
 
 const TabNavigator = createMaterialTopTabNavigator({
-    SplashIntro: {
-        screen: SplashScreen,
-        navigationOptions: {
-            tabBarVisible: false
-        }
-    },
+    // SplashIntro: {
+    //     screen: SplashScreen,
+    //     navigationOptions: {
+    //         tabBarVisible: false
+    //     }
+    // },
     Chat: {
         screen: ChatScreen,
         navigationOptions: {
@@ -139,7 +139,7 @@ const TabNavigator = createMaterialTopTabNavigator({
         }
     }
 }, {
-    initialRouteName: 'SplashIntro',
+    initialRouteName: 'Chat',
     tabBarPosition: 'bottom',
     keyboardDismissMode: 'on-drag',
     swipeEnabled: false,
@@ -151,7 +151,16 @@ const TabNavigator = createMaterialTopTabNavigator({
     tabBarComponent: MaterialTopTabBarWrapper,
 });
 
-const AppContainer = createAppContainer(TabNavigator);
+// const AppContainer = createAppContainer(TabNavigator);
+const AppContainer = createAppContainer(createSwitchNavigator(
+    {
+        MainApp: TabNavigator,
+        SplashIntro: SplashScreen,
+    },
+    {
+        initialRouteName: 'SplashIntro',
+    }
+));
 
 export default class Nav extends React.Component {
     render() {
