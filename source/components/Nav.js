@@ -102,6 +102,12 @@ const MaterialTopTabBarWrapper = props => {
 };
 
 const TabNavigator = createMaterialTopTabNavigator({
+    SplashIntro: {
+        screen: SplashScreen,
+        navigationOptions: {
+            tabBarVisible: false
+        }
+    },
     Chat: {
         screen: ChatScreen,
         navigationOptions: {
@@ -133,7 +139,7 @@ const TabNavigator = createMaterialTopTabNavigator({
         }
     }
 }, {
-    initialRouteName: 'Chat',
+    initialRouteName: 'SplashIntro',
     tabBarPosition: 'bottom',
     keyboardDismissMode: 'on-drag',
     swipeEnabled: false,

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, ImageBackground} from 'react-native';
 import { SHOW_SPLASH_SCREEN } from "../../services/StorageService";
 import AsyncStorage from '@react-native-community/async-storage';
 import Swiper from "react-native-swiper";
 import ScreenWrapper from '../molecules/ScreenWrapper';
 import styled from 'styled-components/native';
+import Heading from "../atoms/Heading";
+import Button from "../atoms/Button";
 
 
 /**
@@ -13,6 +15,10 @@ import styled from 'styled-components/native';
  * SHOW_SPLASH_SCREEN is a persistent variable that will route navigation to ether AuthLoading or display splash screen.
  */
 export default class SplashScreen extends Component {
+    state = {
+        disableSwipeNext: true,
+    };
+
     componentWillMount() {
         this.showSplash();
     }
@@ -37,7 +43,7 @@ export default class SplashScreen extends Component {
      disableSplash = () => {
         AsyncStorage.setItem(SHOW_SPLASH_SCREEN, JSON.stringify(false));
 
-        this.props.navigation.navigate('AuthLoading');
+        this.props.navigation.navigate('Chat');
     };
 
     /**
@@ -45,13 +51,62 @@ export default class SplashScreen extends Component {
      */
     ButtonDisableSplash = () => {
         return (
-            <View>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => this.disableSplash()}
-                >
-                    <Text style={styles.buttonText}>Godkänn och gå vidare</Text>
-                </TouchableOpacity>
+            <View style={{paddingStart: 205, paddingTop: 590}}>
+                <Button color={'purple'} pill>
+                    <Text>Nu vill jag testa!</Text>
+                </Button>
+            </View>
+        )
+    };
+
+    slideEasy = () => {
+        return (
+            <View style={styles.slideEasy}>
+                <View style={{flex: 5, justifyContent: 'center', alignItems: 'center'}}>
+                    <ImageBackground
+                        source={require('../../assets/slides/slideEasy.png')}
+                        style={{width: 250, height: 250}}
+                    />
+                </View>
+                <View style={{flex: 3}}>
+                    <Heading type="h2">Enkelt</Heading>
+                    <Text>
+                        Mitt Helsingborg är appen där du enkelt får tillgång till tjänster och information från kommunen.{'\n\n'}
+                        Allt samlat i mobilen.
+                    </Text>
+                </View>
+                <View style={{flex: 1}} />
+            </View>
+        )
+    };
+
+    slideAccessible = () => {
+        return (
+            <View style={styles.slideEasy}>
+                <View style={{flex: 5, justifyContent: 'center', alignItems: 'center'}}>
+                    <ImageBackground
+                        source={require('../../assets/slides/slideEasy.png')}
+                        style={{width: 250, height: 250}}
+                    />
+                </View>
+                <View style={{flex: 3}}>
+                    <Heading type="h2">Tillgängligt</Heading>
+                    <Text>
+                        {'\n'}
+                        Inloggad ger mer.{'\n\n'}
+                        Som inloggad får du en personblig upplevelse anpassad för dig.
+                    </Text>
+                </View>
+                <View style={{flex: 1}} />
+            </View>
+        )
+    };
+
+    slidePersonal = () => {
+        const { ButtonDisableSplash } = this;
+        return (
+            <View >
+                <ButtonDisableSplash />
             </View>
         )
     };
@@ -60,15 +115,12 @@ export default class SplashScreen extends Component {
         const {ButtonDisableSplash} = this;
         return (
             <EnhancedScreenWrapper>
-                <Swiper showsButtons={true}>
-                    <View style={styles.slide1}>
-                        <Text style={styles.textTitle}>Swipa on!</Text>
-                    </View>
-                    <View style={styles.slide2}>
-                        <Text style={styles.textTitle}>Personuppgifter</Text>
-                        <Text style={styles.text}>Vi använder dina personuppgifter för specifika ändamål som vi har informerat dig om eller som du har samtyckt till. Vi samlar inte in fler uppgifter än de som vi behöver för att kunna leverera de tjänster du vill ha, eller de som lagen kräver att vi samlar in.</Text>
-                        <ButtonDisableSplash />
-                    </View>
+                <Swiper showsButtons={this.state.disableSwipeNext}>
+
+                    { this.slideEasy() }
+                    { this.slideAccessible() }
+                    { this.slidePersonal() }
+
                 </Swiper>
             </EnhancedScreenWrapper>
         )
@@ -92,6 +144,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#97CAE5',
+    },
+    slideEasy: {
+        flex: 1,
+        padding: 30,
+        backgroundColor: '#F5F5F5',
+        justifyContent: 'flex-end'
     },
     textTitle: {
         color: '#fff',
