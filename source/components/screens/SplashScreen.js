@@ -51,9 +51,9 @@ export default class SplashScreen extends Component {
      */
     ButtonDisableSplash = () => {
         return (
-            <View style={{paddingStart: 190, paddingTop: 40, width: 500}}>
+            <View style={{paddingStart: 180, paddingTop: 35, width: 500}}>
                 <Button onClick={() => this.props.navigation.navigate('LoginScreen')} color={'purpleLight'} pill>
-                    <Text style={{color: 'white'}}>Nu vill jag testa!</Text>
+                    <Text style={{color: 'white', fontSize: 16, fontFamily: 'Roboto', fontWeight: '500'}}>Nu vill jag testa!</Text>
                 </Button>
             </View>
         )
@@ -154,7 +154,7 @@ export default class SplashScreen extends Component {
                     nextButton={<Text style={{fontSize: 40, color: '#D35098'}}>›</Text>}
                     dot={<View style={styles.dot} />}
                     activeDot={<View style={styles.activeDot} />}
-                    paginationStyle={{paddingEnd: 200}}
+                    paginationStyle={{paddingEnd: 225}}
                     onIndexChanged={(index) => this.swipeAction(index)}
                     loop={false}
                 >
@@ -202,9 +202,9 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     dot: {
-        width: 10,
-        height: 10,
-        borderWidth: 1,
+        width: 15,
+        height: 15,
+        borderWidth: 2,
         borderColor: '#610839',
         borderRadius: 8,
         marginLeft: 10,
@@ -214,8 +214,8 @@ const styles = StyleSheet.create({
     },
     activeDot: {
         backgroundColor: '#610839',
-        width: 10,
-        height: 10,
+        width: 15,
+        height: 15,
         borderRadius: 8,
         marginLeft: 10,
         marginRight: 10,
