@@ -51,9 +51,9 @@ export default class SplashScreen extends Component {
      */
     ButtonDisableSplash = () => {
         return (
-            <View style={{paddingStart: 190, paddingTop: 40, width: 500}}>
+            <View style={{paddingStart: 180, paddingTop: 35, width: 500}}>
                 <Button onClick={() => this.props.navigation.navigate('Chat')} color={'purpleLight'} pill>
-                    <Text style={{color: 'white'}}>Nu vill jag testa!</Text>
+                    <Text style={{color: 'white', fontSize: 16, fontFamily: 'Roboto', fontWeight: '500'}}>Nu vill jag testa!</Text>
                 </Button>
             </View>
         )
@@ -157,6 +157,7 @@ export default class SplashScreen extends Component {
                     paginationStyle={{paddingEnd: 200}}
                     onIndexChanged={(index) => this.swipeAction(index)}
                     loop={false}
+                    index={2}
                 >
 
                     { this.slideEasy() }
