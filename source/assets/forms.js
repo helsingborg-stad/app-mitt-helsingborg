@@ -202,6 +202,13 @@ const forms = [
                     icon: 'close',
                 },
             ],
+            explainer: [
+                {
+                    key: 0,
+                    heading: 'Önskemål',
+                    content: 'Önskemål för er vigsel kan till exempel vara att ni vill ha musik vid vigseln, att ni vill ha ert vigselbevis på engelska eller om ni vill ha en specifik vigselförrättare.\nEfter er bokningsbekräftelse kan ni kan kontakta er vigselförrättare om ni har särskilda önskemål.Det går också bra att kontakta Helsingborgs kontaktcenter här i appen, via telefon eller mejl.',
+                }
+            ]
         },
         {
             key: 'speciaRequests',
