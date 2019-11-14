@@ -3,7 +3,7 @@ const forms = [
       id: 1,
       name: 'Borgerlig vigsel',
       trigger: 'Vill boka borgerlig vigsel',
-      doneMessage: 'Då har jag tagit emot er bokning. Du kan när som helst se eller redigera din bokning under fliken Ärenden.',
+      doneMessage: 'Då har jag tagit emot er bokning. Du kan när som helst se din bokning under fliken Min sida.',
       questions: [
         {
               id: 'partnerName',
@@ -20,7 +20,7 @@ const forms = [
         },
         {
               id: 'partnerSameAddress',
-              name: ({ answers }) => `Är ${answers.partnerName.split(' ')[0]} folkbokförd på samma adress som du?`,
+              name: ({ answers }) => `Har ${answers.partnerName.split(' ')[0]} samma adress som du?`,
               type: 'radio',
               options: [
                 {
@@ -35,7 +35,7 @@ const forms = [
         },
         {
             id: 'partnerAddress',
-            name: ({ answers }) => `Vilken adress är ${answers.partnerName.split(' ')[0]} folkbokförd på?`,
+            name: ({ answers }) => `Vilken gatuadress har ${answers.partnerName.split(' ')[0]}?`,
             type: 'text',
             placeholder: 'Adress',
             dependency: {
@@ -49,7 +49,7 @@ const forms = [
         },
         {
             id: 'partnerPostal',
-            name: 'Vilket postnummer?',
+            name: ({ answers }) => `Vilket postnummer har ${answers.partnerName.split(' ')[0]}?`,
             type: 'number',
             placeholder: 'Postnummer',
             dependency: {
@@ -63,7 +63,7 @@ const forms = [
         },
         {
             id: 'partnerCity',
-            name: 'Ort?',
+            name: ({ answers }) => `Vilken ort bor ${answers.partnerName.split(' ')[0]} på?`,
             type: 'text',
             placeholder: 'Ort',
             dependency: {
@@ -190,11 +190,10 @@ const forms = [
             ]
         },
         {
-            id: 'hindersProvning',
-            name: 'Har ni intyg för hindersprövning från Skatteverket? ',
+            id: 'hasSpecialRequests',
+            name: 'Har ni några speciella önskemål för er vigsel?',
             type: 'radio',
-            options: [
-                {
+            options: [{
                     value: 'Ja',
                     icon: 'check',
                 },
@@ -205,8 +204,25 @@ const forms = [
             ],
         },
         {
-            id: 'specialRequests',
-            name: 'Har ni några speciella önskemål för er vigsel?',
+            key: 'speciaRequests',
+            name: false,
+            type: 'text',
+            placeholder: 'Ange önskemål',
+            dependency: {
+                relation: 'AND',
+                conditions: [{
+                    'key': 'hasSpecialRequests',
+                    'value': 'Ja',
+                    'compare': '='
+                }]
+            }
+        },
+        {
+            id: 'hindersProvning',
+            name: [
+                'Innan ni gifter er måste Skatteverket intyga att det inte finns några hinder för giftemål',
+                'Har ni intyg för hindersprövning från Skatteverket?'
+            ],
             type: 'radio',
             options: [
                 {
@@ -218,20 +234,15 @@ const forms = [
                     icon: 'close',
                 },
             ],
-            explainer: [
-                {
-                    key: 0,
-                    heading: 'Önskemål',
-                    content: 'Önskemål för er vigsel kan till exempel vara att ni vill ha musik vid vigseln, att ni vill ha ert vigselbevis på engelska eller om ni vill ha en specifik vigselförrättare.\nEfter er bokningsbekräftelse kan ni kan kontakta er vigselförrättare om ni har särskilda önskemål.Det går också bra att kontakta Helsingborgs kontaktcenter här i appen, via telefon eller mejl.',
-                }
-            ]
         },
         {
             id: 'confirmBooking',
             name: [
-                'Du har nu gått igenom alla steg för att boka borgerlig vigsel.',
-                ({answers}) => (`Du och ${answers.partnerName.split(' ')[0]} vill gifta er i ${answers.weddingLocation} ${answers.weddingDate}. Ni kommer ha ${answers.guestsTotal} gäster, inklusive era vittnen ${answers.firstWitness.split(' ')[0]} och ${answers.secondWitness.split(' ')[0]}.`),
-                'Vill du boka vigsel?'
+                'Då har jag följande uppgifter om din bokning',
+                ({
+                    answers
+                }) => (`Du och ${answers.partnerName.split(' ')[0]} vill gifta er ${answers.weddingLocationCustom ? answers.weddingLocationCustom : answers.weddingLocation} ${answers.weddingDate}`),
+                'Vill du skicka bokningsförfrågan?'
             ],
             type: 'radio',
             options: [
