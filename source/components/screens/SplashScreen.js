@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, ImageBackground} from 'react-native';
+import {Text, View, StyleSheet, ImageBackground} from 'react-native';
 import { SHOW_SPLASH_SCREEN } from "../../services/StorageService";
 import AsyncStorage from '@react-native-community/async-storage';
 import Swiper from "react-native-swiper";
@@ -111,11 +111,31 @@ export default class SplashScreen extends Component {
         )
     };
 
+    /**
+     * Remove next buttons for last screen.
+     */
+    swipeAction = (index) => {
+        if (index === 2) {
+            this.setState({ disableSwipeNext: false })
+        } else {
+            this.setState({ disableSwipeNext: true })
+        }
+    };
+
     render() {
-        const {ButtonDisableSplash} = this;
+        // const {ButtonDisableSplash} = this;
         return (
             <EnhancedScreenWrapper>
-                <Swiper showsButtons={this.state.disableSwipeNext}>
+                <Swiper
+                    buttonWrapperStyle={styles.buttonWrapperStyle}
+                    showsButtons={this.state.disableSwipeNext}
+                    prevButton={<Text style={styles.buttonText} />}
+                    nextButton={<Text style={{fontSize: 40, color: 'purple'}}>›</Text>}
+                    dot={<View style={styles.dot} />}
+                    activeDot={<View style={styles.activeDot} />}
+                    paginationStyle={{paddingEnd: 200}}
+                    onIndexChanged={(index) => this.swipeAction(index)}
+                >
 
                     { this.slideEasy() }
                     { this.slideAccessible() }
@@ -150,6 +170,35 @@ const styles = StyleSheet.create({
         padding: 30,
         backgroundColor: '#F5F5F5',
         justifyContent: 'flex-end'
+    },
+    buttonWrapperStyle: {
+        backgroundColor: 'transparent',
+        flexDirection: 'row',
+        paddingBottom: 25,
+        paddingRight: 30,
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+    },
+    dot: {
+        width: 10,
+        height: 10,
+        borderWidth: 1,
+        borderColor: '#610839',
+        borderRadius: 8,
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 3,
+        marginBottom: 20,
+    },
+    activeDot: {
+        backgroundColor: '#610839',
+        width: 10,
+        height: 10,
+        borderRadius: 8,
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 3,
+        marginBottom: 20,
     },
     textTitle: {
         color: '#fff',
