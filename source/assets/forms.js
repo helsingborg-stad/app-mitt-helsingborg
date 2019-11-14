@@ -7,7 +7,7 @@ const forms = [
       questions: [
         {
               id: 'partnerName',
-              name: 'Vem ska du gifta dig med?',
+              name: 'Först vill vi veta vem du ska gifta dig med?',
               type: 'text',
               placeholder: 'För- och efternamn',
         },
@@ -80,13 +80,13 @@ const forms = [
             name: 'Var vill ni gifta er?',
             type: 'radio',
             options: [{
-                    value: 'På Rådhuset i Helsingborg',
+                    value: 'Rådhuset i Helsingborg',
                 },
                 {
-                    value: 'Annan plats',
+                    value: 'Egen vald plats',
                 },
             ],
-        }, 
+        },
         {
             id: 'weddingLocationCustom',
             name: 'Var vill ni gifta er?',
@@ -139,7 +139,7 @@ const forms = [
             id: 'firstWitness',
             name: [
                 'Under vigseln behöver ni ha två vittnen. För att jag ska kunna boka er vigsel behöver jag veta vad de heter.',
-                'Vad heter ert första vittne?',
+                'Vad heter era vittnen?',
             ],
             type: 'text',
             placeholder: 'Vittne 1: För- och efternamn',
@@ -154,7 +154,7 @@ const forms = [
         },
         {
             id: 'secondWitness',
-            name: 'Vad heter ert andra vittne?',
+            name: false,
             type: 'text',
             placeholder: 'Vittne 2: För- och efternamn',
             dependency: {
@@ -227,8 +227,7 @@ const forms = [
         {
             id: 'hindersProvning',
             name: [
-                'Innan ni gifter er måste Skatteverket intyga att det inte finns några hinder för giftemål',
-                'Har ni intyg för hindersprövning från Skatteverket?'
+                'Innan ni gifter er måste Skatteverket intyga att det inte finns några hinder för giftemål.\n\nHar ni intyg för hindersprövning från Skatteverket?'
             ],
             type: 'radio',
             options: [
@@ -241,15 +240,21 @@ const forms = [
                     icon: 'close',
                 },
             ],
+            explainer: [
+                {
+                    key: 0,
+                    heading: 'Hindersprövning',
+                    content: 'Innan ni gifter er måste Skatteverket göra en hindersprövning, för att se till att det inte finns några hinder för äktenskapet. Ni ansöker om hindersprövning genom att fylla i en blankett som ni skickar till Skatteverket. Du hittar blanketten, och mer information om hindersprövning, på Skatteverkets webbplats.',
+                }
+            ]
         },
         {
             id: 'confirmBooking',
             name: [
-                'Då har jag följande uppgifter om din bokning',
                 ({
                     answers
-                }) => (`Du och ${answers.partnerName.split(' ')[0]} vill gifta er ${answers.weddingLocationCustom ? answers.weddingLocationCustom : answers.weddingLocation} ${answers.weddingDate}`),
-                'Vill du skicka bokningsförfrågan?'
+                }) => (`Då har jag följande uppgifter om din bokning.\n\nDu och ${answers.partnerName.split(' ')[0]} vill gifta er ${answers.weddingLocationCustom ? answers.weddingLocationCustom : answers.weddingLocation} ${answers.weddingDate}`),
+                'Vill du boka?'
             ],
             type: 'radio',
             options: [
