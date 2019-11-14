@@ -154,10 +154,9 @@ export default class SplashScreen extends Component {
                     nextButton={<Text style={{fontSize: 40, color: '#D35098'}}>›</Text>}
                     dot={<View style={styles.dot} />}
                     activeDot={<View style={styles.activeDot} />}
-                    paginationStyle={{paddingEnd: 200}}
+                    paginationStyle={{paddingEnd: 225}}
                     onIndexChanged={(index) => this.swipeAction(index)}
                     loop={false}
-                    index={2}
                 >
 
                     { this.slideEasy() }
