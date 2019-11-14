@@ -51,8 +51,8 @@ export default class SplashScreen extends Component {
      */
     ButtonDisableSplash = () => {
         return (
-            <View style={{paddingStart: 170, paddingTop: 40}}>
-                <Button onClick={() => this.props.navigation.navigate('Chat')} color={'purple'} pill>
+            <View style={{paddingStart: 190, paddingTop: 40, width: 500}}>
+                <Button onClick={() => this.props.navigation.navigate('Chat')} color={'purpleLight'} pill>
                     <Text style={{color: 'white'}}>Nu vill jag testa!</Text>
                 </Button>
             </View>
@@ -64,8 +64,8 @@ export default class SplashScreen extends Component {
             <View style={styles.slideEasy}>
                 <View style={{flex: 4, justifyContent: 'center', alignItems: 'center'}}>
                     <ImageBackground
-                        source={require('../../assets/slides/slideEasy.png')}
-                        style={{width: 250, height: 250}}
+                        source={require('../../assets/slides/illu_001.png')}
+                        style={{width: 300, height: 300}}
                     />
                 </View>
                 <View style={{flex: 2}}>
@@ -86,8 +86,8 @@ export default class SplashScreen extends Component {
             <View style={styles.slideEasy}>
                 <View style={{flex: 4, justifyContent: 'center', alignItems: 'center'}}>
                     <ImageBackground
-                        source={require('../../assets/slides/slideEasy.png')}
-                        style={{width: 250, height: 250}}
+                        source={require('../../assets/slides/illu_002.png')}
+                        style={{width: 230, height: 260}}
                     />
                 </View>
                 <View style={{flex: 2}}>
@@ -109,8 +109,8 @@ export default class SplashScreen extends Component {
             <View style={styles.slideEasy}>
                 <View style={{flex: 4, justifyContent: 'center', alignItems: 'center'}}>
                     <ImageBackground
-                        source={require('../../assets/slides/slideEasy.png')}
-                        style={{width: 250, height: 250}}
+                        source={require('../../assets/slides/illu_003.png')}
+                        style={{width: 300, height: 300}}
                     />
                 </View>
                 <View style={{flex: 2}}>
@@ -151,7 +151,7 @@ export default class SplashScreen extends Component {
                     buttonWrapperStyle={styles.buttonWrapperStyle}
                     showsButtons={this.state.disableSwipeNext}
                     prevButton={<Text style={styles.buttonText} />}
-                    nextButton={<Text style={{fontSize: 40, color: 'purple'}}>›</Text>}
+                    nextButton={<Text style={{fontSize: 40, color: '#D35098'}}>›</Text>}
                     dot={<View style={styles.dot} />}
                     activeDot={<View style={styles.activeDot} />}
                     paginationStyle={{paddingEnd: 200}}
