@@ -71,6 +71,7 @@ export default class SplashScreen extends Component {
                 <View style={{flex: 3}}>
                     <Heading type="h2">Enkelt</Heading>
                     <Text>
+                        {'\n'}
                         Mitt Helsingborg är appen där du enkelt får tillgång till tjänster och information från kommunen.{'\n\n'}
                         Allt samlat i mobilen.
                     </Text>
@@ -93,8 +94,8 @@ export default class SplashScreen extends Component {
                     <Heading type="h2">Tillgängligt</Heading>
                     <Text>
                         {'\n'}
-                        Inloggad ger mer.{'\n\n'}
-                        Som inloggad får du en personblig upplevelse anpassad för dig.
+                        Du kan också följa dina ärenden, ställa frågor eller prata med oss.{'\n\n'}
+                        När du vill.
                     </Text>
                 </View>
                 <View style={{flex: 1}} />
@@ -102,11 +103,34 @@ export default class SplashScreen extends Component {
         )
     };
 
+    // slidePersonal = () => {
+    //     const { ButtonDisableSplash } = this;
+    //     return (
+    //         <View >
+    //             <ButtonDisableSplash />
+    //         </View>
+    //     )
+    // };
+
     slidePersonal = () => {
         const { ButtonDisableSplash } = this;
         return (
-            <View >
-                <ButtonDisableSplash />
+            <View style={styles.slideEasy}>
+                <View style={{flex: 5, justifyContent: 'center', alignItems: 'center'}}>
+                    <ImageBackground
+                        source={require('../../assets/slides/slideEasy.png')}
+                        style={{width: 250, height: 250}}
+                    />
+                </View>
+                <View style={{flex: 3}}>
+                    <Heading type="h2">Personligt</Heading>
+                    <Text>
+                        {'\n'}
+                        Inloggad ger mer.{'\n\n'}
+                        Som inloggad får du en personblig upplevelse anpassad för dig.
+                    </Text>
+                </View>
+                <View style={{flex: 1}} />
             </View>
         )
     };
@@ -123,7 +147,6 @@ export default class SplashScreen extends Component {
     };
 
     render() {
-        // const {ButtonDisableSplash} = this;
         return (
             <EnhancedScreenWrapper>
                 <Swiper
