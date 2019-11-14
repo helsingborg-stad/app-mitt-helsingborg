@@ -34,7 +34,7 @@ const withAuthentication = (WrappedComponent) => {
     }
 
     componentDidMount() {
-      this._setUserAsync();
+      // this._setUserAsync();
       this._isBankidInstalled();
     }
 
