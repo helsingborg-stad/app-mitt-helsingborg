@@ -91,11 +91,10 @@ export default class SplashScreen extends Component {
                     />
                 </View>
                 <View style={{flex: 2}}>
-                    <Heading type="h2">Tillgängligt</Heading>
-                    <Text>
+                    <Heading type="h2">Nära</Heading>
+                    <Text style={{fontSize: 23}}>
                         {'\n'}
-                        Du kan också följa dina ärenden, ställa frågor eller prata med oss.{'\n\n'}
-                        När du vill.
+                        Du kan följa och hantera dina ärenden, få personlig service eller bli tipsad om saker som händer nära dig.
                     </Text>
                 </View>
                 <View style={{flex: 1}} />
