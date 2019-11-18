@@ -20,12 +20,12 @@ class ChatScreen extends Component {
     render() {
         return (
             <ChatScreenWrapper>
-                <Chat 
-                    ChatAgent={WatsonAgent} 
-                    inputComponents={{type: 'text', placeholder: 'Skriv något...'}}
-                    // onUserLogin={this.toggleTabs} />)} 
-                    ChatUserInput={false} 
-                />       
+                <Chat
+                    ChatAgent={WatsonAgent}
+                    inputComponents={{type: 'text', placeholder: 'Skriv något...', autoFocus: false}}
+                    // onUserLogin={this.toggleTabs} />)}
+                    ChatUserInput={false}
+                />
             </ChatScreenWrapper>
         )
     }
