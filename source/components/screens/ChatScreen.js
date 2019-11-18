@@ -25,6 +25,7 @@ class ChatScreen extends Component {
                     inputComponents={{type: 'text', placeholder: 'Skriv något...'}}
                     // onUserLogin={this.toggleTabs} />)} 
                     ChatUserInput={false} 
+                    keyboardVerticalOffset={0}
                 />       
             </ChatScreenWrapper>
         )
@@ -34,6 +35,7 @@ class ChatScreen extends Component {
 const ChatScreenWrapper = styled(ScreenWrapper)`
     padding-left: 0;
     padding-right: 0;
+    padding-bottom: 0px;
 `;
 
 export default ChatScreen;

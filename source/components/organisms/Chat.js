@@ -16,13 +16,15 @@ class Chat extends Component {
     static propTypes = {
         ChatAgent: PropTypes.oneOfType([PropTypes.oneOf([false]), PropTypes.elementType, PropTypes.func]).isRequired,
         ChatUserInput: PropTypes.oneOfType([PropTypes.oneOf([false]), PropTypes.elementType, PropTypes.func]),
-        inputComponents: PropTypes.array
+        inputComponents: PropTypes.array,
+        keyboardVerticalOffset: PropTypes.number
     };
 
     static defaultProps = {
         ChatAgent: false,
         ChatUserInput: false,
-        inputComponents: []
+        inputComponents: [],
+        keyboardVerticalOffset: 24
     };
 
     state = {
@@ -133,12 +135,13 @@ class Chat extends Component {
     }
 
     render() {
+        const { keyboardVerticalOffset } = this.props;
         const { messages, ChatAgent, inputComponents, modal, isTyping } = this.state;
         const { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal, toggleTyping } = this;
         const instanceMethods = { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal, toggleTyping };
 
         return (
-            <ChatWrapper keyboardVerticalOffset={24} >
+            <ChatWrapper keyboardVerticalOffset={keyboardVerticalOffset} >
                 {ChatAgent ?
                     <ChatAgent chat={{ ...instanceMethods, ...this.state }} />
                     : null}
