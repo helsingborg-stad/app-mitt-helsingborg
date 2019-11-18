@@ -18,7 +18,7 @@ export default class WatsonAgent extends Component {
     componentDidMount() {
         const { chat, initialMessages } = this.props;
 
-        if (initialMessages !== undefined) {
+        if (initialMessages !== undefined && Array.isArray(initialMessages)) {
             initialMessages.forEach((message) => {
                 chat.addMessages({
                     Component: ChatBubble,
@@ -28,6 +28,9 @@ export default class WatsonAgent extends Component {
                     }
                 });
             })
+        } else if (initialMessages !== undefined && initialMessages === 'remote') {
+             // Show welcome message from Watson
+            this.handleHumanChatMessage('');
         } else {
             StorageService.getData(USER_KEY).then(({ name }) => {
                 chat.addMessages({
