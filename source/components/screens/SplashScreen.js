@@ -70,10 +70,9 @@ export default class SplashScreen extends Component {
                 </View>
                 <View style={{flex: 2}}>
                     <Heading type="h2">Enkelt</Heading>
-                    <Text>
+                    <Text style={{fontSize: 23}}>
                         {'\n'}
-                        Mitt Helsingborg är appen där du enkelt får tillgång till tjänster och information från kommunen.{'\n\n'}
-                        Allt samlat i mobilen.
+                        Mitt Helsingborg är appen där du enkelt får tillgång till tjänster och information från kommunen.
                     </Text>
                 </View>
                 <View style={{flex: 1}} />
