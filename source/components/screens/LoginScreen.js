@@ -117,7 +117,7 @@ class LoginScreen extends Component {
                                                 underlayColor='#fff'
                                                 disabled={!validPin}
                                             >
-                                                <Text style={[styles.buttonText, !validPin ? styles.buttonTextDisabled : '']}>Logga in</Text>
+                                                <Text style={[styles.buttonText, !validPin ? styles.buttonTextDisabled : '']}>Logga in med mobilt BankID</Text>
                                             </TouchableOpacity>
                                         </View>
 

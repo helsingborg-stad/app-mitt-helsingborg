@@ -4,9 +4,12 @@ import styled from 'styled-components/native';
 import { PropTypes } from 'prop-types';
 import ChatBubble from '../atoms/ChatBubble';
 
+const OFFSET_TOP = 32;
+const OFFSET_BOTTOM = 24;
+
 const ChatMessagesFlatList = styled.FlatList`
     flex-basis: 100%;
-    margin-bottom: 24px;
+
 `;
 
 class ChatMessages extends Component {
@@ -66,6 +69,7 @@ class ChatMessages extends Component {
                 onLayout={() => {this.flatListRef.scrollToOffset({offset: [...messages].length * 500, animted: true})}}
                 keyExtractor={(item, index) => index.toString()}
                 ListFooterComponent={chat.isTyping ? TypeIndicator : null}
+                contentInset={{top: OFFSET_TOP, left: 0, bottom: OFFSET_BOTTOM, right: 0}}
                 {...forwardProps}
             />
         )
