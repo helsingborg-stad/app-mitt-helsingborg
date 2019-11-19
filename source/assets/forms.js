@@ -3,11 +3,11 @@ const forms = [
       id: 1,
       name: 'Borgerlig vigsel',
       trigger: 'Vill boka borgerlig vigsel',
-      doneMessage: 'Då har jag tagit emot er bokning. Du kan när som helst se din bokning under fliken Min sida.',
+      doneMessage: 'Då har jag tagit emot er bokning. Du kan när som helst se din bokning under fliken Mitt HBG.',
       questions: [
         {
               id: 'partnerName',
-              name: 'Först vill vi veta vem du ska gifta dig med?',
+              name: 'Vi börjar med information om din partner. Vad heter personen du ska gifta dig med?',
               type: 'text',
               placeholder: 'För- och efternamn',
         },
@@ -20,7 +20,7 @@ const forms = [
         },
         {
               id: 'partnerSameAddress',
-              name: ({ answers }) => `Har ${answers.partnerName.split(' ')[0]} samma adress som du?`,
+              name: ({ answers }) => `Bor ${answers.partnerName.split(' ')[0]} samma adress som du?`,
               type: 'radio',
               options: [
                 {
@@ -35,9 +35,9 @@ const forms = [
         },
         {
             id: 'partnerAddress',
-            name: ({ answers }) => `Vilken gatuadress har ${answers.partnerName.split(' ')[0]}?`,
+            name: ({ answers }) => `Vilken adress har ${answers.partnerName.split(' ')[0]}?`,
             type: 'text',
-            placeholder: 'Adress',
+            placeholder: 'Gatuadress',
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -49,7 +49,7 @@ const forms = [
         },
         {
             id: 'partnerPostal',
-            name: ({ answers }) => `Vilket postnummer har ${answers.partnerName.split(' ')[0]}?`,
+            name: false,
             type: 'number',
             placeholder: 'Postnummer',
             dependency: {
@@ -63,7 +63,7 @@ const forms = [
         },
         {
             id: 'partnerCity',
-            name: ({ answers }) => `Vilken ort bor ${answers.partnerName.split(' ')[0]} på?`,
+            name: false,
             type: 'text',
             placeholder: 'Ort',
             dependency: {
@@ -89,14 +89,14 @@ const forms = [
         },
         {
             id: 'weddingLocationCustom',
-            name: 'Var vill ni gifta er?',
+            name: 'Vilken plats vill ni gifta er på?',
             type: 'text',
             placeholder: 'Val av plats',
             dependency: {
                 relation: 'AND',
                 conditions: [{
                     'key': 'weddingLocation',
-                    'value': 'Annan plats',
+                    'value': 'Egen vald plats',
                     'compare': '='
                 }]
             }
@@ -115,7 +115,7 @@ const forms = [
         },
         {
             id: 'hasWitness',
-            name: 'Ni behöver ha två vittnen under er vigsel. Har ni bestämt vilka vittnen ni vill ha?',
+            name: 'Ni behöver ha två vittnen under er vigsel.\n\nHar ni bestämt vilka vittnen ni vill ha?',
             type: 'radio',
             options: [
               {
@@ -135,10 +135,25 @@ const forms = [
                 }
             ]
         },
+        // TODO: Lägg in meddelande efter man svarat "Nej jag vill komplettera senare"
+        //   {
+        //       id: 'hasNoWitness',
+        //       name: [
+        //           'Okej, då kan du göra detta senare.\n\nFör att vi ska kunna trycka ert vigselbevis behöver vi era vittnens namn senast 3 dagar innan vigsel.\n\nVi påminner dig i tid så att du inte glömmer. ',
+        //       ],
+        //       type: 'text',
+        //       dependency: {
+        //           relation: 'AND',
+        //           conditions: [{
+        //               'key': 'hasWitness',
+        //               'value': 'Nej jag vill komplettera senare',
+        //               'compare': '='
+        //           }]
+        //       }
+        //   },
          {
             id: 'firstWitness',
             name: [
-                'Under vigseln behöver ni ha två vittnen. För att jag ska kunna boka er vigsel behöver jag veta vad de heter.',
                 'Vad heter era vittnen?',
             ],
             type: 'text',
@@ -169,6 +184,7 @@ const forms = [
         {
             id: 'guestsTotal',
             name: [
+                'I Rådhusets vigselsal får det vara 20 personer samtidigt. Ni kan därför som mest ha 17 gäster till er vigsel, inklusive barn och era vittnen.',
                 'Hur många gäster kommer till er vigsel?'
             ],
             type: 'number',
@@ -177,57 +193,15 @@ const forms = [
                 relation: 'AND',
                 conditions: [{
                     'key': 'weddingLocation',
-                    'value': 'På Rådhuset i Helsingborg',
+                    'value': 'Rådhuset i Helsingborg',
                     'compare': '='
                 }]
             },
-            explainer: [
-                {
-                    key: 0,
-                    heading: 'Gäster',
-                    content: 'I Rådhusets vigselsal får det max vara 20 personer samtidigt. Ni kan därför som mest ha 17 gäster till er vigsel, inklusive barn och era vittnen.',
-                }
-            ]
-        },
-        {
-            id: 'hasSpecialRequests',
-            name: 'Har ni några speciella önskemål för er vigsel?',
-            type: 'radio',
-            options: [{
-                    value: 'Ja',
-                    icon: 'check',
-                },
-                {
-                    value: 'Nej',
-                    icon: 'close',
-                },
-            ],
-            explainer: [
-                {
-                    key: 0,
-                    heading: 'Önskemål',
-                    content: 'Önskemål för er vigsel kan till exempel vara att ni vill ha musik vid vigseln, att ni vill ha ert vigselbevis på engelska eller om ni vill ha en specifik vigselförrättare.\nEfter er bokningsbekräftelse kan ni kan kontakta er vigselförrättare om ni har särskilda önskemål.Det går också bra att kontakta Helsingborgs kontaktcenter här i appen, via telefon eller mejl.',
-                }
-            ]
-        },
-        {
-            id: 'specialRequests',
-            name: false,
-            type: 'text',
-            placeholder: 'Ange önskemål',
-            dependency: {
-                relation: 'AND',
-                conditions: [{
-                    'key': 'hasSpecialRequests',
-                    'value': 'Ja',
-                    'compare': '='
-                }]
-            }
         },
         {
             id: 'hindersProvning',
             name: [
-                'Innan ni gifter er måste Skatteverket intyga att det inte finns några hinder för giftemål.\n\nHar ni intyg för hindersprövning från Skatteverket?'
+                'Innan ni gifter er måste Skatteverket intyga att det inte finns några hinder för giftermål.\n\nHar ni intyg för hindersprövning?'
             ],
             type: 'radio',
             options: [
@@ -248,13 +222,46 @@ const forms = [
                 }
             ]
         },
+        // TODO: Lägg in meddelande efter man svarat "Ja"
+        //   {
+        //       id: 'hindersProvningJa',
+        //       name: [
+        //           'Perfekt! Vi behöver en kopia av er hindersprövning. I slutet av bokningen får du information om hur du skickar den till oss.',
+        //       ],
+        //       type: 'text',
+        //       dependency: {
+        //           relation: 'AND',
+        //           conditions: [{
+        //               'key': 'hindersProvning',
+        //               'value': 'Ja',
+        //               'compare': '='
+        //           }]
+        //       }
+        //   },
+        // TODO: Lägg in meddelande efter man svarat "Nej"
+        //   {
+        //       id: 'hindersProvningNej',
+        //       name: [
+            //      'Jag kan göra klart din bokning utan hindersprövning, men vigseln kan inte genomföras utan den.\n\nNi ansöker om hindersprövning på Skatteverkets webbplats[https://skatteverket.se/privat/folkbokforing/aktenskapochpartnerskap/forevigselnhindersprovning.4.76a43be412206334b89800020477.html?q=hinderspr%C3%B6vning] ',
+        //       ],
+        //       type: 'text',
+        //       dependency: {
+        //           relation: 'AND',
+        //           conditions: [{
+        //               'key': 'hindersProvning',
+        //               'value': 'Nej',
+        //               'compare': '='
+        //           }]
+        //       }
+        //   },
+        // TODO: Lägg in divider här med titel: Summering
         {
             id: 'confirmBooking',
             name: [
                 ({
                     answers
-                }) => (`Då har jag följande uppgifter om din bokning.\n\nDu och ${answers.partnerName.split(' ')[0]} vill gifta er ${answers.weddingLocationCustom ? answers.weddingLocationCustom : answers.weddingLocation} ${answers.weddingDate}`),
-                'Vill du boka?'
+                }) => (`Då har jag följande uppgifter om din bokning.\n\nDu och ${answers.partnerName.split(' ')[0]} vill gifta er ${answers.weddingLocationCustom ? answers.weddingLocationCustom : answers.weddingLocation} ${answers.weddingDate}. Ni kommer ha ${answers.guestsTotal} gäster, inklusive era vittnen.`),
+                'Vill du bekräfta bokningen?'
             ],
             type: 'radio',
             options: [
@@ -263,11 +270,13 @@ const forms = [
                     icon: 'check',
                 },
                 {
-                    value: 'Nej, spara bokning och vänta till senare',
+                    value: 'Nej, jag vill spara och fortsätta senare',
                     icon: 'close',
                 },
             ]
         }
+        // TODO: Lägg in meddelande om man valt "Nej, jag vill spara och fortsätta senare"
+        // TEXT: Okej, då sparar jag ditt ärende. Du kan när som helst komma tillbaka och göra klart det.
     ],
 }, ];
 export default forms;

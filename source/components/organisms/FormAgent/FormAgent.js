@@ -38,7 +38,7 @@ class FormAgent extends Component {
             {
                 Component: ChatDivider,
                 componentProps: {
-                    title: `${new Date().getDay()} ${MONTHS.SE[new Date().getMonth()]}`,
+                    title: '',
                     info: `Bokning ${form.name.toLowerCase()} startad`,
                 }
             }
@@ -81,7 +81,7 @@ class FormAgent extends Component {
 
                 chat.switchAgent(props => <WatsonAgent {...props}
                     initialMessages={['Kan jag hjälpa dig med någon annat?']} />)
-                
+
                 chat.switchInput({
                     autoFocus: false,
                     type: 'text',
@@ -107,7 +107,7 @@ class FormAgent extends Component {
                 chat.switchInput(nextQuestion);
 
                 return
-            } 
+            }
 
             chat.switchInput(nextQuestion);
         });
@@ -144,7 +144,7 @@ class FormAgent extends Component {
 
         await arrayOfmessages.reduce(async (previousPromise, msg, index) => {
             await previousPromise;
-            
+
 
             const message = typeof msg === 'function' ? msg(this.state) : msg;
             const caluclatedDelay = message.length * 16 + ((index + 1)  * 400);

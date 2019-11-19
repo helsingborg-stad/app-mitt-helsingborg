@@ -36,7 +36,7 @@ export default class WatsonAgent extends Component {
                 chat.addMessages({
                     Component: ChatBubble,
                     componentProps: {
-                        content: `Hej ${name}!\nKul att du har loggat in i Mitt Helsingborg.`,
+                        content: `Hej och välkommen till Mitt Helsingborg! Jag heter Sally. Jag kan hjälpa dig med att svara på frågor och guida dig runt i appen.`,
                         modifiers: ['automated'],
                     }
                 });
@@ -44,7 +44,7 @@ export default class WatsonAgent extends Component {
                 chat.addMessages({
                     Component: ChatBubble,
                     componentProps: {
-                        content: 'Här kan du använda tjänster och få information från kommunen.\nVad vill du göra?',
+                        content: 'Vad vill du göra?',
                         modifiers: ['automated'],
                     }
                 });
@@ -54,11 +54,11 @@ export default class WatsonAgent extends Component {
                     componentProps: {
                         items: [
                             {
-                                value: 'Boka borgerlig vigsel',
+                                value: 'Jag vill boka borgerlig vigsel',
                                 icon: 'wc'
                             },
                             {
-                                value: 'Fråga om borgerlig vigsel',
+                                value: 'Jag har frågor om borgerlig vigsel',
                                 icon: 'help-outline'
                             }
                         ]
