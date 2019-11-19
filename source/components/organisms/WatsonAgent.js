@@ -96,90 +96,102 @@ export default class WatsonAgent extends Component {
     }
 
     handleHumanChatMessage = async (message) => {
-        const { chat } = this.props;
-        const workspaceId = env.WATSON_WORKSPACEID;
-        if (workspaceId === undefined) {
-            Alert.alert('Missing Watson workspace ID');
-        }
-        else {
-            let chatMessages = [];
-            let chatOptions = [];
-            let inputOptions = [];
-            try {
-                await sendChatMsg(workspaceId, message, context).then((response) => {
-                    // Set context for every response
-                    context = response.data.attributes.context;
+        try {
+            const { chat } = this.props;
+            const { WATSON_WORKSPACEID } = env;
 
-                    const responseGeneric = response.data.attributes.output.generic;
+            if (!WATSON_WORKSPACEID) {
+                throw new Error('Missing Watson workspace ID');
+            }
 
-                    responseGeneric.forEach(elem => {
-                        if (elem.response_type === 'text') {
-                            chatMessages.push({
-                                content: elem.text
-                            });
-                        }
+            const response = await sendChatMsg(WATSON_WORKSPACEID, message, context);
 
-                        if (elem.response_type === 'option' && elem.options) {
-                            elem.options.forEach((option) => {
-                                const meta = this.captureMetaData(option.value.input.text);
-                                const button = { value: option.label, ...meta }
-                                if (meta.type && meta.type === 'chat') {
-                                    chatOptions.push(button);
-                                } else {
-                                    inputOptions.push(button);
+            // Default input
+            let textInput = [{
+                type: 'text',
+                placeholder: 'Skriv något...',
+                autoFocus: false,
+            }];
+            
+            if (!response.data 
+                || !response.data.attributes 
+                || !response.data.attributes.output 
+                || !response.data.attributes.output.generic) {
+                throw new Error('Something went wrong with Watson response'); 
+            }
+            
+            const { output, context: newContext } = response.data.attributes;
+
+            // Set new context
+            context = newContext;
+
+            await output.generic.reduce(async (previousPromise, current) => {
+                await previousPromise;
+                switch(current.response_type) {
+                    case 'text':
+                        return chat.addMessages({
+                            Component: props => <ChatBubble {...props}>
+                                <Markdown styles={markdownStyles}>{current.text}</Markdown>
+                            </ChatBubble>,
+                            componentProps: {
+                                content: current.text,
+                                modifiers: ['automated'],
+                            }
+                        });
+
+                    case 'option':
+                        const options = current.options.map((option) => {
+                            const meta = this.captureMetaData(option.value.input.text);
+                            return { value: option.label, ...meta };
+                        });
+
+                        const optionType = options[0].type;
+
+                        if (optionType === 'chat') {
+                            return chat.addMessages({
+                                Component: (props) => <ButtonStack {...props} chat={chat} />,
+                                componentProps: {
+                                    items: options
                                 }
                             });
                         }
-                    });
-                });
-            }
-            catch (e) {
-                console.log('SendChat error: ', e);
-                chatMessages = [{content: 'Kan ej svara på frågan. Vänta och prova igen senare.'}];
-            }
 
-            if (!this.state.disableAgent) {
-                // Output chat messages
-                chatMessages.forEach(chatMessage => {
-                         chat.addMessages({
-                             Component: props => <ChatBubble {...props}>
-                                 <Markdown styles={markdownStyles}>{chatMessage.content}</Markdown>
-                             </ChatBubble>,
-                             componentProps: {
-                                 content: chatMessage.content,
-                                 modifiers: ['automated'],
-                             }
-                        });
-                });
+                        // Disable default input
+                        textInput = false;
 
-                // Output chat options
-                if (chatOptions.length > 0) {
-                    chat.addMessages({
-                        Component: (props) => <ButtonStack {...props} chat={chat} />,
-                        componentProps: {
-                            items: chatOptions
-                        }
-                    });
+                        return chat.switchInput([{
+                            type: 'radio',
+                            options: options,
+                        }]);
+                    
+                    case 'pause': 
+                        await chat.toggleTyping();
+                        await new Promise(resolve => setTimeout(resolve, current.time));
+                        return chat.toggleTyping();
+
+                    default:
+                        return Promise.resolve();
                 }
 
-                let input = [{
-                    type: 'text',
-                    placeholder: 'Skriv något...',
-                    autoFocus: false,
-                }];
+            }, Promise.resolve());
 
-                // Output input options
-                if (inputOptions.length > 0) {
-                    input = [{
-                        type: 'radio',
-                        options: inputOptions,
-                    }];
-                }
-
-                chat.switchInput(input);
+            // Set default input
+            if (textInput) {
+                await chat.switchInput(textInput);
             }
+
+        } catch(e) {
+            console.info('Error in WatsonAgent::handleHumanChatMessage', e);
+            await chat.addMessages({
+                Component: ChatBubble,
+                componentProps: {
+                    content: 'Kan ej svara på frågan. Vänta och prova igen senare.',
+                    modifiers: ['automated'],
+                }
+            });
         }
     };
+
     render() {
         return null;
     }
