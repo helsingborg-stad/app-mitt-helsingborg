@@ -22,7 +22,7 @@ class ChatScreen extends Component {
             <ChatScreenWrapper>
                 <Chat 
                     ChatAgent={WatsonAgent} 
-                    inputComponents={{type: 'text', placeholder: 'Skriv något...'}}
+                    inputComponents={{type: 'text', placeholder: 'Skriv något...', autoFocus: false}}
                     // onUserLogin={this.toggleTabs} />)} 
                     ChatUserInput={false} 
                     keyboardVerticalOffset={0}

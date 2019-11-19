@@ -217,12 +217,12 @@ export default withAuthentication(class LoginAgent extends Component {
         }
       ]);
       chat.switchAgent(WatsonAgent);
-      chat.switchInput({type: 'text', placeholder: 'Skriv något...'});
+      chat.switchInput({type: 'text', placeholder: 'Skriv något...', autoFocus: false});
       chat.setInputActions([]);
 
       if (typeof onUserLogin === 'function') {
         onUserLogin();
-      } 
+      }
     } catch (e) {
       if (e.message !== 'cancelled') {
         Alert.alert(e.message);

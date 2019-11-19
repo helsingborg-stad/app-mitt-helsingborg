@@ -3,6 +3,7 @@ import env from 'react-native-config';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 import { sendChatMsg } from '../../services/ChatFormService';
 import ChatBubble from '../atoms/ChatBubble';
+import ButtonStack from '../molecules/ButtonStack';
 import { Alert, } from "react-native";
 import StorageService, { USER_KEY } from "../../services/StorageService";
 import Markdown from "react-native-simple-markdown";
@@ -15,9 +16,9 @@ export default class WatsonAgent extends Component {
     };
 
     componentDidMount() {
-        const { chat, initialMessages} = this.props;
+        const { chat, initialMessages } = this.props;
 
-        if (initialMessages !== undefined) {
+        if (initialMessages !== undefined && Array.isArray(initialMessages)) {
             initialMessages.forEach((message) => {
                 chat.addMessages({
                     Component: ChatBubble,
@@ -27,12 +28,15 @@ export default class WatsonAgent extends Component {
                     }
                 });
             })
+        } else if (initialMessages !== undefined && initialMessages === 'remote') {
+             // Show welcome message from Watson
+            this.handleHumanChatMessage('');
         } else {
-            StorageService.getData(USER_KEY).then(({name}) => {
+            StorageService.getData(USER_KEY).then(({ name }) => {
                 chat.addMessages({
                     Component: ChatBubble,
                     componentProps: {
-                        content: `Hej ${name}!`,
+                        content: `Hej ${name}!\nKul att du har loggat in i Mitt Helsingborg.`,
                         modifiers: ['automated'],
                     }
                 });
@@ -40,11 +44,26 @@ export default class WatsonAgent extends Component {
                 chat.addMessages({
                     Component: ChatBubble,
                     componentProps: {
-                        content: 'Vad kan jag hjälpa dig med?',
+                        content: 'Här kan du använda tjänster och få information från kommunen.\nVad vill du göra?',
                         modifiers: ['automated'],
                     }
                 });
 
+                chat.addMessages({
+                    Component: (props) => <ButtonStack {...props} chat={chat} />,
+                    componentProps: {
+                        items: [
+                            {
+                                value: 'Boka borgerlig vigsel',
+                                icon: 'wc'
+                            },
+                            {
+                                value: 'Fråga om borgerlig vigsel',
+                                icon: 'help-outline'
+                            }
+                        ]
+                    }
+                });
             });
         }
 
@@ -61,16 +80,16 @@ export default class WatsonAgent extends Component {
      */
     captureMetaData(value) {
         if (typeof value !== 'string') {
-            return undefined;
+            return {};
         }
 
-        const match = /{([a-z0-9.,_\'"\[\]:{}]+)}/g.exec(value);
+        const match = /{([a-z0-9\s.,_\'"-\[\]:{}]+)}/g.exec(value);
         let meta = match && typeof match[1] !== 'undefined' ? match[1] : undefined;
 
         try {
             meta = JSON.parse(meta);
         } catch (error) {
-            // Cannot parse json
+            return {};
         }
 
         return meta;
@@ -83,8 +102,9 @@ export default class WatsonAgent extends Component {
             Alert.alert('Missing Watson workspace ID');
         }
         else {
-            let responseText;
-            let options = [];
+            let chatMessages = [];
+            let chatOptions = [];
+            let inputOptions = [];
             try {
                 await sendChatMsg(workspaceId, message, context).then((response) => {
                     // Set context for every response
@@ -94,16 +114,20 @@ export default class WatsonAgent extends Component {
 
                     responseGeneric.forEach(elem => {
                         if (elem.response_type === 'text') {
-                            responseText = elem.text;
+                            chatMessages.push({
+                                content: elem.text
+                            });
                         }
 
                         if (elem.response_type === 'option' && elem.options) {
                             elem.options.forEach((option) => {
-                                const action = this.captureMetaData(option.value.input.text);
-                                options.push({
-                                    value: option.label,
-                                    action: action
-                                })
+                                const meta = this.captureMetaData(option.value.input.text);
+                                const button = { value: option.label, ...meta }
+                                if (meta.type && meta.type === 'chat') {
+                                    chatOptions.push(button);
+                                } else {
+                                    inputOptions.push(button);
+                                }
                             });
                         }
                     });
@@ -111,31 +135,48 @@ export default class WatsonAgent extends Component {
             }
             catch (e) {
                 console.log('SendChat error: ', e);
-                responseText = 'Kan ej svara på frågan. Vänta och prova igen senare.';
+                chatMessages = [{content: 'Kan ej svara på frågan. Vänta och prova igen senare.'}];
             }
 
             if (!this.state.disableAgent) {
-                chat.addMessages({
-                    Component: props => (<ChatBubble {...props}><Markdown styles={markdownStyles}>{responseText}</Markdown></ChatBubble>),
-                    componentProps: {
-                        content: responseText,
-                        modifiers: ['automated'],
-                    }
+                // Output chat messages
+                chatMessages.forEach(chatMessage => {
+                         chat.addMessages({
+                             Component: props => <ChatBubble {...props}>
+                                 <Markdown styles={markdownStyles}>{chatMessage.content}</Markdown>
+                             </ChatBubble>,
+                             componentProps: {
+                                 content: chatMessage.content,
+                                 modifiers: ['automated'],
+                             }
+                        });
                 });
 
-                let inputArray = [{
+                // Output chat options
+                if (chatOptions.length > 0) {
+                    chat.addMessages({
+                        Component: (props) => <ButtonStack {...props} chat={chat} />,
+                        componentProps: {
+                            items: chatOptions
+                        }
+                    });
+                }
+
+                let input = [{
                     type: 'text',
                     placeholder: 'Skriv något...',
+                    autoFocus: false,
                 }];
 
-                if (options.length > 0) {
-                    inputArray = [{
+                // Output input options
+                if (inputOptions.length > 0) {
+                    input = [{
                         type: 'radio',
-                        options,
+                        options: inputOptions,
                     }];
                 }
 
-                chat.switchInput(inputArray);
+                chat.switchInput(input);
             }
         }
     };
