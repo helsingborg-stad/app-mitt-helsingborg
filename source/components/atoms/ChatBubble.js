@@ -37,15 +37,15 @@ const ChatBubble = props => {
     return (
         <Bubble alignment={alignment} colorTheme={colorTheme} style={style}>
                 <ContentWrapper>
-                    <Body>
-                        {children ? 
+                    <View>
+                        {children ?
                             children
                         : content ?
                             <BubbleText colorTheme={colorTheme}>
                                 {content}
                             </BubbleText>
                         : null}
-                    </Body>
+                    </View>
                     {
                         iconRight && onClickIconRight ?
                             <Aside>
@@ -73,7 +73,7 @@ ChatBubble.defaultProps = {
 
 export default withTheme(ChatBubble);
 
-const Bubble = styled.View`  
+const Bubble = styled.View`
     margin-top: 6px;
     margin-bottom: 6px;
     margin-left: 16px;
@@ -117,14 +117,12 @@ const IconButton = styled(Button)`
     padding-bottom: 0;
     min-height: auto;
 `;
+
 const ContentWrapper = styled.View`
     flex-direction: row;
-    flex-wrap: nowrap;
+    width: 100%;
 `;
 
-const Body = styled.View`
-    flex-shrink: 1;
-`;
 const Aside = styled.View`
     flex-basis: 42px;
     border-left-width: 1px;
