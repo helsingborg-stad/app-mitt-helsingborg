@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, View, TextInput, Linking } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, View, TextInput, Linking, Image } from 'react-native';
 import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
 import withAuthentication from '../organisms/withAuthentication';
 import ScreenWrapper from '../molecules/ScreenWrapper';
@@ -9,7 +9,7 @@ import Input from '../atoms/Input';
 import styled from 'styled-components/native';
 import Heading from '../atoms/Heading';
 
-
+import HbgLogo from '../../assets/hbg-logo-staende.png';
 import AuthLoading from '../molecules/AuthLoading';
 
 class LoginScreen extends Component {
@@ -17,9 +17,26 @@ class LoginScreen extends Component {
         super(props);
 
         this.state = {
+            hideLogo: false,
             validPin: false,
             personalNumberInput: ''
         };
+    }
+
+    componentDidMount() {
+        this.keyboardWillShowListener = Keyboard.addListener(
+            'keyboardWillShow',
+            () => this.setState({ hideLogo: true }),
+        );
+        this.keyboardWillHideListener = Keyboard.addListener(
+            'keyboardWillHide',
+            () => this.setState({ hideLogo: false }),
+        );
+    }
+
+    componentWillUnmount() {
+        this.keyboardWillShowListener.remove();
+        this.keyboardWillHideListener.remove();
     }
 
     changeHandler = value => {
@@ -60,27 +77,34 @@ class LoginScreen extends Component {
     };
 
     render() {
-        const {validPin, personalNumberInput } = this.state;
+        const {validPin, personalNumberInput, hideLogo } = this.state;
         const {isLoading, cancelLogin, resetUser, user, isBankidInstalled} = this.props.authentication;
 
         if (isLoading) {
             return (
-                <ScreenWrapper>
+                <LoginScreenWrapper>
                     <AuthLoading cancelLogin={cancelLogin} isBankidInstalled={isBankidInstalled} />
-                </ScreenWrapper>
+                </LoginScreenWrapper>
             )
         }
 
         return (
-            <ScreenWrapper>
-                <LoginWrapper behavior="padding" enabled>
+            <LoginScreenWrapper>
+                <LoginKeyboardAvoidingView behavior="padding" enabled>
                     <LoginHeader>
-                        <Heading align={'center'}>Mitt {'\n'}Helsingborg</Heading>
+                        {
+                            hideLogo ?
+                            null
+                            : (
+                                <Logo source={HbgLogo} resizeMode={'contain'} />
+                            )
+                        }
+                        
+                        <View><Heading align={'center'}>Mitt {'\n'}Helsingborg</Heading></View>
+                        
                     </LoginHeader>
                     <LoginBody>
                         <LoginForm>
-                            <Heading marginBottom={24} type={'h4'} align={'center'}>Logga in med BankID</Heading>
-                            
                             <LoginFormField>
                                 <Label>Personnummer</Label>
                                 <Input 
@@ -106,24 +130,35 @@ class LoginScreen extends Component {
 
                             <LoginFormField>
                                 <Link onPress={() => {
-                                                    Linking.openURL("https://support.bankid.com/sv/bankid/mobilt-bankid")
-                                                        .catch(() => console.log("Couldnt open url"));
-                                                }}>Läs mer om hur du skaffar mobilt BankID</Link>
+                                    Linking.openURL("https://support.bankid.com/sv/bankid/mobilt-bankid")
+                                    .catch(() => console.log("Couldnt open url"));
+                                            }}>Läs mer om hur du skaffar mobilt BankID</Link>
                             </LoginFormField>
 
                         </LoginForm>
                     </LoginBody>
-                </LoginWrapper>
-            </ScreenWrapper>
+                </LoginKeyboardAvoidingView>
+            </LoginScreenWrapper>
         );
     }
 }
+
+const Logo = styled.Image`
+    height: 80px;
+    width: auto;
+    margin-bottom: 16px;
+`;
+
+const LoginScreenWrapper = styled(ScreenWrapper)`
+    background-color: #F5F5F5;
+`;
 
 const Link = styled(Text)`
     text-decoration: underline;
     font-size: 16px;
     text-align: center;
     margin-top: 16px;
+    margin-bottom: 8px;
 `;
 
 const Label = styled(Text)`
@@ -131,19 +166,26 @@ const Label = styled(Text)`
     font-size: 16px;
 `;
 
-const LoginWrapper = styled.KeyboardAvoidingView`
+const LoginKeyboardAvoidingView = styled.KeyboardAvoidingView`
     flex: 1;
     align-items: stretch;
 `;
 
 const LoginHeader = styled.View`
     text-align: center;
-    flex: 2;
+    flex: 1;
     justify-content: center;
 `;
 
-const LoginBody = styled.View`flex: 1; margin-bottom: 192px;`;
-const LoginForm = styled.View``;
+const LoginBody = styled.View`
+    flex: 1; 
+    justify-content: flex-end;
+`;
+
+const LoginForm = styled.View`
+    flex-grow: 0;
+`;
+
 const LoginFormField = styled.View`margin-bottom: 16px;`;
 
 export default withAuthentication(LoginScreen);
