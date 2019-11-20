@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, Text, View, TextInput, Linking, Button } from 'react-native';
+import { KeyboardAvoidingView, Alert, TouchableOpacity, ActivityIndicator, StyleSheet, View, TextInput, Linking } from 'react-native';
 import { sanitizePin, validatePin } from "../../helpers/ValidationHelper";
 import withAuthentication from '../organisms/withAuthentication';
 import ScreenWrapper from '../molecules/ScreenWrapper';
+import Text from '../atoms/Text';
+import Button from '../atoms/Button';
+import Input from '../atoms/Input';
+import styled from 'styled-components/native';
+import Heading from '../atoms/Heading';
+
+
+import AuthLoading from '../molecules/AuthLoading';
 
 class LoginScreen extends Component {
     constructor(props) {
@@ -14,6 +22,28 @@ class LoginScreen extends Component {
         };
     }
 
+    changeHandler = value => {
+        this.setState({
+            personalNumberInput: sanitizePin(value),
+            validPin: validatePin(value)
+        });
+    }
+
+    submitHandler = () => {
+        const { personalNumberInput } = this.state;
+
+        if (personalNumberInput.length <= 0) {
+            return;
+        }
+
+        if (!validatePin(personalNumberInput)) {
+            Alert.alert('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.');
+            return;
+        }
+
+        this.authenticateUser(personalNumberInput);
+    }
+
     /**
      * Authenticate user and navigate on success
      */
@@ -23,32 +53,9 @@ class LoginScreen extends Component {
             await loginUser(personalNumber);
             this.props.navigation.navigate('Chat');
         } catch (e) {
-            if (e !== 'cancelled') {
-                Alert.alert(message);
+            if (e.message !== 'cancelled') {
+                console.info('Error in LoginScreen::authenticateUser', e.message);
             }
-        }
-    };
-
-    /**
-     * Sanitize and save personal identity number to state
-     * @param {string} personalNumber
-     */
-    setPin(personalNumber) {
-        personalNumber = sanitizePin(personalNumber);
-
-        this.setState({
-            validPin: validatePin(personalNumber),
-            personalNumberInput: personalNumber
-        });
-    }
-
-    /**
-     * Check PIN (Personal identity number)
-     */
-    checkPin = () => {
-        const { validPin } = this.state;
-        if (!validPin) {
-            this.displayError('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.');
         }
     };
 
@@ -56,180 +63,87 @@ class LoginScreen extends Component {
         const {validPin, personalNumberInput } = this.state;
         const {isLoading, cancelLogin, resetUser, user, isBankidInstalled} = this.props.authentication;
 
+        if (isLoading) {
+            return (
+                <ScreenWrapper>
+                    <AuthLoading cancelLogin={cancelLogin} isBankidInstalled={isBankidInstalled} />
+                </ScreenWrapper>
+            )
+        }
+
         return (
             <ScreenWrapper>
-                {isLoading === false ? (
-                    <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-                        <View style={styles.content}>
-                            <Text style={styles.header}>Mitt{"\n"}Helsingborg</Text>
-                        </View>
+                <LoginWrapper behavior="padding" enabled>
+                    <LoginHeader>
+                        <Heading align={'center'}>Mitt {'\n'}Helsingborg</Heading>
+                    </LoginHeader>
+                    <LoginBody>
+                        <LoginForm>
+                            <Heading marginBottom={24} type={'h4'} align={'center'}>Logga in med BankID</Heading>
+                            
+                            <LoginFormField>
+                                <Label>Personnummer</Label>
+                                <Input 
+                                    placeholder={'ÅÅÅÅMMDDXXXX'}
+                                    value={personalNumberInput}
+                                    onChangeText={this.changeHandler}
+                                    keyboardType='number-pad'
+                                    returnKeyType='done'
+                                    maxLength={12}
+                                    onSubmitEditing={this.submitHandler}
+                                />
+                            </LoginFormField>
 
-                        <View
-                            style={styles.loginContainer}
-                            testID={"ViewLogin"}
-                        >
+                            <LoginFormField>
+                                <Button 
+                                    color={'purple'} 
+                                    block 
+                                    onClick={this.submitHandler}
+                                >
+                                        <Text>Logga in med mobilt BankID</Text>
+                                </Button>
+                            </LoginFormField>
 
-                            {user.personalNumber !== 'undefined' && user.personalNumber ? (
-                                <>
-                                    <TouchableOpacity
-                                        style={styles.button}
-                                        onPress={() => this.authenticateUser(user.personalNumber)}
-                                        underlayColor='#fff'
-                                    >
-                                        <Text
-                                            style={styles.buttonText}
-                                            accessible={true}
-                                            testID={"LoginButton"}
-                                        >Logga in</Text>
-                                    </TouchableOpacity>
-                                    <View
-                                        style={styles.loginFooter}
-                                        testID={"ChangeLogInUser"}
-                                    >
-                                        <Button
-                                            accessible={true}
-                                            testID={"ChangeLogInUser"}
-                                            title="Logga in som en annan användare"
-                                            color="#000"
-                                            onPress={() => resetUser()}
-                                        />
-                                    </View>
-                                </>
-                            ) : (
-                                    <>
-                                        <Text style={styles.infoText}>Logga in med BankID</Text>
-                                        <View style={styles.paper}>
-                                            <Text style={styles.label}>Personnummer</Text>
-                                            <TextInput
-                                                style={styles.inputField}
-                                                keyboardType='number-pad'
-                                                returnKeyType='done'
-                                                maxLength={12}
-                                                placeholder={'ÅÅÅÅMMDDXXXX'}
-                                                onChangeText={(value) => this.setPin(value)}
-                                                onSubmitEditing={this.checkPin}
-                                                value={personalNumberInput}
-                                            />
-
-                                            <TouchableOpacity
-                                                style={[styles.button, !validPin ? styles.buttonDisabled : '']}
-                                                onPress={() => this.authenticateUser(personalNumberInput)}
-                                                underlayColor='#fff'
-                                                disabled={!validPin}
-                                            >
-                                                <Text style={[styles.buttonText, !validPin ? styles.buttonTextDisabled : '']}>Logga in med mobilt BankID</Text>
-                                            </TouchableOpacity>
-                                        </View>
-
-                                        <View style={styles.loginFooter}>
-                                            <Button
-                                                title="Läs mer om hur du skaffar mobilt BankID"
-                                                color="#000"
-                                                onPress={() => {
+                            <LoginFormField>
+                                <Link onPress={() => {
                                                     Linking.openURL("https://support.bankid.com/sv/bankid/mobilt-bankid")
                                                         .catch(() => console.log("Couldnt open url"));
-                                                }}
-                                            />
-                                        </View>
-                                    </>
-                                )}
-                        </View>
-                    </KeyboardAvoidingView >
-                ) : (
-                        <View style={styles.container}>
-                            <View style={styles.content}>
-                                <ActivityIndicator size="large" color="slategray" />
-                                {!isBankidInstalled &&
-                                    <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
-                                }
-                            </View>
-                            <View style={styles.loginContainer}>
-                                <TouchableOpacity
-                                    style={styles.button}
-                                    onPress={cancelLogin}
-                                    underlayColor='#fff'>
-                                    <Text style={styles.buttonText}>Avbryt</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    )
-                }
+                                                }}>Läs mer om hur du skaffar mobilt BankID</Link>
+                            </LoginFormField>
+
+                        </LoginForm>
+                    </LoginBody>
+                </LoginWrapper>
             </ScreenWrapper>
         );
     }
 }
 
-export default withAuthentication(LoginScreen);
+const Link = styled(Text)`
+    text-decoration: underline;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 16px;
+`;
 
-const styles = StyleSheet.create({
-    paper: {
-        backgroundColor: '#fff',
-        padding: 24,
-        borderRadius: 7,
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
-        shadowColor: '#000',
-        shadowOffset: { height: 5, width: 0 },
-    },
-    container: {
-        flex: 1,
-        alignItems: 'stretch',
-    },
-    content: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    loginContainer: {
-        flex: 0,
-        width: '100%',
-        marginBottom: 30
-    },
-    loginFooter: {
-        marginTop: 42,
-        marginBottom: 26,
-        alignItems: 'center',
-    },
-    button: {
-        paddingTop: 16,
-        paddingBottom: 16,
-        backgroundColor: '#007AFF',
-        borderRadius: 7,
-    },
-    buttonDisabled: {
-        backgroundColor: '#E5E5EA',
-    },
-    buttonText: {
-        fontSize: 18,
-        color: '#fff',
-        textAlign: 'center',
-        fontWeight: 'bold',
-    },
-    buttonTextDisabled: {
-        color: '#C7C7CC',
-    },
-    header: {
-        fontWeight: 'bold',
-        fontSize: 35,
-        textAlign: 'center',
-    },
-    infoText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginTop: 24,
-        marginBottom: 24
-    },
-    label: {
-        fontSize: 16,
-        marginBottom: 8,
-    },
-    inputField: {
-        height: 40,
-        borderColor: 'transparent',
-        borderBottomColor: '#D3D3D3',
-        borderWidth: 0.5,
-        marginBottom: 24,
-        color: '#555',
-    },
-});
+const Label = styled(Text)`
+    margin-bottom: 8px;
+    font-size: 16px;
+`;
+
+const LoginWrapper = styled.KeyboardAvoidingView`
+    flex: 1;
+    align-items: stretch;
+`;
+
+const LoginHeader = styled.View`
+    text-align: center;
+    flex: 2;
+    justify-content: center;
+`;
+
+const LoginBody = styled.View`flex: 1; margin-bottom: 192px;`;
+const LoginForm = styled.View``;
+const LoginFormField = styled.View`margin-bottom: 16px;`;
+
+export default withAuthentication(LoginScreen);
