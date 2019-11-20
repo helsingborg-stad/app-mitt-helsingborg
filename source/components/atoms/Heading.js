@@ -15,6 +15,8 @@ const Heading = styled(Text)`
     font-weight: 900;
     font-size: ${props => (fontSizes[props.type || 'h1'])}px;
     color: ${props => (props.theme.text.heading)};
+    text-align: ${props => (props.align || 'left')};
+    margin-bottom: ${props => props.marginBottom  || '0' }px;
 `;
 
 Heading.propTypes = {
