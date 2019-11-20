@@ -3,7 +3,6 @@ const forms = [
       id: 1,
       name: 'Borgerlig vigsel',
       trigger: 'Vill boka borgerlig vigsel',
-      doneMessage: 'Då har jag tagit emot er bokning. Du kan när som helst se din bokning under fliken Mitt HBG.',
       questions: [
         {
               id: 'partnerName',
@@ -135,22 +134,19 @@ const forms = [
                 }
             ]
         },
-        // TODO: Lägg in meddelande efter man svarat "Nej jag vill komplettera senare"
-        //   {
-        //       id: 'hasNoWitness',
-        //       name: [
-        //           'Okej, då kan du göra detta senare.\n\nFör att vi ska kunna trycka ert vigselbevis behöver vi era vittnens namn senast 3 dagar innan vigsel.\n\nVi påminner dig i tid så att du inte glömmer. ',
-        //       ],
-        //       type: 'text',
-        //       dependency: {
-        //           relation: 'AND',
-        //           conditions: [{
-        //               'key': 'hasWitness',
-        //               'value': 'Nej jag vill komplettera senare',
-        //               'compare': '='
-        //           }]
-        //       }
-        //   },
+        {
+            id:  'hasNoWitness',
+            name: 'Okej, då kan du göra detta senare.\n\nFör att vi ska kunna trycka ert vigselbevis behöver vi era vittnens namn senast 3 dagar innan vigsel.\n\nVi påminner dig i tid så att du inte glömmer.',
+            type: 'message',
+            dependency: {
+                relation: 'AND',
+                conditions: [{
+                    'key': 'hasWitness',
+                    'value': 'Nej jag vill komplettera senare',
+                    'compare': '='
+                }]
+            }
+        },
          {
             id: 'firstWitness',
             name: [
@@ -222,38 +218,36 @@ const forms = [
                 }
             ]
         },
-        // TODO: Lägg in meddelande efter man svarat "Ja"
-        //   {
-        //       id: 'hindersProvningJa',
-        //       name: [
-        //           'Perfekt! Vi behöver en kopia av er hindersprövning. I slutet av bokningen får du information om hur du skickar den till oss.',
-        //       ],
-        //       type: 'text',
-        //       dependency: {
-        //           relation: 'AND',
-        //           conditions: [{
-        //               'key': 'hindersProvning',
-        //               'value': 'Ja',
-        //               'compare': '='
-        //           }]
-        //       }
-        //   },
-        // TODO: Lägg in meddelande efter man svarat "Nej"
-        //   {
-        //       id: 'hindersProvningNej',
-        //       name: [
-            //      'Jag kan göra klart din bokning utan hindersprövning, men vigseln kan inte genomföras utan den.\n\nNi ansöker om hindersprövning på Skatteverkets webbplats[https://skatteverket.se/privat/folkbokforing/aktenskapochpartnerskap/forevigselnhindersprovning.4.76a43be412206334b89800020477.html?q=hinderspr%C3%B6vning] ',
-        //       ],
-        //       type: 'text',
-        //       dependency: {
-        //           relation: 'AND',
-        //           conditions: [{
-        //               'key': 'hindersProvning',
-        //               'value': 'Nej',
-        //               'compare': '='
-        //           }]
-        //       }
-        //   },
+        {
+              id: 'hindersProvningYes',
+              name: [
+                  'Perfekt! Vi behöver en kopia av er hindersprövning. I slutet av bokningen får du information om hur du skickar den till oss.',
+              ],
+              type: 'message',
+              dependency: {
+                  relation: 'AND',
+                  conditions: [{
+                      'key': 'hindersProvning',
+                      'value': 'Ja',
+                      'compare': '='
+                  }]
+              }
+        },
+        {
+              id: 'hindersProvningNo',
+              name: [
+                 'Jag kan göra klart din bokning utan hindersprövning, men vigseln kan inte genomföras utan den.\n\nNi ansöker om hindersprövning på Skatteverkets webbplats[https://skatteverket.se/privat/folkbokforing/aktenskapochpartnerskap/forevigselnhindersprovning.4.76a43be412206334b89800020477.html?q=hinderspr%C3%B6vning] ',
+              ],
+              type: 'message',
+              dependency: {
+                  relation: 'AND',
+                  conditions: [{
+                      'key': 'hindersProvning',
+                      'value': 'Nej',
+                      'compare': '='
+                  }]
+              }
+          },
         // TODO: Lägg in divider här med titel: Summering
         {
             id: 'confirmBooking',
@@ -274,9 +268,35 @@ const forms = [
                     icon: 'close',
                 },
             ]
-        }
-        // TODO: Lägg in meddelande om man valt "Nej, jag vill spara och fortsätta senare"
-        // TEXT: Okej, då sparar jag ditt ärende. Du kan när som helst komma tillbaka och göra klart det.
+        },
+        {
+            id: 'confirmBookingYes',
+            name: [
+            'Då har jag tagit emot er bokning. Du kan när som helst se din bokning under fliken Mitt HBG.',
+            'Vi har också skickat en bekräftelse till din e-post.'],
+            type: 'message',
+            dependency: {
+                relation: 'AND',
+                conditions: [{
+                    'key': 'confirmBooking',
+                    'value': 'Ja, boka vigsel',
+                    'compare': '='
+                }]
+            }
+        },
+        {
+            id: 'confirmBookingNo',
+            name: 'Okej, då sparar jag ditt ärende. Du kan när som helst komma tillbaka och göra klart det.',
+            type: 'message',
+            dependency: {
+                relation: 'AND',
+                conditions: [{
+                    'key': 'confirmBooking',
+                    'value': 'Nej, jag vill spara och fortsätta senare',
+                    'compare': '='
+                }]
+            }
+        },
     ],
 }, ];
 export default forms;
