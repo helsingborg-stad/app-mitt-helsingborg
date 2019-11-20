@@ -188,13 +188,14 @@ export default class SplashScreen extends Component {
         return (
             <EnhancedScreenWrapper>
                 <Swiper
+                    ref={(swiper) => {this._swiper = swiper}}
                     style={{ overflow: 'visible' }}
                     buttonWrapperStyle={styles.buttonWrapperStyle}
                     showsPagination={this.state.disableSwipeInterface}
                     showsButtons={this.state.disableSwipeInterface}
                     prevButton={<Text style={styles.buttonText} />}
                     nextButton={
-                        <Button color={'swipe'} z={5}>
+                        <Button color={'swipe'} z={5} onClick={() => {this._swiper.scrollBy(1)}}>
                             <Text>{this.state.swipeButtonText}</Text>
                             <Icon name="chevron-right" color={'purple'}/>
                         </Button>
