@@ -139,6 +139,13 @@ const colors = {
       iconRight: palette.mono.light,
       shadow: 'rgba(255, 255, 255, 0.0)',
     },
+    swipe: {
+      background: '#F5F5F5',
+      text: palette.mono.darker,
+      icon: palette.purple[1],
+      iconRight: palette.purple[1],
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    }
   },
   status: {
   },
