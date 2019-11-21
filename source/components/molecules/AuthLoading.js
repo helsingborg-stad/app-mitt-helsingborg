@@ -15,8 +15,8 @@ const AuthLoading = props => (
             }
         </AuthLoadingBody>
         <AuthLoadingAction>
-            <Button color={'purple'} onPress={props.cancelLogin} block>
-                <Text>Avbryt</Text>
+            <Button color={'purple'} onClick={props.cancelLogin} block>
+                <Text>Avbryt test</Text>
             </Button>
         </AuthLoadingAction>
     </AuthLoadingWrapper>
