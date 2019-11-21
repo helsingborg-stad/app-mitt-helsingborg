@@ -27,23 +27,20 @@ export default class SplashScreen extends Component {
 
         this._panResponder = PanResponder.create({
             onPanResponderMove: (evt, gestureState) => {
-                console.log(gestureState.dx);
                 if (this.state.swipeIndex === 2 && this.state.showSwipeInterface === true) {
                     if (gestureState.dx < 0) {
                         console.log('hiding interface');
                         this.setState({showSwipeInterface: false})
                     }
                 }
-
             },
 
             onPanResponderRelease: (evt, gestureState) => {
-                if (this.state.swipeIndex === 2 && gestureState.dx > -184.5) {
-                    this.setState({showSwipeInterface: true})
-                }
-                // else if (this.state.swipeIndex === 2 && gestureState.dx > 184.5) {
-                //
-                // }
+                setTimeout(() => {
+                    if (this.state.swipeIndex === 2) {
+                        this.setState({showSwipeInterface: true});
+                    }
+                }, 400)
             }
 
         });
@@ -242,7 +239,6 @@ export default class SplashScreen extends Component {
                     paginationStyle={{paddingEnd: 195}}
                     onIndexChanged={(index) => this.swipeAction(index)}
                     loop={false}
-                    scrollEnabled={false}
                 >
 
                     { this.swipeWelcome() }
