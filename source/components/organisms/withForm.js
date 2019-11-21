@@ -8,8 +8,19 @@ const withForm = (WrappedComponent, onSubmit) => {
             isFocused: false,
         };
 
+        static defaultProps = {
+            withForm: {}
+        };
+
+
         changeHandler = value => {
-            this.setState({inputValue: value});
+            const { withForm } = this.props;
+            const { filterChangeHandler } = withForm;
+
+            this.setState({
+                inputValue: typeof filterChangeHandler === 'function' 
+                ? filterChangeHandler(value) : value
+            });
         }
 
         componentDidMount() {
@@ -29,11 +40,20 @@ const withForm = (WrappedComponent, onSubmit) => {
         }
 
         submitHandler = (argValue) => {
+            const { withForm } = this.props;
             const { inputValue } = this.state;
             const value = typeof argValue === 'string' ? argValue : inputValue;
 
+            const { validateSubmitHandlerInput } = withForm;
+
             if (value.length <= 0) {
                 return;
+            }
+
+            // Validation callback should return true
+            if (typeof validateSubmitHandlerInput === 'function' 
+                && !validateSubmitHandlerInput(value)) {
+                    return;
             }
 
             this.setState({ inputValue: '' }, () => {

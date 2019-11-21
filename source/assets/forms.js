@@ -1,3 +1,7 @@
+
+import { sanitizePin } from "../helpers/ValidationHelper";
+import { Alert } from 'react-native';
+
 const forms = [
   {
       id: 1,
@@ -16,6 +20,11 @@ const forms = [
               type: 'number',
               placeholder: 'Personnummer',
               maxLength: 12,
+              // TODO: Lift out arrow functions for validation/formatting to ChatUserInput
+              withForm: {
+                validateSubmitHandlerInput: value => (value.length === 12 ? true : Alert.alert('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.') && false),
+                filterChangeHandler: value => (sanitizePin(value))
+              }
         },
         {
               id: 'partnerSameAddress',

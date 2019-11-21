@@ -33,7 +33,7 @@ export default class ChatUserInput extends Component {
                     componentProps: {
                         blurOnSubmit: false,
                         autoFocus: true,
-                        ...includePropetiesWithKey(input, ['placeholder', 'autoFocus', 'maxLength', 'submitText']),
+                        ...includePropetiesWithKey(input, ['placeholder', 'autoFocus', 'maxLength', 'submitText', 'withForm']),
                     }
                 };
                 break;
@@ -45,7 +45,7 @@ export default class ChatUserInput extends Component {
                         blurOnSubmit: false,
                         autoFocus: true,
                         keyboardType: 'numeric',
-                        ...includePropetiesWithKey(input, ['placeholder', 'autoFocus', 'maxLength', 'submitText']),
+                        ...includePropetiesWithKey(input, ['placeholder', 'autoFocus', 'maxLength', 'submitText', 'withForm']),
                     }
                 };
                 break;
