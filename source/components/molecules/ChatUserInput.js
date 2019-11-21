@@ -29,7 +29,7 @@ export default class ChatUserInput extends Component {
         switch(input.type) {
             case 'text':
                 data = {
-                    Component: this.avalibleComponents.text, 
+                    Component: this.avalibleComponents.text,
                     componentProps: {
                         blurOnSubmit: false,
                         autoFocus: true,
@@ -40,7 +40,7 @@ export default class ChatUserInput extends Component {
 
             case 'number':
                 data =  {
-                    Component: this.avalibleComponents.number, 
+                    Component: this.avalibleComponents.number,
                     componentProps: {
                         blurOnSubmit: false,
                         autoFocus: true,
@@ -52,7 +52,7 @@ export default class ChatUserInput extends Component {
 
             case 'radio':
                 data =  {
-                    Component: this.avalibleComponents.radio, 
+                    Component: this.avalibleComponents.radio,
                     componentProps: {
                         items: input.options
                     }
@@ -65,9 +65,30 @@ export default class ChatUserInput extends Component {
 
             case 'datetime':
                 data = {
-                    Component: this.avalibleComponents.dateTime, 
+                    Component: this.avalibleComponents.dateTime,
                     componentProps: {
-                        ...includePropetiesWithKey(input, ['placeholder'])
+                        mode: 'datetime',
+                        ...includePropetiesWithKey(input, ['placeholder', 'selectorProps'])
+                    }
+                };
+                break;
+
+            case 'date':
+                data = {
+                    Component: this.avalibleComponents.dateTime,
+                    componentProps: {
+                        mode: 'date',
+                        ...includePropetiesWithKey(input, ['placeholder', 'selectorProps'])
+                    }
+                };
+                break;
+
+            case 'time':
+                data = {
+                    Component: this.avalibleComponents.dateTime,
+                    componentProps: {
+                        mode: 'time',
+                        ...includePropetiesWithKey(input, ['placeholder', 'selectorProps'])
                     }
                 };
                 break;
@@ -101,9 +122,9 @@ export default class ChatUserInput extends Component {
 
                     // render JSX element
                     .map(({Component, componentProps}, index) => (
-                        Component ? 
-                            <Component 
-                                chat={excludePropetiesWithKey(chat, ['messages'])} 
+                        Component ?
+                            <Component
+                                chat={excludePropetiesWithKey(chat, ['messages'])}
                                 key={`${Component}-${index}`}
 
                                 {...componentProps}
