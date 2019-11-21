@@ -49,6 +49,9 @@ const palette = {
 const colors = {
   title: palette.black,
   anchor: palette.green.dark,
+  login: {
+    background: palette.bg.default
+  },
   input: {
     background: palette.mono.white,
     border: palette.mono.lighter,

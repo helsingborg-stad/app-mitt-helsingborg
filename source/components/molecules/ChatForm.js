@@ -107,4 +107,5 @@ const InputStyledView = styled.View`
     ${inputStyles}
     padding: 8px;
     flex-direction: row;
+    flex: 1;
 `;
