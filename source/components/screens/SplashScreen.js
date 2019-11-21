@@ -29,7 +29,6 @@ export default class SplashScreen extends Component {
             onPanResponderMove: (evt, gestureState) => {
                 if (this.state.swipeIndex === 2 && this.state.showSwipeInterface === true) {
                     if (gestureState.dx < 0) {
-                        console.log('hiding interface');
                         this.setState({showSwipeInterface: false})
                     }
                 }
