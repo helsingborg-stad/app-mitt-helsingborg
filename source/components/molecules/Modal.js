@@ -25,6 +25,7 @@ const Modal = ({ visible, heading, content, changeModal, color }) =>
                 </FlexInner>
                 <FlexOuter>
                     <TouchableHighlight
+                        hitSlop={{top: 8, bottom: 8, left: 16, right: 16}}
                         onPress={() => { changeModal(!visible) }}
                         underlayColor={'white'}>
                         <Text>Klar</Text>
