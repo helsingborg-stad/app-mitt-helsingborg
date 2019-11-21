@@ -16,7 +16,7 @@ class Chat extends Component {
     static propTypes = {
         ChatAgent: PropTypes.oneOfType([PropTypes.oneOf([false]), PropTypes.elementType, PropTypes.func]).isRequired,
         ChatUserInput: PropTypes.oneOfType([PropTypes.oneOf([false]), PropTypes.elementType, PropTypes.func]),
-        inputComponents: PropTypes.array,
+        inputComponents: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
         keyboardVerticalOffset: PropTypes.number
     };
 
