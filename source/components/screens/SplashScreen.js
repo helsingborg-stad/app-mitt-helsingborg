@@ -37,12 +37,11 @@ export default class SplashScreen extends Component {
 
             onPanResponderRelease: (evt, gestureState) => {
                 setTimeout(() => {
-                    if (this.state.swipeIndex === 2) {
+                    if (this.state.swipeIndex <= 2) {
                         this.setState({showSwipeInterface: true});
                     }
                 }, 400)
             }
-
         });
     }
 
