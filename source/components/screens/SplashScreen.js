@@ -17,12 +17,36 @@ import Icon from "../atoms/Icon";
  */
 export default class SplashScreen extends Component {
     state = {
-        disableSwipeInterface: true,
+        showSwipeInterface: true,
         swipeButtonText: 'Kom igång',
+        swipeIndex: 0
     };
 
     componentWillMount() {
         this.showSplash();
+
+        this._panResponder = PanResponder.create({
+            onPanResponderMove: (evt, gestureState) => {
+                console.log(gestureState.dx);
+                if (this.state.swipeIndex === 2 && this.state.showSwipeInterface === true) {
+                    if (gestureState.dx < 0) {
+                        console.log('hiding interface');
+                        this.setState({showSwipeInterface: false})
+                    }
+                }
+
+            },
+
+            onPanResponderRelease: (evt, gestureState) => {
+                if (this.state.swipeIndex === 2 && gestureState.dx > -184.5) {
+                    this.setState({showSwipeInterface: true})
+                }
+                // else if (this.state.swipeIndex === 2 && gestureState.dx > 184.5) {
+                //
+                // }
+            }
+
+        });
     }
 
     /**
@@ -173,14 +197,26 @@ export default class SplashScreen extends Component {
      * Remove next buttons for last screen.
      */
     swipeAction = (index) => {
-
         if (index === 0) {
             this.setState({ swipeButtonText: 'Kom igång'})
-        } else if (index === 3) {
-            this.setState({ disableSwipeInterface: false })
+        } else if (index === 2) {
+            this.setState({ showSwipeInterface: true })
+        }
+        else if (index === 3) {
+            this.setState({ showSwipeInterface: false })
         } else {
-            this.setState({ disableSwipeInterface: true })
+            // this.setState({ disableSwipeInterface: true })
             this.setState({ swipeButtonText: 'Nästa'})
+        }
+
+        this.setState({swipeIndex: index})
+    };
+
+    swipeToNext = () => {
+        this._swiper.scrollBy(1);
+
+        if (this.state.swipeIndex === 2) {
+            this.setState({showSwipeInterface: false})
         }
     };
 
@@ -188,14 +224,15 @@ export default class SplashScreen extends Component {
         return (
             <EnhancedScreenWrapper>
                 <Swiper
+                    {...this._panResponder.panHandlers}
                     ref={(swiper) => {this._swiper = swiper}}
                     style={{ overflow: 'visible' }}
                     buttonWrapperStyle={styles.buttonWrapperStyle}
-                    showsPagination={this.state.disableSwipeInterface}
-                    showsButtons={this.state.disableSwipeInterface}
+                    showsPagination={this.state.showSwipeInterface}
+                    showsButtons={this.state.showSwipeInterface}
                     prevButton={<Text style={styles.buttonText} />}
                     nextButton={
-                        <Button color={'swipe'} z={5} onClick={() => {this._swiper.scrollBy(1)}}>
+                        <Button color={'swipe'} z={5} onClick={() => this.swipeToNext()}>
                             <Text>{this.state.swipeButtonText}</Text>
                             <Icon name="chevron-right" color={'purple'}/>
                         </Button>
@@ -205,6 +242,7 @@ export default class SplashScreen extends Component {
                     paginationStyle={{paddingEnd: 195}}
                     onIndexChanged={(index) => this.swipeAction(index)}
                     loop={false}
+                    scrollEnabled={false}
                 >
 
                     { this.swipeWelcome() }
