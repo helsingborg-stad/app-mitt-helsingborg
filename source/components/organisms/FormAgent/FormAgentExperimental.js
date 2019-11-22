@@ -66,8 +66,10 @@ class FormAgentExperimental extends Component {
         const { chat } = this.props;
         const { questions, form, answers, queue, currentQuestion } = this.state;
         
+        // Retrive updated question queue.
         const newQueue = Array.from(this.updateQueue(queue, answers, questions, currentQuestion))
 
+        // Retrive the first question in the queue.
         const nextQuestionFromQueue = this.dequeue(newQueue)
 
         if (!nextQuestionFromQueue) {
@@ -94,7 +96,7 @@ class FormAgentExperimental extends Component {
             return;
         }
 
-        // Set currentQuestion then output messages & render input
+        // Set currentQuestion and queue then output messages & render input
         this.setState({queue: newQueue, currentQuestion: nextQuestionFromQueue }, async () => {
             if (nextQuestionFromQueue.name) {
 
@@ -122,41 +124,56 @@ class FormAgentExperimental extends Component {
 
     updateQueue = (queue, answers, questions, currentQuestion) => {
         // updated the queue based on the answer for the current question.
+
         if(queue.length > 0 || currentQuestion.last) {
-           return queue
+            // Return the queue untouched.
+            return queue
         }
 
+        
         if(currentQuestion) {
             const currentQueue = [...queue]
 
             if ("logics" in currentQuestion) {
                 
+                // Find the answer for the question that was just answered.
                 const currentQuestionAnswer = answers[currentQuestion.id]
 
+                // Go thourugh all the logic actions for a question. 
                 currentQuestion.logics.actions.reduce((accumulator, action) => {
 
+                    // Find the target question to add in the queue.
                     const questionToAddInQueue = questions.find(q => q.id === action.target_question)
 
                     if ('op' in action.condition) {
+                        // Retrive predicate funtion to 
                         const checkAnswerWithExpression = createExpression(action.condition);
                         
+                        // Check if the answer on the current question matches the condition/expression 
                         if(checkAnswerWithExpression(currentQuestionAnswer)){
+
+                            // if answer matches the condition add the traget question to the queue.
                             return this.enqueue(currentQueue, questionToAddInQueue)
                         }
 
                         return;
                     }
 
+                    // if current question does not have a condition add target question without checking the condition.
                     return this.enqueue(currentQueue, questionToAddInQueue)
 
                 }, '')
             } else {
+                // If the questions does not have any logic dependecy, 
+                // find the next question to add based on the current question's postition.
                 const questionToAddInQueue = questions.find(q => q.position === (currentQuestion.position + 1))
                 this.enqueue(currentQueue, questionToAddInQueue)
             }
 
+            // Return the queue with new questions.
             return currentQueue
         } else {
+            // Return the queue untouched.
             return queue
         }
     }
