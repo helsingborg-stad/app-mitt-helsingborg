@@ -12,6 +12,7 @@ import ChatBubble from '../../atoms/ChatBubble';
 import { getFormTemplate } from '../../../services/ChatFormService';
 
 import {renameMatchedKeysInObject, excludePropetiesWithKey} from '../../../helpers/Objects'
+import FormAgentExperimental from './FormAgentExperimental';
 
 class FormAgentInitiator extends Component {
     componentDidMount() {
@@ -44,6 +45,43 @@ class FormAgentInitiator extends Component {
     handleMessage = (message) => {
         const { chat } = this.props;
         chat.switchAgent(props => (<FormAgent {...props} formId={1} />));
+    };
+
+    render() {
+        return null;
+    }
+}
+class FormAgentExperimentalInitiator extends Component {
+    componentDidMount() {
+        const { chat } = this.props;
+
+        chat.addMessages({
+            Component: ChatBubble,
+            componentProps: {
+                content: 'Hej! Vill du prova FormAgent?',
+                modifiers: ['automated'],
+            }
+        });
+
+        chat.switchInput({
+            type: 'radio',
+            options: [
+                {
+                    value: 'Ja, starta FormAgent nu!',
+                },
+            ],
+        });
+
+        EventHandler.subscribe(EVENT_USER_MESSAGE, (message) => this.handleMessage(message));
+    }
+
+    componentWillUnmount() {
+        EventHandler.unSubscribe(EVENT_USER_MESSAGE);
+    }
+
+    handleMessage = (message) => {
+        const { chat } = this.props;
+        chat.switchAgent(props => (<FormAgentExperimental {...props} formId={1} />));
     };
 
     render() {
@@ -153,5 +191,10 @@ storiesOf('Chat', module)
     .add('Form agent with data from request', () => (
         <StoryWrapper>
             <Chat ChatAgent={FormAgentInitiatorWithRequest} />
+        </StoryWrapper>
+    ))
+    .add('Experimental form agent', () => (
+        <StoryWrapper>
+            <Chat ChatAgent={FormAgentExperimentalInitiator} />
         </StoryWrapper>
     ));
