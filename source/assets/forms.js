@@ -28,7 +28,7 @@ const forms = [
         },
         {
               id: 'partnerSameAddress',
-              name: ({ answers }) => `Bor ${answers.partnerName.split(' ')[0]} samma adress som du?`,
+              name: ({ answers }) => `Bor ${answers.partnerName.split(' ')[0]} på samma adress som du?`,
               type: 'radio',
               options: [
                 {
