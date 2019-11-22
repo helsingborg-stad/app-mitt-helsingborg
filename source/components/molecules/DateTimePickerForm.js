@@ -8,10 +8,24 @@ const DateTimePickerForm = props => {
     const { changeHandler, submitHandler, inputValue, mode, selectorProps } = props;
 
     const date = typeof inputValue.getMonth === 'function' ? inputValue : new Date();
-    const dateString = typeof inputValue.getMonth === 'function' ? inputValue.toLocaleString('sv-SE') : '';
-    console.log(dateString);
+    let options = {};
 
-    const enhancedSubmitHandler = () => {dateString.length > 0 ? submitHandler(dateString) : null};
+    switch (mode) {
+        case 'date':
+            options.dateStyle = 'short';
+            break;
+
+        case 'time':
+            options.timeStyle = 'short';
+            break;
+
+        default:
+            options.dateStyle = 'short';
+            options.timeStyle = 'short';
+    }
+
+    const dateString = typeof inputValue.getMonth === 'function' ? inputValue.toLocaleString('sv-SE', options) : '';
+    const enhancedSubmitHandler = () => { dateString.length > 0 ? submitHandler(dateString) : null };
 
     return (
         <ChatForm
