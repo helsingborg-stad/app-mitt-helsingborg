@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import validator from 'validator';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
-import forms from '../../../assets/forms';
+import forms from '../../../assets/forms.js';
+import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../../services/StorageService';
 
 import ChatBubble from '../../atoms/ChatBubble';
 
@@ -87,31 +88,12 @@ class FormAgent extends Component {
 
     nextQuestion = async () => {
         const { chat } = this.props;
-        const { questions, form, answers } = this.state;
+        const { questions } = this.state;
 
         const nextQuestion = questions.find(this.isNextQuestion);
 
         if (!nextQuestion) {
-            this.setState({ currentQuestion: undefined });
-
-            await chat.addMessages([
-                {
-                    Component: ChatDivider,
-                    componentProps: {
-                        info: `Bokning ${form.name.toLowerCase()} avslutad`,
-                    }
-                }
-            ]);
-
-            chat.switchAgent(props => <WatsonAgent {...props}
-                initialMessages={['Kan jag hjälpa dig med någon annat?']} />)
-
-            chat.switchInput({
-                autoFocus: false,
-                type: 'text',
-                placeholder: 'Skriv något...'
-            });
-
+            this.exitForm();
             return;
         }
 
@@ -147,6 +129,44 @@ class FormAgent extends Component {
             chat.switchInput(nextQuestion);
         });
     };
+
+    exitForm = async () => {
+        const { chat } = this.props;
+        const { form, questions, answers } = this.state;
+
+        this.setState({ currentQuestion: undefined });
+
+        const user = await StorageService.getData(USER_KEY);
+
+        const formData = {
+            id: +new Date,
+            userId: user.personalNumber,
+            formId: form.id,
+            dateCreated: new Date(),
+            status: 'completed',
+            data: answers,
+        }
+
+        await StorageService.putData(COMPLETED_FORMS_KEY, formData);
+
+        await chat.addMessages([
+            {
+                Component: ChatDivider,
+                componentProps: {
+                    info: `Bokning ${form.name.toLowerCase()} avslutad`,
+                }
+            }
+        ]);
+
+        chat.switchAgent(props => <WatsonAgent {...props}
+            initialMessages={['Kan jag hjälpa dig med någon annat?']} />)
+
+        chat.switchInput({
+            autoFocus: false,
+            type: 'text',
+            placeholder: 'Skriv något...'
+        });
+    }
 
     isNextQuestion = question => {
         const { answers } = this.state;
