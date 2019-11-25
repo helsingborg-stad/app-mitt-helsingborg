@@ -21,7 +21,7 @@ class ChatScreen extends Component {
         return (
             <ChatScreenWrapper>
                 <Chat 
-                    ChatAgent={WatsonAgent} 
+                    ChatAgent={props => (<WatsonAgent {...props} initialMessages={'remote'} />)} 
                     inputComponents={{type: 'text', placeholder: 'Skriv något...', autoFocus: false}}
                     // onUserLogin={this.toggleTabs} />)} 
                     ChatUserInput={false} 
