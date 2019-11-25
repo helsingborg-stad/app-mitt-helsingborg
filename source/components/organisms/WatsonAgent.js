@@ -4,9 +4,8 @@ import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 import { sendChatMsg } from '../../services/ChatFormService';
 import ChatBubble from '../atoms/ChatBubble';
 import ButtonStack from '../molecules/ButtonStack';
-import { Alert, } from "react-native";
 import StorageService, { USER_KEY } from "../../services/StorageService";
-import Markdown from "react-native-markdown-renderer";
+import MarkdownConstructor from "../../helpers/MarkdownConstructor";
 
 let context;
 
@@ -131,7 +130,7 @@ export default class WatsonAgent extends Component {
                     case 'text':
                         return chat.addMessages({
                             Component: props => <ChatBubble {...props}>
-                                <Markdown styles={markdownStyles}>{current.text}</Markdown>
+                                <MarkdownConstructor rawText={current.text}/>
                             </ChatBubble>,
                             componentProps: {
                                 content: current.text,
@@ -196,13 +195,3 @@ export default class WatsonAgent extends Component {
         return null;
     }
 }
-
-const markdownStyles = {
-    text: {
-        color: '#707070',
-        fontSize: 16,
-        fontStyle: 'normal',
-        fontWeight: '500',
-        fontFamily: 'Roboto'
-    }
-};

@@ -31,7 +31,6 @@ const markDownStyles = StyleSheet.create({
         lineHeight: 16
     },
     paragraph: {
-        paddingBottom: 5,
         flexWrap: 'wrap',
         flexDirection: 'row',
         alignItems: 'flex-start',
