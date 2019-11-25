@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
 import { NavItems, CompletedTasks, ActiveTasks } from '../../assets/dashboard';
+import { NavigationEvents } from 'react-navigation';
 import GroupedList from '../molecules/GroupedList';
 import Header from '../molecules/Header';
 import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../services/StorageService';
@@ -26,9 +27,9 @@ class TaskScreen extends Component {
     getTasks = async () => {
         try {
             const tasks = await StorageService.getData(COMPLETED_FORMS_KEY);
-            if (Array.isArray(tasks) && tasks.length) {
-                this.setState({ activeTasks: tasks });
-            }
+            this.setState({
+                activeTasks: Array.isArray(tasks) && tasks.length ? tasks : []
+            });
         } catch (error) {
             return;
         }
@@ -63,6 +64,8 @@ class TaskScreen extends Component {
 
         return (
             <TaskScreenWrapper>
+                <NavigationEvents onWillFocus={() => this.getTasks() } />
+
                 <Header
                     title="Mitt Helsingborg"
                     message={user && user.givenName ? `Hej ${user.givenName}!` : 'Hej!'}
@@ -84,6 +87,13 @@ class TaskScreen extends Component {
                             items={CompletedTasks}
                         />
                     </List>
+
+                    {/* TODO: For testing only, remove me later  */}
+                    <Heading type="h3" style={{ marginTop: 30 }} onPress={async () => {
+                        await StorageService.removeData(COMPLETED_FORMS_KEY);
+                        this.getTasks();
+                    }}>Clear tasks</Heading>
+
                 </Container>
             </TaskScreenWrapper>
         );

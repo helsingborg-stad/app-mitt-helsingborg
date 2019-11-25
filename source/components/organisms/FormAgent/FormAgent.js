@@ -142,7 +142,7 @@ class FormAgent extends Component {
             id: +new Date,
             userId: user.personalNumber,
             formId: form.id,
-            dateCreated: new Date(),
+            created: new Date(),
             status: 'completed',
             data: answers,
         }
