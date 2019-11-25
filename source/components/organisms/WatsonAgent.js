@@ -6,7 +6,7 @@ import ChatBubble from '../atoms/ChatBubble';
 import ButtonStack from '../molecules/ButtonStack';
 import { Alert, } from "react-native";
 import StorageService, { USER_KEY } from "../../services/StorageService";
-import Markdown from "react-native-simple-markdown";
+import Markdown from "react-native-markdown-renderer";
 
 let context;
 
@@ -112,14 +112,14 @@ export default class WatsonAgent extends Component {
                 placeholder: 'Skriv något...',
                 autoFocus: false,
             }];
-            
-            if (!response.data 
-                || !response.data.attributes 
-                || !response.data.attributes.output 
+
+            if (!response.data
+                || !response.data.attributes
+                || !response.data.attributes.output
                 || !response.data.attributes.output.generic) {
-                throw new Error('Something went wrong with Watson response'); 
+                throw new Error('Something went wrong with Watson response');
             }
-            
+
             const { output, context: newContext } = response.data.attributes;
 
             // Set new context
@@ -163,8 +163,8 @@ export default class WatsonAgent extends Component {
                             type: 'radio',
                             options: options,
                         }]);
-                    
-                    case 'pause': 
+
+                    case 'pause':
                         await chat.toggleTyping();
                         await new Promise(resolve => setTimeout(resolve, current.time));
                         return chat.toggleTyping();
