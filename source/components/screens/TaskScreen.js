@@ -3,22 +3,36 @@ import styled from 'styled-components/native';
 import { NavItems, CompletedTasks, ActiveTasks } from '../../assets/dashboard';
 import GroupedList from '../molecules/GroupedList';
 import Header from '../molecules/Header';
-import StorageService, { USER_KEY } from '../../services/StorageService';
+import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../services/StorageService';
 import ScreenWrapper from '../molecules/ScreenWrapper';
 import Heading from '../atoms/Heading';
-import ListItem from '../molecules/ListItem'
+import ListItem from '../molecules/ListItem';
+import forms from '../../assets/forms';
 
 class TaskScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: {}
+            user: {},
+            activeTasks: []
         };
     }
 
     componentDidMount() {
         this.getUser();
+        this.getTasks();
     }
+
+    getTasks = async () => {
+        try {
+            const tasks = await StorageService.getData(COMPLETED_FORMS_KEY);
+            if (Array.isArray(tasks) && tasks.length) {
+                this.setState({ activeTasks: tasks });
+            }
+        } catch (error) {
+            return;
+        }
+    };
 
     getUser = async () => {
         try {
@@ -29,8 +43,24 @@ class TaskScreen extends Component {
         }
     };
 
+    renderTaskItem = (item) => {
+        const form = forms.find(form => (form.id === item.formId));
+        if (!form) {
+            return null;
+        }
+
+        return <ListItem
+            key={item.id}
+            highlighted={true}
+            title='Ansökan'
+            text={form.name}
+            iconName={form.icon || null}
+        />;
+    }
+
     render() {
-        const { user } = this.state;
+        const { user, activeTasks } = this.state;
+
         return (
             <TaskScreenWrapper>
                 <Header
@@ -40,15 +70,14 @@ class TaskScreen extends Component {
                     navItems={NavItems}
                 />
                 <Container>
-                    <List>
-                        <ListHeading type="h3">Aktiva</ListHeading>
-                        {ActiveTasks.map(item =>
-                            <ListItem
-                                key={item.id}
-                                {...item}
-                            />
-                        )}
-                    </List>
+
+                    {activeTasks.length > 0 &&
+                        <List>
+                            <ListHeading type="h3">Aktiva</ListHeading>
+                            {activeTasks.map(this.renderTaskItem)}
+                        </List>
+                    }
+
                     <List>
                         <GroupedList
                             heading="Avslutade"
