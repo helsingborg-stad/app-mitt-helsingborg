@@ -13,6 +13,7 @@ export const TOKEN_KEY = '@app:accessToken';
 export const TEMP_TOKEN_KEY = '@app:tempAccessToken';
 export const USER_KEY = '@app:user';
 export const ORDER_KEY = '@app:orderRef';
+export const COMPLETED_FORMS_KEY = '@app:completedForms';
 
 export default class StorageService extends Component {
   /**
@@ -42,6 +43,32 @@ export default class StorageService extends Component {
   static saveData(key, value) {
     return AsyncStorage.setItem(key, JSON.stringify(value));
   }
+
+    /**
+       * Put new data to array with key value pair to storage.
+       *
+       * @param key
+       * @param value
+       * @returns {Promise}
+       */
+    static putData(key, value) {
+        return AsyncStorage.getItem(key, (err, result) => {
+            if (result !== null) {
+                let newValue = [];
+                if (Array.isArray(value)) {
+                    newValue = JSON.parse(result).concat(value);
+                } else if (typeof value === 'object' && value !== null) {
+                    newValue = JSON.parse(result);
+                    newValue.push(value);
+                }
+
+                return AsyncStorage.setItem(key, JSON.stringify(newValue));
+            } else {
+                let newValue = Array.isArray(value) ? value : [value];
+                return AsyncStorage.setItem(key, JSON.stringify(newValue));
+            }
+        });
+    }
 
   /**
    * Save multiple values with key pair to storage.
