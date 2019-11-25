@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import { MONTHS } from '../../../helpers/Date';
-
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
 import forms from '../../../assets/forms.js';
 
@@ -9,23 +7,17 @@ import ChatBubble from '../../atoms/ChatBubble';
 
 import ChatDivider from '../../atoms/ChatDivider';
 import WatsonAgent from "../WatsonAgent";
-import withChatForm from "../withChatForm";
-import ChatForm from "../../molecules/ChatFormDeprecated";
-import createExpression from '../../../helpers/Logics';
-import { PropTypes } from 'prop-types';
 
 class FormAgent extends Component {
     state = {
         form: {},
-        answers: {},
         questions: [],
-        queue: [],
+        answers: {},
         currentQuestion: undefined,
-        position: undefined,
     };
 
     componentDidMount() {
-        const { formId, chat, answers, startPosition } = this.props;
+        const { formId, chat, answers } = this.props;
 
         chat.switchInput(false);
 
@@ -48,16 +40,12 @@ class FormAgent extends Component {
             }
         ]);
 
-        const currentQuestion = form.questions.find(q => q.position=== startPosition)
-        const initialQueue = [ currentQuestion ]
-
         // Let the form party begin
         new Promise(resolve => setTimeout(resolve, 500)).then(() => {
             this.setState({
-                answers: answers,
+                answers: answers ? answers : {},
                 form: form,
-                questions: form.questions,
-                queue: initialQueue,
+                questions: form.questions
             }, this.nextQuestion);
         });
     }
@@ -68,13 +56,11 @@ class FormAgent extends Component {
 
     nextQuestion = async () => {
         const { chat } = this.props;
-        const { questions, form, answers, queue, currentQuestion } = this.state;
-        
-        const newQueue = Array.from(this.updateQueue(queue, answers, questions, currentQuestion))
+        const { questions, form, answers } = this.state;
 
-        const nextQuestionFromQueue = this.dequeue(newQueue)
+        const nextQuestion = questions.find(this.isNextQuestion);
 
-        if (!nextQuestionFromQueue) {
+        if (!nextQuestion) {
             this.setState({ currentQuestion: undefined });
 
             await chat.addMessages([
@@ -99,72 +85,50 @@ class FormAgent extends Component {
         }
 
         // Set currentQuestion then output messages & render input
-        this.setState({queue: newQueue, currentQuestion: nextQuestionFromQueue }, async () => {
-            if (nextQuestionFromQueue.name) {
+        this.setState({ currentQuestion: nextQuestion.id }, async () => {
+            if (nextQuestion.name) {
 
                 await this.outputMessages(
-                    nextQuestionFromQueue.name,
+                    nextQuestion.name,
                     'automated',
-                    nextQuestionFromQueue.explainer,
+                    nextQuestion.explainer
                 );
 
                 await new Promise(resolve => setTimeout(resolve, 50));
 
-                if (nextQuestionFromQueue.type === 'message') {
+                if (nextQuestion.type === 'message') {
                     this.handleUserInput(false);
                     return;
                 }
 
-                chat.switchInput(nextQuestionFromQueue);
+                chat.switchInput(nextQuestion);
 
                 return
             }
 
-            chat.switchInput(nextQuestionFromQueue);
+            chat.switchInput(nextQuestion);
         });
     };
 
-    updateQueue = (queue, answers, questions, currentQuestion) => {
-        // updated the queue based on the answer for the current question.
-        if(queue.length > 0 || currentQuestion.last) {
-           return queue
+    isNextQuestion = question => {
+        const { answers } = this.state;
+        const { dependency, id } = question;
+
+        let coniditionsIsValid = true;
+
+        if (dependency && dependency.conditions && dependency.conditions.length > 0) {
+            // Valdate conditions with 'AND' ... 'OR' has yet to be implemented
+            coniditionsIsValid = dependency.conditions.reduce((accumulator, condition) => {
+                if (!accumulator) {
+                    return accumulator;
+                }
+
+                return answers[condition.key] !== undefined && answers[condition.key] === condition.value;
+            }, true);
         }
 
-        if(currentQuestion) {
-            const currentQueue = [...queue]
-
-            if ("logics" in currentQuestion) {
-                
-                const currentQuestionAnswer = answers[currentQuestion.id]
-
-                currentQuestion.logics.actions.reduce((accumulator, action) => {
-
-                    const questionToAddInQueue = questions.find(q => q.id === action.target_question)
-
-                    if ('op' in action.condition) {
-                        const checkAnswerWithExpression = createExpression(action.condition);
-                        
-                        if(checkAnswerWithExpression(currentQuestionAnswer)){
-                            return this.enqueue(currentQueue, questionToAddInQueue)
-                        }
-
-                        return;
-                    }
-
-                    return this.enqueue(currentQueue, questionToAddInQueue)
-
-                }, '')
-            } else {
-                const questionToAddInQueue = questions.find(q => q.position === (currentQuestion.position + 1))
-                this.enqueue(currentQueue, questionToAddInQueue)
-            }
-
-            return currentQueue
-        } else {
-            return queue
-        }
-    }
-
+        return coniditionsIsValid && answers[id] === undefined;
+    };
 
     outputMessages = async (messages, modifier = 'automated', explainer = undefined) => {
         const { chat } = this.props;
@@ -216,25 +180,6 @@ class FormAgent extends Component {
         await chat.toggleTyping();
     };
 
-    dequeue = (queue) => {
-        // removing element from the queue 
-        // returns undefined when called  
-        // on empty queue 
-        if(this.queueIsEmpty(queue))
-            return undefined;
-        return queue.shift();
-    }
-
-    enqueue = (queue, item) => {
-        // adding element to the queue 
-        queue.push(item);
-    }
-
-    queueIsEmpty = (queue) => { 
-        // return true if the queue is empty. 
-        return queue.length == 0;
-    } 
-
     handleUserInput = async message => {
         const { chat } = this.props;
         const { currentQuestion, answers } = this.state;
@@ -242,7 +187,7 @@ class FormAgent extends Component {
         if (currentQuestion) {
             await chat.switchUserInput(false);
             await new Promise(resolve => setTimeout(resolve, 500));
-            await this.setState({ answers: { ...answers, [currentQuestion.id]: message } }, this.nextQuestion);
+            await this.setState({ answers: { ...answers, [currentQuestion]: message } }, this.nextQuestion);
         }
     };
 
@@ -251,15 +196,4 @@ class FormAgent extends Component {
     }
 }
 
-FormAgent.propTypes = {
-    formId: PropTypes.string.isRequired,
-    chat: PropTypes.shape({}).isRequired,
-    answers: PropTypes.shape({}),
-    startPosition: PropTypes.number,
-}
-
-FormAgent.defaultProps = {
-    answers: {},
-    startPosition: 1
-}
 export default FormAgent;
