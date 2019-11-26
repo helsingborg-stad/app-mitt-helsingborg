@@ -28,7 +28,7 @@ const forms = [
             withForm: {
                 validateSubmitHandlerInput: value => (value.length === 12 ? true : Alert.alert('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.') && false),
                 filterChangeHandler: value => (sanitizePin(value))
-              }
+            }
         },
         {
             id: 'partnerSameAddress',

@@ -180,7 +180,7 @@
       newCondition = predicate(...childConditions)
     }
   
-    if (isComparisonOperator(op)) {
+    if (isComparisonOperator(operator)) {
       const [check] = variabels
       newCondition = predicate(check.value)
     }

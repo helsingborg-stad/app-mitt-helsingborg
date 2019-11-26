@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
-import forms from '../../../assets/forms.js';
+import forms from '../../../assets/formsExperimental';
 
 import ChatBubble from '../../atoms/ChatBubble';
 
