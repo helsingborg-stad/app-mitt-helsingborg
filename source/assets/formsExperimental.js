@@ -24,11 +24,6 @@ const forms = [
             placeholder: 'Personnummer',
             maxLength: 12,
             last: false,
-            // TODO: Lift out arrow functions for validation/formatting to ChatUserInput
-            withForm: {
-                validateSubmitHandlerInput: value => (value.length === 12 ? true : Alert.alert('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.') && false),
-                filterChangeHandler: value => (sanitizePin(value))
-            }
         },
         {
             id: 'partnerSameAddress',
