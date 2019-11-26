@@ -11,7 +11,7 @@ import Button from './Button';
 
 
 const ChatBubble = props => {
-    const { content, modifiers, style, iconRight, onClickIconRight, theme } = props;
+    const { content, modifiers, style, iconRight, onClickIconRight, theme, z } = props;
 
     const avalibleColorModifiers = ['automated', 'human', 'user'];
     let colorTheme = modifiers ? modifiers.find(modifier => (avalibleColorModifiers.includes(modifier))) : undefined;
@@ -35,7 +35,7 @@ const ChatBubble = props => {
     });
 
     return (
-        <Bubble alignment={alignment} colorTheme={colorTheme} style={style}>
+        <Bubble alignment={alignment} colorTheme={colorTheme} style={style} z={z}>
                 <ContentWrapper>
                     <View>
                         {children ?
@@ -68,7 +68,8 @@ ChatBubble.propTypes = {
 
 ChatBubble.defaultProps = {
     modifiers: ['user'],
-    iconRight: 'help-outline'
+    iconRight: 'help-outline',
+    z: 1
 };
 
 export default withTheme(ChatBubble);
@@ -85,7 +86,7 @@ const Bubble = styled.View`
     background-color: ${props => (props.theme.chatBubble[props.colorTheme].background)};
 
     ${props => ((props.alignment && CSS[props.alignment]) ? CSS[props.alignment] : null)}
-    ${props => (shadow[1])}
+    ${props => (shadow[props.z])}
 `;
 
 
