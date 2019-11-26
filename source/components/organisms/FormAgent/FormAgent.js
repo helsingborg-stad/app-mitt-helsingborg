@@ -9,6 +9,9 @@ import ChatBubble from '../../atoms/ChatBubble';
 
 import ChatDivider from '../../atoms/ChatDivider';
 import WatsonAgent from "../WatsonAgent";
+import withChatForm from "../withChatForm";
+import ChatForm from "../../molecules/ChatFormDeprecated";
+import ButtonStack from '../../molecules/ButtonStack';
 
 // TODO: Find better place for storing this function and
 // TODO: Refactor function so it can be used in a more general purpose.
@@ -147,9 +150,25 @@ class FormAgent extends Component {
             data: answers,
         }
 
-        await StorageService.putData(COMPLETED_FORMS_KEY, formData);
+        try {
+            await StorageService.putData(COMPLETED_FORMS_KEY, formData);
+        } catch (error) {
+            console.log("Save form error", error);
+        }
 
         await chat.addMessages([
+            {
+                Component: (props) => <ButtonStack {...props} chat={chat} />,
+                componentProps: {
+                    items: [
+                        {
+                            value: 'Visa mina ärenden',
+                            action: { 'type': 'navigate', 'value': 'UserEvents' },
+                            icon: 'arrow-forward'
+                        },
+                    ]
+                }
+            },
             {
                 Component: ChatDivider,
                 componentProps: {
