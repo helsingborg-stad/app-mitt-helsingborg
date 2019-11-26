@@ -112,7 +112,12 @@ const forms = [
         {
             id: 'weddingDate',
             name: 'Vilket datum vill ni gifta er?',
-            type: 'datetime',
+            type: 'date',
+            selectorProps: {
+                locale: 'sv',
+                // TODO: Lift out date object
+                minimumDate: new Date(),
+            },
             explainer: [
                 {
                     key: 0,
@@ -120,6 +125,15 @@ const forms = [
                     content: 'Ni kan bli vigda i Rådhuset följande tider:\nVardagar klockan 16 och 16: 30. Under sommaren 15:30 och 16.\nLördagar klockan 14, 14: 30, 15 och 15.30.\nDag före röd dag klockan 11: 30.\n\nUnder storhelger är Rådhuset stängt, men ni kan välja att istället boka vigsel på annan plats. ',
                 }
             ]
+        },
+        {
+            id: 'weddingTime',
+            name: 'Vilken tid?',
+            type: 'time',
+            selectorProps: {
+                minuteInterval: 30,
+                locale: 'sv',
+            },
         },
         {
             id: 'hasWitness',
