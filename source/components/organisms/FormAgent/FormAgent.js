@@ -8,6 +8,8 @@ import ChatBubble from '../../atoms/ChatBubble';
 import ChatDivider from '../../atoms/ChatDivider';
 import WatsonAgent from "../WatsonAgent";
 
+// TODO: Find better place for storing this function and
+// TODO: Refactor function so it can be used in a more general purpose.
 const questionValidation = (value, validations) => {
     const validationRulesResults = validations.map(rule => {
         const args = rule.args || [];
@@ -30,10 +32,10 @@ const questionValidation = (value, validations) => {
     const inValidValidationRules = validationRulesResults.filter(v => v.isValid === false)
 
     if (inValidValidationRules.length > 0) {
-        return false;
+        return inValidValidationRules[0];
     }
 
-    return true
+    return { isValid: true, message: "" }
 }
 
 class FormAgent extends Component {
