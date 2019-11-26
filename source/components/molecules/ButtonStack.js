@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import { withNavigation } from 'react-navigation';
 
 import FormAgent from '../organisms/FormAgent/FormAgent';
 import Button from '../atoms/Button';
@@ -29,12 +30,22 @@ const ButtonStack = props => {
                         modifiers: ['user'],
                     }
                 }];
+
+                // Trigger custom actions
+                if (typeof action.type !== 'undefined'
+                    && typeof action.value !== 'undefined') {
+                    switch (action.type) {
+                        case ('form'):
+                            props.chat.switchAgent(props => <FormAgent {...props} formId={action.value} />);
+                            break;
+                        case ('navigate'):
+                            props.navigation.navigate('UserEvents');
+                        return;
+                    }
+                }
+
                 // Add message
                 props.chat.addMessages(message);
-                // Trigger custom actions
-                if (action && action.type === 'form') {
-                    props.chat.switchAgent(props => <FormAgent {...props} formId={action.value} />);
-                }
             }
         };
 
@@ -50,7 +61,7 @@ const ButtonStack = props => {
     )
 }
 
-export default ButtonStack;
+export default withNavigation(ButtonStack);
 
 const ActionButton = (props) => {
     return (
