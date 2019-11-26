@@ -1,4 +1,3 @@
-
 import { sanitizePin } from "../helpers/ValidationHelper";
 
 const forms = [
