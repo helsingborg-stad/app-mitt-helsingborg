@@ -28,7 +28,7 @@ const forms = [
             type: 'number',
             placeholder: 'ÅÅÅÅMMDDXXXX',
             maxLength: 12,
-            // TODO: Lift out arrow functions for validation/formatting to ChatUserInput
+            // TODO: Lift out arrow functions for formatting to ChatUserInput
             withForm: {
                 filterChangeHandler: value => (sanitizePin(value))
             },
@@ -212,7 +212,15 @@ const forms = [
                     'value': 'Ja',
                     'compare': '='
                 }]
-            }
+            },
+            validations: [
+                {
+                    method: "isLength",
+                    args: [{min: 5}],
+                    message: "Ditt svar är för kort. Ange minst 5 tecken.",
+                    valid_when: true
+                }
+            ]
         },
         {
             id: 'secondWitness',
@@ -226,7 +234,15 @@ const forms = [
                     'value': 'Ja',
                     'compare': '='
                 }]
-            }
+            },
+            validations: [
+                {
+                    method: "isLength",
+                    args: [{min: 5}],
+                    message: "Ditt svar är för kort. Ange minst 5 tecken.",
+                    valid_when: true
+                }
+            ]
         },
         {
             id: 'guestsTotal',
