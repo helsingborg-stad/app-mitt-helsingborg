@@ -120,7 +120,7 @@ class LoginScreen extends Component {
 
                             <LoginFormField>
                                 <Button 
-                                    color={'purple'} 
+                                    color={'purpleLight'} 
                                     block 
                                     onClick={this.submitHandler}
                                 >
