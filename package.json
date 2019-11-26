@@ -32,7 +32,9 @@
     "react-navigation-tabs": "^2.5.6",
     "redux": "^4.0.1",
     "redux-persist": "^5.10.0",
-    "styled-components": "^4.3.2"
+    "simple-markdown": "^0.7.1",
+    "styled-components": "^4.3.2",
+    "validator": "^12.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
