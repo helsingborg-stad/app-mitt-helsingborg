@@ -22,6 +22,7 @@ const ButtonStack = props => {
                     ? '#AE0B05'
                     : undefined,
             icon: icon ? icon : 'message',
+            // TODO: Define click action in upper component
             clickAction: () => {
                 const message = [{
                     Component: ChatBubble,
@@ -32,12 +33,17 @@ const ButtonStack = props => {
                 }];
 
                 // Trigger custom actions
+                // TODO: Type check action params
                 if (action &&
                     typeof action.type !== 'undefined' &&
                     typeof action.value !== 'undefined') {
                     switch (action.type) {
                         case ('form'):
-                            props.chat.switchAgent(props => <FormAgent {...props} formId={action.value} />);
+                            props.chat.switchAgent(props =>
+                            <FormAgent {...props}
+                                formId={action.value}
+                                callback={(params) => action.callback(params)}
+                            />);
                             break;
                         case ('navigate'):
                             props.navigation.navigate(action.value);

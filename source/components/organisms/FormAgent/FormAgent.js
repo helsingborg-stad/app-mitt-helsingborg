@@ -1,17 +1,9 @@
 import React, { Component } from 'react';
 import validator from 'validator';
-
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
 import forms from '../../../assets/forms.js';
-import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../../services/StorageService';
-
 import ChatBubble from '../../atoms/ChatBubble';
-
 import ChatDivider from '../../atoms/ChatDivider';
-import WatsonAgent from "../WatsonAgent";
-import withChatForm from "../withChatForm";
-import ChatForm from "../../molecules/ChatFormDeprecated";
-import ButtonStack from '../../molecules/ButtonStack';
 
 // TODO: Find better place for storing this function and
 // TODO: Refactor function so it can be used in a more general purpose.
@@ -90,13 +82,16 @@ class FormAgent extends Component {
     }
 
     nextQuestion = async () => {
-        const { chat } = this.props;
-        const { questions } = this.state;
+        const { chat, callback } = this.props;
+        const { form, questions, answers } = this.state;
 
         const nextQuestion = questions.find(this.isNextQuestion);
 
         if (!nextQuestion) {
-            this.exitForm();
+            this.setState({ currentQuestion: undefined });
+            if (typeof callback === 'function') {
+                callback({ form, answers });
+            }
             return;
         }
 
@@ -132,60 +127,6 @@ class FormAgent extends Component {
             chat.switchInput(nextQuestion);
         });
     };
-
-    exitForm = async () => {
-        const { chat } = this.props;
-        const { form, questions, answers } = this.state;
-
-        this.setState({ currentQuestion: undefined });
-
-        const user = await StorageService.getData(USER_KEY);
-
-        const formData = {
-            id: +new Date,
-            userId: user.personalNumber,
-            formId: form.id,
-            created: new Date(),
-            status: 'completed',
-            data: answers,
-        }
-
-        try {
-            await StorageService.putData(COMPLETED_FORMS_KEY, formData);
-        } catch (error) {
-            console.log("Save form error", error);
-        }
-
-        await chat.addMessages([
-            {
-                Component: (props) => <ButtonStack {...props} chat={chat} />,
-                componentProps: {
-                    items: [
-                        {
-                            value: 'Visa mina ärenden',
-                            action: { 'type': 'navigate', 'value': 'UserEvents' },
-                            icon: 'arrow-forward'
-                        },
-                    ]
-                }
-            },
-            {
-                Component: ChatDivider,
-                componentProps: {
-                    info: `Bokning ${form.name.toLowerCase()} avslutad`,
-                }
-            }
-        ]);
-
-        chat.switchAgent(props => <WatsonAgent {...props}
-            initialMessages={['Kan jag hjälpa dig med någon annat?']} />)
-
-        chat.switchInput({
-            autoFocus: false,
-            type: 'text',
-            placeholder: 'Skriv något...'
-        });
-    }
 
     isNextQuestion = question => {
         const { answers } = this.state;
