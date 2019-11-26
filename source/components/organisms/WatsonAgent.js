@@ -54,14 +54,6 @@ export default class WatsonAgent extends Component {
                     componentProps: {
                         items: [
                             {
-                                value: 'Test service',
-                                action: {
-                                    'type': 'form',
-                                    'value': 2,
-                                    'callback': (params) => this.onFormEnd(params)
-                                }
-                            },
-                            {
                                 value: 'Jag vill boka borgerlig vigsel',
                                 icon: 'wc'
                             },
