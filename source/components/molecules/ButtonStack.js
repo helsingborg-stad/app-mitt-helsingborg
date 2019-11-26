@@ -39,7 +39,7 @@ const ButtonStack = props => {
                             props.chat.switchAgent(props => <FormAgent {...props} formId={action.value} />);
                             break;
                         case ('navigate'):
-                            props.navigation.navigate('UserEvents');
+                            props.navigation.navigate(action.value);
                         return;
                     }
                 }
