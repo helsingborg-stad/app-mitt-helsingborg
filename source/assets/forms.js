@@ -1,6 +1,5 @@
 
 import { sanitizePin } from "../helpers/ValidationHelper";
-import { Alert } from 'react-native';
 
 const forms = [
   {
@@ -9,22 +8,48 @@ const forms = [
       trigger: 'Vill boka borgerlig vigsel',
       questions: [
         {
-              id: 'partnerName',
-              name: 'Vi börjar med information om din partner. Vad heter personen du ska gifta dig med?',
-              type: 'text',
-              placeholder: 'För- och efternamn',
+            id: 'partnerName',
+            name: 'Vi börjar med information om din partner. Vad heter personen du ska gifta dig med?',
+            type: 'text',
+            placeholder: 'För- och efternamn',
+            validations: [
+                {
+                    method: "isLength",
+                    args: [{min: 5}],
+                    message: "Ditt svar är för kort. Ange minst 5 tecken.",
+                    valid_when: true
+                }
+            ]
         },
         {
-              id: 'partnerSocialNumber',
-              name: ({ answers }) => `Vilket personnummer har ${answers.partnerName.split(' ')[0]}?`,
-              type: 'number',
-              placeholder: 'Personnummer',
-              maxLength: 12,
-              // TODO: Lift out arrow functions for validation/formatting to ChatUserInput
-              withForm: {
-                validateSubmitHandlerInput: value => (value.length === 12 ? true : Alert.alert('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.') && false),
+            id: 'partnerSocialNumber',
+            name: ({ answers }) => `Vilket personnummer har ${answers.partnerName.split(' ')[0]}?`,
+            type: 'number',
+            placeholder: 'ÅÅÅÅMMDDXXXX',
+            maxLength: 12,
+            // TODO: Lift out arrow functions for formatting to ChatUserInput
+            withForm: {
                 filterChangeHandler: value => (sanitizePin(value))
-              }
+            },
+            validations: [
+                {
+                    method: "isLength",
+                    args: [{
+                        min: 12, 
+                        max: 12
+                    }],
+                    message: "Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.",
+                    valid_when: true
+                },
+                {
+                    method: "isNumeric",
+                    args: [{
+                        no_symbols: true,
+                    }],
+                    message: "Du måste ange siffror. Bokstäver är ej tillåtet.",
+                    valid_when: true
+                }
+            ]
         },
         {
               id: 'partnerSameAddress',
@@ -53,7 +78,7 @@ const forms = [
                     'value': 'Nej',
                     'compare': '='
                 }]
-            }
+            },
         },
         {
             id: 'partnerPostal',
@@ -67,7 +92,23 @@ const forms = [
                     'value': 'Nej',
                     'compare': '='
                 }]
-            }
+            },
+            validations: [
+                {
+                    method: "isPostalCode",
+                    args: [],
+                    message: "Du måste ange ett giltigt postnummer. Bokstäver är ej tillåtet.",
+                    valid_when: true
+                },
+                {
+                    method: "isLength",
+                    args: [{
+                        min: 5, max: 5
+                    }],
+                    message: "Du måste ange ett giltigt postnummer. Bokstäver är ej tillåtet.",
+                    valid_when: true
+                }
+            ]
         },
         {
             id: 'partnerCity',
@@ -184,7 +225,15 @@ const forms = [
                     'value': 'Ja',
                     'compare': '='
                 }]
-            }
+            },
+            validations: [
+                {
+                    method: "isLength",
+                    args: [{min: 5}],
+                    message: "Ditt svar är för kort. Ange minst 5 tecken.",
+                    valid_when: true
+                }
+            ]
         },
         {
             id: 'secondWitness',
@@ -198,7 +247,15 @@ const forms = [
                     'value': 'Ja',
                     'compare': '='
                 }]
-            }
+            },
+            validations: [
+                {
+                    method: "isLength",
+                    args: [{min: 5}],
+                    message: "Ditt svar är för kort. Ange minst 5 tecken.",
+                    valid_when: true
+                }
+            ]
         },
         {
             id: 'guestsTotal',
@@ -216,6 +273,14 @@ const forms = [
                     'compare': '='
                 }]
             },
+            validations: [
+                {
+                    method: "isInt",
+                    args: [{min: 0, max: 17}],
+                    message: "Du måste ange siffror. Bokstäver är ej tillåtet.",
+                    valid_when: true
+                }
+            ]
         },
         {
             id: 'hindersProvning',
