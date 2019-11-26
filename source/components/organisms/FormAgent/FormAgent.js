@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import validator from 'validator';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
 import forms from '../../../assets/formsExperimental';
@@ -7,6 +8,36 @@ import ChatBubble from '../../atoms/ChatBubble';
 
 import ChatDivider from '../../atoms/ChatDivider';
 import WatsonAgent from "../WatsonAgent";
+
+// TODO: Find better place for storing this function and
+// TODO: Refactor function so it can be used in a more general purpose.
+const questionValidation = (value, validations) => {
+    const validationRulesResults = validations.map(rule => {
+        const args = rule.args || [];
+
+        const validationMethod =
+            typeof rule.method === "string" ? validator[rule.method] : rule.method;
+        
+        let validationValue = value;
+
+        if (Array.isArray(value)) {
+            validationValue = `${value.length}`;
+        }
+
+        return { 
+            isValid: validationMethod(validationValue, ...args) === rule.valid_when, 
+            message: rule.message || ""
+        };
+    });
+
+    const inValidValidationRules = validationRulesResults.filter(v => v.isValid === false)
+
+    if (inValidValidationRules.length > 0) {
+        return inValidValidationRules[0];
+    }
+
+    return { isValid: true, message: "" }
+}
 
 class FormAgent extends Component {
     state = {
@@ -82,6 +113,13 @@ class FormAgent extends Component {
             });
 
             return;
+        }
+
+        if (nextQuestion.validations) {
+            nextQuestion.withForm = {
+                ...nextQuestion.withForm,
+                validateSubmitHandlerInput: (value) => questionValidation(value, nextQuestion.validations)
+            }
         }
 
         // Set currentQuestion then output messages & render input

@@ -4,9 +4,8 @@ import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 import { sendChatMsg } from '../../services/ChatFormService';
 import ChatBubble from '../atoms/ChatBubble';
 import ButtonStack from '../molecules/ButtonStack';
-import { Alert, } from "react-native";
 import StorageService, { USER_KEY } from "../../services/StorageService";
-import Markdown from "react-native-simple-markdown";
+import MarkdownConstructor from "../../helpers/MarkdownConstructor";
 
 let context;
 
@@ -112,14 +111,14 @@ export default class WatsonAgent extends Component {
                 placeholder: 'Skriv något...',
                 autoFocus: false,
             }];
-            
-            if (!response.data 
-                || !response.data.attributes 
-                || !response.data.attributes.output 
+
+            if (!response.data
+                || !response.data.attributes
+                || !response.data.attributes.output
                 || !response.data.attributes.output.generic) {
-                throw new Error('Something went wrong with Watson response'); 
+                throw new Error('Something went wrong with Watson response');
             }
-            
+
             const { output, context: newContext } = response.data.attributes;
 
             // Set new context
@@ -131,7 +130,7 @@ export default class WatsonAgent extends Component {
                     case 'text':
                         return chat.addMessages({
                             Component: props => <ChatBubble {...props}>
-                                <Markdown styles={markdownStyles}>{current.text}</Markdown>
+                                <MarkdownConstructor rawText={current.text}/>
                             </ChatBubble>,
                             componentProps: {
                                 content: current.text,
@@ -163,8 +162,8 @@ export default class WatsonAgent extends Component {
                             type: 'radio',
                             options: options,
                         }]);
-                    
-                    case 'pause': 
+
+                    case 'pause':
                         await chat.toggleTyping();
                         await new Promise(resolve => setTimeout(resolve, current.time));
                         return chat.toggleTyping();
@@ -196,13 +195,3 @@ export default class WatsonAgent extends Component {
         return null;
     }
 }
-
-const markdownStyles = {
-    text: {
-        color: '#707070',
-        fontSize: 16,
-        fontStyle: 'normal',
-        fontWeight: '500',
-        fontFamily: 'Roboto'
-    }
-};
