@@ -11,12 +11,23 @@ const MarkdownConstructor = props => {
     );
 };
 
+/**
+ * Override markdown rules.
+ *
+ * Using own custom implementation of Text (...atoms/Text).
+ *
+ */
 const markdownRules = {
     text: (node) => {
         return <Text key={node.key} style={markDownStyles.atomText}>{node.content}</Text>;
     },
 };
 
+/**
+ * Override markdown styles.
+ *
+ * paragraph: Removed padding top/bottom.
+ */
 const markDownStyles = StyleSheet.create({
     listUnorderedItemIcon: {
         lineHeight: 22,
