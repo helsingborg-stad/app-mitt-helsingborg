@@ -100,6 +100,7 @@ const MaterialTopTabBarWrapper = props => {
                 }}
                 style={{backgroundColor: '#F8F8F8'}}
                 inactiveTintColor='gray'
+                labelStyle={{fontSize: 12, fontWeight: 400, fontFamily: 'Roboto'}}
             />
         </SafeAreaView>
     );
