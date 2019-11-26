@@ -32,8 +32,9 @@ const ButtonStack = props => {
                 }];
 
                 // Trigger custom actions
-                if (typeof action.type !== 'undefined'
-                    && typeof action.value !== 'undefined') {
+                if (action &&
+                    typeof action.type !== 'undefined' &&
+                    typeof action.value !== 'undefined') {
                     switch (action.type) {
                         case ('form'):
                             props.chat.switchAgent(props => <FormAgent {...props} formId={action.value} />);
