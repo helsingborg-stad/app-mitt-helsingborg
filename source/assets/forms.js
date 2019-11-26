@@ -1,6 +1,5 @@
 
 import { sanitizePin } from "../helpers/ValidationHelper";
-import { Alert } from 'react-native';
 
 const forms = [
   {
