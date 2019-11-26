@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, Alert } from 'react-native';
 
 const withForm = (WrappedComponent, onSubmit) => {
     return class WithForm extends Component {
@@ -50,10 +50,14 @@ const withForm = (WrappedComponent, onSubmit) => {
                 return;
             }
 
-            // Validation callback should return true
-            if (typeof validateSubmitHandlerInput === 'function' 
-                && !validateSubmitHandlerInput(value)) {
+            // Validation callback should return object with keys: isValid (Boolean) and message (String)
+            if (typeof validateSubmitHandlerInput === 'function') {
+                const {isValid, message} = validateSubmitHandlerInput(value)
+
+                if(!isValid) { 
+                    Alert.alert(message);
                     return;
+                }
             }
 
             this.setState({ inputValue: '' }, () => {
