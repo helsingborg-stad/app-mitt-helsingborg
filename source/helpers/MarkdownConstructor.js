@@ -39,7 +39,6 @@ const markDownStyles = StyleSheet.create({
     atomText: {
         fontSize: 16,
         color: '#707070',
-        lineHeight: 16
     },
     paragraph: {
         flexWrap: 'wrap',
