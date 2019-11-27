@@ -52,6 +52,12 @@ class ModalExample extends Component {
                     <Text>Show modal</Text>
                 </ModalButton>
 
+                <ModalButton
+                    color={'dark'}
+                    onClick={() => this.changeModal(!visible, 'Markdown modal', `[I'm an inline-style link](https://www.google.com)`)}>
+                    <Text>Show modal</Text>
+                </ModalButton>
+
             </View>
         );
     }

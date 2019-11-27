@@ -76,7 +76,7 @@ const simpleText = `
 Text
 `;
 
-const url = `[I'm an inline-style link](www.google.com)`;
+const url = `[I'm an inline-style link](https://www.google.com)`;
 
 storiesOf('Text', module)
     .add('Markdown', () => (

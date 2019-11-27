@@ -40,7 +40,7 @@ const markDownStyles = StyleSheet.create({
     },
     atomText: {
         fontSize: 16,
-        color: '#707070',
+        color: '#565656',
         lineHeight: 22
     },
     paragraph: {
