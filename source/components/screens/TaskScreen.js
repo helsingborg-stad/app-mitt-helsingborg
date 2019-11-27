@@ -87,13 +87,6 @@ class TaskScreen extends Component {
                             items={CompletedTasks}
                         />
                     </List>
-
-                    {/* TODO: For testing only, remove me later  */}
-                    <Heading type="h3" style={{ marginTop: 30 }} onPress={async () => {
-                        await StorageService.removeData(COMPLETED_FORMS_KEY);
-                        this.getTasks();
-                    }}>Clear tasks</Heading>
-
                 </Container>
             </TaskScreenWrapper>
         );
