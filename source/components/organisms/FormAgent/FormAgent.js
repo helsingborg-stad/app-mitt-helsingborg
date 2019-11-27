@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import validator from 'validator';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
-import forms from '../../../assets/formsExperimental';
+import forms from '../../../assets/forms';
 
 import ChatBubble from '../../atoms/ChatBubble';
 
