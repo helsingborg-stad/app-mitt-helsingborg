@@ -6,6 +6,7 @@ import styled, { withTheme } from 'styled-components/native';
 import shadow from '../../styles/shadow';
 import Text from '../atoms/Text';
 import Heading from '../atoms/Heading';
+import MarkdownConstructor from "../../helpers/MarkdownConstructor";
 
 const Modal = ({ visible, heading, content, changeModal, color }) =>
     <ModalContainer
@@ -35,7 +36,9 @@ const Modal = ({ visible, heading, content, changeModal, color }) =>
             <Content>
                 {/* TouchableOpacity = Hack to make scrolling work inside swipeable modal */}
                 <TouchableOpacity activeOpacity={1}>
-                    <ModalText>{content}</ModalText>
+                    <ModalView>
+                        <MarkdownConstructor rawText={content}/>
+                    </ModalView>
                 </TouchableOpacity>
             </Content>
         </Flex>
@@ -51,7 +54,7 @@ Modal.propTypes = {
 
 Modal.defaultProps = {
     color: 'purple',
-}
+};
 
 export default withTheme(Modal);
 
@@ -96,6 +99,6 @@ const Content = styled.ScrollView`
     background-color: ${props => (props.theme.background.lightest)};
 `;
 
-const ModalText = styled(Text)`
+const ModalView = styled(View)`
     padding: 32px 16px 32px 16px;
 `;
