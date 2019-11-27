@@ -123,7 +123,7 @@ export default class WatsonAgent extends Component {
         ]);
 
         chat.switchAgent(props => <WatsonAgent {...props}
-            initialMessages={['Kan jag hjälpa dig med någon annat?']}
+            initialMessages={['Kan jag hjälpa dig med något annat?']}
         />)
 
         chat.switchInput({
