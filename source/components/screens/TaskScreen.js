@@ -24,11 +24,15 @@ class TaskScreen extends Component {
         this.getTasks();
     }
 
+    sortTasksByDate = (list) => {
+        return list.sort((a, b) => new Date(b.created) - new Date(a.created));
+    }
+
     getTasks = async () => {
         try {
             const tasks = await StorageService.getData(COMPLETED_FORMS_KEY);
             this.setState({
-                activeTasks: Array.isArray(tasks) && tasks.length ? tasks : []
+                activeTasks: Array.isArray(tasks) && tasks.length ? this.sortTasksByDate(tasks) : []
             });
         } catch (error) {
             return;
