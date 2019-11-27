@@ -9,6 +9,7 @@ import ScreenWrapper from '../molecules/ScreenWrapper';
 import Heading from '../atoms/Heading';
 import ListItem from '../molecules/ListItem';
 import forms from '../../assets/forms';
+import Text from '../atoms/Text';
 
 class TaskScreen extends Component {
     constructor(props) {
@@ -78,12 +79,13 @@ class TaskScreen extends Component {
                 />
                 <Container>
 
-                    {activeTasks.length > 0 &&
+                    
                         <List>
                             <ListHeading type="h3">Aktiva</ListHeading>
-                            {activeTasks.map(this.renderTaskItem)}
+                            {activeTasks.length > 0 ? activeTasks.map(this.renderTaskItem) : (<Text style={{marginLeft: 4}}>Inga aktiva ärenden..</Text>) }
+                            
                         </List>
-                    }
+
 
                     <List>
                         <GroupedList
