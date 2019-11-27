@@ -1,10 +1,11 @@
 import { sanitizePin } from "../helpers/ValidationHelper";
+import ICON_RINGS_PNG from './icon-rings/icon-rings-24x24_2x.png';
 
 const forms = [
   {
       id: 1,
       name: 'Borgerlig vigsel',
-      icon: 'wc',
+      imageIcon: ICON_RINGS_PNG,
       trigger: 'Vill boka borgerlig vigsel',
       questions: [
         {

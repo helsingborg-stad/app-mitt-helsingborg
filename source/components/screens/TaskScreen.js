@@ -61,6 +61,7 @@ class TaskScreen extends Component {
             title='Ansökan'
             text={form.name}
             iconName={form.icon || null}
+            imageSrc={form.imageIcon || null}
         />;
     }
 
