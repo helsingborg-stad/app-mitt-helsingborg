@@ -34,7 +34,7 @@ const forms = [
                 {
                     method: "isLength",
                     args: [{
-                        min: 12, 
+                        min: 12,
                         max: 12
                     }],
                     message: "Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.",
@@ -93,12 +93,6 @@ const forms = [
                 }]
             },
             validations: [
-                {
-                    method: "isPostalCode",
-                    args: [],
-                    message: "Du måste ange ett giltigt postnummer. Bokstäver är ej tillåtet.",
-                    valid_when: true
-                },
                 {
                     method: "isLength",
                     args: [{
