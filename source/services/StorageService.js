@@ -90,4 +90,13 @@ export default class StorageService extends Component {
   static removeData(key) {
     return AsyncStorage.removeItem(key);
   }
+
+  /**
+   * Remove all data from storage
+   *
+   * @returns {Promise}
+   */
+    static clearData() {
+        return AsyncStorage.clear();
+    }
 }
