@@ -29,7 +29,7 @@ export default class WatsonAgent extends Component {
                 });
             })
         } else if (initialMessages !== undefined && initialMessages === 'remote') {
-             // Show welcome message from Watson
+            // Show welcome message from Watson
             this.handleHumanChatMessage('');
         } else {
             StorageService.getData(USER_KEY).then(({ name }) => {
@@ -65,7 +65,7 @@ export default class WatsonAgent extends Component {
                     }
                 });
             });
-       }
+        }
 
         EventHandler.subscribe(EVENT_USER_MESSAGE, (message) => this.handleHumanChatMessage(message));
     }
@@ -75,10 +75,10 @@ export default class WatsonAgent extends Component {
     }
 
     /**
-     * Callback method to run after form is done
+     * Callback method that runs after form is done
      * @param {object}
      *
-     * TODO: Move somewhere else?
+     * TODO: Move somewhere else in the future?
      */
     onFormEnd = async ({ form, answers }) => {
         const { chat } = this.props;
@@ -186,7 +186,7 @@ export default class WatsonAgent extends Component {
 
             await output.generic.reduce(async (previousPromise, current) => {
                 await previousPromise;
-                switch(current.response_type) {
+                switch (current.response_type) {
                     case 'text':
                         return chat.addMessages({
                             Component: props => <ChatBubble {...props}>
@@ -205,7 +205,7 @@ export default class WatsonAgent extends Component {
                             const { action } = meta;
                             // Add callback method to form action
                             if (action) {
-                                action.callback = action.type === 'form' ? (params) => this.onFormEnd(params) : () => {};
+                                action.callback = action.type === 'form' ? (props) => this.onFormEnd(props) : () => { };
                             }
 
                             return {
@@ -250,7 +250,7 @@ export default class WatsonAgent extends Component {
                 await chat.switchInput(textInput);
             }
 
-        } catch(e) {
+        } catch (e) {
             console.info('Error in WatsonAgent::handleHumanChatMessage', e);
             await chat.addMessages({
                 Component: ChatBubble,

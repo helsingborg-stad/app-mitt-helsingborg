@@ -11,8 +11,51 @@ import ChatBubble from '../atoms/ChatBubble';
 const ButtonStack = props => {
     const { items, children } = props;
 
+    /**
+     * Adds different on click actions
+     * @param {object} params
+     *
+     * TODO: Get click action from props
+     */
+    onClick = params => {
+        const { content, action } = params;
+        const { type: actionType, value: actionValue, callback: actionCallback } = action;
+
+        // Do custom actions
+        if (actionType && actionValue) {
+            switch (actionType) {
+                case ('form'):
+                    // Trigger form service
+                    props.chat.switchAgent(props =>
+                        <FormAgent {...props}
+                            formId={actionValue}
+                            callback={actionCallback ? (props) => actionCallback(props) : undefined}
+                        />
+                    );
+                    break;
+                case ('navigate'):
+                    // Navigate to given route
+                    props.navigation.navigate(actionValue);
+                    return;
+            }
+        }
+
+        const message = [{
+            Component: ChatBubble,
+            componentProps: {
+                content,
+                modifiers: ['user'],
+            }
+        }];
+
+        // Add message
+        props.chat.addMessages(message);
+    }
+
     renderItem = (item, index) => {
-        const { icon, value, action } = item;
+        const { icon, value } = item;
+        let { action } = item;
+        action = (typeof action === 'object' && action !== null) ? action : {};
 
         const buttonProps = {
             label: value,
@@ -22,38 +65,7 @@ const ButtonStack = props => {
                     ? '#AE0B05'
                     : undefined,
             icon: icon ? icon : 'message',
-            // TODO: Define click action in upper component
-            clickAction: () => {
-                const message = [{
-                    Component: ChatBubble,
-                    componentProps: {
-                        content: value,
-                        modifiers: ['user'],
-                    }
-                }];
-
-                // Trigger custom actions
-                // TODO: Type check action params
-                if (action &&
-                    typeof action.type !== 'undefined' &&
-                    typeof action.value !== 'undefined') {
-                    switch (action.type) {
-                        case ('form'):
-                            props.chat.switchAgent(props =>
-                            <FormAgent {...props}
-                                formId={action.value}
-                                callback={(params) => action.callback(params)}
-                            />);
-                            break;
-                        case ('navigate'):
-                            props.navigation.navigate(action.value);
-                        return;
-                    }
-                }
-
-                // Add message
-                props.chat.addMessages(message);
-            }
+            clickAction: () => this.onClick({ content: value, action })
         };
 
         return (
