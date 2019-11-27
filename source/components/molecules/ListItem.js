@@ -4,9 +4,10 @@ import styled, { withTheme } from 'styled-components/native';
 import Text from '../atoms/Text';
 import Icon from '../atoms/Icon';
 import Button from '../atoms/Button';
+import { Image } from 'react-native';
 
 const ListItem = props => {
-    const { highlighted, iconName, title, text, color, onClick } = props;
+    const { highlighted, iconName, title, text, color, onClick, imageSrc } = props;
     const background =
         props.highlighted && props.color && props.theme.icon.hasOwnProperty(props.color) && props.theme.icon[props.color][1] ||
         props.highlighted && !props.color && props.theme.icon.lightest ||
@@ -15,13 +16,22 @@ const ListItem = props => {
     const renderContent = () => {
         return (
             <Flex>
-                {iconName &&
+                {iconName && !imageSrc &&
                     <IconContainer highlighted={highlighted} background={background}>
                         <IconFlex>
                             <ItemIcon name={iconName} color={color} />
                         </IconFlex>
                     </IconContainer>
                 }
+
+                {imageSrc &&
+                    <IconContainer highlighted={highlighted} background={background}>
+                        <IconFlex>
+                            <ImageIcon source={imageSrc} resizeMode={'contain'} />
+                        </IconFlex>
+                    </IconContainer>
+                }
+
                 <Content>
                     {title && <Title small>{title}</Title>}
                     {text && <Text>{text}</Text>}
@@ -107,4 +117,9 @@ const Content = styled.View`
 const Chevron = styled(Icon)`
     color: #A3A3A3;
     margin - right: 16px;
+`;
+
+const ImageIcon = styled.Image`
+    width: 32px;
+    height: 32px;
 `;
