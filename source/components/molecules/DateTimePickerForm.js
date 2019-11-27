@@ -7,25 +7,25 @@ import Input from '../atoms/Input';
 const DateTimePickerForm = props => {
     const { changeHandler, submitHandler, inputValue, mode, selectorProps } = props;
 
+    let dateTimeString;
     const date = typeof inputValue.getMonth === 'function' ? inputValue : new Date();
-    let options = {};
+    const dateString = `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, 0)}-${`${date.getDate()}`.padStart(2, 0)}`;
+    const timeString = `${`${date.getHours()}`.padStart(2, 0)}:${`${date.getMinutes()}`.padStart(2, 0)}`;
 
     switch (mode) {
         case 'date':
-            options.dateStyle = 'short';
+            dateTimeString = dateString;
             break;
 
         case 'time':
-            options.timeStyle = 'short';
+            dateTimeString = timeString;
             break;
 
         default:
-            options.dateStyle = 'short';
-            options.timeStyle = 'short';
+            dateTimeString = `${dateString} ${timeString}`;
     }
 
-    const dateString = typeof inputValue.getMonth === 'function' ? inputValue.toLocaleString('sv-SE', options) : '';
-    const enhancedSubmitHandler = () => { dateString.length > 0 ? submitHandler(dateString) : null };
+    const enhancedSubmitHandler = () => { dateTimeString.length > 0 ? submitHandler(dateTimeString) : null };
 
     return (
         <ChatForm
@@ -44,7 +44,7 @@ const DateTimePickerForm = props => {
                 placeholder={'Välj ett datum'}
                 {...props}
                 editable={false}
-                value={dateString}
+                value={dateTimeString}
                 onSubmitEditing={enhancedSubmitHandler}
             />
         </ChatForm>
