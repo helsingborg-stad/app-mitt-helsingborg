@@ -228,8 +228,8 @@ export default class SplashScreen extends Component {
                     prevButton={<Text style={styles.buttonText} />}
                     nextButton={
                         <Button color={'swipe'} z={5} onClick={() => this.swipeToNext()}>
-                            <Text>{this.state.swipeButtonText}</Text>
-                            <Icon name="chevron-right" color={'purple'}/>
+                            <Text style={{fontSize: 19}}>{this.state.swipeButtonText}</Text>
+                            <Icon size={19} name="chevron-right" color={'purple'}/>
                         </Button>
                     }
                     dot={<View style={styles.dot} />}

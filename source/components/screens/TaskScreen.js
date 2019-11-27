@@ -68,7 +68,7 @@ const TaskScreenWrapper = styled(ScreenWrapper)`
     padding-right: 0;
     padding-top: 0;
     paddingBottom: 0;
-    background-color: #FCFCFC;
+    background-color: #F5F5F5;
 `;
 
 const Container = styled.ScrollView`

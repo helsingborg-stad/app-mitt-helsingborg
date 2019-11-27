@@ -9,7 +9,7 @@ import Input from '../atoms/Input';
 import styled from 'styled-components/native';
 import Heading from '../atoms/Heading';
 
-import HbgLogo from '../../assets/hbg-logo-staende.png';
+import HbgLogo from '../../assets/slides/stadsvapen.png';
 import AuthLoading from '../molecules/AuthLoading';
 
 class LoginScreen extends Component {
@@ -120,7 +120,7 @@ class LoginScreen extends Component {
 
                             <LoginFormField>
                                 <Button 
-                                    color={'purple'} 
+                                    color={'purpleLight'} 
                                     block 
                                     onClick={this.submitHandler}
                                 >

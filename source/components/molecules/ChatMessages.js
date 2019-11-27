@@ -76,6 +76,6 @@ class ChatMessages extends Component {
     }
 }
 
-const TypeIndicator = props => (<ChatBubble modifiers={['automated']}><Text>•••</Text></ChatBubble>);
+const TypeIndicator = props => (<ChatBubble z={0} modifiers={['automated']}><Text>•••</Text></ChatBubble>);
 
 export default ChatMessages;

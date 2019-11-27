@@ -31,15 +31,17 @@ const markdownRules = {
 const markDownStyles = StyleSheet.create({
     listUnorderedItemIcon: {
         lineHeight: 22,
-        marginLeft: 5,
-        marginRight: 5,
-        fontSize: 30,
+        marginLeft: 4,
+        marginRight: 8,
+        fontSize: 22,
+        fontWeight: '800',
         color: '#707070',
+        fontFamily: 'Roboto'
     },
     atomText: {
         fontSize: 16,
         color: '#707070',
-        lineHeight: 16
+        lineHeight: 22
     },
     paragraph: {
         flexWrap: 'wrap',

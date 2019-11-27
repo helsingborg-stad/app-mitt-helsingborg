@@ -88,17 +88,19 @@ const MaterialTopTabBarWrapper = props => {
 
     return (
         <SafeAreaView
-            style={{backgroundColor: '#2196f3'}}
+            style={{backgroundColor: '#F8F8F8'}}
             forceInset={{top: 'always', horizontal: 'never', bottom: 'never'}}>
             <MaterialTopTabBar
                 {...props}
                 activeTintColor={color}
                 indicatorStyle={{
                     backgroundColor: color,
-                    position: 0
+                    position: 0,
+                    display: 'none'
                 }}
-                style={{backgroundColor: '#fff'}}
+                style={{backgroundColor: '#F8F8F8'}}
                 inactiveTintColor='gray'
+                labelStyle={{fontSize: 12, fontWeight: '400', fontFamily: 'Roboto'}}
             />
         </SafeAreaView>
     );
