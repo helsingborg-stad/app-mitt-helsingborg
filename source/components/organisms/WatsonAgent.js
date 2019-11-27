@@ -4,8 +4,9 @@ import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 import { sendChatMsg } from '../../services/ChatFormService';
 import ChatBubble from '../atoms/ChatBubble';
 import ButtonStack from '../molecules/ButtonStack';
-import StorageService, { USER_KEY } from "../../services/StorageService";
+import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../services/StorageService';
 import MarkdownConstructor from "../../helpers/MarkdownConstructor";
+import { Alert, } from "react-native";
 
 let context;
 
@@ -28,7 +29,7 @@ export default class WatsonAgent extends Component {
                 });
             })
         } else if (initialMessages !== undefined && initialMessages === 'remote') {
-             // Show welcome message from Watson
+            // Show welcome message from Watson
             this.handleHumanChatMessage('');
         } else {
             StorageService.getData(USER_KEY).then(({ name }) => {
@@ -74,6 +75,65 @@ export default class WatsonAgent extends Component {
     }
 
     /**
+     * Callback method that runs after form is done
+     * @param {object}
+     *
+     * TODO: Move somewhere else in the future?
+     */
+    onFormEnd = async ({ form, answers }) => {
+        const { chat } = this.props;
+
+        const user = await StorageService.getData(USER_KEY);
+
+        const formData = {
+            id: +new Date,
+            userId: user.personalNumber,
+            formId: form.id,
+            created: new Date(),
+            lastUpdated: new Date(),
+            status: 'completed',
+            data: answers,
+        }
+
+        try {
+            await StorageService.putData(COMPLETED_FORMS_KEY, formData);
+        } catch (error) {
+            console.log("Save form error", error);
+        }
+
+        await chat.addMessages([
+            {
+                Component: (props) => <ButtonStack {...props} chat={chat} />,
+                componentProps: {
+                    items: [
+                        {
+                            value: 'Visa mina ärenden',
+                            action: { 'type': 'navigate', 'value': 'UserEvents' },
+                            icon: 'arrow-forward'
+                        },
+                    ]
+                }
+            },
+            {
+                Component: ChatDivider,
+                componentProps: {
+                    info: `Bokning ${form.name.toLowerCase()} avslutad`,
+                }
+            }
+        ]);
+
+        chat.switchAgent(props => <WatsonAgent {...props}
+            initialMessages={['Kan jag hjälpa dig med något annat?']}
+        />)
+
+        chat.switchInput({
+            autoFocus: false,
+            type: 'text',
+            placeholder: 'Skriv något...'
+        });
+    }
+
+    /**
      * Parse metadata found in text strings
      * @param {string} value
      */
@@ -103,6 +163,14 @@ export default class WatsonAgent extends Component {
                 throw new Error('Missing Watson workspace ID');
             }
 
+            /**
+             * TODO: FOR DEV PURPOSE ONLY, REMOVE ME LATER
+             */
+            if (message === 'Radera data') {
+                await StorageService.clearData();
+                return;
+            }
+
             const response = await sendChatMsg(WATSON_WORKSPACEID, message, context);
 
             // Default input
@@ -126,7 +194,7 @@ export default class WatsonAgent extends Component {
 
             await output.generic.reduce(async (previousPromise, current) => {
                 await previousPromise;
-                switch(current.response_type) {
+                switch (current.response_type) {
                     case 'text':
                         return chat.addMessages({
                             Component: props => <ChatBubble {...props}>
@@ -141,7 +209,18 @@ export default class WatsonAgent extends Component {
                     case 'option':
                         const options = current.options.map((option) => {
                             const meta = this.captureMetaData(option.value.input.text);
-                            return { value: option.label, ...meta };
+
+                            const { action } = meta;
+                            // Add callback method to form action
+                            if (action) {
+                                action.callback = action.type === 'form' ? (props) => this.onFormEnd(props) : () => { };
+                            }
+
+                            return {
+                                value: option.label,
+                                ...meta,
+                                action
+                            };
                         });
 
                         const optionType = options[0].type;
@@ -179,7 +258,7 @@ export default class WatsonAgent extends Component {
                 await chat.switchInput(textInput);
             }
 
-        } catch(e) {
+        } catch (e) {
             console.info('Error in WatsonAgent::handleHumanChatMessage', e);
             await chat.addMessages({
                 Component: ChatBubble,

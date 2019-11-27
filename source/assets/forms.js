@@ -4,6 +4,7 @@ const forms = [
   {
       id: 1,
       name: 'Borgerlig vigsel',
+      icon: 'wc',
       trigger: 'Vill boka borgerlig vigsel',
       questions: [
         {

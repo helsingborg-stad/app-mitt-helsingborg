@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import validator from 'validator';
-
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
-import forms from '../../../assets/forms';
-
+import forms from '../../../assets/forms.js';
 import ChatBubble from '../../atoms/ChatBubble';
-
 import ChatDivider from '../../atoms/ChatDivider';
-import WatsonAgent from "../WatsonAgent";
 
 // TODO: Find better place for storing this function and
 // TODO: Refactor function so it can be used in a more general purpose.
@@ -86,32 +82,16 @@ class FormAgent extends Component {
     }
 
     nextQuestion = async () => {
-        const { chat } = this.props;
-        const { questions, form, answers } = this.state;
+        const { chat, callback } = this.props;
+        const { form, questions, answers } = this.state;
 
         const nextQuestion = questions.find(this.isNextQuestion);
 
         if (!nextQuestion) {
             this.setState({ currentQuestion: undefined });
-
-            await chat.addMessages([
-                {
-                    Component: ChatDivider,
-                    componentProps: {
-                        info: `Bokning ${form.name.toLowerCase()} avslutad`,
-                    }
-                }
-            ]);
-
-            chat.switchAgent(props => <WatsonAgent {...props}
-                initialMessages={['Kan jag hjälpa dig med någon annat?']} />)
-
-            chat.switchInput({
-                autoFocus: false,
-                type: 'text',
-                placeholder: 'Skriv något...'
-            });
-
+            if (typeof callback === 'function') {
+                callback({ form, answers });
+            }
             return;
         }
 

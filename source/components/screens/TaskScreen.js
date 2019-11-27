@@ -1,24 +1,44 @@
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
 import { NavItems, CompletedTasks, ActiveTasks } from '../../assets/dashboard';
+import { NavigationEvents } from 'react-navigation';
 import GroupedList from '../molecules/GroupedList';
 import Header from '../molecules/Header';
-import StorageService, { USER_KEY } from '../../services/StorageService';
+import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../services/StorageService';
 import ScreenWrapper from '../molecules/ScreenWrapper';
 import Heading from '../atoms/Heading';
-import ListItem from '../molecules/ListItem'
+import ListItem from '../molecules/ListItem';
+import forms from '../../assets/forms';
+import Text from '../atoms/Text';
 
 class TaskScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: {}
+            user: {},
+            activeTasks: []
         };
     }
 
     componentDidMount() {
         this.getUser();
+        this.getTasks();
     }
+
+    sortTasksByDate = (list) => {
+        return list.sort((a, b) => new Date(b.created) - new Date(a.created));
+    }
+
+    getTasks = async () => {
+        try {
+            const tasks = await StorageService.getData(COMPLETED_FORMS_KEY);
+            this.setState({
+                activeTasks: Array.isArray(tasks) && tasks.length ? this.sortTasksByDate(tasks) : []
+            });
+        } catch (error) {
+            return;
+        }
+    };
 
     getUser = async () => {
         try {
@@ -29,10 +49,28 @@ class TaskScreen extends Component {
         }
     };
 
+    renderTaskItem = (item) => {
+        const form = forms.find(form => (form.id === item.formId));
+        if (!form) {
+            return null;
+        }
+
+        return <ListItem
+            key={item.id}
+            highlighted={true}
+            title='Ansökan'
+            text={form.name}
+            iconName={form.icon || null}
+        />;
+    }
+
     render() {
-        const { user } = this.state;
+        const { user, activeTasks } = this.state;
+
         return (
             <TaskScreenWrapper>
+                <NavigationEvents onWillFocus={() => this.getTasks() } />
+
                 <Header
                     title="Mitt Helsingborg"
                     message={user && user.givenName ? `Hej ${user.givenName}!` : 'Hej!'}
@@ -40,15 +78,15 @@ class TaskScreen extends Component {
                     navItems={NavItems}
                 />
                 <Container>
-                    <List>
-                        <ListHeading type="h3">Aktiva</ListHeading>
-                        {ActiveTasks.map(item =>
-                            <ListItem
-                                key={item.id}
-                                {...item}
-                            />
-                        )}
-                    </List>
+
+                    
+                        <List>
+                            <ListHeading type="h3">Aktiva</ListHeading>
+                            {activeTasks.length > 0 ? activeTasks.map(this.renderTaskItem) : (<Text style={{marginLeft: 4}}>Inga aktiva ärenden..</Text>) }
+                            
+                        </List>
+
+
                     <List>
                         <GroupedList
                             heading="Avslutade"
