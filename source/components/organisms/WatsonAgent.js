@@ -163,6 +163,14 @@ export default class WatsonAgent extends Component {
                 throw new Error('Missing Watson workspace ID');
             }
 
+            /**
+             * TODO: FOR DEV PURPOSE ONLY, REMOVE ME LATER
+             */
+            if (message === 'Radera data') {
+                await StorageService.clearData();
+                return;
+            }
+
             const response = await sendChatMsg(WATSON_WORKSPACEID, message, context);
 
             // Default input
