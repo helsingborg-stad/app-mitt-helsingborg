@@ -461,8 +461,8 @@ const forms = [
                 &nbsp;
                 Vigsel för: ${data.user.givenName} och ${data.answers.partnerName.split(' ')[0]}
                 Plats: ${data.answers.weddingLocationCustom || data.answers.weddingLocation}
-                Datum: ${data.answers.weddingDate} \n\n Tid: ${data.answers.weddingTime}
-                Antal gäster, inklusive vittnen: ${data.answers.guestsTotal} personer
+                Datum: ${data.answers.weddingDate}
+                Tid: ${data.answers.weddingTime}
                 Vittnen: ${data.answers.hasWitness === 'Ja' ? data.answers.firstWitness + ' och ' + data.answers.secondWitness : 'Anger senare'}`,
                 'Vill du bekräfta bokningen?'
             ],
