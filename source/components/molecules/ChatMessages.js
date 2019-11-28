@@ -4,12 +4,12 @@ import styled from 'styled-components/native';
 import { PropTypes } from 'prop-types';
 import ChatBubble from '../atoms/ChatBubble';
 
-const OFFSET_TOP = 32;
+const OFFSET_TOP = 0;
 const OFFSET_BOTTOM = 24;
 
 const ChatMessagesFlatList = styled.FlatList`
     flex-basis: 100%;
-
+    margin-top: 24px;
 `;
 
 class ChatMessages extends Component {
