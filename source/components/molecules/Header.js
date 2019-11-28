@@ -4,13 +4,21 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import Heading from '../atoms/Heading';
 import Text from '../atoms/Text';
+import Icon from '../atoms/Icon';
 import shadow from '../../styles/shadow';
 import HeaderNav from './HeaderNav';
+import ButtonNew from '../atoms/Button';
 
-export default Header = ({ message, title, themeColor, navItems }) => {
+export default Header = ({ message, title, themeColor, navItems, backButton }) => {
     return (
         <HeaderContainer>
             <HeaderContent>
+                {backButton && (
+                    <BackButton z="0" onClick={backButton.onClick}>
+                        <Icon name="arrow-back" />
+                        <Text>{backButton.text}</Text>
+                    </BackButton>)
+                }
                 {message &&
                     <Text>{message}</Text>}
                 {title &&
@@ -29,6 +37,14 @@ export default Header = ({ message, title, themeColor, navItems }) => {
         </HeaderContainer>
     );
 }
+
+
+const BackButton = styled(ButtonNew)`
+    padding: 0;
+    margin-left: -10px;
+    min-height: auto;
+    background-color: #FFF;
+`
 
 const HeaderContainer = styled.View`
     padding: 16px;
@@ -58,9 +74,14 @@ Header.propTypes = {
     themeColor: PropTypes.string,
     message: PropTypes.string,
     title: PropTypes.string,
-    navItems: PropTypes.array
+    navItems: PropTypes.array,
+    backButton: PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        onClick: PropTypes.func.isRequired
+    })
 };
 
 Header.defaultProps = {
     themeColor: 'purple',
+    backbutton: undefined,
 }

@@ -20,7 +20,6 @@ function loadStories() {
   require('../source/components/organisms/LoginAgent.stories');
   require('../source/components/organisms/NavigationTabs.stories');
   require('../source/components/organisms/WatsonAgent.stories');
-
 }
 
 const stories = [
@@ -39,7 +38,6 @@ const stories = [
   '../source/components/organisms/LoginAgent.stories',
   '../source/components/organisms/NavigationTabs.stories',
   '../source/components/organisms/WatsonAgent.stories',
-
 ];
 
 module.exports = {

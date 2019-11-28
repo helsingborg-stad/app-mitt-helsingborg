@@ -14,6 +14,7 @@ import DashboardScreen from './screens/DashboardScreen';
 import SplashScreen from './screens/SplashScreen';
 import ChatScreen from './screens/ChatScreen';
 import TaskScreen from './screens/TaskScreen';
+import TaskDetailScreen from './screens/TaskDetailScreen';
 
 import {Icon} from 'react-native-elements';
 import LoginScreen from './screens/LoginScreen';
@@ -106,6 +107,22 @@ const MaterialTopTabBarWrapper = props => {
     );
 };
 
+const TaskScreenStack = createStackNavigator({
+    Task: {
+      screen: TaskScreen,
+      navigationOptions: {
+        header: null,
+      }
+    },
+  
+    TaskDetails: {
+      screen: TaskDetailScreen,
+      navigationOptions: {
+        header: null,
+      }
+    }
+  });
+
 const TabNavigator = createMaterialTopTabNavigator({
     // SplashIntro: {
     //     screen: SplashScreen,
@@ -124,7 +141,7 @@ const TabNavigator = createMaterialTopTabNavigator({
         }
     },
     UserEvents: {
-        screen: TaskScreen,
+        screen: TaskScreenStack,
         navigationOptions: {
             title: 'Mitt HBG',
             tabBarIcon: tabBarIcon('home', '#A61380')

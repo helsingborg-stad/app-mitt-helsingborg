@@ -155,8 +155,8 @@ export default class WatsonAgent extends Component {
     }
 
     handleHumanChatMessage = async (message) => {
+        const { chat } = this.props;
         try {
-            const { chat } = this.props;
             const { WATSON_WORKSPACEID } = env;
 
             if (!WATSON_WORKSPACEID) {

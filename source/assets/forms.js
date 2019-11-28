@@ -11,6 +11,12 @@ const forms = [
         {
             id: 'partnerName',
             name: 'Vi börjar med information om din partner. Vad heter personen du ska gifta dig med?',
+            details: {
+                group: "partner",
+                label: "Namn",
+                icon: "person",
+                show: true
+            },
             type: 'text',
             placeholder: 'För- och efternamn',
             validations: [
@@ -25,6 +31,13 @@ const forms = [
         {
             id: 'partnerSocialNumber',
             name: ({ answers }) => `Vilket personnummer har ${answers.partnerName.split(' ')[0]}?`,
+            details: {
+                group: "partner",
+                label: "Personummer",
+                icon: "done",
+                show: true
+            },
+            label: "Personnummer",
             type: 'number',
             placeholder: 'ÅÅÅÅMMDDXXXX',
             maxLength: 12,
@@ -71,6 +84,12 @@ const forms = [
             id: 'partnerAddress',
             name: ({ answers }) => `Vilken adress har ${answers.partnerName.split(' ')[0]}?`,
             type: 'text',
+            details: {
+                group: "partner",
+                label: "Gatuadress",
+                icon: "location-on",
+                show: true
+            },
             placeholder: 'Gatuadress',
             dependency: {
                 relation: 'AND',
@@ -86,6 +105,12 @@ const forms = [
             name: false,
             type: 'number',
             placeholder: 'Postnummer',
+            details: {
+                group: "partner",
+                label: "Postnummer",
+                icon: "location-on",
+                show: true
+            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -110,6 +135,12 @@ const forms = [
             name: false,
             type: 'text',
             placeholder: 'Ort',
+            details: {
+                group: "partner",
+                label: "Ort",
+                icon: "location-on",
+                show: true
+            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -123,6 +154,12 @@ const forms = [
             id: 'weddingLocation',
             name: 'Okej, då går vi vidare till vigseln.\n\nVar vill ni gifta er?',
             type: 'radio',
+            details: {
+                group: "wedding",
+                label: "Plats",
+                icon: "location-on",
+                show: true
+            },
             options: [{
                     value: 'Rådhuset i Helsingborg',
                 },
@@ -143,6 +180,12 @@ const forms = [
             name: 'Vilken plats vill ni gifta er på?',
             type: 'text',
             placeholder: 'Val av plats',
+            details: {
+                group: "wedding",
+                label: "Egen vald plats",
+                icon: "location-on",
+                show: true
+            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -156,6 +199,12 @@ const forms = [
             id: 'weddingDate',
             name: 'Vilket datum vill ni gifta er?',
             type: 'date',
+            details: {
+                group: "wedding",
+                label: "Datum för vigsel",
+                icon: "event",
+                show: true
+            },
             selectorProps: {
                 locale: 'sv',
                 // TODO: Lift out date object
@@ -173,6 +222,12 @@ const forms = [
             id: 'weddingTime',
             name: 'Vilken tid?',
             type: 'time',
+            details: {
+                group: "wedding",
+                label: "Tid för vigsel",
+                icon: "access-time",
+                show: true
+            },
             selectorProps: {
                 minuteInterval: 30,
                 locale: 'sv',
@@ -232,6 +287,12 @@ const forms = [
                 'Vad heter era vittnen? Ange ett namn i taget.',
             ],
             type: 'text',
+            details: {
+                group: "witness",
+                label: "Första vittne",
+                icon: "person",
+                show: true
+            },
             placeholder: 'Vittne 1: För- och efternamn',
             dependency: {
                 relation: 'AND',
@@ -255,6 +316,12 @@ const forms = [
             name: false,
             type: 'text',
             placeholder: 'Vittne 2: För- och efternamn',
+            details: {
+                group: "witness",
+                label: "Andra vittne",
+                icon: "person",
+                show: true
+            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -280,6 +347,12 @@ const forms = [
             ],
             type: 'number',
             placeholder: 'Antal',
+            details: {
+                group: "wedding",
+                label: "Antal gäster",
+                icon: "group",
+                show: true
+            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -303,6 +376,12 @@ const forms = [
                 'En sista fråga, innan ni gifter er måste Skatteverket intyga att det inte finns några hinder för giftermål.\n\nHar ni intyg för hindersprövning?'
             ],
             type: 'radio',
+            details: {
+                group: "wedding",
+                label: "Intyg för hindersprovning",
+                icon: "done",
+                show: true
+            },
             options: [
                 {
                     value: 'Ja',
