@@ -7,18 +7,18 @@ const NavItems = [
         route: '',
         active: true
     },
-    {
-        id: '3ac68afc',
-        title: 'Översikt',
-        route: '',
-        active: false
-    },
-    {
-        id: '58694a0f',
-        title: 'Händelser',
-        route: '',
-        active: false
-    },
+    // {
+    //     id: '3ac68afc',
+    //     title: 'Översikt',
+    //     route: '',
+    //     active: false
+    // },
+    // {
+    //     id: '58694a0f',
+    //     title: 'Händelser',
+    //     route: '',
+    //     active: false
+    // },
 ]
 
 const ActiveTasks = [
