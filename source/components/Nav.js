@@ -215,17 +215,19 @@ const styles = StyleSheet.create({
         height: '100%'
     },
     UserEventTabView: {
+        borderColor: '#F5F5F5',
+        borderWidth: 2,
         position: 'absolute',
-        right: -4,
-        top: -5,
-        backgroundColor: 'red',
-        borderRadius: 8,
-        width: 14,
-        height: 14,
+        right: -8,
+        top: -10,
+        backgroundColor: '#D73640',
+        borderRadius: 24,
+        width: 20,
+        height: 20,
         justifyContent: 'center',
         alignItems: 'center',
     },
     UserEventTabBadge: {
-        color: 'white', fontSize: 12, fontFamily: 'Roboto', fontWeight: '500'
+        color: 'white', fontSize: 12, fontFamily: 'Roboto', fontWeight: '800'
     }
 });
