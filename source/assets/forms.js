@@ -463,7 +463,7 @@ const forms = [
                 Plats: ${data.answers.weddingLocationCustom || data.answers.weddingLocation}
                 Datum: ${data.answers.weddingDate} \n\n Tid: ${data.answers.weddingTime}
                 Antal gäster, inklusive vittnen: ${data.answers.guestsTotal} personer
-                Vittnen: ${data.answers.hasWitness === 'Ja' ? data.answers.firstWitness + 'och' + data.answers.secondWitness : 'Anger senare'}`,
+                Vittnen: ${data.answers.hasWitness === 'Ja' ? data.answers.firstWitness + ' och ' + data.answers.secondWitness : 'Anger senare'}`,
                 'Vill du bekräfta bokningen?'
             ],
             type: 'radio',
