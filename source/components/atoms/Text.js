@@ -12,7 +12,9 @@ const Text = styled(RNText)`
     ${({ small }) => small && `
       font-size: 12px;
     `}
+    ${({ strong }) => strong && `
+      font-weight: 900;
+    `}
 `;
 
 export default Text;
-
