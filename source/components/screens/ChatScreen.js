@@ -33,6 +33,7 @@ class ChatScreen extends Component {
 }
 
 const ChatScreenWrapper = styled(ScreenWrapper)`
+    padding-top: 0px;
     padding-left: 0;
     padding-right: 0;
     padding-bottom: 0px;
