@@ -56,7 +56,7 @@ const TaskDetailScreen = (props) => {
             />
             <Container>
                 {groups.map( group => (
-                    <List>
+                    <List key={group.title}>
                         <ListHeading type="h3">{group.title}</ListHeading>
                         {   
                             group.questions.map( question => (
