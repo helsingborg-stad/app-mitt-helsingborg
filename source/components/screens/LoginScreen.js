@@ -99,14 +99,13 @@ class LoginScreen extends Component {
                                 <Logo source={HbgLogo} resizeMode={'contain'} />
                             )
                         }
-                        
-                        <View><Heading align={'center'}>Mitt {'\n'}Helsingborg</Heading></View>
-                        
                     </LoginHeader>
                     <LoginBody>
                         <LoginForm>
+                            <LoginFormHeader>
+                                <Heading>Logga in</Heading>
+                            </LoginFormHeader>
                             <LoginFormField>
-                                <Label>Personnummer</Label>
                                 <Input 
                                     placeholder={'ÅÅÅÅMMDDXXXX'}
                                     value={personalNumberInput}
@@ -115,6 +114,7 @@ class LoginScreen extends Component {
                                     returnKeyType='done'
                                     maxLength={12}
                                     onSubmitEditing={this.submitHandler}
+                                    center
                                 />
                             </LoginFormField>
 
@@ -143,10 +143,10 @@ class LoginScreen extends Component {
     }
 }
 
+
 const Logo = styled.Image`
-    height: 80px;
+    height: 200px;
     width: auto;
-    margin-bottom: 16px;
 `;
 
 const LoginScreenWrapper = styled(ScreenWrapper)`
@@ -187,5 +187,6 @@ const LoginForm = styled.View`
 `;
 
 const LoginFormField = styled.View`margin-bottom: 16px;`;
+const LoginFormHeader = styled.View`margin-bottom: 32px;`;
 
 export default withAuthentication(LoginScreen);

@@ -21,9 +21,9 @@ const forms = [
             placeholder: 'För- och efternamn',
             validations: [
                 {
-                    method: "isLength",
-                    args: [{min: 5}],
-                    message: "Ditt svar är för kort. Ange minst 5 tecken.",
+                    method: 'matches',
+                    args: ["(\\w.+\\s).+", 'i'],
+                    message: "Ange både för- och efternamn.",
                     valid_when: true
                 }
             ]
@@ -128,7 +128,7 @@ const forms = [
                     args: [{
                         min: 5, max: 5
                     }],
-                    message: "Du måste ange ett giltigt postnummer. Bokstäver är ej tillåtet.",
+                    message: "Du måste ange ett giltigt postnummer.",
                     valid_when: true
                 }
             ]
@@ -155,7 +155,7 @@ const forms = [
         },
         {
             id: 'weddingLocation',
-            name: 'Var vill ni gifta er?',
+            name: 'Okej, då går vi vidare till vigseln.\n\nVar vill ni gifta er?',
             type: 'radio',
             details: {
                 group: "wedding",
@@ -170,6 +170,13 @@ const forms = [
                     value: 'Egen vald plats',
                 },
             ],
+            explainer: [
+                {
+                    key: 0,
+                    heading: 'Plats för vigsel',
+                    content: 'Ni kan välja att gifta er i Rådhuset eller på egen vald plats. Om ni väljer egen vald plats kontaktar vi dig för att bekräfta platsen för vigsel när vi har tagit emot din bokningsförfrågan.',
+                }
+            ]
         },
         {
             id: 'weddingLocationCustom',
@@ -229,6 +236,19 @@ const forms = [
                 locale: 'sv',
             },
         },
+          {
+              id: 'weddingLocationCustomInfo',
+              name: 'Bra, då vet jag. Efter att du har skickat in din bokningsförfrågan kontaktar vi dig för att bekräfta vi kan viga er på önskad plats och dag.',
+              type: 'message',
+              dependency: {
+                  relation: 'AND',
+                  conditions: [{
+                      'key': 'weddingLocation',
+                      'value': 'Egen vald plats',
+                      'compare': '='
+                  }]
+              }
+          },
         {
             id: 'hasWitness',
             name: 'Ni behöver ha två vittnen under er vigsel.\n\nHar ni bestämt vilka vittnen ni vill ha?',
@@ -250,7 +270,7 @@ const forms = [
                 {
                     key: 0,
                     heading: 'Vittnen',
-                    content: 'Två vittnen måste närvara vid den borgerliga vigseln och det är brudparet som ansvarar för att vittnen finns. Vi behöver namn på era vittnen innan vigsel, men det går bra att komplettera med det efter att bokning är gjord. Vittnena ska vara över 15 år.',
+                    content: 'Ni behöver ha två vittnen vid er vigsel, och det är ni som brudpar som ansvarar för att ni har vittnen under vigseln. Era vittnen måste vara över 15 år. För att vi ska kunna trycka vigselbeviset behöver vi namn på era vittnen senast 3 dagar innan vigseln. Om du inte vill ange vittnen när du bokar, kan du komplettera det senare.',
                 }
             ]
         },
@@ -273,7 +293,7 @@ const forms = [
          {
             id: 'firstWitness',
             name: [
-                'Vad heter era vittnen?',
+                'Vad heter era vittnen? Ange ett namn i taget.',
             ],
             type: 'text',
             details: {
@@ -293,9 +313,9 @@ const forms = [
             },
             validations: [
                 {
-                    method: "isLength",
-                    args: [{min: 5}],
-                    message: "Ditt svar är för kort. Ange minst 5 tecken.",
+                    method: "matches",
+                    args: ["(\\w.+\\s).+", 'i'],
+                    message: "Ange både för- och efternamn.",
                     valid_when: true
                 }
             ]
@@ -321,9 +341,9 @@ const forms = [
             },
             validations: [
                 {
-                    method: "isLength",
-                    args: [{min: 5}],
-                    message: "Ditt svar är för kort. Ange minst 5 tecken.",
+                    method: "matches",
+                    args: ["(\\w.+\\s).+", 'i'],
+                    message: "Ange både för- och efternamn.",
                     valid_when: true
                 }
             ]
@@ -335,7 +355,7 @@ const forms = [
                 'Hur många gäster kommer till er vigsel?'
             ],
             type: 'number',
-            placeholder: 'Ange antal gäster',
+            placeholder: 'Anntal',
             details: {
                 group: "wedding",
                 label: "Antal gäster",
@@ -354,7 +374,7 @@ const forms = [
                 {
                     method: "isInt",
                     args: [{min: 0, max: 17}],
-                    message: "Du måste ange siffror. Bokstäver är ej tillåtet.",
+                    message: "I Rådhuset får ni som mest ha 17 gäster. Ange antal mellan 2-17.",
                     valid_when: true
                 }
             ]
@@ -362,7 +382,7 @@ const forms = [
         {
             id: 'hindersProvning',
             name: [
-                'Innan ni gifter er måste Skatteverket intyga att det inte finns några hinder för giftermål.\n\nHar ni intyg för hindersprövning?'
+                'En sista fråga, innan ni gifter er måste Skatteverket intyga att det inte finns några hinder för giftermål.\n\nHar ni intyg för hindersprövning?'
             ],
             type: 'radio',
             details: {
@@ -392,7 +412,7 @@ const forms = [
         {
               id: 'hindersProvningYes',
               name: [
-                  'Perfekt! Vi behöver en kopia av er hindersprövning. I slutet av bokningen får du information om hur du skickar den till oss.',
+                  'Perfekt! Vi behöver en kopia av er hindersprövning. Skicka den till:\nHelsingborg kontaktcenter\nStortorget 17\n251 89 Helsingborg',
               ],
               type: 'message',
               details: {
@@ -410,7 +430,7 @@ const forms = [
         {
               id: 'hindersProvningNo',
               name: [
-                 'Jag kan göra klart din bokning utan hindersprövning, men vigseln kan inte genomföras utan den.\n\nNi ansöker om hindersprövning på Skatteverkets webbplats[https://skatteverket.se/privat/folkbokforing/aktenskapochpartnerskap/forevigselnhindersprovning.4.76a43be412206334b89800020477.html?q=hinderspr%C3%B6vning] ',
+                 `Jag kan göra klart din bokning utan hindersprövning, men vigseln kan inte genomföras utan den.\n\nNi ansöker om hindersprövning på (Skatteverkets webbplats)[https://skatteverket.se/privat/folkbokforing/aktenskapochpartnerskap/forevigselnhindersprovning.4.76a43be412206334b89800020477.html?q=hinderspr%C3%B6vning]`,
               ],
               type: 'message',
               details: {
@@ -451,9 +471,7 @@ const forms = [
         },
         {
             id: 'confirmBookingYes',
-            name: [
-            'Då har jag tagit emot er bokning. Du kan när som helst se din bokning under fliken Mitt HBG.',
-            'Vi har också skickat en bekräftelse till din e-post.'],
+            name: ['Då har jag tagit emot er bokning. Du kan när som helst se din bokning under fliken Mitt HBG.'],
             type: 'message',
             details: {
                 show: false

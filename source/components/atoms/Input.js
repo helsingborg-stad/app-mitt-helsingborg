@@ -9,6 +9,7 @@ const input = css`
     border-radius: 17.5px;
     border: solid 1px ${({theme}) => theme.input.border};
     padding: 16px;
+    ${props => (props.center ? 'text-align: center;' : null)}
 `;
 
 const Input = styled(TextInput)`
