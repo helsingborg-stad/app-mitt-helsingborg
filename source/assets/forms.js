@@ -69,9 +69,6 @@ const forms = [
               id: 'partnerSameAddress',
               name: ({ answers }) => `Bor ${answers.partnerName.split(' ')[0]} på samma adress som du?`,
               type: 'radio',
-              details: {    
-                show: false
-              },
               options: [
                 {
                     value: 'Ja',
@@ -253,9 +250,6 @@ const forms = [
             id: 'hasWitness',
             name: 'Ni behöver ha två vittnen under er vigsel.\n\nHar ni bestämt vilka vittnen ni vill ha?',
             type: 'radio',
-            details: {
-                show: false
-            },
             options: [
               {
                   value: 'Ja',
@@ -278,9 +272,6 @@ const forms = [
             id:  'hasNoWitness',
             name: 'Okej, då kan du göra detta senare.\n\nFör att vi ska kunna trycka ert vigselbevis behöver vi era vittnens namn senast 3 dagar innan vigsel.\n\nVi påminner dig i tid så att du inte glömmer.',
             type: 'message',
-            details: {
-                show: false
-            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -415,9 +406,6 @@ const forms = [
                   'Perfekt! Vi behöver en kopia av er hindersprövning. Skicka den till:\nHelsingborg kontaktcenter\nStortorget 17\n251 89 Helsingborg',
               ],
               type: 'message',
-              details: {
-                show: false
-                },
               dependency: {
                   relation: 'AND',
                   conditions: [{
@@ -433,9 +421,6 @@ const forms = [
                  `Jag kan göra klart din bokning utan hindersprövning, men vigseln kan inte genomföras utan den.\n\nNi ansöker om hindersprövning på (Skatteverkets webbplats)[https://skatteverket.se/privat/folkbokforing/aktenskapochpartnerskap/forevigselnhindersprovning.4.76a43be412206334b89800020477.html?q=hinderspr%C3%B6vning]`,
               ],
               type: 'message',
-              details: {
-                show: false
-                },
               dependency: {
                   relation: 'AND',
                   conditions: [{
@@ -455,9 +440,6 @@ const forms = [
                 'Vill du bekräfta bokningen?'
             ],
             type: 'radio',
-            details: {
-                show: false
-            },
             options: [
                 {
                     value: 'Ja, boka vigsel',
@@ -473,9 +455,6 @@ const forms = [
             id: 'confirmBookingYes',
             name: ['Då har jag tagit emot er bokning. Du kan när som helst se din bokning under fliken Mitt HBG.'],
             type: 'message',
-            details: {
-                show: false
-            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -489,9 +468,6 @@ const forms = [
             id: 'confirmBookingNo',
             name: 'Okej, då sparar jag ditt ärende. Du kan när som helst komma tillbaka och göra klart det.',
             type: 'message',
-            details: {
-                show: false
-            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
