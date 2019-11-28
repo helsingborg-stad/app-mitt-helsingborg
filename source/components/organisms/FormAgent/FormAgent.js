@@ -4,6 +4,7 @@ import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler'
 import forms from '../../../assets/forms.js';
 import ChatBubble from '../../atoms/ChatBubble';
 import ChatDivider from '../../atoms/ChatDivider';
+import StorageService, { USER_KEY } from '../../../services/StorageService';
 import MarkdownConstructor from "../../../helpers/MarkdownConstructor";
 
 // TODO: Find better place for storing this function and
@@ -42,10 +43,13 @@ class FormAgent extends Component {
         questions: [],
         answers: {},
         currentQuestion: undefined,
+        user: {}
     };
 
     componentDidMount() {
         const { formId, chat, answers } = this.props;
+
+        this.saveUserToState();
 
         chat.switchInput(false);
 
@@ -212,6 +216,13 @@ class FormAgent extends Component {
         }
     };
 
+    saveUserToState = async () => {
+        const user = await StorageService.getData(USER_KEY);
+        if (user) {
+            this.setState({user: user});
+        }
+    }
+    
     render() {
         return null;
     }
