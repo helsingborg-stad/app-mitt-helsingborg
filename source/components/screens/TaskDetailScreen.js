@@ -15,6 +15,83 @@ const TaskDetailScreen = (props) => {
     const answers = navigation.getParam('answers', false)
     const form = navigation.getParam('form', false)
 
+    // TODO: ERSÄTT DENNA KOD PRONTO
+    // PR 100!
+    // OBS! Riktigt haxig fungerande kod, YOCO (Yoda Only Code Once)
+    const filteredQuestions = form.questions.map(q => {
+        switch (q.id) {
+            case "partnerAddress":
+                if(answers["partnerSameAddress"] === "Ja"){
+                    return { ...q, details:{ ...q.details, show: false }}
+                }
+                break;
+
+            case "partnerCity":
+                if(answers["partnerSameAddress"] === "Ja"){
+                    return { ...q, details:{ ...q.details, show: false }}
+                }
+                break;
+
+            case "partnerPostal":
+                if(answers["partnerSameAddress"] === "Ja"){
+                    return { ...q, details:{ ...q.details, show: false }}
+                }
+                break;
+
+            case "partnerAddress":
+                if(answers["partnerSameAddress"] === "Ja"){
+                    return { ...q, details:{ ...q.details, show: false }}
+                }
+                break;
+
+            case "partnerAddress":
+                if(answers["partnerSameAddress"] === "Ja"){
+                    return { ...q, details:{ ...q.details, show: false }}
+                }
+                break;
+
+            case "partnerSameAddress":
+                if(answers["partnerSameAddress"] === "Ja"){
+                    return { 
+                        ...q, 
+                        details:{ 
+                            group: "partner", 
+                            label: "Gemensam address",
+                            icon: "location-on",
+                            show: true 
+                        }
+                    }
+                }
+
+                break;
+            
+            case "weddingLocationCustom":
+                    if(answers["weddingLocation"] === "Rådhuset i Helsingborg"){
+                        return { ...q, details:{ ...q.details, show: false }}
+                    }
+                    break;
+
+            case "weddingLocation":
+                    if(answers["weddingLocation"] === "Egen vald plats"){
+                        return { ...q, details:{ ...q.details, show: false }}
+                    }
+                    break;
+
+            case "guestsTotal":
+                    if(answers["weddingLocation"] === "Egen vald plats"){
+                        return { ...q, details:{ ...q.details, show: false }}
+                    }
+                    break;
+        
+            default:
+                break;
+        }
+
+        return q;
+    })
+
+    // END OF HAX KOD
+
     const groups = [
         {
             name: "partner",
@@ -33,7 +110,8 @@ const TaskDetailScreen = (props) => {
         }
     ]
 
-    form.questions.forEach(question =>  {
+    // TODO: Ersätt filtredQuestions från hax koden längre upp.
+    filteredQuestions.forEach(question =>  {
         const { details } = question;
         if (details && details.show) {
             const group = groups.find(g => g.name === question.details.group)
