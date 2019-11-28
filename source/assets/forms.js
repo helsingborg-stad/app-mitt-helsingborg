@@ -11,6 +11,12 @@ const forms = [
         {
             id: 'partnerName',
             name: 'Vi börjar med information om din partner. Vad heter personen du ska gifta dig med?',
+            details: {
+                group: "partner",
+                label: "Namn",
+                icon: "person",
+                show: true
+            },
             type: 'text',
             placeholder: 'För- och efternamn',
             validations: [
@@ -25,6 +31,13 @@ const forms = [
         {
             id: 'partnerSocialNumber',
             name: ({ answers }) => `Vilket personnummer har ${answers.partnerName.split(' ')[0]}?`,
+            details: {
+                group: "partner",
+                label: "Personummer",
+                icon: "done",
+                show: true
+            },
+            label: "Personnummer",
             type: 'number',
             placeholder: 'ÅÅÅÅMMDDXXXX',
             maxLength: 12,
@@ -56,6 +69,9 @@ const forms = [
               id: 'partnerSameAddress',
               name: ({ answers }) => `Bor ${answers.partnerName.split(' ')[0]} på samma adress som du?`,
               type: 'radio',
+              details: {    
+                show: false
+              },
               options: [
                 {
                     value: 'Ja',
@@ -71,6 +87,12 @@ const forms = [
             id: 'partnerAddress',
             name: ({ answers }) => `Vilken adress har ${answers.partnerName.split(' ')[0]}?`,
             type: 'text',
+            details: {
+                group: "partner",
+                label: "Gatuadress",
+                icon: "location-on",
+                show: true
+            },
             placeholder: 'Gatuadress',
             dependency: {
                 relation: 'AND',
@@ -86,6 +108,12 @@ const forms = [
             name: false,
             type: 'number',
             placeholder: 'Postnummer',
+            details: {
+                group: "partner",
+                label: "Postnummer",
+                icon: "location-on",
+                show: true
+            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -109,7 +137,13 @@ const forms = [
             id: 'partnerCity',
             name: false,
             type: 'text',
-            placeholder: 'Ort',
+            placeholder: 'ort',
+            details: {
+                group: "partner",
+                label: "Ort",
+                icon: "location-on",
+                show: true
+            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -123,6 +157,12 @@ const forms = [
             id: 'weddingLocation',
             name: 'Var vill ni gifta er?',
             type: 'radio',
+            details: {
+                group: "wedding",
+                label: "Plats",
+                icon: "location-on",
+                show: true
+            },
             options: [{
                     value: 'Rådhuset i Helsingborg',
                 },
@@ -136,6 +176,12 @@ const forms = [
             name: 'Vilken plats vill ni gifta er på?',
             type: 'text',
             placeholder: 'Val av plats',
+            details: {
+                group: "wedding",
+                label: "Egen vald plats",
+                icon: "location-on",
+                show: true
+            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -149,6 +195,12 @@ const forms = [
             id: 'weddingDate',
             name: 'Vilket datum vill ni gifta er?',
             type: 'date',
+            details: {
+                group: "wedding",
+                label: "Datum för vigsel",
+                icon: "event",
+                show: true
+            },
             selectorProps: {
                 locale: 'sv',
                 // TODO: Lift out date object
@@ -166,6 +218,12 @@ const forms = [
             id: 'weddingTime',
             name: 'Vilken tid?',
             type: 'time',
+            details: {
+                group: "wedding",
+                label: "Tid för vigsel",
+                icon: "access-time",
+                show: true
+            },
             selectorProps: {
                 minuteInterval: 30,
                 locale: 'sv',
@@ -175,6 +233,9 @@ const forms = [
             id: 'hasWitness',
             name: 'Ni behöver ha två vittnen under er vigsel.\n\nHar ni bestämt vilka vittnen ni vill ha?',
             type: 'radio',
+            details: {
+                show: false
+            },
             options: [
               {
                   value: 'Ja',
@@ -197,6 +258,9 @@ const forms = [
             id:  'hasNoWitness',
             name: 'Okej, då kan du göra detta senare.\n\nFör att vi ska kunna trycka ert vigselbevis behöver vi era vittnens namn senast 3 dagar innan vigsel.\n\nVi påminner dig i tid så att du inte glömmer.',
             type: 'message',
+            details: {
+                show: false
+            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -212,6 +276,12 @@ const forms = [
                 'Vad heter era vittnen?',
             ],
             type: 'text',
+            details: {
+                group: "witness",
+                label: "Första vittne",
+                icon: "person",
+                show: true
+            },
             placeholder: 'Vittne 1: För- och efternamn',
             dependency: {
                 relation: 'AND',
@@ -235,6 +305,12 @@ const forms = [
             name: false,
             type: 'text',
             placeholder: 'Vittne 2: För- och efternamn',
+            details: {
+                group: "witness",
+                label: "Andra vittne",
+                icon: "person",
+                show: true
+            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -260,6 +336,12 @@ const forms = [
             ],
             type: 'number',
             placeholder: 'Ange antal gäster',
+            details: {
+                group: "wedding",
+                label: "Antal gäster",
+                icon: "group",
+                show: true
+            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -283,6 +365,12 @@ const forms = [
                 'Innan ni gifter er måste Skatteverket intyga att det inte finns några hinder för giftermål.\n\nHar ni intyg för hindersprövning?'
             ],
             type: 'radio',
+            details: {
+                group: "wedding",
+                label: "Intyg för hindersprovning",
+                icon: "done",
+                show: true
+            },
             options: [
                 {
                     value: 'Ja',
@@ -307,6 +395,9 @@ const forms = [
                   'Perfekt! Vi behöver en kopia av er hindersprövning. I slutet av bokningen får du information om hur du skickar den till oss.',
               ],
               type: 'message',
+              details: {
+                show: false
+                },
               dependency: {
                   relation: 'AND',
                   conditions: [{
@@ -322,6 +413,9 @@ const forms = [
                  'Jag kan göra klart din bokning utan hindersprövning, men vigseln kan inte genomföras utan den.\n\nNi ansöker om hindersprövning på Skatteverkets webbplats[https://skatteverket.se/privat/folkbokforing/aktenskapochpartnerskap/forevigselnhindersprovning.4.76a43be412206334b89800020477.html?q=hinderspr%C3%B6vning] ',
               ],
               type: 'message',
+              details: {
+                show: false
+                },
               dependency: {
                   relation: 'AND',
                   conditions: [{
@@ -341,6 +435,9 @@ const forms = [
                 'Vill du bekräfta bokningen?'
             ],
             type: 'radio',
+            details: {
+                show: false
+            },
             options: [
                 {
                     value: 'Ja, boka vigsel',
@@ -358,6 +455,9 @@ const forms = [
             'Då har jag tagit emot er bokning. Du kan när som helst se din bokning under fliken Mitt HBG.',
             'Vi har också skickat en bekräftelse till din e-post.'],
             type: 'message',
+            details: {
+                show: false
+            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
@@ -371,6 +471,9 @@ const forms = [
             id: 'confirmBookingNo',
             name: 'Okej, då sparar jag ditt ärende. Du kan när som helst komma tillbaka och göra klart det.',
             type: 'message',
+            details: {
+                show: false
+            },
             dependency: {
                 relation: 'AND',
                 conditions: [{
