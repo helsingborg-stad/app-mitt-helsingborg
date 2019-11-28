@@ -171,7 +171,9 @@ const forms = [
                 {
                     key: 0,
                     heading: 'Plats för vigsel',
-                    content: 'Ni kan välja att gifta er i Rådhuset eller på egen vald plats. Om ni väljer egen vald plats kontaktar vi dig för att bekräfta platsen för vigsel när vi har tagit emot din bokningsförfrågan.',
+                    content: `Om ni inte vill gifta er i Rådhuset kan ni ange önskad plats i bokningen. Vi kan oftast tillgodose önskemål om egen vald plats.
+                    &nbsp;
+                    När du har skickat in din bokningsförfrågan tar vi kontakt med dig för att bekräfta plats för vigsel.`,
                 }
             ]
         },
@@ -214,7 +216,19 @@ const forms = [
                 {
                     key: 0,
                     heading: 'Tid',
-                    content: 'Ni kan bli vigda i Rådhuset följande tider:\nVardagar klockan 16 och 16: 30. Under sommaren 15:30 och 16.\nLördagar klockan 14, 14: 30, 15 och 15.30.\nDag före röd dag klockan 11: 30.\n\nUnder storhelger är Rådhuset stängt, men ni kan välja att istället boka vigsel på annan plats. ',
+                    content:
+                    `Ni kan bli vigda i Rådhuset följande tider:
+                    &nbsp;
+                    &nbsp;
+                    **Vardagar:** 16:00 och 16:30.
+                    &nbsp;
+                    **Lördagar:** 14:00, 14:30, 15:00 och 15.30.
+                    &nbsp;
+                    **Dag före röd dag:** 11:30.
+                    &nbsp;
+                    &nbsp;
+                    Under **storhelger är Rådhuset stängt**, men ni kan välja att istället boka vigsel på annan plats.
+                    `,
                 }
             ]
         },
@@ -264,7 +278,13 @@ const forms = [
                 {
                     key: 0,
                     heading: 'Vittnen',
-                    content: 'Ni behöver ha två vittnen vid er vigsel, och det är ni som brudpar som ansvarar för att ni har vittnen under vigseln. Era vittnen måste vara över 15 år. För att vi ska kunna trycka vigselbeviset behöver vi namn på era vittnen senast 3 dagar innan vigseln. Om du inte vill ange vittnen när du bokar, kan du komplettera det senare.',
+                    content: `**Ni behöver ha två vittnen vid er vigsel**, och det är ni som brudpar som ansvarar för att ni har vittnen under vigseln.
+                    &nbsp;
+                    **Era vittnen måste vara över 15 år**.
+                    &nbsp;
+                    För att vi ska kunna trycka vigselbeviset behöver vi namn på era vittnen **senast 3 dagar innan vigseln**.
+                    &nbsp;
+                    Om du inte vill ange vittnen när du bokar, kan du komplettera det senare.`,
                 }
             ]
         },
@@ -396,7 +416,11 @@ const forms = [
                 {
                     key: 0,
                     heading: 'Hindersprövning',
-                    content: 'Innan ni gifter er måste Skatteverket göra en hindersprövning, för att se till att det inte finns några hinder för äktenskapet. Ni ansöker om hindersprövning genom att fylla i en blankett som ni skickar till Skatteverket. Du hittar blanketten, och mer information om hindersprövning, på Skatteverkets webbplats.',
+                    content: `Innan ni gifter er måste Skatteverket göra en hindersprövning, för att se till att det inte finns några hinder för äktenskapet.
+                    &nbsp;
+                    Ni ansöker om hindersprövning genom att fylla i en blankett som ni skickar till Skatteverket.
+                    &nbsp;
+                    Du hittar blanketten, och mer information om hindersprövning, på [Skatteverkets webbplats](https://skatteverket.se/privat/folkbokforing/aktenskapochpartnerskap/forevigselnhindersprovning.4.76a43be412206334b89800020477.html?q=hinderspr%C3%B6vning).`,
                 }
             ]
         },
@@ -417,9 +441,8 @@ const forms = [
         },
         {
               id: 'hindersProvningNo',
-              name: [
-                 `Jag kan göra klart din bokning utan hindersprövning, men vigseln kan inte genomföras utan den.\n\nNi ansöker om hindersprövning på (Skatteverkets webbplats)[https://skatteverket.se/privat/folkbokforing/aktenskapochpartnerskap/forevigselnhindersprovning.4.76a43be412206334b89800020477.html?q=hinderspr%C3%B6vning]`,
-              ],
+              name:
+                 `Jag kan göra klart din bokning utan hindersprövning, men vigseln kan inte genomföras utan den.\n\nNi ansöker om hindersprövning på [Skatteverkets webbplats](https://skatteverket.se/privat/folkbokforing/aktenskapochpartnerskap/forevigselnhindersprovning.4.76a43be412206334b89800020477.html?q=hinderspr%C3%B6vning)`,
               type: 'message',
               dependency: {
                   relation: 'AND',
