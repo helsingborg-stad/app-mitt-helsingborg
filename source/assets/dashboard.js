@@ -26,7 +26,7 @@ const ActiveTasks = [
         id: 'bd7akbea',
         title: 'Ansökan',
         text: 'Borgerlig vigsel',
-        iconName: 'wc',
+        iconName: 'favorite',
         highlighted: true
     },
 ];
