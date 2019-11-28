@@ -442,7 +442,7 @@ const forms = [
         {
               id: 'hindersProvningNo',
               name:
-                 `Jag kan göra klart din bokning utan hindersprövning, men vigseln kan inte genomföras utan den.\n\nNi ansöker om hindersprövning på [Skatteverkets webbplats](https://skatteverket.se/privat/folkbokforing/aktenskapochpartnerskap/forevigselnhindersprovning.4.76a43be412206334b89800020477.html?q=hinderspr%C3%B6vning)`,
+                 `Jag kan göra klart din bokning utan hindersprövning, men vigseln kan inte genomföras utan den.\n\nNi ansöker om hindersprövning på [Skatteverkets webbplats](https://skatteverket.se/privat/folkbokforing/aktenskapochpartnerskap/forevigselnhindersprovning.4.76a43be412206334b89800020477.html?q=hinderspr%C3%B6vning).`,
               type: 'message',
               dependency: {
                   relation: 'AND',
