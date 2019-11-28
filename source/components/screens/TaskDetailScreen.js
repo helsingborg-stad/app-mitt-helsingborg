@@ -88,6 +88,7 @@ const TaskDetailScreenWrapper = styled(ScreenWrapper)`
     padding-left: 0;
     padding-right: 0;
     padding-top: 0;
+    padding-bottom: 0;
     background-color: #FCFCFC;
 `;
 
@@ -97,7 +98,8 @@ const Container = styled.ScrollView`
 `;
 
 const List = styled.View`
-    margin-top: 24px;
+    margin-top: 20px;
+    margin-bottom: 30px;
 `;
 
 const ListHeading = styled(Heading)`
