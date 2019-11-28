@@ -34,7 +34,8 @@ const TaskDetailScreen = (props) => {
     ]
 
     form.questions.forEach(question =>  {
-        if (question.details.show) {
+        const { details } = question;
+        if (details && details.show) {
             const group = groups.find(g => g.name === question.details.group)
             group.questions.push(question)
         }
