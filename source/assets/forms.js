@@ -457,9 +457,13 @@ const forms = [
         {
             id: 'confirmBooking',
             name: [
-                ({
-                    answers
-                }) => (`Då har jag följande uppgifter om din bokning.\n\nDu och ${answers.partnerName.split(' ')[0]} vill gifta er ${answers.weddingLocationCustom ? answers.weddingLocationCustom : answers.weddingLocation} ${answers.weddingDate}. Ni kommer ha ${answers.guestsTotal} gäster, inklusive era vittnen.`),
+                (data) => `Då har jag följande uppgifter om din bokning. 
+                &nbsp;
+                Vigsel för: ${data.user.givenName} och ${data.answers.partnerName.split(' ')[0]}
+                Plats: ${data.answers.weddingLocationCustom || data.answers.weddingLocation}
+                Datum: ${data.answers.weddingDate} \n\n Tid: ${data.answers.weddingTime}
+                Antal gäster, inklusive vittnen: ${data.answers.guestsTotal} personer
+                Vittnen: ${data.answers.hasWitness === 'Ja' ? data.answers.firstWitness + 'och' + data.answers.secondWitness : 'Anger senare'}`,
                 'Vill du bekräfta bokningen?'
             ],
             type: 'radio',
