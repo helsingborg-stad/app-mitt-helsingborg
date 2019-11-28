@@ -4,6 +4,7 @@ import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler'
 import forms from '../../../assets/forms.js';
 import ChatBubble from '../../atoms/ChatBubble';
 import ChatDivider from '../../atoms/ChatDivider';
+import MarkdownConstructor from "../../../helpers/MarkdownConstructor";
 
 // TODO: Find better place for storing this function and
 // TODO: Refactor function so it can be used in a more general purpose.
@@ -186,7 +187,9 @@ class FormAgent extends Component {
             }
 
             return chat.addMessages({
-                Component: ChatBubble,
+                Component: props => <ChatBubble {...props}>
+                    <MarkdownConstructor rawText={message} />
+                </ChatBubble>,
                 componentProps: {
                     content: message,
                     modifiers: [modifier],
