@@ -11,6 +11,7 @@ import ChatFooter from '../atoms/ChatFooter';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 
 import ChatUserInput from '../molecules/ChatUserInput';
+import StoreContext from "../../helpers/StoreContext";
 
 class Chat extends Component {
     static propTypes = {
@@ -141,23 +142,28 @@ class Chat extends Component {
         const instanceMethods = { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal, toggleTyping };
 
         return (
-            <ChatWrapper keyboardVerticalOffset={keyboardVerticalOffset} >
-                {ChatAgent ?
-                    <ChatAgent chat={{ ...instanceMethods, ...this.state }} />
-                    : null}
-                <ChatBody>
-                    <ChatMessages messages={messages} chat={{ ...instanceMethods, ...this.state }} />
-                </ChatBody>
-                <ChatFooter>
-                    {inputComponents && inputComponents.length > 0 ?
-                        <ChatUserInput inputArray={inputComponents} chat={{ ...instanceMethods, ...this.state }} />
-                        : null}
-                </ChatFooter>
-                <Modal
-                    {...modal}
-                    changeModal={(visible) => this.changeModal(visible)}
-                />
-            </ChatWrapper>
+            <StoreContext.Consumer>
+                {({setBadgeCount}) => (
+
+                    <ChatWrapper keyboardVerticalOffset={keyboardVerticalOffset} >
+                        {ChatAgent ?
+                            <ChatAgent chat={{ ...instanceMethods, ...this.state, setBadgeCount }} />
+                            : null}
+                        <ChatBody>
+                            <ChatMessages messages={messages} chat={{ ...instanceMethods, ...this.state }} />
+                        </ChatBody>
+                        <ChatFooter>
+                            {inputComponents && inputComponents.length > 0 ?
+                                <ChatUserInput inputArray={inputComponents} chat={{ ...instanceMethods, ...this.state }} />
+                                : null}
+                        </ChatFooter>
+                        <Modal
+                            {...modal}
+                            changeModal={(visible) => this.changeModal(visible)}
+                        />
+                    </ChatWrapper>
+                )}
+            </StoreContext.Consumer>
         )
     }
 }

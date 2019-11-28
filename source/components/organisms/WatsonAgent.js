@@ -15,6 +15,10 @@ export default class WatsonAgent extends Component {
         disableAgent: false
     };
 
+    updateActiveFormsBadge( newValue ) {
+        this.props.chat.setBadgeCount(newValue);
+    }
+
     componentDidMount() {
         const { chat, initialMessages } = this.props;
 
@@ -96,7 +100,11 @@ export default class WatsonAgent extends Component {
         }
 
         try {
-            await StorageService.putData(COMPLETED_FORMS_KEY, formData);
+            await StorageService.putData(COMPLETED_FORMS_KEY, formData).then(() => {
+                StorageService.getData(COMPLETED_FORMS_KEY).then((value) => {
+                    this.updateActiveFormsBadge(value.length)
+                } );
+            });
         } catch (error) {
             console.log("Save form error", error);
         }
@@ -168,6 +176,8 @@ export default class WatsonAgent extends Component {
              */
             if (message === 'Radera data') {
                 await StorageService.clearData();
+                this.updateActiveFormsBadge(0);
+
                 return;
             }
 
