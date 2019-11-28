@@ -175,10 +175,17 @@ export default class WatsonAgent extends Component {
              * TODO: FOR DEV PURPOSE ONLY, REMOVE ME LATER
              */
             if (message === 'Radera data') {
-                await StorageService.clearData();
+                await StorageService.removeData(COMPLETED_FORMS_KEY);
                 this.updateActiveFormsBadge(0);
-
-                return;
+                return chat.addMessages({
+                    Component: props => <ChatBubble {...props}>
+                        <MarkdownConstructor rawText={'Nu har jag raderat din data.'} />
+                    </ChatBubble>,
+                    componentProps: {
+                        content: 'Nu har jag raderat din data.',
+                        modifiers: ['automated'],
+                    }
+                });
             }
 
             const response = await sendChatMsg(WATSON_WORKSPACEID, message, context);
