@@ -18,6 +18,7 @@ import TaskDetailScreen from './screens/TaskDetailScreen';
 
 import {Icon} from 'react-native-elements';
 import LoginScreen from './screens/LoginScreen';
+import StoreContext from "../helpers/StoreContext";
 
 
 
@@ -82,6 +83,23 @@ const tabBarIcon = (iconName, colorFocused) => ({focused}) => (
     <Icon name={iconName} color={focused ? colorFocused : 'gray'}/>
 );
 
+const userEventTabWithBadge = ( iconName, colorFocused ) => ({ focused }) => (
+    <StoreContext.Consumer>
+        {({badgeCount}) => (
+            <View>
+                <Icon name={iconName} color={focused ? colorFocused : 'gray'}/>
+                {badgeCount > 0 && (
+                    <View style={styles.UserEventTabView}>
+                        <Text style={styles.UserEventTabBadge}>
+                            {badgeCount}
+                        </Text>
+                    </View>
+                )}
+            </View>
+        )}
+    </StoreContext.Consumer>
+);
+
 const MaterialTopTabBarWrapper = props => {
     const {index} = props.navigationState;
     const color =
@@ -144,7 +162,7 @@ const TabNavigator = createMaterialTopTabNavigator({
         screen: TaskScreenStack,
         navigationOptions: {
             title: 'Mitt HBG',
-            tabBarIcon: tabBarIcon('home', '#A61380')
+            tabBarIcon: userEventTabWithBadge('home', '#A61380')
         }
     },
     Profile: {
@@ -195,5 +213,21 @@ const styles = StyleSheet.create({
     ProfileMockImage: {
         width: '100%',
         height: '100%'
+    },
+    UserEventTabView: {
+        borderColor: '#F5F5F5',
+        borderWidth: 2,
+        position: 'absolute',
+        right: -8,
+        top: -10,
+        backgroundColor: '#D73640',
+        borderRadius: 24,
+        width: 20,
+        height: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    UserEventTabBadge: {
+        color: 'white', fontSize: 12, fontFamily: 'Roboto', fontWeight: '800'
     }
 });
