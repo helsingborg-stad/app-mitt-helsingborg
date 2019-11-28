@@ -19,7 +19,7 @@ const MarkdownConstructor = props => {
  */
 const markdownRules = {
     text: (node) => {
-        return <Text key={node.key}>{node.content}</Text>;
+        return <Text style={markDownStyles.atomText} key={node.key}>{node.content}</Text>;
     },
     strong: (node, children, parent, styles) => {
         return (
