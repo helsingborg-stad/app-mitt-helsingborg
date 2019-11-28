@@ -134,7 +134,7 @@ const forms = [
             id: 'partnerCity',
             name: false,
             type: 'text',
-            placeholder: 'ort',
+            placeholder: 'Ort',
             details: {
                 group: "partner",
                 label: "Ort",
@@ -346,7 +346,7 @@ const forms = [
                 'Hur många gäster kommer till er vigsel?'
             ],
             type: 'number',
-            placeholder: 'Anntal',
+            placeholder: 'Antal',
             details: {
                 group: "wedding",
                 label: "Antal gäster",
