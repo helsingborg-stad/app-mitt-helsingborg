@@ -121,7 +121,7 @@ class DashboardScreen extends Component {
               accessible={false}
               testID={"ViewGreetings"}
             >
-              <Text style={styles.header}>Greetings {user.givenName}!</Text>
+              <Text style={styles.header}>Greetings {user.given_name}!</Text>
               <Text style={{ fontSize: 60 }}>🦄</Text>
 
               <TouchableOpacity

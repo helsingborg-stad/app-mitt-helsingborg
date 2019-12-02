@@ -459,7 +459,7 @@ const forms = [
             name: [
                 (data) => `Då har jag följande uppgifter om din bokning. 
                 &nbsp;
-                Vigsel för: ${data.user.givenName} och ${data.answers.partnerName.split(' ')[0]}
+                Vigsel för: ${data.user.given_name} och ${data.answers.partnerName.split(' ')[0]}
                 Plats: ${data.answers.weddingLocationCustom || data.answers.weddingLocation}
                 Datum: ${data.answers.weddingDate}
                 Tid: ${data.answers.weddingTime}${data.answers.guestsTotal ? `

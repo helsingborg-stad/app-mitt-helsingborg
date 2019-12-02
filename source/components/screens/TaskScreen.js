@@ -66,9 +66,9 @@ class TaskScreen extends Component {
             iconName={form.icon || null}
             imageSrc={form.imageIcon || null}
             onClick={() => navigation.navigate(
-                    'TaskDetails', 
+                    'TaskDetails',
                     {
-                        answers: item.data, 
+                        answers: item.data,
                         form,
                         user,
                     }
@@ -86,17 +86,17 @@ class TaskScreen extends Component {
 
                 <Header
                     title="Mitt Helsingborg"
-                    message={user && user.givenName ? `Hej ${user.givenName}!` : 'Hej!'}
+                    message={user && user.given_name ? `Hej ${user.given_name}!` : 'Hej!'}
                     themeColor="purple"
                     navItems={NavItems}
                 />
                 <Container>
 
-                    
+
                         <List>
                             <ListHeading type="h3">Aktiva</ListHeading>
                             {activeTasks.length > 0 ? activeTasks.map(this.renderTaskItem) : (<Text style={{marginLeft: 4}}>Inga aktiva ärenden..</Text>) }
-                            
+
                         </List>
 
 
