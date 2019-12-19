@@ -24,6 +24,9 @@
 ## 📋 Requirements
 Mitt Helsingborg targets iOS 9.0. Android support is currently missing.
 
+
+Test.
+
 ## 🚀 Getting started
 1) Clone repo and run "npm install".
 2) For testing; launch application in simulator by running command "react-native run-ios".
