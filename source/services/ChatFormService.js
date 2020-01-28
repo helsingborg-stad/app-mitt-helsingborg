@@ -33,14 +33,25 @@ export const constructGetFormTemplate = (endpoint) => {
     })
 };
 
-export const sendChatMsg = async (workspaceId, textInput, context, intents = undefined, entities = undefined) => {
+export const sendChatMsg = async (
+  assistantId,
+  textInput,
+  context = undefined,
+  sessionId = undefined,
+  intents = undefined,
+  entities = undefined
+  ) => {
     const endpoint = 'chatbot/message';
 
     return new Promise(async (resolve, reject) => {
         let data = {
-            workspaceId,
-            textInput
+          assistantId,
+          textInput
         };
+
+        if (sessionId) {
+          data.sessionId = sessionId;
+        }
 
         if (context) {
             data.context = context;

@@ -9,6 +9,7 @@ import MarkdownConstructor from "../../helpers/MarkdownConstructor";
 import { Alert, } from "react-native";
 
 let context;
+let sessionId;
 
 export default class WatsonAgent extends Component {
     state = {
@@ -164,11 +165,12 @@ export default class WatsonAgent extends Component {
 
     handleHumanChatMessage = async (message) => {
         const { chat } = this.props;
-        try {
-            const { WATSON_WORKSPACEID } = env;
 
-            if (!WATSON_WORKSPACEID) {
-                throw new Error('Missing Watson workspace ID');
+        try {
+          const { WATSON_ASSISTANT_ID } = env;
+
+          if (!WATSON_ASSISTANT_ID) {
+                throw new Error('Missing Watson assistant ID');
             }
 
             /**
@@ -188,7 +190,7 @@ export default class WatsonAgent extends Component {
                 });
             }
 
-            const response = await sendChatMsg(WATSON_WORKSPACEID, message, context);
+          const response = await sendChatMsg(WATSON_ASSISTANT_ID, message, context, sessionId);
 
             // Default input
             let textInput = [{
@@ -204,10 +206,11 @@ export default class WatsonAgent extends Component {
                 throw new Error('Something went wrong with Watson response');
             }
 
-            const { output, context: newContext } = response.data.attributes;
+            const { output, context: newContext, session_id } = response.data.attributes;
 
-            // Set new context
+            // Set new context and session ID
             context = newContext;
+            sessionId = session_id;
 
             await output.generic.reduce(async (previousPromise, current) => {
                 await previousPromise;
