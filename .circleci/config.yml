@@ -153,12 +153,13 @@ workflows:
   version: 2
   node-ios-jobs:
     jobs:
-      []
-      # - node:
-      #     filters:
-      #       branches:
-      #         only:
-      #           beta
+      - node:
+          filters:
+            branches:
+              - master
+              - develop
+              - /feature.*/
+              - /release.*/
       # - ios:
       #     requires:
       #       - node
