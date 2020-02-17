@@ -53,101 +53,77 @@ jobs:
 
     #android:
     # Not yet implemented.
-
-  ios:
-    macos:
-      xcode: "10.2.1"
-    environment:
-      FASTLANE_LANE: test
-
-      # Fastlane env. variables. Must be set before uploading builds.
-      LC_ALL: en_US.UTF-8
-      LANG: en_US.UTF-8
-
-    working_directory: ~/app_mitt_helsingborg
-
-    shell: /bin/bash --login -o pipefail
-
-    steps:
-      - checkout
-
-      - run:
-          name: set Ruby version
-          command: echo "ruby-2.4" > ~/.ruby-version
-
-      - restore_cache:
-          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
-
-      - restore_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-
-      - run: yarn install
-
-      - save_cache:
-          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
-          paths:
-            - ~/.cache/yarn
-
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-          paths:
-            - node_modules
-
-      - restore_cache:
-          key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
-
-      - run:
-          name: Install all gemes for Fastlane
-          command: bundle install
-          working_directory: ios
-
-      - save_cache:
-          key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
-          paths:
-            - vendor/bundle
-
-      - run:
-          command: bundle exec fastlane $FASTLANE_LANE
-          working_directory: ios
-
-      - run:
-          name: Set up Fastlane test results
-          working_directory: ios
-          when: always
-          command: |
-            mkdir -p test-results/fastlane test-results/xcode
-            mv fastlane/report.xml test-results/fastlane
-            mv fastlane/test_output/report.junit test-results/xcode/junit.xml
-
-      - store_test_results:
-          path: ios/test-results
-
-      - store_artifacts:
-          path: ios/test-results
-
-  set_pkg_number:
-    docker:
-      - image: circleci/node:12.3.1
-    working_directory: ~/app_mitt_helsingborg
-
-    steps:
-      # Add SSH key used for pushing code to GIT repo.
-      - add_ssh_keys:
-          fingerprints:
-            - "7b:cd:43:39:07:e5:19:96:ac:36:7d:bb:0d:ce:1d:bd"
-
-      - checkout
-
-      - run:
-          name: Bump package version
-          command: |
-            git config user.name "CircleCI bot"
-            git config user.email "circleci@circleci"
-
-            npm version prerelease --preid=beta -m "Bumped version number to %s [ci skip]"
-
-            git push origin beta
-            git push --tags
+  # ios:
+  #   macos:
+  #     xcode: "10.2.1"
+  #   environment:
+  #     FASTLANE_LANE: test
+  #     # Fastlane env. variables. Must be set before uploading builds.
+  #     LC_ALL: en_US.UTF-8
+  #     LANG: en_US.UTF-8
+  #   working_directory: ~/app_mitt_helsingborg
+  #   shell: /bin/bash --login -o pipefail
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: set Ruby version
+  #         command: echo "ruby-2.4" > ~/.ruby-version
+  #     - restore_cache:
+  #         key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+  #     - restore_cache:
+  #         key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+  #     - run: yarn install
+  #     - save_cache:
+  #         key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+  #         paths:
+  #           - ~/.cache/yarn
+  #     - save_cache:
+  #         key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+  #         paths:
+  #           - node_modules
+  #     - restore_cache:
+  #         key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
+  #     - run:
+  #         name: Install all gemes for Fastlane
+  #         command: bundle install
+  #         working_directory: ios
+  #     - save_cache:
+  #         key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
+  #         paths:
+  #           - vendor/bundle
+  #     - run:
+  #         command: bundle exec fastlane $FASTLANE_LANE
+  #         working_directory: ios
+  #     - run:
+  #         name: Set up Fastlane test results
+  #         working_directory: ios
+  #         when: always
+  #         command: |
+  #           mkdir -p test-results/fastlane test-results/xcode
+  #           mv fastlane/report.xml test-results/fastlane
+  #           mv fastlane/test_output/report.junit test-results/xcode/junit.xml
+  #     - store_test_results:
+  #         path: ios/test-results
+  #     - store_artifacts:
+  #         path: ios/test-results
+  # set_pkg_number:
+  #   docker:
+  #     - image: circleci/node:12.3.1
+  #   working_directory: ~/app_mitt_helsingborg
+  #   steps:
+  #     # Add SSH key used for pushing code to GIT repo.
+  #     - add_ssh_keys:
+  #         fingerprints:
+  #           - "7b:cd:43:39:07:e5:19:96:ac:36:7d:bb:0d:ce:1d:bd"
+  #     - checkout
+  #     - run:
+  #         name: Bump package version
+  #         command: |
+  #           git config user.name "CircleCI bot"
+  #           git config user.email "circleci@circleci"
+  #           npm version prerelease --preid=beta -m "Bumped version number to %s [ci skip]"
+  #           git push origin beta
+  #           git push --tags
 
 workflows:
   version: 2
@@ -156,10 +132,10 @@ workflows:
       - node:
           filters:
             branches:
-              - master
-              - develop
-              - /feature.*/
-              - /release.*/
+              only:
+                - master
+                - develop
+                - /feature.*/
       # - ios:
       #     requires:
       #       - node
