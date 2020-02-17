@@ -1,3 +1,4 @@
-import StorybookUI from "./storybook";
+/* eslint-disable prettier/prettier */
+import StorybookUI from './storybook';
 
 export default StorybookUI;
