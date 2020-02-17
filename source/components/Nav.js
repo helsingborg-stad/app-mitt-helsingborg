@@ -1,3 +1,13 @@
+/* eslint-disable react/display-name */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable global-require */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-use-before-define */
+/* eslint-disable import/no-named-as-default-member */
 import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { View, Text, SafeAreaView, Image, StyleSheet } from 'react-native';
