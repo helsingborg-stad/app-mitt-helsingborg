@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-async-promise-executor */
+/* eslint-disable no-use-before-define */
 /**
  * Service for all chat and form requests.
  *

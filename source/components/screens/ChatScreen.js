@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
 import ScreenWrapper from '../molecules/ScreenWrapper';

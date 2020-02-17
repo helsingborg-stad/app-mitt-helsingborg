@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
+/* eslint-disable no-return-await */
 /**
  * Wrapper for AsyncStorage.
  * Keys should be placed in this file.
