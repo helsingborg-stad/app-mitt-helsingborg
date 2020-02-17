@@ -4,24 +4,28 @@ import StoryWrapper from '../molecules/StoryWrapper';
 import Input from './Input';
 import withForm from '../organisms/withForm';
 
-const InputWithForm = withForm((props) => (
-    <Input value={props.inputValue} onChangeText={props.changeHandler} onSubmitEditing={props.submitHandler} {...props}/>
+const InputWithForm = withForm(props => (
+  <Input
+    value={props.inputValue}
+    onChangeText={props.changeHandler}
+    onSubmitEditing={props.submitHandler}
+    {...props}
+  />
 ));
 
 storiesOf('Input', module)
-    .add('default', () => (
-        <StoryWrapper>
-            <InputWithForm placeholder={'Type something'} />
-        </StoryWrapper>
-    ))
-    .add('numeric', () => (
-        <StoryWrapper>
-            <InputWithForm placeholder={'Type some numbers'} keyboardType={'numeric'} />
-        </StoryWrapper>
-    ))
-    .add('phone pad', () => (
-        <StoryWrapper>
-            <InputWithForm placeholder={'Type some number using phone pad'} keyboardType={'phone-pad'} />
-        </StoryWrapper>
-    ))
-
+  .add('default', () => (
+    <StoryWrapper>
+      <InputWithForm placeholder="Type something" />
+    </StoryWrapper>
+  ))
+  .add('numeric', () => (
+    <StoryWrapper>
+      <InputWithForm placeholder="Type some numbers" keyboardType="numeric" />
+    </StoryWrapper>
+  ))
+  .add('phone pad', () => (
+    <StoryWrapper>
+      <InputWithForm placeholder="Type some number using phone pad" keyboardType="phone-pad" />
+    </StoryWrapper>
+  ));

@@ -2,49 +2,43 @@ import React, { Component } from 'react';
 import Button from '../atoms/ButtonDeprecated';
 
 class MoreInfoExpanded extends Component {
-    constructor(props) {
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+  }
 
-    onClick = () => {
-        this.props.addMessages(
-            MESSAGES
-        );
+  onClick = () => {
+    this.props.addMessages(MESSAGES);
 
-        this.props.setActions(
-            ACTIONS
-        );
-    }
+    this.props.setActions(ACTIONS);
+  };
 
-    render() {
-        return <Button
-            value={'Berätta ännu mer!'}
-            onClick={this.onClick} />;
-    }
-};
+  render() {
+    return <Button value="Berätta ännu mer!" onClick={this.onClick} />;
+  }
+}
 
 export default MoreInfoExpanded;
 
 const MESSAGES = [
-    {
-        type: 'chatBubble',
-        modifiers: ['user'],
-        value: "Berätta ännu mer"
-    },
-    {
-        type: 'chatBubble',
-        modifiers: ['automated'],
-        value: "Här kommer ännu mer info!"
-    }
+  {
+    type: 'chatBubble',
+    modifiers: ['user'],
+    value: 'Berätta ännu mer',
+  },
+  {
+    type: 'chatBubble',
+    modifiers: ['automated'],
+    value: 'Här kommer ännu mer info!',
+  },
 ];
 
 const ACTIONS = [
-    {
-        type: 'chatSectionTitle',
-        value: "Hur vill du fortsätta?"
-    },
-    {
-        type: 'component',
-        value: "loginAction"
-    }
+  {
+    type: 'chatSectionTitle',
+    value: 'Hur vill du fortsätta?',
+  },
+  {
+    type: 'component',
+    value: 'loginAction',
+  },
 ];

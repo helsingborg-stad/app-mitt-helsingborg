@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react-native';
-import styled from 'styled-components/native'
+import styled from 'styled-components/native';
 
 import StoryWrapper from '../molecules/StoryWrapper';
 
@@ -13,9 +13,8 @@ const ModifiedStoryWrapper = styled(StoryWrapper)`
   padding-right: 0;
 `;
 
-storiesOf('Chat', module)
-  .add('Login agent', () => (
-    <ModifiedStoryWrapper>
-      <Chat ChatAgent={LoginAgent}  />
-    </ModifiedStoryWrapper>
-  ));
+storiesOf('Chat', module).add('Login agent', () => (
+  <ModifiedStoryWrapper>
+    <Chat ChatAgent={LoginAgent} />
+  </ModifiedStoryWrapper>
+));

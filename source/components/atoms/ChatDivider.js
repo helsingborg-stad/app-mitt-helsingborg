@@ -4,15 +4,11 @@ import { View } from 'react-native';
 import Text from './Text';
 
 export default ChatDivider = props => (
-    <DividerWrapper>
-        <DividerTitle>
-            {props.title}
-        </DividerTitle>
-        <DividerLine />
-        <DividerInfo>
-            {props.info}
-        </DividerInfo>
-    </DividerWrapper>
+  <DividerWrapper>
+    <DividerTitle>{props.title}</DividerTitle>
+    <DividerLine />
+    <DividerInfo>{props.info}</DividerInfo>
+  </DividerWrapper>
 );
 
 const DividerLine = styled.View`
@@ -46,4 +42,3 @@ const DividerInfo = styled(Text)`
   flex-shrink: 0;
   font-size: 12px;
 `;
-
