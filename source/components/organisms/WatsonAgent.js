@@ -1,3 +1,17 @@
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable import/no-named-as-default-member */
+/* eslint-disable react/state-in-constructor */
+/* eslint-disable react/sort-comp */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-undef */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-useless-escape */
+/* eslint-disable camelcase */
+/* eslint-disable no-case-declarations */
+/* eslint-disable react/no-unused-state */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import env from 'react-native-config';
 import { Alert } from 'react-native';

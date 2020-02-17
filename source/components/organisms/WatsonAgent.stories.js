@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable import/no-extraneous-dependencies */
 import React, { Component } from 'react';
 import env from 'react-native-config';
 import { storiesOf } from '@storybook/react-native';

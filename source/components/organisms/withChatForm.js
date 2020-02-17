@@ -1,3 +1,6 @@
+/* eslint-disable react/sort-comp */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/static-property-placement */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 

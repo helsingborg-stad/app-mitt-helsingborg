@@ -1,3 +1,9 @@
+/* eslint-disable react/sort-comp */
+/* eslint-disable no-shadow */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/static-property-placement */
+/* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
 import { Keyboard, Alert } from 'react-native';
 

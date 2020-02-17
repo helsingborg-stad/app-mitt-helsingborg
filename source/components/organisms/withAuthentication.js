@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-useless-catch */
 import React, { PureComponent } from 'react';
 import env from 'react-native-config';
 
