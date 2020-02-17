@@ -1,3 +1,7 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-async-promise-executor */
+/* eslint-disable camelcase */
+/* eslint-disable no-undef */
 import { Linking } from 'react-native';
 import { NetworkInfo } from 'react-native-network-info';
 import { canOpenUrl, buildServiceUrl, buildBankIdClientUrl } from '../helpers/UrlHelper';

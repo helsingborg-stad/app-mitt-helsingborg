@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * Service for push notification.
  * Component should be added at app top level.
