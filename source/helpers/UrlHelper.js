@@ -1,3 +1,9 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-undef */
 import env from 'react-native-config';
 import { Linking } from 'react-native';
 

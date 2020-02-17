@@ -1,3 +1,5 @@
+/* eslint-disable no-return-await */
+/* eslint-disable no-async-promise-executor */
 import decode from 'jwt-decode';
 import StorageService, { TOKEN_KEY, USER_KEY } from '../services/StorageService';
 

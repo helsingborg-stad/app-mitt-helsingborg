@@ -1,3 +1,5 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable no-param-reassign */
 export const validatePin = pin => {
   const pinRegex = /^[0-9]{12}$/;
   return pinRegex.test(pin);

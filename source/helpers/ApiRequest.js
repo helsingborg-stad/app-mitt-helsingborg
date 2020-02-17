@@ -1,3 +1,7 @@
+/* eslint-disable prefer-promise-reject-errors */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-async-promise-executor */
+/* eslint-disable no-use-before-define */
 import axios from 'axios';
 import StorageService, { TOKEN_KEY } from '../services/StorageService';
 import { buildServiceUrl } from './UrlHelper';

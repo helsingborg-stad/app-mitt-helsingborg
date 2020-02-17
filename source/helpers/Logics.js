@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /**
  * Checks if two values is equal to one another.
  * @param {*} check
