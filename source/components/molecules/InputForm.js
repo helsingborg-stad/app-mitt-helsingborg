@@ -1,3 +1,6 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { Keyboard, TextInput, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import styled, { withTheme } from 'styled-components/native';

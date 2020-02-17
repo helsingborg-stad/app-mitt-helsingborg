@@ -1,3 +1,7 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-shadow */
+/* eslint-disable react/state-in-constructor */
+/* eslint-disable import/no-extraneous-dependencies */
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { storiesOf } from '@storybook/react-native';

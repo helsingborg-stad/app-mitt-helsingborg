@@ -1,3 +1,11 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/no-this-in-sfc */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-shadow */
+/* eslint-disable default-case */
+/* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components/native';
 import { withNavigation } from 'react-navigation';

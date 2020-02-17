@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import Markdown from 'react-native-markdown-renderer';
@@ -21,15 +23,18 @@ const MarkdownConstructor = props => {
  *
  */
 const markdownRules = {
-  text: node => <Text style={markDownStyles.atomText} key={node.key}>{node.content}</Text>,
-  },
+  text: node => (
+    <Text style={markDownStyles.atomText} key={node.key}>
+      {node.content}
+    </Text>
+  ),
   strong: (node, children, parent, styles) => (
-            <Text key={node.key}>
-                {React.Children.map(children, (child, index) => {
-                    return React.createElement(child.type, { ...child.props, strong: true });
-                })}
-            </Text>
-        ),
+    <Text key={node.key}>
+      {React.Children.map(children, (child, index) =>
+        React.createElement(child.type, { ...child.props, strong: true })
+      )}
+    </Text>
+  ),
 };
 
 /**

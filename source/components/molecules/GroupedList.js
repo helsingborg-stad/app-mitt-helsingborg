@@ -1,3 +1,9 @@
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable no-shadow */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-undef */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/display-name */
 import React from 'react';
 import { View, SectionList, TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
@@ -15,7 +21,8 @@ export default GroupedList = props => {
         <View>
           <SectionHeader small>{heading}</SectionHeader>
           {!(data[0].hasOwnProperty('highlighted') && data[0].highlighted === true) && (
-            <Separator />}
+            <Separator />
+          )}
         </View>
       )}
       scrollEnabled={false}

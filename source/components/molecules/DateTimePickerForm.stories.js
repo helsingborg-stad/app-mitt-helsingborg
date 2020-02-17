@@ -1,3 +1,7 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/state-in-constructor */
+/* eslint-disable max-classes-per-file */
 import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from './StoryWrapper';

@@ -1,3 +1,8 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-shadow */
+/* eslint-disable react/sort-comp */
+/* eslint-disable react/static-property-placement */
 import React, { Component } from 'react';
 import { Text, View, FlatList } from 'react-native';
 import styled from 'styled-components/native';

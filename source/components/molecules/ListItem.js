@@ -1,3 +1,7 @@
+/* eslint-disable react/no-unused-prop-types */
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components/native';
@@ -23,14 +27,16 @@ const ListItem = props => {
           <IconFlex>
             <ItemIcon name={iconName} color={color} />
           </IconFlex>
-        </IconContainer>}
+        </IconContainer>
+      )}
 
       {imageSrc && (
         <IconContainer highlighted={highlighted} background={background}>
           <IconFlex>
             <ImageIcon source={imageSrc} resizeMode="contain" />
           </IconFlex>
-        </IconContainer>}
+        </IconContainer>
+      )}
 
       <Content>
         {title && <Title small>{title}</Title>}

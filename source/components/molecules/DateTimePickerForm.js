@@ -1,3 +1,6 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { DatePickerIOS } from 'react-native';
 import { includePropetiesWithKey } from '../../helpers/Objects';

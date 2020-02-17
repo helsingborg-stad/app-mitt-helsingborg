@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import Text from '../atoms/Text';
 
-export default HeaderNav = ({ themeColor, navItems }) => (
+const HeaderNav = ({ themeColor, navItems }) => (
   <Nav>
     {navItems.map(item => (
       <NavItem key={item.id}>
@@ -15,6 +15,8 @@ export default HeaderNav = ({ themeColor, navItems }) => (
     ))}
   </Nav>
 );
+
+export default HeaderNav;
 
 const Nav = styled.View`
   width: 100%;

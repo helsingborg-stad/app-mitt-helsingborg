@@ -1,3 +1,6 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { Keyboard, TextInput, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import styled from 'styled-components/native';
@@ -35,12 +38,11 @@ const ChatForm = props => {
         {isFocused && (
           <ChatFormButton onClick={Keyboard.dismiss} z={0}>
             <ChatFormButtonIcon name="keyboard-hide" />
-          </ChatFormButton>}
+          </ChatFormButton>
+        )}
 
         <InputStyledView>
-          {children ? (
-            children
-          ) : (
+          {children || (
             <UnStyledInput
               value={inputValue}
               onChangeText={changeHandler}

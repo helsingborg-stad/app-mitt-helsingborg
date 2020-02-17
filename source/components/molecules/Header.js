@@ -1,3 +1,7 @@
+/* eslint-disable react/default-props-match-prop-types */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/display-name */
+/* eslint-disable no-undef */
 import React from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
@@ -9,7 +13,7 @@ import shadow from '../../styles/shadow';
 import HeaderNav from './HeaderNav';
 import ButtonNew from '../atoms/Button';
 
-export default Header = ({ message, title, themeColor, navItems, backButton }) => (
+const Header = ({ message, title, themeColor, navItems, backButton }) => (
   <HeaderContainer>
     <HeaderContent>
       {backButton && (
@@ -29,9 +33,12 @@ export default Header = ({ message, title, themeColor, navItems, backButton }) =
       <View>
         <Separator />
         <HeaderNav themeColor={themeColor} navItems={navItems} />
-      </View>}
+      </View>
+    )}
   </HeaderContainer>
 );
+
+export default Header;
 
 const BackButton = styled(ButtonNew)`
   padding: 0;

@@ -1,3 +1,6 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-shadow */
+/* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 import styled from 'styled-components/native';
