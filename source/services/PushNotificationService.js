@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * Service for push notification.
  * Component should be added at app top level.
@@ -10,41 +11,41 @@ import React, { Component } from 'react';
 import { PushNotificationIOS, Alert } from 'react-native';
 
 class PushNotificationService extends Component {
-    componentDidMount() {
-        PushNotificationIOS.addEventListener('register', token => {
-            // Log device UDID. Unique ID used for sending notification to specific device.
-            console.log(token);
-        });
+  componentDidMount() {
+    PushNotificationIOS.addEventListener('register', token => {
+      // Log device UDID. Unique ID used for sending notification to specific device.
+      console.log(token);
+    });
 
-        PushNotificationIOS.addEventListener('registrationError', registrationError => {
-            console.log(registrationError, '--');
-        });
+    PushNotificationIOS.addEventListener('registrationError', registrationError => {
+      console.log(registrationError, '--');
+    });
 
-        PushNotificationIOS.addEventListener('notification', function (notification) {
-            if (!notification) {
-                return;
-            }
+    PushNotificationIOS.addEventListener('notification', function(notification) {
+      if (!notification) {
+        return;
+      }
 
-            const data = notification.getData();
-            Alert.alert(JSON.stringify({ data, source: 'CollapsedApp' }))
-        });
+      const data = notification.getData();
+      Alert.alert(JSON.stringify({ data, source: 'CollapsedApp' }));
+    });
 
-        PushNotificationIOS.getInitialNotification().then(notification => {
-            if (!notification) {
-                return;
-            }
+    PushNotificationIOS.getInitialNotification().then(notification => {
+      if (!notification) {
+        return;
+      }
 
-            const data = notification.getData();
-            Alert.alert(JSON.stringify({ data, source: 'ClosedApp' }))
-        });
+      const data = notification.getData();
+      Alert.alert(JSON.stringify({ data, source: 'ClosedApp' }));
+    });
 
-        // Requests user permissions for handling posh notifications.
-        PushNotificationIOS.requestPermissions();
-    }
+    // Requests user permissions for handling posh notifications.
+    PushNotificationIOS.requestPermissions();
+  }
 
-    render() {
-        return null;
-    }
+  render() {
+    return null;
+  }
 }
 
 export default PushNotificationService;

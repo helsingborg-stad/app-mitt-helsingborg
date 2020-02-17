@@ -1,9 +1,21 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-use-before-define */
+/* eslint-disable react/prop-types */
+/* eslint-disable import/named */
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Alert, Button } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+  Button,
+} from 'react-native';
 import Auth from '../../helpers/AuthHelper';
 import StorageService from '../../services/StorageService';
-import { sign, cancelRequest, resetCancel } from "../../services/UserService";
-import { canOpenUrl } from "../../helpers/UrlHelper";
+import { sign, cancelRequest, resetCancel } from '../../services/UserService';
+import { canOpenUrl } from '../../helpers/UrlHelper';
 import ScreenWrapper from '../molecules/ScreenWrapper';
 
 const USERKEY = 'user';
@@ -15,7 +27,7 @@ class DashboardScreen extends Component {
       user: {},
       isBankidInstalled: false,
       isLoading: false,
-    }
+    };
   }
 
   componentDidMount() {
@@ -34,12 +46,12 @@ class DashboardScreen extends Component {
   setUserAsync = async () => {
     try {
       const user = await StorageService.getData(USERKEY);
-      console.log("getUserAsync dashboard", user);
+      console.log('getUserAsync dashboard', user);
       if (user) {
         this.setState({ user });
       }
     } catch (error) {
-      console.log("Something went wrong", error);
+      console.log('Something went wrong', error);
     }
   };
 
@@ -49,16 +61,13 @@ class DashboardScreen extends Component {
     this.setState({ isLoading: true });
 
     try {
-      const signResponse = await sign(
-        user.personalNumber,
-        'Sign some stuff please'
-      );
+      const signResponse = await sign(user.personalNumber, 'Sign some stuff please');
 
       if (signResponse.ok === true) {
         this.setState({ isLoading: false });
-        Alert.alert("Great success 🤘");
+        Alert.alert('Great success 🤘');
       } else {
-        throw (signResponse.data);
+        throw signResponse.data;
       }
     } catch (error) {
       this.setState({ isLoading: false });
@@ -102,53 +111,45 @@ class DashboardScreen extends Component {
           <View style={styles.container}>
             <View style={styles.content}>
               <ActivityIndicator size="large" color="slategray" />
-              {!isBankidInstalled &&
-                <Text style={styles.infoText}>Väntar på att BankID ska startas på en annan enhet</Text>
-              }
+              {!isBankidInstalled && (
+                <Text style={styles.infoText}>
+                  Väntar på att BankID ska startas på en annan enhet
+                </Text>
+              )}
             </View>
             <View style={styles.loginContainer}>
               <TouchableOpacity
                 style={styles.button}
                 onPress={this.cancelSign}
-                underlayColor='#fff'>
+                underlayColor="#fff"
+              >
                 <Text style={styles.buttonText}>Avbryt</Text>
               </TouchableOpacity>
             </View>
           </View>
         ) : (
-            <View
-              style={styles.container}
-              accessible={false}
-              testID={"ViewGreetings"}
+          <View style={styles.container} accessible={false} testID="ViewGreetings">
+            <Text style={styles.header}>Greetings {user.givenName}!</Text>
+            <Text style={{ fontSize: 60 }}>🦄</Text>
+
+            <TouchableOpacity
+              style={styles.button}
+              onPress={this.signWithBankid}
+              underlayColor="#fff"
             >
-              <Text style={styles.header}>Greetings {user.givenName}!</Text>
-              <Text style={{ fontSize: 60 }}>🦄</Text>
+              <Text style={styles.buttonText}>Sign some stuff</Text>
+            </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.button}
-                onPress={this.signWithBankid}
-                underlayColor='#fff'
-              >
-                <Text style={styles.buttonText}>Sign some stuff</Text>
-              </TouchableOpacity>
+            <Button accessible testID="ButtonSignOut" onPress={this.logOut} title="Sign out" />
 
-              <Button
-                accessible={true}
-                testID={'ButtonSignOut'}
-                onPress={this.logOut}
-                title="Sign out"
-              />
-
-              <Button
-                accessible={true}
-                testID={'ButtonRemoveUser'}
-                onPress={this.removeUser}
-                title="Remove this user"
-              />
-
-            </View >
-          )
-        }
+            <Button
+              accessible
+              testID="ButtonRemoveUser"
+              onPress={this.removeUser}
+              title="Remove this user"
+            />
+          </View>
+        )}
       </ScreenWrapper>
     );
   }
@@ -170,17 +171,17 @@ const styles = StyleSheet.create({
   loginContainer: {
     flex: 0,
     width: '100%',
-    marginBottom: 30
+    marginBottom: 30,
   },
   infoText: {
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 24,
-    marginBottom: 24
+    marginBottom: 24,
   },
   header: {
-    fontSize: 20
+    fontSize: 20,
   },
   button: {
     width: '100%',
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     backgroundColor: '#007AFF',
     borderRadius: 7,
-    marginTop: 80
+    marginTop: 80,
   },
   buttonText: {
     fontSize: 18,

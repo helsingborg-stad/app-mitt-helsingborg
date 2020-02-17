@@ -1,11 +1,14 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
+/* eslint-disable no-return-await */
 /**
  * Wrapper for AsyncStorage.
  * Keys should be placed in this file.
  *
  */
 
-import React, { Component } from 'react'
-import AsyncStorage from "@react-native-community/async-storage";
+import React, { Component } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // Storage key definitions
 export const SHOW_SPLASH_SCREEN = '@app:show_splash_screen';
@@ -26,8 +29,7 @@ export default class StorageService extends Component {
     return await AsyncStorage.getItem(key).then(value => {
       try {
         return JSON.parse(value);
-      }
-      catch (e) {
+      } catch (e) {
         return value;
       }
     });
@@ -44,31 +46,30 @@ export default class StorageService extends Component {
     return AsyncStorage.setItem(key, JSON.stringify(value));
   }
 
-    /**
-       * Put new data to array with key value pair to storage.
-       *
-       * @param key
-       * @param value
-       * @returns {Promise}
-       */
-    static putData(key, value) {
-        return AsyncStorage.getItem(key, (err, result) => {
-            if (result !== null) {
-                let newValue = [];
-                if (Array.isArray(value)) {
-                    newValue = JSON.parse(result).concat(value);
-                } else if (typeof value === 'object' && value !== null) {
-                    newValue = JSON.parse(result);
-                    newValue.push(value);
-                }
+  /**
+   * Put new data to array with key value pair to storage.
+   *
+   * @param key
+   * @param value
+   * @returns {Promise}
+   */
+  static putData(key, value) {
+    return AsyncStorage.getItem(key, (err, result) => {
+      if (result !== null) {
+        let newValue = [];
+        if (Array.isArray(value)) {
+          newValue = JSON.parse(result).concat(value);
+        } else if (typeof value === 'object' && value !== null) {
+          newValue = JSON.parse(result);
+          newValue.push(value);
+        }
 
-                return AsyncStorage.setItem(key, JSON.stringify(newValue));
-            } else {
-                let newValue = Array.isArray(value) ? value : [value];
-                return AsyncStorage.setItem(key, JSON.stringify(newValue));
-            }
-        });
-    }
+        return AsyncStorage.setItem(key, JSON.stringify(newValue));
+      }
+      const newValue = Array.isArray(value) ? value : [value];
+      return AsyncStorage.setItem(key, JSON.stringify(newValue));
+    });
+  }
 
   /**
    * Save multiple values with key pair to storage.
@@ -96,7 +97,7 @@ export default class StorageService extends Component {
    *
    * @returns {Promise}
    */
-    static clearData() {
-        return AsyncStorage.clear();
-    }
+  static clearData() {
+    return AsyncStorage.clear();
+  }
 }
