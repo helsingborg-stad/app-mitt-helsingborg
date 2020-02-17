@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable react/prop-types */
 import { Component } from 'react';
 import ChatBubble from '../atoms/ChatBubble';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
@@ -18,7 +20,7 @@ export default class ParrotAgent extends Component {
     EventHandler.subscribe(EVENT_USER_MESSAGE, message => this.handleHumanChatMessage(message));
   }
 
-  componentWillUnmount(): void {
+  componentWillUnmount() {
     EventHandler.unSubscribe(EVENT_USER_MESSAGE);
   }
 

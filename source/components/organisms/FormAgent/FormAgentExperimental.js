@@ -1,3 +1,9 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-shadow */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 

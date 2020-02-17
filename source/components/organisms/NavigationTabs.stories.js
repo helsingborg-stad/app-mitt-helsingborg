@@ -1,3 +1,9 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable max-classes-per-file */
 import React, { Component } from 'react';
 import { View, Text, SafeAreaView } from 'react-native';
 import { createAppContainer } from 'react-navigation';

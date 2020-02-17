@@ -1,3 +1,10 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable react/sort-comp */
+/* eslint-disable react/state-in-constructor */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/prop-types */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable max-classes-per-file */
 import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react-native';
 
