@@ -1,3 +1,10 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-unused-vars */
+/* eslint-disable global-require */
+/* eslint-disable no-use-before-define */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
 import { View, StyleSheet, ImageBackground, PanResponder } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';

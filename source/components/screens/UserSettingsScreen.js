@@ -1,3 +1,6 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-use-before-define */
+/* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Switch } from 'react-native';
 import ScreenWrapper from '../molecules/ScreenWrapper';

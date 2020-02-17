@@ -1,3 +1,9 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-shadow */
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable import/no-named-as-default-member */
+/* eslint-disable no-duplicate-case */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components/native';
 import { TextInput } from 'react-native';

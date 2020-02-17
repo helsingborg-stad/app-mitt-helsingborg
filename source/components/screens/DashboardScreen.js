@@ -1,3 +1,7 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-use-before-define */
+/* eslint-disable react/prop-types */
+/* eslint-disable import/named */
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -110,7 +114,8 @@ class DashboardScreen extends Component {
               {!isBankidInstalled && (
                 <Text style={styles.infoText}>
                   Väntar på att BankID ska startas på en annan enhet
-                </Text>}
+                </Text>
+              )}
             </View>
             <View style={styles.loginContainer}>
               <TouchableOpacity
@@ -123,7 +128,7 @@ class DashboardScreen extends Component {
             </View>
           </View>
         ) : (
-          <View style={styles.container} accessible={false} testID={'ViewGreetings'}>
+          <View style={styles.container} accessible={false} testID="ViewGreetings">
             <Text style={styles.header}>Greetings {user.givenName}!</Text>
             <Text style={{ fontSize: 60 }}>🦄</Text>
 
@@ -135,12 +140,7 @@ class DashboardScreen extends Component {
               <Text style={styles.buttonText}>Sign some stuff</Text>
             </TouchableOpacity>
 
-            <Button
-              accessible
-              testID="ButtonSignOut"
-              onPress={this.logOut}
-              title="Sign out"
-            />
+            <Button accessible testID="ButtonSignOut" onPress={this.logOut} title="Sign out" />
 
             <Button
               accessible

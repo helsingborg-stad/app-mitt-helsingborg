@@ -1,3 +1,10 @@
+/* eslint-disable no-shadow */
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-empty */
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable no-unused-vars */
+/* eslint-disable import/no-named-as-default-member */
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
 import { NavigationEvents } from 'react-navigation';
@@ -67,7 +74,8 @@ class TaskScreen extends Component {
             answers: item.data,
             form,
             user,
-          })}
+          })
+        }
       />
     );
   };
