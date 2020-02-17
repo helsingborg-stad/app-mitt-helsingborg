@@ -1,3 +1,8 @@
+/* eslint-disable no-shadow */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-plusplus */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { TouchableOpacity, StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';

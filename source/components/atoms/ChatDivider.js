@@ -1,3 +1,7 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/display-name */
+/* eslint-disable no-undef */
 import React from 'react';
 import styled from 'styled-components/native';
 import { View } from 'react-native';

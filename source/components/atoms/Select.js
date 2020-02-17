@@ -1,3 +1,8 @@
+/* eslint-disable react/state-in-constructor */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/default-props-match-prop-types */
+/* eslint-disable react/static-property-placement */
+/* eslint-disable import/no-unresolved */
 import React, { Component } from 'react';
 import {
   View,

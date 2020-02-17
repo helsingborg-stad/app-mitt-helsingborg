@@ -1,19 +1,26 @@
+/* eslint-disable no-shadow */
+/* eslint-disable import/no-named-as-default-member */
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { View, StyleSheet } from 'react-native';
 import Markdown, { getUniqueID } from 'react-native-markdown-renderer';
 import StoryWrapper from '../molecules/StoryWrapper';
-import Text from '../atoms/Text';
+import Text from './Text';
 import MarkdownConstructor from '../../helpers/MarkdownConstructor';
 
 const rules = {
-  text: (node, children, parent, styles) => <Text style={{fontSize: 16}} key={node.key}>{node.content}</Text>,
-  },
+  text: (node, children, parent, styles) => (
+    <Text style={{ fontSize: 16 }} key={node.key}>
+      {node.content}
+    </Text>
+  ),
   bullet_list: (node, children, parent, styles) => (
-            <View key={node.key} style={[styles.list, styles.listUnordered]}>
-                {children}
-            </View>
-        ),
+    <View key={node.key} style={[styles.list, styles.listUnordered]}>
+      {children}
+    </View>
+  ),
 };
 
 const styles = StyleSheet.create({

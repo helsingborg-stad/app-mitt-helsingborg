@@ -1,3 +1,6 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/destructuring-assignment */
 import React, { PureComponent } from 'react';
 import styled from 'styled-components/native';
 import { PropTypes } from 'prop-types';

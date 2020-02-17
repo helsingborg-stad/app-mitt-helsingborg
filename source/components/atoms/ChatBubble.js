@@ -1,3 +1,7 @@
+/* eslint-disable react/default-props-match-prop-types */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-use-before-define */
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import styled, { css, withTheme } from 'styled-components/native';

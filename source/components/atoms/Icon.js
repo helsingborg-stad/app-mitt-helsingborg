@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-default */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { default as MIcon } from 'react-native-vector-icons/MaterialIcons';
