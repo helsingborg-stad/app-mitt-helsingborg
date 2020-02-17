@@ -7,8 +7,8 @@ const Text = styled(RNText)`
   font-weight: 500;
   font-size: 18px;
   font-family: Roboto;
+  flex-shrink: 1;
   color: ${props => props.theme.text.default};
-  flexshrink: 1;
   ${({ small }) =>
     small &&
     `

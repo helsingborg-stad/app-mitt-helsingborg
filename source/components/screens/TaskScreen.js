@@ -118,7 +118,7 @@ const TaskScreenWrapper = styled(ScreenWrapper)`
   padding-left: 0;
   padding-right: 0;
   padding-top: 0;
-  paddingbottom: 0;
+  padding-bottom: 0;
   background-color: #f5f5f5;
 `;
 
