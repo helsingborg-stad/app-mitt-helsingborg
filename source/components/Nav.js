@@ -9,8 +9,6 @@ import {
 
 import { createStackNavigator } from 'react-navigation-stack';
 import { Icon } from 'react-native-elements';
-import AuthLoadingScreen from './screens/AuthLoadingScreen';
-import LoginChatScreen from './screens/LoginChatScreen';
 import UserSettingsScreen from './screens/UserSettingsScreen';
 import DashboardScreen from './screens/DashboardScreen';
 import SplashScreen from './screens/SplashScreen';
@@ -61,22 +59,6 @@ import StoreContext from '../helpers/StoreContext';
 //         }
 //     }
 // });
-
-// const AuthStack = createStackNavigator({
-//     SignIn: LoginChatScreen
-// });
-
-// const AppContainer = createAppContainer(createSwitchNavigator(
-//     {
-//         AuthLoading: AuthLoadingScreen,
-//         Auth: AuthStack,
-//         App: MainTabs,
-//         Splash: SplashScreen,
-//     },
-//     {
-//         initialRouteName: 'Splash',
-//     }
-// ));
 
 const tabBarIcon = (iconName, colorFocused) => ({ focused }) => (
   <Icon name={iconName} color={focused ? colorFocused : 'gray'} />
