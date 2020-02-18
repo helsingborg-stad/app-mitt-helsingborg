@@ -115,7 +115,7 @@ export default class WatsonAgent extends Component {
     };
 
     try {
-      await StorageService.putData(COMPLETED_FORMS_KEY, formData).then(() => {
+      await StorageService.addDataToArray(COMPLETED_FORMS_KEY, formData).then(() => {
         StorageService.getData(COMPLETED_FORMS_KEY).then(value => {
           this.updateActiveFormsBadge(value.length);
         });
