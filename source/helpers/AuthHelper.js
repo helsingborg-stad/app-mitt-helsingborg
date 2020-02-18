@@ -1,14 +1,13 @@
-/* eslint-disable no-return-await */
-/* eslint-disable no-async-promise-executor */
-import decode from 'jwt-decode';
-import StorageService, { TOKEN_KEY, USER_KEY } from '../services/StorageService';
+import decode from "jwt-decode";
+import StorageService, { TOKEN_KEY, USER_KEY } from './../services/StorageService';
 
 export default class AuthHelper {
+
   /**
    * Login user. Saves user and token to storage
    */
-  static logIn = async (user, token) =>
-    new Promise(async (resolve, reject) => {
+  static logIn = async (user, token) => {
+    return new Promise(async (resolve, reject) => {
       // Check if token is valid
       if (this.isTokenExpired(token)) {
         reject();
@@ -24,6 +23,7 @@ export default class AuthHelper {
         .then(() => resolve())
         .catch(() => reject());
     });
+  };
 
   /**
    * Clear access token
@@ -49,10 +49,9 @@ export default class AuthHelper {
       const decoded = decode(token);
       if (decoded.exp > Math.floor(Date.now() / 1000)) {
         return false;
-      }
-      return true;
+      } else return true;
     } catch (err) {
-      console.log('Token is expired!');
+      console.log("Token is expired!");
       return true;
     }
   };
@@ -60,13 +59,15 @@ export default class AuthHelper {
   /**
    * Retrieves the access token from async storage
    */
-  static getToken = async () => await StorageService.getData(TOKEN_KEY);
+  static getToken = async () => {
+    return await StorageService.getData(TOKEN_KEY);
+  };
 
   /**
-   * Check if user exist in store
-   */
-  static confirmUser = () =>
-    new Promise(async (resolve, reject) => {
+  * Check if user exist in store
+  */
+  static confirmUser = () => {
+    return new Promise(async (resolve, reject) => {
       const user = await StorageService.getData(USER_KEY);
       if (typeof user === 'undefined' || user === null) {
         reject();
@@ -74,4 +75,5 @@ export default class AuthHelper {
 
       resolve();
     });
+  }
 }

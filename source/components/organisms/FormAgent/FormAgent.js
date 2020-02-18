@@ -1,8 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-shadow */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
 import validator from 'validator';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
@@ -10,227 +5,227 @@ import forms from '../../../assets/forms.js';
 import ChatBubble from '../../atoms/ChatBubble';
 import ChatDivider from '../../atoms/ChatDivider';
 import StorageService, { USER_KEY } from '../../../services/StorageService';
-import MarkdownConstructor from '../../../helpers/MarkdownConstructor';
+import MarkdownConstructor from "../../../helpers/MarkdownConstructor";
 
 // TODO: Find better place for storing this function and
 // TODO: Refactor function so it can be used in a more general purpose.
 const questionValidation = (value, validations) => {
-  const validationRulesResults = validations.map(rule => {
-    const args = rule.args || [];
+    const validationRulesResults = validations.map(rule => {
+        const args = rule.args || [];
 
-    const validationMethod = typeof rule.method === 'string' ? validator[rule.method] : rule.method;
+        const validationMethod =
+            typeof rule.method === "string" ? validator[rule.method] : rule.method;
+        
+        let validationValue = value;
 
-    let validationValue = value;
+        if (Array.isArray(value)) {
+            validationValue = `${value.length}`;
+        }
 
-    if (Array.isArray(value)) {
-      validationValue = `${value.length}`;
+        return { 
+            isValid: validationMethod(validationValue, ...args) === rule.valid_when, 
+            message: rule.message || ""
+        };
+    });
+
+    const inValidValidationRules = validationRulesResults.filter(v => v.isValid === false)
+
+    if (inValidValidationRules.length > 0) {
+        return inValidValidationRules[0];
     }
 
-    return {
-      isValid: validationMethod(validationValue, ...args) === rule.valid_when,
-      message: rule.message || '',
-    };
-  });
-
-  const inValidValidationRules = validationRulesResults.filter(v => v.isValid === false);
-
-  if (inValidValidationRules.length > 0) {
-    return inValidValidationRules[0];
-  }
-
-  return { isValid: true, message: '' };
-};
+    return { isValid: true, message: "" }
+}
 
 class FormAgent extends Component {
-  state = {
-    form: {},
-    questions: [],
-    answers: {},
-    currentQuestion: undefined,
-    user: {},
-  };
+    state = {
+        form: {},
+        questions: [],
+        answers: {},
+        currentQuestion: undefined,
+        user: {}
+    };
 
-  componentDidMount() {
-    const { formId, chat, answers } = this.props;
+    componentDidMount() {
+        const { formId, chat, answers } = this.props;
 
-    this.saveUserToState();
+        this.saveUserToState();
 
-    chat.switchInput(false);
+        chat.switchInput(false);
 
-    const form = this.props.form ? this.props.form : forms.find(form => form.id === formId);
+        const form = this.props.form ? this.props.form : forms.find(form => (form.id === formId));
 
-    if (!form) {
-      console.error(`FormAgent: Cannot find Form with ID ${formId}.`);
-      return;
-    }
-
-    EventHandler.subscribe(EVENT_USER_MESSAGE, this.handleUserInput);
-
-    chat.addMessages([
-      {
-        Component: ChatDivider,
-        componentProps: {
-          title: '',
-          info: `Bokning ${form.name.toLowerCase()} startad`,
-        },
-      },
-    ]);
-
-    // Let the form party begin
-    new Promise(resolve => setTimeout(resolve, 500)).then(() => {
-      this.setState(
-        {
-          answers: answers || {},
-          form,
-          questions: form.questions,
-        },
-        this.nextQuestion
-      );
-    });
-  }
-
-  componentWillUnmount() {
-    EventHandler.unSubscribe(EVENT_USER_MESSAGE);
-  }
-
-  nextQuestion = async () => {
-    const { chat, callback } = this.props;
-    const { form, questions, answers } = this.state;
-
-    const nextQuestion = questions.find(this.isNextQuestion);
-
-    if (!nextQuestion) {
-      this.setState({ currentQuestion: undefined });
-      if (typeof callback === 'function') {
-        callback({ form, answers });
-      }
-      return;
-    }
-
-    if (nextQuestion.validations) {
-      nextQuestion.withForm = {
-        ...nextQuestion.withForm,
-        validateSubmitHandlerInput: value => questionValidation(value, nextQuestion.validations),
-      };
-    }
-
-    // Set currentQuestion then output messages & render input
-    this.setState({ currentQuestion: nextQuestion.id }, async () => {
-      if (nextQuestion.name) {
-        await this.outputMessages(nextQuestion.name, 'automated', nextQuestion.explainer);
-
-        await new Promise(resolve => setTimeout(resolve, 50));
-
-        if (nextQuestion.type === 'message') {
-          this.handleUserInput(false);
-          return;
+        if (!form) {
+            console.error(`FormAgent: Cannot find Form with ID ${formId}.`);
+            return;
         }
 
-        chat.switchInput(nextQuestion);
+        EventHandler.subscribe(EVENT_USER_MESSAGE, this.handleUserInput);
 
-        return;
-      }
+        chat.addMessages([
+            {
+                Component: ChatDivider,
+                componentProps: {
+                    title: '',
+                    info: `Bokning ${form.name.toLowerCase()} startad`,
+                }
+            }
+        ]);
 
-      chat.switchInput(nextQuestion);
-    });
-  };
-
-  isNextQuestion = question => {
-    const { answers } = this.state;
-    const { dependency, id } = question;
-
-    let coniditionsIsValid = true;
-
-    if (dependency && dependency.conditions && dependency.conditions.length > 0) {
-      // Valdate conditions with 'AND' ... 'OR' has yet to be implemented
-      coniditionsIsValid = dependency.conditions.reduce((accumulator, condition) => {
-        if (!accumulator) {
-          return accumulator;
-        }
-
-        return answers[condition.key] !== undefined && answers[condition.key] === condition.value;
-      }, true);
-    }
-
-    return coniditionsIsValid && answers[id] === undefined;
-  };
-
-  outputMessages = async (messages, modifier = 'automated', explainer = undefined) => {
-    const { chat } = this.props;
-    const arrayOfmessages = Array.isArray(messages) ? messages : [messages];
-
-    await chat.toggleTyping();
-
-    await arrayOfmessages
-      .reduce(async (previousPromise, msg, index) => {
-        await previousPromise;
-
-        const message = typeof msg === 'function' ? msg(this.state) : msg;
-        const caluclatedDelay = message.length * 16 + (index + 1) * 400;
-        const minDelayMs = 600; // 0.6 sec
-        const maxDelayMs = 1000 * 2; // 2sec
-
-        const delay = caluclatedDelay > maxDelayMs ? maxDelayMs : caluclatedDelay;
-
-        let messageExplainer;
-
-        await new Promise(resolve => setTimeout(resolve, delay >= minDelayMs ? delay : minDelayMs));
-
-        // Map explainer with the message
-        if (typeof explainer === 'object') {
-          let foundExplainer = explainer.filter(({ key }) => key === index);
-          foundExplainer = typeof foundExplainer[0] !== 'undefined' ? foundExplainer[0] : {};
-
-          messageExplainer = {
-            heading: foundExplainer.heading || undefined,
-            content: foundExplainer.content || undefined,
-          };
-        }
-
-        return chat.addMessages({
-          Component: props => (
-            <ChatBubble {...props}>
-              <MarkdownConstructor rawText={message} />
-            </ChatBubble>
-          ),
-          componentProps: {
-            content: message,
-            modifiers: [modifier],
-            explainer: messageExplainer,
-          },
+        // Let the form party begin
+        new Promise(resolve => setTimeout(resolve, 500)).then(() => {
+            this.setState({
+                answers: answers ? answers : {},
+                form: form,
+                questions: form.questions
+            }, this.nextQuestion);
         });
-      }, Promise.resolve())
-      .catch(e => {
-        console.log(e);
-      });
-
-    await chat.toggleTyping();
-  };
-
-  handleUserInput = async message => {
-    const { chat } = this.props;
-    const { currentQuestion, answers } = this.state;
-
-    if (currentQuestion) {
-      await chat.switchUserInput(false);
-      await new Promise(resolve => setTimeout(resolve, 500));
-      await this.setState(
-        { answers: { ...answers, [currentQuestion]: message } },
-        this.nextQuestion
-      );
     }
-  };
 
-  saveUserToState = async () => {
-    const user = await StorageService.getData(USER_KEY);
-    if (user) {
-      this.setState({ user });
+    componentWillUnmount() {
+        EventHandler.unSubscribe(EVENT_USER_MESSAGE);
     }
-  };
 
-  render() {
-    return null;
-  }
+    nextQuestion = async () => {
+        const { chat, callback } = this.props;
+        const { form, questions, answers } = this.state;
+
+        const nextQuestion = questions.find(this.isNextQuestion);
+
+        if (!nextQuestion) {
+            this.setState({ currentQuestion: undefined });
+            if (typeof callback === 'function') {
+                callback({ form, answers });
+            }
+            return;
+        }
+
+        if (nextQuestion.validations) {
+            nextQuestion.withForm = {
+                ...nextQuestion.withForm,
+                validateSubmitHandlerInput: (value) => questionValidation(value, nextQuestion.validations)
+            }
+        }
+
+        // Set currentQuestion then output messages & render input
+        this.setState({ currentQuestion: nextQuestion.id }, async () => {
+            if (nextQuestion.name) {
+
+                await this.outputMessages(
+                    nextQuestion.name,
+                    'automated',
+                    nextQuestion.explainer
+                );
+
+                await new Promise(resolve => setTimeout(resolve, 50));
+
+                if (nextQuestion.type === 'message') {
+                    this.handleUserInput(false);
+                    return;
+                }
+
+                chat.switchInput(nextQuestion);
+
+                return
+            }
+
+            chat.switchInput(nextQuestion);
+        });
+    };
+
+    isNextQuestion = question => {
+        const { answers } = this.state;
+        const { dependency, id } = question;
+
+        let coniditionsIsValid = true;
+
+        if (dependency && dependency.conditions && dependency.conditions.length > 0) {
+            // Valdate conditions with 'AND' ... 'OR' has yet to be implemented
+            coniditionsIsValid = dependency.conditions.reduce((accumulator, condition) => {
+                if (!accumulator) {
+                    return accumulator;
+                }
+
+                return answers[condition.key] !== undefined && answers[condition.key] === condition.value;
+            }, true);
+        }
+
+        return coniditionsIsValid && answers[id] === undefined;
+    };
+
+    outputMessages = async (messages, modifier = 'automated', explainer = undefined) => {
+        const { chat } = this.props;
+        const arrayOfmessages = Array.isArray(messages)
+            ? messages
+            : [messages];
+
+
+        await chat.toggleTyping();
+
+        await arrayOfmessages.reduce(async (previousPromise, msg, index) => {
+            await previousPromise;
+
+
+            const message = typeof msg === 'function' ? msg(this.state) : msg;
+            const caluclatedDelay = message.length * 16 + ((index + 1) * 400);
+            const minDelayMs = 600; // 0.6 sec
+            const maxDelayMs = 1000 * 2; // 2sec
+
+            const delay = caluclatedDelay > maxDelayMs ? maxDelayMs : caluclatedDelay;
+
+            let messageExplainer = undefined;
+
+
+            await new Promise(resolve => setTimeout(resolve, delay >= minDelayMs ? delay : minDelayMs));
+
+            // Map explainer with the message
+            if (typeof explainer === 'object') {
+                let foundExplainer = explainer.filter(({ key }) => key === index);
+                foundExplainer = typeof foundExplainer[0] !== 'undefined'
+                    ? foundExplainer[0] : {};
+
+                messageExplainer = {
+                    heading: foundExplainer.heading || undefined,
+                    content: foundExplainer.content || undefined
+                }
+            }
+
+            return chat.addMessages({
+                Component: props => <ChatBubble {...props}>
+                    <MarkdownConstructor rawText={message} />
+                </ChatBubble>,
+                componentProps: {
+                    content: message,
+                    modifiers: [modifier],
+                    explainer: messageExplainer,
+                }
+            });
+        }, Promise.resolve()).catch(e => { console.log(e); });
+
+        await chat.toggleTyping();
+    };
+
+    handleUserInput = async message => {
+        const { chat } = this.props;
+        const { currentQuestion, answers } = this.state;
+
+        if (currentQuestion) {
+            await chat.switchUserInput(false);
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await this.setState({ answers: { ...answers, [currentQuestion]: message } }, this.nextQuestion);
+        }
+    };
+
+    saveUserToState = async () => {
+        const user = await StorageService.getData(USER_KEY);
+        if (user) {
+            this.setState({user: user});
+        }
+    }
+    
+    render() {
+        return null;
+    }
 }
 
 export default FormAgent;

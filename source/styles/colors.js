@@ -1,65 +1,65 @@
 const palette = {
   mono: {
-    black: '#000000',
-    darkest: '#3D3D3D',
-    darker: '#565656',
-    gray: '#707070',
-    light: '#A3A3A3',
-    lighter: '#E5E5E5',
-    lightest: '#FCFCFC',
-    white: '#FFFFFF',
+    black: "#000000",
+    darkest: "#3D3D3D",
+    darker: "#565656",
+    gray: "#707070",
+    light: "#A3A3A3",
+    lighter: "#E5E5E5",
+    lightest: "#FCFCFC",
+    white: "#FFFFFF",
   },
   red: {
-    1: '#F7A600',
-    2: '#CB0050',
-    3: '#EC6701',
-    4: '#AE0B05',
-    5: '#E3000F',
+    1: "#F7A600",
+    2: "#CB0050",
+    3: "#EC6701",
+    4: "#AE0B05",
+    5: "#E3000F",
   },
   purple: {
-    1: '#D35098',
-    2: '#712082',
-    3: '#A84C98',
-    4: '#7B075E',
-    5: '#A61380',
+    1: "#D35098",
+    2: "#712082",
+    3: "#A84C98",
+    4: "#7B075E",
+    5: "#A61380",
   },
   blue: {
-    1: '#4DB4E7',
-    2: '#0069B4',
-    3: '#5BA1D8',
-    4: '#005C86',
-    5: '#0095DB',
+    1: "#4DB4E7",
+    2: "#0069B4",
+    3: "#5BA1D8",
+    4: "#005C86",
+    5: "#0095DB",
   },
   green: {
-    1: '#AFCA05',
-    2: '#11A636',
-    3: '#A0C855',
-    4: '#50811B',
-    5: '#76B828',
+    1: "#AFCA05",
+    2: "#11A636",
+    3: "#A0C855",
+    4: "#50811B",
+    5: "#76B828",
   },
   state: {
-    danger: '#D73640',
+    danger: "#D73640"
   },
   bg: {
-    default: '#F5F5F5',
-    header: '#F8F8F8',
-  },
+    default: "#F5F5F5",
+    header: "#F8F8F8"
+  }
 };
 
 const colors = {
   title: palette.black,
   anchor: palette.green.dark,
   login: {
-    background: palette.bg.default,
+    background: palette.bg.default
   },
   input: {
     background: palette.mono.white,
     border: palette.mono.lighter,
-    placeholder: palette.mono.gray,
+    placeholder: palette.mono.gray
   },
   background: {
     default: palette.mono.lightest,
-    ...palette.mono,
+    ...palette.mono
   },
   border: {
     default: palette.mono.lighter,
@@ -70,27 +70,27 @@ const colors = {
     heading: palette.mono.darkest,
     ...palette.mono,
     purple: {
-      ...palette.purple,
+      ...palette.purple
     },
     blue: {
-      ...palette.blue,
-    },
+      ...palette.blue
+    }
   },
   icon: {
     default: palette.mono.black,
     ...palette.mono,
     purple: {
-      ...palette.purple,
+      ...palette.purple
     },
     blue: {
-      ...palette.blue,
+      ...palette.blue
     },
     red: {
-      ...palette.red,
+      ...palette.red
     },
     green: {
-      ...palette.green,
-    },
+      ...palette.green
+    }
   },
   button: {
     purple: {
@@ -148,37 +148,35 @@ const colors = {
       icon: palette.purple[1],
       iconRight: palette.purple[1],
       shadow: 'rgba(255, 255, 255, 0.0)',
-    },
+    }
   },
-  status: {},
+  status: {
+  },
   chatBubble: {
-    user: {
-      // "User"
+    user: { // "User"
       background: palette.purple[3],
       text: palette.mono.white,
-      asideIcon: palette.mono.white,
+      asideIcon: palette.mono.white
     },
-    human: {
-      // "Sally"
+    human: { // "Sally"
       background: palette.mono.white,
       text: palette.mono.gray,
-      asideIcon: palette.mono.darkest,
+      asideIcon: palette.mono.darkest
     },
-    automated: {
-      // "KC"
+    automated: { // "KC"
       background: palette.mono.white,
       text: palette.mono.gray,
-      asideIcon: palette.mono.darkest,
-    },
+      asideIcon: palette.mono.darkest
+    }
   },
   chatBody: {
-    background: palette.bg.default,
+      background: palette.bg.default
   },
   chatForm: {
-    background: palette.bg.header,
+      background: palette.bg.header
   },
   shadow: {
-    default: palette.mono.darker,
+    default: palette.mono.darker
   },
   divider: {
     title: palette.mono.lighter,
@@ -189,25 +187,25 @@ const colors = {
     accessory: {
       background: palette.mono.lighter,
       border: palette.mono.lightest,
-    },
+    }
   },
   heading: {
-    default: palette.mono.darker,
-    heading: palette.mono.darkest,
-    ...palette.mono,
-    purple: {
-      ...palette.purple,
-    },
-    blue: {
-      ...palette.blue,
-    },
-    red: {
-      ...palette.red,
-    },
-    green: {
-      ...palette.green,
-    },
-  },
+      default: palette.mono.darker,
+      heading: palette.mono.darkest,
+      ...palette.mono,
+      purple: {
+          ...palette.purple
+        },
+      blue: {
+          ...palette.blue
+      },
+      red: {
+          ...palette.red
+      },
+      green: {
+          ...palette.green
+      },
+   }
 };
 
 export default colors;

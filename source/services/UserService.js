@@ -1,12 +1,8 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-async-promise-executor */
-/* eslint-disable camelcase */
-/* eslint-disable no-undef */
 import { Linking } from 'react-native';
 import { NetworkInfo } from 'react-native-network-info';
 import { canOpenUrl, buildServiceUrl, buildBankIdClientUrl } from '../helpers/UrlHelper';
 import StorageService, { TEMP_TOKEN_KEY, ORDER_KEY } from './StorageService';
-import { remove, post } from '../helpers/ApiRequest';
+import { remove, post } from "../helpers/ApiRequest";
 
 let cancelled = false;
 
@@ -15,13 +11,13 @@ let cancelled = false;
  */
 export const resetCancel = () => {
   cancelled = false;
-};
+}
 
 /**
  * Launch BankID app
  * @param {string} bankIdClientUrl
  */
-launchBankIdApp = async autoStartToken => {
+launchBankIdApp = async (autoStartToken) => {
   const bankIdClientUrl = buildBankIdClientUrl(autoStartToken);
 
   return this.openURL(bankIdClientUrl);
@@ -31,16 +27,17 @@ launchBankIdApp = async autoStartToken => {
  * Open requested URL
  * @param {string} url
  */
-openURL = url =>
-  Linking.openURL(url)
+openURL = (url) => {
+  return Linking.openURL(url)
     .then(() => true)
     .catch(() => false);
+};
 
 /**
  * Make an auth request to BankID API and poll until done
  * @param {string} personalNumber
  */
-export const authorize = personalNumber =>
+export const authorize = (personalNumber) =>
   new Promise(async (resolve, reject) => {
     const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
     let responseJson;
@@ -50,7 +47,7 @@ export const authorize = personalNumber =>
       responseJson = await post('auth/bankid', { personalNumber, endUserIp });
       responseJson = responseJson.data.data.attributes;
     } catch (error) {
-      console.log('Auth error', error);
+      console.log("Auth error", error);
       return reject(error);
     }
 
@@ -76,7 +73,7 @@ export const authorize = personalNumber =>
       if (cancelled === true) {
         clearInterval(interval);
         resetCancel();
-        return resolve({ ok: false, data: 'cancelled' });
+        return resolve({ ok: false, data: "cancelled" });
       }
 
       let collectData = {};
@@ -106,8 +103,8 @@ export const authorize = personalNumber =>
             ok: true,
             data: {
               user: completion_data.user,
-              accessToken: token,
-            },
+              accessToken: token
+            }
           });
         }
 
@@ -117,9 +114,9 @@ export const authorize = personalNumber =>
   });
 
 /**
- * Make a sign request to BankID API and poll until done
- * @param {string} personalNumber
- */
+* Make a sign request to BankID API and poll until done
+* @param {string} personalNumber
+*/
 export const sign = (personalNumber, userVisibleData) =>
   new Promise(async (resolve, reject) => {
     const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
@@ -132,10 +129,13 @@ export const sign = (personalNumber, userVisibleData) =>
 
     // Make initial auth request to retrieve user details and access token
     try {
-      responseJson = await post('auth/bankid/sign', reqBody);
+      responseJson = await post(
+        'auth/bankid/sign',
+        reqBody
+      );
       responseJson = responseJson.data.data.attributes;
     } catch (error) {
-      console.log('Sign error', error);
+      console.log("Sign error", error);
       return reject(error);
     }
 
@@ -160,14 +160,18 @@ export const sign = (personalNumber, userVisibleData) =>
       if (cancelled === true) {
         clearInterval(interval);
         resetCancel();
-        return resolve({ ok: false, data: 'cancelled' });
+        return resolve({ ok: false, data: "cancelled" });
       }
 
       let collectData = {};
 
       try {
-        collectData = await post('auth/bankid/collect', { orderRef: order_ref });
+        collectData = await post(
+          'auth/bankid/collect',
+          { orderRef: order_ref },
+        );
         collectData = collectData.data.data.attributes;
+
       } catch (error) {
         clearInterval(interval);
         reject(error);
@@ -186,7 +190,7 @@ export const sign = (personalNumber, userVisibleData) =>
             ok: true,
             data: {
               user: completion_data.user,
-            },
+            }
           });
         }
 
@@ -199,34 +203,40 @@ export const sign = (personalNumber, userVisibleData) =>
  * Cancels a started auth BankID request
  * @param {string} order
  */
-export const cancelBankidRequest = async request => {
+export const cancelBankidRequest = async (request) => {
   const orderRef = await StorageService.getData(ORDER_KEY);
   const token = await StorageService.getData(TEMP_TOKEN_KEY);
-  const headers = request === 'auth' ? { Authorization: `Bearer ${token}` } : undefined;
+  const headers = (request === 'auth') ? { Authorization: `Bearer ${token}` } : undefined;
 
   // Stop polling auth/sign requests
   cancelled = true;
 
   // Send cancel request
   try {
-    await remove('auth/bankid/cancel', { orderRef }, headers);
+    await remove(
+      'auth/bankid/cancel',
+      { orderRef },
+      headers
+    );
   } catch (err) {
-    console.log('Cancel err', err);
+    console.log("Cancel err", err)
   }
-};
+}
 
 /**
  * Bypasses the BankID authentication steps
  * @param {string} personalNumber
  */
-export const bypassBankid = async personalNumber => ({
-  ok: true,
-  data: {
-    user: {
-      name: 'Saruman Stål',
-      givenName: 'Saruman',
-      surname: 'Stål',
-      personalNumber,
-    },
-  },
-});
+export const bypassBankid = async (personalNumber) => {
+  return {
+    ok: true,
+    data: {
+      user: {
+        'name': 'Saruman Stål',
+        'givenName': 'Saruman',
+        'surname': 'Stål',
+        'personalNumber': personalNumber
+      },
+    }
+  }
+};

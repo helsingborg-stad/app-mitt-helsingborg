@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable import/no-extraneous-dependencies */
 import React, { Component } from 'react';
 import env from 'react-native-config';
 import { storiesOf } from '@storybook/react-native';
@@ -15,13 +13,15 @@ import InputForm from '../molecules/InputForm';
 
 import ParrotAgent from './ParrotAgent';
 
-storiesOf('Chat', module).add('Watson agent', () => (
-  <ModifiedStoryWrapper>
-    <Chat ChatAgent={ParrotAgent} ChatUserInput={withChatForm(InputForm)} />
-  </ModifiedStoryWrapper>
-));
+storiesOf('Chat', module)
+    .add('Watson agent', () => (
+        <ModifiedStoryWrapper>
+            <Chat ChatAgent={ParrotAgent} ChatUserInput={withChatForm(InputForm)} />
+        </ModifiedStoryWrapper>
+    ));
 
 const ModifiedStoryWrapper = styled(StoryWrapper)`
-  padding-left: 0;
-  padding-right: 0;
-`;
+    padding-left: 0;
+    padding-right: 0;
+  `;
+

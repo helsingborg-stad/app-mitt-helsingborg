@@ -1,21 +1,13 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-useless-catch */
-import React, { PureComponent } from 'react';
+import React, { PureComponent } from 'react'
 import env from 'react-native-config';
 
 import StorageService, { USER_KEY } from '../../services/StorageService';
 import Auth from '../../helpers/AuthHelper';
-import {
-  authorize,
-  bypassBankid,
-  cancelBankidRequest,
-  resetCancel,
-} from '../../services/UserService';
-import { canOpenUrl } from '../../helpers/UrlHelper';
+import { authorize, bypassBankid, cancelBankidRequest, resetCancel } from "../../services/UserService";
+import { canOpenUrl } from "../../helpers/UrlHelper";
 
 const FAKE_PERSONAL_NUMBER = '201111111111';
-const FAKE_TOKEN =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjFlZDcyYzJjLWQ5OGUtNGZjMC04ZGY2LWY5NjRkOTYxMTVjYSIsImlhdCI6MTU2Mjc0NzM2NiwiZXhwIjoxNTYyNzUwOTc0fQ.iwmUMm51j-j2BYui9v9371DkY5LwLGATWn4LepVxmNk';
+const FAKE_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjFlZDcyYzJjLWQ5OGUtNGZjMC04ZGY2LWY5NjRkOTYxMTVjYSIsImlhdCI6MTU2Mjc0NzM2NiwiZXhwIjoxNTYyNzUwOTc0fQ.iwmUMm51j-j2BYui9v9371DkY5LwLGATWn4LepVxmNk';
 
 /**
  * Wraps a react component with user authentication component.
@@ -29,8 +21,8 @@ const FAKE_TOKEN =
  *  props.authentication.loginUser(), props.authentication.isLoading etc
  *
  */
-const withAuthentication = WrappedComponent =>
-  class WithAuthentication extends PureComponent {
+const withAuthentication = (WrappedComponent) => {
+  return class WithAuthentication extends PureComponent {
     constructor(props) {
       super(props);
 
@@ -49,7 +41,7 @@ const withAuthentication = WrappedComponent =>
     /**
      * Make authenticate request and log in user
      */
-    loginUser = async personalNumber => {
+    loginUser = async (personalNumber) => {
       try {
         this.setState({ isLoading: true });
         // TODO: Safe to keep in production?
@@ -66,13 +58,13 @@ const withAuthentication = WrappedComponent =>
           const { user, accessToken } = authResponse.data;
           await Auth.logIn(user, accessToken);
         } catch (error) {
-          throw new Error('Login failed');
+          throw new Error("Login failed");
         }
 
         return authResponse.data;
       } catch (error) {
         // TODO: Add dynamic error messages
-        console.log('Authentication error: ', error);
+        console.log("Authentication error: ", error);
 
         throw error;
       } finally {
@@ -108,13 +100,16 @@ const withAuthentication = WrappedComponent =>
     /**
      * Simulate login using fake user
      */
-    _fakeLogin = async personalNumber => {
+    _fakeLogin = async (personalNumber) => {
       try {
         const response = await bypassBankid(personalNumber);
         const { user } = response.data;
 
         try {
-          await Auth.logIn(user, FAKE_TOKEN);
+          await Auth.logIn(
+            user,
+            FAKE_TOKEN
+          );
         } catch (e) {
           // BY PASS REJECTION
           // throw "Login failed";
@@ -122,9 +117,9 @@ const withAuthentication = WrappedComponent =>
 
         return { user, FAKE_TOKEN };
       } catch (e) {
-        throw e;
+        throw (e);
       }
-    };
+    }
 
     /**
      * Get user from async storage and add to state
@@ -139,7 +134,7 @@ const withAuthentication = WrappedComponent =>
           // this.loginUser(user.personalNumber);
         }
       } catch (error) {
-        console.log('Something went wrong', error);
+        console.log("Something went wrong", error);
       }
     };
 
@@ -159,8 +154,11 @@ const withAuthentication = WrappedComponent =>
       const instanceMethods = { loginUser, cancelLogin, resetUser };
       const injectProps = { ...instanceMethods, ...state };
 
-      return <WrappedComponent authentication={{ ...injectProps }} {...props} />;
+      return (
+        <WrappedComponent authentication={{ ...injectProps }} {...props} />
+      )
     }
   };
+}
 
 export default withAuthentication;

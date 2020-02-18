@@ -1,39 +1,37 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-async-promise-executor */
-/* eslint-disable no-use-before-define */
 /**
  * Service for all chat and form requests.
  *
  */
 
 import React from 'react';
+import { get, post } from '../helpers/ApiRequest';
 import axios from 'axios';
-import env from 'react-native-config';
-import { post } from '../helpers/ApiRequest';
-import StorageService, { TOKEN_KEY } from './StorageService';
+import env from "react-native-config";
+import StorageService, { TOKEN_KEY } from "../services/StorageService";
 
-export const getFormTemplate = formId => {
-  const endpoint = `forms/${formId}/questions`;
+export const getFormTemplate = (formId) => {
+    const endpoint = `forms/${formId}/questions`;
 
-  return constructGetFormTemplate(endpoint);
+    return constructGetFormTemplate(endpoint);
 };
 
 export const getAllFormTemplates = () => {
-  const endpoint = 'form/forms';
+    const endpoint = 'form/forms';
 
-  return constructGetFormTemplate(endpoint);
+    return constructGetFormTemplate(endpoint);
 };
 
-export const constructGetFormTemplate = endpoint =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const reqChatResult = await getService(endpoint);
+export const constructGetFormTemplate = (endpoint) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const reqChatResult = await getService(endpoint);
 
-      return resolve(reqChatResult);
-    } catch (error) {
-      return reject(error.message);
-    }
-  });
+            return resolve(reqChatResult);
+        } catch (error) {
+            return reject(error.message);
+        }
+    })
+};
 
 export const sendChatMsg = async (
   assistantId,
@@ -42,76 +40,80 @@ export const sendChatMsg = async (
   sessionId = undefined,
   intents = undefined,
   entities = undefined
-) => {
-  const endpoint = 'chatbot/message';
+  ) => {
+    const endpoint = 'chatbot/message';
 
-  return new Promise(async (resolve, reject) => {
-    const data = {
-      assistantId,
-      textInput,
-    };
+    return new Promise(async (resolve, reject) => {
+        let data = {
+          assistantId,
+          textInput
+        };
 
-    if (sessionId) {
-      data.sessionId = sessionId;
-    }
+        if (sessionId) {
+          data.sessionId = sessionId;
+        }
 
-    if (context) {
-      data.context = context;
-    }
+        if (context) {
+            data.context = context;
+        }
 
-    if (intents) {
-      data.intents = intents;
-    }
+        if (intents) {
+            data.intents = intents;
+        }
 
-    if (entities) {
-      data.entities = entities;
-    }
+        if (entities) {
+            data.entities = entities;
+        }
 
-    try {
-      const reqChatResult = await post(endpoint, data);
+        try {
+            const reqChatResult = await post(endpoint, data);
 
-      return resolve(reqChatResult.data);
-    } catch (error) {
-      return reject(error.message);
-    }
-  });
+            return resolve(reqChatResult.data);
+        } catch (error) {
+            return reject(error.message);
+        }
+    })
 };
 
-const postService = async (endpoint, data, token) =>
-  new Promise(async (resolve, reject) => {
-    await axios({
-      method: 'POST',
-      url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
-      data,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(result => resolve(result.data))
-      .catch(err => {
-        console.log('Error in request call', err.request);
-        return reject(err);
-      });
-  });
+const postService = async (endpoint, data, token) => {
+    return new Promise(async (resolve, reject) => {
+        await axios({
+            method: 'POST',
+            url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
+            data: data,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        }
+        ).then(result => {
+            return resolve(result.data);
+        }).catch(err => {
+            console.log("Error in request call", err.request);
+            return reject(err);
+        });
+    });
+};
 
-const getService = async endpoint =>
-  new Promise(async (resolve, reject) => {
-    const token = await StorageService.getData(TOKEN_KEY);
+const getService = async (endpoint) => {
+    return new Promise(async (resolve, reject) => {
+        const token = await StorageService.getData(TOKEN_KEY);
 
-    await axios({
-      method: 'GET',
-      url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(result => resolve(result.data))
-      .catch(err => {
-        console.log('Error in request call', err.request);
-        return reject(err);
-      });
-  });
+        await axios({
+            method: 'GET',
+            url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        }
+        ).then(result => {
+            return resolve(result.data);
+        }).catch(err => {
+            console.log("Error in request call", err.request);
+            return reject(err);
+        });
+    });
+};
