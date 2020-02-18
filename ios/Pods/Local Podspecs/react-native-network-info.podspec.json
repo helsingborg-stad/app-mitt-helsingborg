@@ -1,0 +1,21 @@
+{
+  "name": "react-native-network-info",
+  "version": "5.2.1",
+  "summary": "Get local network information",
+  "homepage": "https://github.com/pusherman/react-native-network-info",
+  "authors": "Corey Wilson",
+  "license": "MIT",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source": {
+    "git": "https://github.com/pusherman/react-native-network-info",
+    "tag": "v5.2.1"
+  },
+  "source_files": "ios/*.{h,m,c}",
+  "dependencies": {
+    "React": [
+
+    ]
+  }
+}
