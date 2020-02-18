@@ -1,4 +1,10 @@
-import React, { Component } from 'react'
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-shadow */
+/* eslint-disable react/state-in-constructor */
+/* eslint-disable react/default-props-match-prop-types */
+/* eslint-disable react/static-property-placement */
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import ChatMessages from '../molecules/ChatMessages';
@@ -11,161 +17,190 @@ import ChatFooter from '../atoms/ChatFooter';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 
 import ChatUserInput from '../molecules/ChatUserInput';
-import StoreContext from "../../helpers/StoreContext";
+import StoreContext from '../../helpers/StoreContext';
 
 class Chat extends Component {
-    static propTypes = {
-        ChatAgent: PropTypes.oneOfType([PropTypes.oneOf([false]), PropTypes.elementType, PropTypes.func]).isRequired,
-        ChatUserInput: PropTypes.oneOfType([PropTypes.oneOf([false]), PropTypes.elementType, PropTypes.func]),
-        inputComponents: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-        keyboardVerticalOffset: PropTypes.number
-    };
+  static propTypes = {
+    ChatAgent: PropTypes.oneOfType([
+      PropTypes.oneOf([false]),
+      PropTypes.elementType,
+      PropTypes.func,
+    ]).isRequired,
+    ChatUserInput: PropTypes.oneOfType([
+      PropTypes.oneOf([false]),
+      PropTypes.elementType,
+      PropTypes.func,
+    ]),
+    inputComponents: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    keyboardVerticalOffset: PropTypes.number,
+  };
 
-    static defaultProps = {
-        ChatAgent: false,
-        ChatUserInput: false,
-        inputComponents: [],
-        keyboardVerticalOffset: 24
-    };
+  static defaultProps = {
+    ChatAgent: false,
+    ChatUserInput: false,
+    inputComponents: [],
+    keyboardVerticalOffset: 24,
+  };
 
-    state = {
-        messages: [],
-        ChatAgent: false,
-        inputComponents: [],
-        // TODO: Move inputActions state outside of Chat organism
-        inputActions: [],
-        modal: {
-            visible: false,
-            heading: '',
-            content: ''
-        },
-        isTyping: false
-    };
+  state = {
+    messages: [],
+    ChatAgent: false,
+    inputComponents: [],
+    // TODO: Move inputActions state outside of Chat organism
+    inputActions: [],
+    modal: {
+      visible: false,
+      heading: '',
+      content: '',
+    },
+    isTyping: false,
+  };
 
-    componentDidMount() {
-        const { ChatAgent, ChatUserInput, inputComponents } = this.props;
+  componentDidMount() {
+    const { ChatAgent, ChatUserInput, inputComponents } = this.props;
 
-        if (ChatAgent) {
-            this.switchAgent(ChatAgent);
-        }
-
-        if (inputComponents) {
-            this.switchInput(inputComponents);
-        }
-
-        // Fix for components using old API to prevent breaking app
-        if (ChatUserInput) {
-            this.switchUserInput(ChatUserInput);
-        }
+    if (ChatAgent) {
+      this.switchAgent(ChatAgent);
     }
 
-    toggleTyping = async () => {
-        await this.setState(prevState => ({isTyping: !prevState.isTyping}));
+    if (inputComponents) {
+      this.switchInput(inputComponents);
     }
 
-    addMessages = async (objects) => {
-        const array = Array.isArray(objects) ? objects : [objects];
+    // Fix for components using old API to prevent breaking app
+    if (ChatUserInput) {
+      this.switchUserInput(ChatUserInput);
+    }
+  }
 
-        await this.setState(prevState => {
-            let { messages } = prevState;
-            // TODO: loop through message array & setState for each separately (or dispatch will fail if more then 1 message)
-            array.forEach(object => { messages.push(object) });
-            return { messages };
-        }, this.dispatchMessageEvents);
-    };
+  toggleTyping = async () => {
+    await this.setState(prevState => ({ isTyping: !prevState.isTyping }));
+  };
 
-    dispatchMessageEvents = () => {
-        const lastMsg = this.state.messages.slice(-1)[0].componentProps;
+  addMessages = async objects => {
+    const array = Array.isArray(objects) ? objects : [objects];
 
-        if (Array.isArray(lastMsg.modifiers) && lastMsg.modifiers[0] === 'user') {
-            EventHandler.dispatch(EVENT_USER_MESSAGE, lastMsg.content);
-        }
+    await this.setState(prevState => {
+      const { messages } = prevState;
+      // TODO: loop through message array & setState for each separately (or dispatch will fail if more then 1 message)
+      array.forEach(object => {
+        messages.push(object);
+      });
+      return { messages };
+    }, this.dispatchMessageEvents);
+  };
+
+  dispatchMessageEvents = () => {
+    const lastMsg = this.state.messages.slice(-1)[0].componentProps;
+
+    if (Array.isArray(lastMsg.modifiers) && lastMsg.modifiers[0] === 'user') {
+      EventHandler.dispatch(EVENT_USER_MESSAGE, lastMsg.content);
+    }
+  };
+
+  switchAgent = async AgentComponent => {
+    await this.setState({
+      ChatAgent: AgentComponent,
+    });
+  };
+
+  switchInput = async inputArr => {
+    if (inputArr === false) {
+      await this.setState({ inputComponents: [] });
+      return;
     }
 
-    switchAgent = async (AgentComponent) => {
-        await this.setState({
-            ChatAgent: AgentComponent
-        });
-    }
+    const inputArray = !Array.isArray(inputArr) ? [inputArr] : inputArr;
 
-    switchInput = async (inputArr) => {
-        if (inputArr === false) {
-            await this.setState({ inputComponents: [] });
-            return;
-        }
+    await this.setState({ inputComponents: inputArray });
+  };
 
-        const inputArray = !Array.isArray(inputArr) ? [inputArr] : inputArr;
-
-        await this.setState({ inputComponents: inputArray });
-    }
-
-    /**
-     * switchUserInput will be removed in favor of switchInput
-     * @deprecated
-     */
-    switchUserInput = async (Component, componentProps = {}) => {
-        await this.switchInput(Component ? {
+  /**
+   * switchUserInput will be removed in favor of switchInput
+   * @deprecated
+   */
+  switchUserInput = async (Component, componentProps = {}) => {
+    await this.switchInput(
+      Component
+        ? {
             type: 'custom',
             Component,
-            componentProps
-        } : false);
-    }
+            componentProps,
+          }
+        : false
+    );
+  };
 
-    // TODO: Implement setInputActions functionality outside of Chat organism
-    setInputActions = (inputActions) => {
-        this.setState({
-            inputActions
-        });
-    }
+  // TODO: Implement setInputActions functionality outside of Chat organism
+  setInputActions = inputActions => {
+    this.setState({
+      inputActions,
+    });
+  };
 
-    /**
-     * Changes modal state
-     *
-     * @param {bool} visible
-     * @param {string} heading
-     * @param {string} content
-     */
-    changeModal = (visible, heading = '', content = '') => {
-        this.setState({
-            modal: {
-                visible,
-                heading,
-                content
-            }
-        });
-    }
+  /**
+   * Changes modal state
+   *
+   * @param {bool} visible
+   * @param {string} heading
+   * @param {string} content
+   */
+  changeModal = (visible, heading = '', content = '') => {
+    this.setState({
+      modal: {
+        visible,
+        heading,
+        content,
+      },
+    });
+  };
 
-    render() {
-        const { keyboardVerticalOffset } = this.props;
-        const { messages, ChatAgent, inputComponents, modal, isTyping } = this.state;
-        const { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal, toggleTyping } = this;
-        const instanceMethods = { addMessages, switchAgent, switchUserInput, switchInput, setInputActions, changeModal, toggleTyping };
+  render() {
+    const { keyboardVerticalOffset } = this.props;
+    const { messages, ChatAgent, inputComponents, modal, isTyping } = this.state;
+    const {
+      addMessages,
+      switchAgent,
+      switchUserInput,
+      switchInput,
+      setInputActions,
+      changeModal,
+      toggleTyping,
+    } = this;
+    const instanceMethods = {
+      addMessages,
+      switchAgent,
+      switchUserInput,
+      switchInput,
+      setInputActions,
+      changeModal,
+      toggleTyping,
+    };
 
-        return (
-            <StoreContext.Consumer>
-                {({setBadgeCount}) => (
-
-                    <ChatWrapper keyboardVerticalOffset={keyboardVerticalOffset} >
-                        {ChatAgent ?
-                            <ChatAgent chat={{ ...instanceMethods, ...this.state, setBadgeCount }} />
-                            : null}
-                        <ChatBody>
-                            <ChatMessages messages={messages} chat={{ ...instanceMethods, ...this.state }} />
-                        </ChatBody>
-                        <ChatFooter>
-                            {inputComponents && inputComponents.length > 0 ?
-                                <ChatUserInput inputArray={inputComponents} chat={{ ...instanceMethods, ...this.state }} />
-                                : null}
-                        </ChatFooter>
-                        <Modal
-                            {...modal}
-                            changeModal={(visible) => this.changeModal(visible)}
-                        />
-                    </ChatWrapper>
-                )}
-            </StoreContext.Consumer>
-        )
-    }
+    return (
+      <StoreContext.Consumer>
+        {({ setBadgeCount }) => (
+          <ChatWrapper keyboardVerticalOffset={keyboardVerticalOffset}>
+            {ChatAgent ? (
+              <ChatAgent chat={{ ...instanceMethods, ...this.state, setBadgeCount }} />
+            ) : null}
+            <ChatBody>
+              <ChatMessages messages={messages} chat={{ ...instanceMethods, ...this.state }} />
+            </ChatBody>
+            <ChatFooter>
+              {inputComponents && inputComponents.length > 0 ? (
+                <ChatUserInput
+                  inputArray={inputComponents}
+                  chat={{ ...instanceMethods, ...this.state }}
+                />
+              ) : null}
+            </ChatFooter>
+            <Modal {...modal} changeModal={visible => this.changeModal(visible)} />
+          </ChatWrapper>
+        )}
+      </StoreContext.Consumer>
+    );
+  }
 }
 
 export default Chat;

@@ -1,95 +1,117 @@
+/* eslint-disable react/state-in-constructor */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/default-props-match-prop-types */
+/* eslint-disable react/static-property-placement */
+/* eslint-disable import/no-unresolved */
 import React, { Component } from 'react';
-import { View, Picker, PickerItem, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import {
+  View,
+  Picker,
+  PickerItem,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 // import DismissKeyboard from 'dismissKeyboard';
 import PropTypes from 'prop-types';
-import styled from 'styled-components/native'
+import styled from 'styled-components/native';
 
 import Text from './Text';
 import Button from './Button';
 import Input from './Input';
 
 export default class Select extends Component {
-    static propTypes = {
-        items: PropTypes.arrayOf(PropTypes.shape({
-            label: PropTypes.string,
-            value: PropTypes.string
-        })).isRequired,
-        onValueChange: PropTypes.func,
-        placeholder: PropTypes.string.isRequired
-    }
+  static propTypes = {
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        value: PropTypes.string,
+      })
+    ).isRequired,
+    onValueChange: PropTypes.func,
+    placeholder: PropTypes.string.isRequired,
+  };
 
-    static defaultProps = {
-        placeholder: 'Select an item'
-    };
+  static defaultProps = {
+    placeholder: 'Select an item',
+  };
 
-    state = {
-        currentValue: '',
-        showPicker: false
-    };
+  state = {
+    currentValue: '',
+    showPicker: false,
+  };
 
-    render() {
-        const { items, style, onValueChange, placeholder } = this.props;
-        const { currentValue, showPicker } = this.state;
+  render() {
+    const { items, style, onValueChange, placeholder } = this.props;
+    const { currentValue, showPicker } = this.state;
 
-        const currentItem = items.find(item => (item.value === currentValue));
+    const currentItem = items.find(item => item.value === currentValue);
 
-        return (
-            <>
-                <SelectInput
-                    style={style}
-                    placeholder={placeholder}
-                    editable={false}
-                    onTouchStart={() => { this.setState(prevState => ({showPicker: true})); }}
-                    onChange={nativeEvent => {console.log(nativeEvent)}}
-                    value={currentItem ? currentItem.label : ''}
-                />
+    return (
+      <>
+        <SelectInput
+          style={style}
+          placeholder={placeholder}
+          editable={false}
+          onTouchStart={() => {
+            this.setState(prevState => ({ showPicker: true }));
+          }}
+          onChange={nativeEvent => {
+            console.log(nativeEvent);
+          }}
+          value={currentItem ? currentItem.label : ''}
+        />
 
-               {showPicker ?
-                     <PickerWrapper>
-                         <PickerAcessoryWrapper>
-                            <PickerAcessoryLink
-                                accessibilityRole={'button'}
-                                onPress={() => {this.setState(prevState => ({showPicker: false}))}}
-                            >
-                                Done
-                            </PickerAcessoryLink>
-                         </PickerAcessoryWrapper>
-                        <Picker
-                            selectedValue={currentValue}
-                            onValueChange={(itemValue, itemIndex) => {
-                                if (typeof onValueChange === 'function') {
-                                    onValueChange(itemValue);
-                                }
-                                this.setState({currentValue: itemValue});
-                            }}
-                        >
-                            <Picker.Item label={placeholder} value={''} color="gray" />
-                            {items.map((item, index) => (<Picker.Item label={item.label} value={item.value} key={`${index}-${item.value}`} />))}
-                        </Picker>
-                    </PickerWrapper>
-               : null}
-            </>
-        )
-    }
-};
+        {showPicker ? (
+          <PickerWrapper>
+            <PickerAcessoryWrapper>
+              <PickerAcessoryLink
+                accessibilityRole="button"
+                onPress={() => {
+                  this.setState(prevState => ({ showPicker: false }));
+                }}
+              >
+                Done
+              </PickerAcessoryLink>
+            </PickerAcessoryWrapper>
+            <Picker
+              selectedValue={currentValue}
+              onValueChange={(itemValue, itemIndex) => {
+                if (typeof onValueChange === 'function') {
+                  onValueChange(itemValue);
+                }
+                this.setState({ currentValue: itemValue });
+              }}
+            >
+              <Picker.Item label={placeholder} value="" color="gray" />
+              {items.map((item, index) => (
+                <Picker.Item label={item.label} value={item.value} key={`${index}-${item.value}`} />
+              ))}
+            </Picker>
+          </PickerWrapper>
+        ) : null}
+      </>
+    );
+  }
+}
 
 const SelectInput = styled(Input)`
-    flex: 0 1 auto;
+  flex: 0 1 auto;
 `;
 
 const PickerAcessoryLink = styled(Text)`
-    align-self: flex-end;
-    margin-right: 16px;
-    margin-top: 8px;
-    margin-bottom: 8px;
+  align-self: flex-end;
+  margin-right: 16px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 `;
 
 const PickerWrapper = styled.View`
-    background: ${props => (props.theme.picker.background)};
+  background: ${props => props.theme.picker.background};
 `;
 
 const PickerAcessoryWrapper = styled.View`
-    border-bottom-width: 1px;
-    background: ${props => (props.theme.picker.accessory.background)};
-    border-color: ${props => (props.theme.picker.accessory.border)};
+  border-bottom-width: 1px;
+  background: ${props => props.theme.picker.accessory.background};
+  border-color: ${props => props.theme.picker.accessory.border};
 `;

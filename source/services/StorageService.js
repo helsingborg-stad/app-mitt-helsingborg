@@ -4,8 +4,8 @@
  *
  */
 
-import React, { Component } from 'react'
-import AsyncStorage from "@react-native-community/async-storage";
+import { Component } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // Storage key definitions
 export const SHOW_SPLASH_SCREEN = '@app:show_splash_screen';
@@ -23,11 +23,10 @@ export default class StorageService extends Component {
    * @returns {Promise}
    */
   static async getData(key) {
-    return await AsyncStorage.getItem(key).then(value => {
+    return AsyncStorage.getItem(key).then(value => {
       try {
         return JSON.parse(value);
-      }
-      catch (e) {
+      } catch (e) {
         return value;
       }
     });
@@ -36,67 +35,66 @@ export default class StorageService extends Component {
   /**
    * Save key value pair to storage.
    *
-   * @param key
-   * @param value
+   * @param {String} key   The AsyncStorage key
+   * @param {String} value The AsyncStorage value
    * @returns {Promise}
    */
-  static saveData(key, value) {
-    return AsyncStorage.setItem(key, JSON.stringify(value));
-  }
-
-    /**
-       * Put new data to array with key value pair to storage.
-       *
-       * @param key
-       * @param value
-       * @returns {Promise}
-       */
-    static putData(key, value) {
-        return AsyncStorage.getItem(key, (err, result) => {
-            if (result !== null) {
-                let newValue = [];
-                if (Array.isArray(value)) {
-                    newValue = JSON.parse(result).concat(value);
-                } else if (typeof value === 'object' && value !== null) {
-                    newValue = JSON.parse(result);
-                    newValue.push(value);
-                }
-
-                return AsyncStorage.setItem(key, JSON.stringify(newValue));
-            } else {
-                let newValue = Array.isArray(value) ? value : [value];
-                return AsyncStorage.setItem(key, JSON.stringify(newValue));
-            }
-        });
-    }
+  static saveData = (key, value) => AsyncStorage.setItem(key, JSON.stringify(value));
 
   /**
    * Save multiple values with key pair to storage.
    *
-   * @param key
-   * @param value
+   * @param {String} key   The AsyncStorage key
+   * @param {String} value The AsyncStorage value
    * @returns {Promise}
    */
-  static multiSaveData(key, value) {
-    return AsyncStorage.multiSet(key, value);
-  }
+  static multiSaveData = (key, value) => AsyncStorage.multiSet(key, value);
 
   /**
    * Remove data from storage
    *
-   * @param key
+   * @param {String} key The AsyncStorage key
    * @returns {Promise}
    */
-  static removeData(key) {
-    return AsyncStorage.removeItem(key);
-  }
+  static removeData = key => AsyncStorage.removeItem(key);
 
   /**
    * Remove all data from storage
    *
    * @returns {Promise}
    */
-    static clearData() {
-        return AsyncStorage.clear();
-    }
+  static clearData = () => AsyncStorage.clear();
+
+  /**
+   * Add an item to array in local storage
+   * @param {String} key   The AsyncStorage key
+   * @param {String} value The AsyncStorage value
+   */
+  static addDataToArray = async (key, value) => {
+    // Get the existing data
+    const prevValue = await this.getData(key);
+    // If no previous data exists, create an empty array
+    const newValue = prevValue && Array.isArray(prevValue) ? prevValue : [];
+    // Add new data to localStorage Array
+    newValue.push(value);
+    // Save back to localStorage
+    return this.saveData(key, newValue);
+  };
+
+  /**
+   * Add an item to object in local storage
+   * @param {String} key        The AsyncStorage key
+   * @param {String} objectKey  The AsyncStorage value object key
+   * @param {String} value      The AsyncStorage value
+   */
+  static addDataToObject = async (key, objectKey, value) => {
+    // Get the existing data
+    const prevValue = await this.getData(key);
+    // If no previous data exists, create an empty object
+    const newValue = prevValue && typeof value === 'object' && value !== null ? prevValue : {};
+    // Add new data to localStorage Object
+    newValue[objectKey] = value;
+    // Save back to localStorage
+    return this.saveData(key, newValue);
+  };
 }
