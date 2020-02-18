@@ -9,7 +9,7 @@
 import React from 'react';
 import axios from 'axios';
 import env from 'react-native-config';
-import { get, post } from '../helpers/ApiRequest';
+import { post } from '../helpers/ApiRequest';
 import StorageService, { TOKEN_KEY } from './StorageService';
 
 export const getFormTemplate = formId => {
