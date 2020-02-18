@@ -132,7 +132,6 @@
     "react-hooks/exhaustive-deps": "warn"
   },
   "plugins": [
-    //"html", <-- Currenly not working
     "prettier",
     "react-hooks"
   ]
