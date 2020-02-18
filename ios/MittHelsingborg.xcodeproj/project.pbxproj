@@ -871,7 +871,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = works.hbg.ehszil.push.test;
+				PRODUCT_BUNDLE_IDENTIFIER = works.hbg.MittHelsingborg;
 				PRODUCT_NAME = MittHelsingborg;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -896,7 +896,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = works.hbg.ehszil.push.test;
+				PRODUCT_BUNDLE_IDENTIFIER = works.hbg.MittHelsingborg;
 				PRODUCT_NAME = MittHelsingborg;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
