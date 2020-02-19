@@ -32,11 +32,11 @@ const stories = [
 	'../source/components/atoms/Text/Text.stories',
 	'../source/components/molecules/DateTimePickerForm.stories',
 	'../source/components/molecules/Header/Header.stories',
-	'../source/components/molecules/Lists.stories',
+	'../source/components/molecules/ListItem/Lists.stories',
 	'../source/components/molecules/Modal.stories',
 	'../source/components/organisms/FormAgent/FormAgent.stories',
 	'../source/components/organisms/NavigationTabs.stories',
-	'../source/components/organisms/WatsonAgent.stories'
+	'../source/components/organisms/Watson/WatsonAgent.stories'
 ];
 
 module.exports = {
