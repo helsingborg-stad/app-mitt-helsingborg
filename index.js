@@ -45,7 +45,7 @@ export default class MittHbg extends Component {
   }
 
   render() {
-    if (Config.IS_STORYBOOK === 'true') {
+    if (Config.IS_STORYBOOK === 'false') {
       return (
         <StoreContext.Provider value={this.state}>
           <StorybookUIRoot />
