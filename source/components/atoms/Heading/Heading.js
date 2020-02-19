@@ -4,7 +4,7 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components/native';
 import { PropTypes } from 'prop-types';
-import Text from './Text';
+import Text from '../Text';
 
 const fontSizes = {
   h1: 48,

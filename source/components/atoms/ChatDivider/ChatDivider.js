@@ -5,7 +5,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
-import Text from './Text';
+import Text from '../Text';
 
 export default ChatDivider = props => (
   <DividerWrapper>

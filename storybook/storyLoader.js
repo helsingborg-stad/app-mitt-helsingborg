@@ -6,12 +6,12 @@
 function loadStories() {
 	require('../source/components/atoms/Button/Button.stories');
 	require('../source/components/atoms/ChatBubble/ChatBubble.stories');
-	require('../source/components/atoms/Heading.stories');
-	require('../source/components/atoms/Icon.stories');
-	require('../source/components/atoms/Input.stories');
+	require('../source/components/atoms/Heading/Heading.stories');
+	require('../source/components/atoms/Icon/Icon.stories');
+	require('../source/components/atoms/Input/Input.stories');
 	require('../source/components/atoms/Markdown.stories');
-	require('../source/components/atoms/Select.stories');
-	require('../source/components/atoms/Text.stories');
+	require('../source/components/atoms/Select/Select.stories');
+	require('../source/components/atoms/Text/Text.stories');
 	require('../source/components/molecules/DateTimePickerForm.stories');
 	require('../source/components/molecules/Lists.stories');
 	require('../source/components/molecules/Modal.stories');

@@ -16,9 +16,9 @@ import {
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 
-import Text from './Text';
-import Button from './Button/Button';
-import Input from './Input';
+import Text from '../Text';
+import Button from '../Button/Button';
+import Input from '../Input';
 
 export default class Select extends Component {
   static propTypes = {

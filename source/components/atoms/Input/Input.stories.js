@@ -2,9 +2,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import StoryWrapper from '../molecules/StoryWrapper';
-import Input from './Input';
-import withForm from '../organisms/withForm';
+import StoryWrapper from '../../molecules/StoryWrapper';
+import Input from './index';
+import withForm from '../../organisms/withForm';
 
 const InputWithForm = withForm(props => (
   <Input

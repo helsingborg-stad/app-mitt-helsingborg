@@ -10,9 +10,9 @@ import PropTypes from 'prop-types';
 import ChatMessages from '../molecules/ChatMessages';
 import Modal from '../molecules/Modal';
 
-import ChatBody from '../atoms/ChatBody';
+import ChatBody from '../atoms/ChatBody/ChatBody';
 import ChatWrapper from '../atoms/ChatWrapper';
-import ChatFooter from '../atoms/ChatFooter';
+import ChatFooter from '../atoms/ChatFooter/ChatFooter';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
 

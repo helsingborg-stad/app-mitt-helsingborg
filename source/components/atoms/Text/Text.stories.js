@@ -1,8 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import StoryWrapper from '../molecules/StoryWrapper';
-import Text from './Text';
+import StoryWrapper from '../../molecules/StoryWrapper';
+import Text from './index';
 
 storiesOf('Text', module).add('default', () => (
   <StoryWrapper>
