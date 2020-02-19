@@ -7,17 +7,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import ChatMessages from '../molecules/ChatMessages';
-import Modal from '../molecules/Modal';
+import ChatMessages from '../../molecules/ChatMessages/ChatMessages';
+import Modal from '../../molecules/Modal';
 
-import ChatBody from '../atoms/ChatBody/ChatBody';
-import ChatWrapper from '../atoms/ChatWrapper';
-import ChatFooter from '../atoms/ChatFooter/ChatFooter';
+import ChatBody from '../../atoms/ChatBody/ChatBody';
+import ChatWrapper from '../../atoms/ChatWrapper';
+import ChatFooter from '../../atoms/ChatFooter/ChatFooter';
 
-import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
+import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
 
-import ChatUserInput from '../molecules/ChatUserInput';
-import StoreContext from '../../helpers/StoreContext';
+import ChatUserInput from '../../molecules/ChatUserInput';
+import StoreContext from '../../../helpers/StoreContext';
 
 class Chat extends Component {
   static propTypes = {

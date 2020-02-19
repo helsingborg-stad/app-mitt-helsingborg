@@ -8,9 +8,9 @@ import React from 'react';
 import { View, SectionList, TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import Heading from '../atoms/Heading';
-import Text from '../atoms/Text';
-import ListItem from './ListItem';
+import Heading from '../../atoms/Heading';
+import Text from '../../atoms/Text';
+import ListItem from '../ListItem';
 
 export default GroupedList = props => {
   const { heading, items, onClick } = props;

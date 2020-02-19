@@ -3,9 +3,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import StoryWrapper from './StoryWrapper';
-import GroupedList from './GroupedList';
-import ListItem from './ListItem';
+import StoryWrapper from '../StoryWrapper';
+import GroupedList from '../GroupedList/GroupedList';
+import ListItem from './index';
 
 storiesOf('Lists', module)
   .add('Grouped list', props => (

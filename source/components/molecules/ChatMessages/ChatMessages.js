@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import { Text, View, FlatList } from 'react-native';
 import styled from 'styled-components/native';
 import { PropTypes } from 'prop-types';
-import ChatBubble from '../atoms/ChatBubble';
+import ChatBubble from '../../atoms/ChatBubble';
 
 const OFFSET_TOP = 0;
 const OFFSET_BOTTOM = 24;

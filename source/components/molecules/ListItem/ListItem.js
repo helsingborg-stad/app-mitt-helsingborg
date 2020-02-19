@@ -6,9 +6,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components/native';
 import { Image } from 'react-native';
-import Text from '../atoms/Text';
-import Icon from '../atoms/Icon';
-import Button from '../atoms/Button/Button';
+import Text from '../../atoms/Text';
+import Icon from '../../atoms/Icon';
+import Button from '../../atoms/Button/Button';
 
 const ListItem = props => {
   const { highlighted, iconName, title, text, color, onClick, imageSrc } = props;

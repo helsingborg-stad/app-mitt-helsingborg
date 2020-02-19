@@ -6,12 +6,12 @@ import React from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import Heading from '../atoms/Heading';
-import Text from '../atoms/Text';
-import Icon from '../atoms/Icon';
-import shadow from '../../styles/shadow';
+import Heading from '../../atoms/Heading';
+import Text from '../../atoms/Text';
+import Icon from '../../atoms/Icon';
+import shadow from '../../../styles/shadow';
 import HeaderNav from './HeaderNav';
-import ButtonNew from '../atoms/Button/Button';
+import ButtonNew from '../../atoms/Button/Button';
 
 const Header = ({ message, title, themeColor, navItems, backButton }) => (
   <HeaderContainer>

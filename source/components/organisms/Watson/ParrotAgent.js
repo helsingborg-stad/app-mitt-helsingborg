@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable react/prop-types */
 import { Component } from 'react';
-import ChatBubble from '../atoms/ChatBubble';
-import EventHandler, { EVENT_USER_MESSAGE } from '../../helpers/EventHandler';
+import ChatBubble from '../../atoms/ChatBubble';
+import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
 import WatsonAgent from './WatsonAgent';
 
 export default class ParrotAgent extends Component {
