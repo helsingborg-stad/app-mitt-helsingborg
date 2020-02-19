@@ -12,7 +12,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import DismissKeyboard from 'dismissKeyboard';
+// import DismissKeyboard from 'dismissKeyboard';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 

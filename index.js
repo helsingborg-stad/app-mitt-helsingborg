@@ -21,44 +21,44 @@ YellowBox.ignoreWarnings(['Warning: Async Storage has been extracted from react-
  * Platform specific handling, global listeners, providers, etc.
  */
 export default class MittHbg extends Component {
-    setBadgeCount = badgeCount => {
-        this.setState({badgeCount})
-    };
+  setBadgeCount = badgeCount => {
+    this.setState({badgeCount})
+  };
 
-    state = {
-        language: "en",
-        badgeCount: 0,
-        setBadgeCount: this.setBadgeCount
-    };
+  state = {
+    language: "en",
+    badgeCount: 0,
+    setBadgeCount: this.setBadgeCount
+  };
 
-    componentDidMount() {
-        this.initApp()
+  componentDidMount() {
+    this.initApp()
+  }
+
+  initApp() {
+    // Get badge count for active errands.
+    StorageService.getData(COMPLETED_FORMS_KEY).then((value) => {
+      if (value !== null && value.length >= 0) {
+        this.setBadgeCount(value.length) ;
+      }
+    })
+  }
+
+  render() {
+    if (Config.IS_STORYBOOK === 'true') {
+      return (
+        <StoreContext.Provider value={this.state}>
+          <StorybookUIRoot />
+        </StoreContext.Provider>
+      )
     }
 
-    initApp() {
-        // Get badge count for active errands.
-        StorageService.getData(COMPLETED_FORMS_KEY).then((value) => {
-            if (value !== null && value.length >= 0) {
-                this.setBadgeCount(value.length) ;
-            }
-        })
-    }
-
-    render() {
-        if (Config.IS_STORYBOOK === 'true') {
-            return (
-                <StoreContext.Provider value={this.state}>
-                    <StorybookUIRoot />
-                </StoreContext.Provider>
-            )
-        }
-
-        return (
-            <StoreContext.Provider value={this.state}>
-                <Nav />
-            </StoreContext.Provider>
-        )
-    }
+    return (
+      <StoreContext.Provider value={this.state}>
+        <Nav />
+      </StoreContext.Provider>
+    )
+  }
 }
 
 // const componentToRegister = (Config.IS_STORYBOOK === 'true') ? StorybookUIRoot : MittHbg
