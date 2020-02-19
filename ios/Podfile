@@ -41,13 +41,3 @@ target 'MittHelsingborg' do
 
   use_native_modules!
 end
-
-target 'MittHelsingborg-tvOS' do
-  # Pods for MittHelsingborg-tvOS
-
-  target 'MittHelsingborg-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-end
