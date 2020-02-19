@@ -11,7 +11,7 @@ import Text from '../atoms/Text';
 import Icon from '../atoms/Icon';
 import shadow from '../../styles/shadow';
 import HeaderNav from './HeaderNav';
-import ButtonNew from '../atoms/Button';
+import ButtonNew from '../atoms/Button/Button';
 
 const Header = ({ message, title, themeColor, navItems, backButton }) => (
   <HeaderContainer>

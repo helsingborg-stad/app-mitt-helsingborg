@@ -8,7 +8,7 @@ import { storiesOf } from '@storybook/react-native';
 import styled from 'styled-components/native';
 import StoryWrapper from './StoryWrapper';
 import Modal from './Modal';
-import Button from '../atoms/Button';
+import Button from '../atoms/Button/Button';
 import Text from '../atoms/Text';
 
 class ModalExample extends Component {

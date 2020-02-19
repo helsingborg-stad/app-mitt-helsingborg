@@ -4,8 +4,8 @@
 // https://github.com/elderfo/react-native-storybook-loader.git
 
 function loadStories() {
-	require('../source/components/atoms/Button.stories');
-	require('../source/components/atoms/ChatBubble.stories');
+	require('../source/components/atoms/Button/Button.stories');
+	require('../source/components/atoms/ChatBubble/ChatBubble.stories');
 	require('../source/components/atoms/Heading.stories');
 	require('../source/components/atoms/Icon.stories');
 	require('../source/components/atoms/Input.stories');
@@ -21,8 +21,8 @@ function loadStories() {
 }
 
 const stories = [
-	'../source/components/atoms/Button.stories',
-	'../source/components/atoms/ChatBubble.stories',
+	'../source/components/atoms/Button/Button.stories',
+	'../source/components/atoms/ChatBubble/ChatBubble.stories',
 	'../source/components/atoms/Heading.stories',
 	'../source/components/atoms/Icon.stories',
 	'../source/components/atoms/Input.stories',

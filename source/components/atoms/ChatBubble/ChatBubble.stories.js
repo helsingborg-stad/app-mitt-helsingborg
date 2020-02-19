@@ -2,9 +2,9 @@
 import React from 'react';
 import { View } from 'react-native';
 import { storiesOf } from '@storybook/react-native';
-import StoryWrapper from '../molecules/StoryWrapper';
-import ChatBubble from './ChatBubble';
-import Text from './Text';
+import StoryWrapper from '../../molecules/StoryWrapper';
+import ChatBubble from './index';
+import Text from '../Text';
 
 storiesOf('Chat', module).add('ChatBubble', () => (
   <StoryWrapper>

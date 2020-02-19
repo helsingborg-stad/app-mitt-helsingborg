@@ -19,7 +19,7 @@ import { sanitizePin, validatePin } from '../../helpers/ValidationHelper';
 import withAuthentication from '../organisms/withAuthentication';
 import ScreenWrapper from '../molecules/ScreenWrapper';
 import Text from '../atoms/Text';
-import Button from '../atoms/Button';
+import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input';
 import Heading from '../atoms/Heading';
 

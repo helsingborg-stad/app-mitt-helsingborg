@@ -4,10 +4,10 @@ import React from 'react';
 import { View } from 'react-native';
 import { storiesOf } from '@storybook/react-native';
 import styled, { css } from 'styled-components/native';
-import StoryWrapper from '../molecules/StoryWrapper';
+import StoryWrapper from '../../molecules/StoryWrapper';
 import Button from './Button';
-import Text from './Text';
-import Icon from './Icon';
+import Text from '../Text';
+import Icon from '../Icon';
 
 storiesOf('Button', module)
   .add('Default', props => (

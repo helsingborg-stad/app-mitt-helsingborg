@@ -6,12 +6,12 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import styled, { css, withTheme } from 'styled-components/native';
 import PropTypes from 'prop-types';
-import Text from './Text';
-import Heading from './Heading';
-import shadow from '../../styles/shadow';
+import Text from '../Text';
+import Heading from '../Heading';
+import shadow from '../../../styles/shadow';
 
-import Icon from './Icon';
-import Button from './Button';
+import Icon from '../Icon';
+import Button from '../Button/Button';
 
 const ChatBubble = props => {
   const { content, modifiers, style, iconRight, onClickIconRight, theme, z } = props;
@@ -71,8 +71,6 @@ ChatBubble.defaultProps = {
   z: 1,
 };
 
-export default withTheme(ChatBubble);
-
 const Bubble = styled.View`
   margin-top: 6px;
   margin-bottom: 6px;
@@ -129,3 +127,5 @@ const Aside = styled.View`
   align-items: flex-end;
   margin-left: 16px;
 `;
+
+export default withTheme(ChatBubble);

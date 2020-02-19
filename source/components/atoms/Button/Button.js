@@ -8,10 +8,10 @@ import { TouchableOpacity, StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import styled, { ThemeProvider, css } from 'styled-components/native';
 
-import z from '../../styles/shadow';
+import z from '../../../styles/shadow';
 
-import Text from './Text';
-import Icon from './Icon';
+import Text from '../Text';
+import Icon from '../Icon';
 
 const ButtonNew = props => {
   const { value, onClick, style, color, block, rounded, pill, sharp, icon, z, size } = props;
