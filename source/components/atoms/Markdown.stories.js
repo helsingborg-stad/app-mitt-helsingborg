@@ -5,7 +5,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { View, StyleSheet } from 'react-native';
-import Markdown, { getUniqueID } from 'react-native-markdown-renderer';
+import Markdown, { getUniqueID } from 'react-native-markdown-display';
 import StoryWrapper from '../molecules/StoryWrapper';
 import Text from './Text';
 import MarkdownConstructor from '../../helpers/MarkdownConstructor';
@@ -78,6 +78,13 @@ after`;
 
 const simpleText = `
 Text
+`;
+
+const copy = `# h1 Heading 8-)
+
+**This is some bold text!**
+
+This is normal text
 `;
 
 const url = `[I'm an inline-style link](https://www.google.com)`;
