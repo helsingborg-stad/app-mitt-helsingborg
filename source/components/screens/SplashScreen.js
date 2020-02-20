@@ -29,7 +29,9 @@ export default class SplashScreen extends Component {
     swipeIndex: 0,
   };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+
     this.showSplash();
 
     this._panResponder = PanResponder.create({
