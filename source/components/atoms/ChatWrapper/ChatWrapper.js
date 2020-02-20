@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { KeyboardAvoidingView, StyleSheet, SafeAreaView, View } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 import styled from 'styled-components/native';
 
 const ChatWrapper = styled(KeyboardAvoidingView)`
