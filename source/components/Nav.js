@@ -103,7 +103,6 @@ const MaterialTopTabBarWrapper = props => {
         activeTintColor={color}
         indicatorStyle={{
           backgroundColor: color,
-          position: 0,
           display: 'none',
         }}
         style={{ backgroundColor: '#F8F8F8' }}
