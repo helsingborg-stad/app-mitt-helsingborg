@@ -73,7 +73,19 @@ export default class WatsonAgent extends Component {
           componentProps: {
             items: [
               {
+                action: {
+                  type: 'form',
+                  value: 1,
+                },
                 value: 'Jag vill boka borgerlig vigsel',
+                icon: 'favorite',
+              },
+              {
+                action: {
+                  type: 'form',
+                  value: 2,
+                },
+                value: 'Jag vill ansöka om Ekonomiskt bistånd',
                 icon: 'favorite',
               },
               {
