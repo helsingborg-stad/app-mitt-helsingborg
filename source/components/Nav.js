@@ -19,7 +19,6 @@ import {
 
 import { createStackNavigator } from 'react-navigation-stack';
 import { Icon } from 'react-native-elements';
-import UserSettingsScreen from './screens/UserSettingsScreen';
 import DashboardScreen from './screens/DashboardScreen';
 import SplashScreen from './screens/SplashScreen';
 import ChatScreen from './screens/ChatScreen';
