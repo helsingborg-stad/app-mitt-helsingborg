@@ -1,18 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { Component } from 'react';
-import {
-  KeyboardAvoidingView,
-  Alert,
-  TouchableOpacity,
-  ActivityIndicator,
-  StyleSheet,
-  View,
-  TextInput,
-  Linking,
-} from 'react-native';
+import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
-
 import Text from '../atoms/Text';
 import Button from '../atoms/Button/Button';
 
