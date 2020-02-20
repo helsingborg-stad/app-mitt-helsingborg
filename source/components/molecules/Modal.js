@@ -78,7 +78,7 @@ const ModalContainer = styled(RnModal)`
 const Header = styled.View`
   flex-direction: row;
   border: 1px solid ${props => props.theme.background.lighter};
-  border-bottom-width: 2;
+  border-bottom-width: 2px;
   border-top-left-radius: 17.5px;
   border-top-right-radius: 17.5px;
   background-color: white;
