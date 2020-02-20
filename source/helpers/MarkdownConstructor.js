@@ -1,8 +1,7 @@
+/* eslint-disable react/display-name */
 /* eslint-disable no-use-before-define */
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { StyleSheet } from 'react-native';
-// import Markdown from 'react-native-markdown-renderer';
 import Markdown from 'react-native-markdown-display';
 import Text from '../components/atoms/Text';
 
@@ -23,11 +22,7 @@ const MarkdownConstructor = props => {
  *
  */
 const markdownRules = {
-  text: node => (
-    <Text style={markDownStyles.atomText} key={node.key}>
-      {node.content}
-    </Text>
-  ),
+  text: node => <Text key={node.key}>{node.content}</Text>,
   strong: (node, children, parent, styles) => (
     <Text key={node.key}>
       {React.Children.map(children, (child, index) =>
@@ -42,7 +37,7 @@ const markdownRules = {
  *
  * paragraph: Removed padding top/bottom.
  */
-const markDownStyles = StyleSheet.create({
+const markDownStyles = {
   listUnorderedItemIcon: {
     lineHeight: 22,
     marginLeft: 4,
@@ -52,17 +47,12 @@ const markDownStyles = StyleSheet.create({
     color: '#707070',
     fontFamily: 'Roboto',
   },
-  atomText: {
-    fontSize: 16,
-    color: '#565656',
-    lineHeight: 22,
-  },
   paragraph: {
     flexWrap: 'wrap',
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
   },
-});
+};
 
 export default MarkdownConstructor;
