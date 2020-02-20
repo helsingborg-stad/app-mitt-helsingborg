@@ -5,7 +5,7 @@ import styled from 'styled-components/native';
 const Text = styled(RNText)`
   font-style: normal;
   font-weight: 500;
-  font-size: 18px;
+  font-size: 16px;
   font-family: Roboto;
   flex-shrink: 1;
   color: ${props => props.theme.text.default};
