@@ -2,18 +2,7 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 import React, { Component } from 'react';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Alert,
-  TouchableOpacity,
-  ActivityIndicator,
-  StyleSheet,
-  View,
-  TextInput,
-  Linking,
-  Image,
-} from 'react-native';
+import { Keyboard, Alert, Linking } from 'react-native';
 import styled from 'styled-components/native';
 import { sanitizePin, validatePin } from '../../helpers/ValidationHelper';
 import withAuthentication from '../organisms/withAuthentication';
@@ -25,6 +14,55 @@ import Heading from '../atoms/Heading';
 
 import HbgLogo from '../../assets/slides/stadsvapen.png';
 import AuthLoading from '../molecules/AuthLoading';
+
+const Logo = styled.Image`
+  height: 200px;
+  width: auto;
+`;
+
+const LoginScreenWrapper = styled(ScreenWrapper)`
+  background-color: #f5f5f5;
+`;
+
+const Link = styled(Text)`
+  text-decoration: underline;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 8px;
+`;
+
+const Label = styled(Text)`
+  margin-bottom: 8px;
+  font-size: 16px;
+`;
+
+const LoginKeyboardAvoidingView = styled.KeyboardAvoidingView`
+  flex: 1;
+  align-items: stretch;
+`;
+
+const LoginHeader = styled.View`
+  text-align: center;
+  flex: 1;
+  justify-content: center;
+`;
+
+const LoginBody = styled.View`
+  flex: 1;
+  justify-content: flex-end;
+`;
+
+const LoginForm = styled.View`
+  flex-grow: 0;
+`;
+
+const LoginFormField = styled.View`
+  margin-bottom: 16px;
+`;
+const LoginFormHeader = styled.View`
+  margin-bottom: 32px;
+`;
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -154,54 +192,5 @@ class LoginScreen extends Component {
     );
   }
 }
-
-const Logo = styled.Image`
-  height: 200px;
-  width: auto;
-`;
-
-const LoginScreenWrapper = styled(ScreenWrapper)`
-  background-color: #f5f5f5;
-`;
-
-const Link = styled(Text)`
-  text-decoration: underline;
-  font-size: 16px;
-  text-align: center;
-  margin-top: 16px;
-  margin-bottom: 8px;
-`;
-
-const Label = styled(Text)`
-  margin-bottom: 8px;
-  font-size: 16px;
-`;
-
-const LoginKeyboardAvoidingView = styled.KeyboardAvoidingView`
-  flex: 1;
-  align-items: stretch;
-`;
-
-const LoginHeader = styled.View`
-  text-align: center;
-  flex: 1;
-  justify-content: center;
-`;
-
-const LoginBody = styled.View`
-  flex: 1;
-  justify-content: flex-end;
-`;
-
-const LoginForm = styled.View`
-  flex-grow: 0;
-`;
-
-const LoginFormField = styled.View`
-  margin-bottom: 16px;
-`;
-const LoginFormHeader = styled.View`
-  margin-bottom: 32px;
-`;
 
 export default withAuthentication(LoginScreen);
