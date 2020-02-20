@@ -10,7 +10,7 @@ import { storiesOf } from '@storybook/react-native';
 
 import StoryWrapper from '../../molecules/StoryWrapper';
 
-import Chat from '../Chat';
+import Chat from '../Chat/Chat';
 import FormAgent from '.';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';

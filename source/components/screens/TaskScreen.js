@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components/native';
 import { NavigationEvents } from 'react-navigation';
 import { NavItems, CompletedTasks, ActiveTasks } from '../../assets/dashboard';
-import GroupedList from '../molecules/GroupedList';
+import GroupedList from '../molecules/GroupedList/GroupedList';
 import Header from '../molecules/Header';
 import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../services/StorageService';
 import ScreenWrapper from '../molecules/ScreenWrapper';

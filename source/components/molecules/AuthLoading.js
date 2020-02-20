@@ -14,7 +14,7 @@ import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 
 import Text from '../atoms/Text';
-import Button from '../atoms/Button';
+import Button from '../atoms/Button/Button';
 
 const AuthLoading = props => (
   <AuthLoadingWrapper>

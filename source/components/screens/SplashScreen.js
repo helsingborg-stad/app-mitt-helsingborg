@@ -13,7 +13,7 @@ import styled from 'styled-components/native';
 import ScreenWrapper from '../molecules/ScreenWrapper';
 import { SHOW_SPLASH_SCREEN } from '../../services/StorageService';
 import Heading from '../atoms/Heading';
-import Button from '../atoms/Button';
+import Button from '../atoms/Button/Button';
 import Text from '../atoms/Text';
 import Icon from '../atoms/Icon';
 

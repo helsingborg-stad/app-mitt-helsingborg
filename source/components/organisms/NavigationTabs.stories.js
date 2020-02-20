@@ -11,13 +11,13 @@ import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigati
 import { storiesOf } from '@storybook/react-native';
 import styled from 'styled-components/native/dist/styled-components.native.esm';
 import { Icon } from 'react-native-elements';
-import Chat from './Chat';
+import Chat from './Chat/Chat';
 import withChatForm from './withChatForm';
 import ChatForm from '../molecules/ChatForm';
 import ScreenWrapper from '../molecules/ScreenWrapper';
-import ParrotAgent from './ParrotAgent';
+import ParrotAgent from './Watson/ParrotAgent';
 import TaskScreen from '../screens/TaskScreen';
-import WatsonAgent from './WatsonAgent';
+import WatsonAgent from './Watson/WatsonAgent';
 
 class ChatScreen extends Component {
   render() {

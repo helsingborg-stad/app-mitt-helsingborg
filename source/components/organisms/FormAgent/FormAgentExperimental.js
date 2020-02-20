@@ -12,8 +12,8 @@ import forms from '../../../assets/formsExperimental';
 
 import ChatBubble from '../../atoms/ChatBubble';
 
-import ChatDivider from '../../atoms/ChatDivider';
-import WatsonAgent from '../WatsonAgent';
+import ChatDivider from '../../atoms/ChatDivider/ChatDivider';
+import WatsonAgent from '../Watson/WatsonAgent';
 import createExpression from '../../../helpers/Logics';
 
 class FormAgentExperimental extends Component {

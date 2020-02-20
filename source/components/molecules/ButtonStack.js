@@ -11,7 +11,7 @@ import styled from 'styled-components/native';
 import { withNavigation } from 'react-navigation';
 
 import FormAgent from '../organisms/FormAgent/FormAgent';
-import Button from '../atoms/Button';
+import Button from '../atoms/Button/Button';
 import Icon from '../atoms/Icon';
 import Text from '../atoms/Text';
 import ChatBubble from '../atoms/ChatBubble';

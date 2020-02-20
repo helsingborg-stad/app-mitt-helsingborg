@@ -5,7 +5,7 @@ import React from 'react';
 import { Keyboard, TextInput, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import styled from 'styled-components/native';
 import Input, { input as inputStyles } from '../atoms/Input';
-import Button from '../atoms/Button';
+import Button from '../atoms/Button/Button';
 import Icon from '../atoms/Icon';
 import Text from '../atoms/Text';
 
