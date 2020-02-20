@@ -35,12 +35,14 @@ const ekbQuestion = args => {
       name: 'Hur mycket?',
       type: 'number',
       dependency,
+      placeholder: 'Ange summa',
     },
     {
       id: `${key}Date`,
       name: 'När?',
       type: 'number',
       dependency,
+      placeholder: 'Ange datum',
     },
   ];
 
