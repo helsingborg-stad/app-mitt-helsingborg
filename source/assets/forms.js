@@ -1,5 +1,6 @@
 import { sanitizePin } from '../helpers/ValidationHelper';
 import ICON_RINGS_PNG from './icon-rings/icon-rings-24x24_2x.png';
+import EKB_FORM from './form-ekb';
 
 const forms = [
   {
@@ -551,5 +552,6 @@ const forms = [
       },
     ],
   },
+  EKB_FORM,
 ];
 export default forms;
