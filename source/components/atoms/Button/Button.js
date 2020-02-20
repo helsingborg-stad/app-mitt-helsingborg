@@ -4,7 +4,6 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { TouchableOpacity, StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import styled, { ThemeProvider, css } from 'styled-components/native';
 
@@ -101,7 +100,7 @@ const ButtonBase = styled.View`
     ${props => (props.rounded ? CSS.buttonRounded : null)}
     ${props => (props.pill ? CSS.buttonPill : null)}
     ${props => (props.sharp ? CSS.buttonSharp : null)}
-    
+
     ${props => (props.buttonSize === 'small' ? CSS.buttonSmall : null)}
 
     ${props => CSS.z[props.z]}
@@ -153,7 +152,7 @@ const LeftButtonIcon = styled(ButtonIcon)`
 const RightButtonIcon = styled(ButtonIcon)`
     margin-left: 16px;
     ${props => (props.push ? 'margin-left: auto;' : null)}
-    
+
     color: ${props => props.theme.button[props.buttonTheme].iconRight};
 `;
 
