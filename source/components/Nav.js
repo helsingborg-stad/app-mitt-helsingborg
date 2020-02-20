@@ -9,65 +9,17 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable import/no-named-as-default-member */
 import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { View, Text, SafeAreaView, Image, StyleSheet } from 'react-native';
-import {
-  createMaterialTopTabNavigator,
-  MaterialTopTabBar,
-  createBottomTabNavigator,
-} from 'react-navigation-tabs';
-
-import { createStackNavigator } from 'react-navigation-stack';
+import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
-import DashboardScreen from './screens/DashboardScreen';
-import SplashScreen from './screens/SplashScreen';
-import ChatScreen from './screens/ChatScreen';
-import TaskScreen from './screens/TaskScreen';
-import TaskDetailScreen from './screens/TaskDetailScreen';
-
-import LoginScreen from './screens/LoginScreen';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigation-tabs';
 import StoreContext from '../helpers/StoreContext';
-
-// const MittHbgStack = createStackNavigator(
-//     {
-//         Dashboard: DashboardScreen
-//     },
-//     {
-//         initialRouteName: "Dashboard",
-//         defaultNavigationOptions: {
-//             headerStyle: {
-//                 //backgroundColor: '#f4511e'
-//             }
-//         }
-//     },
-// );
-
-// const SettingStack = createStackNavigator(
-//     {
-//         Settings: UserSettingsScreen
-//     },
-//     {
-//         initialRouteName: "Settings",
-//         defaultNavigationOptions: {
-//             headerTitle: "Inställningar"
-//         }
-//     }
-// );
-
-// const MainTabs = createBottomTabNavigator({
-//     MittHelsingborg: {
-//         screen: MittHbgStack,
-//         navigationOptions: {
-//             tabBarLabel: 'Mitt HBG'
-//         }
-//     },
-//     Nav: {
-//         screen: SettingStack,
-//         navigationOptions: {
-//             tabBarLabel: 'Inställningar'
-//         }
-//     }
-// });
+import ChatScreen from './screens/ChatScreen';
+import LoginScreen from './screens/LoginScreen';
+import SplashScreen from './screens/SplashScreen';
+import TaskDetailScreen from './screens/TaskDetailScreen';
+import TaskScreen from './screens/TaskScreen';
 
 const tabBarIcon = (iconName, colorFocused) => ({ focused }) => (
   <Icon name={iconName} color={focused ? colorFocused : 'gray'} />
@@ -130,12 +82,6 @@ const TaskScreenStack = createStackNavigator({
 
 const TabNavigator = createMaterialTopTabNavigator(
   {
-    // SplashIntro: {
-    //     screen: SplashScreen,
-    //     navigationOptions: {
-    //         tabBarVisible: false
-    //     }
-    // },
     Chat: {
       screen: ChatScreen,
       navigationOptions: {
