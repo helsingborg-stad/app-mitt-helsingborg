@@ -10,7 +10,6 @@ import { buildServiceUrl } from './UrlHelper';
  * @param {obj} headers
  */
 const request = async (endpoint, method, data, headers) => {
-  console.log('api req', endpoint);
   // Build complete api url
   const url = buildServiceUrl(endpoint);
   const token = await StorageService.getData(TOKEN_KEY);
