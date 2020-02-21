@@ -9,66 +9,41 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable import/no-named-as-default-member */
 import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { View, Text, SafeAreaView, Image, StyleSheet } from 'react-native';
-import {
-  createMaterialTopTabNavigator,
-  MaterialTopTabBar,
-  createBottomTabNavigator,
-} from 'react-navigation-tabs';
-
-import { createStackNavigator } from 'react-navigation-stack';
+import { SafeAreaView, View } from 'react-native';
 import { Icon } from 'react-native-elements';
-import UserSettingsScreen from './screens/UserSettingsScreen';
-import DashboardScreen from './screens/DashboardScreen';
-import SplashScreen from './screens/SplashScreen';
-import ChatScreen from './screens/ChatScreen';
-import TaskScreen from './screens/TaskScreen';
-import TaskDetailScreen from './screens/TaskDetailScreen';
-
-import LoginScreen from './screens/LoginScreen';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigation-tabs';
+import styled from 'styled-components/native';
 import StoreContext from '../helpers/StoreContext';
+import ChatScreen from './screens/ChatScreen';
+import LoginScreen from './screens/LoginScreen';
+import SplashScreen from './screens/SplashScreen';
+import TaskDetailScreen from './screens/TaskDetailScreen';
+import TaskScreen from './screens/TaskScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
-// const MittHbgStack = createStackNavigator(
-//     {
-//         Dashboard: DashboardScreen
-//     },
-//     {
-//         initialRouteName: "Dashboard",
-//         defaultNavigationOptions: {
-//             headerStyle: {
-//                 //backgroundColor: '#f4511e'
-//             }
-//         }
-//     },
-// );
+// TODO: Move Badge to own component file
+const Badge = styled.View`
+  border-color: #f5f5f5;
+  border-width: 2px;
+  position: absolute;
+  right: -8px;
+  top: -10px;
+  background-color: #d73640;
+  border-radius: 24px;
+  width: 20px;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+`;
 
-// const SettingStack = createStackNavigator(
-//     {
-//         Settings: UserSettingsScreen
-//     },
-//     {
-//         initialRouteName: "Settings",
-//         defaultNavigationOptions: {
-//             headerTitle: "Inställningar"
-//         }
-//     }
-// );
-
-// const MainTabs = createBottomTabNavigator({
-//     MittHelsingborg: {
-//         screen: MittHbgStack,
-//         navigationOptions: {
-//             tabBarLabel: 'Mitt HBG'
-//         }
-//     },
-//     Nav: {
-//         screen: SettingStack,
-//         navigationOptions: {
-//             tabBarLabel: 'Inställningar'
-//         }
-//     }
-// });
+const BadgeText = styled.Text`
+  color: white;
+  font-size: 12px;
+  font-family: Roboto;
+  font-weight: 800;
+`;
 
 const tabBarIcon = (iconName, colorFocused) => ({ focused }) => (
   <Icon name={iconName} color={focused ? colorFocused : 'gray'} />
@@ -80,9 +55,9 @@ const userEventTabWithBadge = (iconName, colorFocused) => ({ focused }) => (
       <View>
         <Icon name={iconName} color={focused ? colorFocused : 'gray'} />
         {badgeCount > 0 && (
-          <View style={styles.UserEventTabView}>
-            <Text style={styles.UserEventTabBadge}>{badgeCount}</Text>
-          </View>
+          <Badge>
+            <BadgeText>{badgeCount}</BadgeText>
+          </Badge>
         )}
       </View>
     )}
@@ -131,12 +106,6 @@ const TaskScreenStack = createStackNavigator({
 
 const TabNavigator = createMaterialTopTabNavigator(
   {
-    // SplashIntro: {
-    //     screen: SplashScreen,
-    //     navigationOptions: {
-    //         tabBarVisible: false
-    //     }
-    // },
     Chat: {
       screen: ChatScreen,
       navigationOptions: {
@@ -155,14 +124,7 @@ const TabNavigator = createMaterialTopTabNavigator(
       },
     },
     Profile: {
-      screen: () => (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Image
-            style={styles.ProfileMockImage}
-            source={require('../assets/screenshot_profile.png')}
-          />
-        </View>
-      ),
+      screen: ProfileScreen,
       navigationOptions: {
         title: 'Profil',
         tabBarIcon: tabBarIcon('contacts', 'blue'),
@@ -202,29 +164,3 @@ export default class Nav extends React.Component {
     return <AppContainer />;
   }
 }
-
-const styles = StyleSheet.create({
-  ProfileMockImage: {
-    width: '100%',
-    height: '100%',
-  },
-  UserEventTabView: {
-    borderColor: '#F5F5F5',
-    borderWidth: 2,
-    position: 'absolute',
-    right: -8,
-    top: -10,
-    backgroundColor: '#D73640',
-    borderRadius: 24,
-    width: 20,
-    height: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  UserEventTabBadge: {
-    color: 'white',
-    fontSize: 12,
-    fontFamily: 'Roboto',
-    fontWeight: '800',
-  },
-});

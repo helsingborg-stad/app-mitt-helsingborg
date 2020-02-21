@@ -1,12 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
 /* eslint-disable global-require */
-/* eslint-disable no-use-before-define */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
-import { View, StyleSheet, ImageBackground, PanResponder } from 'react-native';
+import { ImageBackground, PanResponder } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Swiper from 'react-native-swiper';
 import styled from 'styled-components/native';
@@ -17,10 +16,84 @@ import Button from '../atoms/Button/Button';
 import Text from '../atoms/Text';
 import Icon from '../atoms/Icon';
 
+const Slide = styled.View`
+  flex: 1;
+  padding: 30px;
+  background-color: #f5f5f5;
+  justify-content: flex-end;
+`;
+
+const SlideText = styled(Text)`
+  font-size: 18px;
+  line-height: 23px;
+`;
+
+const SlideTextLarge = styled(Text)`
+  font-size: 25px;
+  line-height: 23px;
+`;
+
+const SlideImageContainer = styled.View`
+  flex: 3;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Dot = styled.View`
+  width: 15px;
+  height: 15px;
+  border-width: 2px;
+  border-color: #610839;
+  border-radius: 8px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 3px;
+  margin-bottom: 20px;
+`;
+
+const ActiveDot = styled.View`
+  background-color: #610839;
+  width: 15px;
+  height: 15px;
+  border-radius: 8px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 3px;
+  margin-bottom: 20;
+`;
+
+const ButtonNextText = styled(Text)`
+  font-size: 19px;
+`;
+
+const ButtonContainer = styled.View`
+  padding-start: 25px;
+  padding-end: 25px;
+  padding-top: 35px;
+`;
+
+const EnhancedScreenWrapper = styled(ScreenWrapper)`
+  padding: 0px;
+`;
+
+const Flex = styled.View`
+  flex: ${props => (props.value ? props.value : 1)};
+`;
+
+const buttonWrapperStyle = {
+  backgroundColor: 'transparent',
+  flexDirection: 'row',
+  paddingBottom: 25,
+  paddingRight: 30,
+  justifyContent: 'space-between',
+  alignItems: 'flex-end',
+};
+
 /**
  * Splash screen that shall be displayed during first app initiation or after an app update.
  *
- * SHOW_SPLASH_SCREEN is a persistent variable that will route navigation to ether AuthLoading or display splash screen.
+ * SHOW_SPLASH_SCREEN is a persistent variable that will route navigation
+ * to ether AuthLoading or display splash screen.
  */
 export default class SplashScreen extends Component {
   state = {
@@ -80,115 +153,112 @@ export default class SplashScreen extends Component {
    * Button for disabling splash screen.
    */
   ButtonDisableSplash = () => (
-    <View style={{ paddingStart: 25, paddingEnd: 25, paddingTop: 35 }}>
+    <ButtonContainer>
       <Button
         onClick={() => this.props.navigation.navigate('LoginScreen')}
         color="purpleLight"
         block
       >
-        <Text style={{ color: 'white', fontSize: 16, fontFamily: 'Roboto', fontWeight: '500' }}>
-          Logga in med Mobilt BankID
-        </Text>
+        <Text>Logga in med Mobilt BankID</Text>
       </Button>
-    </View>
+    </ButtonContainer>
   );
 
   swipeWelcome = () => (
-    <View style={styles.slideEasy}>
-      <View style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
+    <Slide>
+      <SlideImageContainer>
         <ImageBackground
           style={{ width: 130, height: 200 }}
           source={require('../../assets/slides/stadsvapen.png')}
         />
-      </View>
-      <View style={{ flex: 2 }}>
-        <View style={{ flex: 1 }}>
+      </SlideImageContainer>
+      <Flex value="2">
+        <Flex>
           <Heading type="h2">Mitt {'\n'}Helsingborg</Heading>
-        </View>
-
-        <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 25, lineHeight: 28 }}>Välkommen!</Text>
-        </View>
-      </View>
-      <View style={{ flex: 1 }} />
-    </View>
+        </Flex>
+        <Flex>
+          <SlideTextLarge>Välkommen!</SlideTextLarge>
+        </Flex>
+      </Flex>
+      <Flex />
+    </Slide>
   );
 
   slideEasy = () => (
-    <View style={styles.slideEasy}>
-      <View style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
+    <Slide>
+      <SlideImageContainer>
         <ImageBackground
           source={require('../../assets/slides/illu_001.png')}
           style={{ width: 300, height: 300 }}
         />
-      </View>
-      <View style={{ flex: 2 }}>
-        <View style={{ flex: 1 }}>
+      </SlideImageContainer>
+      <Flex value="2">
+        <Flex>
           <Heading type="h2">Enkelt</Heading>
-        </View>
+        </Flex>
 
-        <View style={{ flex: 2 }}>
-          <Text style={{ fontSize: 19, lineHeight: 28 }}>
+        <Flex value="2">
+          <SlideText>
             Mitt Helsingborg är appen där du enkelt får tillgång till tjänster och information från
             kommunen.
-          </Text>
-        </View>
-      </View>
-      <View style={{ flex: 1 }} />
-    </View>
+          </SlideText>
+        </Flex>
+      </Flex>
+      <Flex />
+    </Slide>
   );
 
   slideAccessible = () => (
-    <View style={styles.slideEasy}>
-      <View style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
+    <Slide>
+      <SlideImageContainer>
         <ImageBackground
           source={require('../../assets/slides/illu_002.png')}
           style={{ width: 230, height: 260 }}
         />
-      </View>
-      <View style={{ flex: 2 }}>
-        <View style={{ flex: 1 }}>
+      </SlideImageContainer>
+      <Flex value="2">
+        <Flex>
           <Heading type="h2">Nära</Heading>
-        </View>
+        </Flex>
 
-        <View style={{ flex: 2 }}>
-          <Text style={{ fontSize: 19, lineHeight: 28 }}>
+        <Flex value="2">
+          <SlideText>
             Du kan följa och hantera dina ärenden, få personlig service eller bli tipsad om saker
             som händer nära dig.
-          </Text>
-        </View>
-      </View>
-      <View style={{ flex: 1 }} />
-    </View>
+          </SlideText>
+        </Flex>
+      </Flex>
+      <Flex />
+    </Slide>
   );
 
   slidePersonal = () => {
     const { ButtonDisableSplash } = this;
     return (
-      <View style={styles.slideEasy}>
-        <View style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
+      <Slide>
+        <SlideImageContainer>
           <ImageBackground
             source={require('../../assets/slides/illu_003.png')}
             style={{ width: 300, height: 300 }}
           />
-        </View>
-        <View style={{ flex: 2 }}>
-          <View style={{ flex: 1 }}>
+        </SlideImageContainer>
+        <Flex value="2">
+          <Flex>
             <Heading type="h2">Personligt</Heading>
-          </View>
-          <View style={{ flex: 2 }}>
-            <Text style={{ fontSize: 18, lineHeight: 23 }}>
+          </Flex>
+          <Flex value="2">
+            <SlideText>
               Inloggad ger mer. Som inloggad får du en personlig upplevelse anpassad för dig.
               {'\n\n'}
               Allt samlat i mobilen.
-            </Text>
-          </View>
-        </View>
+            </SlideText>
+          </Flex>
+        </Flex>
 
-        <View style={{ flex: 1 }}>
+        <Flex>
           <ButtonDisableSplash />
-        </View>
-      </View>
+        </Flex>
+      </Slide>
     );
   };
 
@@ -227,18 +297,18 @@ export default class SplashScreen extends Component {
             this._swiper = swiper;
           }}
           style={{ overflow: 'visible' }}
-          buttonWrapperStyle={styles.buttonWrapperStyle}
+          buttonWrapperStyle={buttonWrapperStyle}
           showsPagination={this.state.showSwipeInterface}
           showsButtons={this.state.showSwipeInterface}
-          prevButton={<Text style={styles.buttonText} />}
+          prevButton={<Text></Text>}
           nextButton={
             <Button color="swipe" z={5} onClick={() => this.swipeToNext()}>
-              <Text style={{ fontSize: 19 }}>{this.state.swipeButtonText}</Text>
+              <ButtonNextText>{this.state.swipeButtonText}</ButtonNextText>
               <Icon size={16} name="chevron-right" color="purple" />
             </Button>
           }
-          dot={<View style={styles.dot} />}
-          activeDot={<View style={styles.activeDot} />}
+          dot={<Dot />}
+          activeDot={<ActiveDot />}
           paginationStyle={{ paddingEnd: 195 }}
           onIndexChanged={index => this.swipeAction(index)}
           loop={false}
@@ -252,83 +322,3 @@ export default class SplashScreen extends Component {
     );
   }
 }
-
-const EnhancedScreenWrapper = styled(ScreenWrapper)`
-  padding: 0px;
-`;
-
-const styles = StyleSheet.create({
-  slide1: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#9DD6EB',
-  },
-  slide2: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#97CAE5',
-  },
-  slideEasy: {
-    flex: 1,
-    padding: 30,
-    backgroundColor: '#F5F5F5',
-    justifyContent: 'flex-end',
-  },
-  buttonWrapperStyle: {
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    paddingBottom: 25,
-    paddingRight: 30,
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-  },
-  dot: {
-    width: 15,
-    height: 15,
-    borderWidth: 2,
-    borderColor: '#610839',
-    borderRadius: 8,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 3,
-    marginBottom: 20,
-  },
-  activeDot: {
-    backgroundColor: '#610839',
-    width: 15,
-    height: 15,
-    borderRadius: 8,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 3,
-    marginBottom: 20,
-  },
-  textTitle: {
-    color: '#fff',
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  text: {
-    color: '#fff',
-    paddingTop: 15,
-    paddingHorizontal: 40,
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-  button: {
-    width: '100%',
-    paddingTop: 16,
-    paddingBottom: 16,
-    backgroundColor: '#0336FF',
-    borderRadius: 7,
-    marginTop: 40,
-  },
-  buttonText: {
-    paddingHorizontal: 10,
-    color: 'white',
-    fontSize: 17,
-    fontWeight: 'bold',
-  },
-});

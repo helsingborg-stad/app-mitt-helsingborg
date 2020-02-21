@@ -2,11 +2,10 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { Keyboard, TextInput, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import styled, { withTheme } from 'styled-components/native';
-import { includePropetiesWithKey, excludePropetiesWithKey } from '../../helpers/Objects';
-import ChatForm from './ChatForm';
+import { withTheme } from 'styled-components/native';
+import { excludePropetiesWithKey, includePropetiesWithKey } from '../../helpers/Objects';
 import Input from '../atoms/Input';
+import ChatForm from './ChatForm';
 
 const InputForm = props => {
   const chatFormProps = ['isFocused', 'submitHandler', 'changeHandler', 'inputValue', 'submitText'];
