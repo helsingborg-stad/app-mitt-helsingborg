@@ -2,16 +2,15 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-use-before-define */
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import styled, { css, withTheme } from 'styled-components/native';
 import PropTypes from 'prop-types';
-import Text from '../Text';
-import Heading from '../Heading';
+import React from 'react';
+import { View } from 'react-native';
+import styled, { css, withTheme } from 'styled-components/native';
 import shadow from '../../../styles/shadow';
-
-import Icon from '../Icon';
 import Button from '../Button/Button';
+import Heading from '../Heading';
+import Icon from '../Icon';
+import Text from '../Text';
 
 const ChatBubble = props => {
   const { content, modifiers, style, iconRight, onClickIconRight, theme, z } = props;
