@@ -59,7 +59,7 @@ const ActiveDot = styled.View`
   margin-left: 10px;
   margin-right: 10px;
   margin-top: 3px;
-  margin-bottom: 20;
+  margin-bottom: 20px;
 `;
 
 const ButtonNextText = styled(Text)`
