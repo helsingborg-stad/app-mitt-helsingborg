@@ -77,7 +77,7 @@ ListItem.defaultProps = {
 };
 
 const DefaultItem = styled.TouchableHighlight`
-  border-bottom-width: 1;
+  border-bottom-width: 1px;
   border-color: ${props => props.theme.background.lighter};
 `;
 

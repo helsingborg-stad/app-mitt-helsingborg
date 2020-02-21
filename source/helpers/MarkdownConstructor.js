@@ -2,7 +2,8 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import Markdown from 'react-native-markdown-renderer';
+// import Markdown from 'react-native-markdown-renderer';
+import Markdown from 'react-native-markdown-display';
 import Text from '../components/atoms/Text';
 
 const MarkdownConstructor = props => {
@@ -10,8 +11,7 @@ const MarkdownConstructor = props => {
 
   return (
     <Markdown rules={markdownRules} style={markDownStyles}>
-      {' '}
-      {rawText}{' '}
+      {rawText}
     </Markdown>
   );
 };

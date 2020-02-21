@@ -117,14 +117,14 @@ const TaskScreenStack = createStackNavigator({
   Task: {
     screen: TaskScreen,
     navigationOptions: {
-      header: null,
+      headerShown: false,
     },
   },
 
   TaskDetails: {
     screen: TaskDetailScreen,
     navigationOptions: {
-      header: null,
+      headerShown: false,
     },
   },
 });
