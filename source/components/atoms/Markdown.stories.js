@@ -2,13 +2,12 @@
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import { View, StyleSheet } from 'react-native';
-import Markdown, { getUniqueID } from 'react-native-markdown-display';
+import React from 'react';
+import { View } from 'react-native';
+import MarkdownConstructor from '../../helpers/MarkdownConstructor';
 import StoryWrapper from '../molecules/StoryWrapper';
 import Text from './Text';
-import MarkdownConstructor from '../../helpers/MarkdownConstructor';
 
 const rules = {
   text: (node, children, parent, styles) => (
@@ -23,7 +22,7 @@ const rules = {
   ),
 };
 
-const styles = StyleSheet.create({
+const styles = {
   heading: {
     borderBottomWidth: 1,
     borderColor: '#000000',
@@ -53,7 +52,6 @@ const styles = StyleSheet.create({
   },
   listUnorderedItemText: {
     fontSize: 20,
-    // lineHeight: 10
   },
   paragraph: {
     flexWrap: 'wrap',
@@ -61,7 +59,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
   },
-});
+};
 
 const list = `
 Okej, då ska jag hjälpa dig med det. För att boka vigsel behöver jag veta:
@@ -71,9 +69,9 @@ Okej, då ska jag hjälpa dig med det. För att boka vigsel behöver jag veta:
 - Om er vigsel ska vara i Rådhuset i Helsingborg eller på egen vald plats
 `;
 
-const linebreak = `before 
-&nbsp; 
-&nbsp; 
+const linebreak = `before
+&nbsp;
+&nbsp;
 after`;
 
 const simpleText = `
@@ -92,5 +90,7 @@ const url = `[I'm an inline-style link](https://www.google.com)`;
 storiesOf('Text', module).add('Markdown', () => (
   <StoryWrapper>
     <MarkdownConstructor style={styles} rules={rules} rawText={linebreak} />
+    <MarkdownConstructor style={styles} rules={rules} rawText={list} />
+    <MarkdownConstructor style={styles} rules={rules} rawText={url} />
   </StoryWrapper>
 ));
