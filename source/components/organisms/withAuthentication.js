@@ -15,7 +15,7 @@ import { canOpenUrl } from '../../helpers/UrlHelper';
 
 const FAKE_PERSONAL_NUMBER = '201111111111';
 const FAKE_TOKEN =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjFlZDcyYzJjLWQ5OGUtNGZjMC04ZGY2LWY5NjRkOTYxMTVjYSIsImlhdCI6MTU2Mjc0NzM2NiwiZXhwIjoxNTYyNzUwOTc0fQ.iwmUMm51j-j2BYui9v9371DkY5LwLGATWn4LepVxmNk';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbm8iOiIxOTc0MDYwMjc4MjYiLCJpYXQiOjE1ODEwNjQ4OTIsImV4cCI6MTYxMjYwMDg5Mn0.JCBvQ3cbd-2b6jvdwhSoC7AxJ9DVML11OSlWZvFZG8o';
 
 /**
  * Wraps a react component with user authentication component.
