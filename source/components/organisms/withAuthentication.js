@@ -62,10 +62,10 @@ const withAuthentication = WrappedComponent =>
           throw new Error(authResponse.data);
         }
 
-        try {
-          const { user, accessToken } = authResponse.data;
-          await Auth.logIn(user, accessToken);
-        } catch (error) {
+        const { user, accessToken } = authResponse.data;
+        const loginUser = await Auth.logIn(user, accessToken);
+        console.log('loginUser', loginUser);
+        if (!loginUser) {
           throw new Error('Login failed');
         }
 
@@ -112,13 +112,7 @@ const withAuthentication = WrappedComponent =>
       try {
         const response = await bypassBankid(personalNumber);
         const { user } = response.data;
-
-        try {
-          await Auth.logIn(user, FAKE_TOKEN);
-        } catch (e) {
-          // BY PASS REJECTION
-          // throw "Login failed";
-        }
+        await Auth.logIn(user, FAKE_TOKEN);
 
         return { user, FAKE_TOKEN };
       } catch (e) {
