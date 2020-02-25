@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /**
  * Service for push notification.
  * Component should be added at app top level.
@@ -7,8 +6,8 @@
  * Only tested on iOS.
  */
 
-import React, { Component } from 'react';
-import { PushNotificationIOS, Alert } from 'react-native';
+import { Component } from 'react';
+import { Alert, PushNotificationIOS } from 'react-native';
 
 class PushNotificationService extends Component {
   componentDidMount() {
