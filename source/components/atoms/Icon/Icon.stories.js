@@ -1,11 +1,8 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
-import { View, Text } from 'react-native';
 import { storiesOf } from '@storybook/react-native';
 import styled from 'styled-components/native';
+import PropTypes from 'prop-types';
 import StoryWrapper from '../../molecules/StoryWrapper';
 
 import Icon from './index';
@@ -26,15 +23,28 @@ const Flex = styled.View`
   flex-wrap: wrap;
 `;
 
-const IconCategory = props => (
-  <>
-    <Flex>
-      <Heading type="h3">{props.name.charAt(0).toUpperCase() + props.name.slice(1)}</Heading>
-    </Flex>
-    <Flex>
-      {props.icons.map(({ name }) => (
-        <Icon size={48} name={name.split(' ').join('-')} key={name.split(' ').join('-')} />
-      ))}
-    </Flex>
-  </>
-);
+const IconCategory = props => {
+  const { name, icons } = props;
+
+  return (
+    <>
+      <Flex>
+        <Heading type="h3">{name.charAt(0).toUpperCase() + name.slice(1)}</Heading>
+      </Flex>
+      <Flex>
+        {icons.map(({ name: iconName }) => (
+          <Icon
+            size={48}
+            name={iconName.split(' ').join('-')}
+            key={iconName.split(' ').join('-')}
+          />
+        ))}
+      </Flex>
+    </>
+  );
+};
+
+IconCategory.propTypes = {
+  name: PropTypes.string.isRequired,
+  icons: PropTypes.array.isRequired,
+};
