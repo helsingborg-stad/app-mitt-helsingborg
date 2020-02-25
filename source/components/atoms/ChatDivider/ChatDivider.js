@@ -1,6 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/display-name */
-/* eslint-disable no-undef */
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
@@ -38,13 +35,17 @@ const DividerInfo = styled(Text)`
   font-size: 12px;
 `;
 
-const ChatDivider = props => (
-  <DividerWrapper>
-    <DividerTitle>{props.title}</DividerTitle>
-    <DividerLine />
-    <DividerInfo>{props.info}</DividerInfo>
-  </DividerWrapper>
-);
+const ChatDivider = props => {
+  const { title, info } = props;
+
+  return (
+    <DividerWrapper>
+      <DividerTitle>{title}</DividerTitle>
+      <DividerLine />
+      <DividerInfo>{info}</DividerInfo>
+    </DividerWrapper>
+  );
+};
 
 ChatDivider.propTypes = {
   title: PropTypes.string,
