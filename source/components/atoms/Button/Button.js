@@ -2,15 +2,15 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-plusplus */
-/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled, { ThemeProvider, css } from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 
 import z from '../../../styles/shadow';
 
 import Text from '../Text';
 import Icon from '../Icon';
+import colors from '../../../styles/colors';
 
 const ButtonNew = props => {
   const { value, onClick, style, color, block, rounded, pill, sharp, icon, z, size } = props;
@@ -70,6 +70,21 @@ const ButtonNew = props => {
       </ButtonTouchable>
     </ButtonWrapper>
   );
+};
+
+ButtonNew.propTypes = {
+  block: PropTypes.bool,
+  children: PropTypes.any,
+  color: PropTypes.oneOf(Object.keys(colors.button)),
+  icon: PropTypes.bool,
+  onClick: PropTypes.func,
+  pill: PropTypes.bool,
+  rounded: PropTypes.bool,
+  sharp: PropTypes.bool,
+  size: PropTypes.string,
+  style: PropTypes.array,
+  value: PropTypes.string,
+  z: PropTypes.oneOf(Number(Object.keys(z))),
 };
 
 ButtonNew.defaultProps = {
