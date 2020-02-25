@@ -1,9 +1,7 @@
 /* eslint-disable import/no-named-default */
-import React from 'react';
 import PropTypes from 'prop-types';
 import { default as MIcon } from 'react-native-vector-icons/MaterialIcons';
 import styled from 'styled-components/native';
-import Text from '../Text';
 
 const Icon = styled(MIcon)`
   color: #000000;
