@@ -6,7 +6,7 @@ import env from 'react-native-config';
 import StorageService, { USER_KEY } from '../../services/StorageService';
 import Auth from '../../helpers/AuthHelper';
 import {
-  authorize,
+  authAndCollect,
   bypassBankid,
   cancelBankidRequest,
   resetCancel,
@@ -57,7 +57,7 @@ const withAuthentication = WrappedComponent =>
           return await this._fakeLogin(personalNumber);
         }
 
-        const authResponse = await authorize(personalNumber);
+        const authResponse = await authAndCollect(personalNumber);
         if (authResponse.ok !== true) {
           throw new Error(authResponse.data);
         }
