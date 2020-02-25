@@ -102,7 +102,6 @@ const ButtonNew = props => {
   const childrenTotal = React.Children.count(props.children);
 
   let iconComponentsTotal = 0;
-  let textComponentsTotal = 0;
 
   /** Override child components */
   const children = React.Children.map(props.children, (child, index) => {
@@ -125,7 +124,6 @@ const ButtonNew = props => {
 
     /** Text */
     if (child.type === Text) {
-      textComponentsTotal++;
       return React.createElement(ButtonText, {
         ...child.props,
         buttonTheme: color,
