@@ -1,19 +1,10 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/display-name */
 /* eslint-disable no-undef */
 import React from 'react';
 import styled from 'styled-components/native';
-import { View } from 'react-native';
+import PropTypes from 'prop-types';
 import Text from '../Text';
-
-export default ChatDivider = props => (
-  <DividerWrapper>
-    <DividerTitle>{props.title}</DividerTitle>
-    <DividerLine />
-    <DividerInfo>{props.info}</DividerInfo>
-  </DividerWrapper>
-);
 
 const DividerLine = styled.View`
   height: 1px;
@@ -46,3 +37,18 @@ const DividerInfo = styled(Text)`
   flex-shrink: 0;
   font-size: 12px;
 `;
+
+const ChatDivider = props => (
+  <DividerWrapper>
+    <DividerTitle>{props.title}</DividerTitle>
+    <DividerLine />
+    <DividerInfo>{props.info}</DividerInfo>
+  </DividerWrapper>
+);
+
+ChatDivider.propTypes = {
+  title: PropTypes.string,
+  info: PropTypes.string,
+};
+
+export default ChatDivider;
