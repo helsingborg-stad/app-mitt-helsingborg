@@ -67,13 +67,7 @@
       }
     ],
     "radix": 0,
-    "no-shadow": [
-      2,
-      {
-        "hoist": "all",
-        "allow": ["resolve", "reject", "done", "next", "err", "error"]
-      }
-    ],
+    "no-shadow": 0,
     "quotes": [
       2,
       "single",
@@ -98,8 +92,7 @@
     ],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "react/state-in-constructor": 0,
-    "no-shadow": 0
+    "react/state-in-constructor": 0
   },
   "plugins": ["prettier", "react-hooks"]
 }
