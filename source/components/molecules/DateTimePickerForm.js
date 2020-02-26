@@ -1,17 +1,15 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import React from 'react';
-import { DatePickerIOS } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { includePropetiesWithKey } from '../../helpers/Objects';
 import ChatForm from './ChatForm';
 import Input from '../atoms/Input';
 
 const DateTimePickerForm = props => {
   const { changeHandler, submitHandler, inputValue, mode, selectorProps } = props;
-
+  console.log('changeHandler', changeHandler);
   let dateTimeString;
-  const date = typeof inputValue.getMonth === 'function' ? inputValue : new Date();
+  const date = inputValue && typeof inputValue.getMonth === 'function' ? inputValue : new Date();
   const dateString = `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(
     2,
     0
@@ -21,29 +19,32 @@ const DateTimePickerForm = props => {
     0
   )}`;
 
-  switch (mode) {
-    case 'date':
-      dateTimeString = dateString;
-      break;
+  if (inputValue) {
+    switch (mode) {
+      case 'date':
+        dateTimeString = dateString;
+        break;
 
-    case 'time':
-      dateTimeString = timeString;
-      break;
+      case 'time':
+        dateTimeString = timeString;
+        break;
 
-    default:
-      dateTimeString = `${dateString} ${timeString}`;
+      default:
+        dateTimeString = `${dateString} ${timeString}`;
+    }
   }
-
-  const enhancedSubmitHandler = () => {
-    dateTimeString.length > 0 ? submitHandler(dateTimeString) : null;
-  };
 
   return (
     <ChatForm
       {...includePropetiesWithKey(props, ['isFocused', 'changeHandler', 'inputValue'])}
-      submitHandler={enhancedSubmitHandler}
+      submitHandler={() => submitHandler(dateTimeString)}
       renderFooter={() => (
-        <DatePickerIOS date={date} onDateChange={changeHandler} mode={mode} {...selectorProps} />
+        <DateTimePicker
+          value={date}
+          onChange={(_event, value) => changeHandler(value)}
+          mode={mode}
+          {...selectorProps}
+        />
       )}
     >
       <Input
@@ -51,10 +52,22 @@ const DateTimePickerForm = props => {
         {...props}
         editable={false}
         value={dateTimeString}
-        onSubmitEditing={enhancedSubmitHandler}
+        onSubmitEditing={() => submitHandler(dateTimeString)}
       />
     </ChatForm>
   );
+};
+
+DateTimePickerForm.propTypes = {
+  changeHandler: PropTypes.func,
+  inputValue: PropTypes.oneOfType(PropTypes.instanceOf(Date), PropTypes.string),
+  mode: PropTypes.string,
+  selectorProps: PropTypes.object,
+  submitHandler: PropTypes.func,
+};
+
+DateTimePickerForm.defaultProps = {
+  inputValue: '',
 };
 
 export default DateTimePickerForm;
