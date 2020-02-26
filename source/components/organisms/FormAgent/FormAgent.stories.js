@@ -5,9 +5,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable max-classes-per-file */
+/* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react-native';
 
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import StoryWrapper from '../../molecules/StoryWrapper';
 
 import Chat from '../Chat/Chat';
@@ -185,19 +187,30 @@ class FormAgentInitiatorWithRequest extends Component {
   }
 }
 
-storiesOf('Chat', module)
-  .add('Form agent', () => (
-    <StoryWrapper>
-      <Chat ChatAgent={FormAgentInitiator} />
-    </StoryWrapper>
-  ))
-  .add('Form agent with data from request', () => (
-    <StoryWrapper>
-      <Chat ChatAgent={FormAgentInitiatorWithRequest} />
-    </StoryWrapper>
-  ))
-  .add('Experimental form agent', () => (
-    <StoryWrapper>
-      <Chat ChatAgent={FormAgentExperimentalInitiator} />
-    </StoryWrapper>
-  ));
+const StoryStack = createSwitchNavigator(
+  {
+    Story: () => (
+      <StoryWrapper>
+        <Chat ChatAgent={FormAgentInitiator} />
+      </StoryWrapper>
+    ),
+  },
+  {
+    initialRouteName: 'Story',
+  }
+);
+
+const StoryNavigator = createAppContainer(StoryStack);
+
+storiesOf('Chat', module).add('Form agent', () => <StoryNavigator />);
+
+// .add('Form agent with data from request', () => (
+//   <StoryWrapper>
+//     <Chat ChatAgent={FormAgentInitiatorWithRequest} />
+//   </StoryWrapper>
+// ))
+// .add('Experimental form agent', () => (
+//   <StoryWrapper>
+//     <Chat ChatAgent={FormAgentExperimentalInitiator} />
+//   </StoryWrapper>
+// ));
