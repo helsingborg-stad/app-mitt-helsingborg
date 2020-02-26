@@ -1,10 +1,7 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-shadow */
-/* eslint-disable react/prop-types */
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
 import styled from 'styled-components/native';
 
+import PropTypes from 'prop-types';
 import { excludePropetiesWithKey, includePropetiesWithKey } from '../../helpers/Objects';
 
 import withChatForm from '../organisms/withChatForm';
@@ -13,8 +10,17 @@ import ButtonStack from './ButtonStack';
 import DateTimePickerForm from './DateTimePickerForm';
 import InputForm from './InputForm';
 
+const ChatUserInputWrapper = styled.View`
+  background-color: ${props => props.theme.chatForm.background};
+  overflow: visible;
+  border-top-width: 1px;
+  border-color: ${props => props.theme.border.default};
+  margin-top 16px;
+  padding-bottom: 6px;
+`;
+
 export default class ChatUserInput extends Component {
-  avalibleComponents = {
+  availableComponents = {
     text: withChatForm(InputForm),
     number: withChatForm(InputForm),
     radio: ButtonStack,
@@ -23,7 +29,7 @@ export default class ChatUserInput extends Component {
     custom: {},
   };
 
-  componentController = (input, index) => {
+  componentController = (input, _index) => {
     let data = {
       Component: false,
       componentProps: {},
@@ -32,7 +38,7 @@ export default class ChatUserInput extends Component {
     switch (input.type) {
       case 'text':
         data = {
-          Component: this.avalibleComponents.text,
+          Component: this.availableComponents.text,
           componentProps: {
             blurOnSubmit: false,
             autoFocus: true,
@@ -49,7 +55,7 @@ export default class ChatUserInput extends Component {
 
       case 'number':
         data = {
-          Component: this.avalibleComponents.number,
+          Component: this.availableComponents.number,
           componentProps: {
             blurOnSubmit: false,
             autoFocus: true,
@@ -67,7 +73,7 @@ export default class ChatUserInput extends Component {
 
       case 'radio':
         data = {
-          Component: this.avalibleComponents.radio,
+          Component: this.availableComponents.radio,
           componentProps: {
             items: input.options,
           },
@@ -80,7 +86,7 @@ export default class ChatUserInput extends Component {
 
       case 'datetime':
         data = {
-          Component: this.avalibleComponents.dateTime,
+          Component: this.availableComponents.dateTime,
           componentProps: {
             mode: 'datetime',
             ...includePropetiesWithKey(input, ['placeholder', 'selectorProps']),
@@ -90,7 +96,7 @@ export default class ChatUserInput extends Component {
 
       case 'date':
         data = {
-          Component: this.avalibleComponents.dateTime,
+          Component: this.availableComponents.dateTime,
           componentProps: {
             mode: 'date',
             ...includePropetiesWithKey(input, ['placeholder', 'selectorProps']),
@@ -100,7 +106,7 @@ export default class ChatUserInput extends Component {
 
       case 'time':
         data = {
-          Component: this.avalibleComponents.dateTime,
+          Component: this.availableComponents.dateTime,
           componentProps: {
             mode: 'time',
             ...includePropetiesWithKey(input, ['placeholder', 'selectorProps']),
@@ -149,11 +155,7 @@ export default class ChatUserInput extends Component {
   }
 }
 
-const ChatUserInputWrapper = styled.View`
-  background-color: ${props => props.theme.chatForm.background};
-  overflow: visible;
-  border-top-width: 1px;
-  border-color: ${props => props.theme.border.default};
-  margin-top 16px;
-  padding-bottom: 6px;
-`;
+ChatUserInput.propTypes = {
+  inputArray: PropTypes.array.isRequired,
+  chat: PropTypes.shape({}),
+};

@@ -1,80 +1,9 @@
-/* eslint-disable react/no-unused-prop-types */
-/* eslint-disable no-prototype-builtins */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components/native';
-import { Image } from 'react-native';
 import Text from '../../atoms/Text';
 import Icon from '../../atoms/Icon';
 import Button from '../../atoms/Button/Button';
-
-const ListItem = props => {
-  const { highlighted, iconName, title, text, color, onClick, imageSrc } = props;
-  const background =
-    (props.highlighted &&
-      props.color &&
-      props.theme.icon.hasOwnProperty(props.color) &&
-      props.theme.icon[props.color][1]) ||
-    (props.highlighted && !props.color && props.theme.icon.lightest) ||
-    'transparent';
-
-  const renderContent = () => (
-    <Flex>
-      {iconName && !imageSrc && (
-        <IconContainer highlighted={highlighted} background={background}>
-          <IconFlex>
-            <ItemIcon name={iconName} color={color} />
-          </IconFlex>
-        </IconContainer>
-      )}
-
-      {imageSrc && (
-        <IconContainer highlighted={highlighted} background={background}>
-          <IconFlex>
-            <ImageIcon source={imageSrc} resizeMode="contain" />
-          </IconFlex>
-        </IconContainer>
-      )}
-
-      <Content>
-        {title && <Title small>{title}</Title>}
-        {text && <Text>{text}</Text>}
-      </Content>
-      <Chevron name="chevron-right" />
-    </Flex>
-  );
-
-  if (highlighted) {
-    return (
-      <HighlightedItem onClick={onClick} block>
-        {renderContent()}
-      </HighlightedItem>
-    );
-  }
-
-  return (
-    <DefaultItem underlayColor="transparent" onPress={onClick}>
-      {renderContent()}
-    </DefaultItem>
-  );
-};
-
-export default withTheme(ListItem);
-
-ListItem.propTypes = {
-  color: PropTypes.oneOf(['blue', 'purple', 'red', 'green']),
-  highlighted: PropTypes.bool,
-  iconName: PropTypes.string,
-  title: PropTypes.string,
-  text: PropTypes.string,
-  onCLick: PropTypes.func,
-};
-
-ListItem.defaultProps = {
-  highlighted: false,
-};
 
 const DefaultItem = styled.TouchableHighlight`
   border-bottom-width: 1px;
@@ -128,3 +57,79 @@ const ImageIcon = styled.Image`
   width: 32px;
   height: 32px;
 `;
+
+const ListItem = props => {
+  const {
+    highlighted,
+    iconName,
+    title,
+    text,
+    color,
+    onClick,
+    imageSrc,
+    theme: { icon },
+  } = props;
+
+  const background =
+    (highlighted && color && Object.prototype.hasOwnProperty.call(icon, color) && icon[color][1]) ||
+    (highlighted && !color && icon.lightest) ||
+    'transparent';
+
+  const renderContent = () => (
+    <Flex>
+      {iconName && !imageSrc && (
+        <IconContainer highlighted={highlighted} background={background}>
+          <IconFlex>
+            <ItemIcon name={iconName} color={color} />
+          </IconFlex>
+        </IconContainer>
+      )}
+
+      {imageSrc && (
+        <IconContainer highlighted={highlighted} background={background}>
+          <IconFlex>
+            <ImageIcon source={imageSrc} resizeMode="contain" />
+          </IconFlex>
+        </IconContainer>
+      )}
+
+      <Content>
+        {title && <Title small>{title}</Title>}
+        {text && <Text>{text}</Text>}
+      </Content>
+      <Chevron name="chevron-right" />
+    </Flex>
+  );
+
+  if (highlighted) {
+    return (
+      <HighlightedItem onClick={onClick} block>
+        {renderContent()}
+      </HighlightedItem>
+    );
+  }
+
+  return (
+    <DefaultItem underlayColor="transparent" onPress={onClick}>
+      {renderContent()}
+    </DefaultItem>
+  );
+};
+
+export default withTheme(ListItem);
+
+ListItem.propTypes = {
+  color: PropTypes.oneOf(['blue', 'purple', 'red', 'green']),
+  highlighted: PropTypes.bool,
+  iconName: PropTypes.string,
+  title: PropTypes.string,
+  text: PropTypes.string,
+  onClick: PropTypes.func,
+  theme: PropTypes.object,
+  imageSrc: PropTypes.number,
+  lightest: PropTypes.string,
+};
+
+ListItem.defaultProps = {
+  highlighted: false,
+};

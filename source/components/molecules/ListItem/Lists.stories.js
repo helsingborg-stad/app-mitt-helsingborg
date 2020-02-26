@@ -1,25 +1,8 @@
-/* eslint-disable no-use-before-define */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from '../StoryWrapper';
 import GroupedList from '../GroupedList/GroupedList';
 import ListItem from './index';
-
-storiesOf('Lists', module)
-  .add('Grouped list', props => (
-    <StoryWrapper {...props}>
-      <GroupedList heading="Avslutade" items={GroupedListData} />
-    </StoryWrapper>
-  ))
-  .add('Highlight colors', props => (
-    <StoryWrapper {...props}>
-      {HighlightedData.map(item => (
-        <ListItem highlighted key={item.id} {...item} />
-      ))}
-    </StoryWrapper>
-  ));
 
 const GroupedListData = [
   {
@@ -89,3 +72,17 @@ const HighlightedData = [
     color: 'red',
   },
 ];
+
+storiesOf('Lists', module)
+  .add('Grouped list', props => (
+    <StoryWrapper {...props}>
+      <GroupedList heading="Avslutade" items={GroupedListData} />
+    </StoryWrapper>
+  ))
+  .add('Highlight colors', props => (
+    <StoryWrapper {...props}>
+      {HighlightedData.map(item => (
+        <ListItem highlighted key={item.id} {...item} />
+      ))}
+    </StoryWrapper>
+  ));

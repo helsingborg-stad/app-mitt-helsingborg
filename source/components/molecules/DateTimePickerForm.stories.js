@@ -1,109 +1,62 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable react/state-in-constructor */
-/* eslint-disable max-classes-per-file */
-import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react-native';
-import StoryWrapper from './StoryWrapper';
-import withChatForm from '../organisms/withChatForm';
+import React, { useState } from 'react';
 import DateTimePickerForm from './DateTimePickerForm';
+import StoryWrapper from './StoryWrapper';
 
-class DateTimePicker extends Component {
-  state = {
-    inputValue: '',
-  };
+const DateTimePicker = () => {
+  const [inputValue, setInputValue] = useState('');
 
-  changeHandler = inputValue => {
-    this.setState(prevState => ({
-      inputValue,
-    }));
-  };
+  return (
+    <DateTimePickerForm
+      inputValue={inputValue}
+      changeHandler={date => setInputValue(date)}
+      submitHandler={() => alert(inputValue)}
+      mode="datetime"
+      placeholder="Date time"
+      selectorProps={{
+        minuteInterval: 30,
+        locale: 'sv',
+        minimumDate: new Date(),
+      }}
+    />
+  );
+};
 
-  submitHandler = () => {
-    alert(this.state.inputValue);
-  };
+const DatePicker = () => {
+  const [inputValue, setInputValue] = useState('');
 
-  render() {
-    return (
-      <DateTimePickerForm
-        inputValue={this.state.inputValue}
-        changeHandler={this.changeHandler}
-        submitHandler={this.submitHandler}
-        mode="datetime"
-        placeholder="Date time"
-        selectorProps={{
-          minuteInterval: 30,
-          locale: 'sv',
-          minimumDate: new Date(),
-        }}
-      />
-    );
-  }
-}
+  return (
+    <DateTimePickerForm
+      inputValue={inputValue}
+      changeHandler={date => setInputValue(date)}
+      submitHandler={() => alert(inputValue)}
+      placeholder="Date"
+      mode="date"
+      selectorProps={{
+        locale: 'sv',
+        minimumDate: new Date(),
+      }}
+    />
+  );
+};
 
-class DatePicker extends Component {
-  state = {
-    inputValue: '',
-  };
+const TimePicker = () => {
+  const [inputValue, setInputValue] = useState('');
 
-  changeHandler = inputValue => {
-    this.setState(prevState => ({
-      inputValue,
-    }));
-  };
-
-  submitHandler = () => {
-    alert(this.state.inputValue);
-  };
-
-  render() {
-    return (
-      <DateTimePickerForm
-        inputValue={this.state.inputValue}
-        changeHandler={this.changeHandler}
-        submitHandler={this.submitHandler}
-        placeholder="Date"
-        mode="date"
-        selectorProps={{
-          locale: 'sv',
-          minimumDate: new Date(),
-        }}
-      />
-    );
-  }
-}
-
-class TimePicker extends Component {
-  state = {
-    inputValue: '',
-  };
-
-  changeHandler = inputValue => {
-    this.setState(prevState => ({
-      inputValue,
-    }));
-  };
-
-  submitHandler = () => {
-    alert(this.state.inputValue);
-  };
-
-  render() {
-    return (
-      <DateTimePickerForm
-        inputValue={this.state.inputValue}
-        changeHandler={this.changeHandler}
-        submitHandler={this.submitHandler}
-        mode="time"
-        placeholder="Time"
-        selectorProps={{
-          locale: 'sv',
-          minuteInterval: 30,
-        }}
-      />
-    );
-  }
-}
+  return (
+    <DateTimePickerForm
+      inputValue={inputValue}
+      changeHandler={date => setInputValue(date)}
+      submitHandler={() => alert(inputValue)}
+      mode="time"
+      placeholder="Time"
+      selectorProps={{
+        locale: 'sv',
+        minuteInterval: 30,
+      }}
+    />
+  );
+};
 
 storiesOf('Date time picker', module)
   .add('Date time picker', () => (

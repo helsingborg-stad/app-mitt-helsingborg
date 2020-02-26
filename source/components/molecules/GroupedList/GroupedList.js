@@ -1,37 +1,10 @@
-/* eslint-disable no-prototype-builtins */
-/* eslint-disable no-shadow */
-/* eslint-disable react/prop-types */
-/* eslint-disable no-undef */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/display-name */
 import React from 'react';
-import { View, SectionList, TouchableHighlight } from 'react-native';
+import { View, SectionList } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import Heading from '../../atoms/Heading';
 import Text from '../../atoms/Text';
 import ListItem from '../ListItem';
-
-export default GroupedList = props => {
-  const { heading, items, onClick } = props;
-  return (
-    <SectionList
-      ListHeaderComponent={heading ? <Header type="h3">{heading}</Header> : null}
-      renderSectionHeader={({ section: { heading, data } }) => (
-        <View>
-          <SectionHeader small>{heading}</SectionHeader>
-          {!(data[0].hasOwnProperty('highlighted') && data[0].highlighted === true) && (
-            <Separator />
-          )}
-        </View>
-      )}
-      scrollEnabled={false}
-      sections={items}
-      renderItem={item => <ListItem onClick={onClick} {...item.item} />}
-      keyExtractor={(item, index) => index}
-    />
-  );
-};
 
 const Header = styled(Heading)`
   margin-left: 4px;
@@ -50,8 +23,32 @@ const Separator = styled(View)`
   background-color: ${props => props.theme.background.lighter};
 `;
 
+const GroupedList = props => {
+  const { heading: sectionHeading, items, onClick } = props;
+  return (
+    <SectionList
+      ListHeaderComponent={sectionHeading ? <Header type="h3">{sectionHeading}</Header> : null}
+      renderSectionHeader={({ section: { heading, data } }) => (
+        <View>
+          <SectionHeader small>{heading}</SectionHeader>
+          {!(
+            Object.prototype.hasOwnProperty.call(data[0], 'highlighted') &&
+            data[0].highlighted === true
+          ) && <Separator />}
+        </View>
+      )}
+      scrollEnabled={false}
+      sections={items}
+      renderItem={item => <ListItem onClick={onClick} {...item.item} />}
+      keyExtractor={(item, index) => index}
+    />
+  );
+};
+
 GroupedList.propTypes = {
   heading: PropTypes.string,
   items: PropTypes.array,
   onClick: PropTypes.func,
 };
+
+export default GroupedList;
