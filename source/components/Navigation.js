@@ -83,7 +83,7 @@ const MaterialTopTabBarWrapper = props => {
   );
 };
 
-const TaskScreenStack = createStackNavigator({
+const TaskStack = createStackNavigator({
   Task: {
     screen: TaskScreen,
     navigationOptions: {
@@ -99,7 +99,7 @@ const TaskScreenStack = createStackNavigator({
   },
 });
 
-const TabNavigator = createMaterialTopTabNavigator(
+const BottomBarStack = createMaterialTopTabNavigator(
   {
     Chat: {
       screen: ChatScreen,
@@ -112,7 +112,7 @@ const TabNavigator = createMaterialTopTabNavigator(
       },
     },
     UserEvents: {
-      screen: TaskScreenStack,
+      screen: TaskStack,
       navigationOptions: {
         title: 'Mitt HBG',
         tabBarIcon: userEventTabWithBadge('home', '#A61380'),
@@ -140,22 +140,17 @@ const TabNavigator = createMaterialTopTabNavigator(
   }
 );
 
-// const AppContainer = createAppContainer(TabNavigator);
-const AppContainer = createAppContainer(
-  createSwitchNavigator(
-    {
-      MainApp: TabNavigator,
-      LoginScreen,
-      SplashIntro: SplashScreen,
-    },
-    {
-      initialRouteName: 'SplashIntro',
-    }
-  )
+const RootStack = createSwitchNavigator(
+  {
+    MainApp: BottomBarStack,
+    LoginScreen,
+    SplashIntro: SplashScreen,
+  },
+  {
+    initialRouteName: 'SplashIntro',
+  }
 );
 
-export default class Nav extends React.Component {
-  render() {
-    return <AppContainer />;
-  }
-}
+const AppNavigation = createAppContainer(RootStack);
+
+export default AppNavigation;
