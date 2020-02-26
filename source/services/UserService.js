@@ -30,10 +30,8 @@ const openURL = url =>
  */
 const launchBankIdApp = async autoStartToken => {
   const bankIdClientUrl = buildBankIdClientUrl(autoStartToken);
-  console.log(bankIdClientUrl);
   // Launch app if it's installed on this machine
-  const canLaunchApp = await canOpenUrl(bankIdClientUrl);
-  console.log(canLaunchApp);
+  const canLaunchApp = await canOpenUrl('bankid:///');
   if (canLaunchApp) {
     openURL(bankIdClientUrl);
   }
