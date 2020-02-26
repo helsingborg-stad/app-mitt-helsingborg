@@ -1,7 +1,3 @@
-/* eslint-disable react/default-props-match-prop-types */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/display-name */
-/* eslint-disable no-undef */
 import React from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
@@ -84,5 +80,5 @@ Header.propTypes = {
 
 Header.defaultProps = {
   themeColor: 'purple',
-  backbutton: undefined,
+  backButton: undefined,
 };
