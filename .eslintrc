@@ -29,7 +29,7 @@
       1,
       {
         "ignoreRestSiblings": true,
-        "argsIgnorePattern": "res|next|^err"
+        "argsIgnorePattern": "res|next|^err|^_"
       }
     ],
     "prefer-const": "error",
@@ -60,6 +60,7 @@
     "no-underscore-dangle": 0,
     "consistent-return": 0,
     "react/display-name": 0,
+    "react/jsx-props-no-spreading": 0,
     "react/no-array-index-key": 0,
     "react/react-in-jsx-scope": 0,
     "react/prefer-stateless-function": 0,

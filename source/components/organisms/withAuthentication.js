@@ -6,7 +6,7 @@ import env from 'react-native-config';
 import StorageService, { USER_KEY } from '../../services/StorageService';
 import Auth from '../../helpers/AuthHelper';
 import {
-  authorize,
+  authAndCollect,
   bypassBankid,
   cancelBankidRequest,
   resetCancel,
@@ -15,7 +15,7 @@ import { canOpenUrl } from '../../helpers/UrlHelper';
 
 const FAKE_PERSONAL_NUMBER = '201111111111';
 const FAKE_TOKEN =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6IjFlZDcyYzJjLWQ5OGUtNGZjMC04ZGY2LWY5NjRkOTYxMTVjYSIsImlhdCI6MTU2Mjc0NzM2NiwiZXhwIjoxNTYyNzUwOTc0fQ.iwmUMm51j-j2BYui9v9371DkY5LwLGATWn4LepVxmNk';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbm8iOiIxOTc0MDYwMjc4MjYiLCJpYXQiOjE1ODEwNjQ4OTIsImV4cCI6MTYxMjYwMDg5Mn0.JCBvQ3cbd-2b6jvdwhSoC7AxJ9DVML11OSlWZvFZG8o';
 
 /**
  * Wraps a react component with user authentication component.
@@ -57,15 +57,15 @@ const withAuthentication = WrappedComponent =>
           return await this._fakeLogin(personalNumber);
         }
 
-        const authResponse = await authorize(personalNumber);
+        const authResponse = await authAndCollect(personalNumber);
         if (authResponse.ok !== true) {
           throw new Error(authResponse.data);
         }
 
-        try {
-          const { user, accessToken } = authResponse.data;
-          await Auth.logIn(user, accessToken);
-        } catch (error) {
+        const { user, accessToken } = authResponse.data;
+        const loginUser = await Auth.logIn(user, accessToken);
+        console.log('loginUser', loginUser);
+        if (!loginUser) {
           throw new Error('Login failed');
         }
 
@@ -112,13 +112,7 @@ const withAuthentication = WrappedComponent =>
       try {
         const response = await bypassBankid(personalNumber);
         const { user } = response.data;
-
-        try {
-          await Auth.logIn(user, FAKE_TOKEN);
-        } catch (e) {
-          // BY PASS REJECTION
-          // throw "Login failed";
-        }
+        await Auth.logIn(user, FAKE_TOKEN);
 
         return { user, FAKE_TOKEN };
       } catch (e) {
