@@ -21,6 +21,7 @@
   "rules": {
     "no-debugger": 0,
     "no-alert": 0,
+    "no-plusplus": "off",
     "no-return-assign": [
       "error",
       "except-parens"
