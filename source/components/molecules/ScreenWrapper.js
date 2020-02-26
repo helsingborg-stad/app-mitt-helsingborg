@@ -21,7 +21,7 @@ const ScreenWrapper = props => {
 
 ScreenWrapper.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
-  style: PropTypes.shape({}),
+  style: PropTypes.array,
 };
 
 export default ScreenWrapper;

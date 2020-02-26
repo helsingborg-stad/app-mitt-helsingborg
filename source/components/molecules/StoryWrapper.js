@@ -21,8 +21,6 @@ const ModifiedScreenWrapper = styled(ScreenWrapper)`
 const StoryWrapper = props => {
   const { style, kind, name, children } = props;
 
-  console.log('props', props);
-
   return (
     <EnhancedSafeAreaView>
       <ModifiedScreenWrapper style={style}>
@@ -37,7 +35,7 @@ StoryWrapper.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
   kind: PropTypes.string,
   name: PropTypes.string,
-  style: PropTypes.shape({}),
+  style: PropTypes.array,
 };
 
 export default StoryWrapper;
