@@ -37,7 +37,6 @@ class TaskScreen extends Component {
   getTasks = async () => {
     try {
       const tasks = await StorageService.getData(COMPLETED_FORMS_KEY);
-      console.log('TCL: getTasks -> tasks', tasks);
       this.setState({
         activeTasks: Array.isArray(tasks) && tasks.length ? this.sortTasksByDate(tasks) : [],
       });
