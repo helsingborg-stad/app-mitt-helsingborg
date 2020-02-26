@@ -107,7 +107,7 @@ ChatForm.propTypes = {
   renderFooter: PropTypes.func,
   submitHandler: PropTypes.func,
   changeHandler: PropTypes.func,
-  inputValue: PropTypes.string,
+  inputValue: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
   isFocused: PropTypes.bool,
   submitText: PropTypes.string,
 };
