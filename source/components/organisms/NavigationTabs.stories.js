@@ -15,9 +15,9 @@ import Chat from './Chat/Chat';
 import withChatForm from './withForm/withChatForm';
 import ChatForm from '../molecules/ChatForm';
 import ScreenWrapper from '../molecules/ScreenWrapper';
-import ParrotAgent from './Watson/ParrotAgent';
+import ParrotAgent from './WatsonAgent/ParrotAgent';
 import TaskScreen from '../screens/TaskScreen';
-import WatsonAgent from './Watson/WatsonAgent';
+import WatsonAgent from './WatsonAgent';
 
 class ChatScreen extends Component {
   render() {
