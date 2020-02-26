@@ -1,13 +1,4 @@
-/* eslint-disable react/display-name */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable global-require */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable import/no-named-as-default */
 /* eslint-disable react/prop-types */
-/* eslint-disable no-use-before-define */
-/* eslint-disable import/no-named-as-default-member */
 import React from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { Icon } from 'react-native-elements';
@@ -65,8 +56,12 @@ const userEventTabWithBadge = (iconName, colorFocused) => ({ focused }) => (
 );
 
 const MaterialTopTabBarWrapper = props => {
-  const { index } = props.navigationState;
-  const color = index === 0 ? '#EC6701' : index === 1 ? '#A61380' : '#2196f3';
+  const {
+    navigationState: { index },
+  } = props;
+  let color = '#2196f3';
+  color = index === 0 ? '#EC6701' : color;
+  color = index === 1 ? '#A61380' : color;
 
   return (
     <SafeAreaView

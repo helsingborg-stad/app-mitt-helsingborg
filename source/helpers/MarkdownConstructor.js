@@ -1,19 +1,7 @@
-/* eslint-disable react/display-name */
-/* eslint-disable no-use-before-define */
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import React from 'react';
 import Markdown from 'react-native-markdown-display';
 import Text from '../components/atoms/Text';
-
-const MarkdownConstructor = props => {
-  const { rawText } = props;
-
-  return (
-    <Markdown rules={markdownRules} style={markDownStyles}>
-      {rawText}
-    </Markdown>
-  );
-};
 
 /**
  * Override markdown rules.
@@ -23,9 +11,9 @@ const MarkdownConstructor = props => {
  */
 const markdownRules = {
   text: node => <Text key={node.key}>{node.content}</Text>,
-  strong: (node, children, parent, styles) => (
+  strong: (node, children, _parent, _styles) => (
     <Text key={node.key}>
-      {React.Children.map(children, (child, index) =>
+      {React.Children.map(children, (child, _index) =>
         React.createElement(child.type, { ...child.props, strong: true })
       )}
     </Text>
@@ -53,6 +41,20 @@ const markDownStyles = {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
   },
+};
+
+const MarkdownConstructor = props => {
+  const { rawText } = props;
+
+  return (
+    <Markdown rules={markdownRules} style={markDownStyles}>
+      {rawText}
+    </Markdown>
+  );
+};
+
+MarkdownConstructor.propTypes = {
+  rawText: PropTypes.string,
 };
 
 export default MarkdownConstructor;

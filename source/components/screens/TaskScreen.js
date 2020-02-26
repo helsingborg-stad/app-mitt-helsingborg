@@ -15,7 +15,7 @@ import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../services/St
 import ScreenWrapper from '../molecules/ScreenWrapper';
 import Heading from '../atoms/Heading';
 import ListItem from '../molecules/ListItem';
-import forms from '../../assets/forms';
+import forms from '../../assets/mock/forms';
 import Text from '../atoms/Text';
 
 class TaskScreen extends Component {
@@ -37,6 +37,7 @@ class TaskScreen extends Component {
   getTasks = async () => {
     try {
       const tasks = await StorageService.getData(COMPLETED_FORMS_KEY);
+      console.log('TCL: getTasks -> tasks', tasks);
       this.setState({
         activeTasks: Array.isArray(tasks) && tasks.length ? this.sortTasksByDate(tasks) : [],
       });

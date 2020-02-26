@@ -67,8 +67,10 @@ export default class StorageService extends Component {
 
   /**
    * Add an item to array in local storage
+   *
    * @param {String} key   The AsyncStorage key
    * @param {String} value The AsyncStorage value
+   * @returns {Promise}
    */
   static addDataToArray = async (key, value) => {
     // Get the existing data
@@ -83,9 +85,11 @@ export default class StorageService extends Component {
 
   /**
    * Add an item to object in local storage
+   *
    * @param {String} key        The AsyncStorage key
    * @param {String} objectKey  The AsyncStorage value object key
    * @param {String} value      The AsyncStorage value
+   * @returns {Promise}
    */
   static addDataToObject = async (key, objectKey, value) => {
     // Get the existing data
