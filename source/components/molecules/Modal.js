@@ -1,12 +1,56 @@
-import React from 'react';
-import RnModal from 'react-native-modal';
-import { TouchableHighlight, TouchableOpacity, ScrollView, View } from 'react-native';
 import PropTypes from 'prop-types';
+import React from 'react';
+import { TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import RnModal from 'react-native-modal';
 import styled, { withTheme } from 'styled-components/native';
-import shadow from '../../styles/shadow';
-import Text from '../atoms/Text';
-import Heading from '../atoms/Heading';
 import MarkdownConstructor from '../../helpers/MarkdownConstructor';
+import Heading from '../atoms/Heading';
+import Text from '../atoms/Text';
+
+const ModalContainer = styled(RnModal)`
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  margin-top: 32px;
+  border-top-left-radius: 17.5px;
+  border-top-right-radius: 17.5px;
+`;
+
+const Header = styled.View`
+  flex-direction: row;
+  border: 1px solid ${props => props.theme.background.lighter};
+  border-bottom-width: 2px;
+  border-top-left-radius: 17.5px;
+  border-top-right-radius: 17.5px;
+  background-color: white;
+  padding: 16px 16px 12px 16px;
+`;
+
+const Flex = styled.View`
+  flex: 1;
+`;
+
+const FlexInner = styled.View`
+  flex: 3;
+`;
+
+const FlexOuter = styled.View`
+  flex: 1;
+  align-items: flex-end;
+`;
+
+const Title = styled(Heading)`
+  text-align: center;
+  color: ${props => props.theme.heading[props.color][1]};
+`;
+
+const Content = styled.ScrollView`
+  background-color: ${props => props.theme.background.lightest};
+`;
+
+const ModalView = styled(View)`
+  padding: 32px 16px 32px 16px;
+`;
 
 const Modal = ({ visible, heading, content, changeModal, color }) => (
   <ModalContainer
@@ -65,48 +109,3 @@ Modal.defaultProps = {
 };
 
 export default withTheme(Modal);
-
-const ModalContainer = styled(RnModal)`
-  margin-left: 0px;
-  margin-right: 0px;
-  margin-bottom: 0px;
-  margin-top: 32px;
-  border-top-left-radius: 17.5px;
-  border-top-right-radius: 17.5px;
-`;
-
-const Header = styled.View`
-  flex-direction: row;
-  border: 1px solid ${props => props.theme.background.lighter};
-  border-bottom-width: 2px;
-  border-top-left-radius: 17.5px;
-  border-top-right-radius: 17.5px;
-  background-color: white;
-  padding: 16px 16px 12px 16px;
-`;
-
-const Flex = styled.View`
-  flex: 1;
-`;
-
-const FlexInner = styled.View`
-  flex: 3;
-`;
-
-const FlexOuter = styled.View`
-  flex: 1;
-  align-items: flex-end;
-`;
-
-const Title = styled(Heading)`
-  text-align: center;
-  color: ${props => props.theme.heading[props.color][1]};
-`;
-
-const Content = styled.ScrollView`
-  background-color: ${props => props.theme.background.lightest};
-`;
-
-const ModalView = styled(View)`
-  padding: 32px 16px 32px 16px;
-`;
