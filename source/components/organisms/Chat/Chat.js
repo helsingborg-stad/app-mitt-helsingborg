@@ -63,7 +63,8 @@ class Chat extends Component {
   };
 
   dispatchMessageEvents = () => {
-    const lastMsg = this.state.messages.slice(-1)[0].componentProps;
+    const { messages } = this.state;
+    const lastMsg = messages.slice(-1)[0].componentProps;
 
     if (Array.isArray(lastMsg.modifiers) && lastMsg.modifiers[0] === 'user') {
       EventHandler.dispatch(EVENT_USER_MESSAGE, lastMsg.content);
@@ -129,7 +130,7 @@ class Chat extends Component {
 
   render() {
     const { keyboardVerticalOffset } = this.props;
-    const { messages, ChatAgent, inputComponents, modal, isTyping } = this.state;
+    const { messages, ChatAgent, inputComponents, modal } = this.state;
     const {
       addMessages,
       switchAgent,
