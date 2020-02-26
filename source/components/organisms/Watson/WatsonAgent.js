@@ -1,5 +1,7 @@
+/* eslint-disable camelcase */
 import React, { Component } from 'react';
 import env from 'react-native-config';
+import { PropTypes } from 'prop-types';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
 import { sendChatMsg } from '../../../services/ChatFormService';
 import ChatBubble from '../../atoms/ChatBubble';
@@ -13,12 +15,25 @@ let context;
 let sessionId;
 
 class WatsonAgent extends Component {
-  state = {
-    disableAgent: false,
-  };
+  /**
+   * Parse metadata found in text strings
+   * @param {string} value
+   */
+  static captureMetaData(value) {
+    if (typeof value !== 'string') {
+      return {};
+    }
 
-  updateActiveFormsBadge(newValue) {
-    this.props.chat.setBadgeCount(newValue);
+    const match = /{([a-z0-9\s.,_'"-[\]:{}]+)}/g.exec(value);
+    let meta = match && typeof match[1] !== 'undefined' ? match[1] : undefined;
+
+    try {
+      meta = JSON.parse(meta);
+    } catch (error) {
+      return {};
+    }
+
+    return meta;
   }
 
   componentDidMount() {
@@ -38,34 +53,30 @@ class WatsonAgent extends Component {
       // Show welcome message from Watson
       this.handleHumanChatMessage('');
     } else {
-      StorageService.getData(USER_KEY).then(({ name }) => {
-        chat.addMessages({
-          Component: ChatBubble,
-          componentProps: {
-            content: `Hej och välkommen till Mitt Helsingborg! Jag heter Sally. Jag kan hjälpa dig med att svara på frågor och guida dig runt i appen.`,
-            modifiers: ['automated'],
-          },
-        });
+      chat.addMessages({
+        Component: ChatBubble,
+        componentProps: {
+          content: `Hej och välkommen till Mitt Helsingborg! Jag heter Sally. Jag kan hjälpa dig med att svara på frågor och guida dig runt i appen.`,
+          modifiers: ['automated'],
+        },
+      });
 
-        chat.addMessages({
-          Component: ChatBubble,
-          componentProps: {
-            content: 'Vad vill du göra?',
-            modifiers: ['automated'],
-          },
-        });
+      chat.addMessages({
+        Component: ChatBubble,
+        componentProps: {
+          content: 'Vad vill du göra?',
+          modifiers: ['automated'],
+        },
+      });
 
-        chat.addMessages({
-          Component: props => <ButtonStack {...props} chat={chat} />,
-          componentProps: {
-            items: [
-              {
-                action: {
-                  type: 'form',
-                  value: 1,
-                },
-                value: 'Jag vill boka borgerlig vigsel',
-                icon: 'favorite',
+      chat.addMessages({
+        Component: props => <ButtonStack {...props} chat={chat} />,
+        componentProps: {
+          items: [
+            {
+              action: {
+                type: 'form',
+                value: 1,
               },
               {
                 action: {
@@ -75,13 +86,15 @@ class WatsonAgent extends Component {
                 value: 'Jag vill ansöka om Ekonomiskt bistånd',
                 icon: 'attach-money',
               },
-              {
-                value: 'Jag har frågor om borgerlig vigsel',
-                icon: 'help-outline',
-              },
-            ],
-          },
-        });
+              value: 'Jag vill ansöka om Ekonomiskt bistånd',
+              icon: 'favorite',
+            },
+            {
+              value: 'Jag har frågor om borgerlig vigsel',
+              icon: 'help-outline',
+            },
+          ],
+        },
       });
     }
 
@@ -155,27 +168,6 @@ class WatsonAgent extends Component {
     });
   };
 
-  /**
-   * Parse metadata found in text strings
-   * @param {string} value
-   */
-  captureMetaData(value) {
-    if (typeof value !== 'string') {
-      return {};
-    }
-
-    const match = /{([a-z0-9\s.,_\'"-\[\]:{}]+)}/g.exec(value);
-    let meta = match && typeof match[1] !== 'undefined' ? match[1] : undefined;
-
-    try {
-      meta = JSON.parse(meta);
-    } catch (error) {
-      return {};
-    }
-
-    return meta;
-  }
-
   handleHumanChatMessage = async message => {
     const { chat } = this.props;
 
@@ -247,9 +239,9 @@ class WatsonAgent extends Component {
               },
             });
 
-          case 'option':
+          case 'option': {
             const options = current.options.map(option => {
-              const meta = this.captureMetaData(option.value.input.text);
+              const meta = WatsonAgent.captureMetaData(option.value.input.text);
 
               const { action } = meta;
               // Add callback method to form action
@@ -285,6 +277,7 @@ class WatsonAgent extends Component {
                 options,
               },
             ]);
+          }
 
           case 'pause':
             await chat.toggleTyping();
@@ -312,6 +305,11 @@ class WatsonAgent extends Component {
     }
   };
 
+  updateActiveFormsBadge(newValue) {
+    const { chat } = this.props;
+    chat.setBadgeCount(newValue);
+  }
+
   render() {
     return null;
   }
@@ -320,10 +318,6 @@ class WatsonAgent extends Component {
 WatsonAgent.propTypes = {
   chat: PropTypes.object,
   initialMessages: PropTypes.any,
-};
-
-WatsonAgent.defaultProps = {
-  initialMessages: 'remote'
 };
 
 export default WatsonAgent;
