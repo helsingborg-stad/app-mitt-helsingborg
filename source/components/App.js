@@ -15,11 +15,6 @@ import StorybookUIRoot from '../../storybook/index';
 import StoreContext from '../helpers/StoreContext';
 import StorageService, { COMPLETED_FORMS_KEY } from '../services/StorageService';
 
-// TODO: Fix tab navigation and remove ignore warning.
-YellowBox.ignoreWarnings([
-  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
-]);
-
 /**
  * Any setup and init for application goes here:
  * Platform specific handling, global listeners, providers, etc.
