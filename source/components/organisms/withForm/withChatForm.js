@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import withForm from './withForm';
 
-import ChatBubble from '../atoms/ChatBubble';
+import ChatBubble from '../../atoms/ChatBubble';
 
 const withChatForm = (WrappedComponent, onSubmit) =>
   class WithChatForm extends Component {

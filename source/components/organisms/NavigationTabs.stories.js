@@ -12,7 +12,7 @@ import { storiesOf } from '@storybook/react-native';
 import styled from 'styled-components/native/dist/styled-components.native.esm';
 import { Icon } from 'react-native-elements';
 import Chat from './Chat/Chat';
-import withChatForm from './withChatForm';
+import withChatForm from './withForm/withChatForm';
 import ChatForm from '../molecules/ChatForm';
 import ScreenWrapper from '../molecules/ScreenWrapper';
 import ParrotAgent from './Watson/ParrotAgent';

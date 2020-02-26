@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import { excludePropetiesWithKey, includePropetiesWithKey } from '../../helpers/Objects';
 
-import withChatForm from '../organisms/withChatForm';
+import withChatForm from '../organisms/withForm/withChatForm';
 
 import ButtonStack from './ButtonStack';
 import DateTimePickerForm from './DateTimePickerForm';

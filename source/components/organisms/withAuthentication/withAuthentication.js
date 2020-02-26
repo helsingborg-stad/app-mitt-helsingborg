@@ -1,17 +1,15 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-useless-catch */
 import React, { PureComponent } from 'react';
 import env from 'react-native-config';
 
-import StorageService, { USER_KEY } from '../../services/StorageService';
-import Auth from '../../helpers/AuthHelper';
+import StorageService, { USER_KEY } from '../../../services/StorageService';
+import Auth from '../../../helpers/AuthHelper';
 import {
   authAndCollect,
   bypassBankid,
   cancelBankidRequest,
   resetCancel,
-} from '../../services/UserService';
-import { canOpenUrl } from '../../helpers/UrlHelper';
+} from '../../../services/UserService';
+import { canOpenUrl } from '../../../helpers/UrlHelper';
 
 const FAKE_PERSONAL_NUMBER = '201111111111';
 const FAKE_TOKEN =
@@ -116,7 +114,7 @@ const withAuthentication = WrappedComponent =>
 
         return { user, FAKE_TOKEN };
       } catch (e) {
-        throw e;
+        console.log(e);
       }
     };
 
