@@ -1,10 +1,6 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-shadow */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
 import validator from 'validator';
+import PropTypes from 'prop-types';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
 import forms from '../../../assets/mock/forms.js';
 import ChatBubble from '../../atoms/ChatBubble';
@@ -231,6 +227,12 @@ class FormAgent extends Component {
   render() {
     return null;
   }
+}
+
+FormAgent.propType = {
+  formId: PropTypes.number,
+  chat: PropTypes.object,
+  answers: PropTypes.object
 }
 
 export default FormAgent;
