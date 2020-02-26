@@ -1,30 +1,12 @@
-/* eslint-disable react/sort-comp */
-/* eslint-disable no-shadow */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/static-property-placement */
-/* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
 import { Keyboard, Alert } from 'react-native';
+import { PropTypes } from 'prop-types';
 
-const withForm = (WrappedComponent, onSubmit) =>
+const withForm = (WrappedComponent, onSubmit) => {
   class WithForm extends Component {
     state = {
       inputValue: '',
       isFocused: false,
-    };
-
-    static defaultProps = {
-      withForm: {},
-    };
-
-    changeHandler = value => {
-      const { withForm } = this.props;
-      const { filterChangeHandler } = withForm;
-
-      this.setState({
-        inputValue: typeof filterChangeHandler === 'function' ? filterChangeHandler(value) : value,
-      });
     };
 
     componentDidMount() {
@@ -40,6 +22,15 @@ const withForm = (WrappedComponent, onSubmit) =>
       this.keyboardWillShowListener.remove();
       this.keyboardWillHideListener.remove();
     }
+
+    changeHandler = value => {
+      const { withForm } = this.props;
+      const { filterChangeHandler } = withForm;
+
+      this.setState({
+        inputValue: typeof filterChangeHandler === 'function' ? filterChangeHandler(value) : value,
+      });
+    };
 
     submitHandler = argValue => {
       const { withForm } = this.props;
@@ -75,6 +66,16 @@ const withForm = (WrappedComponent, onSubmit) =>
 
       return <WrappedComponent {...instanceMethods} {...this.props} {...this.state} />;
     }
+  }
+
+  WithForm.propTypes = {
+    withForm: PropTypes.shape({
+      validateSubmitHandlerInput: PropTypes.func,
+      filterChangeHandler: PropTypes.func,
+    }),
   };
+
+  return WithForm;
+};
 
 export default withForm;
