@@ -9,33 +9,6 @@ import shadow from '../../../styles/shadow';
 import HeaderNav from './HeaderNav';
 import ButtonNew from '../../atoms/Button/Button';
 
-const Header = ({ message, title, themeColor, navItems, backButton }) => (
-  <HeaderContainer>
-    <HeaderContent>
-      {backButton && (
-        <BackButton z="0" onClick={backButton.onClick}>
-          <Icon name="arrow-back" />
-          <Text>{backButton.text}</Text>
-        </BackButton>
-      )}
-      {message && <Text>{message}</Text>}
-      {title && (
-        <Title type="h2" color={themeColor}>
-          {title}
-        </Title>
-      )}
-    </HeaderContent>
-    {navItems && (
-      <View>
-        <Separator />
-        <HeaderNav themeColor={themeColor} navItems={navItems} />
-      </View>
-    )}
-  </HeaderContainer>
-);
-
-export default Header;
-
 const BackButton = styled(ButtonNew)`
   padding: 0;
   margin-left: -10px;
@@ -66,6 +39,33 @@ const Separator = styled.View`
   height: 1px;
   background-color: ${props => props.theme.background.lighter};
 `;
+
+const Header = ({ message, title, themeColor, navItems, backButton }) => (
+  <HeaderContainer>
+    <HeaderContent>
+      {backButton && (
+        <BackButton z="0" onClick={backButton.onClick}>
+          <Icon name="arrow-back" />
+          <Text>{backButton.text}</Text>
+        </BackButton>
+      )}
+      {message && <Text>{message}</Text>}
+      {title && (
+        <Title type="h2" color={themeColor}>
+          {title}
+        </Title>
+      )}
+    </HeaderContent>
+    {navItems && (
+      <View>
+        <Separator />
+        <HeaderNav themeColor={themeColor} navItems={navItems} />
+      </View>
+    )}
+  </HeaderContainer>
+);
+
+export default Header;
 
 Header.propTypes = {
   themeColor: PropTypes.string,
