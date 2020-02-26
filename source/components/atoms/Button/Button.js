@@ -1,6 +1,3 @@
-/* eslint-disable no-shadow */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable no-plusplus */
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components/native';
@@ -97,14 +94,27 @@ const ButtonTouchable = styled.TouchableOpacity`
 `;
 
 const ButtonNew = props => {
-  const { value, onClick, style, color, block, rounded, pill, sharp, icon, z, size } = props;
+  const {
+    value,
+    onClick,
+    style,
+    color,
+    block,
+    rounded,
+    pill,
+    sharp,
+    icon,
+    z: shadow,
+    size,
+    ...other
+  } = props;
 
-  const childrenTotal = React.Children.count(props.children);
+  const childrenTotal = React.Children.count(other.children);
 
   let iconComponentsTotal = 0;
 
   /** Override child components */
-  const children = React.Children.map(props.children, (child, index) => {
+  const children = React.Children.map(other.children, (child, index) => {
     /** Icon */
     if (child.type === Icon) {
       iconComponentsTotal++;
@@ -136,7 +146,7 @@ const ButtonNew = props => {
 
   return (
     <ButtonWrapper>
-      <ButtonTouchable onPress={onClick} block={block} z={z}>
+      <ButtonTouchable onPress={onClick} block={block} z={shadow}>
         <ButtonBase
           buttonTheme={color}
           buttonSize={size}
@@ -144,7 +154,7 @@ const ButtonNew = props => {
           pill={pill}
           style={style}
           icon={iconComponentsTotal === 1 && childrenTotal === 1 ? true : icon}
-          z={z}
+          z={shadow}
           shrarp={sharp}
         >
           {children || (value ? <ButtonText>{value}</ButtonText> : null)}
@@ -156,7 +166,6 @@ const ButtonNew = props => {
 
 ButtonNew.propTypes = {
   block: PropTypes.bool,
-  children: PropTypes.any,
   color: PropTypes.oneOf(Object.keys(colors.button)),
   icon: PropTypes.bool,
   onClick: PropTypes.func,
