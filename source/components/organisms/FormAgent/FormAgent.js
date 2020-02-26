@@ -47,15 +47,15 @@ class FormAgent extends Component {
   };
 
   componentDidMount() {
-    const { formId, chat, answers } = this.props;
+    const { formId, chat, answers, form } = this.props;
 
     this.saveUserToState();
 
     chat.switchInput(false);
 
-    const form = this.props.form ? this.props.form : forms.find(form => form.id === formId);
+    const formObject = form || forms.find(formItem => formItem.id === formId);
 
-    if (!form) {
+    if (!formObject) {
       console.error(`FormAgent: Cannot find Form with ID ${formId}.`);
       return;
     }
@@ -67,7 +67,7 @@ class FormAgent extends Component {
         Component: ChatDivider,
         componentProps: {
           title: '',
-          info: `Bokning ${form.name.toLowerCase()} startad`,
+          info: `Bokning ${formObject.name.toLowerCase()} startad`,
         },
       },
     ]);
@@ -77,8 +77,8 @@ class FormAgent extends Component {
       this.setState(
         {
           answers: answers || {},
-          form,
-          questions: form.questions,
+          form: formObject,
+          questions: formObject.questions,
         },
         this.nextQuestion
       );
@@ -229,10 +229,17 @@ class FormAgent extends Component {
   }
 }
 
-FormAgent.propType = {
+FormAgent.propTypes = {
   formId: PropTypes.number,
-  chat: PropTypes.object,
-  answers: PropTypes.object
-}
+  chat: PropTypes.shape({
+    switchInput: PropTypes.func.isRequired,
+    addMessages: PropTypes.func.isRequired,
+    toggleTyping: PropTypes.func.isRequired,
+    switchUserInput: PropTypes.func.isRequired,
+  }),
+  answers: PropTypes.object,
+  form: PropTypes.object,
+  callback: PropTypes.func,
+};
 
 export default FormAgent;
