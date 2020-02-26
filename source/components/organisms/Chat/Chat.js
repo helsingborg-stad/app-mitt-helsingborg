@@ -1,9 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable no-shadow */
-/* eslint-disable react/state-in-constructor */
-/* eslint-disable react/default-props-match-prop-types */
-/* eslint-disable react/static-property-placement */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -20,28 +14,6 @@ import ChatUserInput from '../../molecules/ChatUserInput';
 import StoreContext from '../../../helpers/StoreContext';
 
 class Chat extends Component {
-  static propTypes = {
-    ChatAgent: PropTypes.oneOfType([
-      PropTypes.oneOf([false]),
-      PropTypes.elementType,
-      PropTypes.func,
-    ]).isRequired,
-    ChatUserInput: PropTypes.oneOfType([
-      PropTypes.oneOf([false]),
-      PropTypes.elementType,
-      PropTypes.func,
-    ]),
-    inputComponents: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    keyboardVerticalOffset: PropTypes.number,
-  };
-
-  static defaultProps = {
-    ChatAgent: false,
-    ChatUserInput: false,
-    inputComponents: [],
-    keyboardVerticalOffset: 24,
-  };
-
   state = {
     messages: [],
     ChatAgent: false,
@@ -202,5 +174,23 @@ class Chat extends Component {
     );
   }
 }
+
+Chat.propTypes = {
+  ChatAgent: PropTypes.oneOfType([PropTypes.bool, PropTypes.elementType, PropTypes.func]),
+  ChatUserInput: PropTypes.oneOfType([
+    PropTypes.oneOf([false]),
+    PropTypes.elementType,
+    PropTypes.func,
+  ]),
+  inputComponents: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  keyboardVerticalOffset: PropTypes.number,
+};
+
+Chat.defaultProps = {
+  ChatAgent: false,
+  ChatUserInput: false,
+  inputComponents: [],
+  keyboardVerticalOffset: 24,
+};
 
 export default Chat;
