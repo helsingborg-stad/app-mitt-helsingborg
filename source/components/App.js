@@ -7,7 +7,6 @@
  */
 
 import React, { Component } from 'react';
-import { YellowBox } from 'react-native';
 import Config from 'react-native-config';
 import AppNavigation from './Navigation';
 import StorybookUIRoot from '../../storybook/index';
