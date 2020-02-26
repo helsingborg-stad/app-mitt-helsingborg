@@ -6,6 +6,23 @@ import Heading from '../../atoms/Heading';
 import Text from '../../atoms/Text';
 import ListItem from '../ListItem';
 
+const Header = styled(Heading)`
+  margin-left: 4px;
+  margin-bottom: 8px;
+`;
+
+const SectionHeader = styled(Text)`
+  margin: 16px;
+  margin-left: 4px;
+  color: ${props => props.theme.background.light};
+`;
+
+const Separator = styled(View)`
+  width: 100%;
+  height: 1px;
+  background-color: ${props => props.theme.background.lighter};
+`;
+
 const GroupedList = props => {
   const { heading: sectionHeading, items, onClick } = props;
   return (
@@ -27,23 +44,6 @@ const GroupedList = props => {
     />
   );
 };
-
-const Header = styled(Heading)`
-  margin-left: 4px;
-  margin-bottom: 8px;
-`;
-
-const SectionHeader = styled(Text)`
-  margin: 16px;
-  margin-left: 4px;
-  color: ${props => props.theme.background.light};
-`;
-
-const Separator = styled(View)`
-  width: 100%;
-  height: 1px;
-  background-color: ${props => props.theme.background.lighter};
-`;
 
 GroupedList.propTypes = {
   heading: PropTypes.string,
