@@ -126,7 +126,7 @@ ListItem.propTypes = {
   text: PropTypes.string,
   onClick: PropTypes.func,
   theme: PropTypes.object,
-  imageSrc: PropTypes.string,
+  imageSrc: PropTypes.number,
   lightest: PropTypes.string,
 };
 
