@@ -1,45 +1,20 @@
-/* eslint-disable react/state-in-constructor */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/default-props-match-prop-types */
-/* eslint-disable react/static-property-placement */
-/* eslint-disable import/no-unresolved */
 import React, { Component } from 'react';
-import {
-  View,
-  Picker,
-  PickerItem,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
-// import DismissKeyboard from 'dismissKeyboard';
+import { Picker } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 
 import Text from '../Text';
-import Button from '../Button/Button';
 import Input from '../Input';
 
 export default class Select extends Component {
-  static propTypes = {
-    items: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string,
-        value: PropTypes.string,
-      })
-    ).isRequired,
-    onValueChange: PropTypes.func,
-    placeholder: PropTypes.string.isRequired,
-  };
+  constructor(props) {
+    super(props);
 
-  static defaultProps = {
-    placeholder: 'Select an item',
-  };
-
-  state = {
-    currentValue: '',
-    showPicker: false,
-  };
+    this.state = {
+      currentValue: '',
+      showPicker: false,
+    };
+  }
 
   render() {
     const { items, style, onValueChange, placeholder } = this.props;
@@ -54,7 +29,7 @@ export default class Select extends Component {
           placeholder={placeholder}
           editable={false}
           onTouchStart={() => {
-            this.setState(prevState => ({ showPicker: true }));
+            this.setState(() => ({ showPicker: true }));
           }}
           onChange={nativeEvent => {
             console.log(nativeEvent);
@@ -68,7 +43,7 @@ export default class Select extends Component {
               <PickerAcessoryLink
                 accessibilityRole="button"
                 onPress={() => {
-                  this.setState(prevState => ({ showPicker: false }));
+                  this.setState(() => ({ showPicker: false }));
                 }}
               >
                 Done
@@ -76,7 +51,7 @@ export default class Select extends Component {
             </PickerAcessoryWrapper>
             <Picker
               selectedValue={currentValue}
-              onValueChange={(itemValue, itemIndex) => {
+              onValueChange={(itemValue, _itemIndex) => {
                 if (typeof onValueChange === 'function') {
                   onValueChange(itemValue);
                 }
@@ -94,6 +69,22 @@ export default class Select extends Component {
     );
   }
 }
+
+Select.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string,
+    })
+  ).isRequired,
+  onValueChange: PropTypes.func,
+  placeholder: PropTypes.string,
+  style: PropTypes.shape({}),
+};
+
+Select.defaultProps = {
+  placeholder: 'Select an item',
+};
 
 const SelectInput = styled(Input)`
   flex: 0 1 auto;

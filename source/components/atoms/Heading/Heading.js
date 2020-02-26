@@ -1,9 +1,7 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/destructuring-assignment */
-import React, { PureComponent } from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import Text from '../Text';
 
 const fontSizes = {
@@ -30,20 +28,33 @@ Heading.defaultProps = {
   type: 'h2',
 };
 
-export const H1 = props => (
-  <Heading {...props} type="h1">
-    {props.children}
-  </Heading>
-);
-export const H2 = props => (
-  <Heading {...props} type="h2">
-    {props.children}
-  </Heading>
-);
-export const H3 = props => (
-  <Heading {...props} type="h3">
-    {props.children}
-  </Heading>
-);
+export const H1 = props => {
+  const { ...other } = props;
+
+  return (
+    <Heading {...props} type="h1">
+      {other.children}
+    </Heading>
+  );
+};
+
+export const H2 = props => {
+  const { ...other } = props;
+
+  return (
+    <Heading {...props} type="h2">
+      {other.children}
+    </Heading>
+  );
+};
+export const H3 = props => {
+  const { ...other } = props;
+
+  return (
+    <Heading {...props} type="h3">
+      {other.children}
+    </Heading>
+  );
+};
 
 export default Heading;

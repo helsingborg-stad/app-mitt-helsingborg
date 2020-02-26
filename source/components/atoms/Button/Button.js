@@ -1,86 +1,33 @@
-/* eslint-disable no-shadow */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-plusplus */
-/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled, { ThemeProvider, css } from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 
 import z from '../../../styles/shadow';
 
 import Text from '../Text';
 import Icon from '../Icon';
+import colors from '../../../styles/colors';
 
-const ButtonNew = props => {
-  const { value, onClick, style, color, block, rounded, pill, sharp, icon, z, size } = props;
+/** Button modifiers */
+const CSS = { z };
 
-  const childrenTotal = React.Children.count(props.children);
+CSS.buttonRounded = css`
+  border-radius: 17.5px;
+`;
 
-  let iconComponentsTotal = 0;
-  let textComponentsTotal = 0;
+CSS.buttonPill = css`
+  border-radius: 24.5px;
+`;
 
-  /** Override child components */
-  const children = React.Children.map(props.children, (child, index) => {
-    /** Icon */
-    if (child.type === Icon) {
-      iconComponentsTotal++;
+CSS.buttonSharp = css`
+  border-radius: 0px;
+`;
 
-      let ButtonComponent = ButtonIcon;
-
-      if (childrenTotal > 1 && index > 0) {
-        ButtonComponent = RightButtonIcon;
-      }
-
-      if (childrenTotal > 1 && index === 0) {
-        ButtonComponent = LeftButtonIcon;
-      }
-
-      return React.createElement(ButtonComponent, { ...child.props, size: 32, buttonTheme: color });
-    }
-
-    /** Text */
-    if (child.type === Text) {
-      textComponentsTotal++;
-      return React.createElement(ButtonText, {
-        ...child.props,
-        buttonTheme: color,
-        buttonSize: size,
-      });
-    }
-
-    return child;
-  });
-
-  return (
-    <ButtonWrapper>
-      <ButtonTouchable onPress={onClick} block={block} z={z}>
-        <ButtonBase
-          buttonTheme={color}
-          buttonSize={size}
-          rounded={rounded}
-          pill={pill}
-          style={style}
-          icon={iconComponentsTotal === 1 && childrenTotal === 1 ? true : icon}
-          z={z}
-          shrarp={sharp}
-        >
-          {children || (value ? <ButtonText>{value}</ButtonText> : null)}
-        </ButtonBase>
-      </ButtonTouchable>
-    </ButtonWrapper>
-  );
-};
-
-ButtonNew.defaultProps = {
-  color: 'light',
-  rounded: false,
-  pill: false,
-  icon: false,
-  sharp: false,
-  z: 1,
-  size: 'medium',
-};
+CSS.buttonSmall = css`
+  padding: 10px 12px;
+  min-height: 36px;
+  min-width: 74px;
+`;
 
 /** Button styles */
 const ButtonBase = styled.View`
@@ -105,27 +52,6 @@ const ButtonBase = styled.View`
 
     ${props => CSS.z[props.z]}
     shadow-color: ${props => props.theme.button[props.buttonTheme].shadow};
-`;
-
-/** Button modifiers */
-const CSS = { z };
-
-CSS.buttonRounded = css`
-  border-radius: 17.5px;
-`;
-
-CSS.buttonPill = css`
-  border-radius: 24.5px;
-`;
-
-CSS.buttonSharp = css`
-  border-radius: 0px;
-`;
-
-CSS.buttonSmall = css`
-  padding: 10px 12px;
-  min-height: 36px;
-  min-width: 74px;
 `;
 
 /** Button child component overrides */
@@ -166,5 +92,100 @@ const ButtonTouchable = styled.TouchableOpacity`
     ${props => CSS.z[props.z]}
     shadow-color: ${props => props.theme.shadow.default};
 `;
+
+const ButtonNew = props => {
+  const {
+    value,
+    onClick,
+    style,
+    color,
+    block,
+    rounded,
+    pill,
+    sharp,
+    icon,
+    z: shadow,
+    size,
+    ...other
+  } = props;
+
+  const childrenTotal = React.Children.count(other.children);
+
+  let iconComponentsTotal = 0;
+
+  /** Override child components */
+  const children = React.Children.map(other.children, (child, index) => {
+    /** Icon */
+    if (child.type === Icon) {
+      iconComponentsTotal++;
+
+      let ButtonComponent = ButtonIcon;
+
+      if (childrenTotal > 1 && index > 0) {
+        ButtonComponent = RightButtonIcon;
+      }
+
+      if (childrenTotal > 1 && index === 0) {
+        ButtonComponent = LeftButtonIcon;
+      }
+
+      return React.createElement(ButtonComponent, { ...child.props, size: 32, buttonTheme: color });
+    }
+
+    /** Text */
+    if (child.type === Text) {
+      return React.createElement(ButtonText, {
+        ...child.props,
+        buttonTheme: color,
+        buttonSize: size,
+      });
+    }
+
+    return child;
+  });
+
+  return (
+    <ButtonWrapper>
+      <ButtonTouchable onPress={onClick} block={block} z={shadow}>
+        <ButtonBase
+          buttonTheme={color}
+          buttonSize={size}
+          rounded={rounded}
+          pill={pill}
+          style={style}
+          icon={iconComponentsTotal === 1 && childrenTotal === 1 ? true : icon}
+          z={shadow}
+          shrarp={sharp}
+        >
+          {children || (value ? <ButtonText>{value}</ButtonText> : null)}
+        </ButtonBase>
+      </ButtonTouchable>
+    </ButtonWrapper>
+  );
+};
+
+ButtonNew.propTypes = {
+  block: PropTypes.bool,
+  color: PropTypes.oneOf(Object.keys(colors.button)),
+  icon: PropTypes.bool,
+  onClick: PropTypes.func,
+  pill: PropTypes.bool,
+  rounded: PropTypes.bool,
+  sharp: PropTypes.bool,
+  size: PropTypes.string,
+  style: PropTypes.array,
+  value: PropTypes.string,
+  z: PropTypes.oneOf(Number(Object.keys(z))),
+};
+
+ButtonNew.defaultProps = {
+  color: 'light',
+  rounded: false,
+  pill: false,
+  icon: false,
+  sharp: false,
+  z: 1,
+  size: 'medium',
+};
 
 export default ButtonNew;
