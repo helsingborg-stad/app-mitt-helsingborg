@@ -29,7 +29,7 @@ export default class Select extends Component {
           placeholder={placeholder}
           editable={false}
           onTouchStart={() => {
-            this.setState(prevState => ({ showPicker: true }));
+            this.setState(() => ({ showPicker: true }));
           }}
           onChange={nativeEvent => {
             console.log(nativeEvent);
@@ -43,7 +43,7 @@ export default class Select extends Component {
               <PickerAcessoryLink
                 accessibilityRole="button"
                 onPress={() => {
-                  this.setState(prevState => ({ showPicker: false }));
+                  this.setState(() => ({ showPicker: false }));
                 }}
               >
                 Done
@@ -51,7 +51,7 @@ export default class Select extends Component {
             </PickerAcessoryWrapper>
             <Picker
               selectedValue={currentValue}
-              onValueChange={(itemValue, itemIndex) => {
+              onValueChange={(itemValue, _itemIndex) => {
                 if (typeof onValueChange === 'function') {
                   onValueChange(itemValue);
                 }

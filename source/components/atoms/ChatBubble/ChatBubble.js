@@ -78,7 +78,7 @@ const ChatBubble = props => {
   const alignment = colorTheme === 'user' ? 'right' : 'left';
 
   /** Override child components */
-  const children = React.Children.map(other.children, (child, index) => {
+  const children = React.Children.map(other.children, (child, _index) => {
     /** Heading */
     if (child.type === Heading) {
       return React.createElement(BubbleHeading, { ...child.props, colorTheme });

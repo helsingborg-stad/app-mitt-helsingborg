@@ -1,13 +1,10 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
-import { View } from 'react-native';
 import { storiesOf } from '@storybook/react-native';
-import styled, { css } from 'styled-components/native';
+import React from 'react';
+import styled from 'styled-components/native';
 import StoryWrapper from '../../molecules/StoryWrapper';
-import Button from './Button';
-import Text from '../Text';
 import Icon from '../Icon';
+import Text from '../Text';
+import Button from './Button';
 
 storiesOf('Button', module)
   .add('Default', props => (
