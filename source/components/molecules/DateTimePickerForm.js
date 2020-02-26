@@ -7,7 +7,7 @@ import Input from '../atoms/Input';
 
 const DateTimePickerForm = props => {
   const { changeHandler, submitHandler, inputValue, mode, selectorProps } = props;
-  console.log('changeHandler', changeHandler);
+
   let dateTimeString;
   const date = inputValue && typeof inputValue.getMonth === 'function' ? inputValue : new Date();
   const dateString = `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(
@@ -60,7 +60,7 @@ const DateTimePickerForm = props => {
 
 DateTimePickerForm.propTypes = {
   changeHandler: PropTypes.func,
-  inputValue: PropTypes.oneOfType(PropTypes.instanceOf(Date), PropTypes.string),
+  inputValue: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
   mode: PropTypes.string,
   selectorProps: PropTypes.object,
   submitHandler: PropTypes.func,
