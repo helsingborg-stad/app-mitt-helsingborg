@@ -316,7 +316,14 @@ class WatsonAgent extends Component {
 }
 
 WatsonAgent.propTypes = {
-  chat: PropTypes.object,
+  chat: PropTypes.shape({
+    switchInput: PropTypes.func.isRequired,
+    addMessages: PropTypes.func.isRequired,
+    toggleTyping: PropTypes.func.isRequired,
+    switchUserInput: PropTypes.func.isRequired,
+    setBadgeCount: PropTypes.func.isRequired,
+    switchAgent: PropTypes.func.isRequired,
+  }),
   initialMessages: PropTypes.any,
 };
 
