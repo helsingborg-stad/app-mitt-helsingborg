@@ -1,28 +1,8 @@
-/* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import Text from '../atoms/Text';
 import Button from '../atoms/Button/Button';
-
-const AuthLoading = props => (
-  <AuthLoadingWrapper>
-    <AuthLoadingBody>
-      <AuthActivityIndicator size="large" color="slategray" />
-      {!props.isBankidInstalled && <Text>Väntar på att BankID ska startas på en annan enhet</Text>}
-    </AuthLoadingBody>
-    <AuthLoadingAction>
-      <Button color="purple" onClick={props.cancelLogin} block>
-        <Text>Avbryt</Text>
-      </Button>
-    </AuthLoadingAction>
-  </AuthLoadingWrapper>
-);
-
-AuthLoading.propTypes = {
-  isBankidInstalled: PropTypes.bool.isRequired,
-  cancelLogin: PropTypes.func.isRequired,
-};
 
 const AuthActivityIndicator = styled.ActivityIndicator`
   margin-bottom: 32px;
@@ -42,5 +22,28 @@ const AuthLoadingAction = styled.View`
   flex-grow: 0;
   justify-content: flex-end;
 `;
+
+const AuthLoading = props => {
+  const { isBankidInstalled, cancelLogin } = props;
+
+  return (
+    <AuthLoadingWrapper>
+      <AuthLoadingBody>
+        <AuthActivityIndicator size="large" color="slategray" />
+        {!isBankidInstalled && <Text>Väntar på att BankID ska startas på en annan enhet</Text>}
+      </AuthLoadingBody>
+      <AuthLoadingAction>
+        <Button color="purple" onClick={cancelLogin} block>
+          <Text>Avbryt</Text>
+        </Button>
+      </AuthLoadingAction>
+    </AuthLoadingWrapper>
+  );
+};
+
+AuthLoading.propTypes = {
+  isBankidInstalled: PropTypes.bool.isRequired,
+  cancelLogin: PropTypes.func.isRequired,
+};
 
 export default AuthLoading;

@@ -1,12 +1,7 @@
-/* eslint-disable no-use-before-define */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-shadow */
-/* eslint-disable react/sort-comp */
-/* eslint-disable react/static-property-placement */
 import React, { Component } from 'react';
-import { Text, View, FlatList } from 'react-native';
+import { Text } from 'react-native';
 import styled from 'styled-components/native';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import ChatBubble from '../../atoms/ChatBubble';
 
 const OFFSET_TOP = 0;
@@ -17,18 +12,13 @@ const ChatMessagesFlatList = styled.FlatList`
   margin-top: 24px;
 `;
 
-class ChatMessages extends Component {
-  static propTypes = {
-    messages: PropTypes.arrayOf(
-      PropTypes.shape({
-        Component: PropTypes.elementType,
-        componentProps: PropTypes.object,
-      })
-    ),
-    forwardProps: PropTypes.object,
-    chat: PropTypes.object,
-  };
+const TypeIndicator = () => (
+  <ChatBubble z={0} modifiers={['automated']}>
+    <Text>•••</Text>
+  </ChatBubble>
+);
 
+class ChatMessages extends Component {
   // Required to scroll FlatList
   flatListRef = React.createRef();
 
@@ -50,12 +40,12 @@ class ChatMessages extends Component {
     return componentProps;
   };
 
-  renderItem = ({ item, index }) => {
-    const { Component } = item;
+  renderItem = ({ item }) => {
+    const { Component: ItemComponent } = item;
     let { componentProps } = item;
     componentProps = this.mapComponentProps(componentProps);
 
-    return <Component {...componentProps} />;
+    return <ItemComponent {...componentProps} />;
   };
 
   render() {
@@ -85,10 +75,16 @@ class ChatMessages extends Component {
   }
 }
 
-const TypeIndicator = props => (
-  <ChatBubble z={0} modifiers={['automated']}>
-    <Text>•••</Text>
-  </ChatBubble>
-);
+ChatMessages.propTypes = {
+  messages: PropTypes.arrayOf(
+    PropTypes.shape({
+      Component: PropTypes.elementType,
+      componentProps: PropTypes.object,
+    })
+  ),
+  forwardProps: PropTypes.object,
+  chat: PropTypes.object,
+  changeModal: PropTypes.any,
+};
 
 export default ChatMessages;
