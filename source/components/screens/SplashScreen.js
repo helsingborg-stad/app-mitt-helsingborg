@@ -1,20 +1,19 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-unused-vars */
-/* eslint-disable global-require */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/state-in-constructor */
+import AsyncStorage from '@react-native-community/async-storage';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { ImageBackground, PanResponder } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 import Swiper from 'react-native-swiper';
 import styled from 'styled-components/native';
-import ScreenWrapper from '../molecules/ScreenWrapper';
+import SlideOneImg from '../../assets/slides/illu_001.png';
+import SlideTwoImg from '../../assets/slides/illu_002.png';
+import SlideThreeImg from '../../assets/slides/illu_003.png';
+import Stadsvapen from '../../assets/slides/stadsvapen.png';
 import { SHOW_SPLASH_SCREEN } from '../../services/StorageService';
-import Heading from '../atoms/Heading';
 import Button from '../atoms/Button/Button';
-import Text from '../atoms/Text';
+import Heading from '../atoms/Heading';
 import Icon from '../atoms/Icon';
+import Text from '../atoms/Text';
+import ScreenWrapper from '../molecules/ScreenWrapper';
 
 const Slide = styled.View`
   flex: 1;
@@ -95,35 +94,36 @@ const buttonWrapperStyle = {
  * SHOW_SPLASH_SCREEN is a persistent variable that will route navigation
  * to ether AuthLoading or display splash screen.
  */
-export default class SplashScreen extends Component {
-  state = {
-    showSwipeInterface: true,
-    swipeButtonText: 'Kom igång',
-    swipeIndex: 0,
-  };
+class SplashScreen extends Component {
+  _panResponder = PanResponder.create({
+    onPanResponderMove: (_evt, gestureState) => {
+      const { swipeIndex, showSwipeInterface } = this.state;
+      if (swipeIndex === 2 && showSwipeInterface === true) {
+        if (gestureState.dx < 0) {
+          this.setState({ showSwipeInterface: false });
+        }
+      }
+    },
+    onPanResponderRelease: (_evt, _gestureState) => {
+      setTimeout(() => {
+        const { swipeIndex } = this.state;
+        if (swipeIndex <= 2) {
+          this.setState({ showSwipeInterface: true });
+        }
+      }, 400);
+    },
+  });
 
   constructor(props) {
     super(props);
 
+    this.state = {
+      showSwipeInterface: true,
+      swipeButtonText: 'Kom igång',
+      swipeIndex: 0,
+    };
+
     this.showSplash();
-
-    this._panResponder = PanResponder.create({
-      onPanResponderMove: (evt, gestureState) => {
-        if (this.state.swipeIndex === 2 && this.state.showSwipeInterface === true) {
-          if (gestureState.dx < 0) {
-            this.setState({ showSwipeInterface: false });
-          }
-        }
-      },
-
-      onPanResponderRelease: (evt, gestureState) => {
-        setTimeout(() => {
-          if (this.state.swipeIndex <= 2) {
-            this.setState({ showSwipeInterface: true });
-          }
-        }, 400);
-      },
-    });
   }
 
   /**
@@ -131,11 +131,14 @@ export default class SplashScreen extends Component {
    */
   showSplash = () => {
     AsyncStorage.getItem(SHOW_SPLASH_SCREEN).then(value => {
+      const {
+        navigation: { navigate },
+      } = this.props;
       let showSplash = true;
       if (value) showSplash = JSON.parse(value);
 
       if (!showSplash) {
-        this.props.navigation.navigate('AuthLoading');
+        navigate('LoginScreen');
       }
     });
   };
@@ -144,9 +147,13 @@ export default class SplashScreen extends Component {
    * Set state disable for splash screen.
    */
   disableSplash = () => {
+    const {
+      navigation: { navigate },
+    } = this.props;
+
     AsyncStorage.setItem(SHOW_SPLASH_SCREEN, JSON.stringify(false));
 
-    this.props.navigation.navigate('LoginScreen');
+    navigate('LoginScreen');
   };
 
   /**
@@ -154,11 +161,7 @@ export default class SplashScreen extends Component {
    */
   ButtonDisableSplash = () => (
     <ButtonContainer>
-      <Button
-        onClick={() => this.props.navigation.navigate('LoginScreen')}
-        color="purpleLight"
-        block
-      >
+      <Button onClick={() => this.disableSplash()} color="purpleLight" block>
         <Text>Logga in med Mobilt BankID</Text>
       </Button>
     </ButtonContainer>
@@ -167,10 +170,7 @@ export default class SplashScreen extends Component {
   swipeWelcome = () => (
     <Slide>
       <SlideImageContainer>
-        <ImageBackground
-          style={{ width: 130, height: 200 }}
-          source={require('../../assets/slides/stadsvapen.png')}
-        />
+        <ImageBackground style={{ width: 130, height: 200 }} source={Stadsvapen} />
       </SlideImageContainer>
       <Flex value="2">
         <Flex>
@@ -187,10 +187,7 @@ export default class SplashScreen extends Component {
   slideEasy = () => (
     <Slide>
       <SlideImageContainer>
-        <ImageBackground
-          source={require('../../assets/slides/illu_001.png')}
-          style={{ width: 300, height: 300 }}
-        />
+        <ImageBackground source={SlideOneImg} style={{ width: 300, height: 300 }} />
       </SlideImageContainer>
       <Flex value="2">
         <Flex>
@@ -211,10 +208,7 @@ export default class SplashScreen extends Component {
   slideAccessible = () => (
     <Slide>
       <SlideImageContainer>
-        <ImageBackground
-          source={require('../../assets/slides/illu_002.png')}
-          style={{ width: 230, height: 260 }}
-        />
+        <ImageBackground source={SlideTwoImg} style={{ width: 230, height: 260 }} />
       </SlideImageContainer>
       <Flex value="2">
         <Flex>
@@ -237,10 +231,7 @@ export default class SplashScreen extends Component {
     return (
       <Slide>
         <SlideImageContainer>
-          <ImageBackground
-            source={require('../../assets/slides/illu_003.png')}
-            style={{ width: 300, height: 300 }}
-          />
+          <ImageBackground source={SlideThreeImg} style={{ width: 300, height: 300 }} />
         </SlideImageContainer>
         <Flex value="2">
           <Flex>
@@ -281,14 +272,18 @@ export default class SplashScreen extends Component {
   };
 
   swipeToNext = () => {
+    const { swipeIndex } = this.state;
     this._swiper.scrollBy(1);
 
-    if (this.state.swipeIndex === 2) {
+    if (swipeIndex === 2) {
       this.setState({ showSwipeInterface: false });
     }
   };
 
   render() {
+    const { showSwipeInterface, swipeButtonText } = this.state;
+    console.log('showSwipeInterface', showSwipeInterface);
+
     return (
       <EnhancedScreenWrapper>
         <Swiper
@@ -298,12 +293,12 @@ export default class SplashScreen extends Component {
           }}
           style={{ overflow: 'visible' }}
           buttonWrapperStyle={buttonWrapperStyle}
-          showsPagination={this.state.showSwipeInterface}
-          showsButtons={this.state.showSwipeInterface}
+          showsPagination={showSwipeInterface}
+          showsButtons={showSwipeInterface}
           prevButton={<Text></Text>}
           nextButton={
             <Button color="swipe" z={5} onClick={() => this.swipeToNext()}>
-              <ButtonNextText>{this.state.swipeButtonText}</ButtonNextText>
+              <ButtonNextText>{swipeButtonText}</ButtonNextText>
               <Icon size={16} name="chevron-right" color="purple" />
             </Button>
           }
@@ -322,3 +317,9 @@ export default class SplashScreen extends Component {
     );
   }
 }
+
+SplashScreen.propTypes = {
+  navigation: PropTypes.object,
+};
+
+export default SplashScreen;
