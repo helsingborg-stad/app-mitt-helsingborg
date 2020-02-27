@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import Config from 'react-native-config';
-import AppNavigation from './Navigation';
+import Navigator from './navigator';
 import StorybookUIRoot from '../storybook/index';
 
 import StoreContext from './helpers/StoreContext';
@@ -53,7 +53,7 @@ export default class App extends Component {
 
     return (
       <StoreContext.Provider value={this.state}>
-        <AppNavigation />
+        <Navigator />
       </StoreContext.Provider>
     );
   }
