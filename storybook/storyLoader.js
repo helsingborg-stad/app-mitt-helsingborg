@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+/* eslint-disable prettier/prettier */
 // Auto-generated file created by react-native-storybook-loader
 // Do not edit.
 //
