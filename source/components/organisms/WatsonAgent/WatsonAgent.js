@@ -9,7 +9,6 @@ import ButtonStack from '../../molecules/ButtonStack';
 import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../../services/StorageService';
 import MarkdownConstructor from '../../../helpers/MarkdownConstructor';
 import ChatDivider from '../../atoms/ChatDivider';
-import { PropTypes } from 'prop-types';
 
 let context;
 let sessionId;
@@ -78,16 +77,16 @@ class WatsonAgent extends Component {
                 type: 'form',
                 value: 1,
               },
-              {
-                action: {
-                  type: 'form',
-                  value: 2,
-                },
-                value: 'Jag vill ansöka om Ekonomiskt bistånd',
-                icon: 'attach-money',
+              value: 'Jag vill boka borgerlig vigsel',
+              icon: 'favorite',
+            },
+            {
+              action: {
+                type: 'form',
+                value: 2,
               },
               value: 'Jag vill ansöka om Ekonomiskt bistånd',
-              icon: 'favorite',
+              icon: 'attach-money',
             },
             {
               value: 'Jag har frågor om borgerlig vigsel',
