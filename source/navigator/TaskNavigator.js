@@ -2,7 +2,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import TaskDetailScreen from '../components/screens/TaskDetailScreen';
 import TaskScreen from '../components/screens/TaskScreen';
 
-const TaskStack = createStackNavigator({
+export const TaskStack = {
   Task: {
     screen: TaskScreen,
     navigationOptions: {
@@ -15,6 +15,6 @@ const TaskStack = createStackNavigator({
       headerShown: false,
     },
   },
-});
+};
 
-export default TaskStack;
+export default createStackNavigator(TaskStack);

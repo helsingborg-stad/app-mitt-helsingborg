@@ -2,11 +2,11 @@
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import LoginScreen from '../components/screens/LoginScreen';
 import SplashScreen from '../components/screens/SplashScreen';
-import BottomBarStack from './BottomBarStack';
+import BottomBarNavigator from './BottomBarNavigator';
 
 const RootStack = createSwitchNavigator(
   {
-    MainApp: BottomBarStack,
+    MainApp: BottomBarNavigator,
     LoginScreen,
     SplashIntro: SplashScreen,
   },
