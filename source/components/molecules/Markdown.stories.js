@@ -6,8 +6,8 @@ import { storiesOf } from '@storybook/react-native';
 import React from 'react';
 import { View } from 'react-native';
 import MarkdownConstructor from '../../helpers/MarkdownConstructor';
-import StoryWrapper from '../molecules/StoryWrapper';
-import Text from './Text';
+import StoryWrapper from './StoryWrapper';
+import Text from '../atoms/Text';
 
 const rules = {
   text: (node, children, parent, styles) => (
