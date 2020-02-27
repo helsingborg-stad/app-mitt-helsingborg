@@ -1,16 +1,14 @@
 /* eslint-disable no-shadow */
-/* eslint-disable import/no-named-as-default-member */
-/* eslint-disable import/no-named-as-default */
-/* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react-native';
 import React from 'react';
 import { View } from 'react-native';
 import MarkdownConstructor from '../../helpers/MarkdownConstructor';
-import StoryWrapper from '../molecules/StoryWrapper';
-import Text from './Text';
+import StoryWrapper from './StoryWrapper';
+import Text from '../atoms/Text';
+import Heading from '../atoms/Heading';
 
 const rules = {
-  text: (node, children, parent, styles) => (
+  text: (node, _children, _parent, _styles) => (
     <Text style={{ fontSize: 16 }} key={node.key}>
       {node.content}
     </Text>
@@ -74,23 +72,28 @@ const linebreak = `before
 &nbsp;
 after`;
 
-const simpleText = `
-Text
-`;
-
-const copy = `# h1 Heading 8-)
+const mixed = `
+# h1 Heading 8-)
 
 **This is some bold text!**
 
 This is normal text
 `;
 
-const url = `[I'm an inline-style link](https://www.google.com)`;
+const url = `[Helsingborg.se](https://www.helsingborg.se)`;
 
 storiesOf('Text', module).add('Markdown', () => (
   <StoryWrapper>
+    <Heading type="h3">Mixed</Heading>
+    <MarkdownConstructor style={styles} rules={rules} rawText={mixed} />
+
+    <Heading type="h3">Linebreak</Heading>
     <MarkdownConstructor style={styles} rules={rules} rawText={linebreak} />
+
+    <Heading type="h3">List</Heading>
     <MarkdownConstructor style={styles} rules={rules} rawText={list} />
+
+    <Heading type="h3">URL</Heading>
     <MarkdownConstructor style={styles} rules={rules} rawText={url} />
   </StoryWrapper>
 ));

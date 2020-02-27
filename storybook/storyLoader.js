@@ -11,7 +11,7 @@ function loadStories() {
 	require('../source/components/atoms/Heading/Heading.stories');
 	require('../source/components/atoms/Icon/Icon.stories');
 	require('../source/components/atoms/Input/Input.stories');
-	require('../source/components/atoms/Markdown.stories');
+	require('../source/components/molecules/Markdown.stories');
 	require('../source/components/atoms/Select/Select.stories');
 	require('../source/components/atoms/Text/Text.stories');
 	require('../source/components/molecules/DateTimePickerForm.stories');
