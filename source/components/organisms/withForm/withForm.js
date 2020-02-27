@@ -75,6 +75,10 @@ const withForm = (WrappedComponent, onSubmit) => {
     }),
   };
 
+  WithForm.defaultProps = {
+    withForm: {},
+  };
+
   return WithForm;
 };
 
