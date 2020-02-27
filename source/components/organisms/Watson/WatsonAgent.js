@@ -21,6 +21,7 @@ import ChatBubble from '../../atoms/ChatBubble';
 import ButtonStack from '../../molecules/ButtonStack';
 import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../../services/StorageService';
 import MarkdownConstructor from '../../../helpers/MarkdownConstructor';
+import ChatDivider from '../../atoms/ChatDivider';
 
 let context;
 let sessionId;
@@ -86,7 +87,7 @@ export default class WatsonAgent extends Component {
                   value: 2,
                 },
                 value: 'Jag vill ansöka om Ekonomiskt bistånd',
-                icon: 'favorite',
+                icon: 'attach-money',
               },
               {
                 value: 'Jag har frågor om borgerlig vigsel',
