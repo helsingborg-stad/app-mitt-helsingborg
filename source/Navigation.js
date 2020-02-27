@@ -2,15 +2,15 @@
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
-import ChatScreen from './screens/ChatScreen';
-import LoginScreen from './screens/LoginScreen';
-import SplashScreen from './screens/SplashScreen';
-import TaskDetailScreen from './screens/TaskDetailScreen';
-import TaskScreen from './screens/TaskScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import TabBarIcon from './molecules/TabBarIcon';
-import MaterialTopTabBarWrapper from './molecules/MaterialTopTabBarWrapper';
-import BottomBarTabWithBadge from './molecules/BottomBarTabWithBadge';
+import ChatScreen from './components/screens/ChatScreen';
+import LoginScreen from './components/screens/LoginScreen';
+import SplashScreen from './components/screens/SplashScreen';
+import TaskDetailScreen from './components/screens/TaskDetailScreen';
+import TaskScreen from './components/screens/TaskScreen';
+import ProfileScreen from './components/screens/ProfileScreen';
+import TabBarIcon from './components/molecules/TabBarIcon';
+import MaterialTopTabBarWrapper from './components/molecules/MaterialTopTabBarWrapper';
+import BottomBarTabWithBadge from './components/molecules/BottomBarTabWithBadge';
 
 const TaskStack = createStackNavigator({
   Task: {
