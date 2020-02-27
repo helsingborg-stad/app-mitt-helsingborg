@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Alert, Keyboard, Linking } from 'react-native';
 import styled from 'styled-components/native';
+import env from 'react-native-config';
 import HbgLogo from '../../assets/slides/stadsvapen.png';
 import { sanitizePin, validatePin } from '../../helpers/ValidationHelper';
 import Button from '../atoms/Button/Button';
@@ -144,24 +145,37 @@ class LoginScreen extends Component {
               <LoginFormHeader>
                 <Heading>Logga in</Heading>
               </LoginFormHeader>
-              <LoginFormField>
-                <Input
-                  placeholder="ÅÅÅÅMMDDXXXX"
-                  value={personalNumberInput}
-                  onChangeText={this.changeHandler}
-                  keyboardType="number-pad"
-                  returnKeyType="done"
-                  maxLength={12}
-                  onSubmitEditing={this.submitHandler}
-                  center
-                />
-              </LoginFormField>
-
-              <LoginFormField>
-                <Button color="purpleLight" block onClick={this.submitHandler}>
-                  <Text>Logga in med mobilt BankID</Text>
-                </Button>
-              </LoginFormField>
+              {!isBankidInstalled || env.APP_ENV === 'development' ? (
+                <>
+                  <LoginFormField>
+                    <Input
+                      placeholder="ÅÅÅÅMMDDXXXX"
+                      value={personalNumberInput}
+                      onChangeText={this.changeHandler}
+                      keyboardType="number-pad"
+                      returnKeyType="done"
+                      maxLength={12}
+                      onSubmitEditing={this.submitHandler}
+                      center
+                    />
+                  </LoginFormField>
+                  <LoginFormField>
+                    <Button color="purpleLight" block onClick={this.submitHandler}>
+                      <Text>Logga in med mobilt BankID</Text>
+                    </Button>
+                  </LoginFormField>
+                </>
+              ) : (
+                <LoginFormField>
+                  <Button
+                    color="purpleLight"
+                    block
+                    onClick={() => this.authenticateUser(undefined)}
+                  >
+                    <Text>Logga in med mobilt BankID</Text>
+                  </Button>
+                </LoginFormField>
+              )}
 
               <LoginFormField>
                 <Link
