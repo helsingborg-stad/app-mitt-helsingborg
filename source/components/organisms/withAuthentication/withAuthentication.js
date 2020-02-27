@@ -11,10 +11,6 @@ import {
 } from '../../../services/UserService';
 import { canOpenUrl } from '../../../helpers/UrlHelper';
 
-const FAKE_PERSONAL_NUMBER = '201111111111';
-const FAKE_TOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbm8iOiIxOTc0MDYwMjc4MjYiLCJpYXQiOjE1ODEwNjQ4OTIsImV4cCI6MTYxMjYwMDg5Mn0.JCBvQ3cbd-2b6jvdwhSoC7AxJ9DVML11OSlWZvFZG8o';
-
 /**
  * Wraps a react component with user authentication component.
  *
@@ -51,7 +47,11 @@ const withAuthentication = WrappedComponent =>
       try {
         this.setState({ isLoading: true });
         // TODO: Safe to keep in production?
-        if (personalNumber === FAKE_PERSONAL_NUMBER && env.APP_ENV === 'development') {
+        if (
+          env.FAKE_PERSONAL_NUMBER &&
+          personalNumber === env.FAKE_PERSONAL_NUMBER &&
+          env.APP_ENV === 'development'
+        ) {
           return await this._fakeLogin(personalNumber);
         }
 
@@ -110,9 +110,9 @@ const withAuthentication = WrappedComponent =>
       try {
         const response = await bypassBankid(personalNumber);
         const { user } = response.data;
-        await Auth.logIn(user, FAKE_TOKEN);
+        await Auth.logIn(user, env.FAKE_TOKEN);
 
-        return { user, FAKE_TOKEN };
+        return { user, FAKE_TOKEN: env.FAKE_TOKEN };
       } catch (e) {
         console.log(e);
       }
