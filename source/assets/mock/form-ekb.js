@@ -1,5 +1,3 @@
-import ICON_RINGS_PNG from '../icon-rings/icon-rings-24x24_2x.png';
-
 const ekbQuestion = args => {
   const { key, question, group, title } = args;
 
@@ -58,14 +56,25 @@ const ekbQuestion = args => {
   return questions;
 };
 
+/**
+ * Temporary methods to calculate payment sum and date
+ * TODO: Temp fix, remove me later
+ */
+const lottery = () => Math.floor(Math.random() * 9999) + 0;
+const getPaymentDate = () => {
+  const d = new Date();
+  d.setDate(d.getDate() + ((7 - d.getDay()) % 7) + 1);
+  return d.toLocaleDateString('sv-SE');
+};
+
 const EKB_FORM = {
   id: 2,
   name: 'Ekonomiskt Bistånd',
-  imageIcon: ICON_RINGS_PNG,
+  icon: 'attach-money',
   trigger: 'Vill ansöka om ekonomiskt bistånd',
   questions: [
-    /* 
-      Income 
+    /*
+      Income
     */
     ...ekbQuestion({
       key: 'incomeSalary',
@@ -99,8 +108,8 @@ const EKB_FORM = {
       key: 'incomeOther',
       question: 'Övrig inkomst?',
     }),
-    /* 
-      Expenses 
+    /*
+      Expenses
     */
     ...ekbQuestion({
       title: 'expenseRent',
@@ -151,7 +160,16 @@ const EKB_FORM = {
       key: 'expenseOther',
       question: 'Utgifter övrigt?',
     }),
-
+    /**
+     * Preiliminary calculation
+     */
+    {
+      id: 'preliminaryCalculation',
+      name: [
+        `Enligt vår preliminära uträkning kommer du att få ut ${lottery()} kr och kommer utbetalas ${getPaymentDate()}.`,
+      ],
+      type: 'message',
+    },
     /**
      * Confirm
      */
