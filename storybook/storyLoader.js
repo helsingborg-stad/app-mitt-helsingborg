@@ -17,7 +17,6 @@ function loadStories() {
 	require('../source/components/molecules/ListItem/Lists.stories');
 	require('../source/components/molecules/Modal.stories');
 	require('../source/components/organisms/FormAgent/FormAgent.stories');
-	require('../source/components/organisms/NavigationTabs.stories');
 	require('../source/components/organisms/WatsonAgent/WatsonAgent.stories');
 }
 
@@ -35,7 +34,6 @@ const stories = [
 	'../source/components/molecules/ListItem/Lists.stories',
 	'../source/components/molecules/Modal.stories',
 	'../source/components/organisms/FormAgent/FormAgent.stories',
-	'../source/components/organisms/NavigationTabs.stories',
 	'../source/components/organisms/WatsonAgent/WatsonAgent.stories'
 ];
 
