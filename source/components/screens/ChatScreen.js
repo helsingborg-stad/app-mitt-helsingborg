@@ -5,8 +5,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components/native';
 import ScreenWrapper from '../molecules/ScreenWrapper';
 import Chat from '../organisms/Chat/Chat';
-import withChatForm from '../organisms/withChatForm';
-import WatsonAgent from '../organisms/Watson/WatsonAgent';
+import withChatForm from '../organisms/withForm/withChatForm';
+import WatsonAgent from '../organisms/WatsonAgent';
 
 class ChatScreen extends Component {
   static navigationOptions = ({ navigation }) => ({

@@ -7,7 +7,7 @@ import styled from 'styled-components/native';
 
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
 
-import withChatForm from '../withChatForm';
+import withChatForm from '../withForm/withChatForm';
 import Chat from '../Chat/Chat';
 
 import StoryWrapper from '../../molecules/StoryWrapper';
