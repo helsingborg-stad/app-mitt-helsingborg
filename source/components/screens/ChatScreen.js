@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components/native';
 import ScreenWrapper from '../molecules/ScreenWrapper';
 import Chat from '../organisms/Chat/Chat';
-import withChatForm from '../organisms/withForm/withChatForm';
 import WatsonAgent from '../organisms/WatsonAgent';
 
 const ChatScreenWrapper = styled(ScreenWrapper)`
