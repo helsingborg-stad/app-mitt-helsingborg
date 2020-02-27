@@ -20,7 +20,7 @@ const HeaderContainer = styled.View`
   padding: 16px;
   justify-content: flex-end;
   background-color: white;
-  ${props => shadow[1]}
+  ${() => shadow[1]}
 `;
 
 const Title = styled(Heading)`

@@ -1,26 +1,16 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable react/sort-comp */
-/* eslint-disable react/state-in-constructor */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/prop-types */
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-unused-vars */
 /* eslint-disable max-classes-per-file */
-/* eslint-disable react/prop-types */
-import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { storiesOf } from '@storybook/react-native';
-
+import React, { Component } from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import StoryWrapper from '../../molecules/StoryWrapper';
-
-import Chat from '../Chat/Chat';
 import FormAgent from '.';
-
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
-
-import ChatBubble from '../../atoms/ChatBubble';
+import { excludePropetiesWithKey, renameMatchedKeysInObject } from '../../../helpers/Objects';
 import { getFormTemplate } from '../../../services/ChatFormService';
-
-import { renameMatchedKeysInObject, excludePropetiesWithKey } from '../../../helpers/Objects';
+import ChatBubble from '../../atoms/ChatBubble';
+import StoryWrapper from '../../molecules/StoryWrapper';
+import Chat from '../Chat/Chat';
 import FormAgentExperimental from './FormAgentExperimental';
 
 class FormAgentInitiator extends Component {
@@ -60,6 +50,15 @@ class FormAgentInitiator extends Component {
     return null;
   }
 }
+
+FormAgentInitiator.propTypes = {
+  chat: PropTypes.shape({
+    switchInput: PropTypes.func.isRequired,
+    switchAgent: PropTypes.func.isRequired,
+    addMessages: PropTypes.func.isRequired,
+  }),
+};
+
 class FormAgentExperimentalInitiator extends Component {
   componentDidMount() {
     const { chat } = this.props;
@@ -98,6 +97,14 @@ class FormAgentExperimentalInitiator extends Component {
   }
 }
 
+FormAgentExperimentalInitiator.propTypes = {
+  chat: PropTypes.shape({
+    switchInput: PropTypes.func.isRequired,
+    switchAgent: PropTypes.func.isRequired,
+    addMessages: PropTypes.func.isRequired,
+  }),
+};
+
 class FormAgentInitiatorWithRequest extends Component {
   state = {
     form: {},
@@ -132,6 +139,10 @@ class FormAgentInitiatorWithRequest extends Component {
     this.setState({ form: formObject });
   }
 
+  componentWillUnmount() {
+    EventHandler.unSubscribe(EVENT_USER_MESSAGE);
+  }
+
   convertFromJsonApiDataToFormObject = jsonApiData => {
     const { included, data } = jsonApiData;
 
@@ -147,7 +158,7 @@ class FormAgentInitiatorWithRequest extends Component {
   };
 
   createQuestionsArray = (questions, included) => {
-    questions = questions.map(item => {
+    const newQuestions = questions.map(item => {
       const { id, attributes, relationships } = item;
 
       let questionObject = renameMatchedKeysInObject(attributes, 'question_');
@@ -169,14 +180,10 @@ class FormAgentInitiatorWithRequest extends Component {
       return questionObject;
     });
 
-    return questions;
+    return newQuestions;
   };
 
-  componentWillUnmount() {
-    EventHandler.unSubscribe(EVENT_USER_MESSAGE);
-  }
-
-  handleMessage = message => {
+  handleMessage = _message => {
     const { chat } = this.props;
     const { form } = this.state;
     chat.switchAgent(props => <FormAgent {...props} form={form} formId={form.id} />);
@@ -186,6 +193,14 @@ class FormAgentInitiatorWithRequest extends Component {
     return null;
   }
 }
+
+FormAgentInitiatorWithRequest.propTypes = {
+  chat: PropTypes.shape({
+    switchInput: PropTypes.func.isRequired,
+    switchAgent: PropTypes.func.isRequired,
+    addMessages: PropTypes.func.isRequired,
+  }),
+};
 
 const StoryStack = createSwitchNavigator(
   {

@@ -1,5 +1,5 @@
 const ekbQuestion = args => {
-  const { key, question, group, title } = args;
+  const { key, question } = args;
 
   const dependency = {
     relation: 'AND',
