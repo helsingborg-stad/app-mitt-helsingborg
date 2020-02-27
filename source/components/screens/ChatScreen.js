@@ -1,12 +1,17 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
 import ScreenWrapper from '../molecules/ScreenWrapper';
 import Chat from '../organisms/Chat/Chat';
 import withChatForm from '../organisms/withForm/withChatForm';
 import WatsonAgent from '../organisms/WatsonAgent';
+
+const ChatScreenWrapper = styled(ScreenWrapper)`
+  padding-top: 0px;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0px;
+`;
 
 class ChatScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -35,11 +40,8 @@ class ChatScreen extends Component {
   }
 }
 
-const ChatScreenWrapper = styled(ScreenWrapper)`
-  padding-top: 0px;
-  padding-left: 0;
-  padding-right: 0;
-  padding-bottom: 0px;
-`;
+ChatScreen.propTypes = {
+  navigation: PropTypes.object,
+};
 
 export default ChatScreen;
