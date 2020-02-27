@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import LoginScreen from '../components/screens/LoginScreen';
-import SplashScreen from '../components/screens/SplashScreen';
+import LoginScreen from '../screens/LoginScreen';
+import SplashScreen from '../screens/SplashScreen';
 import BottomBarNavigator from './BottomBarNavigator';
 
-const RootStack = createSwitchNavigator(
+export const RootStack = createSwitchNavigator(
   {
     MainApp: BottomBarNavigator,
     LoginScreen,

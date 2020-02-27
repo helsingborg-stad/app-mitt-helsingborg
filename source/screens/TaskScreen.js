@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { NavigationEvents } from 'react-navigation';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
-import { CompletedTasks, NavItems } from '../../assets/dashboard';
-import forms from '../../assets/mock/forms';
-import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../services/StorageService';
-import Heading from '../atoms/Heading';
-import Text from '../atoms/Text';
-import GroupedList from '../molecules/GroupedList/GroupedList';
-import Header from '../molecules/Header';
-import ListItem from '../molecules/ListItem';
-import ScreenWrapper from '../molecules/ScreenWrapper';
+import { CompletedTasks, NavItems } from '../assets/dashboard';
+import forms from '../assets/mock/forms';
+import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../services/StorageService';
+import Heading from '../components/atoms/Heading';
+import Text from '../components/atoms/Text';
+import GroupedList from '../components/molecules/GroupedList/GroupedList';
+import Header from '../components/molecules/Header';
+import ListItem from '../components/molecules/ListItem';
+import ScreenWrapper from '../components/molecules/ScreenWrapper';
 
 const TaskScreenWrapper = styled(ScreenWrapper)`
   padding-left: 0;

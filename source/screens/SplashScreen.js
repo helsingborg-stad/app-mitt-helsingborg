@@ -4,16 +4,16 @@ import React, { Component } from 'react';
 import { ImageBackground, PanResponder } from 'react-native';
 import Swiper from 'react-native-swiper';
 import styled from 'styled-components/native';
-import SlideOneImg from '../../assets/slides/illu_001.png';
-import SlideTwoImg from '../../assets/slides/illu_002.png';
-import SlideThreeImg from '../../assets/slides/illu_003.png';
-import Stadsvapen from '../../assets/slides/stadsvapen.png';
-import { SHOW_SPLASH_SCREEN } from '../../services/StorageService';
-import Button from '../atoms/Button/Button';
-import Heading from '../atoms/Heading';
-import Icon from '../atoms/Icon';
-import Text from '../atoms/Text';
-import ScreenWrapper from '../molecules/ScreenWrapper';
+import SlideOneImg from '../assets/slides/illu_001.png';
+import SlideTwoImg from '../assets/slides/illu_002.png';
+import SlideThreeImg from '../assets/slides/illu_003.png';
+import Stadsvapen from '../assets/slides/stadsvapen.png';
+import { SHOW_SPLASH_SCREEN } from '../services/StorageService';
+import Button from '../components/atoms/Button/Button';
+import Heading from '../components/atoms/Heading';
+import Icon from '../components/atoms/Icon';
+import Text from '../components/atoms/Text';
+import ScreenWrapper from '../components/molecules/ScreenWrapper';
 
 const Slide = styled.View`
   flex: 1;

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import mockImage from '../../assets/screenshot_profile.png';
+import mockImage from '../assets/screenshot_profile.png';
 
 const ProfileContainer = styled.View`
   flex: 1;

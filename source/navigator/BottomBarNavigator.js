@@ -1,6 +1,6 @@
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
-import ChatScreen from '../components/screens/ChatScreen';
-import ProfileScreen from '../components/screens/ProfileScreen';
+import ChatScreen from '../screens/ChatScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import TabBarIcon from '../components/molecules/TabBarIcon';
 import MaterialTopTabBarWrapper from '../components/molecules/MaterialTopTabBarWrapper';
 import BottomBarTabWithBadge from '../components/molecules/BottomBarTabWithBadge';
