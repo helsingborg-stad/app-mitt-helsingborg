@@ -1,6 +1,6 @@
-/* eslint-disable global-require */
 import React from 'react';
 import styled from 'styled-components';
+import mockImage from '../../assets/screenshot_profile.png';
 
 const ProfileContainer = styled.View`
   flex: 1;
@@ -15,7 +15,7 @@ const ProfileMockImage = styled.Image`
 
 const ProfileScreen = () => (
   <ProfileContainer>
-    <ProfileMockImage source={require('../../assets/screenshot_profile.png')} />
+    <ProfileMockImage source={mockImage} />
   </ProfileContainer>
 );
 

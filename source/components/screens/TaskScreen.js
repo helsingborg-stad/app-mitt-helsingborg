@@ -1,22 +1,38 @@
-/* eslint-disable no-shadow */
-/* eslint-disable import/no-named-as-default */
-/* eslint-disable react/prop-types */
-/* eslint-disable no-empty */
-/* eslint-disable react/jsx-curly-newline */
-/* eslint-disable no-unused-vars */
-/* eslint-disable import/no-named-as-default-member */
 import React, { Component } from 'react';
-import styled from 'styled-components/native';
 import { NavigationEvents } from 'react-navigation';
-import { NavItems, CompletedTasks, ActiveTasks } from '../../assets/dashboard';
+import styled from 'styled-components/native';
+import PropTypes from 'prop-types';
+import { CompletedTasks, NavItems } from '../../assets/dashboard';
+import forms from '../../assets/mock/forms';
+import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../services/StorageService';
+import Heading from '../atoms/Heading';
+import Text from '../atoms/Text';
 import GroupedList from '../molecules/GroupedList/GroupedList';
 import Header from '../molecules/Header';
-import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../services/StorageService';
-import ScreenWrapper from '../molecules/ScreenWrapper';
-import Heading from '../atoms/Heading';
 import ListItem from '../molecules/ListItem';
-import forms from '../../assets/mock/forms';
-import Text from '../atoms/Text';
+import ScreenWrapper from '../molecules/ScreenWrapper';
+
+const TaskScreenWrapper = styled(ScreenWrapper)`
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  background-color: #f5f5f5;
+`;
+
+const Container = styled.ScrollView`
+  padding-left: 16px;
+  padding-right: 16px;
+`;
+
+const List = styled.View`
+  margin-top: 24px;
+`;
+
+const ListHeading = styled(Heading)`
+  margin-left: 4px;
+  margin-bottom: 8px;
+`;
 
 class TaskScreen extends Component {
   constructor(props) {
@@ -40,7 +56,9 @@ class TaskScreen extends Component {
       this.setState({
         activeTasks: Array.isArray(tasks) && tasks.length ? this.sortTasksByDate(tasks) : [],
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log('Tasks not found: ', error);
+    }
   };
 
   getUser = async () => {
@@ -54,9 +72,11 @@ class TaskScreen extends Component {
 
   renderTaskItem = item => {
     const { user } = this.state;
-    const { navigation } = this.props;
+    const {
+      navigation: { navigate },
+    } = this.props;
 
-    const form = forms.find(form => form.id === item.formId);
+    const form = forms.find(formData => formData.id === item.formId);
     if (!form) {
       return null;
     }
@@ -70,7 +90,7 @@ class TaskScreen extends Component {
         iconName={form.icon || null}
         imageSrc={form.imageIcon || null}
         onClick={() =>
-          navigation.navigate('TaskDetails', {
+          navigate('TaskDetails', {
             answers: item.data,
             form,
             user,
@@ -112,26 +132,8 @@ class TaskScreen extends Component {
   }
 }
 
+TaskScreen.propTypes = {
+  navigation: PropTypes.object,
+};
+
 export default TaskScreen;
-
-const TaskScreenWrapper = styled(ScreenWrapper)`
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  background-color: #f5f5f5;
-`;
-
-const Container = styled.ScrollView`
-  padding-left: 16px;
-  padding-right: 16px;
-`;
-
-const List = styled.View`
-  margin-top: 24px;
-`;
-
-const ListHeading = styled(Heading)`
-  margin-left: 4px;
-  margin-bottom: 8px;
-`;

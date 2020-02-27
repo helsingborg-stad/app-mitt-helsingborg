@@ -1,9 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-shadow */
-/* eslint-disable import/no-named-as-default */
-/* eslint-disable import/no-named-as-default-member */
-/* eslint-disable no-duplicate-case */
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components/native';
 import { TextInput } from 'react-native';
@@ -13,6 +8,81 @@ import Heading from '../atoms/Heading';
 import Text from '../atoms/Text';
 import Icon from '../atoms/Icon';
 import { input } from '../atoms/Input';
+
+const TaskDetailScreenWrapper = styled(ScreenWrapper)`
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  background-color: #fcfcfc;
+`;
+
+const Container = styled.ScrollView`
+  padding-left: 16px;
+  padding-right: 16px;
+`;
+
+const List = styled.View`
+  margin-top: 20px;
+  margin-bottom: 30px;
+`;
+
+const ListHeading = styled(Heading)`
+  margin-left: 4px;
+  margin-bottom: 8px;
+`;
+
+const FieldWrapper = styled.View`
+  padding-top: 15px;
+`;
+
+const FieldLabel = styled(Text)`
+  margin-bottom: 5px;
+  margin-left: 4px;
+  margin-right: 10px;
+  font-weight: normal;
+  font-size: 14px;
+`;
+
+const FieldInputWrapper = styled.View`
+  flex: 1;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  ${input}
+  padding: 10px;
+  padding-left: 5px;
+`;
+
+const FieldInputIcon = styled(Icon)`
+  font-size: 16px;
+  color: #999;
+`;
+
+const FieldInput = styled(TextInput)`
+  padding-left: 5px;
+`;
+
+// TODO: Lift out Field Component
+const Field = props => {
+  const { label, icon, input } = props;
+  return (
+    <FieldWrapper>
+      {label && <FieldLabel>{label}</FieldLabel>}
+
+      <FieldInputWrapper>
+        {icon && <FieldInputIcon name={icon} />}
+        <FieldInput {...input} />
+      </FieldInputWrapper>
+    </FieldWrapper>
+  );
+};
+
+Field.propTypes = {
+  icon: PropTypes.string,
+  input: PropTypes.object,
+  label: PropTypes.string,
+};
 
 const TaskDetailScreen = props => {
   const { navigation } = props;
@@ -38,18 +108,6 @@ const TaskDetailScreen = props => {
         break;
 
       case 'partnerPostal':
-        if (answers.partnerSameAddress === 'Ja') {
-          return { ...q, details: { ...q.details, show: false } };
-        }
-        break;
-
-      case 'partnerAddress':
-        if (answers.partnerSameAddress === 'Ja') {
-          return { ...q, details: { ...q.details, show: false } };
-        }
-        break;
-
-      case 'partnerAddress':
         if (answers.partnerSameAddress === 'Ja') {
           return { ...q, details: { ...q.details, show: false } };
         }
@@ -156,70 +214,8 @@ const TaskDetailScreen = props => {
   );
 };
 
+TaskDetailScreen.propTypes = {
+  navigation: PropTypes.object,
+};
+
 export default TaskDetailScreen;
-
-const TaskDetailScreenWrapper = styled(ScreenWrapper)`
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  background-color: #fcfcfc;
-`;
-
-const Container = styled.ScrollView`
-  padding-left: 16px;
-  padding-right: 16px;
-`;
-
-const List = styled.View`
-  margin-top: 20px;
-  margin-bottom: 30px;
-`;
-
-const ListHeading = styled(Heading)`
-  margin-left: 4px;
-  margin-bottom: 8px;
-`;
-
-// TODO: Lift out Field Component
-const Field = ({ label, icon, input }) => (
-  <FieldWrapper>
-    {label && <FieldLabel>{label}</FieldLabel>}
-
-    <FieldInputWrapper>
-      {icon && <FieldInputIcon name={icon} />}
-      <FieldInput {...input} />
-    </FieldInputWrapper>
-  </FieldWrapper>
-);
-
-const FieldWrapper = styled.View`
-  padding-top: 15px;
-`;
-
-const FieldLabel = styled(Text)`
-  margin-bottom: 5px;
-  margin-left: 4px;
-  margin-right: 10px;
-  font-weight: normal;
-  font-size: 14px;
-`;
-
-const FieldInputWrapper = styled.View`
-  flex: 1;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  ${input}
-  padding: 10px;
-  padding-left: 5px;
-`;
-
-const FieldInputIcon = styled(Icon)`
-  font-size: 16px;
-  color: #999;
-`;
-
-const FieldInput = styled(TextInput)`
-  padding-left: 5px;
-`;

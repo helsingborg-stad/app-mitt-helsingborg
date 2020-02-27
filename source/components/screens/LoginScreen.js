@@ -1,19 +1,16 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Keyboard, Alert, Linking } from 'react-native';
+import { Alert, Keyboard, Linking } from 'react-native';
 import styled from 'styled-components/native';
-import { sanitizePin, validatePin } from '../../helpers/ValidationHelper';
-import withAuthentication from '../organisms/withAuthentication';
-import ScreenWrapper from '../molecules/ScreenWrapper';
-import Text from '../atoms/Text';
-import Button from '../atoms/Button/Button';
-import Input from '../atoms/Input';
-import Heading from '../atoms/Heading';
-
 import HbgLogo from '../../assets/slides/stadsvapen.png';
+import { sanitizePin, validatePin } from '../../helpers/ValidationHelper';
+import Button from '../atoms/Button/Button';
+import Heading from '../atoms/Heading';
+import Input from '../atoms/Input';
+import Text from '../atoms/Text';
 import AuthLoading from '../molecules/AuthLoading';
+import ScreenWrapper from '../molecules/ScreenWrapper';
+import withAuthentication from '../organisms/withAuthentication';
 
 const Logo = styled.Image`
   height: 200px;
@@ -30,11 +27,6 @@ const Link = styled(Text)`
   text-align: center;
   margin-top: 16px;
   margin-bottom: 8px;
-`;
-
-const Label = styled(Text)`
-  margin-bottom: 8px;
-  font-size: 16px;
 `;
 
 const LoginKeyboardAvoidingView = styled.KeyboardAvoidingView`
@@ -70,7 +62,6 @@ class LoginScreen extends Component {
 
     this.state = {
       hideLogo: false,
-      validPin: false,
       personalNumberInput: '',
     };
   }
@@ -92,7 +83,6 @@ class LoginScreen extends Component {
   changeHandler = value => {
     this.setState({
       personalNumberInput: sanitizePin(value),
-      validPin: validatePin(value),
     });
   };
 
@@ -116,9 +106,12 @@ class LoginScreen extends Component {
    */
   authenticateUser = async personalNumber => {
     try {
-      const { loginUser } = this.props.authentication;
+      const {
+        authentication: { loginUser },
+        navigation: { navigate },
+      } = this.props;
       await loginUser(personalNumber);
-      this.props.navigation.navigate('Chat');
+      navigate('Chat');
     } catch (e) {
       if (e.message !== 'cancelled') {
         console.info('Error in LoginScreen::authenticateUser', e.message);
@@ -127,14 +120,10 @@ class LoginScreen extends Component {
   };
 
   render() {
-    const { validPin, personalNumberInput, hideLogo } = this.state;
+    const { personalNumberInput, hideLogo } = this.state;
     const {
-      isLoading,
-      cancelLogin,
-      resetUser,
-      user,
-      isBankidInstalled,
-    } = this.props.authentication;
+      authentication: { isLoading, cancelLogin, isBankidInstalled },
+    } = this.props;
 
     if (isLoading) {
       return (
@@ -192,5 +181,10 @@ class LoginScreen extends Component {
     );
   }
 }
+
+LoginScreen.propTypes = {
+  navigation: PropTypes.object,
+  authentication: PropTypes.object,
+};
 
 export default withAuthentication(LoginScreen);
