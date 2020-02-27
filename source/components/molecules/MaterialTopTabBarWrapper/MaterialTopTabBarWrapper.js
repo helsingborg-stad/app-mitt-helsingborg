@@ -1,11 +1,12 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native';
 import { MaterialTopTabBar } from 'react-navigation-tabs';
+import PropTypes from 'prop-types';
 
 const MaterialTopTabBarWrapper = props => {
-  const {
-    navigationState: { index },
-  } = props;
+  const { navigationState } = props;
+  const { index } = navigationState;
+
   let color = '#2196f3';
   color = index === 0 ? '#EC6701' : color;
   color = index === 1 ? '#A61380' : color;
@@ -27,6 +28,12 @@ const MaterialTopTabBarWrapper = props => {
       />
     </SafeAreaView>
   );
+};
+
+MaterialTopTabBarWrapper.propTypes = {
+  navigationState: PropTypes.shape({
+    index: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default MaterialTopTabBarWrapper;
