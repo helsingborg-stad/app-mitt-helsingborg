@@ -7,7 +7,7 @@
 
 import { AppRegistry, YellowBox } from 'react-native';
 import { name as appName } from './app.json';
-import App from './source/components/App';
+import App from './source/App';
 
 // TODO: Fix tab navigation and remove ignore warning.
 YellowBox.ignoreWarnings([

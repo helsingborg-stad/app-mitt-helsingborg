@@ -2,12 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components/native';
 import { TextInput } from 'react-native';
-import Header from '../molecules/Header';
-import ScreenWrapper from '../molecules/ScreenWrapper';
-import Heading from '../atoms/Heading';
-import Text from '../atoms/Text';
-import Icon from '../atoms/Icon';
-import { input } from '../atoms/Input';
+import Header from '../components/molecules/Header';
+import ScreenWrapper from '../components/molecules/ScreenWrapper';
+import Heading from '../components/atoms/Heading';
+import Text from '../components/atoms/Text';
+import Icon from '../components/atoms/Icon';
+import { input } from '../components/atoms/Input';
 
 const TaskDetailScreenWrapper = styled(ScreenWrapper)`
   padding-left: 0;
