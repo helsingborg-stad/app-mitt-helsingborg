@@ -7,10 +7,10 @@ import styled from 'styled-components/native';
 import { Button, Heading, Icon, Text } from 'app/components/atoms';
 import { StorageService } from 'app/services';
 import { ScreenWrapper } from 'app/components/molecules';
-import SlideOneImg from '../assets/slides/illu_001.png';
-import SlideTwoImg from '../assets/slides/illu_002.png';
-import SlideThreeImg from '../assets/slides/illu_003.png';
-import Stadsvapen from '../assets/slides/stadsvapen.png';
+
+import { SLIDES } from 'app/assets/images';
+
+const { SLIDE_001_PNG, SLIDE_002_PNG, SLIDE_003_PNG, STADSVAPEN_PNG } = SLIDES;
 
 const { SHOW_SPLASH_SCREEN } = StorageService;
 
@@ -169,7 +169,7 @@ class SplashScreen extends Component {
   swipeWelcome = () => (
     <Slide>
       <SlideImageContainer>
-        <ImageBackground style={{ width: 130, height: 200 }} source={Stadsvapen} />
+        <ImageBackground style={{ width: 130, height: 200 }} source={STADSVAPEN_PNG} />
       </SlideImageContainer>
       <Flex value="2">
         <Flex>
@@ -186,7 +186,7 @@ class SplashScreen extends Component {
   slideEasy = () => (
     <Slide>
       <SlideImageContainer>
-        <ImageBackground source={SlideOneImg} style={{ width: 300, height: 300 }} />
+        <ImageBackground source={SLIDE_001_PNG} style={{ width: 300, height: 300 }} />
       </SlideImageContainer>
       <Flex value="2">
         <Flex>
@@ -207,7 +207,7 @@ class SplashScreen extends Component {
   slideAccessible = () => (
     <Slide>
       <SlideImageContainer>
-        <ImageBackground source={SlideTwoImg} style={{ width: 230, height: 260 }} />
+        <ImageBackground source={SLIDE_002_PNG} style={{ width: 230, height: 260 }} />
       </SlideImageContainer>
       <Flex value="2">
         <Flex>
@@ -230,7 +230,7 @@ class SplashScreen extends Component {
     return (
       <Slide>
         <SlideImageContainer>
-          <ImageBackground source={SlideThreeImg} style={{ width: 300, height: 300 }} />
+          <ImageBackground source={SLIDE_003_PNG} style={{ width: 300, height: 300 }} />
         </SlideImageContainer>
         <Flex value="2">
           <Flex>

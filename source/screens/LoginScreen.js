@@ -7,9 +7,7 @@ import { Button, Text, Heading, Input } from 'app/components/atoms';
 import { AuthLoading, ScreenWrapper } from 'app/components/molecules';
 import { withAuthentication } from 'app/components/organisms';
 import { ValidationHelper } from 'app/helpers';
-import HbgLogo from 'app/assets/slides/stadsvapen.png';
-
-console.log('ValidationHelper', ValidationHelper);
+import { SLIDES } from 'app/assets/images';
 
 const { sanitizePin, validatePin } = ValidationHelper;
 
@@ -138,7 +136,7 @@ class LoginScreen extends Component {
       <LoginScreenWrapper>
         <LoginKeyboardAvoidingView behavior="padding" enabled>
           <LoginHeader>
-            {hideLogo ? null : <Logo source={HbgLogo} resizeMode="contain" />}
+            {hideLogo ? null : <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />}
           </LoginHeader>
           <LoginBody>
             <LoginForm>
