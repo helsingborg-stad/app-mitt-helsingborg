@@ -47,7 +47,7 @@ storiesOf('Button', module)
     <StoryWrapper {...props}>
       <FlexContainer>
         <Flex>
-          <Button color="purple" z={5} rounded>
+          <Button color="purple" rounded>
             <Icon name="arrow-upward" pill />
           </Button>
         </Flex>

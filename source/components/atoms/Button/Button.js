@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components/native';
 
-import z from '../../../styles/shadow';
+import SHADOW from '../../../styles/shadow';
 
 import Text from '../Text';
 import Icon from '../Icon';
 import colors from '../../../styles/colors';
 
 /** Button modifiers */
-const CSS = { z };
+const CSS = { z: SHADOW };
 
 CSS.buttonRounded = css`
   border-radius: 17.5px;
@@ -93,7 +93,7 @@ const ButtonTouchable = styled.TouchableOpacity`
     shadow-color: ${props => props.theme.shadow.default};
 `;
 
-const ButtonNew = props => {
+const Button = props => {
   const {
     value,
     onClick,
@@ -164,7 +164,7 @@ const ButtonNew = props => {
   );
 };
 
-ButtonNew.propTypes = {
+Button.propTypes = {
   block: PropTypes.bool,
   color: PropTypes.oneOf(Object.keys(colors.button)),
   icon: PropTypes.bool,
@@ -175,10 +175,10 @@ ButtonNew.propTypes = {
   size: PropTypes.string,
   style: PropTypes.array,
   value: PropTypes.string,
-  z: PropTypes.oneOf(Number(Object.keys(z))),
+  z: PropTypes.oneOf(Object.keys(SHADOW).map(number => parseInt(number))),
 };
 
-ButtonNew.defaultProps = {
+Button.defaultProps = {
   color: 'light',
   rounded: false,
   pill: false,
@@ -188,4 +188,4 @@ ButtonNew.defaultProps = {
   size: 'medium',
 };
 
-export default ButtonNew;
+export default Button;
