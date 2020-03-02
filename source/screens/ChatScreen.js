@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
-import ScreenWrapper from '../components/molecules/ScreenWrapper';
-import Chat from '../components/organisms/Chat/Chat';
-import WatsonAgent from '../components/organisms/WatsonAgent';
+import { WatsonAgent, Chat } from 'app/components/organisms';
+import { ScreenWrapper } from 'app/components/molecules';
 
 const ChatScreenWrapper = styled(ScreenWrapper)`
   padding-top: 0px;

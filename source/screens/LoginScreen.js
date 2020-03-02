@@ -3,15 +3,15 @@ import React, { Component } from 'react';
 import { Alert, Keyboard, Linking } from 'react-native';
 import styled from 'styled-components/native';
 import env from 'react-native-config';
-import HbgLogo from '../assets/slides/stadsvapen.png';
-import { sanitizePin, validatePin } from '../helpers/ValidationHelper';
-import Button from '../components/atoms/Button/Button';
-import Heading from '../components/atoms/Heading';
-import Input from '../components/atoms/Input';
-import Text from '../components/atoms/Text';
-import AuthLoading from '../components/molecules/AuthLoading';
-import ScreenWrapper from '../components/molecules/ScreenWrapper';
-import withAuthentication from '../components/organisms/withAuthentication';
+import { Button, Text, Heading, Input } from 'app/components/atoms';
+import { AuthLoading, ScreenWrapper } from 'app/components/molecules';
+import { withAuthentication } from 'app/components/organisms';
+import { ValidationHelper } from 'app/helpers';
+import HbgLogo from 'app/assets/slides/stadsvapen.png';
+
+console.log('ValidationHelper', ValidationHelper);
+
+const { sanitizePin, validatePin } = ValidationHelper;
 
 const Logo = styled.Image`
   height: 200px;
