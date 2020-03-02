@@ -27,8 +27,8 @@ export default class AuthHelper {
   /**
    * Checks if there is a saved token and is still valid
    */
-  static loggedIn = async () => {
-    const token = await this.getToken();
+  static isAuthenticated = async () => {
+    const token = await StorageService.getData(TOKEN_KEY);
 
     return !!token && !this.isTokenExpired(token);
   };
