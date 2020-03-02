@@ -7,9 +7,9 @@ import Text from '../../atoms/Text';
 import Icon from '../../atoms/Icon';
 import shadow from '../../../styles/shadow';
 import HeaderNav from './HeaderNav';
-import ButtonNew from '../../atoms/Button/Button';
+import Button from '../../atoms/Button/Button';
 
-const BackButton = styled(ButtonNew)`
+const BackButton = styled(Button)`
   padding: 0;
   margin-left: -10px;
   min-height: auto;

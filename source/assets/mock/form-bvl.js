@@ -1,10 +1,12 @@
-import { sanitizePin } from '../../helpers/ValidationHelper';
-import ICON_RINGS_PNG from '../icon-rings/icon-rings-24x24_2x.png';
+import { ICON_RINGS } from 'app/assets/images';
+import { ValidationHelper } from 'app/helpers';
+
+const { sanitizePin } = ValidationHelper;
 
 const BVL_FORM = {
   id: 1,
   name: 'Borgerlig vigsel',
-  imageIcon: ICON_RINGS_PNG,
+  imageIcon: ICON_RINGS.SIZE_24X24_2X_PNG,
   trigger: 'Vill boka borgerlig vigsel',
   questions: [
     {

@@ -1,6 +1,5 @@
 import { createSwitchNavigator } from 'react-navigation';
-import LoginScreen from '../screens/LoginScreen';
-import SplashScreen from '../screens/SplashScreen';
+import { LoginScreen, SplashScreen } from 'app/screens';
 import BottomBarNavigator from './BottomBarNavigator';
 
 export const RootStack = {

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import mockImage from '../assets/screenshot_profile.png';
+import { SCREENSHOTS } from 'app/assets/images';
 
 const ProfileContainer = styled.View`
   flex: 1;
@@ -15,7 +15,7 @@ const ProfileMockImage = styled.Image`
 
 const ProfileScreen = () => (
   <ProfileContainer>
-    <ProfileMockImage source={mockImage} />
+    <ProfileMockImage source={SCREENSHOTS.SCREENSHOT_PROFILE_PNG} />
   </ProfileContainer>
 );
 
