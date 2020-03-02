@@ -1,9 +1,11 @@
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
-import ChatScreen from '../screens/ChatScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import TabBarIcon from '../components/molecules/TabBarIcon';
-import MaterialTopTabBarWrapper from '../components/molecules/MaterialTopTabBarWrapper';
-import BottomBarTabWithBadge from '../components/molecules/BottomBarTabWithBadge';
+import {
+  TabBarIcon,
+  MaterialTopTabBarWrapper,
+  BottomBarTabWithBadge,
+} from 'app/components/molecules';
+import { ChatScreen, ProfileScreen } from 'app/screens';
+
 import TaskNavigator from './TaskNavigator';
 
 export const BottomBarConfig = {

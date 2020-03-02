@@ -1,6 +1,5 @@
 import { createStackNavigator } from 'react-navigation-stack';
-import TaskDetailScreen from '../screens/TaskDetailScreen';
-import TaskScreen from '../screens/TaskScreen';
+import { TaskDetailScreen, TaskScreen } from 'app/screens';
 
 export const TaskStack = {
   Task: {
