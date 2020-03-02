@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      /**
+       * Resolve custom alias paths in VSCODE
+       */
+      "app/*": ["./source/*"],
+      "storybook/*": ["./storybook/*"]
+    }
+  }
+}

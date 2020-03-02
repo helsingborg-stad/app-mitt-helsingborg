@@ -94,5 +94,13 @@
     "react-hooks/exhaustive-deps": "warn",
     "react/state-in-constructor": 0
   },
-  "plugins": ["prettier", "react-hooks"]
+  "plugins": ["prettier", "react-hooks"],
+  "settings": {
+    /**
+     * Resolve custom alias paths in ESLINT
+     */
+    "import/resolver": {
+      "babel-module": {}
+    }
+  }
 }
