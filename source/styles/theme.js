@@ -1,8 +1,8 @@
 // theming for styled components goes in this file.
 import colors from './colors';
 
-const theme = {
+const THEME = {
   ...colors,
 };
 
-export default theme;
+export default THEME;
