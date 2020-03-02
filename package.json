@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "(cd ./ios && pod install) && (react-native run-ios)",
+    "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ./source/",
     "storybook": "start-storybook -p 7007",
     "prestorybook": "rnstl",
-    "clear-cache": "watchman watch-del-all && rm -rf $TMPDIR/metro-* && rm -rf node_modules/ && yarn cache clean && yarn install",
+    "clear-cache": "(watchman watch-del-all & rm -rf $TMPDIR/metro-* & yarn cache clean & (cd ./ios && pod deintegrate) & rm -rf node_modules/) && yarn install && (cd ./ios && pod install)",
     "rebuild-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/"
   },
   "dependencies": {
