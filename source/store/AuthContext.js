@@ -5,30 +5,6 @@ import StorageService, { TOKEN_KEY } from '../services/StorageService';
 
 const AuthContext = React.createContext();
 
-/**
- * Check if token is expired
- */
-const isTokenExpired = token => {
-  try {
-    const decoded = decode(token);
-    if (decoded.exp > Math.floor(Date.now() / 1000)) {
-      return false;
-    }
-    return true;
-  } catch (err) {
-    console.log('Token is expired!');
-    return true;
-  }
-};
-
-/**
- * Checks if there is a saved token and is still valid
- */
-const isUserAuthenticated = async () => {
-  const token = await StorageService.getData(TOKEN_KEY);
-  return !!token && !isTokenExpired(token);
-};
-
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(
     (prevState, action) => {
@@ -58,13 +34,34 @@ function AuthProvider({ children }) {
     {
       isLoading: true,
       isSignout: false,
-      isAuthenticated: false,
+      isAuthenticated: null,
     }
   );
 
-  console.log('IS AUTHENTICATED', state.isAuthenticated);
+  /**
+   * Check if token is expired
+   */
+  const isTokenExpired = token => {
+    try {
+      const decoded = decode(token);
+      if (decoded.exp > Math.floor(Date.now() / 1000)) {
+        return false;
+      }
+      return true;
+    } catch (err) {
+      console.log('Token is expired!');
+      return true;
+    }
+  };
 
   useEffect(() => {
+    /**
+     * Checks if there is a saved token and is still valid
+     */
+    const isUserAuthenticated = async () => {
+      const token = await StorageService.getData(TOKEN_KEY);
+      return !!token && !isTokenExpired(token);
+    };
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
       const authenticated = await isUserAuthenticated();
@@ -91,7 +88,7 @@ function AuthProvider({ children }) {
   );
 
   return (
-    <AuthContext.Provider value={{ isAuthenticatedLOL: state.isAuthenticated }}>
+    <AuthContext.Provider value={{ ...authContext, isAuthenticated: state.isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );

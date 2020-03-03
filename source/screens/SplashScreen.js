@@ -1,7 +1,9 @@
 import React, { useEffect, useContext } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import HbgLogo from '../assets/slides/stadsvapen.png';
 import AuthContext from '../store/AuthContext';
+import StorageService, { SHOW_SPLASH_SCREEN } from '../services/StorageService';
 
 const SplashContainer = styled.View`
   flex: 1;
@@ -14,19 +16,36 @@ const Logo = styled.Image`
 `;
 
 function SplashScreen(props) {
-  const { isAuthenticatedLOL } = useContext(AuthContext);
-  console.log("isAuthenticated in OUTISDE'", isAuthenticatedLOL);
-
   const {
     navigation: { navigate },
   } = props;
 
+  const { isAuthenticated } = useContext(AuthContext);
+
+  /**
+   * Returns if onboarding screen is disabled
+   */
+  const showOnboardingScreen = async () => {
+    const value = await StorageService.getData(SHOW_SPLASH_SCREEN);
+    return value !== false;
+  };
+
   useEffect(() => {
-    console.log("isAuthenticated in use effect'", isAuthenticatedLOL);
-    // TODO: wait for response before navigating
-    navigate(isAuthenticatedLOL ? 'Chat' : 'Onboarding');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticatedLOL]);
+    const navigateAsync = async () => {
+      const showOnboarding = await showOnboardingScreen();
+      navigate(showOnboarding ? 'Onboarding' : 'Login');
+    };
+
+    switch (isAuthenticated) {
+      case true:
+        navigate('Chat');
+        break;
+      case false:
+        navigateAsync();
+        break;
+      default:
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <SplashContainer>
@@ -34,5 +53,9 @@ function SplashScreen(props) {
     </SplashContainer>
   );
 }
+
+SplashScreen.propTypes = {
+  navigation: PropTypes.object,
+};
 
 export default SplashScreen;
