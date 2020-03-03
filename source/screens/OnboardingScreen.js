@@ -282,7 +282,6 @@ class OnboardingScreen extends Component {
 
   render() {
     const { showSwipeInterface, swipeButtonText } = this.state;
-    console.log('showSwipeInterface', showSwipeInterface);
 
     return (
       <EnhancedScreenWrapper>
