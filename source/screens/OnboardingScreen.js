@@ -138,7 +138,7 @@ class OnboardingScreen extends Component {
       if (value) showSplash = JSON.parse(value);
 
       if (!showSplash) {
-        navigate('LoginScreen');
+        navigate('Login');
       }
     });
   };
@@ -153,7 +153,7 @@ class OnboardingScreen extends Component {
 
     AsyncStorage.setItem(SHOW_SPLASH_SCREEN, JSON.stringify(false));
 
-    navigate('LoginScreen');
+    navigate('Login');
   };
 
   /**
