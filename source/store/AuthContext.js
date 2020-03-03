@@ -1,56 +1,75 @@
 import PropTypes from 'prop-types';
 import React, { useReducer, useEffect, useMemo } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
+import decode from 'jwt-decode';
+import StorageService, { TOKEN_KEY } from '../services/StorageService';
 
 const AuthContext = React.createContext();
+
+/**
+ * Check if token is expired
+ */
+const isTokenExpired = token => {
+  try {
+    const decoded = decode(token);
+    if (decoded.exp > Math.floor(Date.now() / 1000)) {
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.log('Token is expired!');
+    return true;
+  }
+};
+
+/**
+ * Checks if there is a saved token and is still valid
+ */
+const isUserAuthenticated = async () => {
+  const token = await StorageService.getData(TOKEN_KEY);
+  return !!token && !isTokenExpired(token);
+};
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
-        case 'RESTORE_TOKEN':
+        case 'RESTORE_SESSION':
           return {
             ...prevState,
-            userToken: action.token,
+            isAuthenticated: action.isAuthenticated,
             isLoading: false,
           };
         case 'SIGN_IN':
           return {
             ...prevState,
             isSignout: false,
-            userToken: action.token,
+            isAuthenticated: true,
           };
         case 'SIGN_OUT':
           return {
             ...prevState,
             isSignout: true,
-            userToken: null,
+            isAuthenticated: false,
           };
+        default:
+          return prevState;
       }
     },
     {
       isLoading: true,
       isSignout: false,
-      userToken: null,
+      isAuthenticated: false,
     }
   );
+
+  console.log('IS AUTHENTICATED', state.isAuthenticated);
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
-      let userToken;
+      const authenticated = await isUserAuthenticated();
 
-      try {
-        userToken = await AsyncStorage.getItem('userToken');
-      } catch (e) {
-        // Restoring token failed
-      }
-
-      // After restoring token, we may need to validate it in production apps
-
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      dispatch({ type: 'RESTORE_SESSION', isAuthenticated: authenticated });
     };
 
     bootstrapAsync();
@@ -64,14 +83,18 @@ function AuthProvider({ children }) {
         // After getting token, we need to persist the token using `AsyncStorage`
         // In the example, we'll use a dummy token
 
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        dispatch({ type: 'SIGN_IN' });
       },
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
     }),
     []
   );
 
-  return <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ isAuthenticatedLOL: state.isAuthenticated }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 AuthProvider.propTypes = {
