@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import HbgLogo from '../assets/slides/stadsvapen.png';
+import { ActivityIndicator } from 'react-native';
 import AuthContext from '../store/AuthContext';
 import StorageService, { SHOW_SPLASH_SCREEN } from '../services/StorageService';
 
@@ -9,10 +9,6 @@ const SplashContainer = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-`;
-
-const Logo = styled.Image`
-  width: 100px;
 `;
 
 function SplashScreen(props) {
@@ -49,7 +45,7 @@ function SplashScreen(props) {
 
   return (
     <SplashContainer>
-      <Logo source={HbgLogo} resizeMode="contain" />
+      <ActivityIndicator size="large" color="slategray" />
     </SplashContainer>
   );
 }
