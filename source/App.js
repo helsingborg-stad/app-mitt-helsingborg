@@ -8,10 +8,10 @@
 
 import React, { Component } from 'react';
 import Config from 'react-native-config';
-import Navigator from './navigator';
 import StorybookUIRoot from '../storybook/index';
-
+import { AuthProvider } from './store/AuthContext';
 import StoreContext from './helpers/StoreContext';
+import Navigator from './navigator';
 import StorageService, { COMPLETED_FORMS_KEY } from './services/StorageService';
 
 /**
@@ -52,9 +52,11 @@ export default class App extends Component {
     }
 
     return (
-      <StoreContext.Provider value={this.state}>
-        <Navigator />
-      </StoreContext.Provider>
+      <AuthProvider>
+        <StoreContext.Provider value={this.state}>
+          <Navigator />
+        </StoreContext.Provider>
+      </AuthProvider>
     );
   }
 }
