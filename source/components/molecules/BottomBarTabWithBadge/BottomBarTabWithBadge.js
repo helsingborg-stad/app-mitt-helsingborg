@@ -1,23 +1,23 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Icon } from 'react-native-elements';
-import StoreContext from '../../../helpers/StoreContext';
+import { Notification } from 'app/store';
 import BadgeText from '../../atoms/Badge/BadgeText';
 import Badge from '../../atoms/Badge/Badge';
 
 const BottomBarTabWithBadge = (iconName, colorFocused) => ({ focused }) => (
-  <StoreContext.Consumer>
-    {({ badgeCount }) => (
+  <Notification.State.Consumer>
+    {({ number }) => (
       <View>
         <Icon name={iconName} color={focused ? colorFocused : 'gray'} />
-        {badgeCount > 0 && (
+        {number !== undefined && number > 0 && (
           <Badge>
-            <BadgeText>{badgeCount}</BadgeText>
+            <BadgeText>{number}</BadgeText>
           </Badge>
         )}
       </View>
     )}
-  </StoreContext.Consumer>
+  </Notification.State.Consumer>
 );
 
 export default BottomBarTabWithBadge;

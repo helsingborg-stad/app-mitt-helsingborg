@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { Notification } from 'app/store';
 import ChatMessages from '../../molecules/ChatMessages/ChatMessages';
 import Modal from '../../molecules/Modal';
 
@@ -11,7 +12,6 @@ import ChatFooter from '../../atoms/ChatFooter/ChatFooter';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
 
 import ChatUserInput from '../../molecules/ChatUserInput';
-import StoreContext from '../../../helpers/StoreContext';
 
 class Chat extends Component {
   state = {
@@ -151,11 +151,19 @@ class Chat extends Component {
     };
 
     return (
-      <StoreContext.Consumer>
-        {({ setBadgeCount }) => (
+      <Notification.Dispatch.Consumer>
+        {dispatchNotification => (
           <ChatWrapper keyboardVerticalOffset={keyboardVerticalOffset}>
             {ChatAgent ? (
-              <ChatAgent chat={{ ...instanceMethods, ...this.state, setBadgeCount }} />
+              <ChatAgent
+                chat={{
+                  ...instanceMethods,
+                  ...this.state,
+                  setBadgeCount: value => {
+                    dispatchNotification({ type: 'set', number: value });
+                  },
+                }}
+              />
             ) : null}
             <ChatBody>
               <ChatMessages messages={messages} chat={{ ...instanceMethods, ...this.state }} />
@@ -171,7 +179,7 @@ class Chat extends Component {
             <Modal {...modal} changeModal={visible => this.changeModal(visible)} />
           </ChatWrapper>
         )}
-      </StoreContext.Consumer>
+      </Notification.Dispatch.Consumer>
     );
   }
 }
