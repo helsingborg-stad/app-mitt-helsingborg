@@ -3,11 +3,16 @@ import React, { Component } from 'react';
 import { Alert, Keyboard, Linking } from 'react-native';
 import styled from 'styled-components/native';
 import env from 'react-native-config';
-import { Button, Text, Heading, Input } from 'app/components/atoms';
-import { AuthLoading, ScreenWrapper } from 'app/components/molecules';
-import { withAuthentication } from 'app/components/organisms';
-import { ValidationHelper } from 'app/helpers';
-import { SLIDES } from 'app/assets/images';
+import HbgLogo from '../assets/slides/stadsvapen.png';
+import { sanitizePin, validatePin } from '../helpers/ValidationHelper';
+import Button from '../components/atoms/Button/Button';
+import Heading from '../components/atoms/Heading';
+import Input from '../components/atoms/Input';
+import Text from '../components/atoms/Text';
+import AuthLoading from '../components/molecules/AuthLoading';
+import ScreenWrapper from '../components/molecules/ScreenWrapper';
+import withAuthentication from '../components/organisms/withAuthentication';
+import AuthContext from '../store/AuthContext';
 
 const { sanitizePin, validatePin } = ValidationHelper;
 
@@ -86,6 +91,7 @@ class LoginScreen extends Component {
   };
 
   submitHandler = () => {
+    const { signIn } = this.context;
     const { personalNumberInput } = this.state;
 
     if (personalNumberInput.length <= 0) {
@@ -97,7 +103,7 @@ class LoginScreen extends Component {
       return;
     }
 
-    this.authenticateUser(personalNumberInput);
+    signIn({ personalNumber: personalNumberInput });
   };
 
   /**
@@ -119,6 +125,8 @@ class LoginScreen extends Component {
   };
 
   render() {
+    const { signIn } = this.context;
+
     const { personalNumberInput, hideLogo } = this.state;
     const {
       authentication: { isLoading, cancelLogin, isBankidInstalled },
@@ -168,7 +176,7 @@ class LoginScreen extends Component {
                   <Button
                     color="purpleLight"
                     block
-                    onClick={() => this.authenticateUser(undefined)}
+                    onClick={() => signIn({ personalNumber: null })}
                   >
                     <Text>Logga in med mobilt BankID</Text>
                   </Button>
@@ -198,5 +206,7 @@ LoginScreen.propTypes = {
   navigation: PropTypes.object,
   authentication: PropTypes.object,
 };
+
+LoginScreen.contextType = AuthContext;
 
 export default withAuthentication(LoginScreen);
