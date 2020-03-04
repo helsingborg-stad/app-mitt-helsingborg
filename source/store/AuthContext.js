@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import React, { useReducer, useEffect, useMemo } from 'react';
 import decode from 'jwt-decode';
+import PropTypes from 'prop-types';
+import React, { useEffect, useMemo, useReducer } from 'react';
 import env from 'react-native-config';
 import StorageService, { TOKEN_KEY, USER_KEY } from '../services/StorageService';
 import {
@@ -85,7 +85,7 @@ function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    // Get stored token and login if it´s valid
+    // Get stored token and login user if it´s valid
     const bootstrapAsync = async () => {
       const token = await StorageService.getData(TOKEN_KEY);
       const user = await StorageService.getData(USER_KEY);
@@ -107,10 +107,9 @@ function AuthProvider({ children }) {
       signIn: async data => {
         dispatch({ type: 'PENDING' });
         const { personalNumber } = data;
-        console.log('SIGN IN DATA', data);
 
         try {
-          // Login with fake user (for dev mode)
+          // Login with fake user (in dev mode)
           if (
             env.FAKE_PERSONAL_NUMBER &&
             personalNumber === env.FAKE_PERSONAL_NUMBER &&
