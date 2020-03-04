@@ -6,13 +6,13 @@ const stack = {
   Onboarding: {
     screen: OnboardingScreen,
     navigationOptions: {
-      header: false,
+      header: () => {},
     },
   },
   Login: {
     screen: LoginScreen,
     navigationOptions: {
-      header: false,
+      header: () => {},
     },
   },
 };
