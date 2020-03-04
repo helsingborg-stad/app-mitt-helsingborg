@@ -9,37 +9,33 @@ function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
-        case 'RESTORE_SESSION':
-          return {
-            ...prevState,
-            isAuthenticated: action.isAuthenticated,
-            isLoading: false,
-          };
         case 'SIGN_IN':
           return {
             ...prevState,
-            isSignout: false,
             isAuthenticated: true,
+            token: action.token,
+            user: action.user,
           };
         case 'SIGN_OUT':
           return {
             ...prevState,
-            isSignout: true,
             isAuthenticated: false,
+            token: null,
+            user: null,
           };
         default:
           return prevState;
       }
     },
     {
-      isLoading: true,
-      isSignout: false,
       isAuthenticated: null,
+      token: null,
+      user: null,
     }
   );
 
   /**
-   * Check if token is expired
+   * Checks if token is expired
    */
   const isTokenExpired = token => {
     try {
@@ -55,18 +51,17 @@ function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    /**
-     * Checks if there is a saved token and is still valid
-     */
-    const isUserAuthenticated = async () => {
-      const token = await StorageService.getData(TOKEN_KEY);
-      return !!token && !isTokenExpired(token);
-    };
-    // Fetch the token from storage then navigate to our appropriate place
+    // Get stored token and login if it´s valid
     const bootstrapAsync = async () => {
-      const authenticated = await isUserAuthenticated();
+      const token = await StorageService.getData(TOKEN_KEY);
+      const isUserAuthenticated = !!token && !isTokenExpired(token);
 
-      dispatch({ type: 'RESTORE_SESSION', isAuthenticated: authenticated });
+      if (isUserAuthenticated) {
+        dispatch({ type: 'SIGN_IN', token });
+        return;
+      }
+
+      dispatch({ type: 'SIGN_OUT' });
     };
 
     bootstrapAsync();
@@ -80,7 +75,7 @@ function AuthProvider({ children }) {
         // After getting token, we need to persist the token using `AsyncStorage`
         // In the example, we'll use a dummy token
 
-        dispatch({ type: 'SIGN_IN' });
+        dispatch({ type: 'SIGN_IN', token: data.token });
       },
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
     }),
