@@ -17,7 +17,6 @@ function SplashScreen(props) {
   } = props;
 
   const { authStatus } = useContext(AuthContext);
-  console.log('authStatus', authStatus);
 
   /**
    * Returns if onboarding screen is disabled
