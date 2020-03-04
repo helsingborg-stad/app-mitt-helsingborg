@@ -128,9 +128,7 @@ function AuthProvider({ children }) {
   );
 
   return (
-    <AuthContext.Provider value={{ ...authContext, authStatus: state.authStatus }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ ...authContext, ...state }}>{children}</AuthContext.Provider>
   );
 }
 
