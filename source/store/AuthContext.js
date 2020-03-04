@@ -1,36 +1,55 @@
 import PropTypes from 'prop-types';
 import React, { useReducer, useEffect, useMemo } from 'react';
 import decode from 'jwt-decode';
-import StorageService, { TOKEN_KEY } from '../services/StorageService';
+import StorageService, { TOKEN_KEY, USER_KEY } from '../services/StorageService';
+import {
+  authAndCollect,
+  bypassBankid,
+  cancelBankidRequest,
+  resetCancel,
+} from '../services/UserService';
 
 const AuthContext = React.createContext();
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(
     (prevState, action) => {
+      console.log('DISPATCH:', action);
       switch (action.type) {
         case 'SIGN_IN':
           return {
             ...prevState,
-            isAuthenticated: true,
+            authStatus: 'resolved',
             token: action.token,
             user: action.user,
           };
         case 'SIGN_OUT':
           return {
             ...prevState,
-            isAuthenticated: false,
+            authStatus: 'idle',
             token: null,
             user: null,
+          };
+        case 'PENDING':
+          return {
+            ...prevState,
+            authStatus: 'pending',
+          };
+        case 'ERROR':
+          return {
+            ...prevState,
+            authStatus: 'rejected',
+            error: action.error,
           };
         default:
           return prevState;
       }
     },
     {
-      isAuthenticated: null,
+      authStatus: 'pending',
       token: null,
       user: null,
+      error: undefined,
     }
   );
 
@@ -45,7 +64,6 @@ function AuthProvider({ children }) {
       }
       return true;
     } catch (err) {
-      console.log('Token is expired!');
       return true;
     }
   };
@@ -54,10 +72,11 @@ function AuthProvider({ children }) {
     // Get stored token and login if it´s valid
     const bootstrapAsync = async () => {
       const token = await StorageService.getData(TOKEN_KEY);
+      const user = await StorageService.getData(USER_KEY);
       const isUserAuthenticated = !!token && !isTokenExpired(token);
 
       if (isUserAuthenticated) {
-        dispatch({ type: 'SIGN_IN', token });
+        dispatch({ type: 'SIGN_IN', token, user });
         return;
       }
 
@@ -70,20 +89,46 @@ function AuthProvider({ children }) {
   const authContext = useMemo(
     () => ({
       signIn: async data => {
-        // In a production app, we need to send some data (usually username, password) to server and get a token
-        // We will also need to handle errors if sign in failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
+        dispatch({ type: 'PENDING' });
+        const { personalNumber } = data;
+        console.log('SIGN IN DATA', data);
 
-        dispatch({ type: 'SIGN_IN', token: data.token });
+        try {
+          const authResponse = await authAndCollect(personalNumber);
+          if (authResponse.ok !== true) {
+            throw new Error(authResponse.data);
+          }
+
+          const { user, accessToken: token } = authResponse.data;
+
+          // Check if token is valid
+          if (isTokenExpired(token)) {
+            throw new Error('Token has expired');
+          }
+
+          // Store user and token
+          await StorageService.saveData(USER_KEY, user);
+          await StorageService.saveData(TOKEN_KEY, token);
+
+          dispatch({ type: 'SIGN_IN', token, user });
+        } catch (error) {
+          console.log('Sign in error: ', error);
+          dispatch({ type: 'ERROR', error });
+        }
       },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
+      signOut: async () => {
+        await StorageService.removeData(TOKEN_KEY);
+        dispatch({ type: 'SIGN_OUT' });
+      },
+      cancelSignIn: () => {
+        console.log('Cancel sign in');
+      },
     }),
     []
   );
 
   return (
-    <AuthContext.Provider value={{ ...authContext, isAuthenticated: state.isAuthenticated }}>
+    <AuthContext.Provider value={{ ...authContext, authStatus: state.authStatus }}>
       {children}
     </AuthContext.Provider>
   );

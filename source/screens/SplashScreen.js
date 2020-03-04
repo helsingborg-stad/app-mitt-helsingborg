@@ -16,7 +16,8 @@ function SplashScreen(props) {
     navigation: { navigate },
   } = props;
 
-  const { isAuthenticated } = useContext(AuthContext);
+  const { authStatus } = useContext(AuthContext);
+  console.log('authStatus', authStatus);
 
   /**
    * Returns if onboarding screen is disabled
@@ -32,16 +33,16 @@ function SplashScreen(props) {
       navigate(showOnboarding ? 'Onboarding' : 'Login');
     };
 
-    switch (isAuthenticated) {
-      case true:
+    switch (authStatus) {
+      case 'resolved':
         navigate('Chat');
         break;
-      case false:
+      case 'idle':
         navigateAsync();
         break;
       default:
     }
-  }, [isAuthenticated, navigate]);
+  }, [authStatus, navigate]);
 
   return (
     <SplashContainer>
