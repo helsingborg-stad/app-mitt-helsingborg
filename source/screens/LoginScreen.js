@@ -90,52 +90,61 @@ class LoginScreen extends Component {
     });
   };
 
-  submitHandler = () => {
-    const { signIn } = this.context;
-    const { personalNumberInput } = this.state;
+  signInNavigate = () => {
+    const { authStatus } = this.context;
+    const {
+      navigation: { navigate },
+    } = this.props;
 
-    if (personalNumberInput.length <= 0) {
-      return;
+    if (authStatus === 'resolved') {
+      navigate('Chat');
     }
-
-    if (!validatePin(personalNumberInput)) {
-      Alert.alert('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.');
-      return;
-    }
-
-    signIn({ personalNumber: personalNumberInput });
   };
 
-  /**
-   * Authenticate user and navigate on success
-   */
-  authenticateUser = async personalNumber => {
-    try {
-      const {
-        authentication: { loginUser },
-        navigation: { navigate },
-      } = this.props;
-      await loginUser(personalNumber);
-      navigate('Chat');
-    } catch (e) {
-      if (e.message !== 'cancelled') {
-        console.info('Error in LoginScreen::authenticateUser', e.message);
+  submitHandler = async () => {
+    const { signIn } = this.context;
+    const { personalNumberInput } = this.state;
+    const {
+      authentication: { isBankidInstalled },
+    } = this.props;
+
+    // Use external mobile bankid app if app is not installed or set to dev mode
+    const useExternalBankId = !isBankidInstalled || env.APP_ENV === 'development';
+
+    if (useExternalBankId) {
+      // Validate personal number input
+      if (personalNumberInput.length <= 0) {
+        return;
       }
+
+      if (!validatePin(personalNumberInput)) {
+        Alert.alert('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.');
+        return;
+      }
+
+      await signIn({ personalNumber: personalNumberInput });
+    } else {
+      await signIn();
     }
+
+    this.signInNavigate();
   };
 
   render() {
-    const { signIn } = this.context;
-
+    const { authStatus, cancelSignIn, error } = this.context;
+    console.log(authStatus);
     const { personalNumberInput, hideLogo } = this.state;
     const {
-      authentication: { isLoading, cancelLogin, isBankidInstalled },
+      authentication: { isBankidInstalled },
     } = this.props;
 
-    if (isLoading) {
+    const useExternalBankId = !isBankidInstalled || env.APP_ENV === 'development';
+    console.log('useExternalBankId', useExternalBankId);
+
+    if (authStatus === 'pending') {
       return (
         <LoginScreenWrapper>
-          <AuthLoading cancelLogin={cancelLogin} isBankidInstalled={isBankidInstalled} />
+          <AuthLoading cancelSignIn={() => cancelSignIn()} isBankidInstalled={isBankidInstalled} />
         </LoginScreenWrapper>
       );
     }
@@ -151,37 +160,33 @@ class LoginScreen extends Component {
               <LoginFormHeader>
                 <Heading>Logga in</Heading>
               </LoginFormHeader>
-              {!isBankidInstalled || env.APP_ENV === 'development' ? (
-                <>
-                  <LoginFormField>
-                    <Input
-                      placeholder="ÅÅÅÅMMDDXXXX"
-                      value={personalNumberInput}
-                      onChangeText={this.changeHandler}
-                      keyboardType="number-pad"
-                      returnKeyType="done"
-                      maxLength={12}
-                      onSubmitEditing={this.submitHandler}
-                      center
-                    />
-                  </LoginFormField>
-                  <LoginFormField>
-                    <Button color="purpleLight" block onClick={this.submitHandler}>
-                      <Text>Logga in med mobilt BankID</Text>
-                    </Button>
-                  </LoginFormField>
-                </>
-              ) : (
+
+              {/* TODO: Fix better error messages */}
+              {authStatus === 'rejected' && error.message !== 'cancelled' && (
+                <Text style={{ color: 'red', paddingBottom: 12 }}>
+                  Inloggningen misslyckades (Error: {error.message})
+                </Text>
+              )}
+
+              {useExternalBankId && (
                 <LoginFormField>
-                  <Button
-                    color="purpleLight"
-                    block
-                    onClick={() => signIn({ personalNumber: null })}
-                  >
-                    <Text>Logga in med mobilt BankID</Text>
-                  </Button>
+                  <Input
+                    placeholder="ÅÅÅÅMMDDXXXX"
+                    value={personalNumberInput}
+                    onChangeText={this.changeHandler}
+                    keyboardType="number-pad"
+                    returnKeyType="done"
+                    maxLength={12}
+                    onSubmitEditing={() => this.submitHandler()}
+                    center
+                  />
                 </LoginFormField>
               )}
+              <LoginFormField>
+                <Button color="purpleLight" block onClick={() => this.submitHandler()}>
+                  <Text>Logga in med mobilt BankID</Text>
+                </Button>
+              </LoginFormField>
 
               <LoginFormField>
                 <Link
