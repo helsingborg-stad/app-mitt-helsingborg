@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Alert, Keyboard, Linking } from 'react-native';
-import styled from 'styled-components/native';
 import env from 'react-native-config';
+import styled from 'styled-components/native';
 import HbgLogo from '../assets/slides/stadsvapen.png';
-import { sanitizePin, validatePin } from '../helpers/ValidationHelper';
 import Button from '../components/atoms/Button/Button';
 import Heading from '../components/atoms/Heading';
 import Input from '../components/atoms/Input';
 import Text from '../components/atoms/Text';
 import AuthLoading from '../components/molecules/AuthLoading';
 import ScreenWrapper from '../components/molecules/ScreenWrapper';
-import withAuthentication from '../components/organisms/withAuthentication';
+import { canOpenUrl } from '../helpers/UrlHelper';
+import { sanitizePin, validatePin } from '../helpers/ValidationHelper';
 import AuthContext from '../store/AuthContext';
 
 const { sanitizePin, validatePin } = ValidationHelper;
@@ -67,10 +67,13 @@ class LoginScreen extends Component {
     this.state = {
       hideLogo: false,
       personalNumberInput: '',
+      isBankidInstalled: false,
     };
   }
 
   componentDidMount() {
+    this.isBankidInstalled();
+
     this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', () =>
       this.setState({ hideLogo: true })
     );
@@ -83,6 +86,17 @@ class LoginScreen extends Component {
     this.keyboardWillShowListener.remove();
     this.keyboardWillHideListener.remove();
   }
+
+  /**
+   * Check if BankID app is installed on this machine
+   */
+  isBankidInstalled = async () => {
+    const isInstalled = await canOpenUrl('bankid:///');
+
+    if (isInstalled) {
+      this.setState({ isBankidInstalled: true });
+    }
+  };
 
   changeHandler = value => {
     this.setState({
@@ -103,10 +117,7 @@ class LoginScreen extends Component {
 
   submitHandler = async () => {
     const { signIn } = this.context;
-    const { personalNumberInput } = this.state;
-    const {
-      authentication: { isBankidInstalled },
-    } = this.props;
+    const { personalNumberInput, isBankidInstalled } = this.state;
 
     // Use external mobile bankid app if app is not installed or set to dev mode
     const useExternalBankId = !isBankidInstalled || env.APP_ENV === 'development';
@@ -132,14 +143,8 @@ class LoginScreen extends Component {
 
   render() {
     const { authStatus, cancelSignIn, error } = this.context;
-    console.log(authStatus);
-    const { personalNumberInput, hideLogo } = this.state;
-    const {
-      authentication: { isBankidInstalled },
-    } = this.props;
-
+    const { personalNumberInput, hideLogo, isBankidInstalled } = this.state;
     const useExternalBankId = !isBankidInstalled || env.APP_ENV === 'development';
-    console.log('useExternalBankId', useExternalBankId);
 
     if (authStatus === 'pending') {
       return (
@@ -214,4 +219,4 @@ LoginScreen.propTypes = {
 
 LoginScreen.contextType = AuthContext;
 
-export default withAuthentication(LoginScreen);
+export default LoginScreen;
