@@ -185,8 +185,7 @@ class WatsonAgent extends Component {
        * TODO: FOR DEV PURPOSE ONLY, REMOVE ME LATER
        */
       if (message === 'Radera data') {
-        await StorageService.removeData(COMPLETED_FORMS_KEY);
-        await StorageService.removeData(SHOW_SPLASH_SCREEN);
+        await StorageService.clearData();
         this.updateActiveFormsBadge(0);
         return chat.addMessages({
           Component: props => (

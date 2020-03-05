@@ -1,5 +1,5 @@
 import { createSwitchNavigator } from 'react-navigation';
-import SplashScreen from '../screens/SplashScreen';
+import { SplashScreen } from 'app/screens';
 import AuthStack from './AuthStack';
 import BottomBarNavigator from './BottomBarNavigator';
 

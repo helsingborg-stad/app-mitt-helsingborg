@@ -4,16 +4,12 @@ import React, { Component } from 'react';
 import { ImageBackground, PanResponder } from 'react-native';
 import Swiper from 'react-native-swiper';
 import styled from 'styled-components/native';
-import SlideOneImg from '../assets/slides/illu_001.png';
-import SlideTwoImg from '../assets/slides/illu_002.png';
-import SlideThreeImg from '../assets/slides/illu_003.png';
-import Stadsvapen from '../assets/slides/stadsvapen.png';
+import { SLIDES } from 'app/assets/images';
+import { Button, Heading, Icon, Text } from 'app/components/atoms';
+import { ScreenWrapper } from 'app/components/molecules';
 import { SHOW_SPLASH_SCREEN } from '../services/StorageService';
-import Button from '../components/atoms/Button/Button';
-import Heading from '../components/atoms/Heading';
-import Icon from '../components/atoms/Icon';
-import Text from '../components/atoms/Text';
-import ScreenWrapper from '../components/molecules/ScreenWrapper';
+
+const { SLIDE_001_PNG, SLIDE_002_PNG, SLIDE_003_PNG, STADSVAPEN_PNG } = SLIDES;
 
 const Slide = styled.View`
   flex: 1;
@@ -170,7 +166,7 @@ class OnboardingScreen extends Component {
   swipeWelcome = () => (
     <Slide>
       <SlideImageContainer>
-        <ImageBackground style={{ width: 130, height: 200 }} source={Stadsvapen} />
+        <ImageBackground style={{ width: 130, height: 200 }} source={STADSVAPEN_PNG} />
       </SlideImageContainer>
       <Flex value="2">
         <Flex>
@@ -187,7 +183,7 @@ class OnboardingScreen extends Component {
   slideEasy = () => (
     <Slide>
       <SlideImageContainer>
-        <ImageBackground source={SlideOneImg} style={{ width: 300, height: 300 }} />
+        <ImageBackground source={SLIDE_001_PNG} style={{ width: 300, height: 300 }} />
       </SlideImageContainer>
       <Flex value="2">
         <Flex>
@@ -208,7 +204,7 @@ class OnboardingScreen extends Component {
   slideAccessible = () => (
     <Slide>
       <SlideImageContainer>
-        <ImageBackground source={SlideTwoImg} style={{ width: 230, height: 260 }} />
+        <ImageBackground source={SLIDE_002_PNG} style={{ width: 230, height: 260 }} />
       </SlideImageContainer>
       <Flex value="2">
         <Flex>
@@ -231,7 +227,7 @@ class OnboardingScreen extends Component {
     return (
       <Slide>
         <SlideImageContainer>
-          <ImageBackground source={SlideThreeImg} style={{ width: 300, height: 300 }} />
+          <ImageBackground source={SLIDE_003_PNG} style={{ width: 300, height: 300 }} />
         </SlideImageContainer>
         <Flex value="2">
           <Flex>

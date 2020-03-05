@@ -1,5 +1,4 @@
 import * as ApiRequest from './ApiRequest';
-import * as AuthHelper from './AuthHelper';
 import * as Date from './Date';
 import * as EventHandler from './EventHandler';
 import * as Logics from './Logics';
@@ -11,7 +10,6 @@ import * as ValidationHelper from './ValidationHelper/ValidationHelper';
 
 export {
   ApiRequest,
-  AuthHelper,
   Date,
   EventHandler,
   Logics,
