@@ -214,7 +214,6 @@ class LoginScreen extends Component {
 
 LoginScreen.propTypes = {
   navigation: PropTypes.object,
-  authentication: PropTypes.object,
 };
 
 LoginScreen.contextType = AuthContext;
