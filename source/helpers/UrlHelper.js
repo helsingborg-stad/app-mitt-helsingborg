@@ -1,5 +1,5 @@
 import env from 'react-native-config';
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 
 /**
  * Test if URL can be opened
@@ -56,9 +56,15 @@ export const buildServiceUrl = (endpoint = '', params = {}) => {
  * @param {string} autoStartToken
  */
 export const buildBankIdClientUrl = autoStartToken => {
-  const params = `?autostarttoken=${autoStartToken}&redirect=${env.APP_SCHEME}://`;
-  /** const androidUrl = 'bankid:///'; <-- Use for android */
-  const iosUrl = 'https://app.bankid.com/';
+  let url = 'bankid:///';
+  let queryString = `?autostarttoken=${autoStartToken}&redirect=null`;
 
-  return `${iosUrl}${params}`;
+  if (Platform.OS === 'ios') {
+    url = 'https://app.bankid.com/';
+    queryString = `?autostarttoken=${autoStartToken}&redirect=${env.APP_SCHEME}://`;
+  }
+
+  console.log('URL', `${url}${queryString}`);
+
+  return `${url}${queryString}`;
 };
