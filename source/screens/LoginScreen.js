@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import { Alert, Keyboard, Linking } from 'react-native';
 import env from 'react-native-config';
 import styled from 'styled-components/native';
-import { AuthLoading, ScreenWrapper} from 'app/components/molecules';
+import { AuthLoading, ScreenWrapper } from 'app/components/molecules';
 import { ValidationHelper, UrlHelper } from 'app/helpers';
-import AuthContext from '../store/AuthContext';
 import { Button, Text, Heading, Input } from 'app/components/atoms';
 import { SLIDES } from 'app/assets/images';
+import AuthContext from '../store/AuthContext';
 
 const { sanitizePin, validatePin } = ValidationHelper;
 const { canOpenUrl } = UrlHelper;

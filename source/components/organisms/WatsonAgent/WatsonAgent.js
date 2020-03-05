@@ -6,11 +6,7 @@ import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler'
 import { sendChatMsg } from '../../../services/ChatFormService';
 import ChatBubble from '../../atoms/ChatBubble';
 import ButtonStack from '../../molecules/ButtonStack';
-import StorageService, {
-  COMPLETED_FORMS_KEY,
-  USER_KEY,
-  SHOW_SPLASH_SCREEN,
-} from '../../../services/StorageService';
+import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../../services/StorageService';
 import MarkdownConstructor from '../../../helpers/MarkdownConstructor';
 import ChatDivider from '../../atoms/ChatDivider';
 
