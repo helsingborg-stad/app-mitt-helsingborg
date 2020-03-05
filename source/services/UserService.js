@@ -99,7 +99,7 @@ const collect = async (orderRef, accessToken) =>
  * @return {Promise}
  */
 export const authAndCollect = async personalNumber => {
-  const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
+  const endUserIp = await NetworkInfo.getIPV4Address(ip => ip);
   let responseJson;
 
   // Make initial auth request to retrieve user details and access token
@@ -134,7 +134,7 @@ export const authAndCollect = async personalNumber => {
  * @return {Promise}
  */
 export const signAndCollect = async (personalNumber, userVisibleData) => {
-  const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
+  const endUserIp = await NetworkInfo.getIPV4Address(ip => ip);
   const requestBody = {
     personalNumber,
     endUserIp,
