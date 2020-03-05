@@ -1,4 +1,4 @@
-import { validatePin, sanitizePin } from 'app/helpers/ValidationHelper/ValidationHelper';
+import { validatePin, sanitizePin } from 'app/helpers/ValidationHelper';
 
 test('validationPin: test valid pin', () => {
   const validPin = 201111111111;
