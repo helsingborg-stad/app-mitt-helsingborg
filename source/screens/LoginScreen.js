@@ -133,9 +133,9 @@ class LoginScreen extends Component {
         return;
       }
 
-      await signIn({ personalNumber: personalNumberInput });
+      await signIn(personalNumberInput);
     } else {
-      await signIn({ personalNumber: undefined });
+      await signIn(undefined);
     }
 
     this.signInNavigate();

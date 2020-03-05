@@ -15,7 +15,6 @@ const AuthContext = React.createContext();
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(
     (prevState, action) => {
-      console.log('DISPATCH:', action);
       switch (action.type) {
         case 'SIGN_IN':
           return {
@@ -56,6 +55,9 @@ function AuthProvider({ children }) {
 
   /**
    * Checks if token is expired
+   *
+   * @param {string} token JSON Web Token
+   * @return {boolean}
    */
   const isTokenExpired = token => {
     try {
@@ -70,7 +72,9 @@ function AuthProvider({ children }) {
   };
 
   /**
-   * Simulate login using fake user
+   * Logins with mock user credentials
+   *
+   * @param {string} personalNumber Personal identity number
    */
   const fakeUserLogin = async personalNumber => {
     try {
@@ -85,7 +89,7 @@ function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    // Get stored token and login user if it´s valid
+    // Get stored token and login user if token is valid
     const bootstrapAsync = async () => {
       const token = await StorageService.getData(TOKEN_KEY);
       const user = await StorageService.getData(USER_KEY);
@@ -104,9 +108,13 @@ function AuthProvider({ children }) {
 
   const authContext = useMemo(
     () => ({
-      signIn: async data => {
+      /**
+       * Signs in user and store credentials
+       *
+       * @param {*} personalNumber Personal identity number
+       */
+      signIn: async personalNumber => {
         dispatch({ type: 'PENDING' });
-        const { personalNumber } = data;
 
         try {
           // Login with fake user (in dev mode)
@@ -144,12 +152,17 @@ function AuthProvider({ children }) {
         // Reset cancel collect parameter
         resetCancel();
       },
+      /**
+       * Signs out the user
+       */
       signOut: async () => {
         await StorageService.removeData(TOKEN_KEY);
         dispatch({ type: 'SIGN_OUT' });
       },
+      /**
+       * Cancels ongoing sign in process
+       */
       cancelSignIn: () => {
-        console.log('Cancel sign in');
         cancelBankidRequest('auth');
         dispatch({ type: 'ERROR', error: new Error('cancelled') });
       },
