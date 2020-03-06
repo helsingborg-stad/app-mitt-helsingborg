@@ -1,15 +1,16 @@
 import { createSwitchNavigator } from 'react-navigation';
-import { LoginScreen, SplashScreen } from 'app/screens';
+import { SplashScreen } from 'app/screens';
+import AuthStack from './AuthStack';
 import BottomBarNavigator from './BottomBarNavigator';
 
 export const RootStack = {
-  MainApp: BottomBarNavigator,
-  LoginScreen,
-  SplashIntro: SplashScreen,
+  Start: SplashScreen,
+  Auth: AuthStack,
+  App: BottomBarNavigator,
 };
 
 export const RootConfig = {
-  initialRouteName: 'SplashIntro',
+  initialRouteName: 'Start',
 };
 
 export default createSwitchNavigator(RootStack, RootConfig);

@@ -24,7 +24,7 @@ const AuthLoadingAction = styled.View`
 `;
 
 const AuthLoading = props => {
-  const { isBankidInstalled, cancelLogin } = props;
+  const { isBankidInstalled, cancelSignIn } = props;
 
   return (
     <AuthLoadingWrapper>
@@ -33,7 +33,7 @@ const AuthLoading = props => {
         {!isBankidInstalled && <Text>Väntar på att BankID ska startas på en annan enhet</Text>}
       </AuthLoadingBody>
       <AuthLoadingAction>
-        <Button color="purple" onClick={cancelLogin} block>
+        <Button color="purple" onClick={cancelSignIn} block>
           <Text>Avbryt</Text>
         </Button>
       </AuthLoadingAction>
@@ -43,7 +43,7 @@ const AuthLoading = props => {
 
 AuthLoading.propTypes = {
   isBankidInstalled: PropTypes.bool.isRequired,
-  cancelLogin: PropTypes.func.isRequired,
+  cancelSignIn: PropTypes.func.isRequired,
 };
 
 export default AuthLoading;
