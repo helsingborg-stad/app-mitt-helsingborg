@@ -178,5 +178,5 @@ AuthProvider.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 };
 
-export { AuthProvider };
+export { AuthProvider, reducer };
 export default AuthContext;
