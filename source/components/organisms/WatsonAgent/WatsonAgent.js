@@ -2,11 +2,12 @@
 import React, { Component } from 'react';
 import env from 'react-native-config';
 import { PropTypes } from 'prop-types';
+import AuthContext from 'app/store/AuthContext';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
 import { sendChatMsg } from '../../../services/ChatFormService';
 import ChatBubble from '../../atoms/ChatBubble';
 import ButtonStack from '../../molecules/ButtonStack';
-import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from '../../../services/StorageService';
+import StorageService, { COMPLETED_FORMS_KEY } from '../../../services/StorageService';
 import MarkdownConstructor from '../../../helpers/MarkdownConstructor';
 import ChatDivider from '../../atoms/ChatDivider';
 
@@ -112,8 +113,7 @@ class WatsonAgent extends Component {
    */
   onFormEnd = async ({ form, answers }) => {
     const { chat } = this.props;
-
-    const user = await StorageService.getData(USER_KEY);
+    const { user } = this.context;
 
     const formData = {
       id: +new Date(),
@@ -325,5 +325,7 @@ WatsonAgent.propTypes = {
   }),
   initialMessages: PropTypes.any,
 };
+
+WatsonAgent.contextType = AuthContext;
 
 export default WatsonAgent;

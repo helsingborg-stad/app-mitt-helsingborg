@@ -1,13 +1,13 @@
+import { CompletedTasks, NavItems } from 'app/assets/dashboard';
+import forms from 'app/assets/mock/forms';
+import { Heading, Text } from 'app/components/atoms';
+import { GroupedList, Header, ListItem, ScreenWrapper } from 'app/components/molecules';
+import StorageService, { COMPLETED_FORMS_KEY } from 'app/services/StorageService';
+import AuthContext from 'app/store/AuthContext';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { NavigationEvents } from 'react-navigation';
 import styled from 'styled-components/native';
-import PropTypes from 'prop-types';
-import StorageService, { COMPLETED_FORMS_KEY, USER_KEY } from 'app/services/StorageService';
-import { CompletedTasks, NavItems } from 'app/assets/dashboard';
-import forms from 'app/assets/mock/forms';
-
-import { Heading, Text } from 'app/components/atoms';
-import { GroupedList, Header, ListItem, ScreenWrapper } from 'app/components/molecules';
 
 const TaskScreenWrapper = styled(ScreenWrapper)`
   padding-left: 0;
@@ -35,13 +35,11 @@ class TaskScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {},
       activeTasks: [],
     };
   }
 
   componentDidMount() {
-    this.getUser();
     this.getTasks();
   }
 
@@ -58,17 +56,7 @@ class TaskScreen extends Component {
     }
   };
 
-  getUser = async () => {
-    try {
-      const user = await StorageService.getData(USER_KEY);
-      this.setState({ user });
-    } catch (error) {
-      console.log('User not found', error);
-    }
-  };
-
   renderTaskItem = item => {
-    const { user } = this.state;
     const {
       navigation: { navigate },
     } = this.props;
@@ -90,7 +78,6 @@ class TaskScreen extends Component {
           navigate('TaskDetails', {
             answers: item.data,
             form,
-            user,
           })
         }
       />
@@ -98,7 +85,8 @@ class TaskScreen extends Component {
   };
 
   render() {
-    const { user, activeTasks } = this.state;
+    const { user } = this.context;
+    const { activeTasks } = this.state;
 
     return (
       <TaskScreenWrapper>
@@ -132,5 +120,7 @@ class TaskScreen extends Component {
 TaskScreen.propTypes = {
   navigation: PropTypes.object,
 };
+
+TaskScreen.contextType = AuthContext;
 
 export default TaskScreen;
