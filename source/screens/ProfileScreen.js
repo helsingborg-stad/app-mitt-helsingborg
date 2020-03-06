@@ -53,8 +53,7 @@ function ProfileScreen(props) {
   } = props;
   const { user, signOut } = useContext(AuthContext);
 
-  const FieldText = ({ value }) =>
-    value ? <Text>{value}</Text> : <EmptyValue>Ej angivet</EmptyValue>;
+  const renderField = value => (value ? <Text>{value}</Text> : <EmptyValue>Ej angivet</EmptyValue>);
 
   return (
     <ProfileScreenWrapper>
@@ -64,16 +63,16 @@ function ProfileScreen(props) {
           <ProfileInfoContainer>
             <ProfileInfoHeading type="h3">Personuppgifter</ProfileInfoHeading>
             <Label small>NAMN</Label>
-            <FieldText value={user.name} />
+            {renderField(user.name)}
             <Label small>PERSONNUMMER</Label>
-            <FieldText value={user.personalNumber} />
+            {renderField(user.personalNumber)}
           </ProfileInfoContainer>
           <ProfileInfoContainer>
             <ProfileInfoHeading type="h3">Kontaktuppgifter</ProfileInfoHeading>
             <Label small>TELEFONNUMMER</Label>
-            <FieldText value={user.phone} />
+            {renderField(user.phone)}
             <Label small>E-POSTADRESS</Label>
-            <FieldText value={user.mail} />
+            {renderField(user.mail)}
           </ProfileInfoContainer>
         </View>
         <BottomContainer>
