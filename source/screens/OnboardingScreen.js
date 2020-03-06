@@ -292,7 +292,7 @@ class OnboardingScreen extends Component {
           showsButtons={showSwipeInterface}
           prevButton={<Text></Text>}
           nextButton={
-            <Button color="swipe" z={5} onClick={() => this.swipeToNext()}>
+            <Button color="swipe" z={0} onClick={() => this.swipeToNext()}>
               <ButtonNextText>{swipeButtonText}</ButtonNextText>
               <Icon size={16} name="chevron-right" color="purple" />
             </Button>
