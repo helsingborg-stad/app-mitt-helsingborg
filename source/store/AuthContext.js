@@ -12,46 +12,45 @@ import {
 
 const AuthContext = React.createContext();
 
+const reducer = (prevState, action) => {
+  switch (action.type) {
+    case 'SIGN_IN':
+      return {
+        ...prevState,
+        authStatus: 'resolved',
+        token: action.token,
+        user: action.user,
+      };
+    case 'SIGN_OUT':
+      return {
+        ...prevState,
+        authStatus: 'idle',
+        token: null,
+        user: null,
+      };
+    case 'PENDING':
+      return {
+        ...prevState,
+        authStatus: 'pending',
+      };
+    case 'ERROR':
+      return {
+        ...prevState,
+        authStatus: 'rejected',
+        error: action.error,
+      };
+    default:
+      return prevState;
+  }
+};
+
 function AuthProvider({ children }) {
-  const [state, dispatch] = useReducer(
-    (prevState, action) => {
-      switch (action.type) {
-        case 'SIGN_IN':
-          return {
-            ...prevState,
-            authStatus: 'resolved',
-            token: action.token,
-            user: action.user,
-          };
-        case 'SIGN_OUT':
-          return {
-            ...prevState,
-            authStatus: 'idle',
-            token: null,
-            user: null,
-          };
-        case 'PENDING':
-          return {
-            ...prevState,
-            authStatus: 'pending',
-          };
-        case 'ERROR':
-          return {
-            ...prevState,
-            authStatus: 'rejected',
-            error: action.error,
-          };
-        default:
-          return prevState;
-      }
-    },
-    {
-      authStatus: 'pending',
-      token: null,
-      user: null,
-      error: undefined,
-    }
-  );
+  const [state, dispatch] = useReducer(reducer, {
+    authStatus: 'pending',
+    token: null,
+    user: null,
+    error: undefined,
+  });
 
   /**
    * Checks if token is expired
@@ -179,7 +178,5 @@ AuthProvider.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 };
 
-const AuthConsumer = AuthContext.Consumer;
-
-export { AuthProvider, AuthConsumer };
+export { AuthProvider };
 export default AuthContext;
