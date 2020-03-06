@@ -62,3 +62,6 @@ buck-out/
 
 # Local environment files
 .env
+
+# Jest
+coverage/
