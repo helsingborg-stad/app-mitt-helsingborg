@@ -45,9 +45,11 @@ export default class App extends Component {
   render() {
     if (Config.IS_STORYBOOK === 'true') {
       return (
-        <StoreContext.Provider value={this.state}>
-          <StorybookUIRoot />
-        </StoreContext.Provider>
+        <AuthProvider>
+          <StoreContext.Provider value={this.state}>
+            <StorybookUIRoot />
+          </StoreContext.Provider>
+        </AuthProvider>
       );
     }
 
