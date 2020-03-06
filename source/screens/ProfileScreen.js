@@ -1,22 +1,113 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { SCREENSHOTS } from 'app/assets/images';
+import { View } from 'react-native';
+import { Button, Text, Heading } from 'app/components/atoms';
+import { ScreenWrapper, Header } from 'app/components/molecules';
+import AuthContext from 'app/store/AuthContext';
+import PropTypes from 'prop-types';
+import env from 'react-native-config';
+import { StorageService } from 'app/services';
 
-const ProfileContainer = styled.View`
+const ProfileScreenWrapper = styled(ScreenWrapper)`
+  padding: 0;
+  background-color: #f5f5f5;
+`;
+
+const Container = styled.View`
   flex: 1;
-  justify-content: center;
-  align-items: center;
+  padding: 16px;
 `;
 
-const ProfileMockImage = styled.Image`
-  width: 100%;
-  height: 100%;
+const BottomContainer = styled.View`
+  flex: 1;
+  justify-content: flex-end;
 `;
 
-const ProfileScreen = () => (
-  <ProfileContainer>
-    <ProfileMockImage source={SCREENSHOTS.SCREENSHOT_PROFILE_PNG} />
-  </ProfileContainer>
-);
+const SignOutButton = styled(Button)`
+  margin-bottom: 16px;
+`;
+
+const ProfileInfoContainer = styled.View`
+  margin-top: 16px;
+  margin-bottom: 16px;
+`;
+
+const ProfileInfoHeading = styled(Heading)`
+  margin-bottom: 8px;
+`;
+
+const EmptyValue = styled(Text)`
+  font-style: italic;
+  font-weight: normal;
+`;
+
+const Label = styled(Text)`
+  margin-top: 12px;
+  margin-bottom: 4px;
+  color: ${props => props.theme.background.light};
+`;
+
+function ProfileScreen(props) {
+  const {
+    navigation: { navigate },
+  } = props;
+  const { user, signOut } = useContext(AuthContext);
+
+  const FieldText = ({ value }) =>
+    value ? <Text>{value}</Text> : <EmptyValue>Ej angivet</EmptyValue>;
+
+  return (
+    <ProfileScreenWrapper>
+      <Header title="Min profil" themeColor="purple" />
+      <Container>
+        <View>
+          <ProfileInfoContainer>
+            <ProfileInfoHeading type="h3">Personuppgifter</ProfileInfoHeading>
+            <Label small>NAMN</Label>
+            <FieldText value={user.name} />
+            <Label small>PERSONNUMMER</Label>
+            <FieldText value={user.personalNumber} />
+          </ProfileInfoContainer>
+          <ProfileInfoContainer>
+            <ProfileInfoHeading type="h3">Kontaktuppgifter</ProfileInfoHeading>
+            <Label small>TELEFONNUMMER</Label>
+            <FieldText value={user.phone} />
+            <Label small>E-POSTADRESS</Label>
+            <FieldText value={user.mail} />
+          </ProfileInfoContainer>
+        </View>
+        <BottomContainer>
+          <SignOutButton
+            block
+            color="purple"
+            onClick={async () => {
+              await signOut();
+              navigate('Start');
+            }}
+          >
+            <Text>Logga ut</Text>
+          </SignOutButton>
+
+          {env.APP_ENV === 'development' && (
+            <SignOutButton
+              block
+              onClick={async () => {
+                await StorageService.default.clearData();
+                await signOut();
+                navigate('Start');
+              }}
+            >
+              <Text>Nollställ data</Text>
+            </SignOutButton>
+          )}
+        </BottomContainer>
+      </Container>
+    </ProfileScreenWrapper>
+  );
+}
+
+ProfileScreen.propTypes = {
+  navigation: PropTypes.object,
+};
 
 export default ProfileScreen;
