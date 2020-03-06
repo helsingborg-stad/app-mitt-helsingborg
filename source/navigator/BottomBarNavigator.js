@@ -43,7 +43,7 @@ export const BottomBarStack = {
     screen: ProfileScreen,
     navigationOptions: {
       title: 'Profil',
-      tabBarIcon: TabBarIcon('contacts', 'blue'),
+      tabBarIcon: TabBarIcon('contacts', '#0095DB'),
     },
   },
 };
