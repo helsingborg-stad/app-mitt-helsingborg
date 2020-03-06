@@ -6,7 +6,7 @@ import * as MarkdownConstructor from './MarkdownConstructor';
 import * as Objects from './Objects';
 import * as StoreContext from './StoreContext';
 import * as UrlHelper from './UrlHelper';
-import * as ValidationHelper from './ValidationHelper/ValidationHelper';
+import * as ValidationHelper from './ValidationHelper';
 
 export {
   ApiRequest,
