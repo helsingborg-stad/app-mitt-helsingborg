@@ -26,7 +26,7 @@ const reducer = (prevState, action) => {
         ...prevState,
         authStatus: 'idle',
         token: null,
-        user: null,
+        user: {},
       };
     case 'PENDING':
       return {
@@ -48,7 +48,7 @@ function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, {
     authStatus: 'pending',
     token: null,
-    user: null,
+    user: {},
     error: undefined,
   });
 
@@ -132,7 +132,7 @@ function AuthProvider({ children }) {
           }
 
           // Destruct user and token variables
-          const { user, accessToken: token } = authResponse.data;
+          const { user, token } = authResponse.data;
 
           // Check if token is valid
           if (isTokenExpired(token)) {
@@ -155,8 +155,8 @@ function AuthProvider({ children }) {
        * Signs out the user
        */
       signOut: async () => {
-        await StorageService.removeData(TOKEN_KEY);
         dispatch({ type: 'SIGN_OUT' });
+        await StorageService.removeData(TOKEN_KEY);
       },
       /**
        * Cancels ongoing sign in process
