@@ -1,3 +1,3 @@
-import Notification from './Notification';
+import * as Notification from './Notification';
 
 export { Notification };
