@@ -44,7 +44,7 @@ const Header = ({ message, title, themeColor, navItems, backButton }) => (
   <HeaderContainer>
     <HeaderContent>
       {backButton && (
-        <BackButton z="0" onClick={backButton.onClick}>
+        <BackButton z={0} onClick={backButton.onClick}>
           <Icon name="arrow-back" />
           <Text>{backButton.text}</Text>
         </BackButton>
