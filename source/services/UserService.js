@@ -40,11 +40,11 @@ const launchBankIdApp = async autoStartToken => {
 /**
  * Polls collect endpoint every 2nd second until it's resolved
  *
- * @param {String} Order reference
- * @param {String} Access token
+ * @param {String} orderRef Order reference
+ * @param {String} token    Access oken
  * @return {Promise}
  */
-const collect = async (orderRef, accessToken) =>
+const collect = async (orderRef, token) =>
   new Promise((resolve, reject) => {
     const interval = setInterval(async () => {
       // Bail if cancel button is triggered by the user
@@ -60,7 +60,7 @@ const collect = async (orderRef, accessToken) =>
         collectData = await post(
           'auth/bankid/collect',
           { orderRef },
-          accessToken ? { Authorization: `Bearer ${accessToken}` } : {}
+          token ? { Authorization: `Bearer ${token}` } : {}
         );
         collectData = collectData.data.data.attributes;
       } catch (error) {
@@ -78,11 +78,18 @@ const collect = async (orderRef, accessToken) =>
         clearInterval(interval);
 
         if (completetionData.user) {
+          const userData = {
+            name: completetionData.user.name || '',
+            givenName: completetionData.user.given_name || '',
+            surname: completetionData.user.surname || '',
+            personalNumber: completetionData.user.personal_number || '',
+          };
+
           resolve({
             ok: true,
             data: {
-              user: completetionData.user,
-              accessToken,
+              user: userData,
+              token,
             },
           });
         }
@@ -193,9 +200,9 @@ export const bypassBankid = async personalNumber => ({
   ok: true,
   data: {
     user: {
-      name: 'Saruman Stål',
+      name: 'Saruman The White',
       givenName: 'Saruman',
-      surname: 'Stål',
+      surname: 'The White',
       personalNumber,
     },
   },
