@@ -1,6 +1,3 @@
-import { Alert } from 'react-native';
-import { sanitizePin } from '../helpers/ValidationHelper';
-
 const forms = [
   {
     id: 1,

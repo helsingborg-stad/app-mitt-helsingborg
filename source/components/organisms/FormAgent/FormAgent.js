@@ -1,15 +1,10 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-shadow */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/state-in-constructor */
 import React, { Component } from 'react';
 import validator from 'validator';
+import PropTypes from 'prop-types';
 import EventHandler, { EVENT_USER_MESSAGE } from '../../../helpers/EventHandler';
-import forms from '../../../assets/forms.js';
+import forms from '../../../assets/mock/forms.js';
 import ChatBubble from '../../atoms/ChatBubble';
-import ChatDivider from '../../atoms/ChatDivider';
-import StorageService, { USER_KEY } from '../../../services/StorageService';
+import ChatDivider from '../../atoms/ChatDivider/ChatDivider';
 import MarkdownConstructor from '../../../helpers/MarkdownConstructor';
 
 // TODO: Find better place for storing this function and
@@ -47,19 +42,16 @@ class FormAgent extends Component {
     questions: [],
     answers: {},
     currentQuestion: undefined,
-    user: {},
   };
 
   componentDidMount() {
-    const { formId, chat, answers } = this.props;
-
-    this.saveUserToState();
+    const { formId, chat, answers, form } = this.props;
 
     chat.switchInput(false);
 
-    const form = this.props.form ? this.props.form : forms.find(form => form.id === formId);
+    const formObject = form || forms.find(formItem => formItem.id === formId);
 
-    if (!form) {
+    if (!formObject) {
       console.error(`FormAgent: Cannot find Form with ID ${formId}.`);
       return;
     }
@@ -71,7 +63,7 @@ class FormAgent extends Component {
         Component: ChatDivider,
         componentProps: {
           title: '',
-          info: `Bokning ${form.name.toLowerCase()} startad`,
+          info: `Bokning ${formObject.name.toLowerCase()} startad`,
         },
       },
     ]);
@@ -81,8 +73,8 @@ class FormAgent extends Component {
       this.setState(
         {
           answers: answers || {},
-          form,
-          questions: form.questions,
+          form: formObject,
+          questions: formObject.questions,
         },
         this.nextQuestion
       );
@@ -221,16 +213,22 @@ class FormAgent extends Component {
     }
   };
 
-  saveUserToState = async () => {
-    const user = await StorageService.getData(USER_KEY);
-    if (user) {
-      this.setState({ user });
-    }
-  };
-
   render() {
     return null;
   }
 }
+
+FormAgent.propTypes = {
+  formId: PropTypes.number,
+  chat: PropTypes.shape({
+    switchInput: PropTypes.func.isRequired,
+    addMessages: PropTypes.func.isRequired,
+    toggleTyping: PropTypes.func.isRequired,
+    switchUserInput: PropTypes.func.isRequired,
+  }),
+  answers: PropTypes.object,
+  form: PropTypes.object,
+  callback: PropTypes.func,
+};
 
 export default FormAgent;

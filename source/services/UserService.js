@@ -1,12 +1,8 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-async-promise-executor */
-/* eslint-disable camelcase */
-/* eslint-disable no-undef */
 import { Linking } from 'react-native';
 import { NetworkInfo } from 'react-native-network-info';
-import { canOpenUrl, buildServiceUrl, buildBankIdClientUrl } from '../helpers/UrlHelper';
-import StorageService, { TEMP_TOKEN_KEY, ORDER_KEY } from './StorageService';
-import { remove, post } from '../helpers/ApiRequest';
+import { post, remove } from '../helpers/ApiRequest';
+import { buildBankIdClientUrl, canOpenUrl } from '../helpers/UrlHelper';
+import StorageService, { ORDER_KEY, TEMP_TOKEN_KEY } from './StorageService';
 
 let cancelled = false;
 
@@ -18,65 +14,44 @@ export const resetCancel = () => {
 };
 
 /**
- * Launch BankID app
- * @param {string} bankIdClientUrl
- */
-launchBankIdApp = async autoStartToken => {
-  const bankIdClientUrl = buildBankIdClientUrl(autoStartToken);
-
-  return this.openURL(bankIdClientUrl);
-};
-
-/**
  * Open requested URL
- * @param {string} url
+ *
+ * @param {String} url
  */
-openURL = url =>
+const openURL = url =>
   Linking.openURL(url)
     .then(() => true)
     .catch(() => false);
 
 /**
- * Make an auth request to BankID API and poll until done
- * @param {string} personalNumber
+ * Launch BankID app id it's installed on clients machine
+ *
+ * @param {string} bankIdClientUrl
  */
-export const authorize = personalNumber =>
-  new Promise(async (resolve, reject) => {
-    const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
-    let responseJson;
+const launchBankIdApp = async autoStartToken => {
+  const bankIdClientUrl = buildBankIdClientUrl(autoStartToken);
+  // Launch app if it's installed on this machine
+  const canLaunchApp = await canOpenUrl('bankid:///');
+  if (canLaunchApp) {
+    openURL(bankIdClientUrl);
+  }
+};
 
-    // Make initial auth request to retrieve user details and access token
-    try {
-      responseJson = await post('auth/bankid', { personalNumber, endUserIp });
-      responseJson = responseJson.data.data.attributes;
-    } catch (error) {
-      console.log('Auth error', error);
-      return reject(error);
-    }
-
-    const { auto_start_token, order_ref, token } = responseJson;
-
-    if (!auto_start_token || !order_ref) {
-      return reject(new Error('Missing auto_start_token or order_ref'));
-    }
-
-    // Save order reference + temporary access token to async storage
-    StorageService.saveData(ORDER_KEY, order_ref);
-    StorageService.saveData(TEMP_TOKEN_KEY, token);
-
-    // Launch BankID app if it's installed on this machine
-    const launchNativeApp = await canOpenUrl('bankid:///');
-    if (launchNativeApp) {
-      this.launchBankIdApp(auto_start_token);
-    }
-
-    // Poll /collect/ endpoint every 2nd second until auth either success or fails
+/**
+ * Polls collect endpoint every 2nd second until it's resolved
+ *
+ * @param {String} orderRef Order reference
+ * @param {String} token    Access oken
+ * @return {Promise}
+ */
+const collect = async (orderRef, token) =>
+  new Promise((resolve, reject) => {
     const interval = setInterval(async () => {
       // Bail if cancel button is triggered by the user
       if (cancelled === true) {
         clearInterval(interval);
         resetCancel();
-        return resolve({ ok: false, data: 'cancelled' });
+        resolve({ ok: false, data: 'cancelled' });
       }
 
       let collectData = {};
@@ -84,8 +59,8 @@ export const authorize = personalNumber =>
       try {
         collectData = await post(
           'auth/bankid/collect',
-          { orderRef: order_ref },
-          { Authorization: `Bearer ${token}` }
+          { orderRef },
+          token ? { Authorization: `Bearer ${token}` } : {}
         );
         collectData = collectData.data.data.attributes;
       } catch (error) {
@@ -93,107 +68,109 @@ export const authorize = personalNumber =>
         reject(error);
       }
 
-      const { status, hint_code, completion_data } = collectData;
+      const { status, hint_code: hintCode, completion_data: completetionData } = collectData;
 
       if (status === 'failed') {
         clearInterval(interval);
-        resolve({ ok: false, data: hint_code });
-      } else if (status === 'complete') {
+        resolve({ ok: false, data: hintCode });
+      }
+      if (status === 'complete') {
         clearInterval(interval);
 
-        if (completion_data.user) {
+        if (completetionData.user) {
+          const userData = {
+            name: completetionData.user.name || '',
+            givenName: completetionData.user.given_name || '',
+            surname: completetionData.user.surname || '',
+            personalNumber: completetionData.user.personal_number || '',
+          };
+
           resolve({
             ok: true,
             data: {
-              user: completion_data.user,
-              accessToken: token,
+              user: userData,
+              token,
             },
           });
         }
 
-        resolve({ ok: false, data: hint_code });
+        resolve({ ok: false, data: hintCode });
       }
     }, 2000);
   });
 
 /**
- * Make a sign request to BankID API and poll until done
+ * Make an auth request to BankID API and wait for response
+ *
  * @param {string} personalNumber
+ * @return {Promise}
  */
-export const sign = (personalNumber, userVisibleData) =>
-  new Promise(async (resolve, reject) => {
-    const endUserIp = await NetworkInfo.getIPAddress(ip => ip);
-    const reqBody = {
-      personalNumber,
-      endUserIp,
-      userVisibleData,
-    };
-    let responseJson = {};
+export const authAndCollect = async personalNumber => {
+  const endUserIp = await NetworkInfo.getIPV4Address(ip => ip);
+  let responseJson;
 
-    // Make initial auth request to retrieve user details and access token
-    try {
-      responseJson = await post('auth/bankid/sign', reqBody);
-      responseJson = responseJson.data.data.attributes;
-    } catch (error) {
-      console.log('Sign error', error);
-      return reject(error);
-    }
+  // Make initial auth request to retrieve user details and access token
+  try {
+    responseJson = await post('auth/bankid', { personalNumber, endUserIp });
+    responseJson = responseJson.data.data.attributes;
+  } catch (error) {
+    console.log('Auth error', error);
+    return Promise.reject(error);
+  }
 
-    const { auto_start_token, order_ref } = responseJson;
+  const { auto_start_token: autoStartToken, order_ref: orderRef, token } = responseJson;
+  if (!autoStartToken || !orderRef) {
+    return Promise.reject(new Error('Missing autoStartToken or orderRef'));
+  }
 
-    if (!auto_start_token || !order_ref) {
-      return reject(new Error('Missing auto_start_token or order_ref'));
-    }
+  // Save order reference + temporary access token to async storage
+  await StorageService.saveData(ORDER_KEY, orderRef);
+  await StorageService.saveData(TEMP_TOKEN_KEY, token);
 
-    // Save order reference to async storage
-    StorageService.saveData(ORDER_KEY, order_ref);
+  // Launch BankID app if it's installed on the clients machine
+  launchBankIdApp(autoStartToken);
 
-    // Launch BankID app if it's installed on this machine
-    const launchNativeApp = await canOpenUrl('bankid:///');
-    if (launchNativeApp) {
-      this.launchBankIdApp(autoStartToken);
-    }
+  return collect(orderRef, token);
+};
 
-    // Poll /collect/ endpoint every 2nd second until auth either success or fails
-    const interval = setInterval(async () => {
-      // Bail if cancel button is triggered by the user
-      if (cancelled === true) {
-        clearInterval(interval);
-        resetCancel();
-        return resolve({ ok: false, data: 'cancelled' });
-      }
+/**
+ * Makes a sign request to BankID API and wait for response
+ *
+ * @param {string} personalNumber
+ * @param {string} userVisibleData
+ * @return {Promise}
+ */
+export const signAndCollect = async (personalNumber, userVisibleData) => {
+  const endUserIp = await NetworkInfo.getIPV4Address(ip => ip);
+  const requestBody = {
+    personalNumber,
+    endUserIp,
+    userVisibleData,
+  };
+  let responseJson = {};
 
-      let collectData = {};
+  // Make initial auth request to retrieve order reference
+  try {
+    responseJson = await post('auth/bankid/sign', requestBody);
+    responseJson = responseJson.data.data.attributes;
+  } catch (error) {
+    console.log('Sign error', error);
+    return Promise.reject(error);
+  }
 
-      try {
-        collectData = await post('auth/bankid/collect', { orderRef: order_ref });
-        collectData = collectData.data.data.attributes;
-      } catch (error) {
-        clearInterval(interval);
-        reject(error);
-      }
+  const { auto_start_token: autoStartToken, order_ref: orderRef } = responseJson;
+  if (!autoStartToken || !orderRef) {
+    return Promise.reject(new Error('Missing autoStartToken or orderRef'));
+  }
 
-      const { status, hint_code, completion_data } = collectData;
+  // Save order reference to async storage
+  await StorageService.saveData(ORDER_KEY, orderRef);
 
-      if (status === 'failed') {
-        clearInterval(interval);
-        resolve({ ok: false, data: hint_code });
-      } else if (status === 'complete') {
-        clearInterval(interval);
+  // Launch BankID app if it's installed on the clients machine
+  launchBankIdApp(autoStartToken);
 
-        if (completion_data.user) {
-          resolve({
-            ok: true,
-            data: {
-              user: completion_data.user,
-            },
-          });
-        }
-
-        resolve({ ok: false, data: hint_code });
-      }
-    }, 2000);
-  });
+  return collect(orderRef);
+};
 
 /**
  * Cancels a started auth BankID request
@@ -223,9 +200,9 @@ export const bypassBankid = async personalNumber => ({
   ok: true,
   data: {
     user: {
-      name: 'Saruman Stål',
+      name: 'Saruman The White',
       givenName: 'Saruman',
-      surname: 'Stål',
+      surname: 'The White',
       personalNumber,
     },
   },

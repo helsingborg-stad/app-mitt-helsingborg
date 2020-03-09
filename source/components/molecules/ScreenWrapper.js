@@ -1,10 +1,7 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
-import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { ThemeProvider } from 'styled-components';
-import { View } from 'react-native';
 import styled from 'styled-components/native';
-import { PropTypes } from 'prop-types';
 import theme from '../../styles/theme';
 
 const Container = styled.View`
@@ -12,10 +9,19 @@ const Container = styled.View`
   padding: 16px;
 `;
 
-const ScreenWrapper = props => (
-  <ThemeProvider theme={theme}>
-    <Container style={props.style}>{props.children}</Container>
-  </ThemeProvider>
-);
+const ScreenWrapper = props => {
+  const { style, children } = props;
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Container style={style}>{children}</Container>
+    </ThemeProvider>
+  );
+};
+
+ScreenWrapper.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  style: PropTypes.array,
+};
 
 export default ScreenWrapper;

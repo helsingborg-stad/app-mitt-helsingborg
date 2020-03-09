@@ -1,22 +1,6 @@
-/* eslint-disable prefer-promise-reject-errors */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-async-promise-executor */
-/* eslint-disable no-use-before-define */
 import axios from 'axios';
 import StorageService, { TOKEN_KEY } from '../services/StorageService';
 import { buildServiceUrl } from './UrlHelper';
-
-export const get = (endpoint = '', headers = undefined) =>
-  request(endpoint, 'get', undefined, headers);
-
-export const post = (endpoint = '', body = undefined, headers = undefined) =>
-  request(endpoint, 'post', body, headers);
-
-export const remove = (endpoint = '', body = undefined, headers = undefined) =>
-  request(endpoint, 'delete', body, headers);
-
-export const put = (endpoint = '', body = undefined, headers = undefined) =>
-  request(endpoint, 'put', body, headers);
 
 /**
  * Axios request
@@ -25,41 +9,46 @@ export const put = (endpoint = '', body = undefined, headers = undefined) =>
  * @param {obj} data
  * @param {obj} headers
  */
-const request = (endpoint, method, data, headers) =>
-  new Promise(async (resolve, reject) => {
-    // Build complete api url
-    const url = buildServiceUrl(endpoint);
-    const token = await StorageService.getData(TOKEN_KEY);
-    const bearer = token ? `Bearer ${token}` : '';
+const request = async (endpoint, method, data, headers) => {
+  // Build complete api url
+  const url = buildServiceUrl(endpoint);
+  const token = await StorageService.getData(TOKEN_KEY);
+  const bearer = token ? `Bearer ${token}` : '';
 
-    // Merge custom headers
-    headers = {
-      ...{
-        Authorization: bearer,
-        'Content-Type': 'application/json',
-      },
-      ...headers,
-    };
+  // Merge custom headers
+  const newHeaders = {
+    ...{
+      Authorization: bearer,
+      'Content-Type': 'application/json',
+    },
+    ...headers,
+  };
 
-    // Do request
-    const req = await axios({
-      url,
-      method,
-      headers,
-      data: data !== undefined ? data : undefined,
-    })
-      .then(res => {
-        if (res.status >= 200 && res.status < 400) {
-          return resolve(res);
-        }
-        return reject({
-          status: res.status,
-        });
-      })
-      .catch(error => {
-        console.log('API request error', error);
-        return reject(error);
-      });
+  // Do request
+  const req = await axios({
+    url,
+    method,
+    headers: newHeaders,
+    data: data !== undefined ? data : undefined,
+  })
+    .then(res => res)
+    .catch(error => {
+      console.log('API request error', error);
+      return error;
+    });
 
-    return req;
-  });
+  return req;
+};
+
+const get = (endpoint = '', headers = undefined) => request(endpoint, 'get', undefined, headers);
+
+const post = (endpoint = '', body = undefined, headers = undefined) =>
+  request(endpoint, 'post', body, headers);
+
+const remove = (endpoint = '', body = undefined, headers = undefined) =>
+  request(endpoint, 'delete', body, headers);
+
+const put = (endpoint = '', body = undefined, headers = undefined) =>
+  request(endpoint, 'put', body, headers);
+
+export { get, post, remove, put };

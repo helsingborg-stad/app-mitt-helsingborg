@@ -1,19 +1,8 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
+import PropTypes from 'prop-types';
 import React from 'react';
-import { SafeAreaView } from 'react-native';
 import styled from 'styled-components/native';
-import ScreenWrapper from './ScreenWrapper';
 import Heading from '../atoms/Heading';
-
-const StoryWrapper = props => (
-  <EnhancedSafeAreaView>
-    <ModifiedScreenWrapper style={props.style}>
-      {props.kind ? <StoryHeading type="h2">{`${props.kind} / ${props.name}`}</StoryHeading> : null}
-      {props.children}
-    </ModifiedScreenWrapper>
-  </EnhancedSafeAreaView>
-);
+import ScreenWrapper from './ScreenWrapper';
 
 const StoryHeading = styled(Heading)`
   margin-bottom: 16px;
@@ -28,5 +17,25 @@ const EnhancedSafeAreaView = styled.SafeAreaView`
 const ModifiedScreenWrapper = styled(ScreenWrapper)`
   justify-content: flex-start;
 `;
+
+const StoryWrapper = props => {
+  const { style, kind, name, children } = props;
+
+  return (
+    <EnhancedSafeAreaView>
+      <ModifiedScreenWrapper style={style}>
+        {kind ? <StoryHeading type="h2">{`${kind} / ${name}`}</StoryHeading> : null}
+        {children}
+      </ModifiedScreenWrapper>
+    </EnhancedSafeAreaView>
+  );
+};
+
+StoryWrapper.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  kind: PropTypes.string,
+  name: PropTypes.string,
+  style: PropTypes.array,
+};
 
 export default StoryWrapper;

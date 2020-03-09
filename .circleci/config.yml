@@ -30,6 +30,11 @@ jobs:
             - node_modules
 
       - run:
+          name: Lint code
+          command: |
+            yarn run lint
+
+      - run:
           name: Run jest test
           command: |
             mkdir -p test-results/jest

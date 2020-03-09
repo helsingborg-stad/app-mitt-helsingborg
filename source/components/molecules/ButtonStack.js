@@ -1,23 +1,30 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/no-this-in-sfc */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-shadow */
-/* eslint-disable default-case */
-/* eslint-disable no-undef */
-/* eslint-disable react/prop-types */
 import React from 'react';
 import styled from 'styled-components/native';
 import { withNavigation } from 'react-navigation';
+import PropTypes from 'prop-types';
 
 import FormAgent from '../organisms/FormAgent/FormAgent';
-import Button from '../atoms/Button';
+import Button from '../atoms/Button/Button';
 import Icon from '../atoms/Icon';
 import Text from '../atoms/Text';
 import ChatBubble from '../atoms/ChatBubble';
 
+const ButtonStackWrapper = styled.View``;
+
+const ModifiedButton = styled(Button)`
+  justify-content: flex-start;
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+`;
+
 const ButtonStack = props => {
-  const { items, children } = props;
+  const {
+    items,
+    chat,
+    navigation: { navigate },
+  } = props;
 
   /**
    * Adds different on click actions
@@ -25,7 +32,7 @@ const ButtonStack = props => {
    *
    * TODO: Get click action from props
    */
-  onClick = params => {
+  const onClick = params => {
     const { content, action } = params;
     const { type: actionType, value: actionValue, callback: actionCallback } = action;
 
@@ -34,7 +41,7 @@ const ButtonStack = props => {
       switch (actionType) {
         case 'form':
           // Trigger form service
-          props.chat.switchAgent(props => (
+          chat.switchAgent(props => (
             <FormAgent
               {...props}
               formId={actionValue}
@@ -44,7 +51,9 @@ const ButtonStack = props => {
           break;
         case 'navigate':
           // Navigate to given route
-          props.navigation.navigate(actionValue);
+          navigate(actionValue);
+          return;
+        default:
           return;
       }
     }
@@ -60,42 +69,50 @@ const ButtonStack = props => {
     ];
 
     // Add message
-    props.chat.addMessages(message);
+    chat.addMessages(message);
   };
 
-  renderItem = (item, index) => {
+  const renderItem = (item, index) => {
     const { icon, value } = item;
     let { action } = item;
     action = typeof action === 'object' && action !== null ? action : {};
 
     const buttonProps = {
       label: value,
+      // eslint-disable-next-line no-nested-ternary
       iconColor: icon === 'check' ? '#50811B' : icon === 'close' ? '#AE0B05' : undefined,
       icon: icon || 'message',
-      clickAction: () => this.onClick({ content: value, action }),
+      clickAction: () => onClick({ content: value, action }),
     };
 
     return <ActionButton {...buttonProps} key={`${item}-${index}`} />;
   };
 
-  return <ButtonStackWrapper>{items.map(this.renderItem)}</ButtonStackWrapper>;
+  return <ButtonStackWrapper>{items.map(renderItem)}</ButtonStackWrapper>;
+};
+
+const ActionButton = props => {
+  const { clickAction, iconColor, icon, label } = props;
+
+  return (
+    <ModifiedButton onClick={clickAction} color="light" rounded block>
+      <Icon color={iconColor} name={icon} />
+      <Text>{label}</Text>
+    </ModifiedButton>
+  );
+};
+
+ButtonStack.propTypes = {
+  items: PropTypes.array.isRequired,
+  chat: PropTypes.object.isRequired,
+  navigation: PropTypes.shape({ navigate: PropTypes.func }),
+};
+
+ActionButton.propTypes = {
+  iconColor: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  icon: PropTypes.string,
+  clickAction: PropTypes.func,
 };
 
 export default withNavigation(ButtonStack);
-
-const ActionButton = props => (
-  <ModifiedButton onClick={props.clickAction} color="light" rounded block>
-    <Icon color={props.iconColor} name={props.icon} />
-    <Text>{props.label}</Text>
-  </ModifiedButton>
-);
-
-const ButtonStackWrapper = styled.View``;
-
-const ModifiedButton = styled(Button)`
-  justify-content: flex-start;
-  margin-left: 16px;
-  margin-right: 16px;
-  margin-top: 6px;
-  margin-bottom: 6px;
-`;

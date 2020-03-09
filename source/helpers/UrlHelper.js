@@ -1,11 +1,5 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-undef */
 import env from 'react-native-config';
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 
 /**
  * Test if URL can be opened
@@ -25,6 +19,20 @@ export const canOpenUrl = url =>
     });
 
 /**
+ * Build query URL
+ * @param {obj} queryParams
+ */
+const encodeQueryData = queryParams => {
+  const data = [];
+  const entries = Object.entries(queryParams);
+  entries.forEach(([key, value]) => {
+    data.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
+  });
+
+  return data.join('&');
+};
+
+/**
  * Builds a service request url
  * @param {string} endpoint
  * @param {obj} params
@@ -34,26 +42,13 @@ export const buildServiceUrl = (endpoint = '', params = {}) => {
   // Concatenate params
   queryParams = { ...params, ...queryParams };
   // Build query url
-  queryUrl = encodeQueryData(queryParams);
+  const queryString = encodeQueryData(queryParams);
   // Trim slashes
-  endpoint = endpoint.replace(/^\/|\/$/g, '');
+  const sanitizedEndpoint = endpoint.replace(/^\/|\/$/g, '');
   // Build url
-  const url = `${env.MITTHELSINGBORG_IO}/${endpoint}?${queryUrl}`;
+  const completeUrl = `${env.MITTHELSINGBORG_IO}/${sanitizedEndpoint}?${queryString}`;
 
-  return url;
-};
-
-/**
- *
- * @param {obj} queryParams
- */
-const encodeQueryData = queryParams => {
-  const data = [];
-  for (const d in queryParams) {
-    data.push(`${encodeURIComponent(d)}=${encodeURIComponent(queryParams[d])}`);
-  }
-
-  return data.join('&');
+  return completeUrl;
 };
 
 /**
@@ -61,9 +56,15 @@ const encodeQueryData = queryParams => {
  * @param {string} autoStartToken
  */
 export const buildBankIdClientUrl = autoStartToken => {
-  const params = `?autostarttoken=${autoStartToken}&redirect=${env.APP_SCHEME}://`;
-  const androidUrl = 'bankid:///';
-  const iosUrl = 'https://app.bankid.com/';
+  let url = 'bankid:///';
+  let queryString = `?autostarttoken=${autoStartToken}&redirect=null`;
 
-  return `${iosUrl}${params}`;
+  if (Platform.OS === 'ios') {
+    url = 'https://app.bankid.com/';
+    queryString = `?autostarttoken=${autoStartToken}&redirect=${env.APP_SCHEME}://`;
+  }
+
+  console.log('URL', `${url}${queryString}`);
+
+  return `${url}${queryString}`;
 };

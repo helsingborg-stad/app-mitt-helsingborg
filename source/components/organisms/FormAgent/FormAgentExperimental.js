@@ -12,7 +12,7 @@ import forms from '../../../assets/formsExperimental';
 
 import ChatBubble from '../../atoms/ChatBubble';
 
-import ChatDivider from '../../atoms/ChatDivider';
+import ChatDivider from '../../atoms/ChatDivider/ChatDivider';
 import WatsonAgent from '../WatsonAgent';
 import createExpression from '../../../helpers/Logics';
 

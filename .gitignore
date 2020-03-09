@@ -21,10 +21,11 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
+ios/Pods/
+ios/Podfile.lock
 
 # Android/IntelliJ
 #
-build/
 .idea
 .gradle
 local.properties
@@ -35,6 +36,7 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
+package-lock.json
 
 # BUCK
 buck-out/
@@ -60,3 +62,6 @@ buck-out/
 
 # Local environment files
 .env
+
+# Jest
+coverage/
