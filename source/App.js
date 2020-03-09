@@ -11,6 +11,7 @@ import Config from 'react-native-config';
 import { Notification } from 'app/store';
 import Navigator from './navigator';
 import StorybookUIRoot from '../storybook';
+import { AuthProvider } from './store/AuthContext';
 
 /**
  * Any setup and init for application goes here:
@@ -20,16 +21,20 @@ import StorybookUIRoot from '../storybook';
 const App = () => {
   if (Config.IS_STORYBOOK === 'true') {
     return (
-      <Notification.Provider>
-        <StorybookUIRoot />
-      </Notification.Provider>
+      <AuthProvider>
+        <Notification.Provider>
+          <StorybookUIRoot />
+        </Notification.Provider>
+      </AuthProvider>
     );
   }
 
   return (
-    <Notification.Provider>
-      <Navigator />
-    </Notification.Provider>
+    <AuthProvider>
+      <Notification.Provider>
+        <Navigator />
+      </Notification.Provider>
+    </AuthProvider>
   );
 };
 
