@@ -96,7 +96,7 @@ const collect = async (orderRef, token) =>
 
         resolve({ ok: false, data: hintCode });
       }
-    }, 2000);
+    }, 1050);
   });
 
 /**
