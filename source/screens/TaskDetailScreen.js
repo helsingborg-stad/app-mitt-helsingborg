@@ -76,7 +76,7 @@ const Field = props => {
 };
 
 Field.propTypes = {
-  icon: PropTypes.string,
+  icon: PropTypes.oneOfType([PropTypes.string, false]),
   input: PropTypes.object,
   label: PropTypes.string,
 };
