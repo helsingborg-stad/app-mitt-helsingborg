@@ -29,6 +29,10 @@ CSS.buttonSmall = css`
   min-width: 74px;
 `;
 
+CSS.disabled = css`
+  opacity: 0.2;
+`;
+
 /** Button styles */
 const ButtonBase = styled.View`
     flex-direction: row;
@@ -47,6 +51,7 @@ const ButtonBase = styled.View`
     ${props => (props.rounded ? CSS.buttonRounded : null)}
     ${props => (props.pill ? CSS.buttonPill : null)}
     ${props => (props.sharp ? CSS.buttonSharp : null)}
+    ${props => (props.disabled ? CSS.disabled : null)}
 
     ${props => (props.buttonSize === 'small' ? CSS.buttonSmall : null)}
 
@@ -106,6 +111,7 @@ const Button = props => {
     icon,
     z: shadow,
     size,
+    disabled,
     ...other
   } = props;
 
@@ -146,7 +152,7 @@ const Button = props => {
 
   return (
     <ButtonWrapper>
-      <ButtonTouchable onPress={onClick} block={block} z={shadow}>
+      <ButtonTouchable disabled={disabled} onPress={onClick} block={block} z={shadow}>
         <ButtonBase
           buttonTheme={color}
           buttonSize={size}
@@ -156,6 +162,7 @@ const Button = props => {
           icon={iconComponentsTotal === 1 && childrenTotal === 1 ? true : icon}
           z={shadow}
           shrarp={sharp}
+          disabled={disabled}
         >
           {children || (value ? <ButtonText>{value}</ButtonText> : null)}
         </ButtonBase>
@@ -175,6 +182,7 @@ Button.propTypes = {
   size: PropTypes.string,
   style: PropTypes.array,
   value: PropTypes.string,
+  disabled: PropTypes.bool,
   z: PropTypes.oneOf(Object.keys(SHADOW).map(number => parseInt(number))),
 };
 
@@ -186,6 +194,7 @@ Button.defaultProps = {
   sharp: false,
   z: 1,
   size: 'medium',
+  disabled: false,
 };
 
 export default Button;
