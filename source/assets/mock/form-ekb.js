@@ -48,14 +48,14 @@ const ekbQuestion = args => {
     questions[1].details = {
       group,
       label: `${title} (kr)`,
-      icon: 'location-on',
+      icon: false,
       show: true,
     };
 
     questions[2].details = {
       group,
       label: `${title} (datum)`,
-      icon: 'location-on',
+      icon: false,
       show: true,
     };
   }
