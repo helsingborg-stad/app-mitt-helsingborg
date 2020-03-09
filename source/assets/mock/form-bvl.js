@@ -8,6 +8,23 @@ const BVL_FORM = {
   name: 'Borgerlig vigsel',
   imageIcon: ICON_RINGS.SIZE_24X24_2X_PNG,
   trigger: 'Vill boka borgerlig vigsel',
+  groups: [
+    {
+      name: 'partner',
+      title: 'Make/Maka',
+      questions: [],
+    },
+    {
+      name: 'wedding',
+      title: 'Om vigseln',
+      questions: [],
+    },
+    {
+      name: 'witness',
+      title: 'Vittnen',
+      questions: [],
+    },
+  ],
   questions: [
     {
       id: 'partnerName',

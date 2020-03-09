@@ -21,7 +21,7 @@ test('dispatch:SIGN_OUT', async () => {
     type: 'SIGN_OUT',
   });
 
-  expect(state).toEqual({ authStatus: 'idle', token: null, user: null });
+  expect(state).toEqual({ authStatus: 'idle', token: null, user: {} });
 });
 
 test('dispatch:PENDING', async () => {

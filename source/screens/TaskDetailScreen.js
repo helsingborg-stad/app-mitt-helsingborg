@@ -76,7 +76,7 @@ const Field = props => {
 };
 
 Field.propTypes = {
-  icon: PropTypes.string,
+  icon: PropTypes.oneOfType([PropTypes.string, false]),
   input: PropTypes.object,
   label: PropTypes.string,
 };
@@ -87,97 +87,18 @@ const TaskDetailScreen = props => {
   const answers = navigation.getParam('answers', false);
   const form = navigation.getParam('form', false);
 
-  // TODO: ERSÄTT DENNA KOD PRONTO
-  // PR 100!
-  // OBS! Riktigt haxig fungerande kod, YOCO (Yoda Only Code Once)
-  const filteredQuestions = form.questions.map(q => {
-    switch (q.id) {
-      case 'partnerAddress':
-        if (answers.partnerSameAddress === 'Ja') {
-          return { ...q, details: { ...q.details, show: false } };
-        }
-        break;
-
-      case 'partnerCity':
-        if (answers.partnerSameAddress === 'Ja') {
-          return { ...q, details: { ...q.details, show: false } };
-        }
-        break;
-
-      case 'partnerPostal':
-        if (answers.partnerSameAddress === 'Ja') {
-          return { ...q, details: { ...q.details, show: false } };
-        }
-        break;
-
-      case 'partnerSameAddress':
-        if (answers.partnerSameAddress === 'Ja') {
-          return {
-            ...q,
-            details: {
-              group: 'partner',
-              label: 'Gemensam address',
-              icon: 'location-on',
-              show: true,
-            },
-          };
-        }
-
-        break;
-
-      case 'weddingLocationCustom':
-        if (answers.weddingLocation === 'Rådhuset i Helsingborg') {
-          return { ...q, details: { ...q.details, show: false } };
-        }
-        break;
-
-      case 'weddingLocation':
-        if (answers.weddingLocation === 'Egen vald plats') {
-          return { ...q, details: { ...q.details, show: false } };
-        }
-        break;
-
-      case 'guestsTotal':
-        if (answers.weddingLocation === 'Egen vald plats') {
-          return { ...q, details: { ...q.details, show: false } };
-        }
-        break;
-
-      default:
-        break;
-    }
-
-    return q;
-  });
-
-  // END OF HAX KOD
-
-  const groups = [
-    {
-      name: 'partner',
-      title: 'Make/Maka',
-      questions: [],
-    },
-    {
-      name: 'wedding',
-      title: 'Om vigseln',
-      questions: [],
-    },
-    {
-      name: 'witness',
-      title: 'Vittnen',
-      questions: [],
-    },
-  ];
-
-  // TODO: Ersätt filtredQuestions från hax koden längre upp.
-  filteredQuestions.forEach(question => {
-    const { details } = question;
-    if (details && details.show) {
-      const group = groups.find(g => g.name === question.details.group);
-      group.questions.push(question);
-    }
-  });
+  const groups = form.groups.map(group => ({
+    ...group,
+    questions: form.questions
+      .filter(
+        question =>
+          question.details &&
+          question.details.show &&
+          question.details.group &&
+          question.details.group === group.name
+      )
+      .map(question => ({ ...question, value: answers[question.id] ? answers[question.id] : '' })),
+  }));
 
   return (
     <TaskDetailScreenWrapper>
@@ -197,10 +118,10 @@ const TaskDetailScreen = props => {
               <Field
                 key={question.id}
                 label={question.details.label}
-                icon={question.details.icon}
+                icon={question.details.icon ? question.details.icon : false}
                 input={{
                   editable: false,
-                  value: answers[question.id],
+                  value: question.value,
                 }}
               />
             ))}

@@ -1,5 +1,5 @@
 const ekbQuestion = args => {
-  const { key, question } = args;
+  const { key, question, group, title } = args;
 
   const dependency = {
     relation: 'AND',
@@ -44,14 +44,21 @@ const ekbQuestion = args => {
     },
   ];
 
-  // if (group && title) {
-  //   questions.push({
-  //     group,
-  //     label: title,
-  //     icon: 'location-on',
-  //     show: true,
-  //   });
-  // }
+  if (group && title) {
+    questions[1].details = {
+      group,
+      label: `${title} (kr)`,
+      icon: false,
+      show: true,
+    };
+
+    questions[2].details = {
+      group,
+      label: `${title} (datum)`,
+      icon: false,
+      show: true,
+    };
+  }
 
   return questions;
 };
@@ -72,11 +79,23 @@ const EKB_FORM = {
   name: 'Ekonomiskt Bistånd',
   icon: 'attach-money',
   trigger: 'Vill ansöka om ekonomiskt bistånd',
+  groups: [
+    {
+      name: 'income',
+      title: 'Inkomster',
+    },
+    {
+      name: 'expense',
+      title: 'Utgifter',
+    },
+  ],
   questions: [
     /*
       Income
     */
     ...ekbQuestion({
+      title: 'incomeSalary',
+      group: 'income',
       key: 'incomeSalary',
       question: [
         'För att vi ska kunna hjälpa dig räkna ut om du kan få ekonomiskt bistånd behöver vi veta vilka pengar du får in de närmsta 30 dagarna.',
@@ -85,26 +104,31 @@ const EKB_FORM = {
     }),
     ...ekbQuestion({
       title: 'incomeRent',
+      group: 'income',
       key: 'incomeRent',
       question: 'Inkomst Hyra?',
     }),
     ...ekbQuestion({
       title: 'incomeElectricity',
+      group: 'income',
       key: 'incomeElectricity',
       question: 'Inkomst El?',
     }),
     ...ekbQuestion({
       title: 'incomePension',
+      group: 'income',
       key: 'incomePension',
       question: 'Utländsk Pension?',
     }),
     ...ekbQuestion({
       title: 'incomeLoan',
+      group: 'income',
       key: 'incomeLoan',
       question: 'Lånade pengar?',
     }),
     ...ekbQuestion({
       title: 'incomeOther',
+      group: 'income',
       key: 'incomeOther',
       question: 'Övrig inkomst?',
     }),
@@ -113,50 +137,61 @@ const EKB_FORM = {
     */
     ...ekbQuestion({
       title: 'expenseRent',
+      group: 'expense',
       key: 'expenseRent',
       question: 'Utgifter Hyra?',
     }),
     ...ekbQuestion({
       title: 'expenseHomeInsurance',
+      group: 'expense',
       key: 'expenseHomeInsurance',
       question: 'Utgifter Försäkring?',
     }),
     ...ekbQuestion({
       title: 'expenseInternet',
+      group: 'expense',
       key: 'expenseInternet',
       question: 'Utgifter Internet?',
     }),
     ...ekbQuestion({
       title: 'expenseKidSupport',
+      group: 'expense',
       key: 'expenseKidSupport',
       question: 'Utgifter Barn underhåll?',
     }),
     ...ekbQuestion({
       title: 'expenseTeeth',
+      group: 'expense',
       key: 'expenseTeeth',
       question: 'Utgifter tandvård?',
     }),
     ...ekbQuestion({
       title: 'expenseMedical',
+      group: 'expense',
       key: 'expenseMedical',
       question: 'Ugifter medicin?',
     }),
     ...ekbQuestion({
       title: 'expenseLoan',
+      group: 'expense',
       key: 'expenseLoan',
       question: 'Ugifter lån?',
     }),
     ...ekbQuestion({
       title: 'expenseTravel',
+      group: 'expense',
       key: 'expenseTravel',
       question: 'Ugifter resor?',
     }),
     ...ekbQuestion({
       title: 'expenseUnionFee',
+      group: 'expense',
       key: 'expenseUnionFee',
       question: 'Ugifter A-kassa?',
     }),
     ...ekbQuestion({
+      title: 'expenseOther',
+      group: 'expense',
       key: 'expenseOther',
       question: 'Utgifter övrigt?',
     }),
