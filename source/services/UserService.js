@@ -45,13 +45,13 @@ const launchBankIdApp = async autoStartToken => {
  * @return {Promise}
  */
 const collect = async (orderRef, token) =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve, _reject) => {
     const interval = setInterval(async () => {
       // Bail if cancel button is triggered by the user
       if (cancelled === true) {
         clearInterval(interval);
         resetCancel();
-        resolve({ ok: false, data: 'cancelled' });
+        resolve({ ok: false, data: 'Åtgärden avbruten.' });
       }
 
       let collectData = {};
@@ -65,7 +65,8 @@ const collect = async (orderRef, token) =>
         collectData = collectData.data.data.attributes;
       } catch (error) {
         clearInterval(interval);
-        reject(error);
+        console.log('Collect failed: ', error.message);
+        resolve({ ok: false, data: 'Okänt fel. Försök igen.' });
       }
 
       const { status, hint_code: hintCode, completion_data: completetionData } = collectData;
@@ -96,7 +97,7 @@ const collect = async (orderRef, token) =>
 
         resolve({ ok: false, data: hintCode });
       }
-    }, 2000);
+    }, 1050);
   });
 
 /**

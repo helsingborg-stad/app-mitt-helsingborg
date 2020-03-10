@@ -163,10 +163,8 @@ class LoginScreen extends Component {
               </LoginFormHeader>
 
               {/* TODO: Fix better error messages */}
-              {authStatus === 'rejected' && error.message !== 'cancelled' && (
-                <Text style={{ color: 'red', paddingBottom: 12 }}>
-                  Inloggningen misslyckades (Error: {error.message})
-                </Text>
+              {authStatus === 'rejected' && (
+                <Text style={{ color: 'red', paddingBottom: 12 }}>{error.message}</Text>
               )}
 
               {useExternalBankId && (
@@ -184,7 +182,12 @@ class LoginScreen extends Component {
                 </LoginFormField>
               )}
               <LoginFormField>
-                <Button color="purpleLight" block onClick={() => this.submitHandler()}>
+                <Button
+                  disabled={authStatus === 'canceled'}
+                  color="purpleLight"
+                  block
+                  onClick={() => this.submitHandler()}
+                >
                   <Text>Logga in med mobilt BankID</Text>
                 </Button>
               </LoginFormField>

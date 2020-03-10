@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useReducer } from 'react';
 import env from 'react-native-config';
 import StorageService, { TOKEN_KEY, USER_KEY } from '../services/StorageService';
-import {
-  authAndCollect,
-  bypassBankid,
-  cancelBankidRequest,
-  resetCancel,
-} from '../services/UserService';
+import { authAndCollect, bypassBankid, cancelBankidRequest } from '../services/UserService';
 
 const AuthContext = React.createContext();
 
@@ -38,6 +33,11 @@ const reducer = (prevState, action) => {
         ...prevState,
         authStatus: 'rejected',
         error: action.error,
+      };
+    case 'CANCEL':
+      return {
+        ...prevState,
+        authStatus: 'canceled',
       };
     default:
       return prevState;
@@ -148,8 +148,6 @@ function AuthProvider({ children }) {
           console.log('Sign in error: ', error);
           dispatch({ type: 'ERROR', error });
         }
-        // Reset cancel collect parameter
-        resetCancel();
       },
       /**
        * Signs out the user
@@ -163,7 +161,7 @@ function AuthProvider({ children }) {
        */
       cancelSignIn: () => {
         cancelBankidRequest('auth');
-        dispatch({ type: 'ERROR', error: new Error('cancelled') });
+        dispatch({ type: 'CANCEL' });
       },
     }),
     []
