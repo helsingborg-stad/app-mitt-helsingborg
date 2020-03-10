@@ -2,6 +2,7 @@ import decode from 'jwt-decode';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useReducer } from 'react';
 import env from 'react-native-config';
+import { getMessage } from 'app/helpers/MessageHelper';
 import StorageService, { TOKEN_KEY, USER_KEY } from '../services/StorageService';
 import { authAndCollect, bypassBankid, cancelBankidRequest } from '../services/UserService';
 
@@ -136,7 +137,8 @@ function AuthProvider({ children }) {
 
           // Check if token is valid
           if (isTokenExpired(token)) {
-            throw new Error('Token has expired');
+            console.log('Sign in error: Token has expired');
+            throw new Error(getMessage('technicalError'));
           }
 
           // Store user and token

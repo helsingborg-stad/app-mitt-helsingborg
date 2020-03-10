@@ -1,5 +1,6 @@
 import { Linking } from 'react-native';
 import { NetworkInfo } from 'react-native-network-info';
+import { getMessage } from 'app/helpers/MessageHelper';
 import { post, remove } from '../helpers/ApiRequest';
 import { buildBankIdClientUrl, canOpenUrl } from '../helpers/UrlHelper';
 import StorageService, { ORDER_KEY, TEMP_TOKEN_KEY } from './StorageService';
@@ -51,7 +52,7 @@ const collect = async (orderRef, token) =>
       if (cancelled === true) {
         clearInterval(interval);
         resetCancel();
-        resolve({ ok: false, data: 'Åtgärden avbruten.' });
+        resolve({ ok: false, data: getMessage('userCancel') });
       }
 
       let collectData = {};
@@ -65,15 +66,15 @@ const collect = async (orderRef, token) =>
         collectData = collectData.data.data.attributes;
       } catch (error) {
         clearInterval(interval);
-        console.log('Collect failed: ', error.message);
-        resolve({ ok: false, data: 'Okänt fel. Försök igen.' });
+        console.log('Collect error: ', error.message);
+        resolve({ ok: false, data: getMessage('unknownError') });
       }
 
       const { status, hint_code: hintCode, completion_data: completetionData } = collectData;
 
       if (status === 'failed') {
         clearInterval(interval);
-        resolve({ ok: false, data: hintCode });
+        resolve({ ok: false, data: getMessage(hintCode) });
       }
       if (status === 'complete') {
         clearInterval(interval);
@@ -95,7 +96,7 @@ const collect = async (orderRef, token) =>
           });
         }
 
-        resolve({ ok: false, data: hintCode });
+        resolve({ ok: false, data: getMessage(hintCode) });
       }
     }, 1050);
   });
@@ -115,13 +116,14 @@ export const authAndCollect = async personalNumber => {
     responseJson = await post('auth/bankid', { personalNumber, endUserIp });
     responseJson = responseJson.data.data.attributes;
   } catch (error) {
-    console.log('Auth error', error);
-    return Promise.reject(error);
+    console.log('Auth error:', error);
+    return Promise.resolve({ ok: false, data: getMessage('technicalError') });
   }
 
   const { auto_start_token: autoStartToken, order_ref: orderRef, token } = responseJson;
   if (!autoStartToken || !orderRef) {
-    return Promise.reject(new Error('Missing autoStartToken or orderRef'));
+    console.log('Auth error: Missing autoStartToken or orderRef');
+    return Promise.resolve({ ok: false, data: getMessage('technicalError') });
   }
 
   // Save order reference + temporary access token to async storage
@@ -155,13 +157,14 @@ export const signAndCollect = async (personalNumber, userVisibleData) => {
     responseJson = await post('auth/bankid/sign', requestBody);
     responseJson = responseJson.data.data.attributes;
   } catch (error) {
-    console.log('Sign error', error);
-    return Promise.reject(error);
+    console.log('Sign error:', error);
+    return Promise.resolve({ ok: false, data: getMessage('technicalError') });
   }
 
   const { auto_start_token: autoStartToken, order_ref: orderRef } = responseJson;
   if (!autoStartToken || !orderRef) {
-    return Promise.reject(new Error('Missing autoStartToken or orderRef'));
+    console.log('Sign error: Missing autoStartToken or orderRef');
+    return Promise.resolve({ ok: false, data: getMessage('technicalError') });
   }
 
   // Save order reference to async storage
