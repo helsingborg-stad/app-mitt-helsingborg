@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useReducer } from 'react';
 import env from 'react-native-config';
 import { getMessage } from 'app/helpers/MessageHelper';
 import StorageService, { TOKEN_KEY, USER_KEY } from '../services/StorageService';
-import { authAndCollect, bypassBankid, cancelBankidRequest } from '../services/UserService';
+import { authAndCollect, getUser, getMockUser, cancelBankidRequest } from '../services/UserService';
 
 const AuthContext = React.createContext();
 
@@ -73,13 +73,10 @@ function AuthProvider({ children }) {
 
   /**
    * Logins with mock user credentials
-   *
-   * @param {string} personalNumber Personal identity number
    */
-  const fakeUserLogin = async personalNumber => {
+  const fakeUserLogin = async () => {
     try {
-      const response = await bypassBankid(personalNumber);
-      const { user } = response.data;
+      const user = getMockUser();
       await StorageService.saveData(USER_KEY, user);
       await StorageService.saveData(TOKEN_KEY, env.FAKE_TOKEN);
       dispatch({ type: 'SIGN_IN', token: env.FAKE_TOKEN, user });
@@ -141,11 +138,18 @@ function AuthProvider({ children }) {
             throw new Error(getMessage('technicalError'));
           }
 
+          // Get user data from database
+          // TODO: Get user with token instead of sending personal number
+          const { ok: userOk, data: userData } = await getUser(user.personal_number);
+          if (userOk !== true) {
+            throw new Error(userData);
+          }
+
           // Store user and token
-          await StorageService.saveData(USER_KEY, user);
+          await StorageService.saveData(USER_KEY, userData);
           await StorageService.saveData(TOKEN_KEY, token);
 
-          dispatch({ type: 'SIGN_IN', token, user });
+          dispatch({ type: 'SIGN_IN', token, user: userData });
         } catch (error) {
           console.log('Sign in error: ', error);
           dispatch({ type: 'ERROR', error });

@@ -1,7 +1,7 @@
 import { Linking } from 'react-native';
 import { NetworkInfo } from 'react-native-network-info';
 import { getMessage } from 'app/helpers/MessageHelper';
-import { post, remove } from '../helpers/ApiRequest';
+import { get, post, remove } from '../helpers/ApiRequest';
 import { buildBankIdClientUrl, canOpenUrl } from '../helpers/UrlHelper';
 import StorageService, { ORDER_KEY, TEMP_TOKEN_KEY } from './StorageService';
 import UserMockData from '../assets/mock/user';
@@ -81,17 +81,10 @@ const collect = async (orderRef, token) =>
         clearInterval(interval);
 
         if (completetionData.user) {
-          const userData = {
-            name: completetionData.user.name || '',
-            givenName: completetionData.user.given_name || '',
-            surname: completetionData.user.surname || '',
-            personalNumber: completetionData.user.personal_number || '',
-          };
-
           resolve({
             ok: true,
             data: {
-              user: userData,
+              user: completetionData.user,
               token,
             },
           });
@@ -198,17 +191,43 @@ export const cancelBankidRequest = async request => {
 };
 
 /**
- * Bypasses the BankID authentication steps
- * @param {string} personalNumber
+ * Returns mock user data
  */
-export const bypassBankid = async personalNumber => ({
-  ok: true,
-  data: {
-    user: {
-      name: UserMockData.user.name,
-      givenName: UserMockData.user.firstName,
-      surname: UserMockData.user.lastName,
-      personalNumber,
-    },
+export const getMockUser = () => ({ ...UserMockData.user });
+
+/**
+ * Create user object with data collected from user database
+ * TODO: Temporary fix, remove when data structure is done in db
+ * @param {object} data User object data
+ * @return {object}
+ */
+const createUserObject = data => ({
+  mobilePhone: data.mobile_phone || null,
+  address: {
+    street: data.adress.street || null,
+    postalCode: data.adress.postal_code || null,
   },
+  lastName: data.last_name || null,
+  personalNumber: data.personal_number || null,
+  civilStatus: data.civil_status || null,
+  createdAt: data.created_at || null,
+  uuid: data.uuid || null,
+  email: data.email || null,
+  firstName: data.first_name || null,
 });
+
+/**
+ * Get user from database
+ * @param {string} personalNumber Personal identoty number
+ * @return {promise}
+ */
+export const getUser = async personalNumber => {
+  try {
+    let response = await get(`user/${personalNumber}`);
+    response = response.data.data.attributes.item;
+    return Promise.resolve({ ok: true, data: createUserObject(response) });
+  } catch (error) {
+    console.log('Get user error:', error);
+    return Promise.resolve({ ok: false, data: getMessage('unknownError') });
+  }
+};
