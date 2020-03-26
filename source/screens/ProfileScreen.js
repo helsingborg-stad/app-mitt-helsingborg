@@ -52,7 +52,6 @@ function ProfileScreen(props) {
     navigation: { navigate },
   } = props;
   const { user, signOut } = useContext(AuthContext);
-
   const renderField = value => (value ? <Text>{value}</Text> : <EmptyValue>Ej angivet</EmptyValue>);
 
   return (
@@ -63,16 +62,19 @@ function ProfileScreen(props) {
           <ProfileInfoContainer>
             <ProfileInfoHeading type="h3">Personuppgifter</ProfileInfoHeading>
             <Label small>NAMN</Label>
-            {renderField(user.name)}
+            {renderField(`${user.firstName || ''} ${user.lastName || ''}`)}
             <Label small>PERSONNUMMER</Label>
             {renderField(user.personalNumber)}
           </ProfileInfoContainer>
           <ProfileInfoContainer>
             <ProfileInfoHeading type="h3">Kontaktuppgifter</ProfileInfoHeading>
             <Label small>TELEFONNUMMER</Label>
-            {renderField(user.phone)}
+            {renderField(user.mobilePhone)}
             <Label small>E-POSTADRESS</Label>
-            {renderField(user.mail)}
+            {renderField(user.email)}
+            <Label small>ADRESS</Label>
+            {renderField(user.address.street)}
+            {renderField(user.address.postalCode)}
           </ProfileInfoContainer>
         </View>
         <BottomContainer>
@@ -80,7 +82,7 @@ function ProfileScreen(props) {
             block
             color="purple"
             onClick={async () => {
-              await signOut();
+              signOut();
               navigate('Start');
             }}
           >
@@ -91,8 +93,8 @@ function ProfileScreen(props) {
             <SignOutButton
               block
               onClick={async () => {
-                await StorageService.default.clearData();
-                await signOut();
+                StorageService.default.clearData();
+                signOut();
                 navigate('Start');
               }}
             >
