@@ -218,14 +218,14 @@ const createUserObject = data => ({
 
 /**
  * Get user from database
- * TODO: Replace poll method
- * @param {string} personalNumber Personal identoty number
+ * TODO: Replace polling with a better solution
+ * @param {string} personalNumber Personal identity number
  * @return {promise}
  */
 export const getUser = async personalNumber =>
   new Promise(function(resolve, _reject) {
-    const tryGetUser = async (retryNumber, retryLimit) => {
-      let attempt = retryNumber;
+    const tryGetUser = async ({ retryAttempt = 0, retryLimit = 10 }) => {
+      let attempt = retryAttempt;
 
       try {
         let response = await get(`user/${personalNumber}`);
@@ -234,7 +234,7 @@ export const getUser = async personalNumber =>
       } catch (error) {
         if (attempt < retryLimit) {
           setTimeout(async () => {
-            await tryGetUser((attempt += 1));
+            await tryGetUser({ retryAttempt: (attempt += 1) });
           }, 1000);
         } else {
           resolve({ ok: false, data: getMessage('unknownError') });
@@ -242,5 +242,5 @@ export const getUser = async personalNumber =>
       }
     };
 
-    tryGetUser(0, 10);
+    tryGetUser({});
   });
