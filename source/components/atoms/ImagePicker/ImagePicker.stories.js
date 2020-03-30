@@ -19,7 +19,13 @@ storiesOf('ImagePicker', module)
     <StoryWrapper {...props}>
       <ImagePickerColors uploadText uploadIcon deleteText deleteIcon />
     </StoryWrapper>
+  ))
+  .add('With Text and selected Image', props => (
+    <StoryWrapper {...props}>
+      <ImagePickerColors uploadText deleteText showImage />
+    </StoryWrapper>
   ));
+
 const ImagePickerColors = injectProps => (
   <FlexContainer>
     <Flex>

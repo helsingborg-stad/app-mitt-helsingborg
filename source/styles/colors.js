@@ -149,6 +149,13 @@ const colors = {
       iconRight: palette.purple[1],
       shadow: 'rgba(255, 255, 255, 0.0)',
     },
+    red: {
+      background: palette.red[2],
+      text: palette.mono.white,
+      icon: palette.mono.white,
+      iconRight: palette.mono.white,
+      shadow: palette.red[2],
+    },
   },
   status: {},
   chatBubble: {
