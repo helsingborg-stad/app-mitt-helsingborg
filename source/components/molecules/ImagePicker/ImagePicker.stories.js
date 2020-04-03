@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/react-native';
 import React from 'react';
 import styled from 'styled-components/native';
-import StoryWrapper from '../../molecules/StoryWrapper';
+import StoryWrapper from '../StoryWrapper';
 import ImagePicker from './ImagePicker';
 
 storiesOf('ImagePicker', module)

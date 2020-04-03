@@ -5,9 +5,9 @@ import { StyleSheet, Image } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import Button from '../Button/Button';
-import Icon from '../Icon';
-import Text from '../Text';
+import Button from '../../atoms/Button/Button';
+import Icon from '../../atoms/Icon';
+import Text from '../../atoms/Text';
 
 const styles = StyleSheet.create({
   textContainer: {

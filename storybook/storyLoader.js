@@ -14,7 +14,7 @@ function loadStories() {
 	require('../source/components/molecules/Markdown.stories');
 	require('../source/components/atoms/Select/Select.stories');
 	require('../source/components/atoms/Text/Text.stories');
-  require('../source/components/atoms/ImagePicker/ImagePicker.stories');
+  require('../source/components/molecules/ImagePicker/ImagePicker.stories');
   require('../source/components/molecules/DateTimePickerForm.stories');
 	require('../source/components/molecules/Header/Header.stories');
 	require('../source/components/molecules/ListItem/Lists.stories');
