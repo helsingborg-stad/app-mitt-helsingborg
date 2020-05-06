@@ -15,3 +15,5 @@ export { default as ScreenWrapper } from './ScreenWrapper';
 export { default as StoryWrapper } from './StoryWrapper';
 export { default as TabBarIcon } from './TabBarIcon';
 export { default as ImagePicker } from './ImagePicker';
+export { default as InfoText } from './InfoText';
+export { default as InfoLink } from './InfoLink';

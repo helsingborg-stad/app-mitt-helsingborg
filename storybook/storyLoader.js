@@ -18,7 +18,9 @@ function loadStories() {
   require('../source/components/molecules/DateTimePickerForm.stories');
 	require('../source/components/molecules/Header/Header.stories');
 	require('../source/components/molecules/ListItem/Lists.stories');
-	require('../source/components/molecules/Modal.stories');
+  require('../source/components/molecules/Modal.stories');
+  require('../source/components/molecules/InfoLink/InfoButton.stories');
+  require('../source/components/molecules/InfoText/InfoButton.stories');
 	require('../source/components/organisms/FormAgent/FormAgent.stories');
 	require('../source/components/organisms/WatsonAgent/WatsonAgent.stories');
 }
@@ -35,7 +37,9 @@ const stories = [
   '../source/components/atoms/ImagePicker/ImagePicker.stories',
   '../source/components/molecules/DateTimePickerForm.stories',
 	'../source/components/molecules/Header/Header.stories',
-	'../source/components/molecules/ListItem/Lists.stories',
+  '../source/components/molecules/ListItem/Lists.stories',
+  '../source/components/molecules/InfoLink/InfoButton.stories',
+  '../source/components/molecules/InfoText/InfoButton.stories',
 	'../source/components/molecules/Modal.stories',
 	'../source/components/organisms/FormAgent/FormAgent.stories',
   '../source/components/organisms/WatsonAgent/WatsonAgent.stories'
