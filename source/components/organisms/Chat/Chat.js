@@ -129,7 +129,7 @@ class Chat extends Component {
   };
 
   render() {
-    const { keyboardVerticalOffset } = this.props;
+    const { keyboardVerticalOffset, isInputVisible } = this.props;
     const { messages, ChatAgent, inputComponents, modal } = this.state;
     const {
       addMessages,
@@ -149,7 +149,7 @@ class Chat extends Component {
       changeModal,
       toggleTyping,
     };
-
+    console.log('is visible', isInputVisible);
     return (
       <Notification.Dispatch.Consumer>
         {dispatchNotification => (
@@ -169,7 +169,7 @@ class Chat extends Component {
               <ChatMessages messages={messages} chat={{ ...instanceMethods, ...this.state }} />
             </ChatBody>
             <ChatFooter>
-              {inputComponents && inputComponents.length > 0 ? (
+              {inputComponents && isInputVisible && inputComponents.length > 0 ? (
                 <ChatUserInput
                   inputArray={inputComponents}
                   chat={{ ...instanceMethods, ...this.state }}
@@ -193,6 +193,7 @@ Chat.propTypes = {
   ]),
   inputComponents: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   keyboardVerticalOffset: PropTypes.number,
+  isInputVisible: PropTypes.bool,
 };
 
 Chat.defaultProps = {
@@ -200,6 +201,7 @@ Chat.defaultProps = {
   ChatUserInput: false,
   inputComponents: [],
   keyboardVerticalOffset: 24,
+  isInputVisible: false,
 };
 
 export default Chat;
