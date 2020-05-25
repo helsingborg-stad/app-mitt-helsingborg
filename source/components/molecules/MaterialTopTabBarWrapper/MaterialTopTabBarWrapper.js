@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import { SafeAreaView } from 'react-native';
 import { MaterialTopTabBar } from 'react-navigation-tabs';
@@ -7,9 +8,21 @@ const MaterialTopTabBarWrapper = props => {
   const { navigationState } = props;
   const { index } = navigationState;
 
+  // TODO: pass color and borderColor as props
   let color = '#2196f3';
-  color = index === 0 ? '#EC6701' : color;
-  color = index === 1 ? '#A61380' : color;
+  color = index === 0 ? '#75C9A8' : color;
+  color = index === 1 ? '#DD6161' : color;
+  color = index === 2 ? '#477C9C' : color;
+
+  let borderColor = '#2196f3';
+  borderColor = index === 0 ? '#75C9A8' : borderColor;
+  borderColor = index === 1 ? '#DD6161' : borderColor;
+  borderColor = index === 2 ? '#477C9C' : borderColor;
+
+  const indicatorStyle = {
+    borderBottomColor: borderColor,
+    borderBottomWidth: 2,
+  };
   return (
     <SafeAreaView
       style={{ backgroundColor: '#F8F8F8' }}
@@ -17,11 +30,8 @@ const MaterialTopTabBarWrapper = props => {
     >
       <MaterialTopTabBar
         {...props}
+        indicatorStyle={indicatorStyle}
         activeTintColor={color}
-        indicatorStyle={{
-          backgroundColor: color,
-          display: 'none',
-        }}
         style={{ backgroundColor: '#F8F8F8' }}
         inactiveTintColor="gray"
         labelStyle={{ fontSize: 12, fontWeight: '400', fontFamily: 'Roboto' }}

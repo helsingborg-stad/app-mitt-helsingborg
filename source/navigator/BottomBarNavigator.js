@@ -1,11 +1,7 @@
+/* eslint-disable global-require */
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
-import {
-  TabBarIcon,
-  MaterialTopTabBarWrapper,
-  BottomBarTabWithBadge,
-} from 'app/components/molecules';
-import { ChatScreen, ProfileScreen } from 'app/screens';
-
+import { TabBarImage, MaterialTopTabBarWrapper } from 'app/components/molecules';
+import { ProfileScreen, HomeScreen } from 'app/screens';
 import TaskNavigator from './TaskNavigator';
 
 export const BottomBarConfig = {
@@ -17,16 +13,22 @@ export const BottomBarConfig = {
     upperCaseLabel: false,
     pressOpacity: 1,
     showIcon: true,
+    showLabel: true,
+    tabStyle: {
+      flexDirection: 'row',
+    },
   },
   tabBarComponent: MaterialTopTabBarWrapper,
 };
 
+// TODO: make title dynamic
 export const BottomBarStack = {
   Chat: {
-    screen: ChatScreen,
+    screen: HomeScreen,
     navigationOptions: {
-      title: 'Prata med oss',
-      tabBarIcon: TabBarIcon('message', '#EC6701'),
+      headerTintColor: 'black',
+      title: 'Hem',
+      tabBarIcon: TabBarImage(require('../images/home.png')),
     },
     params: {
       tabBarVisible: true,
@@ -35,15 +37,18 @@ export const BottomBarStack = {
   UserEvents: {
     screen: TaskNavigator,
     navigationOptions: {
-      title: 'Mitt HBG',
-      tabBarIcon: BottomBarTabWithBadge('home', '#A61380'),
+      title: 'Ärende',
+      tabBarIcon: TabBarImage(require('../images/task.png')),
+      tabBarLabel: 'Ärende',
     },
   },
+
   Profile: {
     screen: ProfileScreen,
     navigationOptions: {
       title: 'Profil',
-      tabBarIcon: TabBarIcon('contacts', '#0095DB'),
+      tabBarIcon: TabBarImage(require('../images/profile.png')),
+      tabBarLabel: 'Profil',
     },
   },
 };
