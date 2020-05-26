@@ -149,7 +149,7 @@ class Chat extends Component {
       changeModal,
       toggleTyping,
     };
-    console.log('is visible', isInputVisible);
+
     return (
       <Notification.Dispatch.Consumer>
         {dispatchNotification => (
