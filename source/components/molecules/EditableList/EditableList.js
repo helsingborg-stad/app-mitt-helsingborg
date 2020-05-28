@@ -16,13 +16,14 @@ const EditableListWrapper = styled.View`
   width: 382px;
   height: auto;
 
-  background: #fbf7f0;
+  background: ${props => props.bg};
   border-radius: 9.5px;
   overflow: hidden;
 `;
 
 const EditableListHeader = styled.View`
-  background: #f5e0d8;
+  background: ${props => props.bg};
+  color: ${props => props.color};
   padding-left: 24px;
   padding-right: 12px;
   padding-top: 12px;
@@ -30,6 +31,7 @@ const EditableListHeader = styled.View`
   position: relative;
   flex-direction: row;
   align-items: center;
+  min-height: 58px;
 `;
 
 const HeaderButtonWrapper = styled.View`
@@ -71,7 +73,7 @@ const EditableListItemLabelWrapper = styled.View`
 const EditableListItemLabel = styled.Text`
   font-size: 18px;
   font-weight: normal;
-  color: #855851;
+  color: ${props => props.color};
 `;
 
 const EditableListItemInputWrapper = styled.View`
@@ -84,31 +86,41 @@ const EditableListItemInputWrapper = styled.View`
 const EditableListItemInput = styled.TextInput`
   font-size: 18px;
   font-weight: bold;
-  color: #00213f;
+  color: ${props => props.color};
 `;
 
-function EditableList({ title, inputs, onInputChange, inputsEditable }) {
+function EditableList({
+  theme,
+  title,
+  inputs,
+  onInputChange,
+  inputsEditable,
+  headerButton: HeaderButton,
+}) {
   return (
-    <EditableListWrapper>
-      <EditableListHeader>
+    <EditableListWrapper bg={theme.list.bg}>
+      <EditableListHeader {...theme.list.header}>
         <HeaderTitleWrapper>
-          <HeaderTitle>{title}</HeaderTitle>
+          <HeaderTitle> {title}</HeaderTitle>
         </HeaderTitleWrapper>
-        <HeaderButtonWrapper color="purple" size="small">
-          <Button size="small" z={0}>
-            <Text>Ändra</Text>
-          </Button>
-        </HeaderButtonWrapper>
+        {HeaderButton && (
+          <HeaderButtonWrapper>
+            <HeaderButton />
+          </HeaderButtonWrapper>
+        )}
       </EditableListHeader>
 
       <EditableListBody>
         {inputs.map(input => (
           <EditableListItem key={input.key}>
             <EditableListItemLabelWrapper>
-              <EditableListItemLabel>{input.label}</EditableListItemLabel>
+              <EditableListItemLabel color={theme.list.item.label.color}>
+                {input.label}
+              </EditableListItemLabel>
             </EditableListItemLabelWrapper>
             <EditableListItemInputWrapper>
               <EditableListItemInput
+                color={theme.list.item.input.color}
                 editable={inputsEditable}
                 onChangeText={onInputChange}
                 value={input.value}
@@ -145,8 +157,34 @@ EditableList.propTypes = {
    * Decides of the inputs are editable or not
    */
   inputsEditable: PropTypes.bool,
+  /**
+   * The right side component in the list header
+   */
+  headerButton: PropTypes.node,
+
+  /**
+   * The theming of the component
+   */
+  theme: PropTypes.shape({
+    list: PropTypes.shape({
+      bg: PropTypes.string,
+      header: PropTypes.shape({
+        bg: PropTypes.string,
+        color: PropTypes.string,
+      }),
+      item: PropTypes.shape({
+        label: PropTypes.shape({
+          color: PropTypes.string,
+        }),
+        input: PropTypes.shape({
+          color: PropTypes.string,
+        }),
+      }),
+    }),
+  }),
 };
 EditableList.defaultProps = {
+  headerButton: undefined,
   inputsEditable: false,
   inputs: [
     {
@@ -168,6 +206,23 @@ EditableList.defaultProps = {
       value: 'Helsingborgshem',
     },
   ],
+  theme: {
+    list: {
+      bg: '#fbf7f0',
+      header: {
+        bg: '#f5e0d8',
+        color: '#5C3D38',
+      },
+      item: {
+        label: {
+          color: '#855851',
+        },
+        input: {
+          color: '#00213f',
+        },
+      },
+    },
+  },
 };
 
 export default EditableList;
