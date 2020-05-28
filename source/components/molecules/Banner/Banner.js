@@ -11,17 +11,18 @@ const ImageWrapper = styled.View(props => ({
   backgroundColor: props.backgroundColor,
 }));
 
-const Banner = ({ image, backgroundColor, height, style }) => (
-  <ImageWrapper backgroundColor={backgroundColor} height={height}>
-    <Image source={image} style={style} />
+const Banner = ({ imageSrc, imageStyle, backgroundColor, height, style }) => (
+  <ImageWrapper style={style} backgroundColor={backgroundColor} height={height}>
+    <Image source={imageSrc} style={imageStyle} />
   </ImageWrapper>
 );
 
 Banner.propTypes = {
-  image: PropTypes.string.isRequired,
+  imageSrc: PropTypes.string.isRequired,
   backgroundColor: PropTypes.string,
   height: PropTypes.string,
   style: PropTypes.object.isRequired,
+  imageStyle: PropTypes.object.isRequired,
 };
 Banner.defaultProps = {
   backgroundColor: '#FBF7F0',

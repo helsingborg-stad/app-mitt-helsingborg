@@ -63,24 +63,24 @@ const styles = StyleSheet.create({
 storiesOf('Banner', module)
   .add('Logo', props => (
     <StoryWrapper {...props}>
-      <Banner image={LOGO} style={styles.smallIcon} />
+      <Banner imageSrc={LOGO} imageStyle={styles.smallIcon} />
     </StoryWrapper>
   ))
   .add('CoApplication', props => (
     <StoryWrapper {...props}>
-      <Banner image={COAPPLICATION} style={styles.smallIcon} height="25%" />
+      <Banner imageSrc={COAPPLICATION} imageStyle={styles.smallIcon} height="25%" />
     </StoryWrapper>
   ))
   .add('Income', props => (
     <StoryWrapper {...props}>
-      <Banner image={INCOME} style={styles.incomeIcon} backgroundColor="#75C9A8" />
+      <Banner imageSrc={INCOME} imageStyle={styles.incomeIcon} backgroundColor="#75C9A8" />
     </StoryWrapper>
   ))
   .add('AddIncome', props => (
     <StoryWrapper {...props}>
       <Banner
-        image={ADD_INCOME}
-        style={styles.addIncomeIcon}
+        imageSrc={ADD_INCOME}
+        imageStyle={styles.addIncomeIcon}
         backgroundColor="#193752"
         height="25%"
       />
@@ -88,26 +88,36 @@ storiesOf('Banner', module)
   ))
   .add('medicine', props => (
     <StoryWrapper {...props}>
-      <Banner image={MEDICINE} style={styles.medicineIcon} backgroundColor="#193752" height="25%" />
+      <Banner
+        imageSrc={MEDICINE}
+        imageStyle={styles.medicineIcon}
+        backgroundColor="#193752"
+        height="25%"
+      />
     </StoryWrapper>
   ))
   .add('ExpensePage', props => (
     <StoryWrapper {...props}>
-      <Banner image={EXPENSE_PAGE} style={styles.expenseIcon} backgroundColor="#75C9A8" />
+      <Banner imageSrc={EXPENSE_PAGE} imageStyle={styles.expenseIcon} backgroundColor="#75C9A8" />
     </StoryWrapper>
   ))
   .add('ExpenseList', props => (
     <StoryWrapper {...props}>
-      <Banner image={EXPENSE_LIST} style={styles.expenseIcon} />
+      <Banner imageSrc={EXPENSE_LIST} imageStyle={styles.expenseIcon} />
     </StoryWrapper>
   ))
   .add('Message', props => (
     <StoryWrapper {...props}>
-      <Banner image={MESSAGE} style={styles.messageIcon} height="25%" backgroundColor="#75C9A8" />
+      <Banner
+        imageSrc={MESSAGE}
+        imageStyle={styles.messageIcon}
+        height="25%"
+        backgroundColor="#75C9A8"
+      />
     </StoryWrapper>
   ))
   .add('complete', props => (
     <StoryWrapper {...props}>
-      <Banner image={COMPLETE} style={styles.messageIcon} height="25%" />
+      <Banner imageSrc={COMPLETE} imageStyle={styles.messageIcon} height="25%" />
     </StoryWrapper>
   ));
