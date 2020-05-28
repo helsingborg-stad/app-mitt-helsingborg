@@ -11,9 +11,10 @@ function loadStories() {
 	require('../source/components/atoms/Heading/Heading.stories');
 	require('../source/components/atoms/Icon/Icon.stories');
 	require('../source/components/atoms/Input/Input.stories');
-	require('../source/components/molecules/Markdown.stories');
+	require('../source/components/atoms/Stepper/Stepper.stories');
 	require('../source/components/atoms/Select/Select.stories');
 	require('../source/components/atoms/Text/Text.stories');
+	require('../source/components/molecules/Markdown.stories');
   require('../source/components/molecules/ImagePicker/ImagePicker.stories');
   require('../source/components/molecules/BackNavigation/BackNavigation.stories');
   require('../source/components/molecules/DateTimePickerForm.stories');
@@ -38,6 +39,7 @@ const stories = [
 	'../source/components/atoms/Select/Select.stories',
 	'../source/components/atoms/Text/Text.stories',
   '../source/components/atoms/ImagePicker/ImagePicker.stories',
+  '../source/components/atoms/Stepper/Stepper.stories',
   '../source/components/molecules/DateTimePickerForm.stories',
 	'../source/components/molecules/Header/Header.stories',
   '../source/components/molecules/ListItem/Lists.stories',
@@ -48,8 +50,6 @@ const stories = [
   '../source/components/molecules/Banner/Banner.stories',
 	'../source/components/organisms/FormAgent/FormAgent.stories',
   '../source/components/organisms/WatsonAgent/WatsonAgent.stories'
-
-
 ];
 
 module.exports = {
