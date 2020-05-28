@@ -5,3 +5,4 @@ export { default as SplashScreen } from './SplashScreen';
 export { default as TaskDetailScreen } from './TaskDetailScreen';
 export { default as TaskScreen } from './TaskScreen';
 export { default as HomeScreen } from './HomeScreen';
+export { default as FormCaseScreen } from './FormCaseScreen';

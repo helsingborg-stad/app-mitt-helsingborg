@@ -84,7 +84,9 @@ class HomeScreen extends Component {
               color="purple"
               block
               style={styles.button}
-              onClick={() => this.openEkonomiBistånd()}
+              onClick={() => {
+                this.props.navigation.navigate('Form');
+              }}
             >
               <Text>Sök Ekonomiskt Bistånd</Text>
             </Button>
