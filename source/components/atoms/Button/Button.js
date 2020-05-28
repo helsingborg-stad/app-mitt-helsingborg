@@ -42,10 +42,10 @@ const ButtonBase = styled.View`
     max-width: 100%;
     min-height: 56px;
 
-    border-radius: 12.5px;
+    border-radius: 4.5px;
 
     padding: ${props => (!props.icon ? '12px 20px' : '16px 16px')};
-    min-width: ${props => (!props.icon ? '124px' : 'auto')};
+    min-width: ${props => (!props.icon ? '124px' : '169px')};
     background-color: ${props => props.theme.button[props.buttonTheme].background};
 
     ${props => (props.rounded ? CSS.buttonRounded : null)}

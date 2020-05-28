@@ -8,6 +8,7 @@ const palette = {
     lighter: '#E5E5E5',
     lightest: '#FCFCFC',
     white: '#FFFFFF',
+    blue: '#00213F',
   },
   red: {
     1: '#F7A600',
@@ -15,6 +16,7 @@ const palette = {
     3: '#EC6701',
     4: '#AE0B05',
     5: '#E3000F',
+    6: '#FFAA9B',
   },
   purple: {
     1: '#D35098',
@@ -29,6 +31,7 @@ const palette = {
     3: '#5BA1D8',
     4: '#005C86',
     5: '#0095DB',
+    6: '#00213F',
   },
   green: {
     1: '#AFCA05',
@@ -36,6 +39,7 @@ const palette = {
     3: '#A0C855',
     4: '#50811B',
     5: '#76B828',
+    6: '#75C9A8',
   },
   state: {
     danger: '#D73640',
@@ -108,11 +112,11 @@ const colors = {
       shadow: palette.purple[1],
     },
     blue: {
-      background: palette.blue[2],
+      background: palette.blue[6],
       text: palette.mono.white,
       icon: palette.mono.white,
       iconRight: palette.mono.white,
-      shadow: palette.blue[2],
+      shadow: palette.blue[6],
     },
     white: {
       background: palette.mono.white,
@@ -155,6 +159,20 @@ const colors = {
       icon: palette.mono.white,
       iconRight: palette.mono.white,
       shadow: palette.red[2],
+    },
+    green: {
+      background: palette.green[6],
+      text: palette.mono.blue,
+      icon: palette.mono.blue,
+      iconRight: palette.mono.blue,
+      shadow: palette.green[6],
+    },
+    orange: {
+      background: palette.red[6],
+      text: palette.mono.blue,
+      icon: palette.mono.blue,
+      iconRight: palette.mono.blue,
+      shadow: palette.red[6],
     },
   },
   status: {},

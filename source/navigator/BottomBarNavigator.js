@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
-import { TabBarImage, MaterialTopTabBarWrapper } from 'app/components/molecules';
+import { TabBarImage, MaterialTopTabBarWrapper } from 'source/components/molecules';
 import { ProfileScreen, HomeScreen } from 'app/screens';
 import TaskNavigator from './TaskNavigator';
 

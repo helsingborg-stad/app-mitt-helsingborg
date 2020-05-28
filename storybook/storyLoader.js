@@ -25,6 +25,7 @@ function loadStories() {
   require('../source/components/molecules/InfoLink/InfoButton.stories');
   require('../source/components/molecules/InfoText/InfoButton.stories');
   require('../source/components/molecules/Banner/Banner.stories');
+  require('../source/components/molecules/FooterAction/FooterAction.stories');
 	require('../source/components/organisms/FormAgent/FormAgent.stories');
 	require('../source/components/organisms/WatsonAgent/WatsonAgent.stories');
 }
@@ -48,6 +49,7 @@ const stories = [
 	'../source/components/molecules/Modal.stories',
 	'../source/components/molecules/BackNavigation/BackNavigation.stories',
   '../source/components/molecules/Banner/Banner.stories',
+  '../source/components/molecules/FooterAction/FooterAction.stories',
 	'../source/components/organisms/FormAgent/FormAgent.stories',
   '../source/components/organisms/WatsonAgent/WatsonAgent.stories'
 ];
