@@ -55,9 +55,9 @@ const CloseButton = styled.View({
   backgroundColor: '#00213F',
 });
 
-const BackNavigation = ({ onBack, onClose, isBackBtnVisible }) =>
+const BackNavigation = ({ style, onBack, onClose, isBackBtnVisible }) =>
   isBackBtnVisible ? (
-    <ButtonWrapper>
+    <ButtonWrapper style={style}>
       <BackButton onStartShouldSetResponder={onBack}>
         <Icon name="keyboard-backspace" style={styles.iconBack} />
       </BackButton>
@@ -74,6 +74,7 @@ const BackNavigation = ({ onBack, onClose, isBackBtnVisible }) =>
   );
 
 BackNavigation.propTypes = {
+  style: PropTypes.object,
   onBack: PropTypes.func,
   onClose: PropTypes.func,
   isBackBtnVisible: PropTypes.bool,
