@@ -19,3 +19,4 @@ export { default as InfoText } from './InfoText';
 export { default as InfoLink } from './InfoLink';
 export { default as TabBarImage } from './TabBarImage';
 export { default as BackNavigation } from './BackNavigation';
+export { default as Banner } from './Banner';
