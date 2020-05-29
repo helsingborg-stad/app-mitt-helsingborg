@@ -1,24 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { BackNavigation, Banner } from '../../molecules';
-import { Text, Heading } from '../../atoms';
+import { Text, Heading, Button } from '../../atoms';
+import { BackNavigation, Banner, FooterAction } from '../../molecules';
 
 const StepContainer = styled.View`
   background: ${props => props.bg}
   flex: 1;
 `;
 
-const StepContentContainer = styled.View``;
+const StepContentContainer = styled.ScrollView`
+  margin-top: -80px;
+`;
 
 const StepFieldsContainer = styled.View``;
 const StepBackNavigation = styled(BackNavigation)`
   padding: 24px;
 `;
 
-const StepBanner = styled(Banner)`
-  margin-top: -80px;
-`;
+const StepBanner = styled(Banner)``;
 
 const StepExplanationWrapper = styled.View`
   margin-left: 25px;
@@ -48,10 +48,22 @@ const StepExplanationText = styled(Text)`
   line-height: 25px;
 `;
 
-function Step({ theme, banner, description, fields, onBack, onNext, onClose, onFieldChange }) {
+const StepFooter = styled(FooterAction)``;
+
+function Step({
+  theme,
+  banner,
+  description,
+  fields,
+  footer,
+  onBack,
+  onClose,
+  onFieldChange,
+  isBackBtnVisible,
+}) {
   return (
     <StepContainer bg={theme.step.bg}>
-      <StepBackNavigation onBack={onBack} onClose={onClose} />
+      <StepBackNavigation isBackBtnVisible={isBackBtnVisible} onBack={onBack} onClose={onClose} />
       <StepContentContainer showsHorizontalScrollIndicator={false}>
         <StepBanner {...banner} />
 
@@ -69,6 +81,19 @@ function Step({ theme, banner, description, fields, onBack, onNext, onClose, onF
 
         {/* Implement Field component to render field types */}
         {fields && <StepFieldsContainer />}
+
+        {footer.buttons && (
+          <StepFooter>
+            {footer.buttons.map(button => {
+              const { label, ...buttonProps } = button;
+              return (
+                <Button {...buttonProps}>
+                  <Text>{label}</Text>
+                </Button>
+              );
+            })}
+          </StepFooter>
+        )}
       </StepContentContainer>
     </StepContainer>
   );
@@ -107,6 +132,7 @@ Step.propTypes = {
     imageSrc: PropTypes.string,
     imageStyle: PropTypes.object,
   }),
+
   /**
    * Values for the description section of the step, including (tagline, heading and text)
    */
@@ -115,6 +141,18 @@ Step.propTypes = {
     heading: PropTypes.string,
     text: PropTypes.string,
   },
+
+  /**
+   * Proprties for changing the footer of the step.
+   */
+  footer: PropTypes.shape({
+    background: PropTypes.string,
+    buttons: PropTypes.arrayOf(
+      PropTypes.shape({
+        ...Button.PropTypes,
+      })
+    ),
+  }),
 
   /**
    * The theming of the component
@@ -147,6 +185,9 @@ Step.defaultProps = {
   banner: {
     imageSrc: undefined,
     icon: undefined,
+  },
+  footer: {
+    background: '#00213F',
   },
 };
 export default Step;
