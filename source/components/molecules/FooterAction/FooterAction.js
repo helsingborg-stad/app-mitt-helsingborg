@@ -18,17 +18,20 @@ const ButtonWrapper = styled.View`
 `;
 
 const FooterAction = props => {
-  const { height, background, ButtonList } = props;
+  const { children, height, background, ButtonList } = props;
 
   return (
     <ActionContainer height={height} background={background}>
       <ButtonWrapper>
-        <ButtonList />
+        {ButtonList && <ButtonList />}
+        {children}
       </ButtonWrapper>
     </ActionContainer>
   );
 };
+
 FooterAction.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
   ButtonList: PropTypes.node,
   height: PropTypes.string,
   background: PropTypes.string,
