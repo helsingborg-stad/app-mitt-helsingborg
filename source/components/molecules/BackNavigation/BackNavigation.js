@@ -66,7 +66,7 @@ const BackNavigation = ({ style, onBack, onClose, isBackBtnVisible }) =>
       </CloseButton>
     </ButtonWrapper>
   ) : (
-    <CloseButtonWrapper>
+    <CloseButtonWrapper style={style}>
       <CloseButton onStartShouldSetResponder={onClose}>
         <Icon name="close" style={styles.iconClose} />
       </CloseButton>
