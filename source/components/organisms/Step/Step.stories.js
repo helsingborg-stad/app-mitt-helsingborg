@@ -13,21 +13,57 @@ const styles = StyleSheet.create({
   },
 });
 
-storiesOf('Step', module).add('Default', () => (
-  <StoryWrapper>
-    <Step
-      banner={{
-        height: '327px',
-        imageSrc: COAPPLICATION,
-        imageStyle: styles.smallIcon,
-      }}
-      heading="Step heading"
-      tagline="Step tagline"
-      description={{
-        heading: 'Vill du ansöka om Ekonomiskt bistånd igen?',
-        tagline: 'Ansökan',
-        text: 'Du kommer behöva ange inkomster, utgifter och kontrollera dina boende detaljer.',
-      }}
-    />
-  </StoryWrapper>
-));
+storiesOf('Step', module)
+  .add('Default', () => (
+    <StoryWrapper>
+      <Step
+        banner={{
+          height: '327px',
+          imageSrc: COAPPLICATION,
+          imageStyle: styles.smallIcon,
+        }}
+        heading="Step heading"
+        tagline="Step tagline"
+        description={{
+          heading: 'Vill du ansöka om Ekonomiskt bistånd igen?',
+          tagline: 'Ansökan',
+          text: 'Du kommer behöva ange inkomster, utgifter och kontrollera dina boende detaljer.',
+        }}
+        footer={{
+          buttons: [
+            {
+              label: 'Nästa',
+              onClick: () => console.log('clicked'),
+            },
+          ],
+        }}
+      />
+    </StoryWrapper>
+  ))
+  .add('Hide back button', () => (
+    <StoryWrapper>
+      <Step
+        banner={{
+          height: '327px',
+          imageSrc: COAPPLICATION,
+          imageStyle: styles.smallIcon,
+        }}
+        isBackBtnVisible={false}
+        heading="Step heading"
+        tagline="Step tagline"
+        description={{
+          heading: 'Vill du ansöka om Ekonomiskt bistånd igen?',
+          tagline: 'Ansökan',
+          text: 'Du kommer behöva ange inkomster, utgifter och kontrollera dina boende detaljer.',
+        }}
+        footer={{
+          buttons: [
+            {
+              label: 'Nästa',
+              onClick: () => console.log('clicked'),
+            },
+          ],
+        }}
+      />
+    </StoryWrapper>
+  ));
