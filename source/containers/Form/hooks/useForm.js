@@ -21,6 +21,7 @@ function useForm(initialState) {
     handlePrev,
     handleNext,
     handleInputChange,
+    handleSkip,
   };
 }
 
