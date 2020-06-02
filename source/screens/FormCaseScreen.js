@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { ScreenWrapper } from 'app/components/molecules';
+import { StatusBar } from 'react-native';
 import Form from '../containers/Form/Form';
 import formEkbMockData from '../assets/mock/form-case-ekb';
 
@@ -11,9 +12,12 @@ const FormScreenWrapper = styled(ScreenWrapper)`
 `;
 
 const FormCaseScreen = ({ ...props }) => (
-  <FormScreenWrapper>
-    <Form steps={formEkbMockData.steps} {...props} />
-  </FormScreenWrapper>
+  <>
+    <StatusBar hidden />
+    <FormScreenWrapper>
+      <Form steps={formEkbMockData.steps} {...props} />
+    </FormScreenWrapper>
+  </>
 );
 
 FormCaseScreen.propTypes = {
