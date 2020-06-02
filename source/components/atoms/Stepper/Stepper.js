@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
+import styled from 'styled-components/native';
 
 /**
  * Function to keep a number in a given range starting at 0.
@@ -21,10 +22,13 @@ const keepNumberInRange = (number, range) => {
   return numberInRange;
 };
 
+const StepperContainer = styled.View`
+  flex: 1;
+`;
 /**
  * Functional atom component that can present a sequence of components
  */
-function Stepper({ children, active }) {
+function Stepper({ children, style, active }) {
   const countChildren = React.Children.count(children);
 
   /**
@@ -38,7 +42,7 @@ function Stepper({ children, active }) {
     React.cloneElement(child, { ...child.props, index })
   );
 
-  return <View>{clonedChildren[currentChildIndex]}</View>;
+  return <StepperContainer style={style}>{clonedChildren[currentChildIndex]}</StepperContainer>;
 }
 
 Stepper.propTypes = {
@@ -50,6 +54,8 @@ Stepper.propTypes = {
    * The current active child that we want to render in the Stepper.
    */
   active: PropTypes.number,
+
+  style: PropTypes.object.isRequired,
 };
 
 Stepper.defaultProps = {
