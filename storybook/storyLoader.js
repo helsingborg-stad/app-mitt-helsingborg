@@ -29,6 +29,7 @@ function loadStories() {
 	require('../source/components/organisms/FormAgent/FormAgent.stories');
 	require('../source/components/organisms/WatsonAgent/WatsonAgent.stories');
 	require('../source/components/organisms/Step/Step.stories');
+	require('../source/containers/Form/Form.stories');
 }
 
 const stories = [
@@ -53,7 +54,8 @@ const stories = [
   '../source/components/molecules/FooterAction/FooterAction.stories',
 	'../source/components/organisms/FormAgent/FormAgent.stories',
   '../source/components/organisms/WatsonAgent/WatsonAgent.stories',
-  '../source/components/organisms/Step/Step.stories'
+  '../source/containers/organisms/Step/Step.stories',
+  '../source/containers/Form/Form.stories'
 ];
 
 module.exports = {
