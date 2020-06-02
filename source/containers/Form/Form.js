@@ -8,6 +8,7 @@ import useForm from './hooks/useForm';
 const FormStepper = styled(Stepper)``;
 const FormContainer = styled.View`
   flex: 1;
+  height: auto;
 `;
 
 /**
@@ -28,6 +29,7 @@ function Form({ startAt, steps }) {
       <FormStepper active={formState.counter}>
         {formState.steps.map(step => (
           <Step
+            theme={step.theme}
             description={{
               heading: step.title,
               tagline: step.group,
