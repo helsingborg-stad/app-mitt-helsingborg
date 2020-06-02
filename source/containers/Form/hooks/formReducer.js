@@ -6,13 +6,13 @@ const actions = {
 function formReducer(state, action) {
   const { type, payload } = action;
 
-  switch (action.type) {
+  switch (type) {
     case actions.increaseCounter:
       break;
     case actions.decreaseCounter:
       break;
     default:
-      break;
+      return state;
   }
 }
 

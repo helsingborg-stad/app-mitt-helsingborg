@@ -1,4 +1,4 @@
-import { useReducer } from 'react-native';
+import { useReducer } from 'react';
 import formReducer from './formReducer';
 
 function useForm(initialState) {
