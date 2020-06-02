@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { Text, Heading, Button } from '../../atoms';
-import { BackNavigation, Banner, FooterAction } from '../../molecules';
+import { Text, Button } from '../../atoms';
+import { BackNavigation, Banner, FooterAction, StepDescription } from '../../molecules';
 
 const StepContainer = styled.View`
   background: ${props => props.bg}
@@ -19,34 +19,6 @@ const StepBackNavigation = styled(BackNavigation)`
 `;
 
 const StepBanner = styled(Banner)``;
-
-const StepExplanationWrapper = styled.View`
-  margin-left: 25px;
-  margin-top: 76px;
-  margin-bottom: 48px;
-  width: 285px;
-`;
-
-const StepExplanationTagline = styled(Text)`
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 16px;
-  color: ${props => props.color};
-  line-height: 20px;
-  letter-spacing: 0.5px;
-`;
-const StepExplanationHeading = styled(Heading)`
-  font-size: 30px;
-  line-height: 40px;
-  color: ${props => props.color};
-`;
-
-const StepExplanationText = styled(Text)`
-  font-size: 16px;
-  margin-top: 16px;
-  color: ${props => props.color};
-  line-height: 25px;
-`;
 
 const StepFooter = styled(FooterAction)``;
 
@@ -66,18 +38,7 @@ function Step({
       <StepBackNavigation isBackBtnVisible={isBackBtnVisible} onBack={onBack} onClose={onClose} />
       <StepContentContainer showsHorizontalScrollIndicator={false}>
         <StepBanner {...banner} />
-
-        <StepExplanationWrapper>
-          <StepExplanationTagline color={theme.step.text.colors.secondary}>
-            {description.tagline}
-          </StepExplanationTagline>
-          <StepExplanationHeading color={theme.step.text.colors.primary}>
-            {description.heading}
-          </StepExplanationHeading>
-          <StepExplanationText color={theme.step.text.colors.primary}>
-            {description.text}
-          </StepExplanationText>
-        </StepExplanationWrapper>
+        <StepDescription theme={theme} {...description} />
 
         {/* Implement Field component to render field types */}
         {fields && <StepFieldsContainer />}
