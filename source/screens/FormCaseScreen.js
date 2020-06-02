@@ -1,33 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { SafeAreaView } from 'react-native';
-import { ScreenWrapper, BackNavigation } from 'app/components/molecules';
+import { ScreenWrapper } from 'app/components/molecules';
+import Form from '../containers/Form/Form';
+import formEkbMockData from '../assets/mock/form-case-ekb';
 
 const FormScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
-  background-color: #f5f5f5;
   flex: 1;
 `;
 
-const FormCaseScreen = props => {
-  const {
-    navigation: { navigate },
-  } = props;
-
-  return (
-    <SafeAreaView>
-      <FormScreenWrapper>
-        <BackNavigation
-          isBackBtnVisible={false}
-          onClose={async () => {
-            navigate('Start');
-          }}
-        />
-      </FormScreenWrapper>
-    </SafeAreaView>
-  );
-};
+const FormCaseScreen = ({ ...props }) => (
+  <FormScreenWrapper>
+    <Form steps={formEkbMockData.steps} {...props} />
+  </FormScreenWrapper>
+);
 
 FormCaseScreen.propTypes = {
   navigation: PropTypes.object,
