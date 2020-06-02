@@ -10,12 +10,14 @@ const StepContainer = styled.View`
 `;
 
 const StepContentContainer = styled.ScrollView`
-  margin-top: -80px;
+  margin-top: -106px;
+  flex: 1;
 `;
 
 const StepFieldsContainer = styled.View``;
 const StepBackNavigation = styled(BackNavigation)`
   padding: 24px;
+  padding-top: 50px;
 `;
 
 const StepBanner = styled(Banner)``;
