@@ -1,123 +1,34 @@
 import { storiesOf } from '@storybook/react-native';
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import StoryWrapper from '../StoryWrapper';
 import Banner from './Banner';
 
-const COAPPLICATION = require('source/images/illu_sammanstallning.png');
-const LOGO = require('source/images/illu_ekonomiskt-bistand.png');
-const INCOME = require('source/images/illu_inkomster.png');
-const ADD_INCOME = require('source/images/illu_lagg-till-inkomst.png');
-const MEDICINE = require('source/images/illu_sjukvard.png');
-const EXPENSE_PAGE = require('source/images/illu_utgifter15.png');
-const EXPENSE_LIST = require('source/images/illu_utgifter15.png');
-const MESSAGE = require('source/images/illu_beratta.png');
-const COMPLETE = require('source/images/illu_fardig.png');
+const ILLU_INCOME = require('source/assets/images/illustrations/illu_inkomster_margins_1x.png');
+const ILLU_ADD_INCOME = require('source/assets/images/illustrations/illu_lagg-till_margins_1x.png');
+const ILLU_EXPENSES = require('source/assets/images/illustrations/illu_utgifter_margins_1x.png');
 
-const styles = StyleSheet.create({
-  smallIcon: {
-    top: '80%',
-    right: -30,
-  },
-  incomeIcon: {
-    top: '8%',
-    margin: 0,
-    padding: 0,
-    flex: 1,
-    width: null,
-    height: null,
-    resizeMode: 'contain',
-  },
-  addIncomeIcon: {
-    top: '35%',
-    right: -30,
-    marginRight: 0,
-    paddingRight: 0,
-    flex: 1,
-    resizeMode: 'contain',
-  },
-  medicineIcon: {
-    top: '70%',
-    right: -30,
-    marginRight: 0,
-    paddingRight: 0,
-  },
-  expenseIcon: {
-    top: '8%',
-    right: '15%',
-    margin: 0,
-    padding: 0,
-    flex: 1,
-    width: null,
-    height: null,
-    resizeMode: 'contain',
-  },
-  messageIcon: {
-    top: '70%',
-    right: -30,
-    marginRight: 0,
-    paddingRight: 0,
-  },
-});
+const ICON_TELL = require('source/assets/images/icons/icn_beratta_1x.png');
+const ICON_INCOME = require('source/assets/images/icons/icn_inkomster_1x.png');
+const ICON_EKB = require('source/assets/images/icons/icn_Main_ekonomiskt-bistand_1x.png');
+const ICON_SUMMARY = require('source/assets/images/icons/icn_sammanstallning_1x.png');
+const ICON_HEALTHCARE = require('source/assets/images/icons/icn_sjukvard_1x.png');
+const ICON_EXPENSES = require('source/assets/images/icons/icn_utgifter_1x.png');
+const ICON_DONE = require('source/assets/images/icons/illu_fardig_1x.png');
+const ICON_HELP = require('source/assets/images/icons/illu_hjalp_1x.png');
 
 storiesOf('Banner', module)
-  .add('Logo', props => (
+  .add('Icon', props => (
     <StoryWrapper {...props}>
-      <Banner imageSrc={LOGO} imageStyle={styles.smallIcon} />
+      <Banner iconSrc={ICON_EKB} />
     </StoryWrapper>
   ))
-  .add('CoApplication', props => (
+  .add('Icon & Image', props => (
     <StoryWrapper {...props}>
-      <Banner imageSrc={COAPPLICATION} imageStyle={styles.smallIcon} height="25%" />
+      <Banner imageSrc={ILLU_EXPENSES} iconSrc={ICON_EXPENSES} />
     </StoryWrapper>
   ))
-  .add('Income', props => (
+  .add('Background', props => (
     <StoryWrapper {...props}>
-      <Banner imageSrc={INCOME} imageStyle={styles.incomeIcon} backgroundColor="#75C9A8" />
-    </StoryWrapper>
-  ))
-  .add('AddIncome', props => (
-    <StoryWrapper {...props}>
-      <Banner
-        imageSrc={ADD_INCOME}
-        imageStyle={styles.addIncomeIcon}
-        backgroundColor="#193752"
-        height="25%"
-      />
-    </StoryWrapper>
-  ))
-  .add('medicine', props => (
-    <StoryWrapper {...props}>
-      <Banner
-        imageSrc={MEDICINE}
-        imageStyle={styles.medicineIcon}
-        backgroundColor="#193752"
-        height="25%"
-      />
-    </StoryWrapper>
-  ))
-  .add('ExpensePage', props => (
-    <StoryWrapper {...props}>
-      <Banner imageSrc={EXPENSE_PAGE} imageStyle={styles.expenseIcon} backgroundColor="#75C9A8" />
-    </StoryWrapper>
-  ))
-  .add('ExpenseList', props => (
-    <StoryWrapper {...props}>
-      <Banner imageSrc={EXPENSE_LIST} imageStyle={styles.expenseIcon} />
-    </StoryWrapper>
-  ))
-  .add('Message', props => (
-    <StoryWrapper {...props}>
-      <Banner
-        imageSrc={MESSAGE}
-        imageStyle={styles.messageIcon}
-        height="25%"
-        backgroundColor="#75C9A8"
-      />
-    </StoryWrapper>
-  ))
-  .add('complete', props => (
-    <StoryWrapper {...props}>
-      <Banner imageSrc={COMPLETE} imageStyle={styles.messageIcon} height="25%" />
+      <Banner backgroundColor="#75C9A8" iconSrc={ICON_INCOME} />
     </StoryWrapper>
   ));
