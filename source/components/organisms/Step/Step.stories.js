@@ -4,7 +4,8 @@ import { StyleSheet } from 'react-native';
 import StoryWrapper from '../../molecules/StoryWrapper';
 import Step from './Step';
 
-const COAPPLICATION = require('source/images/illu_sammanstallning.png');
+const ILLU_INCOME = require('source/assets/images/illustrations/illu_inkomster_margins_2x.png');
+const ICON_INCOME = require('source/assets/images/icons/icn_inkomster_1x.png');
 
 const styles = StyleSheet.create({
   smallIcon: {
@@ -18,9 +19,8 @@ storiesOf('Step', module)
     <StoryWrapper>
       <Step
         banner={{
-          height: '327px',
-          imageSrc: COAPPLICATION,
-          imageStyle: styles.smallIcon,
+          imageSrc: ILLU_INCOME,
+          iconSrc: ICON_INCOME,
         }}
         heading="Step heading"
         tagline="Step tagline"
@@ -44,9 +44,8 @@ storiesOf('Step', module)
     <StoryWrapper>
       <Step
         banner={{
-          height: '327px',
-          imageSrc: COAPPLICATION,
-          imageStyle: styles.smallIcon,
+          imageSrc: ILLU_INCOME,
+          iconSrc: ICON_INCOME,
         }}
         isBackBtnVisible={false}
         heading="Step heading"
