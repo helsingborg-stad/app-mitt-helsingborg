@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Text, Heading } from 'app/components/atoms';
-import colors from '../../../styles/colors';
 
 const StepDescriptionWrapper = styled.View`
   margin-left: 25px;
@@ -34,7 +33,6 @@ const StepDescriptionText = styled(Text)`
 `;
 
 function StepDescription({ style, theme, tagline, heading, text }) {
-  console.log(theme);
   return (
     <StepDescriptionWrapper style={style}>
       {tagline && (
