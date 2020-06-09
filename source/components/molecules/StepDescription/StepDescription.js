@@ -32,7 +32,7 @@ const StepDescriptionText = styled(Text)`
   line-height: 25px;
 `;
 
-function StepDescription({ style, theme, tagline, heading, text }) {
+function StepDescription({ style, theme, tagline, heading, text, firstName }) {
   return (
     <StepDescriptionWrapper style={style}>
       {tagline && (
@@ -41,7 +41,11 @@ function StepDescription({ style, theme, tagline, heading, text }) {
         </StepDescriptionTagline>
       )}
       <StepDescriptionHeading color={theme.step.text.colors.primary}>
-        {heading}
+        {/*
+         * TODO check the specific heading with an id , where the first name would be added.
+         * Instead of string 'Hej'
+         */}
+        {heading === 'Hej' ? `${heading} ${firstName}!` : heading}
       </StepDescriptionHeading>
       {text && (
         <StepDescriptionText color={theme.step.text.colors.primary}>{text}</StepDescriptionText>
@@ -55,6 +59,7 @@ StepDescription.propTypes = {
   tagline: PropTypes.string,
   heading: PropTypes.string.isRequired,
   text: PropTypes.string,
+  firstName: PropTypes.string,
   theme: PropTypes.shape({
     step: PropTypes.shape({
       text: PropTypes.shape({
@@ -70,6 +75,7 @@ StepDescription.propTypes = {
 StepDescription.defaultProps = {
   tagline: null,
   text: null,
+  firstName: null,
   theme: {
     step: {
       text: {

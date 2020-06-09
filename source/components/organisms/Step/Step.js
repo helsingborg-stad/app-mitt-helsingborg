@@ -32,13 +32,26 @@ function Step({
   onClose,
   onFieldChange,
   isBackBtnVisible,
+  answer,
 }) {
+  /**
+   * find the first name of the applicant
+   * Now implemented according to mock data
+   */
+  const firstName =
+    answer && answer.length
+      ? answer
+          .map(steps => (steps.title === 'applicant' ? steps.firstName : null))
+          .filter(x => x)
+          .pop()
+      : '';
+
   return (
     <StepContainer bg={theme.step.bg}>
       <StepBackNavigation isBackBtnVisible={isBackBtnVisible} onBack={onBack} onClose={onClose} />
       <StepContentContainer showsHorizontalScrollIndicator={false}>
         <StepBanner {...banner} />
-        <StepDescription theme={theme} {...description} />
+        <StepDescription theme={theme} firstName={firstName} {...description} />
 
         {/* Implement Field component to render field types */}
         {fields && <StepFieldsContainer />}
@@ -64,7 +77,11 @@ Step.propTypes = {
   /**
    * The array of fields that are going to be displayed in the Step
    */
-  fields: PropTypes.arrayOf({}),
+  fields: PropTypes.arrayOf(PropTypes.shape({})),
+  /**
+   * User information
+   */
+  answer: PropTypes.arrayOf(PropTypes.shape({})),
   /**
    * Property for hiding the back button in the step
    */

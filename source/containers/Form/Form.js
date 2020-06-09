@@ -16,7 +16,7 @@ const FormContainer = styled.View`
  * is a tool to help you solve the problem of allowing end-users to interact with the
  * data and modify the data in your application.
  */
-function Form({ startAt, steps }) {
+function Form({ startAt, steps, answer }) {
   const initialState = {
     counter: startAt,
     steps,
@@ -41,6 +41,7 @@ function Form({ startAt, steps }) {
             footer={{
               buttons: [{ label: 'Nästa', onClick: handleNext }],
             }}
+            answer={answer}
           />
         ))}
       </FormStepper>
@@ -51,6 +52,7 @@ function Form({ startAt, steps }) {
 Form.propTypes = {
   startAt: PropTypes.number,
   steps: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  answer: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 Form.defaultProps = {

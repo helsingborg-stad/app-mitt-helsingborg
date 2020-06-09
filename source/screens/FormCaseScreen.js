@@ -5,6 +5,7 @@ import { ScreenWrapper } from 'app/components/molecules';
 import { StatusBar } from 'react-native';
 import Form from '../containers/Form/Form';
 import formEkbMockData from '../assets/mock/form-case-ekb';
+import AnswerEKBMockData from '../assets/mock/form-answer-ekb';
 
 const FormScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
@@ -15,7 +16,11 @@ const FormCaseScreen = ({ ...props }) => (
   <>
     <StatusBar hidden />
     <FormScreenWrapper>
-      <Form steps={formEkbMockData.steps} {...props} />
+      <Form
+        steps={formEkbMockData.steps}
+        answer={AnswerEKBMockData.personalInformation}
+        {...props}
+      />
     </FormScreenWrapper>
   </>
 );
