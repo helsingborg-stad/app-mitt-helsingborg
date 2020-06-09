@@ -12,12 +12,10 @@ const FormScreenWrapper = styled(ScreenWrapper)`
 `;
 
 const FormCaseScreen = ({ ...props }) => (
-  <>
+  <FormScreenWrapper>
     <StatusBar hidden />
-    <FormScreenWrapper>
-      <Form steps={formEkbMockData.steps} {...props} />
-    </FormScreenWrapper>
-  </>
+    <Form steps={formEkbMockData.steps} {...props} />
+  </FormScreenWrapper>
 );
 
 FormCaseScreen.propTypes = {
