@@ -45,20 +45,7 @@ const Content = styled.View`
 `;
 
 const AvatarListItem = props => {
-  const {
-    highlighted,
-    title,
-    text,
-    color,
-    onClick,
-    imageSrc,
-    theme: { icon },
-  } = props;
-
-  const background =
-    (highlighted && color && Object.prototype.hasOwnProperty.call(icon, color) && icon[color][1]) ||
-    (highlighted && !color && icon.lightest) ||
-    'transparent';
+  const { highlighted, title, text, onClick, imageSrc } = props;
 
   const nameAcronym = title
     .split(/\s/)
@@ -68,7 +55,7 @@ const AvatarListItem = props => {
   const renderContent = () => (
     <Flex>
       {imageSrc && (
-        <IconContainer highlighted={highlighted} background={background}>
+        <IconContainer highlighted={highlighted} background="transparent">
           <IconFlex>
             <Avatar
               rounded
@@ -101,21 +88,17 @@ const AvatarListItem = props => {
 export default withTheme(AvatarListItem);
 
 AvatarListItem.propTypes = {
-  color: PropTypes.oneOf(['blue', 'purple', 'red', 'green']),
   highlighted: PropTypes.bool,
   title: PropTypes.string.isRequired,
   text: PropTypes.string,
   onClick: PropTypes.func,
-  theme: PropTypes.object,
   imageSrc: PropTypes.number,
 };
 
 AvatarListItem.defaultProps = {
-  color: 'blue',
   highlighted: false,
   text: '',
   onClick: null,
-  theme: null,
   imageSrc: null,
 };
 
