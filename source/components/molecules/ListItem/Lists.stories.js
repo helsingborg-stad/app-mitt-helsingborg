@@ -1,9 +1,9 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
+import GroupListWithAvatar from 'app/components/molecules/GroupedListWithAvatar';
 import StoryWrapper from '../StoryWrapper';
 import GroupedList from '../GroupedList/GroupedList';
 import ListItem from './index';
-import GroupListWithAvatar from 'app/components/molecules/GroupedListWithAvatar'
 
 const GroupedListData = [
   {
@@ -54,7 +54,7 @@ const GroupedAvatarListData = [
         title: 'Lotten Larsson',
         text: 'Barn',
         imageSrc: COAPPLICATION,
-      }
+      },
     ],
   },
 ];
@@ -110,7 +110,7 @@ storiesOf('Lists', module)
     </StoryWrapper>
   ))
   .add('Grouped list with avatars', props => (
-    <StoryWrapper { ...props } style={{backgroundColor: '#FFAA9B'}}>
-      <GroupListWithAvatar items={ GroupedAvatarListData } />
+    <StoryWrapper {...props} style={{ backgroundColor: '#FFAA9B' }}>
+      <GroupListWithAvatar items={GroupedAvatarListData} />
     </StoryWrapper>
   ));

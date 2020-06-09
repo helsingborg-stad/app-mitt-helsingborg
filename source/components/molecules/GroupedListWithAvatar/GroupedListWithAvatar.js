@@ -2,8 +2,8 @@ import React from 'react';
 import { View, SectionList } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
+import AvatarListItem from 'app/components/molecules/ListItem/AvatarListItem';
 import Text from '../../atoms/Text';
-import AvatarListItem from 'app/components/molecules/ListItem/AvatarListItem'
 
 const SectionHeader = styled(Text)`
   margin-left: 15px;
@@ -18,7 +18,8 @@ const Separator = styled(View)`
   margin-right: 15px;
   margin-left: 15px;
   margin-bottom: 15px;
-  background-color: ${props => props.theme.list.onLightBackground.listWithAvatar.headerSeparatorBackground};
+  background-color: ${props =>
+    props.theme.list.onLightBackground.listWithAvatar.headerSeparatorBackground};
 `;
 
 const GroupListWithAvatar = props => {
@@ -26,7 +27,7 @@ const GroupListWithAvatar = props => {
   return (
     <SectionList
       renderSectionHeader={({ section: { heading, data } }) => (
-        <View >
+        <View>
           <SectionHeader small>{heading}</SectionHeader>
           <Separator />
         </View>
@@ -34,15 +35,14 @@ const GroupListWithAvatar = props => {
       scrollEnabled={false}
       sections={items}
       renderItem={item => <AvatarListItem onClick={onClick} {...item.item} />}
-
       keyExtractor={(item, index) => index}
     />
   );
-}
+};
 
 GroupListWithAvatar.propTypes = {
   items: PropTypes.array,
   onClick: PropTypes.func,
-}
+};
 
 export default GroupListWithAvatar;

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components/native';
+import { Avatar } from 'react-native-elements';
 import Text from '../../atoms/Text';
 import Button from '../../atoms/Button/Button';
-import { Avatar } from 'react-native-elements';
 
 const HighlightedItem = styled(Button)`
   padding: 0px;
@@ -25,8 +25,7 @@ const Title = styled(Text)`
 
 const Body = styled(Text)`
   color: ${props => props.theme.list.onLightBackground.listWithAvatar.bodyTextColor};
-  
-`
+`;
 
 const IconContainer = styled.View`
   width: 64px;
@@ -54,37 +53,49 @@ const AvatarListItem = props => {
     onClick,
     imageSrc,
     theme: { icon },
-  } = props
+  } = props;
 
   const background =
     (highlighted && color && Object.prototype.hasOwnProperty.call(icon, color) && icon[color][1]) ||
     (highlighted && !color && icon.lightest) ||
-    'transparent'
+    'transparent';
 
-  const nameAcronym = title.split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'')
+  const nameAcronym = title
+    .split(/\s/)
+    // eslint-disable-next-line no-param-reassign
+    .reduce((response, word) => (response += word.slice(0, 1)), '');
 
   const renderContent = () => (
     <Flex>
       {imageSrc && (
         <IconContainer highlighted={highlighted} background={background}>
           <IconFlex>
-            <Avatar rounded size='medium' titleStyle={{fontSize: 20, fontWeight: 'bold'}} title={nameAcronym}/>
+            <Avatar
+              rounded
+              size="medium"
+              titleStyle={{ fontSize: 20, fontWeight: 'bold' }}
+              title={nameAcronym}
+            />
           </IconFlex>
         </IconContainer>
       )}
 
       <Content>
         {title && <Title>{title}</Title>}
-        {text && <Body small strong>{text}</Body>}
+        {text && (
+          <Body small strong>
+            {text}
+          </Body>
+        )}
       </Content>
     </Flex>
-  )
+  );
 
   return (
     <HighlightedItem onClick={onClick} block z={0}>
       {renderContent()}
     </HighlightedItem>
-  )
+  );
 };
 
 export default withTheme(AvatarListItem);
@@ -92,7 +103,6 @@ export default withTheme(AvatarListItem);
 AvatarListItem.propTypes = {
   color: PropTypes.oneOf(['blue', 'purple', 'red', 'green']),
   highlighted: PropTypes.bool,
-  iconName: PropTypes.string,
   title: PropTypes.string,
   text: PropTypes.string,
   onClick: PropTypes.func,
