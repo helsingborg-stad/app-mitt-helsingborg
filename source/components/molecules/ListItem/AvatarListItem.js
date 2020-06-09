@@ -45,7 +45,7 @@ const Content = styled.View`
 `;
 
 const AvatarListItem = props => {
-  const { highlighted, title, text, onClick, imageSrc } = props;
+  const { title, text, onClick, imageSrc } = props;
 
   const nameAcronym = title
     .split(/\s/)
@@ -55,7 +55,7 @@ const AvatarListItem = props => {
   const renderContent = () => (
     <Flex>
       {imageSrc && (
-        <IconContainer highlighted={highlighted} background="transparent">
+        <IconContainer highlighted={false} background="transparent">
           <IconFlex>
             <Avatar
               rounded
@@ -88,7 +88,6 @@ const AvatarListItem = props => {
 export default withTheme(AvatarListItem);
 
 AvatarListItem.propTypes = {
-  highlighted: PropTypes.bool,
   title: PropTypes.string.isRequired,
   text: PropTypes.string,
   onClick: PropTypes.func,
@@ -96,12 +95,7 @@ AvatarListItem.propTypes = {
 };
 
 AvatarListItem.defaultProps = {
-  highlighted: false,
   text: '',
   onClick: null,
   imageSrc: null,
-};
-
-AvatarListItem.defaultProps = {
-  highlighted: false,
 };
