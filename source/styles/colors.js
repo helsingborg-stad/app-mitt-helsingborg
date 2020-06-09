@@ -175,6 +175,17 @@ const colors = {
       shadow: palette.red[6],
     },
   },
+  list: {
+    onLightBackground: {
+      listWithAvatar: {
+        headerColor: 'rgba(0, 0, 0, 0.64)',
+        headerSeparatorBackground: 'rgba(0, 0, 0, 0.48)',
+        text: palette.mono.blue,
+        bodyText: palette.red[6],
+        headerBorderHeight: '2px',
+      },
+    },
+  },
   status: {},
   chatBubble: {
     user: {
