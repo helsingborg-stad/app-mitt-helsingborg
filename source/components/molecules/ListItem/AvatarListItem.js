@@ -103,12 +103,20 @@ export default withTheme(AvatarListItem);
 AvatarListItem.propTypes = {
   color: PropTypes.oneOf(['blue', 'purple', 'red', 'green']),
   highlighted: PropTypes.bool,
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
   text: PropTypes.string,
   onClick: PropTypes.func,
   theme: PropTypes.object,
   imageSrc: PropTypes.number,
-  lightest: PropTypes.string,
+};
+
+AvatarListItem.defaultProps = {
+  color: 'blue',
+  highlighted: false,
+  text: '',
+  onClick: null,
+  theme: null,
+  imageSrc: null,
 };
 
 AvatarListItem.defaultProps = {

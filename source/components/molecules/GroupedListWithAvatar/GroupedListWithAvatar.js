@@ -41,8 +41,12 @@ const GroupListWithAvatar = props => {
 };
 
 GroupListWithAvatar.propTypes = {
-  items: PropTypes.array,
+  items: PropTypes.array.isRequired,
   onClick: PropTypes.func,
+};
+
+GroupListWithAvatar.defaultProps = {
+  onClick: null,
 };
 
 export default GroupListWithAvatar;
