@@ -181,7 +181,7 @@ const colors = {
         headerColor: 'rgba(0, 0, 0, 0.64)',
         headerSeparatorBackground: 'rgba(0, 0, 0, 0.48)',
         text: palette.mono.blue,
-        bodyText: palette.red[6],
+        bodyTextColor: '#855851',
         headerBorderHeight: '2px',
       },
     },
