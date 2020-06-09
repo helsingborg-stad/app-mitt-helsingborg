@@ -5,22 +5,33 @@ import { Text, Button } from '../../atoms';
 import { BackNavigation, Banner, FooterAction, StepDescription } from '../../molecules';
 
 const StepContainer = styled.View`
-  background: ${props => props.bg}
+  background: ${props => props.bg};
   flex: 1;
 `;
 
 const StepContentContainer = styled.ScrollView`
+  /* Covers space occupied by the StepBackNavigation */
   margin-top: -80px;
+  height: 100%;
+  position: relative;
 `;
 
 const StepFieldsContainer = styled.View``;
+
 const StepBackNavigation = styled(BackNavigation)`
   padding: 24px;
 `;
 
 const StepBanner = styled(Banner)``;
 
-const StepFooter = styled(FooterAction)``;
+const StepBody = styled.View`
+  flex: 1;
+`;
+
+const StepFooter = styled(FooterAction)`
+  position: absolute;
+  bottom: 0;
+`;
 
 function Step({
   theme,
@@ -36,13 +47,19 @@ function Step({
   return (
     <StepContainer bg={theme.step.bg}>
       <StepBackNavigation isBackBtnVisible={isBackBtnVisible} onBack={onBack} onClose={onClose} />
-      <StepContentContainer showsHorizontalScrollIndicator={false}>
+      <StepContentContainer
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
+        showsHorizontalScrollIndicator={false}
+      >
         <StepBanner {...banner} />
-        <StepDescription theme={theme} {...description} />
+        <StepBody>
+          <StepDescription theme={theme} {...description} />
 
-        {/* Implement Field component to render field types */}
-        {fields && <StepFieldsContainer />}
-
+          {/* Implement Field component to render field types */}
+          {fields && <StepFieldsContainer />}
+        </StepBody>
         {footer.buttons && (
           <StepFooter>
             {footer.buttons.map(button => {
