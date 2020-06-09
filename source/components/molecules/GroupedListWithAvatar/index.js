@@ -1,1 +1,1 @@
-export { default } from './GroupedListWithAvatar'
+export { default } from './GroupedListWithAvatar';
