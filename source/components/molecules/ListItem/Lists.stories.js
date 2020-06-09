@@ -3,6 +3,7 @@ import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from '../StoryWrapper';
 import GroupedList from '../GroupedList/GroupedList';
 import ListItem from './index';
+import GroupListWithAvatar from 'app/components/molecules/GroupedListWithAvatar'
 
 const GroupedListData = [
   {
@@ -32,6 +33,28 @@ const GroupedListData = [
         title: 'Default',
         text: 'Lorem ipsum',
       },
+    ],
+  },
+];
+
+const COAPPLICATION = require('source/images/illu_sammanstallning.png');
+
+const GroupedAvatarListData = [
+  {
+    heading: 'FAMILJ / PERSONER JAG DELAR BOENDE MED',
+    data: [
+      {
+        id: 'bd7a8bea',
+        title: 'Lisa Larsson',
+        text: 'Sambo',
+        imageSrc: COAPPLICATION,
+      },
+      {
+        id: 'bd7a8bea',
+        title: 'Lotten Larsson',
+        text: 'Barn',
+        imageSrc: COAPPLICATION,
+      }
     ],
   },
 ];
@@ -84,5 +107,10 @@ storiesOf('Lists', module)
       {HighlightedData.map(item => (
         <ListItem highlighted key={item.id} {...item} />
       ))}
+    </StoryWrapper>
+  ))
+  .add('Grouped list with avatars', props => (
+    <StoryWrapper { ...props } style={{backgroundColor: '#FFAA9B'}}>
+      <GroupListWithAvatar items={ GroupedAvatarListData } />
     </StoryWrapper>
   ));
