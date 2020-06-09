@@ -41,7 +41,13 @@ const GroupListWithAvatar = props => {
 };
 
 GroupListWithAvatar.propTypes = {
+  /**
+   * List items to display.
+   */
   items: PropTypes.array.isRequired,
+  /**
+   * onClick handler for list items.
+   */
   onClick: PropTypes.func,
 };
 

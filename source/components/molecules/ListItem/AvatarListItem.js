@@ -88,9 +88,21 @@ const AvatarListItem = props => {
 export default withTheme(AvatarListItem);
 
 AvatarListItem.propTypes = {
+  /**
+   * Title for list item.
+   */
   title: PropTypes.string.isRequired,
+  /**
+   * Body text for list item.
+   */
   text: PropTypes.string,
+  /**
+   * onClick handler for list item.
+   */
   onClick: PropTypes.func,
+  /**
+   * Source of avatar image for list item.
+   */
   imageSrc: PropTypes.number,
 };
 
