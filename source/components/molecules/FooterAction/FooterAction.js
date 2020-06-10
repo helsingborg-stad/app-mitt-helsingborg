@@ -6,7 +6,7 @@ const ActionContainer = styled.View(props => ({
   display: 'flex',
   justifyContent: 'space-around',
   bottom: 0,
-  height: props.height,
+  padding: 32,
   backgroundColor: props.background,
 }));
 
@@ -18,10 +18,10 @@ const ButtonWrapper = styled.View`
 `;
 
 const FooterAction = props => {
-  const { children, height, background, ButtonList } = props;
+  const { children, background, ButtonList } = props;
 
   return (
-    <ActionContainer height={height} background={background}>
+    <ActionContainer background={background}>
       <ButtonWrapper>
         {ButtonList && <ButtonList />}
         {children}
@@ -33,12 +33,10 @@ const FooterAction = props => {
 FooterAction.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
   ButtonList: PropTypes.node,
-  height: PropTypes.string,
   background: PropTypes.string,
 };
 
 FooterAction.defaultProps = {
-  height: '192px',
   background: '#00213F',
 };
 export default FooterAction;
