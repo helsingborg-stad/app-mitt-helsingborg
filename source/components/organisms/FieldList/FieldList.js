@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Button, Text } from 'source/components/atoms';
-import EditableList from '../EditableList';
+import { EditableList } from 'source/components/molecules';
 
 const InputWrapper = styled.View`
   padding-bottom: 16px;
@@ -15,8 +15,8 @@ const InpulList = props => (
   </InputWrapper>
 );
 
-const SwitchAction = props => {
-  const { fields, theme } = props;
+const FieldList = props => {
+  const { fields, theme, onInputChange } = props;
   const [isAddressEditable, setisAddressEditable] = React.useState(false);
   const [isPersonalInfoEditable, setisPersonalInfoEditable] = React.useState(false);
 
@@ -32,9 +32,6 @@ const SwitchAction = props => {
     </Button>
   );
 
-  // TODO: update data
-  const onInputChange = () => {};
-
   const ComponentOptions =
     fields && fields.length
       ? fields.map(items => {
@@ -46,8 +43,8 @@ const SwitchAction = props => {
                   title={items.title}
                   inputs={items.inputs}
                   headerButton={addressButton}
-                  onInputChange={onInputChange}
                   inputsEditable={isAddressEditable}
+                  onInputChange={onInputChange}
                   theme={theme}
                 />
               );
@@ -72,8 +69,19 @@ const SwitchAction = props => {
   return <>{ComponentOptions}</>;
 };
 
-SwitchAction.propTypes = {
-  fields: PropTypes.arrayOf({}),
+FieldList.propTypes = {
+  /**
+   * The array of fields that are going to be displayed in the Step
+   */
+  fields: PropTypes.arrayOf({}).isRequired,
+
+  /**
+   *  The function to handle field input changes
+   */
+  onInputChange: PropTypes.func.isRequired,
+  /**
+   * The theming of the component
+   */
   theme: PropTypes.shape({
     list: PropTypes.shape({
       bg: PropTypes.string,
@@ -93,4 +101,24 @@ SwitchAction.propTypes = {
   }),
 };
 
-export default SwitchAction;
+FieldList.propTypes = {
+  theme: {
+    list: {
+      bg: '#FBF7F0',
+      header: {
+        color: '#5C3D38',
+        bg: '#f5e0d8',
+      },
+      item: {
+        label: {
+          color: '#855851',
+        },
+        input: {
+          color: '#00213f',
+        },
+      },
+    },
+  },
+};
+
+export default FieldList;

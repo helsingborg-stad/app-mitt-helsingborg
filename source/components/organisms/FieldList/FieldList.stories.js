@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import StoryWrapper from '../StoryWrapper';
-import SwitchAction from './SwitchAction';
+import StoryWrapper from '../../molecules/StoryWrapper';
+import FieldList from './FieldList';
 
 const mockData = [
   {
@@ -64,12 +64,12 @@ const theme = {
   list: {
     bg: '#FBF7F0',
     header: {
-      color: '#5C3D38',
-      bg: '#f5e0d8',
+      color: '#2E5043',
+      bg: '#75C9A8',
     },
     item: {
       label: {
-        color: '#855851',
+        color: '#2E5043',
       },
       input: {
         color: '#00213f',
@@ -77,8 +77,14 @@ const theme = {
     },
   },
 };
-storiesOf('SwitchAction', module).add('Default', () => (
-  <StoryWrapper>
-    <SwitchAction fields={mockData} theme={theme} />
-  </StoryWrapper>
-));
+storiesOf('Form Field', module)
+  .add('Default', () => (
+    <StoryWrapper>
+      <FieldList fields={mockData} onInputChange={() => {}} />
+    </StoryWrapper>
+  ))
+  .add('Custom Theme', () => (
+    <StoryWrapper>
+      <FieldList fields={mockData} theme={theme} onInputChange={() => {}} />
+    </StoryWrapper>
+  ));

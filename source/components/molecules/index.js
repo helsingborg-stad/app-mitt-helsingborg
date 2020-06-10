@@ -22,4 +22,4 @@ export { default as BackNavigation } from './BackNavigation';
 export { default as Banner } from './Banner';
 export { default as FooterAction } from './FooterAction';
 export { default as StepDescription } from './StepDescription';
-export { default as SwitchAction } from './SwitchAction';
+export { default as EditableList } from './EditableList';
