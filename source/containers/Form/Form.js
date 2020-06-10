@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Step } from 'app/components/organisms';
-import AuthContext from '../../store/AuthContext';
 import Stepper from '../../components/atoms/Stepper/Stepper';
 import useForm from './hooks/useForm';
 
@@ -17,7 +16,7 @@ const FormContainer = styled.View`
  * is a tool to help you solve the problem of allowing end-users to interact with the
  * data and modify the data in your application.
  */
-function Form({ startAt, steps, firstName }) {
+function Form({ startAt, steps, firstName, onClose }) {
   const initialState = {
     counter: startAt,
     steps,
@@ -26,8 +25,7 @@ function Form({ startAt, steps, firstName }) {
     },
   };
 
-  const { formState, handleNext, handleBack, handleAbort } = useForm(initialState);
-
+  const { formState, goToNextStep, goToPreviousStep, closeForm } = useForm(initialState);
   return (
     <FormContainer>
       <FormStepper active={formState.counter}>
@@ -39,11 +37,11 @@ function Form({ startAt, steps, firstName }) {
               tagline: step.group,
               text: step.description,
             }}
-            onBack={handleBack}
-            onCancel={handleAbort}
+            onBack={goToPreviousStep}
+            onClose={() => closeForm(onClose)}
             isBackBtnVisible={formState.counter !== 1}
             footer={{
-              buttons: [{ label: 'Nästa', onClick: handleNext }],
+              buttons: [{ label: 'Nästa', onClick: goToNextStep }],
             }}
           />
         ))}
@@ -58,7 +56,11 @@ Form.propTypes = {
    */
   startAt: PropTypes.number,
   /**
-   * Array of steps to render in the form
+   * Function to handle a close action in the form.
+   */
+  onClose: PropTypes.func.isRequired,
+  /**
+   * Array of steps that the Form should render.
    */
   steps: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   /**
