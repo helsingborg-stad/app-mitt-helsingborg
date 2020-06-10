@@ -5,7 +5,7 @@ import FieldInputList from './EditableList';
 import { Button, Text } from '../../atoms';
 
 const HeaderButton = () => (
-  <Button z="0" size="small">
+  <Button z={0} size="small">
     <Text>Change</Text>
   </Button>
 );
