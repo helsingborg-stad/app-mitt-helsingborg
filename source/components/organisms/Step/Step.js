@@ -22,11 +22,11 @@ const StepBackNavigation = styled(BackNavigation)`
   padding: 24px;
 `;
 
-const StepBanner = styled(Banner)``;
-
-const StepBody = styled.View`
+const StepBanner = styled(Banner)`
   flex: 1;
 `;
+
+const StepBody = styled.View``;
 
 const StepFooter = styled(FooterAction)`
   position: absolute;
