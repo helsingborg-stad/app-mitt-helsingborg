@@ -32,7 +32,9 @@ function useForm(initialState, onAbort) {
     null;
 
   /**
-   * Function for state values to the abort function that is passed down thorough props.
+   * Function for passing state and step values to the callback function that is passed down
+   * to handle a form close action.
+   * @param {func} callback callback function to be called on when a close action is triggerd
    */
   const closeForm = callback => {
     callback({ state: formState }, isLastStep());
