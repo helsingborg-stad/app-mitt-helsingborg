@@ -154,7 +154,7 @@ Step.defaultProps = {
       bg: '#FFAA9B',
       text: {
         colors: {
-          primary: '#00213f',
+          primary: '#00213F',
           secondary: '#733232',
         },
       },
