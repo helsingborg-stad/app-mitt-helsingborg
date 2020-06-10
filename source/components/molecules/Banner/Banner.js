@@ -4,10 +4,9 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const BannerWrapper = styled.View`
-  top: 0;
   margin: 0;
   padding: 0;
-  min-height: ${props => (props.image ? '256' : '192')}px;
+  min-height: ${props => (props.image ? '256px' : '192px')};
   background: ${props => props.backgroundColor};
   position: relative;
   justify-content: flex-end;
@@ -21,16 +20,11 @@ const BannerImageIcon = styled(Image)`
 `;
 
 const BannerImageWrapper = styled.View`
-  overflow: hidden;
-  position: relative;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  height: auto;
+  height: 256px;
 `;
 const BannerImage = styled(Image)`
   width: 100%;
-  height: 256px;
+  height: 100%;
 `;
 
 const Banner = ({ imageSrc, iconSrc, backgroundColor, style }) => (
