@@ -1,16 +1,16 @@
 import { useReducer, useEffect } from 'react';
-import formReducer, { actions } from './formReducer';
+import formReducer from './formReducer';
+import { actions } from './formActions';
 
 /**
  * A custom hook to handle state actions and logical behavior for a form.
- * @param {obj} initialState The intital state of the hook.
- * @param {obj} user A object containg information about the user.
+ * @param { object } initialState The intital state of the hook.
  */
 function useForm(initialState) {
   const [formState, dispatch] = useReducer(formReducer, initialState);
 
   useEffect(() => {
-    dispatch({ type: actions.setFirstNameInStepTitles });
+    dispatch({ type: actions.replaceFirstNameMarkdownInAllStepTitles });
   }, []);
 
   const handleNext = () =>
