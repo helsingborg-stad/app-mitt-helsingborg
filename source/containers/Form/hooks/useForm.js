@@ -13,7 +13,6 @@ function useForm(initialState, onAbort) {
    * Function for increasing the form counter
    */
   const goToNextStep = () => {
-    console.log('next');
     dispatch({ type: actions.increaseCounter });
   };
 
@@ -21,7 +20,6 @@ function useForm(initialState, onAbort) {
    * Function for decreasing the form counter
    */
   const goToPreviousStep = () => {
-    console.log('prev');
     dispatch({ type: actions.decreaseCounter });
   };
 
