@@ -1,27 +1,23 @@
 import { useReducer, useEffect } from 'react';
 import formReducer from './formReducer';
-import { actions } from './formActions';
+import { actionTypes } from './formActions';
 
-function useForm(initialState, onAbort) {
+function useForm(initialState) {
   const [formState, dispatch] = useReducer(formReducer, initialState);
 
   useEffect(() => {
-    dispatch({ type: actions.replaceFirstNameMarkdownInAllStepTitles });
+    dispatch({ type: actionTypes.REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES });
   }, []);
 
   /**
    * Function for increasing the form counter
    */
-  const goToNextStep = () => {
-    dispatch({ type: actions.increaseCounter });
-  };
+  const goToNextStep = () => dispatch({ type: actionTypes.INCREASE_COUNTER });
 
   /**
    * Function for decreasing the form counter
    */
-  const goToPreviousStep = () => {
-    dispatch({ type: actions.decreaseCounter });
-  };
+  const goToPreviousStep = () => dispatch({ type: actionTypes.DECREASE_COUNTER });
 
   const isLastStep = () => formState.steps.length === formState.counter;
 
@@ -34,9 +30,7 @@ function useForm(initialState, onAbort) {
    * to handle a form close action.
    * @param {func} callback callback function to be called on when a close action is triggerd
    */
-  const closeForm = callback => {
-    callback({ state: formState }, isLastStep());
-  };
+  const closeForm = callback => callback({ state: formState }, isLastStep());
 
   const handleInputChange = () =>
     /** TO BE IMPLEMENTED */

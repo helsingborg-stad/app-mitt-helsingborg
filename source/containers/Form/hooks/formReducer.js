@@ -4,7 +4,6 @@ import {
   increaseFormCounter,
   decreaseFormCounter,
 } from './formActions';
-import { increaseCount, decreaseCount } from '../../../helpers/Counter';
 
 /**
  * The formReducer is a pure function that takes the previous state and an action, and returns the
