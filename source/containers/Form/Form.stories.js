@@ -1,20 +1,42 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import UserMockData from 'app/assets/mock/user';
 import StoryWrapper from '../../components/molecules/StoryWrapper';
 import Form from './Form';
 
 const DynamicTitleStoryData = {
   steps: [
     {
-      title: 'Hello #firstName!',
-      description:
-        'The value #firstName in the step title is changed to the first name of the current user',
-      group: 'Ansökan',
+      title: 'Steg 1',
+      description: 'Det första steget i formuläret som användaren ser',
+      group: 'Story',
       actions: [
         {
           type: 'next',
-          label: 'Ja, starta ansökan',
+          label: 'Nästa',
+        },
+      ],
+      fields: [],
+    },
+    {
+      title: 'Steg 2',
+      description: 'Det andra steget i formuläret som användaren ser',
+      group: 'Story',
+      actions: [
+        {
+          type: 'next',
+          label: 'Nästa',
+        },
+      ],
+      fields: [],
+    },
+    {
+      title: 'Steg 3',
+      description: 'Det tredje och sista steget i formuläret som användaren ser',
+      group: 'Story',
+      actions: [
+        {
+          type: 'next',
+          label: 'Nästa',
         },
       ],
       fields: [],

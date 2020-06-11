@@ -1,3 +1,4 @@
+import { increaseCount, decreaseCount } from '../../../helpers/Counter';
 /**
  * Action Types
  */
@@ -13,10 +14,10 @@ export const INCREASE_COUNTER = 'INCREASE_COUNTER';
 export const DECREASE_COUNTER = 'DECREASE_COUNTER';
 
 /** @type { object } */
-export const actions = {
-  increaseCounter: INCREASE_COUNTER,
-  decreaseCounter: DECREASE_COUNTER,
-  replaceFirstNameMarkdownInAllStepTitles: REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES,
+export const actionTypes = {
+  INCREASE_COUNTER,
+  DECREASE_COUNTER,
+  REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES,
 };
 
 /**
@@ -32,5 +33,29 @@ export function replaceFirstNameMarkdownInAllStepTitles(state) {
   return {
     ...state,
     steps: updatedSteps,
+  };
+}
+
+/**
+ * Action for decreasing the form counter.
+ * @param {object} state the current state of the form
+ */
+export function decreaseFormCounter(state) {
+  const { counter } = state;
+  return {
+    ...state,
+    counter: decreaseCount(counter, 0),
+  };
+}
+
+/**
+ * Action for increasing the form counter.
+ * @param {object} state the current state of the form
+ */
+export function increaseFormCounter(state) {
+  const { steps, counter } = state;
+  return {
+    ...state,
+    counter: increaseCount(counter, steps.length),
   };
 }

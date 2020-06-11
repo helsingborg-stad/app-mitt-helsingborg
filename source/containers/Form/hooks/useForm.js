@@ -1,36 +1,49 @@
 import { useReducer, useEffect } from 'react';
 import formReducer from './formReducer';
-import { actions } from './formActions';
+import { actionTypes } from './formActions';
 
-/**
- * A custom hook to handle state actions and logical behavior for a form.
- * @param { object } initialState The intital state of the hook.
- */
 function useForm(initialState) {
   const [formState, dispatch] = useReducer(formReducer, initialState);
 
   useEffect(() => {
-    dispatch({ type: actions.replaceFirstNameMarkdownInAllStepTitles });
+    dispatch({ type: actionTypes.REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES });
   }, []);
 
-  const handleNext = () =>
-    /** TO BE IMPLEMENTED */
-    null;
-  const handlePrev = () =>
-    /** TO BE IMPLEMENTED */
-    null;
+  /**
+   * Function for increasing the form counter
+   */
+  const goToNextStep = () => dispatch({ type: actionTypes.INCREASE_COUNTER });
+
+  /**
+   * Function for decreasing the form counter
+   */
+  const goToPreviousStep = () => dispatch({ type: actionTypes.DECREASE_COUNTER });
+
+  const isLastStep = () => formState.steps.length === formState.counter;
+
   const handleSkip = () =>
     /** TO BE IMPLEMENTED */
     null;
+
+  /**
+   * Function for passing state and step values to the callback function that is passed down
+   * to handle a form close action.
+   * @param {func} callback callback function to be called on when a close action is triggerd
+   */
+  const closeForm = callback => callback({ state: formState }, isLastStep());
+
   const handleInputChange = () =>
     /** TO BE IMPLEMENTED */
     null;
+
   return {
     formState,
-    handlePrev,
-    handleNext,
+    goToNextStep,
+    goToPreviousStep,
     handleInputChange,
     handleSkip,
+    closeForm,
+    isLastStep,
   };
 }
 

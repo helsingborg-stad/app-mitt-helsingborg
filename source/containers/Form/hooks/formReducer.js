@@ -1,4 +1,9 @@
-import { actions, replaceFirstNameMarkdownInAllStepTitles } from './formActions';
+import {
+  actionTypes,
+  replaceFirstNameMarkdownInAllStepTitles,
+  increaseFormCounter,
+  decreaseFormCounter,
+} from './formActions';
 
 /**
  * The formReducer is a pure function that takes the previous state and an action, and returns the
@@ -11,13 +16,26 @@ function formReducer(state, action) {
   const { type } = action;
 
   switch (type) {
-    case actions.increaseCounter:
-      break;
-    case actions.decreaseCounter:
-      break;
-    case actions.replaceFirstNameMarkdownInAllStepTitles: {
+    case actionTypes.REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES: {
       return replaceFirstNameMarkdownInAllStepTitles(state);
     }
+
+    /**
+     * Incrementing the counter of the form based on the lenght of steps.
+     * This allow going forward to the next step in the form.
+     */
+    case actionTypes.INCREASE_COUNTER: {
+      return increaseFormCounter(state);
+    }
+
+    /**
+     * Decrementing the counter of the form until it hits 0.
+     * This allow going back to the previous step in the form.
+     */
+    case actionTypes.DECREASE_COUNTER: {
+      return decreaseFormCounter(state);
+    }
+
     default:
       return state;
   }

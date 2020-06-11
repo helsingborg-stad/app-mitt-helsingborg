@@ -11,12 +11,18 @@ const FormScreenWrapper = styled(ScreenWrapper)`
   flex: 1;
 `;
 
-const FormCaseScreen = ({ ...props }) => (
-  <FormScreenWrapper>
-    <StatusBar hidden />
-    <Form steps={formEkbMockData.steps} {...props} />
-  </FormScreenWrapper>
-);
+const FormCaseScreen = ({ navigation, ...props }) => {
+  function handleCloseForm() {
+    navigation.navigate('Start');
+  }
+
+  return (
+    <FormScreenWrapper>
+      <StatusBar hidden />
+      <Form steps={formEkbMockData.steps} onClose={handleCloseForm} {...props} />
+    </FormScreenWrapper>
+  );
+};
 
 FormCaseScreen.propTypes = {
   navigation: PropTypes.object,
