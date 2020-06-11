@@ -17,11 +17,13 @@ const FormContainer = styled.View`
  * is a tool to help you solve the problem of allowing end-users to interact with the
  * data and modify the data in your application.
  */
-function Form({ startAt, steps, user }) {
+function Form({ startAt, steps, firstName }) {
   const initialState = {
     counter: startAt,
     steps,
-    user,
+    user: {
+      firstName,
+    },
   };
 
   const { formState, handleNext, handleBack, handleAbort } = useForm(initialState);
@@ -60,11 +62,9 @@ Form.propTypes = {
    */
   steps: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   /**
-   * Object with information about the current user
+   * The firstName of the respondent.
    */
-  user: PropTypes.shape({
-    givenName: PropTypes.string.isRequired,
-  }).isRequired,
+  firstName: PropTypes.string.isRequired,
 };
 
 Form.defaultProps = {
