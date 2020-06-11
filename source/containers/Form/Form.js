@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Step } from 'app/components/organisms';
+import AuthContext from '../../store/AuthContext';
 import Stepper from '../../components/atoms/Stepper/Stepper';
 import useForm from './hooks/useForm';
 
@@ -16,10 +17,11 @@ const FormContainer = styled.View`
  * is a tool to help you solve the problem of allowing end-users to interact with the
  * data and modify the data in your application.
  */
-function Form({ startAt, steps }) {
+function Form({ startAt, steps, user }) {
   const initialState = {
     counter: startAt,
     steps,
+    user,
   };
 
   const { formState, handleNext, handleBack, handleAbort } = useForm(initialState);
@@ -49,8 +51,20 @@ function Form({ startAt, steps }) {
 }
 
 Form.propTypes = {
+  /**
+   * Number that decides which step to start on in the form.
+   */
   startAt: PropTypes.number,
+  /**
+   * Array of steps to render in the form
+   */
   steps: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  /**
+   * Object with information about the current user
+   */
+  user: PropTypes.shape({
+    givenName: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 Form.defaultProps = {
