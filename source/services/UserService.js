@@ -4,6 +4,7 @@ import { getMessage } from 'app/helpers/MessageHelper';
 import { post, remove } from '../helpers/ApiRequest';
 import { buildBankIdClientUrl, canOpenUrl } from '../helpers/UrlHelper';
 import StorageService, { ORDER_KEY, TEMP_TOKEN_KEY } from './StorageService';
+import UserMockData from '../assets/mock/user';
 
 let cancelled = false;
 
@@ -204,9 +205,9 @@ export const bypassBankid = async personalNumber => ({
   ok: true,
   data: {
     user: {
-      name: 'Saruman The White',
-      givenName: 'Saruman',
-      surname: 'The White',
+      name: UserMockData.user.name,
+      givenName: UserMockData.user.firstName,
+      surname: UserMockData.user.lastName,
       personalNumber,
     },
   },
