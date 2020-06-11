@@ -38,18 +38,14 @@ const DefaultStoryData = {
   ],
 };
 
-const userData = {
-  givenName: 'Fake Name',
-};
-
 storiesOf('Form', module)
   .add('Default', () => (
     <StoryWrapper>
-      <Form steps={DefaultStoryData.steps} user={userData} />
+      <Form steps={DefaultStoryData.steps} firstName="FakeName" />
     </StoryWrapper>
   ))
   .add('Dynamic Title', () => (
     <StoryWrapper>
-      <Form steps={DynamicTitleStoryData.steps} user={userData} />
+      <Form steps={DynamicTitleStoryData.steps} firstName="FakeName" />
     </StoryWrapper>
   ));
