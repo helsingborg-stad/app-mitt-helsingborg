@@ -31,12 +31,14 @@ function Form({ startAt, steps, firstName, onClose }) {
       <FormStepper active={formState.counter}>
         {formState.steps.map(step => (
           <Step
+            banner={{ iconSrc: step.icon }}
             theme={step.theme}
             description={{
               heading: step.title,
               tagline: step.group,
               text: step.description,
             }}
+            fields={step.fields}
             onBack={goToPreviousStep}
             onClose={() => closeForm(onClose)}
             isBackBtnVisible={formState.counter !== 1}
