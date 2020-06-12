@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Text, Button } from '../../atoms';
 import { BackNavigation, Banner, FooterAction, StepDescription } from '../../molecules';
+import FieldList from '../FieldList/FieldList';
 
 const StepContainer = styled.View`
   background: ${props => props.bg};
@@ -27,6 +28,9 @@ const StepBanner = styled(Banner)`
 `;
 
 const StepBody = styled.View``;
+const StepFieldListWrapper = styled.View`
+  margin: auto;
+`;
 
 const StepFooter = styled(FooterAction)`
   position: absolute;
@@ -44,6 +48,7 @@ function Step({
   onFieldChange,
   isBackBtnVisible,
 }) {
+  console.log(fields);
   return (
     <StepContainer bg={theme.step.bg}>
       <StepBackNavigation isBackBtnVisible={isBackBtnVisible} onBack={onBack} onClose={onClose} />
@@ -58,7 +63,11 @@ function Step({
           <StepDescription theme={theme} {...description} />
 
           {/* Implement Field component to render field types */}
-          {fields && <StepFieldsContainer />}
+          {fields && (
+            <StepFieldListWrapper>
+              <FieldList fields={fields} />
+            </StepFieldListWrapper>
+          )}
         </StepBody>
         {footer.buttons && (
           <StepFooter>
