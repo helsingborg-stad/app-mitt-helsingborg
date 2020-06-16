@@ -48,7 +48,6 @@ function Step({
   onFieldChange,
   isBackBtnVisible,
 }) {
-  console.log(fields);
   return (
     <StepContainer bg={theme.step.bg}>
       <StepBackNavigation isBackBtnVisible={isBackBtnVisible} onBack={onBack} onClose={onClose} />
