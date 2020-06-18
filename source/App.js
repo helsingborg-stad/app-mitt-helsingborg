@@ -12,6 +12,7 @@ import { Notification } from 'app/store';
 import Navigator from './navigator';
 import StorybookUIRoot from '../storybook';
 import { AuthProvider } from './store/AuthContext';
+import { CaseProvider } from './store/CaseContext';
 
 /**
  * Any setup and init for application goes here:
@@ -22,18 +23,22 @@ const App = () => {
   if (Config.IS_STORYBOOK === 'true') {
     return (
       <AuthProvider>
-        <Notification.Provider>
-          <StorybookUIRoot />
-        </Notification.Provider>
+        <CaseProvider>
+          <Notification.Provider>
+            <StorybookUIRoot />
+          </Notification.Provider>
+        </CaseProvider>
       </AuthProvider>
     );
   }
 
   return (
     <AuthProvider>
-      <Notification.Provider>
-        <Navigator />
-      </Notification.Provider>
+      <CaseProvider>
+        <Notification.Provider>
+          <Navigator />
+        </Notification.Provider>
+      </CaseProvider>
     </AuthProvider>
   );
 };
