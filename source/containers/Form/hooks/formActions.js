@@ -13,11 +13,15 @@ export const INCREASE_COUNTER = 'INCREASE_COUNTER';
 /** @type { string } */
 export const DECREASE_COUNTER = 'DECREASE_COUNTER';
 
+/** @type { string } */
+export const START_FORM = 'START_FORM';
+
 /** @type { object } */
 export const actionTypes = {
   INCREASE_COUNTER,
   DECREASE_COUNTER,
   REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES,
+  START_FORM,
 };
 
 /**
@@ -53,6 +57,19 @@ export function decreaseFormCounter(state) {
  * @param {object} state the current state of the form
  */
 export function increaseFormCounter(state) {
+  const { steps, counter } = state;
+  return {
+    ...state,
+    counter: increaseCount(counter, steps.length),
+  };
+}
+/**
+ * Action to run when starting a form.
+ * @param {object} state the current state of the form
+ */
+export function startForm(state, payload) {
+  // TODO: Pass user input values.
+  payload.callback({});
   const { steps, counter } = state;
   return {
     ...state,
