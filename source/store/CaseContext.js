@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { post } from 'app/helpers/ApiRequest';
+import AuthContext from 'app/store/AuthContext';
 import casesMock from '../assets/mock/cases';
 
 const CaseContext = React.createContext();
@@ -7,6 +9,7 @@ const CaseContext = React.createContext();
 export const CaseConsumer = CaseContext.Consumer;
 
 export function CaseProvider({ children }) {
+  const { user } = useContext(AuthContext);
   const [cases, setCases] = useState([]);
   const [fetching, setFetcing] = useState(false);
 
@@ -22,12 +25,29 @@ export function CaseProvider({ children }) {
 
   const getCase = caseId => {
     const item = cases.find(c => c.id === caseId);
-    console.log(item);
     return item;
+  };
+  /**
+   * Function for sending a post request towards the case api endpoint.
+   * @param {obj} data a object consiting of case user inputs.
+   */
+  const createCase = data => {
+    const body = {
+      personalNumber: parseInt(user.personalNumber),
+      type: 'VIVA_CASE',
+      data,
+    };
+
+    // TODO: Remove Auhtorization header when token authentication works as expected.
+    post('/cases', JSON.stringify(body), {
+      Authorization: parseInt(user.personalNumber),
+    });
   };
 
   return (
-    <CaseContext.Provider value={{ cases, getCase, fetching }}>{children}</CaseContext.Provider>
+    <CaseContext.Provider value={{ cases, getCase, createCase, fetching }}>
+      {children}
+    </CaseContext.Provider>
   );
 }
 
