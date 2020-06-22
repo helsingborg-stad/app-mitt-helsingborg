@@ -3,6 +3,7 @@ import {
   replaceFirstNameMarkdownInAllStepTitles,
   increaseFormCounter,
   decreaseFormCounter,
+  startForm,
 } from './formActions';
 
 /**
@@ -13,7 +14,7 @@ import {
  * @param {object} action
  */
 function formReducer(state, action) {
-  const { type } = action;
+  const { type, payload } = action;
 
   switch (type) {
     case actionTypes.REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES: {
@@ -34,6 +35,14 @@ function formReducer(state, action) {
      */
     case actionTypes.DECREASE_COUNTER: {
       return decreaseFormCounter(state);
+    }
+
+    /**
+     * Decrementing the counter of the form until it hits 0.
+     * This allow going back to the previous step in the form.
+     */
+    case actionTypes.START_FORM: {
+      return startForm(state, payload);
     }
 
     default:
