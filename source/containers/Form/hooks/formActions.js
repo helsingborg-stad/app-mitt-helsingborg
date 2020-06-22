@@ -13,10 +13,14 @@ export const INCREASE_COUNTER = 'INCREASE_COUNTER';
 /** @type { string } */
 export const DECREASE_COUNTER = 'DECREASE_COUNTER';
 
+/** @type { string } */
+export const UPDATE_USER_ANSWER = 'UPDATE_USER_ANSWER';
+
 /** @type { object } */
 export const actionTypes = {
   INCREASE_COUNTER,
   DECREASE_COUNTER,
+  UPDATE_USER_ANSWER,
   REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES,
 };
 
@@ -57,5 +61,24 @@ export function increaseFormCounter(state) {
   return {
     ...state,
     counter: increaseCount(counter, steps.length),
+  };
+}
+
+/**
+ * Action for updating user information.
+ */
+export function updateUserAnswer(state, userAnswer) {
+  const { answerPerCase } = state;
+  let updateAnswer = answerPerCase;
+
+  if (Object.prototype.hasOwnProperty.call(updateAnswer, Object.keys(userAnswer))) {
+    updateAnswer[Object.keys(userAnswer)] = Object.values(userAnswer);
+  } else {
+    updateAnswer = { ...answerPerCase, ...userAnswer };
+  }
+
+  return {
+    ...state,
+    answerPerCase: updateAnswer,
   };
 }
