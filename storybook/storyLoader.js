@@ -32,6 +32,7 @@ function loadStories() {
 	require('../source/components/organisms/WatsonAgent/WatsonAgent.stories');
 	require('../source/components/organisms/Step/Step.stories');
 	require('../source/containers/Form/Form.stories');
+	require('../source/components/atoms/FieldLabel/FieldLabel.stories');
 }
 
 const stories = [
