@@ -34,7 +34,7 @@ const Checkboxes = injectProps => {
       <FlexRow>
         <Checkbox
           onChange={handleChange('box1')}
-          checked={checkboxValues['box1']}
+          checked={checkboxValues.box1}
           color="white"
           size="small"
           {...injectProps}
@@ -44,7 +44,7 @@ const Checkboxes = injectProps => {
       <FlexRow>
         <Checkbox
           onChange={handleChange('box2')}
-          checked={checkboxValues['box2']}
+          checked={checkboxValues.box2}
           color="dark"
           size="small"
           {...injectProps}
@@ -54,7 +54,7 @@ const Checkboxes = injectProps => {
       <FlexRow>
         <Checkbox
           onChange={handleChange('box3')}
-          checked={checkboxValues['box3']}
+          checked={checkboxValues.box3}
           color="light"
           size="small"
           {...injectProps}
@@ -64,7 +64,7 @@ const Checkboxes = injectProps => {
       <FlexRow>
         <Checkbox
           onChange={handleChange('box4')}
-          checked={checkboxValues['box4']}
+          checked={checkboxValues.box4}
           color="light"
           size="medium"
           {...injectProps}
@@ -74,7 +74,7 @@ const Checkboxes = injectProps => {
       <FlexRow>
         <Checkbox
           onChange={handleChange('box5')}
-          checked={checkboxValues['box5']}
+          checked={checkboxValues.box5}
           color="dark"
           size="large"
           {...injectProps}
@@ -84,7 +84,7 @@ const Checkboxes = injectProps => {
       <FlexRow>
         <Checkbox
           onChange={handleChange('box6')}
-          checked={checkboxValues['box6']}
+          checked={checkboxValues.box6}
           color="gray"
           size="large"
           {...injectProps}
@@ -94,7 +94,7 @@ const Checkboxes = injectProps => {
       <FlexRow>
         <Checkbox
           onChange={handleChange('box7')}
-          checked={checkboxValues['box7']}
+          checked={checkboxValues.box7}
           color="gray"
           size="medium"
           disabled="true"

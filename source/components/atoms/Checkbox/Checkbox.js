@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -43,7 +43,7 @@ const iconSizes = {
 };
 
 const Checkbox = props => {
-  const { checked, onChange, size, disabled, color, ...other } = props;
+  const { checked, onChange, size, disabled, color } = props;
   const iconStyle = { color: colors.checkbox[color].icon };
 
   const style = {
@@ -68,10 +68,25 @@ const Checkbox = props => {
 };
 
 Checkbox.propTypes = {
+  /**
+   * Boolean that determines if the checkbox is checked or not. Manages the 'state' of the component.
+   */
   checked: PropTypes.bool.isRequired,
+  /**
+   * What happens when the checkbox is clicked.
+   */
   onChange: PropTypes.func,
+  /**
+   * sets the color theme.
+   */
   color: PropTypes.oneOf(Object.keys(colors.checkbox)),
+  /**
+   * One of small, medium, large
+   */
   size: PropTypes.oneOf(Object.keys(sizes)),
+  /**
+   * Disables the checkbox if true.
+   */
   disabled: PropTypes.bool,
 };
 
