@@ -207,7 +207,7 @@ const colors = {
       touch: palette.mono.gray,
       disabled: palette.mono.gray,
       shadow: 'rgba(255, 255, 255, 0.0)',
-    }
+    },
   },
   list: {
     onLightBackground: {

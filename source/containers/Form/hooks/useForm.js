@@ -32,9 +32,11 @@ function useForm(initialState) {
    */
   const closeForm = callback => callback({ state: formState }, isLastStep());
 
-  const handleInputChange = () =>
-    /** TO BE IMPLEMENTED */
-    null;
+  /**
+   * Function for updating answer
+   */
+  const handleInputChange = answer =>
+    dispatch({ type: actionTypes.UPDATE_ANSWER, payload: answer });
 
   return {
     formState,

@@ -33,7 +33,7 @@ const sizes = {
     margin: 4,
     borderWidth: 3.2,
     borderRadius: 10,
-  }
+  },
 };
 
 const iconSizes = {

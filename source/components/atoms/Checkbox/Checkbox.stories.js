@@ -5,8 +5,6 @@ import StoryWrapper from '../../molecules/StoryWrapper';
 import Text from '../Text';
 import Checkbox from './Checkbox';
 
-
-
 storiesOf('Checkbox', module).add('Default', props => (
   <StoryWrapper {...props}>
     <Checkboxes />
