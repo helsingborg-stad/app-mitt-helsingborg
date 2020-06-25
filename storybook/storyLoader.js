@@ -7,6 +7,7 @@ function loadStories() {
 	require('../source/components/atoms/Button/Button.stories');
 	require('../source/components/atoms/ChatBubble/ChatBubble.stories');
 	require('../source/components/atoms/Checkbox/Checkbox.stories');
+	require('../source/components/atoms/FieldLabel/FieldLabel.stories');
 	require('../source/components/atoms/Heading/Heading.stories');
 	require('../source/components/atoms/Icon/Icon.stories');
 	require('../source/components/atoms/Input/Input.stories');
@@ -18,6 +19,7 @@ function loadStories() {
 	require('../source/components/molecules/DateTimePickerForm.stories');
 	require('../source/components/molecules/EditableList/EditableList.stories');
 	require('../source/components/molecules/FooterAction/FooterAction.stories');
+	require('../source/components/molecules/FormField/FormField.stories');
 	require('../source/components/molecules/Header/Header.stories');
 	require('../source/components/molecules/ImagePicker/ImagePicker.stories');
 	require('../source/components/molecules/InfoLink/InfoButton.stories');
@@ -29,8 +31,6 @@ function loadStories() {
 	require('../source/components/organisms/FieldList/FieldList.stories');
 	require('../source/components/organisms/FormAgent/FormAgent.stories');
 	require('../source/components/organisms/Step/Step.stories');
-	require('../source/containers/Form/Form.stories');
-	require('../source/components/atoms/FieldLabel/FieldLabel.stories');
 	require('../source/components/organisms/WatsonAgent/WatsonAgent.stories');
 }
 
@@ -38,6 +38,7 @@ const stories = [
 	'../source/components/atoms/Button/Button.stories',
 	'../source/components/atoms/ChatBubble/ChatBubble.stories',
 	'../source/components/atoms/Checkbox/Checkbox.stories',
+	'../source/components/atoms/FieldLabel/FieldLabel.stories',
 	'../source/components/atoms/Heading/Heading.stories',
 	'../source/components/atoms/Icon/Icon.stories',
 	'../source/components/atoms/Input/Input.stories',
@@ -49,6 +50,7 @@ const stories = [
 	'../source/components/molecules/DateTimePickerForm.stories',
 	'../source/components/molecules/EditableList/EditableList.stories',
 	'../source/components/molecules/FooterAction/FooterAction.stories',
+	'../source/components/molecules/FormField/FormField.stories',
 	'../source/components/molecules/Header/Header.stories',
 	'../source/components/molecules/ImagePicker/ImagePicker.stories',
 	'../source/components/molecules/InfoLink/InfoButton.stories',

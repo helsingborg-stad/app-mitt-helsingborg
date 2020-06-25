@@ -9,16 +9,19 @@ const sizes = {
     font: '12px',
     paddingBottom: '3px',
     lineWidth: '2px',
+    marginBottom: '6px',
   },
   medium: {
     font: '14px',
     paddingBottom: '7px',
     lineWidth: '3px',
+    marginBottom: '12px',
   },
   large: {
     font: '18px',
     paddingBottom: '10px',
     lineWidth: '4px',
+    marginBottom: '18px',
   },
 };
 
@@ -38,6 +41,12 @@ const FieldLabelBorder = styled.View`
       return '0px';
     }
     return sizes[props.size].lineWidth;
+  }};
+  margin-bottom: ${props => {
+    if (props.underline === 'false') {
+      return '0px';
+    }
+    return sizes[props.size].marginBottom;
   }};
   align-self: flex-start;
 `;

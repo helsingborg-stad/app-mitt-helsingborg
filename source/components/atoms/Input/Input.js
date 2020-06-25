@@ -10,6 +10,7 @@ const input = css`
   border-radius: 17.5px;
   border: solid 1px ${({ color }) => colors.input[color].border};
   padding: 16px;
+  margin: 3px;
   color: ${({ color }) => colors.input[color].text};
   ${props => (props.center ? 'text-align: center;' : null)}
 `;
