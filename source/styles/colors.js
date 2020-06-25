@@ -345,6 +345,12 @@ const colors = {
       placeholder: palette.mono.darker,
     },
   },
+  formField: {
+    light: {},
+    dark: {},
+    red: {},
+    green: {},
+  },
 };
 
 export default colors;
