@@ -17,16 +17,25 @@ const InputWithForm = withForm(props => (
 storiesOf('Input', module)
   .add('default', () => (
     <StoryWrapper>
-      <InputWithForm placeholder="Type something" />
+      <InputWithForm placeholder="Type something, light theme" />
+      <InputWithForm color="dark" placeholder="Dark theme" />
+      <InputWithForm color="red" placeholder="Red theme" />
+      <InputWithForm color="green" placeholder="Green theme" />
     </StoryWrapper>
   ))
   .add('numeric', () => (
     <StoryWrapper>
-      <InputWithForm placeholder="Type some numbers" keyboardType="numeric" />
+      <InputWithForm placeholder="Type some numbers, light theme" keyboardType="numeric" />
+      <InputWithForm color="dark" placeholder="Dark theme" keyboardType="numeric" />
+      <InputWithForm color="red" placeholder="Red theme" keyboardType="numeric" />
+      <InputWithForm color="green" placeholder="Green theme" keyboardType="numeric" />
     </StoryWrapper>
   ))
   .add('phone pad', () => (
     <StoryWrapper>
       <InputWithForm placeholder="Type some number using phone pad" keyboardType="phone-pad" />
+      <InputWithForm color="dark" placeholder="Dark theme" keyboardType="phone-pad" />
+      <InputWithForm color="red" placeholder="Red theme" keyboardType="phone-pad" />
+      <InputWithForm color="green" placeholder="Green theme" keyboardType="phone-pad" />
     </StoryWrapper>
   ));
