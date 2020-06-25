@@ -16,10 +16,15 @@ export const DECREASE_COUNTER = 'DECREASE_COUNTER';
 /** @type { string } */
 export const START_FORM = 'START_FORM';
 
+ /** @type { string } */
+export const UPDATE_ANSWER = 'UPDATE_ANSWER';
+
+
 /** @type { object } */
 export const actionTypes = {
   INCREASE_COUNTER,
   DECREASE_COUNTER,
+  UPDATE_ANSWER,
   REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES,
   START_FORM,
 };
@@ -63,6 +68,7 @@ export function increaseFormCounter(state) {
     counter: increaseCount(counter, steps.length),
   };
 }
+
 /**
  * Action to run when starting a form.
  * @param {object} state the current state of the form
@@ -74,5 +80,24 @@ export function startForm(state, payload) {
   return {
     ...state,
     counter: increaseCount(counter, steps.length),
+  };
+}
+
+/**
+ * Action for updating information.
+ */
+export function updateAnswer(state, answer) {
+  const { formAnswer } = state;
+  let updateAnswer = formAnswer;
+
+  if (Object.prototype.hasOwnProperty.call(updateAnswer, Object.keys(answer))) {
+    updateAnswer[Object.keys(answer)] = Object.values(answer);
+  } else {
+    updateAnswer = { ...formAnswer, ...answer };
+  }
+
+  return {
+    ...state,
+    formAnswer: updateAnswer,
   };
 }

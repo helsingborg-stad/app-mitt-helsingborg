@@ -175,6 +175,40 @@ const colors = {
       shadow: palette.red[6],
     },
   },
+  checkbox: {
+    white: {
+      background: palette.mono.white,
+      icon: palette.mono.black,
+      border: palette.mono.black,
+      touch: palette.mono.gray,
+      disabled: palette.mono.gray,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    },
+    light: {
+      background: palette.mono.lighter,
+      icon: palette.purple[1],
+      border: palette.mono.black,
+      touch: palette.mono.gray,
+      disabled: palette.mono.gray,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    },
+    gray: {
+      background: palette.mono.gray,
+      icon: palette.red[3],
+      border: palette.mono.black,
+      touch: palette.mono.lighter,
+      disabled: palette.mono.lighter,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    },
+    dark: {
+      background: palette.mono.darkest,
+      icon: palette.mono.white,
+      border: palette.mono.lighter,
+      touch: palette.mono.gray,
+      disabled: palette.mono.gray,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    },
+  },
   list: {
     onLightBackground: {
       listWithAvatar: {
@@ -244,6 +278,52 @@ const colors = {
       ...palette.green,
     },
   },
+  fieldLabel: {
+    purple: {
+      text: palette.mono.white,
+      underline: palette.purple[2],
+    },
+    purpleLight: {
+      text: palette.mono.white,
+      underline: palette.purple[1],
+    },
+    blue: {
+      text: palette.mono.white,
+      underline: palette.blue[6],
+    },
+    white: {
+      text: palette.mono.darker,
+      underline: 'rgba(255, 255, 255, 0.0)',
+    },
+    light: {
+      text: palette.mono.darker,
+      underline: palette.mono.light,
+    },
+    gray: {
+      text: palette.mono.darker,
+      underline: palette.mono.gray,
+    },
+    dark: {
+      text: palette.mono.lightest,
+      underline: palette.mono.light,
+    },
+    swipe: {
+      text: palette.mono.darker,
+      underline: 'rgba(255, 255, 255, 0.0)',
+    },
+    red: {
+      text: palette.red[5],
+      underline: palette.red[2],
+    },
+    green: {
+      text: palette.mono.darker,
+      underline: palette.green[6],
+    },
+    orange: {
+      text: palette.mono.blue,
+      underline: palette.red[6],
+    },
+  }
 };
 
 export default colors;

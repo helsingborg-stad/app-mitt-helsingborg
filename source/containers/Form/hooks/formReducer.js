@@ -4,6 +4,7 @@ import {
   increaseFormCounter,
   decreaseFormCounter,
   startForm,
+  updateAnswer,
 } from './formActions';
 
 /**
@@ -37,12 +38,12 @@ function formReducer(state, action) {
       return decreaseFormCounter(state);
     }
 
-    /**
-     * Decrementing the counter of the form until it hits 0.
-     * This allow going back to the previous step in the form.
-     */
     case actionTypes.START_FORM: {
       return startForm(state, payload);
+    }
+    
+    case actionTypes.UPDATE_ANSWER: {
+      return updateAnswer(state, payload);
     }
 
     default:
