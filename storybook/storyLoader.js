@@ -29,6 +29,8 @@ function loadStories() {
 	require('../source/components/organisms/FieldList/FieldList.stories');
 	require('../source/components/organisms/FormAgent/FormAgent.stories');
 	require('../source/components/organisms/Step/Step.stories');
+	require('../source/containers/Form/Form.stories');
+	require('../source/components/atoms/FieldLabel/FieldLabel.stories');
 	require('../source/components/organisms/WatsonAgent/WatsonAgent.stories');
 }
 

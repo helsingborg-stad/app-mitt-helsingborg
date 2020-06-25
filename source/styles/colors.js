@@ -278,6 +278,52 @@ const colors = {
       ...palette.green,
     },
   },
+  fieldLabel: {
+    purple: {
+      text: palette.mono.white,
+      underline: palette.purple[2],
+    },
+    purpleLight: {
+      text: palette.mono.white,
+      underline: palette.purple[1],
+    },
+    blue: {
+      text: palette.mono.white,
+      underline: palette.blue[6],
+    },
+    white: {
+      text: palette.mono.darker,
+      underline: 'rgba(255, 255, 255, 0.0)',
+    },
+    light: {
+      text: palette.mono.darker,
+      underline: palette.mono.light,
+    },
+    gray: {
+      text: palette.mono.darker,
+      underline: palette.mono.gray,
+    },
+    dark: {
+      text: palette.mono.lightest,
+      underline: palette.mono.light,
+    },
+    swipe: {
+      text: palette.mono.darker,
+      underline: 'rgba(255, 255, 255, 0.0)',
+    },
+    red: {
+      text: palette.red[5],
+      underline: palette.red[2],
+    },
+    green: {
+      text: palette.mono.darker,
+      underline: palette.green[6],
+    },
+    orange: {
+      text: palette.mono.blue,
+      underline: palette.red[6],
+    },
+  }
 };
 
 export default colors;
