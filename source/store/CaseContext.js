@@ -21,7 +21,7 @@ export function CaseProvider({ children }) {
       setCases(casesMock);
       setFetcing(false);
     }, 200);
-  }, [cases]);
+  }, [user]);
 
   const getCase = caseId => {
     const item = cases.find(c => c.id === caseId);
