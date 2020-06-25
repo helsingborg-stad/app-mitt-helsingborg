@@ -16,7 +16,8 @@ const FormContainer = styled.View`
  * is a tool to help you solve the problem of allowing end-users to interact with the
  * data and modify the data in your application.
  */
-function Form({ startAt, steps, firstName, onClose, initialAnswers }) {
+
+function Form({ startAt, steps, firstName, onClose, onStart, initialAnswers }) {
   const initialState = {
     counter: startAt,
     steps,
@@ -25,14 +26,15 @@ function Form({ startAt, steps, firstName, onClose, initialAnswers }) {
     },
     formAnswer: initialAnswers,
   };
-  const { formState, goToNextStep, goToPreviousStep, closeForm, handleInputChange } = useForm(
+  
+  const { formState, goToNextStep, goToPreviousStep, closeForm, startForm, handleInputChange } = useForm(
     initialState
   );
 
   return (
     <FormContainer>
       <FormStepper active={formState.counter}>
-        {formState.steps.map(({ icon, theme, title, group, description, fields }) => (
+        {formState.steps.map(({ icon, theme, title, group, description, fields, actions }) => (
           <Step
             banner={{ iconSrc: icon }}
             theme={theme}
@@ -44,9 +46,25 @@ function Form({ startAt, steps, firstName, onClose, initialAnswers }) {
             fields={fields}
             onBack={goToPreviousStep}
             onClose={() => closeForm(onClose)}
-            isBackBtnVisible={formState.counter !== 1}
+            isBackBtnVisible={formState.counter > 2}
             footer={{
-              buttons: [{ label: 'Nästa', onClick: goToNextStep }],
+              buttons: actions.map(action => {
+                switch (action.type) {
+                  case 'start': {
+                    return {
+                      label: action.label,
+                      onClick: () => startForm(onStart),
+                    };
+                  }
+
+                  default: {
+                    return {
+                      label: action.label,
+                      onClick: goToNextStep,
+                    };
+                  }
+                }
+              }),
             }}
           />
         ))}
@@ -64,6 +82,10 @@ Form.propTypes = {
    * Function to handle a close action in the form.
    */
   onClose: PropTypes.func.isRequired,
+  /**
+   * Function to handle when a form should start.
+   */
+  onStart: PropTypes.func.isRequired,
   /**
    * Array of steps that the Form should render.
    */

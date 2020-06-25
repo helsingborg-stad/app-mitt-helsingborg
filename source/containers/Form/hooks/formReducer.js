@@ -3,6 +3,7 @@ import {
   replaceFirstNameMarkdownInAllStepTitles,
   increaseFormCounter,
   decreaseFormCounter,
+  startForm,
   updateAnswer,
 } from './formActions';
 
@@ -37,6 +38,10 @@ function formReducer(state, action) {
       return decreaseFormCounter(state);
     }
 
+    case actionTypes.START_FORM: {
+      return startForm(state, payload);
+    }
+    
     case actionTypes.UPDATE_ANSWER: {
       return updateAnswer(state, payload);
     }

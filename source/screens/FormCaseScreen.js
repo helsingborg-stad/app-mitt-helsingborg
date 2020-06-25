@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { ScreenWrapper } from 'app/components/molecules';
 import { StatusBar } from 'react-native';
+import CaseContext from 'app/store/CaseContext';
 import Form from '../containers/Form/Form';
 import formEkbMockData from '../assets/mock/form-case-ekb';
 import AuthContext from '../store/AuthContext';
@@ -14,6 +15,7 @@ const FormScreenWrapper = styled(ScreenWrapper)`
 
 const FormCaseScreen = ({ navigation, ...props }) => {
   const { user } = useContext(AuthContext);
+  const { createCase } = useContext(CaseContext);
 
   function handleCloseForm() {
     navigation.navigate('Start');
@@ -26,6 +28,7 @@ const FormCaseScreen = ({ navigation, ...props }) => {
         steps={formEkbMockData.steps}
         firstName={user.givenName}
         onClose={handleCloseForm}
+        onStart={createCase}
         {...props}
       />
     </FormScreenWrapper>

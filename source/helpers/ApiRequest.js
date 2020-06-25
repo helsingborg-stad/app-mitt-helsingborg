@@ -17,10 +17,8 @@ const request = async (endpoint, method, data, headers) => {
 
   // Merge custom headers
   const newHeaders = {
-    ...{
-      Authorization: bearer,
-      'Content-Type': 'application/json',
-    },
+    Authorization: bearer,
+    'Content-Type': 'application/json',
     ...headers,
   };
 

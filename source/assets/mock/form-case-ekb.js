@@ -12,7 +12,7 @@ const formEkbMockData = {
       icon: ICON_EKB,
       actions: [
         {
-          type: 'next',
+          type: 'start',
           label: 'Ja, starta ansökan',
         },
       ],
