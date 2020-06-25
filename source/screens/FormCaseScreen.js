@@ -20,7 +20,11 @@ const FormCaseScreen = ({ navigation, ...props }) => {
   function handleCloseForm() {
     navigation.navigate('Start');
   }
-  // Todo: Create case on form start.
+
+  /*
+   * Function for handling behavior when a form starts
+   * TO BE IMPLEMENTED
+   * */
   function handleStartForm() {
     return null;
   }
@@ -28,7 +32,7 @@ const FormCaseScreen = ({ navigation, ...props }) => {
   // TODO: Update case on form submit.
   function handleSubmitForm(data) {
     // This is a temporary fix, since put endpoint in api is not yet implemented.
-    createCase(data, 'done');
+    createCase(data);
     navigation.navigate('Start');
   }
 
