@@ -175,6 +175,40 @@ const colors = {
       shadow: palette.red[6],
     },
   },
+  checkbox: {
+    white: {
+      background: palette.mono.white,
+      icon: palette.mono.black,
+      border: palette.mono.black,
+      touch: palette.mono.gray,
+      disabled: palette.mono.gray,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    },
+    light: {
+      background: palette.mono.lighter,
+      icon: palette.purple[1],
+      border: palette.mono.black,
+      touch: palette.mono.gray,
+      disabled: palette.mono.gray,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    },
+    gray: {
+      background: palette.mono.gray,
+      icon: palette.red[3],
+      border: palette.mono.black,
+      touch: palette.mono.lighter,
+      disabled: palette.mono.lighter,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    },
+    dark: {
+      background: palette.mono.darkest,
+      icon: palette.mono.white,
+      border: palette.mono.lighter,
+      touch: palette.mono.gray,
+      disabled: palette.mono.gray,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    }
+  },
   list: {
     onLightBackground: {
       listWithAvatar: {
