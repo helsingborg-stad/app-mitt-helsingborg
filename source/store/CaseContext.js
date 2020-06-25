@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { post } from 'app/helpers/ApiRequest';
+import { post, put } from 'app/helpers/ApiRequest';
 import AuthContext from 'app/store/AuthContext';
 import casesMock from '../assets/mock/cases';
 
@@ -27,6 +27,7 @@ export function CaseProvider({ children }) {
     const item = cases.find(c => c.id === caseId);
     return item;
   };
+
   /**
    * Function for sending a post request towards the case api endpoint.
    * @param {obj} data a object consiting of case user inputs.
@@ -34,7 +35,7 @@ export function CaseProvider({ children }) {
   const createCase = data => {
     const body = {
       personalNumber: parseInt(user.personalNumber),
-      status: 'ongoing',
+      status: 'completed',
       type: 'VIVA_CASE',
       data,
     };
