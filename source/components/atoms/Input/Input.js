@@ -27,6 +27,9 @@ const Input = props => {
 };
 
 Input.propTypes = {
+  /**
+   * Sets the color theme, default is light.
+   */
   color: PropTypes.oneOf(Object.keys(colors.input)),
 };
 
