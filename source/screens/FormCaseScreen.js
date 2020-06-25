@@ -20,7 +20,19 @@ const FormCaseScreen = ({ navigation, ...props }) => {
   function handleCloseForm() {
     navigation.navigate('Start');
   }
+  // Todo: Create case on form start.
+  function handleStartForm() {
+    return null;
+  }
 
+  // TODO: Update case on form submit.
+  function handleSubmitForm(data) {
+    // This is a temporary fix, since put endpoint in api is not yet implemented.
+    createCase(data, 'done');
+    navigation.navigate('Start');
+  }
+
+  console.log(user);
   return (
     <FormScreenWrapper>
       <StatusBar hidden />
@@ -28,7 +40,8 @@ const FormCaseScreen = ({ navigation, ...props }) => {
         steps={formEkbMockData.steps}
         firstName={user.givenName}
         onClose={handleCloseForm}
-        onStart={createCase}
+        onStart={handleStartForm}
+        onSubmit={handleSubmitForm}
         {...props}
       />
     </FormScreenWrapper>
