@@ -73,8 +73,8 @@ function ProfileScreen(props) {
             <Label small>E-POSTADRESS</Label>
             {renderField(user.email)}
             <Label small>ADRESS</Label>
-            {renderField(user.address.street)}
-            {renderField(user.address.postalCode)}
+            {/*     {renderField(user.address.street)}
+            {renderField(user.address.postalCode)} */}
           </ProfileInfoContainer>
         </View>
         <BottomContainer>

@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/react-native';
 import React, { useState } from 'react';
 import DateTimePickerForm from './DateTimePickerForm';
-import StoryWrapper from './StoryWrapper';
+import StoryWrapper from '../StoryWrapper';
 
 const DateTimePicker = () => {
   const [inputValue, setInputValue] = useState('');
@@ -9,8 +9,7 @@ const DateTimePicker = () => {
   return (
     <DateTimePickerForm
       inputValue={inputValue}
-      changeHandler={date => setInputValue(date)}
-      submitHandler={() => alert(inputValue)}
+      onSelect={date => setInputValue(date)}
       mode="datetime"
       placeholder="Date time"
       selectorProps={{
@@ -28,13 +27,12 @@ const DatePicker = () => {
   return (
     <DateTimePickerForm
       inputValue={inputValue}
-      changeHandler={date => setInputValue(date)}
-      submitHandler={() => alert(inputValue)}
-      placeholder="Date"
+      onSelect={date => setInputValue(date)}
+      placeholder="åååå-mm-dd"
+      color="dark"
       mode="date"
       selectorProps={{
         locale: 'sv',
-        minimumDate: new Date(),
       }}
     />
   );
@@ -46,8 +44,7 @@ const TimePicker = () => {
   return (
     <DateTimePickerForm
       inputValue={inputValue}
-      changeHandler={date => setInputValue(date)}
-      submitHandler={() => alert(inputValue)}
+      onSelect={date => setInputValue(date)}
       mode="time"
       placeholder="Time"
       selectorProps={{
