@@ -16,9 +16,11 @@ export const DECREASE_COUNTER = 'DECREASE_COUNTER';
 /** @type { string } */
 export const START_FORM = 'START_FORM';
 
- /** @type { string } */
+/** @type { string } */
 export const UPDATE_ANSWER = 'UPDATE_ANSWER';
 
+/** @type { string } */
+export const SUMBIT_FORM = 'SUBMIT_FORM';
 
 /** @type { object } */
 export const actionTypes = {
@@ -27,6 +29,7 @@ export const actionTypes = {
   UPDATE_ANSWER,
   REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES,
   START_FORM,
+  SUMBIT_FORM,
 };
 
 /**
@@ -81,6 +84,15 @@ export function startForm(state, payload) {
     ...state,
     counter: increaseCount(counter, steps.length),
   };
+}
+
+/**
+ * Action to run when starting a form.
+ * @param {object} state the current state of the form
+ */
+export function submitForm(state, payload) {
+  payload.callback(state.formAnswers);
+  return { ...state, submitted: true };
 }
 
 /**

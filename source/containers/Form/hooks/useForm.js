@@ -41,6 +41,17 @@ function useForm(initialState) {
     });
   };
 
+  /**
+   * Function for handling a on submit action in the form.
+   * @param {func} callback callback function to be called on form submit.
+   */
+  const handleSubmit = callback => {
+    dispatch({
+      type: actionTypes.SUBMIT_FORM,
+      payload: { callback },
+    });
+  };
+
   const handleSkip = () =>
     /** TO BE IMPLEMENTED */
     null;
@@ -53,7 +64,7 @@ function useForm(initialState) {
   const closeForm = callback => callback({ state: formState }, isLastStep());
 
   /**
-   * Function for updating answer
+   * Function for updating answer.
    */
   const handleInputChange = answer =>
     dispatch({ type: actionTypes.UPDATE_ANSWER, payload: answer });
@@ -66,6 +77,7 @@ function useForm(initialState) {
     handleSkip,
     closeForm,
     startForm,
+    handleSubmit,
     isLastStep,
   };
 }

@@ -17,8 +17,9 @@ const FormContainer = styled.View`
  * data and modify the data in your application.
  */
 
-function Form({ startAt, steps, firstName, onClose, onStart, initialAnswers }) {
+function Form({ startAt, steps, firstName, onClose, onStart, onSubmit, initialAnswers }) {
   const initialState = {
+    submitted: false,
     counter: startAt,
     steps,
     user: {
@@ -26,10 +27,16 @@ function Form({ startAt, steps, firstName, onClose, onStart, initialAnswers }) {
     },
     formAnswer: initialAnswers,
   };
-  
-  const { formState, goToNextStep, goToPreviousStep, closeForm, startForm, handleInputChange } = useForm(
-    initialState
-  );
+
+  const {
+    formState,
+    goToNextStep,
+    goToPreviousStep,
+    closeForm,
+    startForm,
+    handleSubmit,
+    handleInputChange,
+  } = useForm(initialState);
 
   return (
     <FormContainer>
@@ -54,6 +61,13 @@ function Form({ startAt, steps, firstName, onClose, onStart, initialAnswers }) {
                     return {
                       label: action.label,
                       onClick: () => startForm(onStart),
+                    };
+                  }
+
+                  case 'submit': {
+                    return {
+                      label: action.label,
+                      onClick: () => handleSubmit(onSubmit),
                     };
                   }
 
@@ -86,6 +100,10 @@ Form.propTypes = {
    * Function to handle when a form should start.
    */
   onStart: PropTypes.func.isRequired,
+  /**
+   * Function to handle when a form is submitting.
+   */
+  onSubmit: PropTypes.func.isRequired,
   /**
    * Array of steps that the Form should render.
    */
