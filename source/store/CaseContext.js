@@ -34,6 +34,7 @@ export function CaseProvider({ children }) {
   const createCase = data => {
     const body = {
       personalNumber: parseInt(user.personalNumber),
+      status: 'ongoing',
       type: 'VIVA_CASE',
       data,
     };
