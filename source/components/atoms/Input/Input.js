@@ -1,28 +1,40 @@
+import React from 'react';
 import { TextInput } from 'react-native';
+import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components/native';
+import colors from '../../../styles/colors';
 
 const input = css`
   width: 100%;
-  background-color: ${({ theme }) => theme.input.background};
+  background-color: ${({ color }) => colors.input[color].background};
   border-radius: 17.5px;
-  border: solid 1px ${({ theme }) => theme.input.border};
+  border: solid 1px ${({ color }) => colors.input[color].border};
   padding: 16px;
+  color: ${({ color }) => colors.input[color].text};
   ${props => (props.center ? 'text-align: center;' : null)}
 `;
 
-const Input = styled(TextInput)`
+const inputText = styled(TextInput)`
   ${input}
 `;
 
-Input.propTypes = {};
+const Input = props => {
+  const { color } = props;
+  return React.createElement(inputText, {
+    placeholderTextColor: colors.input[color].placeholder,
+    ...props,
+  });
+};
+
+Input.propTypes = {
+  /**
+   * Sets the color theme, default is light.
+   */
+  color: PropTypes.oneOf(Object.keys(colors.input)),
+};
 
 Input.defaultProps = {
-  theme: {
-    input: {
-      background: '#FFFFFF',
-      border: '#E5E5E5',
-    },
-  },
+  color: 'light',
 };
 
 export default Input;
