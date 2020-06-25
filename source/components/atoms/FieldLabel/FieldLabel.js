@@ -43,8 +43,9 @@ const FieldLabelBorder = styled.View`
 `;
 
 /**
- * Simple label for field inputs, that styles the text to all-caps and optionally puts a line under.
- * @param {*} props 
+ * Simple label for field inputs, that styles the text to all-caps, bold and optionally puts a line under.
+ * Use like a Text component.
+ * @param {*} props
  */
 const FieldLabel = props => {
   const { size, color, underline, style, ...other } = props;
