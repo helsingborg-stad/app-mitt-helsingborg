@@ -14,13 +14,13 @@ export const INCREASE_COUNTER = 'INCREASE_COUNTER';
 export const DECREASE_COUNTER = 'DECREASE_COUNTER';
 
 /** @type { string } */
-export const UPDATE_USER_ANSWER = 'UPDATE_USER_ANSWER';
+export const UPDATE_ANSWER = 'UPDATE_ANSWER';
 
 /** @type { object } */
 export const actionTypes = {
   INCREASE_COUNTER,
   DECREASE_COUNTER,
-  UPDATE_USER_ANSWER,
+  UPDATE_ANSWER,
   REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES,
 };
 
@@ -65,20 +65,20 @@ export function increaseFormCounter(state) {
 }
 
 /**
- * Action for updating user information.
+ * Action for updating information.
  */
-export function updateUserAnswer(state, userAnswer) {
-  const { answerPerCase } = state;
-  let updateAnswer = answerPerCase;
+export function updateAnswer(state, answer) {
+  const { formAnswer } = state;
+  let updateAnswer = formAnswer;
 
-  if (Object.prototype.hasOwnProperty.call(updateAnswer, Object.keys(userAnswer))) {
-    updateAnswer[Object.keys(userAnswer)] = Object.values(userAnswer);
+  if (Object.prototype.hasOwnProperty.call(updateAnswer, Object.keys(answer))) {
+    updateAnswer[Object.keys(answer)] = Object.values(answer);
   } else {
-    updateAnswer = { ...answerPerCase, ...userAnswer };
+    updateAnswer = { ...formAnswer, ...answer };
   }
 
   return {
     ...state,
-    answerPerCase: updateAnswer,
+    formAnswer: updateAnswer,
   };
 }

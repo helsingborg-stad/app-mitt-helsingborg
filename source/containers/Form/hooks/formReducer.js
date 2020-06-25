@@ -3,7 +3,7 @@ import {
   replaceFirstNameMarkdownInAllStepTitles,
   increaseFormCounter,
   decreaseFormCounter,
-  updateUserAnswer,
+  updateAnswer,
 } from './formActions';
 
 /**
@@ -37,9 +37,10 @@ function formReducer(state, action) {
       return decreaseFormCounter(state);
     }
 
-    case actionTypes.UPDATE_USER_ANSWER: {
-      return updateUserAnswer(state, payload);
+    case actionTypes.UPDATE_ANSWER: {
+      return updateAnswer(state, payload);
     }
+
     default:
       return state;
   }
