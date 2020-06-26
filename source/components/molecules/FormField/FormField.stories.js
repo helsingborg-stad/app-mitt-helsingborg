@@ -34,5 +34,14 @@ storiesOf('Form Field input', module).add('Default', () => (
       placeholder="Look ma, no label!"
       inputType="text"
     />
+    <FormField
+      id="5"
+      label="Checkbox input"
+      labelLine="true"
+      color="light"
+      text="Do you feel it now?"
+      inputType="checkbox"
+      placeholder="Do you feel it now?"
+    />
   </StoryWrapper>
 ));

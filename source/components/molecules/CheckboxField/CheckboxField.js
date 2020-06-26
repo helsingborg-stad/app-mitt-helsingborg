@@ -9,19 +9,11 @@ const FlexContainer = styled.View`
   flex-direction: row;
   align-items: center;
   margin: 8px;
-<<<<<<< HEAD
-=======
-  margin-bottom: 8px;
->>>>>>> 7742e95c3f3665ec65f022532b90928eb003538c
 `;
 
 const sizes = {
   small: {
-<<<<<<< HEAD
     padding: 0.25,
-=======
-    padding: 0.5,
->>>>>>> 7742e95c3f3665ec65f022532b90928eb003538c
     margin: 4,
     fontSize: 14,
   },
@@ -31,26 +23,21 @@ const sizes = {
     fontSize: 18,
   },
   large: {
-<<<<<<< HEAD
     padding: 1,
     margin: 5,
-=======
-    padding: 0.5,
-    margin: 4,
->>>>>>> 7742e95c3f3665ec65f022532b90928eb003538c
     fontSize: 20,
   },
 };
 
 const CheckboxField = props => {
-  const { text, color, size, ...other } = props;
+  const { text, color, size, value, ...other } = props;
   const textStyle = {
     color: colors.checkboxField[color].text,
     ...sizes[size],
   };
   return (
     <FlexContainer>
-      <Checkbox color={color} size={size} {...other} />
+      <Checkbox color={color} size={size} checked={value} {...other} />
       <Text style={textStyle}>{text}</Text>
     </FlexContainer>
   );
@@ -64,7 +51,7 @@ CheckboxField.propTypes = {
   /**
    * Boolean that determines if the checkbox is checked or not. Manages the 'state' of the component.
    */
-  checked: PropTypes.bool.isRequired,
+  value: PropTypes.bool.isRequired,
   /**
    * What happens when the checkbox is clicked. Should switch the checked prop.
    */

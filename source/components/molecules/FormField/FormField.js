@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
 import { Input, FieldLabel, Checkbox, Text } from 'source/components/atoms';
-import { EditableList } from 'source/components/molecules';
+import { CheckboxField } from 'source/components/molecules';
 import { View } from 'react-native';
 import colors from '../../../styles/colors';
 
@@ -21,12 +20,14 @@ const inputTypes = {
   date: {}, // To be done as more components are added.
   list: {},
   checkbox: {
-    component: Checkbox,
+    component: CheckboxField,
+    changeEvent: 'onChange',
+    props: {},
   },
 };
 
 const FormField = props => {
-  const { label, labelLine, inputType, color, placeholder, id, onChange } = props;
+  const { label, labelLine, inputType, color, placeholder, id, onChange, value } = props;
   const input = inputTypes[inputType];
   const saveInput = value => {
     onChange({ id: value });
@@ -34,6 +35,10 @@ const FormField = props => {
 
   const inputCompProps = { placeholder, color, ...input.props };
   inputCompProps[input.changeEvent] = saveInput;
+  if (inputType === 'checkbox') {
+    inputCompProps.text = placeholder;
+  }
+
   const inputComponent = React.createElement(input.component, inputCompProps);
 
   return (
@@ -58,7 +63,8 @@ FormField.propTypes = {
    */
   labelLine: PropTypes.bool,
   /**
-   * Placeholder, for certain input types (text, number, date)
+   * Placeholder, for certain input types (text, number, date).
+   * For checkbox input, this is the text displayed next to the input.
    */
   placeholder: PropTypes.string,
   /**
