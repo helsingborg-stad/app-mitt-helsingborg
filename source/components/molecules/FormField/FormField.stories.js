@@ -34,5 +34,13 @@ storiesOf('Form Field input', module).add('Default', () => (
       placeholder="Look ma, no label!"
       inputType="text"
     />
+    <FormField
+      id="5"
+      labelLine="false"
+      text="Button for editing/forwarding/info"
+      iconName="arrow-forward"
+      color="blue"
+      inputType="button"
+    />
   </StoryWrapper>
 ));

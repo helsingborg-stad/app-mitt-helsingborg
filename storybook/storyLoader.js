@@ -29,6 +29,7 @@ function loadStories() {
   require('../source/components/molecules/Markdown.stories');
   require('../source/components/molecules/Modal.stories');
   require('../source/components/molecules/StepDescription/StepDescription.stories');
+  require('../source/components/molecules/ButtonField/ButtonField.stories');
   require('../source/components/organisms/FieldList/FieldList.stories');
   require('../source/components/organisms/FormAgent/FormAgent.stories');
   require('../source/components/organisms/Step/Step.stories');
@@ -60,6 +61,7 @@ const stories = [
   '../source/components/molecules/Markdown.stories',
   '../source/components/molecules/Modal.stories',
   '../source/components/molecules/StepDescription/StepDescription.stories',
+  '../source/components/molecules/ButtonField/ButtonField.stories',
   '../source/components/organisms/FieldList/FieldList.stories',
   '../source/components/organisms/FormAgent/FormAgent.stories',
   '../source/components/organisms/Step/Step.stories',
