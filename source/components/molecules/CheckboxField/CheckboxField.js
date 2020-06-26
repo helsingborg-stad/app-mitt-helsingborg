@@ -9,11 +9,19 @@ const FlexContainer = styled.View`
   flex-direction: row;
   align-items: center;
   margin: 8px;
+<<<<<<< HEAD
+=======
+  margin-bottom: 8px;
+>>>>>>> 7742e95c3f3665ec65f022532b90928eb003538c
 `;
 
 const sizes = {
   small: {
+<<<<<<< HEAD
     padding: 0.25,
+=======
+    padding: 0.5,
+>>>>>>> 7742e95c3f3665ec65f022532b90928eb003538c
     margin: 4,
     fontSize: 14,
   },
@@ -23,8 +31,13 @@ const sizes = {
     fontSize: 18,
   },
   large: {
+<<<<<<< HEAD
     padding: 1,
     margin: 5,
+=======
+    padding: 0.5,
+    margin: 4,
+>>>>>>> 7742e95c3f3665ec65f022532b90928eb003538c
     fontSize: 20,
   },
 };
