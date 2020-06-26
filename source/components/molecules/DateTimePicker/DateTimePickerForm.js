@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { includePropetiesWithKey } from '../../helpers/Objects';
-import ChatForm from './ChatForm';
-import Input from '../atoms/Input';
+import { View, TouchableOpacity } from 'react-native';
+import Input from '../../atoms/Input';
 
 const DateTimePickerForm = props => {
-  const { changeHandler, submitHandler, inputValue, mode, selectorProps } = props;
+  const { onSelect, inputValue, mode, selectorProps } = props;
+
+  const [isVisible, setIsVisible] = useState(false);
 
   let dateTimeString;
   const date = inputValue && typeof inputValue.getMonth === 'function' ? inputValue : new Date();
@@ -21,8 +22,8 @@ const DateTimePickerForm = props => {
 
   if (inputValue) {
     switch (mode) {
-      case 'date':
-        dateTimeString = dateString;
+      case 'datetime':
+        dateTimeString = `${dateString} ${timeString}`;
         break;
 
       case 'time':
@@ -30,40 +31,54 @@ const DateTimePickerForm = props => {
         break;
 
       default:
-        dateTimeString = `${dateString} ${timeString}`;
+        dateTimeString = dateString;
     }
   }
 
   return (
-    <ChatForm
-      {...includePropetiesWithKey(props, ['isFocused', 'changeHandler', 'inputValue'])}
-      submitHandler={() => submitHandler(dateTimeString)}
-      renderFooter={() => (
+    <View>
+      <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
+        <Input
+          placeholder="åååå-mm-dd"
+          editable={false}
+          value={dateTimeString}
+          pointerEvents="none"
+          {...props}
+        />
+      </TouchableOpacity>
+      {isVisible && (
         <DateTimePicker
           value={date}
-          onChange={(_event, value) => changeHandler(value)}
+          onChange={(_event, value) => onSelect(value)}
           mode={mode}
           {...selectorProps}
         />
       )}
-    >
-      <Input
-        placeholder="Välj ett datum"
-        {...props}
-        editable={false}
-        value={dateTimeString}
-        onSubmitEditing={() => submitHandler(dateTimeString)}
-      />
-    </ChatForm>
+    </View>
   );
 };
 
 DateTimePickerForm.propTypes = {
-  changeHandler: PropTypes.func,
+  /**
+   * Function to set input date value
+   */
+  onSelect: PropTypes.func,
+  /**
+   * Value from the date picker
+   */
   inputValue: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
+  /**
+   * Defines the type of date picker
+   */
   mode: PropTypes.string,
+  /**
+   * Is an object that can define the locale, minuteInterval or minimumDate
+   */
   selectorProps: PropTypes.object,
-  submitHandler: PropTypes.func,
+  /**
+   * Sets the color theme, default is light.
+   */
+  color: PropTypes.string,
 };
 
 DateTimePickerForm.defaultProps = {

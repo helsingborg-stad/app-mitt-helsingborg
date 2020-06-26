@@ -56,11 +56,6 @@ const colors = {
   login: {
     background: palette.bg.default,
   },
-  input: {
-    background: palette.mono.white,
-    border: palette.mono.lighter,
-    placeholder: palette.mono.gray,
-  },
   background: {
     default: palette.mono.lightest,
     ...palette.mono,
@@ -323,7 +318,39 @@ const colors = {
       text: palette.mono.blue,
       underline: palette.red[6],
     },
-  }
+  },
+  input: {
+    light: {
+      text: palette.mono.black,
+      background: palette.mono.white,
+      border: palette.mono.light,
+      placeholder: palette.mono.darker,
+    },
+    dark: {
+      text: palette.mono.white,
+      background: palette.blue[6],
+      border: palette.blue[6],
+      placeholder: palette.mono.light,
+    },
+    red: {
+      text: palette.mono.black,
+      background: palette.red[6],
+      border: palette.red[4],
+      placeholder: palette.mono.darker,
+    },
+    green: {
+      text: palette.mono.black,
+      background: palette.green[6],
+      border: palette.green[5],
+      placeholder: palette.mono.darker,
+    },
+  },
+  formField: {
+    light: {},
+    dark: {},
+    red: {},
+    green: {},
+  },
 };
 
 export default colors;

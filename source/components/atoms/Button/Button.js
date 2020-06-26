@@ -122,7 +122,7 @@ const Button = props => {
   /** Override child components */
   const children = React.Children.map(other.children, (child, index) => {
     /** Icon */
-    if (child.type === Icon) {
+    if (child && child.type === Icon) {
       iconComponentsTotal++;
 
       let ButtonComponent = ButtonIcon;
@@ -139,7 +139,7 @@ const Button = props => {
     }
 
     /** Text */
-    if (child.type === Text) {
+    if (child && child.type === Text) {
       return React.createElement(ButtonText, {
         ...child.props,
         buttonTheme: color,
