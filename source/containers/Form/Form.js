@@ -24,12 +24,17 @@ function Form({ startAt, steps, firstName, onClose, onStart, initialAnswers }) {
     user: {
       firstName,
     },
-    formAnswer: initialAnswers,
+    formAnswers: initialAnswers,
   };
-  
-  const { formState, goToNextStep, goToPreviousStep, closeForm, startForm, handleInputChange } = useForm(
-    initialState
-  );
+
+  const {
+    formState,
+    goToNextStep,
+    goToPreviousStep,
+    closeForm,
+    startForm,
+    handleInputChange,
+  } = useForm(initialState);
 
   return (
     <FormContainer>
@@ -43,9 +48,11 @@ function Form({ startAt, steps, firstName, onClose, onStart, initialAnswers }) {
               tagline: group,
               text: description,
             }}
+            answers={formState.formAnswers}
             fields={fields}
             onBack={goToPreviousStep}
             onClose={() => closeForm(onClose)}
+            onFieldChange={handleInputChange}
             isBackBtnVisible={formState.counter > 2}
             footer={{
               buttons: actions.map(action => {

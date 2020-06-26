@@ -16,9 +16,8 @@ export const DECREASE_COUNTER = 'DECREASE_COUNTER';
 /** @type { string } */
 export const START_FORM = 'START_FORM';
 
- /** @type { string } */
+/** @type { string } */
 export const UPDATE_ANSWER = 'UPDATE_ANSWER';
-
 
 /** @type { object } */
 export const actionTypes = {
@@ -87,17 +86,18 @@ export function startForm(state, payload) {
  * Action for updating information.
  */
 export function updateAnswer(state, answer) {
-  const { formAnswer } = state;
-  let updateAnswer = formAnswer;
+  const { formAnswers } = state;
 
-  if (Object.prototype.hasOwnProperty.call(updateAnswer, Object.keys(answer))) {
-    updateAnswer[Object.keys(answer)] = Object.values(answer);
+  let updatedAnswers = formAnswers;
+
+  if (Object.keys(updateAnswer).length === 0) {
+    updatedAnswers = { ...answer };
   } else {
-    updateAnswer = { ...formAnswer, ...answer };
+    updatedAnswers = { ...formAnswers, [answer.id]: answer.value };
   }
 
   return {
     ...state,
-    formAnswer: updateAnswer,
+    formAnswers: updatedAnswers,
   };
 }
