@@ -7,7 +7,7 @@ import { excludePropetiesWithKey, includePropetiesWithKey } from '../../helpers/
 import withChatForm from '../organisms/withForm/withChatForm';
 
 import ButtonStack from './ButtonStack';
-import DateTimePickerForm from './DateTimePickerForm';
+import DateTimePickerForm from './DateTimePicker';
 import InputForm from './InputForm';
 
 const ChatUserInputWrapper = styled.View`

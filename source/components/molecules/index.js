@@ -5,7 +5,7 @@ export { default as ButtonListField } from './ButtonListField';
 export { default as ChatForm } from './ChatForm';
 export { default as ChatMessages } from './ChatMessages';
 export { default as ChatUserInput } from './ChatUserInput';
-export { default as DateTimePickerForm } from './DateTimePickerForm';
+export { default as DateTimePicker } from './DateTimePicker';
 export { default as GroupedList } from './GroupedList';
 export { default as Header } from './Header';
 export { default as InputForm } from './InputForm';
