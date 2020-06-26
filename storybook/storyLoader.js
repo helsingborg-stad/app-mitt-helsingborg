@@ -33,6 +33,7 @@ function loadStories() {
   require('../source/components/organisms/FormAgent/FormAgent.stories');
   require('../source/components/organisms/Step/Step.stories');
   require('../source/components/organisms/WatsonAgent/WatsonAgent.stories');
+  require('../source/components/molecules/CheckboxField/CheckboxField.stories');
 }
 
 const stories = [
@@ -64,6 +65,7 @@ const stories = [
   '../source/components/organisms/FormAgent/FormAgent.stories',
   '../source/components/organisms/Step/Step.stories',
   '../source/components/organisms/WatsonAgent/WatsonAgent.stories',
+  '../source/components/molecules/CheckboxField/CheckboxField.stories',
 ];
 
 module.exports = {
