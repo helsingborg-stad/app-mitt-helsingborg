@@ -45,58 +45,10 @@ const formEkbMockData = {
       ],
       fields: [
         {
-          fieldType: 'address',
-          title: 'Boende/Tillgånger',
-          inputs: [
-            {
-              key: 'key-1',
-              label: 'Adress',
-              type: 'text',
-              value: 'Storgatan 9, Helsingborg',
-            },
-            {
-              key: 'key-2',
-              label: 'Storlek',
-              type: 'text',
-              value: '1 rum & kök',
-            },
-            {
-              key: 'key-3',
-              label: 'Hyresvärd',
-              type: 'text',
-              value: 'Helsingborgshem',
-            },
-          ],
-        },
-        {
-          fieldType: 'personal',
-          title: 'Mina Uppgifter',
-          inputs: [
-            {
-              key: 'key-1',
-              label: 'Epost',
-              type: 'text',
-              value: 'karin.olsson@epost.com',
-            },
-            {
-              key: 'key-2',
-              label: 'Telefone',
-              type: 'text',
-              value: '760000009',
-            },
-            {
-              key: 'key-3',
-              label: 'Medborgarskap',
-              type: 'text',
-              value: 'Svenskt',
-            },
-            {
-              key: 'key-4',
-              label: 'Sysselsättning',
-              type: 'text',
-              value: 'Arbetssökande',
-            },
-          ],
+          id: 'testField',
+          label: 'Test fält',
+          placeholder: 'Skriv någonting',
+          type: 'text',
         },
       ],
       theme: {

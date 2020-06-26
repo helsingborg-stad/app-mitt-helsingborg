@@ -26,13 +26,13 @@ const inputTypes = {
 };
 
 const FormField = props => {
-  const { label, labelLine, inputType, color, placeholder, id, onChange } = props;
+  const { label, labelLine, inputType, color, placeholder, id, onChange, value } = props;
   const input = inputTypes[inputType];
   const saveInput = value => {
-    onChange({ id: value });
+    onChange({ [id]: value });
   };
 
-  const inputCompProps = { placeholder, color, ...input.props };
+  const inputCompProps = { placeholder, color, value, ...input.props };
   inputCompProps[input.changeEvent] = saveInput;
   const inputComponent = React.createElement(input.component, inputCompProps);
 
@@ -79,6 +79,10 @@ FormField.propTypes = {
    * sets the color theme.
    */
   color: PropTypes.oneOf(Object.keys(colors.formField)),
+  /**
+   * The current input value of the field.
+   */
+  value: PropTypes.string.isRequired,
 };
 
 FormField.defaultProps = {

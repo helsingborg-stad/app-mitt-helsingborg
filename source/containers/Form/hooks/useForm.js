@@ -55,8 +55,10 @@ function useForm(initialState) {
   /**
    * Function for updating answer
    */
-  const handleInputChange = answer =>
+  const handleInputChange = answer => {
+    console.log(answer);
     dispatch({ type: actionTypes.UPDATE_ANSWER, payload: answer });
+  };
 
   return {
     formState,
