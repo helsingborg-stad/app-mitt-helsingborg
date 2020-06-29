@@ -20,7 +20,7 @@ export const START_FORM = 'START_FORM';
 export const UPDATE_ANSWER = 'UPDATE_ANSWER';
 
 /** @type { string } */
-export const SUMBIT_FORM = 'SUBMIT_FORM';
+export const SUBMIT_FORM = 'SUBMIT_FORM';
 
 /** @type { object } */
 export const actionTypes = {
@@ -29,7 +29,7 @@ export const actionTypes = {
   UPDATE_ANSWER,
   REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES,
   START_FORM,
-  SUMBIT_FORM,
+  SUBMIT_FORM,
 };
 
 /**
