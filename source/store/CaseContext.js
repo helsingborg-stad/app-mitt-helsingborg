@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { post } from 'app/helpers/ApiRequest';
 import AuthContext from 'app/store/AuthContext';
@@ -11,22 +11,19 @@ export const CaseConsumer = CaseContext.Consumer;
 export function CaseProvider({ children }) {
   const { user } = useContext(AuthContext);
   const [cases, setCases] = useState([]);
-  const [fetching, setFetcing] = useState(false);
+  const [fetching, setFetching] = useState(false);
 
   useEffect(() => {
     // Todo Replace with api request towards AWS.
-    setFetcing(true);
+    setFetching(true);
 
     setTimeout(() => {
       setCases(casesMock);
-      setFetcing(false);
+      setFetching(false);
     }, 200);
   }, [user]);
 
-  const getCase = caseId => {
-    const item = cases.find(c => c.id === caseId);
-    return item;
-  };
+  const getCase = caseId => cases.find(c => c.id === caseId);
   /**
    * Function for sending a post request towards the case api endpoint.
    * @param {obj} data a object consiting of case user inputs.
