@@ -21,6 +21,22 @@ const FormCaseScreen = ({ navigation, ...props }) => {
     navigation.navigate('Start');
   }
 
+  /*
+   * Function for handling behavior when a form starts
+   * TO BE IMPLEMENTED
+   * */
+  function handleStartForm() {
+    return null;
+  }
+
+  // TODO: Update case on form submit.
+  function handleSubmitForm(data) {
+    // This is a temporary fix, since put endpoint in api is not yet implemented.
+    createCase(data);
+    navigation.navigate('Start');
+  }
+
+  console.log(user);
   return (
     <FormScreenWrapper>
       <StatusBar hidden />
@@ -28,7 +44,8 @@ const FormCaseScreen = ({ navigation, ...props }) => {
         steps={formEkbMockData.steps}
         firstName={user.firstName}
         onClose={handleCloseForm}
-        onStart={createCase}
+        onStart={handleStartForm}
+        onSubmit={handleSubmitForm}
         {...props}
       />
     </FormScreenWrapper>

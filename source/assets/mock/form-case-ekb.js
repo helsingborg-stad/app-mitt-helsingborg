@@ -65,6 +65,33 @@ const formEkbMockData = {
         },
       },
     },
+    {
+      title: 'Skicka in ditt ärende',
+      description: 'Nu är det dags att skicka in ditt ärende',
+      group: 'Färdig',
+      image: '',
+      icon: ICON_BREIF,
+      actions: [
+        {
+          type: 'submit',
+          label: 'Skicka ansökan',
+        },
+      ],
+      fields: [],
+      theme: {
+        step: {
+          bg: '#FFAA9B',
+          banner: {},
+          footer: {},
+          text: {
+            colors: {
+              primary: '#00213F',
+              secondary: '#733232',
+            },
+          },
+        },
+      },
+    },
   ],
 };
 
