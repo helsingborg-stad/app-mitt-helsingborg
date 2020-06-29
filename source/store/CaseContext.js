@@ -37,7 +37,7 @@ export function CaseProvider({ children }) {
       personalNumber: parseInt(user.personalNumber),
       status: 'completed',
       type: 'VIVA_CASE',
-      data,
+      data: data || {},
     };
 
     // TODO: Remove Auhtorization header when token authentication works as expected.
