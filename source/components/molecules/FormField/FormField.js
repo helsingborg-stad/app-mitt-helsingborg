@@ -27,17 +27,14 @@ const inputTypes = {
 };
 
 const FormField = props => {
-  const { label, labelLine, inputType, color, placeholder, id, onChange, value } = props;
+  const { label, labelLine, inputType, color, id, onChange, value, ...other } = props;
   const input = inputTypes[inputType];
   const saveInput = value => {
     onChange({ id: value });
   };
 
-  const inputCompProps = { placeholder, color, ...input.props };
+  const inputCompProps = { , color, value, ...input.props, ...other };
   inputCompProps[input.changeEvent] = saveInput;
-  if (inputType === 'checkbox') {
-    inputCompProps.text = placeholder;
-  }
 
   const inputComponent = React.createElement(input.component, inputCompProps);
 
@@ -81,6 +78,10 @@ FormField.propTypes = {
    * Should handle objects on the form { id : value }, where value is the new value and id is the uuid for the input-field.
    */
   onChange: PropTypes.func,
+  /**
+   * sets the value, since the input field component should be managed.
+   */
+  value: PropTypes.any,
   /**
    * sets the color theme.
    */
