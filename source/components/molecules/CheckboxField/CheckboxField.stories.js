@@ -76,11 +76,3 @@ const CheckboxFields = injectProps => {
     </View>
   );
 };
-
-const FlexContainer = styled.View``;
-const FlexRow = styled.View`
-  flex-direction: row;
-  max-height: 70px;
-  height: 100%;
-  flex: auto;
-`;
