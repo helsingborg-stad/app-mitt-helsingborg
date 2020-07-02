@@ -32,7 +32,7 @@ const request = async (endpoint, method, data, headers, userId) => {
   };
 
   // Do request
-  return axios({
+  const req = await axios({
     url,
     method,
     headers: newHeaders,
@@ -43,6 +43,8 @@ const request = async (endpoint, method, data, headers, userId) => {
       console.log('API request error', error);
       return error;
     });
+
+  return req;
 };
 
 const get = (endpoint = '', headers = undefined, userId = undefined) =>
