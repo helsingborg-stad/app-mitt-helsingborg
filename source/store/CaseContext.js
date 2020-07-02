@@ -17,9 +17,10 @@ export function CaseProvider({ children }) {
     // Todo Replace with api request towards AWS.
     setFetching(true);
 
-    get('/cases', undefined, user.personalNumber).then(response => {
+    get('/cases', undefined, '201111111111').then(response => {
       // TODO: Handle case response.
-      console.log(`CaseContext: Got response from case API: ${response}`);
+      console.log('CaseContext: Got response from case API:');
+      console.log(response);
     });
 
     setTimeout(() => {
