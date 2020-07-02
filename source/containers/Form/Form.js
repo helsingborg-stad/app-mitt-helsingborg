@@ -28,13 +28,12 @@ function Form({ startAt, steps, firstName, onClose, onStart, onSubmit, initialAn
     formAnswers: initialAnswers,
   };
 
-  const {
+const {
     formState,
     goToNextStep,
     goToPreviousStep,
     closeForm,
     startForm,
-    handleSubmit,
     handleInputChange,
   } = useForm(initialState);
 
