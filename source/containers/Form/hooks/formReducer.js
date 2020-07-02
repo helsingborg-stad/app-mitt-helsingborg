@@ -41,7 +41,7 @@ function formReducer(state, action) {
     case actionTypes.START_FORM: {
       return startForm(state, payload);
     }
-    
+
     case actionTypes.UPDATE_ANSWER: {
       return updateAnswer(state, payload);
     }

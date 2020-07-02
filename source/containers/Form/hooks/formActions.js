@@ -16,9 +16,8 @@ export const DECREASE_COUNTER = 'DECREASE_COUNTER';
 /** @type { string } */
 export const START_FORM = 'START_FORM';
 
- /** @type { string } */
+/** @type { string } */
 export const UPDATE_ANSWER = 'UPDATE_ANSWER';
-
 
 /** @type { object } */
 export const actionTypes = {

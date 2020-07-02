@@ -26,10 +26,15 @@ function Form({ startAt, steps, firstName, onClose, onStart, initialAnswers }) {
     },
     formAnswer: initialAnswers,
   };
-  
-  const { formState, goToNextStep, goToPreviousStep, closeForm, startForm, handleInputChange } = useForm(
-    initialState
-  );
+
+  const {
+    formState,
+    goToNextStep,
+    goToPreviousStep,
+    closeForm,
+    startForm,
+    handleInputChange,
+  } = useForm(initialState);
 
   return (
     <FormContainer>
