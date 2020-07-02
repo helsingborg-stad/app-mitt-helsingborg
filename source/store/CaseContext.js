@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { post } from 'app/helpers/ApiRequest';
+import { get, post } from 'app/helpers/ApiRequest';
 import AuthContext from 'app/store/AuthContext';
 import casesMock from '../assets/mock/cases';
 
@@ -16,6 +16,11 @@ export function CaseProvider({ children }) {
   useEffect(() => {
     // Todo Replace with api request towards AWS.
     setFetching(true);
+
+    get('/cases', undefined, user.personalNumber).then(response => {
+      // TODO: Handle case response.
+      console.log(`CaseContext: Got response from case API: ${response}`);
+    });
 
     setTimeout(() => {
       setCases(casesMock);
