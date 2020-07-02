@@ -37,9 +37,9 @@ export function CaseProvider({ children }) {
   const createCase = data => {
     const body = {
       personalNumber: parseInt(user.personalNumber),
-      status: 'ongoing',
+      status: 'completed',
       type: 'VIVA_CASE',
-      data,
+      data: data || {},
     };
 
     // TODO: Remove Auhtorization header when token authentication works as expected.

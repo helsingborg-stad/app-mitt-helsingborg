@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Text, Button } from '../../atoms';
-import { BackNavigation, Banner, FooterAction, StepDescription } from '../../molecules';
+import { BackNavigation, Banner, FooterAction, StepDescription, FormField } from '../../molecules';
 import FieldList from '../FieldList/FieldList';
 
 const StepContainer = styled.View`
@@ -16,8 +16,6 @@ const StepContentContainer = styled.ScrollView`
   height: 100%;
   position: relative;
 `;
-
-const StepFieldsContainer = styled.View``;
 
 const StepBackNavigation = styled(BackNavigation)`
   padding: 24px;
@@ -43,6 +41,7 @@ function Step({
   description,
   fields,
   footer,
+  answers,
   onBack,
   onClose,
   onFieldChange,
@@ -60,11 +59,18 @@ function Step({
         <StepBanner {...banner} />
         <StepBody>
           <StepDescription theme={theme} {...description} />
-
-          {/* Implement Field component to render field types */}
           {fields && (
             <StepFieldListWrapper>
-              <FieldList fields={fields} />
+              {fields.map(field => (
+                <FormField
+                  label={field.label}
+                  onChange={onFieldChange}
+                  placeholder={field.placeholder}
+                  id={field.id}
+                  inputType={field.type}
+                  value={answers[field.id] || ''}
+                />
+              ))}
             </StepFieldListWrapper>
           )}
         </StepBody>
@@ -90,6 +96,10 @@ Step.propTypes = {
    * The array of fields that are going to be displayed in the Step
    */
   fields: PropTypes.arrayOf({}),
+  /**
+   * The answers of a form.
+   */
+  answers: PropTypes.arrayOf({}),
   /**
    * Property for hiding the back button in the step
    */

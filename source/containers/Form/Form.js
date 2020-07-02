@@ -17,17 +17,18 @@ const FormContainer = styled.View`
  * data and modify the data in your application.
  */
 
-function Form({ startAt, steps, firstName, onClose, onStart, initialAnswers }) {
+function Form({ startAt, steps, firstName, onClose, onStart, onSubmit, initialAnswers }) {
   const initialState = {
+    submitted: false,
     counter: startAt,
     steps,
     user: {
       firstName,
     },
-    formAnswer: initialAnswers,
+    formAnswers: initialAnswers,
   };
 
-  const {
+const {
     formState,
     goToNextStep,
     goToPreviousStep,
@@ -48,9 +49,11 @@ function Form({ startAt, steps, firstName, onClose, onStart, initialAnswers }) {
               tagline: group,
               text: description,
             }}
+            answers={formState.formAnswers}
             fields={fields}
             onBack={goToPreviousStep}
             onClose={() => closeForm(onClose)}
+            onFieldChange={handleInputChange}
             isBackBtnVisible={formState.counter > 2}
             footer={{
               buttons: actions.map(action => {
@@ -59,6 +62,13 @@ function Form({ startAt, steps, firstName, onClose, onStart, initialAnswers }) {
                     return {
                       label: action.label,
                       onClick: () => startForm(onStart),
+                    };
+                  }
+
+                  case 'submit': {
+                    return {
+                      label: action.label,
+                      onClick: () => handleSubmit(onSubmit),
                     };
                   }
 
@@ -91,6 +101,10 @@ Form.propTypes = {
    * Function to handle when a form should start.
    */
   onStart: PropTypes.func.isRequired,
+  /**
+   * Function to handle when a form is submitting.
+   */
+  onSubmit: PropTypes.func.isRequired,
   /**
    * Array of steps that the Form should render.
    */

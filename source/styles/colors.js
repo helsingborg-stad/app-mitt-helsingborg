@@ -17,6 +17,9 @@ const palette = {
     4: '#AE0B05',
     5: '#E3000F',
     6: '#FFAA9B',
+    7: '#F5D2C8',
+    8: '#5C3D38',
+    9: '#DD6161',
   },
   purple: {
     1: '#D35098',
@@ -40,6 +43,9 @@ const palette = {
     4: '#50811B',
     5: '#76B828',
     6: '#75C9A8',
+    7: '#BFDECD',
+    8: '#2A483C',
+    9: '#3DA68C',
   },
   state: {
     danger: '#D73640',
@@ -109,8 +115,8 @@ const colors = {
     blue: {
       background: palette.blue[6],
       text: palette.mono.white,
-      icon: palette.mono.white,
-      iconRight: palette.mono.white,
+      icon: palette.red[6],
+      iconRight: palette.red[6],
       shadow: palette.blue[6],
     },
     white: {
@@ -168,6 +174,20 @@ const colors = {
       icon: palette.mono.blue,
       iconRight: palette.mono.blue,
       shadow: palette.red[6],
+    },
+    coral: {
+      background: palette.red[7],
+      text: palette.red[8],
+      icon: palette.red[9],
+      iconRight: palette.red[9],
+      shadow: palette.red[7],
+    },
+    areo: {
+      background: palette.green[7],
+      text: palette.green[8],
+      icon: palette.green[9],
+      iconRight: palette.green[9],
+      shadow: palette.green[7],
     },
   },
   checkbox: {

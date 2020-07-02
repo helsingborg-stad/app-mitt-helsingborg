@@ -83,20 +83,30 @@ export function startForm(state, payload) {
 }
 
 /**
+ * Action to run when starting a form.
+ * @param {object} state the current state of the form
+ */
+export function submitForm(state, payload) {
+  payload.callback(state.formAnswers);
+  return { ...state, submitted: true };
+}
+
+/**
  * Action for updating information.
  */
 export function updateAnswer(state, answer) {
-  const { formAnswer } = state;
-  let updateAnswer = formAnswer;
+  const { formAnswers } = state;
 
-  if (Object.prototype.hasOwnProperty.call(updateAnswer, Object.keys(answer))) {
-    updateAnswer[Object.keys(answer)] = Object.values(answer);
+  let updatedAnswers = formAnswers;
+
+  if (Object.keys(updateAnswer).length === 0) {
+    updatedAnswers = { ...answer };
   } else {
-    updateAnswer = { ...formAnswer, ...answer };
+    updatedAnswers = { ...formAnswers, [answer.id]: answer.value };
   }
 
   return {
     ...state,
-    formAnswer: updateAnswer,
+    formAnswers: updatedAnswers,
   };
 }
