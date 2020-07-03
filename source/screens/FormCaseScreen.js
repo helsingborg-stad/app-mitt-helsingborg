@@ -15,7 +15,7 @@ const FormScreenWrapper = styled(ScreenWrapper)`
 
 const FormCaseScreen = ({ navigation, ...props }) => {
   const { user } = useContext(AuthContext);
-  const { createCase } = useContext(CaseContext);
+  const { currentCase, createCase, updateCurrentCase } = useContext(CaseContext);
 
   function handleCloseForm() {
     navigation.navigate('Start');
@@ -46,6 +46,7 @@ const FormCaseScreen = ({ navigation, ...props }) => {
         onClose={handleCloseForm}
         onStart={handleStartForm}
         onSubmit={handleSubmitForm}
+        initialAnswers={currentCase.attributes.data}
         {...props}
       />
     </FormScreenWrapper>
