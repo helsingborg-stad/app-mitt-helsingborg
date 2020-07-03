@@ -32,7 +32,10 @@ const FormCaseScreen = ({ navigation, ...props }) => {
   // TODO: Update case on form submit.
   function handleSubmitForm(data) {
     // This is a temporary fix, since put endpoint in api is not yet implemented.
-    createCase(data);
+    // createCase(data);
+    // updateCaseInContext(formState.formAnswers, 'submitted');
+
+    updateCurrentCase(data, 'submitted');
     navigation.navigate('Start');
   }
 

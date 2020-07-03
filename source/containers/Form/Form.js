@@ -44,6 +44,7 @@ function Form({
     closeForm,
     startForm,
     handleInputChange,
+    handleSubmit,
   } = useForm(initialState);
 
   return (
@@ -80,7 +81,7 @@ function Form({
                     return {
                       label: action.label,
                       onClick: () => {
-                        updateCaseInContext(formState.formAnswers, 'submitted');
+                        // closeForm(onClose);
                         handleSubmit(onSubmit);
                       },
                     };
