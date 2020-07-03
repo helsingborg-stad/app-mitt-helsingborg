@@ -1,12 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { ScreenWrapper } from 'app/components/molecules';
 import { StatusBar } from 'react-native';
-import CaseContext from 'app/store/CaseContext';
 import Form from '../containers/Form/Form';
 import formEkbMockData from '../assets/mock/form-case-ekb';
 import AuthContext from '../store/AuthContext';
+import CaseContext from '../store/CaseContext';
+import FormContext from '../store/FormContext';
 
 const FormScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
@@ -16,6 +17,11 @@ const FormScreenWrapper = styled(ScreenWrapper)`
 const FormCaseScreen = ({ navigation, ...props }) => {
   const { user } = useContext(AuthContext);
   const { currentCase, createCase, updateCurrentCase } = useContext(CaseContext);
+  const { form, getForm } = useContext(FormContext);
+
+  useEffect(() => {
+    getForm('4bc10130-af17-11ea-b35b-c9388ccd1548');
+  }, [getForm]);
 
   function handleCloseForm() {
     navigation.navigate('Start');

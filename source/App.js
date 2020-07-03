@@ -11,9 +11,10 @@ import Config from 'react-native-config';
 import { Notification } from 'app/store';
 import Navigator from './navigator';
 import StorybookUIRoot from '../storybook';
-import { AuthProvider } from './store/AuthContext';
-import { CaseProvider } from './store/CaseContext';
 
+import { CaseProvider } from './store/CaseContext';
+import { AuthProvider } from './store/AuthContext';
+import { FormProvider } from './store/FormContext';
 /**
  * Any setup and init for application goes here:
  * Platform specific handling, global listeners, providers, etc.
@@ -24,9 +25,11 @@ const App = () => {
     return (
       <AuthProvider>
         <CaseProvider>
-          <Notification.Provider>
-            <StorybookUIRoot />
-          </Notification.Provider>
+          <FormProvider>
+            <Notification.Provider>
+              <StorybookUIRoot />
+            </Notification.Provider>
+          </FormProvider>
         </CaseProvider>
       </AuthProvider>
     );
@@ -35,9 +38,11 @@ const App = () => {
   return (
     <AuthProvider>
       <CaseProvider>
-        <Notification.Provider>
-          <Navigator />
-        </Notification.Provider>
+        <FormProvider>
+          <Notification.Provider>
+            <Navigator />
+          </Notification.Provider>
+        </FormProvider>
       </CaseProvider>
     </AuthProvider>
   );

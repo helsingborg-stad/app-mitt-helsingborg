@@ -103,10 +103,6 @@ FormField.propTypes = {
    * sets the color theme.
    */
   color: PropTypes.oneOf(Object.keys(colors.formField)),
-  /**
-   * The current input value of the field.
-   */
-  value: PropTypes.string.isRequired,
   /*
    * The function triggers when the button is clicked.
    */
