@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { ScreenWrapper } from 'app/components/molecules';
@@ -36,7 +36,6 @@ const FormCaseScreen = ({ navigation, ...props }) => {
     navigation.navigate('Start');
   }
 
-  console.log(user);
   return (
     <FormScreenWrapper>
       <StatusBar hidden />
@@ -47,6 +46,7 @@ const FormCaseScreen = ({ navigation, ...props }) => {
         onStart={handleStartForm}
         onSubmit={handleSubmitForm}
         initialAnswers={currentCase.attributes.data}
+        updateCaseInContext={updateCurrentCase}
         {...props}
       />
     </FormScreenWrapper>

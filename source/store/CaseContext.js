@@ -28,6 +28,25 @@ export function CaseProvider({ children }) {
     return null;
   };
 
+  /**
+   * Function to refresh the loaded cases from the backen.
+   * Currently it also sets the currentCase.
+   * Pass a callback in order to guarantee that the loading of
+   * information happens before the updated values are used.
+   */
+  const updateCases = async callback => {
+    console.log('UPDATE CASES!!');
+    setFetching(true);
+
+    get('/cases', undefined, user.personalNumber)
+      .then(response => {
+        setCases(response.data.data);
+        setCurrentCase(findLatestCase(response.data.data));
+        setFetching(false);
+      })
+      .then(response => callback(response));
+  };
+
   useEffect(() => {
     setFetching(true);
 
@@ -67,6 +86,9 @@ export function CaseProvider({ children }) {
       data,
     };
     // TODO: Remove Auhtorization header when token authentication works as expected.
+    console.log('sending db put request with data:');
+    console.log(data);
+    console.log(status);
     put(`/cases/${currentCase.id}`, JSON.stringify(body), {
       Authorization: parseInt(user.personalNumber),
     });
@@ -74,7 +96,15 @@ export function CaseProvider({ children }) {
 
   return (
     <CaseContext.Provider
-      value={{ cases, currentCase, getCase, createCase, updateCurrentCase, fetching }}
+      value={{
+        cases,
+        currentCase,
+        getCase,
+        createCase,
+        updateCurrentCase,
+        updateCases,
+        fetching,
+      }}
     >
       {children}
     </CaseContext.Provider>

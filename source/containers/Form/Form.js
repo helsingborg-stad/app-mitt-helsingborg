@@ -17,7 +17,16 @@ const FormContainer = styled.View`
  * data and modify the data in your application.
  */
 
-function Form({ startAt, steps, firstName, onClose, onStart, onSubmit, initialAnswers }) {
+function Form({
+  startAt,
+  steps,
+  firstName,
+  onClose,
+  onStart,
+  onSubmit,
+  initialAnswers,
+  updateCaseInContext,
+}) {
   const initialState = {
     submitted: false,
     counter: startAt,
@@ -28,7 +37,7 @@ function Form({ startAt, steps, firstName, onClose, onStart, onSubmit, initialAn
     formAnswers: initialAnswers,
   };
 
-const {
+  const {
     formState,
     goToNextStep,
     goToPreviousStep,
@@ -61,21 +70,29 @@ const {
                   case 'start': {
                     return {
                       label: action.label,
-                      onClick: () => startForm(onStart),
+                      onClick: () => {
+                        startForm(onStart);
+                      },
                     };
                   }
 
                   case 'submit': {
                     return {
                       label: action.label,
-                      onClick: () => handleSubmit(onSubmit),
+                      onClick: () => {
+                        updateCaseInContext(formState.formAnswers, 'submitted');
+                        handleSubmit(onSubmit);
+                      },
                     };
                   }
 
                   default: {
                     return {
                       label: action.label,
-                      onClick: goToNextStep,
+                      onClick: () => {
+                        updateCaseInContext(formState.formAnswers, 'ongoing');
+                        goToNextStep();
+                      },
                     };
                   }
                 }
@@ -117,6 +134,10 @@ Form.propTypes = {
    * Initial answer for each case.
    */
   initialAnswers: PropTypes.object,
+  /**
+   * function for updating case in caseContext
+   */
+  updateCaseInContext: PropTypes.func,
 };
 
 Form.defaultProps = {
