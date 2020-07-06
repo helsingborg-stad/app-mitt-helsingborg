@@ -2,6 +2,7 @@ const ICON_EKB = require('source/assets/images/icons/icn_Main_ekonomiskt-bistand
 const ICON_BREIF = require('source/assets/images/icons/icn_sammanstallning_1x.png');
 
 const formEkbMockData = {
+  id: 'mockFormId',
   steps: [
     {
       title: 'Vill du ansöka om Ekonomiskt bistånd igen?',

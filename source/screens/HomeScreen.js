@@ -7,6 +7,7 @@ import { ScreenWrapper } from 'app/components/molecules';
 import { View, StyleSheet } from 'react-native';
 import { Text, Button } from 'app/components/atoms';
 import CaseContext from 'app/store/CaseContext';
+import FormContext from 'app/store/FormContext';
 
 const styles = StyleSheet.create({
   button: {
@@ -35,7 +36,8 @@ const HomeScreen = ({ navigation }) => {
   const [isInputVisible, setInputVisible] = useState(false);
   const [isChatButton, setChatButton] = useState(true);
 
-  const { updateCases } = useContext(CaseContext);
+  const { updateCases, createCase } = useContext(CaseContext);
+  const { form } = useContext(FormContext);
 
   const navigationOptions = ({ navigation }) => ({
     tabBarVisible: navigation.state.params.tabBarVisible,
@@ -81,7 +83,7 @@ const HomeScreen = ({ navigation }) => {
             block
             style={styles.button}
             onClick={() => {
-              updateCases(() => navigation.navigate('Form'), true);
+              createCase({}, form.id, () => navigation.navigate('Form'), true);
             }}
           >
             <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
