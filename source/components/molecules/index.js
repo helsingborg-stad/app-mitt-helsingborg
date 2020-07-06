@@ -26,3 +26,4 @@ export { default as StepDescription } from './StepDescription';
 export { default as EditableList } from './EditableList';
 export { default as CheckboxField } from './CheckboxField';
 export { default as FormField } from './FormField';
+export { default as ButtonField } from './ButtonField';

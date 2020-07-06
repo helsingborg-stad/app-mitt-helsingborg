@@ -4,16 +4,25 @@ import { buildServiceUrl } from './UrlHelper';
 
 /**
  * Axios request
+ * User ID will overwrite bearer token in header.
+ *
  * @param {string} endpoint
  * @param {string} method
  * @param {obj} data
  * @param {obj} headers
+ * @param userId  Will overwrite bearer token in header if set.
  */
-const request = async (endpoint, method, data, headers) => {
+const request = async (endpoint, method, data, headers, userId) => {
   // Build complete api url
   const url = buildServiceUrl(endpoint);
-  const token = await StorageService.getData(TOKEN_KEY);
-  const bearer = token ? `Bearer ${token}` : '';
+
+  let bearer;
+  if (userId) {
+    bearer = userId;
+  } else {
+    const token = await StorageService.getData(TOKEN_KEY);
+    bearer = token ? `Bearer ${token}` : '';
+  }
 
   // Merge custom headers
   const newHeaders = {
@@ -38,7 +47,8 @@ const request = async (endpoint, method, data, headers) => {
   return req;
 };
 
-const get = (endpoint = '', headers = undefined) => request(endpoint, 'get', undefined, headers);
+const get = (endpoint = '', headers = undefined, userId = undefined) =>
+  request(endpoint, 'get', undefined, headers, userId);
 
 const post = (endpoint = '', body = undefined, headers = undefined) =>
   request(endpoint, 'post', body, headers);

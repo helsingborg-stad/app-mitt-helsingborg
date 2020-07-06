@@ -4,6 +4,7 @@ import {
   increaseFormCounter,
   decreaseFormCounter,
   startForm,
+  submitForm,
   updateAnswer,
 } from './formActions';
 
@@ -44,6 +45,13 @@ function formReducer(state, action) {
 
     case actionTypes.UPDATE_ANSWER: {
       return updateAnswer(state, payload);
+    }
+
+    /**
+     * Action for handling the submission of form answers.
+     */
+    case actionTypes.SUBMIT_FORM: {
+      return submitForm(state, payload);
     }
 
     default:

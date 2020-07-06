@@ -4,6 +4,7 @@ import { Input, FieldLabel, Checkbox, Text } from 'source/components/atoms';
 import { CheckboxField } from 'source/components/molecules';
 import { View } from 'react-native';
 import colors from '../../../styles/colors';
+import ButtonField from '../ButtonField';
 
 const inputTypes = {
   text: {
@@ -24,16 +25,32 @@ const inputTypes = {
     changeEvent: 'onChange',
     props: {},
   },
+  button: {
+    component: ButtonField,
+    changeEvent: 'onClick',
+  },
 };
 
 const FormField = props => {
-  const { label, labelLine, inputType, color, id, onChange, value, ...other } = props;
+  const {
+    label,
+    labelLine,
+    inputType,
+    color,
+    placeholder,
+    id,
+    onChange,
+    onClick,
+    text,
+    iconName,
+    value,
+  } = props;
   const input = inputTypes[inputType];
   const saveInput = value => {
-    onChange({ id: value });
+    onChange({ [id]: value });
   };
 
-  const inputCompProps = { , color, value, ...input.props, ...other };
+  const inputCompProps = { placeholder, color, onClick, text, iconName, value, ...input.props };
   inputCompProps[input.changeEvent] = saveInput;
 
   const inputComponent = React.createElement(input.component, inputCompProps);
@@ -86,14 +103,33 @@ FormField.propTypes = {
    * sets the color theme.
    */
   color: PropTypes.oneOf(Object.keys(colors.formField)),
+  /**
+   * The current input value of the field.
+   */
+  value: PropTypes.string.isRequired,
+  /*
+   * The function triggers when the button is clicked.
+   */
+  onClick: PropTypes.func,
+  /**
+   * Text string for button or checkbox
+   */
+  text: PropTypes.string,
+  /**
+   * Icon name for button icon
+   */
+  iconName: PropTypes.string,
 };
 
 FormField.defaultProps = {
+  onClick: () => {},
   onChange: () => {},
   color: 'light',
   labelLine: true,
   inputType: 'text',
   placeholder: '',
+  text: '',
+  iconName: '',
 };
 
 export default FormField;
