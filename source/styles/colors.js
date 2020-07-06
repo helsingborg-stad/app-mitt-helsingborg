@@ -223,6 +223,14 @@ const colors = {
       disabled: palette.mono.gray,
       shadow: 'rgba(255, 255, 255, 0.0)',
     },
+    blue: {
+      background: palette.blue[4],
+      icon: palette.mono.white,
+      border: palette.mono.lighter,
+      touch: palette.mono.gray,
+      disabled: palette.mono.gray,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    },
   },
   list: {
     onLightBackground: {
@@ -363,6 +371,26 @@ const colors = {
       background: palette.green[6],
       border: palette.green[5],
       placeholder: palette.mono.darker,
+    },
+  },
+  checkboxField: {
+    light: {
+      text: palette.mono.black,
+    },
+    gray: {
+      text: palette.mono.gray,
+    },
+    dark: {
+      text: palette.mono.white,
+    },
+    blue: {
+      text: palette.mono.lightest,
+    },
+    red: {
+      text: palette.mono.darkest,
+    },
+    green: {
+      text: palette.mono.darkest,
     },
   },
   formField: {

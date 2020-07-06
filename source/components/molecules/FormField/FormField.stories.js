@@ -36,11 +36,12 @@ storiesOf('Form Field input', module).add('Default', () => (
     />
     <FormField
       id="5"
-      labelLine="false"
-      text="Button for editing/forwarding/info"
-      iconName="arrow-forward"
-      color="blue"
-      inputType="button"
+      label="Checkbox input"
+      labelLine="true"
+      color="light"
+      text="Do you feel it now?"
+      inputType="checkbox"
+      placeholder="Do you feel it now?"
     />
   </StoryWrapper>
 ));

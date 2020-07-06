@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
 import { Input, FieldLabel, Checkbox, Text } from 'source/components/atoms';
-import { EditableList } from 'source/components/molecules';
+import { CheckboxField } from 'source/components/molecules';
 import { View } from 'react-native';
 import colors from '../../../styles/colors';
 import ButtonField from '../ButtonField';
@@ -22,7 +21,9 @@ const inputTypes = {
   date: {}, // To be done as more components are added.
   list: {},
   checkbox: {
-    component: Checkbox,
+    component: CheckboxField,
+    changeEvent: 'onChange',
+    props: {},
   },
   button: {
     component: ButtonField,
@@ -51,6 +52,7 @@ const FormField = props => {
 
   const inputCompProps = { placeholder, color, onClick, text, iconName, value, ...input.props };
   inputCompProps[input.changeEvent] = saveInput;
+
   const inputComponent = React.createElement(input.component, inputCompProps);
 
   return (
@@ -75,7 +77,8 @@ FormField.propTypes = {
    */
   labelLine: PropTypes.bool,
   /**
-   * Placeholder, for certain input types (text, number, date)
+   * Placeholder, for certain input types (text, number, date).
+   * For checkbox input, this is the text displayed next to the input.
    */
   placeholder: PropTypes.string,
   /**
@@ -92,6 +95,10 @@ FormField.propTypes = {
    * Should handle objects on the form { id : value }, where value is the new value and id is the uuid for the input-field.
    */
   onChange: PropTypes.func,
+  /**
+   * sets the value, since the input field component should be managed.
+   */
+  value: PropTypes.any,
   /**
    * sets the color theme.
    */
