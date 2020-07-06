@@ -50,6 +50,7 @@ export function CaseProvider({ children }) {
       status: 'completed',
       type: 'VIVA_CASE',
       data: data || {},
+      formId: 'someFormId', // To be properly implemented later! dependent on FormContext.
     };
 
     // TODO: Remove Auhtorization header when token authentication works as expected.

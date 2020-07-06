@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import styled from 'styled-components/native';
-import { KeyboardAvoidingView } from 'react-native';
+import { Platform } from 'react-native';
 import theme from '../../styles/theme';
 
 const Container = styled.KeyboardAvoidingView`
@@ -16,7 +16,7 @@ const ScreenWrapper = props => {
   return (
     <ThemeProvider theme={theme}>
       <Container
-        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={0}
         style={style}
       >
