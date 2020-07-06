@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { ScreenWrapper } from 'app/components/molecules';
@@ -15,7 +15,7 @@ const FormScreenWrapper = styled(ScreenWrapper)`
 
 const FormCaseScreen = ({ navigation, ...props }) => {
   const { user } = useContext(AuthContext);
-  const { createCase } = useContext(CaseContext);
+  const { currentCase, createCase, updateCurrentCase } = useContext(CaseContext);
 
   function handleCloseForm() {
     navigation.navigate('Start');
@@ -32,11 +32,13 @@ const FormCaseScreen = ({ navigation, ...props }) => {
   // TODO: Update case on form submit.
   function handleSubmitForm(data) {
     // This is a temporary fix, since put endpoint in api is not yet implemented.
-    createCase(data);
+    // createCase(data);
+    // updateCaseInContext(formState.formAnswers, 'submitted');
+
+    updateCurrentCase(data, 'submitted');
     navigation.navigate('Start');
   }
 
-  console.log(user);
   return (
     <FormScreenWrapper>
       <StatusBar hidden />
@@ -46,6 +48,8 @@ const FormCaseScreen = ({ navigation, ...props }) => {
         onClose={handleCloseForm}
         onStart={handleStartForm}
         onSubmit={handleSubmitForm}
+        initialAnswers={currentCase.attributes.data}
+        updateCaseInContext={updateCurrentCase}
         {...props}
       />
     </FormScreenWrapper>

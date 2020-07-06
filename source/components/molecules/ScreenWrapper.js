@@ -2,9 +2,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import styled from 'styled-components/native';
+import { Platform } from 'react-native';
 import theme from '../../styles/theme';
 
-const Container = styled.View`
+const Container = styled.KeyboardAvoidingView`
   flex: 1;
   padding: 16px;
 `;
@@ -14,7 +15,13 @@ const ScreenWrapper = props => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container style={style}>{children}</Container>
+      <Container
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={0}
+        style={style}
+      >
+        {children}
+      </Container>
     </ThemeProvider>
   );
 };

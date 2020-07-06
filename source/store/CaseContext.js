@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { get, post } from 'app/helpers/ApiRequest';
+import { get, post, put } from 'app/helpers/ApiRequest';
 import AuthContext from 'app/store/AuthContext';
 import casesMock from '../assets/mock/cases';
 
@@ -11,45 +11,112 @@ export const CaseConsumer = CaseContext.Consumer;
 export function CaseProvider({ children }) {
   const { user } = useContext(AuthContext);
   const [cases, setCases] = useState([]);
+  const [currentCase, setCurrentCase] = useState({ data: {} });
   const [fetching, setFetching] = useState(false);
 
+  /**
+   * Function to load the latest updated case. This is a temporary fix so that we don't have to build
+   * too much other logic about how to choose a case.
+   */
+  const findLatestCase = cases => {
+    if (cases.length > 0) {
+      cases.sort((c1, c2) => c2.attributes.updatedAt - c1.attributes.updatedAt);
+      console.log('Latest case:');
+      console.log(cases[0]);
+      return cases[0];
+    }
+    return null;
+  };
+
   useEffect(() => {
-    // Todo Replace with api request towards AWS.
     setFetching(true);
 
-    get('/cases', undefined, '201111111111').then(response => {
-      // TODO: Handle case response.
-      console.log('CaseContext: Got response from case API:');
-      console.log(response);
-    });
-
-    setTimeout(() => {
-      setCases(casesMock);
+    get('/cases', undefined, user.personalNumber).then(response => {
+      setCases(response.data.data);
+      setCurrentCase(findLatestCase(response.data.data));
       setFetching(false);
-    }, 200);
+    });
   }, [user]);
 
   const getCase = caseId => cases.find(c => c.id === caseId);
   /**
    * Function for sending a post request towards the case api endpoint.
+   * Can be used with  callback if something is to be done with the response object.
    * @param {obj} data a object consiting of case user inputs.
    */
-  const createCase = data => {
+  const createCase = (data, callback = response => {}) => {
     const body = {
       personalNumber: parseInt(user.personalNumber),
       status: 'completed',
       type: 'VIVA_CASE',
       data: data || {},
+      formId: 'someFormId', // To be properly implemented later! dependent on FormContext.
     };
 
     // TODO: Remove Auhtorization header when token authentication works as expected.
     post('/cases', JSON.stringify(body), {
       Authorization: parseInt(user.personalNumber),
+    }).then(response => callback(response.data.data));
+  };
+
+  /**
+   * Function to refresh the loaded cases from the backend.
+   * Currently it also sets the currentCase.
+   * Pass a callback in order to guarantee that the loading of
+   * information happens before the updated values are used.
+   */
+  const updateCases = async (callback, createNew = false) => {
+    console.log('UPDATE CASES!!');
+    setFetching(true);
+    if (createNew) {
+      console.log('Creating new, empty case');
+      createCase({}, newCase => {
+        console.log(newCase);
+        setCurrentCase(newCase);
+        setFetching(false);
+        callback(newCase);
+      });
+    } else {
+      get('/cases', undefined, user.personalNumber)
+        .then(response => {
+          setCases(response.data.data);
+          setCurrentCase(findLatestCase(response.data.data));
+          setFetching(false);
+        })
+        .then(response => callback(response));
+    }
+  };
+
+  /**
+   * Function for sending a put request towards the case api endpoint, updating the currently active case
+   * @param {obj} data a object consiting of case user inputs.
+   */
+  const updateCurrentCase = (data, status) => {
+    const body = {
+      status,
+      data,
+    };
+    // TODO: Remove Auhtorization header when token authentication works as expected.
+    console.log('sending db put request with data:');
+    console.log(data);
+    console.log(status);
+    put(`/cases/${currentCase.id}`, JSON.stringify(body), {
+      Authorization: parseInt(user.personalNumber),
     });
   };
 
   return (
-    <CaseContext.Provider value={{ cases, getCase, createCase, fetching }}>
+    <CaseContext.Provider
+      value={{
+        cases,
+        currentCase,
+        getCase,
+        createCase,
+        updateCurrentCase,
+        updateCases,
+        fetching,
+      }}
+    >
       {children}
     </CaseContext.Provider>
   );

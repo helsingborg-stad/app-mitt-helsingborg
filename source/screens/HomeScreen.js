@@ -1,11 +1,12 @@
 /* eslint-disable react/destructuring-assignment */
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, useState, useContext } from 'react';
 import styled from 'styled-components/native';
 import { WatsonAgent, Chat } from 'app/components/organisms';
 import { ScreenWrapper } from 'app/components/molecules';
 import { View, StyleSheet } from 'react-native';
 import { Text, Button } from 'app/components/atoms';
+import CaseContext from 'app/store/CaseContext';
 
 const styles = StyleSheet.create({
   button: {
@@ -29,73 +30,77 @@ const ChatScreenWrapper = styled(ScreenWrapper)`
   padding-bottom: 0px;
 `;
 // padding-bottom: 0px;
-class HomeScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+
+const HomeScreen = ({ navigation }) => {
+  const [isInputVisible, setInputVisible] = useState(false);
+  const [isChatButton, setChatButton] = useState(true);
+
+  const { updateCases } = useContext(CaseContext);
+
+  const navigationOptions = ({ navigation }) => ({
     tabBarVisible: navigation.state.params.tabBarVisible,
   });
 
-  state = {
-    isInputVisible: false,
-    isChatButton: true,
-  };
-
-  toggleTabs = () => {
-    const { navigation } = this.props;
+  const toggleTabs = () => {
     navigation.setParams({
       tabBarVisible: navigation.getParam('tabBarVisible') !== true,
     });
   };
 
-  toggleInput = () => {
-    this.setState({ isInputVisible: true, isChatButton: false });
+  const toggleInput = () => {
+    setInputVisible(true);
+    setChatButton(false);
   };
 
-  openEkonomiBistånd = () => {};
+  const openEkonomiBistånd = () => {};
 
-  render() {
-    return (
-      <>
-        <ChatScreenWrapper>
-          <Chat
-            ChatAgent={props => <WatsonAgent {...props} initialMessages="remote" />}
-            inputComponents={{
-              type: 'text',
-              placeholder: 'Skriv något...',
-              autoFocus: false,
-              display: 'none',
-            }}
-            // onUserLogin={this.toggleTabs} />)}
-            ChatUserInput={false}
-            keyboardVerticalOffset={0}
-            isInputVisible={this.state.isInputVisible}
-          />
-          <View style={styles.buttonContainer}>
-            {this.state.isChatButton ? (
-              <Button
-                color="purpleLight"
-                style={styles.button}
-                onClick={() => this.toggleInput()}
-                block
-              >
-                <Text>Ställ en fråga</Text>
-              </Button>
-            ) : null}
-            <Button
-              color="purple"
-              block
-              style={styles.button}
-              onClick={() => {
-                this.props.navigation.navigate('Form');
-              }}
-            >
-              <Text>Sök Ekonomiskt Bistånd</Text>
+  return (
+    <>
+      <ChatScreenWrapper>
+        <Chat
+          ChatAgent={props => <WatsonAgent {...props} initialMessages="remote" />}
+          inputComponents={{
+            type: 'text',
+            placeholder: 'Skriv något...',
+            autoFocus: false,
+            display: 'none',
+          }}
+          // onUserLogin={this.toggleTabs} />)}
+          ChatUserInput={false}
+          keyboardVerticalOffset={0}
+          isInputVisible={isInputVisible}
+        />
+        <View style={styles.buttonContainer}>
+          {isChatButton ? (
+            <Button color="purpleLight" style={styles.button} onClick={() => toggleInput()} block>
+              <Text>Ställ en fråga</Text>
             </Button>
-          </View>
-        </ChatScreenWrapper>
-      </>
-    );
-  }
-}
+          ) : null}
+          <Button
+            color="purple"
+            block
+            style={styles.button}
+            onClick={() => {
+              updateCases(() => navigation.navigate('Form'), true);
+            }}
+          >
+            <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
+          </Button>
+          <Button
+            color="purple"
+            block
+            style={styles.button}
+            onClick={() => {
+              updateCases(() => navigation.navigate('Form'));
+            }}
+          >
+            <Text>Fortsätt senaste ansökan</Text>
+          </Button>
+        </View>
+      </ChatScreenWrapper>
+    </>
+  );
+};
 
 HomeScreen.propTypes = {
   navigation: PropTypes.object,
