@@ -81,10 +81,20 @@ const HomeScreen = ({ navigation }) => {
             block
             style={styles.button}
             onClick={() => {
+              updateCases(() => navigation.navigate('Form'), true);
+            }}
+          >
+            <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
+          </Button>
+          <Button
+            color="purple"
+            block
+            style={styles.button}
+            onClick={() => {
               updateCases(() => navigation.navigate('Form'));
             }}
           >
-            <Text>Sök Ekonomiskt Bistånd</Text>
+            <Text>Fortsätt senaste ansökan</Text>
           </Button>
         </View>
       </ChatScreenWrapper>

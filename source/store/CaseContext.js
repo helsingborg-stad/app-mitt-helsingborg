@@ -28,25 +28,6 @@ export function CaseProvider({ children }) {
     return null;
   };
 
-  /**
-   * Function to refresh the loaded cases from the backen.
-   * Currently it also sets the currentCase.
-   * Pass a callback in order to guarantee that the loading of
-   * information happens before the updated values are used.
-   */
-  const updateCases = async callback => {
-    console.log('UPDATE CASES!!');
-    setFetching(true);
-
-    get('/cases', undefined, user.personalNumber)
-      .then(response => {
-        setCases(response.data.data);
-        setCurrentCase(findLatestCase(response.data.data));
-        setFetching(false);
-      })
-      .then(response => callback(response));
-  };
-
   useEffect(() => {
     setFetching(true);
 
@@ -60,9 +41,10 @@ export function CaseProvider({ children }) {
   const getCase = caseId => cases.find(c => c.id === caseId);
   /**
    * Function for sending a post request towards the case api endpoint.
+   * Can be used with  callback if something is to be done with the response object.
    * @param {obj} data a object consiting of case user inputs.
    */
-  const createCase = data => {
+  const createCase = (data, callback = response => {}) => {
     const body = {
       personalNumber: parseInt(user.personalNumber),
       status: 'completed',
@@ -73,7 +55,35 @@ export function CaseProvider({ children }) {
     // TODO: Remove Auhtorization header when token authentication works as expected.
     post('/cases', JSON.stringify(body), {
       Authorization: parseInt(user.personalNumber),
-    });
+    }).then(response => callback(response.data.data));
+  };
+
+  /**
+   * Function to refresh the loaded cases from the backend.
+   * Currently it also sets the currentCase.
+   * Pass a callback in order to guarantee that the loading of
+   * information happens before the updated values are used.
+   */
+  const updateCases = async (callback, createNew = false) => {
+    console.log('UPDATE CASES!!');
+    setFetching(true);
+    if (createNew) {
+      console.log('Creating new, empty case');
+      createCase({}, newCase => {
+        console.log(newCase);
+        setCurrentCase(newCase);
+        setFetching(false);
+        callback(newCase);
+      });
+    } else {
+      get('/cases', undefined, user.personalNumber)
+        .then(response => {
+          setCases(response.data.data);
+          setCurrentCase(findLatestCase(response.data.data));
+          setFetching(false);
+        })
+        .then(response => callback(response));
+    }
   };
 
   /**
