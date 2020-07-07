@@ -28,6 +28,7 @@ const inputTypes = {
   button: {
     component: ButtonField,
     changeEvent: 'onClick',
+    props: {},
   },
   editableList: {
     component: EditableList,

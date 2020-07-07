@@ -398,6 +398,7 @@ const colors = {
     dark: {},
     red: {},
     green: {},
+    blue: {},
   },
 };
 
