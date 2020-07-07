@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Checkbox, Text } from 'source/components/atoms';
+import { updateAnswer } from 'app/containers/Form/hooks/formActions';
 import colors from '../../../styles/colors';
 
 const FlexContainer = styled.View`
@@ -30,14 +31,21 @@ const sizes = {
 };
 
 const CheckboxField = props => {
-  const { text, color, size, value, ...other } = props;
+  const { text, color, size, value, onChange, ...other } = props;
   const textStyle = {
     color: colors.checkboxField[color].text,
     ...sizes[size],
   };
+  let boolValue;
+  if (typeof value === 'boolean') {
+    boolValue = value;
+  } else {
+    boolValue = value === 'true';
+  }
+  const update = event => onChange(!boolValue);
   return (
     <FlexContainer>
-      <Checkbox color={color} size={size} checked={value} {...other} />
+      <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
       <Text style={textStyle}>{text}</Text>
     </FlexContainer>
   );

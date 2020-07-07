@@ -66,10 +66,9 @@ function Step({
                 <FormField
                   label={field.label}
                   onChange={onFieldChange}
-                  placeholder={field.placeholder}
-                  id={field.id}
                   inputType={field.type}
                   value={answers[field.id] || ''}
+                  {...field}
                 />
               ))}
             </StepFieldListWrapper>

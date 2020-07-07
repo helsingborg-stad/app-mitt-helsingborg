@@ -125,10 +125,11 @@ const formEkbMockData = {
           type: 'text',
         },
         {
-          id: 'other2',
-          label: 'Bästa djuret?',
-          placeholder: 'Hund',
-          type: 'text',
+          id: 'dogCheckbox',
+          label: 'Dogs',
+          text: 'Do you like dogs?',
+          placeholder: '',
+          type: 'checkbox',
         },
       ],
       theme: {
