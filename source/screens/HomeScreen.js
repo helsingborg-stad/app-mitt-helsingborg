@@ -30,7 +30,6 @@ const ChatScreenWrapper = styled(ScreenWrapper)`
   padding-right: 0;
   padding-bottom: 0px;
 `;
-// padding-bottom: 0px;
 
 const HomeScreen = ({ navigation }) => {
   const [isInputVisible, setInputVisible] = useState(false);
