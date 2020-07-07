@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Text, Button } from '../../atoms';
@@ -80,32 +80,52 @@ const EditableListItemInputWrapper = styled.View`
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
-  flex: 4;
+  flex: 5;
 `;
 
+// eslint-disable-next-line prettier/prettier
 const EditableListItemInput = styled.TextInput`
+  text-align: right;
+  min-width: 220px;
   font-size: 18px;
   font-weight: bold;
   color: ${props => props.color};
 `;
 
-function EditableList({
-  theme,
-  title,
-  inputs,
-  onInputChange,
-  inputsEditable,
-  headerButton: HeaderButton,
-}) {
+function EditableList({ theme, title, inputs, onInputChange, inputIsEditable }) {
+  const [editable, setEditable] = useState(false);
+  const [state, setState] = useState(
+    inputs.reduce((prev, current) => ({ ...prev, [current.key]: current.value }), {})
+  );
+
+  const changeEditable = () => setEditable(!editable);
+
+  const onChange = (key, text) => {
+    const updatedState = JSON.parse(JSON.stringify(state));
+    updatedState[key] = text;
+    onInputChange(updatedState);
+    setState(updatedState);
+  };
+
+  const editStyle = {
+    borderColor: 'gray',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderStyle: 'solid',
+    backgroundColor: 'white',
+  };
+
   return (
     <EditableListWrapper bg={theme.list.bg}>
       <EditableListHeader {...theme.list.header}>
         <HeaderTitleWrapper>
           <HeaderTitle> {title}</HeaderTitle>
         </HeaderTitleWrapper>
-        {HeaderButton && (
+        {inputIsEditable && (
           <HeaderButtonWrapper>
-            <HeaderButton />
+            <Button z={0} size="small" onClick={changeEditable}>
+              <Text>{editable ? 'Spara' : 'Ändra'}</Text>
+            </Button>
           </HeaderButtonWrapper>
         )}
       </EditableListHeader>
@@ -120,10 +140,11 @@ function EditableList({
             </EditableListItemLabelWrapper>
             <EditableListItemInputWrapper>
               <EditableListItemInput
+                style={editable ? editStyle : {}}
                 color={theme.list.item.input.color}
-                editable={inputsEditable}
-                onChangeText={onInputChange}
-                value={input.value}
+                editable={editable}
+                onChangeText={text => onChange(input.key, text)}
+                value={state[input.key]}
               />
             </EditableListItemInputWrapper>
           </EditableListItem>
@@ -156,11 +177,7 @@ EditableList.propTypes = {
   /**
    * Decides of the inputs are editable or not
    */
-  inputsEditable: PropTypes.bool,
-  /**
-   * The right side component in the list header
-   */
-  headerButton: PropTypes.node,
+  inputIsEditable: PropTypes.bool,
 
   /**
    * The theming of the component
@@ -184,28 +201,8 @@ EditableList.propTypes = {
   }),
 };
 EditableList.defaultProps = {
-  headerButton: undefined,
-  inputsEditable: false,
-  inputs: [
-    {
-      key: 'key-1',
-      label: 'Adress',
-      type: 'text',
-      value: 'Storgatan 9, Helsingborg',
-    },
-    {
-      key: 'key-2',
-      label: 'Storlek',
-      type: 'text',
-      value: '1 rum & kök',
-    },
-    {
-      key: 'key-3',
-      label: 'Hyresvärd',
-      type: 'text',
-      value: 'Helsingborgshem',
-    },
-  ],
+  inputIsEditable: true,
+  inputs: [],
   theme: {
     list: {
       bg: '#fbf7f0',

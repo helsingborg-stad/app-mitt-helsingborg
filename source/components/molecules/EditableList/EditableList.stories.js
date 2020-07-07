@@ -27,25 +27,48 @@ const customEditableListTheme = {
   },
 };
 
+const inputs = [
+  {
+    key: 'key-1',
+    label: 'Adress',
+    type: 'text',
+    value: 'Storgatan 9, Helsingborg',
+  },
+  {
+    key: 'key-2',
+    label: 'Storlek',
+    type: 'text',
+    value: '1 rum & kök',
+  },
+  {
+    key: 'key-3',
+    label: 'Hyresvärd',
+    type: 'text',
+    value: 'Helsingborgshem',
+  },
+];
+
 storiesOf('EditableList', module).add('Default', () => (
   <StoryWrapper>
-    <FieldInputList title="Editable List" />
+    <FieldInputList onInputChange={() => {}} inputs={inputs} title="Editable List" />
   </StoryWrapper>
 ));
 
 storiesOf('EditableList', module).add('With Header Button', () => (
   <StoryWrapper>
-    <FieldInputList title="Editable List" headerButton={HeaderButton} />
+    <FieldInputList onInputChange={() => {}} inputs={inputs} title="Editable List" />
   </StoryWrapper>
 ));
 
 storiesOf('EditableList', module).add('Theming', () => (
   <StoryWrapper>
-    <FieldInputList title="Default theme" headerButton={HeaderButton} />
+    <FieldInputList onInputChange={() => {}} inputs={inputs} title="Default theme" />
     <FieldInputList
+      onInputChange={() => {}}
+      inputs={inputs}
       theme={customEditableListTheme}
       title="Custom theme"
-      headerButton={HeaderButton}
+      inputIsEditable={false}
     />
   </StoryWrapper>
 ));
