@@ -49,7 +49,7 @@ const FormCaseScreen = ({ navigation, ...props }) => {
     <FormScreenWrapper>
       <StatusBar hidden />
       <Form
-        steps={formEkbMockData.steps}
+        steps={form.steps}
         firstName={user.firstName}
         onClose={handleCloseForm}
         onStart={handleStartForm}

@@ -92,18 +92,14 @@ export function submitForm(state, payload) {
 }
 
 /**
- * Action for updating information.
+ * Action for updating the answers in the form state.
+ * @param {object} state The current state of the form
+ * @param {object} answer The new answer(s): an object with key:value pairs, to be inserted into the states formAnswers
  */
 export function updateAnswer(state, answer) {
-  const { formAnswers } = state;
-
-  let updatedAnswers = formAnswers;
-
-  if (Object.keys(updateAnswer).length === 0) {
-    updatedAnswers = { ...answer };
-  } else {
-    updatedAnswers = { ...formAnswers, [answer.id]: answer.value };
-  }
+  // make a deep copy of the formAnswers, and use that to update. Not sure if completely needed.
+  const updatedAnswers = JSON.parse(JSON.stringify(state.formAnswers));
+  Object.keys(answer).forEach(key => (updatedAnswers[key] = answer[key]));
 
   return {
     ...state,

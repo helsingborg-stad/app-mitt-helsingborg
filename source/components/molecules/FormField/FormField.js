@@ -32,25 +32,13 @@ const inputTypes = {
 };
 
 const FormField = props => {
-  const {
-    label,
-    labelLine,
-    inputType,
-    color,
-    placeholder,
-    id,
-    onChange,
-    onClick,
-    text,
-    iconName,
-    value,
-  } = props;
+  const { label, labelLine, inputType, color, id, onChange, value, ...other } = props;
   const input = inputTypes[inputType];
   const saveInput = value => {
     onChange({ [id]: value });
   };
 
-  const inputCompProps = { placeholder, color, onClick, text, iconName, value, ...input.props };
+  const inputCompProps = { color, value, ...input.props, ...other };
   inputCompProps[input.changeEvent] = saveInput;
 
   const inputComponent = React.createElement(input.component, inputCompProps);

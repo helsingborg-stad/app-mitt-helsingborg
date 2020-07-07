@@ -30,14 +30,21 @@ const sizes = {
 };
 
 const CheckboxField = props => {
-  const { text, color, size, value, ...other } = props;
+  const { text, color, size, value, onChange, ...other } = props;
   const textStyle = {
     color: colors.checkboxField[color].text,
     ...sizes[size],
   };
+  let boolValue;
+  if (typeof value === 'boolean') {
+    boolValue = value;
+  } else {
+    boolValue = value === 'true';
+  }
+  const update = event => onChange(!boolValue);
   return (
     <FlexContainer>
-      <Checkbox color={color} size={size} checked={value} {...other} />
+      <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
       <Text style={textStyle}>{text}</Text>
     </FlexContainer>
   );

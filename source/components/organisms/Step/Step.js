@@ -27,8 +27,9 @@ const StepBanner = styled(Banner)`
 
 const StepBody = styled.View``;
 const StepFieldListWrapper = styled.View`
-  margin: auto;
+  margin: 24px;
 `;
+// margin: auto;
 
 const StepFooter = styled(FooterAction)`
   position: absolute;
@@ -63,12 +64,10 @@ function Step({
             <StepFieldListWrapper>
               {fields.map(field => (
                 <FormField
-                  label={field.label}
                   onChange={onFieldChange}
-                  placeholder={field.placeholder}
-                  id={field.id}
                   inputType={field.type}
                   value={answers[field.id] || ''}
+                  {...field}
                 />
               ))}
             </StepFieldListWrapper>
