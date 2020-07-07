@@ -39,26 +39,13 @@ export function CaseProvider({ children }) {
   }, [user]);
 
   const getCase = caseId => cases.find(c => c.id === caseId);
-  // const createCase = (data, formId, callback = response => {}) => {
-  //   const body = {
-  //     personalNumber: parseInt(user.personalNumber),
-  //     status: 'completed',
-  //     type: 'VIVA_CASE',
-  //     data: data || {},
-  //     formId, // To be properly implemented later! dependent on FormContext.
-  //   };
-  //   setFetching(true);
-
-  //   // TODO: Remove Auhtorization header when token authentication works as expected.
-  //   post('/cases', JSON.stringify(body), {
-  //     Authorization: parseInt(user.personalNumber),
-  //   }).then(response => callback(response.data.data));
-  // };
 
   /**
    * Function for sending a post request towards the case api endpoint.
    * Can be used with  callback if something is to be done with the response object.
    * @param {obj} data a object consiting of case user inputs.
+   * @param {string} formId the id of the form corresponding to the new case
+   * @param {func} callback what should happen after the new case have been created.
    */
   const createCase = async (data, formId, callback = response => {}) => {
     const body = {
@@ -86,7 +73,7 @@ export function CaseProvider({ children }) {
    * Pass a callback in order to guarantee that the loading of
    * information happens before the updated values are used.
    */
-  const updateCases = async (callback, createNew = false) => {
+  const updateCases = async callback => {
     console.log('UPDATE CASES!!');
     setFetching(true);
     get('/cases', undefined, user.personalNumber)
