@@ -46,8 +46,88 @@ const formEkbMockData = {
       fields: [
         {
           id: 'testField',
-          label: 'Test fält',
-          placeholder: 'Skriv någonting',
+          label: 'Namn',
+          placeholder: 'Skriv ditt namn',
+          type: 'text',
+        },
+      ],
+      theme: {
+        step: {
+          bg: '#FFAA9B',
+          banner: {},
+          footer: {},
+          text: {
+            colors: {
+              primary: '#00213F',
+              secondary: '#733232',
+            },
+          },
+        },
+      },
+    },
+    {
+      title: 'Okej...',
+      description: 'Nu kommer lite frågor om dina inkomster',
+      group: 'Inkomster',
+      image: '',
+      icon: ICON_BREIF,
+      actions: [
+        {
+          type: 'next',
+          label: 'Gå vidare',
+        },
+      ],
+      fields: [
+        {
+          id: 'incomeField',
+          label: 'Lön',
+          placeholder: '0',
+          type: 'number',
+        },
+        {
+          id: 'incomeSwishField',
+          label: 'Swish',
+          placeholder: '0',
+          type: 'number',
+        },
+      ],
+      theme: {
+        step: {
+          bg: '#FFAA9B',
+          banner: {},
+          footer: {},
+          text: {
+            colors: {
+              primary: '#00213F',
+              secondary: '#733232',
+            },
+          },
+        },
+      },
+    },
+    {
+      title: 'Bra!',
+      description: 'Nu kommer lite andra frågor',
+      group: 'Övrigt',
+      image: '',
+      icon: ICON_BREIF,
+      actions: [
+        {
+          type: 'next',
+          label: 'Gå vidare',
+        },
+      ],
+      fields: [
+        {
+          id: 'other1',
+          label: 'Favoritfilm',
+          placeholder: '0',
+          type: 'text',
+        },
+        {
+          id: 'other2',
+          label: 'Bästa djuret?',
+          placeholder: 'Hund',
           type: 'text',
         },
       ],

@@ -27,8 +27,9 @@ const StepBanner = styled(Banner)`
 
 const StepBody = styled.View``;
 const StepFieldListWrapper = styled.View`
-  margin: auto;
+  margin: 24px;
 `;
+// margin: auto;
 
 const StepFooter = styled(FooterAction)`
   position: absolute;
