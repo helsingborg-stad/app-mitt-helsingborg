@@ -92,7 +92,7 @@ const EditableListItemInput = styled.TextInput`
   color: ${props => props.color};
 `;
 
-function EditableList({ theme, title, inputs, onInputChange, inputIsEditable }) {
+function EditableList({ theme, title, inputs, value, onInputChange, inputIsEditable }) {
   const [editable, setEditable] = useState(false);
   const [state, setState] = useState(
     inputs.reduce((prev, current) => ({ ...prev, [current.key]: current.value }), {})
@@ -144,7 +144,7 @@ function EditableList({ theme, title, inputs, onInputChange, inputIsEditable }) 
                 color={theme.list.item.input.color}
                 editable={editable}
                 onChangeText={text => onChange(input.key, text)}
-                value={state[input.key]}
+                value={value && value !== '' ? value[input.key] : state[input.key]}
               />
             </EditableListItemInputWrapper>
           </EditableListItem>
@@ -155,6 +155,10 @@ function EditableList({ theme, title, inputs, onInputChange, inputIsEditable }) 
 }
 
 EditableList.propTypes = {
+  /**
+   * The values
+   */
+  value: PropTypes.object,
   /**
    * Function for handling input events
    */

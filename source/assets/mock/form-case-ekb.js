@@ -46,9 +46,27 @@ const formEkbMockData = {
       fields: [
         {
           id: 'testField',
-          label: 'Namn',
-          placeholder: 'Skriv ditt namn',
-          type: 'text',
+          label: '',
+          title: 'Address',
+          inputIsEditable: 'true',
+          type: 'editableList',
+          inputs: [
+            {
+              key: 'address',
+              label: 'Adress',
+              type: 'text',
+            },
+            {
+              key: 'size',
+              label: 'Storlek',
+              type: 'text',
+            },
+            {
+              key: 'landlord',
+              label: 'Hyresvärd',
+              type: 'text',
+            },
+          ],
         },
       ],
       theme: {
