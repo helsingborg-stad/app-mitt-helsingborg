@@ -64,7 +64,6 @@ function Step({
             <StepFieldListWrapper>
               {fields.map(field => (
                 <FormField
-                  label={field.label}
                   onChange={onFieldChange}
                   inputType={field.type}
                   value={answers[field.id] || ''}

@@ -126,10 +126,19 @@ const formEkbMockData = {
         },
         {
           id: 'dogCheckbox',
-          label: 'Dogs',
+          label: '',
           text: 'Do you like dogs?',
           placeholder: '',
           type: 'checkbox',
+          size: 'small',
+        },
+        {
+          id: 'catCheckbox',
+          label: '',
+          text: 'Do you like cats?',
+          placeholder: '',
+          type: 'checkbox',
+          size: 'small',
         },
       ],
       theme: {
