@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Checkbox, Text } from 'source/components/atoms';
-import { updateAnswer } from 'app/containers/Form/hooks/formActions';
 import colors from '../../../styles/colors';
 
 const FlexContainer = styled.View`

@@ -101,8 +101,6 @@ export function updateAnswer(state, answer) {
   const updatedAnswers = JSON.parse(JSON.stringify(state.formAnswers));
   Object.keys(answer).forEach(key => (updatedAnswers[key] = answer[key]));
 
-  console.log(answer);
-
   return {
     ...state,
     formAnswers: updatedAnswers,
