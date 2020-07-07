@@ -35,7 +35,7 @@ const StepDescriptionText = styled(Text)`
 function StepDescription({ style, theme, tagline, heading, text }) {
   return (
     <StepDescriptionWrapper style={style}>
-      {tagline && (
+      {tagline.length > 0 && (
         <StepDescriptionTagline color={theme.step.text.colors.secondary}>
           {tagline}
         </StepDescriptionTagline>

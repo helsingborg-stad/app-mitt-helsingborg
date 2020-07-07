@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Text, Button } from '../../atoms';
 import { BackNavigation, Banner, FooterAction, StepDescription, FormField } from '../../molecules';
-import FieldList from '../FieldList/FieldList';
 
 const StepContainer = styled.View`
   background: ${props => props.bg};
@@ -40,7 +39,7 @@ function Step({
   theme,
   banner,
   description,
-  fields,
+  questions,
   footer,
   answers,
   onBack,
@@ -60,13 +59,15 @@ function Step({
         <StepBanner {...banner} />
         <StepBody>
           <StepDescription theme={theme} {...description} />
-          {fields && (
+          {questions && (
             <StepFieldListWrapper>
-              {fields.map(field => (
+              {questions.map(field => (
                 <FormField
                   onChange={onFieldChange}
                   inputType={field.type}
                   value={answers[field.id] || ''}
+                  color={field.color}
+                  id={field.id}
                   {...field}
                 />
               ))}
@@ -78,7 +79,7 @@ function Step({
             {footer.buttons.map(button => {
               const { label, ...buttonProps } = button;
               return (
-                <Button {...buttonProps}>
+                <Button {...buttonProps} block>
                   <Text>{label}</Text>
                 </Button>
               );
@@ -94,7 +95,7 @@ Step.propTypes = {
   /**
    * The array of fields that are going to be displayed in the Step
    */
-  fields: PropTypes.arrayOf({}),
+  questions: PropTypes.arrayOf({}),
   /**
    * The answers of a form.
    */

@@ -1,6 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
 import PropTypes from 'prop-types';
-import React, { Component, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components/native';
 import { WatsonAgent, Chat } from 'app/components/organisms';
 import { ScreenWrapper } from 'app/components/molecules';
@@ -36,7 +36,13 @@ const HomeScreen = ({ navigation }) => {
   const [isChatButton, setChatButton] = useState(true);
 
   const { updateCases, createCase } = useContext(CaseContext);
-  const { form } = useContext(FormContext);
+  const { getForm, form } = useContext(FormContext);
+  const formId = 'ba337cb0-c029-11ea-bf81-adc7ded8f031';
+
+  useEffect(() => {
+    getForm(formId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const navigationOptions = ({ navigation }) => ({
     tabBarVisible: navigation.state.params.tabBarVisible,
@@ -52,8 +58,6 @@ const HomeScreen = ({ navigation }) => {
     setInputVisible(true);
     setChatButton(false);
   };
-
-  const openEkonomiBistånd = () => {};
 
   return (
     <>
@@ -78,6 +82,7 @@ const HomeScreen = ({ navigation }) => {
             </Button>
           ) : null}
           <Button
+            disabled={!form.steps}
             color="purple"
             block
             style={styles.button}
@@ -88,6 +93,7 @@ const HomeScreen = ({ navigation }) => {
             <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
           </Button>
           <Button
+            disabled={!form.steps}
             color="purple"
             block
             style={styles.button}

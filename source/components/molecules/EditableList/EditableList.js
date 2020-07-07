@@ -19,6 +19,8 @@ const EditableListWrapper = styled.View`
   background: ${props => props.bg};
   border-radius: 9.5px;
   overflow: hidden;
+  margin-bottom: 16px;
+  margin-left: -10px;
 `;
 
 const EditableListHeader = styled.View`

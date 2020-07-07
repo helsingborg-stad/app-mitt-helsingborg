@@ -50,7 +50,7 @@ function Form({
   return (
     <FormContainer>
       <FormStepper active={formState.counter}>
-        {formState.steps.map(({ icon, theme, title, group, description, fields, actions }) => (
+        {formState.steps.map(({ icon, theme, title, group, description, questions, actions }) => (
           <Step
             banner={{ iconSrc: icon }}
             theme={theme}
@@ -60,7 +60,7 @@ function Form({
               text: description,
             }}
             answers={formState.formAnswers}
-            fields={fields}
+            questions={questions}
             onBack={goToPreviousStep}
             onClose={() => closeForm(onClose)}
             onFieldChange={handleInputChange}

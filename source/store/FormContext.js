@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'app/helpers/ApiRequest';
 import CaseContext from 'app/store/CaseContext';
-import formEkbMockData from '../assets/mock/form-case-ekb';
 
 const FormContext = React.createContext();
 
@@ -14,36 +13,30 @@ export function FormProvider({ children }) {
   const { cases } = useContext(CaseContext);
   const [form, setForm] = useState({});
 
-  // TODO: set formID from case
-
-  // Using a form id for now
-  const id = '4bc10130-af17-11ea-b35b-c9388ccd1548';
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getForm = async id => {
     try {
-      const response = await get(`/forms/${id}`);
+      const response = await get(`/forms/${id}`)
+        .then(res => {
+          if (res && res.data) {
+            setForm(res.data.data);
+          } else {
+            console.log(' Form data not found');
+          }
+        })
+        .catch(error => console.log(error.message));
+
       console.log('response', response);
-      // TODO : set response to setForm
-      setForm(formEkbMockData);
-      console.log('FORM', form);
-      /*  if (response && response.length) {
-        setForm(response);
-      } else {
-        console.log('Error form not found');
-      } */
+      console.log('Form ', form);
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
     }
   };
 
+  /* 
   useEffect(() => {
     getForm(id);
-    setTimeout(() => {
-      setForm(formEkbMockData);
-    }, 200);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id]); */
 
   return <FormContext.Provider value={{ form, getForm }}>{children}</FormContext.Provider>;
 }
