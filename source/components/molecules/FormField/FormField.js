@@ -39,14 +39,11 @@ const inputTypes = {
     changeEvent: 'onInputChange',
     props: {},
   },
-<<<<<<< HEAD
-=======
   substepButton: {
     component: SubstepButton,
     changeEvent: 'onChange',
     props: {},
   },
->>>>>>> 11399e1... Minor changes, added code to index.js
 };
 
 const FormField = props => {
