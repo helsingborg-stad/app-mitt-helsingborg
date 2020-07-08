@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { ScreenWrapper } from 'app/components/molecules';
 import { StatusBar } from 'react-native';
 import Form from '../containers/Form/Form';
-import formEkbMockData from '../assets/mock/form-case-ekb';
 import AuthContext from '../store/AuthContext';
 import CaseContext from '../store/CaseContext';
 import FormContext from '../store/FormContext';
