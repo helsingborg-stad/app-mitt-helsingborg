@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Input, FieldLabel, Checkbox, Text } from 'source/components/atoms';
-import { CheckboxField } from 'source/components/molecules';
+import { CheckboxField, EditableList } from 'source/components/molecules';
 import { View } from 'react-native';
 import colors from '../../../styles/colors';
 import ButtonField from '../ButtonField';
@@ -28,6 +28,11 @@ const inputTypes = {
   button: {
     component: ButtonField,
     changeEvent: 'onClick',
+  },
+  editableList: {
+    component: EditableList,
+    changeEvent: 'onInputChange',
+    props: {},
   },
 };
 
