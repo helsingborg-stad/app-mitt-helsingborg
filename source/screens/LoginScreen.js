@@ -151,13 +151,8 @@ class LoginScreen extends Component {
     }
 
     return (
-<<<<<<< HEAD
-      <LoginScreenWrapper>
-        <LoginKeyboardAvoidingView enabled>
-=======
       <LoginSafeAreaView behavior="padding" enabled>
         <LoginScreenWrapper>
->>>>>>> 91b1370... Add button that opens a sub-form, first version.
           <LoginHeader>
             {hideLogo ? null : <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />}
           </LoginHeader>
