@@ -92,11 +92,16 @@ const EditableListItemInput = styled.TextInput`
   color: ${props => props.color};
 `;
 
+const getInitialState = (inputs, value) => {
+  if (value && typeof value === 'object') {
+    return inputs.reduce((prev, current) => ({ ...prev, [current.key]: value[current.key] }), {});
+  }
+  return inputs.reduce((prev, current) => ({ ...prev, [current.key]: current.value }), {});
+};
+
 function EditableList({ theme, title, inputs, value, onInputChange, inputIsEditable }) {
   const [editable, setEditable] = useState(false);
-  const [state, setState] = useState(
-    inputs.reduce((prev, current) => ({ ...prev, [current.key]: current.value }), {})
-  );
+  const [state, setState] = useState(getInitialState(inputs, value));
 
   const changeEditable = () => setEditable(!editable);
 
