@@ -10,8 +10,10 @@ const ButtonFieldWrapper = styled.View`
 `;
 
 const ButtonField = ({ iconName, text, onClick, color }) => (
+  // Disabled onClick for now, need to change/add logic later.
+  // Depends on what the buttons actually have to do.
   <ButtonFieldWrapper>
-    <Button onClick={onClick} color={color} block>
+    <Button onClick={() => {}} color={color} block>
       <Text>{text}</Text>
       {iconName.length ? <Icon name={iconName} /> : null}
     </Button>
