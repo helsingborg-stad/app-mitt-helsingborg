@@ -152,7 +152,7 @@ class LoginScreen extends Component {
 
     return (
       <LoginScreenWrapper>
-        <LoginKeyboardAvoidingView behavior="padding" enabled>
+        <LoginKeyboardAvoidingView enabled>
           <LoginHeader>
             {hideLogo ? null : <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />}
           </LoginHeader>
