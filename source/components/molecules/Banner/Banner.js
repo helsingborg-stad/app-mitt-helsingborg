@@ -2,6 +2,7 @@ import React from 'react';
 import { Image } from 'react-native';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import icons from 'source/helpers/Icons';
 
 const BannerWrapper = styled.View`
   margin: 0;
@@ -34,7 +35,9 @@ const Banner = ({ imageSrc, iconSrc, backgroundColor, style }) => (
         <BannerImage resizeMode="contain" source={imageSrc} />
       </BannerImageWrapper>
     )}
-    <BannerImageIcon source={iconSrc} />
+    <BannerImageIcon
+      source={Object.prototype.hasOwnProperty.call(icons, iconSrc) ? icons[iconSrc] : ''}
+    />
   </BannerWrapper>
 );
 
