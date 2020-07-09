@@ -11,7 +11,7 @@ const FormScreenWrapper = styled(ScreenWrapper)`
   flex: 1;
 `;
 
-const SubstepButton = ({ text, value, form, onChange, ...other }) => {
+function SubstepButton({ text, value, form, onChange, ...other }) {
   const { user } = useContext(AuthContext);
   const [showForm, setShowForm] = useState(false);
   const [answers, setAnswers] = useState({});
@@ -52,7 +52,8 @@ const SubstepButton = ({ text, value, form, onChange, ...other }) => {
       />
     </FormScreenWrapper>
   );
-};
+}
+
 SubstepButton.propTypes = {
   /**
    * The values
@@ -78,6 +79,7 @@ SubstepButton.propTypes = {
    */
   color: PropTypes.string,
 };
+
 SubstepButton.defaultProps = {
   color: 'light',
 };
