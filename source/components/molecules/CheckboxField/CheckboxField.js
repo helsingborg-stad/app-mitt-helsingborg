@@ -43,8 +43,21 @@ const CheckboxField = props => {
     boolValue = value === 'true';
   }
   const update = event => onChange(!boolValue);
+
+  const backgroundStyle = {
+    marginLeft: -24,
+    marginRight: -24,
+    paddingLeft: 24,
+    paddingRight: 24,
+    backgroundColor: boolValue ? 'transparent' : colors.checkbox[color].checkedBackground,
+  };
+
   return (
-    <TouchableHighlight underlayColor={colors.checkbox[color].touch} onPress={update}>
+    <TouchableHighlight
+      underlayColor={colors.checkbox[color].checkedBackground}
+      style={backgroundStyle}
+      onPress={update}
+    >
       <FlexContainer>
         <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
         <Text style={textStyle}>{text}</Text>
@@ -83,7 +96,7 @@ CheckboxField.propTypes = {
 CheckboxField.defaultProps = {
   onChange: () => {},
   color: 'light',
-  size: 'small',
+  size: 'medium',
   disabled: false,
 };
 
