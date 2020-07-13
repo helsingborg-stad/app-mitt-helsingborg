@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'app/helpers/ApiRequest';
 import CaseContext from 'app/store/CaseContext';
@@ -16,7 +16,7 @@ export function FormProvider({ children }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getForm = async id => {
     try {
-      const response = await get(`/forms/${id}`)
+      const response = await get(`/forms3/${id}`)
         .then(res => {
           if (res && res.data) {
             setForm(res.data.data);
@@ -25,15 +25,12 @@ export function FormProvider({ children }) {
           }
         })
         .catch(error => console.log(error.message));
-
-      console.log('response', response);
-      console.log('Form ', form);
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  /* 
+  /*
   useEffect(() => {
     getForm(id);
   }, [id]); */

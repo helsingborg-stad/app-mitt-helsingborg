@@ -37,7 +37,9 @@ const HomeScreen = ({ navigation }) => {
 
   const { updateCases, createCase } = useContext(CaseContext);
   const { getForm, form } = useContext(FormContext);
-  const formId = 'ba337cb0-c029-11ea-bf81-adc7ded8f031';
+
+  // TODO: Remove static formId. Should be fetched or defined as env variable.
+  const formId = 'e7801ac0-c4f7-11ea-9198-757c76f2706c';
 
   useEffect(() => {
     getForm(formId);
