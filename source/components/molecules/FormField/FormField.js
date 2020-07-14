@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Input, FieldLabel } from 'source/components/atoms';
-import { CheckboxField, EditableList, SubstepButton } from 'source/components/molecules';
+import { CheckboxField, EditableList } from 'source/components/molecules';
 import { View } from 'react-native';
+import SubstepButton from '../SubstepButton';
 import colors from '../../../styles/colors';
 import ButtonField from '../ButtonField';
 

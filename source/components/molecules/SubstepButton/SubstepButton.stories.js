@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react-native';
-import Text from 'source/components/atoms';
 import { View } from 'react-native';
 import StoryWrapper from '../StoryWrapper';
-
+import { Text } from '../../atoms';
 import SubstepButton from './SubstepButton';
 
 const ICON_EKB = require('source/assets/images/icons/icn_Main_ekonomiskt-bistand_1x.png');
@@ -23,7 +22,7 @@ const testForm = {
           label: 'Ja, allt stämmer',
         },
       ],
-      fields: [
+      questions: [
         {
           id: 'testField',
           label: 'Namn',
@@ -57,7 +56,7 @@ const testForm = {
           label: 'Avsluta och spara',
         },
       ],
-      fields: [
+      questions: [
         {
           id: 'incomeField',
           label: 'Lön',
@@ -95,18 +94,21 @@ storiesOf('SubstepButton', module).add('Default', props => (
 ));
 
 const SubstepStory = props => {
-  const [answers, setAnswers] = useState('');
+  const [answers, setAnswers] = useState({});
 
   const updateVal = data => {
     setAnswers(data);
   };
 
   return (
-    <SubstepButton
-      text="Open sub-form"
-      value={answers}
-      form={testForm}
-      onChange={updateVal}
-    ></SubstepButton>
+    <View>
+      <SubstepButton
+        text="Open sub-form"
+        value={answers}
+        formId={testForm}
+        onChange={updateVal}
+      ></SubstepButton>
+      <Text>answers from substep: {JSON.stringify(answers, null, 2)}</Text>
+    </View>
   );
 };
