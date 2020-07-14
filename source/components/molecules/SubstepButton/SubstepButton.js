@@ -1,10 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Modal, StyleSheet, View, Dimensions } from 'react-native';
 import { ScreenWrapper } from 'app/components/molecules';
 import AuthContext from 'source/store/AuthContext';
 import Form from 'source/containers/Form';
+import FormContext from 'app/store/FormContext';
 import { Text, Button } from '../../atoms';
 
 const styles = StyleSheet.create({
@@ -44,11 +45,13 @@ const FormScreenWrapper = styled(ScreenWrapper)`
   margin: 0;
 `;
 
-function SubstepButton({ text, value, formId, onChange, ...other }) {
+function SubstepButton({ text, value, formId, onChange, color, ...other }) {
   const { user } = useContext(AuthContext);
+  const { getForm } = useContext(FormContext);
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState({});
-  const [form, setForm] = useState(formId);
+  const [form, setForm] = useState({});
   const screenWidth = Math.round(Dimensions.get('window').width);
 
   const updateAnswers = data => {
@@ -62,27 +65,40 @@ function SubstepButton({ text, value, formId, onChange, ...other }) {
     setShowForm(false);
   };
 
+  // load the form from formContext once, store it in state.
+  useEffect(() => {
+    getForm(formId).then(res => {
+      setForm(res);
+      setLoading(false);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <View>
-      <Button onClick={() => setShowForm(true)}>
+      <Button color={color} onClick={() => setShowForm(true)}>
         <Text>{text}</Text>
       </Button>
       <Modal animationType="slide" transparent visible={showForm} onRequestClose={() => {}}>
         <View style={{ width: screenWidth, ...styles.centeredView }}>
           <View style={styles.modalView}>
             <FormScreenWrapper>
-              <Form
-                steps={form.steps}
-                firstName={user.firstName}
-                onClose={() => {
-                  setShowForm(false);
-                }}
-                onStart={() => {}}
-                onSubmit={handleSubmitForm}
-                initialAnswers={typeof value !== 'object' ? answers : value}
-                updateCaseInContext={updateAnswers}
-                {...other}
-              />
+              {loading ? (
+                <Text>Loading form...</Text>
+              ) : (
+                <Form
+                  steps={form.steps}
+                  firstName={user.firstName}
+                  onClose={() => {
+                    setShowForm(false);
+                  }}
+                  onStart={() => {}}
+                  onSubmit={handleSubmitForm}
+                  initialAnswers={typeof value !== 'object' ? answers : value}
+                  updateCaseInContext={updateAnswers}
+                  {...other}
+                />
+              )}
             </FormScreenWrapper>
           </View>
         </View>
@@ -91,8 +107,35 @@ function SubstepButton({ text, value, formId, onChange, ...other }) {
   );
 }
 
+SubstepButton.propTypes = {
+  /**
+   * The text to display on the button
+   */
+  text: PropTypes.string,
+  /**
+   * The value to fill the subform with
+   */
+  value: PropTypes.any,
+  /**
+   * The id that specifies the sub-form in the backend
+   */
+  formId: PropTypes.string,
+  /**
+   * what happens when a value change
+   */
+  onChange: PropTypes.func,
+  /**
+   * remaining things
+   */
+  other: PropTypes.any,
+  /**
+   * The color theme that specifies the button
+   */
+  color: PropTypes.string,
+};
+
 SubstepButton.defaultProps = {
-  color: 'light',
+  color: 'dark',
 };
 
 export default SubstepButton;

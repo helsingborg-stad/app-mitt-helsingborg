@@ -1,91 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { View } from 'react-native';
+import Markdown from 'react-native-markdown-display';
+import FormContext from 'app/store/FormContext';
 import StoryWrapper from '../StoryWrapper';
 import { Text } from '../../atoms';
 import SubstepButton from './SubstepButton';
 
 const ICON_EKB = require('source/assets/images/icons/icn_Main_ekonomiskt-bistand_1x.png');
 const ICON_BREIF = require('source/assets/images/icons/icn_sammanstallning_1x.png');
-
-const testForm = {
-  steps: [
-    {
-      title: 'Hej!',
-      description: 'Först börjar vi med att bekräfta dina uppgifter. Stämmer det här?',
-      group: 'Ekonomiskt Bistånd',
-      image: '',
-      icon: ICON_BREIF,
-      actions: [
-        {
-          type: 'next',
-          label: 'Ja, allt stämmer',
-        },
-      ],
-      questions: [
-        {
-          id: 'testField',
-          label: 'Namn',
-          placeholder: 'Skriv ditt namn',
-          type: 'text',
-        },
-      ],
-      theme: {
-        step: {
-          bg: '#FFAA9B',
-          banner: {},
-          footer: {},
-          text: {
-            colors: {
-              primary: '#00213F',
-              secondary: '#733232',
-            },
-          },
-        },
-      },
-    },
-    {
-      title: 'Okej...',
-      description: 'Nu kommer lite frågor om dina inkomster',
-      group: 'Inkomster',
-      image: '',
-      icon: ICON_BREIF,
-      actions: [
-        {
-          type: 'submit',
-          label: 'Avsluta och spara',
-        },
-      ],
-      questions: [
-        {
-          id: 'incomeField',
-          label: 'Lön',
-          placeholder: '0',
-          type: 'number',
-        },
-        {
-          id: 'incomeSwishField',
-          label: 'Swish',
-          placeholder: '0',
-          type: 'number',
-        },
-      ],
-      theme: {
-        step: {
-          bg: '#FFAA9B',
-          banner: {},
-          footer: {},
-          text: {
-            colors: {
-              primary: '#00213F',
-              secondary: '#733232',
-            },
-          },
-        },
-      },
-    },
-  ],
-};
 
 storiesOf('SubstepButton', module).add('Default', props => (
   <StoryWrapper {...props}>
@@ -100,12 +23,15 @@ const SubstepStory = props => {
     setAnswers(data);
   };
 
+  const subformId = 'e366f250-c5a2-11ea-9e21-b7b32d0793c5';
+
   return (
     <View>
       <SubstepButton
         text="Open sub-form"
+        color="dark"
         value={answers}
-        formId={testForm}
+        formId={subformId}
         onChange={updateVal}
       ></SubstepButton>
       <Text>answers from substep: {JSON.stringify(answers, null, 2)}</Text>

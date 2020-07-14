@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'app/helpers/ApiRequest';
-import CaseContext from 'app/store/CaseContext';
 
 const FormContext = React.createContext();
 
@@ -17,7 +16,7 @@ export function FormProvider({ children }) {
       return forms.id;
     }
     try {
-      const response = await get(`/forms/${id}`)
+      const response = await get(`/forms3/${id}`)
         .then(res => {
           if (res && res.data) {
             setForms({ ...forms, [res.data.data.id]: res.data.data });
@@ -26,8 +25,8 @@ export function FormProvider({ children }) {
           console.log(' Form data not found');
         })
         .catch(error => console.log(error.message));
+      console.log('response', response.data.data);
       return response.data.data;
-      // console.log('response', response);
       // console.log('Form ', form);
     } catch (error) {
       console.error(error.message);
@@ -39,7 +38,7 @@ export function FormProvider({ children }) {
       setCurrentFormLocal(forms.id);
     }
     try {
-      const response = await get(`/forms/${id}`)
+      const response = await get(`/forms3/${id}`)
         .then(res => {
           if (res && res.data) {
             setCurrentFormLocal(res.data.data);
