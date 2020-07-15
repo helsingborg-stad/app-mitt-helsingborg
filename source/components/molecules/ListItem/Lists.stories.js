@@ -2,40 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import GroupListWithAvatar from 'app/components/molecules/GroupedListWithAvatar';
 import StoryWrapper from '../StoryWrapper';
-import GroupedList from '../GroupedList/GroupedList';
 import ListItem from './index';
-
-const GroupedListData = [
-  {
-    heading: 'TISDAG 3 NOVEMBER',
-    data: [
-      {
-        id: 'bd7a8bea',
-        title: 'Highlighted with icon',
-        text: 'Lorem ipsum',
-        iconName: 'directions-bus',
-        highlighted: true,
-        color: 'red',
-      },
-    ],
-  },
-  {
-    heading: 'FREDAG 10 NOVEMBER',
-    data: [
-      {
-        id: '3ac68afc',
-        title: 'With icon',
-        text: 'Lorem ipsum',
-        iconName: 'directions-bus',
-      },
-      {
-        id: '58694a0f',
-        title: 'Default',
-        text: 'Lorem ipsum',
-      },
-    ],
-  },
-];
 
 const COAPPLICATION = require('source/images/illu_sammanstallning.png');
 
@@ -97,11 +64,6 @@ const HighlightedData = [
 ];
 
 storiesOf('Lists', module)
-  .add('Grouped list', props => (
-    <StoryWrapper {...props}>
-      <GroupedList heading="Avslutade" items={GroupedListData} />
-    </StoryWrapper>
-  ))
   .add('Highlight colors', props => (
     <StoryWrapper {...props}>
       {HighlightedData.map(item => (

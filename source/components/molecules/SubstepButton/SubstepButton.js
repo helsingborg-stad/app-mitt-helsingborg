@@ -37,6 +37,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  button: {
+    margin: 2,
+  },
 });
 
 const FormScreenWrapper = styled(ScreenWrapper)`
@@ -45,7 +48,7 @@ const FormScreenWrapper = styled(ScreenWrapper)`
   margin: 0;
 `;
 
-function SubstepButton({ text, value, formId, onChange, color, ...other }) {
+function SubstepButton({ text, value, formId, onChange, color, size, ...other }) {
   const { user } = useContext(AuthContext);
   const { getForm } = useContext(FormContext);
   const [showForm, setShowForm] = useState(false);
@@ -76,7 +79,7 @@ function SubstepButton({ text, value, formId, onChange, color, ...other }) {
 
   return (
     <View>
-      <Button color={color} onClick={() => setShowForm(true)}>
+      <Button style={styles.button} size={size} color={color} onClick={() => setShowForm(true)}>
         <Text>{text}</Text>
       </Button>
       <Modal animationType="slide" transparent visible={showForm} onRequestClose={() => {}}>
@@ -132,10 +135,14 @@ SubstepButton.propTypes = {
    * The color theme that specifies the button
    */
   color: PropTypes.string,
+  /**
+   * The size for the button; essentially allows it to be set to small
+   */
+  size: PropTypes.string,
 };
 
 SubstepButton.defaultProps = {
-  color: 'dark',
+  color: 'light',
 };
 
 export default SubstepButton;

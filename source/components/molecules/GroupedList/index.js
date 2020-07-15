@@ -1,1 +1,1 @@
-export { default } from './GroupedList';
+export { default as GroupedList } from './GroupedList';
