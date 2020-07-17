@@ -9,7 +9,6 @@ import { Text, Button } from '../../atoms';
  */
 
 const EditableListWrapper = styled.View`
-  background: red;
   display: flex;
   flex-direction: column;
 

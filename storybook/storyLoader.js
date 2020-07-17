@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 // Auto-generated file created by react-native-storybook-loader
 // Do not edit.
 //
@@ -17,10 +16,14 @@ function loadStories() {
   require('../source/components/atoms/Text/Text.stories');
   require('../source/components/molecules/BackNavigation/BackNavigation.stories');
   require('../source/components/molecules/Banner/Banner.stories');
+  require('../source/components/molecules/ButtonField/ButtonField.stories');
+  require('../source/components/molecules/ButtonListField/ButtonListField.stories');
+  require('../source/components/molecules/CheckboxField/CheckboxField.stories');
   require('../source/components/molecules/DateTimePicker/DateTimePickerForm.stories');
   require('../source/components/molecules/EditableList/EditableList.stories');
   require('../source/components/molecules/FooterAction/FooterAction.stories');
   require('../source/components/molecules/FormField/FormField.stories');
+  require('../source/components/molecules/GroupedList/GroupedList.stories');
   require('../source/components/molecules/Header/Header.stories');
   require('../source/components/molecules/ImagePicker/ImagePicker.stories');
   require('../source/components/molecules/InfoLink/InfoButton.stories');
@@ -29,12 +32,12 @@ function loadStories() {
   require('../source/components/molecules/Markdown.stories');
   require('../source/components/molecules/Modal.stories');
   require('../source/components/molecules/StepDescription/StepDescription.stories');
-  require('../source/components/molecules/ButtonField/ButtonField.stories');
+  require('../source/components/molecules/SubstepButton/SubstepButton.stories');
   require('../source/components/organisms/FieldList/FieldList.stories');
   require('../source/components/organisms/FormAgent/FormAgent.stories');
   require('../source/components/organisms/Step/Step.stories');
+  require('../source/components/organisms/SubstepList/SubstepList.stories');
   require('../source/components/organisms/WatsonAgent/WatsonAgent.stories');
-  require('../source/components/molecules/CheckboxField/CheckboxField.stories');
 }
 
 const stories = [
@@ -50,10 +53,14 @@ const stories = [
   '../source/components/atoms/Text/Text.stories',
   '../source/components/molecules/BackNavigation/BackNavigation.stories',
   '../source/components/molecules/Banner/Banner.stories',
+  '../source/components/molecules/ButtonField/ButtonField.stories',
+  '../source/components/molecules/ButtonListField/ButtonListField.stories',
+  '../source/components/molecules/CheckboxField/CheckboxField.stories',
   '../source/components/molecules/DateTimePicker/DateTimePickerForm.stories',
   '../source/components/molecules/EditableList/EditableList.stories',
   '../source/components/molecules/FooterAction/FooterAction.stories',
   '../source/components/molecules/FormField/FormField.stories',
+  '../source/components/molecules/GroupedList/GroupedList2.stories',
   '../source/components/molecules/Header/Header.stories',
   '../source/components/molecules/ImagePicker/ImagePicker.stories',
   '../source/components/molecules/InfoLink/InfoButton.stories',
@@ -62,12 +69,12 @@ const stories = [
   '../source/components/molecules/Markdown.stories',
   '../source/components/molecules/Modal.stories',
   '../source/components/molecules/StepDescription/StepDescription.stories',
-  '../source/components/molecules/ButtonField/ButtonField.stories',
+  '../source/components/molecules/SubstepButton/SubstepButton.stories',
   '../source/components/organisms/FieldList/FieldList.stories',
   '../source/components/organisms/FormAgent/FormAgent.stories',
   '../source/components/organisms/Step/Step.stories',
+  '../source/components/organisms/SubstepList/SubstepList.stories',
   '../source/components/organisms/WatsonAgent/WatsonAgent.stories',
-  '../source/components/molecules/CheckboxField/CheckboxField.stories',
 ];
 
 module.exports = {

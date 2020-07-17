@@ -29,7 +29,7 @@ const Link = styled(Text)`
   margin-bottom: 8px;
 `;
 
-const LoginKeyboardAvoidingView = styled.KeyboardAvoidingView`
+const LoginSafeAreaView = styled.SafeAreaView`
   flex: 1;
   align-items: stretch;
 `;
@@ -151,8 +151,8 @@ class LoginScreen extends Component {
     }
 
     return (
-      <LoginScreenWrapper>
-        <LoginKeyboardAvoidingView enabled>
+      <LoginSafeAreaView behavior="padding" enabled>
+        <LoginScreenWrapper>
           <LoginHeader>
             {hideLogo ? null : <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />}
           </LoginHeader>
@@ -205,8 +205,8 @@ class LoginScreen extends Component {
               </LoginFormField>
             </LoginForm>
           </LoginBody>
-        </LoginKeyboardAvoidingView>
-      </LoginScreenWrapper>
+        </LoginScreenWrapper>
+      </LoginSafeAreaView>
     );
   }
 }

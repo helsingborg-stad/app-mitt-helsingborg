@@ -36,13 +36,11 @@ const HomeScreen = ({ navigation }) => {
   const [isChatButton, setChatButton] = useState(true);
 
   const { updateCases, createCase } = useContext(CaseContext);
-  const { getForm, form } = useContext(FormContext);
-
-  // TODO: Remove static formId. Should be fetched or defined as env variable.
-  const formId = 'e7801ac0-c4f7-11ea-9198-757c76f2706c';
+  const { setCurrentForm, currentForm, getForm } = useContext(FormContext);
+  const formId = 'ba337cb0-c029-11ea-bf81-adc7ded8f031';
 
   useEffect(() => {
-    getForm(formId);
+    setCurrentForm(formId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -84,18 +82,18 @@ const HomeScreen = ({ navigation }) => {
             </Button>
           ) : null}
           <Button
-            disabled={!form.steps}
+            disabled={!currentForm.steps}
             color="purple"
             block
             style={styles.button}
             onClick={() => {
-              createCase({}, form.id, () => navigation.navigate('Form'), true);
+              createCase({}, currentForm.id, () => navigation.navigate('Form'), true);
             }}
           >
             <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
           </Button>
           <Button
-            disabled={!form.steps}
+            disabled={!currentForm.steps}
             color="purple"
             block
             style={styles.button}

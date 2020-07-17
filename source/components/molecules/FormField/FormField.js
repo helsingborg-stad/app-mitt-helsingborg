@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, FieldLabel, Checkbox, Text } from 'source/components/atoms';
+import { Input, FieldLabel } from 'source/components/atoms';
 import { CheckboxField, EditableList } from 'source/components/molecules';
 import { View } from 'react-native';
+import SubstepButton from '../SubstepButton';
 import colors from '../../../styles/colors';
 import ButtonField from '../ButtonField';
 
@@ -33,6 +34,11 @@ const inputTypes = {
   editableList: {
     component: EditableList,
     changeEvent: 'onInputChange',
+    props: {},
+  },
+  substepButton: {
+    component: SubstepButton, // SubstepButton,
+    changeEvent: 'onChange',
     props: {},
   },
 };
