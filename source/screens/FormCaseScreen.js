@@ -21,7 +21,6 @@ const FormCaseScreen = ({ navigation, ...props }) => {
   /**
    * Sets the correct order of the form steps
    */
-  const formSteps = form.stepOrder.map(stepId => form.steps.find(step => step.id === stepId));
 
   function handleCloseForm() {
     navigation.navigate('Start');
@@ -45,7 +44,7 @@ const FormCaseScreen = ({ navigation, ...props }) => {
     <FormScreenWrapper>
       <StatusBar hidden />
       <Form
-        steps={formSteps}
+        steps={form.steps}
         firstName={user.firstName}
         onClose={handleCloseForm}
         onStart={handleStartForm}

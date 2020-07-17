@@ -107,7 +107,7 @@ export const authAndCollect = async personalNumber => {
 
   // Make initial auth request to retrieve user details and access token
   try {
-    responseJson = await post('auth/bankid', { personalNumber, endUserIp });
+    responseJson = await post('auth/bankid/auth', { personalNumber, endUserIp });
     responseJson = responseJson.data.data.attributes;
   } catch (error) {
     console.log('Auth error:', error);
