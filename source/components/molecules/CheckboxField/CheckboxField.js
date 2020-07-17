@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { TouchableHighlight } from 'react-native';
 import { Checkbox, Text } from 'source/components/atoms';
 import colors from '../../../styles/colors';
 
@@ -42,11 +43,26 @@ const CheckboxField = props => {
     boolValue = value === 'true';
   }
   const update = event => onChange(!boolValue);
+
+  const backgroundStyle = {
+    marginLeft: -24,
+    marginRight: -24,
+    paddingLeft: 24,
+    paddingRight: 24,
+    backgroundColor: boolValue ? 'transparent' : colors.checkbox[color].checkedBackground,
+  };
+
   return (
-    <FlexContainer>
-      <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
-      <Text style={textStyle}>{text}</Text>
-    </FlexContainer>
+    <TouchableHighlight
+      underlayColor={colors.checkbox[color].checkedBackground}
+      style={backgroundStyle}
+      onPress={update}
+    >
+      <FlexContainer>
+        <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
+        <Text style={textStyle}>{text}</Text>
+      </FlexContainer>
+    </TouchableHighlight>
   );
 };
 
@@ -80,7 +96,7 @@ CheckboxField.propTypes = {
 CheckboxField.defaultProps = {
   onChange: () => {},
   color: 'light',
-  size: 'small',
+  size: 'medium',
   disabled: false,
 };
 

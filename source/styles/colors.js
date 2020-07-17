@@ -198,6 +198,7 @@ const colors = {
       touch: palette.mono.gray,
       disabled: palette.mono.gray,
       shadow: 'rgba(255, 255, 255, 0.0)',
+      checkedBackground: palette.mono.lighter,
     },
     light: {
       background: palette.mono.lighter,
@@ -206,6 +207,7 @@ const colors = {
       touch: palette.mono.gray,
       disabled: palette.mono.gray,
       shadow: 'rgba(255, 255, 255, 0.0)',
+      checkedBackground: palette.mono.lighter,
     },
     gray: {
       background: palette.mono.gray,
@@ -214,6 +216,7 @@ const colors = {
       touch: palette.mono.lighter,
       disabled: palette.mono.lighter,
       shadow: 'rgba(255, 255, 255, 0.0)',
+      checkedBackground: palette.mono.lighter,
     },
     dark: {
       background: palette.mono.darkest,
@@ -222,6 +225,7 @@ const colors = {
       touch: palette.mono.gray,
       disabled: palette.mono.gray,
       shadow: 'rgba(255, 255, 255, 0.0)',
+      checkedBackground: palette.mono.white,
     },
     blue: {
       background: palette.blue[4],
@@ -230,6 +234,7 @@ const colors = {
       touch: palette.mono.gray,
       disabled: palette.mono.gray,
       shadow: 'rgba(255, 255, 255, 0.0)',
+      checkedBackground: palette.blue[6],
     },
   },
   list: {
