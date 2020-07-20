@@ -1,1 +1,1 @@
-export { default as SubstepList } from './SubstepList';
+export { default } from './SubstepList';

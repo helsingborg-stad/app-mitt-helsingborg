@@ -40,7 +40,6 @@ const SubstepListStory = () => {
 
   return (
     <ScrollView>
-      <Text>{JSON.stringify(values, null, 2)}</Text>
       <SubstepList
         heading={heading}
         items={items}
