@@ -75,7 +75,7 @@ function Step({
           )}
         </StepBody>
         {footer.buttons && (
-          <StepFooter>
+          <StepFooter background={footer.background}>
             {footer.buttons.map(button => {
               const { label, ...buttonProps } = button;
               return (
@@ -127,6 +127,7 @@ Step.propTypes = {
     height: PropTypes.string,
     imageSrc: PropTypes.string,
     imageStyle: PropTypes.object,
+    backgroundColor: PropTypes.string,
   }),
 
   /**

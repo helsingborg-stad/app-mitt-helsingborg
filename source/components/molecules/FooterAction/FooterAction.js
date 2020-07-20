@@ -11,8 +11,12 @@ const ActionContainer = styled.View(props => ({
 }));
 
 const ButtonWrapper = styled.View`
-  padding-left: 60%;
+  padding-left: 30%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  width: 100%;
   display: flex;
+  flex: 1;
   flex-direction: column;
   justify-content: space-around;
 `;

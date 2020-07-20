@@ -32,7 +32,10 @@ const Banner = ({ imageSrc, iconSrc, backgroundColor, style }) => (
   <BannerWrapper image={imageSrc} style={style} backgroundColor={backgroundColor}>
     {imageSrc && (
       <BannerImageWrapper>
-        <BannerImage resizeMode="contain" source={imageSrc} />
+        <BannerImage
+          resizeMode="contain"
+          source={Object.prototype.hasOwnProperty.call(icons, imageSrc) ? icons[imageSrc] : ''}
+        />
       </BannerImageWrapper>
     )}
     <BannerImageIcon
