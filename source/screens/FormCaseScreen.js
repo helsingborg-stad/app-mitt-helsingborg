@@ -16,11 +16,7 @@ const FormScreenWrapper = styled(ScreenWrapper)`
 const FormCaseScreen = ({ navigation, ...props }) => {
   const { user } = useContext(AuthContext);
   const { currentCase, createCase, updateCurrentCase } = useContext(CaseContext);
-  const { form } = useContext(FormContext);
-
-  /**
-   * Sets the correct order of the form steps
-   */
+  const { currentForm } = useContext(FormContext);
 
   function handleCloseForm() {
     navigation.navigate('Start');
@@ -44,7 +40,7 @@ const FormCaseScreen = ({ navigation, ...props }) => {
     <FormScreenWrapper>
       <StatusBar hidden />
       <Form
-        steps={form.steps}
+        steps={currentForm.steps}
         firstName={user.firstName}
         onClose={handleCloseForm}
         onStart={handleStartForm}

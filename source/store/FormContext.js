@@ -34,23 +34,7 @@ export function FormProvider({ children }) {
   };
 
   const setCurrentForm = async id => {
-    if (forms.id) {
-      setCurrentFormLocal(forms.id);
-    }
-    try {
-      const response = await get(`/forms3/${id}`)
-        .then(res => {
-          if (res && res.data) {
-            setCurrentFormLocal(res.data.data);
-            setForms({ ...forms, [res.data.data.id]: res.data.data });
-          } else {
-            console.log(' Form data not found');
-          }
-        })
-        .catch(error => console.log(error.message));
-    } catch (error) {
-      console.error(error.message);
-    }
+    setCurrentFormLocal(getForm(id));
   };
 
   return (
