@@ -53,17 +53,14 @@ function SubstepButton({ text, value, formId, onChange, color, size, ...other })
   const { getForm } = useContext(FormContext);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [answers, setAnswers] = useState({});
   const [form, setForm] = useState({});
   const screenWidth = Math.round(Dimensions.get('window').width);
 
   const updateAnswers = data => {
-    setAnswers(data);
     onChange(data);
   };
 
   const handleSubmitForm = data => {
-    setAnswers(data);
     onChange(data);
     setShowForm(false);
   };
@@ -97,7 +94,7 @@ function SubstepButton({ text, value, formId, onChange, color, size, ...other })
                   }}
                   onStart={() => {}}
                   onSubmit={handleSubmitForm}
-                  initialAnswers={typeof value !== 'object' ? answers : value}
+                  initialAnswers={typeof value !== 'object' ? {} : value}
                   updateCaseInContext={updateAnswers}
                   {...other}
                 />

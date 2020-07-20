@@ -6,6 +6,7 @@ import styled from 'styled-components/native';
 import { excludePropetiesWithKey } from 'source/helpers/Objects';
 import { SubstepButton } from 'source/components/molecules';
 import GroupedList from 'app/components/molecules/GroupedList/GroupedList';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const ItemWrapper = styled(View)`
   flex-direction: row;
@@ -111,8 +112,9 @@ const SubstepList = ({ heading, items, categories, value, onChange, summary, ...
         removable={editable}
         removeItem={() => {}}
       />
-      {editable
-        ? items.map(item =>
+      {editable ? (
+        <ScrollView horizontal>
+          {items.map(item =>
             Object.keys(value).includes(item.title) ? null : (
               <SubstepButton
                 text={item.title}
@@ -121,8 +123,9 @@ const SubstepList = ({ heading, items, categories, value, onChange, summary, ...
                 formId={item.formId}
               />
             )
-          )
-        : null}
+          )}
+        </ScrollView>
+      ) : null}
       {summary ? (
         <ButtonWrapper>
           <Button color="dark" onClick={() => setEditable(!editable)}>
