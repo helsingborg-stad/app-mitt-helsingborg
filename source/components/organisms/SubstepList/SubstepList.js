@@ -26,6 +26,10 @@ const TextWrapper = styled.View`
   flex: 10;
   padding-left: 100px;
 `;
+const SumWrapper = styled.View`
+  align-items: center;
+  margin-bottom: 5px;
+`;
 const ButtonWrapper = styled.View`
   align-items: center;
   margin-top: 10px;
@@ -127,11 +131,26 @@ const SubstepList = ({ heading, items, categories, value, onChange, summary, ...
         </ScrollView>
       ) : null}
       {summary ? (
-        <ButtonWrapper>
-          <Button color="dark" onClick={() => setEditable(!editable)}>
-            <Text>{editable ? 'Lås' : 'Ändra'}</Text>
-          </Button>
-        </ButtonWrapper>
+        <>
+          <SumWrapper>
+            <Text>
+              Summa:{' '}
+              {Object.keys(value).reduce((prev, curr) => {
+                const amount = parseFloat(value[curr].amount);
+                if (isNaN(amount)) {
+                  return prev;
+                }
+                return prev + amount;
+              }, 0)}{' '}
+              kr
+            </Text>
+          </SumWrapper>
+          <ButtonWrapper>
+            <Button color="dark" onClick={() => setEditable(!editable)}>
+              <Text>{editable ? 'Lås' : 'Ändra'}</Text>
+            </Button>
+          </ButtonWrapper>
+        </>
       ) : null}
     </View>
   );
