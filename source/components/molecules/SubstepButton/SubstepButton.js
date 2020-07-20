@@ -7,6 +7,7 @@ import AuthContext from 'source/store/AuthContext';
 import Form from 'source/containers/Form';
 import FormContext from 'app/store/FormContext';
 import { Text, Button } from '../../atoms';
+import SubstepModal from '../SubstepModal/SubstepModal';
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -49,60 +50,21 @@ const FormScreenWrapper = styled(ScreenWrapper)`
 `;
 
 function SubstepButton({ text, value, formId, onChange, color, size, ...other }) {
-  const { user } = useContext(AuthContext);
-  const { getForm } = useContext(FormContext);
   const [showForm, setShowForm] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({});
-  const screenWidth = Math.round(Dimensions.get('window').width);
-
-  const updateAnswers = data => {
-    onChange(data);
-  };
-
-  const handleSubmitForm = data => {
-    onChange(data);
-    setShowForm(false);
-  };
-
-  // load the form from formContext once, store it in state.
-  useEffect(() => {
-    getForm(formId).then(res => {
-      setForm(res);
-      setLoading(false);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <View>
       <Button style={styles.button} size={size} color={color} onClick={() => setShowForm(true)}>
         <Text>{text}</Text>
       </Button>
-      <Modal animationType="slide" transparent visible={showForm} onRequestClose={() => {}}>
-        <View style={{ width: screenWidth, ...styles.centeredView }}>
-          <View style={styles.modalView}>
-            <FormScreenWrapper>
-              {loading ? (
-                <Text>Loading form...</Text>
-              ) : (
-                <Form
-                  steps={form.steps}
-                  firstName={user.firstName}
-                  onClose={() => {
-                    setShowForm(false);
-                  }}
-                  onStart={() => {}}
-                  onSubmit={handleSubmitForm}
-                  initialAnswers={typeof value !== 'object' ? {} : value}
-                  updateCaseInContext={updateAnswers}
-                  {...other}
-                />
-              )}
-            </FormScreenWrapper>
-          </View>
-        </View>
-      </Modal>
+      <SubstepModal
+        visible={showForm}
+        setVisible={setShowForm}
+        value={value}
+        formId={formId}
+        onChange={onChange}
+        {...other}
+      />
     </View>
   );
 }

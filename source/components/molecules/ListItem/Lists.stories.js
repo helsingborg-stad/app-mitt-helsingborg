@@ -12,7 +12,7 @@ const GroupedAvatarListData = [
     data: [
       {
         id: 'bd7a8bea',
-        title: 'Lisa Larsson',
+        title: 'Malin Larsson',
         text: 'Sambo',
         imageSrc: COAPPLICATION,
       },

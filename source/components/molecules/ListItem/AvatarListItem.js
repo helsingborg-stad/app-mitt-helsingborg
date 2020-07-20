@@ -47,6 +47,8 @@ const Content = styled.View`
 const AvatarListItem = props => {
   const { title, text, onClick, imageSrc } = props;
 
+  const familyFormId = 'dc069a10-c68d-11ea-9984-cbb2e8b06538'; // hardcoded for now, using dev db
+
   const nameAcronym = title
     .split(/\s/)
     // eslint-disable-next-line no-param-reassign
