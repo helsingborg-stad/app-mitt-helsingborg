@@ -49,12 +49,13 @@ const CheckboxField = props => {
     marginRight: -24,
     paddingLeft: 24,
     paddingRight: 24,
-    backgroundColor: boolValue ? 'transparent' : colors.checkbox[color].checkedBackground,
+    backgroundColor:
+      'transparent' /* boolValue ? 'transparent' : colors.checkbox[color].checkedBackground */,
   };
 
   return (
     <TouchableHighlight
-      underlayColor={colors.checkbox[color].checkedBackground}
+      underlayColor="transparent" // {colors.checkbox[color].checkedBackground}
       style={backgroundStyle}
       onPress={update}
     >

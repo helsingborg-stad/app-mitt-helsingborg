@@ -50,57 +50,76 @@ function Form({
   return (
     <FormContainer>
       <FormStepper active={formState.counter}>
-        {formState.steps.map(({ icon, theme, title, group, description, questions, actions }) => (
-          <Step
-            banner={{ iconSrc: icon }}
-            theme={theme}
-            description={{
-              heading: title,
-              tagline: group,
-              text: description,
-            }}
-            answers={formState.formAnswers}
-            questions={questions}
-            onBack={goToPreviousStep}
-            onClose={() => closeForm(onClose)}
-            onFieldChange={handleInputChange}
-            isBackBtnVisible={formState.counter > 2}
-            footer={{
-              buttons: actions.map(action => {
-                switch (action.type) {
-                  case 'start': {
-                    return {
-                      label: action.label,
-                      onClick: () => {
-                        startForm(onStart);
-                      },
-                    };
-                  }
+        {formState.steps.map(
+          ({ banner, theme, title, group, description, questions, actions, footerBG }) => (
+            <Step
+              banner={{
+                ...banner,
+              }}
+              theme={theme}
+              description={{
+                heading: title,
+                tagline: group,
+                text: description,
+              }}
+              answers={formState.formAnswers}
+              questions={questions}
+              onBack={goToPreviousStep}
+              onClose={() => closeForm(onClose)}
+              onFieldChange={handleInputChange}
+              isBackBtnVisible={formState.counter > 2}
+              footer={{
+                background: footerBG || '#00213F',
+                buttons: actions.map(action => {
+                  switch (action.type) {
+                    case 'start': {
+                      return {
+                        label: action.label,
+                        color: action.color,
+                        onClick: () => {
+                          startForm(onStart);
+                        },
+                      };
+                    }
+                    case 'close': {
+                      return {
+                        label: action.label,
+                        color: action.color,
+                        z: 0,
+                        onClick: () => {
+                          updateCaseInContext(formState.formAnswers, 'ongoing');
+                          closeForm(onClose);
+                        },
+                      };
+                    }
+                    case 'submit': {
+                      return {
+                        label: action.label,
+                        color: action.color,
+                        onClick: () => {
+                          // closeForm(onClose);
+                          handleSubmit(onSubmit);
+                        },
+                      };
+                    }
 
-                  case 'submit': {
-                    return {
-                      label: action.label,
-                      onClick: () => {
-                        // closeForm(onClose);
-                        handleSubmit(onSubmit);
-                      },
-                    };
+                    default: {
+                      return {
+                        label: action.label,
+                        color: action.color,
+                        z: 0,
+                        onClick: () => {
+                          updateCaseInContext(formState.formAnswers, 'ongoing');
+                          goToNextStep();
+                        },
+                      };
+                    }
                   }
-
-                  default: {
-                    return {
-                      label: action.label,
-                      onClick: () => {
-                        updateCaseInContext(formState.formAnswers, 'ongoing');
-                        goToNextStep();
-                      },
-                    };
-                  }
-                }
-              }),
-            }}
-          />
-        ))}
+                }),
+              }}
+            />
+          )
+        )}
       </FormStepper>
     </FormContainer>
   );
