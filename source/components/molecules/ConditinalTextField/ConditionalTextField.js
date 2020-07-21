@@ -12,20 +12,18 @@ const ConditionalTextField = props => {
     checkboxDisableText,
     checkboxEnableText,
     textFieldPlaceholder,
-    text = undefined,
+    value = undefined,
   } = props;
 
-  const [textFieldState, setTextFieldState] = useState(!!text); // Show text field if we have prop with text.
-  const [textFieldInput, setTextFieldInput] = useState(text || '');
+  const [textFieldState, setTextFieldState] = useState(!!value); // Show text field if we have prop with text.
 
   function onChange(change) {
-    setTextFieldInput(change);
     onInputChange(change);
   }
 
   function disableTextField() {
     setTextFieldState(false);
-    setTextFieldInput('');
+    onChange('');
   }
 
   return (
@@ -52,12 +50,10 @@ const ConditionalTextField = props => {
             placeholder={textFieldPlaceholder}
             multiline
           >
-            {textFieldInput}
+            {value}
           </Input>
         </FlexRow>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </View>
   );
 };
@@ -90,7 +86,7 @@ ConditionalTextField.propTypes = {
    * Text value in input field.
    * If defined, checkboxEnableText will be set true and input field populated with text.
    */
-  text: PropTypes.string,
+  value: PropTypes.string,
 };
 
 ConditionalTextField.defaultProps = {
