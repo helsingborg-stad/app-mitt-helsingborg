@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { ScrollView } from 'react-native';
 import { storiesOf } from '@storybook/react-native';
-import GroupListWithAvatar from 'app/components/molecules/GroupedListWithAvatar';
 import { Text } from 'source/components/atoms';
 import StoryWrapper from '../../molecules/StoryWrapper';
 import SubstepList from './SubstepList';
@@ -33,8 +33,34 @@ const items = [
   },
 ];
 
+const SubstepListStory = () => {
+  const [values, setValues] = useState({ Carrot: { amount: '342' } });
+
+  const onChange = newValues => setValues(newValues);
+
+  return (
+    <ScrollView>
+      <SubstepList
+        heading={heading}
+        items={items}
+        categories={categories}
+        value={values}
+        onChange={onChange}
+      />
+      <SubstepList
+        heading="Summary"
+        items={items}
+        categories={categories}
+        value={values}
+        onChange={onChange}
+        summary
+      />
+    </ScrollView>
+  );
+};
+
 storiesOf('Substep List', module).add('default', props => (
   <StoryWrapper {...props}>
-    <SubstepList heading={heading} items={items} categories={categories} value={{}} />
+    <SubstepListStory />
   </StoryWrapper>
 ));

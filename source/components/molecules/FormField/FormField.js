@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, FieldLabel } from 'source/components/atoms';
-import { CheckboxField, EditableList } from 'source/components/molecules';
+import { Input, FieldLabel, Select } from 'source/components/atoms';
+import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
+import SubstepList from 'source/components/organisms/SubstepList';
 import { View } from 'react-native';
 import SubstepButton from '../SubstepButton';
 import colors from '../../../styles/colors';
@@ -38,6 +39,26 @@ const inputTypes = {
   },
   substepButton: {
     component: SubstepButton, // SubstepButton,
+    changeEvent: 'onChange',
+    props: {},
+  },
+  substepList: {
+    component: SubstepList,
+    changeEvent: 'onChange',
+    props: {},
+  },
+  substepListSummary: {
+    component: SubstepList,
+    changeEvent: 'onChange',
+    props: { summary: true },
+  },
+  select: {
+    component: Select,
+    changeEvent: 'onValueChange',
+    props: {},
+  },
+  avatarList: {
+    component: GroupListWithAvatar,
     changeEvent: 'onChange',
     props: {},
   },

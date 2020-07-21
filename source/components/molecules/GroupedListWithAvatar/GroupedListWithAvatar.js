@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import AvatarListItem from 'app/components/molecules/ListItem/AvatarListItem';
 import Text from '../../atoms/Text';
+import Button from '../../atoms/Button';
+import Icon from '../../atoms/Icon';
 
 const SectionHeader = styled(Text)`
   margin-left: 15px;
@@ -22,37 +24,71 @@ const Separator = styled(View)`
     props.theme.list.onLightBackground.listWithAvatar.headerSeparatorBackground};
 `;
 
-const GroupListWithAvatar = props => {
-  const { items, onClick } = props;
+const ButtonWrapper = styled(View)`
+  margin-left: 80%;
+`;
+
+const GroupListWithAvatar = ({ heading, value, onChange, formId }) => {
+  const updateValue = index => newValue => {
+    const vs = JSON.parse(JSON.stringify(value));
+    vs[index] = newValue;
+    onChange(vs);
+  };
+  const addItem = () => {
+    const vs = JSON.parse(JSON.stringify(value));
+    vs.push({});
+    onChange(vs);
+  };
+  const removeItem = index => () => {
+    const vs = JSON.parse(JSON.stringify(value));
+    vs.splice(index, 1);
+    onChange(vs);
+  };
   return (
-    <SectionList
-      renderSectionHeader={({ section: { heading, data } }) => (
-        <View>
-          <SectionHeader small>{heading}</SectionHeader>
-          <Separator />
-        </View>
-      )}
-      scrollEnabled={false}
-      sections={items}
-      renderItem={item => <AvatarListItem onClick={onClick} {...item.item} />}
-      keyExtractor={(item, index) => index}
-    />
+    <>
+      <View>
+        <SectionHeader small>{heading}</SectionHeader>
+        <Separator />
+      </View>
+      {value.map((item, index) => (
+        <AvatarListItem
+          onChange={updateValue(index)}
+          value={item}
+          imageSrc="hello"
+          removeItem={removeItem(index)}
+          formId={formId}
+        />
+      ))}
+      <ButtonWrapper>
+        <Button size="small" pill icon onClick={addItem}>
+          <Icon name="add"></Icon>
+        </Button>
+      </ButtonWrapper>
+    </>
   );
 };
 
 GroupListWithAvatar.propTypes = {
   /**
+   * Heading to display above list
+   */
+  heading: PropTypes.string,
+  /**
    * List items to display.
    */
-  items: PropTypes.array.isRequired,
+  value: PropTypes.array.isRequired,
   /**
    * onClick handler for list items.
    */
-  onClick: PropTypes.func,
+  onChange: PropTypes.func,
+  /**
+   * What form to open
+   */
+  formId: PropTypes.string,
 };
 
 GroupListWithAvatar.defaultProps = {
-  onClick: null,
+  onChange: null,
 };
 
 export default GroupListWithAvatar;

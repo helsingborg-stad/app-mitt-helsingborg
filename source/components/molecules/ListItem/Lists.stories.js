@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react-native';
 import GroupListWithAvatar from 'app/components/molecules/GroupedListWithAvatar';
 import StoryWrapper from '../StoryWrapper';
@@ -6,13 +6,13 @@ import ListItem from './index';
 
 const COAPPLICATION = require('source/images/illu_sammanstallning.png');
 
+const heading = 'FAMILJ / PERSONER JAG DELAR BOENDE MED';
 const GroupedAvatarListData = [
   {
-    heading: 'FAMILJ / PERSONER JAG DELAR BOENDE MED',
     data: [
       {
         id: 'bd7a8bea',
-        title: 'Lisa Larsson',
+        title: 'Malin Larsson',
         text: 'Sambo',
         imageSrc: COAPPLICATION,
       },
@@ -63,6 +63,30 @@ const HighlightedData = [
   },
 ];
 
+const AvatarListStory = props => {
+  const [answers, setAnswers] = useState([
+    { firstName: 'Eva', lastName: 'Erikson', email: 'test@test.dev' },
+  ]);
+  const change = value => {
+    setAnswers(value);
+  };
+  const [answersKids, setAnswersKids] = useState([{ firstName: 'Lotta', lastName: 'Erikson' }]);
+  const changeKids = value => {
+    setAnswersKids(value);
+  };
+  return (
+    <StoryWrapper {...props} style={{ backgroundColor: '#FFAA9B' }}>
+      <GroupListWithAvatar heading="VUXNA JAG DELAR BOENDE MED" value={answers} onChange={change} />
+      <GroupListWithAvatar
+        heading="BARN JAG DELAR BOENDE MED"
+        value={answersKids}
+        onChange={changeKids}
+        formId="34c8e190-c68d-11ea-9984-cbb2e8b06538"
+      />
+    </StoryWrapper>
+  );
+};
+
 storiesOf('Lists', module)
   .add('Highlight colors', props => (
     <StoryWrapper {...props}>
@@ -71,8 +95,4 @@ storiesOf('Lists', module)
       ))}
     </StoryWrapper>
   ))
-  .add('Grouped list with avatars', props => (
-    <StoryWrapper {...props} style={{ backgroundColor: '#FFAA9B' }}>
-      <GroupListWithAvatar items={GroupedAvatarListData} />
-    </StoryWrapper>
-  ));
+  .add('Grouped list with avatars', props => <AvatarListStory />);
