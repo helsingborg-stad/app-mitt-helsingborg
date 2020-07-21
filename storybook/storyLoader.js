@@ -19,6 +19,7 @@ function loadStories() {
   require('../source/components/molecules/ButtonField/ButtonField.stories');
   require('../source/components/molecules/ButtonListField/ButtonListField.stories');
   require('../source/components/molecules/CheckboxField/CheckboxField.stories');
+  require('../source/components/molecules/ConditinalTextField/ConditionalTextField.stories');
   require('../source/components/molecules/DateTimePicker/DateTimePickerForm.stories');
   require('../source/components/molecules/EditableList/EditableList.stories');
   require('../source/components/molecules/FooterAction/FooterAction.stories');
@@ -56,11 +57,12 @@ const stories = [
   '../source/components/molecules/ButtonField/ButtonField.stories',
   '../source/components/molecules/ButtonListField/ButtonListField.stories',
   '../source/components/molecules/CheckboxField/CheckboxField.stories',
+  '../source/components/molecules/ConditinalTextField/ConditionalTextField.stories',
   '../source/components/molecules/DateTimePicker/DateTimePickerForm.stories',
   '../source/components/molecules/EditableList/EditableList.stories',
   '../source/components/molecules/FooterAction/FooterAction.stories',
   '../source/components/molecules/FormField/FormField.stories',
-  '../source/components/molecules/GroupedList/GroupedList2.stories',
+  '../source/components/molecules/GroupedList/GroupedList.stories',
   '../source/components/molecules/Header/Header.stories',
   '../source/components/molecules/ImagePicker/ImagePicker.stories',
   '../source/components/molecules/InfoLink/InfoButton.stories',
