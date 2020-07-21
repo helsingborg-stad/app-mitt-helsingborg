@@ -15,7 +15,7 @@ const ConditionalTextField = props => {
     text = undefined,
   } = props;
 
-  const [textFieldState, setTextFieldState] = useState(!!text);
+  const [textFieldState, setTextFieldState] = useState(!!text); // Show text field if we have prop with text.
   const [textFieldInput, setTextFieldInput] = useState(text || '');
 
   function onChange(change) {
