@@ -9,7 +9,10 @@ const input = css`
   background-color: ${({ color }) => colors.input[color].background};
   border-radius: 17.5px;
   border: solid 1px ${({ color }) => colors.input[color].border};
-  padding: 16px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
   margin: 3px;
   color: ${({ color }) => colors.input[color].text};
   ${props => (props.center ? 'text-align: center;' : null)}
