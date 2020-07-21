@@ -17,6 +17,7 @@ const ConstTextFields = () => {
       checkboxDisableText="Disable text field"
       checkboxEnableText="Enable text field"
       onInputChange={setText}
+      color="light"
       value={text}
     />
   );

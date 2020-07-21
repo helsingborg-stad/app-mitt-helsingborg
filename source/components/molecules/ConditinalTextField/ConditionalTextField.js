@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Input } from 'app/components/atoms';
 import styled from 'styled-components/native/dist/styled-components.native.esm';
 import { CheckboxField } from 'app/components/molecules';
+import colors from 'app/styles/colors';
 
 const ConditionalTextField = props => {
   const {
@@ -12,6 +13,7 @@ const ConditionalTextField = props => {
     checkboxDisableText,
     checkboxEnableText,
     textFieldPlaceholder,
+    color,
     value = undefined,
   } = props;
 
@@ -30,14 +32,14 @@ const ConditionalTextField = props => {
     <View>
       <CheckboxField
         text={checkboxDisableText}
-        color="light"
+        color={color}
         size="small"
         checked={textFieldState === false}
         onChange={() => disableTextField()}
       />
       <CheckboxField
         text={checkboxEnableText}
-        color="light"
+        color={color}
         size="small"
         checked={textFieldState === true}
         onChange={() => setTextFieldState(true)}
@@ -82,6 +84,10 @@ ConditionalTextField.propTypes = {
    * Placeholder text to be shown in the text field.
    */
   textFieldPlaceholder: PropTypes.string,
+  /**
+   * Sets the color theme.
+   */
+  color: PropTypes.oneOf(Object.keys(colors.checkboxField)),
   /**
    * Text value in input field.
    * If defined, checkboxEnableText will be set true and input field populated with text.
