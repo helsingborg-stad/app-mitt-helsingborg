@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components/native';
 import { Avatar } from 'react-native-elements';
 import Text from '../../atoms/Text';
 import Button from '../../atoms/Button/Button';
+import Icon from '../../atoms/Icon';
+import SubstepModal from '../SubstepModal';
 
 const HighlightedItem = styled(Button)`
   padding: 0px;
@@ -44,11 +46,16 @@ const Content = styled.View`
   padding: 16px 0px 16px 8px;
 `;
 
-const AvatarListItem = props => {
-  const { title, text, onClick, imageSrc } = props;
+const AvatarListItem = ({ value, onChange, imageSrc, formId, removeItem }) => {
+  const [showForm, setShowForm] = useState(false);
+  const familyFormId = formId || 'dc069a10-c68d-11ea-9984-cbb2e8b06538'; // hardcoded for now, using dev db
 
-  const familyFormId = 'dc069a10-c68d-11ea-9984-cbb2e8b06538'; // hardcoded for now, using dev db
+  const showFormModal = () => {
+    setShowForm(true);
+  };
 
+  const title = `${value.firstName || 'Förnamn'} ${value.lastName || 'Efternamn'}`;
+  const { personalNumber, email, telephone, living } = value;
   const nameAcronym = title
     .split(/\s/)
     // eslint-disable-next-line no-param-reassign
@@ -71,45 +78,76 @@ const AvatarListItem = props => {
 
       <Content>
         {title && <Title>{title}</Title>}
-        {text && (
+        {email ? (
           <Body small strong>
-            {text}
+            Email: {email}
           </Body>
-        )}
+        ) : null}
+        {telephone ? (
+          <Body small strong>
+            Telefon: {telephone}
+          </Body>
+        ) : null}
+        {personalNumber ? (
+          <Body small strong>
+            Personnummer: {personalNumber}
+          </Body>
+        ) : null}
+        {living ? (
+          <Body small strong>
+            Boende: {living}
+          </Body>
+        ) : null}
       </Content>
+      <Button size="small" pill icon onClick={removeItem}>
+        <Icon name="remove"></Icon>
+      </Button>
     </Flex>
   );
 
   return (
-    <HighlightedItem onClick={onClick} block z={0}>
-      {renderContent()}
-    </HighlightedItem>
+    <>
+      <HighlightedItem onClick={showFormModal} block z={0}>
+        {renderContent()}
+      </HighlightedItem>
+      <SubstepModal
+        visible={showForm}
+        setVisible={setShowForm}
+        value={value}
+        formId={familyFormId}
+        onChange={onChange}
+      />
+    </>
   );
 };
 
-export default withTheme(AvatarListItem);
-
 AvatarListItem.propTypes = {
   /**
-   * Title for list item.
+   * Values for the list item.
    */
-  title: PropTypes.string.isRequired,
-  /**
-   * Body text for list item.
-   */
-  text: PropTypes.string,
+  value: PropTypes.object,
   /**
    * onClick handler for list item.
    */
-  onClick: PropTypes.func,
+  onChange: PropTypes.func,
+  /**
+   * What happens when the removeItem button is clicked
+   */
+  removeItem: PropTypes.func,
   /**
    * Source of avatar image for list item.
    */
   imageSrc: PropTypes.number,
+  /**
+   * The id for the the form that specifies the information.
+   */
+  formId: PropTypes.string,
 };
 
 AvatarListItem.defaultProps = {
-  text: '',
-  onClick: null,
+  value: {},
+  onChange: null,
   imageSrc: null,
 };
+
+export default withTheme(AvatarListItem);

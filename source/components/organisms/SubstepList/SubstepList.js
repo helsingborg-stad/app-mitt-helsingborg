@@ -137,6 +137,7 @@ const SubstepList = ({ heading, items, categories, value, onChange, summary, ...
               Summa:{' '}
               {Object.keys(value).reduce((prev, curr) => {
                 const amount = parseFloat(value[curr].amount);
+                // eslint-disable-next-line no-restricted-globals
                 if (isNaN(amount)) {
                   return prev;
                 }

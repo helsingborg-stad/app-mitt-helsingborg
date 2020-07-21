@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Modal, StyleSheet, View, Dimensions } from 'react-native';
-import { ScreenWrapper } from 'app/components/molecules';
+import ScreenWrapper from 'app/components/molecules/ScreenWrapper';
 import AuthContext from 'source/store/AuthContext';
 import Form from 'source/containers/Form';
 import FormContext from 'app/store/FormContext';
@@ -48,7 +48,7 @@ const FormScreenWrapper = styled(ScreenWrapper)`
   margin: 0;
 `;
 
-function SubstepModal({ visible, setVisible, value, formId, onChange, ...other }) {
+const SubstepModal = ({ visible, setVisible, value, formId, onChange, ...other }) => {
   const { user } = useContext(AuthContext);
   const { getForm } = useContext(FormContext);
   const [loading, setLoading] = useState(true);
@@ -99,7 +99,7 @@ function SubstepModal({ visible, setVisible, value, formId, onChange, ...other }
       </View>
     </Modal>
   );
-}
+};
 
 SubstepModal.propTypes = {
   /**
@@ -128,6 +128,9 @@ SubstepModal.propTypes = {
   other: PropTypes.any,
 };
 
-SubstepModal.defaultProps = {};
+SubstepModal.defaultProps = {
+  value: {},
+  onChange: null,
+};
 
 export default SubstepModal;

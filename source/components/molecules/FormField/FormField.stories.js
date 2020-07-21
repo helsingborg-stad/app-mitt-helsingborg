@@ -108,6 +108,19 @@ storiesOf('Form Field input', module)
         inputType="checkbox"
         placeholder="Do you feel it now?"
       />
+      <FormField
+        id="6"
+        label="Select input"
+        labelLine="true"
+        color="light"
+        placeholder="Your car preference"
+        inputType="select"
+        items={[
+          { label: 'Ferrari', value: 'ferrari' },
+          { label: 'Buggati', value: 'buggati' },
+          { label: 'Porsche', value: 'porsche' },
+        ]}
+      />
     </StoryWrapper>
   ))
   .add('Substep List', () => (
