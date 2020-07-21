@@ -34,7 +34,7 @@ const items = [
 ];
 
 const SubstepListStory = () => {
-  const [values, setValues] = useState({ Carrot: { amount: 342 } });
+  const [values, setValues] = useState({ Carrot: { amount: '342' } });
 
   const onChange = newValues => setValues(newValues);
 

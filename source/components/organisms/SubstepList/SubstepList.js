@@ -96,7 +96,9 @@ const SubstepList = ({ heading, items, categories, value, onChange, summary, ...
               <>
                 <SmallText>{item.title}</SmallText>
                 <TextWrapper>
-                  <SmallText>{`${value[item.title].amount} kr`}</SmallText>
+                  <SmallText>
+                    {value[item.title].amount ? `${value[item.title].amount} kr` : '0 kr'}
+                  </SmallText>
                 </TextWrapper>
               </>
             )}
