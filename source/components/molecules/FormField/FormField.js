@@ -4,6 +4,7 @@ import { Input, FieldLabel, Select } from 'source/components/atoms';
 import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
 import SubstepList from 'source/components/organisms/SubstepList';
 import { View } from 'react-native';
+import ConditionalTextField from 'app/components/molecules/ConditinalTextField';
 import SubstepButton from '../SubstepButton';
 import colors from '../../../styles/colors';
 import ButtonField from '../ButtonField';
@@ -59,6 +60,11 @@ const inputTypes = {
   },
   avatarList: {
     component: GroupListWithAvatar,
+    changeEvent: 'onChange',
+    props: {},
+  },
+  conditionalTextField: {
+    component: ConditionalTextField,
     changeEvent: 'onChange',
     props: {},
   },
