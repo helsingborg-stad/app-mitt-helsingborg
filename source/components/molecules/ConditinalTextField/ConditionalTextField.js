@@ -63,7 +63,6 @@ const ConditionalTextField = props => {
 const FlexRow = styled.View`
   flex-direction: row;
   max-height: 90px;
-  height: 100%;
   flex: auto;
 `;
 
