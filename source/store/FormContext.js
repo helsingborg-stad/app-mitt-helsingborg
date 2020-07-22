@@ -10,7 +10,6 @@ export function FormProvider({ children }) {
   const [forms, setForms] = useState({});
   const [currentForm, setCurrentFormLocal] = useState({});
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getForm = async id => {
     if (forms.id) {
       return forms.id;
@@ -27,14 +26,13 @@ export function FormProvider({ children }) {
         .catch(error => console.log(error.message));
       console.log('response', response.data.data);
       return response.data.data;
-      // console.log('Form ', form);
     } catch (error) {
       console.error(error.message);
     }
   };
 
   const setCurrentForm = async id => {
-    setCurrentFormLocal(getForm(id));
+    getForm(id).then(resp => setCurrentFormLocal(resp));
   };
 
   return (
