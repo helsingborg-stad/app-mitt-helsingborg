@@ -55,7 +55,6 @@ const AvatarListItem = ({ value, onChange, imageSrc, formId, removeItem }) => {
   };
 
   const title = `${value.firstName || 'Förnamn'} ${value.lastName || 'Efternamn'}`;
-  const { personalNumber, email, telephone, living } = value;
   const nameAcronym = title
     .split(/\s/)
     // eslint-disable-next-line no-param-reassign
@@ -78,24 +77,19 @@ const AvatarListItem = ({ value, onChange, imageSrc, formId, removeItem }) => {
 
       <Content>
         {title && <Title>{title}</Title>}
-        {email ? (
+        {value && value.personalInfo && value.personalInfo.email ? (
           <Body small strong>
-            Email: {email}
+            Email: {value.personalInfo.email}
           </Body>
         ) : null}
-        {telephone ? (
+        {value && value.personalInfo && value.personalInfo.telephone ? (
           <Body small strong>
-            Telefon: {telephone}
+            Telefon: {value.personalInfo.telephone}
           </Body>
         ) : null}
-        {personalNumber ? (
+        {value && value.personalInfo && value.personalInfo.personalNumber ? (
           <Body small strong>
-            Personnummer: {personalNumber}
-          </Body>
-        ) : null}
-        {living ? (
-          <Body small strong>
-            Boende: {living}
+            Personnummer: {value.personalInfo.personalNumber}
           </Body>
         ) : null}
       </Content>
