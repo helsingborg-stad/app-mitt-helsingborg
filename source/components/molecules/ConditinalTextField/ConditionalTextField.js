@@ -9,19 +9,15 @@ import colors from 'app/styles/colors';
 
 const ConditionalTextField = props => {
   const {
-    onInputChange,
+    onChange,
     checkboxDisableText,
     checkboxEnableText,
     textFieldPlaceholder,
     color,
-    value = undefined,
+    value,
   } = props;
 
   const [textFieldState, setTextFieldState] = useState(!!value); // Show text field if we have prop with text.
-
-  function onChange(change) {
-    onInputChange(change);
-  }
 
   function disableTextField() {
     setTextFieldState(false);
@@ -71,7 +67,7 @@ ConditionalTextField.propTypes = {
   /**
    * Function that handles text input changes.
    */
-  onInputChange: PropTypes.func,
+  onChange: PropTypes.func,
   /**
    * The text to show at the side of the checkbox that will disable the text field.
    */
@@ -96,7 +92,7 @@ ConditionalTextField.propTypes = {
 };
 
 ConditionalTextField.defaultProps = {
-  onInputChange: () => {},
+  onChange: () => {},
   textFieldPlaceholder: '',
 };
 
