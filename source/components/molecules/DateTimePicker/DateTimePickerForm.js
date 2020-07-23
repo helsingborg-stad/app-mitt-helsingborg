@@ -43,6 +43,7 @@ const DateTimePickerForm = props => {
           editable={false}
           value={dateTimeString}
           pointerEvents="none"
+          center
           {...other}
         />
       </TouchableOpacity>

@@ -55,19 +55,10 @@ const TimePicker = () => {
   );
 };
 
-storiesOf('Date time picker', module)
-  .add('Date time picker', () => (
-    <StoryWrapper>
-      <DateTimePicker />
-    </StoryWrapper>
-  ))
-  .add('Date picker', () => (
-    <StoryWrapper>
-      <DatePicker />
-    </StoryWrapper>
-  ))
-  .add('Time picker', () => (
-    <StoryWrapper>
-      <TimePicker />
-    </StoryWrapper>
-  ));
+storiesOf('Date time picker', module).add('Date time picker', () => (
+  <StoryWrapper>
+    <DateTimePicker />
+    <DatePicker />
+    <TimePicker />
+  </StoryWrapper>
+));

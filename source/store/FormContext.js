@@ -11,8 +11,8 @@ export function FormProvider({ children }) {
   const [currentForm, setCurrentFormLocal] = useState({});
 
   const getForm = async id => {
-    if (forms.id) {
-      return forms.id;
+    if (Object.keys(forms).includes(id)) {
+      return forms[id];
     }
     try {
       const response = await get(`/forms3/${id}`)
@@ -21,10 +21,10 @@ export function FormProvider({ children }) {
             setForms({ ...forms, [res.data.data.id]: res.data.data });
             return res;
           }
-          console.log(' Form data not found');
+          console.log('Form data not found');
         })
         .catch(error => console.log(error.message));
-      console.log('response', response.data.data);
+      // console.log('Fetched form:', response.data.data);
       return response.data.data;
     } catch (error) {
       console.error(error.message);
