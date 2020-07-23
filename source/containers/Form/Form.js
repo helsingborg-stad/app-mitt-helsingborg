@@ -64,59 +64,14 @@ function Form({
               }}
               answers={formState.formAnswers}
               questions={questions}
+              actions={actions}
+              onNext={goToNextStep}
               onBack={goToPreviousStep}
               onClose={() => closeForm(onClose)}
+              onSubmit={() => handleSubmit(onSubmit)}
+              onStart={() => startForm(onStart)}
               onFieldChange={handleInputChange}
               isBackBtnVisible={formState.counter > 2}
-              footer={{
-                background: footerBG || '#00213F',
-                buttons: actions.map(action => {
-                  switch (action.type) {
-                    case 'start': {
-                      return {
-                        label: action.label,
-                        color: action.color,
-                        onClick: () => {
-                          startForm(onStart);
-                        },
-                      };
-                    }
-                    case 'close': {
-                      return {
-                        label: action.label,
-                        color: action.color,
-                        z: 0,
-                        onClick: () => {
-                          updateCaseInContext(formState.formAnswers, 'ongoing');
-                          closeForm(onClose);
-                        },
-                      };
-                    }
-                    case 'submit': {
-                      return {
-                        label: action.label,
-                        color: action.color,
-                        onClick: () => {
-                          // closeForm(onClose);
-                          handleSubmit(onSubmit);
-                        },
-                      };
-                    }
-
-                    default: {
-                      return {
-                        label: action.label,
-                        color: action.color,
-                        z: 0,
-                        onClick: () => {
-                          updateCaseInContext(formState.formAnswers, 'ongoing');
-                          goToNextStep();
-                        },
-                      };
-                    }
-                  }
-                }),
-              }}
             />
           )
         )}

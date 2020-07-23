@@ -8,7 +8,7 @@ import FooterAction from './FooterAction';
 const styles = StyleSheet.create({
   buttonWrapper: {
     display: 'flex',
-    flexGrow: 1,
+    flexGrow: 10,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
     fontFamily: 'Roboto',
@@ -17,48 +17,38 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
-const ButtonList = () => (
-  <View style={styles.buttonWrapper}>
-    <Button color="green">
-      <Text>Fortsätt</Text>
-    </Button>
-    <Button color="blue" z={0}>
-      <Text>Fortsätt senare</Text>
-    </Button>
-  </View>
-);
-const Save = () => (
-  <View style={styles.buttonWrapper}>
-    <Button color="green">
-      <Text>Spara utgift</Text>
-    </Button>
-  </View>
-);
 
-const Start = () => (
-  <View style={styles.buttonWrapper}>
-    <Button color="blue">
-      <Text>Ja, jag är redo</Text>
-    </Button>
-    <Button color="orange" z={0}>
-      <Text>Nej, jag väntar</Text>
-    </Button>
-  </View>
-);
+const actions1 = [
+  {
+    type: 'next',
+    color: 'green',
+    label: 'Ja, allt stämmer',
+  },
+];
+const actions2 = [
+  {
+    type: 'next',
+    color: 'green',
+    label: 'Yes!',
+  },
+  {
+    type: 'next',
+    color: 'red',
+    label: 'No!',
+  },
+];
+const actions3 = [
+  {
+    type: 'close',
+    color: 'red',
+    label: 'Close it',
+  },
+];
 
-storiesOf('Footer', module)
-  .add('Forward/ Cancel', props => (
-    <StoryWrapper {...props}>
-      <FooterAction ButtonList={ButtonList} />
-    </StoryWrapper>
-  ))
-  .add('Save', props => (
-    <StoryWrapper {...props}>
-      <FooterAction ButtonList={Save} />
-    </StoryWrapper>
-  ))
-  .add('Start', props => (
-    <StoryWrapper {...props}>
-      <FooterAction ButtonList={Start} background="#FFAA9B" />
-    </StoryWrapper>
-  ));
+storiesOf('Footer', module).add('Forward/ Cancel', props => (
+  <StoryWrapper {...props}>
+    <FooterAction actions={actions1} />
+    <FooterAction actions={actions2} background="#FFAA9B" />
+    <FooterAction actions={actions3} />
+  </StoryWrapper>
+));

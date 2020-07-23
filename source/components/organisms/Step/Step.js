@@ -40,12 +40,16 @@ function Step({
   banner,
   description,
   questions,
-  footer,
+  actions,
   answers,
   onBack,
+  onNext,
   onClose,
+  onSubmit,
+  onStart,
   onFieldChange,
   isBackBtnVisible,
+  footerBg,
 }) {
   return (
     <StepContainer bg={theme.step.bg}>
@@ -74,18 +78,19 @@ function Step({
             </StepFieldListWrapper>
           )}
         </StepBody>
-        {footer.buttons && (
-          <StepFooter background={footer.background}>
-            {footer.buttons.map(button => {
-              const { label, ...buttonProps } = button;
-              return (
-                <Button {...buttonProps} block>
-                  <Text>{label}</Text>
-                </Button>
-              );
-            })}
-          </StepFooter>
-        )}
+        {actions && actions.length > 0 ? (
+          <StepFooter
+            actions={actions}
+            background={footerBg}
+            answers={answers}
+            onStart={onStart}
+            onClose={onClose}
+            onSubmit={onSubmit}
+            onNext={onNext}
+            onBack={onBack}
+            onUpdate={onFieldChange}
+          />
+        ) : null}
       </StepContentContainer>
     </StepContainer>
   );
@@ -117,6 +122,14 @@ Step.propTypes = {
    */
   onClose: PropTypes.func,
   /**
+   * The function to handle starting the form
+   */
+  onStart: PropTypes.func,
+  /**
+   * The function to handle a press on the submit button
+   */
+  onSubmit: PropTypes.func,
+  /**
    * The function to handle field input changes
    */
   onFieldChange: PropTypes.func,
@@ -140,16 +153,16 @@ Step.propTypes = {
   },
 
   /**
-   * Proprties for changing the footer of the step.
+   * Properties for actions in the footer of the step.
    */
-  footer: PropTypes.shape({
-    background: PropTypes.string,
-    buttons: PropTypes.arrayOf(
-      PropTypes.shape({
-        ...Button.PropTypes,
-      })
-    ),
-  }),
+  actions: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.string,
+      label: PropTypes.string,
+      color: PropTypes.string,
+    })
+  ),
+  footerBg: PropTypes.string,
 
   /**
    * The theming of the component
@@ -183,8 +196,6 @@ Step.defaultProps = {
     imageSrc: undefined,
     icon: undefined,
   },
-  footer: {
-    background: '#00213F',
-  },
+  footerBg: '#00213F',
 };
 export default Step;
