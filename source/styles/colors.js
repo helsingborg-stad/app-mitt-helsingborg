@@ -9,6 +9,7 @@ const palette = {
     lightest: '#FCFCFC',
     white: '#FFFFFF',
     blue: '#00213F',
+    floral: '#FBF7F0',
   },
   red: {
     1: '#F7A600',
@@ -35,6 +36,7 @@ const palette = {
     4: '#005C86',
     5: '#0095DB',
     6: '#00213F',
+    7: '#1F3C56',
   },
   green: {
     1: '#AFCA05',
@@ -189,6 +191,13 @@ const colors = {
       iconRight: palette.green[9],
       shadow: palette.green[7],
     },
+    floral: {
+      background: '#FBF7F0',
+      text: palette.blue[6],
+      icon: palette.red[9],
+      iconRight: palette.red[9],
+      shadow: '#FBF7F0',
+    },
   },
   checkbox: {
     white: {
@@ -244,6 +253,24 @@ const colors = {
       disabled: palette.mono.gray,
       shadow: 'rgba(255, 255, 255, 0.0)',
       checkedBackground: palette.blue[6],
+    },
+    green: {
+      background: palette.green[6],
+      icon: palette.blue[6],
+      border: palette.mono.lighter,
+      touch: palette.mono.gray,
+      disabled: palette.mono.gray,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+      checkedBackground: palette.green[6],
+    },
+    red: {
+      background: palette.red[6],
+      icon: palette.blue[6],
+      border: palette.mono.lighter,
+      touch: palette.mono.gray,
+      disabled: palette.mono.gray,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+      checkedBackground: palette.red[6],
     },
   },
   list: {

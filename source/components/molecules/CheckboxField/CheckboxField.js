@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { TouchableHighlight } from 'react-native';
 import { Checkbox, Text } from 'source/components/atoms';
+import { HelpButton } from 'source/components/molecules';
 import colors from '../../../styles/colors';
 
 const FlexContainer = styled.View`
   flex: auto;
   flex-direction: row;
-  align-items: center;
   margin: 8px;
 `;
 
@@ -16,7 +16,8 @@ const sizes = {
   small: {
     padding: 0.25,
     margin: 4,
-    fontSize: 14,
+    marginTop: 0,
+    fontSize: 16,
   },
   medium: {
     padding: 0.5,
@@ -31,7 +32,7 @@ const sizes = {
 };
 
 const CheckboxField = props => {
-  const { text, color, size, value, onChange, ...other } = props;
+  const { text, color, size, value, onChange, help, ...other } = props;
   const textStyle = {
     color: colors.checkboxField[color].text,
     ...sizes[size],
@@ -62,6 +63,7 @@ const CheckboxField = props => {
       <FlexContainer>
         <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
         <Text style={textStyle}>{text}</Text>
+        {Object.keys(help).length ? <HelpButton {...help} /> : null}
       </FlexContainer>
     </TouchableHighlight>
   );
@@ -92,13 +94,24 @@ CheckboxField.propTypes = {
    * Disables the checkbox if true.
    */
   disabled: PropTypes.bool,
+  /**
+   * Properties to show help button both for text or link
+   */
+  help: PropTypes.shape({
+    text: PropTypes.string,
+    size: PropTypes.number,
+    heading: PropTypes.string,
+    tagline: PropTypes.string,
+    url: PropTypes.string,
+  }),
 };
 
 CheckboxField.defaultProps = {
   onChange: () => {},
   color: 'light',
-  size: 'medium',
+  size: 'small',
   disabled: false,
+  help: {},
 };
 
 export default CheckboxField;
