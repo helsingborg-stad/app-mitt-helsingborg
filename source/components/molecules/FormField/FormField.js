@@ -8,6 +8,7 @@ import ConditionalTextField from 'app/components/molecules/ConditinalTextField';
 import SubstepButton from '../SubstepButton';
 import colors from '../../../styles/colors';
 import ButtonField from '../ButtonField';
+import DateTimePickerForm from '../DateTimePicker';
 
 const inputTypes = {
   text: {
@@ -21,7 +22,14 @@ const inputTypes = {
       keyboardType: 'numeric',
     },
   },
-  date: {}, // To be done as more components are added.
+  date: {
+    component: DateTimePickerForm,
+    changeEvent: 'onSelect',
+    props: {
+      mode: 'date',
+      selectorProps: { locale: 'sv' },
+    },
+  },
   list: {},
   checkbox: {
     component: CheckboxField,
@@ -104,11 +112,6 @@ FormField.propTypes = {
    */
   labelLine: PropTypes.bool,
   /**
-   * Placeholder, for certain input types (text, number, date).
-   * For checkbox input, this is the text displayed next to the input.
-   */
-  placeholder: PropTypes.string,
-  /**
    * Unique id for the input field. Used
    */
   id: PropTypes.string,
@@ -134,14 +137,6 @@ FormField.propTypes = {
    * The function triggers when the button is clicked.
    */
   onClick: PropTypes.func,
-  /**
-   * Text string for button or checkbox
-   */
-  text: PropTypes.string,
-  /**
-   * Icon name for button icon
-   */
-  iconName: PropTypes.string,
 };
 
 FormField.defaultProps = {
@@ -150,9 +145,6 @@ FormField.defaultProps = {
   color: 'light',
   labelLine: true,
   inputType: 'text',
-  placeholder: '',
-  text: '',
-  iconName: '',
 };
 
 export default FormField;
