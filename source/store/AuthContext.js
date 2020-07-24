@@ -5,8 +5,29 @@ import env from 'react-native-config';
 import { getMessage } from 'app/helpers/MessageHelper';
 import StorageService, { TOKEN_KEY, USER_KEY } from '../services/StorageService';
 import { authAndCollect, getUser, getMockUser, cancelBankidRequest } from '../services/UserService';
+import bankid from '../services/BankidService';
+import { get, post } from '../helpers/ApiRequest';
 
 const AuthContext = React.createContext();
+
+async function grantAccessToken(ssn) {
+  try {
+    const response = await post(
+      '/auth/token',
+      { personalNumber: ssn },
+      { 'x-api-key': env.MITTHELSINGBORG_IO_APIKEY }
+    );
+
+    if (response.status !== 200) {
+      return { success: false, data: 'Cannot authorize user' };
+    }
+
+    return { success: true, data: response.data.data.attributes };
+  } catch (error) {
+    console.error('Token Auth Error:', error);
+    return { success: false, data: error };
+  }
+}
 
 const reducer = (prevState, action) => {
   switch (action.type) {
@@ -103,6 +124,63 @@ function AuthProvider({ children }) {
     bootstrapAsync();
   }, []);
 
+  /**
+   * Signs in user and store credentials
+   * @param {string} ssn Swedish Social Security Number
+   */
+  async function signIn(ssn) {
+    console.log(ssn);
+    try {
+      dispatch({ type: 'PENDING' });
+      if (
+        env.FAKE_PERSONAL_NUMBER &&
+        ssn === env.FAKE_PERSONAL_NUMBER &&
+        env.APP_ENV === 'development'
+      ) {
+        return await fakeUserLogin(ssn);
+      }
+
+      const bankidAuthResponse = await bankid.auth(ssn);
+
+      if (bankidAuthResponse.success === false) {
+        throw new Error(bankidAuthResponse.data);
+      }
+
+      const bankidCollectResponse = await bankid.collect(bankidAuthResponse.data.order_ref);
+      if (bankidCollectResponse.success === false) {
+        throw new Error(bankidCollectResponse.data);
+      }
+
+      console.log(bankidCollectResponse);
+
+      const tokenResponse = await grantAccessToken(ssn);
+
+      console.log('TOKEN_RESPONSE:', tokenResponse);
+
+      await StorageService.saveData(TOKEN_KEY, tokenResponse.data.token);
+
+      const userResponse = await get(`/users/${ssn}`, {
+        Authorization: tokenResponse.data.token,
+      });
+      console.log('USER_DATA', userResponse);
+      // Store user and token
+      await StorageService.saveData(USER_KEY, userResponse.data);
+
+      dispatch({
+        type: 'SIGN_IN',
+        token: tokenResponse.data.token,
+        user: userResponse.data,
+      });
+    } catch (error) {
+      dispatch({ type: 'ERROR', error });
+    }
+  }
+
+  async function signOut() {
+    dispatch({ type: 'SIGN_OUT' });
+    await StorageService.removeData(TOKEN_KEY);
+  }
+
   const authContext = useMemo(
     () => ({
       /**
@@ -174,7 +252,7 @@ function AuthProvider({ children }) {
   );
 
   return (
-    <AuthContext.Provider value={{ ...authContext, ...state }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ signIn, signOut, ...state }}>{children}</AuthContext.Provider>
   );
 }
 
