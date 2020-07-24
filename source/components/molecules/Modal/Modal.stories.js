@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { storiesOf } from '@storybook/react-native';
 import styled from 'styled-components/native';
 import StoryWrapper from '../StoryWrapper';
-import Modal from './Modal2';
+import Modal from './Modal';
 import Button from '../../atoms/Button/Button';
 import Text from '../../atoms/Text';
 
@@ -19,23 +19,25 @@ class ModalExample extends Component {
         visible: false,
         heading: '',
         content: '',
+        closeButtonText: '',
       },
     };
   }
 
-  changeModal(visible, heading = '', content = '') {
+  changeModal(visible, heading = '', content = '', closeButtonText = 'Klar') {
     this.setState({
       modal: {
         visible,
         heading,
         content,
+        closeButtonText,
       },
     });
   }
 
   render() {
     const { modal } = this.state;
-    const { visible, heading, content } = modal;
+    const { visible, heading, closeButtonText } = modal;
 
     return (
       <View>
@@ -43,9 +45,13 @@ class ModalExample extends Component {
           color="purple"
           visible={visible}
           heading={heading}
+          closeButtonText={closeButtonText}
           changeModal={isVisible => this.changeModal(isVisible)}
         >
           <Text>Trying out children</Text>
+          <Button onClick={() => this.changeModal(!visible)}>
+            <Text>En knapp</Text>
+          </Button>
         </Modal>
 
         <ModalButton

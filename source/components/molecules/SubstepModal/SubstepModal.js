@@ -1,50 +1,16 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { Modal, StyleSheet, View, Dimensions } from 'react-native';
+import { Modal } from 'source/components/molecules';
 import ScreenWrapper from 'app/components/molecules/ScreenWrapper';
 import AuthContext from 'source/store/AuthContext';
 import Form from 'source/containers/Form';
 import FormContext from 'app/store/FormContext';
-import { Text, Button } from '../../atoms';
-
-const styles = StyleSheet.create({
-  centeredView: {
-    flexGrow: 1,
-    marginLeft: '-17%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 40,
-    width: '135%',
-  },
-  modalView: {
-    margin: 0,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 0,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  button: {
-    margin: 2,
-  },
-});
+import { Text } from '../../atoms';
 
 const FormScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
-  flex: 1;
+  flex: 0;
   margin: 0;
 `;
 
@@ -53,7 +19,6 @@ const SubstepModal = ({ visible, setVisible, value, formId, onChange, ...other }
   const { getForm } = useContext(FormContext);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({});
-  const screenWidth = Math.round(Dimensions.get('window').width);
 
   const updateAnswers = data => {
     onChange(data);
@@ -72,31 +37,26 @@ const SubstepModal = ({ visible, setVisible, value, formId, onChange, ...other }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return (
-    <Modal animationType="slide" transparent visible={visible} onRequestClose={() => {}}>
-      <View style={{ width: screenWidth, ...styles.centeredView }}>
-        <View style={styles.modalView}>
-          <FormScreenWrapper>
-            {loading ? (
-              <Text>Loading form...</Text>
-            ) : (
-              <Form
-                steps={form.steps}
-                firstName={user.firstName}
-                onClose={() => {
-                  setVisible(false);
-                }}
-                onStart={() => {}}
-                onSubmit={handleSubmitForm}
-                initialAnswers={typeof value !== 'object' ? {} : value}
-                updateCaseInContext={updateAnswers}
-                {...other}
-              />
-            )}
-          </FormScreenWrapper>
-        </View>
-      </View>
+    <Modal visible={visible}>
+      <FormScreenWrapper>
+        {loading ? (
+          <Text>Loading form...</Text>
+        ) : (
+          <Form
+            steps={form.steps}
+            firstName={user.firstName}
+            onClose={() => {
+              setVisible(false);
+            }}
+            onStart={() => {}}
+            onSubmit={handleSubmitForm}
+            initialAnswers={typeof value !== 'object' ? {} : value}
+            updateCaseInContext={updateAnswers}
+            {...other}
+          />
+        )}
+      </FormScreenWrapper>
     </Modal>
   );
 };

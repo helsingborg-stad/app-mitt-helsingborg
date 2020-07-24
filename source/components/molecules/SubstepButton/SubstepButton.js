@@ -1,11 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { Modal, StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ScreenWrapper } from 'app/components/molecules';
-import AuthContext from 'source/store/AuthContext';
-import Form from 'source/containers/Form';
-import FormContext from 'app/store/FormContext';
 import { Text, Button } from '../../atoms';
 import SubstepModal from '../SubstepModal/SubstepModal';
 
@@ -42,12 +39,6 @@ const styles = StyleSheet.create({
     margin: 2,
   },
 });
-
-const FormScreenWrapper = styled(ScreenWrapper)`
-  padding: 0;
-  flex: 1;
-  margin: 0;
-`;
 
 function SubstepButton({ text, value, formId, onChange, color, size, ...other }) {
   const [showForm, setShowForm] = useState(false);

@@ -31,7 +31,7 @@ function loadStories() {
   require('../source/components/molecules/InfoText/InfoButton.stories');
   require('../source/components/molecules/ListItem/Lists.stories');
   require('../source/components/molecules/Markdown.stories');
-  require('../source/components/molecules/Modal.stories');
+  require('../source/components/molecules/Modal/Modal.stories');
   require('../source/components/molecules/StepDescription/StepDescription.stories');
   require('../source/components/molecules/SubstepButton/SubstepButton.stories');
   require('../source/components/organisms/FieldList/FieldList.stories');
@@ -69,7 +69,7 @@ const stories = [
   '../source/components/molecules/InfoText/InfoButton.stories',
   '../source/components/molecules/ListItem/Lists.stories',
   '../source/components/molecules/Markdown.stories',
-  '../source/components/molecules/Modal.stories',
+  '../source/components/molecules/Modal/Modal2.stories',
   '../source/components/molecules/StepDescription/StepDescription.stories',
   '../source/components/molecules/SubstepButton/SubstepButton.stories',
   '../source/components/organisms/FieldList/FieldList.stories',

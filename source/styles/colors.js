@@ -200,6 +200,15 @@ const colors = {
       shadow: 'rgba(255, 255, 255, 0.0)',
       checkedBackground: palette.mono.lighter,
     },
+    green: {
+      background: palette.mono.white,
+      icon: palette.green[2],
+      border: palette.mono.black,
+      touch: palette.green[4],
+      disabled: palette.mono.gray,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+      checkedBackground: palette.mono.lighter,
+    },
     light: {
       background: palette.mono.lighter,
       icon: palette.purple[1],
