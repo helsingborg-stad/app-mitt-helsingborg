@@ -8,7 +8,7 @@ const ModalContainer = styled(RnModal)`
   margin-left: 0px;
   margin-right: 0px;
   margin-bottom: 0px;
-  margin-top: 32px;
+  margin-top: 24px;
   border-top-left-radius: 17.5px;
   border-top-right-radius: 17.5px;
 `;
