@@ -50,32 +50,31 @@ function Form({
   return (
     <FormContainer>
       <FormStepper active={formState.counter}>
-        {formState.steps.map(
-          ({ banner, theme, title, group, description, questions, actions, footerBG }) => (
-            <Step
-              banner={{
-                ...banner,
-              }}
-              theme={theme}
-              description={{
-                heading: title,
-                tagline: group,
-                text: description,
-              }}
-              answers={formState.formAnswers}
-              questions={questions}
-              actions={actions}
-              onNext={goToNextStep}
-              onBack={goToPreviousStep}
-              onClose={() => closeForm(onClose)}
-              onSubmit={() => handleSubmit(onSubmit)}
-              onStart={() => startForm(onStart)}
-              onFieldChange={handleInputChange}
-              updateCaseInContext={updateCaseInContext}
-              isBackBtnVisible={formState.counter > 2}
-            />
-          )
-        )}
+        {formState.steps.map(({ banner, theme, title, group, description, questions, actions }) => (
+          <Step
+            banner={{
+              ...banner,
+            }}
+            theme={theme}
+            description={{
+              heading: title,
+              tagline: group,
+              text: description,
+            }}
+            answers={formState.formAnswers}
+            questions={questions}
+            actions={actions}
+            onNext={goToNextStep}
+            onBack={goToPreviousStep}
+            onClose={() => closeForm(onClose)}
+            onSubmit={() => handleSubmit(onSubmit)}
+            onStart={() => startForm(onStart)}
+            onFieldChange={handleInputChange}
+            updateCaseInContext={updateCaseInContext}
+            stepNumber={formState.counter}
+            isBackBtnVisible={formState.counter > 2}
+          />
+        ))}
       </FormStepper>
     </FormContainer>
   );

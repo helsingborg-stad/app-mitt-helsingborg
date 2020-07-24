@@ -38,6 +38,7 @@ const StepFooter = styled(FooterAction)`
 function Step({
   theme,
   banner,
+  footerBg,
   description,
   questions,
   actions,
@@ -49,8 +50,8 @@ function Step({
   onStart,
   onFieldChange,
   isBackBtnVisible,
-  footerBg,
   updateCaseInContext,
+  stepNumber,
 }) {
   return (
     <StepContainer bg={theme.step.bg}>
@@ -84,6 +85,7 @@ function Step({
             actions={actions}
             background={footerBg}
             answers={answers}
+            stepNumber={stepNumber}
             onStart={onStart}
             onClose={onClose}
             onSubmit={onSubmit}
@@ -148,7 +150,6 @@ Step.propTypes = {
     imageStyle: PropTypes.object,
     backgroundColor: PropTypes.string,
   }),
-
   /**
    * Values for the description section of the step, including (tagline, heading and text)
    */
@@ -169,8 +170,8 @@ Step.propTypes = {
       conditionalOn: PropTypes.string,
     })
   ),
+  /** Background color for the footer */
   footerBg: PropTypes.string,
-
   /**
    * The theming of the component
    */
@@ -185,6 +186,8 @@ Step.propTypes = {
       }),
     }),
   }),
+  /** The steps number in the form */
+  stepNumber: PropTypes.number,
 };
 
 Step.defaultProps = {
