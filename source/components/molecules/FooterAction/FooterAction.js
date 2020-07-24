@@ -2,10 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Button, Text } from 'source/components/atoms';
-// justifyContent: 'space-around',
-// bottom: 0,
-// padding: 30,
-// display: 'flex',
+
 const ActionContainer = styled.View(props => ({
   flex: 1,
   backgroundColor: props.background,
@@ -55,9 +52,26 @@ const FooterAction = ({
     }
   };
 
+  const checkCondition = questionId => {
+    if (!questionId) return false;
+
+    if (typeof questionId === 'string') {
+      if (questionId[0] === '!') {
+        const qId = questionId.slice(1);
+        return answers[qId];
+      }
+      return !answers[questionId];
+    }
+    return false;
+  };
+
   const buttons = actions.map(action => (
     <Flex>
-      <Button onClick={actionMap(action.type)} color={action.color}>
+      <Button
+        onClick={actionMap(action.type)}
+        color={action.color}
+        disabled={checkCondition(action.conditionalOn)}
+      >
         <Text>{action.label}</Text>
       </Button>
     </Flex>
@@ -84,18 +98,28 @@ FooterAction.propTypes = {
       type: PropTypes.string,
       label: PropTypes.string,
       color: PropTypes.string,
+      conditionalOn: PropTypes.string,
     })
   ),
   /**
    * Background color for the footer
    */
   background: PropTypes.string,
+  /**
+   * Current form answers, used for passing to the various actions
+   */
   answers: PropTypes.object,
+  /** Behaviour for the start action */
   onStart: PropTypes.func,
+  /** Behaviour for the close action */
   onClose: PropTypes.func,
+  /** Behaviour for the next page action */
   onNext: PropTypes.func,
+  /** Behaviour for the back action */
   onBack: PropTypes.func,
+  /** Behaviour for sending updates to context and/or backend */
   onUpdate: PropTypes.func,
+  /** Behaviour for the submit action */
   onSubmit: PropTypes.func,
 };
 

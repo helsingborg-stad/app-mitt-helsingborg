@@ -160,6 +160,7 @@ Step.propTypes = {
       type: PropTypes.string,
       label: PropTypes.string,
       color: PropTypes.string,
+      conditionalOn: PropTypes.string,
     })
   ),
   footerBg: PropTypes.string,
