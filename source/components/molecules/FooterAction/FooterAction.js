@@ -27,6 +27,7 @@ const FooterAction = ({
   onBack,
   onUpdate,
   onSubmit,
+  updateCaseInContext,
   children,
 }) => {
   const actionMap = type => {
@@ -37,6 +38,7 @@ const FooterAction = ({
       case 'close': {
         return () => {
           if (onUpdate) onUpdate(answers, 'ongoing');
+          if (updateCaseInContext) updateCaseInContext(answers, 'ongoing');
           if (onClose) onClose();
         };
       }
@@ -46,6 +48,7 @@ const FooterAction = ({
       default: {
         return () => {
           if (onUpdate) onUpdate(answers, 'ongoing');
+          if (updateCaseInContext) updateCaseInContext(answers, 'ongoing');
           if (onNext) onNext();
         };
       }
@@ -121,6 +124,8 @@ FooterAction.propTypes = {
   onUpdate: PropTypes.func,
   /** Behaviour for the submit action */
   onSubmit: PropTypes.func,
+  /** Behaviour for updating case in context and backend */
+  updateCaseInContext: PropTypes.func,
 };
 
 FooterAction.defaultProps = {

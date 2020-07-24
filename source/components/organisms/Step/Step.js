@@ -50,6 +50,7 @@ function Step({
   onFieldChange,
   isBackBtnVisible,
   footerBg,
+  updateCaseInContext,
 }) {
   return (
     <StepContainer bg={theme.step.bg}>
@@ -89,6 +90,7 @@ function Step({
             onNext={onNext}
             onBack={onBack}
             onUpdate={onFieldChange}
+            updateCaseInContext={updateCaseInContext}
           />
         ) : null}
       </StepContentContainer>
@@ -133,6 +135,10 @@ Step.propTypes = {
    * The function to handle field input changes
    */
   onFieldChange: PropTypes.func,
+  /**
+   * The function to update values in context (and thus the backend)
+   */
+  updateCaseInContext: PropTypes.func,
   /**
    * Properties to adjust the banner at the top of a step
    */

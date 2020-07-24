@@ -71,6 +71,7 @@ function Form({
               onSubmit={() => handleSubmit(onSubmit)}
               onStart={() => startForm(onStart)}
               onFieldChange={handleInputChange}
+              updateCaseInContext={updateCaseInContext}
               isBackBtnVisible={formState.counter > 2}
             />
           )
