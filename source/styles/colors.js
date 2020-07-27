@@ -254,7 +254,7 @@ const colors = {
       shadow: 'rgba(255, 255, 255, 0.0)',
       checkedBackground: palette.blue[6],
     },
-    green: {
+    lightGreen: {
       background: palette.green[6],
       icon: palette.blue[6],
       border: palette.mono.lighter,
