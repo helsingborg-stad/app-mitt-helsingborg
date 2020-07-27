@@ -97,7 +97,7 @@ class ModalExample extends Component {
   }
 }
 
-storiesOf('Modal 2', module).add('default', () => (
+storiesOf('Modal', module).add('default', () => (
   <StoryWrapper>
     <ModalExample />
   </StoryWrapper>

@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 // Auto-generated file created by react-native-storybook-loader
 // Do not edit.
 //
@@ -69,7 +70,7 @@ const stories = [
   '../source/components/molecules/InfoText/InfoButton.stories',
   '../source/components/molecules/ListItem/Lists.stories',
   '../source/components/molecules/Markdown.stories',
-  '../source/components/molecules/Modal/Modal2.stories',
+  '../source/components/molecules/Modal/Modal.stories',
   '../source/components/molecules/StepDescription/StepDescription.stories',
   '../source/components/molecules/SubstepButton/SubstepButton.stories',
   '../source/components/organisms/FieldList/FieldList.stories',

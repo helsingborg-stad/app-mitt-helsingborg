@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Text } from 'source/components/atoms';
 import { storiesOf } from '@storybook/react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import StoryWrapper from '../StoryWrapper';
@@ -30,7 +29,7 @@ const items = [
   },
 ];
 
-const SubstepListFormField = props => {
+const SubstepListFormField = () => {
   const [answers, setAnswers] = useState({});
 
   const onChange = values => {
@@ -65,7 +64,7 @@ const SubstepListFormField = props => {
   );
 };
 
-const DateFormField = props => {
+const DateFormField = () => {
   const [date, setDate] = useState({ 7: '' });
   return (
     <FormField

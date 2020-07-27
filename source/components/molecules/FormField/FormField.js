@@ -47,7 +47,7 @@ const inputTypes = {
     props: {},
   },
   substepButton: {
-    component: SubstepButton, // SubstepButton,
+    component: SubstepButton,
     changeEvent: 'onChange',
     props: {},
   },
