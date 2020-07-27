@@ -118,7 +118,6 @@ const HelpButton = props => {
       </Modal>
       <TouchableHighlight
         onPress={() => {
-          // eslint-disable-next-line no-unused-expressions
           setModalVisible(true);
         }}
         underlayColor="transparent"
