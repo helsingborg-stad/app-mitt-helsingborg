@@ -24,7 +24,6 @@ const FooterAction = ({
   onStart,
   onClose,
   onNext,
-  onBack,
   onUpdate,
   onSubmit,
   updateCaseInContext,
@@ -119,8 +118,6 @@ FooterAction.propTypes = {
   onClose: PropTypes.func,
   /** Behaviour for the next page action */
   onNext: PropTypes.func,
-  /** Behaviour for the back action */
-  onBack: PropTypes.func,
   /** Behaviour for sending updates to context and/or backend */
   onUpdate: PropTypes.func,
   /** Behaviour for the submit action */

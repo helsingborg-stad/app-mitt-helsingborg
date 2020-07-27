@@ -1,22 +1,7 @@
 import { storiesOf } from '@storybook/react-native';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Button, Text } from 'source/components/atoms';
 import StoryWrapper from '../StoryWrapper';
 import FooterAction from './FooterAction';
-
-const styles = StyleSheet.create({
-  buttonWrapper: {
-    display: 'flex',
-    flexGrow: 10,
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: '500',
-    fontSize: 18,
-  },
-});
 
 const actions1 = [
   {
