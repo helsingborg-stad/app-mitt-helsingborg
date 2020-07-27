@@ -30,17 +30,17 @@ const ButtonWrapper = styled(View)`
 
 const GroupListWithAvatar = ({ heading, value, onChange, formId }) => {
   const updateValue = index => newValue => {
-    const vs = JSON.parse(JSON.stringify(value));
+    const vs = value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
     vs[index] = newValue;
     onChange(vs);
   };
   const addItem = () => {
-    const vs = JSON.parse(JSON.stringify(value));
+    const vs = value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
     vs.push({});
     onChange(vs);
   };
   const removeItem = index => () => {
-    const vs = JSON.parse(JSON.stringify(value));
+    const vs = value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
     vs.splice(index, 1);
     onChange(vs);
   };
@@ -50,15 +50,17 @@ const GroupListWithAvatar = ({ heading, value, onChange, formId }) => {
         <SectionHeader small>{heading}</SectionHeader>
         <Separator />
       </View>
-      {value.map((item, index) => (
-        <AvatarListItem
-          onChange={updateValue(index)}
-          value={item}
-          imageSrc="hello"
-          removeItem={removeItem(index)}
-          formId={formId}
-        />
-      ))}
+      {value && value.length > 0
+        ? value.map((item, index) => (
+            <AvatarListItem
+              onChange={updateValue(index)}
+              value={item}
+              imageSrc="hello"
+              removeItem={removeItem(index)}
+              formId={formId}
+            />
+          ))
+        : null}
       <ButtonWrapper>
         <Button size="small" pill icon onClick={addItem}>
           <Icon name="add"></Icon>

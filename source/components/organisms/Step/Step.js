@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { Text, Button } from '../../atoms';
 import { BackNavigation, Banner, FooterAction, StepDescription, FormField } from '../../molecules';
 
 const StepContainer = styled.View`
@@ -38,14 +37,20 @@ const StepFooter = styled(FooterAction)`
 function Step({
   theme,
   banner,
+  footerBg,
   description,
   questions,
-  footer,
+  actions,
   answers,
   onBack,
+  onNext,
   onClose,
+  onSubmit,
+  onStart,
   onFieldChange,
   isBackBtnVisible,
+  updateCaseInContext,
+  stepNumber,
 }) {
   return (
     <StepContainer bg={theme.step.bg}>
@@ -74,18 +79,21 @@ function Step({
             </StepFieldListWrapper>
           )}
         </StepBody>
-        {footer.buttons && (
-          <StepFooter background={footer.background}>
-            {footer.buttons.map(button => {
-              const { label, ...buttonProps } = button;
-              return (
-                <Button {...buttonProps} block>
-                  <Text>{label}</Text>
-                </Button>
-              );
-            })}
-          </StepFooter>
-        )}
+        {actions && actions.length > 0 ? (
+          <StepFooter
+            actions={actions}
+            background={footerBg}
+            answers={answers}
+            stepNumber={stepNumber}
+            onStart={onStart}
+            onClose={onClose}
+            onSubmit={onSubmit}
+            onNext={onNext}
+            onBack={onBack}
+            onUpdate={onFieldChange}
+            updateCaseInContext={updateCaseInContext}
+          />
+        ) : null}
       </StepContentContainer>
     </StepContainer>
   );
@@ -117,9 +125,21 @@ Step.propTypes = {
    */
   onClose: PropTypes.func,
   /**
+   * The function to handle starting the form
+   */
+  onStart: PropTypes.func,
+  /**
+   * The function to handle a press on the submit button
+   */
+  onSubmit: PropTypes.func,
+  /**
    * The function to handle field input changes
    */
   onFieldChange: PropTypes.func,
+  /**
+   * The function to update values in context (and thus the backend)
+   */
+  updateCaseInContext: PropTypes.func,
   /**
    * Properties to adjust the banner at the top of a step
    */
@@ -129,7 +149,6 @@ Step.propTypes = {
     imageStyle: PropTypes.object,
     backgroundColor: PropTypes.string,
   }),
-
   /**
    * Values for the description section of the step, including (tagline, heading and text)
    */
@@ -140,17 +159,18 @@ Step.propTypes = {
   },
 
   /**
-   * Proprties for changing the footer of the step.
+   * Properties for actions in the footer of the step.
    */
-  footer: PropTypes.shape({
-    background: PropTypes.string,
-    buttons: PropTypes.arrayOf(
-      PropTypes.shape({
-        ...Button.PropTypes,
-      })
-    ),
-  }),
-
+  actions: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.string,
+      label: PropTypes.string,
+      color: PropTypes.string,
+      conditionalOn: PropTypes.string,
+    })
+  ),
+  /** Background color for the footer */
+  footerBg: PropTypes.string,
   /**
    * The theming of the component
    */
@@ -165,6 +185,8 @@ Step.propTypes = {
       }),
     }),
   }),
+  /** The steps number in the form */
+  stepNumber: PropTypes.number,
 };
 
 Step.defaultProps = {
@@ -183,8 +205,6 @@ Step.defaultProps = {
     imageSrc: undefined,
     icon: undefined,
   },
-  footer: {
-    background: '#00213F',
-  },
+  footerBg: '#00213F',
 };
 export default Step;
