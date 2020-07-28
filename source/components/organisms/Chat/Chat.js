@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Notification } from 'app/store';
 import ChatMessages from '../../molecules/ChatMessages/ChatMessages';
-import Modal from '../../molecules/Modal';
+// import Modal from '../../molecules/Modal';
 
 import ChatBody from '../../atoms/ChatBody/ChatBody';
 import ChatWrapper from '../../atoms/ChatWrapper';
@@ -176,7 +176,7 @@ class Chat extends Component {
                 />
               ) : null}
             </ChatFooter>
-            <Modal {...modal} changeModal={visible => this.changeModal(visible)} />
+            {/* <Modal {...modal} changeModal={visible => this.changeModal(visible)} /> */}
           </ChatWrapper>
         )}
       </Notification.Dispatch.Consumer>

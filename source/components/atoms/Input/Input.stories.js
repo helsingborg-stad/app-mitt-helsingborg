@@ -19,6 +19,7 @@ storiesOf('Input', module)
     <StoryWrapper>
       <InputWithForm placeholder="Type something, light theme" />
       <InputWithForm color="dark" placeholder="Dark theme" />
+      <InputWithForm color="dark" placeholder="Dark theme" center />
       <InputWithForm color="red" placeholder="Red theme" />
       <InputWithForm color="green" placeholder="Green theme" />
     </StoryWrapper>
