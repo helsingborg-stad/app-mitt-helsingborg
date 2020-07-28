@@ -56,7 +56,7 @@ const FooterAction = ({
                 if (updateCaseInContext) updateCaseInContext(answers, 'signed', stepNumber);
                 if (onNext) onNext();
               } else {
-                // TODO: Error will be completed once new code for signAndCollect pusched.
+                // TODO: Error will be completed once new code for signAndCollect pushed.
                 return null;
               }
             });
