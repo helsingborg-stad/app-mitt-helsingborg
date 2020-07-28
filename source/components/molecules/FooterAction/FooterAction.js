@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Button, Text } from 'source/components/atoms';
 import { signAndCollect } from 'app/services/UserService';
+import StorageService, { USER_KEY } from 'app/services/StorageService';
 
 const ActionContainer = styled.View(props => ({
   flex: 1,
@@ -48,15 +49,17 @@ const FooterAction = ({
       }
       case 'bankIdSign': {
         return () => {
-          signAndCollect('199803312389', 'Testing BankID sign').then(result => {
-            if (result.ok) {
-              if (onUpdate) onUpdate(answers);
-              if (updateCaseInContext) updateCaseInContext(answers, 'signed', stepNumber);
-              if (onNext) onNext();
-            } else {
-              // TODO: signAndCollect will be updated, handle errors once once new code committed.
-              return null;
-            }
+          StorageService.getData(USER_KEY).then(user => {
+            signAndCollect(user.personalNumber, 'Signering för Mitt Helsingborg').then(result => {
+              if (result.ok) {
+                if (onUpdate) onUpdate(answers);
+                if (updateCaseInContext) updateCaseInContext(answers, 'signed', stepNumber);
+                if (onNext) onNext();
+              } else {
+                // TODO: Error will be completed once new code for signAndCollect pusched.
+                return null;
+              }
+            });
           });
         };
       }
