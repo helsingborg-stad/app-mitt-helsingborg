@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Button, Text } from 'source/components/atoms';
+import { signAndCollect } from 'app/services/UserService';
 
 const ActionContainer = styled.View(props => ({
   flex: 1,
@@ -44,6 +45,20 @@ const FooterAction = ({
       }
       case 'submit': {
         return onSubmit || null;
+      }
+      case 'bankIdSign': {
+        return () => {
+          signAndCollect('199803312389', 'Testing BankID sign').then(result => {
+            if (result.ok) {
+              if (onUpdate) onUpdate(answers);
+              if (updateCaseInContext) updateCaseInContext(answers, 'signed', stepNumber);
+              if (onNext) onNext();
+            } else {
+              // TODO: signAndCollect will be updated, handle errors once once new code committed.
+              return null;
+            }
+          });
+        };
       }
       default: {
         return () => {
