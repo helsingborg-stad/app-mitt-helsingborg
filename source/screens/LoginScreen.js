@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { Alert, Keyboard, Linking } from 'react-native';
-import env from 'react-native-config';
 import styled from 'styled-components/native';
 import { AuthLoading, ScreenWrapper } from 'app/components/molecules';
 import { ValidationHelper, UrlHelper } from 'app/helpers';
@@ -57,7 +56,7 @@ const LoginFormHeader = styled.View`
 `;
 
 function LoginScreen(props) {
-  const { authStatus, cancelSignIn, signIn, error } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
 
   const [hideLogo, setHideLogo] = useState(false);
   const [personalNumber, setPersonalNumber] = useState('');
@@ -88,6 +87,24 @@ function LoginScreen(props) {
   }, []);
 
   /**
+   * Function for navigating to a screen in the application.
+   */
+  const navigateToScreen = useCallback(screen => {
+    props.navigation.navigate(screen);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /**
+   * Effect for navigating to a set screen when authentication is completed/resolved
+   */
+  useEffect(() => {
+    console.log(authContext.isAuthenticated);
+    if (authContext.isAuthenticated) {
+      navigateToScreen('Chat');
+    }
+  }, [authContext.isAuthenticated, navigateToScreen]);
+
+  /**
    * Handles the personal number input field changes and updates state.
    */
   const handlePersonalNumber = value => {
@@ -98,10 +115,7 @@ function LoginScreen(props) {
    * Handles the submission of the login form.
    */
   const handleSubmit = async () => {
-    console.log(bankidInstalled);
-    const useExternalBankId = !bankidInstalled || env.APP_ENV === 'development';
-
-    if (useExternalBankId) {
+    if (!bankidInstalled) {
       // Validate personal number input
       if (personalNumber.length <= 0) {
         return;
@@ -112,23 +126,19 @@ function LoginScreen(props) {
         return;
       }
 
-      await signIn(personalNumber);
+      await authContext.handleAuth(personalNumber);
     } else {
-      await signIn(undefined);
-    }
-
-    if (authStatus === 'resolved') {
-      props.navigation.navigate('Chat');
+      await authContext.handleAuth(personalNumber);
     }
   };
-
-  // Use external mobile bankid app if app is not installed or set to dev mode
-  const useExternalBankId = !bankidInstalled || env.APP_ENV === 'development';
-
-  if (authStatus === 'pending') {
+  console.log(authContext);
+  if (!authContext.isAuthenticated && authContext.isAuthorizing) {
     return (
       <LoginScreenWrapper>
-        <AuthLoading cancelSignIn={() => cancelSignIn()} isBankidInstalled={bankidInstalled} />
+        <AuthLoading
+          cancelSignIn={() => authContext.handleCancelAuth()}
+          isBankidInstalled={bankidInstalled}
+        />
       </LoginScreenWrapper>
     );
   }
@@ -146,11 +156,11 @@ function LoginScreen(props) {
             </LoginFormHeader>
 
             {/* TODO: Fix better error messages */}
-            {authStatus === 'rejected' && (
-              <Text style={{ color: 'red', paddingBottom: 12 }}>{error.message}</Text>
+            {authContext.error && (
+              <Text style={{ color: 'red', paddingBottom: 12 }}>{authContext.error}</Text>
             )}
 
-            {useExternalBankId && (
+            {!bankidInstalled && (
               <LoginFormField>
                 <Input
                   placeholder="ÅÅÅÅMMDDXXXX"
@@ -165,12 +175,7 @@ function LoginScreen(props) {
               </LoginFormField>
             )}
             <LoginFormField>
-              <Button
-                disabled={authStatus === 'canceled'}
-                color="purpleLight"
-                block
-                onClick={handleSubmit}
-              >
+              <Button color="purpleLight" block onClick={handleSubmit}>
                 <Text>Logga in med mobilt BankID</Text>
               </Button>
             </LoginFormField>
