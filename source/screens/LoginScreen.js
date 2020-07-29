@@ -114,23 +114,18 @@ function LoginScreen(props) {
    * Handles the submission of the login form.
    */
   const handleSubmit = async () => {
-    if (!bankidInstalled) {
-      // Validate personal number input
-      if (personalNumber.length <= 0) {
-        return;
-      }
-
-      if (!validatePin(personalNumber)) {
-        Alert.alert('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.');
-        return;
-      }
-
-      await authContext.handleAuth(personalNumber);
-    } else {
-      await authContext.handleAuth(personalNumber);
+    if (personalNumber.length <= 0) {
+      return;
     }
+
+    if (!validatePin(personalNumber)) {
+      Alert.alert('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.');
+      return;
+    }
+
+    await authContext.handleAuth(personalNumber);
   };
-  console.log(authContext);
+
   if (!authContext.isAuthenticated && authContext.isAuthorizing) {
     return (
       <LoginScreenWrapper>
@@ -159,20 +154,19 @@ function LoginScreen(props) {
               <Text style={{ color: 'red', paddingBottom: 12 }}>{authContext.error}</Text>
             )}
 
-            {!bankidInstalled && (
-              <LoginFormField>
-                <Input
-                  placeholder="ÅÅÅÅMMDDXXXX"
-                  value={personalNumber}
-                  onChangeText={handlePersonalNumber}
-                  keyboardType="number-pad"
-                  returnKeyType="done"
-                  maxLength={12}
-                  onSubmitEditing={handleSubmit}
-                  center
-                />
-              </LoginFormField>
-            )}
+            <LoginFormField>
+              <Input
+                placeholder="ÅÅÅÅMMDDXXXX"
+                value={personalNumber}
+                onChangeText={handlePersonalNumber}
+                keyboardType="number-pad"
+                returnKeyType="done"
+                maxLength={12}
+                onSubmitEditing={handleSubmit}
+                center
+              />
+            </LoginFormField>
+
             <LoginFormField>
               <Button color="purpleLight" block onClick={handleSubmit}>
                 <Text>Logga in med mobilt BankID</Text>
