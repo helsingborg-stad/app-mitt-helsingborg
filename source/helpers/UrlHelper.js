@@ -2,6 +2,16 @@ import env from 'react-native-config';
 import { Linking, Platform } from 'react-native';
 
 /**
+ * Open requested URL
+ *
+ * @param {String} url
+ */
+export const openUrl = url =>
+  Linking.openURL(url)
+    .then(() => true)
+    .catch(() => false);
+
+/**
  * Test if URL can be opened
  * @param {string} url
  */

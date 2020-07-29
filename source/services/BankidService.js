@@ -1,22 +1,11 @@
-import { Linking } from 'react-native';
 import { NetworkInfo } from 'react-native-network-info';
 import { getMessage } from 'app/helpers/MessageHelper';
-import { buildBankIdClientUrl, canOpenUrl } from '../helpers/UrlHelper';
+import { buildBankIdClientUrl, canOpenUrl, openUrl } from '../helpers/UrlHelper';
 import { post } from '../helpers/ApiRequest';
 
 function isError(value) {
   return value instanceof Error;
 }
-
-/**
- * Open requested URL
- *
- * @param {String} url
- */
-const openURL = url =>
-  Linking.openURL(url)
-    .then(() => true)
-    .catch(() => false);
 
 /**
  * Function for polling the status in a BankID authentication process.
@@ -117,7 +106,7 @@ const launchApp = async autoStartToken => {
   // Launch app if it's installed on this machine
   const canLaunchApp = await canOpenUrl('bankid:///');
   if (canLaunchApp) {
-    openURL(bankIdClientUrl);
+    openUrl(bankIdClientUrl);
   }
 };
 
