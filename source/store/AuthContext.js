@@ -1,264 +1,172 @@
 import decode from 'jwt-decode';
-import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useReducer } from 'react';
+import React, { useEffect, useReducer, useCallback } from 'react';
 import env from 'react-native-config';
-import { getMessage } from 'app/helpers/MessageHelper';
 import StorageService, { TOKEN_KEY, USER_KEY } from '../services/StorageService';
-import { authAndCollect, getUser, getMockUser, cancelBankidRequest } from '../services/UserService';
-import bankid from '../services/BankidService';
-import { get, post } from '../helpers/ApiRequest';
+import { getMockUser } from '../services/UserService';
+
+import AuthReducer, { initialState } from './reducers/AuthReducer';
+import {
+  startAuth,
+  cancelAuth,
+  loginFailure,
+  loginSuccess,
+  checkAuthStatus,
+  removeProfile,
+  addProfile,
+  mockedAuth,
+} from './actions/AuthActions';
 
 const AuthContext = React.createContext();
 
-async function grantAccessToken(ssn) {
-  try {
-    const response = await post(
-      '/auth/token',
-      { personalNumber: ssn },
-      { 'x-api-key': env.MITTHELSINGBORG_IO_APIKEY }
-    );
-
-    if (response.status !== 200) {
-      return { success: false, data: 'Cannot authorize user' };
-    }
-
-    return { success: true, data: response.data.data.attributes };
-  } catch (error) {
-    console.error('Token Auth Error:', error);
-    return { success: false, data: error };
-  }
-}
-
-const reducer = (prevState, action) => {
-  switch (action.type) {
-    case 'SIGN_IN':
-      return {
-        ...prevState,
-        authStatus: 'resolved',
-        token: action.token,
-        user: action.user,
-      };
-    case 'SIGN_OUT':
-      return {
-        ...prevState,
-        authStatus: 'idle',
-        token: null,
-        user: {},
-      };
-    case 'PENDING':
-      return {
-        ...prevState,
-        authStatus: 'pending',
-      };
-    case 'ERROR':
-      return {
-        ...prevState,
-        authStatus: 'rejected',
-        error: action.error,
-      };
-    case 'CANCEL':
-      return {
-        ...prevState,
-        authStatus: 'canceled',
-      };
-    default:
-      return prevState;
-  }
-};
-
 function AuthProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, {
-    authStatus: 'pending',
-    token: null,
-    user: {},
-    error: undefined,
-  });
+  const [state, dispatch] = useReducer(AuthReducer, initialState);
+
+  // /**
+  //  * Logins with mock user credentials
+  //  */
+  // const fakeUserLogin = async () => {
+  //   try {
+  //     const user = getMockUser();
+  //     await StorageService.saveData(USER_KEY, user);
+  //     await StorageService.saveData(TOKEN_KEY, env.FAKE_TOKEN);
+  //     dispatch({ type: 'SIGN_IN', payload: { token: env.FAKE_TOKEN, user } });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   /**
-   * Checks if token is expired
-   *
-   * @param {string} token JSON Web Token
-   * @return {boolean}
+   * Starts polling for an user authorization response if orderRef and autoStartToken is set in state.
    */
-  const isTokenExpired = token => {
-    try {
-      const decoded = decode(token);
-      if (decoded.exp > Math.floor(Date.now() / 1000)) {
-        return false;
-      }
-      return true;
-    } catch (err) {
-      return true;
-    }
-  };
-
-  /**
-   * Logins with mock user credentials
-   */
-  const fakeUserLogin = async () => {
-    try {
-      const user = getMockUser();
-      await StorageService.saveData(USER_KEY, user);
-      await StorageService.saveData(TOKEN_KEY, env.FAKE_TOKEN);
-      dispatch({ type: 'SIGN_IN', token: env.FAKE_TOKEN, user });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   useEffect(() => {
-    // Get stored token and login user if token is valid
-    const bootstrapAsync = async () => {
-      const token = await StorageService.getData(TOKEN_KEY);
-      const user = await StorageService.getData(USER_KEY);
-      const isUserAuthenticated = !!token && !isTokenExpired(token);
-
-      if (isUserAuthenticated) {
-        dispatch({ type: 'SIGN_IN', token, user });
-        return;
+    const handleCheckAuthStatus = async () => {
+      if (state.orderRef && state.autoStartToken && state.isAuthorizing) {
+        dispatch(await checkAuthStatus(state.autoStartToken, state.orderRef));
       }
-
-      dispatch({ type: 'SIGN_OUT' });
     };
+    handleCheckAuthStatus();
+  }, [state.orderRef, state.autoStartToken, state.isAuthorizing]);
 
-    bootstrapAsync();
+  /**
+   * This function starts up the authorization process.
+   * @param {string} ssn Swedish Social Security Number (SSN)
+   */
+  async function handleAuth(ssn) {
+    if (env.USE_BANKID === 'false') {
+      dispatch(await mockedAuth());
+    } else {
+      dispatch(await startAuth(ssn));
+    }
+  }
+
+  /**
+   * This function cancels the authorization process.
+   */
+  async function handleCancelAuth() {
+    dispatch(await cancelAuth(state.orderRef));
+  }
+
+  /**
+   * Dispatch action to set authentication state of the user true
+   */
+  const handleLogin = useCallback(() => {
+    dispatch(loginSuccess());
   }, []);
 
   /**
-   * Signs in user and store credentials
-   * @param {string} ssn Swedish Social Security Number
+   * This function triggers an action to logout the user.
    */
-  async function signIn(ssn) {
-    console.log(ssn);
-    try {
-      dispatch({ type: 'PENDING' });
-      if (
-        env.FAKE_PERSONAL_NUMBER &&
-        ssn === env.FAKE_PERSONAL_NUMBER &&
-        env.APP_ENV === 'development'
-      ) {
-        return await fakeUserLogin(ssn);
-      }
+  const handleLogout = useCallback(() => {
+    dispatch(loginFailure());
+  }, []);
 
-      const bankidAuthResponse = await bankid.auth(ssn);
+  /**
+   * Used to save user profile data to the state.
+   * @param {object} profile a user profile object
+   */
+  const handleAddProfile = useCallback(profile => {
+    dispatch(addProfile(profile));
+  }, []);
 
-      if (bankidAuthResponse.success === false) {
-        throw new Error(bankidAuthResponse.data);
-      }
+  /**
+   * Used to remove user profile data from the state.
+   */
+  const handleRemoveProfile = useCallback(() => {
+    dispatch(removeProfile());
+  }, []);
 
-      const bankidCollectResponse = await bankid.collect(bankidAuthResponse.data.order_ref);
-      if (bankidCollectResponse.success === false) {
-        throw new Error(bankidCollectResponse.data);
-      }
-
-      console.log(bankidCollectResponse);
-
-      const tokenResponse = await grantAccessToken(ssn);
-
-      console.log('TOKEN_RESPONSE:', tokenResponse);
-
-      await StorageService.saveData(TOKEN_KEY, tokenResponse.data.token);
-
-      const userResponse = await get(`/users/${ssn}`, {
-        Authorization: tokenResponse.data.token,
-      });
-      console.log('USER_DATA', userResponse);
-      // Store user and token
-      await StorageService.saveData(USER_KEY, userResponse.data);
-
-      dispatch({
-        type: 'SIGN_IN',
-        token: tokenResponse.data.token,
-        user: userResponse.data,
-      });
-    } catch (error) {
-      dispatch({ type: 'ERROR', error });
+  /**
+   * This function checks if the current accessToken is valid.
+   */
+  async function isUserAuthenticated() {
+    const token = await StorageService.getData('token');
+    if (token) {
+      const decoded = decode(token);
+      const expiresAt = decoded.exp * 1000;
+      return new Date().getTime() < expiresAt;
     }
+    return false;
   }
 
-  async function signOut() {
-    dispatch({ type: 'SIGN_OUT' });
-    await StorageService.removeData(TOKEN_KEY);
-  }
+  // /**
+  //  * Signs in user and store credentials
+  //  * @param {string} ssn Swedish Social Security Number
+  //  */
+  // async function signIn(ssn) {
+  //   try {
+  //     dispatch({ type: 'UPDATE_STATUS', payload: { status: 'pending' } });
+  //     if (
+  //       env.FAKE_PERSONAL_NUMBER &&
+  //       ssn === env.FAKE_PERSONAL_NUMBER &&
+  //       env.APP_ENV === 'development'
+  //     ) {
+  //       return await fakeUserLogin(ssn);
+  //     }
 
-  const authContext = useMemo(
-    () => ({
-      /**
-       * Signs in user and store credentials
-       *
-       * @param {*} personalNumber Personal identity number
-       */
-      signIn: async personalNumber => {
-        dispatch({ type: 'PENDING' });
+  //     const bankidAuthResponse = await bankid.auth(ssn);
+  //     if (bankidAuthResponse.success === false) {
+  //       throw new Error(bankidAuthResponse.data);
+  //     }
 
-        try {
-          // Login with fake user (in dev mode)
-          if (
-            env.FAKE_PERSONAL_NUMBER &&
-            personalNumber === env.FAKE_PERSONAL_NUMBER &&
-            env.APP_ENV === 'development'
-          ) {
-            return await fakeUserLogin(personalNumber);
-          }
+  //     dispatch({ type: 'SET_ORDER_REF', payload: { orderRef: bankidAuthResponse.data.order_ref } });
 
-          // Send auth request and collect responses until resolved/rejected
-          const authResponse = await authAndCollect(personalNumber);
-          if (authResponse.ok !== true) {
-            throw new Error(authResponse.data);
-          }
+  //     const bankidCollectResponse = await bankid.collect(bankidAuthResponse.data.order_ref);
+  //     if (bankidCollectResponse.success === false) {
+  //       throw new Error(bankidCollectResponse.data);
+  //     }
 
-          // Destruct user and token variables
-          const { user, token } = authResponse.data;
+  //     const tokenResponse = await grantAccessToken(ssn);
 
-          // Check if token is valid
-          if (isTokenExpired(token)) {
-            console.log('Sign in error: Token has expired');
-            throw new Error(getMessage('technicalError'));
-          }
+  //     await StorageService.saveData(TOKEN_KEY, tokenResponse.data.token);
 
-          // Get user data from database
-          // TODO: Get user with token instead of sending personal number
-          const { ok: userOk, data: userData } = await getUser(user.personal_number);
-          if (userOk !== true) {
-            throw new Error(userData);
-          }
+  //     const userProfile = await getProfile(ssn);
+  //     await StorageService.saveData(USER_KEY, userProfile);
 
-          // Store user and token
-          await StorageService.saveData(USER_KEY, userData);
-          await StorageService.saveData(TOKEN_KEY, token);
+  //     dispatch({
+  //       type: 'SIGN_IN',
+  //       payload: {
+  //         token: tokenResponse.data.token,
+  //         user: userProfile,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     dispatch({ type: 'ERROR', payload: { error } });
+  //   }
+  // }
 
-          dispatch({ type: 'SIGN_IN', token, user: userData });
-        } catch (error) {
-          console.log('Sign in error: ', error);
-          dispatch({ type: 'ERROR', error });
-        }
-      },
-      /**
-       * Signs out the user
-       */
-      signOut: async () => {
-        dispatch({ type: 'SIGN_OUT' });
-        await StorageService.removeData(TOKEN_KEY);
-      },
-      /**
-       * Cancels ongoing sign in process
-       */
-      cancelSignIn: () => {
-        cancelBankidRequest('auth');
-        dispatch({ type: 'CANCEL' });
-      },
-    }),
-    []
-  );
+  const contextValues = {
+    handleLogin,
+    handleLogout,
+    handleAddProfile,
+    handleRemoveProfile,
+    handleAuth,
+    handleCancelAuth,
+    isUserAuthenticated,
+    ...state,
+  };
 
-  return (
-    <AuthContext.Provider value={{ signIn, signOut, ...state }}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={contextValues}>{children}</AuthContext.Provider>;
 }
 
-AuthProvider.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
-};
-
-export { AuthProvider, reducer };
+export { AuthProvider };
 export default AuthContext;
