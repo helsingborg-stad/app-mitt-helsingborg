@@ -28,13 +28,15 @@ export function CaseProvider({ children }) {
   };
 
   useEffect(() => {
-    setFetching(true);
+    if (user) {
+      setFetching(true);
 
-    get('/cases', undefined, user.personalNumber).then(response => {
-      setCases(response.data.data);
-      setCurrentCase(findLatestCase(response.data.data));
-      setFetching(false);
-    });
+      get('/cases', undefined, user.personalNumber).then(response => {
+        setCases(response.data.data);
+        setCurrentCase(findLatestCase(response.data.data));
+        setFetching(false);
+      });
+    }
   }, [user]);
 
   const getCase = caseId => cases.find(c => c.id === caseId);
