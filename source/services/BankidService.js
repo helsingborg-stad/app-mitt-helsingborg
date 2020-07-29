@@ -2,7 +2,11 @@ import { Linking } from 'react-native';
 import { NetworkInfo } from 'react-native-network-info';
 import { getMessage } from 'app/helpers/MessageHelper';
 import { buildBankIdClientUrl, canOpenUrl } from '../helpers/UrlHelper';
-import { get, post } from '../helpers/ApiRequest';
+import { post } from '../helpers/ApiRequest';
+
+function isError(value) {
+  return value instanceof Error;
+}
 
 /**
  * Open requested URL
@@ -19,25 +23,39 @@ const openURL = url =>
  * @param {string} orderRef A valid BankID order reference
  */
 async function collect(orderRef) {
+  console.log('Collect', orderRef);
   try {
-    const { data, status } = await post('auth/bankid/collect', { orderRef });
-    if (status === 502) {
+    const response = await post('auth/bankid/collect', { orderRef });
+    const responseIsError = isError(response);
+    if (responseIsError && response.response.status === 502) {
       // Status 502 is a connection timeout error,
       // may happen when the connection was pending for too long,
       // and the remote server or a proxy closed it
       // let's reconnect
-      await collect(orderRef);
-    } else if (status === 200 && data && data.data.status === 'pending') {
+      return await collect(orderRef);
+    }
+    if (responseIsError && response.response.status === 404) {
+      return { success: false, data: getMessage('userCancel') };
+    }
+    if (
+      !responseIsError &&
+      response.status === 200 &&
+      response.data &&
+      response.data.data.attributes.status === 'pending'
+    ) {
       // Reconnect in one 1050 ms
       await new Promise(resolve => setTimeout(resolve, 1050));
-      await collect(orderRef);
-    } else if (status === 200 && data && data.data.status === 'failed') {
-      return { success: false, data: getMessage(data.data.hintCode) };
-    } else if (status === 404) {
-      return { success: false, data: getMessage('userCancel') };
-    } else {
-      return { success: true, data: data.data };
+      return await collect(orderRef);
     }
+    if (
+      !responseIsError &&
+      response.status === 200 &&
+      response.data &&
+      response.data.data.attributes.status === 'failed'
+    ) {
+      return { success: false, data: getMessage(response.data.data.hintCode) };
+    }
+    return { success: true, data: response.data.data };
   } catch (error) {
     console.error(`BankID Collect Error: ${error}`);
     return { success: false, data: getMessage('unkownError') };
@@ -51,11 +69,11 @@ async function auth(ssn) {
   const endUserIp = await NetworkInfo.getIPV4Address(ip => ip);
   try {
     const response = await post('auth/bankid/auth', { personalNumber: ssn, endUserIp });
-    if (response.status === 400) {
-      await auth(ssn);
-    } else {
-      return { success: true, data: response.data.data.attributes };
+    const responseIsError = isError(response);
+    if (responseIsError && response.response.status === 400) {
+      return await auth(ssn);
     }
+    return { success: true, data: response.data.data.attributes };
   } catch (error) {
     console.error(`BankID Auth Error: ${error}`);
     return { success: false, data: getMessage('technicalError') };
