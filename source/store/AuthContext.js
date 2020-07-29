@@ -21,20 +21,6 @@ const AuthContext = React.createContext();
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
-  // /**
-  //  * Logins with mock user credentials
-  //  */
-  // const fakeUserLogin = async () => {
-  //   try {
-  //     const user = getMockUser();
-  //     await StorageService.saveData(USER_KEY, user);
-  //     await StorageService.saveData(TOKEN_KEY, env.FAKE_TOKEN);
-  //     dispatch({ type: 'SIGN_IN', payload: { token: env.FAKE_TOKEN, user } });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
   /**
    * Starts polling for an user authorization response if orderRef and autoStartToken is set in state.
    */
@@ -107,52 +93,6 @@ function AuthProvider({ children }) {
     }
     return false;
   }
-
-  // /**
-  //  * Signs in user and store credentials
-  //  * @param {string} ssn Swedish Social Security Number
-  //  */
-  // async function signIn(ssn) {
-  //   try {
-  //     dispatch({ type: 'UPDATE_STATUS', payload: { status: 'pending' } });
-  //     if (
-  //       env.FAKE_PERSONAL_NUMBER &&
-  //       ssn === env.FAKE_PERSONAL_NUMBER &&
-  //       env.APP_ENV === 'development'
-  //     ) {
-  //       return await fakeUserLogin(ssn);
-  //     }
-
-  //     const bankidAuthResponse = await bankid.auth(ssn);
-  //     if (bankidAuthResponse.success === false) {
-  //       throw new Error(bankidAuthResponse.data);
-  //     }
-
-  //     dispatch({ type: 'SET_ORDER_REF', payload: { orderRef: bankidAuthResponse.data.order_ref } });
-
-  //     const bankidCollectResponse = await bankid.collect(bankidAuthResponse.data.order_ref);
-  //     if (bankidCollectResponse.success === false) {
-  //       throw new Error(bankidCollectResponse.data);
-  //     }
-
-  //     const tokenResponse = await grantAccessToken(ssn);
-
-  //     await StorageService.saveData(TOKEN_KEY, tokenResponse.data.token);
-
-  //     const userProfile = await getProfile(ssn);
-  //     await StorageService.saveData(USER_KEY, userProfile);
-
-  //     dispatch({
-  //       type: 'SIGN_IN',
-  //       payload: {
-  //         token: tokenResponse.data.token,
-  //         user: userProfile,
-  //       },
-  //     });
-  //   } catch (error) {
-  //     dispatch({ type: 'ERROR', payload: { error } });
-  //   }
-  // }
 
   const contextValues = {
     handleLogin,

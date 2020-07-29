@@ -98,7 +98,6 @@ function LoginScreen(props) {
    * Effect for navigating to a set screen when authentication is completed/resolved
    */
   useEffect(() => {
-    console.log(authContext.isAuthenticated);
     if (authContext.isAuthenticated) {
       navigateToScreen('Chat');
     }
