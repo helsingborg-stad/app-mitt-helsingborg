@@ -13,13 +13,12 @@ const ModalContainer = styled(RnModal)`
   border-top-right-radius: 17.5px;
 `;
 
-const Flex = styled.View`
-  flex: 1;
-`;
+const ModalWrapper = styled.View({
+  backgroundColor: '#00213F',
+  flexGrow: 1,
+});
 
-const Content = styled.ScrollView`
-  background-color: ${props => props.theme.background.lightest};
-`;
+const Content = styled.ScrollView``;
 
 const Modal = ({ visible, children }) => (
   <ModalContainer
@@ -30,12 +29,11 @@ const Modal = ({ visible, children }) => (
     swipeDirection="down"
     isVisible={visible}
   >
-    <Flex>
+    <ModalWrapper>
       <Content>
-        {/* TouchableOpacity = Hack to make scrolling work inside swipeable modal */}
         <TouchableOpacity activeOpacity={1}>{children}</TouchableOpacity>
       </Content>
-    </Flex>
+    </ModalWrapper>
   </ModalContainer>
 );
 

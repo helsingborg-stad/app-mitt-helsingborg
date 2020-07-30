@@ -4,7 +4,7 @@ import { default as MIcon } from 'react-native-vector-icons/MaterialIcons';
 import styled from 'styled-components/native';
 
 const Icon = styled(MIcon)`
-  color: #000000;
+  color: ${props => props.color};
   font-size: ${props => props.size}px;
   height: ${props => props.size}px;
   width: ${props => props.size}px;
@@ -20,6 +20,7 @@ Icon.propTypes = {
 Icon.defaultProps = {
   size: 24,
   name: '3d-rotation',
+  color: ' #000000',
 };
 
 export default Icon;

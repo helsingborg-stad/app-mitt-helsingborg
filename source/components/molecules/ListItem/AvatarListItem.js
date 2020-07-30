@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components/native';
 import { Avatar } from 'react-native-elements';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 import Text from '../../atoms/Text';
 import Button from '../../atoms/Button/Button';
 import Icon from '../../atoms/Icon';
@@ -10,7 +11,7 @@ import SubstepModal from '../SubstepModal';
 const HighlightedItem = styled(Button)`
   padding: 0px;
   margin-bottom: 8px;
-  background-color: white;
+  background-color: #fbf7f0;
   border-radius: 9.5px;
 `;
 
@@ -46,12 +47,28 @@ const Content = styled.View`
   padding: 16px 0px 16px 8px;
 `;
 
-const AvatarListItem = ({ value, onChange, imageSrc, formId, removeItem }) => {
-  const [showForm, setShowForm] = useState(false);
+const DeleteButton = styled(Icon)`
+  padding: 5px;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  color: #dd6161;
+`;
+
+const AvatarListItem = ({
+  value,
+  onChange,
+  imageSrc,
+  formId,
+  removeItem,
+  isDisable,
+  showModal,
+}) => {
+  const [showForm, setShowForm] = useState(showModal);
   const familyFormId = formId || 'dc069a10-c68d-11ea-9984-cbb2e8b06538'; // hardcoded for now, using dev db
 
   const showFormModal = () => {
-    setShowForm(true);
+    if (isDisable) setShowForm(true);
   };
 
   const title = `${value.firstName || 'Förnamn'} ${value.lastName || 'Efternamn'}`;
@@ -93,9 +110,11 @@ const AvatarListItem = ({ value, onChange, imageSrc, formId, removeItem }) => {
           </Body>
         ) : null}
       </Content>
-      <Button size="small" pill icon onClick={removeItem}>
-        <Icon name="remove"></Icon>
-      </Button>
+      {isDisable ? (
+        <TouchableHighlight activeOpacity={1} onPress={removeItem}>
+          <DeleteButton name="delete-forever" />
+        </TouchableHighlight>
+      ) : null}
     </Flex>
   );
 
@@ -136,12 +155,22 @@ AvatarListItem.propTypes = {
    * The id for the the form that specifies the information.
    */
   formId: PropTypes.string,
+  /**
+   * List is disabled
+   */
+  isDisable: PropTypes.bool,
+  /**
+   * Boolean value to Open Modal window
+   */
+  showModal: PropTypes.bool,
 };
 
 AvatarListItem.defaultProps = {
   value: {},
   onChange: null,
   imageSrc: null,
+  isDisable: true,
+  showModal: false,
 };
 
 export default withTheme(AvatarListItem);

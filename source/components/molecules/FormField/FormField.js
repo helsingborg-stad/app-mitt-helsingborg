@@ -36,11 +36,7 @@ const inputTypes = {
     changeEvent: 'onChange',
     props: {},
   },
-  button: {
-    component: ButtonField,
-    changeEvent: 'onClick',
-    props: {},
-  },
+  button: {},
   editableList: {
     component: EditableList,
     changeEvent: 'onInputChange',
