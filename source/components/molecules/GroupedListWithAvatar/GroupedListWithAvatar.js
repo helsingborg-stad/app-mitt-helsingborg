@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, SectionList } from 'react-native';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import AvatarListItem from 'app/components/molecules/ListItem/AvatarListItem';
-import Text from '../../atoms/Text';
-import Button from '../../atoms/Button';
-import Icon from '../../atoms/Icon';
+import { TouchableHighlight } from 'react-native-gesture-handler';
+import { Text, Icon } from '../../atoms';
+import ButtonField from '../ButtonField';
 
 const SectionHeader = styled(Text)`
   margin-left: 15px;
@@ -24,30 +24,48 @@ const Separator = styled(View)`
     props.theme.list.onLightBackground.listWithAvatar.headerSeparatorBackground};
 `;
 
-const ButtonWrapper = styled(View)`
-  margin-left: 80%;
+const HeadingWrapper = styled(View)`
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 const GroupListWithAvatar = ({ heading, value, onChange, formId }) => {
+  const [isDisable, setIsDisable] = React.useState(false);
+  const [showModal, setShowModal] = React.useState(false);
+
   const updateValue = index => newValue => {
     const vs = value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
     vs[index] = newValue;
     onChange(vs);
   };
+
   const addItem = () => {
+    setShowModal(true);
     const vs = value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
     vs.push({});
     onChange(vs);
   };
+
   const removeItem = index => () => {
+    setShowModal(false);
     const vs = value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
     vs.splice(index, 1);
     onChange(vs);
   };
+
+  const editList = () => {
+    setIsDisable(!isDisable);
+  };
+
   return (
     <>
       <View>
-        <SectionHeader small>{heading}</SectionHeader>
+        <HeadingWrapper>
+          <SectionHeader small>{heading}</SectionHeader>
+          <TouchableHighlight onPress={editList}>
+            <Icon name="create" color="#00213F" />
+          </TouchableHighlight>
+        </HeadingWrapper>
         <Separator />
       </View>
       {value && value.length > 0
@@ -58,14 +76,14 @@ const GroupListWithAvatar = ({ heading, value, onChange, formId }) => {
               imageSrc="hello"
               removeItem={removeItem(index)}
               formId={formId}
+              isDisable={isDisable}
+              showModal={showModal}
             />
           ))
         : null}
-      <ButtonWrapper>
-        <Button size="small" pill icon onClick={addItem}>
-          <Icon name="add"></Icon>
-        </Button>
-      </ButtonWrapper>
+      {isDisable ? (
+        <ButtonField text="Lägg till" iconName="add" onClick={addItem} color="blue" />
+      ) : null}
     </>
   );
 };
