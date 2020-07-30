@@ -1,5 +1,5 @@
-import { env } from 'react-native-config';
-import { JwtDecode } from 'jwt-decode';
+import env from 'react-native-config';
+import JwtDecode from 'jwt-decode';
 import StorageService, { TOKEN_KEY } from 'app/services/StorageService';
 import { post, get } from 'app/helpers/ApiRequest';
 
@@ -25,9 +25,13 @@ export async function getAccessTokenFromStorage() {
 export async function saveAccessTokenToStorage(accessToken) {
   await StorageService.saveData(TOKEN_KEY, accessToken);
   // TODO: Add real expired at time from token.
-  const decodedJwt = JwtDecode(accessToken);
-  const expiresAt = JSON.stringify(decodedJwt.exp * 10000 + new Date().getTime());
+  const decodedAccessToken = JwtDecode(accessToken);
+  const expiresAt = JSON.stringify(decodedAccessToken.exp * 10000 + new Date().getTime());
   await StorageService.saveData('expiresAt', expiresAt);
+  return {
+    accessToken,
+    ...decodedAccessToken,
+  };
 }
 
 /**
@@ -49,21 +53,32 @@ export async function grantAccessToken(ssn) {
     const { token: accessToken } = response.data.data.attributes;
     const decodedAccessToken = await saveAccessTokenToStorage(accessToken);
     return [decodedAccessToken, null];
-  } catch (e) {
-    return [null, e];
+  } catch (error) {
+    console.error(error);
+    return [null, error];
   }
 }
+
 /**
  * Function for retriving a user.
  * @param {string} accessToken json web token
  */
 export async function getUserProfile(accessToken) {
-  const decodedToken = JwtDecode(accessToken);
-  if (decodedToken) {
-    const response = await get(`/users/${decodedToken.personalNumber}`, {
-      Authorization: accessToken,
-    });
-    return response.data.data.attributes.item;
+  try {
+    const decodedToken = JwtDecode(accessToken);
+    if (decodedToken) {
+      const response = await get(`/users/${decodedToken.personalNumber}`, {
+        Authorization: accessToken,
+      });
+
+      if (response.status !== 200) {
+        throw new Error(response.data);
+      }
+
+      return [response.data.data.attributes.item, null];
+    }
+  } catch (error) {
+    console.error(error);
+    return [null, error];
   }
-  return null;
 }
