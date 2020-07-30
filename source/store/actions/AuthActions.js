@@ -1,7 +1,7 @@
 import env from 'react-native-config';
 import bankid from 'app/services/BankidService';
 import * as authService from 'app/services/AuthService';
-import StorageService, { TOKEN_KEY, USER_KEY } from 'app/services/StorageService';
+import StorageService, { TOKEN_KEY } from 'app/services/StorageService';
 import { getMockUser } from 'app/services/UserService';
 
 export const actionTypes = {
@@ -17,7 +17,6 @@ export const actionTypes = {
 export async function mockedAuth() {
   try {
     const user = getMockUser();
-    await StorageService.saveData(USER_KEY, user);
     await StorageService.saveData(TOKEN_KEY, env.FAKE_TOKEN);
     return {
       type: actionTypes.loginSuccess,
@@ -38,17 +37,32 @@ export function loginSuccess() {
     type: actionTypes.loginSuccess,
   };
 }
-export function loginFailure() {
+export async function loginFailure() {
+  await authService.removeAccessTokenFromStorage();
   return {
     type: actionTypes.loginFailure,
   };
 }
 
-export function addProfile(obj) {
-  return {
-    type: actionTypes.addProfile,
-    payload: obj,
-  };
+export async function addProfile() {
+  try {
+    const decodedToken = await authService.getAccessTokenFromStorage();
+    const [userProfile, userError] = await authService.getUserProfile(decodedToken.accessToken);
+
+    if (userError) {
+      throw new Error(userError);
+    }
+
+    return {
+      type: actionTypes.addProfile,
+      payload: { ...userProfile },
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      type: actionTypes.authError,
+    };
+  }
 }
 
 export function removeProfile() {
@@ -59,7 +73,6 @@ export function removeProfile() {
 
 export async function startAuth(ssn) {
   try {
-    console.log('Start Auth');
     const response = await bankid.auth(ssn);
     if (response.success === false) {
       throw new Error(response.data);
@@ -108,27 +121,13 @@ export async function checkAuthStatus(autoStartToken, orderRef) {
 
     // Tries to grant a token from the authorization endpoint in the api.
     const { personal_number: ssn } = response.data.attributes.completion_data.user;
-    const [decodedAccessToken, grantTokenError] = await authService.grantAccessToken(ssn);
+    const [__, grantTokenError] = await authService.grantAccessToken(ssn);
     if (grantTokenError) {
       throw new Error(grantTokenError);
     }
 
-    console.log('token retrived', decodedAccessToken);
-
-    // Tries to retrive an user from the api with accessToken.
-    const [userProfile, userError] = await authService.getUserProfile(
-      decodedAccessToken.accessToken
-    );
-
-    if (userError) {
-      throw new Error(userError);
-    }
-
     return {
       type: actionTypes.loginSuccess,
-      payload: {
-        user: userProfile,
-      },
     };
   } catch (error) {
     console.log(error);

@@ -7,15 +7,19 @@ import { post, get } from 'app/helpers/ApiRequest';
  * This function retrives the accessToken from AsyncStorage and decodes it.
  */
 export async function getAccessTokenFromStorage() {
-  const accessToken = await StorageService.getData(TOKEN_KEY);
-  const decodedAccessToken = JwtDecode(accessToken);
-  if (decodedAccessToken) {
-    return {
-      accessToken,
-      ...decodedAccessToken,
-    };
+  try {
+    const accessToken = await StorageService.getData(TOKEN_KEY);
+    const decodedAccessToken = accessToken && JwtDecode(accessToken);
+    if (decodedAccessToken) {
+      return {
+        accessToken,
+        ...decodedAccessToken,
+      };
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
   }
-  return null;
 }
 
 /**
@@ -32,6 +36,13 @@ export async function saveAccessTokenToStorage(accessToken) {
     accessToken,
     ...decodedAccessToken,
   };
+}
+/**
+ * This function saves the accessToken and it's expire time to AsyncStorage.
+ * @param {string} accessToken json web token;
+ */
+export async function removeAccessTokenFromStorage() {
+  await StorageService.removeData(TOKEN_KEY);
 }
 
 /**

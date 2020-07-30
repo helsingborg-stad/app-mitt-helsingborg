@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from 'react';
+import env from 'react-native-config';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { ActivityIndicator } from 'react-native';
@@ -35,10 +36,10 @@ function SplashScreen(props) {
     const authCheck = async () => {
       if (await authContext.isUserAuthenticated()) {
         authContext.handleLogin();
-        authContext.handleAddProfile();
+        await authContext.handleAddProfile();
         navigate('Chat');
       } else {
-        authContext.handleLogout();
+        await authContext.handleLogout();
         authContext.handleRemoveProfile();
         await navigateAsync();
       }
