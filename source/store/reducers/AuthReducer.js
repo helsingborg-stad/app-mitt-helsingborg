@@ -61,14 +61,6 @@ export default function AuthReducer(state = initialState, action) {
         user: null,
       };
 
-    case actionTypes.authCompleted:
-      return {
-        ...state,
-        ...payload,
-        isAuthorizing: false,
-        isAuthenticated: true,
-      };
-
     default:
       return state;
   }
