@@ -1,12 +1,9 @@
-import decode from 'jwt-decode';
 import React, { useEffect, useReducer, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import env from 'react-native-config';
-import StorageService, { TOKEN_KEY, USER_KEY } from '../services/StorageService';
-import { getMockUser } from '../services/UserService';
-
+import * as authService from '../services/AuthService';
 import AuthReducer, { initialState } from './reducers/AuthReducer';
 import {
-import { PropTypes } from 'prop-types';
   startAuth,
   cancelAuth,
   loginFailure,
@@ -56,40 +53,41 @@ function AuthProvider({ children }) {
   /**
    * Dispatch action to set authentication state of the user true
    */
-  const handleLogin = useCallback(() => {
+  function handleLogin() {
     dispatch(loginSuccess());
-  }, []);
+  }
 
   /**
    * This function triggers an action to logout the user.
    */
-  const handleLogout = useCallback(() => {
-    dispatch(loginFailure());
-  }, []);
+  async function handleLogout() {
+    dispatch(await loginFailure());
+  }
 
   /**
    * Used to save user profile data to the state.
    * @param {object} profile a user profile object
    */
-  const handleAddProfile = useCallback(profile => {
-    dispatch(addProfile(profile));
-  }, []);
+  async function handleAddProfile() {
+    if (env.USE_BANKID === 'true') {
+      dispatch(await addProfile());
+    }
+  }
 
   /**
    * Used to remove user profile data from the state.
    */
-  const handleRemoveProfile = useCallback(() => {
+  function handleRemoveProfile() {
     dispatch(removeProfile());
-  }, []);
+  }
 
   /**
    * This function checks if the current accessToken is valid.
    */
   async function isUserAuthenticated() {
-    const token = await StorageService.getData('token');
-    if (token) {
-      const decoded = decode(token);
-      const expiresAt = decoded.exp * 1000;
+    const decodedToken = await authService.getAccessTokenFromStorage();
+    if (decodedToken) {
+      const expiresAt = decodedToken.exp * 1000;
       return new Date().getTime() < expiresAt;
     }
     return false;
@@ -111,7 +109,7 @@ function AuthProvider({ children }) {
 
 AuthProvider.propTypes = {
   children: PropTypes.node,
-}
+};
 
 export { AuthProvider };
 export default AuthContext;

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import env from 'react-native-config';
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { Alert, Keyboard, Linking } from 'react-native';
 import styled from 'styled-components/native';
@@ -98,10 +99,14 @@ function LoginScreen(props) {
    * Effect for navigating to a set screen when authentication is completed/resolved
    */
   useEffect(() => {
-    if (authContext.isAuthenticated) {
-      navigateToScreen('Chat');
-    }
-  }, [authContext.isAuthenticated, navigateToScreen]);
+    const handleNavigateToScreen = async () => {
+      if (authContext.isAuthenticated) {
+        await authContext.handleAddProfile();
+        navigateToScreen('Chat');
+      }
+    };
+    handleNavigateToScreen();
+  }, [authContext, navigateToScreen]);
 
   /**
    * Handles the personal number input field changes and updates state.

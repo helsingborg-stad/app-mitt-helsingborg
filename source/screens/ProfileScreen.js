@@ -83,7 +83,7 @@ function ProfileScreen(props) {
             block
             color="purple"
             onClick={async () => {
-              authContext.handleLogout();
+              await authContext.handleLogout();
               navigate('Start');
             }}
           >
@@ -95,7 +95,7 @@ function ProfileScreen(props) {
               block
               onClick={async () => {
                 StorageService.default.clearData();
-                authContext.handleLogout();
+                await authContext.handleLogout();
                 navigate('Start');
               }}
             >

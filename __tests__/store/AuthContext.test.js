@@ -1,11 +1,5 @@
 import AuthReducer from 'app/store/reducers/AuthReducer';
-import {
-  actionTypes,
-  loginSuccess,
-  loginFailure,
-  addProfile,
-  removeProfile,
-} from 'app/store/actions/AuthActions';
+import { actionTypes, loginSuccess, removeProfile } from 'app/store/actions/AuthActions';
 
 const initialState = {};
 
@@ -16,17 +10,17 @@ test(`dispatch:${actionTypes.loginSuccess}`, async () => {
 });
 
 test(`dispatch:${actionTypes.loginFailure}`, async () => {
-  const state = AuthReducer(initialState, loginFailure());
+  const state = AuthReducer(initialState, { type: actionTypes.loginFailure });
 
   expect(state).toEqual({ isAuthenticated: false, isAuthorizing: false });
 });
 
 test(`dispatch:${actionTypes.addProfile}`, async () => {
-  const user = {
+  const payload = {
     data: 123,
   };
 
-  const state = AuthReducer(initialState, addProfile(user));
+  const state = AuthReducer(initialState, { type: actionTypes.addProfile, payload });
 
   expect(state).toEqual({ user: { data: 123 } });
 });
