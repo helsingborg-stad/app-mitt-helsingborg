@@ -12,7 +12,6 @@ function isError(value) {
  * @param {string} orderRef A valid BankID order reference
  */
 async function collect(orderRef) {
-  console.log('Collect', orderRef);
   try {
     const response = await post('auth/bankid/collect', { orderRef });
     const responseIsError = isError(response);

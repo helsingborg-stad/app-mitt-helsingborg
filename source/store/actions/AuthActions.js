@@ -1,6 +1,7 @@
 import env from 'react-native-config';
 import { get, post } from 'app/helpers/ApiRequest';
 import bankid from 'app/services/BankidService';
+import authService from 'app/services/AuthService';
 import JwtDecode from 'jwt-decode';
 import StorageService, { TOKEN_KEY, USER_KEY } from 'app/services/StorageService';
 import { getMockUser } from 'app/services/UserService';
@@ -11,7 +12,6 @@ export const actionTypes = {
   addProfile: 'ADD_PROFILE',
   removeProfile: 'REMOVE_PROFILE',
   authStarted: 'AUTH_STARTED',
-  authCompleted: 'AUTH_COMPLETED',
   authError: 'AUTH_ERROR',
   authCanceled: 'AUTH_CANCELED',
 };
@@ -28,7 +28,7 @@ export async function mockedAuth() {
   } catch (error) {
     return {
       type: actionTypes.authError,
-      paylaod: {
+      payload: {
         error,
       },
     };
@@ -95,66 +95,31 @@ export async function cancelAuth(orderRef) {
   };
 }
 
-async function getUserProfile(accessToken) {
-  const decodedToken = JwtDecode(accessToken);
-  if (decodedToken) {
-    const response = await get(`/users/${decodedToken.personalNumber}`, {
-      Authorization: accessToken,
-    });
-    return response.data.data.attributes.item;
-  }
-  return null;
-}
-
-// TODO: Seperate getUserProfile from this function.
-async function grantAccessToken(ssn) {
-  try {
-    const response = await post(
-      '/auth/token',
-      { personalNumber: ssn },
-      { 'x-api-key': env.MITTHELSINGBORG_IO_APIKEY }
-    );
-
-    if (response.status !== 200) {
-      return {
-        type: actionTypes.authError,
-        payload: {
-          error: response.data,
-        },
-      };
-    }
-    console.log(response);
-    const { token: accessToken } = response.data.data.attributes;
-    // Save accessToken to storage.
-    await StorageService.saveData(TOKEN_KEY, accessToken);
-    // TODO: Add real expired at time from token.
-    const expiresAt = JSON.stringify(900000 + new Date().getTime());
-    await StorageService.saveData('expiresAt', expiresAt);
-
-    return accessToken;
-  } catch (error) {
-    console.error('Token Auth Error:', error);
-    return {
-      type: actionTypes.loginFailure,
-      payload: {
-        error,
-      },
-    };
-  }
-}
-
 export async function checkAuthStatus(autoStartToken, orderRef) {
   try {
+    // Tries to start the bankId app on the device for user authorization.
     bankid.launchApp(autoStartToken);
+
+    // Try to collect a successfull collect response from bankid.
     const response = await bankid.collect(orderRef);
     if (response.success === false) {
       throw new Error(response.data);
     }
 
+    // Tries to grant a token from the authorization endpoint in the api.
     const { personal_number: ssn } = response.data.attributes.completion_data.user;
-    const accessToken = await grantAccessToken(ssn);
+    const [decodedAccessToken, grantTokenError] = await authService.grantAccessToken(ssn);
+    if (grantTokenError) {
+      throw new Error(grantTokenError);
+    }
 
-    const userProfile = await getUserProfile(accessToken);
+    // Tries to retrive an user from the api with accessToken.
+    const [userProfile, userError] = await authService.getUserProfile(
+      decodedAccessToken.accessToken
+    );
+    if (userError) {
+      throw new Error(userError);      ß;
+    }
 
     return {
       type: actionTypes.loginSuccess,
