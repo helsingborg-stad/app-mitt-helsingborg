@@ -1,8 +1,6 @@
 import env from 'react-native-config';
-import { get, post } from 'app/helpers/ApiRequest';
 import bankid from 'app/services/BankidService';
-import authService from 'app/services/AuthService';
-import JwtDecode from 'jwt-decode';
+import * as authService from 'app/services/AuthService';
 import StorageService, { TOKEN_KEY, USER_KEY } from 'app/services/StorageService';
 import { getMockUser } from 'app/services/UserService';
 
@@ -61,6 +59,7 @@ export function removeProfile() {
 
 export async function startAuth(ssn) {
   try {
+    console.log('Start Auth');
     const response = await bankid.auth(ssn);
     if (response.success === false) {
       throw new Error(response.data);
@@ -97,8 +96,9 @@ export async function cancelAuth(orderRef) {
 
 export async function checkAuthStatus(autoStartToken, orderRef) {
   try {
+    console.log('Check Auth Status');
     // Tries to start the bankId app on the device for user authorization.
-    bankid.launchApp(autoStartToken);
+    await bankid.launchApp(autoStartToken);
 
     // Try to collect a successfull collect response from bankid.
     const response = await bankid.collect(orderRef);
@@ -113,12 +113,15 @@ export async function checkAuthStatus(autoStartToken, orderRef) {
       throw new Error(grantTokenError);
     }
 
+    console.log('token retrived', decodedAccessToken);
+
     // Tries to retrive an user from the api with accessToken.
     const [userProfile, userError] = await authService.getUserProfile(
       decodedAccessToken.accessToken
     );
+
     if (userError) {
-      throw new Error(userError);      ß;
+      throw new Error(userError);
     }
 
     return {
@@ -128,6 +131,7 @@ export async function checkAuthStatus(autoStartToken, orderRef) {
       },
     };
   } catch (error) {
+    console.log(error);
     return {
       type: actionTypes.loginFailure,
       payload: {
