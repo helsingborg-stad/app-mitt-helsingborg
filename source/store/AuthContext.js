@@ -6,6 +6,7 @@ import { getMockUser } from '../services/UserService';
 
 import AuthReducer, { initialState } from './reducers/AuthReducer';
 import {
+import { PropTypes } from 'prop-types';
   startAuth,
   cancelAuth,
   loginFailure,
@@ -106,6 +107,10 @@ function AuthProvider({ children }) {
   };
 
   return <AuthContext.Provider value={contextValues}>{children}</AuthContext.Provider>;
+}
+
+AuthProvider.propTypes = {
+  children: PropTypes.node,
 }
 
 export { AuthProvider };
