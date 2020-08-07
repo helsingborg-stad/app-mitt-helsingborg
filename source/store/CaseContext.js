@@ -19,10 +19,10 @@ export function CaseProvider({ children }) {
    */
   const findLatestCase = cases => {
     if (cases.length > 0) {
-      cases.sort((c1, c2) => c2.attributes.updatedAt - c1.attributes.updatedAt);
-      console.log('Latest case:');
-      console.log(cases[0]);
-      return cases[0];
+      const [latestCase] = cases.sort(
+        (c1, c2) => c2.attributes.updatedAt - c1.attributes.updatedAt
+      );
+      return latestCase.attributes;
     }
     return null;
   };
