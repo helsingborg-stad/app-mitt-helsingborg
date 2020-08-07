@@ -37,15 +37,15 @@ const HomeScreen = ({ navigation }) => {
 
   const { updateCases, createCase, currentCase } = useContext(CaseContext);
   const { setCurrentForm, currentForm } = useContext(FormContext);
-  const formId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
 
+  /**
+   * This side effect sets the currentForm when the currentCase is updated.
+   */
   useEffect(() => {
-    console.log('currentCase', currentCase);
     if (currentCase && currentCase.formId) {
       setCurrentForm(currentCase.formId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentCase]);
+  }, [currentCase, setCurrentForm]);
 
   const navigationOptions = ({ navigation }) => ({
     tabBarVisible: navigation.state.params.tabBarVisible,
