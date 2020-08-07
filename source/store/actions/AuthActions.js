@@ -53,9 +53,27 @@ export async function addProfile() {
       throw new Error(userError);
     }
 
+    const {
+      personal_number: personalNumber,
+      created_at: createdAt,
+      first_name: firstName,
+      last_name: lastName,
+      mobile_phone: mobilePhone,
+      civil_status: civilStatus,
+      ...profile
+    } = userProfile;
+
     return {
       type: actionTypes.addProfile,
-      payload: { ...userProfile },
+      payload: {
+        personalNumber,
+        createdAt,
+        firstName,
+        lastName,
+        mobilePhone,
+        civilStatus,
+        ...profile,
+      },
     };
   } catch (error) {
     console.error(error);
