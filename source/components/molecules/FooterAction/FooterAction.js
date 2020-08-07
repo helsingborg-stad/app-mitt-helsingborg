@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Button, Text } from 'source/components/atoms';
 import { signAndCollect } from 'app/services/UserService';
 import StorageService, { USER_KEY } from 'app/services/StorageService';
+import AuthContext from 'app/store/AuthContext';
 
 const ActionContainer = styled.View(props => ({
   flex: 1,
@@ -32,6 +33,7 @@ const FooterAction = ({
   stepNumber,
   children,
 }) => {
+  const { user } = useContext(AuthContext);
   const actionMap = type => {
     switch (type) {
       case 'start': {
@@ -49,17 +51,16 @@ const FooterAction = ({
       }
       case 'bankIdSign': {
         return () => {
-          StorageService.getData(USER_KEY).then(user => {
-            signAndCollect(user.personalNumber, 'Signering för Mitt Helsingborg').then(result => {
-              if (result.ok) {
-                if (onUpdate) onUpdate(answers);
-                if (updateCaseInContext) updateCaseInContext(answers, 'signed', stepNumber);
-                if (onNext) onNext();
-              } else {
-                // TODO: Error will be completed once new code for signAndCollect pushed.
-                return null;
-              }
-            });
+          signAndCollect(user.personalNumber, 'Signering för Mitt Helsingborg').then(result => {
+            console.log(result);
+            if (result.ok) {
+              if (onUpdate) onUpdate(answers);
+              if (updateCaseInContext) updateCaseInContext(answers, 'signed', stepNumber);
+              if (onNext) onNext();
+            } else {
+              // TODO: Error will be completed once new code for signAndCollect pushed.
+              return null;
+            }
           });
         };
       }
