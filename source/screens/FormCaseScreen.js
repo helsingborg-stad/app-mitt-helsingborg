@@ -45,7 +45,7 @@ const FormCaseScreen = ({ navigation, ...props }) => {
         onClose={handleCloseForm}
         onStart={handleStartForm}
         onSubmit={handleSubmitForm}
-        initialAnswers={currentCase.attributes.data}
+        initialAnswers={currentCase.data}
         updateCaseInContext={updateCurrentCase}
         {...props}
       />
