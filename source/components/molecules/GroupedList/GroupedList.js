@@ -80,14 +80,16 @@ const GroupedList = ({ heading, items, categories, onEdit, color, ...other }) =>
         ) : null}
       </ListHeader>
       <ListBody>
-        {Object.keys(groupedItems).map(key => (
-          <View>
-            <FieldLabel style={{ marginTop: 40 }} underline="true">
-              {categories[key]}
-            </FieldLabel>
-            {groupedItems[key].map(item => item.component)}
-          </View>
-        ))}
+        {Object.keys(groupedItems)
+          .sort((a, b) => (a === 'sum' ? 1 : -1))
+          .map(key => (
+            <View>
+              <FieldLabel style={{ marginTop: 40 }} underline="true">
+                {categories[key]}
+              </FieldLabel>
+              {groupedItems[key].map(item => item.component)}
+            </View>
+          ))}
       </ListBody>
     </ListWrapper>
   );
