@@ -3,11 +3,11 @@ import { actionTypes } from '../actions/AuthActions';
 export const initialState = {
   isAuthenticated: false,
   isAuthorizing: false,
-  user: null,
+  user: {},
   error: null,
 };
 
-export default function AuthReducer(state = initialState, action) {
+export default function AuthReducer(state, action) {
   const { type, payload } = action;
   switch (type) {
     case actionTypes.loginSuccess:

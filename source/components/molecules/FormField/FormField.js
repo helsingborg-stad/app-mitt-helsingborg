@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, FieldLabel, Select } from 'source/components/atoms';
+import { Input, FieldLabel, Select, Text } from 'source/components/atoms';
 import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
 import SubstepList from 'source/components/organisms/SubstepList';
 import { View } from 'react-native';
 import ConditionalTextField from 'app/components/molecules/ConditinalTextField';
 import SubstepButton from '../SubstepButton';
 import colors from '../../../styles/colors';
-import ButtonField from '../ButtonField';
 import DateTimePickerForm from '../DateTimePicker';
 
 const inputTypes = {
@@ -36,7 +35,6 @@ const inputTypes = {
     changeEvent: 'onChange',
     props: {},
   },
-  button: {},
   editableList: {
     component: EditableList,
     changeEvent: 'onInputChange',
@@ -80,11 +78,16 @@ const FormField = props => {
   const saveInput = value => {
     onChange({ [id]: value });
   };
+  const inputProps = input && input.props ? input.props : {};
+  const inputCompProps = { color, value, ...inputProps, ...other };
+  if (input && input.changeEvent) inputCompProps[input.changeEvent] = saveInput;
 
-  const inputCompProps = { color, value, ...input.props, ...other };
-  inputCompProps[input.changeEvent] = saveInput;
-
-  const inputComponent = React.createElement(input.component, inputCompProps);
+  const inputComponent =
+    input && input.component ? (
+      React.createElement(input.component, inputCompProps)
+    ) : (
+      <Text>{`Invalid field type ${inputType}`}</Text>
+    );
 
   return (
     <View>
