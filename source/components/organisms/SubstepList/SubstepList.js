@@ -9,6 +9,10 @@ import { SubstepButton } from 'source/components/molecules';
 import GroupedList from 'app/components/molecules/GroupedList/GroupedList';
 import colors from 'source/styles/colors';
 
+const Wrapper = styled(View)`
+  margin-bottom: 25px;
+`;
+
 const ItemWrapper = styled(View)`
   flex-direction: row;
   align-items: flex-end;
@@ -26,10 +30,6 @@ const TextWrapper = styled.View`
   justify-content: flex-end;
   flex: 10;
   padding-left: 0px;
-`;
-const SumWrapper = styled.View`
-  align-items: center;
-  margin-bottom: 5px;
 `;
 
 const SmallInput = styled(Input)`
@@ -164,7 +164,7 @@ const SubstepList = ({
   }
 
   return (
-    <View>
+    <Wrapper>
       <GroupedList
         heading={heading}
         items={listItems}
@@ -189,7 +189,7 @@ const SubstepList = ({
           )}
         </ScrollView>
       ) : null}
-    </View>
+    </Wrapper>
   );
 };
 
