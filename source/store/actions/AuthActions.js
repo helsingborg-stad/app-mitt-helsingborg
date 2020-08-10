@@ -16,11 +16,9 @@ export const actionTypes = {
 
 export async function mockedAuth() {
   try {
-    const user = getMockUser();
     await StorageService.saveData(TOKEN_KEY, env.FAKE_TOKEN);
     return {
       type: actionTypes.loginSuccess,
-      payload: { user },
     };
   } catch (error) {
     return {
@@ -32,11 +30,20 @@ export async function mockedAuth() {
   }
 }
 
+export function addFakeProfile() {
+  const user = getMockUser();
+  return {
+    dispatch: actionTypes.addProfile,
+    payload: user,
+  };
+}
+
 export function loginSuccess() {
   return {
     type: actionTypes.loginSuccess,
   };
 }
+
 export async function loginFailure() {
   await authService.removeAccessTokenFromStorage();
   return {
@@ -127,7 +134,6 @@ export async function cancelAuth(orderRef) {
 
 export async function checkAuthStatus(autoStartToken, orderRef) {
   try {
-    console.log('Check Auth Status');
     // Tries to start the bankId app on the device for user authorization.
     await bankid.launchApp(autoStartToken);
 
