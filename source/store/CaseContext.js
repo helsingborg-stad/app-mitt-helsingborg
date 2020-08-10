@@ -90,11 +90,11 @@ export function CaseProvider({ children }) {
    * Function for sending a put request towards the case api endpoint, updating the currently active case
    * @param {obj} data a object consiting of case user inputs.
    */
-  const updateCurrentCase = (data, status, currentPage) => {
+  const updateCurrentCase = (data, status, currentStep) => {
     const body = {
       status,
       data,
-      currentPage,
+      currentStep,
     };
     // TODO: Remove Auhtorization header when token authentication works as expected.
     console.log('sending db put request with data:');
