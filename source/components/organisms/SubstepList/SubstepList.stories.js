@@ -45,6 +45,7 @@ const SubstepListStory = () => {
         items={items}
         categories={categories}
         value={values}
+        color="red"
         onChange={onChange}
       />
       <SubstepList

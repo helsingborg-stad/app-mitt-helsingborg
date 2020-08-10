@@ -450,6 +450,32 @@ const colors = {
     green: {},
     blue: {},
   },
+  groupedList: {
+    red: {
+      headerBackground: palette.red[6],
+      headerText: palette.red[8],
+      bodyBackground: palette.red[7],
+      bodyText: palette.mono.black,
+    },
+    light: {
+      headerBackground: palette.mono.light,
+      headerText: palette.mono.black,
+      bodyBackground: palette.mono.lighter,
+      bodyText: palette.mono.black,
+    },
+  },
+  substepList: {
+    red: {
+      listButtonColor: 'red',
+      addButtonColor: 'green',
+      addButtonIconColor: 'black',
+    },
+    light: {
+      listButtonColor: 'light',
+      addButtonColor: 'light',
+      addButtonIconColor: 'black',
+    },
+  },
 };
 
 export default colors;

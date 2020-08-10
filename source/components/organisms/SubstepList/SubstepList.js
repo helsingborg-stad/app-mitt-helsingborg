@@ -1,30 +1,31 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
+import { TouchableHighlight, ScrollView } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
-import { Input, Button, Text } from 'source/components/atoms';
+import { Input, Button, Text, Icon } from 'source/components/atoms';
 import styled from 'styled-components/native';
 import { excludePropetiesWithKey } from 'source/helpers/Objects';
 import { SubstepButton } from 'source/components/molecules';
 import GroupedList from 'app/components/molecules/GroupedList/GroupedList';
-import { ScrollView } from 'react-native-gesture-handler';
+import colors from 'source/styles/colors';
 
 const ItemWrapper = styled(View)`
   flex-direction: row;
+  align-items: flex-end;
   height: 46px;
-  width: 250px;
 `;
 // flex-direction: column;
 const InputWrapper = styled.View`
   align-items: center;
   justify-content: flex-end;
-  flex: 5;
+  flex: 1;
   padding-left: 50px;
 `;
 const TextWrapper = styled.View`
-  align-items: center;
+  align-items: flex-end;
   justify-content: flex-end;
   flex: 10;
-  padding-left: 100px;
+  padding-left: 0px;
 `;
 const SumWrapper = styled.View`
   align-items: center;
@@ -44,8 +45,14 @@ const SmallText = styled(Text)`
   padding-top: 8px;
   padding-bottom: 8px;
 `;
-
-const SubstepList = ({ heading, items, categories, value, onChange, summary, ...other }) => {
+const DeleteButton = styled(Icon)`
+  padding: 5px;
+  margin-left: 15px;
+  margin-right: 0px;
+  margin-bottom: 15px;
+  color: #dd6161;
+`;
+const SubstepList = ({ heading, items, categories, value, onChange, summary, color, ...other }) => {
   const [editable, setEditable] = useState(!summary);
 
   const updateAnswer = itemTitle => data => {
@@ -81,11 +88,15 @@ const SubstepList = ({ heading, items, categories, value, onChange, summary, ...
                   value={value[item.title] ? value[item.title] : {}}
                   onChange={updateAnswer(item.title)}
                   formId={item.formId}
-                  color="light"
+                  color={colors.substepList[color].listButtonColor}
                   size="small"
                 />
+                <TouchableHighlight activeOpacity={1} onPress={removeItem(item)}>
+                  <DeleteButton name="delete-forever" />
+                </TouchableHighlight>
                 <InputWrapper>
                   <SmallInput
+                    textAlign="right"
                     keyboardType="numeric"
                     value={value[item.title].amount}
                     onChangeText={changeFromInput(item)}
@@ -115,8 +126,8 @@ const SubstepList = ({ heading, items, categories, value, onChange, summary, ...
         heading={heading}
         items={listItems}
         categories={categories}
-        removable={editable}
-        removeItem={() => {}}
+        color={color}
+        onEdit={() => setEditable(!editable)}
       />
       {editable ? (
         <ScrollView horizontal>
@@ -124,7 +135,10 @@ const SubstepList = ({ heading, items, categories, value, onChange, summary, ...
             Object.keys(value).includes(item.title) ? null : (
               <SubstepButton
                 text={item.title}
+                iconName="add"
+                iconColor={colors.substepList[color].addButtonIconColor}
                 value={value[item.title] || {}}
+                color={colors.substepList[color].addButtonColor}
                 onChange={updateAnswer(item.title)}
                 formId={item.formId}
               />
@@ -148,11 +162,11 @@ const SubstepList = ({ heading, items, categories, value, onChange, summary, ...
               kr
             </Text>
           </SumWrapper>
-          <ButtonWrapper>
+          {/* <ButtonWrapper>
             <Button color="dark" onClick={() => setEditable(!editable)}>
               <Text>{editable ? 'Lås' : 'Ändra'}</Text>
             </Button>
-          </ButtonWrapper>
+          </ButtonWrapper> */}
         </>
       ) : null}
     </View>
@@ -184,12 +198,17 @@ SubstepList.propTypes = {
    * If the list acts as a summary; default is false.
    */
   summary: PropTypes.bool,
+  /**
+   * Sets the color scheme of the list. default is red.
+   */
+  color: PropTypes.string,
   other: PropTypes.any,
 };
 
 SubstepList.defaultProps = {
   items: [],
   summary: false,
+  color: 'red',
   onChange: () => {},
 };
 export default SubstepList;
