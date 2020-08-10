@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import env from 'react-native-config';
 import * as authService from '../services/AuthService';
-import AuthReducer, { initialState } from './reducers/AuthReducer';
+import AuthReducer, { initialState as defaultInitialState } from './reducers/AuthReducer';
 import {
   startAuth,
   cancelAuth,
@@ -16,7 +16,7 @@ import {
 
 const AuthContext = React.createContext();
 
-function AuthProvider({ children }) {
+function AuthProvider({ children, initialState }) {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
   /**
@@ -109,6 +109,11 @@ function AuthProvider({ children }) {
 
 AuthProvider.propTypes = {
   children: PropTypes.node,
+  initialState: PropTypes.shape({}),
+};
+
+AuthProvider.defaultProps = {
+  initialState: defaultInitialState,
 };
 
 export { AuthProvider };
