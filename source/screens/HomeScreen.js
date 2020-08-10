@@ -35,14 +35,17 @@ const HomeScreen = ({ navigation }) => {
   const [isInputVisible, setInputVisible] = useState(false);
   const [isChatButton, setChatButton] = useState(true);
 
-  const { updateCases, createCase } = useContext(CaseContext);
-  const { setCurrentForm, currentForm, getForm } = useContext(FormContext);
-  const formId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
+  const { updateCases, createCase, currentCase } = useContext(CaseContext);
+  const { setCurrentForm, currentForm } = useContext(FormContext);
 
+  /**
+   * This side effect sets the currentForm when the currentCase is updated.
+   */
   useEffect(() => {
-    setCurrentForm(formId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (currentCase && currentCase.formId) {
+      setCurrentForm(currentCase.formId);
+    }
+  }, [currentCase, setCurrentForm]);
 
   const navigationOptions = ({ navigation }) => ({
     tabBarVisible: navigation.state.params.tabBarVisible,

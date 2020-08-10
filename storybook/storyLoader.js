@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 // Auto-generated file created by react-native-storybook-loader
 // Do not edit.
 //
@@ -27,11 +28,10 @@ function loadStories() {
   require('../source/components/molecules/GroupedList/GroupedList.stories');
   require('../source/components/molecules/Header/Header.stories');
   require('../source/components/molecules/ImagePicker/ImagePicker.stories');
-  require('../source/components/molecules/InfoLink/InfoButton.stories');
-  require('../source/components/molecules/InfoText/InfoButton.stories');
+  require('../source/components/molecules/HelpButton/HelpButton.stories');
   require('../source/components/molecules/ListItem/Lists.stories');
   require('../source/components/molecules/Markdown.stories');
-  require('../source/components/molecules/Modal.stories');
+  require('../source/components/molecules/Modal/Modal.stories');
   require('../source/components/molecules/StepDescription/StepDescription.stories');
   require('../source/components/molecules/SubstepButton/SubstepButton.stories');
   require('../source/components/organisms/FieldList/FieldList.stories');
@@ -65,11 +65,10 @@ const stories = [
   '../source/components/molecules/GroupedList/GroupedList.stories',
   '../source/components/molecules/Header/Header.stories',
   '../source/components/molecules/ImagePicker/ImagePicker.stories',
-  '../source/components/molecules/InfoLink/InfoButton.stories',
-  '../source/components/molecules/InfoText/InfoButton.stories',
+  '../source/components/molecules/HelpButton/HelpButton.stories',
   '../source/components/molecules/ListItem/Lists.stories',
   '../source/components/molecules/Markdown.stories',
-  '../source/components/molecules/Modal.stories',
+  '../source/components/molecules/Modal/Modal.stories',
   '../source/components/molecules/StepDescription/StepDescription.stories',
   '../source/components/molecules/SubstepButton/SubstepButton.stories',
   '../source/components/organisms/FieldList/FieldList.stories',

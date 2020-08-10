@@ -1,33 +1,108 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { Button, Text } from 'source/components/atoms';
+import { signAndCollect } from 'app/services/UserService';
+import StorageService, { USER_KEY } from 'app/services/StorageService';
+import AuthContext from 'app/store/AuthContext';
 
 const ActionContainer = styled.View(props => ({
-  display: 'flex',
-  justifyContent: 'space-around',
-  bottom: 0,
-  padding: 32,
+  flex: 1,
   backgroundColor: props.background,
 }));
-
+const Flex = styled.View`
+  padding: 5px;
+  align-items: flex-end;
+  padding-right: 10px;
+`;
 const ButtonWrapper = styled.View`
-  padding-left: 30%;
   margin-top: 5%;
   margin-bottom: 5%;
-  width: 100%;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: space-around;
 `;
 
-const FooterAction = props => {
-  const { children, background, ButtonList } = props;
+const FooterAction = ({
+  actions,
+  background,
+  answers,
+  onStart,
+  onClose,
+  onNext,
+  onUpdate,
+  onSubmit,
+  updateCaseInContext,
+  stepNumber,
+  children,
+}) => {
+  const { user } = useContext(AuthContext);
+  const actionMap = type => {
+    switch (type) {
+      case 'start': {
+        return onStart || null;
+      }
+      case 'close': {
+        return () => {
+          if (onUpdate) onUpdate(answers);
+          if (updateCaseInContext) updateCaseInContext(answers, 'ongoing', stepNumber);
+          if (onClose) onClose();
+        };
+      }
+      case 'submit': {
+        return onSubmit || null;
+      }
+      case 'bankIdSign': {
+        return () => {
+          signAndCollect(user.personalNumber, 'Signering för Mitt Helsingborg').then(result => {
+            console.log(result);
+            if (result.ok) {
+              if (onUpdate) onUpdate(answers);
+              if (updateCaseInContext) updateCaseInContext(answers, 'signed', stepNumber);
+              if (onNext) onNext();
+            } else {
+              // TODO: Error will be completed once new code for signAndCollect pushed.
+              return null;
+            }
+          });
+        };
+      }
+      default: {
+        return () => {
+          if (onUpdate) onUpdate(answers);
+          if (updateCaseInContext) updateCaseInContext(answers, 'ongoing', stepNumber);
+          if (onNext) onNext();
+        };
+      }
+    }
+  };
+
+  const checkCondition = questionId => {
+    if (!questionId) return false;
+
+    if (typeof questionId === 'string') {
+      if (questionId[0] === '!') {
+        const qId = questionId.slice(1);
+        return answers[qId];
+      }
+      return !answers[questionId];
+    }
+    return false;
+  };
+
+  const buttons = actions.map(action => (
+    <Flex>
+      <Button
+        onClick={actionMap(action.type)}
+        color={action.color}
+        disabled={checkCondition(action.conditionalOn)}
+      >
+        <Text>{action.label}</Text>
+      </Button>
+    </Flex>
+  ));
 
   return (
     <ActionContainer background={background}>
       <ButtonWrapper>
-        {ButtonList && <ButtonList />}
+        {buttons}
         {children}
       </ButtonWrapper>
     </ActionContainer>
@@ -36,8 +111,40 @@ const FooterAction = props => {
 
 FooterAction.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
-  ButtonList: PropTypes.node,
+
+  /**
+   * Properties for actions in the footer of the step.
+   */
+  actions: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.string,
+      label: PropTypes.string,
+      color: PropTypes.string,
+      conditionalOn: PropTypes.string,
+    })
+  ),
+  /**
+   * Background color for the footer
+   */
   background: PropTypes.string,
+  /**
+   * Current form answers, used for passing to the various actions
+   */
+  answers: PropTypes.object,
+  /** Behaviour for the start action */
+  onStart: PropTypes.func,
+  /** Behaviour for the close action */
+  onClose: PropTypes.func,
+  /** Behaviour for the next page action */
+  onNext: PropTypes.func,
+  /** Behaviour for sending updates to context and/or backend */
+  onUpdate: PropTypes.func,
+  /** Behaviour for the submit action */
+  onSubmit: PropTypes.func,
+  /** Behaviour for updating case in context and backend */
+  updateCaseInContext: PropTypes.func,
+  /** The steps position in the form */
+  stepNumber: PropTypes.number,
 };
 
 FooterAction.defaultProps = {

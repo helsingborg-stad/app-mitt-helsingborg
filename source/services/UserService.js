@@ -155,7 +155,7 @@ export const signAndCollect = async (personalNumber, userVisibleData) => {
     return Promise.resolve({ ok: false, data: getMessage('technicalError') });
   }
 
-  const { auto_start_token: autoStartToken, order_ref: orderRef } = responseJson;
+  const { autoStartToken, orderRef } = responseJson;
   if (!autoStartToken || !orderRef) {
     console.log('Sign error: Missing autoStartToken or orderRef');
     return Promise.resolve({ ok: false, data: getMessage('technicalError') });

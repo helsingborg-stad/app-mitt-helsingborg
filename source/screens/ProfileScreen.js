@@ -51,7 +51,8 @@ function ProfileScreen(props) {
   const {
     navigation: { navigate },
   } = props;
-  const { user, signOut } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+  const { user } = authContext;
   const renderField = value => (value ? <Text>{value}</Text> : <EmptyValue>Ej angivet</EmptyValue>);
 
   return (
@@ -82,7 +83,7 @@ function ProfileScreen(props) {
             block
             color="purple"
             onClick={async () => {
-              signOut();
+              await authContext.handleLogout();
               navigate('Start');
             }}
           >
@@ -94,7 +95,7 @@ function ProfileScreen(props) {
               block
               onClick={async () => {
                 StorageService.default.clearData();
-                signOut();
+                await authContext.handleLogout();
                 navigate('Start');
               }}
             >

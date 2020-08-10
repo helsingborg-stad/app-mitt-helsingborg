@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from 'react';
+import env from 'react-native-config';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { ActivityIndicator } from 'react-native';
@@ -16,7 +17,7 @@ function SplashScreen(props) {
     navigation: { navigate },
   } = props;
 
-  const { authStatus } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
 
   /**
    * Returns if onboarding screen is disabled
@@ -32,16 +33,20 @@ function SplashScreen(props) {
       navigate(showOnboarding ? 'Onboarding' : 'Login');
     };
 
-    switch (authStatus) {
-      case 'resolved':
+    const authCheck = async () => {
+      if (await authContext.isUserAuthenticated()) {
+        authContext.handleLogin();
+        await authContext.handleAddProfile();
         navigate('Chat');
-        break;
-      case 'idle':
-        navigateAsync();
-        break;
-      default:
-    }
-  }, [authStatus, navigate]);
+      } else {
+        await authContext.handleLogout();
+        authContext.handleRemoveProfile();
+        await navigateAsync();
+      }
+    };
+
+    authCheck();
+  }, [authContext, navigate]);
 
   return (
     <SplashContainer>

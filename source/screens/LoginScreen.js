@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { Alert, Keyboard, Linking } from 'react-native';
 import env from 'react-native-config';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
+import { Alert, Keyboard, Linking } from 'react-native';
 import styled from 'styled-components/native';
 import { AuthLoading, ScreenWrapper } from 'app/components/molecules';
 import { ValidationHelper, UrlHelper } from 'app/helpers';
@@ -56,165 +56,148 @@ const LoginFormHeader = styled.View`
   margin-bottom: 32px;
 `;
 
-class LoginScreen extends Component {
-  constructor(props) {
-    super(props);
+function LoginScreen(props) {
+  const authContext = useContext(AuthContext);
 
-    this.state = {
-      hideLogo: false,
-      personalNumberInput: '',
-      isBankidInstalled: false,
+  const [hideLogo, setHideLogo] = useState(false);
+  const [personalNumber, setPersonalNumber] = useState('');
+  const [bankidInstalled, setBankidInstalled] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () =>
+      setHideLogo(true)
+    );
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () =>
+      setHideLogo(false)
+    );
+
+    async function isBankidInstalled() {
+      const isInstalled = await canOpenUrl('bankid:///');
+
+      if (isInstalled) {
+        setBankidInstalled(true);
+      }
+    }
+
+    isBankidInstalled();
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
     };
-  }
-
-  componentDidMount() {
-    this.isBankidInstalled();
-
-    this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', () =>
-      this.setState({ hideLogo: true })
-    );
-    this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', () =>
-      this.setState({ hideLogo: false })
-    );
-  }
-
-  componentWillUnmount() {
-    this.keyboardWillShowListener.remove();
-    this.keyboardWillHideListener.remove();
-  }
+  }, []);
 
   /**
-   * Check if BankID app is installed on this machine
+   * Function for navigating to a screen in the application.
    */
-  isBankidInstalled = async () => {
-    const isInstalled = await canOpenUrl('bankid:///');
+  const navigateToScreen = useCallback(screen => {
+    props.navigation.navigate(screen);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    if (isInstalled) {
-      this.setState({ isBankidInstalled: true });
-    }
-  };
-
-  changeHandler = value => {
-    this.setState({
-      personalNumberInput: sanitizePin(value),
-    });
-  };
-
-  signInNavigate = () => {
-    const { authStatus } = this.context;
-    const {
-      navigation: { navigate },
-    } = this.props;
-
-    if (authStatus === 'resolved') {
-      navigate('Chat');
-    }
-  };
-
-  submitHandler = async () => {
-    const { signIn } = this.context;
-    const { personalNumberInput, isBankidInstalled } = this.state;
-
-    // Use external mobile bankid app if app is not installed or set to dev mode
-    const useExternalBankId = !isBankidInstalled || env.APP_ENV === 'development';
-
-    if (useExternalBankId) {
-      // Validate personal number input
-      if (personalNumberInput.length <= 0) {
-        return;
+  /**
+   * Effect for navigating to a set screen when authentication is completed/resolved
+   */
+  useEffect(() => {
+    const handleNavigateToScreen = async () => {
+      if (authContext.isAuthenticated) {
+        await authContext.handleAddProfile();
+        navigateToScreen('Chat');
       }
+    };
+    handleNavigateToScreen();
+  }, [authContext, navigateToScreen]);
 
-      if (!validatePin(personalNumberInput)) {
-        Alert.alert('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.');
-        return;
-      }
-
-      await signIn(personalNumberInput);
-    } else {
-      await signIn(undefined);
-    }
-
-    this.signInNavigate();
+  /**
+   * Handles the personal number input field changes and updates state.
+   */
+  const handlePersonalNumber = value => {
+    setPersonalNumber(sanitizePin(value));
   };
 
-  render() {
-    const { authStatus, cancelSignIn, error } = this.context;
-    const { personalNumberInput, hideLogo, isBankidInstalled } = this.state;
-    const useExternalBankId = !isBankidInstalled || env.APP_ENV === 'development';
-
-    if (authStatus === 'pending') {
-      return (
-        <LoginScreenWrapper>
-          <AuthLoading cancelSignIn={() => cancelSignIn()} isBankidInstalled={isBankidInstalled} />
-        </LoginScreenWrapper>
-      );
+  /**
+   * Handles the submission of the login form.
+   */
+  const handleSubmit = async () => {
+    if (personalNumber.length <= 0) {
+      return;
     }
 
+    if (!validatePin(personalNumber)) {
+      Alert.alert('Felaktigt personnummer. Ange format ÅÅÅÅMMDDXXXX.');
+      return;
+    }
+
+    await authContext.handleAuth(personalNumber);
+  };
+
+  if (!authContext.isAuthenticated && authContext.isAuthorizing) {
     return (
-      <LoginSafeAreaView behavior="padding" enabled>
-        <LoginScreenWrapper>
-          <LoginHeader>
-            {hideLogo ? null : <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />}
-          </LoginHeader>
-          <LoginBody>
-            <LoginForm>
-              <LoginFormHeader>
-                <Heading>Logga in</Heading>
-              </LoginFormHeader>
-
-              {/* TODO: Fix better error messages */}
-              {authStatus === 'rejected' && (
-                <Text style={{ color: 'red', paddingBottom: 12 }}>{error.message}</Text>
-              )}
-
-              {useExternalBankId && (
-                <LoginFormField>
-                  <Input
-                    placeholder="ÅÅÅÅMMDDXXXX"
-                    value={personalNumberInput}
-                    onChangeText={this.changeHandler}
-                    keyboardType="number-pad"
-                    returnKeyType="done"
-                    maxLength={12}
-                    onSubmitEditing={() => this.submitHandler()}
-                    center
-                  />
-                </LoginFormField>
-              )}
-              <LoginFormField>
-                <Button
-                  disabled={authStatus === 'canceled'}
-                  color="purpleLight"
-                  block
-                  onClick={() => this.submitHandler()}
-                >
-                  <Text>Logga in med mobilt BankID</Text>
-                </Button>
-              </LoginFormField>
-
-              <LoginFormField>
-                <Link
-                  onPress={() => {
-                    Linking.openURL(
-                      'https://support.bankid.com/sv/bankid/mobilt-bankid'
-                    ).catch(() => console.log('Couldnt open url'));
-                  }}
-                >
-                  Läs mer om hur du skaffar mobilt BankID
-                </Link>
-              </LoginFormField>
-            </LoginForm>
-          </LoginBody>
-        </LoginScreenWrapper>
-      </LoginSafeAreaView>
+      <LoginScreenWrapper>
+        <AuthLoading
+          cancelSignIn={() => authContext.handleCancelAuth()}
+          isBankidInstalled={bankidInstalled}
+        />
+      </LoginScreenWrapper>
     );
   }
+
+  return (
+    <LoginSafeAreaView behavior="padding" enabled>
+      <LoginScreenWrapper>
+        <LoginHeader>
+          {hideLogo ? null : <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />}
+        </LoginHeader>
+        <LoginBody>
+          <LoginForm>
+            <LoginFormHeader>
+              <Heading>Logga in</Heading>
+            </LoginFormHeader>
+
+            {/* TODO: Fix better error messages */}
+            {authContext.error && (
+              <Text style={{ color: 'red', paddingBottom: 12 }}>{authContext.error}</Text>
+            )}
+
+            <LoginFormField>
+              <Input
+                placeholder="ÅÅÅÅMMDDXXXX"
+                value={personalNumber}
+                onChangeText={handlePersonalNumber}
+                keyboardType="number-pad"
+                returnKeyType="done"
+                maxLength={12}
+                onSubmitEditing={handleSubmit}
+                center
+              />
+            </LoginFormField>
+
+            <LoginFormField>
+              <Button color="purpleLight" block onClick={handleSubmit}>
+                <Text>Logga in med mobilt BankID</Text>
+              </Button>
+            </LoginFormField>
+
+            <LoginFormField>
+              <Link
+                onPress={() => {
+                  Linking.openURL('https://support.bankid.com/sv/bankid/mobilt-bankid').catch(() =>
+                    console.log('Couldnt open url')
+                  );
+                }}
+              >
+                Läs mer om hur du skaffar mobilt BankID
+              </Link>
+            </LoginFormField>
+          </LoginForm>
+        </LoginBody>
+      </LoginScreenWrapper>
+    </LoginSafeAreaView>
+  );
 }
 
 LoginScreen.propTypes = {
   navigation: PropTypes.object,
 };
-
-LoginScreen.contextType = AuthContext;
 
 export default LoginScreen;

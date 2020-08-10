@@ -12,14 +12,14 @@ const EditableListWrapper = styled.View`
   display: flex;
   flex-direction: column;
 
-  width: 382px;
+  width: 100%;
   height: auto;
 
   background: ${props => props.bg};
   border-radius: 9.5px;
   overflow: hidden;
   margin-bottom: 16px;
-  margin-left: -10px;
+  margin-top: 16px;
 `;
 
 const EditableListHeader = styled.View`
@@ -48,16 +48,16 @@ const HeaderTitleWrapper = styled.View`
 
 const HeaderTitle = styled(Text)`
   font-weight: 900;
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.8px;
   text-transform: uppercase;
 `;
 
 const EditableListBody = styled.View`
-  padding-top: 18px;
-  padding-bottom: 24px;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-top: 12px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   height: auto;
 `;
 
@@ -67,12 +67,12 @@ const EditableListItem = styled.View`
 `;
 
 const EditableListItemLabelWrapper = styled.View`
-  flex: 2;
+  flex: 4;
   justify-content: center;
 `;
 
 const EditableListItemLabel = styled.Text`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: normal;
   color: ${props => props.color};
 `;
@@ -87,10 +87,11 @@ const EditableListItemInputWrapper = styled.View`
 // eslint-disable-next-line prettier/prettier
 const EditableListItemInput = styled.TextInput`
   text-align: right;
-  min-width: 220px;
-  font-size: 18px;
+  min-width: 80%;
+  font-size: 16px;
   font-weight: bold;
   color: ${props => props.color};
+  padding: 6px;
 `;
 
 const getInitialState = (inputs, value) => {

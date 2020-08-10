@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { get, post, put } from 'app/helpers/ApiRequest';
 import AuthContext from 'app/store/AuthContext';
-import casesMock from '../assets/mock/cases';
 
 const CaseContext = React.createContext();
 
@@ -20,22 +19,24 @@ export function CaseProvider({ children }) {
    */
   const findLatestCase = cases => {
     if (cases.length > 0) {
-      cases.sort((c1, c2) => c2.attributes.updatedAt - c1.attributes.updatedAt);
-      console.log('Latest case:');
-      console.log(cases[0]);
-      return cases[0];
+      const [latestCase] = cases.sort(
+        (c1, c2) => c2.attributes.updatedAt - c1.attributes.updatedAt
+      );
+      return latestCase.attributes;
     }
     return null;
   };
 
   useEffect(() => {
-    setFetching(true);
+    if (user) {
+      setFetching(true);
 
-    get('/cases', undefined, user.personalNumber).then(response => {
-      setCases(response.data.data);
-      setCurrentCase(findLatestCase(response.data.data));
-      setFetching(false);
-    });
+      get('/cases', undefined, user.personalNumber).then(response => {
+        setCases(response.data.data);
+        setCurrentCase(findLatestCase(response.data.data));
+        setFetching(false);
+      });
+    }
   }, [user]);
 
   const getCase = caseId => cases.find(c => c.id === caseId);
@@ -89,15 +90,16 @@ export function CaseProvider({ children }) {
    * Function for sending a put request towards the case api endpoint, updating the currently active case
    * @param {obj} data a object consiting of case user inputs.
    */
-  const updateCurrentCase = (data, status) => {
+  const updateCurrentCase = (data, status, currentPage) => {
     const body = {
       status,
       data,
+      currentPage,
     };
     // TODO: Remove Auhtorization header when token authentication works as expected.
     console.log('sending db put request with data:');
-    console.log(data);
-    console.log(status);
+    console.log(body);
+    // console.log(status);
     put(`/cases/${currentCase.id}`, JSON.stringify(body), {
       Authorization: parseInt(user.personalNumber),
     });

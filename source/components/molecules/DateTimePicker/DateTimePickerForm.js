@@ -5,12 +5,12 @@ import { View, TouchableOpacity } from 'react-native';
 import Input from '../../atoms/Input';
 
 const DateTimePickerForm = props => {
-  const { onSelect, inputValue, mode, selectorProps } = props;
+  const { onSelect, value, mode, selectorProps, ...other } = props;
 
   const [isVisible, setIsVisible] = useState(false);
 
   let dateTimeString;
-  const date = inputValue && typeof inputValue.getMonth === 'function' ? inputValue : new Date();
+  const date = value && typeof value.getMonth === 'function' ? value : new Date();
   const dateString = `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(
     2,
     0
@@ -19,8 +19,8 @@ const DateTimePickerForm = props => {
     2,
     0
   )}`;
-
-  if (inputValue) {
+  if (value) {
+    console.log('entered if');
     switch (mode) {
       case 'datetime':
         dateTimeString = `${dateString} ${timeString}`;
@@ -43,13 +43,14 @@ const DateTimePickerForm = props => {
           editable={false}
           value={dateTimeString}
           pointerEvents="none"
-          {...props}
+          center
+          {...other}
         />
       </TouchableOpacity>
       {isVisible && (
         <DateTimePicker
           value={date}
-          onChange={(_event, value) => onSelect(value)}
+          onChange={(_event, x) => onSelect(x)}
           mode={mode}
           {...selectorProps}
         />
@@ -66,7 +67,7 @@ DateTimePickerForm.propTypes = {
   /**
    * Value from the date picker
    */
-  inputValue: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
+  value: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
   /**
    * Defines the type of date picker
    */
@@ -82,7 +83,7 @@ DateTimePickerForm.propTypes = {
 };
 
 DateTimePickerForm.defaultProps = {
-  inputValue: '',
+  value: '',
 };
 
 export default DateTimePickerForm;
