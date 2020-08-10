@@ -17,7 +17,6 @@ export async function getAccessTokenFromStorage() {
       };
     }
   } catch (error) {
-    console.error(error);
     return null;
   }
 }
@@ -27,15 +26,20 @@ export async function getAccessTokenFromStorage() {
  * @param {string} accessToken json web token;
  */
 export async function saveAccessTokenToStorage(accessToken) {
-  await StorageService.saveData(TOKEN_KEY, accessToken);
-  // TODO: Add real expired at time from token.
-  const decodedAccessToken = JwtDecode(accessToken);
-  const expiresAt = JSON.stringify(decodedAccessToken.exp * 10000 + new Date().getTime());
-  await StorageService.saveData('expiresAt', expiresAt);
-  return {
-    accessToken,
-    ...decodedAccessToken,
-  };
+  try {
+    await StorageService.saveData(TOKEN_KEY, accessToken);
+    // TODO: Add real expired at time from token.
+    const decodedAccessToken = JwtDecode(accessToken);
+    const expiresAt = JSON.stringify(decodedAccessToken.exp * 10000 + new Date().getTime());
+    await StorageService.saveData('expiresAt', expiresAt);
+    return {
+      accessToken,
+      ...decodedAccessToken,
+    };
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 }
 /**
  * This function saves the accessToken and it's expire time to AsyncStorage.
