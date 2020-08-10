@@ -102,7 +102,7 @@ function LoginScreen(props) {
     const handleNavigateToScreen = async () => {
       if (authContext.isAuthenticated) {
         await authContext.handleAddProfile();
-        navigateToScreen('Chat');
+        navigateToScreen('Start');
       }
     };
     handleNavigateToScreen();
