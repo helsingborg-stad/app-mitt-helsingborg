@@ -82,7 +82,9 @@ const GroupedList = ({ heading, items, categories, onEdit, color, ...other }) =>
       <ListBody>
         {Object.keys(groupedItems).map(key => (
           <View>
-            <FieldLabel underline="false">{categories[key]}</FieldLabel>
+            <FieldLabel style={{ marginTop: 40 }} underline="true">
+              {categories[key]}
+            </FieldLabel>
             {groupedItems[key].map(item => item.component)}
           </View>
         ))}

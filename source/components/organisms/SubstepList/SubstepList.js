@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { TouchableHighlight, ScrollView } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
-import { Input, Button, Text, Icon } from 'source/components/atoms';
+import { Input, Text, Icon } from 'source/components/atoms';
 import styled from 'styled-components/native';
 import { excludePropetiesWithKey } from 'source/helpers/Objects';
 import { SubstepButton } from 'source/components/molecules';
@@ -31,10 +31,7 @@ const SumWrapper = styled.View`
   align-items: center;
   margin-bottom: 5px;
 `;
-const ButtonWrapper = styled.View`
-  align-items: center;
-  margin-top: 10px;
-`;
+
 const SmallInput = styled(Input)`
   height: 40px;
   padding-top: 8px;
@@ -42,8 +39,18 @@ const SmallInput = styled(Input)`
 `;
 const SmallText = styled(Text)`
   height: 40px;
-  padding-top: 8px;
+  font-size: 14;
+  padding-top: 11px;
   padding-bottom: 8px;
+  padding-left: 17px;
+`;
+const LargeText = styled(Text)`
+  height: 40px;
+  font-size: 22;
+  font-weight: 800;
+  padding-top: 11px;
+  padding-bottom: 8px;
+  padding-left: 17px;
 `;
 const DeleteButton = styled(Icon)`
   padding: 5px;
@@ -52,7 +59,17 @@ const DeleteButton = styled(Icon)`
   margin-bottom: 15px;
   color: #dd6161;
 `;
-const SubstepList = ({ heading, items, categories, value, onChange, summary, color, ...other }) => {
+const SubstepList = ({
+  heading,
+  items,
+  categories,
+  value,
+  onChange,
+  summary,
+  color,
+  placeholder,
+  ...other
+}) => {
   const [editable, setEditable] = useState(!summary);
 
   const updateAnswer = itemTitle => data => {
@@ -115,10 +132,36 @@ const SubstepList = ({ heading, items, categories, value, onChange, summary, col
             )}
           </ItemWrapper>
         ),
-        remove: removeItem(item),
       });
     }
   });
+  if (listItems.length === 0) {
+    categories.empty = '';
+    listItems.push({
+      category: 'empty',
+      component: <LargeText style={{ marginTop: -50 }}>{placeholder}</LargeText>,
+    });
+  }
+  if (summary) {
+    console.log('in summary, listItems is:', listItems);
+    if (!categories.sum) categories.sum = 'Summa';
+    listItems.push({
+      category: 'sum',
+      component: (
+        <LargeText>
+          {Object.keys(value).reduce((prev, curr) => {
+            const amount = parseFloat(value[curr].amount);
+            // eslint-disable-next-line no-restricted-globals
+            if (isNaN(amount)) {
+              return prev;
+            }
+            return prev + amount;
+          }, 0)}{' '}
+          kr
+        </LargeText>
+      ),
+    });
+  }
 
   return (
     <View>
@@ -145,29 +188,6 @@ const SubstepList = ({ heading, items, categories, value, onChange, summary, col
             )
           )}
         </ScrollView>
-      ) : null}
-      {summary ? (
-        <>
-          <SumWrapper>
-            <Text>
-              Summa:{' '}
-              {Object.keys(value).reduce((prev, curr) => {
-                const amount = parseFloat(value[curr].amount);
-                // eslint-disable-next-line no-restricted-globals
-                if (isNaN(amount)) {
-                  return prev;
-                }
-                return prev + amount;
-              }, 0)}{' '}
-              kr
-            </Text>
-          </SumWrapper>
-          {/* <ButtonWrapper>
-            <Button color="dark" onClick={() => setEditable(!editable)}>
-              <Text>{editable ? 'Lås' : 'Ändra'}</Text>
-            </Button>
-          </ButtonWrapper> */}
-        </>
       ) : null}
     </View>
   );
@@ -202,6 +222,10 @@ SubstepList.propTypes = {
    * Sets the color scheme of the list. default is red.
    */
   color: PropTypes.string,
+  /**
+   * Message to display before anything has been added to the list.
+   */
+  placeholder: PropTypes.string,
   other: PropTypes.any,
 };
 
@@ -209,6 +233,7 @@ SubstepList.defaultProps = {
   items: [],
   summary: false,
   color: 'red',
+  placeholder: 'Du har inte lagt till något än',
   onChange: () => {},
 };
 export default SubstepList;
