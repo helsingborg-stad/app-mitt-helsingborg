@@ -101,8 +101,7 @@ function LoginScreen(props) {
   useEffect(() => {
     const handleNavigateToScreen = async () => {
       if (authContext.isAuthenticated) {
-        await authContext.handleAddProfile();
-        navigateToScreen('Chat');
+        navigateToScreen('Start');
       }
     };
     handleNavigateToScreen();

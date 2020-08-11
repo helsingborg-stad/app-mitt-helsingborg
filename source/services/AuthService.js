@@ -27,15 +27,20 @@ export async function getAccessTokenFromStorage() {
  * @param {string} accessToken json web token;
  */
 export async function saveAccessTokenToStorage(accessToken) {
-  await StorageService.saveData(TOKEN_KEY, accessToken);
-  // TODO: Add real expired at time from token.
-  const decodedAccessToken = JwtDecode(accessToken);
-  const expiresAt = JSON.stringify(decodedAccessToken.exp * 10000 + new Date().getTime());
-  await StorageService.saveData('expiresAt', expiresAt);
-  return {
-    accessToken,
-    ...decodedAccessToken,
-  };
+  try {
+    await StorageService.saveData(TOKEN_KEY, accessToken);
+    // TODO: Add real expired at time from token.
+    const decodedAccessToken = JwtDecode(accessToken);
+    const expiresAt = JSON.stringify(decodedAccessToken.exp * 10000 + new Date().getTime());
+    await StorageService.saveData('expiresAt', expiresAt);
+    return {
+      accessToken,
+      ...decodedAccessToken,
+    };
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
 }
 /**
  * This function saves the accessToken and it's expire time to AsyncStorage.
@@ -77,7 +82,11 @@ export async function grantAccessToken(ssn) {
 export async function getUserProfile(accessToken) {
   try {
     const decodedToken = JwtDecode(accessToken);
-    if (decodedToken) {
+    if (!decodedToken || !decodedToken.personalNumber) {
+      throw new Error('Invalid JWT token');
+    }
+
+    if (decodedToken && decodedToken.personalNumber) {
       const response = await get(`/users/${decodedToken.personalNumber}`, {
         Authorization: accessToken,
       });
@@ -85,7 +94,6 @@ export async function getUserProfile(accessToken) {
       if (response.status !== 200) {
         throw new Error(response.data);
       }
-
       return [response.data.data.attributes.item, null];
     }
   } catch (error) {

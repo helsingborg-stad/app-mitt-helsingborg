@@ -69,9 +69,7 @@ function AuthProvider({ children }) {
    * @param {object} profile a user profile object
    */
   async function handleAddProfile() {
-    if (env.USE_BANKID === 'true') {
-      dispatch(await addProfile());
-    }
+    dispatch(await addProfile());
   }
 
   /**
@@ -86,7 +84,14 @@ function AuthProvider({ children }) {
    */
   async function isUserAuthenticated() {
     const decodedToken = await authService.getAccessTokenFromStorage();
+
+    // TODO: Remove this condition when exp value is set on the jwt token in the api.
+    if (env.USE_BANKID === 'true' && decodedToken) {
+      return true;
+    }
+
     if (decodedToken) {
+      // Checks if a token is present in the application and that the expire time of the token is valid
       const expiresAt = decodedToken.exp * 1000;
       return new Date().getTime() < expiresAt;
     }
