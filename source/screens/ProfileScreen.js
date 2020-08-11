@@ -60,8 +60,6 @@ function ProfileScreen(props) {
       <Header title="Min profil" themeColor="purple" />
       <Container>
         <View>
-          {/* {user ? (
-            <> */}
           <ProfileInfoContainer>
             <ProfileInfoHeading type="h3">Personuppgifter</ProfileInfoHeading>
             <Label small>NAMN</Label>
@@ -79,8 +77,6 @@ function ProfileScreen(props) {
             {/*     {renderField(user.address.street)}
             {renderField(user.address.postalCode)} */}
           </ProfileInfoContainer>
-          {/* </>
-          ) : null} */}
         </View>
         <BottomContainer>
           <SignOutButton

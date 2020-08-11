@@ -12,13 +12,11 @@ import colors from 'source/styles/colors';
 const Wrapper = styled(View)`
   margin-bottom: 25px;
 `;
-
 const ItemWrapper = styled(View)`
   flex-direction: row;
   align-items: flex-end;
   height: 46px;
 `;
-// flex-direction: column;
 const InputWrapper = styled.View`
   align-items: center;
   justify-content: flex-end;
@@ -31,7 +29,6 @@ const TextWrapper = styled.View`
   flex: 10;
   padding-left: 0px;
 `;
-
 const SmallInput = styled(Input)`
   height: 40px;
   padding-top: 8px;
@@ -143,7 +140,6 @@ const SubstepList = ({
     });
   }
   if (summary) {
-    console.log('in summary, listItems is:', listItems);
     if (!categories.sum) categories.sum = 'Summa';
     listItems.push({
       category: 'sum',
@@ -172,7 +168,7 @@ const SubstepList = ({
         color={color}
         onEdit={() => setEditable(!editable)}
       />
-      {editable ? (
+      {editable && (
         <ScrollView horizontal>
           {items.map(item =>
             Object.keys(value).includes(item.title) ? null : (
@@ -188,7 +184,7 @@ const SubstepList = ({
             )
           )}
         </ScrollView>
-      ) : null}
+      )}
     </Wrapper>
   );
 };
