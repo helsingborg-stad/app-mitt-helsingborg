@@ -30,14 +30,6 @@ export async function mockedAuth() {
   }
 }
 
-export function addFakeProfile() {
-  const user = getMockUser();
-  return {
-    dispatch: actionTypes.addProfile,
-    payload: user,
-  };
-}
-
 export function loginSuccess() {
   return {
     type: actionTypes.loginSuccess,

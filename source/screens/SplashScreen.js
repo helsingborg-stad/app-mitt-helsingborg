@@ -25,13 +25,6 @@ function SplashScreen(props) {
     isUserAuthenticated,
   } = useContext(AuthContext);
 
-  useEffect(() => {
-    const boostrapAsync = async () => {
-      console.log(await StorageService.getData(TOKEN_KEY));
-    };
-
-    boostrapAsync();
-  }, []);
   /**
    * Returns if onboarding screen is disabled
    */
