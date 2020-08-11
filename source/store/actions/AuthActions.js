@@ -59,7 +59,6 @@ export async function addProfile() {
     if (userError) {
       throw new Error(userError);
     }
-
     const {
       personal_number: personalNumber,
       created_at: createdAt,
@@ -102,7 +101,6 @@ export async function startAuth(ssn) {
     if (response.success === false) {
       throw new Error(response.data);
     }
-
     const { order_ref: orderRef, auto_start_token: autoStartToken } = response.data;
 
     return {
