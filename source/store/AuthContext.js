@@ -12,7 +12,6 @@ import {
   removeProfile,
   addProfile,
   mockedAuth,
-  addFakeProfile,
 } from './actions/AuthActions';
 
 const AuthContext = React.createContext();
