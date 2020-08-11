@@ -82,7 +82,11 @@ export async function grantAccessToken(ssn) {
 export async function getUserProfile(accessToken) {
   try {
     const decodedToken = JwtDecode(accessToken);
-    if (decodedToken) {
+    if (!decodedToken || !decodedToken.personalNumber) {
+      throw new Error('Invalid JWT token');
+    }
+
+    if (decodedToken && decodedToken.personalNumber) {
       const response = await get(`/users/${decodedToken.personalNumber}`, {
         Authorization: accessToken,
       });
@@ -90,7 +94,6 @@ export async function getUserProfile(accessToken) {
       if (response.status !== 200) {
         throw new Error(response.data);
       }
-
       return [response.data.data.attributes.item, null];
     }
   } catch (error) {

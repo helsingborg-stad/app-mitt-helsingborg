@@ -34,6 +34,7 @@ function SplashScreen(props) {
   };
 
   useEffect(() => {
+    console.log('Splash Screen useEffect!');
     const authCheck = async () => {
       if (await isUserAuthenticated()) {
         handleLogin();
@@ -48,14 +49,8 @@ function SplashScreen(props) {
     };
 
     authCheck();
-  }, [
-    handleAddProfile,
-    handleLogin,
-    handleLogout,
-    handleRemoveProfile,
-    isUserAuthenticated,
-    navigate,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <SplashContainer>
