@@ -1,13 +1,14 @@
+import React, { useState, useContext, useCallback, useEffect } from 'react';
 import { CompletedTasks, NavItems } from 'app/assets/dashboard';
-import forms from 'app/assets/mock/forms';
 import { Heading, Text } from 'app/components/atoms';
 import { GroupedList, Header, ListItem, ScreenWrapper } from 'app/components/molecules';
-import StorageService, { COMPLETED_FORMS_KEY } from 'app/services/StorageService';
 import AuthContext from 'app/store/AuthContext';
+import FormContext from 'app/store/FormContext';
+import CaseContext from 'app/store/CaseContext';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import { NavigationEvents } from 'react-navigation';
 import styled from 'styled-components/native';
+import { get } from 'app/helpers/ApiRequest';
 
 const TaskScreenWrapper = styled(ScreenWrapper)`
   padding-left: 0;
@@ -31,96 +32,81 @@ const ListHeading = styled(Heading)`
   margin-bottom: 8px;
 `;
 
-class TaskScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeTasks: [],
-    };
-  }
+const TaskScreen = ({ navigation }) => {
+  const [activeCases, setActiveCases] = useState([]);
+  const { user } = useContext(AuthContext);
+  const { setCurrentForm } = useContext(FormContext);
+  const { getCase, setCurrentCase } = useContext(CaseContext);
 
-  componentDidMount() {
-    this.getTasks();
-  }
+  const sortTasksByDate = list =>
+    list.sort((a, b) => new Date(b.attributes.updatedAt) - new Date(a.attributes.updatedAt));
 
-  sortTasksByDate = list => list.sort((a, b) => new Date(b.created) - new Date(a.created));
+  const getTasks = useCallback(async () => {
+    console.log('user', user);
 
-  getTasks = async () => {
     try {
-      const tasks = await StorageService.getData(COMPLETED_FORMS_KEY);
-      this.setState({
-        activeTasks: Array.isArray(tasks) && tasks.length ? this.sortTasksByDate(tasks) : [],
-      });
+      const response = await get('/cases', undefined, user.personalNumber);
+      console.log(response.data.data);
+
+      setActiveCases(
+        Array.isArray(response.data.data) && response.data.data
+          ? sortTasksByDate(response.data.data)
+          : []
+      );
     } catch (error) {
-      console.log('Tasks not found: ', error);
+      console.error(`Get cases Error: ${error}`);
     }
-  };
+  }, [user]);
 
-  renderTaskItem = item => {
-    const {
-      navigation: { navigate },
-    } = this.props;
+  useEffect(() => {
+    getTasks();
+  }, [getTasks]);
 
-    const form = forms.find(formData => formData.id === item.formId);
-    if (!form) {
-      return null;
-    }
+  return (
+    <TaskScreenWrapper>
+      <NavigationEvents onWillFocus={() => getTasks()} />
 
-    return (
-      <ListItem
-        key={item.id}
-        highlighted
-        title="Ansökan"
-        text={form.name}
-        iconName={form.icon || null}
-        imageSrc={form.imageIcon || null}
-        onClick={() =>
-          navigate('TaskDetails', {
-            answers: item.data,
-            form,
-          })
-        }
+      <Header
+        title="Mitt Helsingborg"
+        message={user && user.givenName ? `Hej ${user.givenName}!` : 'Hej!'}
+        themeColor="purple"
+        navItems={NavItems}
       />
-    );
-  };
+      <Container>
+        <List>
+          <ListHeading type="h3">Aktiva</ListHeading>
+          {activeCases.length > 0 ? (
+            activeCases.map(item => (
+              <ListItem
+                key={item.id}
+                highlighted
+                title="Ansökan"
+                text={`${item.attributes.type} - ${item.attributes.status}`}
+                iconName={null}
+                imageSrc={null}
+                onClick={() => {
+                  setCurrentForm(item.attributes.formId);
+                  const caseObj = getCase(item.id);
+                  setCurrentCase({ id: caseObj.id, ...caseObj.attributes });
+                  navigation.navigate('Form');
+                }}
+              />
+            ))
+          ) : (
+            <Text style={{ marginLeft: 4 }}>Inga aktiva ärenden..</Text>
+          )}
+        </List>
 
-  render() {
-    const { user } = this.context;
-    const { activeTasks } = this.state;
-
-    return (
-      <TaskScreenWrapper>
-        <NavigationEvents onWillFocus={() => this.getTasks()} />
-
-        <Header
-          title="Mitt Helsingborg"
-          message={user && user.givenName ? `Hej ${user.givenName}!` : 'Hej!'}
-          themeColor="purple"
-          navItems={NavItems}
-        />
-        <Container>
-          <List>
-            <ListHeading type="h3">Aktiva</ListHeading>
-            {activeTasks.length > 0 ? (
-              activeTasks.map(this.renderTaskItem)
-            ) : (
-              <Text style={{ marginLeft: 4 }}>Inga aktiva ärenden..</Text>
-            )}
-          </List>
-
-          <List>
-            <GroupedList heading="Avslutade" items={CompletedTasks} />
-          </List>
-        </Container>
-      </TaskScreenWrapper>
-    );
-  }
-}
+        <List>
+          <GroupedList heading="Avslutade" items={CompletedTasks} />
+        </List>
+      </Container>
+    </TaskScreenWrapper>
+  );
+};
 
 TaskScreen.propTypes = {
   navigation: PropTypes.object,
 };
-
-TaskScreen.contextType = AuthContext;
 
 export default TaskScreen;
