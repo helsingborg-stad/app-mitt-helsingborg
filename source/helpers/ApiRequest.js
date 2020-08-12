@@ -39,10 +39,7 @@ const request = async (endpoint, method, data, headers, userId) => {
     data: data !== undefined ? data : undefined,
   })
     .then(res => res)
-    .catch(error => {
-      console.log('API request error', error);
-      return error;
-    });
+    .catch(error => ({ message: error.message, ...error.response }));
 
   return req;
 };
