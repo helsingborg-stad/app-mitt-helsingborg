@@ -71,6 +71,7 @@ function Step({
                   onChange={onFieldChange}
                   inputType={field.type}
                   value={answers[field.id] || ''}
+                  answers={answers}
                   color={field.color}
                   id={field.id}
                   {...field}

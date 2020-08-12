@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
 import { StyleSheet, View } from 'react-native';
-import { ScreenWrapper } from 'app/components/molecules';
-import { Text, Button } from '../../atoms';
+import { Text, Button, Icon } from '../../atoms';
 import SubstepModal from '../SubstepModal/SubstepModal';
 
 const styles = StyleSheet.create({
@@ -40,12 +38,23 @@ const styles = StyleSheet.create({
   },
 });
 
-function SubstepButton({ text, value, formId, onChange, color, size, ...other }) {
+function SubstepButton({
+  text,
+  iconName,
+  iconColor,
+  value,
+  formId,
+  onChange,
+  color,
+  size,
+  ...other
+}) {
   const [showForm, setShowForm] = useState(false);
 
   return (
     <View>
       <Button style={styles.button} size={size} color={color} onClick={() => setShowForm(true)}>
+        {iconName ? <Icon name={iconName} color={iconColor} /> : null}
         <Text>{text}</Text>
       </Button>
       <SubstepModal
@@ -65,6 +74,11 @@ SubstepButton.propTypes = {
    * The text to display on the button
    */
   text: PropTypes.string,
+  /**
+   * If the button should have an icon
+   */
+  iconName: PropTypes.string,
+  iconColor: PropTypes.string,
   /**
    * The value to fill the subform with
    */
@@ -93,6 +107,7 @@ SubstepButton.propTypes = {
 
 SubstepButton.defaultProps = {
   color: 'light',
+  iconColor: 'black',
 };
 
 export default SubstepButton;
