@@ -36,32 +36,13 @@ const CaseArchiveScreen = ({ navigation }) => {
   const [activeCases, setActiveCases] = useState([]);
   const { user } = useContext(AuthContext);
   const { setCurrentForm } = useContext(FormContext);
-  const { getCase, setCurrentCase } = useContext(CaseContext);
+  const { cases, getCase, setCurrentCase } = useContext(CaseContext);
 
   const sortCasesByLastUpdated = list =>
     list.sort((a, b) => b.attributes.updatedAt - a.attributes.updatedAt);
 
-  const getCases = useCallback(async () => {
-    try {
-      const response = await get('/cases', undefined, user.personalNumber);
-      setActiveCases(
-        Array.isArray(response.data.data) && response.data.data
-          ? sortCasesByLastUpdated(response.data.data)
-          : []
-      );
-    } catch (error) {
-      console.error(`Get cases Error: ${error}`);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    getCases();
-  }, [getCases]);
-
   return (
     <CaseArchiveWrapper>
-      <NavigationEvents onWillFocus={() => getCases()} />
-
       <Header
         title="Mitt Helsingborg"
         message={user && user.givenName ? `Hej ${user.givenName}!` : 'Hej!'}
@@ -71,13 +52,13 @@ const CaseArchiveScreen = ({ navigation }) => {
       <Container>
         <List>
           <ListHeading type="h3">Aktiva</ListHeading>
-          {activeCases.length > 0 ? (
-            activeCases.map(item => (
+          {cases.length > 0 ? (
+            sortCasesByLastUpdated(cases).map(item => (
               <ListItem
                 key={item.id}
                 highlighted
                 title={item.attributes.status}
-                text={`ID: ${item.id} Updated: ${new Date(item.attributes.updatedAt)}`}
+                text={`ID: ${item.id} Type: ${item.attributes.type}`}
                 iconName={null}
                 imageSrc={null}
                 onClick={() => {
