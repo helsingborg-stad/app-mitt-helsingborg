@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { NavItems } from 'app/assets/dashboard';
 import { Heading, Text } from 'app/components/atoms';
 import { GroupedList, Header, ListItem, ScreenWrapper } from 'app/components/molecules';
@@ -6,9 +6,7 @@ import AuthContext from 'app/store/AuthContext';
 import FormContext from 'app/store/FormContext';
 import CaseContext from 'app/store/CaseContext';
 import PropTypes from 'prop-types';
-import { NavigationEvents } from 'react-navigation';
 import styled from 'styled-components/native';
-import { get } from 'app/helpers/ApiRequest';
 
 const CaseArchiveWrapper = styled(ScreenWrapper)`
   padding-left: 0;
@@ -33,7 +31,6 @@ const ListHeading = styled(Heading)`
 `;
 
 const CaseArchiveScreen = ({ navigation }) => {
-  const [activeCases, setActiveCases] = useState([]);
   const { user } = useContext(AuthContext);
   const { setCurrentForm } = useContext(FormContext);
   const { cases, getCase, setCurrentCase } = useContext(CaseContext);
