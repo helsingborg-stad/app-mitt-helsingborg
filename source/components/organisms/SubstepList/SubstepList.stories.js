@@ -45,7 +45,9 @@ const SubstepListStory = () => {
         items={items}
         categories={categories}
         value={values}
+        color="red"
         onChange={onChange}
+        placeholder="Lägg till saker!"
       />
       <SubstepList
         heading="Summary"
@@ -53,6 +55,7 @@ const SubstepListStory = () => {
         categories={categories}
         value={values}
         onChange={onChange}
+        placeholder="Listan är tom!"
         summary
       />
     </ScrollView>

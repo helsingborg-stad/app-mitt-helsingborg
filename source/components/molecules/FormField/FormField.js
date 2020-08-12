@@ -1,13 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Input, FieldLabel, Select } from 'source/components/atoms';
+import PropTypes, { any } from 'prop-types';
+import { Input, FieldLabel, Select, Text } from 'source/components/atoms';
 import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
 import SubstepList from 'source/components/organisms/SubstepList';
 import { View } from 'react-native';
 import ConditionalTextField from 'app/components/molecules/ConditinalTextField';
 import SubstepButton from '../SubstepButton';
 import colors from '../../../styles/colors';
-import ButtonField from '../ButtonField';
 import DateTimePickerForm from '../DateTimePicker';
 
 const inputTypes = {
@@ -36,7 +35,6 @@ const inputTypes = {
     changeEvent: 'onChange',
     props: {},
   },
-  button: {},
   editableList: {
     component: EditableList,
     changeEvent: 'onInputChange',
@@ -75,27 +73,61 @@ const inputTypes = {
 };
 
 const FormField = props => {
-  const { label, labelLine, inputType, color, id, onChange, value, ...other } = props;
+  const {
+    label,
+    labelLine,
+    inputType,
+    color,
+    id,
+    onChange,
+    value,
+    answers,
+    conditionalOn,
+    ...other
+  } = props;
   const input = inputTypes[inputType];
   const saveInput = value => {
     onChange({ [id]: value });
   };
+  const inputProps = input && input.props ? input.props : {};
+  const inputCompProps = { color, value, ...inputProps, ...other };
+  if (input && input.changeEvent) inputCompProps[input.changeEvent] = saveInput;
 
-  const inputCompProps = { color, value, ...input.props, ...other };
-  inputCompProps[input.changeEvent] = saveInput;
+  /** Checks if the field is conditional on another input, and if so,
+   * evaluates whether this field should be active or not */
+  const checkCondition = questionId => {
+    if (!questionId) return true;
 
-  const inputComponent = React.createElement(input.component, inputCompProps);
+    if (typeof questionId === 'string') {
+      if (questionId[0] === '!') {
+        const qId = questionId.slice(1);
+        return !answers[qId];
+      }
+      return answers[questionId];
+    }
+    return true;
+  };
 
-  return (
-    <View>
-      {label ? (
-        <FieldLabel color={color} underline={labelLine}>
-          {label}
-        </FieldLabel>
-      ) : null}
-      {inputComponent}
-    </View>
-  );
+  const inputComponent =
+    input && input.component ? (
+      React.createElement(input.component, inputCompProps)
+    ) : (
+      <Text>{`Invalid field type ${inputType}`}</Text>
+    );
+
+  if (checkCondition(conditionalOn)) {
+    return (
+      <View>
+        {label ? (
+          <FieldLabel color={color} underline={labelLine}>
+            {label}
+          </FieldLabel>
+        ) : null}
+        {inputComponent}
+      </View>
+    );
+  }
+  return null;
 };
 
 FormField.propTypes = {
@@ -126,6 +158,10 @@ FormField.propTypes = {
    */
   value: PropTypes.any,
   /**
+   * All the form state answers. Needed because of conditional checks.
+   */
+  answers: PropTypes.shape(any),
+  /**
    * sets the color theme.
    */
   color: PropTypes.oneOf(Object.keys(colors.formField)),
@@ -133,6 +169,12 @@ FormField.propTypes = {
    * The function triggers when the button is clicked.
    */
   onClick: PropTypes.func,
+  /**
+   * The id of another input field: if supplied, the formField input will only be active (i.e. visible, for now)
+   * if the answer to the other input value evaluates as 'truthy'.
+   * One can also add an ! in front of the id to enable the field if the other input evaluates as 'falsy', i.e. !id.
+   */
+  conditionalOn: PropTypes.string,
 };
 
 FormField.defaultProps = {

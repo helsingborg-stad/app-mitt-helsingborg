@@ -26,21 +26,14 @@ const items = [
 
 storiesOf('Lists 2', module).add('Grouped list', props => (
   <StoryWrapper {...props}>
-    <GroupedList
-      heading="Green things"
-      items={items}
-      categories={categories}
-      removeItem={() => {}}
-      color="light"
-    />
+    <GroupedList heading="Green things" items={items} categories={categories} color="light" />
 
     <GroupedList
-      heading="Non-removable greens"
+      heading="Red color scheme"
       items={items}
       categories={categories}
-      removeItem={() => {}}
-      color="light"
-      removable={false}
+      color="red"
+      onEdit={() => {}}
     />
   </StoryWrapper>
 ));

@@ -1,38 +1,33 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
+import { TouchableHighlight, ScrollView } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
-import { Input, Button, Text } from 'source/components/atoms';
+import { Input, Text, Icon } from 'source/components/atoms';
 import styled from 'styled-components/native';
 import { excludePropetiesWithKey } from 'source/helpers/Objects';
 import { SubstepButton } from 'source/components/molecules';
 import GroupedList from 'app/components/molecules/GroupedList/GroupedList';
-import { ScrollView } from 'react-native-gesture-handler';
+import colors from 'source/styles/colors';
 
+const Wrapper = styled(View)`
+  margin-bottom: 25px;
+`;
 const ItemWrapper = styled(View)`
   flex-direction: row;
+  align-items: flex-end;
   height: 46px;
-  width: 250px;
 `;
-// flex-direction: column;
 const InputWrapper = styled.View`
   align-items: center;
   justify-content: flex-end;
-  flex: 5;
+  flex: 1;
   padding-left: 50px;
 `;
 const TextWrapper = styled.View`
-  align-items: center;
+  align-items: flex-end;
   justify-content: flex-end;
   flex: 10;
-  padding-left: 100px;
-`;
-const SumWrapper = styled.View`
-  align-items: center;
-  margin-bottom: 5px;
-`;
-const ButtonWrapper = styled.View`
-  align-items: center;
-  margin-top: 10px;
+  padding-left: 0px;
 `;
 const SmallInput = styled(Input)`
   height: 40px;
@@ -41,11 +36,37 @@ const SmallInput = styled(Input)`
 `;
 const SmallText = styled(Text)`
   height: 40px;
-  padding-top: 8px;
+  font-size: 14;
+  padding-top: 11px;
   padding-bottom: 8px;
+  padding-left: 17px;
 `;
-
-const SubstepList = ({ heading, items, categories, value, onChange, summary, ...other }) => {
+const LargeText = styled(Text)`
+  height: 40px;
+  font-size: 22;
+  font-weight: 800;
+  padding-top: 11px;
+  padding-bottom: 8px;
+  padding-left: 17px;
+`;
+const DeleteButton = styled(Icon)`
+  padding: 5px;
+  margin-left: 15px;
+  margin-right: 0px;
+  margin-bottom: 15px;
+  color: #dd6161;
+`;
+const SubstepList = ({
+  heading,
+  items,
+  categories,
+  value,
+  onChange,
+  summary,
+  color,
+  placeholder,
+  ...other
+}) => {
   const [editable, setEditable] = useState(!summary);
 
   const updateAnswer = itemTitle => data => {
@@ -81,11 +102,15 @@ const SubstepList = ({ heading, items, categories, value, onChange, summary, ...
                   value={value[item.title] ? value[item.title] : {}}
                   onChange={updateAnswer(item.title)}
                   formId={item.formId}
-                  color="light"
+                  color={colors.substepList[color].listButtonColor}
                   size="small"
                 />
+                <TouchableHighlight activeOpacity={1} onPress={removeItem(item)}>
+                  <DeleteButton name="delete-forever" />
+                </TouchableHighlight>
                 <InputWrapper>
                   <SmallInput
+                    textAlign="right"
                     keyboardType="numeric"
                     value={value[item.title].amount}
                     onChangeText={changeFromInput(item)}
@@ -104,58 +129,63 @@ const SubstepList = ({ heading, items, categories, value, onChange, summary, ...
             )}
           </ItemWrapper>
         ),
-        remove: removeItem(item),
       });
     }
   });
+  if (listItems.length === 0) {
+    categories.empty = '';
+    listItems.push({
+      category: 'empty',
+      component: <LargeText style={{ marginTop: -50 }}>{placeholder}</LargeText>,
+    });
+  }
+  if (summary) {
+    if (!categories.sum) categories.sum = 'Summa';
+    listItems.push({
+      category: 'sum',
+      component: (
+        <LargeText>
+          {Object.keys(value).reduce((prev, curr) => {
+            const amount = parseFloat(value[curr].amount);
+            // eslint-disable-next-line no-restricted-globals
+            if (isNaN(amount)) {
+              return prev;
+            }
+            return prev + amount;
+          }, 0)}{' '}
+          kr
+        </LargeText>
+      ),
+    });
+  }
 
   return (
-    <View>
+    <Wrapper>
       <GroupedList
         heading={heading}
         items={listItems}
         categories={categories}
-        removable={editable}
-        removeItem={() => {}}
+        color={color}
+        onEdit={() => setEditable(!editable)}
       />
-      {editable ? (
+      {editable && (
         <ScrollView horizontal>
           {items.map(item =>
             Object.keys(value).includes(item.title) ? null : (
               <SubstepButton
                 text={item.title}
+                iconName="add"
+                iconColor={colors.substepList[color].addButtonIconColor}
                 value={value[item.title] || {}}
+                color={colors.substepList[color].addButtonColor}
                 onChange={updateAnswer(item.title)}
                 formId={item.formId}
               />
             )
           )}
         </ScrollView>
-      ) : null}
-      {summary ? (
-        <>
-          <SumWrapper>
-            <Text>
-              Summa:{' '}
-              {Object.keys(value).reduce((prev, curr) => {
-                const amount = parseFloat(value[curr].amount);
-                // eslint-disable-next-line no-restricted-globals
-                if (isNaN(amount)) {
-                  return prev;
-                }
-                return prev + amount;
-              }, 0)}{' '}
-              kr
-            </Text>
-          </SumWrapper>
-          <ButtonWrapper>
-            <Button color="dark" onClick={() => setEditable(!editable)}>
-              <Text>{editable ? 'Lås' : 'Ändra'}</Text>
-            </Button>
-          </ButtonWrapper>
-        </>
-      ) : null}
-    </View>
+      )}
+    </Wrapper>
   );
 };
 
@@ -184,12 +214,22 @@ SubstepList.propTypes = {
    * If the list acts as a summary; default is false.
    */
   summary: PropTypes.bool,
+  /**
+   * Sets the color scheme of the list. default is red.
+   */
+  color: PropTypes.string,
+  /**
+   * Message to display before anything has been added to the list.
+   */
+  placeholder: PropTypes.string,
   other: PropTypes.any,
 };
 
 SubstepList.defaultProps = {
   items: [],
   summary: false,
+  color: 'red',
+  placeholder: 'Du har inte lagt till något än',
   onChange: () => {},
 };
 export default SubstepList;

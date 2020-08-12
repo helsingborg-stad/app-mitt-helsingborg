@@ -75,7 +75,6 @@ export function CaseProvider({ children }) {
    * information happens before the updated values are used.
    */
   const updateCases = async callback => {
-    console.log('UPDATE CASES!!');
     setFetching(true);
     get('/cases', undefined, user.personalNumber)
       .then(response => {
@@ -96,9 +95,7 @@ export function CaseProvider({ children }) {
       currentStep,
     };
     // TODO: Remove Auhtorization header when token authentication works as expected.
-    console.log('sending db put request with data:');
-    console.log(body);
-    // console.log(status);
+
     await put(`/cases/${currentCase.id}`, JSON.stringify(body), {
       Authorization: parseInt(user.personalNumber),
     });
