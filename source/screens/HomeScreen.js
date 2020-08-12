@@ -62,6 +62,8 @@ const HomeScreen = ({ navigation }) => {
     setChatButton(false);
   };
 
+  const recurringFormId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
+
   return (
     <>
       <ChatScreenWrapper>
@@ -90,7 +92,7 @@ const HomeScreen = ({ navigation }) => {
             block
             style={styles.button}
             onClick={() => {
-              createCase({}, currentForm.id, () => navigation.navigate('Form'), true);
+              createCase({}, recurringFormId, () => navigation.navigate('Form'), true);
             }}
           >
             <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
