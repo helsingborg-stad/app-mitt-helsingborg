@@ -33,7 +33,8 @@ export function CaseProvider({ children }) {
 
       get('/cases', undefined, user.personalNumber).then(response => {
         setCases(response.data.data);
-        setCurrentCase(findLatestCase(response.data.data));
+        const latestCase = findLatestCase(response.data.data);
+        setCurrentCase(latestCase);
         setFetching(false);
       });
     }
@@ -70,7 +71,6 @@ export function CaseProvider({ children }) {
 
   /**
    * Function to refresh the loaded cases from the backend.
-   * Currently it also sets the currentCase.
    * Pass a callback in order to guarantee that the loading of
    * information happens before the updated values are used.
    */
@@ -79,7 +79,6 @@ export function CaseProvider({ children }) {
     get('/cases', undefined, user.personalNumber)
       .then(response => {
         setCases(response.data.data);
-        setCurrentCase(findLatestCase(response.data.data));
         setFetching(false);
       })
       .then(response => callback(response));
@@ -89,15 +88,24 @@ export function CaseProvider({ children }) {
    * Function for sending a put request towards the case api endpoint, updating the currently active case
    * @param {obj} data a object consiting of case user inputs.
    */
-  const updateCurrentCase = (data, status, currentStep) => {
+  const updateCurrentCase = async (data, status, currentStep) => {
     const body = {
       status,
       data,
       currentStep,
     };
     // TODO: Remove Auhtorization header when token authentication works as expected.
-    put(`/cases/${currentCase.id}`, JSON.stringify(body), {
+
+    await put(`/cases/${currentCase.id}`, JSON.stringify(body), {
       Authorization: parseInt(user.personalNumber),
+    });
+
+    // Refresh current case state
+    updateCases(() => {
+      const caseObj = getCase(currentCase.id);
+      if (caseObj) {
+        setCurrentCase({ id: currentCase.id, ...caseObj.attributes });
+      }
     });
   };
 
@@ -107,6 +115,7 @@ export function CaseProvider({ children }) {
         cases,
         currentCase,
         getCase,
+        setCurrentCase,
         createCase,
         updateCurrentCase,
         updateCases,
