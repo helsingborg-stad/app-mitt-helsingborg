@@ -38,17 +38,15 @@ const TaskScreen = ({ navigation }) => {
   const { setCurrentForm } = useContext(FormContext);
   const { getCase, setCurrentCase } = useContext(CaseContext);
 
-  const sortTasksByDate = list =>
-    list.sort((a, b) => new Date(b.attributes.updatedAt) - new Date(a.attributes.updatedAt));
+  const sortTasksByLastUpdated = list =>
+    list.sort((a, b) => b.attributes.updatedAt - a.attributes.updatedAt);
 
   const getTasks = useCallback(async () => {
     try {
       const response = await get('/cases', undefined, user.personalNumber);
-      console.log(response.data.data);
-
       setActiveCases(
         Array.isArray(response.data.data) && response.data.data
-          ? sortTasksByDate(response.data.data)
+          ? sortTasksByLastUpdated(response.data.data)
           : []
       );
     } catch (error) {
@@ -78,8 +76,8 @@ const TaskScreen = ({ navigation }) => {
               <ListItem
                 key={item.id}
                 highlighted
-                title="Ansökan"
-                text={`${item.attributes.type} - ${item.attributes.status}`}
+                title={item.attributes.status}
+                text={`ID: ${item.id} Updated: ${new Date(item.attributes.updatedAt)}`}
                 iconName={null}
                 imageSrc={null}
                 onClick={() => {
