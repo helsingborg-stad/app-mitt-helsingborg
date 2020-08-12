@@ -65,7 +65,6 @@ export async function grantAccessToken(ssn) {
     if (response.status !== 200) {
       throw new Error(response.data);
     }
-
     const { token: accessToken } = response.data.data.attributes;
     const decodedAccessToken = await saveAccessTokenToStorage(accessToken);
     return [decodedAccessToken, null];
@@ -73,6 +72,22 @@ export async function grantAccessToken(ssn) {
     console.error(error);
     return [null, error];
   }
+}
+
+async function wait(ms = 1000) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms);
+  });
+}
+async function poll(fn, condition, ms) {
+  let result = await fn();
+  while (condition(result)) {
+    // eslint-disable-next-line no-await-in-loop
+    await wait(ms);
+    // eslint-disable-next-line no-await-in-loop
+    result = await fn();
+  }
+  return result;
 }
 
 /**
@@ -87,17 +102,27 @@ export async function getUserProfile(accessToken) {
     }
 
     if (decodedToken && decodedToken.personalNumber) {
-      const response = await get(`/users/${decodedToken.personalNumber}`, {
-        Authorization: accessToken,
-      });
-
-      if (response.status !== 200) {
-        throw new Error(response.data);
+      let timesRun = 0;
+      const response = await poll(
+        function() {
+          timesRun += 1;
+          return get(`/users/${decodedToken.personalNumber}`, {
+            Authorization: accessToken,
+          });
+        },
+        response => timesRun < 5 && response.status !== 200,
+        1000
+      );
+      if (response.status === 200) {
+        return [response.data.data.attributes.item, null];
       }
-      return [response.data.data.attributes.item, null];
+      if (response.status === 404) {
+        throw new Error('404, no such user found');
+      }
+      throw new Error(response);
     }
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return [null, error];
   }
 }

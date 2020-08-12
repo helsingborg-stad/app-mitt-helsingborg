@@ -3,10 +3,6 @@ import { getMessage } from 'app/helpers/MessageHelper';
 import { buildBankIdClientUrl, canOpenUrl, openUrl } from '../helpers/UrlHelper';
 import { post } from '../helpers/ApiRequest';
 
-function isError(value) {
-  return value instanceof Error;
-}
-
 /**
  * Function for polling the status in a BankID authentication process.
  * @param {string} orderRef A valid BankID order reference
@@ -14,19 +10,17 @@ function isError(value) {
 async function collect(orderRef) {
   try {
     const response = await post('auth/bankid/collect', { orderRef });
-    const responseIsError = isError(response);
-    if (responseIsError && response.response.status === 502) {
+    if (response.status === 502) {
       // Status 502 is a connection timeout error,
       // may happen when the connection was pending for too long,
       // and the remote server or a proxy closed it
       // let's reconnect
       return await collect(orderRef);
     }
-    if (responseIsError && response.response.status === 404) {
+    if (response.status === 404) {
       return { success: false, data: getMessage('userCancel') };
     }
     if (
-      !responseIsError &&
       response.status === 200 &&
       response.data &&
       response.data.data.attributes.status === 'pending'
@@ -36,7 +30,6 @@ async function collect(orderRef) {
       return await collect(orderRef);
     }
     if (
-      !responseIsError &&
       response.status === 200 &&
       response.data &&
       response.data.data.attributes.status === 'failed'
@@ -57,8 +50,7 @@ async function auth(ssn) {
   const endUserIp = await NetworkInfo.getIPV4Address(ip => ip);
   try {
     const response = await post('auth/bankid/auth', { personalNumber: ssn, endUserIp });
-    const responseIsError = isError(response);
-    if (responseIsError && response.response.status === 400) {
+    if (response.status === 400) {
       return await auth(ssn);
     }
     return { success: true, data: response.data.data.attributes };

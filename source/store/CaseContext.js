@@ -75,7 +75,6 @@ export function CaseProvider({ children }) {
    * information happens before the updated values are used.
    */
   const updateCases = async callback => {
-    console.log('UPDATE CASES!!');
     setFetching(true);
     get('/cases', undefined, user.personalNumber)
       .then(response => {
