@@ -450,6 +450,54 @@ const colors = {
     green: {},
     blue: {},
   },
+  groupedList: {
+    red: {
+      headerBackground: palette.red[7],
+      headerText: palette.red[8],
+      bodyBackground: palette.mono.floral,
+      bodyText: palette.mono.black,
+    },
+    light: {
+      headerBackground: palette.mono.light,
+      headerText: palette.mono.black,
+      bodyBackground: palette.mono.lighter,
+      bodyText: palette.mono.black,
+    },
+    orange: {
+      headerBackground: palette.red[6],
+      headerText: palette.red[8],
+      bodyBackground: palette.red[7],
+      bodyText: palette.mono.black,
+    },
+    green: {
+      headerBackground: palette.green[7],
+      headerText: palette.green[8],
+      bodyBackground: palette.mono.floral,
+      bodyText: palette.mono.black,
+    },
+  },
+  substepList: {
+    red: {
+      listButtonColor: 'red',
+      addButtonColor: 'green',
+      addButtonIconColor: 'black',
+    },
+    light: {
+      listButtonColor: 'light',
+      addButtonColor: 'light',
+      addButtonIconColor: 'black',
+    },
+    orange: {
+      listButtonColor: 'red',
+      addButtonColor: 'green',
+      addButtonIconColor: 'black',
+    },
+    green: {
+      listButtonColor: 'light',
+      addButtonColor: 'light',
+      addButtonIconColor: 'black',
+    },
+  },
 };
 
 export default colors;
