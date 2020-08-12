@@ -102,9 +102,7 @@ const HomeScreen = ({ navigation }) => {
             color="purple"
             block
             style={styles.button}
-            onClick={() => {
-              updateCases(() => navigation.navigate('Form'));
-            }}
+            onClick={() => navigation.navigate('Form')}
           >
             <Text>Fortsätt senaste ansökan</Text>
           </Button>
