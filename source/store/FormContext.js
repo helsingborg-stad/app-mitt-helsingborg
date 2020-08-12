@@ -32,7 +32,7 @@ export function FormProvider({ children }) {
   };
 
   const setCurrentForm = async id => {
-    getForm(id).then(resp => setCurrentFormLocal(resp));
+    await getForm(id).then(resp => setCurrentFormLocal(resp));
   };
 
   return (

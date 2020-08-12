@@ -92,7 +92,15 @@ const HomeScreen = ({ navigation }) => {
             block
             style={styles.button}
             onClick={() => {
-              createCase({}, recurringFormId, () => navigation.navigate('Form'), true);
+              createCase(
+                {},
+                recurringFormId,
+                async () => {
+                  await setCurrentForm(recurringFormId);
+                  navigation.navigate('Form');
+                },
+                true
+              );
             }}
           >
             <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
