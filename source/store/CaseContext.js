@@ -99,6 +99,14 @@ export function CaseProvider({ children }) {
       Authorization: parseInt(user.personalNumber),
     });
 
+    try {
+      await put(`/cases/${currentCase.id}`, JSON.stringify(body), {
+        Authorization: parseInt(user.personalNumber),
+      });
+    } catch (error) {
+      console.log(`Update current case error: ${error}`);
+    }
+
     // Refresh current case state
     updateCases(() => {
       const caseObj = getCase(currentCase.id);
