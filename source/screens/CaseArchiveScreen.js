@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback, useEffect } from 'react';
-import { CompletedTasks, NavItems } from 'app/assets/dashboard';
+import { NavItems } from 'app/assets/dashboard';
 import { Heading, Text } from 'app/components/atoms';
 import { GroupedList, Header, ListItem, ScreenWrapper } from 'app/components/molecules';
 import AuthContext from 'app/store/AuthContext';
@@ -10,7 +10,7 @@ import { NavigationEvents } from 'react-navigation';
 import styled from 'styled-components/native';
 import { get } from 'app/helpers/ApiRequest';
 
-const TaskScreenWrapper = styled(ScreenWrapper)`
+const CaseArchiveWrapper = styled(ScreenWrapper)`
   padding-left: 0;
   padding-right: 0;
   padding-top: 0;
@@ -32,21 +32,21 @@ const ListHeading = styled(Heading)`
   margin-bottom: 8px;
 `;
 
-const TaskScreen = ({ navigation }) => {
+const CaseArchiveScreen = ({ navigation }) => {
   const [activeCases, setActiveCases] = useState([]);
   const { user } = useContext(AuthContext);
   const { setCurrentForm } = useContext(FormContext);
   const { getCase, setCurrentCase } = useContext(CaseContext);
 
-  const sortTasksByLastUpdated = list =>
+  const sortCasesByLastUpdated = list =>
     list.sort((a, b) => b.attributes.updatedAt - a.attributes.updatedAt);
 
-  const getTasks = useCallback(async () => {
+  const getCases = useCallback(async () => {
     try {
       const response = await get('/cases', undefined, user.personalNumber);
       setActiveCases(
         Array.isArray(response.data.data) && response.data.data
-          ? sortTasksByLastUpdated(response.data.data)
+          ? sortCasesByLastUpdated(response.data.data)
           : []
       );
     } catch (error) {
@@ -55,12 +55,12 @@ const TaskScreen = ({ navigation }) => {
   }, [user]);
 
   useEffect(() => {
-    getTasks();
-  }, [getTasks]);
+    getCases();
+  }, [getCases]);
 
   return (
-    <TaskScreenWrapper>
-      <NavigationEvents onWillFocus={() => getTasks()} />
+    <CaseArchiveWrapper>
+      <NavigationEvents onWillFocus={() => getCases()} />
 
       <Header
         title="Mitt Helsingborg"
@@ -94,15 +94,15 @@ const TaskScreen = ({ navigation }) => {
         </List>
 
         <List>
-          <GroupedList heading="Avslutade" items={CompletedTasks} />
+          <GroupedList heading="Avslutade" items={[]} />
         </List>
       </Container>
-    </TaskScreenWrapper>
+    </CaseArchiveWrapper>
   );
 };
 
-TaskScreen.propTypes = {
+CaseArchiveScreen.propTypes = {
   navigation: PropTypes.object,
 };
 
-export default TaskScreen;
+export default CaseArchiveScreen;
