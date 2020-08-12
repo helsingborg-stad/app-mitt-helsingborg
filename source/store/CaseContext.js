@@ -33,8 +33,7 @@ export function CaseProvider({ children }) {
 
       get('/cases', undefined, user.personalNumber).then(response => {
         setCases(response.data.data);
-        const latestCase = findLatestCase(response.data.data);
-        setCurrentCase(latestCase);
+        setCurrentCase(findLatestCase(response.data.data));
         setFetching(false);
       });
     }
