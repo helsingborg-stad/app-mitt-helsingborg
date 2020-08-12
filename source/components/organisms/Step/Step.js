@@ -52,9 +52,14 @@ function Step({
   updateCaseInContext,
   stepNumber,
 }) {
+  const closeForm = () => {
+    if (onFieldChange) onFieldChange(answers);
+    if (updateCaseInContext) updateCaseInContext(answers, 'ongoing', stepNumber);
+    if (onClose) onClose();
+  };
   return (
     <StepContainer bg={theme.step.bg}>
-      <StepBackNavigation isBackBtnVisible={isBackBtnVisible} onBack={onBack} onClose={onClose} />
+      <StepBackNavigation isBackBtnVisible={isBackBtnVisible} onBack={onBack} onClose={closeForm} />
       <StepContentContainer
         contentContainerStyle={{
           flexGrow: 1,
