@@ -42,8 +42,6 @@ const TaskScreen = ({ navigation }) => {
     list.sort((a, b) => new Date(b.attributes.updatedAt) - new Date(a.attributes.updatedAt));
 
   const getTasks = useCallback(async () => {
-    console.log('user', user);
-
     try {
       const response = await get('/cases', undefined, user.personalNumber);
       console.log(response.data.data);
