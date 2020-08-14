@@ -31,12 +31,18 @@ const SubstepModal = ({ visible, setVisible, value, formId, onChange, ...other }
 
   // load the form from formContext once, store it in state.
   useEffect(() => {
-    getForm(formId).then(res => {
-      setForm(res);
-      setLoading(false);
-    });
+    setLoading(true);
+    if (formId && formId !== '') {
+      getForm(formId)
+        .then(res => {
+          setForm(res);
+        })
+        .then(() => {
+          setLoading(false);
+        });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [formId]);
   return (
     <Modal visible={visible}>
       <FormScreenWrapper>
@@ -90,7 +96,7 @@ SubstepModal.propTypes = {
 
 SubstepModal.defaultProps = {
   value: {},
-  onChange: null,
+  onChange: () => {},
 };
 
 export default SubstepModal;
