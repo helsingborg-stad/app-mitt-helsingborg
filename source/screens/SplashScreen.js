@@ -34,7 +34,6 @@ function SplashScreen(props) {
   };
 
   useEffect(() => {
-    console.log('Splash Screen useEffect!');
     const authCheck = async () => {
       if (await isUserAuthenticated()) {
         handleLogin();

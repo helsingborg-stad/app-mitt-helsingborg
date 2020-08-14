@@ -35,8 +35,7 @@ const CaseArchiveScreen = ({ navigation }) => {
   const { setCurrentForm } = useContext(FormContext);
   const { cases, getCase, setCurrentCase } = useContext(CaseContext);
 
-  const sortCasesByLastUpdated = list =>
-    list.sort((a, b) => b.attributes.updatedAt - a.attributes.updatedAt);
+  const sortCasesByLastUpdated = list => list.sort((a, b) => b.updatedAt - a.updatedAt);
 
   return (
     <CaseArchiveWrapper>
@@ -54,14 +53,14 @@ const CaseArchiveScreen = ({ navigation }) => {
               <ListItem
                 key={item.id}
                 highlighted
-                title={item.attributes.status}
-                text={`ID: ${item.id} Type: ${item.attributes.type}`}
+                title={item.status}
+                text={`ID: ${item.id} Type: ${item.type}`}
                 iconName={null}
                 imageSrc={null}
-                onClick={() => {
-                  setCurrentForm(item.attributes.formId);
+                onClick={async () => {
+                  await setCurrentForm(item.formId);
                   const caseObj = getCase(item.id);
-                  setCurrentCase({ id: caseObj.id, ...caseObj.attributes });
+                  await setCurrentCase(caseObj);
                   navigation.navigate('Form');
                 }}
               />
