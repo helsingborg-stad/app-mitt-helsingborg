@@ -5,6 +5,7 @@ export const initialState = {
   isAuthorizing: false,
   user: {},
   error: null,
+  status: 'resolved',
 };
 
 export default function AuthReducer(state, action) {
@@ -30,6 +31,7 @@ export default function AuthReducer(state, action) {
         ...state,
         user: payload,
       };
+
     case actionTypes.removeProfile:
       return {
         ...state,
@@ -51,7 +53,9 @@ export default function AuthReducer(state, action) {
         isAuthorizing: false,
         isAuthenticated: false,
         user: null,
+        status: 'rejected',
       };
+
     case actionTypes.authCanceled:
       return {
         ...state,
@@ -59,6 +63,13 @@ export default function AuthReducer(state, action) {
         isAuthorizing: false,
         isAuthenticated: false,
         user: null,
+      };
+
+    case actionTypes.signStarted:
+      return {
+        ...state,
+        ...payload,
+        status: 'pending',
       };
 
     default:

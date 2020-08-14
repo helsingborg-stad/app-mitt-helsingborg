@@ -12,6 +12,7 @@ export const actionTypes = {
   authStarted: 'AUTH_STARTED',
   authError: 'AUTH_ERROR',
   authCanceled: 'AUTH_CANCELED',
+  signStarted: 'SIGN_STARTED',
 };
 
 export async function mockedAuth() {
@@ -95,14 +96,31 @@ export async function startAuth(ssn) {
   }
 }
 
-export async function cancelAuth(orderRef) {
-  await bankid.cancel(orderRef);
-  return {
-    type: actionTypes.authError,
-    payload: {
-      error: 'Åtgärden blev avbruten',
-    },
-  };
+export async function startSign(personalNumber) {
+  try {
+    const response = await bankid.sign(personalNumber);
+
+    if (response.success === false) {
+      throw new Error(response.data);
+    }
+
+    const { order_ref: orderRef, auto_start_token: autoStartToken } = response.data;
+
+    return {
+      type: actionTypes.signStarted,
+      payload: {
+        orderRef,
+        autoStartToken,
+      },
+    };
+  } catch (error) {
+    return {
+      type: actionTypes.authError,
+      payload: {
+        error: error.data,
+      },
+    };
+  }
 }
 
 export async function checkAuthStatus(autoStartToken, orderRef) {

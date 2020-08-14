@@ -33,7 +33,7 @@ const FooterAction = ({
   stepNumber,
   children,
 }) => {
-  const { user } = useContext(AuthContext);
+  const { user, handleSign } = useContext(AuthContext);
   const actionMap = type => {
     switch (type) {
       case 'start': {
@@ -51,17 +51,19 @@ const FooterAction = ({
       }
       case 'bankIdSign': {
         return () => {
-          signAndCollect(user.personalNumber, 'Signering för Mitt Helsingborg').then(result => {
-            console.log(result);
-            if (result.ok) {
-              if (onUpdate) onUpdate(answers);
-              if (updateCaseInContext) updateCaseInContext(answers, 'signed', stepNumber);
-              if (onNext) onNext();
-            } else {
-              // TODO: Error will be completed once new code for signAndCollect pushed.
-              return null;
-            }
-          });
+          handleSign(user.personalNumber);
+
+          // signAndCollect(user.personalNumber, 'Signering för Mitt Helsingborg').then(result => {
+          //   console.log(result);
+          //   if (result.ok) {
+          //     if (onUpdate) onUpdate(answers);
+          //     if (updateCaseInContext) updateCaseInContext(answers, 'signed', stepNumber);
+          //     if (onNext) onNext();
+          //   } else {
+          //     // TODO: Error will be completed once new code for signAndCollect pushed.
+          //     return null;
+          //   }
+          // });
         };
       }
       default: {

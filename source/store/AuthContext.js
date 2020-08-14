@@ -12,6 +12,7 @@ import {
   removeProfile,
   addProfile,
   mockedAuth,
+  startSign,
 } from './actions/AuthActions';
 
 const AuthContext = React.createContext();
@@ -23,13 +24,14 @@ function AuthProvider({ children, initialState }) {
    * Starts polling for an user authorization response if orderRef and autoStartToken is set in state.
    */
   useEffect(() => {
+    console.log('Status has changed', state.status);
     const handleCheckAuthStatus = async () => {
       if (state.orderRef && state.autoStartToken && state.isAuthorizing) {
         dispatch(await checkAuthStatus(state.autoStartToken, state.orderRef));
       }
     };
     handleCheckAuthStatus();
-  }, [state.orderRef, state.autoStartToken, state.isAuthorizing]);
+  }, [state.status, state.orderRef, state.autoStartToken, state.isAuthorizing]);
 
   /**
    * This function starts up the authorization process.
@@ -41,6 +43,11 @@ function AuthProvider({ children, initialState }) {
     } else {
       dispatch(await startAuth(ssn));
     }
+  }
+
+  async function handleSign(personalNumber) {
+    console.log('handleSign started', personalNumber);
+    dispatch(await startSign(personalNumber));
   }
 
   /**
@@ -106,6 +113,7 @@ function AuthProvider({ children, initialState }) {
     handleAuth,
     handleCancelAuth,
     isUserAuthenticated,
+    handleSign,
     ...state,
   };
 
