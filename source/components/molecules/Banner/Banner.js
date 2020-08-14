@@ -29,15 +29,19 @@ const BannerImage = styled(Image)`
 `;
 
 const Banner = ({ imageSrc, iconSrc, backgroundColor, style }) => (
-  <BannerWrapper image={imageSrc} style={style} backgroundColor={backgroundColor}>
-    {imageSrc && (
+  <BannerWrapper
+    image={imageSrc}
+    style={style}
+    backgroundColor={backgroundColor && backgroundColor !== '' ? backgroundColor : 'white'}
+  >
+    {imageSrc ? (
       <BannerImageWrapper>
         <BannerImage
           resizeMode="contain"
           source={Object.prototype.hasOwnProperty.call(icons, imageSrc) ? icons[imageSrc] : ''}
         />
       </BannerImageWrapper>
-    )}
+    ) : null}
     <BannerImageIcon
       source={Object.prototype.hasOwnProperty.call(icons, iconSrc) ? icons[iconSrc] : ''}
     />

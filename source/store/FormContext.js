@@ -13,6 +13,9 @@ export function FormProvider({ children }) {
   const [currentForm, setCurrentFormLocal] = useState({});
 
   const getFormSummaries = async () => {
+    if (formSummaries.length > 0) {
+      return formSummaries;
+    }
     try {
       const response = await get('/forms3');
       if (response.data.data.forms) {
@@ -46,7 +49,7 @@ export function FormProvider({ children }) {
   };
 
   const setCurrentForm = async id => {
-    getForm(id).then(resp => setCurrentFormLocal(resp));
+    await getForm(id).then(resp => setCurrentFormLocal(resp));
   };
 
   return (

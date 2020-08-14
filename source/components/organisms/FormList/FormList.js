@@ -1,10 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { NavItems } from 'app/assets/dashboard';
 import { Heading, Text } from 'app/components/atoms';
-import { GroupedList, Header, ListItem, ScreenWrapper } from 'app/components/molecules';
-import AuthContext from 'app/store/AuthContext';
+import { ListItem } from 'app/components/molecules';
 import FormContext from 'app/store/FormContext';
-import CaseContext from 'app/store/CaseContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 
@@ -17,22 +14,22 @@ const ListHeading = styled(Heading)`
   margin-bottom: 8px;
 `;
 
-const FormList = ({ onClickCallback }) => {
+const FormList = ({ onClickCallback, heading, showSubforms }) => {
   const [forms, setForms] = useState([]);
   const { getFormSummaries } = useContext(FormContext);
 
   useEffect(() => {
     async function fetchForms() {
       const formSummaries = await getFormSummaries();
-      setForms(formSummaries.filter(f => !f.subform));
+      setForms(formSummaries.filter(f => (showSubforms ? f.subform : !f.subform)));
     }
     fetchForms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [showSubforms]);
 
   return (
     <List>
-      <ListHeading type="h3">Forms</ListHeading>
+      <ListHeading type="h3">{heading}</ListHeading>
       {forms.length > 0 ? (
         forms.map(form => (
           <ListItem
@@ -46,14 +43,21 @@ const FormList = ({ onClickCallback }) => {
           />
         ))
       ) : (
-        <Text style={{ marginLeft: 4 }}>Inga formulär laddades...</Text>
+        <Text style={{ marginLeft: 4 }}>Laddar...</Text>
       )}
     </List>
   );
 };
 
 FormList.propTypes = {
+  heading: PropTypes.string,
+  showSubforms: PropTypes.boolean,
   onClickCallback: PropTypes.func,
+};
+
+FormList.defaultProps = {
+  heading: 'Formulär',
+  showSubforms: false,
 };
 
 export default FormList;
