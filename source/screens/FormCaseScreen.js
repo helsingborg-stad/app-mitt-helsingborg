@@ -41,7 +41,7 @@ const FormCaseScreen = ({ navigation, ...props }) => {
       <StatusBar hidden />
       <Form
         steps={currentForm.steps}
-        startAt={currentCase.currentStep || 0}
+        startAt={currentCase.currentStep || 1}
         firstName={user.firstName}
         onClose={handleCloseForm}
         onStart={handleStartForm}
