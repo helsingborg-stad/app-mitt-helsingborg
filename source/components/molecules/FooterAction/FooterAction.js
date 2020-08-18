@@ -33,7 +33,7 @@ const FooterAction = ({
   stepNumber,
   children,
 }) => {
-  const { user, handleSign, handleCancelAuth, status } = useContext(AuthContext);
+  const { user, handleSign, status } = useContext(AuthContext);
 
   useEffect(() => {
     const signCase = () => {
