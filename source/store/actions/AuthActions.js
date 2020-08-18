@@ -11,10 +11,11 @@ export const actionTypes = {
   removeProfile: 'REMOVE_PROFILE',
   authStarted: 'AUTH_STARTED',
   authError: 'AUTH_ERROR',
-  signError: 'SIGN_ERROR',
+  signFailure: 'SIGN_FAILURE',
   authCanceled: 'AUTH_CANCELED',
   signStarted: 'SIGN_STARTED',
   setPending: 'SET_PENDING',
+  signSuccess: 'SIGN_SUCCESS',
 };
 
 export async function mockedAuth() {
@@ -156,9 +157,9 @@ export async function checkOrderStatus(autoStartToken, orderRef, isUserAuthentic
     };
   } catch (error) {
     return {
-      type: actionTypes.loginFailure,
+      type: !isUserAuthenticated ? actionTypes.loginFailure : actionTypes.signFailure,
       payload: {
-        error: error.data,
+        error,
       },
     };
   }
