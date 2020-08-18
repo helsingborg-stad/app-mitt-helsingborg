@@ -38,12 +38,11 @@ const FooterAction = ({
   useEffect(() => {
     const signCase = () => {
       if (onUpdate) onUpdate(answers);
-      if (updateCaseInContext) updateCaseInContext(answers, 'signed', stepNumber);
+      if (updateCaseInContext) updateCaseInContext(answers, 'submitted', stepNumber);
       if (onNext) onNext();
     };
 
     if (status === 'signResolved') {
-      console.log('signResolved');
       signCase();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
