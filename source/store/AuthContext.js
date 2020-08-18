@@ -49,6 +49,11 @@ function AuthProvider({ children, initialState }) {
     }
   }
 
+  /**
+   * This function starts up the sign process.
+   * @param {string} personalNumber Personal Identity Number
+   * @param {string} userVisibleData Message to be shown when signing order
+   */
   async function handleSign(personalNumber, userVisibleData) {
     dispatch(await setPending());
     dispatch(await startSign(personalNumber, userVisibleData));
