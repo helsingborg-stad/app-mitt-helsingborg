@@ -8,11 +8,12 @@ import {
   cancelAuth,
   loginFailure,
   loginSuccess,
-  checkAuthStatus,
+  checkOrderStatus,
   removeProfile,
   addProfile,
   mockedAuth,
   startSign,
+  setPending,
 } from './actions/AuthActions';
 
 const AuthContext = React.createContext();
@@ -21,17 +22,19 @@ function AuthProvider({ children, initialState }) {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
   /**
-   * Starts polling for an user authorization response if orderRef and autoStartToken is set in state.
+   * Starts polling for an order response if status is pending and orderRef and autoStartToken is set in state.
    */
   useEffect(() => {
-    console.log('Status has changed', state.status);
-    const handleCheckAuthStatus = async () => {
-      if (state.orderRef && state.autoStartToken && state.isAuthorizing) {
-        dispatch(await checkAuthStatus(state.autoStartToken, state.orderRef));
+    const handleCheckOrderStatus = async () => {
+      if (state.status === 'pending' && state.orderRef && state.autoStartToken) {
+        dispatch(
+          await checkOrderStatus(state.autoStartToken, state.orderRef, state.isAuthenticated)
+        );
       }
     };
-    handleCheckAuthStatus();
-  }, [state.status, state.orderRef, state.autoStartToken, state.isAuthorizing]);
+    handleCheckOrderStatus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.status, state.orderRef, state.autoStartToken]);
 
   /**
    * This function starts up the authorization process.
@@ -41,13 +44,14 @@ function AuthProvider({ children, initialState }) {
     if (env.USE_BANKID === 'false') {
       dispatch(await mockedAuth());
     } else {
+      dispatch(await setPending());
       dispatch(await startAuth(ssn));
     }
   }
 
-  async function handleSign(personalNumber) {
-    console.log('handleSign started', personalNumber);
-    dispatch(await startSign(personalNumber));
+  async function handleSign(personalNumber, userVisibleData) {
+    dispatch(await setPending());
+    dispatch(await startSign(personalNumber, userVisibleData));
   }
 
   /**
@@ -114,6 +118,10 @@ function AuthProvider({ children, initialState }) {
     handleCancelAuth,
     isUserAuthenticated,
     handleSign,
+    isLoading: state.status === 'pending',
+    isIdle: state.status === 'idle',
+    isResolved: state.status === 'authResolved' || state.status === 'signResolved',
+    isRejected: state.status === 'rejected',
     ...state,
   };
 

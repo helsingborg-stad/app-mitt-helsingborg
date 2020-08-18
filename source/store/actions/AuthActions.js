@@ -11,8 +11,10 @@ export const actionTypes = {
   removeProfile: 'REMOVE_PROFILE',
   authStarted: 'AUTH_STARTED',
   authError: 'AUTH_ERROR',
+  signError: 'SIGN_ERROR',
   authCanceled: 'AUTH_CANCELED',
   signStarted: 'SIGN_STARTED',
+  setPending: 'SET_PENDING',
 };
 
 export async function mockedAuth() {
@@ -34,6 +36,12 @@ export async function mockedAuth() {
 export function loginSuccess() {
   return {
     type: actionTypes.loginSuccess,
+  };
+}
+
+export function setPending() {
+  return {
+    type: actionTypes.setPending,
   };
 }
 
@@ -96,15 +104,15 @@ export async function startAuth(ssn) {
   }
 }
 
-export async function startSign(personalNumber) {
+export async function startSign(personalNumber, userVisibleData) {
   try {
-    const response = await bankid.sign(personalNumber);
+    const response = await bankid.sign(personalNumber, userVisibleData);
 
     if (response.success === false) {
       throw new Error(response.data);
     }
 
-    const { order_ref: orderRef, auto_start_token: autoStartToken } = response.data;
+    const { orderRef, autoStartToken } = response.data;
 
     return {
       type: actionTypes.signStarted,
@@ -115,7 +123,7 @@ export async function startSign(personalNumber) {
     };
   } catch (error) {
     return {
-      type: actionTypes.authError,
+      type: actionTypes.signError,
       payload: {
         error: error.data,
       },
@@ -123,29 +131,30 @@ export async function startSign(personalNumber) {
   }
 }
 
-export async function checkAuthStatus(autoStartToken, orderRef) {
+export async function checkOrderStatus(autoStartToken, orderRef, isUserAuthenticated) {
   try {
     // Tries to start the bankId app on the device for user authorization.
     await bankid.launchApp(autoStartToken);
 
     // Try to collect a successfull collect response from bankid.
     const response = await bankid.collect(orderRef);
+
     if (response.success === false) {
       throw new Error(response.data);
     }
 
     // Tries to grant a token from the authorization endpoint in the api.
     const { personal_number: ssn } = response.data.attributes.completion_data.user;
+
     const [__, grantTokenError] = await authService.grantAccessToken(ssn);
     if (grantTokenError) {
       throw new Error(grantTokenError);
     }
 
     return {
-      type: actionTypes.loginSuccess,
+      type: !isUserAuthenticated ? actionTypes.loginSuccess : actionTypes.signSuccess,
     };
   } catch (error) {
-    console.log(error);
     return {
       type: actionTypes.loginFailure,
       payload: {
