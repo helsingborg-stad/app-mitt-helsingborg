@@ -61,7 +61,6 @@ function LoginScreen(props) {
 
   const [hideLogo, setHideLogo] = useState(false);
   const [personalNumber, setPersonalNumber] = useState('');
-  const [bankidInstalled, setBankidInstalled] = useState(false);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () =>
@@ -70,16 +69,6 @@ function LoginScreen(props) {
     const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () =>
       setHideLogo(false)
     );
-
-    async function isBankidInstalled() {
-      const isInstalled = await canOpenUrl('bankid:///');
-
-      if (isInstalled) {
-        setBankidInstalled(true);
-      }
-    }
-
-    isBankidInstalled();
 
     return () => {
       keyboardDidHideListener.remove();
@@ -134,8 +123,8 @@ function LoginScreen(props) {
     return (
       <LoginScreenWrapper>
         <AuthLoading
-          cancelSignIn={() => authContext.handleCancelAuth()}
-          isBankidInstalled={bankidInstalled}
+          cancelSignIn={() => authContext.handleCancelOrder()}
+          isBankidInstalled={authContext.isBankidInstalled}
         />
       </LoginScreenWrapper>
     );
