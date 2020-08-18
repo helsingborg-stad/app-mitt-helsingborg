@@ -85,7 +85,7 @@ export default function AuthReducer(state, action) {
         autoStartToken: undefined,
       };
 
-    case actionTypes.signError:
+    case actionTypes.signFailure:
       return {
         ...state,
         ...payload,
