@@ -5,7 +5,7 @@ import * as authService from '../services/AuthService';
 import AuthReducer, { initialState as defaultInitialState } from './reducers/AuthReducer';
 import {
   startAuth,
-  cancelAuth,
+  cancelOrder,
   loginFailure,
   loginSuccess,
   checkOrderStatus,
@@ -14,6 +14,7 @@ import {
   mockedAuth,
   startSign,
   setPending,
+  checkIsBankidInstalled,
 } from './actions/AuthActions';
 
 const AuthContext = React.createContext();
@@ -35,6 +36,10 @@ function AuthProvider({ children, initialState }) {
     handleCheckOrderStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.status, state.orderRef, state.autoStartToken]);
+
+  useEffect(() => {
+    checkIsBankidInstalled();
+  }, []);
 
   /**
    * This function starts up the authorization process.
@@ -62,8 +67,8 @@ function AuthProvider({ children, initialState }) {
   /**
    * This function cancels the authorization process.
    */
-  async function handleCancelAuth() {
-    dispatch(await cancelAuth(state.orderRef));
+  async function handleCancelOrder() {
+    dispatch(await cancelOrder(state.orderRef));
   }
 
   /**
@@ -120,7 +125,7 @@ function AuthProvider({ children, initialState }) {
     handleAddProfile,
     handleRemoveProfile,
     handleAuth,
-    handleCancelAuth,
+    handleCancelOrder,
     isUserAuthenticated,
     handleSign,
     isLoading: state.status === 'pending',
