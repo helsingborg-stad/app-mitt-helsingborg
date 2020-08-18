@@ -24,6 +24,7 @@ export default function AuthReducer(state, action) {
     case actionTypes.loginFailure:
       return {
         ...state,
+        ...payload,
         isAuthenticated: false,
         status: 'rejected',
         orderRef: undefined,
