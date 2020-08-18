@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Button, Text } from 'source/components/atoms';
@@ -33,7 +33,22 @@ const FooterAction = ({
   stepNumber,
   children,
 }) => {
-  const { user, handleSign } = useContext(AuthContext);
+  const { user, handleSign, handleCancelAuth, status } = useContext(AuthContext);
+
+  useEffect(() => {
+    const signCase = () => {
+      if (onUpdate) onUpdate(answers);
+      if (updateCaseInContext) updateCaseInContext(answers, 'signed', stepNumber);
+      if (onNext) onNext();
+    };
+
+    if (status === 'signResolved') {
+      console.log('signResolved');
+      signCase();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+
   const actionMap = type => {
     switch (type) {
       case 'start': {
@@ -50,20 +65,8 @@ const FooterAction = ({
         return onSubmit || null;
       }
       case 'bankIdSign': {
-        return () => {
-          handleSign(user.personalNumber);
-
-          // signAndCollect(user.personalNumber, 'Signering för Mitt Helsingborg').then(result => {
-          //   console.log(result);
-          //   if (result.ok) {
-          //     if (onUpdate) onUpdate(answers);
-          //     if (updateCaseInContext) updateCaseInContext(answers, 'signed', stepNumber);
-          //     if (onNext) onNext();
-          //   } else {
-          //     // TODO: Error will be completed once new code for signAndCollect pushed.
-          //     return null;
-          //   }
-          // });
+        return async () => {
+          await handleSign(user.personalNumber, 'Signering för Mitt Helsingborg');
         };
       }
       default: {
