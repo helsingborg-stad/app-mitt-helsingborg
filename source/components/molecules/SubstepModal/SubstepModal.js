@@ -75,7 +75,7 @@ SubstepModal.propTypes = {
   /**
    * Function that sets visibility of modal, used to close it.
    */
-  setVisible: PropTypes.bool,
+  setVisible: PropTypes.func,
   /**
    * The value to fill the subform with
    */
