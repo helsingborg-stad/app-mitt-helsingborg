@@ -42,7 +42,6 @@ test(`dispatch:${REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES} - should replace
 
 test(`dispatch:${INCREASE_COUNTER} - should increment counter by one`, async () => {
   const state = formReducer(initialState, { type: INCREASE_COUNTER });
-  //   const state = AuthReducer(initialState, loginSuccess());
 
   expect(state.counter).toEqual(initialState.counter + 1);
 });
@@ -67,7 +66,6 @@ test(`dispatch:${DECREASE_COUNTER} - should decrement counter by one`, async () 
     },
     { type: DECREASE_COUNTER }
   );
-  //   const state = AuthReducer(initialState, loginSuccess());
 
   expect(state.counter).toEqual(initialState.steps.length - 1);
 });
@@ -80,7 +78,6 @@ test(`dispatch:${DECREASE_COUNTER} - should not decrement counter since we are i
     },
     { type: DECREASE_COUNTER }
   );
-  //   const state = AuthReducer(initialState, loginSuccess());
 
   expect(state.counter).toEqual(1);
 });
