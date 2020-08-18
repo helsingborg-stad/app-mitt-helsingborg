@@ -51,7 +51,7 @@ const FormList = ({ onClickCallback, heading, showSubforms }) => {
 
 FormList.propTypes = {
   heading: PropTypes.string,
-  showSubforms: PropTypes.boolean,
+  showSubforms: PropTypes.bool,
   onClickCallback: PropTypes.func,
 };
 
