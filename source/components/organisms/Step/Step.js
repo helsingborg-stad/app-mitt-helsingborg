@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import AuthContext from 'app/store/AuthContext';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Text } from 'react-native';
 import { BackNavigation, Banner, FooterAction, StepDescription, FormField } from '../../molecules';
 
 const StepContainer = styled.View`
@@ -36,6 +36,11 @@ const StepFooter = styled(FooterAction)`
   bottom: 0;
 `;
 
+const Spinner = styled.ActivityIndicator`
+  margin-bottom: 150px;
+  margin-top: 150px;
+`;
+
 function Step({
   theme,
   banner,
@@ -54,8 +59,7 @@ function Step({
   updateCaseInContext,
   stepNumber,
 }) {
-  const { status: authStatus } = useContext(AuthContext);
-  console.log('authStatus', authStatus);
+  const { isLoading, isRejected, isResolved, error } = useContext(AuthContext);
 
   const closeForm = () => {
     if (onFieldChange) onFieldChange(answers);
@@ -73,7 +77,7 @@ function Step({
       >
         <StepBanner {...banner} />
         <StepBody>
-          {authStatus === 'resolved' && (
+          {isResolved && (
             <>
               <StepDescription theme={theme} {...description} />
               {questions && (
@@ -94,7 +98,12 @@ function Step({
             </>
           )}
 
-          {authStatus === 'pending' && <ActivityIndicator size="large" color="slategray" />}
+          {isLoading && <Spinner size="large" color="slategray" />}
+
+          {/* TODO: Fix how to display error messages */}
+          {isRejected && (
+            <Text style={{ marginTop: 150, marginBottom: 150 }}> Error: {error.message}</Text>
+          )}
         </StepBody>
         {actions && actions.length > 0 ? (
           <StepFooter
