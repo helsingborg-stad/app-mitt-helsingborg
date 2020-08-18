@@ -52,7 +52,7 @@ export function decreaseFormCounter(state) {
   const { counter } = state;
   return {
     ...state,
-    counter: decreaseCount(counter, 0),
+    counter: decreaseCount(counter, 1),
   };
 }
 
