@@ -19,6 +19,9 @@ export const START_FORM = 'START_FORM';
 /** @type { string } */
 export const UPDATE_ANSWER = 'UPDATE_ANSWER';
 
+/** @type { string } */
+export const SUBMIT_FORM = 'SUBMIT_FORM';
+
 /** @type { object } */
 export const actionTypes = {
   INCREASE_COUNTER,
@@ -26,6 +29,7 @@ export const actionTypes = {
   UPDATE_ANSWER,
   REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES,
   START_FORM,
+  SUBMIT_FORM,
 };
 
 /**
