@@ -141,6 +141,8 @@ workflows:
                 - master
                 - develop
                 - /feature.*/
+                - /feat.*/
+                - /fix.*/
       # - ios:
       #     requires:
       #       - node

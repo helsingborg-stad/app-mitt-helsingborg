@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { get, post, put } from 'app/helpers/ApiRequest';
 import AuthContext from 'app/store/AuthContext';
@@ -19,25 +19,42 @@ export function CaseProvider({ children }) {
    */
   const findLatestCase = cases => {
     if (cases.length > 0) {
-      const [latestCase] = cases.sort(
-        (c1, c2) => c2.attributes.updatedAt - c1.attributes.updatedAt
-      );
-      return { id: latestCase.id, ...latestCase.attributes };
+      const [latestCase] = cases.sort((c1, c2) => c2.updatedAt - c1.updatedAt);
+      return latestCase;
     }
     return null;
   };
 
+  /**
+   * Function to refresh the loaded cases from the backend.
+   * Pass a callback in order to guarantee that the loading of
+   * information happens before the updated values are used.
+   */
+  const fetchCases = useCallback(
+    async callback => {
+      setFetching(true);
+      get('/cases', undefined, user.personalNumber)
+        .then(response => {
+          if (response?.data?.data?.map) {
+            const newCases = response.data.data.map(c => ({ id: c.id, ...c.attributes }));
+            setCases(newCases);
+            setFetching(false);
+            return newCases;
+          }
+          return [];
+        })
+        .then(response => callback(response));
+    },
+    [user.personalNumber]
+  );
+
   useEffect(() => {
     if (user) {
-      setFetching(true);
-
-      get('/cases', undefined, user.personalNumber).then(response => {
-        setCases(response.data.data);
-        setCurrentCase(findLatestCase(response.data.data));
-        setFetching(false);
+      fetchCases(response => {
+        setCurrentCase(findLatestCase(response));
       });
     }
-  }, [user]);
+  }, [fetchCases, user]);
 
   const getCase = caseId => cases.find(c => c.id === caseId);
 
@@ -69,21 +86,6 @@ export function CaseProvider({ children }) {
   };
 
   /**
-   * Function to refresh the loaded cases from the backend.
-   * Pass a callback in order to guarantee that the loading of
-   * information happens before the updated values are used.
-   */
-  const updateCases = async callback => {
-    setFetching(true);
-    get('/cases', undefined, user.personalNumber)
-      .then(response => {
-        setCases(response.data.data);
-        setFetching(false);
-      })
-      .then(response => callback(response));
-  };
-
-  /**
    * Function for sending a put request towards the case api endpoint, updating the currently active case
    * @param {obj} data a object consiting of case user inputs.
    */
@@ -95,25 +97,21 @@ export function CaseProvider({ children }) {
     };
     // TODO: Remove Auhtorization header when token authentication works as expected.
 
-    await put(`/cases/${currentCase.id}`, JSON.stringify(body), {
-      Authorization: parseInt(user.personalNumber),
-    });
-
     try {
       await put(`/cases/${currentCase.id}`, JSON.stringify(body), {
         Authorization: parseInt(user.personalNumber),
+      }).then(res => {
+        const { caseId: id, ...other } = res.data.data;
+        const updatedCase = { id, ...other, updatedAt: Date.now(), ...currentCase };
+        setCurrentCase(updatedCase);
+
+        const newCases = JSON.parse(JSON.stringify(cases));
+        newCases[cases.findIndex(c => c.id === currentCase.id)] = updatedCase;
+        setCases(newCases);
       });
     } catch (error) {
       console.log(`Update current case error: ${error}`);
     }
-
-    // Refresh current case state
-    updateCases(() => {
-      const caseObj = getCase(currentCase.id);
-      if (caseObj) {
-        setCurrentCase({ id: currentCase.id, ...caseObj.attributes });
-      }
-    });
   };
 
   return (
@@ -125,7 +123,7 @@ export function CaseProvider({ children }) {
         setCurrentCase,
         createCase,
         updateCurrentCase,
-        updateCases,
+        fetchCases,
         fetching,
       }}
     >
@@ -133,12 +131,5 @@ export function CaseProvider({ children }) {
     </CaseContext.Provider>
   );
 }
-
-CaseProvider.propTypes = {
-  /**
-   * Child nodes/elements.
-   */
-  children: PropTypes.node,
-};
 
 export default CaseContext;

@@ -49,16 +49,18 @@ const ListBody = styled.View`
 `;
 
 /**
- * A grouped list, where items can be removed.
+ * A grouped list, grouping items according to categories.
  */
 const GroupedList = ({ heading, items, categories, onEdit, color, ...other }) => {
   const groupedItems = {};
-  Object.keys(categories).forEach(key => {
-    const catItems = items.filter(item => item.category === key);
+
+  categories.forEach(cat => {
+    const catItems = items.filter(item => item.category === cat.category);
     if (catItems.length > 0) {
-      groupedItems[key] = catItems;
+      groupedItems[cat.category] = catItems;
     }
   });
+
   const headerStyle = {
     backgroundColor: colors.groupedList[color].headerBackground,
     color: colors.groupedList[color].headerText,
@@ -85,7 +87,7 @@ const GroupedList = ({ heading, items, categories, onEdit, color, ...other }) =>
           .map(key => (
             <View>
               <FieldLabel style={{ marginTop: 40 }} underline="true">
-                {categories[key]}
+                {categories.find(c => c.category === key).description}
               </FieldLabel>
               {groupedItems[key].map(item => item.component)}
             </View>
@@ -122,7 +124,7 @@ GroupedList.propTypes = {
 
 GroupedList.defaultProps = {
   items: [],
-  categories: {},
+  categories: [],
   color: 'light',
 };
 export default GroupedList;

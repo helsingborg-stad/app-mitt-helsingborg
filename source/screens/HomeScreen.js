@@ -8,6 +8,7 @@ import { View, StyleSheet } from 'react-native';
 import { Text, Button } from 'app/components/atoms';
 import CaseContext from 'app/store/CaseContext';
 import FormContext from 'app/store/FormContext';
+import FormList from 'app/components/organisms/FormList/FormList';
 
 const styles = StyleSheet.create({
   button: {
@@ -33,9 +34,9 @@ const ChatScreenWrapper = styled(ScreenWrapper)`
 
 const HomeScreen = ({ navigation }) => {
   const [isInputVisible, setInputVisible] = useState(false);
-  const [isChatButton, setChatButton] = useState(true);
+  const [showChat, setShowChat] = useState(false);
 
-  const { updateCases, createCase, currentCase } = useContext(CaseContext);
+  const { createCase, currentCase } = useContext(CaseContext);
   const { setCurrentForm, currentForm } = useContext(FormContext);
 
   /**
@@ -59,7 +60,7 @@ const HomeScreen = ({ navigation }) => {
 
   const toggleInput = () => {
     setInputVisible(true);
-    setChatButton(false);
+    showChat(false);
   };
 
   const recurringFormId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
@@ -67,21 +68,41 @@ const HomeScreen = ({ navigation }) => {
   return (
     <>
       <ChatScreenWrapper>
-        <Chat
-          ChatAgent={props => <WatsonAgent {...props} initialMessages="remote" />}
-          inputComponents={{
-            type: 'text',
-            placeholder: 'Skriv något...',
-            autoFocus: false,
-            display: 'none',
-          }}
-          // onUserLogin={this.toggleTabs} />)}
-          ChatUserInput={false}
-          keyboardVerticalOffset={0}
-          isInputVisible={isInputVisible}
-        />
+        {showChat && (
+          <Chat
+            ChatAgent={props => <WatsonAgent {...props} initialMessages="remote" />}
+            inputComponents={{
+              type: 'text',
+              placeholder: 'Skriv något...',
+              autoFocus: false,
+              display: 'none',
+            }}
+            // onUserLogin={this.toggleTabs} />)}
+            ChatUserInput={false}
+            keyboardVerticalOffset={0}
+            isInputVisible={isInputVisible}
+          />
+        )}
+
+        <View style={{ padding: 20, marginTop: 40, height: '73%' }}>
+          <FormList
+            heading="Ansökningsformulär"
+            onClickCallback={async id => {
+              createCase(
+                {},
+                id,
+                async () => {
+                  await setCurrentForm(id);
+                  navigation.navigate('Form');
+                },
+                true
+              );
+            }}
+          />
+        </View>
+
         <View style={styles.buttonContainer}>
-          {isChatButton ? (
+          {showChat ? (
             <Button color="purpleLight" style={styles.button} onClick={() => toggleInput()} block>
               <Text>Ställ en fråga</Text>
             </Button>

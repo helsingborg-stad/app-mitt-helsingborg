@@ -141,7 +141,6 @@ class FormAgentExperimental extends Component {
 
     if (currentQuestion) {
       const currentQueue = [...queue];
-      console.log(currentQuestion);
       if ('logics' in currentQuestion) {
         // Find the answer for the question that was just answered.
         const currentQuestionAnswer = answers[currentQuestion.id];

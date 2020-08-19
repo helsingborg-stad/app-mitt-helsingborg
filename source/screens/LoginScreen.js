@@ -130,7 +130,7 @@ function LoginScreen(props) {
     await authContext.handleAuth(personalNumber);
   };
 
-  if (!authContext.isAuthenticated && authContext.isAuthorizing) {
+  if (authContext.isLoading) {
     return (
       <LoginScreenWrapper>
         <AuthLoading
@@ -154,8 +154,10 @@ function LoginScreen(props) {
             </LoginFormHeader>
 
             {/* TODO: Fix better error messages */}
-            {authContext.error && (
-              <Text style={{ color: 'red', paddingBottom: 12 }}>{authContext.error}</Text>
+            {authContext.isRejected && (
+              <Text style={{ color: 'red', paddingBottom: 12 }}>
+                {authContext.error && authContext.error.message}
+              </Text>
             )}
 
             <LoginFormField>

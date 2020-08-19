@@ -32,7 +32,6 @@ const FormCaseScreen = ({ navigation, ...props }) => {
 
   // TODO: Update case on form submit.
   function handleSubmitForm(data) {
-    updateCurrentCase(data, 'submitted');
     navigation.navigate('Start');
   }
 
@@ -41,7 +40,7 @@ const FormCaseScreen = ({ navigation, ...props }) => {
       <StatusBar hidden />
       <Form
         steps={currentForm.steps}
-        startAt={currentCase.currentStep || 0}
+        startAt={currentCase.currentStep || 1}
         firstName={user.firstName}
         onClose={handleCloseForm}
         onStart={handleStartForm}
