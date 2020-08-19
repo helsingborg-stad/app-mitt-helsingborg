@@ -13,7 +13,9 @@ const FormScreenWrapper = styled(ScreenWrapper)`
   flex: 1;
 `;
 
-const FormCaseScreen = ({ navigation, ...props }) => {
+const FormCaseScreen = ({ route, navigation, ...props }) => {
+  const { caseData, caseId, formId } = route ? route.params : {};
+
   const { user } = useContext(AuthContext);
   const { currentCase, updateCurrentCase } = useContext(CaseContext);
   const { currentForm } = useContext(FormContext);
@@ -54,6 +56,7 @@ const FormCaseScreen = ({ navigation, ...props }) => {
 };
 
 FormCaseScreen.propTypes = {
+  route: PropTypes.object,
   navigation: PropTypes.object,
 };
 

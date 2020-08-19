@@ -7,6 +7,7 @@ import { ScreenWrapper } from 'app/components/molecules';
 import { View, StyleSheet } from 'react-native';
 import { Text, Button } from 'app/components/atoms';
 import CaseContext from 'app/store/CaseContext';
+import { CaseState, CaseDispatch } from 'app/store/CaseContext2';
 import FormContext from 'app/store/FormContext';
 import FormList from 'app/components/organisms/FormList/FormList';
 
@@ -36,9 +37,14 @@ const HomeScreen = ({ navigation }) => {
   const [isInputVisible, setInputVisible] = useState(false);
   const [showChat, setShowChat] = useState(false);
 
-  const { createCase, currentCase } = useContext(CaseContext);
+  const { updateCases, createCase, currentCase, setCurrentCase } = useContext(CaseContext);
+
+  const { cases, getCase } = useContext(CaseState);
+  const { createCase: crCase } = useContext(CaseDispatch);
+
   const { setCurrentForm, currentForm } = useContext(FormContext);
 
+  const recurringFormId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
   /**
    * This side effect sets the currentForm when the currentCase is updated.
    */
@@ -46,7 +52,7 @@ const HomeScreen = ({ navigation }) => {
     if (currentCase && currentCase.formId) {
       setCurrentForm(currentCase.formId);
     }
-  }, [currentCase, setCurrentForm]);
+  }, [cases, currentCase, getCase, setCurrentForm]);
 
   const navigationOptions = ({ navigation }) => ({
     tabBarVisible: navigation.state.params.tabBarVisible,
@@ -62,8 +68,6 @@ const HomeScreen = ({ navigation }) => {
     setInputVisible(true);
     showChat(false);
   };
-
-  const recurringFormId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
 
   return (
     <>
@@ -112,16 +116,27 @@ const HomeScreen = ({ navigation }) => {
             color="purple"
             block
             style={styles.button}
-            onClick={() => {
-              createCase(
-                {},
-                recurringFormId,
-                async () => {
-                  await setCurrentForm(recurringFormId);
-                  navigation.navigate('Form');
-                },
-                true
-              );
+            onClick={async () => {
+              // let id = '021e4050-dbd7-11ea-b4fe-d7f823c38006';
+              // console.log('case', c);
+              // let cid = '';
+              await crCase(recurringFormId, newCase => (state, action, context) => {
+                console.log('id', newCase.id);
+                console.log('state', Object.keys(state));
+                const c = state[newCase.id]; // getCase(newCase.id);
+                console.log('from callback, using new state?', c);
+              });
+              // const c = getCase(cid);
+              // console.log(c);
+              // createCase(
+              //   {},
+              //   recurringFormId,
+              //   async newCase => {
+              //     await setCurrentForm(recurringFormId);
+              //     navigation.navigate('Form');
+              //   },
+              //   true
+              // );
             }}
           >
             <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>

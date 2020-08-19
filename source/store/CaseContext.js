@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { get, post, put } from 'app/helpers/ApiRequest';
 import AuthContext from 'app/store/AuthContext';
+import generateInitialCase from 'app/containers/dynamicFormData';
+import { initialState } from './reducers/AuthReducer';
 
 const CaseContext = React.createContext();
 
@@ -9,6 +11,7 @@ export const CaseConsumer = CaseContext.Consumer;
 
 export function CaseProvider({ children }) {
   const { user } = useContext(AuthContext);
+
   const [cases, setCases] = useState([]);
   const [currentCase, setCurrentCase] = useState({ data: {} });
   const [fetching, setFetching] = useState(false);
@@ -66,11 +69,14 @@ export function CaseProvider({ children }) {
    * @param {func} callback what should happen after the new case have been created.
    */
   const createCase = async (data, formId, callback = response => {}) => {
+    const initialData = generateInitialCase(formId, user, cases);
+
     const body = {
       personalNumber: parseInt(user.personalNumber),
-      status: 'completed',
+      status: 'ongoing',
       type: 'VIVA_CASE',
-      data: data || {},
+      data: initialData || {},
+      currentStep: 1,
       formId,
     };
     // TODO: Remove Auhtorization header when token authentication works as expected.
@@ -85,6 +91,30 @@ export function CaseProvider({ children }) {
       .then(newCase => callback(newCase));
   };
 
+  const updateCase = async (caseId, data, status, currentStep) => {
+    const body = {
+      status,
+      data,
+      currentStep,
+    };
+    // TODO: Remove Auhtorization header when token authentication works as expected.
+
+    try {
+      await put(`/cases/${caseId}`, JSON.stringify(body), {
+        Authorization: parseInt(user.personalNumber),
+      }).then(res => {
+        const { caseId, ...other } = res.data.data;
+        const updatedCase = { caseId, ...other, updatedAt: Date.now(), ...currentCase };
+        // setCurrentCase(updatedCase);
+
+        const newCases = JSON.parse(JSON.stringify(cases));
+        newCases[cases.findIndex(c => c.id === currentCase.id)] = updatedCase;
+        setCases(newCases);
+      });
+    } catch (error) {
+      console.log(`Update current case error: ${error}`);
+    }
+  };
   /**
    * Function for sending a put request towards the case api endpoint, updating the currently active case
    * @param {obj} data a object consiting of case user inputs.
