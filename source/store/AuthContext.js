@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useCallback } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import env from 'react-native-config';
 import * as authService from '../services/AuthService';
@@ -49,7 +49,7 @@ function AuthProvider({ children, initialState }) {
     if (env.USE_BANKID === 'false') {
       dispatch(await mockedAuth());
     } else {
-      dispatch(await setPending());
+      dispatch(setPending());
       dispatch(await startAuth(ssn));
     }
   }
@@ -60,7 +60,7 @@ function AuthProvider({ children, initialState }) {
    * @param {string} userVisibleData Message to be shown when signing order
    */
   async function handleSign(personalNumber, userVisibleData) {
-    dispatch(await setPending());
+    dispatch(setPending());
     dispatch(await startSign(personalNumber, userVisibleData));
   }
 
