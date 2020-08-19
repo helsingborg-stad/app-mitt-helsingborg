@@ -4,13 +4,12 @@ import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { Alert, Keyboard, Linking } from 'react-native';
 import styled from 'styled-components/native';
 import { AuthLoading, ScreenWrapper } from 'app/components/molecules';
-import { ValidationHelper, UrlHelper } from 'app/helpers';
+import { ValidationHelper } from 'app/helpers';
 import { Button, Text, Heading, Input } from 'app/components/atoms';
 import { SLIDES } from 'app/assets/images';
 import AuthContext from '../store/AuthContext';
 
 const { sanitizePin, validatePin } = ValidationHelper;
-const { canOpenUrl } = UrlHelper;
 
 const Logo = styled.Image`
   height: 200px;
