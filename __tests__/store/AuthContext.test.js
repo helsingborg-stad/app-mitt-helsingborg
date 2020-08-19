@@ -91,16 +91,23 @@ test(`dispatch:${actionTypes.authError}`, async () => {
   });
 });
 
-test(`dispatch:${actionTypes.authCanceled}`, async () => {
+test(`dispatch:${actionTypes.cancelOrder}`, async () => {
   const state = AuthReducer(initialState, {
-    type: actionTypes.authCanceled,
+    type: actionTypes.cancelOrder,
   });
 
   expect(state).toEqual({
     status: 'rejected',
-    isAuthenticated: false,
-    user: null,
     orderRef: undefined,
     autoStartToken: undefined,
   });
+});
+
+test(`dispatch:${actionTypes.setIsBankidInstalled}`, async () => {
+  const payload = {
+    isBankidInstalled: true,
+  };
+  const state = AuthReducer(initialState, { type: actionTypes.setIsBankidInstalled, payload });
+
+  expect(state).toEqual({ isBankidInstalled: true });
 });
