@@ -60,7 +60,7 @@ const CaseArchiveScreen = ({ navigation }) => {
                   await setCurrentForm(item.formId);
                   const caseObj = getCase(item.id);
                   await setCurrentCase(caseObj);
-                  navigation.navigate('App', { screen: 'Form' });
+                  navigation.navigate('Form');
                 }}
               />
             ))
