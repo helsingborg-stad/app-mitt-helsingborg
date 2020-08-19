@@ -37,8 +37,15 @@ function AuthProvider({ children, initialState }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.status, state.orderRef, state.autoStartToken]);
 
+  /**
+   * Check if Bankid App is installed on clients machine
+   */
   useEffect(() => {
-    checkIsBankidInstalled();
+    const handleCheckIsBankidInstalled = async () => {
+      dispatch(await checkIsBankidInstalled());
+    };
+
+    handleCheckIsBankidInstalled();
   }, []);
 
   /**
