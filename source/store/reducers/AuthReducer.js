@@ -2,27 +2,33 @@ import { actionTypes } from '../actions/AuthActions';
 
 export const initialState = {
   isAuthenticated: false,
-  isAuthorizing: false,
   user: {},
   error: null,
+  status: 'idle',
 };
 
 export default function AuthReducer(state, action) {
   const { type, payload } = action;
+
   switch (type) {
     case actionTypes.loginSuccess:
       return {
         ...state,
         ...payload,
         isAuthenticated: true,
-        isAuthorizing: false,
+        status: 'authResolved',
+        orderRef: undefined,
+        autoStartToken: undefined,
       };
 
     case actionTypes.loginFailure:
       return {
         ...state,
+        ...payload,
         isAuthenticated: false,
-        isAuthorizing: false,
+        status: 'rejected',
+        orderRef: undefined,
+        autoStartToken: undefined,
       };
 
     case actionTypes.addProfile:
@@ -30,6 +36,7 @@ export default function AuthReducer(state, action) {
         ...state,
         user: payload,
       };
+
     case actionTypes.removeProfile:
       return {
         ...state,
@@ -40,7 +47,6 @@ export default function AuthReducer(state, action) {
       return {
         ...state,
         ...payload,
-        isAuthorizing: true,
         isAuthenticated: false,
       };
 
@@ -48,17 +54,51 @@ export default function AuthReducer(state, action) {
       return {
         ...state,
         ...payload,
-        isAuthorizing: false,
         isAuthenticated: false,
         user: null,
+        status: 'rejected',
+        orderRef: undefined,
+        autoStartToken: undefined,
       };
+
     case actionTypes.authCanceled:
       return {
         ...state,
         ...payload,
-        isAuthorizing: false,
         isAuthenticated: false,
         user: null,
+        status: 'rejected',
+        orderRef: undefined,
+        autoStartToken: undefined,
+      };
+
+    case actionTypes.signStarted:
+      return {
+        ...state,
+        ...payload,
+      };
+
+    case actionTypes.signSuccess:
+      return {
+        ...state,
+        status: 'signResolved',
+        orderRef: undefined,
+        autoStartToken: undefined,
+      };
+
+    case actionTypes.signFailure:
+      return {
+        ...state,
+        ...payload,
+        status: 'rejected',
+        orderRef: undefined,
+        autoStartToken: undefined,
+      };
+
+    case actionTypes.setPending:
+      return {
+        ...state,
+        status: 'pending',
       };
 
     default:

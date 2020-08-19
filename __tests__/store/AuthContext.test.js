@@ -6,13 +6,43 @@ const initialState = {};
 test(`dispatch:${actionTypes.loginSuccess}`, async () => {
   const state = AuthReducer(initialState, loginSuccess());
 
-  expect(state).toEqual({ isAuthorizing: false, isAuthenticated: true });
+  expect(state).toEqual({
+    status: 'authResolved',
+    isAuthenticated: true,
+    orderRef: undefined,
+    autoStartToken: undefined,
+  });
+});
+
+test(`dispatch:${actionTypes.signSuccess}`, async () => {
+  const state = AuthReducer(initialState, { type: actionTypes.signSuccess });
+
+  expect(state).toEqual({
+    status: 'signResolved',
+    orderRef: undefined,
+    autoStartToken: undefined,
+  });
 });
 
 test(`dispatch:${actionTypes.loginFailure}`, async () => {
   const state = AuthReducer(initialState, { type: actionTypes.loginFailure });
 
-  expect(state).toEqual({ isAuthenticated: false, isAuthorizing: false });
+  expect(state).toEqual({
+    isAuthenticated: false,
+    status: 'rejected',
+    orderRef: undefined,
+    autoStartToken: undefined,
+  });
+});
+
+test(`dispatch:${actionTypes.signFailure}`, async () => {
+  const state = AuthReducer(initialState, { type: actionTypes.signFailure });
+
+  expect(state).toEqual({
+    status: 'rejected',
+    orderRef: undefined,
+    autoStartToken: undefined,
+  });
 });
 
 test(`dispatch:${actionTypes.addProfile}`, async () => {
@@ -34,7 +64,13 @@ test(`dispatch:${actionTypes.removeProfile}`, async () => {
 test(`dispatch:${actionTypes.authStarted}`, async () => {
   const state = AuthReducer(initialState, { type: actionTypes.authStarted });
 
-  expect(state).toEqual({ isAuthorizing: true, isAuthenticated: false });
+  expect(state).toEqual({ isAuthenticated: false });
+});
+
+test(`dispatch:${actionTypes.setPending}`, async () => {
+  const state = AuthReducer(initialState, { type: actionTypes.setPending });
+
+  expect(state).toEqual({ status: 'pending' });
 });
 
 test(`dispatch:${actionTypes.authError}`, async () => {
@@ -47,9 +83,11 @@ test(`dispatch:${actionTypes.authError}`, async () => {
 
   expect(state).toEqual({
     error: 'some error',
-    isAuthorizing: false,
+    status: 'rejected',
     isAuthenticated: false,
     user: null,
+    orderRef: undefined,
+    autoStartToken: undefined,
   });
 });
 
@@ -59,8 +97,10 @@ test(`dispatch:${actionTypes.authCanceled}`, async () => {
   });
 
   expect(state).toEqual({
-    isAuthorizing: false,
+    status: 'rejected',
     isAuthenticated: false,
     user: null,
+    orderRef: undefined,
+    autoStartToken: undefined,
   });
 });

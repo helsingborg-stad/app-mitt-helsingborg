@@ -74,7 +74,5 @@ export const buildBankIdClientUrl = autoStartToken => {
     queryString = `?autostarttoken=${autoStartToken}&redirect=${env.APP_SCHEME}://`;
   }
 
-  console.log('URL', `${url}${queryString}`);
-
   return `${url}${queryString}`;
 };

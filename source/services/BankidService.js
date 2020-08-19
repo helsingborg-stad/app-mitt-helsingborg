@@ -70,10 +70,11 @@ async function cancel(orderRef) {
   }
 }
 
-async function sign(ssn, userVisibleData) {
+async function sign(personalNumber, userVisibleData) {
   const endUserIp = await NetworkInfo.getIPV4Address(ip => ip);
+
   const requestBody = {
-    personalNumber: ssn,
+    personalNumber,
     endUserIp,
     userVisibleData,
   };
