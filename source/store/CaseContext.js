@@ -45,7 +45,7 @@ export function CaseProvider({ children }) {
         })
         .then(response => callback(response));
     },
-    [user.personalNumber]
+    [user]
   );
 
   useEffect(() => {
