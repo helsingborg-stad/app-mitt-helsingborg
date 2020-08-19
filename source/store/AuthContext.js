@@ -1,11 +1,10 @@
-import React, { useEffect, useReducer, useCallback } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import env from 'react-native-config';
 import * as authService from '../services/AuthService';
 import AuthReducer, { initialState as defaultInitialState } from './reducers/AuthReducer';
 import {
   startAuth,
-  cancelAuth,
   loginFailure,
   loginSuccess,
   checkOrderStatus,

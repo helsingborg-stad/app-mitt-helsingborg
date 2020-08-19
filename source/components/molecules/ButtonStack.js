@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { withNavigation } from '@react-navigation/native';
+// import { withNavigation } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 
 import FormAgent from '../organisms/FormAgent/FormAgent';

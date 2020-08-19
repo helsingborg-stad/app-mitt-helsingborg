@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import env from 'react-native-config';
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { Alert, Keyboard, Linking } from 'react-native';
 import styled from 'styled-components/native';
