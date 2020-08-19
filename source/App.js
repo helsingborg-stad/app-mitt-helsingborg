@@ -8,6 +8,7 @@ import Navigator from './navigator';
 import StorybookUIRoot from '../storybook';
 
 import { CaseProvider } from './store/CaseContext';
+import { CaseProvider2 } from './store/CaseContext2';
 import { AuthProvider } from './store/AuthContext';
 import { FormProvider } from './store/FormContext';
 /**
@@ -16,15 +17,17 @@ import { FormProvider } from './store/FormContext';
  */
 
 const App = () => {
-  if (Config.IS_STORYBOOK === 'true') {
+  if (Config.IS_STORYBOOK !== 'true') {
     return (
       <AuthProvider>
         <CaseProvider>
-          <FormProvider>
-            <Notification.Provider>
-              <StorybookUIRoot />
-            </Notification.Provider>
-          </FormProvider>
+          <CaseProvider2>
+            <FormProvider>
+              <Notification.Provider>
+                <StorybookUIRoot />
+              </Notification.Provider>
+            </FormProvider>
+          </CaseProvider2>
         </CaseProvider>
       </AuthProvider>
     );
@@ -33,11 +36,13 @@ const App = () => {
   return (
     <AuthProvider>
       <CaseProvider>
-        <FormProvider>
-          <Notification.Provider>
-            <Navigator />
-          </Notification.Provider>
-        </FormProvider>
+        <CaseProvider2>
+          <FormProvider>
+            <Notification.Provider>
+              <Navigator />
+            </Notification.Provider>
+          </FormProvider>
+        </CaseProvider2>
       </CaseProvider>
     </AuthProvider>
   );
