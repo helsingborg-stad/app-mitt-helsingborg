@@ -1,11 +1,6 @@
 /* eslint-disable react/state-in-constructor */
 /* eslint-disable react/no-unused-state */
 /* eslint-disable react/sort-comp */
-
-/**
- * @format
- */
-
 import React from 'react';
 import Config from 'react-native-config';
 import { Notification } from 'app/store';

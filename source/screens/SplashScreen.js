@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { ActivityIndicator } from 'react-native';
 import AuthContext from '../store/AuthContext';
-import StorageService, { SHOW_SPLASH_SCREEN, TOKEN_KEY } from '../services/StorageService';
+import StorageService, { SHOW_SPLASH_SCREEN } from '../services/StorageService';
 
 const SplashContainer = styled.View`
   flex: 1;
@@ -38,12 +38,12 @@ function SplashScreen(props) {
       if (await isUserAuthenticated()) {
         handleLogin();
         await handleAddProfile();
-        navigate('Chat');
+        navigate('App', { screen: 'Home' });
       } else {
         await handleLogout();
         handleRemoveProfile();
         const showOnboarding = await showOnboardingScreen();
-        navigate(showOnboarding ? 'Onboarding' : 'Login');
+        navigate('Auth', { screen: showOnboarding ? 'Onboarding' : 'Login' });
       }
     };
 

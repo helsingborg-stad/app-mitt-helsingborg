@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import { SafeAreaView } from 'react-native';
-import { MaterialTopTabBar } from 'react-navigation-tabs';
+import { MaterialTopTabBar } from '@react-navigation/material-top-tabs';
 import PropTypes from 'prop-types';
 
 const MaterialTopTabBarWrapper = props => {

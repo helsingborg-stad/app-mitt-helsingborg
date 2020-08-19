@@ -1,4 +1,11 @@
-import { createAppContainer } from 'react-navigation';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import RootNavigator from './RootNavigator';
 
-export default createAppContainer(RootNavigator);
+const Navigator = ({ props }) => (
+  <NavigationContainer>
+    <RootNavigator />
+  </NavigationContainer>
+);
+
+export default Navigator;

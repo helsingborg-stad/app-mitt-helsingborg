@@ -1,18 +1,18 @@
-import { createSwitchNavigator } from 'react-navigation';
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 import { SplashScreen, FormCaseScreen } from 'app/screens';
-
 import AuthStack from './AuthStack';
 import BottomBarNavigator from './BottomBarNavigator';
 
-export const RootStack = {
-  Start: SplashScreen,
-  Auth: AuthStack,
-  App: BottomBarNavigator,
-  Form: FormCaseScreen,
-};
+const Stack = createStackNavigator();
 
-export const RootConfig = {
-  initialRouteName: 'Start',
-};
+const RootStack = () => (
+  <Stack.Navigator initialRouteName="Start" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Start" component={SplashScreen} />
+    <Stack.Screen name="Auth" component={AuthStack} />
+    <Stack.Screen name="App" component={BottomBarNavigator} />
+    <Stack.Screen name="Form" component={FormCaseScreen} />
+  </Stack.Navigator>
+);
 
-export default createSwitchNavigator(RootStack, RootConfig);
+export default RootStack;

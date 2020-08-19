@@ -41,7 +41,7 @@ const CaseArchiveScreen = ({ navigation }) => {
     <CaseArchiveWrapper>
       <Header
         title="Mitt Helsingborg"
-        message={user && user.givenName ? `Hej ${user.givenName}!` : 'Hej!'}
+        // message={user && user.givenName ? `Hej ${user.givenName}!` : 'Hej!'}
         themeColor="purple"
         navItems={NavItems}
       />
@@ -61,7 +61,7 @@ const CaseArchiveScreen = ({ navigation }) => {
                   await setCurrentForm(item.formId);
                   const caseObj = getCase(item.id);
                   await setCurrentCase(caseObj);
-                  navigation.navigate('Form');
+                  navigation.navigate('App', { screen: 'Form' });
                 }}
               />
             ))

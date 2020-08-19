@@ -19,7 +19,7 @@ const FormCaseScreen = ({ navigation, ...props }) => {
   const { currentForm } = useContext(FormContext);
 
   function handleCloseForm() {
-    navigation.navigate('Start');
+    navigation.navigate('App', { screen: 'Home' });
   }
 
   /*
@@ -32,7 +32,7 @@ const FormCaseScreen = ({ navigation, ...props }) => {
 
   // TODO: Update case on form submit.
   function handleSubmitForm(data) {
-    navigation.navigate('Start');
+    navigation.navigate('App', { screen: 'Home' });
   }
 
   return (
