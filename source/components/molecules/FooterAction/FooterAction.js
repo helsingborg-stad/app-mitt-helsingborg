@@ -1,9 +1,7 @@
-import React, { useContext, useEffect, useCallback } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Button, Text } from 'source/components/atoms';
-import { signAndCollect } from 'app/services/UserService';
-import StorageService, { USER_KEY } from 'app/services/StorageService';
 import AuthContext from 'app/store/AuthContext';
 
 const ActionContainer = styled.View(props => ({
