@@ -5,6 +5,7 @@ import * as authService from '../services/AuthService';
 import AuthReducer, { initialState as defaultInitialState } from './reducers/AuthReducer';
 import {
   startAuth,
+  cancelAuth,
   loginFailure,
   loginSuccess,
   checkOrderStatus,

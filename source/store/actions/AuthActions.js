@@ -2,7 +2,6 @@ import env from 'react-native-config';
 import bankid from 'app/services/BankidService';
 import * as authService from 'app/services/AuthService';
 import StorageService, { TOKEN_KEY } from 'app/services/StorageService';
-import { getMockUser } from 'app/services/UserService';
 
 export const actionTypes = {
   loginSuccess: 'LOGIN_SUCCESS',
@@ -104,6 +103,8 @@ export async function startAuth(ssn) {
     };
   }
 }
+
+export async function cancelAuth() {}
 
 export async function startSign(personalNumber, userVisibleData) {
   try {

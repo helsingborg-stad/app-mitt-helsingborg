@@ -31,7 +31,6 @@ const ListHeading = styled(Heading)`
 `;
 
 const CaseArchiveScreen = ({ navigation }) => {
-  const { user } = useContext(AuthContext);
   const { setCurrentForm } = useContext(FormContext);
   const { cases, getCase, setCurrentCase } = useContext(CaseContext);
 

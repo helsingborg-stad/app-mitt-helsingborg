@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from 'react';
-import env from 'react-native-config';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { ActivityIndicator } from 'react-native';

@@ -15,7 +15,7 @@ const FormScreenWrapper = styled(ScreenWrapper)`
 
 const FormCaseScreen = ({ navigation, ...props }) => {
   const { user } = useContext(AuthContext);
-  const { currentCase, createCase, updateCurrentCase } = useContext(CaseContext);
+  const { currentCase, updateCurrentCase } = useContext(CaseContext);
   const { currentForm } = useContext(FormContext);
 
   function handleCloseForm() {
