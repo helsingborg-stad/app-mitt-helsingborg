@@ -132,4 +132,8 @@ export function CaseProvider({ children }) {
   );
 }
 
+CaseProvider.propTypes = {
+  children: PropTypes.object,
+};
+
 export default CaseContext;
