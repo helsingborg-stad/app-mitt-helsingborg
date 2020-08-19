@@ -3,7 +3,7 @@ import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { TabBarImage, MaterialTopTabBarWrapper } from 'source/components/molecules';
 import { ProfileScreen, HomeScreen } from 'app/screens';
-import TaskNavigator from './TaskNavigator';
+import CaseNavigator from './CaseNavigator';
 
 const Tab = createMaterialTopTabNavigator();
 const BottomBarStack = () => (
@@ -33,7 +33,7 @@ const BottomBarStack = () => (
     />
     <Tab.Screen
       name="UserEvents"
-      component={TaskNavigator}
+      component={CaseNavigator}
       options={{
         title: 'Ärende',
         tabBarIcon: TabBarImage(require('../images/task.png')),

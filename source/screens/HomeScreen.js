@@ -93,7 +93,7 @@ const HomeScreen = ({ navigation }) => {
                 id,
                 async () => {
                   await setCurrentForm(id);
-                  navigation.navigate('App', { screen: 'Form' });
+                  navigation.navigate('Form');
                 },
                 true
               );
@@ -118,7 +118,7 @@ const HomeScreen = ({ navigation }) => {
                 recurringFormId,
                 async () => {
                   await setCurrentForm(recurringFormId);
-                  navigation.navigate('App', { screen: 'Form' });
+                  navigation.navigate('Form');
                 },
                 true
               );
@@ -131,7 +131,7 @@ const HomeScreen = ({ navigation }) => {
             color="purple"
             block
             style={styles.button}
-            onClick={() => navigation.navigate('App', { screen: 'Form' })}
+            onClick={() => navigation.navigate('Form')}
           >
             <Text>Fortsätt senaste ansökan</Text>
           </Button>
