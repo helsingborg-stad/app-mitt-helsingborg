@@ -17,7 +17,7 @@ import { FormProvider } from './store/FormContext';
  */
 
 const App = () => {
-  if (Config.IS_STORYBOOK !== 'true') {
+  if (Config.IS_STORYBOOK === 'true') {
     return (
       <AuthProvider>
         <CaseProvider>
