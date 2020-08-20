@@ -147,6 +147,8 @@ FooterAction.propTypes = {
   updateCaseInContext: PropTypes.func,
   /** The steps position in the form */
   stepNumber: PropTypes.number,
+  /** Set auth status */
+  setStatus: PropTypes.func,
 };
 
 FooterAction.defaultProps = {

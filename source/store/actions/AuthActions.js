@@ -16,7 +16,7 @@ export const actionTypes = {
   signFailure: 'SIGN_FAILURE',
   cancelOrder: 'CANCEL_ORDER',
   signStarted: 'SIGN_STARTED',
-  setPending: 'SET_PENDING',
+  setStatus: 'SET_STATUS',
   signSuccess: 'SIGN_SUCCESS',
   setIsBankidInstalled: 'SET_INSTALLED',
 };
@@ -43,9 +43,10 @@ export function loginSuccess() {
   };
 }
 
-export function setPending() {
+export function setStatus(status) {
   return {
-    type: actionTypes.setPending,
+    type: actionTypes.setStatus,
+    status,
   };
 }
 
@@ -190,8 +191,6 @@ export async function checkIsBankidInstalled() {
   const isInstalled = await canOpenUrl('bankid:///');
   return {
     type: actionTypes.setIsBankidInstalled,
-    payload: {
-      isBankidInstalled: isInstalled,
-    },
+    isBankidInstalled: isInstalled,
   };
 }

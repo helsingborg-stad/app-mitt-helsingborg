@@ -13,7 +13,7 @@ import {
   addProfile,
   mockedAuth,
   startSign,
-  setPending,
+  setStatus,
   checkIsBankidInstalled,
 } from './actions/AuthActions';
 
@@ -56,7 +56,7 @@ function AuthProvider({ children, initialState }) {
     if (env.USE_BANKID === 'false') {
       dispatch(await mockedAuth());
     } else {
-      dispatch(setPending());
+      dispatch(setStatus('pending'));
       dispatch(await startAuth(ssn));
     }
   }
@@ -67,7 +67,7 @@ function AuthProvider({ children, initialState }) {
    * @param {string} userVisibleData Message to be shown when signing order
    */
   async function handleSign(personalNumber, userVisibleData) {
-    dispatch(setPending());
+    dispatch(setStatus('pending'));
     dispatch(await startSign(personalNumber, userVisibleData));
   }
 
@@ -108,6 +108,13 @@ function AuthProvider({ children, initialState }) {
   }
 
   /**
+   * Used to remove user profile data from the state.
+   */
+  function handleSetStatus(status) {
+    dispatch(setStatus(status));
+  }
+
+  /**
    * This function checks if the current accessToken is valid.
    */
   async function isUserAuthenticated() {
@@ -133,6 +140,7 @@ function AuthProvider({ children, initialState }) {
     handleRemoveProfile,
     handleAuth,
     handleCancelOrder,
+    handleSetStatus,
     isUserAuthenticated,
     handleSign,
     isLoading: state.status === 'pending',
