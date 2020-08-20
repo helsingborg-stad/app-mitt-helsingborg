@@ -67,6 +67,11 @@ function AuthProvider({ children, initialState }) {
    * @param {string} userVisibleData Message to be shown when signing order
    */
   async function handleSign(personalNumber, userVisibleData) {
+    if (env.USE_BANKID === 'false') {
+      dispatch(setStatus('signResolved'));
+      return;
+    }
+
     dispatch(setStatus('pending'));
     dispatch(await startSign(personalNumber, userVisibleData));
   }
