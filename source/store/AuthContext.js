@@ -1,11 +1,11 @@
-import React, { useEffect, useReducer, useCallback } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import env from 'react-native-config';
 import * as authService from '../services/AuthService';
 import AuthReducer, { initialState as defaultInitialState } from './reducers/AuthReducer';
 import {
   startAuth,
-  cancelAuth,
+  cancelOrder,
   loginFailure,
   loginSuccess,
   checkOrderStatus,
@@ -14,6 +14,7 @@ import {
   mockedAuth,
   startSign,
   setPending,
+  checkIsBankidInstalled,
 } from './actions/AuthActions';
 
 const AuthContext = React.createContext();
@@ -37,6 +38,17 @@ function AuthProvider({ children, initialState }) {
   }, [state.status, state.orderRef, state.autoStartToken]);
 
   /**
+   * Check if Bankid App is installed on clients machine
+   */
+  useEffect(() => {
+    const handleCheckIsBankidInstalled = async () => {
+      dispatch(await checkIsBankidInstalled());
+    };
+
+    handleCheckIsBankidInstalled();
+  }, []);
+
+  /**
    * This function starts up the authorization process.
    * @param {string} ssn Swedish Social Security Number (SSN)
    */
@@ -44,7 +56,7 @@ function AuthProvider({ children, initialState }) {
     if (env.USE_BANKID === 'false') {
       dispatch(await mockedAuth());
     } else {
-      dispatch(await setPending());
+      dispatch(setPending());
       dispatch(await startAuth(ssn));
     }
   }
@@ -55,15 +67,15 @@ function AuthProvider({ children, initialState }) {
    * @param {string} userVisibleData Message to be shown when signing order
    */
   async function handleSign(personalNumber, userVisibleData) {
-    dispatch(await setPending());
+    dispatch(setPending());
     dispatch(await startSign(personalNumber, userVisibleData));
   }
 
   /**
    * This function cancels the authorization process.
    */
-  async function handleCancelAuth() {
-    dispatch(await cancelAuth(state.orderRef));
+  async function handleCancelOrder() {
+    dispatch(await cancelOrder(state.orderRef));
   }
 
   /**
@@ -120,7 +132,7 @@ function AuthProvider({ children, initialState }) {
     handleAddProfile,
     handleRemoveProfile,
     handleAuth,
-    handleCancelAuth,
+    handleCancelOrder,
     isUserAuthenticated,
     handleSign,
     isLoading: state.status === 'pending',

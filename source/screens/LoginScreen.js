@@ -1,16 +1,14 @@
 import PropTypes from 'prop-types';
-import env from 'react-native-config';
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { Alert, Keyboard, Linking } from 'react-native';
 import styled from 'styled-components/native';
 import { AuthLoading, ScreenWrapper } from 'app/components/molecules';
-import { ValidationHelper, UrlHelper } from 'app/helpers';
+import { ValidationHelper } from 'app/helpers';
 import { Button, Text, Heading, Input } from 'app/components/atoms';
 import { SLIDES } from 'app/assets/images';
 import AuthContext from '../store/AuthContext';
 
 const { sanitizePin, validatePin } = ValidationHelper;
-const { canOpenUrl } = UrlHelper;
 
 const Logo = styled.Image`
   height: 200px;
@@ -57,11 +55,18 @@ const LoginFormHeader = styled.View`
 `;
 
 function LoginScreen(props) {
-  const authContext = useContext(AuthContext);
+  const {
+    isAuthenticated,
+    handleAuth,
+    isLoading,
+    handleCancelOrder,
+    isBankidInstalled,
+    isRejected,
+    error,
+  } = useContext(AuthContext);
 
   const [hideLogo, setHideLogo] = useState(false);
   const [personalNumber, setPersonalNumber] = useState('');
-  const [bankidInstalled, setBankidInstalled] = useState(false);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () =>
@@ -70,16 +75,6 @@ function LoginScreen(props) {
     const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () =>
       setHideLogo(false)
     );
-
-    async function isBankidInstalled() {
-      const isInstalled = await canOpenUrl('bankid:///');
-
-      if (isInstalled) {
-        setBankidInstalled(true);
-      }
-    }
-
-    isBankidInstalled();
 
     return () => {
       keyboardDidHideListener.remove();
@@ -100,12 +95,12 @@ function LoginScreen(props) {
    */
   useEffect(() => {
     const handleNavigateToScreen = async () => {
-      if (authContext.isAuthenticated) {
+      if (isAuthenticated) {
         navigateToScreen('Start');
       }
     };
     handleNavigateToScreen();
-  }, [authContext, navigateToScreen]);
+  }, [isAuthenticated, navigateToScreen]);
 
   /**
    * Handles the personal number input field changes and updates state.
@@ -127,15 +122,15 @@ function LoginScreen(props) {
       return;
     }
 
-    await authContext.handleAuth(personalNumber);
+    await handleAuth(personalNumber);
   };
 
-  if (authContext.isLoading) {
+  if (isLoading) {
     return (
       <LoginScreenWrapper>
         <AuthLoading
-          cancelSignIn={() => authContext.handleCancelAuth()}
-          isBankidInstalled={bankidInstalled}
+          cancelSignIn={() => handleCancelOrder()}
+          isBankidInstalled={isBankidInstalled}
         />
       </LoginScreenWrapper>
     );
@@ -154,10 +149,8 @@ function LoginScreen(props) {
             </LoginFormHeader>
 
             {/* TODO: Fix better error messages */}
-            {authContext.isRejected && (
-              <Text style={{ color: 'red', paddingBottom: 12 }}>
-                {authContext.error && authContext.error.message}
-              </Text>
+            {isRejected && (
+              <Text style={{ color: 'red', paddingBottom: 12 }}>{error && error.message}</Text>
             )}
 
             <LoginFormField>
