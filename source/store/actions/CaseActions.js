@@ -48,12 +48,12 @@ export async function createCase(formId, user, cases, callback) {
   // TODO: Remove Auhtorization header when token authentication works as expected.
   const newCase = await post('/cases', JSON.stringify(body), {
     Authorization: parseInt(user.personalNumber),
-  }).then(
-    response =>
-      //   setCurrentCase(response.data.data);
-      //   setFetching(false);
-      response.data.data
-  );
+  }).then(response => {
+    //   setCurrentCase(response.data.data);
+    //   setFetching(false);
+    console.log('response.data', response.data);
+    return response.data.data;
+  });
   // .then(newCase => callback(newCase));
   //   callback(newCase);
   const { caseId } = newCase;

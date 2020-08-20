@@ -8,21 +8,38 @@ import AuthContext from '../store/AuthContext';
 import CaseContext from '../store/CaseContext';
 import FormContext from '../store/FormContext';
 
+import { CaseDispatch } from '../store/CaseContext2';
+
 const FormScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
   flex: 1;
 `;
 
 const FormCaseScreen = ({ route, navigation, ...props }) => {
-  const { caseData, caseId, formId } = route ? route.params : {};
+  const { caseData } = route && route.params ? route.params : {};
+
+  // if (route) {
+  //   console.log(route);
+  // }
 
   const { user } = useContext(AuthContext);
-  const { currentCase, updateCurrentCase } = useContext(CaseContext);
-  const { currentForm } = useContext(FormContext);
+  // const { currentCase, updateCurrentCase } = useContext(CaseContext);
+  const { currentForm, getForm } = useContext(FormContext);
+
+  const form = getForm(caseData.formId);
+
+  console.log('case', caseData);
+  console.log('form', form);
+
+  const { updateCase } = useContext(CaseDispatch);
 
   function handleCloseForm() {
     navigation.navigate('App', { screen: 'Home' });
   }
+
+  const updateCaseContext = (data, status, currentStep) => {
+    updateCase(caseData.id, data, status, currentStep);
+  };
 
   /*
    * Function for handling behavior when a form starts
@@ -41,14 +58,16 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
     <FormScreenWrapper>
       <StatusBar hidden />
       <Form
-        steps={currentForm.steps}
-        startAt={currentCase.currentStep || 1}
+        steps={form.steps}
+        // startAt={currentCase.currentStep || 1}
+        startAt={caseData.currentStep || 1}
         firstName={user.firstName}
         onClose={handleCloseForm}
         onStart={handleStartForm}
         onSubmit={handleSubmitForm}
-        initialAnswers={currentCase.data}
-        updateCaseInContext={updateCurrentCase}
+        // initialAnswers={currentCase.data}
+        initialAnswers={caseData.data}
+        updateCaseInContext={updateCaseContext}
         {...props}
       />
     </FormScreenWrapper>

@@ -91,13 +91,12 @@ const HomeScreen = ({ navigation }) => {
         <View style={{ padding: 20, marginTop: 40, height: '73%' }}>
           <FormList
             heading="Ansökningsformulär"
-            onClickCallback={async id => {
-              createCase(
-                {},
-                id,
-                async () => {
-                  await setCurrentForm(id);
-                  navigation.navigate('Form');
+            onClickCallback={async formId => {
+              crCase(
+                formId,
+                async newCase => {
+                  // await setCurrentForm(id);
+                  navigation.navigate('Form', { caseData: newCase });
                 },
                 true
               );
