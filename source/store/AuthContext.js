@@ -5,7 +5,7 @@ import * as authService from '../services/AuthService';
 import AuthReducer, { initialState as defaultInitialState } from './reducers/AuthReducer';
 import {
   startAuth,
-  cancelAuth,
+  cancelOrder,
   loginFailure,
   loginSuccess,
   checkOrderStatus,
@@ -13,7 +13,8 @@ import {
   addProfile,
   mockedAuth,
   startSign,
-  setPending,
+  setStatus,
+  checkIsBankidInstalled,
 } from './actions/AuthActions';
 
 const AuthContext = React.createContext();
@@ -37,6 +38,17 @@ function AuthProvider({ children, initialState }) {
   }, [state.status, state.orderRef, state.autoStartToken]);
 
   /**
+   * Check if Bankid App is installed on clients machine
+   */
+  useEffect(() => {
+    const handleCheckIsBankidInstalled = async () => {
+      dispatch(await checkIsBankidInstalled());
+    };
+
+    handleCheckIsBankidInstalled();
+  }, []);
+
+  /**
    * This function starts up the authorization process.
    * @param {string} ssn Swedish Social Security Number (SSN)
    */
@@ -44,7 +56,7 @@ function AuthProvider({ children, initialState }) {
     if (env.USE_BANKID === 'false') {
       dispatch(await mockedAuth());
     } else {
-      dispatch(await setPending());
+      dispatch(setStatus('pending'));
       dispatch(await startAuth(ssn));
     }
   }
@@ -55,15 +67,20 @@ function AuthProvider({ children, initialState }) {
    * @param {string} userVisibleData Message to be shown when signing order
    */
   async function handleSign(personalNumber, userVisibleData) {
-    dispatch(await setPending());
+    if (env.USE_BANKID === 'false') {
+      dispatch(setStatus('signResolved'));
+      return;
+    }
+
+    dispatch(setStatus('pending'));
     dispatch(await startSign(personalNumber, userVisibleData));
   }
 
   /**
    * This function cancels the authorization process.
    */
-  async function handleCancelAuth() {
-    dispatch(await cancelAuth(state.orderRef));
+  async function handleCancelOrder() {
+    dispatch(await cancelOrder(state.orderRef));
   }
 
   /**
@@ -96,6 +113,13 @@ function AuthProvider({ children, initialState }) {
   }
 
   /**
+   * Used to remove user profile data from the state.
+   */
+  function handleSetStatus(status) {
+    dispatch(setStatus(status));
+  }
+
+  /**
    * This function checks if the current accessToken is valid.
    */
   async function isUserAuthenticated() {
@@ -120,7 +144,8 @@ function AuthProvider({ children, initialState }) {
     handleAddProfile,
     handleRemoveProfile,
     handleAuth,
-    handleCancelAuth,
+    handleCancelOrder,
+    handleSetStatus,
     isUserAuthenticated,
     handleSign,
     isLoading: state.status === 'pending',

@@ -5,6 +5,7 @@ export const initialState = {
   user: {},
   error: null,
   status: 'idle',
+  isBankidInstalled: false,
 };
 
 export default function AuthReducer(state, action) {
@@ -61,12 +62,10 @@ export default function AuthReducer(state, action) {
         autoStartToken: undefined,
       };
 
-    case actionTypes.authCanceled:
+    case actionTypes.cancelOrder:
       return {
         ...state,
         ...payload,
-        isAuthenticated: false,
-        user: null,
         status: 'rejected',
         orderRef: undefined,
         autoStartToken: undefined,
@@ -95,10 +94,16 @@ export default function AuthReducer(state, action) {
         autoStartToken: undefined,
       };
 
-    case actionTypes.setPending:
+    case actionTypes.setStatus:
       return {
         ...state,
-        status: 'pending',
+        status: action.status,
+      };
+
+    case actionTypes.setIsBankidInstalled:
+      return {
+        ...state,
+        isBankidInstalled: action.isBankidInstalled,
       };
 
     default:

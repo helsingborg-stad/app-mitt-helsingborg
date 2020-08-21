@@ -133,7 +133,7 @@ export function CaseProvider({ children }) {
 }
 
 CaseProvider.propTypes = {
-  children: PropTypes.any,
+  children: PropTypes.object,
 };
 
 export default CaseContext;

@@ -4,13 +4,12 @@ import { Alert, Keyboard, Linking } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { AuthLoading, ScreenWrapper } from 'app/components/molecules';
-import { ValidationHelper, UrlHelper } from 'app/helpers';
+import { ValidationHelper } from 'app/helpers';
 import { Button, Text, Heading, Input } from 'app/components/atoms';
 import { SLIDES } from 'app/assets/images';
 import AuthContext from '../store/AuthContext';
 
 const { sanitizePin, validatePin } = ValidationHelper;
-const { canOpenUrl } = UrlHelper;
 
 const Logo = styled.Image`
   height: 200px;
@@ -57,11 +56,18 @@ const LoginFormHeader = styled.View`
 `;
 
 function LoginScreen(props) {
-  const authContext = useContext(AuthContext);
+  const {
+    isAuthenticated,
+    handleAuth,
+    isLoading,
+    handleCancelOrder,
+    isBankidInstalled,
+    isRejected,
+    error,
+  } = useContext(AuthContext);
 
   const [hideLogo, setHideLogo] = useState(false);
   const [personalNumber, setPersonalNumber] = useState('');
-  const [bankidInstalled, setBankidInstalled] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -103,12 +109,12 @@ function LoginScreen(props) {
   useFocusEffect(
     useCallback(() => {
       const handleNavigateToScreen = async () => {
-        if (authContext.isAuthenticated) {
+        if (isAuthenticated) {
           navigateToScreen('Start');
         }
       };
       handleNavigateToScreen();
-    }, [authContext, navigateToScreen])
+    }, [isAuthenticated, navigateToScreen])
   );
 
   /**
@@ -131,15 +137,15 @@ function LoginScreen(props) {
       return;
     }
 
-    await authContext.handleAuth(personalNumber);
+    await handleAuth(personalNumber);
   };
 
-  if (authContext.isLoading) {
+  if (isLoading) {
     return (
       <LoginScreenWrapper>
         <AuthLoading
-          cancelSignIn={() => authContext.handleCancelAuth()}
-          isBankidInstalled={bankidInstalled}
+          cancelSignIn={() => handleCancelOrder()}
+          isBankidInstalled={isBankidInstalled}
         />
       </LoginScreenWrapper>
     );
@@ -158,10 +164,8 @@ function LoginScreen(props) {
             </LoginFormHeader>
 
             {/* TODO: Fix better error messages */}
-            {authContext.isRejected && (
-              <Text style={{ color: 'red', paddingBottom: 12 }}>
-                {authContext.error && authContext.error.message}
-              </Text>
+            {isRejected && (
+              <Text style={{ color: 'red', paddingBottom: 12 }}>{error && error.message}</Text>
             )}
 
             <LoginFormField>
