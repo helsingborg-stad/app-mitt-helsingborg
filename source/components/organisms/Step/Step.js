@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import AuthContext from 'app/store/AuthContext';
@@ -68,10 +68,20 @@ function Step({
     isLoading,
     isRejected,
     isResolved,
+    isIdle,
     error,
     handleCancelOrder,
     isBankidInstalled,
+    handleSetStatus,
   } = useContext(AuthContext);
+
+  /**
+   * Set auth context status to idle when navigating
+   */
+  useEffect(() => {
+    handleSetStatus('idle');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stepNumber]);
 
   const closeForm = () => {
     if (onFieldChange) onFieldChange(answers);
@@ -89,7 +99,7 @@ function Step({
       >
         <StepBanner {...banner} />
         <StepBody>
-          {isResolved && (
+          {(isResolved || isIdle) && (
             <>
               <StepDescription theme={theme} {...description} />
               {questions && (

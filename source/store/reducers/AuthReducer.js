@@ -94,16 +94,16 @@ export default function AuthReducer(state, action) {
         autoStartToken: undefined,
       };
 
-    case actionTypes.setPending:
+    case actionTypes.setStatus:
       return {
         ...state,
-        status: 'pending',
+        status: action.status,
       };
 
     case actionTypes.setIsBankidInstalled:
       return {
         ...state,
-        isBankidInstalled: payload.isBankidInstalled,
+        isBankidInstalled: action.isBankidInstalled,
       };
 
     default:

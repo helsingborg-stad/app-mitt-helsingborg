@@ -67,10 +67,10 @@ test(`dispatch:${actionTypes.authStarted}`, async () => {
   expect(state).toEqual({ isAuthenticated: false });
 });
 
-test(`dispatch:${actionTypes.setPending}`, async () => {
-  const state = AuthReducer(initialState, { type: actionTypes.setPending });
+test(`dispatch:${actionTypes.setStatus}`, async () => {
+  const state = AuthReducer(initialState, { type: actionTypes.setStatus, status: 'idle' });
 
-  expect(state).toEqual({ status: 'pending' });
+  expect(state).toEqual({ status: 'idle' });
 });
 
 test(`dispatch:${actionTypes.authError}`, async () => {
@@ -104,10 +104,10 @@ test(`dispatch:${actionTypes.cancelOrder}`, async () => {
 });
 
 test(`dispatch:${actionTypes.setIsBankidInstalled}`, async () => {
-  const payload = {
+  const state = AuthReducer(initialState, {
+    type: actionTypes.setIsBankidInstalled,
     isBankidInstalled: true,
-  };
-  const state = AuthReducer(initialState, { type: actionTypes.setIsBankidInstalled, payload });
+  });
 
   expect(state).toEqual({ isBankidInstalled: true });
 });
