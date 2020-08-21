@@ -1,9 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import AuthContext from 'app/store/AuthContext';
-import { ActivityIndicator, Text } from 'react-native';
-import { BackNavigation, Banner, FooterAction, StepDescription, FormField } from '../../molecules';
+import { Text } from 'react-native';
+import {
+  AuthLoading,
+  BackNavigation,
+  Banner,
+  FooterAction,
+  StepDescription,
+  FormField,
+} from 'app/components/molecules';
 
 const StepContainer = styled.View`
   background: ${props => props.bg};
@@ -29,16 +36,14 @@ const StepBody = styled.View``;
 const StepFieldListWrapper = styled.View`
   margin: 24px;
 `;
-// margin: auto;
 
 const StepFooter = styled(FooterAction)`
   position: absolute;
   bottom: 0;
 `;
 
-const Spinner = styled.ActivityIndicator`
-  margin-bottom: 150px;
-  margin-top: 150px;
+const SignStepWrapper = styled.View`
+  padding: 48px 24px 24px 24px;
 `;
 
 function Step({
@@ -59,7 +64,24 @@ function Step({
   updateCaseInContext,
   stepNumber,
 }) {
-  const { isLoading, isRejected, isResolved, error } = useContext(AuthContext);
+  const {
+    isLoading,
+    isRejected,
+    isResolved,
+    isIdle,
+    error,
+    handleCancelOrder,
+    isBankidInstalled,
+    handleSetStatus,
+  } = useContext(AuthContext);
+
+  /**
+   * Set auth context status to idle when navigating
+   */
+  useEffect(() => {
+    handleSetStatus('idle');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stepNumber]);
 
   const closeForm = () => {
     if (onFieldChange) onFieldChange(answers);
@@ -77,7 +99,7 @@ function Step({
       >
         <StepBanner {...banner} />
         <StepBody>
-          {isResolved && (
+          {(isResolved || isIdle) && (
             <>
               <StepDescription theme={theme} {...description} />
               {questions && (
@@ -98,11 +120,20 @@ function Step({
             </>
           )}
 
-          {isLoading && <Spinner size="large" color="slategray" />}
+          {isLoading && (
+            <SignStepWrapper>
+              <AuthLoading
+                cancelSignIn={() => handleCancelOrder()}
+                isBankidInstalled={isBankidInstalled}
+              />
+            </SignStepWrapper>
+          )}
 
           {/* TODO: Fix how to display error messages */}
           {isRejected && (
-            <Text style={{ marginTop: 150, marginBottom: 150 }}> Error: {error.message}</Text>
+            <SignStepWrapper>
+              <Text>{error && error.message}</Text>
+            </SignStepWrapper>
           )}
         </StepBody>
         {actions && actions.length > 0 ? (

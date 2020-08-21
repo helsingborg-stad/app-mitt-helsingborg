@@ -2,13 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from '../StoryWrapper';
 import FieldInputList from './EditableList';
-import { Button, Text } from '../../atoms';
 
-const HeaderButton = () => (
-  <Button z={0} size="small">
-    <Text>Change</Text>
-  </Button>
-);
 const customEditableListTheme = {
   list: {
     bg: 'lightgrey',

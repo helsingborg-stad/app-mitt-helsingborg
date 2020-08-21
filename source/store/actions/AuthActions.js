@@ -2,7 +2,9 @@ import env from 'react-native-config';
 import bankid from 'app/services/BankidService';
 import * as authService from 'app/services/AuthService';
 import StorageService, { TOKEN_KEY } from 'app/services/StorageService';
-import { getMockUser } from 'app/services/UserService';
+import { UrlHelper } from 'app/helpers';
+
+const { canOpenUrl } = UrlHelper;
 
 export const actionTypes = {
   loginSuccess: 'LOGIN_SUCCESS',
@@ -12,10 +14,11 @@ export const actionTypes = {
   authStarted: 'AUTH_STARTED',
   authError: 'AUTH_ERROR',
   signFailure: 'SIGN_FAILURE',
-  authCanceled: 'AUTH_CANCELED',
+  cancelOrder: 'CANCEL_ORDER',
   signStarted: 'SIGN_STARTED',
-  setPending: 'SET_PENDING',
+  setStatus: 'SET_STATUS',
   signSuccess: 'SIGN_SUCCESS',
+  setIsBankidInstalled: 'SET_INSTALLED',
 };
 
 export async function mockedAuth() {
@@ -40,9 +43,10 @@ export function loginSuccess() {
   };
 }
 
-export function setPending() {
+export function setStatus(status) {
   return {
-    type: actionTypes.setPending,
+    type: actionTypes.setStatus,
+    status,
   };
 }
 
@@ -105,6 +109,10 @@ export async function startAuth(ssn) {
   }
 }
 
+export async function cancelAuth() {
+  console.log('cancelAuth action is not implemented yet...');
+}
+
 export async function startSign(personalNumber, userVisibleData) {
   try {
     const response = await bankid.sign(personalNumber, userVisibleData);
@@ -163,4 +171,30 @@ export async function checkOrderStatus(autoStartToken, orderRef, isUserAuthentic
       },
     };
   }
+}
+
+export async function cancelOrder(orderRef) {
+  try {
+    const response = await bankid.cancel(orderRef);
+
+    if (response.success === false) {
+      throw new Error(response.data);
+    }
+
+    return {
+      type: actionTypes.cancelOrder,
+    };
+  } catch (error) {
+    return {
+      type: actionTypes.cancelOrder,
+    };
+  }
+}
+
+export async function checkIsBankidInstalled() {
+  const isInstalled = await canOpenUrl('bankid:///');
+  return {
+    type: actionTypes.setIsBankidInstalled,
+    isBankidInstalled: isInstalled,
+  };
 }

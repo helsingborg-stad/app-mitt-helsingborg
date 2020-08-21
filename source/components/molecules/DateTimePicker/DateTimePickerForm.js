@@ -5,7 +5,7 @@ import { View, TouchableOpacity } from 'react-native';
 import Input from '../../atoms/Input';
 
 const DateTimePickerForm = props => {
-  const { onSelect, value, mode, selectorProps, ...other } = props;
+  const { onSelect, value, mode, selectorProps, color, ...other } = props;
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -44,6 +44,7 @@ const DateTimePickerForm = props => {
           value={dateTimeString}
           pointerEvents="none"
           center
+          color={color}
           {...other}
         />
       </TouchableOpacity>
@@ -52,6 +53,7 @@ const DateTimePickerForm = props => {
           value={date}
           onChange={(_event, x) => onSelect(x)}
           mode={mode}
+          textColor={color === 'light' ? 'white' : 'dark'}
           {...selectorProps}
         />
       )}

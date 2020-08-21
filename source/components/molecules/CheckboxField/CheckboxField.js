@@ -43,7 +43,7 @@ const CheckboxField = props => {
   } else {
     boolValue = value === 'true';
   }
-  const update = event => onChange(!boolValue);
+  const update = () => onChange(!boolValue);
 
   const backgroundStyle = {
     marginLeft: -24,

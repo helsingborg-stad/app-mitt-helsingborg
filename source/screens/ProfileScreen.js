@@ -63,16 +63,16 @@ function ProfileScreen(props) {
           <ProfileInfoContainer>
             <ProfileInfoHeading type="h3">Personuppgifter</ProfileInfoHeading>
             <Label small>NAMN</Label>
-            {renderField(`${user.firstName || ''} ${user.lastName || ''}`)}
+            {renderField(`${user?.firstName || ''} ${user?.lastName || ''}`)}
             <Label small>PERSONNUMMER</Label>
-            {renderField(user.personalNumber)}
+            {renderField(user?.personalNumber)}
           </ProfileInfoContainer>
           <ProfileInfoContainer>
             <ProfileInfoHeading type="h3">Kontaktuppgifter</ProfileInfoHeading>
             <Label small>TELEFONNUMMER</Label>
-            {renderField(user.mobilePhone)}
+            {renderField(user?.mobilePhone)}
             <Label small>E-POSTADRESS</Label>
-            {renderField(user.email)}
+            {renderField(user?.email)}
             <Label small>ADRESS</Label>
             {/*     {renderField(user.address.street)}
             {renderField(user.address.postalCode)} */}

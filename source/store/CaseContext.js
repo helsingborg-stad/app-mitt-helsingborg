@@ -45,7 +45,7 @@ export function CaseProvider({ children }) {
         })
         .then(response => callback(response));
     },
-    [user.personalNumber]
+    [user]
   );
 
   useEffect(() => {
@@ -131,5 +131,9 @@ export function CaseProvider({ children }) {
     </CaseContext.Provider>
   );
 }
+
+CaseProvider.propTypes = {
+  children: PropTypes.object,
+};
 
 export default CaseContext;

@@ -67,10 +67,10 @@ test(`dispatch:${actionTypes.authStarted}`, async () => {
   expect(state).toEqual({ isAuthenticated: false });
 });
 
-test(`dispatch:${actionTypes.setPending}`, async () => {
-  const state = AuthReducer(initialState, { type: actionTypes.setPending });
+test(`dispatch:${actionTypes.setStatus}`, async () => {
+  const state = AuthReducer(initialState, { type: actionTypes.setStatus, status: 'idle' });
 
-  expect(state).toEqual({ status: 'pending' });
+  expect(state).toEqual({ status: 'idle' });
 });
 
 test(`dispatch:${actionTypes.authError}`, async () => {
@@ -91,16 +91,23 @@ test(`dispatch:${actionTypes.authError}`, async () => {
   });
 });
 
-test(`dispatch:${actionTypes.authCanceled}`, async () => {
+test(`dispatch:${actionTypes.cancelOrder}`, async () => {
   const state = AuthReducer(initialState, {
-    type: actionTypes.authCanceled,
+    type: actionTypes.cancelOrder,
   });
 
   expect(state).toEqual({
     status: 'rejected',
-    isAuthenticated: false,
-    user: null,
     orderRef: undefined,
     autoStartToken: undefined,
   });
+});
+
+test(`dispatch:${actionTypes.setIsBankidInstalled}`, async () => {
+  const state = AuthReducer(initialState, {
+    type: actionTypes.setIsBankidInstalled,
+    isBankidInstalled: true,
+  });
+
+  expect(state).toEqual({ isBankidInstalled: true });
 });
