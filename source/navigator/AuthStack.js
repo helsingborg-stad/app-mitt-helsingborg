@@ -1,20 +1,15 @@
-import { createStackNavigator } from 'react-navigation-stack';
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import LoginScreen from '../screens/LoginScreen';
 
-const stack = {
-  Onboarding: {
-    screen: OnboardingScreen,
-    navigationOptions: {
-      header: () => {},
-    },
-  },
-  Login: {
-    screen: LoginScreen,
-    navigationOptions: {
-      header: () => {},
-    },
-  },
-};
+const Stack = createStackNavigator();
 
-export default createStackNavigator(stack);
+const AuthStack = () => (
+  <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+    <Stack.Screen name="Login" component={LoginScreen} />
+  </Stack.Navigator>
+);
+
+export default AuthStack;

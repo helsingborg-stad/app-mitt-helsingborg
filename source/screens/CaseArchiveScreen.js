@@ -31,7 +31,6 @@ const ListHeading = styled(Heading)`
 `;
 
 const CaseArchiveScreen = ({ navigation }) => {
-  const { user } = useContext(AuthContext);
   const { setCurrentForm } = useContext(FormContext);
   const { cases, getCase, setCurrentCase } = useContext(CaseContext);
 
@@ -41,7 +40,7 @@ const CaseArchiveScreen = ({ navigation }) => {
     <CaseArchiveWrapper>
       <Header
         title="Mitt Helsingborg"
-        message={user && user.givenName ? `Hej ${user.givenName}!` : 'Hej!'}
+        // message={user && user.givenName ? `Hej ${user.givenName}!` : 'Hej!'}
         themeColor="purple"
         navItems={NavItems}
       />

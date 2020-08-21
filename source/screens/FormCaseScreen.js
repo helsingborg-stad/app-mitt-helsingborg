@@ -15,11 +15,11 @@ const FormScreenWrapper = styled(ScreenWrapper)`
 
 const FormCaseScreen = ({ navigation, ...props }) => {
   const { user } = useContext(AuthContext);
-  const { currentCase, createCase, updateCurrentCase } = useContext(CaseContext);
+  const { currentCase, updateCurrentCase } = useContext(CaseContext);
   const { currentForm } = useContext(FormContext);
 
   function handleCloseForm() {
-    navigation.navigate('Start');
+    navigation.navigate('App', { screen: 'Home' });
   }
 
   /*
@@ -31,8 +31,8 @@ const FormCaseScreen = ({ navigation, ...props }) => {
   }
 
   // TODO: Update case on form submit.
-  function handleSubmitForm(data) {
-    navigation.navigate('Start');
+  function handleSubmitForm() {
+    navigation.navigate('App', { screen: 'Home' });
   }
 
   return (

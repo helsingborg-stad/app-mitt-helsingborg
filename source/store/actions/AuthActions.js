@@ -109,6 +109,10 @@ export async function startAuth(ssn) {
   }
 }
 
+export async function cancelAuth() {
+  console.log('cancelAuth action is not implemented yet...');
+}
+
 export async function startSign(personalNumber, userVisibleData) {
   try {
     const response = await bankid.sign(personalNumber, userVisibleData);

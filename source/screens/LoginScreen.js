@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { Alert, Keyboard, Linking } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { AuthLoading, ScreenWrapper } from 'app/components/molecules';
 import { ValidationHelper } from 'app/helpers';
@@ -68,19 +69,31 @@ function LoginScreen(props) {
   const [hideLogo, setHideLogo] = useState(false);
   const [personalNumber, setPersonalNumber] = useState('');
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () =>
-      setHideLogo(true)
-    );
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () =>
-      setHideLogo(false)
-    );
+  useFocusEffect(
+    useCallback(() => {
+      const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () =>
+        setHideLogo(true)
+      );
+      const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () =>
+        setHideLogo(false)
+      );
 
-    return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-    };
-  }, []);
+      async function isBankidInstalled() {
+        const isInstalled = await canOpenUrl('bankid:///');
+
+        if (isInstalled) {
+          setBankidInstalled(true);
+        }
+      }
+
+      isBankidInstalled();
+
+      return () => {
+        keyboardDidHideListener.remove();
+        keyboardDidShowListener.remove();
+      };
+    }, [])
+  );
 
   /**
    * Function for navigating to a screen in the application.
@@ -93,14 +106,16 @@ function LoginScreen(props) {
   /**
    * Effect for navigating to a set screen when authentication is completed/resolved
    */
-  useEffect(() => {
-    const handleNavigateToScreen = async () => {
-      if (isAuthenticated) {
-        navigateToScreen('Start');
-      }
-    };
-    handleNavigateToScreen();
-  }, [isAuthenticated, navigateToScreen]);
+  useFocusEffect(
+    useCallback(() => {
+      const handleNavigateToScreen = async () => {
+        if (isAuthenticated) {
+          navigateToScreen('Start');
+        }
+      };
+      handleNavigateToScreen();
+    }, [isAuthenticated, navigateToScreen])
+  );
 
   /**
    * Handles the personal number input field changes and updates state.
