@@ -78,16 +78,6 @@ function LoginScreen(props) {
         setHideLogo(false)
       );
 
-      async function isBankidInstalled() {
-        const isInstalled = await canOpenUrl('bankid:///');
-
-        if (isInstalled) {
-          setBankidInstalled(true);
-        }
-      }
-
-      isBankidInstalled();
-
       return () => {
         keyboardDidHideListener.remove();
         keyboardDidShowListener.remove();
