@@ -31,7 +31,7 @@ const FormCaseScreen = ({ navigation, ...props }) => {
   }
 
   // TODO: Update case on form submit.
-  function handleSubmitForm(data) {
+  function handleSubmitForm() {
     navigation.navigate('App', { screen: 'Home' });
   }
 
