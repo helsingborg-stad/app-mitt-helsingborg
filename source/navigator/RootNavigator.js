@@ -6,11 +6,22 @@ import BottomBarNavigator from './BottomBarNavigator';
 
 const Stack = createStackNavigator();
 
+// transition animation that just fades in the screen
+const forFade = ({ current }) => ({
+  cardStyle: {
+    opacity: current.progress,
+  },
+});
+
 const RootStack = () => (
   <Stack.Navigator initialRouteName="Start" screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Start" component={SplashScreen} />
-    <Stack.Screen name="Auth" component={AuthStack} />
-    <Stack.Screen name="App" component={BottomBarNavigator} />
+    <Stack.Screen name="Auth" component={AuthStack} options={{ cardStyleInterpolator: forFade }} />
+    <Stack.Screen
+      name="App"
+      component={BottomBarNavigator}
+      options={{ cardStyleInterpolator: forFade }}
+    />
     <Stack.Screen name="Form" component={FormCaseScreen} />
   </Stack.Navigator>
 );
