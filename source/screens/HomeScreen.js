@@ -34,7 +34,7 @@ const ChatScreenWrapper = styled(ScreenWrapper)`
 
 const HomeScreen = ({ navigation }) => {
   const [isInputVisible, setInputVisible] = useState(false);
-  const [showChat, setShowChat] = useState(false);
+  const [showChat] = useState(false);
 
   const { createCase, currentCase } = useContext(CaseContext);
   const { setCurrentForm, currentForm } = useContext(FormContext);
@@ -47,16 +47,6 @@ const HomeScreen = ({ navigation }) => {
       setCurrentForm(currentCase.formId);
     }
   }, [currentCase, setCurrentForm]);
-
-  const navigationOptions = ({ navigation }) => ({
-    tabBarVisible: navigation.state.params.tabBarVisible,
-  });
-
-  const toggleTabs = () => {
-    navigation.setParams({
-      tabBarVisible: navigation.getParam('tabBarVisible') !== true,
-    });
-  };
 
   const toggleInput = () => {
     setInputVisible(true);
@@ -77,7 +67,6 @@ const HomeScreen = ({ navigation }) => {
               autoFocus: false,
               display: 'none',
             }}
-            // onUserLogin={this.toggleTabs} />)}
             ChatUserInput={false}
             keyboardVerticalOffset={0}
             isInputVisible={isInputVisible}
