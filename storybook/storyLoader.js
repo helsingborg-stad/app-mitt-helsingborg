@@ -52,6 +52,7 @@ const stories = [
   '../source/components/molecules/BackNavigation/BackNavigation.stories',
   '../source/components/molecules/Banner/Banner.stories',
   '../source/components/molecules/ButtonField/ButtonField.stories',
+  '../source/components/molecules/ButtonListField/ButtonListField.stories',
   '../source/components/molecules/CheckboxField/CheckboxField.stories',
   '../source/components/molecules/ConditinalTextField/ConditionalTextField.stories',
   '../source/components/molecules/DateTimePicker/DateTimePickerForm.stories',
