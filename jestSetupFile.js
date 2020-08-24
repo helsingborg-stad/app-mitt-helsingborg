@@ -1,3 +1,5 @@
+import { NativeModules } from 'react-native';
+
 /**
  * Async Storage
  */
@@ -16,3 +18,12 @@ jest.mock('react-native-reanimated', () => {
     return Reanimated;
 });
 
+/**
+ * Mock react-native-image-picker
+ */
+NativeModules.ImagePickerManager = {
+    showImagePicker: jest.fn(),
+    launchCamera: jest.fn(),
+    launchImageLibrary: jest.fn(),
+};
+  
