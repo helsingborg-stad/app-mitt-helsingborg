@@ -35,7 +35,7 @@ function ButtonListField({ id, onChange, options, label }) {
     <ButtonListFieldWrapper>
       {label && <ButtonListFieldLabel>{label.toUpperCase()}</ButtonListFieldLabel>}
       {options.map(o => (
-        <ButtonListFieldButton onClick={e => handleClick(o.value)}>
+        <ButtonListFieldButton onClick={() => handleClick(o.value)}>
           {o.icon && <ButtonListFieldIcon name={o.icon} />}
           <Text>{o.text}</Text>
         </ButtonListFieldButton>
