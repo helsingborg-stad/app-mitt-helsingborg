@@ -65,7 +65,6 @@ const SubstepList = ({
   summary,
   color,
   placeholder,
-  ...other
 }) => {
   const [editable, setEditable] = useState(!summary);
 
@@ -222,7 +221,6 @@ SubstepList.propTypes = {
    * Message to display before anything has been added to the list.
    */
   placeholder: PropTypes.string,
-  other: PropTypes.any,
 };
 
 SubstepList.defaultProps = {
