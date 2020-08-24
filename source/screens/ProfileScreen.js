@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import { View } from 'react-native';
 import { Button, Text, Heading } from 'app/components/atoms';
 import { ScreenWrapper, Header } from 'app/components/molecules';

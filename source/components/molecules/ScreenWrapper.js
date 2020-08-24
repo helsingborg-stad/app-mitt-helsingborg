@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components/native';
 import styled from 'styled-components/native';
 import { Platform } from 'react-native';
 import theme from '../../styles/theme';

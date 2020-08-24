@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Image } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import Button from '../../atoms/Button/Button';
 import Icon from '../../atoms/Icon';
