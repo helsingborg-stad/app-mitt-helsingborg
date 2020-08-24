@@ -155,6 +155,7 @@ export async function checkOrderStatus(autoStartToken, orderRef, isUserAuthentic
     // Tries to grant a token from the authorization endpoint in the api.
     const { personal_number: ssn } = response.data.attributes.completion_data.user;
 
+    // eslint-disable-next-line no-unused-vars
     const [__, grantTokenError] = await authService.grantAccessToken(ssn);
     if (grantTokenError) {
       throw new Error(grantTokenError);
