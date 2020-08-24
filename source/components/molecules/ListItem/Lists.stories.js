@@ -4,28 +4,6 @@ import GroupListWithAvatar from 'app/components/molecules/GroupedListWithAvatar'
 import StoryWrapper from '../StoryWrapper';
 import ListItem from './index';
 
-const COAPPLICATION = require('source/images/illu_sammanstallning.png');
-
-const heading = 'FAMILJ / PERSONER JAG DELAR BOENDE MED';
-const GroupedAvatarListData = [
-  {
-    data: [
-      {
-        id: 'bd7a8bea',
-        title: 'Malin Larsson',
-        text: 'Sambo',
-        imageSrc: COAPPLICATION,
-      },
-      {
-        id: 'bd7a8bea',
-        title: 'Lotten Larsson',
-        text: 'Barn',
-        imageSrc: COAPPLICATION,
-      },
-    ],
-  },
-];
-
 const HighlightedData = [
   {
     id: 'bd7a2be9',
@@ -95,4 +73,4 @@ storiesOf('Lists', module)
       ))}
     </StoryWrapper>
   ))
-  .add('Grouped list with avatars', props => <AvatarListStory />);
+  .add('Grouped list with avatars', () => <AvatarListStory />);
