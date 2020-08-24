@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { NavItems } from 'app/assets/dashboard';
 import { Heading, Text } from 'app/components/atoms';
 import { GroupedList, Header, ListItem, ScreenWrapper } from 'app/components/molecules';
-import AuthContext from 'app/store/AuthContext';
 import FormContext from 'app/store/FormContext';
 import CaseContext from 'app/store/CaseContext';
 import PropTypes from 'prop-types';
