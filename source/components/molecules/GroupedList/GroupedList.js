@@ -51,7 +51,7 @@ const ListBody = styled.View`
 /**
  * A grouped list, grouping items according to categories.
  */
-const GroupedList = ({ heading, items, categories, onEdit, color, ...other }) => {
+const GroupedList = ({ heading, items, categories, onEdit, color }) => {
   const groupedItems = {};
 
   categories.forEach(cat => {
@@ -83,7 +83,7 @@ const GroupedList = ({ heading, items, categories, onEdit, color, ...other }) =>
       </ListHeader>
       <ListBody>
         {Object.keys(groupedItems)
-          .sort((a, b) => (a === 'sum' ? 1 : -1))
+          .sort((a, _b) => (a === 'sum' ? 1 : -1))
           .map(key => (
             <View>
               <FieldLabel style={{ marginTop: 40 }} underline="true">
@@ -119,7 +119,6 @@ GroupedList.propTypes = {
    * Only display edit button if this prop is sent.
    */
   onEdit: PropTypes.func,
-  other: PropTypes.any,
 };
 
 GroupedList.defaultProps = {
