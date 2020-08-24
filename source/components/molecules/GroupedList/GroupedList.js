@@ -109,7 +109,7 @@ GroupedList.propTypes = {
   /**
    * The allowed categories for the groupings
    */
-  categories: PropTypes.object,
+  categories: PropTypes.array,
   /**
    *  Controls the color scheme of the list
    */
