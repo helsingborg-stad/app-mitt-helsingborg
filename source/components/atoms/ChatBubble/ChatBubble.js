@@ -118,7 +118,7 @@ ChatBubble.propTypes = {
   iconRight: PropTypes.string,
   style: PropTypes.shape({}),
   theme: PropTypes.object,
-  z: PropTypes.oneOf(Number(Object.keys(shadow))),
+  z: PropTypes.oneOf(Object.keys(shadow)),
 };
 
 ChatBubble.defaultProps = {
