@@ -106,6 +106,7 @@ function Step({
                 <StepFieldListWrapper>
                   {questions.map(field => (
                     <FormField
+                      key={`${field.id}`}
                       onChange={onFieldChange}
                       inputType={field.type}
                       value={answers[field.id] || ''}

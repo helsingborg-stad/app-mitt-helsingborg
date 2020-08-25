@@ -89,8 +89,8 @@ const FooterAction = ({
     return false;
   };
 
-  const buttons = actions.map(action => (
-    <Flex>
+  const buttons = actions.map((action, index) => (
+    <Flex key={`${index}-${action.label}`}>
       <Button
         onClick={actionMap(action.type)}
         color={action.color}
