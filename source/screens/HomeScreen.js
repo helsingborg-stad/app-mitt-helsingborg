@@ -4,27 +4,27 @@ import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components/native';
 import { WatsonAgent, Chat } from 'app/components/organisms';
 import { ScreenWrapper } from 'app/components/molecules';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { Text, Button } from 'app/components/atoms';
 import CaseContext from 'app/store/CaseContext';
 import FormContext from 'app/store/FormContext';
 import FormList from 'app/components/organisms/FormList/FormList';
 
-const styles = StyleSheet.create({
-  button: {
-    alignContent: 'center',
-    padding: 10,
-    margin: 15,
-    maxWidth: '90%',
-  },
-  buttonContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    width: '100%',
-    bottom: 0,
-  },
-});
+const ButtonContainer = styled.View`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  bottom: 0;
+`;
+
+const HomeScreenButton = styled(Button)`
+  align-content: center;
+  padding: 10px;
+  margin: 15px;
+  max-width: 90%;
+`;
+
 const ChatScreenWrapper = styled(ScreenWrapper)`
   padding-top: 0px;
   padding-left: 0;
@@ -90,17 +90,16 @@ const HomeScreen = ({ navigation }) => {
           />
         </View>
 
-        <View style={styles.buttonContainer}>
+        <ButtonContainer>
           {showChat ? (
-            <Button color="purpleLight" style={styles.button} onClick={() => toggleInput()} block>
+            <HomeScreenButton color="purpleLight" onClick={() => toggleInput()} block>
               <Text>Ställ en fråga</Text>
-            </Button>
+            </HomeScreenButton>
           ) : null}
-          <Button
+          <HomeScreenButton
             disabled={!currentForm.steps}
             color="purple"
             block
-            style={styles.button}
             onClick={() => {
               createCase(
                 {},
@@ -114,17 +113,16 @@ const HomeScreen = ({ navigation }) => {
             }}
           >
             <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
-          </Button>
-          <Button
+          </HomeScreenButton>
+          <HomeScreenButton
             disabled={!currentForm.steps}
             color="purple"
             block
-            style={styles.button}
             onClick={() => navigation.navigate('Form')}
           >
             <Text>Fortsätt senaste ansökan</Text>
-          </Button>
-        </View>
+          </HomeScreenButton>
+        </ButtonContainer>
       </ChatScreenWrapper>
     </>
   );
