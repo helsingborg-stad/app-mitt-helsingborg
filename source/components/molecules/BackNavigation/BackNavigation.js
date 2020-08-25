@@ -74,7 +74,7 @@ const BackNavigation = ({ style, onBack, onClose, isBackBtnVisible }) =>
   );
 
 BackNavigation.propTypes = {
-  style: PropTypes.object,
+  style: PropTypes.array,
   onBack: PropTypes.func,
   onClose: PropTypes.func,
   isBackBtnVisible: PropTypes.bool,
