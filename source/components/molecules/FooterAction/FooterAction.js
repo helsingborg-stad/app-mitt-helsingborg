@@ -112,7 +112,7 @@ const FooterAction = ({
 };
 
 FooterAction.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 
   /**
    * Properties for actions in the footer of the step.
