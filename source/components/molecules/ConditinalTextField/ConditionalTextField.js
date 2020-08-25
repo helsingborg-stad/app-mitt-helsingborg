@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import PropTypes from 'prop-types';
 
 import { Input } from 'app/components/atoms';
-import styled from 'styled-components/native/dist/styled-components.native.esm';
+import styled from 'styled-components/native';
 import { CheckboxField } from 'app/components/molecules';
 import colors from 'app/styles/colors';
 
