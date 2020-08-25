@@ -54,7 +54,7 @@ Stepper.propTypes = {
    */
   active: PropTypes.number,
 
-  style: PropTypes.object.isRequired,
+  style: PropTypes.array.isRequired,
 };
 
 Stepper.defaultProps = {
