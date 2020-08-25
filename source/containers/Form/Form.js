@@ -47,8 +47,6 @@ function Form({
     handleSubmit,
   } = useForm(initialState);
 
-  console.log('formState.steps', formState.steps);
-
   return (
     <FormContainer>
       <FormStepper active={formState.counter}>
