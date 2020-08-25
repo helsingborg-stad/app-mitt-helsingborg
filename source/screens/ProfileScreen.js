@@ -93,6 +93,7 @@ function ProfileScreen(props) {
           {env.APP_ENV === 'development' && (
             <SignOutButton
               block
+              color="light"
               onClick={async () => {
                 StorageService.default.clearData();
                 await authContext.handleLogout();
