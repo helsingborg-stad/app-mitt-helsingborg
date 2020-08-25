@@ -1,4 +1,3 @@
-export { default as Badge } from './Badge';
 export { default as Button } from './Button';
 export { default as ChatBody } from './ChatBody';
 export { default as ChatBubble } from './ChatBubble';
