@@ -52,7 +52,7 @@ Banner.propTypes = {
   imageSrc: PropTypes.string,
   iconSrc: PropTypes.string.isRequired,
   backgroundColor: PropTypes.string,
-  style: PropTypes.object.isRequired,
+  style: PropTypes.array.isRequired,
 };
 Banner.defaultProps = {
   imageSrc: undefined,
