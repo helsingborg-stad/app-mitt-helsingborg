@@ -210,11 +210,11 @@ Step.propTypes = {
   /**
    * Values for the description section of the step, including (tagline, heading and text)
    */
-  description: {
+  description: PropTypes.shape({
     tagline: PropTypes.string,
     heading: PropTypes.string,
     text: PropTypes.string,
-  },
+  }),
 
   /**
    * Properties for actions in the footer of the step.
