@@ -38,7 +38,9 @@ const inputTypes = {
   editableList: {
     component: EditableList,
     changeEvent: 'onInputChange',
-    props: {},
+    props: {
+      value: {},
+    },
   },
   substepButton: {
     component: SubstepButton,
@@ -63,7 +65,9 @@ const inputTypes = {
   avatarList: {
     component: GroupListWithAvatar,
     changeEvent: 'onChange',
-    props: {},
+    props: {
+      value: [],
+    },
   },
   conditionalTextField: {
     component: ConditionalTextField,
@@ -160,7 +164,7 @@ FormField.propTypes = {
   /**
    * All the form state answers. Needed because of conditional checks.
    */
-  answers: PropTypes.shape(any),
+  answers: PropTypes.object,
   /**
    * sets the color theme.
    */
