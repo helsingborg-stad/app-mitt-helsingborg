@@ -6,6 +6,22 @@ import Icon from '../Icon';
 import Text from '../Text';
 import Button from './Button';
 
+const CustomButton = styled(Button)`
+  background-color: #afca05;
+`;
+
+const CustomButtonText = styled(Text)`
+  color: #7b075e;
+`;
+
+const Flex = styled.View`
+  padding: 8px;
+`;
+
+const FlexContainer = styled.View`
+  flex: 1;
+`;
+
 storiesOf('Button', module)
   .add('Default', props => (
     <StoryWrapper {...props}>
@@ -138,19 +154,3 @@ const ButtonColors = injectProps => (
     </Flex>
   </FlexContainer>
 );
-
-const CustomButton = styled(Button)`
-  background-color: #afca05;
-`;
-
-const CustomButtonText = styled(Text)`
-  color: #7b075e;
-`;
-
-const Flex = styled.View`
-  padding: 8px;
-`;
-
-const FlexContainer = styled.View`
-  flex: 1;
-`;
