@@ -1,5 +1,4 @@
 export { default as AuthLoading } from './AuthLoading';
-export { default as BottomBarTabWithBadge } from './BottomBarTabWithBadge';
 export { default as ButtonStack } from './ButtonStack';
 export { default as ChatForm } from './ChatForm';
 export { default as ChatMessages } from './ChatMessages';
