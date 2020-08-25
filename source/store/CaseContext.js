@@ -36,7 +36,14 @@ export function CaseProvider({ children }) {
       get('/cases', undefined, user.personalNumber)
         .then(response => {
           if (response?.data?.data?.map) {
-            const newCases = response.data.data.map(c => ({ id: c.id, ...c.attributes }));
+            const newCases = response.data.data.reduce((filtered, caseObject) => {
+              if (caseObject?.id) {
+                const newCaseObject = { id: caseObject.id, ...caseObject.attributes };
+                filtered.push(newCaseObject);
+              }
+              return filtered;
+            }, []);
+
             setCases(newCases);
             setFetching(false);
             return newCases;

@@ -49,7 +49,7 @@ const CaseArchiveScreen = ({ navigation }) => {
           {cases.length > 0 ? (
             sortCasesByLastUpdated(cases).map(item => (
               <ListItem
-                key={item.id}
+                key={`${item.id}`}
                 highlighted
                 title={item.status}
                 text={`ID: ${item.id} Type: ${item.type}`}
