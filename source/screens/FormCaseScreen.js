@@ -1,14 +1,13 @@
-import React, { useContext } from 'react';
-import styled from 'styled-components/native';
+import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { ScreenWrapper } from 'app/components/molecules';
-import { StatusBar } from 'react-native';
+import { StatusBar, ActivityIndicator } from 'react-native';
 import Form from '../containers/Form/Form';
 import AuthContext from '../store/AuthContext';
-import CaseContext from '../store/CaseContext';
 import FormContext from '../store/FormContext';
 
-import { CaseDispatch } from '../store/CaseContext2';
+import { CaseDispatch, CaseState } from '../store/CaseContext2';
 
 const FormScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
@@ -16,22 +15,25 @@ const FormScreenWrapper = styled(ScreenWrapper)`
 `;
 
 const FormCaseScreen = ({ route, navigation, ...props }) => {
-  const { caseData } = route && route.params ? route.params : {};
+  const [form, setForm] = useState(undefined);
+  const [initialCase, setInitialCase] = useState(undefined);
 
-  // if (route) {
-  //   console.log(route);
-  // }
-
+  const { caseData, caseId } = route && route.params ? route.params : {};
   const { user } = useContext(AuthContext);
-  // const { currentCase, updateCurrentCase } = useContext(CaseContext);
-  const { currentForm, getForm } = useContext(FormContext);
-
-  const form = getForm(caseData.formId);
-
-  console.log('case', caseData);
-  console.log('form', form);
-
+  const { getForm } = useContext(FormContext);
+  const { getCase } = useContext(CaseState);
   const { updateCase } = useContext(CaseDispatch);
+
+  useEffect(() => {
+    if (caseData?.formId) {
+      getForm(caseData.formId).then(form => setForm(form));
+      setInitialCase(caseData);
+    } else if (caseId) {
+      const initCase = getCase(caseId);
+      setInitialCase(initCase);
+      getForm(initCase.formId).then(form => setForm(form));
+    }
+  }, [caseData, caseId, getForm, getCase]);
 
   function handleCloseForm() {
     navigation.navigate('App', { screen: 'Home' });
@@ -57,19 +59,23 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   return (
     <FormScreenWrapper>
       <StatusBar hidden />
-      <Form
-        steps={form.steps}
-        // startAt={currentCase.currentStep || 1}
-        startAt={caseData.currentStep || 1}
-        firstName={user.firstName}
-        onClose={handleCloseForm}
-        onStart={handleStartForm}
-        onSubmit={handleSubmitForm}
-        // initialAnswers={currentCase.data}
-        initialAnswers={caseData.data}
-        updateCaseInContext={updateCaseContext}
-        {...props}
-      />
+      {form?.steps ? (
+        <Form
+          steps={form.steps}
+          // startAt={currentCase.currentStep || 1}
+          startAt={caseData.currentStep || 1}
+          firstName={user.firstName}
+          onClose={handleCloseForm}
+          onStart={handleStartForm}
+          onSubmit={handleSubmitForm}
+          // initialAnswers={currentCase.data}
+          initialAnswers={initialCase?.data || caseData.data || {}}
+          updateCaseInContext={updateCaseContext}
+          {...props}
+        />
+      ) : (
+        <ActivityIndicator size="large" color="slategray" />
+      )}
     </FormScreenWrapper>
   );
 };

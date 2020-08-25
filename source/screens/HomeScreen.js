@@ -37,8 +37,6 @@ const HomeScreen = ({ navigation }) => {
   const [isInputVisible, setInputVisible] = useState(false);
   const [showChat, setShowChat] = useState(false);
 
-  const { updateCases, createCase, currentCase, setCurrentCase } = useContext(CaseContext);
-
   const { cases, getCase } = useContext(CaseState);
   const { createCase: crCase } = useContext(CaseDispatch);
 
@@ -49,10 +47,11 @@ const HomeScreen = ({ navigation }) => {
    * This side effect sets the currentForm when the currentCase is updated.
    */
   useEffect(() => {
-    if (currentCase && currentCase.formId) {
-      setCurrentForm(currentCase.formId);
-    }
-  }, [cases, currentCase, getCase, setCurrentForm]);
+    // if (currentCase && currentCase.formId) {
+    // setCurrentForm(currentCase.formId);
+    // }
+    setCurrentForm(recurringFormId);
+  }, [cases, getCase, setCurrentForm]);
 
   const navigationOptions = ({ navigation }) => ({
     tabBarVisible: navigation.state.params.tabBarVisible,
@@ -116,26 +115,9 @@ const HomeScreen = ({ navigation }) => {
             block
             style={styles.button}
             onClick={async () => {
-              // let id = '021e4050-dbd7-11ea-b4fe-d7f823c38006';
-              // console.log('case', c);
-              // let cid = '';
-              await crCase(recurringFormId, newCase => (state, action, context) => {
-                console.log('id', newCase.id);
-                console.log('state', Object.keys(state));
-                const c = state[newCase.id]; // getCase(newCase.id);
-                console.log('from callback, using new state?', c);
+              await crCase(recurringFormId, newCase => {
+                navigation.navigate('Form', { caseData: newCase });
               });
-              // const c = getCase(cid);
-              // console.log(c);
-              // createCase(
-              //   {},
-              //   recurringFormId,
-              //   async newCase => {
-              //     await setCurrentForm(recurringFormId);
-              //     navigation.navigate('Form');
-              //   },
-              //   true
-              // );
             }}
           >
             <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
@@ -145,7 +127,9 @@ const HomeScreen = ({ navigation }) => {
             color="purple"
             block
             style={styles.button}
-            onClick={() => navigation.navigate('Form')}
+            onClick={() => {
+              navigation.navigate('Form', { caseData: { hello: 'world' } });
+            }}
           >
             <Text>Fortsätt senaste ansökan</Text>
           </Button>

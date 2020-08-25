@@ -2,7 +2,7 @@ import { actionTypes } from '../actions/CaseActions';
 
 export const initialState = {};
 
-export default function AuthReducer(state, action) {
+export default function CaseReducer(state, action) {
   const { type, payload } = action;
   switch (type) {
     case actionTypes.updateCase:
