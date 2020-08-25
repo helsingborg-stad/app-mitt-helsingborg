@@ -161,11 +161,11 @@ Step.propTypes = {
   /**
    * The array of fields that are going to be displayed in the Step
    */
-  questions: PropTypes.arrayOf({}),
+  questions: PropTypes.arrayOf(PropTypes.object),
   /**
    * The answers of a form.
    */
-  answers: PropTypes.arrayOf({}),
+  answers: PropTypes.object,
   /**
    * Property for hiding the back button in the step
    */
