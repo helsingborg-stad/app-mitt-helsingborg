@@ -1,7 +1,6 @@
 import React, { useContext, useReducer, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import AuthContext from 'app/store/AuthContext';
-import useReducerWithEffects from 'source/helpers/useReducerWithEffects';
 import CaseReducer, { initialState as defaultInitialState } from './reducers/CaseReducer';
 import {
   updateCase as update,
@@ -16,7 +15,7 @@ const CaseState = React.createContext();
 const CaseDispatch = React.createContext();
 
 function CaseProvider2({ children, initialState = defaultInitialState }) {
-  const [cases, dispatch] = useReducerWithEffects(CaseReducer, initialState, {});
+  const [cases, dispatch] = useReducer(CaseReducer, initialState);
   const { user } = useContext(AuthContext);
 
   async function createCase(formId, callback = response => {}) {
@@ -36,7 +35,7 @@ function CaseProvider2({ children, initialState = defaultInitialState }) {
   }
 
   const fetchCases = useCallback(
-    async function loadCases(callback = newCases => {}) {
+    async function loadCases(callback = () => {}) {
       dispatch(await fetch(user, callback));
     },
     [dispatch, user]
@@ -56,7 +55,6 @@ function CaseProvider2({ children, initialState = defaultInitialState }) {
       </CaseDispatch.Provider>
     </CaseState.Provider>
   );
-  // return <CaseContext2.Provider value={contextValues}>{children}</CaseContext2.Provider>;
 }
 
 CaseProvider2.propTypes = {
