@@ -38,9 +38,7 @@ const inputTypes = {
   editableList: {
     component: EditableList,
     changeEvent: 'onInputChange',
-    props: {
-      value: {},
-    },
+    props: {},
   },
   substepButton: {
     component: SubstepButton,
@@ -65,9 +63,7 @@ const inputTypes = {
   avatarList: {
     component: GroupListWithAvatar,
     changeEvent: 'onChange',
-    props: {
-      value: [],
-    },
+    props: {},
   },
   conditionalTextField: {
     component: ConditionalTextField,
