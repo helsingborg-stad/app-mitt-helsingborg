@@ -169,9 +169,10 @@ const SubstepList = ({
       />
       {editable && (
         <ScrollView horizontal>
-          {items.map(item =>
+          {items.map((item, index) =>
             Object.keys(value).includes(item.title) ? null : (
               <SubstepButton
+                key={`${index}-${item.title}`}
                 text={item.title}
                 iconName="add"
                 iconColor={colors.substepList[color].addButtonIconColor}
