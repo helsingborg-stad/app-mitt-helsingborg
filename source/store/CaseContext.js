@@ -17,7 +17,7 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   const { user } = useContext(AuthContext);
 
   async function createCase(formId, callback = response => {}) {
-    dispatch(await create(formId, user, cases, callback));
+    dispatch(await create(formId, user, state?.cases || {}, callback));
   }
 
   async function updateCase(caseId, data, status, currentStep) {
@@ -34,9 +34,9 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
 
   const fetchCases = useCallback(
     async function loadCases(callback = () => {}) {
-      dispatch(await fetch(user, callback));
+      dispatch(await fetch(callback));
     },
-    [dispatch, user]
+    [dispatch]
   );
 
   useEffect(() => {

@@ -48,8 +48,6 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
     updateCase(initialCase.id, data, status, currentStep);
   };
 
-  console.log('initial case', initialCase);
-  if (initialCase?.formId) console.log('form id', initialCase.formId);
   /*
    * Function for handling behavior when a form starts
    * TO BE IMPLEMENTED

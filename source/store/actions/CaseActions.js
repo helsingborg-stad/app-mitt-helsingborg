@@ -23,10 +23,14 @@ export async function updateCase(caseId, data, status, currentStep, user, callba
     if (callback) callback(flatUpdatedCase);
     return {
       type: actionTypes.updateCase,
-      payload: { cases: { [id]: flatUpdatedCase } },
+      payload: flatUpdatedCase,
     };
   } catch (error) {
     console.log(`Update current case error: ${error}`);
+    return {
+      type: actionTypes.apiError,
+      payload: error,
+    };
   }
 }
 
@@ -41,25 +45,32 @@ export async function createCase(formId, user, cases, callback) {
     currentStep: 1,
     formId,
   };
-  const response = await post('/cases', JSON.stringify(body));
-  const newCase = response.data.data;
-  const { id } = newCase;
-  const flattenedNewCase = { id: newCase.id, ...newCase.attributes };
-  callback(flattenedNewCase);
-  return {
-    type: actionTypes.createCase,
-    payload: { cases: { [id]: flattenedNewCase } },
-  };
+  try {
+    const response = await post('/cases', JSON.stringify(body));
+    const newCase = response.data.data;
+    const flattenedNewCase = { id: newCase.id, ...newCase.attributes };
+    callback(flattenedNewCase);
+    return {
+      type: actionTypes.createCase,
+      payload: flattenedNewCase,
+    };
+  } catch (error) {
+    console.log('create case api error', error);
+    return {
+      type: actionTypes.apiError,
+      payload: error,
+    };
+  }
 }
 
 export function deleteCase(caseId) {
   return {
     type: actionTypes.deleteCase,
-    payload: { cases: { [caseId]: undefined } },
+    payload: caseId,
   };
 }
 
-export async function fetchCases(user, callback) {
+export async function fetchCases(callback) {
   try {
     const response = await get('/cases');
     if (response?.data?.data?.map) {
@@ -69,13 +80,14 @@ export async function fetchCases(user, callback) {
       callback(cases);
       return {
         type: actionTypes.fetchCases,
-        payload: { cases },
+        payload: cases,
       };
     }
   } catch (error) {
     console.error(error);
     return {
       type: actionTypes.apiError,
+      payload: error,
     };
   }
   return {

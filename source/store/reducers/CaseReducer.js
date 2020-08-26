@@ -2,33 +2,32 @@ import { actionTypes } from '../actions/CaseActions';
 
 export const initialState = {
   cases: {},
+  error: undefined,
 };
 
 export default function CaseReducer(state, action) {
   const { type, payload } = action;
+  const newState = { ...state };
   switch (type) {
     case actionTypes.updateCase:
-      return {
-        ...state,
-        ...payload,
-      };
+      newState.cases[payload.id] = payload;
+      return newState;
 
     case actionTypes.createCase:
-      return {
-        ...state,
-        ...payload,
-      };
+      newState.cases[payload.id] = payload;
+      return newState;
 
     case actionTypes.deleteCase:
-      return {
-        ...state,
-        ...payload,
-      };
+      newState.cases[payload] = undefined;
+      return newState;
+
     case actionTypes.fetchCases:
-      return {
-        ...state,
-        ...payload,
-      };
+      newState.cases = payload;
+      return newState;
+
+    case actionTypes.apiError:
+      newState.error = payload;
+      return newState;
 
     default:
       return state;
