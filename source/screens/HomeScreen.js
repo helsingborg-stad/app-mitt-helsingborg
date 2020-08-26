@@ -1,13 +1,12 @@
 /* eslint-disable react/destructuring-assignment */
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components/native';
 import { WatsonAgent, Chat } from 'app/components/organisms';
 import { ScreenWrapper } from 'app/components/molecules';
 import { View, StyleSheet } from 'react-native';
 import { Text, Button } from 'app/components/atoms';
-import CaseContext from 'app/store/CaseContext';
-import FormContext from 'app/store/FormContext';
+import { CaseDispatch } from 'app/store/CaseContext';
 import FormList from 'app/components/organisms/FormList/FormList';
 
 const styles = StyleSheet.create({
@@ -35,35 +34,14 @@ const ChatScreenWrapper = styled(ScreenWrapper)`
 const HomeScreen = ({ navigation }) => {
   const [isInputVisible, setInputVisible] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const { createCase } = useContext(CaseDispatch);
 
-  const { createCase, currentCase } = useContext(CaseContext);
-  const { setCurrentForm, currentForm } = useContext(FormContext);
-
-  /**
-   * This side effect sets the currentForm when the currentCase is updated.
-   */
-  useEffect(() => {
-    if (currentCase && currentCase.formId) {
-      setCurrentForm(currentCase.formId);
-    }
-  }, [currentCase, setCurrentForm]);
-
-  const navigationOptions = ({ navigation }) => ({
-    tabBarVisible: navigation.state.params.tabBarVisible,
-  });
-
-  const toggleTabs = () => {
-    navigation.setParams({
-      tabBarVisible: navigation.getParam('tabBarVisible') !== true,
-    });
-  };
+  const recurringFormId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
 
   const toggleInput = () => {
     setInputVisible(true);
     showChat(false);
   };
-
-  const recurringFormId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
 
   return (
     <>
@@ -77,7 +55,6 @@ const HomeScreen = ({ navigation }) => {
               autoFocus: false,
               display: 'none',
             }}
-            // onUserLogin={this.toggleTabs} />)}
             ChatUserInput={false}
             keyboardVerticalOffset={0}
             isInputVisible={isInputVisible}
@@ -87,13 +64,11 @@ const HomeScreen = ({ navigation }) => {
         <View style={{ padding: 20, marginTop: 40, height: '73%' }}>
           <FormList
             heading="Ansökningsformulär"
-            onClickCallback={async id => {
+            onClickCallback={async formId => {
               createCase(
-                {},
-                id,
-                async () => {
-                  await setCurrentForm(id);
-                  navigation.navigate('Form');
+                formId,
+                async newCase => {
+                  navigation.navigate('Form', { caseData: newCase });
                 },
                 true
               );
@@ -108,33 +83,27 @@ const HomeScreen = ({ navigation }) => {
             </Button>
           ) : null}
           <Button
-            disabled={!currentForm.steps}
             color="purple"
             block
             style={styles.button}
-            onClick={() => {
-              createCase(
-                {},
-                recurringFormId,
-                async () => {
-                  await setCurrentForm(recurringFormId);
-                  navigation.navigate('Form');
-                },
-                true
-              );
+            onClick={async () => {
+              await createCase(recurringFormId, newCase => {
+                navigation.navigate('Form', { caseData: newCase });
+              });
             }}
           >
             <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
           </Button>
-          <Button
-            disabled={!currentForm.steps}
+          {/* <Button
             color="purple"
             block
             style={styles.button}
-            onClick={() => navigation.navigate('Form')}
+            onClick={() => {
+              navigation.navigate('Form', { caseData: { hello: 'world' } });
+            }}
           >
             <Text>Fortsätt senaste ansökan</Text>
-          </Button>
+          </Button> */}
         </View>
       </ChatScreenWrapper>
     </>
