@@ -37,13 +37,13 @@ const FieldLabelBorder = styled.View`
   padding-bottom: ${props => sizes[props.size].paddingBottom};
   border-bottom-color: ${props => colors.fieldLabel[props.color].underline};
   border-bottom-width: ${props => {
-    if (props.underline === 'false') {
+    if (props.underline === false) {
       return '0px';
     }
     return sizes[props.size].lineWidth;
   }};
   margin-bottom: ${props => {
-    if (props.underline === 'false') {
+    if (props.underline === false) {
       return '0px';
     }
     return sizes[props.size].marginBottom;

@@ -48,6 +48,10 @@ const ListBody = styled.View`
   height: auto;
 `;
 
+const ListBodyFieldLabel = styled(FieldLabel)`
+  margin-top: 40px;
+`;
+
 /**
  * A grouped list, grouping items according to categories.
  */
@@ -86,9 +90,9 @@ const GroupedList = ({ heading, items, categories, onEdit, color }) => {
           .sort((a, _b) => (a === 'sum' ? 1 : -1))
           .map((key, index) => (
             <View key={`${index}-${key}`}>
-              <FieldLabel style={{ marginTop: 40 }} underline="true">
+              <ListBodyFieldLabel underline>
                 {categories.find(c => c.category === key).description}
-              </FieldLabel>
+              </ListBodyFieldLabel>
               {groupedItems[key].map(item => item.component)}
             </View>
           ))}
