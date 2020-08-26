@@ -1,3 +1,5 @@
+// TODO: remove this and restructure.
+// This is mock data for now, it should come from elsewhere later on (i.e. the form, I think).
 const formDataMap = {
   'a3165a20-ca10-11ea-a07a-7f5f78324df2': {
     personalInfo: {

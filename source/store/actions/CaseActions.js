@@ -1,4 +1,4 @@
-import generateInitialCase from 'app/containers/dynamicFormData';
+import generateInitialCase from 'app/store/actions/dynamicFormData';
 import { get, post, put } from 'app/helpers/ApiRequest';
 
 export const actionTypes = {

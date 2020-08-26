@@ -7,7 +7,8 @@ export const initialState = {
 
 export default function CaseReducer(state, action) {
   const { type, payload } = action;
-  const newState = { ...state };
+  // here be dragons.... deep copy is needed, for some reason.
+  const newState = JSON.parse(JSON.stringify(state));
   switch (type) {
     case actionTypes.updateCase:
       newState.cases[payload.id] = payload;
