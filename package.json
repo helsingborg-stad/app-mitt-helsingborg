@@ -78,6 +78,7 @@
     "jest": "^25.1.0",
     "metro-react-native-babel-preset": "^0.58.0",
     "prettier": "^1.19.1",
+    "react-native-config-node": "0.0.3",
     "react-test-renderer": "16.9.0"
   },
   "jest": {
@@ -85,6 +86,12 @@
     "setupFiles": [
       "./jestSetupFile.js",
       "./node_modules/react-native-gesture-handler/jestSetup.js"
+    ],
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-native/extend-expect"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|@react-native-community|@react-navigation)"
     ]
   },
   "config": {
