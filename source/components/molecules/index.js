@@ -12,7 +12,6 @@ export { default as ListItem } from './ListItem';
 export { default as MaterialTopTabBarWrapper } from './MaterialTopTabBarWrapper';
 export { default as ScreenWrapper } from './ScreenWrapper';
 export { default as StoryWrapper } from './StoryWrapper';
-export { default as TabBarIcon } from './TabBarIcon';
 export { default as ImagePicker } from './ImagePicker';
 export { default as HelpButton } from './HelpButton';
 export { default as TabBarImage } from './TabBarImage';
