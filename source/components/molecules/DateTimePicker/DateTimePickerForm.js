@@ -20,7 +20,6 @@ const DateTimePickerForm = props => {
     0
   )}`;
   if (value) {
-    console.log('entered if');
     switch (mode) {
       case 'datetime':
         dateTimeString = `${dateString} ${timeString}`;
