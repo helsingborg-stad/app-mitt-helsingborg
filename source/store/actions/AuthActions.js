@@ -60,6 +60,7 @@ export async function loginFailure() {
 export async function addProfile() {
   try {
     const decodedToken = await authService.getAccessTokenFromStorage();
+    console.log('decoded token', decodedToken);
     const [userProfile, userError] = await authService.getUserProfile(decodedToken.accessToken);
 
     if (userError) {
