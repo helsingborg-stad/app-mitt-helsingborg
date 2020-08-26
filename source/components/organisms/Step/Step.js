@@ -97,7 +97,9 @@ function Step({
         }}
         showsHorizontalScrollIndicator={false}
       >
-        <StepBanner {...banner} />
+        {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
+          <StepBanner {...banner} />
+        )}
         <StepBody>
           {(isResolved || isIdle) && (
             <>
