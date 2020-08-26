@@ -9,12 +9,10 @@ import {
   fetchCases as fetch,
 } from './actions/CaseActions';
 
-// const CaseContext2 = React.createContext();
-
 const CaseState = React.createContext();
 const CaseDispatch = React.createContext();
 
-function CaseProvider2({ children, initialState = defaultInitialState }) {
+function CaseProvider({ children, initialState = defaultInitialState }) {
   const [cases, dispatch] = useReducer(CaseReducer, initialState);
   const { user } = useContext(AuthContext);
 
@@ -23,9 +21,6 @@ function CaseProvider2({ children, initialState = defaultInitialState }) {
   }
 
   async function updateCase(caseId, data, status, currentStep) {
-    console.log('update case id', caseId);
-    console.log('data', data);
-    console.log('current step', currentStep);
     dispatch(await update(caseId, data, status, currentStep, user));
   }
 
@@ -60,13 +55,13 @@ function CaseProvider2({ children, initialState = defaultInitialState }) {
   );
 }
 
-CaseProvider2.propTypes = {
+CaseProvider.propTypes = {
   children: PropTypes.node,
   initialState: PropTypes.shape({}),
 };
 
-CaseProvider2.defaultProps = {
+CaseProvider.defaultProps = {
   initialState: defaultInitialState,
 };
 
-export { CaseProvider2, CaseState, CaseDispatch };
+export { CaseProvider, CaseState, CaseDispatch };

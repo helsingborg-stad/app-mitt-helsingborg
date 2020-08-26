@@ -7,7 +7,7 @@ import { Notification } from 'app/store';
 import Navigator from './navigator';
 import StorybookUIRoot from '../storybook';
 
-import { CaseProvider2 } from './store/CaseContext2';
+import { CaseProvider } from './store/CaseContext';
 import { AuthProvider } from './store/AuthContext';
 import { FormProvider } from './store/FormContext';
 /**
@@ -32,13 +32,13 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <CaseProvider2>
+      <CaseProvider>
         <FormProvider>
           <Notification.Provider>
             <Navigator />
           </Notification.Provider>
         </FormProvider>
-      </CaseProvider2>
+      </CaseProvider>
     </AuthProvider>
   );
 };

@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { NavItems } from 'app/assets/dashboard';
 import { Heading, Text } from 'app/components/atoms';
 import { GroupedList, Header, ListItem, ScreenWrapper } from 'app/components/molecules';
-import { CaseState } from 'app/store/CaseContext2';
+import { CaseState } from 'app/store/CaseContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 

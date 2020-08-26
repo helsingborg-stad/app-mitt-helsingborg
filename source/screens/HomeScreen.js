@@ -1,13 +1,12 @@
 /* eslint-disable react/destructuring-assignment */
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components/native';
 import { WatsonAgent, Chat } from 'app/components/organisms';
 import { ScreenWrapper } from 'app/components/molecules';
 import { View, StyleSheet } from 'react-native';
 import { Text, Button } from 'app/components/atoms';
-import { CaseState, CaseDispatch } from 'app/store/CaseContext2';
-import FormContext from 'app/store/FormContext';
+import { CaseDispatch } from 'app/store/CaseContext';
 import FormList from 'app/components/organisms/FormList/FormList';
 
 const styles = StyleSheet.create({
@@ -35,20 +34,9 @@ const ChatScreenWrapper = styled(ScreenWrapper)`
 const HomeScreen = ({ navigation }) => {
   const [isInputVisible, setInputVisible] = useState(false);
   const [showChat, setShowChat] = useState(false);
-
   const { createCase } = useContext(CaseDispatch);
 
   const recurringFormId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
-
-  const navigationOptions = ({ navigation }) => ({
-    tabBarVisible: navigation.state.params.tabBarVisible,
-  });
-
-  const toggleTabs = () => {
-    navigation.setParams({
-      tabBarVisible: navigation.getParam('tabBarVisible') !== true,
-    });
-  };
 
   const toggleInput = () => {
     setInputVisible(true);
@@ -67,7 +55,6 @@ const HomeScreen = ({ navigation }) => {
               autoFocus: false,
               display: 'none',
             }}
-            // onUserLogin={this.toggleTabs} />)}
             ChatUserInput={false}
             keyboardVerticalOffset={0}
             isInputVisible={isInputVisible}
@@ -81,7 +68,6 @@ const HomeScreen = ({ navigation }) => {
               createCase(
                 formId,
                 async newCase => {
-                  // await setCurrentForm(id);
                   navigation.navigate('Form', { caseData: newCase });
                 },
                 true

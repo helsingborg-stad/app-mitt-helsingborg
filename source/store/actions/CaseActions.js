@@ -20,7 +20,6 @@ export async function updateCase(caseId, data, status, currentStep, user, callba
       console.log('update case resp:', res.data.data);
       const { id, attributes } = res.data.data;
       const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
-      // const updatedCase = { caseId, ...other, updatedAt: Date.now() };
       if (callback) callback(flatUpdatedCase);
       return {
         type: actionTypes.updateCase,
@@ -44,9 +43,7 @@ export async function createCase(formId, user, cases, callback) {
     currentStep: 1,
     formId,
   };
-  // TODO: Remove Auhtorization header when token authentication works as expected.
   const newCase = await post('/cases', JSON.stringify(body)).then(response => response.data.data);
-  console.log('new case', newCase);
   const { id } = newCase;
   const flattenedNewCase = { id: newCase.id, ...newCase.attributes };
   callback(flattenedNewCase);
