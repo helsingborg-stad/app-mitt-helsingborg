@@ -10,6 +10,7 @@ import MockNavigator from 'app/navigator/MockNavigator';
 jest.mock('axios');
 
 it('Validates personalnumber and triggers an alert', async () => {
+  // TODO: Mock axios bankid requests
   const spy = jest.spyOn(Alert, 'alert');
   const { getByPlaceholderText, getByText } = render(<MockNavigator component={LoginScreen} />);
 
@@ -27,6 +28,7 @@ it('Returns to login screen when cancelling ', async () => {
   fireEvent.changeText(getByPlaceholderText('ÅÅÅÅMMDDXXXX'), '199803312389');
   fireEvent.press(getByText('Logga in med mobilt BankID'));
 
+  // TODO: Mock axios bankid requests
   axios.request(async params => {
     console.log(params);
 
@@ -36,3 +38,5 @@ it('Returns to login screen when cancelling ', async () => {
   await act(async () => fireEvent.press(getByText('Avbryt')));
   expect(getByPlaceholderText('ÅÅÅÅMMDDXXXX')).toBeTruthy();
 });
+
+// TODO: it('Sign in user after successfull authentication')
