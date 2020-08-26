@@ -88,12 +88,12 @@ const SubstepList = ({
   };
 
   const listItems = [];
-  items.forEach(item => {
+  items.forEach((item, index) => {
     if (Object.keys(typeof value === 'string' ? {} : value).includes(item.title)) {
       listItems.push({
         category: item.category,
         component: (
-          <ItemWrapper>
+          <ItemWrapper key={`${index}-${item.title}`}>
             {editable ? (
               <>
                 <SubstepButton

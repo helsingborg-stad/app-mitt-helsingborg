@@ -84,8 +84,8 @@ const GroupedList = ({ heading, items, categories, onEdit, color }) => {
       <ListBody>
         {Object.keys(groupedItems)
           .sort((a, _b) => (a === 'sum' ? 1 : -1))
-          .map(key => (
-            <View>
+          .map((key, index) => (
+            <View key={`${index}-${key}`}>
               <FieldLabel style={{ marginTop: 40 }} underline="true">
                 {categories.find(c => c.category === key).description}
               </FieldLabel>
