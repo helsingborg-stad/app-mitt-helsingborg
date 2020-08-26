@@ -19,13 +19,13 @@ const App = () => {
   if (Config.IS_STORYBOOK === 'true') {
     return (
       <AuthProvider>
-        <CaseProvider2>
+        <CaseProvider>
           <FormProvider>
             <Notification.Provider>
               <StorybookUIRoot />
             </Notification.Provider>
           </FormProvider>
-        </CaseProvider2>
+        </CaseProvider>
       </AuthProvider>
     );
   }
