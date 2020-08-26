@@ -23,6 +23,9 @@ function CaseProvider2({ children, initialState = defaultInitialState }) {
   }
 
   async function updateCase(caseId, data, status, currentStep) {
+    console.log('update case id', caseId);
+    console.log('data', data);
+    console.log('current step', currentStep);
     dispatch(await update(caseId, data, status, currentStep, user));
   }
 
