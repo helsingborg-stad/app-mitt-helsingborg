@@ -7,6 +7,7 @@ import { StatusBar, ActivityIndicator } from 'react-native';
 import Form from '../containers/Form/Form';
 import AuthContext from '../store/AuthContext';
 import FormContext from '../store/FormContext';
+
 import { CaseDispatch, CaseState } from '../store/CaseContext';
 
 const SpinnerContainer = styled.View`
@@ -31,6 +32,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
 
   useEffect(() => {
     if (caseData?.formId) {
+      console.log('use effect in formCaseScreen with caseData.formId');
       getForm(caseData.formId).then(form => setForm(form));
       setInitialCase(caseData);
     } else if (caseId) {
@@ -41,13 +43,15 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   }, [caseData, caseId, getForm, getCase]);
 
   function handleCloseForm() {
-    navigation.goBack();
+    navigation.navigate('App', { screen: 'Home' });
   }
 
   const updateCaseContext = (data, status, currentStep) => {
     updateCase(initialCase.id, data, status, currentStep);
   };
 
+  console.log('initial case', initialCase);
+  if (initialCase?.formId) console.log('form id', initialCase.formId);
   /*
    * Function for handling behavior when a form starts
    * TO BE IMPLEMENTED

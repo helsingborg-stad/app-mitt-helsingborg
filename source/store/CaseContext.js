@@ -5,7 +5,7 @@ import CaseReducer, { initialState as defaultInitialState } from './reducers/Cas
 import {
   updateCase as update,
   createCase as create,
-  deleteCase as remove,
+  deleteCase as delCase,
   fetchCases as fetch,
 } from './actions/CaseActions';
 
@@ -13,11 +13,11 @@ const CaseState = React.createContext();
 const CaseDispatch = React.createContext();
 
 function CaseProvider({ children, initialState = defaultInitialState }) {
-  const [state, dispatch] = useReducer(CaseReducer, initialState);
+  const [cases, dispatch] = useReducer(CaseReducer, initialState);
   const { user } = useContext(AuthContext);
-  // console.log('reducer state', state);
+
   async function createCase(formId, callback = response => {}) {
-    dispatch(await create(formId, user, state.cases, callback));
+    dispatch(await create(formId, user, cases, callback));
   }
 
   async function updateCase(caseId, data, status, currentStep) {
@@ -25,18 +25,18 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   }
 
   function getCase(caseId) {
-    return state?.cases[caseId];
+    return cases[caseId];
   }
 
   async function deleteCase(caseId) {
-    dispatch(await remove(caseId));
+    dispatch(await delCase(caseId));
   }
 
   const fetchCases = useCallback(
     async function loadCases(callback = () => {}) {
-      dispatch(await fetch(callback));
+      dispatch(await fetch(user, callback));
     },
-    [dispatch]
+    [dispatch, user]
   );
 
   useEffect(() => {
@@ -47,7 +47,7 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   }, [user]);
 
   return (
-    <CaseState.Provider value={{ cases: state.cases, getCase }}>
+    <CaseState.Provider value={{ cases, getCase }}>
       <CaseDispatch.Provider value={{ createCase, updateCase, deleteCase }}>
         {children}
       </CaseDispatch.Provider>
