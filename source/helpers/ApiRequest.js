@@ -38,13 +38,7 @@ const request = async (endpoint, method, data, headers, userId) => {
     method,
     headers: newHeaders,
     data: data !== undefined ? data : undefined,
-  })
-    .then(
-      res =>
-        // console.log(res);
-        res
-    )
-    .catch(error => ({ message: error.message, ...error.response }));
+  }).catch(error => ({ message: error.message, ...error.response }));
 
   return req;
 };
