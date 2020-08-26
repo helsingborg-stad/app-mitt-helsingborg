@@ -6,6 +6,7 @@ export const actionTypes = {
   createCase: 'CREATE_CASE',
   deleteCase: 'DELETE_CASE',
   fetchCases: 'FETCH_CASE',
+  apiError: 'API_ERROR',
 };
 
 export async function updateCase(caseId, data, status, currentStep, user, callback) {
@@ -16,17 +17,14 @@ export async function updateCase(caseId, data, status, currentStep, user, callba
   };
 
   try {
-    const res = await put(`/cases/${caseId}`, JSON.stringify(body)).then(res => {
-      console.log('update case resp:', res.data.data);
-      const { id, attributes } = res.data.data;
-      const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
-      if (callback) callback(flatUpdatedCase);
-      return {
-        type: actionTypes.updateCase,
-        payload: { [id]: flatUpdatedCase },
-      };
-    });
-    return res;
+    const res = await put(`/cases/${caseId}`, JSON.stringify(body));
+    const { id, attributes } = res.data.data;
+    const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
+    if (callback) callback(flatUpdatedCase);
+    return {
+      type: actionTypes.updateCase,
+      payload: { cases: { [id]: flatUpdatedCase } },
+    };
   } catch (error) {
     console.log(`Update current case error: ${error}`);
   }
@@ -43,35 +41,45 @@ export async function createCase(formId, user, cases, callback) {
     currentStep: 1,
     formId,
   };
-  const newCase = await post('/cases', JSON.stringify(body)).then(response => response.data.data);
+  const response = await post('/cases', JSON.stringify(body));
+  const newCase = response.data.data;
   const { id } = newCase;
   const flattenedNewCase = { id: newCase.id, ...newCase.attributes };
   callback(flattenedNewCase);
   return {
     type: actionTypes.createCase,
-    payload: { [id]: flattenedNewCase },
+    payload: { cases: { [id]: flattenedNewCase } },
   };
 }
 
 export function deleteCase(caseId) {
   return {
     type: actionTypes.deleteCase,
-    payload: { [caseId]: undefined },
+    payload: { cases: { [caseId]: undefined } },
   };
 }
 
 export async function fetchCases(user, callback) {
-  const cases = await get('/cases').then(response => {
+  try {
+    const response = await get('/cases');
     if (response?.data?.data?.map) {
-      const newCases = {};
-      response.data.data.forEach(c => (newCases[c.id] = { id: c.id, ...c.attributes }));
-      return newCases;
+      const cases = {};
+      response.data.data.forEach(c => (cases[c.id] = { id: c.id, ...c.attributes }));
+
+      callback(cases);
+      return {
+        type: actionTypes.fetchCases,
+        payload: { cases },
+      };
     }
-    return {};
-  });
-  callback(cases);
+  } catch (error) {
+    console.error(error);
+    return {
+      type: actionTypes.apiError,
+    };
+  }
   return {
     type: actionTypes.fetchCases,
-    payload: cases,
+    payload: {},
   };
 }

@@ -13,7 +13,7 @@ const CaseState = React.createContext();
 const CaseDispatch = React.createContext();
 
 function CaseProvider({ children, initialState = defaultInitialState }) {
-  const [cases, dispatch] = useReducer(CaseReducer, initialState);
+  const [state, dispatch] = useReducer(CaseReducer, initialState);
   const { user } = useContext(AuthContext);
 
   async function createCase(formId, callback = response => {}) {
@@ -25,7 +25,7 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   }
 
   function getCase(caseId) {
-    return cases[caseId];
+    return state?.cases[caseId];
   }
 
   async function deleteCase(caseId) {
@@ -47,7 +47,7 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   }, [user]);
 
   return (
-    <CaseState.Provider value={{ cases, getCase }}>
+    <CaseState.Provider value={{ cases: state?.cases || {}, getCase }}>
       <CaseDispatch.Provider value={{ createCase, updateCase, deleteCase }}>
         {children}
       </CaseDispatch.Provider>

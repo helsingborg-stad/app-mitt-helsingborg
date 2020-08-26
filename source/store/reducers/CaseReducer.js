@@ -1,6 +1,8 @@
 import { actionTypes } from '../actions/CaseActions';
 
-export const initialState = {};
+export const initialState = {
+  cases: {},
+};
 
 export default function CaseReducer(state, action) {
   const { type, payload } = action;

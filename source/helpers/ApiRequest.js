@@ -32,15 +32,18 @@ const request = async (endpoint, method, data, headers, userId) => {
     ...headers,
   };
 
-  // Do request
-  const req = await axios({
-    url,
-    method,
-    headers: newHeaders,
-    data: data !== undefined ? data : undefined,
-  }).catch(error => ({ message: error.message, ...error.response }));
-
-  return req;
+  try {
+    // Do request
+    const req = await axios({
+      url,
+      method,
+      headers: newHeaders,
+      data: data !== undefined ? data : undefined,
+    });
+    return req;
+  } catch (error) {
+    return { message: error.message, ...error.response };
+  }
 };
 
 const get = (endpoint = '', headers = undefined, userId = undefined) =>
