@@ -17,12 +17,14 @@ export async function updateCase(caseId, data, status, currentStep, user, callba
 
   try {
     const res = await put(`/cases/${caseId}`, JSON.stringify(body)).then(res => {
-      const { caseId, ...other } = res.data.data;
-      const updatedCase = { caseId, ...other, updatedAt: Date.now() };
-      if (callback) callback(updatedCase);
+      console.log('update case resp:', res.data.data);
+      const { id, attributes } = res.data.data;
+      const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
+      // const updatedCase = { caseId, ...other, updatedAt: Date.now() };
+      if (callback) callback(flatUpdatedCase);
       return {
         type: actionTypes.updateCase,
-        payload: { [caseId]: updatedCase },
+        payload: { [id]: flatUpdatedCase },
       };
     });
     return res;
@@ -44,6 +46,7 @@ export async function createCase(formId, user, cases, callback) {
   };
   // TODO: Remove Auhtorization header when token authentication works as expected.
   const newCase = await post('/cases', JSON.stringify(body)).then(response => response.data.data);
+  console.log('new case', newCase);
   const { id } = newCase;
   const flattenedNewCase = { id: newCase.id, ...newCase.attributes };
   callback(flattenedNewCase);
@@ -62,7 +65,6 @@ export function deleteCase(caseId) {
 
 export async function fetchCases(user, callback) {
   const cases = await get('/cases').then(response => {
-    console.log('fetching cases', response);
     if (response?.data?.data?.map) {
       const newCases = {};
       response.data.data.forEach(c => (newCases[c.id] = { id: c.id, ...c.attributes }));

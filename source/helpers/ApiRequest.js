@@ -21,8 +21,9 @@ const request = async (endpoint, method, data, headers, userId) => {
     bearer = userId;
   } else {
     const token = await StorageService.getData(TOKEN_KEY);
-    bearer = token ? `Bearer ${token}` : '';
+    bearer = token || '';
   }
+  if (method === 'post') console.log('post bearer', bearer);
 
   // Merge custom headers
   const newHeaders = {
@@ -38,7 +39,11 @@ const request = async (endpoint, method, data, headers, userId) => {
     headers: newHeaders,
     data: data !== undefined ? data : undefined,
   })
-    .then(res => res)
+    .then(
+      res =>
+        // console.log(res);
+        res
+    )
     .catch(error => ({ message: error.message, ...error.response }));
 
   return req;
