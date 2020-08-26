@@ -11,3 +11,4 @@ export { default as Text } from './Text';
 export { default as Stepper } from './Stepper';
 export { default as Checkbox } from './Checkbox';
 export { default as FieldLabel } from './FieldLabel';
+export { default as Select } from './Select';
