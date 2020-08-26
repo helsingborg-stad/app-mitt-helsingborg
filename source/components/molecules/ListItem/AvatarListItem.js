@@ -150,7 +150,7 @@ AvatarListItem.propTypes = {
   /**
    * Source of avatar image for list item.
    */
-  imageSrc: PropTypes.number,
+  imageSrc: PropTypes.string,
   /**
    * The id for the the form that specifies the information.
    */

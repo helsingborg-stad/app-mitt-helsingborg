@@ -36,7 +36,7 @@ const SmallInput = styled(Input)`
 `;
 const SmallText = styled(Text)`
   height: 40px;
-  font-size: 14;
+  font-size: 14px;
   padding-top: 11px;
   padding-bottom: 8px;
   padding-left: 17px;
@@ -201,7 +201,7 @@ SubstepList.propTypes = {
   /**
    * The categories of the grouping
    */
-  categories: PropTypes.object,
+  categories: PropTypes.array,
   /**
    * The values of the entire list object
    */
