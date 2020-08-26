@@ -92,6 +92,7 @@ async function poll(fn, condition, ms) {
 
 /**
  * Function for retriving a user.
+ * Polls multiple times with a timeout inbetween, in order to wait for the backend to create a new user.
  * @param {string} accessToken json web token
  */
 export async function getUserProfile(accessToken) {
