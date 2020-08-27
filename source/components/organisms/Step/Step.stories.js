@@ -1,18 +1,10 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import { StyleSheet } from 'react-native';
 import StoryWrapper from '../../molecules/StoryWrapper';
 import Step from './Step';
 
 const ILLU_INCOME = require('source/assets/images/illustrations/illu_inkomster_margins_2x.png');
 const ICON_INCOME = require('source/assets/images/icons/icn_inkomster_1x.png');
-
-const styles = StyleSheet.create({
-  smallIcon: {
-    top: 283,
-    right: -30,
-  },
-});
 
 storiesOf('Step', module)
   .add('Default', () => (

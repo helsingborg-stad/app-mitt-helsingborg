@@ -97,7 +97,9 @@ function Step({
         }}
         showsHorizontalScrollIndicator={false}
       >
-        <StepBanner {...banner} />
+        {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
+          <StepBanner {...banner} />
+        )}
         <StepBody>
           {(isResolved || isIdle) && (
             <>
@@ -106,6 +108,7 @@ function Step({
                 <StepFieldListWrapper>
                   {questions.map(field => (
                     <FormField
+                      key={`${field.id}`}
                       onChange={onFieldChange}
                       inputType={field.type}
                       value={answers[field.id] || ''}
@@ -160,11 +163,11 @@ Step.propTypes = {
   /**
    * The array of fields that are going to be displayed in the Step
    */
-  questions: PropTypes.arrayOf({}),
+  questions: PropTypes.arrayOf(PropTypes.object),
   /**
    * The answers of a form.
    */
-  answers: PropTypes.arrayOf({}),
+  answers: PropTypes.object,
   /**
    * Property for hiding the back button in the step
    */
@@ -209,11 +212,11 @@ Step.propTypes = {
   /**
    * Values for the description section of the step, including (tagline, heading and text)
    */
-  description: {
+  description: PropTypes.shape({
     tagline: PropTypes.string,
     heading: PropTypes.string,
     text: PropTypes.string,
-  },
+  }),
 
   /**
    * Properties for actions in the footer of the step.

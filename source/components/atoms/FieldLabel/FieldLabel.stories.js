@@ -12,7 +12,7 @@ const Background = styled.View`
 storiesOf('Field Label', module).add('default', () => (
   <StoryWrapper>
     <FieldLabel size="small">Small light label</FieldLabel>
-    <FieldLabel color="red" size="small" underline="false">
+    <FieldLabel color="red" size="small" underline={false}>
       Small red label without line
     </FieldLabel>
     <FieldLabel color="green">Normal green Label</FieldLabel>

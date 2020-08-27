@@ -1,6 +1,5 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import { action } from '@storybook/addon-actions';
 import StoryWrapper from '../StoryWrapper';
 import BackNavigation from './BackNavigation';
 

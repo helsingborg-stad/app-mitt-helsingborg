@@ -36,7 +36,7 @@ const SmallInput = styled(Input)`
 `;
 const SmallText = styled(Text)`
   height: 40px;
-  font-size: 14;
+  font-size: 14px;
   padding-top: 11px;
   padding-bottom: 8px;
   padding-left: 17px;
@@ -65,7 +65,6 @@ const SubstepList = ({
   summary,
   color,
   placeholder,
-  ...other
 }) => {
   const [editable, setEditable] = useState(!summary);
 
@@ -89,12 +88,12 @@ const SubstepList = ({
   };
 
   const listItems = [];
-  items.forEach(item => {
+  items.forEach((item, index) => {
     if (Object.keys(typeof value === 'string' ? {} : value).includes(item.title)) {
       listItems.push({
         category: item.category,
         component: (
-          <ItemWrapper>
+          <ItemWrapper key={`${index}-${item.title}`}>
             {editable ? (
               <>
                 <SubstepButton
@@ -170,9 +169,10 @@ const SubstepList = ({
       />
       {editable && (
         <ScrollView horizontal>
-          {items.map(item =>
+          {items.map((item, index) =>
             Object.keys(value).includes(item.title) ? null : (
               <SubstepButton
+                key={`${index}-${item.title}`}
                 text={item.title}
                 iconName="add"
                 iconColor={colors.substepList[color].addButtonIconColor}
@@ -201,7 +201,7 @@ SubstepList.propTypes = {
   /**
    * The categories of the grouping
    */
-  categories: PropTypes.object,
+  categories: PropTypes.array,
   /**
    * The values of the entire list object
    */
@@ -222,7 +222,6 @@ SubstepList.propTypes = {
    * Message to display before anything has been added to the list.
    */
   placeholder: PropTypes.string,
-  other: PropTypes.any,
 };
 
 SubstepList.defaultProps = {

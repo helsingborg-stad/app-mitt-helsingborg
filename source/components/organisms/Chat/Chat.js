@@ -130,7 +130,7 @@ class Chat extends Component {
 
   render() {
     const { keyboardVerticalOffset, isInputVisible } = this.props;
-    const { messages, ChatAgent, inputComponents, modal } = this.state;
+    const { messages, ChatAgent, inputComponents } = this.state;
     const {
       addMessages,
       switchAgent,

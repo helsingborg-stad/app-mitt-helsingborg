@@ -179,12 +179,13 @@ EditableList.propTypes = {
   /**
    * The inputs that will be rendered
    */
-  inputs: PropTypes.arrayOf({
-    label: PropTypes.string.isRequired,
-    key: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-  }),
+  inputs: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      key: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+    })
+  ),
   /**
    * Decides of the inputs are editable or not
    */

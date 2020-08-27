@@ -71,6 +71,7 @@ const GroupListWithAvatar = ({ heading, value, onChange, formId }) => {
       {value && value.length > 0
         ? value.map((item, index) => (
             <AvatarListItem
+              key={`${index}`}
               onChange={updateValue(index)}
               value={item}
               imageSrc="hello"

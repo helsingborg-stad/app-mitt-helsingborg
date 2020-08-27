@@ -34,17 +34,15 @@ const Banner = ({ imageSrc, iconSrc, backgroundColor, style }) => (
     style={style}
     backgroundColor={backgroundColor && backgroundColor !== '' ? backgroundColor : 'white'}
   >
-    {imageSrc ? (
+    {Object.prototype.hasOwnProperty.call(icons, imageSrc) ? (
       <BannerImageWrapper>
-        <BannerImage
-          resizeMode="contain"
-          source={Object.prototype.hasOwnProperty.call(icons, imageSrc) ? icons[imageSrc] : ''}
-        />
+        <BannerImage resizeMode="contain" source={icons[imageSrc]} />
       </BannerImageWrapper>
     ) : null}
-    <BannerImageIcon
-      source={Object.prototype.hasOwnProperty.call(icons, iconSrc) ? icons[iconSrc] : ''}
-    />
+
+    {Object.prototype.hasOwnProperty.call(icons, iconSrc) ? (
+      <BannerImageIcon source={icons[iconSrc]} />
+    ) : null}
   </BannerWrapper>
 );
 
@@ -52,7 +50,7 @@ Banner.propTypes = {
   imageSrc: PropTypes.string,
   iconSrc: PropTypes.string.isRequired,
   backgroundColor: PropTypes.string,
-  style: PropTypes.object.isRequired,
+  style: PropTypes.array.isRequired,
 };
 Banner.defaultProps = {
   imageSrc: undefined,

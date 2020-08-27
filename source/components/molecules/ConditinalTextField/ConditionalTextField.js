@@ -7,6 +7,13 @@ import styled from 'styled-components/native';
 import { CheckboxField } from 'app/components/molecules';
 import colors from 'app/styles/colors';
 
+const FlexRow = styled.View`
+  flex-direction: row;
+  max-height: 90px;
+  height: 110px;
+  flex: auto;
+`;
+
 const ConditionalTextField = props => {
   const {
     onChange,
@@ -30,14 +37,14 @@ const ConditionalTextField = props => {
         text={checkboxDisableText}
         color={color}
         size="small"
-        checked={textFieldState === false}
+        value={textFieldState === false}
         onChange={() => disableTextField()}
       />
       <CheckboxField
         text={checkboxEnableText}
         color={color}
         size="small"
-        checked={textFieldState === true}
+        value={textFieldState === true}
         onChange={() => setTextFieldState(true)}
       />
 
@@ -55,13 +62,6 @@ const ConditionalTextField = props => {
     </View>
   );
 };
-
-const FlexRow = styled.View`
-  flex-direction: row;
-  max-height: 90px;
-  height: 110;
-  flex: auto;
-`;
 
 ConditionalTextField.propTypes = {
   /**

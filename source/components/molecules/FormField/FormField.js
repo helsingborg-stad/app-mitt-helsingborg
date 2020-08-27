@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes, { any } from 'prop-types';
+import PropTypes from 'prop-types';
 import { Input, FieldLabel, Select, Text } from 'source/components/atoms';
 import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
 import SubstepList from 'source/components/organisms/SubstepList';
@@ -28,17 +28,20 @@ const inputTypes = {
       mode: 'date',
       selectorProps: { locale: 'sv' },
     },
+    initialValue: '',
   },
   list: {},
   checkbox: {
     component: CheckboxField,
     changeEvent: 'onChange',
     props: {},
+    initialValue: false,
   },
   editableList: {
     component: EditableList,
     changeEvent: 'onInputChange',
     props: {},
+    initialValue: {},
   },
   substepButton: {
     component: SubstepButton,
@@ -49,11 +52,13 @@ const inputTypes = {
     component: SubstepList,
     changeEvent: 'onChange',
     props: {},
+    initialValue: {},
   },
   substepListSummary: {
     component: SubstepList,
     changeEvent: 'onChange',
     props: { summary: true },
+    initialValue: {},
   },
   select: {
     component: Select,
@@ -64,11 +69,13 @@ const inputTypes = {
     component: GroupListWithAvatar,
     changeEvent: 'onChange',
     props: {},
+    initialValue: [],
   },
   conditionalTextField: {
     component: ConditionalTextField,
     changeEvent: 'onChange',
     props: {},
+    initialValue: '',
   },
 };
 
@@ -90,7 +97,11 @@ const FormField = props => {
     onChange({ [id]: value });
   };
   const inputProps = input && input.props ? input.props : {};
-  const inputCompProps = { color, value, ...inputProps, ...other };
+  const initialValue =
+    value === '' && Object.prototype.hasOwnProperty.call(input, 'initialValue')
+      ? input.initialValue
+      : value;
+  const inputCompProps = { color, value: initialValue, ...inputProps, ...other };
   if (input && input.changeEvent) inputCompProps[input.changeEvent] = saveInput;
 
   /** Checks if the field is conditional on another input, and if so,
@@ -160,7 +171,7 @@ FormField.propTypes = {
   /**
    * All the form state answers. Needed because of conditional checks.
    */
-  answers: PropTypes.shape(any),
+  answers: PropTypes.object,
   /**
    * sets the color theme.
    */

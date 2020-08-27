@@ -89,8 +89,8 @@ const FooterAction = ({
     return false;
   };
 
-  const buttons = actions.map(action => (
-    <Flex>
+  const buttons = actions.map((action, index) => (
+    <Flex key={`${index}-${action.label}`}>
       <Button
         onClick={actionMap(action.type)}
         color={action.color}
@@ -112,7 +112,7 @@ const FooterAction = ({
 };
 
 FooterAction.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 
   /**
    * Properties for actions in the footer of the step.

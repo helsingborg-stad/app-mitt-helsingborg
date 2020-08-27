@@ -1,7 +1,6 @@
 import { storiesOf } from '@storybook/react-native';
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import styled from 'styled-components/native';
 import StoryWrapper from '../StoryWrapper';
 import CheckboxField from './CheckboxField';
 
@@ -11,7 +10,7 @@ storiesOf('CheckboxField', module).add('Default', props => (
   </StoryWrapper>
 ));
 
-const CheckboxFields = injectProps => {
+const CheckboxFields = () => {
   const [checkboxValues, setCValues] = useState({
     box1: false,
     box2: false,

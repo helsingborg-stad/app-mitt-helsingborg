@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
+import styled from 'styled-components/native';
 import { Text, Button, Icon } from '../../atoms';
 import SubstepModal from '../SubstepModal/SubstepModal';
 
@@ -38,6 +39,10 @@ const styles = StyleSheet.create({
   },
 });
 
+const SubStepButton = styled(Button)`
+  margin: 2px;
+`;
+
 function SubstepButton({
   text,
   iconName,
@@ -53,10 +58,15 @@ function SubstepButton({
 
   return (
     <View>
-      <Button style={styles.button} size={size} color={color} onClick={() => setShowForm(true)}>
+      <SubStepButton
+        style={styles.button}
+        size={size}
+        color={color}
+        onClick={() => setShowForm(true)}
+      >
         {iconName ? <Icon name={iconName} color={iconColor} /> : null}
         <Text>{text}</Text>
-      </Button>
+      </SubStepButton>
       <SubstepModal
         visible={showForm}
         setVisible={setShowForm}
