@@ -47,7 +47,6 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   const updateCaseContext = (data, status, currentStep) => {
     updateCase(initialCase.id, data, status, currentStep);
   };
-
   /*
    * Function for handling behavior when a form starts
    * TO BE IMPLEMENTED
