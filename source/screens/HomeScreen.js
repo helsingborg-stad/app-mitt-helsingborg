@@ -33,26 +33,10 @@ const ChatScreenWrapper = styled(ScreenWrapper)`
 
 const HomeScreen = ({ navigation }) => {
   const [isInputVisible, setInputVisible] = useState(false);
-<<<<<<< HEAD
-  const [showChat] = useState(false);
-
-  const { createCase, currentCase } = useContext(CaseContext);
-  const { setCurrentForm, currentForm } = useContext(FormContext);
-
-  /**
-   * This side effect sets the currentForm when the currentCase is updated.
-   */
-  useEffect(() => {
-    if (currentCase && currentCase.formId) {
-      setCurrentForm(currentCase.formId);
-    }
-  }, [currentCase, setCurrentForm]);
-=======
   const [showChat, setShowChat] = useState(false);
   const { createCase } = useContext(CaseDispatch);
 
   const recurringFormId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
->>>>>>> develop
 
   const toggleInput = () => {
     setInputVisible(true);
@@ -98,39 +82,9 @@ const HomeScreen = ({ navigation }) => {
               <Text>Ställ en fråga</Text>
             </HomeScreenButton>
           ) : null}
-<<<<<<< HEAD
           <HomeScreenButton
-            disabled={!currentForm.steps}
             color="purple"
             block
-            onClick={() => {
-              createCase(
-                {},
-                recurringFormId,
-                async () => {
-                  await setCurrentForm(recurringFormId);
-                  navigation.navigate('Form');
-                },
-                true
-              );
-            }}
-          >
-            <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
-          </HomeScreenButton>
-          <HomeScreenButton
-            disabled={!currentForm.steps}
-            color="purple"
-            block
-            onClick={() => navigation.navigate('Form')}
-          >
-            <Text>Fortsätt senaste ansökan</Text>
-          </HomeScreenButton>
-        </ButtonContainer>
-=======
-          <Button
-            color="purple"
-            block
-            style={styles.button}
             onClick={async () => {
               await createCase(recurringFormId, newCase => {
                 navigation.navigate('Form', { caseData: newCase });
@@ -138,7 +92,7 @@ const HomeScreen = ({ navigation }) => {
             }}
           >
             <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
-          </Button>
+          </HomeScreenButton>
           {/* <Button
             color="purple"
             block
@@ -149,8 +103,7 @@ const HomeScreen = ({ navigation }) => {
           >
             <Text>Fortsätt senaste ansökan</Text>
           </Button> */}
-        </View>
->>>>>>> develop
+        </ButtonContainer>
       </ChatScreenWrapper>
     </>
   );
