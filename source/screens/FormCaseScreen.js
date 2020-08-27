@@ -31,7 +31,6 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
 
   useEffect(() => {
     if (caseData?.formId) {
-      console.log('use effect in formCaseScreen with caseData.formId');
       getForm(caseData.formId).then(form => setForm(form));
       setInitialCase(caseData);
     } else if (caseId) {
@@ -48,9 +47,6 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   const updateCaseContext = (data, status, currentStep) => {
     updateCase(initialCase.id, data, status, currentStep);
   };
-
-  console.log('initial case', initialCase);
-  if (initialCase?.formId) console.log('form id', initialCase.formId);
   /*
    * Function for handling behavior when a form starts
    * TO BE IMPLEMENTED
