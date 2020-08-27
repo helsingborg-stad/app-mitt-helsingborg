@@ -1,13 +1,12 @@
 /* eslint-disable react/destructuring-assignment */
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components/native';
 import { WatsonAgent, Chat } from 'app/components/organisms';
 import { ScreenWrapper } from 'app/components/molecules';
 import { View } from 'react-native';
 import { Text, Button } from 'app/components/atoms';
-import CaseContext from 'app/store/CaseContext';
-import FormContext from 'app/store/FormContext';
+import { CaseDispatch } from 'app/store/CaseContext';
 import FormList from 'app/components/organisms/FormList/FormList';
 
 const ButtonContainer = styled.View`
@@ -34,6 +33,7 @@ const ChatScreenWrapper = styled(ScreenWrapper)`
 
 const HomeScreen = ({ navigation }) => {
   const [isInputVisible, setInputVisible] = useState(false);
+<<<<<<< HEAD
   const [showChat] = useState(false);
 
   const { createCase, currentCase } = useContext(CaseContext);
@@ -47,13 +47,17 @@ const HomeScreen = ({ navigation }) => {
       setCurrentForm(currentCase.formId);
     }
   }, [currentCase, setCurrentForm]);
+=======
+  const [showChat, setShowChat] = useState(false);
+  const { createCase } = useContext(CaseDispatch);
+
+  const recurringFormId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
+>>>>>>> develop
 
   const toggleInput = () => {
     setInputVisible(true);
     showChat(false);
   };
-
-  const recurringFormId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
 
   return (
     <>
@@ -76,13 +80,11 @@ const HomeScreen = ({ navigation }) => {
         <View style={{ padding: 20, marginTop: 40, height: '73%' }}>
           <FormList
             heading="Ansökningsformulär"
-            onClickCallback={async id => {
+            onClickCallback={async formId => {
               createCase(
-                {},
-                id,
-                async () => {
-                  await setCurrentForm(id);
-                  navigation.navigate('Form');
+                formId,
+                async newCase => {
+                  navigation.navigate('Form', { caseData: newCase });
                 },
                 true
               );
@@ -96,6 +98,7 @@ const HomeScreen = ({ navigation }) => {
               <Text>Ställ en fråga</Text>
             </HomeScreenButton>
           ) : null}
+<<<<<<< HEAD
           <HomeScreenButton
             disabled={!currentForm.steps}
             color="purple"
@@ -123,6 +126,31 @@ const HomeScreen = ({ navigation }) => {
             <Text>Fortsätt senaste ansökan</Text>
           </HomeScreenButton>
         </ButtonContainer>
+=======
+          <Button
+            color="purple"
+            block
+            style={styles.button}
+            onClick={async () => {
+              await createCase(recurringFormId, newCase => {
+                navigation.navigate('Form', { caseData: newCase });
+              });
+            }}
+          >
+            <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
+          </Button>
+          {/* <Button
+            color="purple"
+            block
+            style={styles.button}
+            onClick={() => {
+              navigation.navigate('Form', { caseData: { hello: 'world' } });
+            }}
+          >
+            <Text>Fortsätt senaste ansökan</Text>
+          </Button> */}
+        </View>
+>>>>>>> develop
       </ChatScreenWrapper>
     </>
   );

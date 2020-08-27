@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { NavItems } from 'app/assets/dashboard';
 import { Heading, Text } from 'app/components/atoms';
 import { GroupedList, Header, ListItem, ScreenWrapper } from 'app/components/molecules';
-import FormContext from 'app/store/FormContext';
-import CaseContext from 'app/store/CaseContext';
+import { CaseState } from 'app/store/CaseContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 
@@ -30,10 +29,14 @@ const ListHeading = styled(Heading)`
 `;
 
 const CaseArchiveScreen = ({ navigation }) => {
-  const { setCurrentForm } = useContext(FormContext);
-  const { cases, getCase, setCurrentCase } = useContext(CaseContext);
+  const [casesList, setCasesList] = useState([]);
+  const { cases } = useContext(CaseState);
 
   const sortCasesByLastUpdated = list => list.sort((a, b) => b.updatedAt - a.updatedAt);
+
+  useEffect(() => {
+    setCasesList(Object.keys(cases).map(key => cases[key]));
+  }, [cases]);
 
   return (
     <CaseArchiveWrapper>
@@ -46,8 +49,8 @@ const CaseArchiveScreen = ({ navigation }) => {
       <Container>
         <List>
           <ListHeading type="h3">Aktiva</ListHeading>
-          {cases.length > 0 ? (
-            sortCasesByLastUpdated(cases).map(item => (
+          {casesList.length > 0 ? (
+            sortCasesByLastUpdated(casesList).map(item => (
               <ListItem
                 key={`${item.id}`}
                 highlighted
@@ -55,11 +58,8 @@ const CaseArchiveScreen = ({ navigation }) => {
                 text={`ID: ${item.id} Type: ${item.type}`}
                 iconName={null}
                 imageSrc={null}
-                onClick={async () => {
-                  await setCurrentForm(item.formId);
-                  const caseObj = getCase(item.id);
-                  await setCurrentCase(caseObj);
-                  navigation.navigate('Form');
+                onClick={() => {
+                  navigation.navigate('Form', { caseId: item.id });
                 }}
               />
             ))
