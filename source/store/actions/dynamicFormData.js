@@ -50,11 +50,11 @@ const generateParser = (user, cases) => str => {
   return result || '';
 };
 
-const generateInitialCase = (formId, user, cases) => {
+const generateInitialCase = (formId, user, cases, dataMap = formDataMap) => {
   const caseArray = Array.isArray(cases) ? cases : Object.values(cases);
-  if (formDataMap[formId]) {
+  if (dataMap[formId]) {
     const parser = generateParser(user, caseArray);
-    const initialCase = treeParse(formDataMap[formId], parser);
+    const initialCase = treeParse(dataMap[formId], parser);
     return initialCase;
   }
 
