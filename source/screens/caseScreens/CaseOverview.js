@@ -14,7 +14,6 @@ const CaseOverviewWrapper = styled(ScreenWrapper)`
   padding-bottom: 0;
   background-color: #f5f5f5;
 `;
-
 const Container = styled.ScrollView`
   padding-left: 16px;
   padding-right: 16px;
@@ -27,11 +26,9 @@ const ButtonContainer = styled.View`
   margin-top: 25px;
   width: 100%;
 `;
-
 const List = styled.View`
   margin-top: 24px;
 `;
-
 const ListHeading = styled(Heading)`
   margin-left: 4px;
   margin-bottom: 8px;
@@ -105,7 +102,7 @@ const CaseOverview = ({ navigation }) => {
               const { caseType, component } = item;
               return (
                 <CaseTypeListItem
-                  key={`${caseType.name}`}
+                  key={caseType.name}
                   title={caseType.name}
                   icon={caseType.icon}
                   onClick={() => {
