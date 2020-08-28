@@ -3,7 +3,7 @@
 const formDataMap = {
   'a3165a20-ca10-11ea-a07a-7f5f78324df2': {
     personalInfo: {
-      email: 'formId.personalInfo.email||user.email',
+      email: 'a3165a20-ca10-11ea-a07a-7f5f78324df2.personalInfo.email||user.email',
       telephone: 'user.mobilePhone',
     },
     housingInfo: {
@@ -11,6 +11,8 @@ const formDataMap = {
     },
   },
 };
+
+const sortCasesByLastUpdated = list => list.sort((a, b) => b.updatedAt - a.updatedAt);
 
 const treeParseAcc = (obj, acc, parser) => {
   if (typeof obj === 'string') {
@@ -25,6 +27,7 @@ const treeParseAcc = (obj, acc, parser) => {
 const treeParse = (obj, parser) => treeParseAcc(obj, {}, parser);
 
 const getUserInfo = (user, strArray) => strArray.reduce((prev, current) => prev[current], user);
+const getCaseInfo = (c, strArray) => strArray.reduce((prev, current) => prev[current], c);
 
 const generateParser = (user, cases) => str => {
   const orSplit = str.split('||');
@@ -33,18 +36,25 @@ const generateParser = (user, cases) => str => {
     if (strArray[0] === 'user') {
       return getUserInfo(user, strArray.slice(1));
     }
+
+    const formId = strArray[0];
+    const sortedCases = sortCasesByLastUpdated(cases);
+    const latestRelevantCase = sortedCases.find(c => c.formId === formId);
+    if (latestRelevantCase) {
+      return getCaseInfo(latestRelevantCase.data, strArray.slice(1));
+    }
+
     return undefined;
   });
   const result = parseArray.find(res => res);
   return result || '';
 };
 
-const generateInitialCase = (formId, user, cases) => {
-  if (formDataMap[formId]) {
-    const parser = generateParser(user, cases);
-    const initialCase = treeParse(formDataMap[formId], parser);
-    console.log('initialCase', initialCase);
-
+const generateInitialCase = (formId, user, cases, dataMap = formDataMap) => {
+  const caseArray = Array.isArray(cases) ? cases : Object.values(cases);
+  if (dataMap[formId]) {
+    const parser = generateParser(user, caseArray);
+    const initialCase = treeParse(dataMap[formId], parser);
     return initialCase;
   }
 
