@@ -6,11 +6,6 @@ import Text from '../../atoms/Text';
 import Icon from '../../atoms/Icon';
 import Button from '../../atoms/Button/Button';
 
-const DefaultItem = styled.TouchableHighlight`
-  border-bottom-width: 1px;
-  border-color: ${props => props.theme.background.lighter};
-`;
-
 const HighlightedItem = styled(Button)`
   padding: 0px;
   margin-bottom: 12px;
@@ -61,40 +56,27 @@ const ImageIcon = styled.Image`
 `;
 
 const CaseTypeListItem = props => {
-  const { highlighted, title, color, onClick, icon, children } = props;
+  const { title, color, onClick, icon, children } = props;
 
   const background =
-    (highlighted && color && Object.prototype.hasOwnProperty.call(icon, color) && icon[color][1]) ||
-    'transparent';
-
-  const renderContent = () => (
-    <Flex>
-      <IconContainer highlighted={highlighted} background={background}>
-        <IconFlex>
-          <ImageIcon source={icons[icon]} resizeMode="contain" />
-        </IconFlex>
-      </IconContainer>
-
-      <Content>
-        {title && <Title>{title}</Title>}
-        {children}
-      </Content>
-      <Chevron name="chevron-right" />
-    </Flex>
-  );
-
-  if (highlighted) {
-    return (
-      <HighlightedItem onClick={onClick} block>
-        {renderContent()}
-      </HighlightedItem>
-    );
-  }
+    (color && Object.prototype.hasOwnProperty.call(icon, color) && icon[color][1]) || 'transparent';
 
   return (
-    <DefaultItem underlayColor="transparent" onPress={onClick}>
-      {renderContent()}
-    </DefaultItem>
+    <HighlightedItem onClick={onClick} block>
+      <Flex>
+        <IconContainer highlighted background={background}>
+          <IconFlex>
+            <ImageIcon source={icons[icon]} resizeMode="contain" />
+          </IconFlex>
+        </IconContainer>
+
+        <Content>
+          {title && <Title>{title}</Title>}
+          {children}
+        </Content>
+        <Chevron name="chevron-right" />
+      </Flex>
+    </HighlightedItem>
   );
 };
 
@@ -102,13 +84,8 @@ export default withTheme(CaseTypeListItem);
 
 CaseTypeListItem.propTypes = {
   color: PropTypes.oneOf(['blue', 'purple', 'red', 'green']),
-  highlighted: PropTypes.bool,
   icon: PropTypes.string,
   title: PropTypes.string,
   onClick: PropTypes.func,
   children: PropTypes.any,
-};
-
-CaseTypeListItem.defaultProps = {
-  highlighted: false,
 };
