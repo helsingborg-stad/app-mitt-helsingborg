@@ -1,3 +1,6 @@
+// Not sure this should be here... we have to decide where to put it.
+// Doesn't necessarily need to be dynamic, since adding a new service
+// will mean adding a few custom screens.
 export const caseTypes = [
   {
     name: 'Ekonomiskt Bistånd',
@@ -13,15 +16,21 @@ export const caseTypes = [
   },
 ];
 
+/** An enum for describing the state of the user with respect to a given case type. */
 export const Status = {
   unfinished: 'UNFINISHED',
   unfinishedNoCompleted: 'UNFINISHED_NO_COMPLETED',
   recentlyCompleted: 'RECENTLY_COMPLETED',
   untouched: 'UNTOUCHED',
-  onlyOldCases: 'OLD_CASES',
+  onlyOldCases: 'ONLY_OLD_CASES',
 };
-const oldCase = 4 * 30 * 24 * 60 * 60 * 1000; // cases older than 4 months are classified as old.
+const oldCaseLimit = 4 * 30 * 24 * 60 * 60 * 1000; // cases older than 4 months are classified as old.
 
+/**
+ * Takes a typeCase and an array of cases and returns [status, latestCase, relevantCases].
+ * @param {*} caseType an object with {name, forms: [formIds], icon: icon name, navigateTo: string with the navigation path}.
+ * @param {*} cases array of case objects.
+ */
 export const getCaseTypeAndLatestCase = (caseType, cases) => {
   let latestUpdated = 0;
   let latestCase;
@@ -45,13 +54,14 @@ export const getCaseTypeAndLatestCase = (caseType, cases) => {
     return [Status.unfinished, latestCase, relevantCases];
   }
   if (latestCase.status === 'submitted') {
-    if (Date.now() - latestUpdated > oldCase) {
+    if (Date.now() - latestUpdated > oldCaseLimit) {
       return [Status.onlyOldCases, latestCase, relevantCases];
     }
     return [Status.recentlyCompleted, latestCase, relevantCases];
   }
 };
 
+/** Returns a string with the formatted updatedAt date, in format dd/mm-yyyy */
 export const getFormattedUpdatedDate = caseObj => {
   const date = new Date(caseObj.updatedAt);
   return `${date.getDate()}/${date.getMonth() + 1}-${date.getFullYear()}`;

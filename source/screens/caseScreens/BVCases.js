@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text } from 'app/components/atoms';
 import { Header, ScreenWrapper } from 'app/components/molecules';
-import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 
 const Wrapper = styled(ScreenWrapper)`
@@ -18,6 +17,7 @@ const Container = styled.ScrollView`
   padding-top: 100px;
 `;
 
+/** A dummy view, just to test navigation and have more than one thing in the caseOverview screen */
 const BVCases = () => (
   <Wrapper>
     <Header title="Borgerlig Vigsel" themeColor="purple" />
