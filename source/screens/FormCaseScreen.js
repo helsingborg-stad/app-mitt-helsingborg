@@ -82,7 +82,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
             onClick={() => {
               navigation.goBack();
             }}
-            style={{ marginTop: 100 }}
+            style={[{ marginTop: 100 }]}
           >
             <Text>Avbryt</Text>
           </Button>

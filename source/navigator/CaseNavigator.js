@@ -1,14 +1,20 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { CaseArchiveScreen } from 'app/screens';
 import CaseOverview from 'app/screens/caseScreens/CaseOverview';
+import EKBCases from 'app/screens/caseScreens/EKBCases';
+import BVCases from 'app/screens/caseScreens/BVCases';
 
 const Stack = createStackNavigator();
 
 const CaseNavigator = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
-    {/* <Stack.Screen name="CaseArchive" component={CaseArchiveScreen} /> */}
-    <Stack.Screen name="CaseOverview" component={CaseOverview} />
+  <Stack.Navigator screenOptions={{ headerShown: true }}>
+    <Stack.Screen
+      name="CaseOverview"
+      component={CaseOverview}
+      options={{ title: 'Tjänster', headerShown: false }}
+    />
+    <Stack.Screen name="EKBCases" component={EKBCases} options={{ title: 'Ekonomiskt bistånd' }} />
+    <Stack.Screen name="BVCases" component={BVCases} options={{ title: 'Borgerlig vigsel' }} />
   </Stack.Navigator>
 );
 
