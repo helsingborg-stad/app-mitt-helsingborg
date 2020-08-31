@@ -145,6 +145,7 @@ function Step({
         {actions && actions.length > 0 ? (
           <StepFooter
             actions={actions}
+            caseStatus={status}
             background={footerBg}
             answers={answers}
             stepNumber={stepNumber}

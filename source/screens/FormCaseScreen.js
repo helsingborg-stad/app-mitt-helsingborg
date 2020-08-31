@@ -75,7 +75,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
           onStart={handleStartForm}
           onSubmit={handleSubmitForm}
           initialAnswers={initialCase?.data || caseData.data || {}}
-          status={initialCase?.status || 'ongoing'}
+          status={initialCase.status || 'ongoing'}
           updateCaseInContext={updateCaseContext}
           {...props}
         />

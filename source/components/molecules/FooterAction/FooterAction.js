@@ -20,6 +20,7 @@ const ButtonWrapper = styled.View`
 
 const FooterAction = ({
   actions,
+  caseStatus,
   background,
   answers,
   onStart,
@@ -53,23 +54,25 @@ const FooterAction = ({
       }
       case 'close': {
         return () => {
-          if (onUpdate) onUpdate(answers);
-          if (updateCaseInContext) updateCaseInContext(answers, 'ongoing', stepNumber);
+          if (onUpdate && caseStatus === 'ongoing') onUpdate(answers);
+          if (updateCaseInContext && caseStatus === 'ongoing')
+            updateCaseInContext(answers, 'ongoing', stepNumber);
           if (onClose) onClose();
         };
       }
       case 'submit': {
         return onSubmit || null;
       }
-      case 'bankIdSign': {
+      case 'sign': {
         return async () => {
           await handleSign(user.personalNumber, 'Signering för Mitt Helsingborg');
         };
       }
       default: {
         return () => {
-          if (onUpdate) onUpdate(answers);
-          if (updateCaseInContext) updateCaseInContext(answers, 'ongoing', stepNumber);
+          if (onUpdate && caseStatus === 'ongoing') onUpdate(answers);
+          if (updateCaseInContext && caseStatus === 'ongoing')
+            updateCaseInContext(answers, 'ongoing', stepNumber);
           if (onNext) onNext();
         };
       }
@@ -129,6 +132,10 @@ FooterAction.propTypes = {
    * Background color for the footer
    */
   background: PropTypes.string,
+  /**
+   * Status: ongoing or submitted or possibly others
+   */
+  caseStatus: PropTypes.string,
   /**
    * Current form answers, used for passing to the various actions
    */

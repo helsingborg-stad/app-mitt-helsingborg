@@ -47,7 +47,6 @@ function Form({
     handleInputChange,
     handleSubmit,
   } = useForm(initialState);
-
   return (
     <FormContainer>
       <FormStepper active={formState.counter}>
