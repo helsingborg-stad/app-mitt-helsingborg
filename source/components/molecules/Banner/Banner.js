@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image } from 'react-native';
+import { Text } from 'source/components/atoms';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import icons from 'source/helpers/Icons';
@@ -20,6 +21,12 @@ const BannerImageIcon = styled(Image)`
   left: 32px;
 `;
 
+const ProgressCounterText = styled(Text)`
+  position: absolute;
+  bottom: -37px;
+  right: 32px;
+`;
+
 const BannerImageWrapper = styled.View`
   height: 256px;
 `;
@@ -28,7 +35,7 @@ const BannerImage = styled(Image)`
   height: 100%;
 `;
 
-const Banner = ({ imageSrc, iconSrc, backgroundColor, style }) => (
+const Banner = ({ stepNumber, totalStepNumber, imageSrc, iconSrc, backgroundColor, style }) => (
   <BannerWrapper
     image={imageSrc}
     style={style}
@@ -43,10 +50,17 @@ const Banner = ({ imageSrc, iconSrc, backgroundColor, style }) => (
     {Object.prototype.hasOwnProperty.call(icons, iconSrc) ? (
       <BannerImageIcon source={icons[iconSrc]} />
     ) : null}
+    {totalStepNumber > 1 && (
+      <ProgressCounterText>
+        Steg {stepNumber}/{totalStepNumber}
+      </ProgressCounterText>
+    )}
   </BannerWrapper>
 );
 
 Banner.propTypes = {
+  stepNumber: PropTypes.number,
+  totalStepNumber: PropTypes.number,
   imageSrc: PropTypes.string,
   iconSrc: PropTypes.string.isRequired,
   backgroundColor: PropTypes.string,
