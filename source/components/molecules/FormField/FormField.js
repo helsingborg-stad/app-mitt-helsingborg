@@ -94,7 +94,7 @@ const FormField = props => {
   } = props;
   const input = inputTypes[inputType];
   const saveInput = value => {
-    onChange({ [id]: value });
+    if (onChange) onChange({ [id]: value });
   };
   const inputProps = input && input.props ? input.props : {};
   const initialValue =
