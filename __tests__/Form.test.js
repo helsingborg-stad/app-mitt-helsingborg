@@ -1,46 +1,74 @@
 import React from 'react';
 
-import { render, fireEvent, cleanup } from 'test-utils';
+import { render, fireEvent, act } from 'test-utils';
 import Form from 'source/containers/Form';
 
-import mockJson from 'source/assets/mock/mock-form-ekb.json';
+it('Starts the form and moves to the next step', async () => {
+  const mockFn = jest.fn();
+  const mockForm = {
+    submitted: false,
+    counter: 1,
+    steps: [
+      {
+        id: '1bc83374-2e10-4244-94fa-8333db0d6b08',
+        title: 'Step one',
+        description: 'Lorem',
+        actions: [
+          {
+            type: 'start',
+            color: 'blue',
+            label: 'Ja, jag är redo',
+          },
+          {
+            type: 'close',
+            color: 'orange',
+            label: 'Nej, jag väntar',
+          },
+        ],
+        show: true,
+        group: 'Group one',
+      },
+      {
+        id: 'fb031655-a27b-444f-9671-4794f054fdf5',
+        title: 'Step two',
+        description: 'Lorem',
+        actions: [
+          {
+            type: 'next',
+            color: 'green',
+            label: 'Ja, allt stämmer',
+          },
+        ],
+        show: true,
+        group: 'Group Two',
+      },
+    ],
+    user: {
+      firstName: 'Gandalf Ståhl',
+    },
+    formAnswers: {},
+    currentStep: 1,
+  };
 
-const mockForm = {
-  submitted: false,
-  counter: 1,
-  steps: mockJson.steps,
-  user: {
-    firstName: 'Gandalf Ståhl',
-  },
-  formAnswers: {},
-  currentStep: 1,
-};
-
-describe('Form Component', () => {
-  const mockOnStart = jest.fn();
-  const mockOnClose = jest.fn();
-  const mockOnSubmit = jest.fn();
-  const mockUpdateCaseInContext = jest.fn();
-
-  const { getByText } = render(
+  const { getByText, findByText } = render(
     <Form
       steps={mockForm.steps}
-      startAt={mockForm.currentStep || 1}
+      startAt={mockForm.currentStep}
       firstName={mockForm.user.firstName}
-      onClose={mockOnClose}
-      onStart={mockOnStart}
-      onSubmit={mockOnSubmit}
+      onClose={mockFn}
+      onStart={mockFn}
+      onSubmit={mockFn}
       initialAnswers={{}}
-      updateCaseInContext={mockUpdateCaseInContext}
+      updateCaseInContext={mockFn}
     />
   );
 
-  test('It should start the form', () => {
-    // This requires the first step to have a submit button with the text 'Ja, jag är redo'
-    const submitButton = getByText('Ja, jag är redo');
-    fireEvent.press(submitButton);
-    expect(mockOnStart).toBeCalled();
-  });
+  // await sideeffects to avoid warning
+  await act(async () => {});
 
-  // TODO: Test each input/question component within form
+  const submitButton = getByText('Ja, jag är redo');
+  fireEvent.press(submitButton);
+
+  expect(getByText('Ja, allt stämmer')).toBeTruthy();
+  expect(mockFn).toBeCalled();
 });
