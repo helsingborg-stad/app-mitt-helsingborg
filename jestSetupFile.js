@@ -21,6 +21,11 @@ jest.mock('react-native-reanimated', () => {
 });
 
 /**
+ * Mock NativeAnimatedHelper
+ */
+jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
+
+/**
  * Mock react-native-image-picker
  */
 NativeModules.ImagePickerManager = {
