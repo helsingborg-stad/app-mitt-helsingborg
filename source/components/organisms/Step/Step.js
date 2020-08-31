@@ -54,6 +54,7 @@ function Step({
   questions,
   actions,
   answers,
+  status,
   onBack,
   onNext,
   onClose,
@@ -84,8 +85,10 @@ function Step({
   }, [stepNumber]);
 
   const closeForm = () => {
-    if (onFieldChange) onFieldChange(answers);
-    if (updateCaseInContext) updateCaseInContext(answers, 'ongoing', stepNumber);
+    if (status === 'ongoing') {
+      if (onFieldChange) onFieldChange(answers);
+      if (updateCaseInContext) updateCaseInContext(answers, 'ongoing', stepNumber);
+    }
     if (onClose) onClose();
   };
   return (
@@ -109,7 +112,7 @@ function Step({
                   {questions.map(field => (
                     <FormField
                       key={`${field.id}`}
-                      onChange={onFieldChange}
+                      onChange={status === 'ongoing' ? onFieldChange : null}
                       inputType={field.type}
                       value={answers[field.id] || ''}
                       answers={answers}
@@ -168,6 +171,10 @@ Step.propTypes = {
    * The answers of a form.
    */
   answers: PropTypes.object,
+  /**
+   * The answers of a form.
+   */
+  status: PropTypes.string,
   /**
    * Property for hiding the back button in the step
    */

@@ -28,8 +28,8 @@ const oldCaseLimit = 4 * 30 * 24 * 60 * 60 * 1000; // cases older than 4 months 
 
 /**
  * Takes a typeCase and an array of cases and returns [status, latestCase, relevantCases].
- * @param {*} caseType an object with {name, forms: [formIds], icon: icon name, navigateTo: string with the navigation path}.
- * @param {*} cases array of case objects.
+ * @param {obj} caseType an object with {name, forms: [formIds], icon: icon name, navigateTo: string with the navigation path}.
+ * @param {[cases]} cases array of case objects.
  */
 export const getCaseTypeAndLatestCase = (caseType, cases) => {
   let latestUpdated = 0;
@@ -61,7 +61,10 @@ export const getCaseTypeAndLatestCase = (caseType, cases) => {
   }
 };
 
-/** Returns a string with the formatted updatedAt date, in format dd/mm-yyyy */
+/**
+ * Returns a string with the formatted updatedAt date, in format dd/mm-yyyy
+ * @param {obj} caseObj
+ * */
 export const getFormattedUpdatedDate = caseObj => {
   const date = new Date(caseObj.updatedAt);
   return `${date.getDate()}/${date.getMonth() + 1}-${date.getFullYear()}`;

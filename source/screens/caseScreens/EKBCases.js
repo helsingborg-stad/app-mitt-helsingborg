@@ -64,6 +64,10 @@ const EKBCases = ({ navigation, route }) => {
     setLatestCase(latest);
     setRelevantCases(relCases);
     setCompletedCases(relCases.filter(c => c.status !== 'ongoing'));
+    console.log(
+      'completed cases:',
+      relCases.filter(c => c.status !== 'ongoing')
+    );
   }, [caseType, cases]);
 
   const StatusComponent = () => {
@@ -114,6 +118,7 @@ const EKBCases = ({ navigation, route }) => {
       case Status.recentlyCompleted:
         return (
           <>
+            <Heading type="h3">Status</Heading>
             <Text>
               Du har en inskickad {latestCase.formId === recurringFormId ? 'löpande ' : 'grund'}
               ansökan.

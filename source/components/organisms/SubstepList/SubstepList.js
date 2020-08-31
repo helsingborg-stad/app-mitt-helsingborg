@@ -43,7 +43,7 @@ const SmallText = styled(Text)`
 `;
 const LargeText = styled(Text)`
   height: 40px;
-  font-size: 22;
+  font-size: 22px;
   font-weight: 800;
   padding-top: 11px;
   padding-bottom: 8px;
@@ -56,6 +56,7 @@ const DeleteButton = styled(Icon)`
   margin-bottom: 15px;
   color: #dd6161;
 `;
+
 const SubstepList = ({
   heading,
   items,
@@ -132,14 +133,18 @@ const SubstepList = ({
     }
   });
   if (listItems.length === 0) {
-    categories.empty = '';
+    if (!categories.find(c => c.category === 'placeholder')) {
+      categories.push({ category: 'placeholder', description: '' });
+    }
     listItems.push({
-      category: 'empty',
+      category: 'placeholder',
       component: <LargeText style={{ marginTop: -50 }}>{placeholder}</LargeText>,
     });
   }
   if (summary) {
-    if (!categories.sum) categories.sum = 'Summa';
+    if (!categories.find(c => c.category === 'sum')) {
+      categories.push({ category: 'sum', description: 'Summa' });
+    }
     listItems.push({
       category: 'sum',
       component: (

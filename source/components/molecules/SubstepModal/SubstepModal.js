@@ -52,6 +52,7 @@ const SubstepModal = ({ visible, setVisible, value, formId, onChange, ...other }
           <Form
             steps={form.steps}
             firstName={user.firstName}
+            status="ongoing"
             onClose={() => {
               setVisible(false);
             }}
