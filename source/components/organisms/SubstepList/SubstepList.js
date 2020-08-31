@@ -162,7 +162,6 @@ const SubstepList = ({
       ),
     });
   }
-
   return (
     <Wrapper>
       <GroupedList
