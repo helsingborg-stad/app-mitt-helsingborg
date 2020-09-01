@@ -3,8 +3,8 @@ import { NativeModules } from 'react-native';
 /**
  * Mock react-native-config (ENVS)
  */
-jest.mock('react-native-config-node', () => ({
-  ...jest.requireActual('react-native-config-node'),
+jest.mock('react-native-config', () => ({
+  // ...jest.requireActual('react-native-config-node'),
   // Override env variables for testing below
 
   // No base URL to prevent actual API calls

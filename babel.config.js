@@ -19,7 +19,7 @@ module.exports = {
   ],
   env: {
     test: {
-      plugins: [['react-native-config-node/transform']],
+      // plugins: [['react-native-config-node/transform']],
     },
   },
 };
