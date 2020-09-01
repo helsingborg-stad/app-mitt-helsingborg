@@ -9,7 +9,7 @@ const RenderWrapper = ({ children }) => (
   </AuthProvider>
 );
 
-const customRender = (ui, options) => render(ui, { wrapper: RenderWrapper });
+const customRender = ui => render(ui, { wrapper: RenderWrapper });
 
 // re-export everything
 export * from '@testing-library/react-native';
