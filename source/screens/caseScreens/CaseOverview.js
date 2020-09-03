@@ -96,28 +96,44 @@ const CaseOverview = ({ navigation }) => {
     <CaseOverviewWrapper>
       <Container>
         <List>
-          <ListHeading type="h3">Tjänster</ListHeading>
+          <ListHeading type="h3">Aktiva ansökningar</ListHeading>
           {caseItems?.length > 0 &&
-            caseItems.map(item => {
-              const { caseType, component } = item;
-              return (
-                <CaseTypeListItem
-                  key={caseType.name}
-                  title={caseType.name}
-                  icon={caseType.icon}
-                  onClick={() => {
-                    navigation.navigate('UserEvents', {
-                      screen: caseType.navigateTo,
-                      params: { caseType },
-                    });
-                  }}
-                >
-                  {component}
-                </CaseTypeListItem>
-              );
-            })}
+            caseItems
+              .filter(
+                item => item.status !== Status.untouched && item.status !== Status.onlyOldCases
+              )
+              .map(item => {
+                const { caseType, component } = item;
+                return (
+                  <CaseTypeListItem
+                    key={caseType.name}
+                    title={caseType.name}
+                    icon={caseType.icon}
+                    onClick={() => {
+                      navigation.navigate('UserEvents', {
+                        screen: caseType.navigateTo,
+                        params: { caseType },
+                      });
+                    }}
+                  >
+                    {component}
+                  </CaseTypeListItem>
+                );
+              })}
         </List>
       </Container>
+      <ButtonContainer style={{ marginBottom: 20 }}>
+        <Button
+          color="green"
+          onClick={() => {
+            navigation.navigate('UserEvents', {
+              screen: 'Services',
+            });
+          }}
+        >
+          <Text>Starta ny ansökan</Text>
+        </Button>
+      </ButtonContainer>
     </CaseOverviewWrapper>
   );
 };

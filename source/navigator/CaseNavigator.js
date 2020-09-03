@@ -13,6 +13,7 @@ const CaseNavigator = () => (
       component={CaseOverview}
       options={{ title: 'Tjänster', headerShown: false }}
     />
+
     <Stack.Screen name="EKBCases" component={EKBCases} options={{ title: 'Ekonomiskt bistånd' }} />
     <Stack.Screen name="BVCases" component={BVCases} options={{ title: 'Borgerlig vigsel' }} />
   </Stack.Navigator>
