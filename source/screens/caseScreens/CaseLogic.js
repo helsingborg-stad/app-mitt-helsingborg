@@ -11,7 +11,31 @@ export const caseTypes = [
   {
     name: 'Borgerlig Vigsel',
     forms: [],
-    icon: '',
+    icon: 'ICON_EXPENSES',
+    navigateTo: 'BVCases',
+  },
+  {
+    name: 'Dagis',
+    forms: [],
+    icon: 'ICON_EXPENSES',
+    navigateTo: 'BVCases',
+  },
+  {
+    name: 'Sophämtning',
+    forms: [],
+    icon: 'ICON_EXPENSES',
+    navigateTo: 'BVCases',
+  },
+  {
+    name: 'Skola',
+    forms: [],
+    icon: 'ICON_EXPENSES',
+    navigateTo: 'BVCases',
+  },
+  {
+    name: 'Vård',
+    forms: [],
+    icon: 'ICON_EXPENSES',
     navigateTo: 'BVCases',
   },
 ];
