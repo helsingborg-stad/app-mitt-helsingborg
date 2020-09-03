@@ -98,9 +98,12 @@ const CaseOverview = ({ navigation }) => {
         <List>
           <ListHeading type="h3">Aktiva ansökningar</ListHeading>
           {caseItems?.length > 0 &&
-            caseItems.map(item => {
-              const { caseType, component, status } = item;
-              if (status !== Status.untouched && status !== Status.onlyOldCases) {
+            caseItems
+              .filter(
+                item => item.status !== Status.untouched && item.status !== Status.onlyOldCases
+              )
+              .map(item => {
+                const { caseType, component } = item;
                 return (
                   <CaseTypeListItem
                     key={caseType.name}
@@ -116,8 +119,7 @@ const CaseOverview = ({ navigation }) => {
                     {component}
                   </CaseTypeListItem>
                 );
-              }
-            })}
+              })}
         </List>
       </Container>
       <ButtonContainer style={{ marginBottom: 20 }}>
