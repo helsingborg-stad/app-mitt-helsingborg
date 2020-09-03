@@ -75,6 +75,7 @@ function Form({
               onFieldChange={handleInputChange}
               updateCaseInContext={updateCaseInContext}
               stepNumber={formState.counter}
+              totalStepNumber={formState.steps.length}
               isBackBtnVisible={formState.counter > 2}
             />
           )

@@ -64,6 +64,7 @@ function Step({
   isBackBtnVisible,
   updateCaseInContext,
   stepNumber,
+  totalStepNumber,
 }) {
   const {
     isLoading,
@@ -101,7 +102,7 @@ function Step({
         showsHorizontalScrollIndicator={false}
       >
         {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
-          <StepBanner {...banner} />
+          <StepBanner stepNumber={stepNumber} totalStepNumber={totalStepNumber} {...banner} />
         )}
         <StepBody>
           {(isResolved || isIdle) && (
@@ -255,6 +256,8 @@ Step.propTypes = {
   }),
   /** The steps number in the form */
   stepNumber: PropTypes.number,
+  /** Total number of steps in the form */
+  totalStepNumber: PropTypes.number,
 };
 
 Step.defaultProps = {
