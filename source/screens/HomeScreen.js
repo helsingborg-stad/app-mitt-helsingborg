@@ -85,8 +85,8 @@ const HomeScreen = ({ navigation }) => {
           <HomeScreenButton
             color="purple"
             block
-            onClick={async () => {
-              await createCase(recurringFormId, newCase => {
+            onClick={() => {
+              createCase(recurringFormId, newCase => {
                 navigation.navigate('Form', { caseData: newCase });
               });
             }}

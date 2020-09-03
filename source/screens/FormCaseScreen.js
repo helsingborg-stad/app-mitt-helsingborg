@@ -45,7 +45,10 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   }
 
   const updateCaseContext = (data, status, currentStep) => {
-    updateCase(initialCase.id, data, status, currentStep);
+    // If the case is submitted, we should not actually update its data...
+    if (initialCase.status === 'ongoing') {
+      updateCase(initialCase.id, data, status, currentStep);
+    }
   };
   /*
    * Function for handling behavior when a form starts
@@ -72,6 +75,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
           onStart={handleStartForm}
           onSubmit={handleSubmitForm}
           initialAnswers={initialCase?.data || caseData.data || {}}
+          status={initialCase.status || 'ongoing'}
           updateCaseInContext={updateCaseContext}
           {...props}
         />
@@ -82,7 +86,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
             onClick={() => {
               navigation.goBack();
             }}
-            style={{ marginTop: 100 }}
+            style={[{ marginTop: 100 }]}
           >
             <Text>Avbryt</Text>
           </Button>

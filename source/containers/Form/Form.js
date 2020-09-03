@@ -25,6 +25,7 @@ function Form({
   onStart,
   onSubmit,
   initialAnswers,
+  status,
   updateCaseInContext,
 }) {
   const initialState = {
@@ -46,7 +47,6 @@ function Form({
     handleInputChange,
     handleSubmit,
   } = useForm(initialState);
-
   return (
     <FormContainer>
       <FormStepper active={formState.counter}>
@@ -64,6 +64,7 @@ function Form({
                 text: description,
               }}
               answers={formState.formAnswers}
+              status={status}
               questions={questions}
               actions={actions}
               onNext={goToNextStep}
@@ -109,9 +110,13 @@ Form.propTypes = {
    */
   firstName: PropTypes.string.isRequired,
   /**
-   * Initial answer for each case.
+   * Initial answer for each question.
    */
   initialAnswers: PropTypes.object,
+  /**
+   * Status, either ongoing or submitted (or others, possibly?)
+   */
+  status: PropTypes.string,
   /**
    * function for updating case in caseContext
    */
