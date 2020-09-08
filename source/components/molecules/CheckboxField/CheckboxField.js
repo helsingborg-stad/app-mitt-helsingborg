@@ -32,7 +32,8 @@ const sizes = {
 };
 
 const CheckboxField = props => {
-  const { text, color, size, value, onChange, help, ...other } = props;
+  const { text, color, size, value, onChange, ...other } = props;
+
   const textStyle = {
     color: colors.checkboxField[color].text,
     ...sizes[size],
@@ -63,7 +64,6 @@ const CheckboxField = props => {
       <FlexContainer>
         <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
         <Text style={textStyle}>{text}</Text>
-        {Object.keys(help).length ? <HelpButton {...help} /> : null}
       </FlexContainer>
     </TouchableHighlight>
   );
@@ -94,16 +94,6 @@ CheckboxField.propTypes = {
    * Disables the checkbox if true.
    */
   disabled: PropTypes.bool,
-  /**
-   * Properties to show help button both for text or link
-   */
-  help: PropTypes.shape({
-    text: PropTypes.string,
-    size: PropTypes.number,
-    heading: PropTypes.string,
-    tagline: PropTypes.string,
-    url: PropTypes.string,
-  }),
 };
 
 CheckboxField.defaultProps = {
@@ -111,7 +101,6 @@ CheckboxField.defaultProps = {
   color: 'light',
   size: 'small',
   disabled: false,
-  help: {},
 };
 
 export default CheckboxField;

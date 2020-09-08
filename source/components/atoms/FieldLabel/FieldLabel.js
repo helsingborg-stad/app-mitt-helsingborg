@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { HelpButton } from 'source/components/molecules';
 import Text from '../Text';
 import colors from '../../../styles/colors';
 
@@ -49,6 +50,11 @@ const FieldLabelBorder = styled.View`
     return sizes[props.size].marginBottom;
   }};
   align-self: flex-start;
+  margin-right: 8px;
+`;
+
+const FieldLabelContainer = styled.View`
+  flex-direction: row;
 `;
 
 /**
@@ -57,13 +63,16 @@ const FieldLabelBorder = styled.View`
  * @param {*} props
  */
 const FieldLabel = props => {
-  const { size, color, underline, style, ...other } = props;
+  const { size, color, underline, style, explainer, ...other } = props;
   return (
-    <FieldLabelBorder size={size} color={color} underline={underline}>
-      <FieldLabelText underline={underline} size={size} color={color} style={style}>
-        {other.children}
-      </FieldLabelText>
-    </FieldLabelBorder>
+    <FieldLabelContainer>
+      <FieldLabelBorder size={size} color={color} underline={underline}>
+        <FieldLabelText underline={underline} size={size} color={color} style={style}>
+          {other.children}
+        </FieldLabelText>
+      </FieldLabelBorder>
+      {explainer && <HelpButton heading={other.children} text={explainer} />}
+    </FieldLabelContainer>
   );
 };
 
@@ -84,6 +93,10 @@ FieldLabel.propTypes = {
    * Any additional styling of the text component.
    */
   style: PropTypes.array,
+  /**
+   * Show an explainer button
+   */
+  explainer: PropTypes.string,
 };
 
 FieldLabel.defaultProps = {
