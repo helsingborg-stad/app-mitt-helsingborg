@@ -58,10 +58,10 @@ const EKBCases = ({ navigation, route }) => {
 
   useEffect(() => {
     const setState = async () => {
-      const recurringFormId = await findFormByType('EKB-recurring');
-      const newFormId = await findFormByType('EKB-new');
-      setRecurringFormId(recurringFormId);
-      setBasicApplicationFormId(newFormId);
+      const recurringForm = await findFormByType('EKB-recurring');
+      const newForm = await findFormByType('EKB-new');
+      setRecurringFormId(recurringForm.id);
+      setBasicApplicationFormId(newForm.id);
 
       const [st, latest, relCases] = await getCaseTypeAndLatestCase(
         caseType,
@@ -126,7 +126,7 @@ const EKBCases = ({ navigation, route }) => {
           <>
             <Heading type="h3">Status</Heading>
             <Text>
-              Du har en inskickad {latestCase.formId === recurringFormId ? 'löpande ' : 'grund'}
+              Du har en inskickad {latestCase?.formId === recurringFormId ? 'löpande ' : 'grund'}
               ansökan.
             </Text>
             <Text>Just nu gäller ansökan perioden XX - YY. Skicka in din ansökan innan ZZ. </Text>
