@@ -90,6 +90,7 @@ const FormField = props => {
     value,
     answers,
     conditionalOn,
+    explainer,
     ...other
   } = props;
   const input = inputTypes[inputType];
@@ -130,7 +131,7 @@ const FormField = props => {
     return (
       <View>
         {label ? (
-          <FieldLabel color={color} underline={labelLine}>
+          <FieldLabel color={color} underline={labelLine} explainer={explainer}>
             {label}
           </FieldLabel>
         ) : null}
@@ -186,6 +187,10 @@ FormField.propTypes = {
    * One can also add an ! in front of the id to enable the field if the other input evaluates as 'falsy', i.e. !id.
    */
   conditionalOn: PropTypes.string,
+  /**
+   * Property to show a help button
+   */
+  explainer: PropTypes.string,
 };
 
 FormField.defaultProps = {
