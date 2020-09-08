@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import env from 'react-native-config';
 import PropTypes from 'prop-types';
 import { get } from 'app/helpers/ApiRequest';
+import FormTypes, { FormTypesDescription } from 'app/assets/formTypes';
 
 const FormContext = React.createContext();
 
@@ -10,8 +11,6 @@ export const FormConsumer = FormContext.Consumer;
 export function FormProvider({ children }) {
   const [forms, setForms] = useState({});
   const [formSummaries, setFormSummaries] = useState([]);
-
-  const [currentForm, setCurrentFormLocal] = useState({});
 
   const getFormSummaries = async () => {
     if (formSummaries.length > 0) {
@@ -49,12 +48,22 @@ export function FormProvider({ children }) {
     }
   };
 
-  const setCurrentForm = async id => {
-    await getForm(id).then(resp => setCurrentFormLocal(resp));
+  const findFormByType = async formType => {
+    const summaries = await getFormSummaries();
+    if (!FormTypes.includes(formType)) {
+      return {
+        error: true,
+        message: `This form type is not currently supported. We support the following form types: ${FormTypes}.`,
+        status: 404,
+      };
+    }
+    summaries.sort((f1, f2) => f2.updatedAt - f1.updatedAt);
+    const form = summaries.find(f => !f.subform && f.formType === formType);
+    return form;
   };
 
   return (
-    <FormContext.Provider value={{ currentForm, setCurrentForm, getForm, getFormSummaries }}>
+    <FormContext.Provider value={{ findFormByType, getForm, getFormSummaries }}>
       {children}
     </FormContext.Provider>
   );

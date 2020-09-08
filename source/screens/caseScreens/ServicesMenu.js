@@ -44,8 +44,6 @@ const ServicesMenu = ({ navigation }) => (
               key={`${caseType.name}`}
               highlighted
               text={caseType.name}
-              iconName={caseType.icon}
-              imageSrc={null}
               onClick={() => {
                 navigation.navigate('UserEvents', {
                   screen: caseType.navigateTo,

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Heading, Text, Button } from 'app/components/atoms';
 import { Header, ListItem, ScreenWrapper } from 'app/components/molecules';
+import FormContext from 'app/store/FormContext';
 import { CaseDispatch, CaseState } from 'app/store/CaseContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
@@ -39,13 +40,6 @@ const ButtonContainer = styled.View`
   width: 100%;
 `;
 
-// The id here is temporary.
-// We should of course avoid hard-coded ids, but we do need specific references to these forms somehow...
-// We could think about setting up a mapping between human-readable identifiers and form-ids somewhere in the backend,
-// and then use that to ensure that we get the correct forms, I don't know.
-const recurringFormId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
-const basicApplicationFormId = 'a0feda30-e86c-11ea-b20a-f72e709dacd1';
-
 const sortCasesByLastUpdated = list => list.sort((a, b) => b.updatedAt - a.updatedAt);
 
 const EKBCases = ({ navigation, route }) => {
@@ -55,20 +49,32 @@ const EKBCases = ({ navigation, route }) => {
   const [relevantCases, setRelevantCases] = useState([]);
   const [completedCases, setCompletedCases] = useState([]);
 
+  const [recurringFormId, setRecurringFormId] = useState('');
+  const [basicApplicationFormId, setBasicApplicationFormId] = useState('');
+
+  const { findFormByType } = useContext(FormContext);
   const { createCase } = useContext(CaseDispatch);
   const { cases } = useContext(CaseState);
 
   useEffect(() => {
-    const [st, latest, relCases] = getCaseTypeAndLatestCase(caseType, Object.values(cases));
-    setStatus(st);
-    setLatestCase(latest);
-    setRelevantCases(relCases);
-    setCompletedCases(relCases.filter(c => c.status !== 'ongoing'));
-    console.log(
-      'completed cases:',
-      relCases.filter(c => c.status !== 'ongoing')
-    );
-  }, [caseType, cases]);
+    const setState = async () => {
+      const recurringFormId = await findFormByType('EKB-recurring');
+      const newFormId = await findFormByType('EKB-new');
+      setRecurringFormId(recurringFormId);
+      setBasicApplicationFormId(newFormId);
+
+      const [st, latest, relCases] = await getCaseTypeAndLatestCase(
+        caseType,
+        Object.values(cases),
+        findFormByType
+      );
+      setStatus(st);
+      setLatestCase(latest);
+      setRelevantCases(relCases);
+      setCompletedCases(relCases.filter(c => c.status !== 'ongoing'));
+    };
+    setState();
+  }, [caseType, cases, findFormByType, latestCase]);
 
   const StatusComponent = () => {
     switch (status) {
@@ -97,10 +103,10 @@ const EKBCases = ({ navigation, route }) => {
           <>
             <Heading type="h3">Status</Heading>
             <Text>
-              Du har en påbörjad {latestCase.formId === recurringFormId ? 'löpande ' : 'grund'}
+              Du har en påbörjad {latestCase?.formId === recurringFormId ? 'löpande ' : 'grund'}
               ansökan, senast uppdaterad {getFormattedUpdatedDate(latestCase)}.
             </Text>
-            {latestCase.formId === recurringFormId && (
+            {latestCase?.formId === recurringFormId && (
               <Text>Just nu gäller ansökan perioden XX - YY. Skicka in din ansökan innan ZZ. </Text>
             )}
             <ButtonContainer>

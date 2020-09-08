@@ -4,13 +4,13 @@
 export const caseTypes = [
   {
     name: 'Ekonomiskt Bistånd',
-    forms: ['a3165a20-ca10-11ea-a07a-7f5f78324df2', 'a0feda30-e86c-11ea-b20a-f72e709dacd1'],
+    formTypes: ['EKB-recurring', 'EKB-new'],
     icon: 'ICON_EKB',
     navigateTo: 'EKBCases',
   },
   {
     name: 'Borgerlig Vigsel',
-    forms: [],
+    formTypes: [],
     icon: '',
     navigateTo: 'BVCases',
   },
@@ -26,17 +26,30 @@ export const Status = {
 };
 const oldCaseLimit = 4 * 30 * 24 * 60 * 60 * 1000; // cases older than 4 months are classified as old.
 
+const getIds = async (formTypes, findFormByType) =>
+  formTypes.map(async type => {
+    const formSummary = await findFormByType(type);
+    return formSummary.id;
+  });
+
 /**
  * Takes a typeCase and an array of cases and returns [status, latestCase, relevantCases].
  * @param {obj} caseType an object with {name, forms: [formIds], icon: icon name, navigateTo: string with the navigation path}.
  * @param {[cases]} cases array of case objects.
  */
-export const getCaseTypeAndLatestCase = (caseType, cases) => {
+export const getCaseTypeAndLatestCase = async (caseType, cases, findFormByType) => {
   let latestUpdated = 0;
   let latestCase;
   const relevantCases = [];
+
+  const idPromises = await getIds(caseType.formTypes, findFormByType);
+  const formIds = [];
+  await Promise.all(idPromises).then(ids => {
+    ids.forEach(id => formIds.push(id));
+  });
+
   cases.forEach(c => {
-    if (caseType.forms.includes(c.formId)) {
+    if (formIds.includes(c.formId)) {
       relevantCases.push(c);
       if (c.updatedAt > latestUpdated) {
         latestUpdated = c.updatedAt;
@@ -66,6 +79,9 @@ export const getCaseTypeAndLatestCase = (caseType, cases) => {
  * @param {obj} caseObj
  * */
 export const getFormattedUpdatedDate = caseObj => {
-  const date = new Date(caseObj.updatedAt);
-  return `${date.getDate()}/${date.getMonth() + 1}-${date.getFullYear()}`;
+  if (caseObj?.updatedAt && caseObj.updatedAt !== '') {
+    const date = new Date(caseObj.updatedAt);
+    return `${date.getDate()}/${date.getMonth() + 1}-${date.getFullYear()}`;
+  }
+  return '';
 };

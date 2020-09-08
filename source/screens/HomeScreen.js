@@ -36,8 +36,6 @@ const HomeScreen = ({ navigation }) => {
   const [showChat, setShowChat] = useState(false);
   const { createCase } = useContext(CaseDispatch);
 
-  const recurringFormId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
-
   const toggleInput = () => {
     setInputVisible(true);
     showChat(false);
@@ -82,7 +80,7 @@ const HomeScreen = ({ navigation }) => {
               <Text>Ställ en fråga</Text>
             </HomeScreenButton>
           ) : null}
-          <HomeScreenButton
+          {/* <HomeScreenButton
             color="purple"
             block
             onClick={() => {
@@ -92,7 +90,7 @@ const HomeScreen = ({ navigation }) => {
             }}
           >
             <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
-          </HomeScreenButton>
+          </HomeScreenButton> */}
           {/* <Button
             color="purple"
             block

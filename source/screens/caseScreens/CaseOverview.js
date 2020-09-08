@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Heading, Text, Button } from 'app/components/atoms';
 import { ScreenWrapper } from 'app/components/molecules';
 import { CaseState } from 'app/store/CaseContext';
+import FormContext from 'app/store/FormContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { CaseTypeListItem } from '../../components/molecules/ListItem';
@@ -78,19 +79,25 @@ const computeCaseComponent = (status, latestCase, navigation) => {
 const CaseOverview = ({ navigation }) => {
   const [caseItems, setCaseItems] = useState([]);
   const { cases } = useContext(CaseState);
+  const { findFormByType } = useContext(FormContext);
 
   useEffect(() => {
-    const updatedItems = [];
-    caseTypes.forEach(caseType => {
-      const [status, latestCase, relevantCases] = getCaseTypeAndLatestCase(
-        caseType,
-        Object.values(cases)
-      );
-      const component = computeCaseComponent(status, latestCase, navigation);
-      updatedItems.push({ caseType, status, latestCase, component, cases: relevantCases });
-    });
-    setCaseItems(updatedItems);
-  }, [cases, navigation]);
+    const updateItems = async () => {
+      const updateItemsPromises = caseTypes.map(async caseType => {
+        const [status, latestCase, relevantCases] = await getCaseTypeAndLatestCase(
+          caseType,
+          Object.values(cases),
+          findFormByType
+        );
+        const component = computeCaseComponent(status, latestCase, navigation);
+        return { caseType, status, latestCase, component, cases: relevantCases };
+      });
+      await Promise.all(updateItemsPromises).then(updatedItems => {
+        setCaseItems(updatedItems);
+      });
+    };
+    updateItems();
+  }, [cases, findFormByType, navigation]);
 
   return (
     <CaseOverviewWrapper>
