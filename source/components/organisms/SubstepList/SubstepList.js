@@ -4,10 +4,10 @@ import { TouchableHighlight, ScrollView } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 import { Input, Text, Icon } from 'source/components/atoms';
 import styled from 'styled-components/native';
-import { excludePropetiesWithKey } from 'source/helpers/Objects';
 import { SubstepButton } from 'source/components/molecules';
 import GroupedList from 'app/components/molecules/GroupedList/GroupedList';
 import colors from 'source/styles/colors';
+import { excludePropetiesWithKey } from '../../../helpers/Objects';
 
 const Wrapper = styled(View)`
   margin-bottom: 25px;
