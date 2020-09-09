@@ -100,7 +100,15 @@
      * Resolve custom alias paths in ESLINT
      */
     "import/resolver": {
-      "babel-module": {}
+      "babel-module": {},
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
+      }
     }
   }
 }
