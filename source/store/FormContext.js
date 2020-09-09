@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import env from 'react-native-config';
 import PropTypes from 'prop-types';
 import { get } from 'app/helpers/ApiRequest';
-import FormTypes, { FormTypesDescription } from 'app/assets/formTypes';
+import FormTypes from 'app/assets/formTypes';
 
 const FormContext = React.createContext();
 
