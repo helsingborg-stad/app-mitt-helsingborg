@@ -2,12 +2,11 @@ import { Form } from '../../types/FormTypes';
 import { Case } from '../../types/CaseType';
 import { User } from '../../types/UserTypes';
 
-const addIds = (descriptor: string[], questionId: string, formId: string) =>
+const addIds = (descriptor: string[], questionId:string, formId: string) =>
   descriptor.map(s => {
-    if (s.split('.')[0] !== 'user' && questionId !== '') {
+    if (s.split('.')[0] !== 'user' && questionId !=='') {
       return `${formId}.${questionId}.${s}`;
-    }
-    if (s.split('.')[0] !== 'user' && questionId === '') {
+    } else if (s.split('.')[0] !== 'user' && questionId ==='') {
       return `${formId}.${s}`;
     }
     return s;
@@ -48,12 +47,8 @@ const makeDataMap = (form: Form) => {
 
 const sortCasesByLastUpdated = (list: Case[]) => list.sort((a, b) => b.updatedAt - a.updatedAt);
 
-const treeParseAcc = (
-  obj: Record<string, any> | string[],
-  acc: Record<string, any>,
-  parser: (s: string[]) => any
-) => {
-  if (Array.isArray(obj) && obj.every(s => typeof s === 'string')) {
+const treeParseAcc = (obj: Record<string, any> | string[], acc: Record<string, any>, parser: (s: string[]) => any) => {
+  if ( Array.isArray(obj) && obj.every( s => typeof s === 'string')) {
     const parseRes = parser(obj);
     return parseRes === '' ? undefined : parseRes;
   }
@@ -63,19 +58,16 @@ const treeParseAcc = (
   });
   return res;
 };
-const treeParse = (obj: Record<string, any>, parser: (s: string[]) => any): Record<string, any> =>
-  treeParseAcc(obj, {}, parser);
+const treeParse = (obj: Record<string, any>, parser: (s: string[]) => any): Record<string, any> => treeParseAcc(obj, {}, parser);
 
-const getUserInfo = (user: User, strArray: string[]): string | undefined =>
-  strArray.reduce((prev, current) => {
-    if (prev && prev[current]) return prev[current];
-    return undefined;
-  }, user);
-const getCaseInfo = (c: Case, strArray: string[]) =>
-  strArray.reduce((prev, current) => {
-    if (prev && prev[current]) return prev[current];
-    return undefined;
-  }, c.data);
+const getUserInfo = (user: User, strArray: string[] ): string|undefined => strArray.reduce((prev, current) => { 
+  if(prev && prev[current]) return prev[current];
+  return undefined;
+}, user);
+const getCaseInfo = (c: Case, strArray: string[]) => strArray.reduce((prev, current) => { 
+  if (prev && prev[current]) return prev[current];
+  return undefined;
+}, c.data);
 
 const generateParser = (user: User, cases: Case[]) => (idArray: string[]) => {
   const parseArray = idArray.map(str => {
