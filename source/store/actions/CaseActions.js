@@ -1,5 +1,5 @@
-import generateInitialCase from 'app/store/actions/dynamicFormData';
 import { get, post, put } from 'app/helpers/ApiRequest';
+import generateInitialCase from './dynamicFormData';
 
 export const actionTypes = {
   updateCase: 'UPDATE_CASE',
@@ -34,8 +34,8 @@ export async function updateCase(caseId, data, status, currentStep, user, callba
   }
 }
 
-export async function createCase(formId, user, cases, callback) {
-  const initialData = generateInitialCase(formId, user, cases);
+export async function createCase(form, user, cases, callback) {
+  const initialData = generateInitialCase(form, user, cases);
 
   const body = {
     personalNumber: parseInt(user.personalNumber),
@@ -43,7 +43,7 @@ export async function createCase(formId, user, cases, callback) {
     type: 'VIVA_CASE',
     data: initialData || {},
     currentStep: 1,
-    formId,
+    formId: form.id,
   };
   try {
     const response = await post('/cases', JSON.stringify(body));
