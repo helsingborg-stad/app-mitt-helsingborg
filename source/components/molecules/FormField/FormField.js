@@ -137,7 +137,7 @@ const FormField = props => {
   if (checkCondition(conditionalOn)) {
     return (
       <View>
-        {label && (
+        {label ? (
           <FieldLabel
             color={color}
             underline={labelLine}
@@ -145,7 +145,7 @@ const FormField = props => {
           >
             {label}
           </FieldLabel>
-        )}
+        ) : null}
         {inputComponent}
       </View>
     );
