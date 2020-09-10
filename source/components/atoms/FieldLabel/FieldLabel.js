@@ -63,7 +63,8 @@ const FieldLabelContainer = styled.View`
  * @param {*} props
  */
 const FieldLabel = props => {
-  const { size, color, underline, style, explainer, ...other } = props;
+  const { size, color, underline, style, help, ...other } = props;
+
   return (
     <FieldLabelContainer>
       <FieldLabelBorder size={size} color={color} underline={underline}>
@@ -71,7 +72,7 @@ const FieldLabel = props => {
           {other.children}
         </FieldLabelText>
       </FieldLabelBorder>
-      {explainer && <HelpButton heading={other.children} text={explainer} />}
+      {Object.keys(help).length > 0 && <HelpButton {...help} />}
     </FieldLabelContainer>
   );
 };
@@ -94,14 +95,22 @@ FieldLabel.propTypes = {
    */
   style: PropTypes.array,
   /**
-   * Show an explainer button
+   * Show an help button
    */
-  explainer: PropTypes.string,
+  help: PropTypes.shape({
+    text: PropTypes.string,
+    size: PropTypes.number,
+    heading: PropTypes.string,
+    tagline: PropTypes.string,
+    url: PropTypes.string,
+  }),
 };
 
 FieldLabel.defaultProps = {
   underline: true,
   color: 'light',
   size: 'medium',
+  help: {},
 };
+
 export default FieldLabel;
