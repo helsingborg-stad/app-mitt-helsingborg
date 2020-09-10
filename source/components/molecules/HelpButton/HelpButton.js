@@ -87,7 +87,7 @@ const HelpButton = props => {
     <>
       <Modal
         visible={modalVisible}
-        animationType="fade"
+        animationType="slide"
         onRequestClose={() => setModalVisible(false)}
         presentationStyle="pageSheet"
       >
