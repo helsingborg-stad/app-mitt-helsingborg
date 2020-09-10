@@ -1,5 +1,9 @@
 {
-  "extends": ["airbnb", "prettier", "prettier/react"],
+  "extends": [
+    "airbnb",
+    "prettier",
+    "prettier/react"
+  ],
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 2020,
@@ -18,7 +22,10 @@
     "no-debugger": 0,
     "no-alert": 0,
     "no-plusplus": "off",
-    "no-return-assign": ["error", "except-parens"],
+    "no-return-assign": [
+      "error",
+      "except-parens"
+    ],
     "no-unused-vars": [
       1,
       {
@@ -27,7 +34,10 @@
       }
     ],
     "prefer-const": "error",
-    "arrow-body-style": [2, "as-needed"],
+    "arrow-body-style": [
+      2,
+      "as-needed"
+    ],
     "no-unused-expressions": [
       2,
       {
@@ -63,7 +73,9 @@
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [".js"]
+        "extensions": [
+          ".js"
+        ]
       }
     ],
     "radix": 0,
@@ -87,20 +99,33 @@
     "jsx-a11y/anchor-is-valid": [
       "warn",
       {
-        "aspects": ["invalidHref"]
+        "aspects": [
+          "invalidHref"
+        ]
       }
     ],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/state-in-constructor": 0
   },
-  "plugins": ["prettier", "react-hooks"],
+  "plugins": [
+    "prettier",
+    "react-hooks"
+  ],
   "settings": {
     /**
      * Resolve custom alias paths in ESLINT
      */
     "import/resolver": {
-      "babel-module": {}
+      "babel-module": {},
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
+      }
     }
   }
 }
