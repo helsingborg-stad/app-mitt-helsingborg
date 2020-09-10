@@ -64,9 +64,9 @@ const HomeScreen = ({ navigation }) => {
         <View style={{ padding: 20, marginTop: 40, height: '73%' }}>
           <FormList
             heading="Ansökningsformulär"
-            onClickCallback={async formId => {
+            onClickCallback={async form => {
               createCase(
-                formId,
+                form,
                 async newCase => {
                   navigation.navigate('Form', { caseData: newCase });
                 },
@@ -82,7 +82,7 @@ const HomeScreen = ({ navigation }) => {
               <Text>Ställ en fråga</Text>
             </HomeScreenButton>
           ) : null}
-          <HomeScreenButton
+          {/* <HomeScreenButton
             color="purple"
             block
             onClick={() => {
@@ -92,7 +92,7 @@ const HomeScreen = ({ navigation }) => {
             }}
           >
             <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
-          </HomeScreenButton>
+          </HomeScreenButton> */}
           {/* <Button
             color="purple"
             block
