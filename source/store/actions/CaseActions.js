@@ -1,6 +1,6 @@
-import generateInitialCase from 'app/store/actions/dynamicFormData';
 import { get, post, put } from 'app/helpers/ApiRequest';
 import { convertAnswersToArray } from 'app/helpers/DataStructure';
+import generateInitialCase from './dynamicFormData';
 
 export const actionTypes = {
   updateCase: 'UPDATE_CASE',
@@ -37,9 +37,8 @@ export async function updateCase(caseId, data, status, currentStep, formQuestion
   }
 }
 
-export async function createCase(formId, user, cases, callback) {
-  let initialData = generateInitialCase(formId, user, cases);
-  initialData = []; // TODO: fix initial data strucutre
+export async function createCase(form, user, cases, callback) {
+  const initialData = generateInitialCase(form, user, cases);
 
   const body = {
     formId,
