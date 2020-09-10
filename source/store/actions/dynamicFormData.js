@@ -27,7 +27,11 @@ const treeParseAcc = (obj, acc, parser) => {
 const treeParse = (obj, parser) => treeParseAcc(obj, {}, parser);
 
 const getUserInfo = (user, strArray) => strArray.reduce((prev, current) => prev[current], user);
-const getCaseInfo = (c, strArray) => strArray.reduce((prev, current) => prev[current], c);
+const getCaseInfo = (c, strArray) =>
+  strArray.reduce((prev, current) => {
+    if (prev && prev[current]) return prev[current];
+    return undefined;
+  }, c);
 
 const generateParser = (user, cases) => str => {
   const orSplit = str.split('||');
