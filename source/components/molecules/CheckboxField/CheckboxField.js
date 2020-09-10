@@ -63,7 +63,7 @@ const CheckboxField = props => {
       <FlexContainer>
         <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
         <Text style={textStyle}>{text}</Text>
-        {Object.keys(help).length ? <HelpButton {...help} /> : null}
+        {Object.keys(help).length > 0 && <HelpButton {...help} />}
       </FlexContainer>
     </TouchableHighlight>
   );

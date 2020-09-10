@@ -90,7 +90,7 @@ const FormField = props => {
     value,
     answers,
     conditionalOn,
-    explainer,
+    labelHelp,
     ...other
   } = props;
   const input = inputTypes[inputType];
@@ -102,7 +102,14 @@ const FormField = props => {
     value === '' && Object.prototype.hasOwnProperty.call(input, 'initialValue')
       ? input.initialValue
       : value;
-  const inputCompProps = { color, value: initialValue, ...inputProps, ...other };
+  const inputCompProps = {
+    color,
+    value: initialValue,
+    help:
+      other.inputHelp && other.text ? { text: other.inputHelp, heading: other.text } : undefined,
+    ...inputProps,
+    ...other,
+  };
   if (input && input.changeEvent) inputCompProps[input.changeEvent] = saveInput;
 
   /** Checks if the field is conditional on another input, and if so,
@@ -130,11 +137,15 @@ const FormField = props => {
   if (checkCondition(conditionalOn)) {
     return (
       <View>
-        {label ? (
-          <FieldLabel color={color} underline={labelLine} explainer={explainer}>
+        {label && (
+          <FieldLabel
+            color={color}
+            underline={labelLine}
+            help={labelHelp ? { heading: label, text: labelHelp } : {}}
+          >
             {label}
           </FieldLabel>
-        ) : null}
+        )}
         {inputComponent}
       </View>
     );
@@ -190,7 +201,7 @@ FormField.propTypes = {
   /**
    * Property to show a help button
    */
-  explainer: PropTypes.string,
+  labelHelp: PropTypes.string,
 };
 
 FormField.defaultProps = {
