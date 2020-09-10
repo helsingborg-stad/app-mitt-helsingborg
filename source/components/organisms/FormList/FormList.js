@@ -15,13 +15,13 @@ const ListHeading = styled(Heading)`
 `;
 
 const FormList = ({ onClickCallback, heading, showSubforms }) => {
-  const [forms, setForms] = useState([]);
-  const { getFormSummaries } = useContext(FormContext);
+  const [formSummaries, setFormSummaries] = useState([]);
+  const { getFormSummaries, getForm } = useContext(FormContext);
 
   useEffect(() => {
     async function fetchForms() {
       const formSummaries = await getFormSummaries();
-      setForms(formSummaries.filter(f => (showSubforms ? f.subform : !f.subform)));
+      setFormSummaries(formSummaries.filter(f => (showSubforms ? f.subform : !f.subform)));
     }
     fetchForms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -30,8 +30,8 @@ const FormList = ({ onClickCallback, heading, showSubforms }) => {
   return (
     <List>
       <ListHeading type="h3">{heading}</ListHeading>
-      {forms.length > 0 ? (
-        forms.map(form => (
+      {formSummaries.length > 0 ? (
+        formSummaries.map(form => (
           <ListItem
             key={form.id}
             highlighted
@@ -39,7 +39,10 @@ const FormList = ({ onClickCallback, heading, showSubforms }) => {
             text={`${form.description}`}
             iconName={null}
             imageSrc={null}
-            onClick={() => onClickCallback(form.id)}
+            onClick={async () => {
+              const f = await getForm(form.id);
+              onClickCallback(f);
+            }}
           />
         ))
       ) : (
