@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Heading, Text, Button } from 'app/components/atoms';
 import { Header, ListItem, ScreenWrapper } from 'app/components/molecules';
 import FormContext from 'app/store/FormContext';
-import { CaseDispatch, CaseState } from 'app/store/CaseContext';
+import { CaseDispatch, CaseState, caseStatus } from 'app/store/CaseContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Status, getCaseTypeAndLatestCase, getFormattedUpdatedDate } from './CaseLogic';
@@ -44,7 +44,7 @@ const sortCasesByLastUpdated = list => list.sort((a, b) => b.updatedAt - a.updat
 
 const EKBCases = ({ navigation, route }) => {
   const { caseType } = route.params;
-  const [status, setStatus] = useState(Status.untouched);
+  const [status, setStatus] = useState(caseStatus.untouched);
   const [latestCase, setLatestCase] = useState(undefined);
   const [relevantCases, setRelevantCases] = useState([]);
   const [completedCases, setCompletedCases] = useState([]);
@@ -78,7 +78,7 @@ const EKBCases = ({ navigation, route }) => {
 
   const StatusComponent = () => {
     switch (status) {
-      case Status.untouched:
+      case caseStatus.untouched:
         return (
           <>
             <Heading type="h3">Status</Heading>
@@ -97,8 +97,8 @@ const EKBCases = ({ navigation, route }) => {
             </ButtonContainer>
           </>
         );
-      case Status.unfinishedNoCompleted:
-      case Status.unfinished:
+      case caseStatus.unfinishedNoCompleted:
+      case caseStatus.unfinished:
         return (
           <>
             <Heading type="h3">Status</Heading>
@@ -121,7 +121,7 @@ const EKBCases = ({ navigation, route }) => {
             </ButtonContainer>
           </>
         );
-      case Status.recentlyCompleted:
+      case caseStatus.recentlyCompleted:
         return (
           <>
             <Heading type="h3">Status</Heading>

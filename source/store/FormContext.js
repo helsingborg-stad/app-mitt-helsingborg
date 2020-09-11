@@ -62,8 +62,20 @@ export function FormProvider({ children }) {
     return form;
   };
 
+  const getFormIdsByFormTypes = async formTypes => {
+    const promises = formTypes.map(async type => {
+      const formSummary = await findFormByType(type);
+      return formSummary.id;
+    });
+
+    const ids = await Promise.all(promises);
+    return ids;
+  };
+
   return (
-    <FormContext.Provider value={{ findFormByType, getForm, getFormSummaries }}>
+    <FormContext.Provider
+      value={{ getFormIdsByFormTypes, findFormByType, getForm, getFormSummaries }}
+    >
       {children}
     </FormContext.Provider>
   );
