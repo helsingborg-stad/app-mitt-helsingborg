@@ -117,6 +117,7 @@ const HelpButton = props => {
         </ModalContainer>
       </Modal>
       <TouchableHighlight
+        onPressIn={() => setModalVisible(false)}
         onPress={() => {
           setModalVisible(true);
         }}
