@@ -205,18 +205,20 @@ const SubstepList = ({
             <FieldLabel>LÄGG TILL</FieldLabel>
           </FieldLabelContainer>
           <ScrollView horizontal>
-            {items.map((item, index) => (
-              <SubstepButton
-                key={`${index}-${item.title}`}
-                text={item.title}
-                iconName="add"
-                iconColor={colors.substepList[color].addButtonIconColor}
-                value={value[item.title] || {}}
-                color={colors.substepList[color].addButtonColor}
-                onChange={updateAnswer(item.title)}
-                formId={item.formId}
-              />
-            ))}
+            {items.map((item, index) =>
+              Object.keys(value).includes(item.title) ? null : (
+                <SubstepButton
+                  key={`${index}-${item.title}`}
+                  text={item.title}
+                  iconName="add"
+                  iconColor={colors.substepList[color].addButtonIconColor}
+                  value={value[item.title] || {}}
+                  color={colors.substepList[color].addButtonColor}
+                  onChange={updateAnswer(item.title)}
+                  formId={item.formId}
+                />
+              )
+            )}
           </ScrollView>
         </>
       )}
