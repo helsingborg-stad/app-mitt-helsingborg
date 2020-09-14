@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Notification } from 'app/store';
 import ChatMessages from '../../molecules/ChatMessages/ChatMessages';
 // import Modal from '../../molecules/Modal';
 
@@ -151,35 +150,28 @@ class Chat extends Component {
     };
 
     return (
-      <Notification.Dispatch.Consumer>
-        {dispatchNotification => (
-          <ChatWrapper keyboardVerticalOffset={keyboardVerticalOffset}>
-            {ChatAgent ? (
-              <ChatAgent
-                chat={{
-                  ...instanceMethods,
-                  ...this.state,
-                  setBadgeCount: value => {
-                    dispatchNotification({ type: 'set', number: value });
-                  },
-                }}
-              />
-            ) : null}
-            <ChatBody>
-              <ChatMessages messages={messages} chat={{ ...instanceMethods, ...this.state }} />
-            </ChatBody>
-            <ChatFooter>
-              {inputComponents && isInputVisible && inputComponents.length > 0 ? (
-                <ChatUserInput
-                  inputArray={inputComponents}
-                  chat={{ ...instanceMethods, ...this.state }}
-                />
-              ) : null}
-            </ChatFooter>
-            {/* <Modal {...modal} changeModal={visible => this.changeModal(visible)} /> */}
-          </ChatWrapper>
-        )}
-      </Notification.Dispatch.Consumer>
+      <ChatWrapper keyboardVerticalOffset={keyboardVerticalOffset}>
+        {ChatAgent ? (
+          <ChatAgent
+            chat={{
+              ...instanceMethods,
+              ...this.state,
+            }}
+          />
+        ) : null}
+        <ChatBody>
+          <ChatMessages messages={messages} chat={{ ...instanceMethods, ...this.state }} />
+        </ChatBody>
+        <ChatFooter>
+          {inputComponents && isInputVisible && inputComponents.length > 0 ? (
+            <ChatUserInput
+              inputArray={inputComponents}
+              chat={{ ...instanceMethods, ...this.state }}
+            />
+          ) : null}
+        </ChatFooter>
+        {/* <Modal {...modal} changeModal={visible => this.changeModal(visible)} /> */}
+      </ChatWrapper>
     );
   }
 }

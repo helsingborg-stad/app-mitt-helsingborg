@@ -94,8 +94,8 @@ const ListItem = props => {
       )}
 
       <Content>
-        {title && <Title small>{title}</Title>}
-        {text && <Text>{text}</Text>}
+        {title && title.trim() !== '' ? <Title small>{title}</Title> : null}
+        {text && text.trim() !== '' ? <Text>{text}</Text> : null}
       </Content>
       <Chevron name="chevron-right" />
     </Flex>
