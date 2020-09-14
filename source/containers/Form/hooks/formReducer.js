@@ -1,6 +1,6 @@
 import {
   actionTypes,
-  replaceFirstNameMarkdownInAllStepTitles,
+  replaceMarkdownText,
   increaseFormCounter,
   decreaseFormCounter,
   startForm,
@@ -19,8 +19,11 @@ function formReducer(state, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case actionTypes.REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES: {
-      return replaceFirstNameMarkdownInAllStepTitles(state);
+    /**
+     * Replaces markdown texts (texts starting with #) with computed values
+     */
+    case actionTypes.REPLACE_MARKDOWN_TEXT: {
+      return replaceMarkdownText(state);
     }
 
     /**

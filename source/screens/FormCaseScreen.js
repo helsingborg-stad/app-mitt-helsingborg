@@ -70,7 +70,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
         <Form
           steps={form.steps}
           startAt={caseData?.currentStep || initialCase?.currentStep || 1}
-          firstName={user?.firstName || ''}
+          user={user}
           onClose={handleCloseForm}
           onStart={handleStartForm}
           onSubmit={handleSubmitForm}

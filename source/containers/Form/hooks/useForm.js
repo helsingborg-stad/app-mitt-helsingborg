@@ -7,7 +7,7 @@ function useForm(initialState) {
 
   useEffect(() => {
     dispatch({
-      type: actionTypes.REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES,
+      type: actionTypes.REPLACE_MARKDOWN_TEXT,
     });
   }, []);
 
