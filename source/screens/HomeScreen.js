@@ -38,8 +38,6 @@ const HomeScreen = ({ navigation }) => {
   const [showChat, setShowChat] = useState(false);
   const { createCase } = useContext(CaseDispatch);
 
-  const showNotification = useNotification();
-
   const toggleInput = () => {
     setInputVisible(true);
     showChat(false);
@@ -47,19 +45,6 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <>
-      {/* <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Text>Centered text</Text>
-        </View> */}
       {showChat && (
         <Chat
           ChatAgent={props => <WatsonAgent {...props} initialMessages="remote" />}
