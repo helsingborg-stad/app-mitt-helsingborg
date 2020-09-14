@@ -95,12 +95,11 @@ const ListItem = props => {
 
       <Content>
         {title && <Title small>{title}</Title>}
-        {text && <Text>{text}</Text>}
+        {text && text.trim() !== '' ? <Text>{text}</Text> : null}
       </Content>
       <Chevron name="chevron-right" />
     </Flex>
   );
-
   if (highlighted) {
     return (
       <HighlightedItem onClick={onClick} block>
