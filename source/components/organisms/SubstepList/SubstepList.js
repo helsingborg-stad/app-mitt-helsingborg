@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { TouchableHighlight, ScrollView } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
-import { Input, Text, Icon } from 'source/components/atoms';
+import { Input, Text, Icon, FieldLabel } from 'source/components/atoms';
 import styled from 'styled-components/native';
 import { SubstepButton } from 'source/components/molecules';
 import GroupedList from 'app/components/molecules/GroupedList/GroupedList';
@@ -57,6 +57,12 @@ const DeleteButton = styled(Icon)`
   color: #dd6161;
 `;
 
+const FieldLabelContainer = styled.View`
+  margin-top: 24px;
+  margin-bottom: 8px;
+  margin-left: 8px;
+`;
+
 const SubstepList = ({
   heading,
   items,
@@ -77,7 +83,7 @@ const SubstepList = ({
 
   const changeFromInput = item => text => {
     const newAnswers = JSON.parse(JSON.stringify(typeof value === 'string' ? {} : value));
-    newAnswers[item.title].amount = text;
+    newAnswers[item.title].amxount = text;
     onChange(newAnswers);
   };
 
@@ -89,6 +95,7 @@ const SubstepList = ({
   };
 
   const listItems = [];
+
   items.forEach((item, index) => {
     if (Object.keys(typeof value === 'string' ? {} : value).includes(item.title)) {
       listItems.push({
@@ -132,19 +139,23 @@ const SubstepList = ({
       });
     }
   });
+
   if (listItems.length === 0) {
     if (!categories.find(c => c.category === 'placeholder')) {
       categories.push({ category: 'placeholder', description: '' });
     }
+
     listItems.push({
       category: 'placeholder',
       component: <LargeText style={{ marginTop: -50 }}>{placeholder}</LargeText>,
     });
   }
+
   if (summary) {
     if (!categories.find(c => c.category === 'sum')) {
       categories.push({ category: 'sum', description: 'Summa' });
     }
+
     listItems.push({
       category: 'sum',
       component: (
@@ -162,6 +173,7 @@ const SubstepList = ({
       ),
     });
   }
+
   return (
     <Wrapper>
       <GroupedList
@@ -172,22 +184,27 @@ const SubstepList = ({
         onEdit={() => setEditable(!editable)}
       />
       {editable && (
-        <ScrollView horizontal>
-          {items.map((item, index) =>
-            Object.keys(value).includes(item.title) ? null : (
-              <SubstepButton
-                key={`${index}-${item.title}`}
-                text={item.title}
-                iconName="add"
-                iconColor={colors.substepList[color].addButtonIconColor}
-                value={value[item.title] || {}}
-                color={colors.substepList[color].addButtonColor}
-                onChange={updateAnswer(item.title)}
-                formId={item.formId}
-              />
-            )
-          )}
-        </ScrollView>
+        <>
+          <FieldLabelContainer>
+            <FieldLabel>LÄGG TILL</FieldLabel>
+          </FieldLabelContainer>
+          <ScrollView horizontal>
+            {items.map((item, index) =>
+              Object.keys(value).includes(item.title) ? null : (
+                <SubstepButton
+                  key={`${index}-${item.title}`}
+                  text={item.title}
+                  iconName="add"
+                  iconColor={colors.substepList[color].addButtonIconColor}
+                  value={value[item.title] || {}}
+                  color={colors.substepList[color].addButtonColor}
+                  onChange={updateAnswer(item.title)}
+                  formId={item.formId}
+                />
+              )
+            )}
+          </ScrollView>
+        </>
       )}
     </Wrapper>
   );
