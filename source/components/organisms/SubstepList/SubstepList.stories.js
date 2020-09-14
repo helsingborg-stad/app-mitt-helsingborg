@@ -55,7 +55,7 @@ const SubstepListStory = () => {
         categories={categories}
         value={values}
         onChange={onChange}
-        placeholderEmptyList="Inga grönsaker valda"
+        placeholder="Inga grönsaker valda"
         summary
       />
     </ScrollView>

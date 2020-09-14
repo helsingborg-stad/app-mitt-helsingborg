@@ -41,14 +41,6 @@ const SmallText = styled(Text)`
   padding-bottom: 8px;
   padding-left: 17px;
 `;
-const MediumText = styled(Text)`
-  height: 40px;
-  font-size: 18px;
-  font-weight: 800;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 17px;
-`;
 const LargeText = styled(Text)`
   height: 40px;
   font-size: 22px;
@@ -80,7 +72,6 @@ const SubstepList = ({
   summary,
   color,
   placeholder,
-  placeholderEmptyList,
 }) => {
   const [editable, setEditable] = useState(!summary);
 
@@ -164,7 +155,7 @@ const SubstepList = ({
     if (listItems.length === 0) {
       listItems.push({
         category: 'placeholder',
-        component: <MediumText style={{ marginTop: -50 }}>{placeholderEmptyList}</MediumText>,
+        component: <SmallText style={{ marginTop: -50 }}>{placeholder}</SmallText>,
       });
     } else {
       if (!categories.find(c => c.category === 'sum')) {
@@ -259,7 +250,6 @@ SubstepList.propTypes = {
    * Message to display before anything has been added to the list.
    */
   placeholder: PropTypes.string,
-  placeholderEmptyList: PropTypes.string,
 };
 
 SubstepList.defaultProps = {
@@ -267,7 +257,6 @@ SubstepList.defaultProps = {
   summary: false,
   color: 'red',
   placeholder: 'Du har inte lagt till något än',
-  placeholderEmptyList: 'Empty list placeholder.',
   onChange: () => {},
 };
 export default SubstepList;
