@@ -41,6 +41,14 @@ const SmallText = styled(Text)`
   padding-bottom: 8px;
   padding-left: 17px;
 `;
+const MediumText = styled(Text)`
+  height: 40px;
+  font-size: 18px;
+  font-weight: 800;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 17px;
+`;
 const LargeText = styled(Text)`
   height: 40px;
   font-size: 22px;
@@ -72,6 +80,7 @@ const SubstepList = ({
   summary,
   color,
   placeholder,
+  placeholderEmptyList,
 }) => {
   const [editable, setEditable] = useState(!summary);
 
@@ -140,7 +149,7 @@ const SubstepList = ({
     }
   });
 
-  if (listItems.length === 0) {
+  if (!summary && listItems.length === 0) {
     if (!categories.find(c => c.category === 'placeholder')) {
       categories.push({ category: 'placeholder', description: '' });
     }
@@ -152,26 +161,33 @@ const SubstepList = ({
   }
 
   if (summary) {
-    if (!categories.find(c => c.category === 'sum')) {
-      categories.push({ category: 'sum', description: 'Summa' });
-    }
+    if (listItems.length === 0) {
+      listItems.push({
+        category: 'placeholder',
+        component: <MediumText style={{ marginTop: -50 }}>{placeholderEmptyList}</MediumText>,
+      });
+    } else {
+      if (!categories.find(c => c.category === 'sum')) {
+        categories.push({ category: 'sum', description: 'Summa' });
+      }
 
-    listItems.push({
-      category: 'sum',
-      component: (
-        <LargeText>
-          {Object.keys(value).reduce((prev, curr) => {
-            const amount = parseFloat(value[curr].amount);
-            // eslint-disable-next-line no-restricted-globals
-            if (isNaN(amount)) {
-              return prev;
-            }
-            return prev + amount;
-          }, 0)}{' '}
-          kr
-        </LargeText>
-      ),
-    });
+      listItems.push({
+        category: 'sum',
+        component: (
+          <LargeText>
+            {Object.keys(value).reduce((prev, curr) => {
+              const amount = parseFloat(value[curr].amount);
+              // eslint-disable-next-line no-restricted-globals
+              if (isNaN(amount)) {
+                return prev;
+              }
+              return prev + amount;
+            }, 0)}{' '}
+            kr
+          </LargeText>
+        ),
+      });
+    }
   }
 
   return (
@@ -241,6 +257,7 @@ SubstepList.propTypes = {
    * Message to display before anything has been added to the list.
    */
   placeholder: PropTypes.string,
+  placeholderEmptyList: PropTypes.string,
 };
 
 SubstepList.defaultProps = {
@@ -248,6 +265,7 @@ SubstepList.defaultProps = {
   summary: false,
   color: 'red',
   placeholder: 'Du har inte lagt till något än',
+  placeholderEmptyList: 'Empty list placeholder.',
   onChange: () => {},
 };
 export default SubstepList;
