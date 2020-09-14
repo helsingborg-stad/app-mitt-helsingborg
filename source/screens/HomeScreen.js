@@ -39,7 +39,6 @@ const HomeScreen = ({ navigation }) => {
   const { createCase } = useContext(CaseDispatch);
 
   const showNotification = useNotification();
-  const recurringFormId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
 
   const toggleInput = () => {
     setInputVisible(true);
@@ -108,27 +107,6 @@ const HomeScreen = ({ navigation }) => {
         >
           <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
         </HomeScreenButton> */}
-
-        <HomeScreenButton
-          color="purple"
-          block
-          onClick={() => {
-            showNotification('This is a toas notification!', 'success');
-          }}
-        >
-          <Text>Visa notification</Text>
-        </HomeScreenButton>
-
-        {/* <Button
-            color="purple"
-            block
-            style={styles.button}
-            onClick={() => {
-              navigation.navigate('Form', { caseData: { hello: 'world' } });
-            }}
-          >
-            <Text>Fortsätt senaste ansökan</Text>
-          </Button> */}
       </ButtonContainer>
     </>
   );

@@ -1,20 +1,40 @@
-import React from "react";
-import { View, TouchableOpacity, Text } from "react-native";
-import styled from "styled-components/native";
-import { TouchableHighlight } from "react-native-gesture-handler";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { View } from 'react-native';
+import styled from 'styled-components/native';
+import { TouchableHighlight } from 'react-native-gesture-handler';
+import { Notification } from '../../../store/NotificationContext';
+import Text from '../../atoms/Text/Text';
+import Icon from '../../atoms/Icon/Icon';
 
-import Icon from "../../atoms/Icon/Icon";
-import styles from "./styles";
+const severityStyles = {
+  success: {
+    color: 'green',
+    icon: 'check',
+  },
+  info: {
+    color: 'yellow',
+    icon: 'info',
+  },
+  warning: {
+    color: 'orange',
+    icon: 'warning',
+  },
+  error: {
+    color: 'red',
+    icon: 'error',
+  },
+};
 
 const BaseContainer = styled.View`
   position: absolute;
   z-index: 1000;
-  top: ${(props) => (props.top ? `${props.top}px` : "40px")};
+  top: ${props => (props.top ? `${props.top}px` : '40px')};
   left: 15%;
   right: 15%;
   bottom: 0;
   height: 60px;
-  padding: 2px;
+  padding: 0px;
   width: 70%;
   background-color: white;
   flex-direction: row;
@@ -25,7 +45,16 @@ const BaseContainer = styled.View`
 `;
 const ContentContainer = styled.View`
   flex: 1;
+  padding-left: 12px;
   justify-content: center;
+`;
+const IconContainer = styled.View`
+  padding-horizontal: 14px;
+  border-bottom-left-radius: 6px;
+  border-top-left-radius: 6px;
+  align-items: center;
+  justify-content: center;
+  background-color: ${props => (props.color ? `${props.color}` : 'transparent')};
 `;
 const CloseButtonContainer = styled.TouchableHighlight`
   padding-horizontal: 14px;
@@ -42,57 +71,55 @@ const SecondaryText = styled(Text)`
   color: #333333;
   margin-bottom: 3px;
 `;
-// text1: {
-//   fontSize: 12,
-//   fontWeight: "bold",
-//   marginBottom: 3,
-// },
-// text2: {
-//   fontSize: 10,
-//   color: colors.text.darker,
-// },
 
 interface Props {
-  color: string;
-  icon: string;
-  text1: string;
-  text2: string;
+  notification: Notification;
   index: number;
   onClose: () => void;
 }
 
-const BaseToast: React.FC<Props> = ({
-  color,
-  icon,
-  text1,
-  text2,
-  index,
-  onClose,
-}) => (
-  <BaseContainer top={40 + 70 * index}>
-    {icon ? (
-      <CloseButtonContainer>
-        <Icon name={icon} />
-      </CloseButtonContainer>
-    ) : null}
-    <ContentContainer>
-      {text1 !== undefined && (
-        <View>
-          <PrimaryText numberOfLines={1}>{text1}</PrimaryText>
-        </View>
-      )}
-      {text2 !== undefined && (
-        <View>
-          <SecondaryText numberOfLines={2}>{text2}</SecondaryText>
-        </View>
-      )}
-    </ContentContainer>
-    <CloseButtonContainer>
-      <TouchableHighlight activeOpacity={1} onPress={onClose}>
-        <Icon name="close" />
-      </TouchableHighlight>
-    </CloseButtonContainer>
-  </BaseContainer>
-);
+const Toast: React.FC<Props> = ({ notification, index, onClose }) => {
+  const { color, icon } = severityStyles[notification.severity];
+  const { mainText, secondaryText } = notification;
 
-export default BaseToast;
+  return (
+    <BaseContainer top={40 + 70 * index}>
+      {icon ? (
+        <IconContainer color={color}>
+          <Icon name={icon} />
+        </IconContainer>
+      ) : null}
+      <ContentContainer>
+        {mainText !== undefined && mainText.trim() !== '' && (
+          <View>
+            <PrimaryText numberOfLines={1}>{mainText}</PrimaryText>
+          </View>
+        )}
+        {secondaryText !== undefined && secondaryText.trim() !== '' && (
+          <View>
+            <SecondaryText numberOfLines={2}>{secondaryText}</SecondaryText>
+          </View>
+        )}
+      </ContentContainer>
+      <CloseButtonContainer>
+        <TouchableHighlight activeOpacity={1} onPress={onClose}>
+          <Icon name="close" />
+        </TouchableHighlight>
+      </CloseButtonContainer>
+    </BaseContainer>
+  );
+};
+
+Toast.propTypes = {
+  notification: PropTypes.shape({
+    id: PropTypes.number,
+    autoHideDuration: PropTypes.number,
+    severity: PropTypes.oneOf(['success', 'info', 'warning', 'error']),
+    mainText: PropTypes.string,
+    secondaryText: PropTypes.string,
+  }),
+  index: PropTypes.number,
+  onClose: PropTypes.func,
+};
+
+export default Toast;
