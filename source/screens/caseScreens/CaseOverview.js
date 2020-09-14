@@ -6,7 +6,7 @@ import FormContext from 'app/store/FormContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { CaseTypeListItem } from '../../components/molecules/ListItem';
-import { getFormattedUpdatedDate } from './CaseLogic';
+import { formatUpdatedAt } from '../../helpers/DateHelpers';
 
 const CaseOverviewWrapper = styled(ScreenWrapper)`
   padding-left: 0;
@@ -38,7 +38,7 @@ const ListHeading = styled(Heading)`
 const computeCaseComponent = (status, latestCase, navigation) => {
   let updatedAt = '';
   if (latestCase) {
-    updatedAt = getFormattedUpdatedDate(latestCase);
+    updatedAt = formatUpdatedAt(latestCase.updatedAt);
   }
 
   switch (status) {
@@ -87,10 +87,11 @@ const CaseOverview = ({ navigation }) => {
         const formIds = await getFormIdsByFormTypes(caseType.formTypes);
 
         const [status, latestCase, relevantCases] = await getCasesByFormIds(formIds);
-
+        console.log(latestCase);
         const component = computeCaseComponent(status, latestCase, navigation);
         return { caseType, status, latestCase, component, cases: relevantCases };
       });
+
       await Promise.all(updateItemsPromises).then(updatedItems => {
         setCaseItems(updatedItems);
       });

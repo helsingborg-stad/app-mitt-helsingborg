@@ -5,7 +5,7 @@ import FormContext from 'app/store/FormContext';
 import { CaseDispatch, CaseState, caseStatus } from 'app/store/CaseContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { Status, getCaseTypeAndLatestCase, getFormattedUpdatedDate } from './CaseLogic';
+import { formatUpdatedAt } from '../../helpers/DateHelpers';
 
 const CaseArchiveWrapper = styled(ScreenWrapper)`
   padding-left: 0;
@@ -46,15 +46,14 @@ const EKBCases = ({ navigation, route }) => {
   const { caseType } = route.params;
   const [status, setStatus] = useState(caseStatus.untouched);
   const [latestCase, setLatestCase] = useState(undefined);
-  const [relevantCases, setRelevantCases] = useState([]);
   const [completedCases, setCompletedCases] = useState([]);
 
   const [recurringFormId, setRecurringFormId] = useState('');
   const [basicApplicationFormId, setBasicApplicationFormId] = useState('');
 
-  const { findFormByType } = useContext(FormContext);
+  const { findFormByType, getFormIdsByFormTypes } = useContext(FormContext);
   const { createCase } = useContext(CaseDispatch);
-  const { cases } = useContext(CaseState);
+  const { cases, getCasesByFormIds } = useContext(CaseState);
 
   useEffect(() => {
     const setState = async () => {
@@ -63,19 +62,19 @@ const EKBCases = ({ navigation, route }) => {
       setRecurringFormId(recurringForm.id);
       setBasicApplicationFormId(newForm.id);
 
-      const [st, latest, relCases] = await getCaseTypeAndLatestCase(
-        caseType,
-        Object.values(cases),
-        findFormByType
-      );
-      setStatus(st);
+      const formIds = await getFormIdsByFormTypes(caseType.formTypes);
+      const [newStatus, latest, relCases] = await getCasesByFormIds(formIds);
+
+      // TODO: set status on case in context.
+      setStatus(newStatus);
+      // TODO: set latest case in context.
       setLatestCase(latest);
-      setRelevantCases(relCases);
       setCompletedCases(relCases.filter(c => c.status !== 'ongoing'));
     };
     setState();
-  }, [caseType, cases, findFormByType, latestCase]);
+  }, [caseType, cases, findFormByType, getCasesByFormIds, getFormIdsByFormTypes]);
 
+  // TODO: Refactor into a dumb component
   const StatusComponent = () => {
     switch (status) {
       case caseStatus.untouched:
@@ -104,7 +103,7 @@ const EKBCases = ({ navigation, route }) => {
             <Heading type="h3">Status</Heading>
             <Text>
               Du har en påbörjad {latestCase?.formId === recurringFormId ? 'löpande ' : 'grund'}
-              ansökan, senast uppdaterad {getFormattedUpdatedDate(latestCase)}.
+              ansökan, senast uppdaterad {formatUpdatedAt(latestCase.updatedAt)}.
             </Text>
             {latestCase?.formId === recurringFormId && (
               <Text>Just nu gäller ansökan perioden XX - YY. Skicka in din ansökan innan ZZ. </Text>
@@ -147,6 +146,7 @@ const EKBCases = ({ navigation, route }) => {
     }
   };
 
+  // TODO: refactor into a dumb component
   const ContactInfoComponent = () => {
     if (completedCases.length > 0) {
       return (
@@ -163,6 +163,7 @@ const EKBCases = ({ navigation, route }) => {
     return null;
   };
 
+  // TODO: Refactor into a dumb
   const CompletedCasesComponent = () => {
     if (completedCases.length > 0) {
       return (
@@ -172,7 +173,7 @@ const EKBCases = ({ navigation, route }) => {
             <ListItem
               key={`${item.id}`}
               highlighted
-              title={getFormattedUpdatedDate(item)}
+              title={formatUpdatedAt(item.updatedAt)}
               text="Perioden XX - YY"
               iconName={null}
               imageSrc={null}
@@ -191,7 +192,7 @@ const EKBCases = ({ navigation, route }) => {
     <CaseArchiveWrapper>
       <Header title="Ekonomiskt bistånd" themeColor="purple" />
       <Container>
-        <StatusComponent />
+        {latestCase && <StatusComponent />}
         <ContactInfoComponent />
         <CompletedCasesComponent />
       </Container>
