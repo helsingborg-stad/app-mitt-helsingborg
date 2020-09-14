@@ -140,6 +140,7 @@ const SubstepList = ({
     }
   });
 
+  // Render list items.
   if (!summary && listItems.length === 0) {
     if (!categories.find(c => c.category === 'placeholder')) {
       categories.push({ category: 'placeholder', description: '' });
@@ -151,6 +152,7 @@ const SubstepList = ({
     });
   }
 
+  // Render summery of list items.
   if (summary) {
     if (listItems.length === 0) {
       listItems.push({
