@@ -140,7 +140,8 @@ const SubstepList = ({
     }
   });
 
-  if (listItems.length === 0) {
+  // Render list items.
+  if (!summary && listItems.length === 0) {
     if (!categories.find(c => c.category === 'placeholder')) {
       categories.push({ category: 'placeholder', description: '' });
     }
@@ -151,27 +152,35 @@ const SubstepList = ({
     });
   }
 
+  // Render summery of list items.
   if (summary) {
-    if (!categories.find(c => c.category === 'sum')) {
-      categories.push({ category: 'sum', description: 'Summa' });
-    }
+    if (listItems.length === 0) {
+      listItems.push({
+        category: 'placeholder',
+        component: <SmallText style={{ marginTop: -50 }}>{placeholder}</SmallText>,
+      });
+    } else {
+      if (!categories.find(c => c.category === 'sum')) {
+        categories.push({ category: 'sum', description: 'Summa' });
+      }
 
-    listItems.push({
-      category: 'sum',
-      component: (
-        <LargeText>
-          {Object.keys(value).reduce((prev, curr) => {
-            const amount = parseFloat(value[curr].amount);
-            // eslint-disable-next-line no-restricted-globals
-            if (isNaN(amount)) {
-              return prev;
-            }
-            return prev + amount;
-          }, 0)}{' '}
-          kr
-        </LargeText>
-      ),
-    });
+      listItems.push({
+        category: 'sum',
+        component: (
+          <LargeText>
+            {Object.keys(value).reduce((prev, curr) => {
+              const amount = parseFloat(value[curr].amount);
+              // eslint-disable-next-line no-restricted-globals
+              if (isNaN(amount)) {
+                return prev;
+              }
+              return prev + amount;
+            }, 0)}{' '}
+            kr
+          </LargeText>
+        ),
+      });
+    }
   }
 
   return (
@@ -189,18 +198,20 @@ const SubstepList = ({
             <FieldLabel>LÄGG TILL</FieldLabel>
           </FieldLabelContainer>
           <ScrollView horizontal>
-            {items.map((item, index) => (
-              <SubstepButton
-                key={`${index}-${item.title}`}
-                text={item.title}
-                iconName="add"
-                iconColor={colors.substepList[color].addButtonIconColor}
-                value={value[item.title] || {}}
-                color={colors.substepList[color].addButtonColor}
-                onChange={updateAnswer(item.title)}
-                formId={item.formId}
-              />
-            ))}
+            {items.map((item, index) =>
+              Object.keys(value).includes(item.title) ? null : (
+                <SubstepButton
+                  key={`${index}-${item.title}`}
+                  text={item.title}
+                  iconName="add"
+                  iconColor={colors.substepList[color].addButtonIconColor}
+                  value={value[item.title] || {}}
+                  color={colors.substepList[color].addButtonColor}
+                  onChange={updateAnswer(item.title)}
+                  formId={item.formId}
+                />
+              )
+            )}
           </ScrollView>
         </>
       )}
