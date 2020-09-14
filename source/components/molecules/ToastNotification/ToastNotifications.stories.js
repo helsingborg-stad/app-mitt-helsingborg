@@ -37,7 +37,12 @@ const NotificationsExample = () => {
         color="blue"
         block
         onClick={() => {
-          showNotification('This is a warning!', 'bar', 'warning');
+          showNotification(
+            'This is a warning!',
+            'it will stay only a very short time',
+            'warning',
+            1500
+          );
         }}
       >
         <Text>Show warning notification</Text>
@@ -46,7 +51,7 @@ const NotificationsExample = () => {
         color="red"
         block
         onClick={() => {
-          showNotification('This is an error notification!', 'Something went wrong!', 'error');
+          showNotification('This is an error notification!', 'It will stay for ever', 'error', 0);
         }}
       >
         <Text>Show error notification</Text>

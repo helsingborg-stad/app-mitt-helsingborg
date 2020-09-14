@@ -42,7 +42,12 @@ interface Props {
 }
 
 interface NotificationContextType {
-  showNotification: (mainText: string, secondaryText: string, severity: Severity) => void;
+  showNotification: (
+    mainText: string,
+    secondaryText: string,
+    severity: Severity,
+    autoHideDuration?: number
+  ) => void;
   removeNotification: (id: number) => void;
   clearAll: () => void;
 }
@@ -63,10 +68,15 @@ export const useNotification = () => {
 export const NotificationProvider: React.FC<Props> = ({ children }: Props) => {
   const [notifications, dispatch] = useReducer(notificationReducer, initialState);
 
-  const showNotification = (mainText: string, secondaryText: string, severity: Severity) => {
+  const showNotification = (
+    mainText: string,
+    secondaryText: string,
+    severity: Severity,
+    autoHideDuration = 6000
+  ) => {
     dispatch({
       type: 'ADD',
-      payload: { autoHideDuration: 6000, mainText, secondaryText, severity },
+      payload: { autoHideDuration, mainText, secondaryText, severity },
     });
   };
 

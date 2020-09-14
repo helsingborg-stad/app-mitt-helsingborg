@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
@@ -81,6 +81,12 @@ interface Props {
 const Toast: React.FC<Props> = ({ notification, index, onClose }) => {
   const { color, icon } = severityStyles[notification.severity];
   const { mainText, secondaryText } = notification;
+
+  useEffect(() => {
+    if (notification.autoHideDuration > 0) {
+      setTimeout(onClose, notification.autoHideDuration);
+    }
+  }, [notification, onClose]);
 
   return (
     <BaseContainer top={40 + 70 * index}>
