@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Heading, Text, Button } from 'app/components/atoms';
 import { ScreenWrapper } from 'app/components/molecules';
-import { CaseState, caseStatus } from 'app/store/CaseContext';
+import { CaseState, caseStatus, caseTypes } from 'app/store/CaseContext';
 import FormContext from 'app/store/FormContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { CaseTypeListItem } from '../../components/molecules/ListItem';
-import { caseTypes, getFormattedUpdatedDate } from './CaseLogic';
+import { getFormattedUpdatedDate } from './CaseLogic';
 
 const CaseOverviewWrapper = styled(ScreenWrapper)`
   padding-left: 0;

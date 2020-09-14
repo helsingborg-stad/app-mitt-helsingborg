@@ -12,6 +12,25 @@ import {
 const CaseState = React.createContext();
 const CaseDispatch = React.createContext();
 
+/**
+ * An array that defines the different types of cases there is in the application.
+ * Note: Not sure if this is the right place to save these params, but will do for know.
+ * */
+export const caseTypes = [
+  {
+    name: 'Ekonomiskt Bistånd',
+    formTypes: ['EKB-recurring', 'EKB-new'],
+    icon: 'ICON_EKB',
+    navigateTo: 'EKBCases',
+  },
+  {
+    name: 'Borgerlig Vigsel',
+    formTypes: [],
+    icon: '',
+    navigateTo: 'BVCases',
+  },
+];
+
 /** An enum for describing the state of the user with respect to a given case type. */
 export const caseStatus = {
   unfinished: 'UNFINISHED',
@@ -41,7 +60,7 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
 
   /**
    * This functions retrives cases based on formIds
-   * @param {formIds} caseType an object with {name, forms: [formIds], icon: icon name, navigateTo: string with the navigation path}.
+   * @param {array} formIds an array of form ids.
    * @param {[cases]} cases array of case objects.
    * @returns {[status, latestCase, relevantCases]}
    */
