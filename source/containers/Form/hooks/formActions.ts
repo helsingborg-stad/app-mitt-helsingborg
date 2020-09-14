@@ -1,38 +1,12 @@
 import { increaseCount, decreaseCount } from '../../../helpers/Counter';
 import { replaceMarkdownTextInSteps } from './textReplacement';
-/**
- * Action Types
- */
-
-/** @type { string } */
-export const REPLACE_MARKDOWN_TEXT = 'REPLACE_MARKDOWN_TEXT';
-
-/** @type { string } */
-export const INCREASE_COUNTER = 'INCREASE_COUNTER';
-
-/** @type { string } */
-export const DECREASE_COUNTER = 'DECREASE_COUNTER';
-
-/** @type { string } */
-export const START_FORM = 'START_FORM';
-
-/** @type { string } */
-export const UPDATE_ANSWER = 'UPDATE_ANSWER';
-
-/** @type { object } */
-export const actionTypes = {
-  INCREASE_COUNTER,
-  DECREASE_COUNTER,
-  UPDATE_ANSWER,
-  REPLACE_MARKDOWN_TEXT,
-  START_FORM,
-};
+import { FormReducerState } from './useForm';
 
 /**
  * Action for replacing title markdown in steps.
- * @param {object} state the current state of the form
+ * @param {FormReducerState} state the current state of the form
  */
-export function replaceMarkdownText(state) {
+export function replaceMarkdownText(state: FormReducerState) {
   const { steps, user } = state;
   const updatedSteps = replaceMarkdownTextInSteps(steps, user);
   return {
@@ -43,9 +17,9 @@ export function replaceMarkdownText(state) {
 
 /**
  * Action for decreasing the form counter.
- * @param {object} state the current state of the form
+ * @param {FormReducerState} state the current state of the form
  */
-export function decreaseFormCounter(state) {
+export function decreaseFormCounter(state: FormReducerState) {
   const { counter } = state;
   return {
     ...state,
@@ -55,9 +29,9 @@ export function decreaseFormCounter(state) {
 
 /**
  * Action for increasing the form counter.
- * @param {object} state the current state of the form
+ * @param {FormReducerState} state the current state of the form
  */
-export function increaseFormCounter(state) {
+export function increaseFormCounter(state: FormReducerState) {
   const { steps, counter } = state;
   return {
     ...state,
@@ -69,7 +43,7 @@ export function increaseFormCounter(state) {
  * Action to run when starting a form.
  * @param {object} state the current state of the form
  */
-export function startForm(state, payload) {
+export function startForm(state: FormReducerState, payload: { callback: () => void }) {
   // TODO: Pass user input values.
   payload.callback({});
   const { steps, counter } = state;
@@ -81,21 +55,24 @@ export function startForm(state, payload) {
 
 /**
  * Action to run when starting a form.
- * @param {object} state the current state of the form
+ * @param {FormReducerState} state the current state of the form
  */
-export function submitForm(state, payload) {
+export function submitForm(
+  state: FormReducerState,
+  payload: { callback: (formAnswers: Record<string, any>) => void }
+) {
   payload.callback(state.formAnswers);
   return { ...state, submitted: true };
 }
 
 /**
  * Action for updating the answers in the form state.
- * @param {object} state The current state of the form
- * @param {object} answer The new answer(s): an object with key:value pairs, to be inserted into the states formAnswers
+ * @param {FormReducerState} state The current state of the form
+ * @param {Record<string, any>} answer The new answer(s): an object with key:value pairs, to be inserted into the states formAnswers
  */
-export function updateAnswer(state, answer) {
+export function updateAnswer(state: FormReducerState, answer: Record<string, any>) {
   // make a deep copy of the formAnswers, and use that to update. Not sure if completely needed.
-  const updatedAnswers = JSON.parse(JSON.stringify(state.formAnswers));
+  const updatedAnswers: Record<string, any> = JSON.parse(JSON.stringify(state.formAnswers));
   Object.keys(answer).forEach(key => (updatedAnswers[key] = answer[key]));
 
   return {
