@@ -10,6 +10,9 @@ import { User } from '../../../types/UserTypes';
 const replacementRules = [
   ['#firstName', 'user.firstName'],
   ['#lastName', 'user.lastName'],
+  ['#datum1', 'date.nextMonth.first'],
+  ['#datum2', 'date.nextMonth.last'],
+  ['#year', 'date.currentYear'], // this is the current year of next month
 ];
 
 const computeText = (descriptor: string, user: User): string => {
@@ -20,6 +23,23 @@ const computeText = (descriptor: string, user: User): string => {
       return undefined;
     }, user);
     if (res) return res;
+  }
+  if (strArr[0] === 'date') {
+    const today = new Date();
+    if (strArr[1] === 'nextMonth') {
+      const month = today.getMonth() + 2;
+      if (strArr[2] === 'first') {
+        return `1/${month}`;
+      }
+      if (strArr[2] === 'last') {
+        const days = new Date(today.getFullYear(), month, 0).getDate();
+        return `${days}/${month}`;
+      }
+    }
+    if (strArr[1] === 'currentYear') {
+      const year = new Date(today.getFullYear(), today.getMonth() + 1, 1).getFullYear();
+      return `${year}`;
+    }
   }
   return '';
 };
