@@ -42,6 +42,20 @@ const ButtonContainer = styled.View`
 
 const sortCasesByLastUpdated = list => list.sort((a, b) => b.updatedAt - a.updatedAt);
 
+// eslint-disable-next-line react/prop-types
+const CaseStatusSection = ({ title, description, button, casePeriod }) => (
+  <Container>
+    <Heading type="h3">{title}</Heading>
+    <Text>{description}</Text>
+    {casePeriod && <Text>{casePeriod}</Text>}
+    <ButtonContainer>
+      <Button {...button}>
+        <Text>Fortsätt ansökan</Text>
+      </Button>
+    </ButtonContainer>
+  </Container>
+);
+
 const EKBCases = ({ navigation, route }) => {
   const { caseType } = route.params;
   const [status, setStatus] = useState(caseStatus.untouched);
@@ -74,73 +88,63 @@ const EKBCases = ({ navigation, route }) => {
     setState();
   }, [caseType, cases, findFormByType, getCasesByFormIds, getFormIdsByFormTypes]);
 
-  // TODO: Refactor into a dumb component
-  const StatusComponent = () => {
+  // TODO: Create props object
+  const caseStatusProps = () => {
+    const casePeriod = 'Just nu gäller ansökan perioden XX - YY. Skicka in din ansökan innan ZZ.';
+    const commonProps = {
+      title: 'Ärende status',
+    };
     switch (status) {
       case caseStatus.untouched:
-        return (
-          <>
-            <Heading type="h3">Status</Heading>
-            <Text>Du har ingen aktiv grundansökan. </Text>
-            <ButtonContainer>
-              <Button
-                color="green"
-                onClick={() => {
-                  createCase(basicApplicationFormId, newCase => {
-                    navigation.navigate('Form', { caseData: newCase });
-                  });
-                }}
-              >
-                <Text>Ansök om ekonomiskt bistånd</Text>
-              </Button>
-            </ButtonContainer>
-          </>
-        );
+        return {
+          ...commonProps,
+          description: 'Du har ingen aktiv ansökan.',
+          button: {
+            onClick: () => {
+              createCase(basicApplicationFormId, newCase => {
+                navigation.navigate('Form', { caseData: newCase });
+              });
+            },
+            text: 'Ansök om ekonomiskt bistånd',
+            color: 'green',
+          },
+        };
       case caseStatus.unfinishedNoCompleted:
       case caseStatus.unfinished:
-        return (
-          <>
-            <Heading type="h3">Status</Heading>
-            <Text>
-              Du har en påbörjad {latestCase?.formId === recurringFormId ? 'löpande ' : 'grund'}
-              ansökan, senast uppdaterad {formatUpdatedAt(latestCase.updatedAt)}.
-            </Text>
-            {latestCase?.formId === recurringFormId && (
-              <Text>Just nu gäller ansökan perioden XX - YY. Skicka in din ansökan innan ZZ. </Text>
-            )}
-            <ButtonContainer>
-              <Button
-                color="blue"
-                onClick={() => {
-                  navigation.navigate('Form', { caseId: latestCase.id });
-                }}
-              >
-                <Text>Fortsätt ansökan</Text>
-              </Button>
-            </ButtonContainer>
-          </>
-        );
+        return {
+          ...commonProps,
+          description: `Du har en påbörjad ${
+            latestCase?.formId === recurringFormId ? 'löpande ansökan' : 'grundansökan'
+          } ansökan, senast uppdaterad ${formatUpdatedAt(latestCase.updatedAt)}.`,
+          casePeriod,
+          button: {
+            onClick: () => {
+              createCase(basicApplicationFormId, newCase => {
+                navigation.navigate('Form', { caseData: newCase });
+              });
+            },
+            text: 'Fortsätt ansökan',
+            color: 'blue',
+          },
+        };
       case caseStatus.recentlyCompleted:
-        return (
-          <>
-            <Heading type="h3">Status</Heading>
-            <Text>
-              Du har en inskickad {latestCase?.formId === recurringFormId ? 'löpande ' : 'grund'}
-              ansökan.
-            </Text>
-            <Text>Just nu gäller ansökan perioden XX - YY. Skicka in din ansökan innan ZZ. </Text>
-            <Button
-              color="green"
-              onClick={() => {
-                createCase(recurringFormId, newCase => {
-                  navigation.navigate('Form', { caseData: newCase });
-                });
-              }}
-            >
-              <Text>Ansök om ekonomiskt bistånd för perioden XX - YY</Text>
-            </Button>
-          </>
-        );
+        return {
+          ...commonProps,
+          description: `Du har en inskickad ${
+            latestCase?.formId === recurringFormId ? 'löpande ansökan' : 'grundansökan'
+          }, senast uppdaterad ${formatUpdatedAt(latestCase.updatedAt)}.`,
+          casePeriod,
+          button: {
+            onClick: () => {
+              createCase(basicApplicationFormId, newCase => {
+                navigation.navigate('Form', { caseData: newCase });
+              });
+            },
+            text: 'Fortsätt ansökan',
+            color: 'blue',
+          },
+        };
+
       default:
         break;
     }
@@ -163,7 +167,7 @@ const EKBCases = ({ navigation, route }) => {
     return null;
   };
 
-  // TODO: Refactor into a dumb
+  // TODO: Refactor into a dumb component
   const CompletedCasesComponent = () => {
     if (completedCases.length > 0) {
       return (
@@ -191,8 +195,12 @@ const EKBCases = ({ navigation, route }) => {
   return (
     <CaseArchiveWrapper>
       <Header title="Ekonomiskt bistånd" themeColor="purple" />
+      {latestCase ? (
+        <CaseStatusSection {...caseStatusProps()} />
+      ) : (
+        <Text> Hämtar senaste ärende... </Text>
+      )}
       <Container>
-        {latestCase && <StatusComponent />}
         <ContactInfoComponent />
         <CompletedCasesComponent />
       </Container>
