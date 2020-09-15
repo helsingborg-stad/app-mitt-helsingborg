@@ -83,7 +83,7 @@ const SubstepList = ({
 
   const changeFromInput = item => text => {
     const newAnswers = JSON.parse(JSON.stringify(typeof value === 'string' ? {} : value));
-    newAnswers[item.title].amxount = text;
+    newAnswers[item.title].amount = text;
     onChange(newAnswers);
   };
 
