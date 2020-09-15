@@ -87,7 +87,6 @@ const CaseOverview = ({ navigation }) => {
         const formIds = await getFormIdsByFormTypes(caseType.formTypes);
 
         const [status, latestCase, relevantCases] = await getCasesByFormIds(formIds);
-        console.log(latestCase);
         const component = computeCaseComponent(status, latestCase, navigation);
         return { caseType, status, latestCase, component, cases: relevantCases };
       });
