@@ -55,8 +55,6 @@ const FooterAction = ({
       case 'close': {
         return () => {
           if (onUpdate && caseStatus === 'ongoing') onUpdate(answers);
-          if (updateCaseInContext && caseStatus === 'ongoing')
-            updateCaseInContext(answers, 'ongoing', stepNumber);
           if (onClose) onClose();
         };
       }

@@ -15,36 +15,47 @@ const replacementRules = [
   ['#year', 'date.currentYear'], // this is the current year of next month
 ];
 
+const replaceDates = (descriptor: string[]): string => {
+  const today = new Date();
+  if (descriptor[1] === 'nextMonth') {
+    const month = today.getMonth() + 2;
+    if (descriptor[2] === 'first') {
+      return `1/${month}`;
+    }
+    if (descriptor[2] === 'last') {
+      const days = new Date(today.getFullYear(), month, 0).getDate();
+      return `${days}/${month}`;
+    }
+  }
+  if (descriptor[1] === 'currentYear') {
+    const year = new Date(today.getFullYear(), today.getMonth() + 1, 1).getFullYear();
+    return `${year}`;
+  }
+  return '';
+};
+
+const replaceUserInfo = (descriptor: string[], user: User): string => {
+  const res = descriptor.slice(1).reduce((prev, current) => {
+    if (prev && prev[current]) return prev[current];
+    return undefined;
+  }, user);
+  return res || '';
+};
+
 const computeText = (descriptor: string, user: User): string => {
   const strArr = descriptor.split('.');
   if (strArr[0] === 'user') {
-    const res = strArr.slice(1).reduce((prev, current) => {
-      if (prev && prev[current]) return prev[current];
-      return undefined;
-    }, user);
-    if (res) return res;
+    return replaceUserInfo(strArr, user);
   }
   if (strArr[0] === 'date') {
-    const today = new Date();
-    if (strArr[1] === 'nextMonth') {
-      const month = today.getMonth() + 2;
-      if (strArr[2] === 'first') {
-        return `1/${month}`;
-      }
-      if (strArr[2] === 'last') {
-        const days = new Date(today.getFullYear(), month, 0).getDate();
-        return `${days}/${month}`;
-      }
-    }
-    if (strArr[1] === 'currentYear') {
-      const year = new Date(today.getFullYear(), today.getMonth() + 1, 1).getFullYear();
-      return `${year}`;
-    }
+    return replaceDates(strArr);
   }
   return '';
 };
 
 const replaceText = (text: string, user: User) => {
+  // This way of doing it might be a bit overkill, but the idea is that this in principle
+  // allows for nesting replacement rules and then applying them in order one after the other.
   let res = text;
   replacementRules.forEach(([template, descriptor]) => {
     res = res.replace(template, computeText(descriptor, user));
@@ -52,6 +63,11 @@ const replaceText = (text: string, user: User) => {
   return res;
 };
 
+/**
+ * Replaces the markdown as specified by a set of markdown rules and logic that we've defined.
+ * @param steps the steps of the form
+ * @param user the user object
+ */
 export const replaceMarkdownTextInSteps = (steps: Step[], user: User): Step[] => {
   const newSteps = steps.map(step => {
     if (step.questions) {
