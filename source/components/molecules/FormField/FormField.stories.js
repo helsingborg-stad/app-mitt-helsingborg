@@ -6,10 +6,10 @@ import FormField from './FormField';
 
 const heading = 'Green things';
 
-const categories = {
-  fruit: 'Frukter',
-  vegetable: 'Grönsaker',
-};
+const categories = [
+  { category: 'fruit', description: 'Frukter' },
+  { category: 'vegetable', description: 'Grönsaker' },
+];
 
 const items = [
   {

@@ -100,7 +100,6 @@ const ListItem = props => {
       <Chevron name="chevron-right" />
     </Flex>
   );
-
   if (highlighted) {
     return (
       <HighlightedItem onClick={onClick} block>

@@ -63,7 +63,11 @@
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [".js", ".tsx", ".jsx"]
+        "extensions": [
+          ".js",
+          ".tsx",
+          ".jsx"
+        ]
       }
     ],
     "radix": 0,
