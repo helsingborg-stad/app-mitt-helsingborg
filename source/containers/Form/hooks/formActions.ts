@@ -45,7 +45,7 @@ export function increaseFormCounter(state: FormReducerState) {
  */
 export function startForm(state: FormReducerState, payload: { callback: () => void }) {
   // TODO: Pass user input values.
-  payload.callback({});
+  payload.callback();
   const { steps, counter } = state;
   return {
     ...state,
