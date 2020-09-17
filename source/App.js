@@ -3,13 +3,15 @@
 /* eslint-disable react/sort-comp */
 import React from 'react';
 import Config from 'react-native-config';
-import { Notification } from 'app/store';
+import { ThemeProvider } from 'styled-components/native';
 import Navigator from './navigator';
 import StorybookUIRoot from '../storybook';
+import theme from './styles/theme';
 
 import { CaseProvider } from './store/CaseContext';
 import { AuthProvider } from './store/AuthContext';
 import { FormProvider } from './store/FormContext';
+import { NotificationProvider } from './store/NotificationContext';
 /**
  * Any setup and init for application goes here:
  * Platform specific handling, global listeners, providers, etc.
@@ -21,9 +23,11 @@ const App = () => {
       <AuthProvider>
         <CaseProvider>
           <FormProvider>
-            <Notification.Provider>
-              <StorybookUIRoot />
-            </Notification.Provider>
+            <ThemeProvider theme={theme}>
+              <NotificationProvider>
+                <StorybookUIRoot />
+              </NotificationProvider>
+            </ThemeProvider>
           </FormProvider>
         </CaseProvider>
       </AuthProvider>
@@ -34,9 +38,11 @@ const App = () => {
     <AuthProvider>
       <CaseProvider>
         <FormProvider>
-          <Notification.Provider>
-            <Navigator />
-          </Notification.Provider>
+          <ThemeProvider theme={theme}>
+            <NotificationProvider>
+              <Navigator />
+            </NotificationProvider>
+          </ThemeProvider>
         </FormProvider>
       </CaseProvider>
     </AuthProvider>
