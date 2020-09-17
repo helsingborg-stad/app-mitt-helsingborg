@@ -1,40 +1,51 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { Step } from 'app/components/organisms';
+import Step from '../../components/organisms/Step/Step';
+import { Step as StepType } from '../../types/FormTypes';
+import { CaseStatus } from '../../types/CaseType';
+import { User } from '../../types/UserTypes';
 import Stepper from '../../components/atoms/Stepper/Stepper';
 import useForm from './hooks/useForm';
 
-const FormStepper = styled(Stepper)``;
 const FormContainer = styled.View`
   flex: 1;
   height: auto;
 `;
+
+interface Props {
+  startAt: number;
+  steps: StepType[];
+  user: User;
+  initialAnswers: Record<string, any>;
+  status?: CaseStatus;
+  onClose: () => void;
+  onSubmit: () => void;
+  onStart: () => any;
+  updateCaseInContext: (data: Record<string, any>, status: CaseStatus, currentStep: number) => void;
+}
 
 /**
  * The Container Component Form allows you to create, process and reuse forms. The Form component
  * is a tool to help you solve the problem of allowing end-users to interact with the
  * data and modify the data in your application.
  */
-
-function Form({
+const Form: React.FC<Props> = ({
   startAt,
   steps,
-  firstName,
+  user,
   onClose,
   onStart,
   onSubmit,
   initialAnswers,
   status,
   updateCaseInContext,
-}) {
+}) => {
   const initialState = {
     submitted: false,
     counter: startAt,
     steps,
-    user: {
-      firstName,
-    },
+    user,
     formAnswers: initialAnswers,
   };
 
@@ -49,7 +60,7 @@ function Form({
   } = useForm(initialState);
   return (
     <FormContainer>
-      <FormStepper active={formState.counter}>
+      <Stepper active={formState.counter}>
         {formState.steps.map(
           ({ id, banner, theme, title, group, description, questions, actions }) => (
             <Step
@@ -80,10 +91,10 @@ function Form({
             />
           )
         )}
-      </FormStepper>
+      </Stepper>
     </FormContainer>
   );
-}
+};
 
 Form.propTypes = {
   /**
@@ -107,9 +118,9 @@ Form.propTypes = {
    */
   steps: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   /**
-   * The firstName of the respondent.
+   * The user info.
    */
-  firstName: PropTypes.string.isRequired,
+  user: PropTypes.object,
   /**
    * Initial answer for each question.
    */

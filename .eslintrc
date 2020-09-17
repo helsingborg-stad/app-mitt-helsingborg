@@ -74,7 +74,9 @@
       1,
       {
         "extensions": [
-          ".js"
+          ".js",
+          ".tsx",
+          ".jsx"
         ]
       }
     ],

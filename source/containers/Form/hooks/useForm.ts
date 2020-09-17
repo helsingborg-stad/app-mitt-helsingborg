@@ -1,13 +1,22 @@
 import { useReducer, useEffect } from 'react';
 import formReducer from './formReducer';
-import { actionTypes } from './formActions';
+import { Step } from '../../../types/FormTypes';
+import { User } from '../../../types/UserTypes';
 
-function useForm(initialState) {
+export interface FormReducerState {
+  submitted: boolean;
+  counter: number;
+  steps: Step[];
+  user: User;
+  formAnswers: Record<string, any>;
+}
+
+function useForm(initialState: FormReducerState) {
   const [formState, dispatch] = useReducer(formReducer, initialState);
 
   useEffect(() => {
     dispatch({
-      type: actionTypes.REPLACE_FIRSTNAME_MARKDOWN_IN_ALL_STEP_TITLES,
+      type: 'REPLACE_MARKDOWN_TEXT',
     });
   }, []);
 
@@ -16,7 +25,7 @@ function useForm(initialState) {
    */
   const goToNextStep = () =>
     dispatch({
-      type: actionTypes.INCREASE_COUNTER,
+      type: 'INCREASE_COUNTER',
     });
 
   /**
@@ -24,7 +33,7 @@ function useForm(initialState) {
    */
   const goToPreviousStep = () =>
     dispatch({
-      type: actionTypes.DECREASE_COUNTER,
+      type: 'DECREASE_COUNTER',
     });
 
   const isLastStep = () => formState.steps.length === formState.counter;
@@ -34,9 +43,9 @@ function useForm(initialState) {
    * to handle a form start action.
    * @param {func} callback callback function to be called on when a start action is triggerd
    */
-  const startForm = callback => {
+  const startForm = (callback: () => void) => {
     dispatch({
-      type: actionTypes.START_FORM,
+      type: 'START_FORM',
       payload: { callback },
     });
   };
@@ -45,9 +54,9 @@ function useForm(initialState) {
    * Function for handling a on submit action in the form.
    * @param {func} callback callback function to be called on form submit.
    */
-  const handleSubmit = callback => {
+  const handleSubmit = (callback: (formAnswers: Record<string, any>) => void) => {
     dispatch({
-      type: actionTypes.SUBMIT_FORM,
+      type: 'SUBMIT_FORM',
       payload: { callback },
     });
   };
@@ -61,14 +70,15 @@ function useForm(initialState) {
    * to handle a form close action.
    * @param {func} callback callback function to be called on when a close action is triggerd
    */
-  const closeForm = callback => callback({ state: formState }, isLastStep());
+  const closeForm = (callback: (s: { state: FormReducerState }, isLastStep: boolean) => any) =>
+    callback({ state: formState }, isLastStep());
 
   /**
    * Function for updating answer.
    */
-  const handleInputChange = answer => {
+  const handleInputChange = (answer: Record<string, any>) => {
     // console.log(answer);
-    dispatch({ type: actionTypes.UPDATE_ANSWER, payload: answer });
+    dispatch({ type: 'UPDATE_ANSWER', payload: answer });
   };
 
   return {
