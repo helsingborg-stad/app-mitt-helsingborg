@@ -51,35 +51,6 @@ const uploadFile = async (endpoint, fileName, fileType, fileData, headers = {}) 
     // return the url and filename on server to the uploaded file.
     return { url: putResponse.url, uploadedFileName };
 
-    // Alternative with signed post request that we didn't get to work... saving for reference if we later want to change this.
-    // fields.acl = 'public-read';
-    // const formData = new FormData();
-    // Object.keys(fields).forEach(key => {
-    //   formData.append(key, fields[key]);
-    // });
-    // formData.append('file', fileData);
-
-    // console.log(
-    //   'form data',
-    //   JSON.stringify(
-    //     {
-    //       ...fields,
-    //       file: fileData,
-    //     },
-    //     null,
-    //     2
-    //   )
-    // );
-
-    // const r = await fetch(url, {
-    //   method: 'POST',
-    //   body: formData,
-    // headers: {
-    //   'Content-Type': 'multipart/form-data',
-    // },
-    // });
-    // console.log(r);
-    // return r;
   } catch (error) {
     console.log('axios error', error);
     return { error: true, message: error.message, ...error.response };
