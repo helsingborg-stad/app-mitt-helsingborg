@@ -125,9 +125,9 @@ const SubstepList: React.FC<Props> = ({
             summary,
             editable,
             color,
-            updateAnswer,
-            removeItem,
-            changeFromInput,
+            updateAnswer: updateAnswer(item.key),
+            removeItem: removeItem(item, shownField),
+            changeFromInput: changeFromInput(item, shownField),
           };
           listItems.push({
             category: shownField.category,
@@ -182,7 +182,7 @@ const SubstepList: React.FC<Props> = ({
       {editable && !summary && (
         <>
           <FieldLabelContainer>
-            <FieldLabel color={color} help={buttonHelp} underline>
+            <FieldLabel color={color} help={buttonHelp}>
               LÄGG TILL
             </FieldLabel>
           </FieldLabelContainer>

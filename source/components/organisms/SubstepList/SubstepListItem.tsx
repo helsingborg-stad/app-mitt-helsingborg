@@ -52,9 +52,9 @@ interface Props {
   item: Item;
   shownField: ShownField;
   value: Record<string, any>;
-  updateAnswer: (key: string) => void;
-  changeFromInput: (item: Item, shownField: ShownField) => (text: string) => void;
-  removeItem: (item: Item, shownField: ShownField) => () => void;
+  updateAnswer: (data: Record<string, any>) => void;
+  changeFromInput: (text: string) => void;
+  removeItem: () => void;
   color: string;
   editable: boolean;
   summary: boolean;
@@ -77,7 +77,7 @@ const SubstepListItem: React.FC<Props> = ({
         <SubstepButton
           text={shownField.heading}
           value={value[item.key] || {}}
-          onChange={updateAnswer(item.key)}
+          onChange={updateAnswer}
           formId={item.formId}
           color={colors.substepList[color].listButtonColor}
           size="small"
@@ -87,10 +87,10 @@ const SubstepListItem: React.FC<Props> = ({
             textAlign="right"
             keyboardType="numeric"
             value={value[item.key][shownField.fieldId]}
-            onChangeText={changeFromInput(item, shownField)}
+            onChangeText={changeFromInput}
           />
         </InputWrapper>
-        <TouchableHighlight activeOpacity={1} onPress={removeItem(item, shownField)}>
+        <TouchableHighlight activeOpacity={1} onPress={removeItem}>
           <DeleteButton name="clear" />
         </TouchableHighlight>
       </>
@@ -103,7 +103,7 @@ const SubstepListItem: React.FC<Props> = ({
               textAlign="right"
               keyboardType="numeric"
               value={value[item.key][shownField.fieldId]}
-              onChangeText={changeFromInput(item, shownField)}
+              onChangeText={changeFromInput}
             />
           </InputWrapper>
         </TextWrapper>
