@@ -92,14 +92,18 @@ const SubstepList: React.FC<Props> = ({
     onChange(newAnswers);
   };
 
-  const changeFromInput = (item: Item) => (text: string) => {
+  const changeFromInput = (item: Item, shownField: ShownField) => (text: string) => {
     const newAnswers = JSON.parse(JSON.stringify(typeof value === 'string' ? {} : value));
-    newAnswers[item.key].amount = text;
+    newAnswers[item.key][shownField.fieldId] = text;
     onChange(newAnswers);
   };
 
-  const removeItem = (item: Item) => () => {
-    const newAnswers = excludePropetiesWithKey(typeof value === 'string' ? {} : value, [item.key]);
+  const removeItem = (item: Item, shownField: ShownField) => () => {
+    const newItem = excludePropetiesWithKey(typeof value === 'string' ? {} : value[item.key], [
+      shownField.fieldId,
+    ]);
+    const newAnswers = JSON.parse(JSON.stringify(value));
+    newAnswers[item.key] = newItem;
     onChange(newAnswers);
   };
 
@@ -139,21 +143,27 @@ const SubstepList: React.FC<Props> = ({
       if (!categories.find(c => c.category === 'sum')) {
         categories.push({ category: 'sum', description: 'Summa' });
       }
+      const sum = items.reduce(
+        (sum: number, item: Item) =>
+          item.shownFields
+            ? sum +
+              item.shownFields.reduce((partialSum: number, shownField: ShownField) => {
+                if (value[item.key] && value[item.key][shownField.fieldId]) {
+                  const term = parseFloat(value[item.key][shownField.fieldId]);
+                  // eslint-disable-next-line no-restricted-globals
+                  if (isNaN(term)) {
+                    return partialSum;
+                  }
+                  return partialSum + term;
+                }
+                return partialSum;
+              }, 0)
+            : sum,
+        0
+      );
       listItems.push({
         category: 'sum',
-        component: (
-          <LargeText>
-            {Object.keys(value).reduce((prev, curr) => {
-              const amount = parseFloat(value[curr].amount);
-              // eslint-disable-next-line no-restricted-globals
-              if (isNaN(amount)) {
-                return prev;
-              }
-              return prev + amount;
-            }, 0)}{' '}
-            kr
-          </LargeText>
-        ),
+        component: <LargeText>{`${sum} kr`}</LargeText>,
       });
     }
   }
@@ -172,7 +182,9 @@ const SubstepList: React.FC<Props> = ({
       {editable && !summary && (
         <>
           <FieldLabelContainer>
-            <FieldLabel help={buttonHelp}>LÄGG TILL</FieldLabel>
+            <FieldLabel color={color} help={buttonHelp} underline>
+              LÄGG TILL
+            </FieldLabel>
           </FieldLabelContainer>
           <ScrollView horizontal>
             {items.map((item: Record<string, any>, index: number) => (
