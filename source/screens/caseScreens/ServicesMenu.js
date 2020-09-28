@@ -3,7 +3,7 @@ import { Heading, Text, Button } from 'app/components/atoms';
 import { ListItem, ScreenWrapper } from 'app/components/molecules';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { caseTypes } from './CaseLogic';
+import { caseTypes } from '../../store/CaseContext';
 
 const MenuWrapper = styled(ScreenWrapper)`
   padding-left: 0;
@@ -44,8 +44,6 @@ const ServicesMenu = ({ navigation }) => (
               key={`${caseType.name}`}
               highlighted
               text={caseType.name}
-              iconName={caseType.icon}
-              imageSrc={null}
               onClick={() => {
                 navigation.navigate('UserEvents', {
                   screen: caseType.navigateTo,

@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Heading, Text, Button } from 'app/components/atoms';
 import { ScreenWrapper } from 'app/components/molecules';
-import { CaseState } from 'app/store/CaseContext';
+import { CaseState, caseStatus, caseTypes } from 'app/store/CaseContext';
+import FormContext from 'app/store/FormContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { CaseTypeListItem } from '../../components/molecules/ListItem';
-import { caseTypes, Status, getCaseTypeAndLatestCase, getFormattedUpdatedDate } from './CaseLogic';
+import { formatUpdatedAt } from '../../helpers/DateHelpers';
 
 const CaseOverviewWrapper = styled(ScreenWrapper)`
   padding-left: 0;
@@ -37,15 +38,15 @@ const ListHeading = styled(Heading)`
 const computeCaseComponent = (status, latestCase, navigation) => {
   let updatedAt = '';
   if (latestCase) {
-    updatedAt = getFormattedUpdatedDate(latestCase);
+    updatedAt = formatUpdatedAt(latestCase.updatedAt);
   }
 
   switch (status) {
-    case Status.untouched:
+    case caseStatus.untouched:
       return <Text small>Inga ärenden</Text>;
 
-    case Status.unfinishedNoCompleted:
-    case Status.unfinished:
+    case caseStatus.unfinishedNoCompleted:
+    case caseStatus.unfinished:
       return (
         <>
           <Text small style={{ color: 'red' }}>
@@ -64,10 +65,10 @@ const computeCaseComponent = (status, latestCase, navigation) => {
         </>
       );
 
-    case Status.recentlyCompleted:
+    case caseStatus.recentlyCompleted:
       return <Text small>Inskickad ansökan {updatedAt}</Text>;
 
-    case Status.onlyOldCases:
+    case caseStatus.onlyOldCases:
       return <Text small>Inga aktiva ärenden</Text>;
 
     default:
@@ -77,20 +78,25 @@ const computeCaseComponent = (status, latestCase, navigation) => {
 
 const CaseOverview = ({ navigation }) => {
   const [caseItems, setCaseItems] = useState([]);
-  const { cases } = useContext(CaseState);
+  const { getCasesByFormIds } = useContext(CaseState);
+  const { getFormIdsByFormTypes } = useContext(FormContext);
 
   useEffect(() => {
-    const updatedItems = [];
-    caseTypes.forEach(caseType => {
-      const [status, latestCase, relevantCases] = getCaseTypeAndLatestCase(
-        caseType,
-        Object.values(cases)
-      );
-      const component = computeCaseComponent(status, latestCase, navigation);
-      updatedItems.push({ caseType, status, latestCase, component, cases: relevantCases });
-    });
-    setCaseItems(updatedItems);
-  }, [cases, navigation]);
+    const updateItems = async () => {
+      const updateItemsPromises = caseTypes.map(async caseType => {
+        const formIds = await getFormIdsByFormTypes(caseType.formTypes);
+
+        const [status, latestCase, relevantCases] = await getCasesByFormIds(formIds);
+        const component = computeCaseComponent(status, latestCase, navigation);
+        return { caseType, status, latestCase, component, cases: relevantCases };
+      });
+
+      await Promise.all(updateItemsPromises).then(updatedItems => {
+        setCaseItems(updatedItems);
+      });
+    };
+    updateItems();
+  }, [getCasesByFormIds, getFormIdsByFormTypes, navigation]);
 
   return (
     <CaseOverviewWrapper>
@@ -100,7 +106,8 @@ const CaseOverview = ({ navigation }) => {
           {caseItems?.length > 0 &&
             caseItems
               .filter(
-                item => item.status !== Status.untouched && item.status !== Status.onlyOldCases
+                item =>
+                  item.status !== caseStatus.untouched && item.status !== caseStatus.onlyOldCases
               )
               .map(item => {
                 const { caseType, component } = item;

@@ -59,7 +59,6 @@ const HomeScreen = ({ navigation }) => {
           isInputVisible={isInputVisible}
         />
       )}
-
       <View style={{ padding: 20, marginTop: 40, height: '73%' }}>
         <FormList
           heading="Ansökningsformulär"

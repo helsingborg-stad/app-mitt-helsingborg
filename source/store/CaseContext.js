@@ -12,6 +12,36 @@ import {
 const CaseState = React.createContext();
 const CaseDispatch = React.createContext();
 
+/**
+ * An array that defines the different types of cases there is in the application.
+ * Note: Not sure if this is the right place to save these params, but will do for know.
+ * */
+export const caseTypes = [
+  {
+    name: 'Ekonomiskt Bistånd',
+    formTypes: ['EKB-recurring', 'EKB-new'],
+    icon: 'ICON_EKB',
+    navigateTo: 'EKBCases',
+  },
+  {
+    name: 'Borgerlig Vigsel',
+    formTypes: [],
+    icon: '',
+    navigateTo: 'BVCases',
+  },
+];
+
+/** An enum for describing the state of the user with respect to a given case type. */
+export const caseStatus = {
+  unfinished: 'UNFINISHED',
+  unfinishedNoCompleted: 'UNFINISHED_NO_COMPLETED',
+  recentlyCompleted: 'RECENTLY_COMPLETED',
+  untouched: 'UNTOUCHED',
+  onlyOldCases: 'ONLY_OLD_CASES',
+};
+
+const oldCaseLimit = 4 * 30 * 24 * 60 * 60 * 1000; // cases older than 4 months are classified as old.
+
 function CaseProvider({ children, initialState = defaultInitialState }) {
   const [state, dispatch] = useReducer(CaseReducer, initialState);
   const { user } = useContext(AuthContext);
@@ -26,6 +56,44 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
 
   function getCase(caseId) {
     return state?.cases[caseId];
+  }
+
+  /**
+   * This functions retrives cases based on formIds
+   * @param {array} formIds an array of form ids.
+   * @param {[cases]} cases array of case objects.
+   * @returns {[status, latestCase, relevantCases]}
+   */
+  function getCasesByFormIds(formIds) {
+    let latestUpdated = 0;
+    let latestCase;
+    const relevantCases = [];
+
+    Object.values(state.cases).forEach(c => {
+      if (formIds.includes(c.formId)) {
+        relevantCases.push(c);
+        if (c.updatedAt > latestUpdated) {
+          latestUpdated = c.updatedAt;
+          latestCase = c;
+        }
+      }
+    });
+
+    if (latestUpdated === 0) {
+      return [caseStatus.untouched, undefined, relevantCases];
+    }
+    if (latestCase.status === 'ongoing' && relevantCases.length === 1) {
+      return [caseStatus.unfinishedNoCompleted, latestCase, relevantCases];
+    }
+    if (latestCase.status === 'ongoing') {
+      return [caseStatus.unfinished, latestCase, relevantCases];
+    }
+    if (latestCase.status === 'submitted') {
+      if (Date.now() - latestUpdated > oldCaseLimit) {
+        return [caseStatus.onlyOldCases, latestCase, relevantCases];
+      }
+      return [caseStatus.recentlyCompleted, latestCase, relevantCases];
+    }
   }
 
   async function deleteCase(caseId) {
@@ -47,7 +115,7 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   }, [user]);
 
   return (
-    <CaseState.Provider value={{ cases: state.cases, getCase }}>
+    <CaseState.Provider value={{ cases: state.cases, getCase, getCasesByFormIds }}>
       <CaseDispatch.Provider value={{ createCase, updateCase, deleteCase }}>
         {children}
       </CaseDispatch.Provider>
