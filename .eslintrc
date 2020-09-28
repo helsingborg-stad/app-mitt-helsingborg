@@ -63,7 +63,11 @@
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [".js"]
+        "extensions": [
+          ".js",
+          ".tsx",
+          ".jsx"
+        ]
       }
     ],
     "radix": 0,
@@ -100,7 +104,10 @@
      * Resolve custom alias paths in ESLINT
      */
     "import/resolver": {
-      "babel-module": {}
+      "babel-module": {},
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
     }
   }
 }

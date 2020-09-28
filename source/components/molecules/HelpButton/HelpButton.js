@@ -87,7 +87,7 @@ const HelpButton = props => {
     <>
       <Modal
         visible={modalVisible}
-        animationType="fade"
+        animationType="slide"
         onRequestClose={() => setModalVisible(false)}
         presentationStyle="pageSheet"
       >
@@ -117,6 +117,7 @@ const HelpButton = props => {
         </ModalContainer>
       </Modal>
       <TouchableHighlight
+        onPressIn={() => setModalVisible(false)}
         onPress={() => {
           setModalVisible(true);
         }}

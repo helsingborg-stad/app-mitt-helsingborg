@@ -90,6 +90,7 @@ const FormField = props => {
     value,
     answers,
     conditionalOn,
+    labelHelp,
     ...other
   } = props;
   const input = inputTypes[inputType];
@@ -101,7 +102,14 @@ const FormField = props => {
     value === '' && Object.prototype.hasOwnProperty.call(input, 'initialValue')
       ? input.initialValue
       : value;
-  const inputCompProps = { color, value: initialValue, ...inputProps, ...other };
+  const inputCompProps = {
+    color,
+    value: initialValue,
+    help:
+      other.inputHelp && other.text ? { text: other.inputHelp, heading: other.text } : undefined,
+    ...inputProps,
+    ...other,
+  };
   if (input && input.changeEvent) inputCompProps[input.changeEvent] = saveInput;
 
   /** Checks if the field is conditional on another input, and if so,
@@ -130,7 +138,11 @@ const FormField = props => {
     return (
       <View>
         {label ? (
-          <FieldLabel color={color} underline={labelLine}>
+          <FieldLabel
+            color={color}
+            underline={labelLine}
+            help={labelHelp ? { heading: label, text: labelHelp } : {}}
+          >
             {label}
           </FieldLabel>
         ) : null}
@@ -186,6 +198,10 @@ FormField.propTypes = {
    * One can also add an ! in front of the id to enable the field if the other input evaluates as 'falsy', i.e. !id.
    */
   conditionalOn: PropTypes.string,
+  /**
+   * Property to show a help button
+   */
+  labelHelp: PropTypes.string,
 };
 
 FormField.defaultProps = {
