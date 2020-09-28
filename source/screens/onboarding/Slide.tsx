@@ -1,100 +1,48 @@
 import React from 'react';
-import styled from 'styled-components/native';
-import { Platform, Dimensions, View, Image } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, Image } from 'react-native';
 
-const COAT_OF_ARMS_IMAGE = require('../../assets/images/slides/logo_3.png');
+const { width, height } = Dimensions.get('window');
+export const SLIDE_HEIGHT = 0.61 * height;
 
-const Heading = styled.Text`
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 20px;
-  letter-spacing: 0.025px;
-  color: ${(props) => props?.headingColor || '#003359'};
-  padding-top: 38px;
-  font-family: 'Roboto';
-`;
+const styles = StyleSheet.create({
+  container: {
+    width,
+  },
+  underlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'flex-end',
+  },
+  picture: {
+    ...StyleSheet.absoluteFillObject,
+    width: undefined,
+    height: undefined,
+  },
+  titleContent: {
+    height: 100,
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 80,
+    lineHeight: 80,
+    color: 'white',
+    textAlign: 'center',
+  },
+});
 
-const SliderContainer = styled.View`
-  padding-top: 50px;
-  padding-left: 58px;
-  padding-right: 58px;
-  width: ${Dimensions.get('window').width}px;
-`;
-
-const CoatOfArms = styled.Image`
-  height: 53px;
-  width: 34px;
-`;
-
-const HorizontalRule = styled.View`
-  padding-top: 16px;
-  width: 32px;
-  border-bottom-width: 2px;
-  border-bottom-color: rgba(0, 0, 0, 0.48);
-`;
-
-const SliderImageContainer = styled.View`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  justify-content: flex-end;
-`;
-
-const TitleContainer = styled.View`
-  height: 100px;
-  justify-content: center;
-`;
-
-const Title = styled.Text`
-  font-size: 30px;
-  line-height: 44px;
-  font-weight: ${Platform.OS === 'android' ? 'bold' : '900'};
-  color: #000000;
-  text-align: left;
-  font-family: 'Roboto';
-`;
-
-const Content = styled.Text`
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 30px;
-  padding-top: 16px;
-  font-family: 'Roboto';
-`;
-
-interface SliderPropsInterface {
+interface SliderProps {
   title: string;
-  content: string;
-  picture?: number;
-  headingColor?: string;
 }
 
-const Slide = ({ headingColor, title, content, picture }: SliderPropsInterface) => (
-  <SliderContainer>
-    <View>
-      <CoatOfArms source={COAT_OF_ARMS_IMAGE} />
-      <Heading headingColor={headingColor}>Mitt Helsingborg</Heading>
-      <HorizontalRule />
+const Slide = ({ title }: SliderProps) => {
+  const transform = [{ translateY: (SLIDE_HEIGHT - 100) / 2 }];
+  return (
+    <View style={styles.container}>
+      <View style={styles.underlay}>{/* <Image source={picture} style={styles.picture} /> */}</View>
+      <View style={[styles.titleContent, { transform }]}>
+        <Text style={styles.title}>{title}</Text>
+      </View>
     </View>
-    <SliderImageContainer>
-      <Image
-        source={picture}
-        style={{
-          flex: 1,
-          width: null,
-          height: null,
-          resizeMode: 'contain',
-        }}
-        resizeMode="cover"
-      />
-    </SliderImageContainer>
-    <TitleContainer>
-      <Title>{title}</Title>
-    </TitleContainer>
-    <Content>{content}</Content>
-  </SliderContainer>
-);
+  );
+};
 
 export default Slide;
