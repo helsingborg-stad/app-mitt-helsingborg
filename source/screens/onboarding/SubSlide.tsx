@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   description: {
-    fontFamily: ' ',
     fontSize: 16,
     lineHeight: 24,
     color: '#0C0D34',
