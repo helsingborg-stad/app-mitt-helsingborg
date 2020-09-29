@@ -1,10 +1,11 @@
 import React, { useRef } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
-import Animated, { multiply } from 'react-native-reanimated';
+import Animated, { divide, multiply } from 'react-native-reanimated';
 import { interpolateColor, useScrollHandler } from 'react-native-redash';
 
 import Slide from './Slide';
 import SubSlide from './SubSlide';
+import Dot from './Dot';
 
 const { width } = Dimensions.get('window');
 
@@ -25,6 +26,9 @@ const styles = StyleSheet.create({
   pagination: {
     ...StyleSheet.absoluteFillObject,
     height: 75,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
@@ -67,8 +71,8 @@ const Onboarding = () => {
           bounces={false}
           {...scrollHandler}
         >
-          {slides.map(({ title }, index) => (
-            <Slide key={index} {...{ title }} />
+          {slides.map(({ title, picture }, index) => (
+            <Slide key={index} {...{ title, picture }} />
           ))}
         </Animated.ScrollView>
       </Animated.View>
@@ -78,7 +82,14 @@ const Onboarding = () => {
             ...StyleSheet.absoluteFillObject,
             backgroundColor,
           }}
-        >
+        />
+        <Animated.View style={[styles.footerContent]}>
+          <View style={styles.pagination}>
+            {slides.map((_, index) => (
+              <Dot key={index} currentIndex={divide(x, width)} {...{ index }} />
+            ))}
+          </View>
+
           <Animated.View
             style={{
               flex: 1,
