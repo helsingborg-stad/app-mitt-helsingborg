@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import Step from '../../components/organisms/Step/Step';
-import { Step as StepType } from '../../types/FormTypes';
+import { Step as StepType, StepperActions } from '../../types/FormTypes';
 import { CaseStatus } from '../../types/CaseType';
 import { User } from '../../types/UserTypes';
-import Stepper from '../../components/atoms/Stepper/Stepper';
 import useForm from './hooks/useForm';
 
 const FormContainer = styled.View`
@@ -16,6 +15,7 @@ const FormContainer = styled.View`
 interface Props {
   startAt: number;
   steps: StepType[];
+  connectivityMatrix: StepperActions[][];
   user: User;
   initialAnswers: Record<string, any>;
   status?: CaseStatus;
@@ -33,6 +33,7 @@ interface Props {
 const Form: React.FC<Props> = ({
   startAt,
   steps,
+  connectivityMatrix,
   user,
   onClose,
   onStart,
@@ -41,59 +42,51 @@ const Form: React.FC<Props> = ({
   status,
   updateCaseInContext,
 }) => {
+  const currentPosition = { index: startAt, level: 0 };
   const initialState = {
     submitted: false,
-    counter: startAt,
+    currentPosition,
     steps,
     user,
     formAnswers: initialAnswers,
+    connectivityMatrix,
   };
 
-  const {
-    formState,
-    goToNextStep,
-    goToPreviousStep,
-    closeForm,
-    startForm,
-    handleInputChange,
-    handleSubmit,
-  } = useForm(initialState);
-  return (
-    <FormContainer>
-      <Stepper active={formState.counter}>
-        {formState.steps.map(
-          ({ id, banner, theme, title, group, description, questions, actions }) => (
-            <Step
-              key={`${id}`}
-              banner={{
-                ...banner,
-              }}
-              theme={theme}
-              description={{
-                heading: title,
-                tagline: group,
-                text: description,
-              }}
-              answers={formState.formAnswers}
-              status={status}
-              questions={questions}
-              actions={actions}
-              onNext={goToNextStep}
-              onBack={goToPreviousStep}
-              onClose={() => closeForm(onClose)}
-              onSubmit={() => handleSubmit(onSubmit)}
-              onStart={() => startForm(onStart)}
-              onFieldChange={handleInputChange}
-              updateCaseInContext={updateCaseInContext}
-              stepNumber={formState.counter}
-              totalStepNumber={formState.steps.length}
-              isBackBtnVisible={formState.counter > 2}
-            />
-          )
-        )}
-      </Stepper>
-    </FormContainer>
+  const { formState, formNavigation, handleInputChange, handleSubmit } = useForm(initialState);
+
+  formNavigation.close = () => {
+    onClose();
+  };
+
+  const stepComponents = formState.steps.map(
+    ({ id, banner, theme, title, group, description, questions, actions }) => (
+      <Step
+        key={`${id}`}
+        banner={{
+          ...banner,
+        }}
+        theme={theme}
+        description={{
+          heading: title,
+          tagline: group,
+          text: description,
+        }}
+        answers={formState.formAnswers}
+        status={status}
+        questions={questions}
+        actions={actions}
+        formNavigation={formNavigation}
+        onSubmit={() => handleSubmit(onSubmit)}
+        onFieldChange={handleInputChange}
+        updateCaseInContext={updateCaseInContext}
+        stepNumber={0} // TO FIX!! NEED TO THINK ABOUT
+        totalStepNumber={formState.steps.length}
+        isBackBtnVisible
+      />
+    )
   );
+
+  return <FormContainer>{stepComponents[formState.currentPosition.index]}</FormContainer>;
 };
 
 Form.propTypes = {
@@ -117,6 +110,7 @@ Form.propTypes = {
    * Array of steps that the Form should render.
    */
   steps: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  connectivityMatrix: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.any)),
   /**
    * The user info.
    */
@@ -128,7 +122,7 @@ Form.propTypes = {
   /**
    * Status, either ongoing or submitted (or others, possibly?)
    */
-  status: PropTypes.string,
+  status: PropTypes.oneOf(['ongoing', 'submitted']),
   /**
    * function for updating case in caseContext
    */

@@ -55,11 +55,8 @@ function Step({
   actions,
   answers,
   status,
-  onBack,
-  onNext,
-  onClose,
+  formNavigation,
   onSubmit,
-  onStart,
   onFieldChange,
   isBackBtnVisible,
   updateCaseInContext,
@@ -90,11 +87,15 @@ function Step({
       if (onFieldChange) onFieldChange(answers);
       if (updateCaseInContext) updateCaseInContext(answers, 'ongoing', stepNumber);
     }
-    if (onClose) onClose();
+    if (formNavigation.close) formNavigation.close(() => {});
   };
   return (
     <StepContainer bg={theme.step.bg}>
-      <StepBackNavigation isBackBtnVisible={isBackBtnVisible} onBack={onBack} onClose={closeForm} />
+      <StepBackNavigation
+        isBackBtnVisible={isBackBtnVisible}
+        onBack={formNavigation.back}
+        onClose={closeForm}
+      />
       <StepContentContainer
         contentContainerStyle={{
           flexGrow: 1,
@@ -119,6 +120,7 @@ function Step({
                       answers={answers}
                       color={field.color}
                       id={field.id}
+                      formNavigation={formNavigation}
                       {...field}
                     />
                   ))}
@@ -150,11 +152,7 @@ function Step({
             background={footerBg}
             answers={answers}
             stepNumber={stepNumber}
-            onStart={onStart}
-            onClose={onClose}
-            onSubmit={onSubmit}
-            onNext={onNext}
-            onBack={onBack}
+            formNavigation={formNavigation}
             onUpdate={onFieldChange}
             updateCaseInContext={updateCaseInContext}
           />
@@ -182,22 +180,6 @@ Step.propTypes = {
    */
   isBackBtnVisible: PropTypes.bool,
   /**
-   * The function to handle a press on the back button
-   */
-  onBack: PropTypes.func,
-  /**
-   * The function to handle a press on the next button
-   */
-  onNext: PropTypes.func,
-  /**
-   * The function to handle a press on the close button
-   */
-  onClose: PropTypes.func,
-  /**
-   * The function to handle starting the form
-   */
-  onStart: PropTypes.func,
-  /**
    * The function to handle a press on the submit button
    */
   onSubmit: PropTypes.func,
@@ -205,6 +187,15 @@ Step.propTypes = {
    * The function to handle field input changes
    */
   onFieldChange: PropTypes.func,
+  formNavigation: PropTypes.shape({
+    next: PropTypes.func,
+    back: PropTypes.func,
+    up: PropTypes.func,
+    down: PropTypes.func,
+    close: PropTypes.func,
+    start: PropTypes.func,
+    isLastStep: PropTypes.func,
+  }),
   /**
    * The function to update values in context (and thus the backend)
    */
