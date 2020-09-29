@@ -5,7 +5,6 @@ import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/compone
 import SubstepList from 'source/components/organisms/SubstepList';
 import { View } from 'react-native';
 import ConditionalTextField from 'app/components/molecules/ConditinalTextField';
-import SubstepButton from '../SubstepButton';
 import colors from '../../../styles/colors';
 import DateTimePickerForm from '../DateTimePicker';
 import NavigationButtonField from '../NavigationButtonField/NavigationButtonField';
