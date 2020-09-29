@@ -1,27 +1,36 @@
 import React from 'react';
+import { StyleSheet, Text } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
-import styled from 'styled-components/native';
 
-const GestureButton = styled(RectButton)`
-  height: 20px;
-  background-color: transparent;
-`;
-
-const GestureButtonLabel = styled.Text`
-  font-size: 15px;
-  text-align: center;
-`;
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 25,
+    height: 50,
+    width: 245,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  label: {
+    fontSize: 15,
+    textAlign: 'center',
+  },
+});
 
 interface ButtonProps {
   label: string;
+  variant: 'default' | 'primary';
   onPress: () => void;
 }
 
-const Button = ({ label, onPress }: ButtonProps) => (
-  <GestureButton {...{ onPress }}>
-    <GestureButtonLabel>{label}</GestureButtonLabel>
-  </GestureButton>
-);
+const Button = ({ label, variant, onPress }: ButtonProps) => {
+  const backgroundColor = variant === 'primary' ? '#2CB9B0' : 'rgba(12, 13, 52, 0.05)';
+  const color = variant === 'primary' ? 'white' : '#0C0D34';
+  return (
+    <RectButton style={[styles.container, { backgroundColor }]} {...{ onPress }}>
+      <Text style={[styles.label, { color }]}>{label}</Text>
+    </RectButton>
+  );
+};
 
 Button.defaultProps = { variant: 'default' };
 
