@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, FieldLabel, Select, Text } from 'source/components/atoms';
+import { Input, FieldLabel, Select, Text, Button } from 'source/components/atoms';
 import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
 import SubstepList from 'source/components/organisms/SubstepList';
 import { View } from 'react-native';
@@ -8,6 +8,8 @@ import ConditionalTextField from 'app/components/molecules/ConditinalTextField';
 import SubstepButton from '../SubstepButton';
 import colors from '../../../styles/colors';
 import DateTimePickerForm from '../DateTimePicker';
+
+import ButtonField from '../ButtonField/ButtonField';
 
 const inputTypes = {
   text: {
@@ -46,6 +48,10 @@ const inputTypes = {
   substepButton: {
     component: SubstepButton,
     changeEvent: 'onChange',
+    props: {},
+  },
+  button: {
+    component: ButtonField,
     props: {},
   },
   substepList: {
@@ -131,7 +137,7 @@ const FormField = props => {
     input && input.component ? (
       React.createElement(input.component, inputCompProps)
     ) : (
-      <Text>{`Invalid field type ${inputType}`}</Text>
+      <Text>{`Invalid field type: ${inputType}`}</Text>
     );
 
   if (checkCondition(conditionalOn)) {
@@ -184,6 +190,15 @@ FormField.propTypes = {
    * All the form state answers. Needed because of conditional checks.
    */
   answers: PropTypes.object,
+  formNavigation: PropTypes.shape({
+    next: PropTypes.func,
+    back: PropTypes.func,
+    up: PropTypes.func,
+    down: PropTypes.func,
+    close: PropTypes.func,
+    start: PropTypes.func,
+    isLastStep: PropTypes.func,
+  }),
   /**
    * sets the color theme.
    */

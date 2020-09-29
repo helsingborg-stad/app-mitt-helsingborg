@@ -1,4 +1,5 @@
 import { increaseCount, decreaseCount } from '../../../helpers/Counter';
+import { StepperActions } from '../../../types/FormTypes';
 import { replaceMarkdownTextInSteps } from './textReplacement';
 import { FormReducerState } from './useForm';
 
@@ -15,28 +16,118 @@ export function replaceMarkdownText(state: FormReducerState) {
   };
 }
 
-/**
- * Action for decreasing the form counter.
- * @param {FormReducerState} state the current state of the form
- */
-export function decreaseFormCounter(state: FormReducerState) {
-  const { counter } = state;
-  return {
-    ...state,
-    counter: decreaseCount(counter, 0),
-  };
+const getConnectionIndex = (
+  matrix: StepperActions[][],
+  currentIndex: number,
+  conn: StepperActions
+) => matrix[currentIndex].findIndex(val => val === conn);
+
+function getIndex(state: FormReducerState, stepId: string) {
+  return state.steps.findIndex(s => s.id === stepId);
+}
+function getNextIndex(
+  matrix: StepperActions[][],
+  currentPosition: { index: number; level: number }
+) {
+  return getConnectionIndex(matrix, currentPosition.index, 'next');
+}
+function getBackIndex(
+  matrix: StepperActions[][],
+  currentPosition: { index: number; level: number }
+) {
+  return getConnectionIndex(matrix, currentPosition.index, 'back');
+}
+function getNestedSteps(
+  matrix: StepperActions[][],
+  currentPosition: { index: number; level: number }
+): number[] {
+  return matrix[currentPosition.index].reduce((prev, curr, currIndex) => {
+    if (curr === 'down') return [currIndex, ...prev];
+    return prev;
+  }, []);
+}
+function getParentSteps(
+  matrix: StepperActions[][],
+  currentPosition: { index: number; level: number }
+): number[] {
+  return matrix[currentPosition.index].reduce((prev, curr, currIndex) => {
+    if (curr === 'up') return [currIndex, ...prev];
+    return prev;
+  }, []);
+}
+
+/** Go to the next step in the form. If you are in a nested step with no further next, then this will go up to the parent. */
+export function goNext(state: FormReducerState) {
+  const { connectivityMatrix, currentPosition } = state;
+  const nextIndex = getNextIndex(connectivityMatrix, currentPosition);
+  if (nextIndex >= 0) {
+    return {
+      ...state,
+      currentPosition: { index: nextIndex, level: currentPosition.level },
+    };
+  }
+  // if we have no next, then look for an up and if that exists, go there instead.
+  const upIndex = getConnectionIndex(connectivityMatrix, currentPosition.index, 'up');
+  if (upIndex >= 0) {
+    return {
+      ...state,
+      currentPosition: { index: upIndex, level: currentPosition.level - 1 },
+    };
+  }
+  return { ...state };
+}
+/** Go to the previous step in the form. If you are in a nested step with no further back, then this will go up to the parent. */
+export function goBack(state: FormReducerState) {
+  const { connectivityMatrix, currentPosition } = state;
+  const backIndex = getBackIndex(connectivityMatrix, currentPosition);
+  if (backIndex >= 0) {
+    return {
+      ...state,
+      currentPosition: { index: backIndex, level: currentPosition.level },
+    };
+  }
+  // if we have no back, then look for an up and if that exists, go there instead.
+  const upIndex = getConnectionIndex(connectivityMatrix, currentPosition.index, 'up');
+  if (upIndex >= 0) {
+    return {
+      ...state,
+      currentPosition: { index: upIndex, level: currentPosition.level - 1 },
+    };
+  }
+  return { ...state };
 }
 
 /**
- * Action for increasing the form counter.
- * @param {FormReducerState} state the current state of the form
+ * Goes down in to a nested child step. Will only allow jumping to a connected step.
+ * @param state current form state
+ * @param targetStep the id or index of the target step.
  */
-export function increaseFormCounter(state: FormReducerState) {
-  const { steps, counter } = state;
-  return {
-    ...state,
-    counter: increaseCount(counter, steps.length),
-  };
+export function goDown(state: FormReducerState, targetStep: number | string) {
+  const { connectivityMatrix, currentPosition } = state;
+  const index = typeof targetStep === 'number' ? targetStep : getIndex(state, targetStep);
+
+  if (getNestedSteps(connectivityMatrix, currentPosition).includes(index)) {
+    return {
+      ...state,
+      currentPosition: { index, level: currentPosition.level + 1 },
+    };
+  }
+}
+/**
+ * Goes up into a parent step. Will only allow jumping to a connected step.
+ * @param state current form state
+ * @param targetStep the id or index of the target step.
+ */
+export function goUp(state: FormReducerState, targetStep: number | string) {
+  const { connectivityMatrix, currentPosition } = state;
+  const index = typeof targetStep === 'number' ? targetStep : getIndex(state, targetStep);
+
+  if (getParentSteps(connectivityMatrix, currentPosition).includes(index)) {
+    return {
+      ...state,
+      currentPosition: { index, level: currentPosition.level - 1 },
+    };
+  }
 }
 
 /**

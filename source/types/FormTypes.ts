@@ -34,6 +34,8 @@ export interface Banner {
   backgroundColor?: string;
 }
 
+export type StepperActions = 'next' | 'back' | 'up' | 'down' | 'none';
+
 export interface Step {
   title: string;
   description: string;
@@ -48,6 +50,7 @@ export interface Form {
   name: string;
   description: string;
   steps?: Step[];
+  connectivityMatrix: StepperActions[][];
   id: string;
   subform?: boolean;
   formType?: string;

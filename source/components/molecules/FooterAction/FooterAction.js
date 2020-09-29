@@ -23,9 +23,7 @@ const FooterAction = ({
   caseStatus,
   background,
   answers,
-  onStart,
-  onClose,
-  onNext,
+  formNavigation,
   onUpdate,
   onSubmit,
   updateCaseInContext,
@@ -38,7 +36,7 @@ const FooterAction = ({
     const signCase = () => {
       if (onUpdate) onUpdate(answers);
       if (updateCaseInContext) updateCaseInContext(answers, 'submitted', stepNumber);
-      if (onNext) onNext();
+      if (formNavigation.next) formNavigation.next();
     };
 
     if (status === 'signResolved') {
@@ -50,12 +48,12 @@ const FooterAction = ({
   const actionMap = type => {
     switch (type) {
       case 'start': {
-        return onStart || null;
+        return formNavigation.start || null;
       }
       case 'close': {
         return () => {
           if (onUpdate && caseStatus === 'ongoing') onUpdate(answers);
-          if (onClose) onClose();
+          if (formNavigation.close) formNavigation.close();
         };
       }
       case 'submit': {
@@ -71,7 +69,7 @@ const FooterAction = ({
           if (onUpdate && caseStatus === 'ongoing') onUpdate(answers);
           if (updateCaseInContext && caseStatus === 'ongoing')
             updateCaseInContext(answers, 'ongoing', stepNumber);
-          if (onNext) onNext();
+          if (formNavigation.next) formNavigation.next();
         };
       }
     }
@@ -138,13 +136,15 @@ FooterAction.propTypes = {
    * Current form answers, used for passing to the various actions
    */
   answers: PropTypes.object,
-  /** Behaviour for the start action */
-  onStart: PropTypes.func,
-  /** Behaviour for the close action */
-  onClose: PropTypes.func,
-  /** Behaviour for the next page action */
-  onNext: PropTypes.func,
-  /** Behaviour for sending updates to context and/or backend */
+  formNavigation: PropTypes.shape({
+    next: PropTypes.func,
+    back: PropTypes.func,
+    up: PropTypes.func,
+    down: PropTypes.func,
+    close: PropTypes.func,
+    start: PropTypes.func,
+    isLastStep: PropTypes.func,
+  }),
   onUpdate: PropTypes.func,
   /** Behaviour for the submit action */
   onSubmit: PropTypes.func,

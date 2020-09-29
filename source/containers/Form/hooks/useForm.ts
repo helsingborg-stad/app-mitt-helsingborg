@@ -1,42 +1,78 @@
 import { useReducer, useEffect } from 'react';
 import formReducer from './formReducer';
-import { Step } from '../../../types/FormTypes';
+import { Step, StepperActions } from '../../../types/FormTypes';
 import { User } from '../../../types/UserTypes';
 
 export interface FormReducerState {
   submitted: boolean;
-  counter: number;
+  currentPosition: { index: number; level: number };
   steps: Step[];
   user: User;
+  connectivityMatrix: StepperActions[][];
   formAnswers: Record<string, any>;
+  numberOfMainSteps?: number;
 }
 
 function useForm(initialState: FormReducerState) {
   const [formState, dispatch] = useReducer(formReducer, initialState);
 
+  /**
+   * Computes the number of main steps in the matrix, by following the 'next' steps until they run out.
+   * returns -1 if it encounters an infinite loop.
+   * @param matrix C
+   */
+  const computeNumberMainSteps = (matrix: StepperActions[][]) => {
+    const countNext = (m: StepperActions[][], currentRow: number, history: number[]) => {
+      const nextIndex = m[currentRow].findIndex(a => a === 'next');
+      if (history.includes(nextIndex)) return 1;
+      return nextIndex >= 0 ? 2 + countNext(m, nextIndex, [...history, nextIndex]) : 2;
+    };
+    const count = countNext(matrix, 0, []);
+    return count % 2 === 0 ? count / 2 : -1;
+  };
+
   useEffect(() => {
+    console.log('number of main steps:', computeNumberMainSteps(formState.connectivityMatrix));
     dispatch({
       type: 'REPLACE_MARKDOWN_TEXT',
     });
-  }, []);
+  }, [formState.connectivityMatrix]);
 
   /**
-   * Function for increasing the form counter
+   * Function for going forward in the form
    */
   const goToNextStep = () =>
     dispatch({
-      type: 'INCREASE_COUNTER',
+      type: 'GO_NEXT',
     });
 
   /**
-   * Function for decreasing the form counter
+   * Function for going back in the form
    */
   const goToPreviousStep = () =>
     dispatch({
-      type: 'DECREASE_COUNTER',
+      type: 'GO_BACK',
     });
 
-  const isLastStep = () => formState.steps.length === formState.counter;
+  /**
+   * Function for going back in the form
+   */
+  const goIntoStep = (targetStep: number | string) =>
+    dispatch({
+      type: 'GO_DOWN',
+      payload: { targetStep },
+    });
+
+  /**
+   * Function for going back in the form
+   */
+  const goOutToStep = (targetStep: number | string) =>
+    dispatch({
+      type: 'GO_UP',
+      payload: { targetStep },
+    });
+
+  const isLastStep = () => false; // Need to think and fix this. //formState.steps.length === formState.counter;
 
   /**
    * Function for passing state and step values to the callback function that is passed down
@@ -68,11 +104,12 @@ function useForm(initialState: FormReducerState) {
   /**
    * Function for passing state and step values to the callback function that is passed down
    * to handle a form close action.
-   * @param {func} callback callback function to be called on when a close action is triggerd
+   * @param {func} callback callback function to be called on when a close action is triggered
    */
-  const closeForm = (callback: (s: { state: FormReducerState }, isLastStep: boolean) => any) =>
-    callback({ state: formState }, isLastStep());
+  // const closeForm = (callback: (s: { state: FormReducerState }, isLastStep: boolean) => any) =>
+  //   callback({ state: formState }, isLastStep());
 
+  function closeForm() {}
   /**
    * Function for updating answer.
    */
@@ -81,16 +118,21 @@ function useForm(initialState: FormReducerState) {
     dispatch({ type: 'UPDATE_ANSWER', payload: answer });
   };
 
+  const formNavigation = {
+    next: goToNextStep,
+    back: goToPreviousStep,
+    up: goOutToStep,
+    down: goIntoStep,
+    start: startForm,
+    close: closeForm,
+    isLastStep,
+  };
+
   return {
     formState,
-    goToNextStep,
-    goToPreviousStep,
+    formNavigation,
     handleInputChange,
-    handleSkip,
-    closeForm,
-    startForm,
     handleSubmit,
-    isLastStep,
   };
 }
 

@@ -1,8 +1,10 @@
 import { FormReducerState } from './useForm';
 import {
   replaceMarkdownText,
-  increaseFormCounter,
-  decreaseFormCounter,
+  goNext,
+  goBack,
+  goDown,
+  goUp,
   startForm,
   submitForm,
   updateAnswer,
@@ -13,10 +15,18 @@ type Action =
       type: 'REPLACE_MARKDOWN_TEXT';
     }
   | {
-      type: 'INCREASE_COUNTER';
+      type: 'GO_NEXT';
     }
   | {
-      type: 'DECREASE_COUNTER';
+      type: 'GO_BACK';
+    }
+  | {
+      type: 'GO_UP';
+      payload: { targetStep: number | string };
+    }
+  | {
+      type: 'GO_DOWN';
+      payload: { targetStep: number | string };
     }
   | {
       type: 'START_FORM';
@@ -48,19 +58,31 @@ function formReducer(state: FormReducerState, action: Action) {
     }
 
     /**
-     * Incrementing the counter of the form based on the lenght of steps.
-     * This allow going forward to the next step in the form.
+     * Forward to the next step in the form.
      */
-    case 'INCREASE_COUNTER': {
-      return increaseFormCounter(state);
+    case 'GO_NEXT': {
+      return goNext(state);
     }
 
     /**
-     * Decrementing the counter of the form until it hits 0.
-     * This allow going back to the previous step in the form.
+     * Back to the previous step in the form.
      */
-    case 'DECREASE_COUNTER': {
-      return decreaseFormCounter(state);
+    case 'GO_BACK': {
+      return goBack(state);
+    }
+
+    /**
+     * Forward to the next step in the form.
+     */
+    case 'GO_DOWN': {
+      return goDown(state, action.payload.targetStep);
+    }
+
+    /**
+     * Back to the previous step in the form.
+     */
+    case 'GO_UP': {
+      return goUp(state, action.payload.targetStep);
     }
 
     case 'START_FORM': {
