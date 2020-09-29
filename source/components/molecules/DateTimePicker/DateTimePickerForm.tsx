@@ -1,25 +1,43 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Platform } from 'react-native';
 import Input from '../../atoms/Input';
 
-const DateTimePickerForm = props => {
-  const { onSelect, value, mode, selectorProps, color, ...other } = props;
+interface Props {
+  onSelect: (date: Date) => void;
+  value: string | number;
+  mode: 'datetime' | 'time' | 'date';
+  color: string;
+  selectorProps: Record<string, any>;
+}
 
+const DateTimePickerForm: React.FC<Props> = ({
+  onSelect,
+  value,
+  mode,
+  selectorProps,
+  color,
+  ...other
+}) => {
   const [isVisible, setIsVisible] = useState(false);
 
-  let dateTimeString;
+  let dateTimeString: string;
   const date = value ? new Date(value) : new Date();
 
-  const dateString = `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(
-    2,
-    0
-  )}-${`${date.getDate()}`.padStart(2, 0)}`;
-  const timeString = `${`${date.getHours()}`.padStart(2, 0)}:${`${date.getMinutes()}`.padStart(
-    2,
-    0
-  )}`;
+  const dateString = `${date.getFullYear()}-${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}-${date
+    .getDate()
+    .toString()
+    .padStart(2, '0')}`;
+  const timeString = `${date
+    .getHours()
+    .toString()
+    .padStart(2, '0')}:${date
+    .getMinutes()
+    .toString()
+    .padStart(2, '0')}`;
   if (value) {
     switch (mode) {
       case 'datetime':
@@ -34,6 +52,11 @@ const DateTimePickerForm = props => {
         dateTimeString = dateString;
     }
   }
+
+  const onChange = (date: Date) => {
+    setIsVisible(Platform.OS === 'ios');
+    onSelect(date);
+  };
 
   return (
     <View>
@@ -51,7 +74,7 @@ const DateTimePickerForm = props => {
       {isVisible && (
         <DateTimePicker
           value={date}
-          onChange={(_event, x) => onSelect(x)}
+          onChange={(_event, date) => onChange(date)}
           mode={mode}
           textColor={color === 'light' ? 'white' : 'dark'}
           {...selectorProps}
