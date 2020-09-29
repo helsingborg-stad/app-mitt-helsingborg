@@ -1,8 +1,10 @@
 import React, { useRef } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
-import Animated from 'react-native-reanimated';
+import Animated, { multiply } from 'react-native-reanimated';
 import { interpolateColor, useScrollHandler } from 'react-native-redash';
+
 import Slide from './Slide';
+import SubSlide from './SubSlide';
 
 const { width } = Dimensions.get('window');
 
@@ -30,14 +32,17 @@ const slides = [
   {
     title: 'Relaxed',
     subtitle: 'Relaxed subtitle',
+    description: 'Always relaxed',
     color: '#BFEAF5',
   },
   {
     title: 'Smooth',
+    description: 'Always smooth',
     color: '#BEECC4',
   },
   {
     title: 'Slow',
+    description: 'Always slow',
     color: '#FFE4D9',
   },
 ];
@@ -71,8 +76,31 @@ const Onboarding = () => {
         <Animated.View
           style={{
             ...StyleSheet.absoluteFillObject,
+            backgroundColor,
           }}
-        />
+        >
+          <Animated.View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              width: width * slides.length,
+              transform: [{ translateX: multiply(x, -1) }],
+            }}
+          >
+            {slides.map(({ subtitle, description }, index) => (
+              <SubSlide
+                key={index}
+                onPress={() => {
+                  if (scroll.current) {
+                    scroll.current.getNode().scrollTo({ x: width * (index + 1), animated: true });
+                  }
+                }}
+                last={index === slides.length - 1}
+                {...{ subtitle, description }}
+              />
+            ))}
+          </Animated.View>
+        </Animated.View>
       </View>
     </View>
   );
