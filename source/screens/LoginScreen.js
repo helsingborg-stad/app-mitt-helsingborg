@@ -6,7 +6,10 @@ import styled from 'styled-components/native';
 import AuthLoading from 'app/components/molecules/AuthLoading';
 import ScreenWrapper from 'app/components/molecules/ScreenWrapper';
 import { ValidationHelper } from 'app/helpers';
-import { Button, Text, Heading, Input } from 'app/components/atoms';
+import Button from 'app/components/atoms/Button';
+import Text from 'app/components/atoms/Text';
+import Heading from 'app/components/atoms/Heading';
+import Input from 'app/components/atoms/Input';
 import { SLIDES } from 'app/assets/images';
 import AuthContext from '../store/AuthContext';
 

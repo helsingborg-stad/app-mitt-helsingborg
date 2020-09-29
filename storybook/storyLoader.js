@@ -33,6 +33,7 @@ function loadStories() {
 	require('../source/components/molecules/Modal/Modal.stories');
 	require('../source/components/molecules/StepDescription/StepDescription.stories');
 	require('../source/components/molecules/SubstepButton/SubstepButton.stories');
+	require('../source/components/molecules/ToastNotification/ToastNotifications.stories');
 	require('../source/components/organisms/FormList/FormList.stories');
 	require('../source/components/organisms/Step/Step.stories');
 	require('../source/components/organisms/SubstepList/SubstepList.stories');
@@ -69,6 +70,7 @@ const stories = [
 	'../source/components/molecules/Modal/Modal.stories',
 	'../source/components/molecules/StepDescription/StepDescription.stories',
 	'../source/components/molecules/SubstepButton/SubstepButton.stories',
+	'../source/components/molecules/ToastNotification/ToastNotifications.stories',
 	'../source/components/organisms/FormList/FormList.stories',
 	'../source/components/organisms/Step/Step.stories',
 	'../source/components/organisms/SubstepList/SubstepList.stories',

@@ -9,6 +9,8 @@ import { Text, Button } from 'app/components/atoms';
 import { CaseDispatch } from 'app/store/CaseContext';
 import FormList from 'app/components/organisms/FormList/FormList';
 
+import { useNotification } from '../store/NotificationContext';
+
 const ButtonContainer = styled.View`
   display: flex;
   flex-direction: column;
@@ -36,8 +38,6 @@ const HomeScreen = ({ navigation }) => {
   const [showChat, setShowChat] = useState(false);
   const { createCase } = useContext(CaseDispatch);
 
-  const recurringFormId = 'a3165a20-ca10-11ea-a07a-7f5f78324df2';
-
   const toggleInput = () => {
     setInputVisible(true);
     showChat(false);
@@ -45,66 +45,53 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <>
-      <ChatScreenWrapper>
-        {showChat && (
-          <Chat
-            ChatAgent={props => <WatsonAgent {...props} initialMessages="remote" />}
-            inputComponents={{
-              type: 'text',
-              placeholder: 'Skriv något...',
-              autoFocus: false,
-              display: 'none',
-            }}
-            ChatUserInput={false}
-            keyboardVerticalOffset={0}
-            isInputVisible={isInputVisible}
-          />
-        )}
-
-        <View style={{ padding: 20, marginTop: 40, height: '73%' }}>
-          <FormList
-            heading="Ansökningsformulär"
-            onClickCallback={async formId => {
-              createCase(
-                formId,
-                async newCase => {
-                  navigation.navigate('Form', { caseData: newCase });
-                },
-                true
-              );
-            }}
-          />
-        </View>
-
-        <ButtonContainer>
-          {showChat ? (
-            <HomeScreenButton color="purpleLight" onClick={() => toggleInput()} block>
-              <Text>Ställ en fråga</Text>
-            </HomeScreenButton>
-          ) : null}
-          <HomeScreenButton
-            color="purple"
-            block
-            onClick={() => {
-              createCase(recurringFormId, newCase => {
+      {showChat && (
+        <Chat
+          ChatAgent={props => <WatsonAgent {...props} initialMessages="remote" />}
+          inputComponents={{
+            type: 'text',
+            placeholder: 'Skriv något...',
+            autoFocus: false,
+            display: 'none',
+          }}
+          ChatUserInput={false}
+          keyboardVerticalOffset={0}
+          isInputVisible={isInputVisible}
+        />
+      )}
+      <View style={{ padding: 20, marginTop: 40, height: '73%' }}>
+        <FormList
+          heading="Ansökningsformulär"
+          onClickCallback={async formId => {
+            createCase(
+              formId,
+              async newCase => {
                 navigation.navigate('Form', { caseData: newCase });
-              });
-            }}
-          >
-            <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
+              },
+              true
+            );
+          }}
+        />
+      </View>
+
+      <ButtonContainer>
+        {showChat ? (
+          <HomeScreenButton color="purpleLight" onClick={() => toggleInput()} block>
+            <Text>Ställ en fråga</Text>
           </HomeScreenButton>
-          {/* <Button
-            color="purple"
-            block
-            style={styles.button}
-            onClick={() => {
-              navigation.navigate('Form', { caseData: { hello: 'world' } });
-            }}
-          >
-            <Text>Fortsätt senaste ansökan</Text>
-          </Button> */}
-        </ButtonContainer>
-      </ChatScreenWrapper>
+        ) : null}
+        {/* <HomeScreenButton
+          color="purple"
+          block
+          onClick={() => {
+            createCase(recurringFormId, newCase => {
+              navigation.navigate('Form', { caseData: newCase });
+            });
+          }}
+        >
+          <Text>Starta ny Ekonomiskt Bistånd ansökan</Text>
+        </HomeScreenButton> */}
+      </ButtonContainer>
     </>
   );
 };

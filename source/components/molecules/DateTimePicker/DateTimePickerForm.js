@@ -10,7 +10,8 @@ const DateTimePickerForm = props => {
   const [isVisible, setIsVisible] = useState(false);
 
   let dateTimeString;
-  const date = value && typeof value.getMonth === 'function' ? value : new Date();
+  const date = value ? new Date(value) : new Date();
+
   const dateString = `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(
     2,
     0
