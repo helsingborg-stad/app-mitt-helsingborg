@@ -22,19 +22,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 80,
-    lineHeight: 80,
-    color: 'white',
-    textAlign: 'center',
+    fontSize: 36,
+    lineHeight: 44,
+    fontWeight: '800',
+    color: '#00213F',
+    textAlign: 'left',
+    paddingLeft: 58,
   },
 });
 
 interface SliderProps {
   title: string;
+  right: boolean;
 }
 
-const Slide = ({ title }: SliderProps) => {
-  const transform = [{ translateY: (SLIDE_HEIGHT - 100) / 2 }];
+const Slide = ({ title, right }: SliderProps) => {
+  // const transform = [{ translateY: (SLIDE_HEIGHT - 100) / 2 }];
+  const transform = [
+    { translateY: SLIDE_HEIGHT / 2 },
+    // { translateX: right ? width / 2 - 50 : -width / 2 + 50 },
+    // { rotate: right ? '-90deg' : '90deg' },
+  ];
+
   return (
     <View style={styles.container}>
       <View style={styles.underlay}>{/* <Image source={picture} style={styles.picture} /> */}</View>
