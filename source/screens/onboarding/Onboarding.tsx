@@ -3,11 +3,11 @@ import { Dimensions, StyleSheet, View } from 'react-native';
 import Animated, { divide, multiply } from 'react-native-reanimated';
 import { interpolateColor, useScrollHandler } from 'react-native-redash';
 
-import Slide from './Slide';
+import Slide, { SLIDE_HEIGHT } from './Slide';
 import SubSlide from './SubSlide';
 import Dot from './Dot';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -34,20 +34,28 @@ const styles = StyleSheet.create({
 
 const slides = [
   {
-    title: 'Relaxed',
-    subtitle: 'Relaxed subtitle',
-    description: 'Always relaxed',
-    color: '#BFEAF5',
+    title: 'Mitt Helsingborg',
+    color: '#FBF7F0',
   },
   {
-    title: 'Smooth',
-    description: 'Always smooth',
-    color: '#BEECC4',
+    title: 'Ställ frågor',
+    content: 'Undrar du något eller behöver hjälp?',
+    color: '#F2E5CF',
   },
   {
-    title: 'Slow',
-    description: 'Always slow',
-    color: '#FFE4D9',
+    title: 'Gör ansökan',
+    content: 'Vill du ansöka om bl.a. Bygglov, Ekonomiskt bistånd eller busskort till barnen.',
+    color: '#D0D9DC',
+  },
+  {
+    title: 'Hantera ärenden',
+    content: 'Se status eller ändra i pågående ärenden.',
+    color: '#F4D3CE',
+  },
+  {
+    title: 'Kontakt med handläggare',
+    content: 'Få personliga uppdateringar och ställ frågor direkt till rätt tjänsteperson.',
+    color: '#DBECE0',
   },
 ];
 
@@ -58,6 +66,13 @@ const Onboarding = () => {
     inputRange: slides.map((_, i) => i * width),
     outputRange: slides.map(slide => slide.color),
   });
+  // const transform = [{ translateX: 50 }];
+  const transform = [
+    // { translateY: (50 - 100) / 2 },
+    // { translateX: false ? width / 2 - 50 : -width / 2 + 50 },
+    // { rotate: false ? '-90deg' : '90deg' },
+    { translateX: height - 50 },
+  ];
 
   return (
     <View style={styles.container}>
@@ -71,8 +86,8 @@ const Onboarding = () => {
           bounces={false}
           {...scrollHandler}
         >
-          {slides.map(({ title, picture }, index) => (
-            <Slide key={index} {...{ title, picture }} />
+          {slides.map(({ title, picture, content }, index) => (
+            <Slide key={index} right={!!(index % 2)} {...{ title, picture, content }} />
           ))}
         </Animated.ScrollView>
       </Animated.View>
@@ -98,7 +113,7 @@ const Onboarding = () => {
               transform: [{ translateX: multiply(x, -1) }],
             }}
           >
-            {slides.map(({ subtitle, description }, index) => (
+            {slides.map(({ subtitle }, index) => (
               <SubSlide
                 key={index}
                 onPress={() => {
@@ -107,7 +122,7 @@ const Onboarding = () => {
                   }
                 }}
                 last={index === slides.length - 1}
-                {...{ subtitle, description }}
+                {...{ subtitle }}
               />
             ))}
           </Animated.View>
