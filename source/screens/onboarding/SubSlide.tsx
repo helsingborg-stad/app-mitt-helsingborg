@@ -29,18 +29,16 @@ const styles = StyleSheet.create({
 
 interface SubSlideProps {
   subtitle: string;
-  description: string;
   last?: boolean;
   onPress: () => void;
 }
 
-const SubSlide = ({ subtitle, description, last, onPress }: SubSlideProps) => (
+const SubSlide = ({ subtitle, last, onPress }: SubSlideProps) => (
   <View style={styles.container}>
     <Text style={styles.subtitle}>{subtitle}</Text>
-    <Text style={styles.description}>{description}</Text>
     <Button
       onPress={onPress}
-      label={last ? 'Login' : 'Next'}
+      label={last ? 'Login' : 'Fortsätt'}
       variant={last ? 'primary' : 'default'}
     />
   </View>

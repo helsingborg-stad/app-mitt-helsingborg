@@ -7,6 +7,7 @@ export const SLIDE_HEIGHT = 0.61 * height;
 const styles = StyleSheet.create({
   container: {
     width,
+    paddingLeft: 58,
   },
   underlay: {
     ...StyleSheet.absoluteFillObject,
@@ -22,24 +23,65 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 80,
-    lineHeight: 80,
-    color: 'white',
-    textAlign: 'center',
+    fontSize: 36,
+    lineHeight: 44,
+    fontWeight: '800',
+    color: '#00213F',
+    textAlign: 'left',
+    fontFamily: 'Roboto',
+  },
+  subTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    lineHeight: 20,
+    letterSpacing: 0.025,
+    color: 'rgba(0, 33, 63, 0.64)',
+    paddingTop: 38,
+    fontFamily: 'Roboto',
+  },
+  subTitleHrRule: {
+    borderBottomColor: 'rgba(0, 0, 0, 0.48)',
+    borderBottomWidth: 2,
+    width: 32,
+    paddingTop: 16,
+  },
+  content: {
+    fontSize: 20,
+    fontWeight: '500',
+    lineHeight: 30,
+    paddingTop: 16,
+    textAlignVertical: 'top',
+    fontFamily: 'Roboto',
   },
 });
 
 interface SliderProps {
   title: string;
+  content: string;
+  right: boolean;
 }
 
-const Slide = ({ title }: SliderProps) => {
-  const transform = [{ translateY: (SLIDE_HEIGHT - 100) / 2 }];
+const Slide = ({ title, right, content }: SliderProps) => {
+  // const transform = [{ translateY: (SLIDE_HEIGHT - 100) / 2 }];
+  const transform = [
+    { translateY: (SLIDE_HEIGHT - 300) / 2 },
+    // { translateX: right ? width / 2 - 50 : -width / 2 + 50 },
+    // { rotate: right ? '-90deg' : '90deg' },
+  ];
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { transform }]}>
+      <View>
+        <Image source={require('./assets/STADSVAPEN.png')} />
+        <Text style={styles.subTitle}>Mitt Helsingborg</Text>
+        <View style={styles.subTitleHrRule} />
+      </View>
       <View style={styles.underlay}>{/* <Image source={picture} style={styles.picture} /> */}</View>
-      <View style={[styles.titleContent, { transform }]}>
+      <View style={[styles.titleContent]}>
         <Text style={styles.title}>{title}</Text>
+      </View>
+      <View>
+        <Text style={styles.content}>{content}</Text>
       </View>
     </View>
   );
