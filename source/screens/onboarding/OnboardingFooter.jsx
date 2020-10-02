@@ -26,12 +26,14 @@ const styles = StyleSheet.create({
   },
 });
 
-interface SubSlideProps {
+interface OnboardingFooterProps {
   last?: boolean;
+  width: number;
+  transform: number;
   onPress: () => void;
 }
 
-const SubSlide = ({ subtitle, last, onPress }: SubSlideProps) => (
+const OnboardingFooter = ({ subtitle, last, onPress }: OnboardingFooterProps) => (
   <View style={styles.container}>
     <Button
       onPress={onPress}
@@ -41,4 +43,4 @@ const SubSlide = ({ subtitle, last, onPress }: SubSlideProps) => (
   </View>
 );
 
-export default SubSlide;
+export default OnboardingFooter;

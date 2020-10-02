@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
   container: {
     width,
     paddingLeft: 58,
+    paddingRight: 58,
   },
   underlay: {
     ...StyleSheet.absoluteFillObject,
@@ -59,15 +60,11 @@ interface SliderProps {
   title: string;
   content: string;
   right: boolean;
+  picture: number;
 }
 
-const Slide = ({ title, right, content }: SliderProps) => {
-  // const transform = [{ translateY: (SLIDE_HEIGHT - 100) / 2 }];
-  const transform = [
-    { translateY: (SLIDE_HEIGHT - 300) / 2 },
-    // { translateX: right ? width / 2 - 50 : -width / 2 + 50 },
-    // { rotate: right ? '-90deg' : '90deg' },
-  ];
+const Slide = ({ title, right, content, picture }: SliderProps) => {
+  const transform = [{ translateY: (SLIDE_HEIGHT - 300) / 2 }];
 
   return (
     <View style={[styles.container, { transform }]}>
@@ -76,7 +73,18 @@ const Slide = ({ title, right, content }: SliderProps) => {
         <Text style={styles.subTitle}>Mitt Helsingborg</Text>
         <View style={styles.subTitleHrRule} />
       </View>
-      <View style={styles.underlay}>{/* <Image source={picture} style={styles.picture} /> */}</View>
+      <View style={styles.underlay}>
+        {/* <Image source={picture} style={styles.picture} /> */}
+        <Image
+          source={picture}
+          style={{
+            alignSelf: 'center',
+            height: '100%',
+            width: '100%',
+          }}
+          resizeMode="cover"
+        />
+      </View>
       <View style={[styles.titleContent]}>
         <Text style={styles.title}>{title}</Text>
       </View>
