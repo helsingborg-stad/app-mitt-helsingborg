@@ -6,9 +6,9 @@ import Button from './components/Button';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
-    padding: 44,
+    padding: 40,
   },
   subtitle: {
     fontSize: 24,
@@ -28,14 +28,12 @@ const styles = StyleSheet.create({
 });
 
 interface SubSlideProps {
-  subtitle: string;
   last?: boolean;
   onPress: () => void;
 }
 
 const SubSlide = ({ subtitle, last, onPress }: SubSlideProps) => (
   <View style={styles.container}>
-    <Text style={styles.subtitle}>{subtitle}</Text>
     <Button
       onPress={onPress}
       label={last ? 'Login' : 'Fortsätt'}
