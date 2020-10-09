@@ -20,11 +20,15 @@ interface Props {
   heading: string;
   items: Item[];
   categories?: Category[];
-  onChange: (answers: Record<string, any> | string | number, fieldId?: string) => void;
+  onChange: (answers: Record<string, any> | string | number, fieldId: string) => void;
   color: string;
   answers: Record<string, any>;
 }
-
+/**
+ * Summary list, that is linked and summarizes values from other input components.
+ * The things to summarize is specified in the items prop.
+ * The things are grouped into categories, as specified by the categories props.
+ */
 const SummaryList: React.FC<Props> = ({ heading, items, categories, onChange, color, answers }) => {
   console.log(answers);
   const changeFromInput = (item: Item, index?: number) => (text: string) => {

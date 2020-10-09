@@ -20,7 +20,7 @@ const ModalWrapper = styled.View({
 
 const Content = styled.ScrollView``;
 
-const Modal = ({ visible, children }) => (
+const Modal = ({ visible, children, ...other }) => (
   <ModalContainer
     animationInTiming={400}
     animationOutTiming={400}
@@ -28,6 +28,7 @@ const Modal = ({ visible, children }) => (
     propagateSwipe
     swipeDirection="down"
     isVisible={visible}
+    {...other}
   >
     <ModalWrapper>
       <Content>

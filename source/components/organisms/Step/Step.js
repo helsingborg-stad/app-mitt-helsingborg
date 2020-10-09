@@ -3,14 +3,10 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import AuthContext from 'app/store/AuthContext';
 import { Text } from 'react-native';
-import {
-  AuthLoading,
-  BackNavigation,
-  Banner,
-  FooterAction,
-  StepDescription,
-  FormField,
-} from 'app/components/molecules';
+import { AuthLoading, StepDescription, FormField } from 'app/components/molecules';
+import BackNavigation from '../../molecules/BackNavigation/BackNavigation';
+import Banner from '../../molecules/Banner/Banner';
+import FooterAction from '../../molecules/FooterAction/FooterAction';
 
 const StepContainer = styled.View`
   background: ${props => props.bg};

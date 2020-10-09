@@ -6,11 +6,22 @@ import FormList from './FormList';
 const FormListStory = () => {
   const [formId, setFormId] = useState('');
   return (
+<<<<<<< HEAD
     <FormList
       onClickCallback={async id => {
         setFormId(id);
       }}
     />
+=======
+    <>
+      <FormList
+        onClickCallback={async id => {
+          setFormId(id);
+          setModalVisible(true);
+        }}
+      />
+    </>
+>>>>>>> 22fd7c2... Removed old components dealing with substeps
   );
 };
 
