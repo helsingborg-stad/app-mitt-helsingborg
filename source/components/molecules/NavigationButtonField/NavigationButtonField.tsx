@@ -6,36 +6,42 @@ import colors from '../../../styles/colors';
 
 const ButtonFieldWrapper = styled.View`
   flex: 1;
-  margin: 24px;
+  margin: 2px;
 `;
 
-type ActionType =
+export type ActionType =
   | { type: 'navigateDown'; stepId: string }
-  | { type: 'navigateUp'; stepId: string }
+  | { type: 'navigateUp' }
   | { type: 'navigateNext' }
   | { type: 'navigateBack' };
 
-interface Props {
+export interface Props {
   iconName: string;
   text: string;
   color: string;
-  type: ActionType;
+  navigationType: ActionType;
   formNavigation: {
     next: () => void;
     back: () => void;
     down: (targetStepId: string) => void;
-    up: (targetStepId: string) => void;
+    up: () => void;
   };
 }
 
-const ButtonField: React.FC<Props> = ({ iconName, text, color, type, formNavigation }) => {
+const NavigationButtonField: React.FC<Props> = ({
+  iconName,
+  text,
+  color,
+  navigationType,
+  formNavigation,
+}) => {
   let onClick = (targetId?: string) => {};
-  switch (type.type) {
+  switch (navigationType.type) {
     case 'navigateDown':
-      onClick = () => formNavigation.down(type.stepId);
+      onClick = () => formNavigation.down(navigationType.stepId);
       break;
     case 'navigateUp':
-      onClick = () => formNavigation.up(type.stepId);
+      onClick = () => formNavigation.up();
       break;
     case 'navigateNext':
       onClick = formNavigation.next;
@@ -55,7 +61,7 @@ const ButtonField: React.FC<Props> = ({ iconName, text, color, type, formNavigat
     </ButtonFieldWrapper>
   );
 };
-ButtonField.propTypes = {
+NavigationButtonField.propTypes = {
   /**
    * Name of the icon to be displayed
    */
@@ -67,7 +73,7 @@ ButtonField.propTypes = {
   /**
    * Function is triggered when button is clicked
    */
-  type: PropTypes.any,
+  navigationType: PropTypes.any,
   /**
    * Color of the button
    */
@@ -75,10 +81,10 @@ ButtonField.propTypes = {
   formNavigation: PropTypes.any,
 };
 
-ButtonField.defaultProps = {
+NavigationButtonField.defaultProps = {
   iconName: '',
   text: '',
   color: 'white',
 };
 
-export default ButtonField;
+export default NavigationButtonField;
