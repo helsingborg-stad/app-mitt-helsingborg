@@ -25,10 +25,14 @@ const FieldsetHeader = styled.View`
   flex-direction: row;
 `;
 
-const FieldsetHeaderSection = styled.View`
+interface FieldsetHeaderSectionProps {
+  alignItems: string;
+}
+
+const FieldsetHeaderSection = styled.View<FieldsetHeaderSectionProps>`
   flex: 1;
   flex-direction: column;
-  align-items: ${({ alignItems }) => alignItems};
+  align-items: ${(props) => props.alignItems};
 `;
 
 const FieldsetBody = styled.View``;
@@ -53,9 +57,9 @@ const FieldsetLegendBorder = styled.View`
 interface FieldsetProps {
   children: React.ReactNode;
   legend: string;
-  onIconPress: () => void;
-  iconName: string;
-  iconSize: number;
+  onIconPress?: () => void;
+  iconName?: string;
+  iconSize?: number;
 }
 
 export default function Fieldset({
@@ -64,7 +68,7 @@ export default function Fieldset({
   onIconPress,
   iconName,
   iconSize,
-}: React.FC<FieldsetProps>) {
+}: FieldsetProps) {
   const showIcon = onIconPress && iconName;
   return (
     <FieldsetContainer>
