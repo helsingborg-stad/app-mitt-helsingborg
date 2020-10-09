@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import { Text, Icon, Button } from 'app/components/atoms';
 import PropTypes from 'prop-types';
 import icons from 'source/helpers/Icons';
-import BackNavigation from '../BackNavigation';
+import BackNavigation from '../BackNavigation/BackNavigation';
 
 const ModalContainer = styled.View({
   backgroundColor: '#00213F',

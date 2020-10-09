@@ -5,6 +5,7 @@ import styled from 'styled-components/native';
 import AvatarListItem from 'app/components/molecules/ListItem/AvatarListItem';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { Text, Icon } from '../../atoms';
+import Button from '../../atoms/Button/Button';
 
 const SectionHeader = styled(Text)`
   margin-left: 15px;
@@ -82,6 +83,7 @@ const GroupListWithAvatar = ({ heading, value, onChange, formId }) => {
             />
           ))
         : null}
+      {isDisable ? <Button text="Lägg till" iconName="add" onClick={addItem} color="blue" /> : null}
     </>
   );
 };

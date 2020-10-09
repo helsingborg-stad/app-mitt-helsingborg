@@ -6,21 +6,21 @@ import styled from "styled-components/native";
 import PropTypes from "prop-types";
 import { Input, Text, Icon } from "../../atoms";
 import colors from "../../../styles/colors";
-import { SummaryListItem as SummaryListItemType } from "./SummaryList";
+import { Item } from "./SummaryList";
 import DateTimePickerForm from "../../molecules/DateTimePicker/DateTimePickerForm";
 
-const SummaryListItemWrapper = styled(View)`
+const ItemWrapper = styled(View)`
   flex-direction: row;
   align-items: flex-end;
   height: 46px;
 `;
-const SummaryListInputWrapper = styled.View`
+const InputWrapper = styled.View`
   align-items: center;
   justify-content: flex-end;
   flex: 1;
   padding-left: 50px;
 `;
-const SummaryListSmallInput = styled(Input)`
+const SmallInput = styled(Input)`
   height: 40px;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -29,14 +29,14 @@ const SummaryListSmallInput = styled(Input)`
   border-bottom-width: 1px;
   border-color: black;
 `;
-const SummaryListSmallText = styled(Text)`
+const SmallText = styled(Text)`
   height: 40px;
   font-size: 14px;
   padding-top: 11px;
   padding-bottom: 8px;
   padding-left: 17px;
 `;
-const SummaryListDeleteButton = styled(Icon)`
+const DeleteButton = styled(Icon)`
   padding-top: 5px;
   padding-left: 0px;
   padding-right: 0px;
@@ -58,7 +58,7 @@ const dateStyle = {
 };
 
 interface Props {
-  item: SummaryListItemType;
+  item: Item;
   value: Record<string, any> | string | number;
   index?: number;
   changeFromInput: (text: string | number) => void;
@@ -66,10 +66,6 @@ interface Props {
   color: string;
 }
 
-/**
- * A component for rendering an singel item in a SummaryList Component.
- * Each summary item contains input fields with a descriptive label, the ability to clear the inputs and .
- */
 const SummaryListItem: React.FC<Props> = ({
   item,
   value,
@@ -78,12 +74,12 @@ const SummaryListItem: React.FC<Props> = ({
   removeItem,
   color,
 }) => {
-  const inputComponent = (input: SummaryListItemType) => {
+  const inputComponent = (input: Item) => {
     switch (input.type) {
       case "text":
       case "arrayText":
         return (
-          <SummaryListSmallInput
+          <SmallInput
             textAlign="right"
             value={value}
             onChangeText={changeFromInput}
@@ -92,7 +88,7 @@ const SummaryListItem: React.FC<Props> = ({
       case "number":
       case "arrayNumber":
         return (
-          <SummaryListSmallInput
+          <SmallInput
             textAlign="right"
             keyboardType="numeric"
             value={value}
@@ -113,7 +109,7 @@ const SummaryListItem: React.FC<Props> = ({
         );
       default:
         return (
-          <SummaryListSmallInput
+          <SmallInput
             textAlign="right"
             value={value}
             onChangeText={changeFromInput}
@@ -122,16 +118,16 @@ const SummaryListItem: React.FC<Props> = ({
     }
   };
   return (
-    <SummaryListItemWrapper key={`${item.title}`}>
-      <SummaryListSmallText>
+    <ItemWrapper key={`${item.title}`}>
+      <SmallText>
         {`${item.title}`}
         {index ? ` ${index}` : null}
-      </SummaryListSmallText>
-      <SummaryListInputWrapper>{inputComponent(item)}</SummaryListInputWrapper>
+      </SmallText>
+      <InputWrapper>{inputComponent(item)}</InputWrapper>
       <TouchableHighlight activeOpacity={1} onPress={removeItem}>
-        <SummaryListDeleteButton name="clear" />
+        <DeleteButton name="clear" />
       </TouchableHighlight>
-    </SummaryListItemWrapper>
+    </ItemWrapper>
   );
 };
 SummaryListItem.propTypes = {
@@ -147,10 +143,9 @@ SummaryListItem.propTypes = {
    * What should happen to update the values
    */
   changeFromInput: PropTypes.func,
-  /** function to remove the item from the list */
   removeItem: PropTypes.func,
   /**
-   * Sets the color scheme of the list. default is light.
+   * Sets the color scheme of the list. default is red.
    */
   color: PropTypes.string,
 };

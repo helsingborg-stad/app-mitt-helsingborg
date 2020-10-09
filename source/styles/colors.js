@@ -467,28 +467,6 @@ const colors = {
       bodyText: palette.mono.black,
     },
   },
-  substepList: {
-    red: {
-      listButtonColor: 'red',
-      addButtonColor: 'green',
-      addButtonIconColor: 'black',
-    },
-    light: {
-      listButtonColor: 'light',
-      addButtonColor: 'light',
-      addButtonIconColor: 'black',
-    },
-    orange: {
-      listButtonColor: 'red',
-      addButtonColor: 'green',
-      addButtonIconColor: 'black',
-    },
-    green: {
-      listButtonColor: 'light',
-      addButtonColor: 'light',
-      addButtonIconColor: 'black',
-    },
-  },
 };
 
 export default colors;
