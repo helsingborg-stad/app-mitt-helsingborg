@@ -46,14 +46,11 @@ function getNestedSteps(
     return prev;
   }, []);
 }
-function getParentSteps(
+function getParentStep(
   matrix: StepperActions[][],
   currentPosition: { index: number; level: number }
-): number[] {
-  return matrix[currentPosition.index].reduce((prev, curr, currIndex) => {
-    if (curr === 'up') return [currIndex, ...prev];
-    return prev;
-  }, []);
+): number {
+  return getConnectionIndex(matrix, currentPosition.index, 'up');
 }
 
 /** Go to the next step in the form. If you are in a nested step with no further next, then this will go up to the parent. */
@@ -118,16 +115,14 @@ export function goDown(state: FormReducerState, targetStep: number | string) {
  * @param state current form state
  * @param targetStep the id or index of the target step.
  */
-export function goUp(state: FormReducerState, targetStep: number | string) {
+export function goUp(state: FormReducerState) {
   const { connectivityMatrix, currentPosition } = state;
-  const index = typeof targetStep === 'number' ? targetStep : getIndex(state, targetStep);
+  const parentStep = getParentStep(connectivityMatrix, currentPosition);
 
-  if (getParentSteps(connectivityMatrix, currentPosition).includes(index)) {
-    return {
-      ...state,
-      currentPosition: { index, level: currentPosition.level - 1 },
-    };
-  }
+  return {
+    ...state,
+    currentPosition: { parentStep, level: currentPosition.level - 1 },
+  };
 }
 
 /**
