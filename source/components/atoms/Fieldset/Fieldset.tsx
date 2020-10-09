@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components/native";
-import { View } from "react-native";
 import Text from "../Text/Text";
 import Icon from "../Icon";
 
@@ -25,6 +24,7 @@ const FieldsetHeader = styled.View`
   position: relative;
   flex-direction: row;
 `;
+
 const FieldsetHeaderSection = styled.View`
   flex: 1;
   flex-direction: column;
@@ -55,6 +55,7 @@ interface FieldsetProps {
   legend: string;
   onIconPress: () => void;
   iconName: string;
+  iconSize: number;
 }
 
 export default function Fieldset({
@@ -62,6 +63,7 @@ export default function Fieldset({
   legend,
   onIconPress,
   iconName,
+  iconSize,
 }: React.FC<FieldsetProps>) {
   const showIcon = onIconPress && iconName;
   return (
@@ -75,7 +77,11 @@ export default function Fieldset({
 
         <FieldsetHeaderSection alignItems="flex-end">
           {showIcon && (
-            <FieldsetIcon onPress={onIconPress} name={iconName} size={22} />
+            <FieldsetIcon
+              onPress={onIconPress}
+              name={iconName}
+              size={iconSize}
+            />
           )}
         </FieldsetHeaderSection>
       </FieldsetHeader>
