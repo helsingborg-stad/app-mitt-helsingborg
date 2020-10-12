@@ -3,6 +3,11 @@ import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from '../../molecules/StoryWrapper';
 import Form from '../../../containers/Form/Form';
 
+// This matrix describes how the steps are connected.
+// The way to read it is that m[step1][step2] describes the connection between
+// step1 to step2, i.e. if the corresponding element is none, they are not connected,
+// if it's next, they follow each other sequentialy, and if it's down, it means step2
+// is a child step of step1, and so on.
 const connectivityMatrix = [
   ['none', 'next', 'none', 'down', 'none', 'none'],
   ['back', 'none', 'next', 'none', 'down', 'none'],
@@ -26,10 +31,10 @@ const steps = [
     ],
     questions: [
       {
-        inputType: 'button',
+        inputType: 'navigationButton',
         description: 'test button',
         id: 'testButton1',
-        type: { type: 'navigateDown', stepId: '4' },
+        navigationType: { type: 'navigateDown', stepId: '4' },
         text: 'To Step 4',
         color: 'blue',
       },
@@ -55,10 +60,10 @@ const steps = [
         color: 'green',
       },
       {
-        inputType: 'button',
+        inputType: 'navigationButton',
         description: 'test button',
         id: 'testButton2',
-        type: { type: 'navigateDown', stepId: '5' },
+        navigationType: { type: 'navigateDown', stepId: '5' },
         text: 'navigate down to step 5',
         color: 'green',
       },
@@ -126,7 +131,7 @@ const steps = [
   },
 ];
 
-storiesOf('New Stepper POC', module).add('default', () => (
+storiesOf('Form Stepper POC', module).add('default', () => (
   <StoryWrapper>
     <Form
       steps={steps}

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, FieldLabel, Select, Text, Button } from 'source/components/atoms';
+import { Input, FieldLabel, Select, Text } from 'source/components/atoms';
 import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
 import SubstepList from 'source/components/organisms/SubstepList';
 import { View } from 'react-native';
@@ -8,8 +8,9 @@ import ConditionalTextField from 'app/components/molecules/ConditinalTextField';
 import SubstepButton from '../SubstepButton';
 import colors from '../../../styles/colors';
 import DateTimePickerForm from '../DateTimePicker';
+import NavigationButtonField from '../NavigationButtonField/NavigationButtonField';
 
-import ButtonField from '../ButtonField/ButtonField';
+// import ButtonField from '../ButtonField/ButtonField';
 
 const inputTypes = {
   text: {
@@ -45,13 +46,13 @@ const inputTypes = {
     props: {},
     initialValue: {},
   },
+  navigationButton: {
+    component: NavigationButtonField,
+    props: {},
+  },
   substepButton: {
     component: SubstepButton,
     changeEvent: 'onChange',
-    props: {},
-  },
-  button: {
-    component: ButtonField,
     props: {},
   },
   substepList: {
@@ -103,6 +104,9 @@ const FormField = props => {
   const saveInput = value => {
     if (onChange) onChange({ [id]: value });
   };
+  if (!input) {
+    return <Text>{`Invalid field type: ${inputType}`}</Text>;
+  }
   const inputProps = input && input.props ? input.props : {};
   const initialValue =
     value === '' && Object.prototype.hasOwnProperty.call(input, 'initialValue')
