@@ -9,7 +9,7 @@ const ButtonFieldWrapper = styled.View`
   margin: 2px;
 `;
 
-export type ActionType =
+export type NavigationActionType =
   | { type: 'navigateDown'; stepId: string }
   | { type: 'navigateUp' }
   | { type: 'navigateNext' }
@@ -19,7 +19,7 @@ export interface Props {
   iconName: string;
   text: string;
   color: string;
-  navigationType: ActionType;
+  navigationType: NavigationActionType;
   formNavigation: {
     next: () => void;
     back: () => void;

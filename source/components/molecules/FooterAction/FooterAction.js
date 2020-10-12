@@ -136,13 +136,23 @@ FooterAction.propTypes = {
    * Current form answers, used for passing to the various actions
    */
   answers: PropTypes.object,
+  /**
+   * An object bundling all functions relevant for navigation through the form.
+   */
   formNavigation: PropTypes.shape({
+    /** go to next step */
     next: PropTypes.func,
+    /** go to previous step */
     back: PropTypes.func,
+    /** go up a level to parent step */
     up: PropTypes.func,
+    /** go down to a child step */
     down: PropTypes.func,
+    /** close the form */
     close: PropTypes.func,
+    /** action to trigger when starting the form */
     start: PropTypes.func,
+    /** whether we are at the last of the main steps */
     isLastStep: PropTypes.func,
   }),
   onUpdate: PropTypes.func,
