@@ -10,8 +10,6 @@ import colors from '../../../styles/colors';
 import DateTimePickerForm from '../DateTimePicker';
 import NavigationButtonField from '../NavigationButtonField/NavigationButtonField';
 
-// import ButtonField from '../ButtonField/ButtonField';
-
 const inputTypes = {
   text: {
     component: Input,

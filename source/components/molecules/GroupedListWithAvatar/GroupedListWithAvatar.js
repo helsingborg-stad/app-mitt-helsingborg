@@ -28,6 +28,7 @@ const HeadingWrapper = styled(View)`
   justify-content: space-between;
 `;
 
+// TODO: this component needs fixing, so that it works with new stepper logic.
 const GroupListWithAvatar = ({ heading, value, onChange, formId }) => {
   const [isDisable, setIsDisable] = React.useState(false);
   const [showModal, setShowModal] = React.useState(false);
@@ -81,9 +82,6 @@ const GroupListWithAvatar = ({ heading, value, onChange, formId }) => {
             />
           ))
         : null}
-      {/* {isDisable ? (
-        <ButtonField text="Lägg till" iconName="add" onClick={addItem} color="blue" />
-      ) : null} */}
     </>
   );
 };
