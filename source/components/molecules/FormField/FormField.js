@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, FieldLabel, Select, Text, Button } from 'source/components/atoms';
+import { Input, FieldLabel, Select, Text } from 'source/components/atoms';
 import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
 import SubstepList from 'source/components/organisms/SubstepList';
 import { View } from 'react-native';
 import ConditionalTextField from 'app/components/molecules/ConditinalTextField';
-import SubstepButton from '../SubstepButton';
 import colors from '../../../styles/colors';
 import DateTimePickerForm from '../DateTimePicker';
 import NavigationButtonField from '../NavigationButtonField/NavigationButtonField';
