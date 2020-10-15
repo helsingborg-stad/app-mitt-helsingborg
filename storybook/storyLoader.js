@@ -14,6 +14,7 @@ function loadStories() {
   require('../source/components/atoms/Input/Input.stories');
   require('../source/components/atoms/Select/Select.stories');
   require('../source/components/atoms/Stepper/Stepper.stories');
+  require('../source/components/atoms/StepperPOC/Stepper.stories');
   require('../source/components/atoms/Text/Text.stories');
   require('../source/components/molecules/BackNavigation/BackNavigation.stories');
   require('../source/components/molecules/Banner/Banner.stories');
@@ -45,11 +46,13 @@ const stories = [
   '../source/components/atoms/ChatBubble/ChatBubble.stories',
   '../source/components/atoms/Checkbox/Checkbox.stories',
   '../source/components/atoms/FieldLabel/FieldLabel.stories',
+  '../source/components/atoms/Fieldset/Fieldset.stories',
   '../source/components/atoms/Heading/Heading.stories',
   '../source/components/atoms/Icon/Icon.stories',
   '../source/components/atoms/Input/Input.stories',
   '../source/components/atoms/Select/Select.stories',
   '../source/components/atoms/Stepper/Stepper.stories',
+  '../source/components/atoms/StepperPOC/Stepper.stories',
   '../source/components/atoms/Text/Text.stories',
   '../source/components/molecules/BackNavigation/BackNavigation.stories',
   '../source/components/molecules/Banner/Banner.stories',
