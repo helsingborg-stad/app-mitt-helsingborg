@@ -30,8 +30,12 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   const { updateCase } = useContext(CaseDispatch);
 
   useEffect(() => {
+    console.log('caseData', caseData);
     if (caseData?.formId) {
-      getForm(caseData.formId).then(form => setForm(form));
+      getForm(caseData.formId).then(form => {
+        setForm(form);
+        console.log('form', form);
+      });
       setInitialCase(caseData);
     } else if (caseId) {
       const initCase = getCase(caseId);
