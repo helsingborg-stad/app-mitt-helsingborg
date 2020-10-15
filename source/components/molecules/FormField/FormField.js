@@ -8,6 +8,7 @@ import ConditionalTextField from 'app/components/molecules/ConditinalTextField';
 import SubstepButton from '../SubstepButton';
 import colors from '../../../styles/colors';
 import DateTimePickerForm from '../DateTimePicker';
+import NavigationButtonField from '../NavigationButtonField/NavigationButtonField';
 
 const inputTypes = {
   text: {
@@ -42,6 +43,10 @@ const inputTypes = {
     changeEvent: 'onInputChange',
     props: {},
     initialValue: {},
+  },
+  navigationButton: {
+    component: NavigationButtonField,
+    props: {},
   },
   substepButton: {
     component: SubstepButton,
@@ -97,6 +102,9 @@ const FormField = props => {
   const saveInput = value => {
     if (onChange) onChange({ [id]: value });
   };
+  if (!input) {
+    return <Text>{`Invalid field type: ${inputType}`}</Text>;
+  }
   const inputProps = input && input.props ? input.props : {};
   const initialValue =
     value === '' && Object.prototype.hasOwnProperty.call(input, 'initialValue')
@@ -131,7 +139,7 @@ const FormField = props => {
     input && input.component ? (
       React.createElement(input.component, inputCompProps)
     ) : (
-      <Text>{`Invalid field type ${inputType}`}</Text>
+      <Text>{`Invalid field type: ${inputType}`}</Text>
     );
 
   if (checkCondition(conditionalOn)) {
@@ -184,6 +192,15 @@ FormField.propTypes = {
    * All the form state answers. Needed because of conditional checks.
    */
   answers: PropTypes.object,
+  formNavigation: PropTypes.shape({
+    next: PropTypes.func,
+    back: PropTypes.func,
+    up: PropTypes.func,
+    down: PropTypes.func,
+    close: PropTypes.func,
+    start: PropTypes.func,
+    isLastStep: PropTypes.func,
+  }),
   /**
    * sets the color theme.
    */
