@@ -70,6 +70,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
         <Form
           steps={form.steps}
           startAt={caseData?.currentStep || initialCase?.currentStep || 1}
+          connectivityMatrix={form.connectivityMatrix}
           user={user}
           onClose={handleCloseForm}
           onStart={handleStartForm}
