@@ -1,25 +1,8 @@
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
+import React, { useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { View, TouchableOpacity, Platform } from 'react-native';
 import Input from '../../atoms/Input';
-import Button from '../../atoms/Button';
-import Text from '../../atoms/Text';
-import Modal from '../Modal/Modal';
-// top: ${props => (props.top ? `${props.top}px` : '40px')};
-
-const ContentContainer = styled.View`
-  flex: 1;
-  padding-left: 12px;
-  justify-content: center;
-  position: relative;
-`;
-const ButtonContainer = styled.View`
-  flex: 1;
-  margin: 0 auto;
-  justify-content: center;
-`;
 
 interface Props {
   onSelect: (date: Date) => void;
@@ -80,7 +63,7 @@ const DateTimePickerForm: React.FC<Props> = ({
       <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
         <Input
           placeholder="åååå-mm-dd"
-          editable
+          editable={false}
           value={dateTimeString}
           pointerEvents="none"
           center
@@ -88,22 +71,15 @@ const DateTimePickerForm: React.FC<Props> = ({
           {...other}
         />
       </TouchableOpacity>
-      <Modal visible={isVisible} presentationStyle="overFullScreen">
-        <ContentContainer>
-          <DateTimePicker
-            value={date}
-            onChange={(_event, x) => onSelect(x)}
-            mode={mode}
-            textColor="white"
-            {...selectorProps}
-          />
-        </ContentContainer>
-        <ButtonContainer>
-          <Button color="green" onClick={() => setIsVisible(false)}>
-            <Text>Spara</Text>
-          </Button>
-        </ButtonContainer>
-      </Modal>
+      {isVisible && (
+        <DateTimePicker
+          value={date}
+          onChange={(_event, date) => onChange(date)}
+          mode={mode}
+          textColor={color === 'light' ? 'white' : 'dark'}
+          {...selectorProps}
+        />
+      )}
     </View>
   );
 };
