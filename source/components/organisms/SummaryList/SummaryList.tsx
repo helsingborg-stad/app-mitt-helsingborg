@@ -11,7 +11,7 @@ export interface Item {
   inputId?: string;
 }
 
-interface Category {
+interface SummaryListCategory {
   category: string;
   description: string;
 }
@@ -19,7 +19,7 @@ interface Category {
 interface Props {
   heading: string;
   items: Item[];
-  categories?: Category[];
+  categories?: SummaryListCategory[];
   onChange: (answers: Record<string, any> | string | number, fieldId: string) => void;
   color: string;
   answers: Record<string, any>;
@@ -30,29 +30,59 @@ interface Props {
  * The things are grouped into categories, as specified by the categories props.
  */
 const SummaryList: React.FC<Props> = ({ heading, items, categories, onChange, color, answers }) => {
+  /**
+   * Given an item, and possibly an index in the case of repeater fields, this generates a function that
+   * updates the form data from the input.
+   * @param item The list item
+   * @param index The index, when summarizing a repeater field with multiple answers
+   */
   const changeFromInput = (item: Item, index?: number) => (text: string) => {
     if (
       ['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type) &&
       typeof index !== 'undefined' &&
       item.inputId
     ) {
-      const oldValue: Record<string, string | number>[] = answers[item.id];
-      oldValue[index][item.inputId] = text;
-      onChange(oldValue, item.id);
+      const oldAnswer: Record<string, string | number>[] = answers[item.id];
+      oldAnswer[index][item.inputId] = text;
+      onChange(oldAnswer, item.id);
     } else {
       onChange(text, item.id);
     }
   };
-
-  const removeItem = (item: Item, index?: number) => () => {
+  /**
+   * Given an item, and index in the case of repeater fields, this generates the function for clearing the associated data
+   * in the form state.
+   * @param item The list item
+   * @param index The index, when summarizing a repeater field with multiple answers
+   */
+  const removeListItem = (item: Item, index?: number) => () => {
     if (typeof index !== 'undefined') {
-      const oldValue: Record<string, string | number>[] = answers[item.id];
-      oldValue.splice(index, 1);
-      onChange(oldValue, item.id);
+      const oldAnswer: Record<string, string | number>[] = answers[item.id];
+      oldAnswer.splice(index, 1);
+      onChange(oldAnswer, item.id);
     } else {
       onChange(undefined, item.id);
     }
   };
+
+  /** Generates a list item */
+  const generateListItem = (
+    item: Item,
+    value: string | number | Record<string, any>,
+    index?: number
+  ) => ({
+    category: item.category,
+    component: (
+      <SummaryListItem
+        item={item}
+        index={index ? index + 1 : undefined}
+        value={value}
+        changeFromInput={changeFromInput(item, index)}
+        removeItem={removeListItem(item, index)}
+        color={color}
+      />
+    ),
+  });
 
   const listItems = [];
   items
@@ -65,34 +95,11 @@ const SummaryList: React.FC<Props> = ({ heading, items, categories, onChange, co
         const values: Record<string, string | number>[] = answers[item.id];
         if (values && values?.length > 0) {
           values.forEach((v, index) => {
-            listItems.push({
-              category: item.category,
-              component: (
-                <SummaryListItem
-                  item={item}
-                  index={index + 1}
-                  value={v[item?.inputId || item.id]}
-                  changeFromInput={changeFromInput(item, index)}
-                  removeItem={removeItem(item, index)}
-                  color={color}
-                />
-              ),
-            });
+            listItems.push(generateListItem(item, v[item?.inputId || item.id], index));
           });
         }
       } else {
-        listItems.push({
-          category: item.category,
-          component: (
-            <SummaryListItem
-              item={item}
-              value={answers[item.id]}
-              changeFromInput={changeFromInput(item)}
-              removeItem={removeItem(item)}
-              color={color}
-            />
-          ),
-        });
+        listItems.push(generateListItem(item, answers[item.id]));
       }
     });
   return (
@@ -124,7 +131,7 @@ SummaryList.propTypes = {
    */
   color: PropTypes.string,
   /**
-   * Message to display before anything has been added to the list.
+   * The form state answers
    */
   answers: PropTypes.object,
 };
