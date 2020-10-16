@@ -3,14 +3,11 @@ import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from '../../molecules/StoryWrapper';
 import Form from '../../../containers/Form/Form';
 
-<<<<<<< HEAD
 // This matrix describes how the steps are connected.
 // The way to read it is that m[step1][step2] describes the connection between
 // step1 to step2, i.e. if the corresponding element is none, they are not connected,
 // if it's next, they follow each other sequentialy, and if it's down, it means step2
 // is a child step of step1, and so on.
-=======
->>>>>>> 2f8b2a3... Working POC of form navigation logic.
 const connectivityMatrix = [
   ['none', 'next', 'none', 'down', 'none', 'none'],
   ['back', 'none', 'next', 'none', 'down', 'none'],
@@ -34,17 +31,10 @@ const steps = [
     ],
     questions: [
       {
-<<<<<<< HEAD
         inputType: 'navigationButton',
         description: 'test button',
         id: 'testButton1',
         navigationType: { type: 'navigateDown', stepId: '4' },
-=======
-        inputType: 'button',
-        description: 'test button',
-        id: 'testButton1',
-        type: { type: 'navigateDown', stepId: '4' },
->>>>>>> 2f8b2a3... Working POC of form navigation logic.
         text: 'To Step 4',
         color: 'blue',
       },
@@ -70,17 +60,10 @@ const steps = [
         color: 'green',
       },
       {
-<<<<<<< HEAD
         inputType: 'navigationButton',
         description: 'test button',
         id: 'testButton2',
         navigationType: { type: 'navigateDown', stepId: '5' },
-=======
-        inputType: 'button',
-        description: 'test button',
-        id: 'testButton2',
-        type: { type: 'navigateDown', stepId: '5' },
->>>>>>> 2f8b2a3... Working POC of form navigation logic.
         text: 'navigate down to step 5',
         color: 'green',
       },
@@ -148,11 +131,7 @@ const steps = [
   },
 ];
 
-<<<<<<< HEAD
 storiesOf('Form Stepper POC', module).add('default', () => (
-=======
-storiesOf('New Stepper POC', module).add('default', () => (
->>>>>>> 2f8b2a3... Working POC of form navigation logic.
   <StoryWrapper>
     <Form
       steps={steps}
