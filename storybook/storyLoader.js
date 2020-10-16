@@ -39,7 +39,6 @@ function loadStories() {
 	require('../source/components/organisms/FormList/FormList.stories');
 	require('../source/components/organisms/Step/Step.stories');
 	require('../source/components/organisms/SubstepList/SubstepList.stories');
-	require('../source/components/organisms/SummaryList/SummaryList.stories');
 	require('../source/components/organisms/WatsonAgent/WatsonAgent.stories');
 }
 
@@ -79,7 +78,6 @@ const stories = [
 	'../source/components/organisms/FormList/FormList.stories',
 	'../source/components/organisms/Step/Step.stories',
 	'../source/components/organisms/SubstepList/SubstepList.stories',
-	'../source/components/organisms/SummaryList/SummaryList.stories',
 	'../source/components/organisms/WatsonAgent/WatsonAgent.stories'
 ];
 
