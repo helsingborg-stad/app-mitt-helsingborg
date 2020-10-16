@@ -1,14 +1,8 @@
-export interface SummaryListItem {
+export interface SubstepItem {
   category: string;
-  type: string;
   title: string;
-  id: string;
-  inputId?: string;
-}
-export interface RepeaterInputItems {
-  title: string;
-  type: string;
-  id: string;
+  formId: string;
+  loadPrevious?: string[];
 }
 export interface ListInput {
   type: 'text' | 'number';
@@ -25,8 +19,8 @@ export interface Question {
   placeholder?: string;
   explainer?: string;
   loadPrevious?: string[];
-  items?: SummaryListItem[];
-  inputs?: ListInput[] | RepeaterInputItems[];
+  items?: SubstepItem[];
+  inputs?: ListInput[];
 }
 
 export interface Action {
