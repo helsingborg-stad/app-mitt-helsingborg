@@ -6,6 +6,7 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 import Text from '../../atoms/Text';
 import Button from '../../atoms/Button/Button';
 import Icon from '../../atoms/Icon';
+import SubstepModal from '../SubstepModal';
 
 const HighlightedItem = styled(Button)`
   padding: 0px;
@@ -118,9 +119,18 @@ const AvatarListItem = ({
   );
 
   return (
-    <HighlightedItem onClick={showFormModal} block z={0}>
-      {renderContent()}
-    </HighlightedItem>
+    <>
+      <HighlightedItem onClick={showFormModal} block z={0}>
+        {renderContent()}
+      </HighlightedItem>
+      <SubstepModal
+        visible={showForm}
+        setVisible={setShowForm}
+        value={value}
+        formId={familyFormId}
+        onChange={onChange}
+      />
+    </>
   );
 };
 
