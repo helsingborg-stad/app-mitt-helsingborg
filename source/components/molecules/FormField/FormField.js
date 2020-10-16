@@ -9,7 +9,6 @@ import SubstepButton from '../SubstepButton';
 import colors from '../../../styles/colors';
 import DateTimePickerForm from '../DateTimePicker';
 import NavigationButtonField from '../NavigationButtonField/NavigationButtonField';
-import NavigationButtonFieldGroup from '../NavigationButtonGroup/NavigationButtonGroup';
 
 const inputTypes = {
   text: {
@@ -49,9 +48,16 @@ const inputTypes = {
     component: NavigationButtonField,
     props: {},
   },
-  navigationButtonGroup: {
-    component: NavigationButtonFieldGroup,
+  substepButton: {
+    component: SubstepButton,
+    changeEvent: 'onChange',
     props: {},
+  },
+  substepList: {
+    component: SubstepList,
+    changeEvent: 'onChange',
+    props: {},
+    initialValue: {},
   },
   substepListSummary: {
     component: SubstepList,
