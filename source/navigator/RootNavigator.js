@@ -22,7 +22,13 @@ const RootStack = () => (
       component={BottomBarNavigator}
       options={{ cardStyleInterpolator: forFade }}
     />
-    <Stack.Screen name="Form" component={FormCaseScreen} />
+    <Stack.Screen
+      name="Form"
+      component={FormCaseScreen}
+      options={{
+        gestureEnabled: false,
+      }}
+    />
   </Stack.Navigator>
 );
 
