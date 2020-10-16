@@ -136,6 +136,7 @@ FooterAction.propTypes = {
    * Current form answers, used for passing to the various actions
    */
   answers: PropTypes.object,
+<<<<<<< HEAD
   /**
    * An object bundling all functions relevant for navigation through the form.
    */
@@ -153,6 +154,15 @@ FooterAction.propTypes = {
     /** action to trigger when starting the form */
     start: PropTypes.func,
     /** whether we are at the last of the main steps */
+=======
+  formNavigation: PropTypes.shape({
+    next: PropTypes.func,
+    back: PropTypes.func,
+    up: PropTypes.func,
+    down: PropTypes.func,
+    close: PropTypes.func,
+    start: PropTypes.func,
+>>>>>>> 2f8b2a3... Working POC of form navigation logic.
     isLastStep: PropTypes.func,
   }),
   onUpdate: PropTypes.func,
