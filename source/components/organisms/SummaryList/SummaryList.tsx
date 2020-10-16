@@ -30,7 +30,6 @@ interface Props {
  * The things are grouped into categories, as specified by the categories props.
  */
 const SummaryList: React.FC<Props> = ({ heading, items, categories, onChange, color, answers }) => {
-  console.log(answers);
   const changeFromInput = (item: Item, index?: number) => (text: string) => {
     if (
       ['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type) &&
@@ -96,7 +95,11 @@ const SummaryList: React.FC<Props> = ({ heading, items, categories, onChange, co
         });
       }
     });
-  return <GroupedList heading={heading} items={listItems} categories={categories} color={color} />;
+  return (
+    listItems.length > 0 && (
+      <GroupedList heading={heading} items={listItems} categories={categories} color={color} />
+    )
+  );
 };
 
 SummaryList.propTypes = {
