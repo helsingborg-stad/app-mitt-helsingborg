@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Input, FieldLabel, Select, Text } from 'source/components/atoms';
 import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
-import SubstepList from 'source/components/organisms/SubstepList';
 import { View } from 'react-native';
 import ConditionalTextField from 'app/components/molecules/ConditinalTextField';
 import colors from '../../../styles/colors';
-import DateTimePickerForm from '../DateTimePicker';
+import DateTimePickerForm from '../DateTimePicker/DateTimePickerForm';
 import NavigationButtonField from '../NavigationButtonField/NavigationButtonField';
-import NavigationButtonFieldGroup from '../NavigationButtonGroup/NavigationButtonGroup';
+import NavigationButtonGroup from '../NavigationButtonGroup/NavigationButtonGroup';
+import SummaryList from '../../organisms/SummaryList/SummaryList';
+import RepeaterField from '../RepeaterField/RepeaterField';
 
 const inputTypes = {
   text: {
@@ -49,14 +50,8 @@ const inputTypes = {
     props: {},
   },
   navigationButtonGroup: {
-    component: NavigationButtonFieldGroup,
+    component: NavigationButtonGroup,
     props: {},
-  },
-  substepListSummary: {
-    component: SubstepList,
-    changeEvent: 'onChange',
-    props: { summary: true },
-    initialValue: {},
   },
   select: {
     component: Select,
@@ -75,25 +70,37 @@ const inputTypes = {
     props: {},
     initialValue: '',
   },
+  summaryList: {
+    component: SummaryList,
+    changeEvent: 'onChange',
+    props: { answers: true },
+  },
+  repeaterField: {
+    component: RepeaterField,
+    changeEvent: 'onChange',
+    props: { answers: true },
+  },
 };
 
-const FormField = props => {
-  const {
-    label,
-    labelLine,
-    inputType,
-    color,
-    id,
-    onChange,
-    value,
-    answers,
-    conditionalOn,
-    labelHelp,
-    ...other
-  } = props;
+const FormField = ({
+  label,
+  labelLine,
+  inputType,
+  color,
+  id,
+  onChange,
+  value,
+  answers,
+  conditionalOn,
+  labelHelp,
+  ...other
+}) => {
   const input = inputTypes[inputType];
-  const saveInput = value => {
-    if (onChange) onChange({ [id]: value });
+  if (!input) {
+    return <Text>{`Invalid field type: ${inputType}`}</Text>;
+  }
+  const saveInput = (value, fieldId = id) => {
+    if (onChange) onChange({ [fieldId]: value });
   };
   if (!input) {
     return <Text>{`Invalid field type: ${inputType}`}</Text>;
@@ -111,6 +118,7 @@ const FormField = props => {
     ...inputProps,
     ...other,
   };
+  if (input?.props?.answers) inputCompProps.answers = answers;
   if (input && input.changeEvent) inputCompProps[input.changeEvent] = saveInput;
 
   /** Checks if the field is conditional on another input, and if so,
