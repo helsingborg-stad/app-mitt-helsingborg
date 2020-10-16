@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components/native';
-import Text from '../Text/Text';
-import Icon from '../Icon';
+import React from "react";
+import styled from "styled-components/native";
+import Text from "../Text/Text";
+import Icon from "../Icon";
 
 const FieldsetContainer = styled.View`
   display: flex;
@@ -32,7 +32,7 @@ interface FieldsetHeaderSectionProps {
 const FieldsetHeaderSection = styled.View<FieldsetHeaderSectionProps>`
   flex: 1;
   flex-direction: column;
-  align-items: ${props => props.alignItems};
+  align-items: ${(props) => props.alignItems};
 `;
 
 const FieldsetBody = styled.View``;
@@ -80,7 +80,13 @@ export default function Fieldset({
         </FieldsetHeaderSection>
 
         <FieldsetHeaderSection alignItems="flex-end">
-          {showIcon && <FieldsetIcon onPress={onIconPress} name={iconName} size={iconSize} />}
+          {showIcon && (
+            <FieldsetIcon
+              onPress={onIconPress}
+              name={iconName}
+              size={iconSize}
+            />
+          )}
         </FieldsetHeaderSection>
       </FieldsetHeader>
       <FieldsetBody>{children}</FieldsetBody>
