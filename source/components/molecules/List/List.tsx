@@ -1,9 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { TouchableHighlight } from 'react-native-gesture-handler';
-import { FieldLabel, Text, Icon } from 'source/components/atoms';
+import { FieldLabel, Text } from '../../atoms';
 import colors from '../../../styles/colors';
 import HelpButton from '../HelpButton/HelpButton';
 
