@@ -32,6 +32,7 @@ function useForm(initialState: FormReducerState) {
   };
 
   useEffect(() => {
+    console.log('number of main steps:', computeNumberMainSteps(formState.connectivityMatrix));
     dispatch({
       type: 'REPLACE_MARKDOWN_TEXT',
     });
