@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Input, FieldLabel, Select, Text } from 'source/components/atoms';
 import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
 import SubstepList from 'source/components/organisms/SubstepList';
-import { View } from 'react-native';
+import { View, LayoutAnimation } from 'react-native';
 import ConditionalTextField from 'app/components/molecules/ConditinalTextField';
 import colors from '../../../styles/colors';
 import DateTimePickerForm from '../DateTimePicker';
@@ -136,6 +136,7 @@ const FormField = props => {
     );
 
   if (checkCondition(conditionalOn)) {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     return (
       <View>
         {label ? (
