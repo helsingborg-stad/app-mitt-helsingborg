@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { LayoutAnimation } from 'react-native';
 import { Button, Text } from '../../atoms';
 import RepeaterFieldListItem from './RepeaterFieldListItem';
 import Fieldset from '../../atoms/Fieldset/Fieldset';
@@ -45,6 +46,7 @@ const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChan
   };
 
   const addAnswer = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setLocalAnswers(prev => [...prev, {}]);
   };
 
