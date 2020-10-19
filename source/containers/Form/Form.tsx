@@ -81,7 +81,10 @@ const Form: React.FC<Props> = ({
         updateCaseInContext={updateCaseInContext}
         currentPosition={formState.currentPosition}
         totalStepNumber={formState.numberOfMainSteps}
-        isBackBtnVisible
+        isBackBtnVisible={
+          formState.currentPosition.currentMainStep > 1 &&
+          formState.currentPosition.currentMainStep < formState.numberOfMainSteps
+        }
       />
     )
   );

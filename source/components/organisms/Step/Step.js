@@ -93,7 +93,8 @@ function Step({
   return (
     <StepContainer bg={theme.step.bg}>
       <StepBackNavigation
-        isBackBtnVisible={isBackBtnVisible}
+        showBackButton={isBackBtnVisible}
+        showCloseButton={currentPosition.level === 0}
         onBack={formNavigation.back}
         onClose={closeForm}
       />
