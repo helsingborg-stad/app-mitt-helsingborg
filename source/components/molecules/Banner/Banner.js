@@ -35,7 +35,14 @@ const BannerImage = styled(Image)`
   height: 100%;
 `;
 
-const Banner = ({ stepNumber, totalStepNumber, imageSrc, iconSrc, backgroundColor, style }) => (
+const Banner = ({
+  currentPosition,
+  totalStepNumber,
+  imageSrc,
+  iconSrc,
+  backgroundColor,
+  style,
+}) => (
   <BannerWrapper
     image={imageSrc}
     style={style}
@@ -52,14 +59,19 @@ const Banner = ({ stepNumber, totalStepNumber, imageSrc, iconSrc, backgroundColo
     ) : null}
     {totalStepNumber > 1 && (
       <ProgressCounterText>
-        Steg {stepNumber}/{totalStepNumber}
+        Steg {currentPosition.currentMainStep}/{totalStepNumber}
       </ProgressCounterText>
     )}
   </BannerWrapper>
 );
 
 Banner.propTypes = {
-  stepNumber: PropTypes.number,
+  /** The current position in the form */
+  currentPosition: PropTypes.shape({
+    index: PropTypes.number,
+    level: PropTypes.number,
+    currentMainStep: PropTypes.number,
+  }),
   totalStepNumber: PropTypes.number,
   imageSrc: PropTypes.string,
   iconSrc: PropTypes.string.isRequired,

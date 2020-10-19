@@ -27,7 +27,7 @@ const FooterAction = ({
   onUpdate,
   onSubmit,
   updateCaseInContext,
-  stepNumber,
+  currentPosition,
   children,
 }) => {
   const { user, handleSign, status } = useContext(AuthContext);
@@ -35,7 +35,8 @@ const FooterAction = ({
   useEffect(() => {
     const signCase = () => {
       if (onUpdate) onUpdate(answers);
-      if (updateCaseInContext) updateCaseInContext(answers, 'submitted', stepNumber);
+      if (updateCaseInContext)
+        updateCaseInContext(answers, 'submitted', currentPosition.currentMainStep);
       if (formNavigation.next) formNavigation.next();
     };
 
@@ -68,7 +69,7 @@ const FooterAction = ({
         return () => {
           if (onUpdate && caseStatus === 'ongoing') onUpdate(answers);
           if (updateCaseInContext && caseStatus === 'ongoing')
-            updateCaseInContext(answers, 'ongoing', stepNumber);
+            updateCaseInContext(answers, 'ongoing', currentPosition.currentMainStep);
           if (formNavigation.next) formNavigation.next();
         };
       }
@@ -160,8 +161,12 @@ FooterAction.propTypes = {
   onSubmit: PropTypes.func,
   /** Behaviour for updating case in context and backend */
   updateCaseInContext: PropTypes.func,
-  /** The steps position in the form */
-  stepNumber: PropTypes.number,
+  /** The current position in the form */
+  currentPosition: PropTypes.shape({
+    index: PropTypes.number,
+    level: PropTypes.number,
+    currentMainStep: PropTypes.number,
+  }),
 };
 
 FooterAction.defaultProps = {
