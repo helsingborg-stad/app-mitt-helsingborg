@@ -1,13 +1,13 @@
 /* eslint-disable no-nested-ternary */
-import React from 'react';
-import { View } from 'react-native';
-import { TouchableHighlight } from 'react-native-gesture-handler';
-import styled from 'styled-components/native';
-import PropTypes from 'prop-types';
-import { Input, Text, Icon } from '../../atoms';
-import colors from '../../../styles/colors';
-import { SummaryListItem as SummaryListItemType } from './SummaryList';
-import DateTimePickerForm from '../../molecules/DateTimePicker/DateTimePickerForm';
+import React from "react";
+import { View } from "react-native";
+import { TouchableHighlight } from "react-native-gesture-handler";
+import styled from "styled-components/native";
+import PropTypes from "prop-types";
+import { Input, Text, Icon } from "../../atoms";
+import colors from "../../../styles/colors";
+import { SummaryListItem as SummaryListItemType } from "./SummaryList";
+import DateTimePickerForm from "../../molecules/DateTimePicker/DateTimePickerForm";
 
 const SummaryListItemWrapper = styled(View)`
   flex-direction: row;
@@ -49,12 +49,12 @@ const dateStyle = {
   height: 40,
   paddingTop: 8,
   paddingBottom: 2,
-  backgroundColor: 'transparent',
+  backgroundColor: "transparent",
   borderTopWidth: 0,
   borderStartWidth: 0,
   borderEndWidth: 0,
   borderBottomWidth: 1,
-  borderColor: 'black',
+  borderColor: "black",
 };
 
 interface Props {
@@ -66,11 +66,22 @@ interface Props {
   color: string;
 }
 
-const SummaryListItem: React.FC<Props> = ({ item, value, index, changeFromInput, removeItem, color }) => {
+/**
+ * A component for rendering an singel item in a SummaryList Component.
+ * Each summary item contains input fields with a descriptive label, the ability to clear the inputs and .
+ */
+const SummaryListItem: React.FC<Props> = ({
+  item,
+  value,
+  index,
+  changeFromInput,
+  removeItem,
+  color,
+}) => {
   const inputComponent = (input: SummaryListItemType) => {
     switch (input.type) {
-      case 'text':
-      case 'arrayText':
+      case "text":
+      case "arrayText":
         return (
           <SummaryListSmallInput
             textAlign="right"
@@ -78,8 +89,8 @@ const SummaryListItem: React.FC<Props> = ({ item, value, index, changeFromInput,
             onChangeText={changeFromInput}
           />
         );
-      case 'number':
-      case 'arrayNumber':
+      case "number":
+      case "arrayNumber":
         return (
           <SummaryListSmallInput
             textAlign="right"
@@ -88,13 +99,13 @@ const SummaryListItem: React.FC<Props> = ({ item, value, index, changeFromInput,
             onChangeText={changeFromInput}
           />
         );
-      case 'date':
-      case 'arrayDate':
+      case "date":
+      case "arrayDate":
         return (
           <DateTimePickerForm
             value={value as string}
             mode="date"
-            selectorProps={{ locale: 'sv' }}
+            selectorProps={{ locale: "sv" }}
             onSelect={changeFromInput}
             color={color}
             style={dateStyle}
@@ -112,10 +123,11 @@ const SummaryListItem: React.FC<Props> = ({ item, value, index, changeFromInput,
   };
   return (
     <SummaryListItemWrapper key={`${item.title}`}>
-      <SummaryListSmallText>{`${item.title}`}{index ? ` ${index}`: null}</SummaryListSmallText>
-      <SummaryListInputWrapper>
-        {inputComponent(item)}
-      </SummaryListInputWrapper>
+      <SummaryListSmallText>
+        {`${item.title}`}
+        {index ? ` ${index}` : null}
+      </SummaryListSmallText>
+      <SummaryListInputWrapper>{inputComponent(item)}</SummaryListInputWrapper>
       <TouchableHighlight activeOpacity={1} onPress={removeItem}>
         <SummaryListDeleteButton name="clear" />
       </TouchableHighlight>
@@ -143,6 +155,6 @@ SummaryListItem.propTypes = {
   color: PropTypes.string,
 };
 SummaryListItem.defaultProps = {
-  color: 'light',
+  color: "light",
 };
 export default SummaryListItem;
