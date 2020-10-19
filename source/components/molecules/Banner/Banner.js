@@ -57,7 +57,7 @@ const Banner = ({
     {Object.prototype.hasOwnProperty.call(icons, iconSrc) ? (
       <BannerImageIcon source={icons[iconSrc]} />
     ) : null}
-    {totalStepNumber > 1 && (
+    {totalStepNumber > 1 && currentPosition.level === 0 && (
       <ProgressCounterText>
         Steg {currentPosition.currentMainStep}/{totalStepNumber}
       </ProgressCounterText>

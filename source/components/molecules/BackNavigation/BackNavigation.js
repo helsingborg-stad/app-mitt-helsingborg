@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Icon } from 'source/components/atoms';
@@ -55,33 +55,35 @@ const CloseButton = styled.View({
   backgroundColor: '#00213F',
 });
 
-const BackNavigation = ({ style, onBack, onClose, isBackBtnVisible }) =>
-  isBackBtnVisible ? (
-    <ButtonWrapper style={style}>
+const BackNavigation = ({ style, onBack, onClose, showBackButton, showCloseButton }) => (
+  <ButtonWrapper style={style}>
+    {showBackButton ? (
       <BackButton onStartShouldSetResponder={onBack}>
         <Icon name="keyboard-backspace" style={styles.iconBack} />
       </BackButton>
+    ) : (
+      <View />
+    )}
+
+    {showCloseButton ? (
       <CloseButton onStartShouldSetResponder={onClose}>
         <Icon name="close" style={styles.iconClose} />
       </CloseButton>
-    </ButtonWrapper>
-  ) : (
-    <CloseButtonWrapper style={style}>
-      <CloseButton onStartShouldSetResponder={onClose}>
-        <Icon name="close" style={styles.iconClose} />
-      </CloseButton>
-    </CloseButtonWrapper>
-  );
+    ) : null}
+  </ButtonWrapper>
+);
 
 BackNavigation.propTypes = {
   style: PropTypes.array,
   onBack: PropTypes.func,
   onClose: PropTypes.func,
-  isBackBtnVisible: PropTypes.bool,
+  showBackButton: PropTypes.bool,
+  showCloseButton: PropTypes.bool,
 };
 
 BackNavigation.defaultProps = {
-  isBackBtnVisible: true,
+  showBackButton: true,
+  showCloseButton: true,
 };
 
 export default BackNavigation;
