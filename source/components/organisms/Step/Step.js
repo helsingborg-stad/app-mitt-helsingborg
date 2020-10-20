@@ -78,7 +78,7 @@ function Step({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stepNumber]);
 
-  /** TODO: move out of this scope, this logic should be defined on the Form component */
+  /** TODO: move out of this scope, this logic should be defined on the form component */
   const closeForm = () => {
     if (status === 'ongoing') {
       if (onFieldChange) onFieldChange(answers);
@@ -186,7 +186,7 @@ Step.propTypes = {
    */
   onFieldChange: PropTypes.func,
   /*
-   * A object with form navigation functions
+   * A object with form navigation actions
    */
   formNavigation: PropTypes.shape({
     next: PropTypes.func,
