@@ -50,7 +50,6 @@ const uploadFile = async (endpoint, fileName, fileType, fileData, headers = {}) 
     });
     // return the url and filename on server to the uploaded file.
     return { url: putResponse.url, uploadedFileName };
-
   } catch (error) {
     console.log('axios error', error);
     return { error: true, message: error.message, ...error.response };
