@@ -78,18 +78,20 @@ function Step({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stepNumber]);
 
+  /** TODO: move out of this scope, this logic should be defined on the Form component */
   const closeForm = () => {
     if (status === 'ongoing') {
       if (onFieldChange) onFieldChange(answers);
       if (updateCaseInContext) updateCaseInContext(answers, 'ongoing', stepNumber);
     }
-    if (formNavigation.close) formNavigation.close(() => {});
+    if (formNavigation?.close) formNavigation.close(() => {});
   };
+
   return (
     <StepContainer bg={theme.step.bg}>
       <StepBackNavigation
         isBackBtnVisible={isBackBtnVisible}
-        onBack={formNavigation.back}
+        onBack={formNavigation?.back ? formNavigation.back : undefined}
         onClose={closeForm}
       />
       <StepContentContainer
@@ -183,6 +185,9 @@ Step.propTypes = {
    * The function to handle field input changes
    */
   onFieldChange: PropTypes.func,
+  /*
+   * A object with form navigation functions
+   */
   formNavigation: PropTypes.shape({
     next: PropTypes.func,
     back: PropTypes.func,
