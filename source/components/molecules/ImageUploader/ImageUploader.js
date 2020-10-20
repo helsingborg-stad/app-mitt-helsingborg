@@ -7,7 +7,7 @@ import styled from 'styled-components/native';
 import { Heading, Text, Button, Icon } from 'app/components/atoms';
 import { ScreenWrapper } from 'app/components/molecules';
 import uploadFile from 'app/helpers/FileUpload';
-import { excludePropetiesWithKey } from 'app/helpers/Objects';
+import { excludePropetiesWithKey } from '../../../helpers/Objects';
 
 const Wrapper = styled(ScreenWrapper)`
   padding-left: 0;
