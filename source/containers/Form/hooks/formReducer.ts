@@ -8,11 +8,15 @@ import {
   startForm,
   submitForm,
   updateAnswer,
+  computeNumberMainSteps,
 } from './formActions';
 
 type Action =
   | {
       type: 'REPLACE_MARKDOWN_TEXT';
+    }
+  | {
+      type: 'COUNT_MAIN_STEPS';
     }
   | {
       type: 'GO_NEXT';
@@ -55,6 +59,13 @@ function formReducer(state: FormReducerState, action: Action) {
      */
     case 'REPLACE_MARKDOWN_TEXT': {
       return replaceMarkdownText(state);
+    }
+
+    /**
+     * Counts the number of main steps and saves it in the state.
+     */
+    case 'COUNT_MAIN_STEPS': {
+      return computeNumberMainSteps(state);
     }
 
     /**

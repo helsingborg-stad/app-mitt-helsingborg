@@ -60,7 +60,7 @@ function Step({
   onFieldChange,
   isBackBtnVisible,
   updateCaseInContext,
-  stepNumber,
+  currentPosition,
   totalStepNumber,
 }) {
   const {
@@ -80,19 +80,21 @@ function Step({
   useEffect(() => {
     handleSetStatus('idle');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stepNumber]);
+  }, [currentPosition]);
 
   const closeForm = () => {
     if (status === 'ongoing') {
       if (onFieldChange) onFieldChange(answers);
-      if (updateCaseInContext) updateCaseInContext(answers, 'ongoing', stepNumber);
+      if (updateCaseInContext)
+        updateCaseInContext(answers, 'ongoing', currentPosition.currentMainStep);
     }
     if (formNavigation.close) formNavigation.close(() => {});
   };
   return (
     <StepContainer bg={theme.step.bg}>
       <StepBackNavigation
-        isBackBtnVisible={isBackBtnVisible}
+        showBackButton={isBackBtnVisible}
+        showCloseButton={currentPosition.level === 0}
         onBack={formNavigation.back}
         onClose={closeForm}
       />
@@ -103,7 +105,11 @@ function Step({
         showsHorizontalScrollIndicator={false}
       >
         {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
-          <StepBanner stepNumber={stepNumber} totalStepNumber={totalStepNumber} {...banner} />
+          <StepBanner
+            currentPosition={currentPosition}
+            totalStepNumber={totalStepNumber}
+            {...banner}
+          />
         )}
         <StepBody>
           {(isResolved || isIdle) && (
@@ -151,8 +157,8 @@ function Step({
             caseStatus={status}
             background={footerBg}
             answers={answers}
-            stepNumber={stepNumber}
             formNavigation={formNavigation}
+            currentPosition={currentPosition}
             onUpdate={onFieldChange}
             updateCaseInContext={updateCaseInContext}
           />
@@ -245,8 +251,12 @@ Step.propTypes = {
       }),
     }),
   }),
-  /** The steps number in the form */
-  stepNumber: PropTypes.number,
+  /** The current position in the form */
+  currentPosition: PropTypes.shape({
+    index: PropTypes.number,
+    level: PropTypes.number,
+    currentMainStep: PropTypes.number,
+  }),
   /** Total number of steps in the form */
   totalStepNumber: PropTypes.number,
 };

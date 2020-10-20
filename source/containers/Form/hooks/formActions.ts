@@ -55,6 +55,20 @@ function getParentSteps(
     return prev;
   }, []);
 }
+/** computes and sets the number of main steps in the form. Sets it to -1 if it encounters an infinite loop */
+export function computeNumberMainSteps(state: FormReducerState) {
+  const { connectivityMatrix } = state;
+  const countNext = (m: StepperActions[][], currentRow: number, history: number[]) => {
+    const nextIndex = m[currentRow].findIndex(a => a === 'next');
+    if (history.includes(nextIndex)) return 1;
+    return nextIndex >= 0 ? 2 + countNext(m, nextIndex, [...history, nextIndex]) : 2;
+  };
+  const count = countNext(connectivityMatrix, 0, []);
+  return {
+    ...state,
+    numberOfMainSteps: count % 2 === 0 ? count / 2 : -1,
+  };
+}
 
 /** Go to the next step in the form. If you are in a nested step with no further next, then this will go up to the parent. */
 export function goNext(state: FormReducerState) {
@@ -63,7 +77,12 @@ export function goNext(state: FormReducerState) {
   if (nextIndex >= 0) {
     return {
       ...state,
-      currentPosition: { index: nextIndex, level: currentPosition.level },
+      currentPosition: {
+        index: nextIndex,
+        level: currentPosition.level,
+        currentMainStep:
+          state.currentPosition.currentMainStep + (currentPosition.level === 0 ? 1 : 0),
+      },
     };
   }
   // if we have no next, then look for an up and if that exists, go there instead.
@@ -71,7 +90,7 @@ export function goNext(state: FormReducerState) {
   if (upIndex >= 0) {
     return {
       ...state,
-      currentPosition: { index: upIndex, level: currentPosition.level - 1 },
+      currentPosition: { ...currentPosition, index: upIndex, level: currentPosition.level - 1 },
     };
   }
   return { ...state };
@@ -83,7 +102,12 @@ export function goBack(state: FormReducerState) {
   if (backIndex >= 0) {
     return {
       ...state,
-      currentPosition: { index: backIndex, level: currentPosition.level },
+      currentPosition: {
+        ...currentPosition,
+        index: backIndex,
+        currentMainStep:
+          state.currentPosition.currentMainStep - (currentPosition.level === 0 ? 1 : 0),
+      },
     };
   }
   // if we have no back, then look for an up and if that exists, go there instead.
@@ -91,7 +115,7 @@ export function goBack(state: FormReducerState) {
   if (upIndex >= 0) {
     return {
       ...state,
-      currentPosition: { index: upIndex, level: currentPosition.level - 1 },
+      currentPosition: { ...currentPosition, index: upIndex, level: currentPosition.level - 1 },
     };
   }
   return { ...state };
@@ -109,7 +133,7 @@ export function goDown(state: FormReducerState, targetStep: number | string) {
   if (getNestedSteps(connectivityMatrix, currentPosition).includes(index)) {
     return {
       ...state,
-      currentPosition: { index, level: currentPosition.level + 1 },
+      currentPosition: { ...currentPosition, index, level: currentPosition.level + 1 },
     };
   }
 }
@@ -125,7 +149,7 @@ export function goUp(state: FormReducerState, targetStep: number | string) {
   if (getParentSteps(connectivityMatrix, currentPosition).includes(index)) {
     return {
       ...state,
-      currentPosition: { index, level: currentPosition.level - 1 },
+      currentPosition: { ...currentPosition, index, level: currentPosition.level - 1 },
     };
   }
 }
@@ -137,10 +161,8 @@ export function goUp(state: FormReducerState, targetStep: number | string) {
 export function startForm(state: FormReducerState, payload: { callback: () => void }) {
   // TODO: Pass user input values.
   payload.callback();
-  const { steps, counter } = state;
   return {
     ...state,
-    counter: increaseCount(counter, steps.length),
   };
 }
 
