@@ -5,7 +5,7 @@ import { User } from '../../../types/UserTypes';
 
 export interface FormReducerState {
   submitted: boolean;
-  currentPosition: { index: number; level: number };
+  currentPosition: { index: number; level: number; currentMainStep: number };
   steps: Step[];
   user: User;
   connectivityMatrix: StepperActions[][];
@@ -34,6 +34,9 @@ function useForm(initialState: FormReducerState) {
   useEffect(() => {
     dispatch({
       type: 'REPLACE_MARKDOWN_TEXT',
+    });
+    dispatch({
+      type: 'COUNT_MAIN_STEPS',
     });
   }, [formState.connectivityMatrix]);
 

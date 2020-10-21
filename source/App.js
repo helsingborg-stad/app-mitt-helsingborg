@@ -2,6 +2,7 @@
 /* eslint-disable react/no-unused-state */
 /* eslint-disable react/sort-comp */
 import React from 'react';
+import { Platform, UIManager } from 'react-native';
 import Config from 'react-native-config';
 import { ThemeProvider } from 'styled-components/native';
 import Navigator from './navigator';
@@ -18,6 +19,12 @@ import { NotificationProvider } from './store/NotificationContext';
  */
 
 const App = () => {
+  // turn on layout animation.
+  if (Platform.OS === 'android') {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
   if (Config.IS_STORYBOOK === 'true') {
     return (
       <AuthProvider>

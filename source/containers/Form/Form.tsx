@@ -42,7 +42,7 @@ const Form: React.FC<Props> = ({
   status,
   updateCaseInContext,
 }) => {
-  const currentPosition = { index: startAt, level: 0 };
+  const currentPosition = { index: startAt, level: 0, currentMainStep: 1 };
   const initialState = {
     submitted: false,
     currentPosition,
@@ -79,9 +79,12 @@ const Form: React.FC<Props> = ({
         onSubmit={() => handleSubmit(onSubmit)}
         onFieldChange={handleInputChange}
         updateCaseInContext={updateCaseInContext}
-        stepNumber={0} // TO FIX!! NEED TO THINK ABOUT
-        totalStepNumber={formState.steps.length}
-        isBackBtnVisible
+        currentPosition={formState.currentPosition}
+        totalStepNumber={formState.numberOfMainSteps}
+        isBackBtnVisible={
+          formState.currentPosition.currentMainStep > 1 &&
+          formState.currentPosition.currentMainStep < formState.numberOfMainSteps
+        }
       />
     )
   );
