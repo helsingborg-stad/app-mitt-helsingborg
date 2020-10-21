@@ -39,6 +39,7 @@ function loadStories() {
   require('../source/components/organisms/Step/Step.stories');
   require('../source/components/organisms/SummaryList/SummaryList.stories');
   require('../source/components/organisms/WatsonAgent/WatsonAgent.stories');
+  require('../source/containers/Form/Form.stories');
 }
 
 const stories = [
