@@ -22,8 +22,7 @@ const DefaultStoryData = {
       name: 'Start steg',
       title: 'Test av validering för fält',
       group: 'test',
-      description:
-        'Detta är ett formulär är ett test för att se så att validering av olika fält fungerar',
+      description: 'Detta formulär är ett test för att se så att validering av olika fält fungerar',
       banner: {},
       actions: [
         {
@@ -62,11 +61,13 @@ const DefaultStoryData = {
               },
               {
                 method: 'isNumeric',
-                args: {
-                  options: {
-                    no_symbols: true,
+                args: [
+                  {
+                    options: {
+                      no_symbols: true,
+                    },
                   },
-                },
+                ],
                 validWhen: true,
                 message: 'Du har angett en siffra som är mindre än 1',
               },
@@ -88,11 +89,13 @@ const DefaultStoryData = {
               },
               {
                 method: 'isNumeric',
-                args: {
-                  options: {
-                    no_symbols: true,
+                args: [
+                  {
+                    options: {
+                      no_symbols: true,
+                    },
                   },
-                },
+                ],
                 validWhen: true,
                 message: 'Du har angett en siffra som är mindre än 1',
               },
