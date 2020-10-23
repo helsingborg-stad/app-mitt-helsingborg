@@ -205,16 +205,20 @@ const handleInputValidation = (value, rules) => {
        * Incases where the field is of type checkbox we only care about the number of selection a
        * user does, To check this we need to check the lenght of the array values provided
        */
-      const valueToValidate = Array.isArray(value) ? `${value.length}` : value;
+      let valueToValidate = Array.isArray(value) ? `${value.length}` : value;
+      if (typeof valueToValidate !== 'string') {
+        valueToValidate = String(valueToValidate);
+      }
 
       /**
        * Retrive the validation method defined in the rule from the validator.js package and execute
        */
       const validationMethodArgs = rule.args || [];
+      const arrayOfArgs = Object.keys(validationMethodArgs).map(key => validationMethodArgs[key]);
       const validationMethod =
         typeof rule.method === 'string' ? validator[rule.method] : rule.methood;
       const isValidationRuleMeet =
-        validationMethod(valueToValidate, ...validationMethodArgs) === rule.validWhen;
+        validationMethod(valueToValidate, arrayOfArgs) === rule.validWhen;
 
       /**
        * Only return true if the current and previous rule is met
