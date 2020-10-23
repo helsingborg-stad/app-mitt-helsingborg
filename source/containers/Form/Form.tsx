@@ -49,6 +49,7 @@ const Form: React.FC<Props> = ({
     steps,
     user,
     formAnswers: initialAnswers,
+    formAnswersValidation: {},
     connectivityMatrix,
   };
 
