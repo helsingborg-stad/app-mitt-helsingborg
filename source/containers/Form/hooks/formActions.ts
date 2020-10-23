@@ -1,3 +1,4 @@
+import validator from 'validator';
 import { increaseCount, decreaseCount } from '../../../helpers/Counter';
 import { StepperActions } from '../../../types/FormTypes';
 import { replaceMarkdownTextInSteps } from './textReplacement';
@@ -191,5 +192,64 @@ export function updateAnswer(state: FormReducerState, answer: Record<string, any
   return {
     ...state,
     formAnswers: updatedAnswers,
+  };
+}
+
+const handleInputValidation = (value, rules) => {
+  const item = rules.reduce(
+    (acc, rule) => {
+      const [valid] = acc;
+      let valueArray = acc;
+
+      /**
+       * Incases where the field is of type checkbox we only care about the number of selection a
+       * user does, To check this we need to check the lenght of the array values provided
+       */
+      const valueToValidate = Array.isArray(value) ? `${value.length}` : value;
+
+      /**
+       * Retrive the validation method defined in the rule from the validator.js package and execute
+       */
+      const validationMethodArgs = rule.args || [];
+      const validationMethod =
+        typeof rule.method === 'string' ? validator[rule.method] : rule.methood;
+      const isValidationRuleMeet =
+        validationMethod(valueToValidate, ...validationMethodArgs) === rule.validWhen;
+
+      /**
+       * Only return true if the current and previous rule is met
+       */
+      if (valid === true && isValidationRuleMeet) {
+        valueArray = [true, ''];
+      }
+
+      /**
+       * Only change the  true if the current and previous rule is met
+       */
+      if (!isValidationRuleMeet) {
+        valueArray = [false, rule.message];
+      }
+      return valueArray;
+    },
+    [true, '']
+  );
+  console.log(item);
+  return item;
+};
+
+export function validateAnswer(state: FormReducerState, answer: Record<string, any>) {
+  const updateValidation: Record<string, any> = JSON.parse(
+    JSON.stringify(state.formAnswersValidation)
+  );
+  Object.keys(answer).forEach(key => {
+    const { questions } = state.steps[state.currentPosition.index];
+    const questionRule = questions.find(question => question.id === Number(key))?.validation;
+
+    updateValidation[key] = handleInputValidation(answer[key], questionRule.rules);
+  });
+
+  return {
+    ...state,
+    formAnswersValidation: updateValidation,
   };
 }
