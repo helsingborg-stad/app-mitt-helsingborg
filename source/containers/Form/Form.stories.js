@@ -61,13 +61,11 @@ const DefaultStoryData = {
               },
               {
                 method: 'isNumeric',
-                args: [
-                  {
-                    options: {
-                      no_symbols: true,
-                    },
+                args: {
+                  options: {
+                    no_symbols: true,
                   },
-                ],
+                },
                 validWhen: true,
                 message: 'Du har angett en siffra som är mindre än 1',
               },
@@ -89,13 +87,11 @@ const DefaultStoryData = {
               },
               {
                 method: 'isNumeric',
-                args: [
-                  {
-                    options: {
-                      no_symbols: true,
-                    },
+                args: {
+                  options: {
+                    no_symbols: true,
                   },
-                ],
+                },
                 validWhen: true,
                 message: 'Du har angett en siffra som är mindre än 1',
               },
@@ -125,7 +121,7 @@ const DefaultStoryData = {
                 message: 'Du får inte lämna detta fält tomt',
               },
               {
-                method: 'isMobilePohne',
+                method: 'isMobilePhone',
                 args: {
                   locale: 'sv-SE',
                 },
