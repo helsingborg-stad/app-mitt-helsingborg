@@ -1,12 +1,12 @@
-<h1 align="center">
+<h1>
     Mitt Helsingborg
 </h1>
 
-<p align="center">
+<p>
   App for Helsingborg E-services.
 </p>
 
-<p align="center">
+<p>
   <a href="https://github.com/helsingborg-stad/app-mitt-helsingborg/blob/develop/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Mitt Helsingborg is released under the MIT license." />
   </a>
