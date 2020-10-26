@@ -25,7 +25,7 @@ const inputText = styled(TextInput)`
 
 const Input = props => {
   const { color, validation } = props;
-  const isValid = validation.isRequired ? validateInput(props.value, validation.rules)[0] : true;
+  const isValid = validation?.isRequired ? validateInput(props.value, validation?.rules)[0] : true;
 
   return React.createElement(inputText, {
     placeholderTextColor: colors.input[color].placeholder,
