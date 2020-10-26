@@ -10,14 +10,33 @@ export const actionTypes = {
 };
 
 export async function updateCase(caseId, data, status, currentStep, user, callback) {
+  const answers = Object.entries(data).map(field => {
+    console.log('field', field);
+
+    const fieldObject = {
+      fieldId: field[0],
+      value: field[1],
+      referenceValue: null,
+      tags: [],
+    };
+
+    return fieldObject;
+  });
+
+  console.log('answers', answers);
+
   const body = {
     status,
-    data,
+    answers,
     currentStep,
   };
 
+  console.log('PUT request body', body);
+
   try {
     const res = await put(`/cases/${caseId}`, JSON.stringify(body));
+    console.log('PUT request response', res);
+
     const { id, attributes } = res.data.data;
     const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
     if (callback) callback(flatUpdatedCase);
@@ -35,18 +54,29 @@ export async function updateCase(caseId, data, status, currentStep, user, callba
 }
 
 export async function createCase(formId, user, cases, callback) {
-  const initialData = generateInitialCase(formId, user, cases);
+  let initialData = generateInitialCase(formId, user, cases);
+  initialData = [];
+  console.log('initialData', initialData);
 
   const body = {
-    personalNumber: parseInt(user.personalNumber),
-    status: 'ongoing',
-    type: 'VIVA_CASE',
-    data: initialData || {},
-    currentStep: 1,
     formId,
+    userId: parseInt(user.personalNumber),
+    provider: 'VIVA', // TODO: Fix hardcoded value
+    status: 'ongoing',
+    currentStep: 0,
+    details: {
+      personalNumber: parseInt(user.personalNumber),
+      period: {
+        startDate: 1601994748326, // TODO: Fix hardcoded value
+        endDate: 1701994748326, // TODO: Fix hardcoded value
+      },
+    },
+    answers: initialData || [],
   };
+
   try {
     const response = await post('/cases', JSON.stringify(body));
+    console.log('create case response', response);
     const newCase = response.data.data;
     const flattenedNewCase = { id: newCase.id, ...newCase.attributes };
     callback(flattenedNewCase);
