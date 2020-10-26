@@ -49,7 +49,7 @@ const Form: React.FC<Props> = ({
     steps,
     user,
     formAnswers: initialAnswers,
-    formAnswersValidation: {},
+    validations: {},
     connectivityMatrix,
   };
 
@@ -59,6 +59,7 @@ const Form: React.FC<Props> = ({
     onClose();
   };
 
+  console.log("FORM STATE", formState);
   const stepComponents = formState.steps.map(
     ({ id, banner, theme, title, group, description, questions, actions }) => (
       <Step

@@ -241,19 +241,20 @@ const handleInputValidation = (value, rules) => {
   return item;
 };
 
-export function validateAnswer(state: FormReducerState, answer: Record<string, any>) {
-  const updateValidation: Record<string, any> = JSON.parse(
-    JSON.stringify(state.formAnswersValidation)
-  );
-  Object.keys(answer).forEach(key => {
-    const { questions } = state.steps[state.currentPosition.index];
-    const questionRule = questions.find(question => question.id === Number(key))?.validation;
+export function validateAnswer(state: FormReducerState, answer: Record<string, any>, questionId: string) {
+  const { questions } = state.steps[state.currentPosition.index];
 
-    updateValidation[key] = handleInputValidation(answer[key], questionRule.rules);
-  });
+  const { validation } = questions.find(question => question.id === questionId)
 
-  return {
-    ...state,
-    formAnswersValidation: updateValidation,
-  };
+  if (validation) {
+
+    const [isValid, validationMessage] = handleInputValidation(answer[questionId], validation.rules)
+
+    return {
+      ...state,
+      validations: { ...state.validations, [questionId]: {isValid, message: validationMessage }}
+    }
+  }
+
+  return state
 }
