@@ -136,24 +136,6 @@ const DefaultStoryData = {
           label: 'Ett text fält',
           placeholder: 'Skriv något',
           type: 'text',
-          validation: {
-            isRequired: true,
-            rules: [
-              {
-                method: 'isEmpty',
-                validWhen: false,
-                message: 'Du får inte lämna detta fält tomt',
-              },
-              {
-                method: 'isAlphanumeric',
-                args: {
-                  locale: 'sv-SE',
-                },
-                validWhen: true,
-                message: 'Du får endast använda bokstäver och siffror',
-              },
-            ],
-          },
         },
         {
           id: 5,
@@ -192,10 +174,12 @@ const DefaultStoryData = {
               {
                 method: 'isEmpty',
                 validWhen: false,
+                message: 'Du får inte lämna detta fält tomt',
               },
               {
                 method: 'isEmail',
                 validWhen: true,
+                message: 'Du måste ange en giltlig email adress',
               },
             ],
           },

@@ -100,7 +100,7 @@ const FormField = ({
     return <Text>{`Invalid field type: ${inputType}`}</Text>;
   }
   const saveInput = (value, fieldId = id) => {
-    if (onChange) onChange({ [fieldId]: value });
+    if (onChange) onChange({ [fieldId]: value }, fieldId);
   };
   if (!input) {
     return <Text>{`Invalid field type: ${inputType}`}</Text>;
@@ -110,6 +110,7 @@ const FormField = ({
     value === '' && Object.prototype.hasOwnProperty.call(input, 'initialValue')
       ? input.initialValue
       : value;
+
   const inputCompProps = {
     color,
     value: initialValue,

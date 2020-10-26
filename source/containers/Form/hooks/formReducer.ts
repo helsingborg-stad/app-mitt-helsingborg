@@ -110,7 +110,7 @@ function formReducer(state: FormReducerState, action: Action) {
     }
 
     case 'VALIDATE_ANSWER': {
-      return validateAnswer(state, action.payload);
+      return validateAnswer(state, action.payload.answer, action.payload.id);
     }
 
     /**
