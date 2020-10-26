@@ -187,7 +187,7 @@ const DefaultStoryData = {
           label: 'Ett email fält',
           type: 'text',
           validation: {
-            isRequeried: true,
+            isRequired: true,
             rules: [
               {
                 method: 'isEmpty',
