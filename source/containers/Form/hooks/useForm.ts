@@ -119,7 +119,7 @@ function useForm(initialState: FormReducerState) {
   const handleInputChange = (answer: Record<string, any>, questionId) => {
     dispatch({ type: 'UPDATE_ANSWER', payload: answer });
 
-    dispatch({ type: 'VALIDATE_ANSWER', payload: {answer, id: questionId} });
+    dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId } });
   };
 
   const formNavigation = {
