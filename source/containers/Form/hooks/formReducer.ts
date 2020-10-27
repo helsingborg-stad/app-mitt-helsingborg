@@ -43,7 +43,7 @@ type Action =
     }
   | {
       type: 'VALIDATE_ANSWER';
-      payload: Record<string, any>;
+      payload: { answer: Record<string, any>; id: string };
     }
   | {
       type: 'SUBMIT_FORM';
