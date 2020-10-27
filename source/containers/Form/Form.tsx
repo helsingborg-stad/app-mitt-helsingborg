@@ -59,7 +59,6 @@ const Form: React.FC<Props> = ({
     onClose();
   };
 
-  console.log("FORM STATE", formState);
   const stepComponents = formState.steps.map(
     ({ id, banner, theme, title, group, description, questions, actions }) => (
       <Step
@@ -74,6 +73,7 @@ const Form: React.FC<Props> = ({
           text: description,
         }}
         answers={formState.formAnswers}
+        validation={formState.validations}
         status={status}
         questions={questions}
         actions={actions}
