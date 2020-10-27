@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Button, Icon, Text } from '../../atoms';
-import colors from '../../../styles/colors';
+import theme from '../../../styles/theme';
 
 const ButtonFieldWrapper = styled.View`
   flex: 1;
@@ -77,7 +77,7 @@ NavigationButtonField.propTypes = {
   /**
    * Color of the button
    */
-  color: PropTypes.oneOf(Object.keys(colors.button)),
+  color: PropTypes.oneOf(Object.keys(theme.button)),
   formNavigation: PropTypes.any,
 };
 

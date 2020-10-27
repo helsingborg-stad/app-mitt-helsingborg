@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { FieldLabel, Text, Icon } from 'source/components/atoms';
-import colors from '../../../styles/colors';
+import theme from '../../../styles/theme';
 
 const ListWrapper = styled.View`
   display: flex;
@@ -117,7 +117,7 @@ GroupedList.propTypes = {
   /**
    *  Controls the color scheme of the list
    */
-  color: PropTypes.oneOf(Object.keys(colors.groupedList)),
+  color: PropTypes.oneOf(Object.keys(theme.groupedList)),
   /**
    * What should happen when the edit button is clicked.
    * Only display edit button if this prop is sent.

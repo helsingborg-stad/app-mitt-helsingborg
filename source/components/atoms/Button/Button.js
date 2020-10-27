@@ -6,7 +6,7 @@ import SHADOW from '../../../styles/shadow';
 
 import Text from '../Text';
 import Icon from '../Icon';
-import colors from '../../../styles/colors';
+import theme from '../../../styles/theme';
 
 /** Button modifiers */
 const CSS = { z: SHADOW };
@@ -173,7 +173,7 @@ const Button = props => {
 
 Button.propTypes = {
   block: PropTypes.bool,
-  color: PropTypes.oneOf(Object.keys(colors.button)),
+  color: PropTypes.oneOf(Object.keys(theme.button)),
   icon: PropTypes.bool,
   onClick: PropTypes.func,
   pill: PropTypes.bool,
