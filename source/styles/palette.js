@@ -4,18 +4,23 @@
  * icons, accent borders, or text that we empahsize.
  */
 
-const primary = [
-  '#4D6A66',
-  '#336868',
-  '#668B87',
-  '#7FAEA9',
-  '#98D1CB',
-  '#B4DAD7',
-  '#CFE6E4',
-  '#E9F3F2',
-];
+const primary = {
+  blue: ['#003359', '#005C86', '#4989B6'],
+  green: ['#205400', '#50811B', '#80B14A'],
+  red: ['#770000', '#AE0B05', '#E84C31'],
+  purple: ['#4B0034', '#7B075E', '#AD428B'],
+};
 
-const secondary = ['#755F67', '#9C7E89', '#C39EAB', '#EABDCD', '#EECFDA', '#F3E1E7', '#F9F1F4'];
+/**
+ * Secondary colors provides more ways to accent and distinguish different aspects in the application.
+ * They are used for things like card, input and header backgrounds.
+ */
+const secondary = {
+  blue: ['#C2CED7', '#DBE4E9', '#E4EBF0', '#EEF3F6'],
+  green: ['#C9D6C2', '#E1E9DB', '#EAF0E4', '#F2F6EE'],
+  red: ['#DEC2C2', '#F0DBD9', '#F5E4E3', '#FAEEEC'],
+  purple: ['#D4C2CE', '#E8DAE4', '#EFE4EB', '#F6EDF3'],
+};
 
 /**
  * Neutrals colors are uses the most and makes up the majority of the UI.
@@ -28,7 +33,6 @@ const neutrals = [
   '#565656',
   '#707070',
   '#A3A3A3',
-  '#E5E5E5',
   '#F5F5F5',
   '#FCFCFC',
   '#FFFFFF',
@@ -37,13 +41,13 @@ const neutrals = [
 /**
  * Supporting colors should be used fairly conservativley thorughout our UI to avoid overpowering our
  * primary colors. Use them when you need an element to stand out, or reinforce things like error
- * states or positive trends witht he appropriate semantic color
+ * states or positive trends.
  */
 const supporting = {
-  blue: ['#515C65', '#6B7B87', '#8599A8', '#A0B8CA', '#BACAD6', '#D3DCE3', '#EAEFF2'],
-  green: ['#1D5A36', '#267847', '#309458', '#3EAF6A', '#73BF91', '#A4D3B8', '#D5E9DD'],
-  red: ['#591C1D', '#772525', '#952F2F', '#B33838', '#C26F6F', '#D4A4A4', '#EAD5D5'],
-  yellow: ['#786E38', '#9E9148', '#C6B65B', '#EDDA6D', '#EEE196', '#F2E9BE', '#F7F4E1'],
+  blue: ['#1C73A6'],
+  green: ['#6F9725'],
+  red: ['#B23700'],
+  pruple: ['#9E166A'],
 };
 
 /**
@@ -54,8 +58,8 @@ const supporting = {
 export const colorPalette = {
   primary,
   secondary,
-  neutrals,
   supporting,
+  neutrals,
 };
 
 // THIS COLOR PALETTE IS DEPRECATED.
