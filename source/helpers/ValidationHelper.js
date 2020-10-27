@@ -32,7 +32,7 @@ export const sanitizePin = pin => {
 /**
  * Use library validator.js to validate inputs.
  *
- * @param value {string} Value to validate
+ * @param value {string} Value to validate.
  * @param rules Array of rules to validate input against.
  * @returns {*} Array with to elements. First element is the validation result, true or false. Second element is a string error message if validation fails.
  */
