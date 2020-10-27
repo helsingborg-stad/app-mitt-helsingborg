@@ -241,20 +241,26 @@ const handleInputValidation = (value, rules) => {
   return item;
 };
 
-export function validateAnswer(state: FormReducerState, answer: Record<string, any>, questionId: string) {
+export function validateAnswer(
+  state: FormReducerState,
+  answer: Record<string, any>,
+  questionId: string
+) {
   const { questions } = state.steps[state.currentPosition.index];
 
-  const { validation } = questions.find(question => question.id === questionId)
+  const { validation } = questions.find(question => question.id === questionId);
 
   if (validation) {
-
-    const [isValid, validationMessage] = handleInputValidation(answer[questionId], validation.rules)
+    const [isValid, validationMessage] = handleInputValidation(
+      answer[questionId],
+      validation.rules
+    );
 
     return {
       ...state,
-      validations: { ...state.validations, [questionId]: {isValid, message: validationMessage }}
-    }
+      validations: { ...state.validations, [questionId]: { isValid, message: validationMessage } },
+    };
   }
 
-  return state
+  return state;
 }

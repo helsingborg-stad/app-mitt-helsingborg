@@ -91,6 +91,7 @@ const FormField = ({
   onChange,
   value,
   answers,
+  error,
   conditionalOn,
   labelHelp,
   ...other
@@ -117,6 +118,7 @@ const FormField = ({
     help:
       other.inputHelp && other.text ? { text: other.inputHelp, heading: other.text } : undefined,
     ...inputProps,
+    error,
     ...other,
   };
   if (input?.props?.answers) inputCompProps.answers = answers;
