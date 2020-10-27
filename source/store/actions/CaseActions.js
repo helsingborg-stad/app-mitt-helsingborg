@@ -13,15 +13,13 @@ const createAnswerObject = data => ({
   fieldId: data?.fieldId ?? null,
   value: data?.value ?? null,
   parentId: data?.parentId ?? null,
-  referenceValue: data?.referenceValue ?? null,
   tags: data?.tags ?? [],
 });
 
 const ConvertAnswersToArray = (data, form) => {
   const answers = [];
-  console.log('form', form);
 
-  if (!data || typeof data !== 'object') {
+  if (!data || typeof data !== 'object' || !form.steps) {
     return answers;
   }
 
@@ -34,20 +32,9 @@ const ConvertAnswersToArray = (data, form) => {
     }
   });
 
-  console.log('formQuestions', formQuestions);
-
   Object.entries(data).forEach(answer => {
-    console.log('answer', answer);
-
     const [fieldId, value] = answer;
-
-    const question = formQuestions.find(element => element.id === fieldId);
-    console.log('question object', question);
-
-    const { id, type, tags } = question;
-
-    console.log('The field to be updated id', id);
-    console.log('The field to be updated type', type);
+    const { id, type, tags } = formQuestions.find(element => element.id === fieldId);
 
     switch (type) {
       case 'editableList':
@@ -57,7 +44,7 @@ const ConvertAnswersToArray = (data, form) => {
             createAnswerObject({
               fieldId: childFieldId, // TODO: Add implementation of auto generated IDs in form builder
               value: childValue,
-              parentId: id, // TODO: Add implementation of auto generated IDs in form builder
+              parentId: id,
               tags, // TODO: Add implementation of Tags in form builder
             })
           );
@@ -80,10 +67,7 @@ const ConvertAnswersToArray = (data, form) => {
 
       case 'repeaterField':
         Object.entries(value).forEach(repeaterField => {
-          console.log('repeater field object', repeaterField);
           const [childFieldId, childItems] = repeaterField;
-          console.log('repeater childFieldId', childFieldId);
-          console.log('repeater childItems', childItems);
 
           Object.entries(childItems).forEach(childItem => {
             const [repeaterItemId, repeaterItemValue] = childItem;
@@ -117,21 +101,14 @@ const ConvertAnswersToArray = (data, form) => {
 
 export async function updateCase(caseId, data, status, currentStep, form, callback) {
   const answers = ConvertAnswersToArray(data, form);
-
-  console.log('answers', answers);
-
   const body = {
     status,
     answers,
     currentStep,
   };
 
-  console.log('PUT request body', body);
-
   try {
     const res = await put(`/cases/${caseId}`, JSON.stringify(body));
-    console.log('PUT request response', res.data.data.attributes.answers);
-
     const { id, attributes } = res.data.data;
     const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
     if (callback) callback(flatUpdatedCase);
@@ -150,8 +127,7 @@ export async function updateCase(caseId, data, status, currentStep, form, callba
 
 export async function createCase(formId, user, cases, callback) {
   let initialData = generateInitialCase(formId, user, cases);
-  initialData = [];
-  console.log('initialData', initialData);
+  initialData = []; // TODO: fix initial data strucutre
 
   const body = {
     formId,
