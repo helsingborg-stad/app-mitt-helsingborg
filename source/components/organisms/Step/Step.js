@@ -181,6 +181,10 @@ Step.propTypes = {
    */
   answers: PropTypes.object,
   /**
+   * User input validation result.
+   */
+  validation: PropTypes.object,
+  /**
    * The answers of a form.
    */
   status: PropTypes.string,
