@@ -29,6 +29,13 @@ export const sanitizePin = pin => {
   return sanitizedPin;
 };
 
+/**
+ * Use library validator.js to validate inputs.
+ *
+ * @param value {string} Value to validate
+ * @param rules Array of rules to validate input against.
+ * @returns {*} Array with to elements. First element is the validation result, true or false. Second element is a string error message if validation fails.
+ */
 export const validateInput = (value, rules) =>
   rules.reduce(
     (acc, rule) => {
@@ -41,7 +48,7 @@ export const validateInput = (value, rules) =>
       const valueToValidate = String(value);
 
       /**
-       * Retrive the validation method defined in the rule from the validator.js package and execute
+       * Retrieve the validation method defined in the rule from the validator.js package and execute
        */
       const validationMethodArgs = rule.args || [];
       const arrayOfArgs = Object.keys(validationMethodArgs).map(key => validationMethodArgs[key]);
