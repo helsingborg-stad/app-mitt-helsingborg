@@ -4,6 +4,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { ProfileScreen, HomeScreen } from 'app/screens';
 import { TabBarImage, MaterialTopTabBarWrapper } from 'source/components/molecules';
 import CaseNavigator from './CaseNavigator';
+import WalletScreen from '../screens/Wallet';
 
 const Tab = createMaterialTopTabNavigator();
 const BottomBarStack = () => (
@@ -47,6 +48,15 @@ const BottomBarStack = () => (
         title: 'Profil',
         tabBarIcon: TabBarImage(require('../images/profile.png')),
         tabBarLabel: 'Profil',
+      }}
+    />
+    <Tab.Screen
+      name="Wallet"
+      component={WalletScreen}
+      options={{
+        title: 'Plånbok',
+        tabBarIcon: TabBarImage(require('../images/profile.png')),
+        tabBarLabel: 'Plånbok',
       }}
     />
   </Tab.Navigator>

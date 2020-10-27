@@ -73,15 +73,14 @@ const EKBCases = ({ navigation, route }) => {
     const setState = async () => {
       const recurringForm = await findFormByType('EKB-recurring');
       const newForm = await findFormByType('EKB-new');
-      setRecurringFormId(recurringForm.id);
-      setBasicApplicationFormId(newForm.id);
+      if (recurringForm?.id) setRecurringFormId(recurringForm.id);
+      if (newForm?.id) setBasicApplicationFormId(newForm.id);
 
       const formIds = await getFormIdsByFormTypes(caseType.formTypes);
       const [newStatus, latest, relCases] = await getCasesByFormIds(formIds);
 
       // TODO: set status on case in context.
       setStatus(newStatus);
-      // TODO: set latest case in context.
       setLatestCase(latest);
       setCompletedCases(relCases.filter(c => c.status !== 'ongoing'));
     };

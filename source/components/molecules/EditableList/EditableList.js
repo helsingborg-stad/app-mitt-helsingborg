@@ -78,6 +78,7 @@ function EditableList({
   onInputChange,
   inputIsEditable,
   error,
+  onSave,
 }) {
   const [editable, setEditable] = useState(false);
   const [state, setState] = useState(getInitialState(inputs, value));
@@ -145,7 +146,10 @@ EditableList.propTypes = {
    * Function for handling input events
    */
   onInputChange: PropTypes.func.isRequired,
-
+  /**
+   * Function that triggers when user clicks the 'save' button
+   */
+  onSave: PropTypes.func,
   /**
    * The title of the list
    */

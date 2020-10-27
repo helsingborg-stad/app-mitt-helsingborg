@@ -1,6 +1,9 @@
 import { get, post, put } from 'app/helpers/ApiRequest';
 import { convertAnswersToArray, getFormQuestions } from 'app/helpers/CaseDataConverter';
 import generateInitialCaseAnswers from './dynamicFormData';
+import env from 'react-native-config';
+import uuid from 'react-native-uuid';
+import { putCase, getCase, getAllCases } from '../../services/Wallet/WalletStorage';
 
 export const actionTypes = {
   updateCase: 'UPDATE_CASE',
@@ -18,6 +21,20 @@ export async function updateCase(caseId, data, status, currentStep, formQuestion
     answers,
     currentStep,
   };
+  if (env.STORE_LOCAL) {
+    const caseData = {
+      updatedAt: new Date().getTime(),
+      data,
+      status,
+      currentStep,
+      id: caseId,
+    };
+    const updatedCase = await putCase(caseId, caseData);
+    return {
+      type: actionTypes.updateCase,
+      payload: updatedCase,
+    };
+  }
 
   try {
     const res = await put(`/cases/${caseId}`, JSON.stringify(body));
@@ -57,6 +74,15 @@ export async function createCase(form, user, cases, callback) {
     answers: initialAnswersArray || [],
   };
 
+  if (env.STORE_LOCAL) {
+    body.id = uuid.v4();
+    const newCase = await putCase(body.id, body);
+    callback(newCase);
+    return {
+      type: actionTypes.createCase,
+      payload: newCase,
+    };
+  }
   try {
     const response = await post('/cases', JSON.stringify(body));
     const newCase = response.data.data;
@@ -87,6 +113,18 @@ export function deleteCase(caseId) {
 }
 
 export async function fetchCases(callback) {
+  if (env.STORE_LOCAL) {
+    const casesArray = await getAllCases();
+    const cases = {};
+    casesArray.forEach(c => (cases[c.id] = c));
+    callback(cases);
+
+    return {
+      type: actionTypes.fetchCases,
+      payload: cases,
+    };
+  }
+
   try {
     const response = await get('/cases');
     if (response?.data?.data?.attributes?.cases) {

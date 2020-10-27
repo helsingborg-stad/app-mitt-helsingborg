@@ -44,6 +44,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       getForm(initCase.formId).then(form => {
         setForm(form);
         setFormQuestions(getFormQuestions(form));
+        // if (form) setForm(form);
       });
     }
   }, [caseData, caseId, getForm, getCase]);
