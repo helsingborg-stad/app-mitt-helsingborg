@@ -9,19 +9,93 @@ export const actionTypes = {
   apiError: 'API_ERROR',
 };
 
-export async function updateCase(caseId, data, status, currentStep, user, callback) {
-  const answers = Object.entries(data).map(field => {
-    console.log('field', field);
+const createAnswerObject = data => ({
+  fieldId: data?.fieldId ?? null,
+  value: data?.value ?? null,
+  parentId: data?.parentId ?? null,
+  referenceValue: data?.referenceValue ?? null,
+  tags: data?.tags ?? [],
+});
 
-    const fieldObject = {
-      fieldId: field[0],
-      value: field[1],
-      referenceValue: null,
-      tags: [],
-    };
+const ConvertAnswersToArray = (data, form) => {
+  const answers = [];
+  console.log('form', form);
 
-    return fieldObject;
+  if (!data || typeof data !== 'object') {
+    return answers;
+  }
+
+  const formQuestions = [];
+  form.steps.forEach(step => {
+    if (step.questions) {
+      step.questions.forEach(question => {
+        formQuestions.push(question);
+      });
+    }
   });
+
+  console.log('formQuestions', formQuestions);
+
+  Object.entries(data).forEach(answer => {
+    console.log('answer', answer);
+
+    const [fieldId, value] = answer;
+
+    const { id, type, referenceValue, tags } = formQuestions.find(
+      element => element.id === fieldId
+    );
+
+    console.log('The field to be updated id', id);
+    console.log('The field to be updated type', type);
+
+    switch (type) {
+      case 'editableList':
+        Object.entries(value).forEach(valueObject => {
+          const [childFieldId, childValue] = valueObject;
+          answers.push(
+            createAnswerObject({
+              fieldId: childFieldId,
+              value: childValue,
+              parentId: id,
+              referenceValue,
+              tags,
+            })
+          );
+        });
+        return;
+
+      case 'avatarList':
+        Object.entries(value).forEach(valueObject => {
+          const [childFieldId, childValue] = valueObject;
+          answers.push(
+            createAnswerObject({
+              fieldId: `${id}-${childFieldId}`,
+              value: childValue,
+              parentId: id,
+              referenceValue,
+              tags,
+            })
+          );
+        });
+        return;
+
+      default:
+        answers.push(
+          createAnswerObject({
+            fieldId: id,
+            value,
+            referenceValue,
+            tags,
+          })
+        );
+    }
+  });
+
+  return answers;
+};
+
+export async function updateCase(caseId, data, status, currentStep, form, callback) {
+  const answers = ConvertAnswersToArray(data, form);
 
   console.log('answers', answers);
 
@@ -35,7 +109,7 @@ export async function updateCase(caseId, data, status, currentStep, user, callba
 
   try {
     const res = await put(`/cases/${caseId}`, JSON.stringify(body));
-    console.log('PUT request response', res);
+    console.log('PUT request response', res.data.data.attributes.answers);
 
     const { id, attributes } = res.data.data;
     const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
