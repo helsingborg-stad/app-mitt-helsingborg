@@ -50,8 +50,8 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
     dispatch(await create(formId, user, state.cases, callback));
   }
 
-  async function updateCase(caseId, data, status, currentStep) {
-    dispatch(await update(caseId, data, status, currentStep, user));
+  async function updateCase(caseId, data, status, currentStep, form) {
+    dispatch(await update(caseId, data, status, currentStep, form));
   }
 
   function getCase(caseId) {
