@@ -196,6 +196,16 @@ export function updateAnswer(state: FormReducerState, answer: Record<string, any
   };
 }
 
+/**
+ * Validate user form answers.
+ *
+ * Shall check validation for user answers and return object with ID and validation result. ID will correspond
+ * question validated.
+ *
+ * @param state State of current form.
+ * @param answer User input / question.
+ * @param questionId  Id of answered question.
+ */
 export function validateAnswer(
   state: FormReducerState,
   answer: Record<string, any>,
