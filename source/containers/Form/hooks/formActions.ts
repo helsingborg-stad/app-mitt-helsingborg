@@ -1,5 +1,3 @@
-import validator from 'validator';
-import { increaseCount, decreaseCount } from '../../../helpers/Counter';
 import { StepperActions } from '../../../types/FormTypes';
 import { replaceMarkdownTextInSteps } from './textReplacement';
 import { FormReducerState } from './useForm';
