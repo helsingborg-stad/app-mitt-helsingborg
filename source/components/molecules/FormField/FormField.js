@@ -197,6 +197,7 @@ FormField.propTypes = {
    * All the form state answers. Needed because of conditional checks.
    */
   answers: PropTypes.object,
+  error: PropTypes.string,
   formNavigation: PropTypes.shape({
     next: PropTypes.func,
     back: PropTypes.func,
