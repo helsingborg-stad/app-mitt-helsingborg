@@ -41,9 +41,10 @@ const ConvertAnswersToArray = (data, form) => {
 
     const [fieldId, value] = answer;
 
-    const { id, type, referenceValue, tags } = formQuestions.find(
-      element => element.id === fieldId
-    );
+    const question = formQuestions.find(element => element.id === fieldId);
+    console.log('question object', question);
+
+    const { id, type, tags } = question;
 
     console.log('The field to be updated id', id);
     console.log('The field to be updated type', type);
@@ -54,11 +55,10 @@ const ConvertAnswersToArray = (data, form) => {
           const [childFieldId, childValue] = valueObject;
           answers.push(
             createAnswerObject({
-              fieldId: childFieldId,
+              fieldId: childFieldId, // TODO: Add implementation of auto generated IDs in form builder
               value: childValue,
-              parentId: id,
-              referenceValue,
-              tags,
+              parentId: id, // TODO: Add implementation of auto generated IDs in form builder
+              tags, // TODO: Add implementation of Tags in form builder
             })
           );
         });
@@ -72,11 +72,33 @@ const ConvertAnswersToArray = (data, form) => {
               fieldId: `${id}-${childFieldId}`,
               value: childValue,
               parentId: id,
-              referenceValue,
               tags,
             })
           );
         });
+        return;
+
+      case 'repeaterField':
+        Object.entries(value).forEach(repeaterField => {
+          console.log('repeater field object', repeaterField);
+          const [childFieldId, childItems] = repeaterField;
+          console.log('repeater childFieldId', childFieldId);
+          console.log('repeater childItems', childItems);
+
+          Object.entries(childItems).forEach(childItem => {
+            const [repeaterItemId, repeaterItemValue] = childItem;
+
+            answers.push(
+              createAnswerObject({
+                fieldId: `${id}-${childFieldId}-${repeaterItemId}`,
+                value: repeaterItemValue,
+                parentId: id,
+                tags,
+              })
+            );
+          });
+        });
+
         return;
 
       default:
@@ -84,7 +106,6 @@ const ConvertAnswersToArray = (data, form) => {
           createAnswerObject({
             fieldId: id,
             value,
-            referenceValue,
             tags,
           })
         );
