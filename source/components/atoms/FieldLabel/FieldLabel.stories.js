@@ -3,10 +3,10 @@ import React from 'react';
 import styled from 'styled-components/native';
 import FieldLabel from './FieldLabel';
 import StoryWrapper from '../../molecules/StoryWrapper';
-import colors from '../../../styles/colors';
+import theme from '../../../styles/theme';
 
 const Background = styled.View`
-  background-color: ${colors.background.darker};
+  background-color: ${theme.background.darker};
 `;
 
 storiesOf('Field Label', module).add('default', () => (

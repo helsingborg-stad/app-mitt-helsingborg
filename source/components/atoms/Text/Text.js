@@ -3,11 +3,11 @@ import styled from 'styled-components/native';
 
 const Text = styled(RNText)`
   font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  font-family: Roboto;
+  font-weight: ${props => props.theme.typography.text.fontWeight};
+  line-height: ${props => props.theme.typography.text.lineHeight};
+  font-size: ${props => props.theme.typography.text.fontSize};
   flex-shrink: 1;
-  color: ${props => props.theme.text.default};
+  color: ${props => props.theme.colors.neutrals[0]};
   ${({ small }) =>
     small &&
     `

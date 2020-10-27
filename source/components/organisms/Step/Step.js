@@ -9,7 +9,7 @@ import Banner from '../../molecules/Banner/Banner';
 import FooterAction from '../../molecules/FooterAction/FooterAction';
 
 const StepContainer = styled.View`
-  background: ${props => props.bg};
+  background: ${props => props.theme.step.colors.body.bg};
   flex: 1;
 `;
 
@@ -25,6 +25,7 @@ const StepBackNavigation = styled(BackNavigation)`
 `;
 
 const StepBanner = styled(Banner)`
+  background: ${props => props.theme.step.colors.banner.bg};
   flex: 1;
 `;
 
@@ -34,6 +35,7 @@ const StepFieldListWrapper = styled.View`
 `;
 
 const StepFooter = styled(FooterAction)`
+  background: ${props => props.theme.step.colors.footer.bg}
   position: absolute;
   bottom: 0;
 `;
@@ -89,7 +91,7 @@ function Step({
   };
 
   return (
-    <StepContainer bg={theme.step.bg}>
+    <StepContainer>
       <StepBackNavigation
         isBackBtnVisible={isBackBtnVisible}
         onBack={formNavigation?.back ? formNavigation.back : undefined}

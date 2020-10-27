@@ -116,7 +116,6 @@ function useForm(initialState: FormReducerState) {
    * Function for updating answer.
    */
   const handleInputChange = (answer: Record<string, any>) => {
-    // console.log(answer);
     dispatch({ type: 'UPDATE_ANSWER', payload: answer });
   };
 
