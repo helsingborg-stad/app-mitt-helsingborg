@@ -124,9 +124,7 @@ function Step({
                       inputType={field.type}
                       value={answers[field.id] || ''}
                       answers={answers}
-                      error={
-                        validation[field.id]?.isValid ? undefined : validation[field.id]?.message
-                      }
+                      error={validation[field.id]}
                       color={field.color}
                       id={field.id}
                       formNavigation={formNavigation}
