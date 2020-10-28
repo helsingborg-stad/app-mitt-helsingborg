@@ -14,7 +14,6 @@ function loadStories() {
   require('../source/components/atoms/Input/Input.stories');
   require('../source/components/atoms/Select/Select.stories');
   require('../source/components/atoms/Stepper/Stepper.stories');
-  require('../source/components/atoms/StepperPOC/Stepper.stories');
   require('../source/components/atoms/Text/Text.stories');
   require('../source/components/molecules/BackNavigation/BackNavigation.stories');
   require('../source/components/molecules/Banner/Banner.stories');
