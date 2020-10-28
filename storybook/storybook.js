@@ -12,7 +12,7 @@ const StorybookUI = getStorybookUI({
   port: 7007,
   host: 'localhost',
   onDeviceUI: true,
-  resetStorybook: false,
+  resetStorybook: true,
   shouldDisableKeyboardAvoidingView: true,
 });
 

@@ -5,17 +5,19 @@
  */
 
 const primary = {
-  blue: ['#003359', '#005C86', '#4989B6'],
+  blue: ['#003359', '#005C86', '#1C73A6', '#4989B6'],
   green: ['#205400', '#50811B', '#80B14A'],
-  red: ['#770000', '#AE0B05', '#E84C31'],
-  purple: ['#4B0034', '#7B075E', '#AD428B'],
+  red: ['#770000', '#AE0B05', '#B23700', '#E84C31'],
+  purple: ['#4B0034', '#7B075E', '#9E166A', '#AD428B'],
 };
 
 /**
- * Secondary colors provides more ways to accent and distinguish different aspects in the application.
- * They are used for things like card, input and header backgrounds.
+ * Complemetary colors should be used fairly conservativley thorughout our UI to avoid overpowering our
+ * primary colors. Use them when you need an element to stand out, or reinforce things like error
+ * states or positive trends.
  */
-const secondary = {
+
+const complementary = {
   blue: ['#C2CED7', '#DBE4E9', '#E4EBF0', '#EEF3F6'],
   green: ['#C9D6C2', '#E1E9DB', '#EAF0E4', '#F2F6EE'],
   red: ['#DEC2C2', '#F0DBD9', '#F5E4E3', '#FAEEEC'],
@@ -23,7 +25,7 @@ const secondary = {
 };
 
 /**
- * Neutrals colors are uses the most and makes up the majority of the UI.
+ * Neutral colors are used the most and makes up the majority of the UI.
  * They are used for most of the texts, backgrounds, and borders, as well as for things like
  * secondary buttons and links
  */
@@ -39,26 +41,13 @@ const neutrals = [
 ];
 
 /**
- * Supporting colors should be used fairly conservativley thorughout our UI to avoid overpowering our
- * primary colors. Use them when you need an element to stand out, or reinforce things like error
- * states or positive trends.
- */
-const supporting = {
-  blue: ['#1C73A6'],
-  green: ['#6F9725'],
-  red: ['#B23700'],
-  pruple: ['#9E166A'],
-};
-
-/**
  * The color palette that includes all our different color categories
  * (primary, neutrals, supporting etc)
  */
 
 export const colorPalette = {
   primary,
-  secondary,
-  supporting,
+  complementary,
   neutrals,
 };
 

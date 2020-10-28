@@ -50,11 +50,7 @@ const Header = ({ message, title, themeColor, navItems, backButton }) => (
         </BackButton>
       )}
       {message && <Text>{message}</Text>}
-      {title && (
-        <Title type="h2" color={themeColor}>
-          {title}
-        </Title>
-      )}
+      {title && <Title color={themeColor}>{title}</Title>}
     </HeaderContent>
     {navItems && (
       <View>

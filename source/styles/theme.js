@@ -24,17 +24,17 @@ const setTypography = () => {
       h1: {
         fontWeight: fontWeights[1],
         fontSize: fontSizes[7],
-        lineHeight: lineHeights[8],
+        lineHeight: lineHeights[7],
       },
       h2: {
         fontWeight: fontWeights[1],
-        fontSize: fontSizes[9],
-        lineHeight: lineHeights[8],
+        fontSize: fontSizes[5],
+        lineHeight: lineHeights[6],
       },
       h3: {
         fontWeight: fontWeights[1],
         fontSize: fontSizes[6],
-        lineHeight: lineHeights[1],
+        lineHeight: lineHeights[7],
       },
       h4: {
         fontWeight: fontWeights[1],
