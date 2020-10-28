@@ -27,9 +27,9 @@ const StepDescriptionText = styled(Text)`
 function StepDescription({ style, tagline, heading, text }) {
   return (
     <StepDescriptionWrapper style={style}>
-      {tagline.length > 0 && <StepDescriptionTagline>{tagline}</StepDescriptionTagline>}
+      {tagline.length !== 0 && <StepDescriptionTagline>{tagline}</StepDescriptionTagline>}
       <Heading>{heading}</Heading>
-      {text.length > 0 && <StepDescriptionText>{text}</StepDescriptionText>}
+      {text.length !== 0 && <StepDescriptionText>{text}</StepDescriptionText>}
     </StepDescriptionWrapper>
   );
 }
@@ -42,8 +42,8 @@ StepDescription.propTypes = {
 };
 
 StepDescription.defaultProps = {
-  tagline: undefined,
-  text: undefined,
+  tagline: '',
+  text: '',
 };
 
 export default StepDescription;
