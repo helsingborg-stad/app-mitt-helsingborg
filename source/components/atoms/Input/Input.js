@@ -9,7 +9,7 @@ const input = css`
   background-color: ${({ color }) => theme.input[color].background};
   border-radius: 17.5px;
   border: solid 1px
-    ${({ color, error }) => (error ? colors.input.red.border : colors.input[color].border)};
+    ${({ color, error }) => (error ? theme.input.red.border : theme.input[color].border)};
   padding-top: 16px;
   padding-bottom: 16px;
   padding-left: 16px;
