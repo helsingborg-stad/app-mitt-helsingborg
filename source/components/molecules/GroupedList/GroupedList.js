@@ -7,6 +7,8 @@ import { FieldLabel, Text, Icon } from 'source/components/atoms';
 import theme from '../../../styles/theme';
 
 const ListWrapper = styled.View`
+  background-color: ${props => props.theme.groupedList[props.color].bodyBackground};
+  color: ${props => props.theme.groupedList[props.color].bodyText};
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -18,6 +20,8 @@ const ListWrapper = styled.View`
 `;
 
 const ListHeader = styled.View`
+  background-color: ${props => props.theme.groupedList[props.color].headerBackground};
+  color: ${props => props.theme.groupedList[props.color].headerText};
   padding-left: 24px;
   padding-right: 12px;
   padding-top: 12px;
@@ -65,17 +69,9 @@ const GroupedList = ({ heading, items, categories, onEdit, color }) => {
     }
   });
 
-  const headerStyle = {
-    backgroundColor: colors.groupedList[color].headerBackground,
-    color: colors.groupedList[color].headerText,
-  };
-  const bodyStyle = {
-    backgroundColor: colors.groupedList[color].bodyBackground,
-    color: colors.groupedList[color].bodyText,
-  };
   return (
-    <ListWrapper style={bodyStyle}>
-      <ListHeader style={headerStyle}>
+    <ListWrapper color={color}>
+      <ListHeader color={color}>
         <HeaderTitleWrapper>
           <HeaderTitle>{heading}</HeaderTitle>
         </HeaderTitleWrapper>
