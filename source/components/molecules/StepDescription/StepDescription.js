@@ -11,11 +11,11 @@ const StepDescriptionWrapper = styled.View`
 `;
 
 const StepDescriptionTagline = styled(Text)`
-  font-size: ${props => props.theme.step.description.tagline.fontSize};
+  font-size: ${props => props.theme.typography[props.type].fontSize}px;
   font-weight: bold;
   margin-bottom: 10px;
   color: ${props => props.theme.step.description.tagline.color};
-  line-height: ${props => props.theme.step.description.tagline.lineHeight};
+  line-height: ${props => props.theme.typography[props.type].lineHeight};
   letter-spacing: 0.5px;
 `;
 
