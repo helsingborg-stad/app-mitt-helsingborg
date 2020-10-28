@@ -8,7 +8,8 @@ const input = css`
   width: 100%;
   background-color: ${({ color }) => theme.input[color].background};
   border-radius: 17.5px;
-  border: solid 1px ${({ color, isValid }) => isValid ? colors.input[color].border : colors.input['red'].border};
+  border: solid 1px
+    ${({ color, error }) => (error ? colors.input.red.border : colors.input[color].border)};
   padding-top: 16px;
   padding-bottom: 16px;
   padding-left: 16px;

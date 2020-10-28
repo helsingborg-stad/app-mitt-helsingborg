@@ -1,6 +1,7 @@
 import { StepperActions } from '../../../types/FormTypes';
 import { replaceMarkdownTextInSteps } from './textReplacement';
 import { FormReducerState } from './useForm';
+import { validateInput } from '../../../helpers/ValidationHelper';
 
 /**
  * Action for replacing title markdown in steps.
@@ -191,4 +192,35 @@ export function updateAnswer(state: FormReducerState, answer: Record<string, any
     ...state,
     formAnswers: updatedAnswers,
   };
+}
+
+/**
+ * Validate user form answers.
+ *
+ * Shall check validation for user answers and return object with ID and validation result. ID will correspond
+ * question validated.
+ *
+ * @param state State of current form.
+ * @param answer User input / question.
+ * @param questionId  Id of answered question.
+ */
+export function validateAnswer(
+  state: FormReducerState,
+  answer: Record<string, any>,
+  questionId: string
+) {
+  const { questions } = state.steps[state.currentPosition.index];
+
+  const { validation } = questions.find(question => question.id === questionId);
+
+  if (validation) {
+    const [isValid, validationMessage] = validateInput(answer[questionId], validation.rules);
+
+    return {
+      ...state,
+      validations: { ...state.validations, [questionId]: { isValid, message: validationMessage } },
+    };
+  }
+
+  return state;
 }
