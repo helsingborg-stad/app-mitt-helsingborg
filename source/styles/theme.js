@@ -117,7 +117,7 @@ const theme = {
     },
     colors: {
       body: {
-        bg: baseTheme.colors.neutrals[8],
+        bg: baseTheme.colors.neutrals[7],
       },
       footer: {
         bg: baseTheme.colors.neutrals[6],
