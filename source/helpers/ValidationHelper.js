@@ -1,3 +1,5 @@
+import validator from 'validator';
+
 /**
  * Checks if a string is a valid personal identity number
  * @param {string} pin Personal identity number
@@ -26,3 +28,49 @@ export const sanitizePin = pin => {
 
   return sanitizedPin;
 };
+
+/**
+ * Use library validator.js to validate inputs.
+ *
+ * @param value {string} Value to validate.
+ * @param rules Array of rules to validate input against.
+ * @returns {*} Array with to elements. First element is the validation result, true or false. Second element is a string error message if validation fails.
+ */
+export const validateInput = (value, rules) =>
+  rules.reduce(
+    (acc, rule) => {
+      const [valid] = acc;
+      let valueArray = acc;
+
+      /**
+       * Validator only accepts strings.
+       */
+      const valueToValidate = String(value);
+
+      /**
+       * Retrieve the validation method defined in the rule from the validator.js package and execute
+       */
+      const validationMethodArgs = rule.args || [];
+      const arrayOfArgs = Object.keys(validationMethodArgs).map(key => validationMethodArgs[key]);
+      const validationMethod =
+        typeof rule.method === 'string' ? validator[rule.method] : rule.method;
+      const isValidationRuleMeet =
+        validationMethod(valueToValidate, arrayOfArgs) === rule.validWhen;
+
+      /**
+       * Only return true if the current and previous rule is met
+       */
+      if (valid === true && isValidationRuleMeet) {
+        valueArray = [true, ''];
+      }
+
+      /**
+       * Only change the  true if the current and previous rule is met
+       */
+      if (!isValidationRuleMeet) {
+        valueArray = [false, rule.message];
+      }
+      return valueArray;
+    },
+    [true, '']
+  );

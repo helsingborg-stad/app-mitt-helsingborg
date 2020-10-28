@@ -22,8 +22,7 @@ const DefaultStoryData = {
       name: 'Start steg',
       title: 'Test av validering för fält',
       group: 'test',
-      description:
-        'Detta är ett formulär är ett test för att se så att validering av olika fält fungerar',
+      description: 'Detta formulär är ett test för att se så att validering av olika fält fungerar',
       banner: {},
       actions: [
         {
@@ -122,7 +121,7 @@ const DefaultStoryData = {
                 message: 'Du får inte lämna detta fält tomt',
               },
               {
-                method: 'isMobilePohne',
+                method: 'isMobilePhone',
                 args: {
                   locale: 'sv-SE',
                 },
@@ -137,24 +136,6 @@ const DefaultStoryData = {
           label: 'Ett text fält',
           placeholder: 'Skriv något',
           type: 'text',
-          validation: {
-            isRequired: true,
-            rules: [
-              {
-                method: 'isEmpty',
-                validWhen: false,
-                message: 'Du får inte lämna detta fält tomt',
-              },
-              {
-                method: 'isAlphanumeric',
-                args: {
-                  locale: 'sv-SE',
-                },
-                validWhen: true,
-                message: 'Du får endast använda bokstäver och siffror',
-              },
-            ],
-          },
         },
         {
           id: 5,
@@ -188,15 +169,17 @@ const DefaultStoryData = {
           label: 'Ett email fält',
           type: 'text',
           validation: {
-            isRequeried: true,
+            isRequired: true,
             rules: [
               {
                 method: 'isEmpty',
                 validWhen: false,
+                message: 'Du får inte lämna detta fält tomt',
               },
               {
                 method: 'isEmail',
                 validWhen: true,
+                message: 'Du måste ange en giltlig email adress',
               },
             ],
           },

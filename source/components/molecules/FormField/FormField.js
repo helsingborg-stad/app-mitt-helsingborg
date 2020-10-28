@@ -91,6 +91,7 @@ const FormField = ({
   onChange,
   value,
   answers,
+  error,
   conditionalOn,
   labelHelp,
   ...other
@@ -100,7 +101,7 @@ const FormField = ({
     return <Text>{`Invalid field type: ${inputType}`}</Text>;
   }
   const saveInput = (value, fieldId = id) => {
-    if (onChange) onChange({ [fieldId]: value });
+    if (onChange) onChange({ [fieldId]: value }, fieldId);
   };
   if (!input) {
     return <Text>{`Invalid field type: ${inputType}`}</Text>;
@@ -110,12 +111,14 @@ const FormField = ({
     value === '' && Object.prototype.hasOwnProperty.call(input, 'initialValue')
       ? input.initialValue
       : value;
+
   const inputCompProps = {
     color,
     value: initialValue,
     help:
       other.inputHelp && other.text ? { text: other.inputHelp, heading: other.text } : undefined,
     ...inputProps,
+    error,
     ...other,
   };
   if (input?.props?.answers) inputCompProps.answers = answers;
@@ -194,6 +197,7 @@ FormField.propTypes = {
    * All the form state answers. Needed because of conditional checks.
    */
   answers: PropTypes.object,
+  error: PropTypes.string,
   formNavigation: PropTypes.shape({
     next: PropTypes.func,
     back: PropTypes.func,

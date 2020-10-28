@@ -52,6 +52,7 @@ function Step({
   questions,
   actions,
   answers,
+  validation,
   status,
   formNavigation,
   onSubmit,
@@ -123,6 +124,7 @@ function Step({
                       inputType={field.type}
                       value={answers[field.id] || ''}
                       answers={answers}
+                      error={validation[field.id]}
                       color={field.color}
                       id={field.id}
                       formNavigation={formNavigation}
@@ -176,6 +178,10 @@ Step.propTypes = {
    * The answers of a form.
    */
   answers: PropTypes.object,
+  /**
+   * User input validation result.
+   */
+  validation: PropTypes.object,
   /**
    * The answers of a form.
    */

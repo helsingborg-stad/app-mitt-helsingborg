@@ -10,6 +10,7 @@ export interface FormReducerState {
   user: User;
   connectivityMatrix: StepperActions[][];
   formAnswers: Record<string, any>;
+  validations: Record<string, any>;
   numberOfMainSteps?: number;
 }
 
@@ -115,8 +116,10 @@ function useForm(initialState: FormReducerState) {
   /**
    * Function for updating answer.
    */
-  const handleInputChange = (answer: Record<string, any>) => {
+  const handleInputChange = (answer: Record<string, any>, questionId: string) => {
     dispatch({ type: 'UPDATE_ANSWER', payload: answer });
+
+    dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId } });
   };
 
   const formNavigation = {

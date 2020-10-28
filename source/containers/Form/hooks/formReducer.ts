@@ -9,6 +9,7 @@ import {
   submitForm,
   updateAnswer,
   computeNumberMainSteps,
+  validateAnswer,
 } from './formActions';
 
 type Action =
@@ -39,6 +40,10 @@ type Action =
   | {
       type: 'UPDATE_ANSWER';
       payload: Record<string, any>;
+    }
+  | {
+      type: 'VALIDATE_ANSWER';
+      payload: { answer: Record<string, any>; id: string };
     }
   | {
       type: 'SUBMIT_FORM';
@@ -102,6 +107,10 @@ function formReducer(state: FormReducerState, action: Action) {
 
     case 'UPDATE_ANSWER': {
       return updateAnswer(state, action.payload);
+    }
+
+    case 'VALIDATE_ANSWER': {
+      return validateAnswer(state, action.payload.answer, action.payload.id);
     }
 
     /**
