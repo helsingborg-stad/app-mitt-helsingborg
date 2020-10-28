@@ -47,12 +47,15 @@ export const convertAnswersToArray = (data, formQuestions) => {
       case 'editableList':
         Object.entries(value).forEach(valueObject => {
           const [childFieldId, childValue] = valueObject;
+          const listItem = other.inputs.find(obj => obj.key === childFieldId);
+          const { tags: listItemTags } = listItem;
+
           answers.push(
             createAnswerObject({
               fieldId: childFieldId,
               value: childValue,
               parentId: id,
-              tags,
+              tags: listItemTags ?? [],
             })
           );
         });
@@ -76,9 +79,9 @@ export const convertAnswersToArray = (data, formQuestions) => {
         Object.entries(value).forEach(repeaterField => {
           const [childFieldId, childItems] = repeaterField;
 
-          Object.entries(childItems).forEach((childItem, index) => {
+          Object.entries(childItems).forEach(childItem => {
             const [repeaterItemId, repeaterItemValue] = childItem;
-            const repeaterFieldItem = other.inputs[index];
+            const repeaterFieldItem = other.inputs.find(obj => obj.id === repeaterItemId);
             const { tags: repeaterFieldItemTags } = repeaterFieldItem;
 
             answers.push(
@@ -86,7 +89,7 @@ export const convertAnswersToArray = (data, formQuestions) => {
                 fieldId: `${id}-${childFieldId}-${repeaterItemId}`,
                 value: repeaterItemValue,
                 parentId: id,
-                tags: repeaterFieldItemTags,
+                tags: repeaterFieldItemTags ?? [],
               })
             );
           });
