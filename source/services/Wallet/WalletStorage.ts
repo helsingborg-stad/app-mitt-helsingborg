@@ -9,7 +9,7 @@ const WALLET_PREFIX = 'WALLET';
 const USER = `${WALLET_PREFIX}.USER`;
 const CASES = `${WALLET_PREFIX}.CASES`;
 const CASES_IDS = `${CASES}.IDS`;
-const VALIDATE_CREDENTIALS = false; //whether or not to validate the stored credential against the API when fetching data from storage
+export const VALIDATE_CREDENTIALS = true; //whether or not to validate the stored credential against the API when fetching data from storage
 
 const walletPreferencesName = 'mittHbgWalletPrefs';
 const keychainServiceName = 'mittHbgWallet';

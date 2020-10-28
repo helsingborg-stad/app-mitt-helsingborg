@@ -3,11 +3,17 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { ScrollView } from 'react-native';
+import { View, ScrollView, ActivityIndicator } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Text, Button } from '../components/atoms';
+import { Text, Button, Icon } from '../components/atoms';
 import { EditableList } from '../components/molecules';
-import { getUser, getAllCases, clearCases, putUserInfo } from '../services/Wallet/WalletStorage';
+import {
+  getUser,
+  getAllCases,
+  clearCases,
+  putUserInfo,
+  VALIDATE_CREDENTIALS,
+} from '../services/Wallet/WalletStorage';
 import { UserInfo } from '../services/Wallet/types';
 import AuthContext from '../store/AuthContext';
 import { Case } from '../types/CaseType';
@@ -38,6 +44,63 @@ const EmptyValue = styled(Text)`
   font-weight: normal;
 `;
 
+type VerificationStatus = 'valid' | 'invalid' | 'loading';
+
+const VerificationStatusComponent: React.FC<{
+  status: VerificationStatus;
+  successMessage: string;
+  failMessage: string;
+}> = ({ status, successMessage, failMessage }) => {
+  if (status === 'loading') {
+    return (
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingRight: 40,
+          paddingLeft: 40,
+        }}
+      >
+        <Text>Verifierar...</Text>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+  if (status === 'valid') {
+    return (
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingRight: 40,
+          paddingLeft: 40,
+        }}
+      >
+        <Text>{successMessage}</Text>
+        <Icon name="done" color="green" />
+      </View>
+    );
+  }
+  if (status === 'invalid') {
+    return (
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingRight: 40,
+          paddingLeft: 40,
+        }}
+      >
+        <Text>{failMessage}</Text>
+        <Icon name="error_outline" color="red" />
+      </View>
+    );
+  }
+};
+
 const emptyCaseList: Case[] = [];
 
 const WalletScreen: React.FC<{ navigation: StackNavigationProp<any, any> }> = ({ navigation }) => {
@@ -45,15 +108,27 @@ const WalletScreen: React.FC<{ navigation: StackNavigationProp<any, any> }> = ({
   const [userInfo, setUserInfo] = useState<Partial<UserInfo>>({});
   const [cases, setCases] = useState(emptyCaseList);
   const [update, triggerUpdate] = useState(0); // TODO: fix this ugly hack of a way to update things.
+  const [userDataStatus, setUserDataStatus] = useState<VerificationStatus>('loading');
+  const [caseDataStatus, setCaseDataStatus] = useState<VerificationStatus>('loading');
 
   const updateData = () => {
     const loadCases = async () => {
       const cs = await getAllCases();
       setCases(cs);
+      if (cs) {
+        setCaseDataStatus('valid');
+      } else {
+        setCaseDataStatus('invalid');
+      }
     };
     const loadUserInfo = async () => {
       const ui = await getUser();
       setUserInfo(ui);
+      if (ui) {
+        setUserDataStatus('valid');
+      } else {
+        setUserDataStatus('invalid');
+      }
     };
     loadCases();
     loadUserInfo();
@@ -137,8 +212,16 @@ const WalletScreen: React.FC<{ navigation: StackNavigationProp<any, any> }> = ({
           value={userInfo.contactInfo}
           title="Kontaktuppgifter"
         />
+        {VALIDATE_CREDENTIALS && (
+          <VerificationStatusComponent
+            status={userDataStatus}
+            successMessage="Personuppgifterna är verifierade"
+            failMessage="Personuppgifterna kunde inte verifieras"
+          />
+        )}
       </ProfileInfoContainer>
       <CaseList cases={cases} navigation={navigation} />
+
       <ButtonContainer>
         <HomeScreenButton
           color="red"
@@ -149,6 +232,13 @@ const WalletScreen: React.FC<{ navigation: StackNavigationProp<any, any> }> = ({
         >
           <Text>Rensa ärenden</Text>
         </HomeScreenButton>
+        {VALIDATE_CREDENTIALS && (
+          <VerificationStatusComponent
+            status={caseDataStatus}
+            successMessage="Ärende-data är verifierad"
+            failMessage="Ärende-datan kunde inte verifieras"
+          />
+        )}
       </ButtonContainer>
     </ScrollView>
   );
