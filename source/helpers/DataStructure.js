@@ -5,14 +5,16 @@ const createAnswerObject = data => ({
   tags: data?.tags ?? [],
 });
 
-export const convertAnswersToArray = (data, form) => {
-  const answers = [];
-
-  if (!data || typeof data !== 'object' || !form.steps) {
-    return answers;
+/**
+ * Returns form questions as a flat array
+ * @param {obj} form
+ */
+export const getFormQuestions = form => {
+  const formQuestions = [];
+  if (!form || typeof form !== 'object') {
+    return formQuestions;
   }
 
-  const formQuestions = [];
   form.steps.forEach(step => {
     if (step.questions) {
       step.questions.forEach(question => {
@@ -20,6 +22,22 @@ export const convertAnswersToArray = (data, form) => {
       });
     }
   });
+
+  return formQuestions;
+};
+
+/**
+ * Convert answers in context to an array that follows Case API data structure
+ * TODO: Add implementation of auto generated IDs and Tags in form builder
+ * @param {obj} data
+ * @param {obj} formQuestions
+ */
+export const convertAnswersToArray = (data, formQuestions) => {
+  const answers = [];
+
+  if (!data || typeof data !== 'object' || !formQuestions || typeof formQuestions !== 'object') {
+    return answers;
+  }
 
   Object.entries(data).forEach(answer => {
     const [fieldId, value] = answer;
@@ -31,10 +49,10 @@ export const convertAnswersToArray = (data, form) => {
           const [childFieldId, childValue] = valueObject;
           answers.push(
             createAnswerObject({
-              fieldId: childFieldId, // TODO: Add implementation of auto generated IDs in form builder
+              fieldId: childFieldId,
               value: childValue,
               parentId: id,
-              tags, // TODO: Add implementation of Tags in form builder
+              tags,
             })
           );
         });

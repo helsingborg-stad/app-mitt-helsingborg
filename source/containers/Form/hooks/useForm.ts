@@ -111,12 +111,11 @@ function useForm(initialState: FormReducerState) {
   // const closeForm = (callback: (s: { state: FormReducerState }, isLastStep: boolean) => any) =>
   //   callback({ state: formState }, isLastStep());
 
-  function closeForm() {}
+  function closeForm() { }
   /**
    * Function for updating answer.
    */
   const handleInputChange = (answer: Record<string, any>) => {
-    // console.log(answer);
     dispatch({ type: 'UPDATE_ANSWER', payload: answer });
   };
 
