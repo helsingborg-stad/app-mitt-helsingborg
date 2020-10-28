@@ -9,16 +9,12 @@ const BannerWrapper = styled.View`
   margin: 0;
   padding: 0;
   min-height: ${props => (props.image ? '256px' : '192px')};
-  background: ${props => props.backgroundColor};
+  background-color: ${props =>
+    props.backgroundColor
+      ? props.backgroundColor
+      : props.theme.colors.complementary[props.colorSchema][0]};
   position: relative;
   justify-content: flex-end;
-`;
-
-const BannerImageIcon = styled(Image)`
-  width: 72px;
-  position: absolute;
-  bottom: -37px;
-  left: 32px;
 `;
 
 const ProgressCounterText = styled(Text)`
@@ -35,28 +31,17 @@ const BannerImage = styled(Image)`
   height: 100%;
 `;
 
-const Banner = ({
-  currentPosition,
-  totalStepNumber,
-  imageSrc,
-  iconSrc,
-  backgroundColor,
-  style,
-}) => (
-  <BannerWrapper
-    image={imageSrc}
-    style={style}
-    backgroundColor={backgroundColor && backgroundColor !== '' ? backgroundColor : 'white'}
-  >
+const Banner = ({ style, currentPosition, totalStepNumber, imageSrc, iconSrc, colorSchema }) => (
+  <BannerWrapper style={style} image={imageSrc} colorSchema={colorSchema}>
     {Object.prototype.hasOwnProperty.call(icons, imageSrc) ? (
       <BannerImageWrapper>
         <BannerImage resizeMode="contain" source={icons[imageSrc]} />
       </BannerImageWrapper>
     ) : null}
-
-    {Object.prototype.hasOwnProperty.call(icons, iconSrc) ? (
-      <BannerImageIcon source={icons[iconSrc]} />
-    ) : null}
+    {/*
+        TODO: Move ProgressCounterText component out of the banner component.
+        Could be rendered as a child in the Banner instead where it's needed. ie in a Step.
+      */}
     {totalStepNumber > 1 && currentPosition.level === 0 && (
       <ProgressCounterText>
         Steg {currentPosition.currentMainStep}/{totalStepNumber}
@@ -73,13 +58,22 @@ Banner.propTypes = {
     currentMainStep: PropTypes.number,
   }),
   totalStepNumber: PropTypes.number,
+  /**
+   * The source to a image to render as a background in the banner.
+   */
   imageSrc: PropTypes.string,
-  iconSrc: PropTypes.string.isRequired,
-  backgroundColor: PropTypes.string,
-  style: PropTypes.array.isRequired,
+  /**
+   * The React Native style property. This is optional and might override the colorSchema.
+   */
+  style: PropTypes.string,
+  /**
+   * The color schema that the component should apply, colors are retrived from ThemeProvider
+   */
+  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
 };
 Banner.defaultProps = {
   imageSrc: undefined,
-  backgroundColor: '#FBF7F0',
+  colorSchema: 'blue',
+  style: {},
 };
 export default Banner;

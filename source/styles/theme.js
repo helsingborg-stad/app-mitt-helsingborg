@@ -122,9 +122,6 @@ const theme = {
       footer: {
         bg: baseTheme.colors.neutrals[6],
       },
-      banner: {
-        bg: baseTheme.colors.neutrals[5],
-      },
     },
   },
   // DEPRECATED THEME SETTINGS
