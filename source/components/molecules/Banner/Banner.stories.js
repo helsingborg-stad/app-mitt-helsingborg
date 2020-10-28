@@ -19,8 +19,28 @@ storiesOf('Banner', module)
       <Banner imageSrc={ILLU_EXPENSES} iconSrc={ICON_EXPENSES} />
     </StoryWrapper>
   ))
-  .add('Background', props => (
+  .add('Custom Styling', props => (
     <StoryWrapper {...props}>
-      <Banner backgroundColor="#75C9A8" iconSrc={ICON_INCOME} />
+      <Banner style={{ backgroundColor: 'yellow' }} colorSchema="blue" iconSrc={ICON_INCOME} />
+    </StoryWrapper>
+  ))
+  .add('Color Schema Blue', props => (
+    <StoryWrapper {...props}>
+      <Banner colorSchema="blue" iconSrc={ICON_INCOME} />
+    </StoryWrapper>
+  ))
+  .add('Color Schema Red', props => (
+    <StoryWrapper {...props}>
+      <Banner colorSchema="red" iconSrc={ICON_INCOME} />
+    </StoryWrapper>
+  ))
+  .add('Color Schema Green', props => (
+    <StoryWrapper {...props}>
+      <Banner colorSchema="green" iconSrc={ICON_INCOME} />
+    </StoryWrapper>
+  ))
+  .add('Color Schema Purple', props => (
+    <StoryWrapper {...props}>
+      <Banner colorSchema="purple" iconSrc={ICON_INCOME} />
     </StoryWrapper>
   ));
