@@ -24,7 +24,18 @@ storiesOf('StepDescription', module)
   ))
   .add('Tagline', () => (
     <StoryWrapper>
-      <StepDescription tagline="Step Description Tagline" heading="Step Description Heading" />
+      <StepDescription tagline="Blue tagline" heading="Step Description Heading" />
+      <StepDescription tagline="Red tagline" colorSchema="red" heading="Step Description Heading" />
+      <StepDescription
+        tagline="Purple tagline"
+        colorSchema="purple"
+        heading="Step Description Heading"
+      />
+      <StepDescription
+        tagline="Green tagline"
+        colorSchema="green"
+        heading="Step Description Heading"
+      />
     </StoryWrapper>
   ))
   .add('Desciprtive Text', () => (

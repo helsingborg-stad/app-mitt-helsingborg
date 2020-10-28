@@ -14,7 +14,7 @@ const StepDescriptionTagline = styled(Text)`
   font-size: ${props => props.theme.typography[props.type].fontSize}px;
   font-weight: bold;
   margin-bottom: 10px;
-  color: ${props => props.theme.step.description.tagline.color};
+  color: ${props => props.theme.colors.primary[props.colorSchema][1]};
   line-height: ${props => props.theme.typography[props.type].lineHeight}px;
   letter-spacing: 0.5px;
 `;
@@ -24,10 +24,12 @@ const StepDescriptionText = styled(Text)`
   margin-top: 16px;
 `;
 
-function StepDescription({ style, tagline, heading, text }) {
+function StepDescription({ style, tagline, heading, text, colorSchema }) {
   return (
     <StepDescriptionWrapper style={style}>
-      {tagline.length !== 0 && <StepDescriptionTagline>{tagline}</StepDescriptionTagline>}
+      {tagline.length !== 0 && (
+        <StepDescriptionTagline colorSchema={colorSchema}>{tagline}</StepDescriptionTagline>
+      )}
       <Heading>{heading}</Heading>
       {text.length !== 0 && <StepDescriptionText>{text}</StepDescriptionText>}
     </StepDescriptionWrapper>
@@ -39,11 +41,17 @@ StepDescription.propTypes = {
   tagline: PropTypes.string,
   heading: PropTypes.string.isRequired,
   text: PropTypes.string,
+  /**
+   * The color schema for the description,
+   */
+  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
 };
 
 StepDescription.defaultProps = {
   tagline: '',
   text: '',
+  colorSchema: 'blue',
+  style: {},
 };
 
 export default StepDescription;
