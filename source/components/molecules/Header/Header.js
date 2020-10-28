@@ -23,7 +23,7 @@ const HeaderContainer = styled.View`
   ${() => shadow[1]}
 `;
 
-const Title = styled(Heading)`
+const HeaderHeading = styled(Heading)`
   margin-top: 4px;
   color: ${props => props.theme.heading[props.color][1]};
 `;
@@ -50,7 +50,7 @@ const Header = ({ message, title, themeColor, navItems, backButton }) => (
         </BackButton>
       )}
       {message && <Text>{message}</Text>}
-      {title && <Title color={themeColor}>{title}</Title>}
+      {title && <HeaderHeading color={themeColor}>{title}</HeaderHeading>}
     </HeaderContent>
     {navItems && (
       <View>
