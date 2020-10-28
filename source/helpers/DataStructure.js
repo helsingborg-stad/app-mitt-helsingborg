@@ -41,7 +41,7 @@ export const convertAnswersToArray = (data, formQuestions) => {
 
   Object.entries(data).forEach(answer => {
     const [fieldId, value] = answer;
-    const { id, type, tags } = formQuestions.find(element => element.id === fieldId);
+    const { id, type, tags, ...other } = formQuestions.find(element => element.id === fieldId);
 
     switch (type) {
       case 'editableList':
@@ -76,15 +76,17 @@ export const convertAnswersToArray = (data, formQuestions) => {
         Object.entries(value).forEach(repeaterField => {
           const [childFieldId, childItems] = repeaterField;
 
-          Object.entries(childItems).forEach(childItem => {
+          Object.entries(childItems).forEach((childItem, index) => {
             const [repeaterItemId, repeaterItemValue] = childItem;
+            const repeaterFieldItem = other.inputs[index];
+            const { tags: repeaterFieldItemTags } = repeaterFieldItem;
 
             answers.push(
               createAnswerObject({
                 fieldId: `${id}-${childFieldId}-${repeaterItemId}`,
                 value: repeaterItemValue,
                 parentId: id,
-                tags,
+                tags: repeaterFieldItemTags,
               })
             );
           });

@@ -46,6 +46,12 @@ export async function createCase(formId, user, cases, callback) {
     provider: 'VIVA_CASE', // TODO: Fix hardcoded value
     status: 'ongoing',
     currentStep: 0,
+    details: {
+      period: {
+        startDate: 0,
+        endDate: 0,
+      },
+    },
     answers: initialData || [],
   };
 
