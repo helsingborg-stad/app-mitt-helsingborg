@@ -15,12 +15,12 @@ const StepDescriptionTagline = styled(Text)`
   font-weight: bold;
   margin-bottom: 10px;
   color: ${props => props.theme.step.description.tagline.color};
-  line-height: ${props => props.theme.typography[props.type].lineHeight};
+  line-height: ${props => props.theme.typography[props.type].lineHeight}px;
   letter-spacing: 0.5px;
 `;
 
 const StepDescriptionText = styled(Text)`
-  line-height: ${props => props.theme.step.description.text.lineHeight};
+  line-height: ${props => props.theme.typography[props.type].lineHeight}px;
   margin-top: 16px;
 `;
 
