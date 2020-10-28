@@ -4,14 +4,14 @@ import styled from 'styled-components/native';
 import { TouchableHighlight } from 'react-native';
 import { Checkbox, Text } from 'source/components/atoms';
 import { HelpButton } from 'source/components/molecules';
-import colors from '../../../styles/colors';
+import theme from '../../../styles/theme';
 
 const FlexContainer = styled.View`
   flex: auto;
   flex-direction: row;
   margin: 8px;
 `;
-
+// TODO: MOVE TO THEME.
 const sizes = {
   small: {
     padding: 0.25,
@@ -31,12 +31,14 @@ const sizes = {
   },
 };
 
+// TODO: THEME/STYLING TEXT SHOULD BE ABLE TO TAKE COLOR PROPS ie <Text color="blue" />
+// THIS WOULD REMOVE THE USAGE OF THIS WRAPPER COMPONENT.
+const CheckboxFieldText = styled(Text)`
+  color: ${props => props.theme.checkboxField[props.color].text};
+`;
+
 const CheckboxField = props => {
   const { text, color, size, value, onChange, help, ...other } = props;
-  const textStyle = {
-    color: colors.checkboxField[color].text,
-    ...sizes[size],
-  };
   let boolValue;
   if (typeof value === 'boolean') {
     boolValue = value;
@@ -45,6 +47,7 @@ const CheckboxField = props => {
   }
   const update = () => onChange(!boolValue);
 
+  // TODO: THEME/STYLING SET STYLING IN A STYLED COMPONENT THAT WRAPS TOUCHABLEHIGHLIGHT
   const backgroundStyle = {
     marginLeft: -24,
     marginRight: -24,
@@ -62,7 +65,7 @@ const CheckboxField = props => {
     >
       <FlexContainer>
         <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
-        <Text style={textStyle}>{text}</Text>
+        <CheckboxFieldText color={color}>{text}</CheckboxFieldText>
         {Object.keys(help).length > 0 && <HelpButton {...help} />}
       </FlexContainer>
     </TouchableHighlight>
@@ -85,7 +88,7 @@ CheckboxField.propTypes = {
   /**
    * sets the color theme.
    */
-  color: PropTypes.oneOf(Object.keys(colors.checkboxField)),
+  color: PropTypes.oneOf(Object.keys(theme.checkboxField)),
   /**
    * One of small, medium, large
    */

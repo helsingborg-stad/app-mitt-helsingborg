@@ -4,10 +4,12 @@ import { Text } from 'source/components/atoms';
 import StoryWrapper from '../StoryWrapper';
 import GroupedList from './GroupedList';
 
-const categories = {
-  fruit: 'Frukter',
-  vegetable: 'Grönsaker',
-};
+const categories = [
+  {
+    category: 'Frukter',
+  },
+  { category: 'Grönsaker' },
+];
 
 const items = [
   {

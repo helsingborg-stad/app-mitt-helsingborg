@@ -224,3 +224,93 @@ formStories.add('Default', () => (
     />
   </StoryWrapper>
 ));
+
+const ThemedFormStoryData = {
+  connectivityMatrix: [
+    ['none', 'next', 'none'],
+    ['back', 'none', 'next'],
+    ['none', 'back', 'none'],
+  ],
+  title: 'Validation test form',
+  description: 'Test formulär för validering av fält',
+  formType: 'EKB-recurring',
+  name: 'Test av valideringsregler',
+  provider: 'VIVA',
+  steps: [
+    {
+      id: 1,
+      name: 'step one',
+      title: 'Vill du ansöka om ekonomiskt bistånd  för perioden #datum! - #datum2?',
+      group: 'Ekonomiskt Bistånd',
+      description: '',
+      banner: {},
+      actions: [
+        {
+          label: 'Nästa steg',
+          type: 'next',
+        },
+      ],
+    },
+    {
+      id: 2,
+      name: 'step two',
+      title: 'Hej Tomas! Stämmer de här uppgifterna om dig?',
+      group: 'Ekonmiskt Bistånd',
+      description: '',
+      actions: [
+        {
+          label: 'Nästa steg',
+          type: 'next',
+        },
+      ],
+      banner: {},
+      questions: [
+        {
+          id: 1,
+          description: 'Beskrivning av ett nummer fält',
+          label: 'Ett nummer fält',
+          placeholder: 'Skriv ett nummer',
+          type: 'number',
+          validation: {
+            isRequired: true,
+            rules: [
+              {
+                method: 'isEmpty',
+                validWhen: false,
+              },
+              {
+                method: 'isNumeric',
+                args: {
+                  options: {
+                    no_symbols: true,
+                  },
+                },
+                validWhen: true,
+                message: 'Du har angett en siffra som är mindre än 1',
+              },
+            ],
+          },
+        },
+      ],
+    },
+    {
+      id: 3,
+      name: 'step three',
+      title: 'Tack för din ansökan!',
+      group: 'Ekonomiskt Bistånd',
+      description: 'Din ansökan är nu inskickad och du kommer få besked inom 10 dagar.',
+      actions: [],
+      banner: {},
+    },
+  ],
+};
+formStories.add('Themed Form', () => (
+  <StoryWrapper>
+    <Form
+      steps={ThemedFormStoryData.steps}
+      connectivityMatrix={ThemedFormStoryData.connectivityMatrix}
+      firstName="FakeName"
+      status="ongoing"
+    />
+  </StoryWrapper>
+));

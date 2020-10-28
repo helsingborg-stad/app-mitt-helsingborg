@@ -1,31 +1,26 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
+import { PropTypes } from 'prop-types';
 import styled from 'styled-components/native';
-import PropTypes from 'prop-types';
 import Text from '../Text';
-
-const fontSizes = {
-  h1: 48,
-  h2: 37,
-  h3: 22,
-  h4: 18,
-};
 
 const Heading = styled(Text)`
   font-style: normal;
-  font-weight: 900;
-  font-size: ${props => fontSizes[props.type || 'h1']}px;
-  color: ${props => props.theme.text.heading};
-  text-align: ${props => props.align || 'left'};
-  margin-bottom: ${props => props.marginBottom || '0'}px;
+  color: ${props => props.theme.colors.neutrals[0]};
+  text-align: ${props => props.align};
+  margin-bottom: ${props => props.marginBottom}px;
 `;
 
 Heading.propTypes = {
-  type: PropTypes.oneOf(Object.keys(fontSizes)),
+  type: PropTypes.oneOf('h1', 'h2', 'h3', 'h4'),
+  marginBottom: PropTypes.string,
+  align: PropTypes.oneOf('left', 'center', 'right'),
 };
 
 Heading.defaultProps = {
   type: 'h2',
+  marginBottom: 0,
+  align: 'left',
 };
 
 export const H1 = props => {

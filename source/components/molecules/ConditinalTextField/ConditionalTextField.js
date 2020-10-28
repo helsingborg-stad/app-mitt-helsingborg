@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Input } from 'app/components/atoms';
 import styled from 'styled-components/native';
 import { CheckboxField } from 'app/components/molecules';
-import colors from 'app/styles/colors';
+import theme from '../../../styles/theme';
 
 const FlexRow = styled.View`
   flex-direction: row;
@@ -83,7 +83,7 @@ ConditionalTextField.propTypes = {
   /**
    * Sets the color theme.
    */
-  color: PropTypes.oneOf(Object.keys(colors.checkboxField)),
+  color: PropTypes.oneOf(Object.keys(theme.checkboxField)),
   /**
    * Text value in input field.
    * If defined, checkboxEnableText will be set true and input field populated with text.

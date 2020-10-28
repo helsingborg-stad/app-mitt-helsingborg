@@ -14,7 +14,6 @@ function loadStories() {
   require('../source/components/atoms/Input/Input.stories');
   require('../source/components/atoms/Select/Select.stories');
   require('../source/components/atoms/Stepper/Stepper.stories');
-  require('../source/components/atoms/StepperPOC/Stepper.stories');
   require('../source/components/atoms/Text/Text.stories');
   require('../source/components/molecules/BackNavigation/BackNavigation.stories');
   require('../source/components/molecules/Banner/Banner.stories');
@@ -53,7 +52,6 @@ const stories = [
   '../source/components/atoms/Input/Input.stories',
   '../source/components/atoms/Select/Select.stories',
   '../source/components/atoms/Stepper/Stepper.stories',
-  '../source/components/atoms/StepperPOC/Stepper.stories',
   '../source/components/atoms/Text/Text.stories',
   '../source/components/molecules/BackNavigation/BackNavigation.stories',
   '../source/components/molecules/Banner/Banner.stories',

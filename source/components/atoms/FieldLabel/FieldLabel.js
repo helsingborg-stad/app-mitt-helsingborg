@@ -3,8 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { HelpButton } from 'source/components/molecules';
 import Text from '../Text';
-import colors from '../../../styles/colors';
+import theme from '../../../styles/theme';
 
+// TODO: THEME/STYLING MOVE SIZES TO THEME DECALRATION in theme.js
 const sizes = {
   small: {
     font: '12px',
@@ -28,7 +29,7 @@ const sizes = {
 
 const FieldLabelText = styled(Text)`
   font-size: ${props => sizes[props.size].font};
-  color: ${props => colors.fieldLabel[props.color].text};
+  color: ${props => theme.fieldLabel[props.color].text};
   text-transform: uppercase;
   font-weight: bold;
   padding-bottom: 7px;
@@ -36,7 +37,7 @@ const FieldLabelText = styled(Text)`
 `;
 const FieldLabelBorder = styled.View`
   padding-bottom: ${props => sizes[props.size].paddingBottom};
-  border-bottom-color: ${props => colors.fieldLabel[props.color].underline};
+  border-bottom-color: ${props => theme.fieldLabel[props.color].underline};
   border-bottom-width: ${props => {
     if (props.underline === false) {
       return '0px';
@@ -85,7 +86,7 @@ FieldLabel.propTypes = {
   /**
    * Set a color theme which changes the text color and line color accordingly. 'light' is default.
    */
-  color: PropTypes.oneOf(Object.keys(colors.fieldLabel)),
+  color: PropTypes.oneOf(Object.keys(theme.fieldLabel)),
   /**
    * Set a size, one of small, medium, large.
    */

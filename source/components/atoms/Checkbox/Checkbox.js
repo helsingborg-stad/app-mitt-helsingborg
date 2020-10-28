@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 
 import Icon from '../Icon';
-import colors from '../../../styles/colors';
+import theme from '../../../styles/theme';
 
 const CheckboxBox = styled.TouchableHighlight`
   border-style: solid;
 `;
 
+// TODO: THEME/STYLING MOVE sizes to theme declaration in theme.js
 const sizes = {
   small: {
     width: 20,
@@ -44,11 +45,11 @@ const iconSizes = {
 
 const Checkbox = props => {
   const { checked, onChange, size, disabled, color } = props;
-  const iconStyle = { color: colors.checkbox[color].icon };
+  const iconStyle = { color: theme.checkbox[color].icon };
 
   const style = {
-    backgroundColor: disabled ? colors.checkbox[color].disabled : colors.checkbox[color].background,
-    borderColor: colors.checkbox[color].border,
+    backgroundColor: disabled ? theme.checkbox[color].disabled : theme.checkbox[color].background,
+    borderColor: theme.checkbox[color].border,
     ...sizes[size],
   };
   const tickIcon = <Icon style={iconStyle} size={iconSizes[size]} name="done"></Icon>;
@@ -59,7 +60,7 @@ const Checkbox = props => {
           onChange();
         }
       }}
-      underlayColor={colors.checkbox[color].touch}
+      underlayColor={theme.checkbox[color].touch}
       style={style}
     >
       {checked ? tickIcon : <></>}
@@ -79,7 +80,7 @@ Checkbox.propTypes = {
   /**
    * sets the color theme.
    */
-  color: PropTypes.oneOf(Object.keys(colors.checkbox)),
+  color: PropTypes.oneOf(Object.keys(theme.checkbox)),
   /**
    * One of small, medium, large
    */

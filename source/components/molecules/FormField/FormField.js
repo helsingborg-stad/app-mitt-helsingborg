@@ -4,12 +4,12 @@ import { Input, FieldLabel, Select, Text } from 'source/components/atoms';
 import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
 import { View, LayoutAnimation } from 'react-native';
 import ConditionalTextField from 'app/components/molecules/ConditinalTextField';
-import colors from '../../../styles/colors';
 import DateTimePickerForm from '../DateTimePicker/DateTimePickerForm';
 import NavigationButtonField from '../NavigationButtonField/NavigationButtonField';
 import NavigationButtonGroup from '../NavigationButtonGroup/NavigationButtonGroup';
 import SummaryList from '../../organisms/SummaryList/SummaryList';
 import RepeaterField from '../RepeaterField/RepeaterField';
+import theme from '../../../styles/theme';
 
 const inputTypes = {
   text: {
@@ -210,7 +210,7 @@ FormField.propTypes = {
   /**
    * sets the color theme.
    */
-  color: PropTypes.oneOf(Object.keys(colors.formField)),
+  color: PropTypes.oneOf(Object.keys(theme.formField)),
   /*
    * The function triggers when the button is clicked.
    */
