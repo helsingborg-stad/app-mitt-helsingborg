@@ -10,8 +10,8 @@ export const actionTypes = {
   apiError: 'API_ERROR',
 };
 
-export async function updateCase(caseId, data, status, currentStep, form, callback) {
-  const answers = convertAnswersToArray(data, form);
+export async function updateCase(caseId, data, status, currentStep, formQuestions, callback) {
+  const answers = convertAnswersToArray(data, formQuestions);
 
   const body = {
     status,
@@ -43,8 +43,8 @@ export async function createCase(formId, user, cases, callback) {
 
   const body = {
     formId,
-    userId: parseInt(user.personalNumber),
-    provider: 'VIVA', // TODO: Fix hardcoded value
+    userId: parseInt(user.personalNumber), // TODO: Use user id instead of personal number
+    provider: 'VIVA_CASE', // TODO: Fix hardcoded value
     status: 'ongoing',
     currentStep: 0,
     details: {
