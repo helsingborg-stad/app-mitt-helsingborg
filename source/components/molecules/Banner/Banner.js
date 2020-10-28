@@ -31,7 +31,7 @@ const BannerImage = styled(Image)`
   height: 100%;
 `;
 
-const Banner = ({ style, currentPosition, totalStepNumber, imageSrc, iconSrc, colorSchema }) => (
+const Banner = ({ style, currentPosition, totalStepNumber, imageSrc, colorSchema }) => (
   <BannerWrapper style={style} image={imageSrc} colorSchema={colorSchema}>
     {Object.prototype.hasOwnProperty.call(icons, imageSrc) ? (
       <BannerImageWrapper>
