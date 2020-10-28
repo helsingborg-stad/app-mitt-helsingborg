@@ -8,6 +8,7 @@ import Form from '../containers/Form/Form';
 import AuthContext from '../store/AuthContext';
 import FormContext from '../store/FormContext';
 import { CaseDispatch, CaseState } from '../store/CaseContext';
+import { getFormQuestions } from '../helpers/DataStructure';
 
 const SpinnerContainer = styled.View`
   flex: 1;
@@ -21,6 +22,7 @@ const FormScreenWrapper = styled(ScreenWrapper)`
 
 const FormCaseScreen = ({ route, navigation, ...props }) => {
   const [form, setForm] = useState(undefined);
+  const [formQuestions, setFormQuestions] = useState(undefined);
   const [initialCase, setInitialCase] = useState(undefined);
 
   const { caseData, caseId } = route && route.params ? route.params : {};
@@ -31,12 +33,18 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
 
   useEffect(() => {
     if (caseData?.formId) {
-      getForm(caseData.formId).then(form => setForm(form));
+      getForm(caseData.formId).then(form => {
+        setForm(form);
+        setFormQuestions(getFormQuestions(form));
+      });
       setInitialCase(caseData);
     } else if (caseId) {
       const initCase = getCase(caseId);
       setInitialCase(initCase);
-      getForm(initCase.formId).then(form => setForm(form));
+      getForm(initCase.formId).then(form => {
+        setForm(form);
+        setFormQuestions(getFormQuestions(form));
+      });
     }
   }, [caseData, caseId, getForm, getCase]);
 
@@ -47,7 +55,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   const updateCaseContext = (data, status, currentStep) => {
     // If the case is submitted, we should not actually update its data...
     if (initialCase.status === 'ongoing') {
-      updateCase(initialCase.id, data, status, currentStep, form);
+      updateCase(initialCase.id, data, status, currentStep, formQuestions);
     }
   };
   /*
