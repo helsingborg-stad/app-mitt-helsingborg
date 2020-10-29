@@ -53,13 +53,16 @@ interface FieldsetLegendProps {
 const FieldsetLegend = styled(Text)<FieldsetLegendProps>`
   color: ${props=> props.theme.colors.primary[props.colorSchema][0]}
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.8);
   padding-bottom: 12px;
   font-weight: bold;
 `;
 
-const FieldsetLegendBorder = styled.View`
-  border-bottom-color: rgba(0,0,0,0.2);
+interface FieldsetLegendBorderProps {
+  colorSchema: string;
+}
+
+const FieldsetLegendBorder = styled.View<FieldsetLegendBorderProps>`
+  border-bottom-color: ${props=> props.theme.colors.complementary[props.colorSchema][1]}
   border-bottom-width: 2px
   align-self: flex-start;
 `;
@@ -86,7 +89,7 @@ function Fieldset({
     <FieldsetContainer colorSchema={colorSchema}>
       <FieldsetHeader>
         <FieldsetHeaderSection alignItems="flex-start">
-          <FieldsetLegendBorder>
+          <FieldsetLegendBorder colorSchema={colorSchema}>
             <FieldsetLegend colorSchema={colorSchema}>{legend.toUpperCase()}</FieldsetLegend>
           </FieldsetLegendBorder>
         </FieldsetHeaderSection>
