@@ -11,8 +11,8 @@ const input = css`
   border: solid 1px
   ${({ theme, error, colorSchema }) =>
     error?.isValid || error === undefined
-      ? theme.colors.primary.red[0]
-      : theme.colors.complementary[colorSchema][2]};
+      ? theme.colors.complementary[colorSchema][2]
+      : theme.colors.primary.red[0]};
   padding-top: 16px;
   padding-bottom: 16px;
   padding-left: 16px;
