@@ -24,7 +24,7 @@ CSS.buttonSharp = css`
 `;
 
 CSS.buttonSmall = css`
-  padding: 10px 12px;
+  padding: 8px 12px;
   min-height: 36px;
   min-width: 74px;
 `;
@@ -54,6 +54,7 @@ const ButtonBase = styled.View`
     ${props => (props.disabled ? CSS.disabled : null)}
 
     ${props => (props.buttonSize === 'small' ? CSS.buttonSmall : null)}
+    ${props => (props.buttonSize === 'xsmall' ? CSS.buttonSmall : null)}
 
     ${props => CSS.z[props.z]}
     shadow-color: ${props => props.theme.button[props.buttonTheme].shadow};

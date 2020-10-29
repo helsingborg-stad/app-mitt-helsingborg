@@ -17,7 +17,7 @@ const FieldsetContainer = styled.View<FieldsetContainerProps>`
   margin-bottom: 24px;
   margin-top: 16px;
   padding-bottom: 20px;
-  padding-top: 20px;
+  padding-top: 16px;
   padding-left: 16px;
   padding-right: 16px;
   background: ${props => props.theme.colors.complementary[props.colorSchema][3]};
@@ -30,20 +30,17 @@ const FieldsetHeader = styled.View`
 `;
 
 interface FieldsetHeaderSectionProps {
-  alignItems: string;
+  justifyContent: string;
 }
 
 const FieldsetHeaderSection = styled.View<FieldsetHeaderSectionProps>`
   flex: 1;
-  flex-direction: column;
-  align-items: ${props => props.alignItems};
+  flex-direction: row;
+  justify-content: ${props => props.justifyContent};
+  align-items: center;
 `;
 
 const FieldsetBody = styled.View``;
-
-const FieldsetIcon = styled(Icon)`
-  margin-top: -5px;
-`;
 
 
 interface FieldsetLegendProps {
@@ -55,6 +52,7 @@ const FieldsetLegend = styled(Text)<FieldsetLegendProps>`
   font-size: 12px;
   padding-bottom: 12px;
   font-weight: bold;
+  padding-top: 8px;
 `;
 
 interface FieldsetLegendBorderProps {
@@ -90,14 +88,14 @@ function Fieldset({
   return (
     <FieldsetContainer colorSchema={colorSchema}>
       <FieldsetHeader>
-        <FieldsetHeaderSection alignItems="flex-start">
+        <FieldsetHeaderSection justifyContent="flex-start">
           <FieldsetLegendBorder colorSchema={colorSchema}>
             <FieldsetLegend colorSchema={colorSchema}>{legend.toUpperCase()}</FieldsetLegend>
           </FieldsetLegendBorder>
         </FieldsetHeaderSection>
 
-        <FieldsetHeaderSection alignItems="flex-end">
-          {showIcon && <FieldsetIcon onPress={onIconPress} name={iconName} size={iconSize} />}
+        <FieldsetHeaderSection justifyContent="flex-end">
+          {showIcon && <Icon onPress={onIconPress} name={iconName} size={iconSize} />}
           {renderHeaderActions && renderHeaderActions()}
         </FieldsetHeaderSection>
       </FieldsetHeader>
@@ -109,7 +107,8 @@ function Fieldset({
 Fieldset.defaultProps = {
   colorSchema: 'blue',
   iconName: undefined,
-  renderHeaderActions: undefined
+  renderHeaderActions: undefined,
+  iconSize: 22,
 }
 
 export default Fieldset;

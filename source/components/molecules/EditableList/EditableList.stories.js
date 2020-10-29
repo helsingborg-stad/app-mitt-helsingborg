@@ -1,25 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from '../StoryWrapper';
-import FieldInputList from './EditableList';
-
-const customEditableListTheme = {
-  list: {
-    bg: 'lightgrey',
-    header: {
-      color: 'black',
-      bg: 'grey',
-    },
-    item: {
-      label: {
-        color: 'red',
-      },
-      input: {
-        color: 'red',
-      },
-    },
-  },
-};
+import EditableList from './EditableList';
 
 const inputs = [
   {
@@ -44,25 +26,26 @@ const inputs = [
 
 storiesOf('EditableList', module).add('Default', () => (
   <StoryWrapper>
-    <FieldInputList onInputChange={() => {}} inputs={inputs} title="Editable List" />
-  </StoryWrapper>
-));
-
-storiesOf('EditableList', module).add('With Header Button', () => (
-  <StoryWrapper>
-    <FieldInputList onInputChange={() => {}} inputs={inputs} title="Editable List" />
-  </StoryWrapper>
-));
-
-storiesOf('EditableList', module).add('Theming', () => (
-  <StoryWrapper>
-    <FieldInputList onInputChange={() => {}} inputs={inputs} title="Default theme" />
-    <FieldInputList
+    <EditableList
+      inputIsEditable={false}
       onInputChange={() => {}}
       inputs={inputs}
-      theme={customEditableListTheme}
-      title="Custom theme"
-      inputIsEditable={false}
+      title="Editable List"
     />
+  </StoryWrapper>
+));
+
+storiesOf('EditableList', module).add('Input is editable', () => (
+  <StoryWrapper>
+    <EditableList onInputChange={() => {}} inputs={inputs} title="Editable List" />
+  </StoryWrapper>
+));
+
+storiesOf('EditableList', module).add('Color Schema', () => (
+  <StoryWrapper>
+    <EditableList onInputChange={() => {}} inputs={inputs} title="Blue (Default)" />
+    <EditableList colorSchema="red" onInputChange={() => {}} inputs={inputs} title="Red" />
+    <EditableList colorSchema="purple" onInputChange={() => {}} inputs={inputs} title="Purple" />
+    <EditableList colorSchema="green" onInputChange={() => {}} inputs={inputs} title="Green" />
   </StoryWrapper>
 ));
