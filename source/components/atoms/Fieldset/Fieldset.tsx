@@ -3,7 +3,11 @@ import styled from 'styled-components/native';
 import Text from '../Text/Text';
 import Icon from '../Icon';
 
-const FieldsetContainer = styled.View`
+interface FieldsetContainerProps {
+  colorSchema: string;
+}
+
+const FieldsetContainer = styled.View<FieldsetContainerProps>`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -16,7 +20,7 @@ const FieldsetContainer = styled.View`
   padding-top: 20px;
   padding-left: 16px;
   padding-right: 16px;
-  background: #faeeec;
+  background: ${props => props.theme.colors.complementary[props.colorSchema][3]};
 `;
 
 const FieldsetHeader = styled.View`
@@ -41,7 +45,13 @@ const FieldsetIcon = styled(Icon)`
   margin-top: -5px;
 `;
 
-const FieldsetLegend = styled(Text)`
+
+interface FieldsetLegendProps {
+  colorSchema: string;
+}
+
+const FieldsetLegend = styled(Text)<FieldsetLegendProps>`
+  color: ${props=> props.theme.colors.primary[props.colorSchema][0]}
   font-size: 12px;
   color: rgba(0, 0, 0, 0.8);
   padding-bottom: 12px;
@@ -60,22 +70,24 @@ interface FieldsetProps {
   onIconPress?: () => void;
   iconName?: string;
   iconSize?: number;
+  colorSchema: string,
 }
 
-export default function Fieldset({
+function Fieldset({
   children,
   legend,
   onIconPress,
   iconName,
   iconSize,
+  colorSchema
 }: FieldsetProps) {
   const showIcon = onIconPress && iconName;
   return (
-    <FieldsetContainer>
+    <FieldsetContainer colorSchema={colorSchema}>
       <FieldsetHeader>
         <FieldsetHeaderSection alignItems="flex-start">
           <FieldsetLegendBorder>
-            <FieldsetLegend>{legend.toUpperCase()}</FieldsetLegend>
+            <FieldsetLegend colorSchema={colorSchema}>{legend.toUpperCase()}</FieldsetLegend>
           </FieldsetLegendBorder>
         </FieldsetHeaderSection>
 
@@ -87,3 +99,10 @@ export default function Fieldset({
     </FieldsetContainer>
   );
 }
+
+Fieldset.defaultProps = {
+  colorSchema: 'blue',
+  iconName: undefined,
+}
+
+export default Fieldset;
