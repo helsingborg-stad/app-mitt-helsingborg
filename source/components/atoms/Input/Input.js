@@ -9,8 +9,9 @@ const input = css`
   background-color: ${({ theme, colorSchema }) => theme.colors.complementary[colorSchema][2]};
   border-radius: 4.5px;
   border: solid 1px
-    ${({ theme, error, colorSchema }) =>
-      error ? theme.colors.primary.red[0] : theme.colors.complementary[colorSchema][2]};
+  ${({ color, error, colorSchema }) => (error?.isValid || error === undefined)
+    ? theme.colors.primary.red[0]
+    : theme.colors.complementary[colorSchema][2]};
   padding-top: 16px;
   padding-bottom: 16px;
   padding-left: 16px;
