@@ -15,28 +15,27 @@ const InputWithForm = withForm(props => (
 ));
 
 storiesOf('Input', module)
-  .add('default', () => (
+  .add('Keyboard type default', () => (
     <StoryWrapper>
-      <InputWithForm placeholder="Type something, light theme" />
-      <InputWithForm color="dark" placeholder="Dark theme" />
-      <InputWithForm color="dark" placeholder="Dark theme" center />
-      <InputWithForm color="red" placeholder="Red theme" />
-      <InputWithForm color="green" placeholder="Green theme" />
+      <InputWithForm placeholder="Type something, blue input" />
+      <InputWithForm colorSchema="purple" placeholder="Purple input" center />
+      <InputWithForm colorSchema="red" placeholder="Red input" />
+      <InputWithForm colorSchema="green" placeholder="Green input" />
     </StoryWrapper>
   ))
-  .add('numeric', () => (
+  .add('Keyboard type numeric', () => (
     <StoryWrapper>
-      <InputWithForm placeholder="Type some numbers, light theme" keyboardType="numeric" />
-      <InputWithForm color="dark" placeholder="Dark theme" keyboardType="numeric" />
-      <InputWithForm color="red" placeholder="Red theme" keyboardType="numeric" />
-      <InputWithForm color="green" placeholder="Green theme" keyboardType="numeric" />
+      <InputWithForm placeholder="Type some numbers, blue theme" keyboardType="numeric" />
+      <InputWithForm colorSchema="purple" placeholder="Purple input" keyboardType="numeric" />
+      <InputWithForm colorSchema="red" placeholder="Red input" keyboardType="numeric" />
+      <InputWithForm colorSchema="green" placeholder="Green input" keyboardType="numeric" />
     </StoryWrapper>
   ))
-  .add('phone pad', () => (
+  .add('Keyboard type phone pad', () => (
     <StoryWrapper>
       <InputWithForm placeholder="Type some number using phone pad" keyboardType="phone-pad" />
-      <InputWithForm color="dark" placeholder="Dark theme" keyboardType="phone-pad" />
-      <InputWithForm color="red" placeholder="Red theme" keyboardType="phone-pad" />
-      <InputWithForm color="green" placeholder="Green theme" keyboardType="phone-pad" />
+      <InputWithForm colorSchema="purple" placeholder="Purple input" keyboardType="phone-pad" />
+      <InputWithForm colorSchema="red" placeholder="Red input" keyboardType="phone-pad" />
+      <InputWithForm colorSchema="green" placeholder="Green input" keyboardType="phone-pad" />
     </StoryWrapper>
   ));
