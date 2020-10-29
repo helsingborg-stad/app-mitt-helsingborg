@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { FieldLabel, Text } from '../../atoms';
-import colors from '../../../styles/colors';
+import theme from '../../../styles/theme';
 import HelpButton from '../HelpButton/HelpButton';
 
 const ListWrapper = styled.View`
@@ -69,12 +69,12 @@ interface Props {
  */
 const List: React.FC<Props> = ({ heading, items, color, help }) => {
   const headerStyle = {
-    backgroundColor: colors.groupedList[color].headerBackground,
-    color: colors.groupedList[color].headerText,
+    backgroundColor: theme.groupedList[color].headerBackground,
+    color: theme.groupedList[color].headerText,
   };
   const bodyStyle = {
-    backgroundColor: colors.groupedList[color].bodyBackground,
-    color: colors.groupedList[color].bodyText,
+    backgroundColor: theme.groupedList[color].bodyBackground,
+    color: theme.groupedList[color].bodyText,
   };
   return (
     <ListWrapper style={bodyStyle}>
@@ -101,7 +101,7 @@ List.propTypes = {
   /**
    *  Controls the color scheme of the list
    */
-  color: PropTypes.oneOf(Object.keys(colors.groupedList)),
+  color: PropTypes.oneOf(Object.keys(theme.groupedList)),
   /**
    * Show an help button
    */
