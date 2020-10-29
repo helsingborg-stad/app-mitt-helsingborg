@@ -20,7 +20,7 @@ fieldsetStories.add('With Icon', () => (
     />
   </StoryWrapper>
 ));
-fieldsetStories.add('Color Schemas Icon', () => (
+fieldsetStories.add('Color Schemas', () => (
   <StoryWrapper>
     <Fieldset
       legend="Blue (default)"
