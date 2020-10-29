@@ -211,7 +211,10 @@ export function validateAnswer(
 ) {
   const { questions } = state.steps[state.currentPosition.index];
 
-  const { validation } = questions.find(question => question.id === questionId);
+  // Return if question or question ID undefined.
+  if (!questions || !questionId) return state;
+
+  const { validation } = questions?.find(question => question.id === questionId);
 
   if (validation) {
     const [isValid, validationMessage] = validateInput(answer[questionId], validation.rules);
