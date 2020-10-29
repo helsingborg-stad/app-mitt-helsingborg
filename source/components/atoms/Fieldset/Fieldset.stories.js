@@ -20,3 +20,30 @@ fieldsetStories.add('With Icon', () => (
     />
   </StoryWrapper>
 ));
+fieldsetStories.add('Color Schemas Icon', () => (
+  <StoryWrapper>
+    <Fieldset
+      legend="Blue (default)"
+      onIconPress={() => console.log('Icon is pressed')}
+      iconName="help-outline"
+    />
+    <Fieldset
+      legend="Red"
+      onIconPress={() => console.log('Icon is pressed')}
+      iconName="help-outline"
+      colorSchema="red"
+    />
+    <Fieldset
+      legend="Purple"
+      onIconPress={() => console.log('Icon is pressed')}
+      iconName="help-outline"
+      colorSchema="purple"
+    />
+    <Fieldset
+      legend="Green"
+      onIconPress={() => console.log('Icon is pressed')}
+      iconName="help-outline"
+      colorSchema="green"
+    />
+  </StoryWrapper>
+));
