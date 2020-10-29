@@ -74,6 +74,7 @@ interface FieldsetProps {
   iconName?: string;
   iconSize?: number;
   colorSchema: string,
+  renderHeaderActions?: () => void;
 }
 
 function Fieldset({
@@ -82,7 +83,8 @@ function Fieldset({
   onIconPress,
   iconName,
   iconSize,
-  colorSchema
+  colorSchema,
+  renderHeaderActions,
 }: FieldsetProps) {
   const showIcon = onIconPress && iconName;
   return (
@@ -96,6 +98,7 @@ function Fieldset({
 
         <FieldsetHeaderSection alignItems="flex-end">
           {showIcon && <FieldsetIcon onPress={onIconPress} name={iconName} size={iconSize} />}
+          {renderHeaderActions && renderHeaderActions()}
         </FieldsetHeaderSection>
       </FieldsetHeader>
       <FieldsetBody>{children}</FieldsetBody>
@@ -106,6 +109,7 @@ function Fieldset({
 Fieldset.defaultProps = {
   colorSchema: 'blue',
   iconName: undefined,
+  renderHeaderActions: undefined
 }
 
 export default Fieldset;
