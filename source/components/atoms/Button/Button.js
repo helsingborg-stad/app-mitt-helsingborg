@@ -33,7 +33,6 @@ CSS.disabled = css`
   opacity: 0.2;
 `;
 
-/** Button styles */
 const ButtonBase = styled.View`
     flex-direction: row;
     justify-content: center;
@@ -46,7 +45,7 @@ const ButtonBase = styled.View`
 
     padding: ${props => (!props.icon ? '12px 20px' : '16px 16px')};
     min-width: ${props => (!props.icon ? '124px' : '169px')};
-    background-color: ${props => props.theme.button[props.buttonTheme].background};
+    background-color: ${props => props.theme.colors.primary[props.buttonTheme][0]};
 
     ${props => (props.rounded ? CSS.buttonRounded : null)}
     ${props => (props.pill ? CSS.buttonPill : null)}
@@ -63,13 +62,14 @@ const ButtonBase = styled.View`
 /** Button child component overrides */
 const ButtonText = styled(Text)`
   font-size: ${props => (props.buttonSize === 'small' ? '14px' : '16px')};
-  color: ${props => props.theme.button[props.buttonTheme].text};
+  color: ${props => props.theme.colors.neutrals[7]};
 
   ${props => (props.buttonSize === 'small' ? 'font-weight: bold;' : null)};
 `;
 
 const ButtonIcon = styled(Icon)`
-  color: ${props => (props.color ? props.color : props.theme.button[props.buttonTheme].icon)};
+  color: ${props =>
+    props.colorSchema ? props.colorSchema : props.theme.button[props.buttonTheme].icon};
   font-size: 26px;
   height: 26px;
   width: 26px;
@@ -105,6 +105,7 @@ const Button = props => {
     onClick,
     style,
     color,
+    colorSchema,
     block,
     rounded,
     pill,
@@ -136,7 +137,11 @@ const Button = props => {
         ButtonComponent = LeftButtonIcon;
       }
 
-      return React.createElement(ButtonComponent, { ...child.props, size: 32, buttonTheme: color });
+      return React.createElement(ButtonComponent, {
+        ...child.props,
+        size: 32,
+        buttonTheme: colorSchema,
+      });
     }
 
     /** Text */
@@ -155,7 +160,7 @@ const Button = props => {
     <ButtonWrapper>
       <ButtonTouchable disabled={disabled} onPress={onClick} block={block} z={shadow}>
         <ButtonBase
-          buttonTheme={color}
+          buttonTheme={colorSchema}
           buttonSize={size}
           rounded={rounded}
           pill={pill}
@@ -175,6 +180,7 @@ const Button = props => {
 Button.propTypes = {
   block: PropTypes.bool,
   color: PropTypes.oneOf(Object.keys(theme.button)),
+  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
   icon: PropTypes.bool,
   onClick: PropTypes.func,
   pill: PropTypes.bool,
@@ -189,6 +195,7 @@ Button.propTypes = {
 
 Button.defaultProps = {
   color: 'light',
+  colorSchema: 'blue',
   rounded: false,
   pill: false,
   icon: false,

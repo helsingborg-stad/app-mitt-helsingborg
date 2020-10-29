@@ -48,39 +48,39 @@ storiesOf('Button', module)
       <ButtonColors block />
     </StoryWrapper>
   ))
-  .add('Custom style', props => (
-    <StoryWrapper {...props}>
-      <FlexContainer>
-        <Flex>
-          <CustomButton color="light" block>
-            <CustomButtonText>Button with custom styles</CustomButtonText>
-          </CustomButton>
-        </Flex>
-      </FlexContainer>
-    </StoryWrapper>
-  ))
+  // .add('Custom style', props => (
+  //   <StoryWrapper {...props}>
+  //     <FlexContainer>
+  //       <Flex>
+  //         <CustomButton colorSchema="light" block>
+  //           <CustomButtonText>Button with custom styles</CustomButtonText>
+  //         </CustomButton>
+  //       </Flex>
+  //     </FlexContainer>
+  //   </StoryWrapper>
+  // ))
   .add('with icon', props => (
     <StoryWrapper {...props}>
       <FlexContainer>
         <Flex>
-          <Button color="purple" rounded>
+          <Button colorSchema="purple" rounded>
             <Icon name="arrow-upward" pill />
           </Button>
         </Flex>
         <Flex>
-          <Button color="purple" pill>
+          <Button colorSchema="purple" pill>
             <Text>Icon right</Text>
             <Icon name="arrow-upward" />
           </Button>
         </Flex>
+        {/* <Flex> */}
+        {/*  <Button colorSchema="light" rounded> */}
+        {/*    <Icon name="message" /> */}
+        {/*    <Text>Icon Left</Text> */}
+        {/*  </Button> */}
+        {/* </Flex> */}
         <Flex>
-          <Button color="light" rounded>
-            <Icon name="message" />
-            <Text>Icon Left</Text>
-          </Button>
-        </Flex>
-        <Flex>
-          <Button color="blue" pill>
+          <Button colorSchema="blue" pill>
             <Icon name="message" />
             <Text>Skriv en fråga</Text>
           </Button>
@@ -92,31 +92,31 @@ storiesOf('Button', module)
     <StoryWrapper {...props}>
       <FlexContainer>
         <Flex>
-          <Button color="purple" z={4} rounded>
+          <Button colorSchema="purple" z={4} rounded>
             <Text>z4</Text>
             <Icon name="arrow-upward" />
           </Button>
         </Flex>
         <Flex>
-          <Button color="purple" z={3} rounded>
+          <Button colorSchema="purple" z={3} rounded>
             <Text>z3</Text>
             <Icon name="arrow-upward" />
           </Button>
         </Flex>
         <Flex>
-          <Button color="purple" z={2} rounded>
+          <Button colorSchema="purple" z={2} rounded>
             <Text>z2</Text>
             <Icon name="arrow-upward" />
           </Button>
         </Flex>
         <Flex>
-          <Button color="purple" z={1} rounded>
+          <Button colorSchema="purple" z={1} rounded>
             <Text>z1</Text>
             <Icon name="arrow-upward" />
           </Button>
         </Flex>
         <Flex>
-          <Button color="purple" z={0} rounded>
+          <Button colorSchema="purple" z={0} rounded>
             <Text>z0</Text>
             <Icon name="arrow-upward" />
           </Button>
@@ -128,28 +128,23 @@ storiesOf('Button', module)
 const ButtonColors = injectProps => (
   <FlexContainer>
     <Flex>
-      <Button color="purple" {...injectProps}>
+      <Button colorSchema="blue" {...injectProps}>
         <Text>Purple</Text>
       </Button>
     </Flex>
     <Flex>
-      <Button color="blue" {...injectProps}>
+      <Button colorSchema="red" {...injectProps}>
         <Text>Blue</Text>
       </Button>
     </Flex>
     <Flex>
-      <Button color="light" {...injectProps}>
+      <Button colorSchema="purple" {...injectProps}>
         <Text>Light</Text>
       </Button>
     </Flex>
     <Flex>
-      <Button color="gray" {...injectProps}>
+      <Button colorSchema="green" {...injectProps}>
         <Text>Gray</Text>
-      </Button>
-    </Flex>
-    <Flex>
-      <Button color="dark" {...injectProps}>
-        <Text>Dark</Text>
       </Button>
     </Flex>
   </FlexContainer>
