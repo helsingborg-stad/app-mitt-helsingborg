@@ -19,7 +19,7 @@ Heading.propTypes = {
 
 Heading.defaultProps = {
   type: 'h2',
-  marginBottom: 0,
+  marginBottom: '0',
   align: 'left',
 };
 
