@@ -1,21 +1,10 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Icon } from 'source/components/atoms';
 
-const styles = StyleSheet.create({
-  iconClose: {
-    padding: 0,
-    margin: 0,
-    color: '#FFFFFF',
-  },
-  iconBack: {
-    color: '#DD6161',
-  },
-});
-
-const ButtonWrapper = styled.View({
+const BackNavigationWrapper = styled.View({
   flexDirection: 'row',
   padding: 0,
   margin: 0,
@@ -24,16 +13,7 @@ const ButtonWrapper = styled.View({
   zIndex: 999,
 });
 
-const CloseButtonWrapper = styled.View({
-  flexDirection: 'row',
-  padding: 0,
-  margin: 0,
-  justifyContent: 'flex-end',
-  top: 0,
-  zIndex: 999,
-});
-
-const BackButton = styled.View({
+const BackButton = styled.View(props => ({
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: 30,
@@ -41,10 +21,13 @@ const BackButton = styled.View({
   margin: 0,
   height: 32,
   width: 32,
-  backgroundColor: '#FBF7F0',
-});
+  backgroundColor: props.theme.colors.neutrals[7],
+}));
+const BackButtonIcon = styled(Icon).attrs(({ theme, colorSchema }) => ({
+  color: theme.colors.primary[colorSchema][0],
+}))``;
 
-const CloseButton = styled.View({
+const CloseButton = styled.View(props => ({
   alignItems: 'center',
   borderRadius: 30,
   justifyContent: 'center',
@@ -52,29 +35,41 @@ const CloseButton = styled.View({
   margin: 0,
   height: 32,
   width: 32,
-  backgroundColor: '#00213F',
-});
+  backgroundColor: props.theme.colors.primary[props.colorSchema][0],
+}));
 
-const BackNavigation = ({ style, onBack, onClose, showBackButton, showCloseButton }) => (
-  <ButtonWrapper style={style}>
+const CloseButtonIcon = styled(Icon).attrs(({ theme }) => ({
+  color: theme.colors.neutrals[7],
+}))``;
+
+const BackNavigation = ({
+  style,
+  colorSchema,
+  onBack,
+  onClose,
+  showBackButton,
+  showCloseButton,
+}) => (
+  <BackNavigationWrapper style={style}>
     {showBackButton ? (
-      <BackButton onStartShouldSetResponder={onBack}>
-        <Icon name="keyboard-backspace" style={styles.iconBack} />
+      <BackButton colorSchema={colorSchema} onStartShouldSetResponder={onBack}>
+        <BackButtonIcon name="keyboard-backspace" colorSchema={colorSchema} />
       </BackButton>
     ) : (
       <View />
     )}
 
     {showCloseButton ? (
-      <CloseButton onStartShouldSetResponder={onClose}>
-        <Icon name="close" style={styles.iconClose} />
+      <CloseButton colorSchema={colorSchema} onStartShouldSetResponder={onClose}>
+        <CloseButtonIcon name="close" />
       </CloseButton>
     ) : null}
-  </ButtonWrapper>
+  </BackNavigationWrapper>
 );
 
 BackNavigation.propTypes = {
   style: PropTypes.array,
+  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
   onBack: PropTypes.func,
   onClose: PropTypes.func,
   showBackButton: PropTypes.bool,
@@ -82,6 +77,8 @@ BackNavigation.propTypes = {
 };
 
 BackNavigation.defaultProps = {
+  colorSchema: 'blue',
+  style: [],
   showBackButton: true,
   showCloseButton: true,
 };
