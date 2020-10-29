@@ -34,7 +34,7 @@ const StepFieldListWrapper = styled.View`
 `;
 
 const StepFooter = styled(FooterAction)`
-  background: ${props => props.theme.step.colors.footer.bg}
+  background: ${props => props.theme.colors.neutrals[6]}
   position: absolute;
   bottom: 0;
 `;
