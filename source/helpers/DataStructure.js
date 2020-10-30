@@ -30,7 +30,6 @@ export const getFormQuestions = form => {
 
 /**
  * Convert answers in context to an array that follows Case API data structure
- * TODO: Add implementation of auto generated IDs and Tags in form builder
  * @param {obj} data
  * @param {obj} formQuestions
  */
@@ -47,6 +46,10 @@ export const convertAnswersToArray = (data, formQuestions) => {
 
     switch (type) {
       case 'editableList':
+        if (value === undefined) {
+          return;
+        }
+
         Object.entries(value).forEach(valueObject => {
           const [childFieldId, childValue] = valueObject;
           const listItem = other.inputs.find(obj => obj.key === childFieldId);
@@ -64,6 +67,10 @@ export const convertAnswersToArray = (data, formQuestions) => {
         return;
 
       case 'avatarList':
+        if (value === undefined) {
+          return;
+        }
+
         Object.entries(value).forEach(valueObject => {
           const [childFieldId, childValue] = valueObject;
           answers.push(
@@ -78,6 +85,10 @@ export const convertAnswersToArray = (data, formQuestions) => {
         return;
 
       case 'repeaterField':
+        if (value === undefined) {
+          return;
+        }
+
         Object.entries(value).forEach(repeaterField => {
           const [childFieldId, childItems] = repeaterField;
 
@@ -111,4 +122,44 @@ export const convertAnswersToArray = (data, formQuestions) => {
   });
 
   return answers;
+};
+
+/**
+ * Checks if string is a numeric value
+ * @param {string} str
+ */
+const isNumeric = str => {
+  if (typeof str !== 'string') return false; // we only process strings!
+  return !isNaN(str) && !isNaN(parseFloat(str));
+};
+
+/**
+ * Converts case answers array to object
+ * Credits to Jacob for the magical data mapping
+ * @param {array} caseData
+ */
+export const convertAnswerArrayToObject = caseData => {
+  const caseObject = {};
+
+  caseData.answers.forEach(element => {
+    const path = element.field.id.split('.');
+    path.reduce((prev, curr, i) => {
+      if (!prev) {
+        return undefined;
+      }
+      if (!prev[curr]) {
+        if (i === path.length - 1) {
+          prev[curr] = element.value;
+        } else if (isNumeric(path[i + 1])) {
+          prev[curr] = [];
+        } else {
+          prev[curr] = {};
+        }
+      }
+
+      return prev[curr];
+    }, caseObject);
+  });
+
+  return { ...caseData, answers: caseObject };
 };
