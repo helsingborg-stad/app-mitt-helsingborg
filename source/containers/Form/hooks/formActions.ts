@@ -2,6 +2,7 @@ import { StepperActions } from '../../../types/FormTypes';
 import { replaceMarkdownTextInSteps } from './textReplacement';
 import { FormReducerState } from './useForm';
 import { validateInput } from '../../../helpers/ValidationHelper';
+import EditableList from '../../../components/molecules/EditableList/EditableList';
 
 /**
  * Action for replacing title markdown in steps.
@@ -214,14 +215,40 @@ export function validateAnswer(
   // Return if question or question ID undefined.
   if (!questions || !questionId) return state;
 
-  const { validation } = questions?.find(question => question.id === questionId);
+  const question = questions?.find(q => q.id === questionId);
 
-  if (validation) {
-    const [isValid, validationMessage] = validateInput(answer[questionId], validation.rules);
+  if (['text', 'number', 'date'].includes(question.type)) {
+    const { validation } = question;
+    if (validation) {
+      const [isValid, validationMessage] = validateInput(answer[questionId], validation.rules);
 
+      return {
+        ...state,
+        validations: {
+          ...state.validations,
+          [questionId]: { isValid, message: validationMessage },
+        },
+      };
+    }
+  }
+  if (['editableList'].includes(question.type)) {
+    const validationResults = {};
+
+    question.inputs.forEach(input => {
+      if (input.validation) {
+        const [isValid, validationMessage] = validateInput(
+          answer[questionId][input.key],
+          input.validation.rules
+        );
+        validationResults[input.key] = { isValid, validationMessage };
+      }
+    });
     return {
       ...state,
-      validations: { ...state.validations, [questionId]: { isValid, message: validationMessage } },
+      validations: {
+        ...state.validations,
+        [questionId]: validationResults,
+      },
     };
   }
 
