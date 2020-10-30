@@ -1,13 +1,13 @@
 import { Form } from '../../types/FormTypes';
 import { Case } from '../../types/CaseType';
 import { User } from '../../types/UserTypes';
+import { convertAnswerArrayToObject } from '../../helpers/DataStructure';
 
 const addIds = (descriptor: string[], questionId: string, formId: string) =>
   descriptor.map(s => {
     if (s.split('.')[0] !== 'user' && questionId !== '') {
       return `${formId}.${questionId}.${s}`;
-    }
-    if (s.split('.')[0] !== 'user' && questionId === '') {
+    } else if (s.split('.')[0] !== 'user' && questionId === '') {
       return `${formId}.${s}`;
     }
     return s;
@@ -17,6 +17,9 @@ const addIds = (descriptor: string[], questionId: string, formId: string) =>
 const makeDataMap = (form: Form) => {
   const dataMap = {};
   form.steps.forEach(step => {
+    if (!step.questions) {
+      return;
+    }
     step.questions.forEach(qs => {
       if (qs.loadPrevious) {
         dataMap[qs.id] = addIds(qs.loadPrevious, '', form.id);
@@ -48,11 +51,7 @@ const makeDataMap = (form: Form) => {
 
 const sortCasesByLastUpdated = (list: Case[]) => list.sort((a, b) => b.updatedAt - a.updatedAt);
 
-const treeParseAcc = (
-  obj: Record<string, any> | string[],
-  acc: Record<string, any>,
-  parser: (s: string[]) => any
-) => {
+const treeParseAcc = (obj: Record<string, any> | string[], acc: Record<string, any>, parser: (s: string[]) => any) => {
   if (Array.isArray(obj) && obj.every(s => typeof s === 'string')) {
     const parseRes = parser(obj);
     return parseRes === '' ? undefined : parseRes;
@@ -63,19 +62,17 @@ const treeParseAcc = (
   });
   return res;
 };
-const treeParse = (obj: Record<string, any>, parser: (s: string[]) => any): Record<string, any> =>
-  treeParseAcc(obj, {}, parser);
 
-const getUserInfo = (user: User, strArray: string[]): string | undefined =>
-  strArray.reduce((prev, current) => {
-    if (prev && prev[current]) return prev[current];
-    return undefined;
-  }, user);
-const getCaseInfo = (c: Case, strArray: string[]) =>
-  strArray.reduce((prev, current) => {
-    if (prev && prev[current]) return prev[current];
-    return undefined;
-  }, c.data);
+const treeParse = (obj: Record<string, any>, parser: (s: string[]) => any): Record<string, any> => treeParseAcc(obj, {}, parser);
+
+const getUserInfo = (user: User, strArray: string[]): string | undefined => strArray.reduce((prev, current) => {
+  if (prev && prev[current]) return prev[current];
+  return undefined;
+}, user);
+const getCaseInfo = (c: Case, strArray: string[]) => strArray.reduce((prev, current) => {
+  if (prev && prev[current]) return prev[current];
+  return undefined;
+}, c.answers);
 
 const generateParser = (user: User, cases: Case[]) => (idArray: string[]) => {
   const parseArray = idArray.map(str => {
@@ -88,7 +85,7 @@ const generateParser = (user: User, cases: Case[]) => (idArray: string[]) => {
     const sortedCases = sortCasesByLastUpdated(cases);
     const latestRelevantCase = sortedCases.find(c => c.formId === formId);
     if (latestRelevantCase) {
-      return getCaseInfo(latestRelevantCase, strArray.slice(1));
+      return getCaseInfo(convertAnswerArrayToObject(latestRelevantCase), strArray.slice(1));
     }
     return undefined;
   });
