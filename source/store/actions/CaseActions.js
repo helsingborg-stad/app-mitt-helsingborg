@@ -45,13 +45,13 @@ export async function createCase(form, user, cases, callback) {
 
   const body = {
     formId: form.id,
-    provider: 'VIVA_CASE', // TODO: Fix hardcoded value
+    provider: 'VIVA',
     status: 'ongoing',
     currentStep: 0,
     details: {
       period: {
-        startDate: 0,
-        endDate: 0,
+        startDate: 1601994748326,
+        endDate: 1701994748326,
       },
     },
     answers: initialAnswersArray || [],
