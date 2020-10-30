@@ -114,7 +114,7 @@ function EditableList({
             colorSchema={colorSchema}
             editable={editable}
             key={input.key}
-            error={error[input.key]}
+            error={error ? error[input.key] : undefined}
           >
             <EditableListItemLabelWrapper>
               <EditableListItemLabel>{input.label}</EditableListItemLabel>
