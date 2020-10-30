@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { LayoutAnimation } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Text, Button, Fieldset } from '../../atoms';
@@ -20,6 +21,8 @@ const EditableListItem = styled.View`
   background-color: transparent;
   border-radius: 4.5px;
   margin-bottom: 10px;
+  ${({ theme, error }) =>
+    error?.isValid || !error ? '' : `border: solid 1px ${theme.colors.primary.red[0]}`}
   ${props =>
     props.editable
       ? `
@@ -67,11 +70,22 @@ const getInitialState = (inputs, value) => {
   return inputs.reduce((prev, current) => ({ ...prev, [current.key]: current.value }), {});
 };
 
-function EditableList({ colorSchema, title, inputs, value, onInputChange, inputIsEditable }) {
+function EditableList({
+  colorSchema,
+  title,
+  inputs,
+  value,
+  onInputChange,
+  inputIsEditable,
+  error,
+}) {
   const [editable, setEditable] = useState(false);
   const [state, setState] = useState(getInitialState(inputs, value));
 
-  const changeEditable = () => setEditable(!editable);
+  const changeEditable = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setEditable(!editable);
+  };
 
   const onChange = (key, text) => {
     const updatedState = JSON.parse(JSON.stringify(state));
@@ -83,7 +97,7 @@ function EditableList({ colorSchema, title, inputs, value, onInputChange, inputI
   return (
     <Fieldset
       colorSchema={colorSchema}
-      legend={title}
+      legend={title || ''}
       onIconPress={() => console.log('Icon is pressed')}
       iconName="help-outline"
       renderHeaderActions={() =>
@@ -96,7 +110,12 @@ function EditableList({ colorSchema, title, inputs, value, onInputChange, inputI
     >
       <EditableListBody>
         {inputs.map(input => (
-          <EditableListItem colorSchema={colorSchema} editable={editable} key={input.key}>
+          <EditableListItem
+            colorSchema={colorSchema}
+            editable={editable}
+            key={input.key}
+            error={error[input.key]}
+          >
             <EditableListItemLabelWrapper>
               <EditableListItemLabel>{input.label}</EditableListItemLabel>
             </EditableListItemLabelWrapper>
@@ -144,6 +163,9 @@ EditableList.propTypes = {
    * Decides of the inputs are editable or not
    */
   inputIsEditable: PropTypes.bool,
+
+  /** Validation error object */
+  error: PropTypes.object,
 
   /**
    * The color schema/theme of the component

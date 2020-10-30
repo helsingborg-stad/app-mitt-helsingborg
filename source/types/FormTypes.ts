@@ -1,26 +1,41 @@
-export interface SubstepItem {
+import { ValidationObject } from './Validation';
+
+export interface SummaryItem {
   category: string;
   title: string;
   formId: string;
   loadPrevious?: string[];
+  validation?: ValidationObject;
 }
 export interface ListInput {
   type: 'text' | 'number';
   key: string;
   label: string;
   loadPrevious?: string[];
+  validation?: ValidationObject;
 }
+
+export type FormInputType =
+  | 'text'
+  | 'number'
+  | 'date'
+  | 'editableList'
+  | 'checkbox'
+  | 'summaryList'
+  | 'repeaterField';
+
 export interface Question {
   label: string;
-  type: string;
+  type: FormInputType;
   id: string;
   description?: string;
   conditionalOn?: string;
   placeholder?: string;
   explainer?: string;
   loadPrevious?: string[];
-  items?: SubstepItem[];
+  items?: SummaryItem[];
   inputs?: ListInput[];
+  validation?: ValidationObject;
 }
 
 export interface Action {
