@@ -2,7 +2,6 @@ import { StepperActions } from '../../../types/FormTypes';
 import { replaceMarkdownTextInSteps } from './textReplacement';
 import { FormReducerState } from './useForm';
 import { validateInput } from '../../../helpers/ValidationHelper';
-import EditableList from '../../../components/molecules/EditableList/EditableList';
 
 /**
  * Action for replacing title markdown in steps.
