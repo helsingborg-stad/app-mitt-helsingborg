@@ -232,9 +232,8 @@ export function validateAnswer(
   }
   if (['editableList'].includes(question.type)) {
     const validationResults = {};
-
     question.inputs.forEach(input => {
-      if (input.validation) {
+      if (input.validation && answer[questionId][input.key] !== undefined) {
         const [isValid, validationMessage] = validateInput(
           answer[questionId][input.key],
           input.validation.rules
@@ -242,6 +241,7 @@ export function validateAnswer(
         validationResults[input.key] = { isValid, validationMessage };
       }
     });
+
     return {
       ...state,
       validations: {
