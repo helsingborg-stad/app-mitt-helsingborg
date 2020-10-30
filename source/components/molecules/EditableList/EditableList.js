@@ -22,7 +22,7 @@ const EditableListItem = styled.View`
   border-radius: 4.5px;
   margin-bottom: 10px;
   ${({ theme, error }) =>
-    error?.isValid || !error ? '' : `border: solid 1px ${theme.colors.primary.red[0]}`}
+    !(error?.isValid || !error) && `border: solid 1px ${theme.colors.primary.red[0]}`}
   ${props =>
     props.editable
       ? `
