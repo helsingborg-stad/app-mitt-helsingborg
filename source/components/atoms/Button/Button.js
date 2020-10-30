@@ -24,7 +24,7 @@ CSS.buttonSharp = css`
 `;
 
 CSS.buttonSmall = css`
-  padding: 10px 12px;
+  padding: 8px 12px;
   min-height: 36px;
   min-width: 74px;
 `;
@@ -45,7 +45,7 @@ const ButtonBase = styled.View`
 
     padding: ${props => (!props.icon ? '12px 20px' : '16px 16px')};
     min-width: ${props => (!props.icon ? '124px' : '169px')};
-    background-color: ${props => props.theme.colors.primary[props.buttonTheme][0]};
+    background-color: ${props => props.theme.colors.primary[props.colorSchema][0]};
 
     ${props => (props.rounded ? CSS.buttonRounded : null)}
     ${props => (props.pill ? CSS.buttonPill : null)}
@@ -55,20 +55,20 @@ const ButtonBase = styled.View`
     ${props => (props.buttonSize === 'small' ? CSS.buttonSmall : null)}
 
     ${props => CSS.z[props.z]}
-    shadow-color: ${props => props.theme.button[props.buttonTheme].shadow};
+    shadow-color: ${props => props.theme.button[props.colorSchema].shadow};
 `;
 
 /** Button child component overrides */
 const ButtonText = styled(Text)`
   font-size: ${props => (props.buttonSize === 'small' ? '14px' : '16px')};
-  color: ${props => props.theme.colors.neutrals[7]};
+  font-weight: ${props => props.theme.fontWeights[1]};
+  color: ${props => props.theme.colors.complementary[props.colorSchema][3]};
 
   ${props => (props.buttonSize === 'small' ? 'font-weight: bold;' : null)};
 `;
 
 const ButtonIcon = styled(Icon)`
-  color: ${props =>
-    props.colorSchema ? props.colorSchema : props.theme.button[props.buttonTheme].icon};
+  color: ${props => props.theme.colors.neutrals[7]};
   font-size: 26px;
   height: 26px;
   width: 26px;
@@ -81,10 +81,8 @@ const LeftButtonIcon = styled(ButtonIcon)`
 `;
 
 const RightButtonIcon = styled(ButtonIcon)`
-    margin-left: 16px;
-    ${props => (props.push ? 'margin-left: auto;' : null)}
-
-    color: ${props => props.theme.button[props.buttonTheme].iconRight};
+  margin-left: 16px;
+  ${props => (props.push ? 'margin-left: auto;' : null)}
 `;
 
 /** Button utils */
@@ -139,7 +137,7 @@ const Button = props => {
       return React.createElement(ButtonComponent, {
         ...child.props,
         size: 32,
-        buttonTheme: colorSchema,
+        colorSchema,
       });
     }
 
@@ -147,7 +145,7 @@ const Button = props => {
     if (child && child.type === Text) {
       return React.createElement(ButtonText, {
         ...child.props,
-        buttonTheme: color,
+        colorSchema,
         buttonSize: size,
       });
     }
@@ -159,7 +157,7 @@ const Button = props => {
     <ButtonWrapper>
       <ButtonTouchable disabled={disabled} onPress={onClick} block={block} z={shadow}>
         <ButtonBase
-          buttonTheme={colorSchema}
+          colorSchema={colorSchema}
           buttonSize={size}
           rounded={rounded}
           pill={pill}
