@@ -3,7 +3,7 @@ export interface Case {
   createdAt: number;
   updatedAt: number;
   currentStep: number;
-  data: Record<string, any>;
+  answers: Record<string, any>;
   formId: string;
   id: string;
   type: string;
