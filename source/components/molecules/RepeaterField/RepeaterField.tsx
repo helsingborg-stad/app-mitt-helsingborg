@@ -18,19 +18,20 @@ interface Props {
   value: string | Record<string, string | number>[];
   onChange: (answers: Record<string, any> | string | number, fieldId?: string) => void;
   color: string;
+  error?: Record<string, {isValid: boolean, validationMessage: string}>[];
 }
 const emptyInput: Record<string, string | number>[] = [];
 
 function isRecordArray(value: string | Record<string,string|number>[]): value is Record<string, string | number>[] {
-    return typeof value !== 'string';
+  return typeof value !== 'string';
 }
 /**
  * Repeater field component, for adding multiple copies of a particular kind of input.
  * The input-prop specifies the form of each input-group.
  */
-const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChange, color, value }) => {
-    const [localAnswers, setLocalAnswers] = useState( isRecordArray(value) ? value : emptyInput);
-
+const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChange, color, value, error }) => {
+  const [localAnswers, setLocalAnswers] = useState( isRecordArray(value) ? value : emptyInput);
+  
   const changeFromInput = (index: number) => (input: InputRow) => (text: string) => {
     localAnswers[index][input.id] = text;
     onChange(localAnswers);
@@ -59,6 +60,7 @@ const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChan
         changeFromInput={changeFromInput(index)}
         color={color}
         removeItem={removeAnswer(index)}
+        error={error && error[index] ? error[index]: undefined}
       />
     );
   });

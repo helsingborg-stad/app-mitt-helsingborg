@@ -4,7 +4,6 @@ import { View } from 'react-native';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import { Input, Text, Icon } from '../../atoms';
-import colors from '../../../styles/colors';
 import { InputRow } from './RepeaterField';
 import DateTimePickerForm from '../DateTimePicker/DateTimePickerForm';
 
@@ -31,11 +30,14 @@ const RemoveButton = styled.TouchableHighlight`
   border-bottom-right-radius: 6px;
   margin-left: 4px;
 `;
-const ItemWrapper = styled(View)`
+const ItemWrapper = styled(View)<{ error: { isValid: boolean; validationMessage: string } | undefined }>`
   flex-direction: row;
   align-items: flex-end;
+  border-radius: 3px;
   height: 46px;
   background-color: white;
+  ${({ theme, error }) =>
+    !(error?.isValid || !error) && `border: solid 2px ${theme.colors.primary.red[0]}`}
 `;
 const InputWrapper = styled.View`
   align-items: center;
@@ -81,6 +83,7 @@ const dateStyle = {
 interface Props {
   inputs: InputRow[];
   value: Record<string, string | number>;
+  error?: Record<string, {isValid: boolean, validationMessage: string}>;
   changeFromInput: (input: InputRow) => (text: string | number) => void;
   removeItem: () => void;
   color: string;
@@ -89,6 +92,7 @@ interface Props {
 const RepeaterFieldListItem: React.FC<Props> = ({
   inputs,
   value,
+  error,
   changeFromInput,
   removeItem,
   color,
@@ -137,6 +141,7 @@ const RepeaterFieldListItem: React.FC<Props> = ({
     <ItemWrapper
       key={`${input.title}.${index}`}
       style={index === inputs.length - 1 ? { marginBottom: 0 } : { marginBottom: 4 }}
+      error={error && error[input.id] ? error[input.id] : undefined}
     >
       <SmallText>{`${input.title}`}</SmallText>
       <InputWrapper>{inputComponent(input)}</InputWrapper>
@@ -146,7 +151,6 @@ const RepeaterFieldListItem: React.FC<Props> = ({
   return (
     <Base>
       <Inputs>{rows}</Inputs>
-
       <RemoveButton activeOpacity={1} onPress={removeItem}>
         <DeleteButton name="clear" />
       </RemoveButton>
