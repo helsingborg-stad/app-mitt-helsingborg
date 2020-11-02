@@ -66,6 +66,7 @@ export const convertAnswersToArray = (data, formQuestions) => {
         });
         return;
 
+      // TODO: AvatarList component is broken so this needs to be updated when it works
       case 'avatarList':
         Object.entries(value).forEach(valueObject => {
           const [childFieldId, childValue] = valueObject;
@@ -134,23 +135,23 @@ const isNumeric = str => {
 export const convertAnswerArrayToObject = caseData => {
   const caseObject = {};
 
-  caseData.answers.forEach(element => {
-    const path = element.field.id.split('.');
-    path.reduce((prev, curr, i) => {
+  caseData.answers.forEach(answer => {
+    const path = answer.field.id.split('.');
+    path.reduce((prev, pathPart, i) => {
       if (!prev) {
         return undefined;
       }
-      if (!prev[curr]) {
+      if (!prev[pathPart]) {
         if (i === path.length - 1) {
-          prev[curr] = element.value;
+          prev[pathPart] = answer.value;
         } else if (isNumeric(path[i + 1])) {
-          prev[curr] = [];
+          prev[pathPart] = [];
         } else {
-          prev[curr] = {};
+          prev[pathPart] = {};
         }
       }
 
-      return prev[curr];
+      return prev[pathPart];
     }, caseObject);
   });
 
