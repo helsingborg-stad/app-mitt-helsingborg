@@ -51,24 +51,24 @@ const makeDataMap = (form: Form) => {
 
 const sortCasesByLastUpdated = (list: Case[]) => list.sort((a, b) => b.updatedAt - a.updatedAt);
 
-const treeParseAcc = (obj: Record<string, any> | string[], parser: (s: string[]) => any) => {
+const treeParse = (obj: Record<string, any> | string[], parser: (s: string[]) => any) => {
   if (Array.isArray(obj) && obj.every(s => typeof s === 'string')) {
     const parseRes = parser(obj);
     return parseRes === '' ? undefined : parseRes;
   }
+
   const res: Record<string, any> = {};
   Object.keys(obj).forEach(key => {
-    res[key] = treeParseAcc(obj[key], parser);
+    res[key] = treeParse(obj[key], parser);
   });
   return res;
 };
-
-const treeParse = (obj: Record<string, any>, parser: (s: string[]) => any): Record<string, any> => treeParseAcc(obj, parser);
 
 const getUserInfo = (user: User, strArray: string[]): string | undefined => strArray.reduce((prev, current) => {
   if (prev && prev[current]) return prev[current];
   return undefined;
 }, user);
+
 const getCaseInfo = (c: Case, strArray: string[]) => strArray.reduce((prev, current) => {
   if (prev && prev[current]) return prev[current];
   return undefined;
@@ -85,7 +85,8 @@ const generateParser = (user: User, cases: Case[]) => (idArray: string[]) => {
     const sortedCases = sortCasesByLastUpdated(cases);
     const latestRelevantCase = sortedCases.find(c => c.formId === formId);
     if (latestRelevantCase) {
-      return getCaseInfo(convertAnswerArrayToObject(latestRelevantCase), strArray.slice(1));
+      const answersObject = convertAnswerArrayToObject(latestRelevantCase);
+      return getCaseInfo(answersObject, strArray.slice(1));
     }
     return undefined;
   });
