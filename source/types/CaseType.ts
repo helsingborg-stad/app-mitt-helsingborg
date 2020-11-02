@@ -1,12 +1,20 @@
 export type CaseStatus = 'ongoing' | 'submitted';
-export interface Case {
+
+interface CaseWithoutAnswers {
   createdAt: number;
   updatedAt: number;
   currentStep: number;
-  answers: Record<string, any>;
   formId: string;
   id: string;
   type: string;
   personalNumber: string;
-  status: CaseStatus; // do we have/need other statuses?
+  status: CaseStatus;
+}
+
+export interface Case extends CaseWithoutAnswers {
+  answers: Record<string, any>;
+}
+
+export interface CaseWithAnswerArray extends CaseWithoutAnswers {
+  answers: Record<string, any>[];
 }
