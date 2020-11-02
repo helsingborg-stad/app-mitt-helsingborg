@@ -1,7 +1,6 @@
 const createAnswerObject = data => ({
   field: {
     id: data?.fieldId ?? null,
-    parentId: data?.parentId ?? null,
     tags: data?.tags ?? [],
   },
   value: data?.value ?? null,
@@ -59,7 +58,6 @@ export const convertAnswersToArray = (data, formQuestions) => {
             createAnswerObject({
               fieldId: `${id}.${childFieldId}`,
               value: childValue,
-              parentId: id,
               tags: listItemTags ?? [],
             })
           );
@@ -74,7 +72,6 @@ export const convertAnswersToArray = (data, formQuestions) => {
             createAnswerObject({
               fieldId: `${id}.${childFieldId}`,
               value: childValue,
-              parentId: id,
               tags,
             })
           );
@@ -94,7 +91,6 @@ export const convertAnswersToArray = (data, formQuestions) => {
               createAnswerObject({
                 fieldId: `${id}.${childFieldId}.${repeaterItemId}`,
                 value: repeaterItemValue,
-                parentId: id,
                 tags: repeaterFieldItemTags ?? [],
               })
             );
