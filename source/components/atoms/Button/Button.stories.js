@@ -6,14 +6,6 @@ import Icon from '../Icon';
 import Text from '../Text';
 import Button from './Button';
 
-const CustomButton = styled(Button)`
-  background-color: #afca05;
-`;
-
-const CustomButtonText = styled(Text)`
-  color: #7b075e;
-`;
-
 const Flex = styled.View`
   padding: 8px;
 `;
@@ -48,17 +40,6 @@ storiesOf('Button', module)
       <ButtonColors block />
     </StoryWrapper>
   ))
-  // .add('Custom style', props => (
-  //   <StoryWrapper {...props}>
-  //     <FlexContainer>
-  //       <Flex>
-  //         <CustomButton colorSchema="light" block>
-  //           <CustomButtonText>Button with custom styles</CustomButtonText>
-  //         </CustomButton>
-  //       </Flex>
-  //     </FlexContainer>
-  //   </StoryWrapper>
-  // ))
   .add('with icon', props => (
     <StoryWrapper {...props}>
       <FlexContainer>
@@ -73,12 +54,6 @@ storiesOf('Button', module)
             <Icon name="arrow-upward" />
           </Button>
         </Flex>
-        {/* <Flex> */}
-        {/*  <Button colorSchema="light" rounded> */}
-        {/*    <Icon name="message" /> */}
-        {/*    <Text>Icon Left</Text> */}
-        {/*  </Button> */}
-        {/* </Flex> */}
         <Flex>
           <Button colorSchema="blue" pill>
             <Icon name="message" />
