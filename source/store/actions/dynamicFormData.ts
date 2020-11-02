@@ -20,28 +20,28 @@ const makeDataMap = (form: Form) => {
     if (!step.questions) {
       return;
     }
-    step.questions.forEach(qs => {
-      if (qs.loadPrevious) {
-        dataMap[qs.id] = addIds(qs.loadPrevious, '', form.id);
-      } else if (qs.type === 'substepList' && qs.items) {
+    step.questions.forEach(question => {
+      if (question.loadPrevious) {
+        dataMap[question.id] = addIds(question.loadPrevious, '', form.id);
+      } else if (question.type === 'substepList' && question.items) {
         const items = {};
-        qs.items.forEach(item => {
+        question.items.forEach(item => {
           if (item.loadPrevious) {
-            items[item.title] = addIds(item.loadPrevious, qs.id, form.id);
+            items[item.title] = addIds(item.loadPrevious, question.id, form.id);
           }
         });
         if (Object.keys(items).length > 0) {
-          dataMap[qs.id] = items;
+          dataMap[question.id] = items;
         }
-      } else if (qs.type === 'editableList' && qs.inputs) {
+      } else if (question.type === 'editableList' && question.inputs) {
         const inputs = {};
-        qs.inputs.forEach(input => {
+        question.inputs.forEach(input => {
           if (input.loadPrevious) {
-            inputs[input.key] = addIds(input.loadPrevious, qs.id, form.id);
+            inputs[input.key] = addIds(input.loadPrevious, question.id, form.id);
           }
         });
         if (Object.keys(inputs).length > 0) {
-          dataMap[qs.id] = inputs;
+          dataMap[question.id] = inputs;
         }
       }
     });
