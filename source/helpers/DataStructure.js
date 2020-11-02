@@ -44,12 +44,12 @@ export const convertAnswersToArray = (data, formQuestions) => {
     const [fieldId, value] = answer;
     const { id, type, tags, ...other } = formQuestions.find(element => element.id === fieldId);
 
+    if (value === undefined) {
+      return;
+    }
+
     switch (type) {
       case 'editableList':
-        if (value === undefined) {
-          return;
-        }
-
         Object.entries(value).forEach(valueObject => {
           const [childFieldId, childValue] = valueObject;
           const listItem = other.inputs.find(obj => obj.key === childFieldId);
@@ -67,10 +67,6 @@ export const convertAnswersToArray = (data, formQuestions) => {
         return;
 
       case 'avatarList':
-        if (value === undefined) {
-          return;
-        }
-
         Object.entries(value).forEach(valueObject => {
           const [childFieldId, childValue] = valueObject;
           answers.push(
@@ -85,10 +81,6 @@ export const convertAnswersToArray = (data, formQuestions) => {
         return;
 
       case 'repeaterField':
-        if (value === undefined) {
-          return;
-        }
-
         Object.entries(value).forEach(repeaterField => {
           const [childFieldId, childItems] = repeaterField;
 
@@ -130,6 +122,7 @@ export const convertAnswersToArray = (data, formQuestions) => {
  */
 const isNumeric = str => {
   if (typeof str !== 'string') return false; // we only process strings!
+  // eslint-disable-next-line no-restricted-globals
   return !isNaN(str) && !isNaN(parseFloat(str));
 };
 
