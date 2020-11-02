@@ -51,19 +51,19 @@ const makeDataMap = (form: Form) => {
 
 const sortCasesByLastUpdated = (list: Case[]) => list.sort((a, b) => b.updatedAt - a.updatedAt);
 
-const treeParseAcc = (obj: Record<string, any> | string[], acc: Record<string, any>, parser: (s: string[]) => any) => {
+const treeParseAcc = (obj: Record<string, any> | string[], parser: (s: string[]) => any) => {
   if (Array.isArray(obj) && obj.every(s => typeof s === 'string')) {
     const parseRes = parser(obj);
     return parseRes === '' ? undefined : parseRes;
   }
   const res: Record<string, any> = {};
   Object.keys(obj).forEach(key => {
-    res[key] = treeParseAcc(obj[key], acc, parser);
+    res[key] = treeParseAcc(obj[key], parser);
   });
   return res;
 };
 
-const treeParse = (obj: Record<string, any>, parser: (s: string[]) => any): Record<string, any> => treeParseAcc(obj, {}, parser);
+const treeParse = (obj: Record<string, any>, parser: (s: string[]) => any): Record<string, any> => treeParseAcc(obj, parser);
 
 const getUserInfo = (user: User, strArray: string[]): string | undefined => strArray.reduce((prev, current) => {
   if (prev && prev[current]) return prev[current];
