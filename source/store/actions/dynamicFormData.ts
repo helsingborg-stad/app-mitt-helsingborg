@@ -14,7 +14,7 @@ const addIds = (descriptor: string[], questionId: string, formId: string) =>
   });
 
 /** Takes a form and generates the dataMap template used to fill the dynamical data.  */
-const makeDataMap = (form: Form) => {
+const generateDataMapTemplateFromForm = (form: Form) => {
   const dataMap = {};
   form.steps.forEach(step => {
     if (!step.questions) {
@@ -95,7 +95,7 @@ const generateParser = (user: User, cases: Case[]) => (idArray: string[]) => {
 };
 
 const generateInitialCase = (form: Form, user: User, cases: Case[]) => {
-  const dataMap = makeDataMap(form);
+  const dataMap = generateDataMapTemplateFromForm(form);
   const parser = generateParser(user, cases);
   const initialCase = treeParse(dataMap, parser);
   return initialCase;
