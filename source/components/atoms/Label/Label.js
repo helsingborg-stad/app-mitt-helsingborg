@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { HelpButton } from 'source/components/molecules';
+import HelpButton from '../../molecules/HelpButton';
 import Text from '../Text';
 import theme from '../../../styles/theme';
 
@@ -27,7 +27,7 @@ const sizes = {
   },
 };
 
-const FieldLabelText = styled(Text)`
+const LabelText = styled(Text)`
   font-size: ${props => sizes[props.size].font};
   color: ${props => theme.fieldLabel[props.color].text};
   text-transform: uppercase;
@@ -35,7 +35,7 @@ const FieldLabelText = styled(Text)`
   padding-bottom: 7px;
   padding-top: 5px;
 `;
-const FieldLabelBorder = styled.View`
+const LabelBorder = styled.View`
   padding-bottom: ${props => sizes[props.size].paddingBottom};
   border-bottom-color: ${props => theme.fieldLabel[props.color].underline};
   border-bottom-width: ${props => {
@@ -54,7 +54,7 @@ const FieldLabelBorder = styled.View`
   margin-right: 8px;
 `;
 
-const FieldLabelContainer = styled.View`
+const LabelContainer = styled.View`
   flex-direction: row;
 `;
 
@@ -63,22 +63,22 @@ const FieldLabelContainer = styled.View`
  * Use like a Text component.
  * @param {*} props
  */
-const FieldLabel = props => {
+const Label = props => {
   const { size, color, underline, style, help, ...other } = props;
 
   return (
-    <FieldLabelContainer>
-      <FieldLabelBorder size={size} color={color} underline={underline}>
-        <FieldLabelText underline={underline} size={size} color={color} style={style}>
+    <LabelContainer>
+      <LabelBorder size={size} color={color} underline={underline}>
+        <LabelText underline={underline} size={size} color={color} style={style}>
           {other.children}
-        </FieldLabelText>
-      </FieldLabelBorder>
+        </LabelText>
+      </LabelBorder>
       {Object.keys(help).length > 0 && <HelpButton {...help} />}
-    </FieldLabelContainer>
+    </LabelContainer>
   );
 };
 
-FieldLabel.propTypes = {
+Label.propTypes = {
   /**
    * If false, disables the line under the label. True by default.
    */
@@ -107,11 +107,11 @@ FieldLabel.propTypes = {
   }),
 };
 
-FieldLabel.defaultProps = {
+Label.defaultProps = {
   underline: true,
   color: 'light',
   size: 'medium',
   help: {},
 };
 
-export default FieldLabel;
+export default Label;

@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, FieldLabel, Select, Text } from 'source/components/atoms';
-import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
 import { View, LayoutAnimation } from 'react-native';
-import ConditionalTextField from 'app/components/molecules/ConditinalTextField';
+import { Input, Label, Select, Text } from 'source/components/atoms';
+import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
 import DateTimePickerForm from '../DateTimePicker/DateTimePickerForm';
 import NavigationButtonField from '../NavigationButtonField/NavigationButtonField';
 import NavigationButtonGroup from '../NavigationButtonGroup/NavigationButtonGroup';
@@ -63,12 +62,6 @@ const inputTypes = {
     changeEvent: 'onChange',
     props: {},
     initialValue: [],
-  },
-  conditionalTextField: {
-    component: ConditionalTextField,
-    changeEvent: 'onChange',
-    props: {},
-    initialValue: '',
   },
   summaryList: {
     component: SummaryList,
@@ -151,13 +144,13 @@ const FormField = ({
     return (
       <View>
         {label ? (
-          <FieldLabel
+          <Label
             color={color}
             underline={labelLine}
             help={labelHelp ? { heading: label, text: labelHelp } : {}}
           >
             {label}
-          </FieldLabel>
+          </Label>
         ) : null}
         {inputComponent}
       </View>

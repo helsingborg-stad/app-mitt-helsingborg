@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image } from 'react-native';
-import { Text } from 'source/components/atoms';
 import styled from 'styled-components/native';
+import { Text } from 'source/components/atoms';
 import PropTypes from 'prop-types';
 import icons from 'source/helpers/Icons';
 
@@ -31,7 +31,7 @@ const BannerImage = styled(Image)`
   height: 100%;
 `;
 
-const Banner = ({ style, currentPosition, totalStepNumber, imageSrc, colorSchema }) => (
+const StepBanner = ({ style, currentPosition, totalStepNumber, imageSrc, colorSchema }) => (
   <BannerWrapper style={style} image={imageSrc} colorSchema={colorSchema}>
     {Object.prototype.hasOwnProperty.call(icons, imageSrc) ? (
       <BannerImageWrapper>
@@ -50,7 +50,7 @@ const Banner = ({ style, currentPosition, totalStepNumber, imageSrc, colorSchema
   </BannerWrapper>
 );
 
-Banner.propTypes = {
+StepBanner.propTypes = {
   /** The current position in the form */
   currentPosition: PropTypes.shape({
     index: PropTypes.number,
@@ -71,9 +71,9 @@ Banner.propTypes = {
    */
   colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
 };
-Banner.defaultProps = {
+StepBanner.defaultProps = {
   imageSrc: undefined,
   colorSchema: 'blue',
   style: {},
 };
-export default Banner;
+export default StepBanner;

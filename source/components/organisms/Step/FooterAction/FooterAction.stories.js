@@ -1,6 +1,6 @@
 import { storiesOf } from '@storybook/react-native';
 import React from 'react';
-import StoryWrapper from '../StoryWrapper';
+import StoryWrapper from '../../../molecules/StoryWrapper';
 import FooterAction from './FooterAction';
 
 const actions1 = [

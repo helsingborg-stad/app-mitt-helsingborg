@@ -3,7 +3,9 @@ import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import { FieldLabel, Text, Icon } from 'source/components/atoms';
+import Text from '../../atoms/Text/Text';
+import Icon from '../../atoms/Icon/Icon';
+import Label from '../../atoms/Label/Label';
 import theme from '../../../styles/theme';
 
 const ListWrapper = styled.View`
@@ -52,7 +54,7 @@ const ListBody = styled.View`
   height: auto;
 `;
 
-const ListBodyFieldLabel = styled(FieldLabel)`
+const ListBodyFieldLabel = styled(Label)`
   margin-top: 40px;
 `;
 

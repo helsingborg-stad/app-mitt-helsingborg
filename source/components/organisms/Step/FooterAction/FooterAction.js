@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
-import { Button, Text } from 'source/components/atoms';
 import AuthContext from 'app/store/AuthContext';
+import { Button, Text } from '../../../atoms';
 
 const ActionContainer = styled.View(props => ({
   flex: 1,

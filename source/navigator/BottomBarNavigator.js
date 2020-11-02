@@ -1,8 +1,8 @@
 /* eslint-disable global-require */
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { TabBarImage, MaterialTopTabBarWrapper } from 'source/components/molecules';
 import { ProfileScreen, HomeScreen } from 'app/screens';
+import { TabBarImage, MaterialTopTabBarWrapper } from 'source/components/molecules';
 import CaseNavigator from './CaseNavigator';
 
 const Tab = createMaterialTopTabNavigator();

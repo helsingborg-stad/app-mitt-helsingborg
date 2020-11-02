@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/react-native';
 import React from 'react';
 import styled from 'styled-components/native';
-import FieldLabel from './FieldLabel';
+import FieldLabel from './Label';
 import StoryWrapper from '../../molecules/StoryWrapper';
 import theme from '../../../styles/theme';
 
