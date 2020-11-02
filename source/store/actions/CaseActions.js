@@ -1,6 +1,6 @@
 import { get, post, put } from 'app/helpers/ApiRequest';
 import { convertAnswersToArray, getFormQuestions } from 'app/helpers/DataStructure';
-import generateInitialCase from './dynamicFormData';
+import generateInitialCaseAnswers from './dynamicFormData';
 
 export const actionTypes = {
   updateCase: 'UPDATE_CASE',
@@ -38,7 +38,7 @@ export async function updateCase(caseId, data, status, currentStep, formQuestion
 }
 
 export async function createCase(form, user, cases, callback) {
-  const initialAnswersObject = generateInitialCase(form, user, cases);
+  const initialAnswersObject = generateInitialCaseAnswers(form, user, cases);
   const formQuestions = getFormQuestions(form);
   // Convert to new data strucure to be saved in Cases API
   const initialAnswersArray = convertAnswersToArray(initialAnswersObject, formQuestions);

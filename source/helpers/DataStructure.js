@@ -126,12 +126,12 @@ const isNumeric = str => {
 /**
  * Converts case answers array to object
  * Credits to Jacob for the magical data mapping
- * @param {array} caseData
+ * @param {array} answerArray the flat array that we want to convert to a nested tree structure
  */
-export const convertAnswerArrayToObject = caseData => {
+export const convertAnswerArrayToObject = answerArray => {
   const caseObject = {};
 
-  caseData.answers.forEach(answer => {
+  answerArray.forEach(answer => {
     const path = answer.field.id.split('.');
     path.reduce((prev, pathPart, i) => {
       if (!prev) {
@@ -151,5 +151,5 @@ export const convertAnswerArrayToObject = caseData => {
     }, caseObject);
   });
 
-  return { ...caseData, answers: caseObject };
+  return caseObject;
 };
