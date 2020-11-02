@@ -211,7 +211,7 @@ export function validateAnswer(
 ) {
   const { questions } = state.steps[state.currentPosition.index];
 
-  // Return if question or question ID undefined.
+  // Return if question or question ID is undefined.
   if (!questions || !questionId) return state;
 
   const question = questions?.find(q => q.id === questionId);

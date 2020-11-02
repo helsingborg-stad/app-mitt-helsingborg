@@ -170,6 +170,7 @@ RepeaterFieldListItem.propTypes = {
    * What should happen to update the values
    */
   changeFromInput: PropTypes.func,
+  /** Function to remove the item from the repeater */
   removeItem: PropTypes.func,
   /**
    * Sets the color scheme of the list. default is red.
