@@ -1,6 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import StoryWrapper from '../StoryWrapper';
+import StoryWrapper from '../../../molecules/StoryWrapper';
 import StepDescription from './StepDescription';
 
 const lorem =

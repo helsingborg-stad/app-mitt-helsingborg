@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { TouchableHighlight } from 'react-native';
-import { Checkbox, Text } from 'source/components/atoms';
 import { HelpButton } from 'source/components/molecules';
+import Text from '../../atoms/Text/Text';
+import Checkbox from '../../atoms/Checkbox/Checkbox';
 import theme from '../../../styles/theme';
 
 const FlexContainer = styled.View`

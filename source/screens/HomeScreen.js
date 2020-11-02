@@ -2,7 +2,6 @@
 import PropTypes from 'prop-types';
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components/native';
-import { WatsonAgent, Chat } from 'app/components/organisms';
 import { ScreenWrapper } from 'app/components/molecules';
 import { View } from 'react-native';
 import { Text, Button } from 'app/components/atoms';
@@ -45,20 +44,6 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <>
-      {showChat && (
-        <Chat
-          ChatAgent={props => <WatsonAgent {...props} initialMessages="remote" />}
-          inputComponents={{
-            type: 'text',
-            placeholder: 'Skriv något...',
-            autoFocus: false,
-            display: 'none',
-          }}
-          ChatUserInput={false}
-          keyboardVerticalOffset={0}
-          isInputVisible={isInputVisible}
-        />
-      )}
       <View style={{ padding: 20, marginTop: 40, height: '73%' }}>
         <FormList
           heading="Ansökningsformulär"

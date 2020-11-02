@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from '../../molecules/StoryWrapper';
 import SummaryList from './SummaryList';
-import { Input, FieldLabel, Text } from '../../atoms';
+import { Input, Label, Text } from '../../atoms';
 
 const stories = storiesOf('Summary List', module);
 
@@ -20,9 +20,9 @@ const SummaryStory = () => {
   const [state, setState] = useState({});
   return (
     <>
-      <FieldLabel>
+      <Label>
         <Text>Frukt</Text>
-      </FieldLabel>
+      </Label>
       <Input
         value={state.f1}
         onChangeText={text => {
@@ -32,9 +32,9 @@ const SummaryStory = () => {
           });
         }}
       />
-      <FieldLabel>
+      <Label>
         <Text>Grönsak</Text>
-      </FieldLabel>
+      </Label>
       <Input
         value={state.f2}
         onChangeText={text => {

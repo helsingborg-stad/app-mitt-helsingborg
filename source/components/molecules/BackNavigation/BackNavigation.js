@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { Icon } from 'source/components/atoms';
+import Icon from '../../atoms/Icon/Icon';
 
 const BackNavigationWrapper = styled.View({
   flexDirection: 'row',
