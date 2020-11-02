@@ -77,7 +77,12 @@ const DateTimePickerForm: React.FC<Props> = ({
 
   return (
     <View>
-      <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
+      <TouchableOpacity
+        onPress={() => {
+          setIsVisible(!isVisible);
+          onSelect(date);
+        }}
+      >
         <Input
           placeholder="åååå-mm-dd"
           editable
