@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components/native'
 import { Avatar } from 'react-native-elements'
 import { Text, Button } from '../../atoms'
+import { InputRow } from '../RepeaterField/RepeaterField';
 
 // TODO: BREAKOUT TO CARD COMPONENT REDUNDANT USE IN FIELDSET ALSO.
 const PersonFieldContainer = styled.View`
@@ -67,7 +68,7 @@ const PersonFieldBody = styled.View`
   height: auto;
 `;
 
-const PersonFieldInputContainer = styled.View`
+const PersonFieldInputContainer = styled.View<{editable: boolean; colorSchema: string;}>`
 font-size: ${props => props.theme.fontSizes[4]}px;
   flex-direction: row;
   height: auto;
@@ -110,9 +111,24 @@ const PersonFieldInput = styled.TextInput`
   font-weight: bold;
 `;
 
-function PersonField(props) {
-  const [editable, setEditable] = useState(props.editable);
-  console.log(props);
+interface Input {
+  label: string,
+  key: string,
+  type: 'text',
+  value: string,
+}
+interface Props {
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  personalNumber: string;
+  relation: string;
+  isEditable: boolean;
+  inputs: Input[];
+  onDelete: () => void;
+  colorSchema: string;
+}
+function PersonField({firstName, lastName, isEditable, personalNumber, relation, colorSchema, inputs, onDelete}: Props) {
   return (
     <PersonFieldContainer>
       <PersonFieldHeader>
@@ -124,21 +140,21 @@ function PersonField(props) {
             />
           <PersonFieldDetails>
             <PersonFieldInfoName>
-              {`${props.firstName} ${props.lastName}`}
+              {`${firstName} ${lastName}`}
             </PersonFieldInfoName>
             <PersonFieldInfoRelation>
-              {`${props.relation}`}
+              {`${relation}`}
             </PersonFieldInfoRelation>
             <PersonFieldInfoPNO>
 
-              Personnummer: {props.personalNumber}
+              Personnummer: {personalNumber}
             </PersonFieldInfoPNO>
           </PersonFieldDetails>
       </PersonFieldHeader>
       <PersonFieldDivider/>
       <PersonFieldBody>
-        {props.inputs.map(input => (
-           <PersonFieldInputContainer colorSchema={props.colorSchema} editable={props.editable}>
+        {inputs.map(input => (
+           <PersonFieldInputContainer key={input.key} colorSchema={colorSchema} editable={isEditable}>
              <PersonFieldInputLabelWrapper>
                 <PersonFieldInputLabel>
                   {input.label}
@@ -146,18 +162,18 @@ function PersonField(props) {
              </PersonFieldInputLabelWrapper>
              <PersonFieldInputWrapper>
                  <PersonFieldInput
-                    editable={editable}
+                    editable={isEditable}
                     value={input.value}
                   />
              </PersonFieldInputWrapper>
           </PersonFieldInputContainer>
         ))}
       </PersonFieldBody>
-      { editable &&
+      { isEditable &&
         <PersonFieldFooter>
-          <PersonFieldDeleteButton>
+          <PersonFieldDeleteButton onPress={onDelete}>
               <Text>
-                {`Ta Bort ${props.firstName}`.toUpperCase()}
+                {`Ta Bort ${firstName}`.toUpperCase()}
               </Text>
           </PersonFieldDeleteButton>
         </PersonFieldFooter>
@@ -167,24 +183,49 @@ function PersonField(props) {
 }
 
 PersonField.propTypes = {
+  /**
+   * The variation of color shcemas that can be used. blue is default.
+   */
   colorSchema: PropTypes.oneOf(['blue', 'green', 'red', 'purple']),
+  /**
+   * A string representing the first name of a person.
+   */
   firstName: PropTypes.string.isRequired,
-  middleName: PropTypes.string,
+  /**
+   * A string representing the last name of a person.
+   */
   lastName: PropTypes.string.isRequired,
+  /**
+   * A number representing the personalnumber of a person.
+   */
   personalNumber: PropTypes.number.isRequired,
+  /**
+   * A string that represents the relation a person has to the user filling in the form (ie wife, husband, brother, child etc )
+   */
   relation: PropTypes.string.isRequired,
-  editable: PropTypes.bool,
+  /**
+   * Boolean for making the field editable. If true the field is editable.
+   */
+  isEditable: PropTypes.bool,
+  /**
+   * Function for triggering an onClick action on a remove button.
+   */
+  onDelete: PropTypes.func,
+  /**
+   * Array of inputs to be rendered in the field.
+   */
   inputs: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       key: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
     })
   )
 }
 
 PersonField.defaultProps = {
-  editable: false,
+  isEditable: false,
   colorSchema: 'blue'
 }
 

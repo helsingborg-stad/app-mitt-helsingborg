@@ -1,6 +1,5 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import { Text } from 'source/components/atoms';
 import StoryWrapper from '../StoryWrapper';
 import PersonFieldCard from './PersonField';
 
@@ -45,7 +44,7 @@ storiesOf('Person Field Card', module).add('Editable', props => (
       personalNumber={19980304056789}
       relation="Min fru"
       inputs={inputs}
-      editable
+      isEditable
     />
   </StoryWrapper>
 ));
