@@ -61,7 +61,7 @@ const DeleteButton = styled(Icon)`
   margin-left: 0px;
   margin-right: 0px;
   margin-bottom: 15px;
-  color: black;
+  color: ${props => props.theme.colors.neutrals[2]};
 `;
 const dateStyle: CSSProp = {
   textAlign: 'right',
@@ -80,7 +80,7 @@ interface Props {
   color: string;
   error?: {isValid: boolean; validationMessage: string};
 }
-
+/** The rows for the summary list. */
 const SummaryListItem: React.FC<Props> = ({
   item,
   value,
@@ -148,9 +148,10 @@ const SummaryListItem: React.FC<Props> = ({
       </SmallText>
       </LabelWrapper>
       <InputWrapper>{inputComponent(item, editable)}</InputWrapper>
-      { editable && <TouchableHighlight activeOpacity={1} onPress={removeItem}>
-        <DeleteButton name="clear" />
-  </TouchableHighlight> }
+      { editable && 
+        (<TouchableHighlight activeOpacity={1} onPress={removeItem}>
+          <DeleteButton name="clear" />
+        </TouchableHighlight>)}
     </ItemWrapper>
   );
 };
@@ -167,13 +168,20 @@ SummaryListItem.propTypes = {
    * What should happen to update the values
    */
   changeFromInput: PropTypes.func,
+  /** 
+   * The function to remove the row and clear the associated input 
+   */
   removeItem: PropTypes.func,
   /**
    * Sets the color scheme of the list. default is red.
    */
   color: PropTypes.string,
+  /**
+   * Whether or not to make the 
+   */
+  editable: PropTypes.bool,
 };
 SummaryListItem.defaultProps = {
-  color: "blue",
+  color: 'blue',
 };
 export default SummaryListItem;
