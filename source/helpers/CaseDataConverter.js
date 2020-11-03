@@ -1,3 +1,7 @@
+/**
+ * Cretaes an answer object with required fields
+ * @param {Object} data
+ */
 const createAnswerObject = data => ({
   field: {
     id: data?.fieldId ?? null,
