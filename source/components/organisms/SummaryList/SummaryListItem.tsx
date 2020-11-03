@@ -93,8 +93,8 @@ const SummaryListItem: React.FC<Props> = ({
 }) => {
   const inputComponent = (input: SummaryListItemType, editable: boolean) => {
     switch (input.type) {
-      case "text":
-      case "arrayText":
+      case 'text':
+      case 'arrayText':
         return (
           <SmallInput
             textAlign="right"
@@ -103,8 +103,8 @@ const SummaryListItem: React.FC<Props> = ({
             editable={editable}
           />
         );
-      case "number":
-      case "arrayNumber":
+      case 'number':
+      case 'arrayNumber':
         return (
           <SmallInput
             textAlign="right"
@@ -114,8 +114,8 @@ const SummaryListItem: React.FC<Props> = ({
             editable={editable}
           />
         );
-      case "date":
-      case "arrayDate":
+      case 'date':
+      case 'arrayDate':
         return (
           <DateTimePickerForm
             value={value as string}
