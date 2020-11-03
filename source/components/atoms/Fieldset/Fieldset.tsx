@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import Text from '../Text/Text';
 import Icon from '../Icon';
+import Button from '../Button';
 
 interface FieldsetContainerProps {
   colorSchema: string;
@@ -27,6 +28,10 @@ const FieldsetHeader = styled.View`
   padding-left: 4px;
   position: relative;
   flex-direction: row;
+`;
+
+export const FieldsetButton = styled(Button)`
+  margin-left: 26px;
 `;
 
 interface FieldsetHeaderSectionProps {

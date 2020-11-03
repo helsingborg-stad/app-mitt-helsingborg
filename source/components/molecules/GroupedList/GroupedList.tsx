@@ -2,16 +2,12 @@ import React, { useState } from 'react';
 import { View, LayoutAnimation } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { TouchableHighlight } from 'react-native-gesture-handler';
-import Text from '../../atoms/Text/Text';
-import Icon from '../../atoms/Icon/Icon';
 import Label from '../../atoms/Label/Label';
-import theme from '../../../styles/theme';
+import Text from '../../atoms/Text';
+import Fieldset, { FieldsetButton } from '../../atoms/Fieldset/Fieldset';
 import { colorPalette } from '../../../styles/palette';
-
-const FieldsetButton = styled(Button)`
-  margin-left: 26px;
-`;
+import theme from '../../../styles/theme';
+import { Heading } from '../../atoms';
 
 const ListBody = styled.View`
   padding-top: 12px;
@@ -19,8 +15,12 @@ const ListBody = styled.View`
   height: auto;
 `;
 
-const ListBodyFieldLabel = styled(Label)`
+const ListBodyFieldLabel = styled(Heading)<{ colorSchema: string }>`
   margin-top: 5px;
+  margin-left: 3px;
+  font-weight: ${props => props.theme.fontWeights[1]};
+  font-size: ${props => props.theme.fontSizes[3]};
+  color: ${props => props.theme.colors.primary[props.colorSchema][1]};
 `;
 
 interface Props {
@@ -79,7 +79,7 @@ const GroupedList: React.FC<Props> = ({
           .sort((a, _b) => (a === 'sum' ? 1 : -1))
           .map((key, index) => (
             <View key={`${index}-${key}`}>
-              <ListBodyFieldLabel underline>
+              <ListBodyFieldLabel colorSchema={colorSchema}>
                 {categories.find(c => c.category === key).description}
               </ListBodyFieldLabel>
               {groupedItems[key].map(item => ({

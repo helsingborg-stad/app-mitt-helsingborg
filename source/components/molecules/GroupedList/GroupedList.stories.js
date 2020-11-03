@@ -6,9 +6,13 @@ import GroupedList from './GroupedList';
 
 const categories = [
   {
-    category: 'Frukter',
+    category: 'fruit',
+    description: 'Frukt',
   },
-  { category: 'Grönsaker' },
+  {
+    category: 'vegetable',
+    description: 'Grönsaker',
+  },
 ];
 
 const items = [
@@ -28,7 +32,13 @@ const items = [
 
 storiesOf('Lists 2', module).add('Grouped list', props => (
   <StoryWrapper {...props}>
-    <GroupedList heading="Green things" items={items} categories={categories} color="light" />
+    <GroupedList
+      heading="Green things"
+      items={items}
+      categories={categories}
+      color="light"
+      showEditButton
+    />
 
     <GroupedList
       heading="Red color scheme"
