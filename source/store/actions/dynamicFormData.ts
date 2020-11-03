@@ -1,10 +1,15 @@
 import { Form } from '../../types/FormTypes';
-import { Case, CaseWithAnswerArray } from '../../types/CaseType';
+import { CaseWithAnswerArray } from '../../types/CaseType';
 import { User } from '../../types/UserTypes';
 import { convertAnswerArrayToObject } from '../../helpers/DataStructure';
 
-/** Takes an array of strings, and pre-pends each one with the sent in formId and/or questionId, with dots in between.
- * If the string starts with 'user', then we don't prepend anything. */
+/**
+ * Takes an array of strings, and pre-pends each one with the sent in formId and/or questionId, with
+ * dots in between. If the string starts with 'user', then we don't prepend anything.
+ * @param {array} descriptor
+ * @param {string} questionId
+ * @param {string} formId
+ */
 const addQuestionAndFormIds = (descriptor: string[], questionId: string, formId: string) =>
   descriptor.map(s => {
     if (s.split('.')[0] !== 'user' && questionId !== '') {
@@ -16,7 +21,10 @@ const addQuestionAndFormIds = (descriptor: string[], questionId: string, formId:
     return s;
   });
 
-/** Takes a form and generates the dataMap template used to fill the dynamical data.  */
+/**
+ * Takes a form and generates the dataMap template used to fill the dynamical data.
+ * @param {Object} form
+ */
 const generateDataMapTemplateFromForm = (form: Form) => {
   const dataMap = {};
   form.steps.forEach(step => {
@@ -52,14 +60,18 @@ const generateDataMapTemplateFromForm = (form: Form) => {
   return dataMap;
 };
 
+/**
+ * Sorts cases list by last updated
+ * @param {array} list
+ */
 const sortCasesByLastUpdated = (list: CaseWithAnswerArray[]) =>
   list.sort((a, b) => b.updatedAt - a.updatedAt);
 
 /**
  *  Goes through a tree structure (the obj parameter) and tries to replace each leaf node using the parser.
- * @param obj The tree structure to parse. All leaf nodes should be strings
- * @param parser A function for replacing the leaf nodes with new strings (i.e. map template strings to values)
- */
+ * @param {Object} obj The tree structure to parse. All leaf nodes should be strings
+ * @param {function} parser A function for replacing the leaf nodes with new strings (i.e. map template strings to values)
+**/
 const treeParse = (
   obj: Record<string, any> | string[],
   parser: (s: string[]) => any
@@ -75,11 +87,12 @@ const treeParse = (
   });
   return res;
 };
+
 /**
  * Takes a user-object and a list of strings specifying a property on the user, like [address, street],
  * and tries to return the corresponding value on the user object.
- * @param user The user object, for personal information
- * @param strArray list of strings that specifies a user property, like [address, street]
+ * @param {Object} user The user object, for personal information
+ * @param {array} strArray list of strings that specifies a user property, like [address, street]
  * */
 const getUserInfo = (user: User, strArray: string[]): string | undefined =>
   strArray.reduce((prev, current) => {
@@ -89,8 +102,8 @@ const getUserInfo = (user: User, strArray: string[]): string | undefined =>
 
 /**
  * Takes a case answers object and an array of strings that specifies an answer, and tries to return the corresponding value from the case object.
- * @param c The case answer object (i.e. not an array)
- * @param strArray String array specifying an answer
+ * @param {Object} answers The case answer object (i.e. not an array)
+ * @param {array} strArray String array specifying an answer
  */
 const getCaseInfo = (answers: Record<string, any>, strArray: string[]) =>
   strArray.reduce((prev, current) => {
@@ -100,8 +113,8 @@ const getCaseInfo = (answers: Record<string, any>, strArray: string[]) =>
 
 /**
  * Generates a parser that will take strings like user.firstName or formId.salary.amount, and try to convert them to values from the sent in user and cases object.
- * @param user The user object, for personal information
- * @param cases List of previous cases
+ * @param {Object} user The user object, for personal information
+ * @param {array} cases List of previous cases
  */
 const generateParser = (user: User, cases: CaseWithAnswerArray[]) => (idArray: string[]) => {
   const parseArray = idArray.map(str => {
@@ -122,11 +135,12 @@ const generateParser = (user: User, cases: CaseWithAnswerArray[]) => (idArray: s
   const result = parseArray.find(res => res);
   return result || '';
 };
+
 /**
  * Assembles data from the user object and previous cases to fill out an initial case, as specified by the form template.
- * @param form The form to generate initial data for
- * @param user The user object
- * @param cases List of previous cases
+ * @param {Object} form The form to generate initial data for
+ * @param {Object} user The user object
+ * @param {array} cases List of previous cases
  */
 const generateInitialCaseAnswers = (form: Form, user: User, cases: CaseWithAnswerArray[]) => {
   const dataMap = generateDataMapTemplateFromForm(form);
