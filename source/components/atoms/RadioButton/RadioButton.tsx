@@ -1,23 +1,14 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { View, TouchableHighlight, LayoutAnimation } from 'react-native';
+import { TouchableHighlight, LayoutAnimation } from 'react-native';
 import styled, { ThemeContext } from 'styled-components';
-import theme from '../../../styles/theme';
-
-interface Props {
-  selected?: boolean;
-  colorSchema?: string;
-  size?: 'small' | 'medium' | 'large';
-  onSelect: () => void;
-}
+import SHADOW from '../../../styles/shadow';
 
 const TouchableSizes = {
   small: {
     height: 22,
     width: 22,
     borderRadius: 11,
-    margin: 0,
-    padding: 0,
   },
   medium: {
     height: 36,
@@ -69,7 +60,7 @@ const FillSizes = {
     height: 25,
     width: 25,
     borderRadius: 12.5,
-    margin: 6,
+    margin: 4,
   },
   large: {
     height: 35,
@@ -79,17 +70,26 @@ const FillSizes = {
   },
 };
 
-const RadioButtonBorder = styled.View<{ colorSchema: string }>`
+const RadioButtonBorder = styled.View<{ colorSchema: string; z: 0 | 1 | 2 | 3 | 4  }>`
   align-items: center;
   justify-content: center;
   border-color: ${props => props.theme.colors.primary[props.colorSchema][0]};
+  shadow-color: ${props => props.theme.button[props.colorSchema].shadow};
+  ${props => SHADOW[props.z]}
 `;
+  
 const RadioButtonFill = styled.View<{ colorSchema: string }>`
   align-items: center;
   justify-content: center;
   background-color: ${props => props.theme.colors.primary[props.colorSchema][1]};
 `;
 
+interface Props {
+  selected?: boolean;
+  colorSchema?: string;
+  size?: 'small' | 'medium' | 'large';
+  onSelect: () => void;
+}
 const RadioButton: React.FC<Props> = ({ selected, onSelect, colorSchema, size }) => {
   const theme = useContext(ThemeContext);
   const onPress = () => {
@@ -105,10 +105,10 @@ const RadioButton: React.FC<Props> = ({ selected, onSelect, colorSchema, size })
     <TouchableHighlight
       onPress={onPress}
       activeOpacity={0.6}
-      underlayColor={theme.colors.complementary[validColorSchema][0]} // "#DDDDDD"
+      underlayColor={theme.colors.complementary[validColorSchema][0]}
       style={TouchableSizes[size]}
     >
-      <RadioButtonBorder style={BorderSizes[size]} colorSchema={validColorSchema}>
+      <RadioButtonBorder style={BorderSizes[size]} colorSchema={validColorSchema} z={1}>
         {selected && <RadioButtonFill style={FillSizes[size]} colorSchema={validColorSchema} />}
       </RadioButtonBorder>
     </TouchableHighlight>
