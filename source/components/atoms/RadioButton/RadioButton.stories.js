@@ -28,29 +28,34 @@ const RadioButtons = injectProps => {
     <FlexContainer>
       <FlexRow>
         <RadioButton selected={buttonValues.box1} onSelect={handleChange('box1')} size="small" />
-        <Text>Small, white color scheme</Text>
+        <Text style={{ margin: 10 }}>Small, blue color scheme</Text>
       </FlexRow>
       <FlexRow>
-        <RadioButton selected={buttonValues.box2} onSelect={handleChange('box2')} size="medium" />
-        <Text>Small, dark color scheme</Text>
+        <RadioButton
+          selected={buttonValues.box2}
+          onSelect={handleChange('box2')}
+          size="small"
+          colorSchema="red"
+        />
+        <Text style={{ margin: 10 }}>Small, red color scheme</Text>
       </FlexRow>
       <FlexRow>
         <RadioButton
           selected={buttonValues.box3}
           onSelect={handleChange('box3')}
-          color="light"
+          colorSchema="purple"
           size="medium"
         />
-        <Text>Medium, light color scheme</Text>
+        <Text style={{ margin: 10 }}>Medium, purple color scheme</Text>
       </FlexRow>
       <FlexRow>
         <RadioButton
           selected={buttonValues.box4}
           onSelect={handleChange('box4')}
-          color="light"
+          colorSchema="green"
           size="large"
         />
-        <Text>Large, light color scheme</Text>
+        <Text style={{ margin: 10 }}>Large, green color scheme</Text>
       </FlexRow>
     </FlexContainer>
   );
