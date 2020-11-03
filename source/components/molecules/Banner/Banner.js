@@ -65,7 +65,7 @@ Banner.propTypes = {
   /**
    * The React Native style property. This is optional and might override the colorSchema.
    */
-  style: PropTypes.string,
+  style: PropTypes.array,
   /**
    * The color schema that the component should apply, colors are retrived from ThemeProvider
    */
@@ -74,6 +74,6 @@ Banner.propTypes = {
 Banner.defaultProps = {
   imageSrc: undefined,
   colorSchema: 'blue',
-  style: {},
+  style: [],
 };
 export default Banner;

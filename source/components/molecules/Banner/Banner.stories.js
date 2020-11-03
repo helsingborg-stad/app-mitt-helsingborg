@@ -13,7 +13,7 @@ storiesOf('Banner', module)
   ))
   .add('Custom Styling', props => (
     <StoryWrapper {...props}>
-      <Banner style={{ backgroundColor: 'yellow' }} colorSchema="blue" />
+      <Banner style={[{ backgroundColor: 'yellow' }]} colorSchema="blue" />
     </StoryWrapper>
   ))
   .add('Color Schema Blue', props => (
