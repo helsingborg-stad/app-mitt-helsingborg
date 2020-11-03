@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React, {useContext} from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components/native'
+import styled, { ThemeContext } from 'styled-components/native'
 import { Avatar } from 'react-native-elements'
 import { Text, Button } from '../../atoms'
 import { InputRow } from '../RepeaterField/RepeaterField';
@@ -128,7 +128,13 @@ interface Props {
   onDelete: () => void;
   colorSchema: string;
 }
-function PersonField({firstName, lastName, isEditable, personalNumber, relation, colorSchema, inputs, onDelete}: Props) {
+function PersonField({firstName, lastName, isEditable, personalNumber, relation, colorSchema, inputs, onDelete}: Props)
+{
+  const theme = useContext(ThemeContext);
+  // Check if passed color is defined in theme
+  const validColorSchema = Object.keys(theme.colors.primary).includes(colorSchema)
+    ? colorSchema
+    : 'blue';
   return (
     <PersonFieldContainer>
       <PersonFieldHeader>
@@ -154,7 +160,7 @@ function PersonField({firstName, lastName, isEditable, personalNumber, relation,
       <PersonFieldDivider/>
       <PersonFieldBody>
         {inputs.map(input => (
-           <PersonFieldInputContainer key={input.key} colorSchema={colorSchema} editable={isEditable}>
+           <PersonFieldInputContainer key={input.key} colorSchema={validColorSchema} editable={isEditable}>
              <PersonFieldInputLabelWrapper>
                 <PersonFieldInputLabel>
                   {input.label}
