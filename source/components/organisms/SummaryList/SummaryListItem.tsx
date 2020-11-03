@@ -22,7 +22,6 @@ const Row = styled(View)`
   align-items: center;
 `
 
-
 const ItemWrapper = styled(View)<ItemWrapperProps>`
   flex: 10;
   font-size: ${props => props.theme.fontSizes[4]}px;
