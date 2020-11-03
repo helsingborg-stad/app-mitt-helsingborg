@@ -152,6 +152,7 @@ const SummaryListItem: React.FC<Props> = ({
         );
     }
   };
+  // TODO: we probably want to change how the color prop is handled in the future.
   const colorSchema = Object.keys(colorPalette.primary).includes(color) ? color : 'blue';
   return (
     <Row>
