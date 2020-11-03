@@ -8,8 +8,9 @@ export interface SummaryItem {
   validation?: ValidationObject;
 }
 export interface ListInput {
-  type: 'text' | 'number';
+  type: 'text' | 'number' | 'date';
   key: string;
+  id?: string;
   label: string;
   loadPrevious?: string[];
   validation?: ValidationObject;
@@ -64,10 +65,9 @@ export interface Step {
 export interface Form {
   name: string;
   description: string;
-  steps?: Step[];
+  steps: Step[];
   connectivityMatrix: StepperActions[][];
   id: string;
-  subform?: boolean;
   formType?: string;
   provider?: string;
 }

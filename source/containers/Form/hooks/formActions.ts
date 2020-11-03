@@ -211,7 +211,7 @@ export function validateAnswer(
 ) {
   const { questions } = state.steps[state.currentPosition.index];
 
-  // Return if question or question ID undefined.
+  // Return if question or question ID is undefined.
   if (!questions || !questionId) return state;
 
   const question = questions?.find(q => q.id === questionId);
@@ -230,8 +230,8 @@ export function validateAnswer(
       };
     }
   }
-  if (['editableList'].includes(question.type)) {
-    const validationResults = {};
+  if (question.type === 'editableList') {
+    const validationResults: Record<string, {isValid:boolean, validationMessage: string}> = {};
     question.inputs.forEach(input => {
       if (input.validation && answer[questionId][input.key] !== undefined) {
         const [isValid, validationMessage] = validateInput(
@@ -241,7 +241,6 @@ export function validateAnswer(
         validationResults[input.key] = { isValid, validationMessage };
       }
     });
-
     return {
       ...state,
       validations: {
@@ -250,6 +249,27 @@ export function validateAnswer(
       },
     };
   }
-
+  if (question.type === 'repeaterField') {
+    const validationResults: Record<string, {isValid:boolean, validationMessage: string}>[] = [];
+    if (answer[questionId]?.length > 0){
+      (answer[questionId] as Record<string, string>[]).forEach(a => {
+        const localValidationResults = {};
+        question.inputs.forEach(input => {
+          if(input.validation && a[input.id] !== undefined){
+            const [isValid, validationMessage] = validateInput(a[input.id], input.validation.rules);
+            localValidationResults[input.id] = { isValid, validationMessage};
+          }
+        });
+        validationResults.push(localValidationResults);
+      });
+    }
+    return {
+      ...state,
+      validations: {
+        ...state.validations,
+        [questionId]: validationResults,
+      },
+    };
+  }
   return state;
 }

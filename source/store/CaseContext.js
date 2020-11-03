@@ -97,7 +97,7 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   }
 
   async function deleteCase(caseId) {
-    dispatch(await remove(caseId));
+    dispatch(remove(caseId));
   }
 
   const fetchCases = useCallback(
