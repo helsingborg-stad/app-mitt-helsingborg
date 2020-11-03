@@ -55,6 +55,7 @@ const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChan
   localAnswers.forEach((answer, index) => {
     listItems.push(
       <RepeaterFieldListItem
+        key={`${index}`}
         inputs={inputs}
         value={answer}
         changeFromInput={changeFromInput(index)}
