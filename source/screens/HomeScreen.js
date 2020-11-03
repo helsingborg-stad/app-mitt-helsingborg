@@ -62,9 +62,9 @@ const HomeScreen = ({ navigation }) => {
       <View style={{ padding: 20, marginTop: 40, height: '73%' }}>
         <FormList
           heading="Ansökningsformulär"
-          onClickCallback={async formId => {
+          onClickCallback={async form => {
             createCase(
-              formId,
+              form,
               async newCase => {
                 navigation.navigate('Form', { caseData: newCase });
               },

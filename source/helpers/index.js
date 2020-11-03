@@ -1,4 +1,5 @@
 import * as ApiRequest from './ApiRequest';
+import * as CaseDataConverter from './CaseDataConverter';
 import * as EventHandler from './EventHandler';
 import * as MarkdownConstructor from './MarkdownConstructor';
 import * as MessageHelper from './MessageHelper';
@@ -8,6 +9,7 @@ import * as ValidationHelper from './ValidationHelper';
 
 export {
   ApiRequest,
+  CaseDataConverter,
   EventHandler,
   MarkdownConstructor,
   MessageHelper,

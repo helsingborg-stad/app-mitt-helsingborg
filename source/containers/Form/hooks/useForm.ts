@@ -112,7 +112,7 @@ function useForm(initialState: FormReducerState) {
   // const closeForm = (callback: (s: { state: FormReducerState }, isLastStep: boolean) => any) =>
   //   callback({ state: formState }, isLastStep());
 
-  function closeForm() {}
+  function closeForm() { }
   /**
    * Function for updating answer.
    */

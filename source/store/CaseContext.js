@@ -46,12 +46,12 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   const [state, dispatch] = useReducer(CaseReducer, initialState);
   const { user } = useContext(AuthContext);
   // console.log('reducer state', state);
-  async function createCase(formId, callback = () => {}) {
-    dispatch(await create(formId, user, state.cases, callback));
+  async function createCase(form, callback = response => {}) {
+    dispatch(await create(form, user, Object.values(state.cases), callback));
   }
 
-  async function updateCase(caseId, data, status, currentStep) {
-    dispatch(await update(caseId, data, status, currentStep, user));
+  async function updateCase(caseId, data, status, currentStep, form) {
+    dispatch(await update(caseId, data, status, currentStep, form));
   }
 
   function getCase(caseId) {

@@ -1,5 +1,6 @@
-import generateInitialCase from 'app/store/actions/dynamicFormData';
 import { get, post, put } from 'app/helpers/ApiRequest';
+import { convertAnswersToArray, getFormQuestions } from 'app/helpers/CaseDataConverter';
+import generateInitialCaseAnswers from './dynamicFormData';
 
 export const actionTypes = {
   updateCase: 'UPDATE_CASE',
@@ -9,10 +10,12 @@ export const actionTypes = {
   apiError: 'API_ERROR',
 };
 
-export async function updateCase(caseId, data, status, currentStep, user, callback) {
+export async function updateCase(caseId, data, status, currentStep, formQuestions, callback) {
+  const answers = convertAnswersToArray(data, formQuestions);
+
   const body = {
     status,
-    data,
+    answers,
     currentStep,
   };
 
@@ -34,21 +37,34 @@ export async function updateCase(caseId, data, status, currentStep, user, callba
   }
 }
 
-export async function createCase(formId, user, cases, callback) {
-  const initialData = generateInitialCase(formId, user, cases);
+export async function createCase(form, user, cases, callback) {
+  const initialAnswersObject = generateInitialCaseAnswers(form, user, cases);
+  const formQuestions = getFormQuestions(form);
+  // Convert to new data strucure to be saved in Cases API
+  const initialAnswersArray = convertAnswersToArray(initialAnswersObject, formQuestions);
 
   const body = {
-    personalNumber: parseInt(user.personalNumber),
+    formId: form.id,
+    provider: 'VIVA',
     status: 'ongoing',
-    type: 'VIVA_CASE',
-    data: initialData || {},
-    currentStep: 1,
-    formId,
+    currentStep: 0,
+    details: {
+      period: {
+        startDate: 1601994748326,
+        endDate: 1701994748326,
+      },
+    },
+    answers: initialAnswersArray || [],
   };
+
   try {
     const response = await post('/cases', JSON.stringify(body));
     const newCase = response.data.data;
-    const flattenedNewCase = { id: newCase.id, ...newCase.attributes };
+    const flattenedNewCase = {
+      id: newCase.id,
+      ...newCase.attributes,
+      data: initialAnswersObject,
+    };
     callback(flattenedNewCase);
     return {
       type: actionTypes.createCase,
@@ -73,9 +89,9 @@ export function deleteCase(caseId) {
 export async function fetchCases(callback) {
   try {
     const response = await get('/cases');
-    if (response?.data?.data?.map) {
+    if (response?.data?.data?.attributes?.cases) {
       const cases = {};
-      response.data.data.forEach(c => (cases[c.id] = { id: c.id, ...c.attributes }));
+      response.data.data.attributes.cases.forEach(c => (cases[c.id] = c));
 
       callback(cases);
       return {
