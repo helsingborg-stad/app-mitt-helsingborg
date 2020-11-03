@@ -16,7 +16,15 @@ interface ItemWrapperProps {
   editable: boolean;
 }
 
+const Row = styled(View)`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+
+
 const ItemWrapper = styled(View)<ItemWrapperProps>`
+  flex: 10;
   font-size: ${props => props.theme.fontSizes[4]}px;
   flex-direction: row;
   height: auto;
@@ -55,13 +63,19 @@ const SmallText = styled(Text)`
   color: ${props => props.theme.colors.neutrals[2]};
 `;
 const DeleteButton = styled(Icon)`
-  padding-top: 5px;
-  padding-left: 0px;
-  padding-right: 0px;
+  padding-top: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 20px;
   margin-left: 0px;
   margin-right: 0px;
-  margin-bottom: 15px;
-  color: ${props => props.theme.colors.neutrals[2]};
+  margin-bottom: 12px;
+  margin-top: 0px;
+  color: ${props => props.theme.colors.neutrals[4]};
+`;
+const DeleteButtonHighligth = styled(TouchableHighlight)`
+  padding: 0;
+  margin: 0;
 `;
 const dateStyle: CSSProp = {
   textAlign: 'right',
@@ -138,8 +152,9 @@ const SummaryListItem: React.FC<Props> = ({
         );
     }
   };
-  const colorSchema = Object.keys(colorPalette).includes(color) ? color : 'blue';
+  const colorSchema = Object.keys(colorPalette.primary).includes(color) ? color : 'blue';
   return (
+    <Row>
     <ItemWrapper key={`${item.title}`} colorSchema={colorSchema} editable={editable} error={error}>
       <LabelWrapper>
         <SmallText>
@@ -148,11 +163,15 @@ const SummaryListItem: React.FC<Props> = ({
       </SmallText>
       </LabelWrapper>
       <InputWrapper>{inputComponent(item, editable)}</InputWrapper>
-      { editable && 
-        (<TouchableHighlight activeOpacity={1} onPress={removeItem}>
-          <DeleteButton name="clear" />
-        </TouchableHighlight>)}
     </ItemWrapper>
+      { editable && 
+        (<DeleteButtonHighligth 
+          activeOpacity={0.6} 
+          underlayColor={colorPalette.complementary[colorSchema][1]}
+          onPress={removeItem}>
+          <DeleteButton name="clear" />
+        </DeleteButtonHighligth>)}
+      </Row>
   );
 };
 SummaryListItem.propTypes = {
