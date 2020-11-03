@@ -8,7 +8,7 @@ import Form from '../containers/Form/Form';
 import AuthContext from '../store/AuthContext';
 import FormContext from '../store/FormContext';
 import { CaseDispatch, CaseState } from '../store/CaseContext';
-import { getFormQuestions } from '../helpers/DataStructure';
+import { getFormQuestions } from '../helpers/CaseDataConverter';
 
 const SpinnerContainer = styled.View`
   flex: 1;

@@ -1,5 +1,5 @@
 import { get, post, put } from 'app/helpers/ApiRequest';
-import { convertAnswersToArray, getFormQuestions } from 'app/helpers/DataStructure';
+import { convertAnswersToArray, getFormQuestions } from 'app/helpers/CaseDataConverter';
 import generateInitialCaseAnswers from './dynamicFormData';
 
 export const actionTypes = {

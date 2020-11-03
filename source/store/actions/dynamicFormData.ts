@@ -1,7 +1,7 @@
 import { Form } from '../../types/FormTypes';
 import { CaseWithAnswerArray } from '../../types/CaseType';
 import { User } from '../../types/UserTypes';
-import { convertAnswerArrayToObject } from '../../helpers/DataStructure';
+import { convertAnswerArrayToObject } from '../../helpers/CaseDataConverter';
 
 /**
  * Takes an array of strings, and pre-pends each one with the sent in formId and/or questionId, with
