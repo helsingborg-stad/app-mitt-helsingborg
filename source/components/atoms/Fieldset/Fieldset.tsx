@@ -42,13 +42,12 @@ const FieldsetHeaderSection = styled.View<FieldsetHeaderSectionProps>`
 
 const FieldsetBody = styled.View``;
 
-
 interface FieldsetLegendProps {
   colorSchema: string;
 }
 
 const FieldsetLegend = styled(Text)<FieldsetLegendProps>`
-  color: ${props=> props.theme.colors.primary[props.colorSchema][0]}
+  color: ${props => props.theme.colors.primary[props.colorSchema][0]}
   font-size: 12px;
   padding-bottom: 12px;
   font-weight: bold;
@@ -60,8 +59,8 @@ interface FieldsetLegendBorderProps {
 }
 
 const FieldsetLegendBorder = styled.View<FieldsetLegendBorderProps>`
-  border-bottom-color: ${props=> props.theme.colors.complementary[props.colorSchema][1]}
-  border-bottom-width: 2px
+  border-bottom-color: ${props => props.theme.colors.complementary[props.colorSchema][1]}
+  border-bottom-width: 2px;
   align-self: flex-start;
 `;
 
@@ -71,7 +70,7 @@ interface FieldsetProps {
   onIconPress?: () => void;
   iconName?: string;
   iconSize?: number;
-  colorSchema: string,
+  colorSchema: string;
   renderHeaderActions?: () => void;
 }
 
@@ -109,6 +108,6 @@ Fieldset.defaultProps = {
   iconName: undefined,
   renderHeaderActions: undefined,
   iconSize: 22,
-}
+};
 
 export default Fieldset;

@@ -1,12 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import GroupedList from "../../molecules/GroupedList/GroupedList";
-import SummaryListItemComponent from "./SummaryListItem";
+import React from 'react';
+import PropTypes from 'prop-types';
+import GroupedList from '../../molecules/GroupedList/GroupedList';
+import SummaryListItemComponent from './SummaryListItem';
 
 export interface SummaryListItem {
   title: string;
   id: string;
-  type: "number" | "text" | "date" | "arrayNumber" | "arrayText" | "arrayDate";
+  type: 'number' | 'text' | 'date' | 'arrayNumber' | 'arrayText' | 'arrayDate';
   category?: string;
   inputId?: string;
 }
@@ -20,10 +20,7 @@ interface Props {
   heading: string;
   items: SummaryListItem[];
   categories?: SummaryListCategory[];
-  onChange: (
-    answers: Record<string, any> | string | number,
-    fieldId: string
-  ) => void;
+  onChange: (answers: Record<string, any> | string | number, fieldId: string) => void;
   color: string;
   answers: Record<string, any>;
 }
@@ -32,26 +29,17 @@ interface Props {
  * The things to summarize is specified in the items prop.
  * The things are grouped into categories, as specified by the categories props.
  */
-const SummaryList: React.FC<Props> = ({
-  heading,
-  items,
-  categories,
-  onChange,
-  color,
-  answers,
-}) => {
+const SummaryList: React.FC<Props> = ({ heading, items, categories, onChange, color, answers }) => {
   /**
    * Given an item, and possibly an index in the case of repeater fields, this generates a function that
    * updates the form data from the input.
    * @param item The list item
    * @param index The index, when summarizing a repeater field with multiple answers
    */
-  const changeFromInput = (item: SummaryListItem, index?: number) => (
-    text: string
-  ) => {
+  const changeFromInput = (item: SummaryListItem, index?: number) => (text: string) => {
     if (
-      ["arrayNumber", "arrayText", "arrayDate"].includes(item.type) &&
-      typeof index !== "undefined" &&
+      ['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type) &&
+      typeof index !== 'undefined' &&
       item.inputId
     ) {
       const oldAnswer: Record<string, string | number>[] = answers[item.id];
@@ -68,7 +56,7 @@ const SummaryList: React.FC<Props> = ({
    * @param index The index, when summarizing a repeater field with multiple answers
    */
   const removeListItem = (item: SummaryListItem, index?: number) => () => {
-    if (typeof index !== "undefined") {
+    if (typeof index !== 'undefined') {
       const oldAnswer: Record<string, string | number>[] = answers[item.id];
       oldAnswer.splice(index, 1);
       onChange(oldAnswer, item.id);
@@ -98,18 +86,16 @@ const SummaryList: React.FC<Props> = ({
 
   const listItems = [];
   items
-    .filter((item) => {
+    .filter(item => {
       const answer = answers[item.id];
-      return typeof answer !== "undefined";
+      return typeof answer !== 'undefined';
     })
-    .forEach((item) => {
-      if (["arrayNumber", "arrayText", "arrayDate"].includes(item.type)) {
+    .forEach(item => {
+      if (['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type)) {
         const values: Record<string, string | number>[] = answers[item.id];
         if (values && values?.length > 0) {
           values.forEach((v, index) => {
-            listItems.push(
-              generateListItem(item, v[item?.inputId || item.id], index)
-            );
+            listItems.push(generateListItem(item, v[item?.inputId || item.id], index));
           });
         }
       } else {
@@ -123,6 +109,8 @@ const SummaryList: React.FC<Props> = ({
         items={listItems}
         categories={categories}
         color={color}
+        showEditButton
+        startEditable
       />
     )
   );
@@ -157,7 +145,7 @@ SummaryList.propTypes = {
 
 SummaryList.defaultProps = {
   items: [],
-  color: "red",
+  color: 'red',
   onChange: () => {},
 };
 export default SummaryList;
