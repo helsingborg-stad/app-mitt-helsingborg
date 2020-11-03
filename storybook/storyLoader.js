@@ -11,6 +11,7 @@ function loadStories() {
 	require('../source/components/atoms/Icon/Icon.stories');
 	require('../source/components/atoms/Input/Input.stories');
 	require('../source/components/atoms/Label/Label.stories');
+	require('../source/components/atoms/RadioButton/RadioButton.stories');
 	require('../source/components/atoms/Select/Select.stories');
 	require('../source/components/atoms/Text/Text.stories');
 	require('../source/components/molecules/BackNavigation/BackNavigation.stories');
@@ -43,6 +44,7 @@ const stories = [
 	'../source/components/atoms/Icon/Icon.stories',
 	'../source/components/atoms/Input/Input.stories',
 	'../source/components/atoms/Label/Label.stories',
+	'../source/components/atoms/RadioButton/RadioButton.stories',
 	'../source/components/atoms/Select/Select.stories',
 	'../source/components/atoms/Text/Text.stories',
 	'../source/components/molecules/BackNavigation/BackNavigation.stories',
