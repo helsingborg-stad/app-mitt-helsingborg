@@ -23,14 +23,30 @@ const ListBodyFieldLabel = styled(Label)`
   margin-top: 5px;
 `;
 
+interface Props {
+  heading?: string;
+  items: { category: string; component: JSX.Element }[];
+  categories: { category: string; description: string }[];
+  color: string;
+  showEditButton?: boolean;
+  startEditable?: boolean;
+}
+
 /**
  * A grouped list, grouping items according to categories.
  * Can show an edit-button, which toggles an editable prop in the children.
  */
-const GroupedList = ({ heading, items, categories, color, showEditButton, startEditable }) => {
+const GroupedList: React.FC<Props> = ({
+  heading,
+  items,
+  categories,
+  color,
+  showEditButton,
+  startEditable,
+}) => {
   const [editable, setEditable] = useState(startEditable);
 
-  const groupedItems = {};
+  const groupedItems: Record<string, { category: string; component: JSX.Element }[]> = {};
   const changeEditable = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setEditable(!editable);
@@ -107,6 +123,6 @@ GroupedList.propTypes = {
 GroupedList.defaultProps = {
   items: [],
   categories: [],
-  color: 'light',
+  color: 'blue',
 };
 export default GroupedList;

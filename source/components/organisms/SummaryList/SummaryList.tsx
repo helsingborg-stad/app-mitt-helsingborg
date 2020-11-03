@@ -145,7 +145,7 @@ SummaryList.propTypes = {
 
 SummaryList.defaultProps = {
   items: [],
-  color: 'red',
+  color: 'blue',
   onChange: () => {},
 };
 export default SummaryList;
