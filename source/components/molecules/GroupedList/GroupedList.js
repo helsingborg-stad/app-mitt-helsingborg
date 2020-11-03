@@ -1,5 +1,5 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useState } from 'react';
+import { View, LayoutAnimation } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
@@ -7,62 +7,34 @@ import Text from '../../atoms/Text/Text';
 import Icon from '../../atoms/Icon/Icon';
 import Label from '../../atoms/Label/Label';
 import theme from '../../../styles/theme';
+import { colorPalette } from '../../../styles/palette';
 
-const ListWrapper = styled.View`
-  background-color: ${props => props.theme.groupedList[props.color].bodyBackground};
-  color: ${props => props.theme.groupedList[props.color].bodyText};
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: auto;
-  border-radius: 9.5px;
-  overflow: hidden;
-  margin-bottom: 16px;
-  margin-top: 16px;
-`;
-
-const ListHeader = styled.View`
-  background-color: ${props => props.theme.groupedList[props.color].headerBackground};
-  color: ${props => props.theme.groupedList[props.color].headerText};
-  padding-left: 24px;
-  padding-right: 12px;
-  padding-top: 12px;
-  padding-bottom: 10px;
-  position: relative;
-  flex-direction: row;
-  align-items: center;
-  min-height: 58px;
-`;
-
-const HeaderTitleWrapper = styled.View`
-  flex-direction: row;
-  flex: 1;
-`;
-
-const HeaderTitle = styled(Text)`
-  font-weight: 900;
-  font-size: 14px;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
+const FieldsetButton = styled(Button)`
+  margin-left: 26px;
 `;
 
 const ListBody = styled.View`
   padding-top: 12px;
   padding-bottom: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
   height: auto;
 `;
 
 const ListBodyFieldLabel = styled(Label)`
-  margin-top: 40px;
+  margin-top: 5px;
 `;
 
 /**
  * A grouped list, grouping items according to categories.
+ * Can show an edit-button, which toggles an editable prop in the children.
  */
-const GroupedList = ({ heading, items, categories, onEdit, color }) => {
+const GroupedList = ({ heading, items, categories, color, showEditButton, startEditable }) => {
+  const [editable, setEditable] = useState(startEditable);
+
   const groupedItems = {};
+  const changeEditable = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setEditable(!editable);
+  };
 
   categories.forEach(cat => {
     const catItems = items.filter(item => item.category === cat.category);
@@ -70,19 +42,22 @@ const GroupedList = ({ heading, items, categories, onEdit, color }) => {
       groupedItems[cat.category] = catItems;
     }
   });
+  const colorSchema = Object.keys(colorPalette.primary).includes(color) ? color : 'blue';
 
   return (
-    <ListWrapper color={color}>
-      <ListHeader color={color}>
-        <HeaderTitleWrapper>
-          <HeaderTitle>{heading}</HeaderTitle>
-        </HeaderTitleWrapper>
-        {onEdit ? (
-          <TouchableHighlight onPress={onEdit}>
-            <Icon name="create" color="#00213F" />
-          </TouchableHighlight>
-        ) : null}
-      </ListHeader>
+    <Fieldset
+      colorSchema={colorSchema}
+      legend={heading || ''}
+      onIconPress={() => console.log('Icon is pressed')}
+      iconName="help-outline"
+      renderHeaderActions={() =>
+        showEditButton && (
+          <FieldsetButton colorSchema={colorSchema} z={0} size="small" onClick={changeEditable}>
+            <Text>{editable ? 'Färdig' : 'Ändra'}</Text>
+          </FieldsetButton>
+        )
+      }
+    >
       <ListBody>
         {Object.keys(groupedItems)
           .sort((a, _b) => (a === 'sum' ? 1 : -1))
@@ -91,11 +66,14 @@ const GroupedList = ({ heading, items, categories, onEdit, color }) => {
               <ListBodyFieldLabel underline>
                 {categories.find(c => c.category === key).description}
               </ListBodyFieldLabel>
-              {groupedItems[key].map(item => item.component)}
+              {groupedItems[key].map(item => ({
+                ...item.component,
+                props: { ...item.component.props, editable },
+              }))}
             </View>
           ))}
       </ListBody>
-    </ListWrapper>
+    </Fieldset>
   );
 };
 
@@ -117,10 +95,13 @@ GroupedList.propTypes = {
    */
   color: PropTypes.oneOf(Object.keys(theme.groupedList)),
   /**
-   * What should happen when the edit button is clicked.
-   * Only display edit button if this prop is sent.
+   * Whether or not to show the edit button
    */
-  onEdit: PropTypes.func,
+  showEditButton: PropTypes.bool,
+  /**
+   * Whether to start in editable mode or not
+   */
+  startEditable: PropTypes.bool,
 };
 
 GroupedList.defaultProps = {
