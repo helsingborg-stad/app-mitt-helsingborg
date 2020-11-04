@@ -5,14 +5,18 @@ import StoryWrapper from '../../molecules/StoryWrapper';
 import Text from '../Text';
 import RadioButton from './RadioButton';
 
-storiesOf('RadioButtons', module).add('Default', props => (
-  <StoryWrapper {...props}>
-    <RadioButtons />
-  </StoryWrapper>
-));
+const FlexContainer = styled.View`
+  flex: 1;
+`;
+const FlexRow = styled.View`
+  flex-direction: row;
+  max-height: 70px;
+  height: 100%;
+  flex: auto;
+`;
 
-const RadioButtons = injectProps => {
-  const [buttonValues, setBValues] = useState({
+const RadioButtons = () => {
+  const [buttonValues, setButtonValues] = useState({
     box1: false,
     box2: false,
     box3: false,
@@ -21,7 +25,7 @@ const RadioButtons = injectProps => {
 
   function handleChange(id) {
     return () => {
-      setBValues({ ...buttonValues, [id]: !buttonValues[id] });
+      setButtonValues({ ...buttonValues, [id]: !buttonValues[id] });
     };
   }
   return (
@@ -61,12 +65,8 @@ const RadioButtons = injectProps => {
   );
 };
 
-const FlexContainer = styled.View`
-  flex: 1;
-`;
-const FlexRow = styled.View`
-  flex-direction: row;
-  max-height: 70px;
-  height: 100%;
-  flex: auto;
-`;
+storiesOf('RadioButtons', module).add('Default', props => (
+  <StoryWrapper {...props}>
+    <RadioButtons />
+  </StoryWrapper>
+));
