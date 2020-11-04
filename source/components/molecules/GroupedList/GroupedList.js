@@ -84,16 +84,14 @@ const GroupedList = ({ heading, items, categories, onEdit, color }) => {
         ) : null}
       </ListHeader>
       <ListBody>
-        {Object.keys(groupedItems)
-          .sort((a, _b) => (a === 'sum' ? 1 : -1))
-          .map((key, index) => (
-            <View key={`${index}-${key}`}>
-              <ListBodyFieldLabel underline>
-                {categories.find(c => c.category === key).description}
-              </ListBodyFieldLabel>
-              {groupedItems[key].map(item => item.component)}
-            </View>
-          ))}
+        {Object.keys(groupedItems).map((key, index) => (
+          <View key={`${index}-${key}`}>
+            <ListBodyFieldLabel underline>
+              {categories.find(c => c.category === key).description}
+            </ListBodyFieldLabel>
+            {groupedItems[key].map(item => item.component)}
+          </View>
+        ))}
       </ListBody>
     </ListWrapper>
   );
