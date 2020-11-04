@@ -18,7 +18,7 @@ const Text = styled(RNText)`
   ${({ strong }) =>
     strong &&
     `
-      font-weight: 900;
+      font-weight: bold;
     `}
 `;
 
