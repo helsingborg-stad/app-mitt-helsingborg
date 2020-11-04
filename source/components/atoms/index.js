@@ -1,3 +1,4 @@
+export { default as Box } from './Box';
 export { default as Button } from './Button';
 export { default as Fieldset } from './Fieldset';
 export { default as Heading } from './Heading';
