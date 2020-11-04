@@ -341,6 +341,65 @@ const theme = {
       checkedBackground: deprecatedPalette.red[6],
     },
   },
+  radiobutton: {
+    small: {
+      touchable: {
+        height: 22,
+        width: 22,
+        borderRadius: 11,
+      },
+      border: {
+        height: 24,
+        width: 24,
+        borderRadius: 12,
+        borderWidth: 2,
+      },
+      fill: {
+        height: 16,
+        width: 16,
+        borderRadius: 8,
+        margin: 2,
+      },
+    },
+    medium: {
+      touchable: {
+        height: 36,
+        width: 36,
+        borderRadius: 18,
+      },
+      border: {
+        height: 36,
+        width: 36,
+        borderRadius: 18,
+        borderWidth: 3,
+      },
+      fill: {
+        height: 25,
+        width: 25,
+        borderRadius: 12.5,
+        margin: 4,
+      },
+    },
+    large: {
+      touchable: {
+        height: 48,
+        width: 48,
+        borderRadius: 24,
+      },
+      border: {
+        height: 48,
+        width: 48,
+        borderRadius: 24,
+        borderWidth: 4,
+      },
+      fill: {
+        height: 35,
+        width: 35,
+        borderRadius: 17.5,
+        margin: 6,
+      },
+    },
+  },
   list: {
     onLightBackground: {
       listWithAvatar: {
@@ -536,5 +595,13 @@ const theme = {
     },
   },
 };
+
+/**
+ * Helper function that checks if the passed colorSchema exists on the theme, and if so returns it.
+ * Otherwise defaults to the blue colorSchema.
+ * @param {*} colorSchema The schema to check
+ */
+export const getValidColorSchema = colorSchema =>
+  Object.keys(theme.colors.primary).includes(colorSchema) ? colorSchema : 'blue';
 
 export default theme;
