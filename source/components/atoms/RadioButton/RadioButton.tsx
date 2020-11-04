@@ -1,87 +1,38 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { TouchableHighlight, LayoutAnimation } from 'react-native';
+import { TouchableHighlight, LayoutAnimation, View } from 'react-native';
 import styled, { ThemeContext } from 'styled-components';
+import {getValidColorSchema} from '../../../styles/theme';
 import SHADOW from '../../../styles/shadow';
 
-const TouchableSizes = {
-  small: {
-    height: 22,
-    width: 22,
-    borderRadius: 11,
-  },
-  medium: {
-    height: 36,
-    width: 36,
-    borderRadius: 18,
-  },
-  large: {
-    height: 48,
-    width: 48,
-    borderRadius: 24,
-  },
-};
+const TouchableArea = styled(TouchableHighlight)<{size: 'small' | 'medium' | 'large'}>`
+  height: ${({theme, size}) => theme.radiobutton[size].touchable.height}px;
+  width: ${({theme, size})  => theme.radiobutton[size].touchable.width}px;
+  border-radius: ${({theme, size})  => theme.radiobutton[size].touchable.borderRadius}px;
+`
 
-const BorderSizes = {
-  small: {
-    height: 24,
-    width: 24,
-    borderRadius: 12,
-    borderWidth: 2,
-    padding: 0,
-    margin: 0,
-  },
-  medium: {
-    height: 36,
-    width: 36,
-    borderRadius: 18,
-    borderWidth: 3,
-    padding: 0,
-    margin: 0,
-  },
-  large: {
-    height: 48,
-    width: 48,
-    borderRadius: 24,
-    borderWidth: 4,
-    padding: 0,
-    margin: 0,
-  },
-};
-
-const FillSizes = {
-  small: {
-    height: 16,
-    width: 16,
-    borderRadius: 10,
-    margin: 2,
-  },
-  medium: {
-    height: 25,
-    width: 25,
-    borderRadius: 12.5,
-    margin: 4,
-  },
-  large: {
-    height: 35,
-    width: 35,
-    borderRadius: 17.5,
-    margin: 6,
-  },
-};
-
-const RadioButtonBorder = styled.View<{ colorSchema: string; z: 0 | 1 | 2 | 3 | 4  }>`
+const RadioButtonBorder = styled(View)<{ colorSchema: string; z: 0 | 1 | 2 | 3 | 4; size: 'small'|'medium' | 'large' }>`
   align-items: center;
   justify-content: center;
   border-color: ${props => props.theme.colors.primary[props.colorSchema][0]};
   shadow-color: ${props => props.theme.button[props.colorSchema].shadow};
+  height: ${({theme, size}) => theme.radiobutton[size].border.height}px;
+  width: ${({theme, size})  => theme.radiobutton[size].border.width}px;
+  border-radius: ${({theme, size}) => theme.radiobutton[size].border.borderRadius}px;
+  border-width: ${({theme, size}) => theme.radiobutton[size].border.borderWidth}px;
+  margin: 0;
+  padding: 0;
   ${props => SHADOW[props.z]}
 `;
   
-const RadioButtonFill = styled.View<{ colorSchema: string }>`
+const RadioButtonFill = styled(View)<{ colorSchema: string; size: 'small' | 'medium' | 'large' }>`
   align-items: center;
   justify-content: center;
   background-color: ${props => props.theme.colors.primary[props.colorSchema][1]};
+  height: ${({theme, size}) => theme.radiobutton[size].fill.height}px;
+  width: ${({theme, size})  => theme.radiobutton[size].fill.width}px;
+  border-radius: ${({theme, size}) => theme.radiobutton[size].fill.borderRadius}px;
+  margin: ${({theme, size}) => theme.radiobutton[size].fill.margin}px;
 `;
 
 interface Props {
@@ -96,22 +47,19 @@ const RadioButton: React.FC<Props> = ({ selected, onSelect, colorSchema, size })
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     onSelect();
   };
-
-  const validColorSchema = Object.keys(theme.colors.primary).includes(colorSchema)
-    ? colorSchema
-    : 'blue';
+  const validColorSchema = getValidColorSchema(colorSchema);
 
   return (
-    <TouchableHighlight
+    <TouchableArea
       onPress={onPress}
       activeOpacity={0.6}
       underlayColor={theme.colors.complementary[validColorSchema][0]}
-      style={TouchableSizes[size]}
+      size={size || 'small'}
     >
-      <RadioButtonBorder style={BorderSizes[size]} colorSchema={validColorSchema} z={1}>
-        {selected && <RadioButtonFill style={FillSizes[size]} colorSchema={validColorSchema} />}
+      <RadioButtonBorder size={size || 'small'} colorSchema={validColorSchema} z={1}>
+        {selected && <RadioButtonFill size={size || 'small'} colorSchema={validColorSchema} />}
       </RadioButtonBorder>
-    </TouchableHighlight>
+    </TouchableArea>
   );
 };
 
