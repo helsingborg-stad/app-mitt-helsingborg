@@ -44,7 +44,7 @@ const setTypography = () => {
       h5: {
         fontWeight: fontWeights[1],
         fontSize: fontSizes[4],
-        lineHeight: lineHeights[1],
+        lineHeight: lineHeights[3],
       },
       h6: {
         fontWeight: fontWeights[1],
@@ -398,6 +398,20 @@ const theme = {
         borderRadius: 17.5,
         margin: 6,
       },
+    },
+  },
+  radiobuttonGroup: {
+    small: {
+      textType: 'text',
+      textMargin: 4,
+    },
+    medium: {
+      textType: 'h6',
+      textMargin: 15,
+    },
+    large: {
+      textType: 'h5',
+      textMargin: 30,
     },
   },
   list: {
