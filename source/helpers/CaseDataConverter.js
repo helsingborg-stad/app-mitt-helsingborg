@@ -134,6 +134,9 @@ const isNumeric = str => {
  */
 export const convertAnswerArrayToObject = answerArray => {
   const caseObject = {};
+  if (!Array.isArray(answerArray)) {
+    return caseObject;
+  }
 
   answerArray.forEach(answer => {
     const path = answer.field.id.split('.');
