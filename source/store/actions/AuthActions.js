@@ -90,7 +90,7 @@ export async function startAuth(ssn) {
     if (response.success === false) {
       throw new Error(response.data);
     }
-    const { order_ref: orderRef, auto_start_token: autoStartToken } = response.data;
+    const { orderRef, autoStartToken } = response.data;
 
     return {
       type: actionTypes.authStarted,
@@ -107,10 +107,6 @@ export async function startAuth(ssn) {
       },
     };
   }
-}
-
-export async function cancelAuth() {
-  console.log('cancelAuth action is not implemented yet...');
 }
 
 export async function startSign(personalNumber, userVisibleData) {
@@ -153,10 +149,10 @@ export async function checkOrderStatus(autoStartToken, orderRef, isUserAuthentic
     }
 
     // Tries to grant a token from the authorization endpoint in the api.
-    const { personal_number: ssn } = response.data.attributes.completion_data.user;
+    const { personalNumber } = response.data.attributes.completionData.user;
 
     // eslint-disable-next-line no-unused-vars
-    const [__, grantTokenError] = await authService.grantAccessToken(ssn);
+    const [__, grantTokenError] = await authService.grantAccessToken(personalNumber);
     if (grantTokenError) {
       throw new Error(grantTokenError);
     }
