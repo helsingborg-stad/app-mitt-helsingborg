@@ -121,6 +121,8 @@ function EditableList({
             </EditableListItemLabelWrapper>
             <EditableListItemInputWrapper>
               <EditableListItemInput
+                multiline /** Temporary fix to make field scrollable inside scrollview */
+                numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
                 colorSchema={colorSchema}
                 editable={editable}
                 onChangeText={text => onChange(input.key, text)}
