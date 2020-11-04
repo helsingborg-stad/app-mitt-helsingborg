@@ -29,6 +29,15 @@ const items = [
   },
 ];
 
+const radioChoices = [
+  { displayText: 'Choice 1', value: '1' },
+  { displayText: 'Choice 2', value: '2' },
+  {
+    displayText: 'Choice 3',
+    value: '3',
+  },
+];
+
 const DateFormField = () => {
   const [date, setDate] = useState({ 7: '' });
   return (
@@ -43,7 +52,20 @@ const DateFormField = () => {
     />
   );
 };
-
+const RadioGroupFormField = () => {
+  const [value, setValue] = useState({ 8: '' });
+  return (
+    <FormField
+      id="8"
+      label="Radio group"
+      labelLine
+      choices={radioChoices}
+      onChange={choice => setValue(choice)}
+      value={value[8]}
+      inputType="radioGroup"
+    />
+  );
+};
 storiesOf('Form Field input', module).add('Default', () => (
   <StoryWrapper>
     <ScrollView>
@@ -99,6 +121,7 @@ storiesOf('Form Field input', module).add('Default', () => (
         ]}
       />
       <DateFormField />
+      <RadioGroupFormField />
     </ScrollView>
   </StoryWrapper>
 ));
