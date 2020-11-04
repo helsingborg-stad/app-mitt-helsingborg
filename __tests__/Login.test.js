@@ -26,8 +26,8 @@ mock.onPost('/auth/bankid/auth?apikey=').reply(200, {
   success: true,
   data: {
     attributes: {
-      order_ref: 'theOrderRef',
-      auto_start_token: 'theAutoStartToken',
+      orderRef: 'theOrderRef',
+      autoStartToken: 'theAutoStartToken',
     },
   },
 });
@@ -36,9 +36,9 @@ mock.onPost('/auth/bankid/collect?apikey=').reply(200, {
   success: true,
   data: {
     attributes: {
-      completion_data: {
+      completionData: {
         user: {
-          personal_number: '199803312389',
+          personalNumber: '199803312389',
         },
       },
     },
