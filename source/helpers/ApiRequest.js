@@ -23,7 +23,6 @@ const request = async (endpoint, method, data, headers, userId) => {
     const token = await StorageService.getData(TOKEN_KEY);
     bearer = token || '';
   }
-  if (method === 'post') console.log('post bearer', bearer);
 
   // Merge custom headers
   const newHeaders = {
