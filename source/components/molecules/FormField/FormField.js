@@ -9,6 +9,7 @@ import NavigationButtonGroup from '../NavigationButtonGroup/NavigationButtonGrou
 import SummaryList from '../../organisms/SummaryList/SummaryList';
 import RepeaterField from '../RepeaterField/RepeaterField';
 import theme from '../../../styles/theme';
+import RadioGroup from '../RadioGroup/RadioGroup';
 
 const inputTypes = {
   text: {
@@ -55,6 +56,11 @@ const inputTypes = {
   select: {
     component: Select,
     changeEvent: 'onValueChange',
+    props: {},
+  },
+  radioGroup: {
+    component: RadioGroup,
+    changeEvent: 'onSelect',
     props: {},
   },
   avatarList: {
@@ -104,7 +110,6 @@ const FormField = ({
     value === '' && Object.prototype.hasOwnProperty.call(input, 'initialValue')
       ? input.initialValue
       : value;
-
   const inputCompProps = {
     color,
     value: initialValue,
