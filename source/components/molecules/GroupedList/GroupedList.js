@@ -40,7 +40,7 @@ const HeaderTitleWrapper = styled.View`
 `;
 
 const HeaderTitle = styled(Text)`
-  font-weight: 900;
+  font-weight: bold;
   font-size: 14px;
   letter-spacing: 0.8px;
   text-transform: uppercase;
