@@ -37,47 +37,47 @@ const Checkboxes = injectProps => {
           size="small"
           {...injectProps}
         />
-        <Text>Small, white color scheme</Text>
+        <Text>Small, blue color scheme</Text>
       </FlexRow>
       <FlexRow>
         <Checkbox
           onChange={handleChange('box2')}
           checked={checkboxValues.box2}
-          color="dark"
+          color="green"
           size="small"
           {...injectProps}
         />
-        <Text>Small, dark color scheme</Text>
+        <Text>Small, green color scheme</Text>
       </FlexRow>
       <FlexRow>
         <Checkbox
           onChange={handleChange('box3')}
           checked={checkboxValues.box3}
-          color="light"
+          color="red"
           size="small"
           {...injectProps}
         />
-        <Text>Small, light color scheme</Text>
+        <Text>Small, red color scheme</Text>
       </FlexRow>
       <FlexRow>
         <Checkbox
           onChange={handleChange('box4')}
           checked={checkboxValues.box4}
-          color="light"
+          color="purple"
           size="medium"
           {...injectProps}
         />
-        <Text>Medium size, light color scheme</Text>
+        <Text>Medium size, purple color scheme</Text>
       </FlexRow>
       <FlexRow>
         <Checkbox
           onChange={handleChange('box5')}
           checked={checkboxValues.box5}
-          color="dark"
+          color="green"
           size="large"
           {...injectProps}
         />
-        <Text>Large size, dark color scheme</Text>
+        <Text>Large size, green color scheme</Text>
       </FlexRow>
       <FlexRow>
         <Checkbox
@@ -87,7 +87,7 @@ const Checkboxes = injectProps => {
           size="large"
           {...injectProps}
         />
-        <Text>Large size, gray color scheme</Text>
+        <Text>Large size, blue color scheme</Text>
       </FlexRow>
       <FlexRow>
         <Checkbox
@@ -98,7 +98,7 @@ const Checkboxes = injectProps => {
           disabled="true"
           {...injectProps}
         />
-        <Text>Disabled, gray color scheme</Text>
+        <Text>Disabled, medium, blue color scheme</Text>
       </FlexRow>
     </FlexContainer>
   );
