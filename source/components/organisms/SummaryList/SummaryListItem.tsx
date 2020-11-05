@@ -120,7 +120,6 @@ const SummaryListItem: React.FC<Props> = ({
       case 'arrayNumber':
         return (
           <SmallInput
-            textAlign="right"
             keyboardType="numeric"
             value={value as string}
             onChangeText={changeFromInput}
