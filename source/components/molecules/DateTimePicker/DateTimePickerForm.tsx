@@ -11,12 +11,15 @@ import Modal from '../Modal/Modal';
 
 const ContentContainer = styled.View`
   flex: 1;
+  padding-top: 30px;
   padding-left: 12px;
+  padding-right: 12px;
   justify-content: center;
   position: relative;
 `;
 const ButtonContainer = styled.View`
   flex: 1;
+  padding-top: 12px;
   margin: 0 auto;
   justify-content: center;
 `;
