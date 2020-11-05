@@ -6,68 +6,80 @@ import Text from '../Text';
 import Icon from '../Icon';
 import theme from '../../../styles/theme';
 
-/** Button modifiers */
-const CSS = { z: SHADOW };
+/** Button styles */
+const Styles = { elevation: SHADOW };
 
-CSS.buttonRounded = css`
-  border-radius: 17.5px;
+/* Styles common to all buttons */
+Styles.buttonbase = css`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  border-radius: 4.5px;
+  background-color: ${props => props.theme.colors.primary[props.colorSchema][0]};
 `;
 
-CSS.buttonPill = css`
-  border-radius: 24.5px;
+/* Styles for different button variants outlined, contained etc */
+Styles.outlined = css`
+  border: 2px solid ${props => props.theme.colors.primary[props.colorSchema][1]};
+  background-color: ${props => props.theme.colors.complementary[props.colorSchema][1]};
+  ${Styles.elevation[0]}
+`;
+Styles.contained = css``;
+
+/* Styles for size variants */
+Styles.small = css`
+  font-size: 14px;
+  padding: 4px 8px;
+  min-width: 10px;
 `;
 
-CSS.buttonSharp = css`
-  border-radius: 0px;
+Styles.medium = css`
+  font-size: 16px;
+  padding: 10px 32px;
+  min-width: 10px;
 `;
 
-CSS.buttonSmall = css`
-  padding: 8px 12px;
-  min-height: 36px;
-  min-width: 74px;
+Styles.fullWidth = css`
+  width: 100%;
 `;
 
-CSS.disabled = css`
+/* Styles for a disabled button */
+Styles.disabled = css`
   opacity: 0.2;
+  background-color: #e5e5e5;
 `;
 
 const ButtonBase = styled.View`
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-
-    max-width: 100%;
-    min-height: 56px;
-
-    border-radius: 4.5px;
+    ${Styles.buttonbase};
 
     padding: ${props => (!props.icon ? '12px 20px' : '16px 16px')};
     min-width: ${props => (!props.icon ? '124px' : '169px')};
-    background-color: ${props => props.theme.colors.primary[props.colorSchema][0]};
 
-    ${props => (props.rounded ? CSS.buttonRounded : null)}
-    ${props => (props.pill ? CSS.buttonPill : null)}
-    ${props => (props.sharp ? CSS.buttonSharp : null)}
-    ${props => (props.disabled ? CSS.disabled : null)}
+    ${props => props.disabled && Styles.disabled}
+    ${props => props.fullWidth && Styles.fullWidth}
 
-    ${props => (props.buttonSize === 'small' ? CSS.buttonSmall : null)}
-    ${props => (props.buttonSize === 'xsmall' ? CSS.buttonSmall : null)}
+    ${props => props.size === 'small' && Styles.small}
+    ${props => props.size === 'medium' && Styles.medium}
+    ${props => props.size === 'large' && Styles.large}
 
-    ${props => CSS.z[props.z]}
+    ${props => Styles.elevation[props.elevation]}
     shadow-color: ${props => props.theme.button[props.colorSchema].shadow};
+
+    ${props => Styles[props.variant]}
 `;
 
 /** Button child component overrides */
 const ButtonText = styled(Text)`
-  font-size: ${props => (props.buttonSize === 'small' ? '14px' : '16px')};
   font-weight: ${props => props.theme.fontWeights[1]};
-  color: ${props => props.theme.colors.complementary[props.colorSchema][3]};
-
-  ${props => (props.buttonSize === 'small' ? 'font-weight: bold;' : null)};
+  color: ${props =>
+    props.variant === 'outlined' ? props.theme.colors.neutrals[1] : props.theme.colors.neutrals[7]};
 `;
-
 const ButtonIcon = styled(Icon)`
-  color: ${props => props.theme.colors.neutrals[7]};
+  color: ${props =>
+    props.variant === 'outlined'
+      ? props.theme.colors.primary[props.colorSchema][1]
+      : props.theme.colors.neutrals[7]};
   font-size: 26px;
   height: 26px;
   width: 26px;
@@ -91,7 +103,7 @@ const ButtonWrapper = styled.View`
 
 const ButtonTouchable = styled.TouchableOpacity`
     ${props => (props.block ? 'flex: 1;' : null)};
-    ${props => CSS.z[props.z]}
+    ${props => Styles.elevation[props.elevation]}
     shadow-color: ${props => props.theme.shadow.default};
 `;
 
@@ -103,13 +115,11 @@ const Button = props => {
     color,
     colorSchema,
     block,
-    rounded,
-    pill,
-    sharp,
     icon,
-    z: shadow,
+    z: elevation,
     size,
     disabled,
+    variant,
     ...other
   } = props;
 
@@ -137,6 +147,7 @@ const Button = props => {
         ...child.props,
         size: 32,
         colorSchema,
+        variant,
       });
     }
 
@@ -146,6 +157,7 @@ const Button = props => {
         ...child.props,
         colorSchema,
         buttonSize: size,
+        variant,
       });
     }
 
@@ -154,17 +166,15 @@ const Button = props => {
 
   return (
     <ButtonWrapper>
-      <ButtonTouchable disabled={disabled} onPress={onClick} block={block} z={shadow}>
+      <ButtonTouchable disabled={disabled} onPress={onClick} block={block} elevation={elevation}>
         <ButtonBase
           colorSchema={colorSchema}
-          buttonSize={size}
-          rounded={rounded}
-          pill={pill}
+          size={size}
           style={style}
           icon={iconComponentsTotal === 1 && childrenTotal === 1 ? true : icon}
-          z={shadow}
-          shrarp={sharp}
+          elevation={elevation}
           disabled={disabled}
+          variant={variant}
         >
           {children || (value ? <ButtonText>{value}</ButtonText> : null)}
         </ButtonBase>
@@ -174,15 +184,15 @@ const Button = props => {
 };
 
 Button.propTypes = {
+  variant: PropTypes.oneOf(['outlined', 'contained']),
   block: PropTypes.bool,
   color: PropTypes.oneOf(Object.keys(theme.button)),
   colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
   icon: PropTypes.bool,
   onClick: PropTypes.func,
   pill: PropTypes.bool,
-  rounded: PropTypes.bool,
   sharp: PropTypes.bool,
-  size: PropTypes.string,
+  size: PropTypes.oneOf(['small', 'medium']),
   style: PropTypes.array,
   value: PropTypes.string,
   disabled: PropTypes.bool,
@@ -192,13 +202,11 @@ Button.propTypes = {
 Button.defaultProps = {
   color: 'light',
   colorSchema: 'blue',
-  rounded: false,
-  pill: false,
   icon: false,
-  sharp: false,
   z: 1,
   size: 'medium',
   disabled: false,
+  variant: 'contained',
 };
 
 export default Button;
