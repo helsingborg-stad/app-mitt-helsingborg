@@ -19,7 +19,7 @@ const PersonFieldContainer = styled.View`
   padding-top: 16px;
   padding-left: 16px;
   padding-right: 16px;
-  background: ${props => props.theme.colors.complementary.blue[3]};
+  background: ${props => props.theme.colors.complementary[props.colorSchema][3]};
 `;
 
 const PersonFieldHeader = styled.View`
@@ -46,7 +46,7 @@ const PersonFieldDivider = styled.View`
   height: 2px;
   margin: 0 -16px;
   margin-top: 20px;
-  background: ${props => props.theme.colors.complementary.blue[1]};
+  background: ${props => props.theme.colors.complementary[props.colorSchema][1]};
 `;
 
 const PersonFieldFooter = styled.View`
