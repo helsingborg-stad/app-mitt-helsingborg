@@ -120,7 +120,6 @@ interface Input {
 interface Props {
   firstName: string;
   lastName: string;
-  middleName: string;
   personalNumber: string;
   relation: string;
   isEditable: boolean;
