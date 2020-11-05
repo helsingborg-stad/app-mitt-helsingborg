@@ -156,7 +156,7 @@ const Button = props => {
       return React.createElement(ButtonText, {
         ...child.props,
         colorSchema,
-        buttonSize: size,
+        size,
         variant,
       });
     }
@@ -190,8 +190,6 @@ Button.propTypes = {
   colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
   icon: PropTypes.bool,
   onClick: PropTypes.func,
-  pill: PropTypes.bool,
-  sharp: PropTypes.bool,
   size: PropTypes.oneOf(['small', 'medium']),
   style: PropTypes.array,
   value: PropTypes.string,
