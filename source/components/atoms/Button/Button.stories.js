@@ -15,32 +15,28 @@ const FlexContainer = styled.View`
 `;
 
 storiesOf('Button', module)
-  .add('Default', props => (
+  .add('Contained Buttons', props => (
     <StoryWrapper {...props}>
       <ButtonColors />
     </StoryWrapper>
   ))
-  .add('Small', props => (
+  .add('Outlined Buttons', props => (
     <StoryWrapper {...props}>
-      <ButtonColors size="small" />
+      <ButtonColors variant="outlined" />
     </StoryWrapper>
   ))
-  .add('Rounded', props => (
+  .add('Sizes', props => (
     <StoryWrapper {...props}>
-      <ButtonColors rounded />
-    </StoryWrapper>
-  ))
-  .add('Pill', props => (
-    <StoryWrapper {...props}>
-      <ButtonColors pill />
+      <ButtonSizes />
     </StoryWrapper>
   ))
   .add('Block', props => (
     <StoryWrapper {...props}>
       <ButtonColors block />
+      <ButtonColors block variant="outlined" />
     </StoryWrapper>
   ))
-  .add('with icon', props => (
+  .add('Icon', props => (
     <StoryWrapper {...props}>
       <FlexContainer>
         <Flex>
@@ -60,10 +56,27 @@ storiesOf('Button', module)
             <Text>Skriv en fråga</Text>
           </Button>
         </Flex>
+        <Flex>
+          <Button variant="outlined" colorSchema="purple" rounded>
+            <Icon name="arrow-upward" pill />
+          </Button>
+        </Flex>
+        <Flex>
+          <Button variant="outlined" colorSchema="purple" pill>
+            <Text>Icon right</Text>
+            <Icon name="arrow-upward" />
+          </Button>
+        </Flex>
+        <Flex>
+          <Button variant="outlined" colorSchema="blue" pill>
+            <Icon name="message" />
+            <Text>Skriv en fråga</Text>
+          </Button>
+        </Flex>
       </FlexContainer>
     </StoryWrapper>
   ))
-  .add('Shadows', props => (
+  .add('Elevation', props => (
     <StoryWrapper {...props}>
       <FlexContainer>
         <Flex>
@@ -104,22 +117,37 @@ const ButtonColors = injectProps => (
   <FlexContainer>
     <Flex>
       <Button colorSchema="blue" {...injectProps}>
-        <Text>Purple</Text>
-      </Button>
-    </Flex>
-    <Flex>
-      <Button colorSchema="red" {...injectProps}>
         <Text>Blue</Text>
       </Button>
     </Flex>
     <Flex>
+      <Button colorSchema="red" {...injectProps}>
+        <Text>Red</Text>
+      </Button>
+    </Flex>
+    <Flex>
       <Button colorSchema="purple" {...injectProps}>
-        <Text>Light</Text>
+        <Text>Purple</Text>
       </Button>
     </Flex>
     <Flex>
       <Button colorSchema="green" {...injectProps}>
-        <Text>Gray</Text>
+        <Text>Green</Text>
+      </Button>
+    </Flex>
+  </FlexContainer>
+);
+
+const ButtonSizes = injectProps => (
+  <FlexContainer>
+    <Flex>
+      <Button size="small" {...injectProps}>
+        <Text>Small</Text>
+      </Button>
+    </Flex>
+    <Flex>
+      <Button size="medium" {...injectProps}>
+        <Text>Medium</Text>
       </Button>
     </Flex>
   </FlexContainer>
