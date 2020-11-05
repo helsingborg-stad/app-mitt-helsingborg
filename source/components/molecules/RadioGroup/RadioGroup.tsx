@@ -34,8 +34,6 @@ interface Props {
 
 /**
  * A component for displaying a number of choices, where at most one can be selected at a time.
- * The component is completely stupid, keeps no internal state, and uses the passed value to
- * determine which radiobutton is selected.
  */
 const RadioGroup: React.FC<Props> = ({ choices, value, onSelect, colorSchema, size }) => {
   const validColorSchema = getValidColorSchema(colorSchema);
@@ -73,19 +71,14 @@ RadioGroup.propTypes = {
   /** The array of choices, each entry corresponding to one row */
   choices: PropTypes.arrayOf(
     PropTypes.shape({
-      /** The text to display next to the button */
       displayText: PropTypes.string,
       /** The value to store in the context/backend */
       value: PropTypes.string,
     })
   ).isRequired,
-  /** The value, corresponding to the selected choice */
   value: PropTypes.string,
-  /** What should happen when a choice is selected */
   onSelect: PropTypes.func,
-  /** Select the color schema of the radio buttons */
   colorSchema: PropTypes.string,
-  /** The size of the radio buttons */
   size: PropTypes.oneOf(['small', 'medium', 'large']),
 };
 
