@@ -1,8 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import GroupedList from '../../molecules/GroupedList/GroupedList';
+import Text from '../../atoms/Text/Text';
+import Heading from '../../atoms/Heading';
 import SummaryListItemComponent from './SummaryListItem';
+import { getValidColorSchema } from '../../../styles/theme';
 
+const SumLabel = styled(Heading)<{ colorSchema: string }>`
+  margin-top: 5px;
+  margin-left: 3px;
+  font-weight: ${props => props.theme.fontWeights[1]};
+  font-size: ${props => props.theme.fontSizes[3]};
+  color: ${props => props.theme.colors.primary[props.colorSchema][1]};
+`;
+const SumText = styled(Text)`
+  margin-left: 4px;
+  margin-top: 10px;
+`;
+// TODO: the sum component should be sent as a footer to the grouped list, at which point this container should be removed.
+// Currently it's using a negative margin, which is a hack and only meant as a temporary fix.
+const SumContainer = styled.View<{ colorSchema: string }>`
+  width: 100%;
+  height: auto;
+  border-radius: 9.5px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  margin-top: -64px;
+  padding-bottom: 20px;
+  padding-top: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
+  background: ${props => props.theme.colors.complementary[props.colorSchema][3]};
+`;
 export interface SummaryListItem {
   title: string;
   id: string;
@@ -23,13 +53,22 @@ interface Props {
   onChange: (answers: Record<string, any> | string | number, fieldId: string) => void;
   color: string;
   answers: Record<string, any>;
+  showSum: boolean;
 }
 /**
  * Summary list, that is linked and summarizes values from other input components.
  * The things to summarize is specified in the items prop.
  * The things are grouped into categories, as specified by the categories props.
  */
-const SummaryList: React.FC<Props> = ({ heading, items, categories, onChange, color, answers }) => {
+const SummaryList: React.FC<Props> = ({
+  heading,
+  items,
+  categories,
+  onChange,
+  color,
+  answers,
+  showSum,
+}) => {
   /**
    * Given an item, and possibly an index in the case of repeater fields, this generates a function that
    * updates the form data from the input.
@@ -84,6 +123,18 @@ const SummaryList: React.FC<Props> = ({ heading, items, categories, onChange, co
     ),
   });
 
+  // Code for computing sum of all numeric values shown in the list
+  let sum = 0;
+  const addToSum = (value: string | number) => {
+    if (typeof value === 'string') {
+      const summand = parseInt(value);
+      // eslint-disable-next-line no-restricted-globals
+      sum += isNaN(summand) ? 0 : summand;
+    } else {
+      sum += value;
+    }
+  };
+
   const listItems = [];
   items
     .filter(item => {
@@ -96,22 +147,40 @@ const SummaryList: React.FC<Props> = ({ heading, items, categories, onChange, co
         if (values && values?.length > 0) {
           values.forEach((v, index) => {
             listItems.push(generateListItem(item, v[item?.inputId || item.id], index));
+            if (item.type === 'arrayNumber') {
+              const numericValue: string | number = v[item?.inputId || item.id];
+              addToSum(numericValue);
+            }
           });
         }
       } else {
         listItems.push(generateListItem(item, answers[item.id]));
+        if (item.type === 'number') {
+          const numericValue: number | string = answers[item.id];
+          addToSum(numericValue);
+        }
       }
     });
+
+  const validColorSchema = getValidColorSchema(color);
   return (
     listItems.length > 0 && (
-      <GroupedList
-        heading={heading}
-        items={listItems}
-        categories={categories}
-        color={color}
-        showEditButton
-        startEditable
-      />
+      <>
+        <GroupedList
+          heading={heading}
+          items={listItems}
+          categories={categories}
+          color={color}
+          showEditButton
+          startEditable
+        />
+        {showSum && (
+          <SumContainer colorSchema={validColorSchema}>
+            <SumLabel colorSchema={validColorSchema}>Summa</SumLabel>
+            <SumText type="h1">{sum} kr</SumText>
+          </SumContainer>
+        )}
+      </>
     )
   );
 };
@@ -141,11 +210,16 @@ SummaryList.propTypes = {
    * The form state answers
    */
   answers: PropTypes.object,
+  /**
+   * Whether or not to show a sum of all numeric values at the bottom. Defaults to true.
+   */
+  showSum: PropTypes.bool,
 };
 
 SummaryList.defaultProps = {
   items: [],
   color: 'blue',
+  showSum: true,
   onChange: () => {},
 };
 export default SummaryList;
