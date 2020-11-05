@@ -613,9 +613,10 @@ const theme = {
 /**
  * Helper function that checks if the passed colorSchema exists on the theme, and if so returns it.
  * Otherwise defaults to the blue colorSchema.
- * @param {*} colorSchema The schema to check
+ * @param {string} colorSchema The schema to check
+ * @param {string} variant The type of colors we want to check (complementary, primary, etc)
  */
-export const getValidColorSchema = colorSchema =>
-  Object.keys(theme.colors.primary).includes(colorSchema) ? colorSchema : 'blue';
+export const getValidColorSchema = (colorSchema, variant = 'primary') =>
+  Object.keys(theme.colors[variant]).includes(colorSchema) ? colorSchema : 'blue';
 
 export default theme;

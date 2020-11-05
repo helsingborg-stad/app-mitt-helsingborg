@@ -4,6 +4,7 @@ import styled, { ThemeContext } from 'styled-components/native'
 import { Avatar } from 'react-native-elements'
 import { Text, Button } from '../../atoms'
 import { InputRow } from '../RepeaterField/RepeaterField';
+import { getValidColorSchema } from '../../../styles/theme'
 
 // TODO: BREAKOUT TO CARD COMPONENT REDUNDANT USE IN FIELDSET ALSO.
 const PersonFieldContainer = styled.View`
@@ -131,9 +132,7 @@ function PersonField({firstName, lastName, isEditable, personalNumber, relation,
 {
   const theme = useContext(ThemeContext);
   // Check if passed color is defined in theme
-  const validColorSchema = Object.keys(theme.colors.primary).includes(colorSchema)
-    ? colorSchema
-    : 'blue';
+  const validColorSchema = getValidColorSchema(colorSchema)
   return (
     <PersonFieldContainer>
       <PersonFieldHeader>
