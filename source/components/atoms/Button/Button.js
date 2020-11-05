@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components/native';
 import SHADOW from '../../../styles/shadow';
 import Text from '../Text';
 import Icon from '../Icon';
-import theme from '../../../styles/theme';
 
 /** Button styles */
 const Styles = { elevation: SHADOW };
@@ -112,7 +111,6 @@ const Button = props => {
     value,
     onClick,
     style,
-    color,
     colorSchema,
     block,
     icon,
@@ -186,7 +184,6 @@ const Button = props => {
 Button.propTypes = {
   variant: PropTypes.oneOf(['outlined', 'contained']),
   block: PropTypes.bool,
-  color: PropTypes.oneOf(Object.keys(theme.button)),
   colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
   icon: PropTypes.bool,
   onClick: PropTypes.func,
@@ -198,7 +195,6 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
-  color: 'light',
   colorSchema: 'blue',
   icon: false,
   z: 1,
