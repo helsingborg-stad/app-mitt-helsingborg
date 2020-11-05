@@ -24,6 +24,7 @@ Styles.outlined = css`
   background-color: ${props => props.theme.colors.complementary[props.colorSchema][1]};
   ${Styles.elevation[0]}
 `;
+
 Styles.contained = css``;
 
 /* Styles for size variants */
@@ -182,14 +183,38 @@ const Button = props => {
 };
 
 Button.propTypes = {
+  /**
+   * The button layout variant to use.
+   */
   variant: PropTypes.oneOf(['outlined', 'contained']),
+  /**
+   * If true, the button will take up the full width of its container.
+   */
   block: PropTypes.bool,
+  /**
+   * The color schema of the component. colors is defined in the application theme.
+   */
   colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
+  /**
+   * If true button will display Icon component passed as children.
+   */
   icon: PropTypes.bool,
   onClick: PropTypes.func,
+  /**
+   * The size of the button. small is equivalent to the dense button styling.
+   */
   size: PropTypes.oneOf(['small', 'medium']),
+  /**
+   * Override or extend the styles applied to the component.
+   */
   style: PropTypes.array,
+  /**
+   * The text value to display in the button.
+   */
   value: PropTypes.string,
+  /**
+   * If true, the button will be disabled.
+   */
   disabled: PropTypes.bool,
   z: PropTypes.oneOf(Object.keys(SHADOW).map(number => parseInt(number))),
 };
