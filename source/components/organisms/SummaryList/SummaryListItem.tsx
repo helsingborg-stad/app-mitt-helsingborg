@@ -9,6 +9,14 @@ import colors from "../../../styles/colors";
 import { Item } from "./SummaryList";
 import DateTimePickerForm from "../../molecules/DateTimePicker/DateTimePickerForm";
 
+/**
+ * Fixes a bug in React Native that makes input fields not scrollable inside ScrollViews on Android
+ * Issue: https://github.com/facebook/react-native/issues/25594
+ * @param props
+ */
+const SmallInputRight = (props) =>
+  <Input {...props} multiline={true} numberOfLines={1} textAlign="right" />;
+
 const ItemWrapper = styled(View)`
   flex-direction: row;
   align-items: flex-end;
@@ -20,7 +28,7 @@ const InputWrapper = styled.View`
   flex: 1;
   padding-left: 50px;
 `;
-const SmallInput = styled(Input)`
+const SmallInput = styled(SmallInputRight)`
   height: 40px;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -80,7 +88,6 @@ const SummaryListItem: React.FC<Props> = ({
       case "arrayText":
         return (
           <SmallInput
-            textAlign="right"
             value={value}
             onChangeText={changeFromInput}
           />
@@ -89,7 +96,6 @@ const SummaryListItem: React.FC<Props> = ({
       case "arrayNumber":
         return (
           <SmallInput
-            textAlign="right"
             keyboardType="numeric"
             value={value}
             onChangeText={changeFromInput}
@@ -110,7 +116,6 @@ const SummaryListItem: React.FC<Props> = ({
       default:
         return (
           <SmallInput
-            textAlign="right"
             value={value}
             onChangeText={changeFromInput}
           />
