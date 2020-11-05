@@ -71,14 +71,19 @@ RadioGroup.propTypes = {
   /** The array of choices, each entry corresponding to one row */
   choices: PropTypes.arrayOf(
     PropTypes.shape({
+      /** The text next to the button */
       displayText: PropTypes.string,
       /** The value to store in the context/backend */
       value: PropTypes.string,
     })
   ).isRequired,
+  /** The value selecting which button to mark. If blank, no button is selected */
   value: PropTypes.string,
+  /** Callback for when a button is clicked */
   onSelect: PropTypes.func,
+  /** Color theme for the component, referencing the theme */
   colorSchema: PropTypes.string,
+  /** Size of buttons and text, one of small, medium, large */
   size: PropTypes.oneOf(['small', 'medium', 'large']),
 };
 
