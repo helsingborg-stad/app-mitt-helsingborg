@@ -7,7 +7,8 @@ import Icon from '../Icon';
 
 const CheckboxBox = styled.TouchableHighlight`
   border-style: solid;
-  border-color: ${props => (props.checked ? 'transparent' : props.theme.colors.neutrals[4])};
+  border-color: ${props =>
+    props.checked ? 'transparent' : props.theme.colors.complementary[props.colorSchema][0]};
   background-color: ${props =>
     props.checked ? props.theme.colors.primary[props.colorSchema][3] : 'transparent'};
 `;
