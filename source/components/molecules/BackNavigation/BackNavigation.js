@@ -12,6 +12,14 @@ const BackNavigationWrapper = styled.View({
   top: 0,
   zIndex: 999,
 });
+const BackNavigationSingleWrapper = styled.View({
+  flexDirection: 'row',
+  padding: 0,
+  margin: 0,
+  justifyContent: 'flex-end',
+  top: 0,
+  zIndex: 999,
+});
 
 const BackButton = styled.View(props => ({
   alignItems: 'center',
@@ -49,23 +57,40 @@ const BackNavigation = ({
   onClose,
   showBackButton,
   showCloseButton,
-}) => (
-  <BackNavigationWrapper style={style}>
-    {showBackButton ? (
-      <BackButton colorSchema={colorSchema} onStartShouldSetResponder={onBack}>
-        <BackButtonIcon name="keyboard-backspace" colorSchema={colorSchema} />
-      </BackButton>
-    ) : (
-      <View />
-    )}
+  inSubstep,
+}) =>
+  !inSubstep ? (
+    <BackNavigationWrapper style={style}>
+      {showBackButton ? (
+        <BackButton colorSchema={colorSchema} onStartShouldSetResponder={onBack}>
+          <BackButtonIcon name="keyboard-backspace" colorSchema={colorSchema} />
+        </BackButton>
+      ) : (
+        <View />
+      )}
 
-    {showCloseButton ? (
-      <CloseButton colorSchema={colorSchema} onStartShouldSetResponder={onClose}>
-        <CloseButtonIcon name="close" />
-      </CloseButton>
-    ) : null}
-  </BackNavigationWrapper>
-);
+      {showCloseButton ? (
+        <CloseButton colorSchema={colorSchema} onStartShouldSetResponder={onClose}>
+          <CloseButtonIcon name="close" />
+        </CloseButton>
+      ) : null}
+    </BackNavigationWrapper>
+  ) : (
+    <BackNavigationSingleWrapper style={style}>
+      <BackButton
+        colorSchema={colorSchema}
+        onStartShouldSetResponder={() => {
+          onBack();
+        }}
+      >
+        <BackButtonIcon
+          name="keyboard-backspace"
+          style={{ transform: [{ rotate: '-90deg' }] }}
+          colorSchema={colorSchema}
+        />
+      </BackButton>
+    </BackNavigationSingleWrapper>
+  );
 
 BackNavigation.propTypes = {
   style: PropTypes.array,
@@ -74,6 +99,7 @@ BackNavigation.propTypes = {
   onClose: PropTypes.func,
   showBackButton: PropTypes.bool,
   showCloseButton: PropTypes.bool,
+  inSubstep: PropTypes.bool,
 };
 
 BackNavigation.defaultProps = {

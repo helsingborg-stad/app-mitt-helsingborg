@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import React, {useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import AuthContext from 'app/store/AuthContext';
-import { Text } from 'react-native';
-import { AuthLoading, FormField } from 'app/components/molecules';
+import {Text} from 'react-native';
+import {AuthLoading, FormField} from 'app/components/molecules';
 import BackNavigation from '../../molecules/BackNavigation/BackNavigation';
 import Banner from './StepBanner/StepBanner';
 import FooterAction from './FooterAction/FooterAction';
@@ -95,6 +95,7 @@ function Step({
     <StepContainer>
       <StepBackNavigation
         showBackButton={isBackBtnVisible}
+        inSubstep={currentPosition.level !== 0}
         onBack={formNavigation?.back ? formNavigation.back : undefined}
         onClose={closeForm}
       />
