@@ -51,7 +51,7 @@ const SmallInput = styled.TextInput`
   min-width: 80%;
   font-weight: 500;
   padding: 6px;
-`;
+  `;
 const LabelWrapper = styled.View`
   flex: 4;
   justify-content: center;
@@ -79,8 +79,8 @@ const DeleteButtonHighligth = styled(TouchableHighlight)`
 const dateStyle: CSSProp = {
   textAlign: 'right',
   minWidth: '80%',
-  fontWeight: 500,
   padding: 6,
+  fontWeight: '500',
 };
 
 interface Props {
