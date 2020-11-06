@@ -1,16 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
+import styled, { ThemeContext } from 'styled-components/native';
 import { TouchableHighlight } from 'react-native';
 import { HelpButton } from 'source/components/molecules';
 import Text from '../../atoms/Text/Text';
 import Checkbox from '../../atoms/Checkbox/Checkbox';
-import theme from '../../../styles/theme';
+import theme, { getValidColorSchema } from '../../../styles/theme';
 
 const FlexContainer = styled.View`
   flex: auto;
   flex-direction: row;
-  margin: 8px;
+  align-items: flex-start;
+  margin-left: -50px;
+  margin-right: -50px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: ${props => props.theme.sizes[1]}px;
+  padding-bottom: ${props => props.theme.sizes[1]}px;
+  background-color: ${props => (props.toggled ? 'transparent' : props.theme.colors.neutrals[5])};
+`;
+
+const TouchableWrapper = styled(TouchableHighlight)`
+  margin-left: -24px;
+  margin-right: -24px;
+  padding-left: 24px;
+  padding-right: 24px;
+`;
+const CheckboxFieldText = styled(Text)`
+  margin-left: ${props => props.theme.sizes[1]}px;
+  margin-right: ${props => props.theme.sizes[1]}px;
 `;
 // TODO: MOVE TO THEME.
 const sizes = {
@@ -32,14 +50,8 @@ const sizes = {
   },
 };
 
-// TODO: THEME/STYLING TEXT SHOULD BE ABLE TO TAKE COLOR PROPS ie <Text color="blue" />
-// THIS WOULD REMOVE THE USAGE OF THIS WRAPPER COMPONENT.
-const CheckboxFieldText = styled(Text)`
-  color: ${props => props.theme.checkboxField[props.color].text};
-`;
-
-const CheckboxField = props => {
-  const { text, color, size, value, onChange, help, ...other } = props;
+const CheckboxField = ({ text, color, size, value, onChange, help, ...other }) => {
+  const theme = useContext(ThemeContext);
   let boolValue;
   if (typeof value === 'boolean') {
     boolValue = value;
@@ -47,29 +59,19 @@ const CheckboxField = props => {
     boolValue = value === 'true';
   }
   const update = () => onChange(!boolValue);
-
-  // TODO: THEME/STYLING SET STYLING IN A STYLED COMPONENT THAT WRAPS TOUCHABLEHIGHLIGHT
-  const backgroundStyle = {
-    marginLeft: -24,
-    marginRight: -24,
-    paddingLeft: 24,
-    paddingRight: 24,
-    backgroundColor:
-      'transparent' /* boolValue ? 'transparent' : colors.checkbox[color].checkedBackground */,
-  };
+  const validColorSchema = getValidColorSchema(color);
 
   return (
-    <TouchableHighlight
-      underlayColor="transparent" // {colors.checkbox[color].checkedBackground}
-      style={backgroundStyle}
+    <TouchableWrapper
+      underlayColor={theme.colors.complementary[validColorSchema][3]} // {colors.checkbox[color].checkedBackground}
       onPress={update}
     >
-      <FlexContainer>
+      <FlexContainer toggled={boolValue}>
         <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
         <CheckboxFieldText color={color}>{text}</CheckboxFieldText>
         {Object.keys(help).length > 0 && <HelpButton {...help} />}
       </FlexContainer>
-    </TouchableHighlight>
+    </TouchableWrapper>
   );
 };
 
