@@ -59,7 +59,6 @@ const Checkbox = props => {
     ...sizes[size],
   };
   const validColorSchema = getValidColorSchema(color);
-  console.log('validColorSchema', validColorSchema);
   const tickIcon = <CheckboxTick size={iconSizes[size]} name="done" />;
   return (
     <CheckboxBox
