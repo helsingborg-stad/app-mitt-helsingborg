@@ -15,7 +15,7 @@ const ListBody = styled.View`
   height: auto;
 `;
 
-const ListBodyFieldLabel = styled(Heading)<{ colorSchema: string }>`
+const ListBodyFieldLabel = styled(Heading) <{ colorSchema: string }>`
   margin-top: 5px;
   margin-left: 3px;
   font-weight: ${props => props.theme.fontWeights[1]};
@@ -75,19 +75,17 @@ const GroupedList: React.FC<Props> = ({
       }
     >
       <ListBody>
-        {Object.keys(groupedItems)
-          .sort((a, _b) => (a === 'sum' ? 1 : -1))
-          .map((key, index) => (
-            <View key={`${index}-${key}`}>
-              <ListBodyFieldLabel colorSchema={colorSchema}>
-                {categories.find(c => c.category === key).description}
-              </ListBodyFieldLabel>
-              {groupedItems[key].map(item => ({
-                ...item.component,
-                props: { ...item.component.props, editable },
-              }))}
-            </View>
-          ))}
+        {Object.keys(groupedItems).map((key, index) => (
+          <View key={`${index}-${key}`}>
+            <ListBodyFieldLabel colorSchema={colorSchema}>
+              {categories.find(c => c.category === key).description}
+            </ListBodyFieldLabel>
+            {groupedItems[key].map(item => ({
+              ...item.component,
+              props: { ...item.component.props, editable },
+            }))}
+          </View>
+        ))}
       </ListBody>
     </Fieldset>
   );

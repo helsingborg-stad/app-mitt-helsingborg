@@ -1,20 +1,28 @@
 /* eslint-disable no-nested-ternary */
 import React from "react";
-import { View } from "react-native";
+import { View, TextInput } from "react-native";
 import { TouchableHighlight } from "react-native-gesture-handler";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
 import { Text, Icon } from "../../atoms";
 import { SummaryListItem as SummaryListItemType } from "./SummaryList";
 import DateTimePickerForm from "../../molecules/DateTimePicker/DateTimePickerForm";
-import {colorPalette} from '../../../styles/palette';
+import { colorPalette } from '../../../styles/palette';
 import { CSSProp } from "styled-components";
 
 interface ItemWrapperProps {
-  error?: {isValid: boolean; validationMessage: string;};
+  error?: { isValid: boolean; validationMessage: string; };
   colorSchema: string;
   editable: boolean;
 }
+
+/**
+ * Fixes a bug in React Native that makes input fields not scrollable inside ScrollViews on Android
+ * Issue: https://github.com/facebook/react-native/issues/25594
+ * @param props
+ */
+const TextInputRight = (props) =>
+  <TextInput {...props} multiline={true} numberOfLines={1} textAlign="right" />;
 
 const Row = styled(View)`
   flex-direction: row;
@@ -22,7 +30,7 @@ const Row = styled(View)`
   align-items: center;
 `
 
-const ItemWrapper = styled(View)<ItemWrapperProps>`
+const ItemWrapper = styled(View) <ItemWrapperProps>`
   flex: 10;
   font-size: ${props => props.theme.fontSizes[4]}px;
   flex-direction: row;
@@ -46,12 +54,13 @@ const InputWrapper = styled.View`
   align-items: flex-end;
   flex: 5;
 `;
-const SmallInput = styled.TextInput`
-  text-align: right;
+
+const SmallInput = styled(TextInputRight)`
   min-width: 80%;
   font-weight: 500;
   padding: 6px;
-  `;
+`;
+
 const LabelWrapper = styled.View`
   flex: 4;
   justify-content: center;
@@ -91,7 +100,7 @@ interface Props {
   changeFromInput: (text: string | number) => void;
   removeItem: () => void;
   color: string;
-  error?: {isValid: boolean; validationMessage: string};
+  error?: { isValid: boolean; validationMessage: string };
 }
 /** The rows for the summary list. */
 const SummaryListItem: React.FC<Props> = ({
@@ -110,7 +119,6 @@ const SummaryListItem: React.FC<Props> = ({
       case 'arrayText':
         return (
           <SmallInput
-            textAlign="right"
             value={value as string}
             onChangeText={changeFromInput}
             editable={editable}
@@ -142,7 +150,6 @@ const SummaryListItem: React.FC<Props> = ({
       default:
         return (
           <SmallInput
-            textAlign="right"
             value={value as string}
             onChangeText={changeFromInput}
             editable={editable}
@@ -154,23 +161,23 @@ const SummaryListItem: React.FC<Props> = ({
   const colorSchema = Object.keys(colorPalette.primary).includes(color) ? color : 'blue';
   return (
     <Row>
-    <ItemWrapper key={`${item.title}`} colorSchema={colorSchema} editable={editable} error={error}>
-      <LabelWrapper>
-        <SmallText>
-        {`${item.title}`}
-        {index ? ` ${index}` : null}
-      </SmallText>
-      </LabelWrapper>
-      <InputWrapper>{inputComponent(item, editable)}</InputWrapper>
-    </ItemWrapper>
-      { editable && 
-        (<DeleteButtonHighligth 
-          activeOpacity={0.6} 
+      <ItemWrapper key={`${item.title}`} colorSchema={colorSchema} editable={editable} error={error}>
+        <LabelWrapper>
+          <SmallText>
+            {`${item.title}`}
+            {index ? ` ${index}` : null}
+          </SmallText>
+        </LabelWrapper>
+        <InputWrapper>{inputComponent(item, editable)}</InputWrapper>
+      </ItemWrapper>
+      { editable &&
+        (<DeleteButtonHighligth
+          activeOpacity={0.6}
           underlayColor={colorPalette.complementary[colorSchema][1]}
           onPress={removeItem}>
           <DeleteButton name="clear" />
         </DeleteButtonHighligth>)}
-      </Row>
+    </Row>
   );
 };
 SummaryListItem.propTypes = {
@@ -186,8 +193,8 @@ SummaryListItem.propTypes = {
    * What should happen to update the values
    */
   changeFromInput: PropTypes.func,
-  /** 
-   * The function to remove the row and clear the associated input 
+  /**
+   * The function to remove the row and clear the associated input
    */
   removeItem: PropTypes.func,
   /**
@@ -195,7 +202,7 @@ SummaryListItem.propTypes = {
    */
   color: PropTypes.string,
   /**
-   * Whether or not to make the 
+   * Whether or not to make the
    */
   editable: PropTypes.bool,
 };
