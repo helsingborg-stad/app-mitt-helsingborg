@@ -86,6 +86,21 @@ const SummaryStory = () => {
         answers={state}
         showSum
       />
+      <SummaryList
+        heading="Blå, ingen summa"
+        items={items}
+        categories={categories}
+        color="blue"
+        onChange={(answer, id) => {
+          setState(s => {
+            s[id] = answer;
+            return { ...s };
+          });
+        }}
+        answers={state}
+        showSum={false}
+        startEditable
+      />
     </ScrollView>
   );
 };

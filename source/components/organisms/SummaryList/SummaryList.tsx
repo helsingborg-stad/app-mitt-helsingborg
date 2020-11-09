@@ -54,6 +54,7 @@ interface Props {
   color: string;
   answers: Record<string, any>;
   showSum: boolean;
+  startEditable?: boolean;
 }
 /**
  * Summary list, that is linked and summarizes values from other input components.
@@ -68,6 +69,7 @@ const SummaryList: React.FC<Props> = ({
   color,
   answers,
   showSum,
+  startEditable,
 }) => {
   /**
    * Given an item, and possibly an index in the case of repeater fields, this generates a function that
@@ -172,7 +174,7 @@ const SummaryList: React.FC<Props> = ({
           categories={categories}
           color={color}
           showEditButton
-          startEditable
+          startEditable={startEditable}
         />
         {showSum && (
           <SumContainer colorSchema={validColorSchema}>
@@ -214,6 +216,10 @@ SummaryList.propTypes = {
    * Whether or not to show a sum of all numeric values at the bottom. Defaults to true.
    */
   showSum: PropTypes.bool,
+  /**
+   * Whether to start in editable mode or not.
+   */
+  startEditable: PropTypes.bool,
 };
 
 SummaryList.defaultProps = {
