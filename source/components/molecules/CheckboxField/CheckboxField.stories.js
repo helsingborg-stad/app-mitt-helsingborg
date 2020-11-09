@@ -34,6 +34,7 @@ const CheckboxFields = () => {
         size="small"
         value={checkboxValues.box1}
         onChange={handleChange('box1')}
+        help={{ text: 'some other helper text' }}
       />
       <CheckboxField
         text="Does it feel good? Can I ask longer questions here? How does it handle long strings?"
@@ -41,6 +42,7 @@ const CheckboxFields = () => {
         size="small"
         value={checkboxValues.box2}
         onChange={handleChange('box2')}
+        help={{ text: 'some helper text' }}
       />
       <CheckboxField
         text="Is it happening? Green theme, medium"
@@ -69,6 +71,7 @@ const CheckboxFields = () => {
         size="large"
         value={checkboxValues.box6}
         onChange={handleChange('box6')}
+        help={{ text: 'some helper text' }}
       />
     </View>
   );
