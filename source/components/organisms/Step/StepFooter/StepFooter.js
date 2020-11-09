@@ -6,9 +6,11 @@ import { Button, Text } from '../../../atoms';
 
 const ActionContainer = styled.View(props => ({
   flex: 1,
-  backgroundColor: props.background,
+  backgroundColor: props.theme.colors.neutrals[5],
 }));
 const Flex = styled.View`
+  position: absolute;
+  bottom: 0;
   padding: 5px;
   align-items: flex-end;
   padding-right: 10px;
@@ -18,7 +20,7 @@ const ButtonWrapper = styled.View`
   margin-bottom: 5%;
 `;
 
-const FooterAction = ({
+const StepFooter = ({
   actions,
   caseStatus,
   background,
@@ -111,7 +113,7 @@ const FooterAction = ({
   );
 };
 
-FooterAction.propTypes = {
+StepFooter.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 
   /**
@@ -169,7 +171,7 @@ FooterAction.propTypes = {
   }),
 };
 
-FooterAction.defaultProps = {
+StepFooter.defaultProps = {
   background: '#00213F',
 };
-export default FooterAction;
+export default StepFooter;
