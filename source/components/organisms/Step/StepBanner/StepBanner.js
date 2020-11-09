@@ -1,7 +1,6 @@
 import React from 'react';
 import { Image } from 'react-native';
 import styled from 'styled-components/native';
-import { Text } from 'source/components/atoms';
 import PropTypes from 'prop-types';
 import icons from 'source/helpers/Icons';
 
@@ -17,12 +16,6 @@ const BannerWrapper = styled.View`
   justify-content: flex-end;
 `;
 
-const ProgressCounterText = styled(Text)`
-  position: absolute;
-  bottom: -37px;
-  right: 32px;
-`;
-
 const BannerImageWrapper = styled.View`
   height: 256px;
 `;
@@ -31,33 +24,17 @@ const BannerImage = styled(Image)`
   height: 100%;
 `;
 
-const StepBanner = ({ style, currentPosition, totalStepNumber, imageSrc, colorSchema }) => (
+const StepBanner = ({ style, imageSrc, colorSchema }) => (
   <BannerWrapper style={style} image={imageSrc} colorSchema={colorSchema}>
     {Object.prototype.hasOwnProperty.call(icons, imageSrc) ? (
       <BannerImageWrapper>
         <BannerImage resizeMode="contain" source={icons[imageSrc]} />
       </BannerImageWrapper>
     ) : null}
-    {/*
-        TODO: Move ProgressCounterText component out of the banner component.
-        Could be rendered as a child in the Banner instead where it's needed. ie in a Step.
-      */}
-    {totalStepNumber > 1 && currentPosition.level === 0 && (
-      <ProgressCounterText>
-        Steg {currentPosition.currentMainStep}/{totalStepNumber}
-      </ProgressCounterText>
-    )}
   </BannerWrapper>
 );
 
 StepBanner.propTypes = {
-  /** The current position in the form */
-  currentPosition: PropTypes.shape({
-    index: PropTypes.number,
-    level: PropTypes.number,
-    currentMainStep: PropTypes.number,
-  }),
-  totalStepNumber: PropTypes.number,
   /**
    * The source to a image to render as a background in the banner.
    */
