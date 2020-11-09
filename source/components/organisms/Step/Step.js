@@ -105,16 +105,19 @@ function Step({
         showsHorizontalScrollIndicator={false}
       >
         {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
-          <StepBanner
-            currentPosition={currentPosition}
-            totalStepNumber={totalStepNumber}
-            {...banner}
-          />
+          <StepBanner {...banner} />
         )}
         <StepBody>
           {(isResolved || isIdle) && (
             <>
-              <StepDescription theme={theme} {...description} />
+              <StepDescription
+                theme={theme}
+                currentStep={
+                  currentPosition.level === 0 ? currentPosition.currentMainStep : undefined
+                }
+                totalStepNumber={totalStepNumber}
+                {...description}
+              />
               {questions && (
                 <StepFieldListWrapper>
                   {questions.map(field => (

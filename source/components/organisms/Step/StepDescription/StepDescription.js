@@ -24,11 +24,23 @@ const StepDescriptionText = styled(Text)`
   margin-top: 16px;
 `;
 
-function StepDescription({ style, tagline, heading, text, colorSchema }) {
+function StepDescription({
+  style,
+  tagline,
+  heading,
+  text,
+  colorSchema,
+  currentStep,
+  totalStepNumber,
+}) {
   return (
     <StepDescriptionWrapper style={style}>
       {tagline.length !== 0 && (
-        <StepDescriptionTagline colorSchema={colorSchema}>{tagline}</StepDescriptionTagline>
+        <StepDescriptionTagline colorSchema={colorSchema}>
+          {tagline}
+          {tagline && currentStep && totalStepNumber && ' • '}
+          {currentStep && totalStepNumber && `${currentStep} / ${totalStepNumber}`}
+        </StepDescriptionTagline>
       )}
       <Heading>{heading}</Heading>
       {text.length !== 0 && <StepDescriptionText>{text}</StepDescriptionText>}
@@ -41,6 +53,10 @@ StepDescription.propTypes = {
   tagline: PropTypes.string,
   heading: PropTypes.string.isRequired,
   text: PropTypes.string,
+  /** Current main step in the form */
+  currentStep: PropTypes.number,
+  /** Total number of main steps in the form */
+  totalStepNumber: PropTypes.number,
   /**
    * The color schema for the description,
    */

@@ -35,6 +35,8 @@ storiesOf('StepDescription', module)
         tagline="Green tagline"
         colorSchema="green"
         heading="Step Description Heading"
+        currentStep={2}
+        totalStepNumber={5}
       />
     </StoryWrapper>
   ))
@@ -49,6 +51,8 @@ storiesOf('StepDescription', module)
         tagline="Step Description Tagline"
         text={lorem}
         heading="Step Description Heading"
+        currentStep={4}
+        totalStepNumber={8}
       />
     </StoryWrapper>
   ))
