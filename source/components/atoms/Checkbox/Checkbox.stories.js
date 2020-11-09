@@ -33,7 +33,7 @@ const Checkboxes = injectProps => {
         <Checkbox
           onChange={handleChange('box1')}
           checked={checkboxValues.box1}
-          color="white"
+          color="blue"
           size="small"
           {...injectProps}
         />
@@ -83,7 +83,7 @@ const Checkboxes = injectProps => {
         <Checkbox
           onChange={handleChange('box6')}
           checked={checkboxValues.box6}
-          color="gray"
+          color="blue"
           size="large"
           {...injectProps}
         />
@@ -93,9 +93,9 @@ const Checkboxes = injectProps => {
         <Checkbox
           onChange={handleChange('box7')}
           checked={checkboxValues.box7}
-          color="gray"
+          color="blue"
           size="medium"
-          disabled="true"
+          disabled
           {...injectProps}
         />
         <Text>Disabled, medium, blue color scheme</Text>
