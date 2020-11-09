@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/react-native';
 import React from 'react';
 import StoryWrapper from '../../../molecules/StoryWrapper';
-import FooterAction from './FooterAction';
+import StepFooter from './StepFooter';
 
 const actions1 = [
   {
@@ -32,8 +32,8 @@ const actions3 = [
 
 storiesOf('Footer', module).add('Forward/ Cancel', props => (
   <StoryWrapper {...props}>
-    <FooterAction actions={actions1} />
-    <FooterAction actions={actions2} background="#FFAA9B" />
-    <FooterAction actions={actions3} />
+    <StepFooter actions={actions1} />
+    <StepFooter actions={actions2} background="#FFAA9B" />
+    <StepFooter actions={actions3} />
   </StoryWrapper>
 ));

@@ -1,12 +1,12 @@
-import React, {useContext, useEffect} from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import AuthContext from 'app/store/AuthContext';
-import {Text} from 'react-native';
-import {AuthLoading, FormField} from 'app/components/molecules';
+import { Text } from 'react-native';
+import { AuthLoading, FormField } from 'app/components/molecules';
 import BackNavigation from '../../molecules/BackNavigation/BackNavigation';
 import Banner from './StepBanner/StepBanner';
-import FooterAction from './FooterAction/FooterAction';
+import StepFooter from './StepFooter/StepFooter';
 import StepDescription from './StepDescription/StepDescription';
 import Progressbar from '../../atoms/Progressbar/Progressbar';
 
@@ -35,12 +35,6 @@ const StepFieldListWrapper = styled.View`
   margin: 24px;
 `;
 
-const StepFooter = styled(FooterAction)`
-  background: ${props => props.theme.colors.neutrals[6]}
-  position: absolute;
-  bottom: 0;
-`;
-
 const SignStepWrapper = styled.View`
   padding: 48px 24px 24px 24px;
 `;
@@ -48,7 +42,6 @@ const SignStepWrapper = styled.View`
 function Step({
   theme,
   banner,
-  footerBg,
   description,
   questions,
   actions,
@@ -167,7 +160,6 @@ function Step({
           <StepFooter
             actions={actions}
             caseStatus={status}
-            background={footerBg}
             answers={answers}
             formNavigation={formNavigation}
             currentPosition={currentPosition}
