@@ -8,6 +8,7 @@ import BackNavigation from '../../molecules/BackNavigation/BackNavigation';
 import Banner from './StepBanner/StepBanner';
 import FooterAction from './FooterAction/FooterAction';
 import StepDescription from './StepDescription/StepDescription';
+import Progressbar from '../../atoms/Progressbar/Progressbar';
 
 const StepContainer = styled.View`
   background: ${props => props.theme.colors.neutrals[7]};
@@ -109,6 +110,12 @@ function Step({
             currentPosition={currentPosition}
             totalStepNumber={totalStepNumber}
             {...banner}
+          />
+        )}
+        {currentPosition.level === 0 && (
+          <Progressbar
+            currentStep={currentPosition.currentMainStep}
+            totalStepNumber={totalStepNumber}
           />
         )}
         <StepBody>
