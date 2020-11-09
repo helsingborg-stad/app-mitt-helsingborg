@@ -6,18 +6,42 @@ import { HelpButton } from 'source/components/molecules';
 import Text from '../../atoms/Text/Text';
 import Checkbox from '../../atoms/Checkbox/Checkbox';
 import theme, { getValidColorSchema } from '../../../styles/theme';
-
+// TODO: MOVE TO THEME.
+const sizes = {
+  small: {
+    padding: 0.25,
+    margin: 4,
+    marginTop: 0,
+    fontSize: 12,
+  },
+  medium: {
+    padding: 0.5,
+    margin: 4,
+    fontSize: 15,
+  },
+  large: {
+    padding: 1,
+    margin: 5,
+    fontSize: 18,
+  },
+};
 const FlexContainer = styled.View`
   flex: auto;
   flex-direction: row;
   align-items: flex-start;
   margin-left: -50px;
   margin-right: -50px;
-  padding-left: 50px;
-  padding-right: 50px;
+  padding-left: 60px;
+  padding-right: 60px;
   padding-top: ${props => props.theme.sizes[1]}px;
   padding-bottom: ${props => props.theme.sizes[1]}px;
   background-color: ${props => (props.toggled ? 'transparent' : props.theme.colors.neutrals[5])};
+`;
+
+const BoxTextWrapper = styled.View`
+  flex: auto;
+  flex-direction: row;
+  align-items: flex-start;
 `;
 
 const TouchableWrapper = styled(TouchableHighlight)`
@@ -29,27 +53,9 @@ const TouchableWrapper = styled(TouchableHighlight)`
 const CheckboxFieldText = styled(Text)`
   margin-left: ${props => props.theme.sizes[1]}px;
   margin-right: ${props => props.theme.sizes[1]}px;
+  font-size: ${props => sizes[props.size].fontSize}px;
 `;
-// TODO: MOVE TO THEME.
-const sizes = {
-  small: {
-    padding: 0.25,
-    margin: 4,
-    marginTop: 0,
-    fontSize: 16,
-  },
-  medium: {
-    padding: 0.5,
-    margin: 4,
-    fontSize: 18,
-  },
-  large: {
-    padding: 1,
-    margin: 5,
-    fontSize: 20,
-  },
-};
-
+/** A component with a checkbox next to a descriptive text, and possibly a help button */
 const CheckboxField = ({ text, color, size, value, onChange, help, ...other }) => {
   const theme = useContext(ThemeContext);
   let boolValue;
@@ -67,8 +73,12 @@ const CheckboxField = ({ text, color, size, value, onChange, help, ...other }) =
       onPress={update}
     >
       <FlexContainer toggled={boolValue}>
-        <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
-        <CheckboxFieldText color={color}>{text}</CheckboxFieldText>
+        <BoxTextWrapper>
+          <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
+          <CheckboxFieldText color={color} size={size}>
+            {text}
+          </CheckboxFieldText>
+        </BoxTextWrapper>
         {Object.keys(help).length > 0 && <HelpButton {...help} />}
       </FlexContainer>
     </TouchableWrapper>
