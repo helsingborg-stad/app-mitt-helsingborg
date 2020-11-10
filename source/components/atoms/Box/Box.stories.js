@@ -69,3 +69,19 @@ boxStories.add('Margin', () => (
     </Box>
   </StoryWrapper>
 ));
+
+boxStories.add('Height and Width', () => (
+  <StoryWrapper>
+    <Box height="100px" width="200px">
+      <Text>This box is 100px in height and 200px in width </Text>
+    </Box>
+
+    <Box height="200px" width="100px">
+      <Text>This box is 200px in height and 100px in width </Text>
+    </Box>
+
+    <Box height="200px" width="100%">
+      <Text>This box is 200px in height and 100% of the screen in width</Text>
+    </Box>
+  </StoryWrapper>
+));
