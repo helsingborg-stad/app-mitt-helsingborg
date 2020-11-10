@@ -1,13 +1,12 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { ThemeContext } from 'styled-components/native'
+import styled from 'styled-components/native'
 import { Avatar } from 'react-native-elements'
 import { Text, Button } from '../../atoms'
-import { InputRow } from '../RepeaterField/RepeaterField';
 import { getValidColorSchema } from '../../../styles/theme'
 
 // TODO: BREAKOUT TO CARD COMPONENT REDUNDANT USE IN FIELDSET ALSO.
-const PersonFieldContainer = styled.View`
+const PersonFieldContainer = styled.View<{colorSchema: string}>`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -43,7 +42,7 @@ const PersonFieldInfoPNO = styled(Text)`
 margin-top: 6px;
   font-size: ${props => props.theme.fontSizes[3]};
 `
-const PersonFieldDivider = styled.View`
+const PersonFieldDivider = styled.View<{colorSchema: string}>`
   height: 2px;
   margin: 0 -16px;
   margin-top: 20px;
@@ -130,11 +129,10 @@ interface Props {
 }
 function PersonField({firstName, lastName, isEditable, personalNumber, relation, colorSchema, inputs, onDelete}: Props)
 {
-  const theme = useContext(ThemeContext);
   // Check if passed color is defined in theme
   const validColorSchema = getValidColorSchema(colorSchema)
   return (
-    <PersonFieldContainer>
+    <PersonFieldContainer colorSchema={validColorSchema}>
       <PersonFieldHeader>
           <Avatar
               rounded
@@ -155,7 +153,7 @@ function PersonField({firstName, lastName, isEditable, personalNumber, relation,
             </PersonFieldInfoPNO>
           </PersonFieldDetails>
       </PersonFieldHeader>
-      <PersonFieldDivider/>
+      <PersonFieldDivider colorSchema={validColorSchema}/>
       <PersonFieldBody>
         {inputs.map(input => (
            <PersonFieldInputContainer key={input.key} colorSchema={validColorSchema} editable={isEditable}>
