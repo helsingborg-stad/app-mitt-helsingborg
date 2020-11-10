@@ -15,7 +15,7 @@ storiesOf('Error boundary', module).add('Default', () => (
       colorSchema="red"
       pill
     >
-      <Text>Trigger JS error</Text>
+      <Text>Trigger JS error!</Text>
     </Button>
   </StoryWrapper>
 ));
