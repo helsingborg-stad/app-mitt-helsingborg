@@ -6,6 +6,14 @@ const Box = styled.View`
   height: ${props => props.height || 'auto'};
   width: ${props => props.width || 'auto'};
 
+  ${({ theme, colorSchema }) => colorSchema && theme && `
+    background: ${theme.colors.complementary[colorSchema][2]};
+  `}
+
+  ${({ bg }) => bg && `
+    background: ${bg};
+  `}
+
   ${props => props.p && `
     padding: ${props.p};
   `}
@@ -70,62 +78,96 @@ const Box = styled.View`
 
 
 Box.propTypes = {
+
+  /**
+   * The width of the box.
+   */
+  width: PropTypes.string,
+
+  /**
+   * The height of the box.
+   */
+  height: PropTypes.string,
+
   /**
    * Value for setting the top, right, bottom and left padding
    */
   p: PropTypes.string,
+
   /**
    * Value for setting the top and bottom padding;
    */
   py: PropTypes.string,
+
   /**
    * Value for setting the left and right padding;
    */
   px: PropTypes.string,
+
   /**
    * Value for setting the top padding.
    */
   pt: PropTypes.string,
+
   /**
    * Value for setting the right padding.
    */
   pr: PropTypes.string,
+
   /**
    * Value for setting the left padding.
    */
   pl: PropTypes.string,
+
   /**
    * Value for setting the bottom padding.
    */
   pb: PropTypes.string,
+
   /**
    * Value for setting the top, right, bottom, and left margin
    */
   m: PropTypes.string,
+
   /**
    * Value for setting the top and bottom margin
    */
   my: PropTypes.string,
+
   /**
    * Value for setting the left and right margin.
    */
   mx: PropTypes.string,
+
   /**
    * Value for setting the top margin
    */
   mt: PropTypes.string,
+
   /**
    * Value for setting the right margin
    */
   mr: PropTypes.string,
+
   /**
    * Value for setting the bottom margin
    */
   mb: PropTypes.string,
+
   /**
    * Value for setting the left margin
    */
   ml: PropTypes.string,
+
+  /**
+   * The background of the box. Overrides the colorSchema.
+   */
+  bg: PropTypes.string,
+
+  /**
+   * The color schema of the box. can be blue, purple, green or red.
+   */
+  colorSchema: PropTypes.oneOf(['blue', 'green', 'purple', 'red']),
 };
 
 export default Box;
