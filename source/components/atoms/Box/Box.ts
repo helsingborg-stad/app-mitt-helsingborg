@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components/native';
 
 const Box = styled.View`
+  height: ${props => props.height || 'auto'};
+  width: ${props => props.width || 'auto'};
+
   ${props => props.p && `
     padding: ${props.p};
   `}
