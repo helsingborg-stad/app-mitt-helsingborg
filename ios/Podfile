@@ -35,6 +35,8 @@ target 'MittHelsingborg' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
 
+  pod 'ReactNativeExceptionHandler', :path => '../node_modules/react-native-exception-handler'
+
   target 'MittHelsingborgTests' do
     inherit! :search_paths
     # Pods for testing
