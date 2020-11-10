@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { LayoutAnimation } from 'react-native';
-import { Button, Text } from '../../atoms';
+import { Button, Icon, Text } from '../../atoms';
 import RepeaterFieldListItem from './RepeaterFieldListItem';
 import Fieldset from '../../atoms/Fieldset/Fieldset';
+import theme from '../../../styles/theme';
 
+const AddButton = styled(Button)`
+  margin-top: 30px;
+  background: ${props => props.theme.colors.neutrals[7]};
+  border: 0;
+`
 export interface InputRow {
   id: string;
   title: string;
@@ -51,27 +58,31 @@ const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChan
     setLocalAnswers(prev => [...prev, {}]);
   };
 
-  const listItems: JSX.Element[] = [];23
+  const validColorSchema = Object.keys(theme.repeater).includes(color) ? color : 'blue';
+
+  const listItems: JSX.Element[] = [];
   localAnswers.forEach((answer, index) => {
     listItems.push(
       <RepeaterFieldListItem
         key={`${index}`}
+        heading={`${heading} ${index+1}`}
         inputs={inputs}
         value={answer}
         changeFromInput={changeFromInput(index)}
-        color={color}
+        color={validColorSchema}
         removeItem={removeAnswer(index)}
         error={error && error[index] ? error[index]: undefined}
       />
     );
   });
   return (
-    <>
-      {localAnswers.length > 0 && <Fieldset legend={heading}>{listItems}</Fieldset>}
-      <Button onClick={addAnswer} color={color}>
+    <Fieldset legend={heading} colorSchema={validColorSchema} empty={listItems.length === 0}>
+       {listItems}
+      <AddButton onClick={addAnswer} colorSchema={"green"} block variant="outlined">
+        <Icon name="add" color="green" />
         <Text>{addButtonText || 'Lägg till'}</Text>
-      </Button>
-    </>
+      </AddButton>
+    </Fieldset>
   );
 };
 

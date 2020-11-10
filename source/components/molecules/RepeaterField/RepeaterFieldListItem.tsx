@@ -1,86 +1,85 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
-import { View } from 'react-native';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
-import { Input, Text, Icon } from '../../atoms';
+import { Text } from '../../atoms';
+import Button from '../../atoms/Button';
+import Label from '../../atoms/Label';
 import { InputRow } from './RepeaterField';
 import DateTimePickerForm from '../DateTimePicker/DateTimePickerForm';
+import theme, { getValidColorSchema } from '../../../styles/theme';
 
 const Base = styled.View`
-  padding: 10px;
+  padding: 0px;
   margin-bottom: 5px;
-  width: 100%;
-  flex-direction: row;
-  justify-content: flex-end;
-  background-color: gray;
-  border-radius: 6px;
-  shadow-offset: 0 0;
-  shadow-opacity: 0.1;
-  shadow-radius: 6px;
-`;
-const Inputs = styled.View`
   flex-direction: column;
-  width: 92%;
+  border-radius: 6px;
 `;
-const RemoveButton = styled.TouchableHighlight`
-  width: 8%;
-  background-color: red;
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-  margin-left: 4px;
-`;
-const ItemWrapper = styled(View)<{ error: { isValid: boolean; validationMessage: string } | undefined }>`
+
+const RepeaterItem = styled.View<{colorSchema: string; error: Record<string, any>}>`
+  font-size: ${props => props.theme.fontSizes[4]}px;
   flex-direction: row;
-  align-items: flex-end;
-  border-radius: 3px;
-  height: 46px;
-  background-color: white;
-  ${({ theme, error }) =>
-    !(error?.isValid || !error) && `border: solid 2px ${theme.colors.primary.red[0]}`}
-`;
-const InputWrapper = styled.View`
-  align-items: center;
-  justify-content: flex-end;
-  flex: 1;
-  padding-left: 50px;
-`;
-const SmallInput = styled(Input)`
-  height: 40px;
-  padding-top: 8px;
-  padding-bottom: 2px;
+  height: auto;
   background-color: transparent;
-  border: none;
-  border-bottom-width: 1px;
-  border-color: black;
+  border-radius: 4.5px;
+  margin-bottom: 10px;
+  ${({ theme, error }) =>
+    !(error?.isValid || !error) && `border: solid 1px ${theme.colors.primary.red[0]}`};
+  background-color: ${props => props.theme.repeater[props.colorSchema].inputBackground};
+  padding: 10px;
 `;
-const SmallText = styled(Text)`
-  height: 40px;
-  font-size: 14px;
-  padding-top: 11px;
-  padding-bottom: 8px;
-  padding-left: 17px;
+
+const ItemLabel = styled(Label)<{colorSchema: string}>`
+  margin-top: 20px;
+  margin-left: 10px;
+  font-size: 12px;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+  color: ${props => props.theme.repeater[props.colorSchema].inputText};
+`
+
+const InputLabelWrapper = styled.View`
+  flex: 4;
+  justify-content: center;
 `;
-const DeleteButton = styled(Icon)`
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
-  margin-bottom: auto;
-  color: black;
+
+const InputLabel = styled.Text<{colorSchema: string}>`
+  padding: 4px;
+  font-weight: ${props => props.theme.fontWeights[1]};
+  color: ${props => props.theme.repeater[props.colorSchema].inputText};
 `;
+
+const InputWrapper = styled.View<{colorSchema: string}>`
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  flex: 5;
+`;
+// eslint-disable-next-line prettier/prettier
+const ItemInput = styled.TextInput<{colorSchema: string}>`
+  text-align: right;
+  min-width: 80%;
+  font-weight: 500;
+  color: ${props => props.theme.repeater[props.colorSchema].inputText};
+  padding: 6px;
+`;
+const DeleteButton = styled(Button)<{color: string}>`
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background: ${props => theme.repeater[props.color].deleteButton}
+`
 const dateStyle = {
-  height: 40,
-  paddingTop: 8,
-  paddingBottom: 2,
+  textAlign: 'right',
+  minWidth: '80%',
+  padding: 6,
   backgroundColor: 'transparent',
-  borderTopWidth: 0,
-  borderStartWidth: 0,
-  borderEndWidth: 0,
-  borderBottomWidth: 1,
-  borderColor: 'black',
+  fontWeight: '500',
+  margin: 0,
 };
 
 interface Props {
+  heading?: string;
+  listIndex?: number;
   inputs: InputRow[];
   value: Record<string, string | number>;
   error?: Record<string, {isValid: boolean, validationMessage: string}>;
@@ -90,6 +89,7 @@ interface Props {
 }
 
 const RepeaterFieldListItem: React.FC<Props> = ({
+  heading,
   inputs,
   value,
   error,
@@ -97,20 +97,24 @@ const RepeaterFieldListItem: React.FC<Props> = ({
   removeItem,
   color,
 }) => {
+  const validColorSchema = Object.keys(theme.repeater).includes(color) ? color : 'blue';
+
   const inputComponent = (input: InputRow) => {
     switch (input.type) {
       case 'text':
         return (
-          <SmallInput
+          <ItemInput
             textAlign="right"
+            colorSchema={validColorSchema}
             value={value[input.id] || ''}
             onChangeText={changeFromInput(input)}
           />
         );
       case 'number':
         return (
-          <SmallInput
+          <ItemInput
             textAlign="right"
+            colorSchema={validColorSchema}
             keyboardType="numeric"
             value={value[input.id] || ''}
             onChangeText={changeFromInput(input)}
@@ -129,7 +133,8 @@ const RepeaterFieldListItem: React.FC<Props> = ({
         );
       default:
         return (
-          <SmallInput
+          <ItemInput
+            colorSchema={validColorSchema}
             textAlign="right"
             value={value[input.id] || ''}
             onChangeText={changeFromInput(input)}
@@ -137,27 +142,31 @@ const RepeaterFieldListItem: React.FC<Props> = ({
         );
     }
   };
+
   const rows = inputs.map((input, index) => (
-    <ItemWrapper
+    <RepeaterItem
+      colorSchema={validColorSchema}
       key={`${input.title}.${index}`}
       style={index === inputs.length - 1 ? { marginBottom: 0 } : { marginBottom: 4 }}
       error={error && error[input.id] ? error[input.id] : undefined}
     >
-      <SmallText>{`${input.title}`}</SmallText>
-      <InputWrapper>{inputComponent(input)}</InputWrapper>
-    </ItemWrapper>
+      <InputLabelWrapper>
+        <InputLabel colorSchema={validColorSchema}>{`${input.title}`}</InputLabel>
+      </InputLabelWrapper>
+      <InputWrapper colorSchema={validColorSchema}>{inputComponent(input)}</InputWrapper>
+    </RepeaterItem>
   ));
 
   return (
     <Base>
-      <Inputs>{rows}</Inputs>
-      <RemoveButton activeOpacity={1} onPress={removeItem}>
-        <DeleteButton name="clear" />
-      </RemoveButton>
+      <ItemLabel colorSchema={validColorSchema} underline={false}>{heading || "Item"}</ItemLabel>
+      {rows}
+      <DeleteButton colorSchema="red" color={validColorSchema} block onClick={removeItem}><Text>Ta bort</Text></DeleteButton>
     </Base>
   );
 };
 RepeaterFieldListItem.propTypes = {
+  heading: PropTypes.string,
   /**
    * The header text of the list.
    */
