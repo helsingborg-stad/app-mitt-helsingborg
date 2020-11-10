@@ -37,3 +37,35 @@ boxStories.add('Padding', () => (
     </Box>
   </StoryWrapper>
 ));
+
+boxStories.add('Margin', () => (
+  <StoryWrapper>
+    <Box m="50px 0 50px 0">
+      <Text>Setting margin through the p prop</Text>
+    </Box>
+
+    <Box ml="50px">
+      <Text>Setting margin through the ml (margin-left) prop</Text>
+    </Box>
+
+    <Box mr="50px">
+      <Text>Setting margin through the mr (margin-right) prop</Text>
+    </Box>
+
+    <Box mt="50px">
+      <Text>Setting margin through the mt (margin-top) prop</Text>
+    </Box>
+
+    <Box mb="50px">
+      <Text>Setting margin through the mb (margin-bottom) prop</Text>
+    </Box>
+
+    <Box my="50px">
+      <Text>Setting margin through the my (margin-top and margin-bottom) prop</Text>
+    </Box>
+
+    <Box mx="50px">
+      <Text>Setting margin through the mx (margin-left and margin-right) prop</Text>
+    </Box>
+  </StoryWrapper>
+));
