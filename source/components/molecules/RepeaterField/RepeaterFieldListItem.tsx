@@ -7,7 +7,7 @@ import Button from '../../atoms/Button';
 import Label from '../../atoms/Label';
 import { InputRow } from './RepeaterField';
 import DateTimePickerForm from '../DateTimePicker/DateTimePickerForm';
-import theme, { getValidColorSchema } from '../../../styles/theme';
+import theme from '../../../styles/theme';
 
 const Base = styled.View`
   padding: 0px;
@@ -187,6 +187,6 @@ RepeaterFieldListItem.propTypes = {
   color: PropTypes.string,
 };
 RepeaterFieldListItem.defaultProps = {
-  color: 'light',
+  color: 'blue',
 };
 export default RepeaterFieldListItem;
