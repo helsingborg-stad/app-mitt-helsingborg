@@ -648,22 +648,22 @@ const theme = {
     blue: {
       inputBackground: colorPalette.complementary.blue[2],
       deleteButton: '#DD6161',
-      inputText: colorPalette.neutrals[0],
+      inputText: colorPalette.neutrals[1],
     },
     green: {
       inputBackground: colorPalette.complementary.green[2],
       deleteButton: '#DD6161',
-      inputText: colorPalette.neutrals[0],
+      inputText: colorPalette.neutrals[1],
     },
     red: {
       inputBackground: colorPalette.complementary.red[2],
       deleteButton: '#DD6161',
-      inputText: colorPalette.neutrals[0],
+      inputText: colorPalette.neutrals[1],
     },
     purple: {
       inputBackground: colorPalette.complementary.purple[2],
       deleteButton: '#DD6161',
-      inputText: colorPalette.neutrals[0],
+      inputText: colorPalette.neutrals[1],
     },
     darkBlue: {
       inputBackground: '#28435B',
