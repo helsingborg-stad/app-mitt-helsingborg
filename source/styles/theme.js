@@ -512,6 +512,10 @@ const theme = {
       text: deprecatedPalette.mono.lightest,
       underline: deprecatedPalette.mono.light,
     },
+    darkBlue: {
+      text: deprecatedPalette.mono.lightest,
+      underline: deprecatedPalette.mono.light,
+    },
     swipe: {
       text: deprecatedPalette.mono.darker,
       underline: 'rgba(255, 255, 255, 0.0)',
@@ -606,6 +610,65 @@ const theme = {
       headerText: deprecatedPalette.green[8],
       bodyBackground: deprecatedPalette.mono.floral,
       bodyText: deprecatedPalette.mono.black,
+    },
+  },
+  fieldset: {
+    blue: {
+      legend: colorPalette.primary.blue[0],
+      legendBorder: colorPalette.complementary.blue[1],
+      background: colorPalette.complementary.blue[3],
+      backgroundEmpty: colorPalette.complementary.blue[3],
+    },
+    green: {
+      legend: colorPalette.primary.green[0],
+      legendBorder: colorPalette.complementary.green[1],
+      background: colorPalette.complementary.green[3],
+      backgroundEmpty: colorPalette.complementary.green[3],
+    },
+    red: {
+      legend: colorPalette.primary.red[0],
+      legendBorder: colorPalette.complementary.red[1],
+      background: colorPalette.complementary.red[3],
+      backgroundEmpty: colorPalette.complementary.red[3],
+    },
+    purple: {
+      legend: colorPalette.primary.purple[0],
+      legendBorder: colorPalette.complementary.purple[1],
+      background: colorPalette.complementary.purple[3],
+      backgroundEmpty: colorPalette.complementary.purple[3],
+    },
+    darkBlue: {
+      legend: colorPalette.neutrals[7],
+      legendBorder: 'rgba(0, 33, 63, 0.24)',
+      background: 'rgba(0, 33, 63, 0.72)',
+      backgroundEmpty: 'rgba(0, 33, 63, 0.24)',
+    },
+  },
+  repeater: {
+    blue: {
+      inputBackground: colorPalette.complementary.blue[2],
+      deleteButton: '#DD6161',
+      inputText: colorPalette.neutrals[0],
+    },
+    green: {
+      inputBackground: colorPalette.complementary.green[2],
+      deleteButton: '#DD6161',
+      inputText: colorPalette.neutrals[0],
+    },
+    red: {
+      inputBackground: colorPalette.complementary.red[2],
+      deleteButton: '#DD6161',
+      inputText: colorPalette.neutrals[0],
+    },
+    purple: {
+      inputBackground: colorPalette.complementary.purple[2],
+      deleteButton: '#DD6161',
+      inputText: colorPalette.neutrals[0],
+    },
+    darkBlue: {
+      inputBackground: '#28435B',
+      deleteButton: '#DD6161',
+      inputText: '#FFFFFF',
     },
   },
 };

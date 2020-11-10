@@ -6,6 +6,7 @@ import Button from '../Button';
 
 interface FieldsetContainerProps {
   colorSchema: string;
+  empty?: boolean;
 }
 
 const FieldsetContainer = styled.View<FieldsetContainerProps>`
@@ -21,7 +22,10 @@ const FieldsetContainer = styled.View<FieldsetContainerProps>`
   padding-top: 16px;
   padding-left: 16px;
   padding-right: 16px;
-  background: ${props => props.theme.colors.complementary[props.colorSchema][3]};
+  background: ${props =>
+    props?.empty
+      ? props.theme.fieldset[props.colorSchema].backgroundEmpty
+      : props.theme.fieldset[props.colorSchema].background};
 `;
 
 const FieldsetHeader = styled.View`
@@ -52,7 +56,7 @@ interface FieldsetLegendProps {
 }
 
 const FieldsetLegend = styled(Text)<FieldsetLegendProps>`
-  color: ${props => props.theme.colors.primary[props.colorSchema][0]}
+  color: ${props => props.theme.fieldset[props.colorSchema].legend}
   font-size: 12px;
   padding-bottom: 12px;
   font-weight: bold;
@@ -64,7 +68,7 @@ interface FieldsetLegendBorderProps {
 }
 
 const FieldsetLegendBorder = styled.View<FieldsetLegendBorderProps>`
-  border-bottom-color: ${props => props.theme.colors.complementary[props.colorSchema][1]}
+  border-bottom-color: ${props => props.theme.fieldset[props.colorSchema].legendBorder}
   border-bottom-width: 2px;
   align-self: flex-start;
 `;
@@ -76,6 +80,7 @@ interface FieldsetProps {
   iconName?: string;
   iconSize?: number;
   colorSchema: string;
+  empty?: boolean;
   renderHeaderActions?: () => void;
 }
 
@@ -87,10 +92,11 @@ function Fieldset({
   iconSize,
   colorSchema,
   renderHeaderActions,
+  empty,
 }: FieldsetProps) {
   const showIcon = onIconPress && iconName;
   return (
-    <FieldsetContainer colorSchema={colorSchema}>
+    <FieldsetContainer colorSchema={colorSchema} empty={empty}>
       <FieldsetHeader>
         <FieldsetHeaderSection justifyContent="flex-start">
           <FieldsetLegendBorder colorSchema={colorSchema}>
