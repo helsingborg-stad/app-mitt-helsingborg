@@ -6,8 +6,19 @@ const Box = styled.View`
   height: ${props => props.height || 'auto'};
   width: ${props => props.width || 'auto'};
 
+  border-radius: ${props => props.borderRadius || '0'};
+  border-style: solid;
+
+  ${({ borderColor }) => borderColor && `
+    border-color: ${borderColor};
+  `}
+
+  ${({ borderWidth }) => borderWidth && `
+    border-width: ${borderWidth};
+  `}
+
   ${({ theme, colorSchema }) => colorSchema && theme && `
-    background: ${theme.colors.complementary[colorSchema][2]};
+    background: ${theme.colors.complementary[colorSchema][0]};
   `}
 
   ${({ bg }) => bg && `
@@ -90,6 +101,11 @@ Box.propTypes = {
   height: PropTypes.string,
 
   /**
+   * The height of the box.
+   */
+  borderRadius: PropTypes.string,
+
+  /**
    * Value for setting the top, right, bottom and left padding
    */
   p: PropTypes.string,
@@ -168,6 +184,22 @@ Box.propTypes = {
    * The color schema of the box. can be blue, purple, green or red.
    */
   colorSchema: PropTypes.oneOf(['blue', 'green', 'purple', 'red']),
+
+  /**
+   * The width of the box border.
+   */
+  borderWidth: PropTypes.string,
+
+  /**
+   * The style of the border solid, dotted etc.
+   */
+
+  borderStyle: PropTypes.string,
+
+  /**
+   * The color of the border.
+   */
+  borderColor: PropTypes.string
 };
 
 export default Box;

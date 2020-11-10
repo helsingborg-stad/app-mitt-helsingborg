@@ -100,3 +100,23 @@ boxStories.add('Background', () => (
     </Box>
   </StoryWrapper>
 ));
+
+boxStories.add('Border', () => (
+  <StoryWrapper>
+    <Box borderRadius="4.5px" mb="10px" p="10px" bg="#ececec" height="100px">
+      <Text>This box has a border radius of 4.5px</Text>
+    </Box>
+
+    <Box
+      borderColor="black"
+      borderStyle="solid"
+      borderWidth="1px"
+      mb="10px"
+      p="10px"
+      bg="#ececec"
+      height="100px"
+    >
+      <Text>This box has a 1px solid black border </Text>
+    </Box>
+  </StoryWrapper>
+));
