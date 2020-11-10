@@ -69,7 +69,7 @@ const CheckboxField = ({ text, color, size, value, onChange, help, ...other }) =
 
   return (
     <TouchableWrapper
-      underlayColor={theme.colors.complementary[validColorSchema][3]} // {colors.checkbox[color].checkedBackground}
+      underlayColor={theme.colors.complementary[validColorSchema][3]}
       onPress={update}
     >
       <FlexContainer toggled={boolValue}>
@@ -101,7 +101,7 @@ CheckboxField.propTypes = {
   /**
    * sets the color theme.
    */
-  color: PropTypes.oneOf(Object.keys(theme.checkboxField)),
+  color: PropTypes.oneOf(Object.keys(theme.colors.primary)),
   /**
    * One of small, medium, large
    */
