@@ -9,15 +9,13 @@ const ActionContainer = styled.View(props => ({
   backgroundColor: props.theme.colors.neutrals[5],
 }));
 const Flex = styled.View`
-  position: absolute;
-  bottom: 0;
   padding: 5px;
   align-items: flex-end;
-  padding-right: 10px;
 `;
 const ButtonWrapper = styled.View`
-  margin-top: 5%;
-  margin-bottom: 5%;
+  margin-top: 32px;
+  margin-bottom: 49px;
+  margin-right: 32px;
 `;
 
 const StepFooter = ({
@@ -97,6 +95,7 @@ const StepFooter = ({
         onClick={actionMap(action.type)}
         color={action.color}
         disabled={checkCondition(action.conditionalOn)}
+        z={0}
       >
         <Text>{action.label}</Text>
       </Button>
