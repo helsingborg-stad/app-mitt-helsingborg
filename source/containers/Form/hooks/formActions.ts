@@ -1,4 +1,4 @@
-import { StepperActions } from '../../../types/FormTypes';
+import { Question, StepperActions } from '../../../types/FormTypes';
 import { replaceMarkdownTextInSteps } from './textReplacement';
 import { FormReducerState } from './useForm';
 import { validateInput } from '../../../helpers/ValidationHelper';
@@ -194,6 +194,16 @@ export function updateAnswer(state: FormReducerState, answer: Record<string, any
   };
 }
 
+/** Action for updating the list of all questions in the form state. */
+export function getAllQuestions(state: FormReducerState) {
+  const allQuestions: Question[] = [];
+  state.steps.forEach(step => { if (step.questions) allQuestions.push(...step.questions)})
+  return {
+    ...state,
+    allQuestions,
+  }
+}
+
 /**
  * Validate user form answers.
  *
@@ -209,12 +219,13 @@ export function validateAnswer(
   answer: Record<string, any>,
   questionId: string
 ) {
-  const { questions } = state.steps[state.currentPosition.index];
+  const { allQuestions } = state;
 
   // Return if question or question ID is undefined.
-  if (!questions || !questionId) return state;
+  if (!allQuestions || !questionId) return state;
 
-  const question = questions?.find(q => q.id === questionId);
+  const question = allQuestions.find(q => q.id === questionId);
+  if (!question) return state;
 
   if (['text', 'number', 'date'].includes(question.type)) {
     const { validation } = question;
