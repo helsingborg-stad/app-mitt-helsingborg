@@ -13,7 +13,7 @@ const ProfileScreenWrapper = styled(ScreenWrapper)`
   background-color: #f5f5f5;
 `;
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   flex: 1;
   padding: 16px;
 `;
