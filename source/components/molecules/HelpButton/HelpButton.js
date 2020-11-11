@@ -88,11 +88,13 @@ const HelpButton = props => {
       <Modal
         visible={modalVisible}
         animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
         presentationStyle="pageSheet"
       >
         <ModalContainer>
-          <CloseModal isBackBtnVisible={false} onClose={() => setModalVisible(false)} />
+          <CloseModal showBackButton={false} onClose={() => setModalVisible(false)} />
           <BannerWrapper>
             <BannerIcon resizeMode="contain" source={icons.ICON_HELP} />
           </BannerWrapper>
