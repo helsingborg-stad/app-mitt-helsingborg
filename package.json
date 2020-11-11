@@ -51,6 +51,7 @@
     "react-native-network-info": "^5.2.1",
     "react-native-push-notification": "^3.1.9",
     "react-native-reanimated": "^1.7.0",
+    "react-native-restart": "^0.0.17",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.0.0-beta.4",
     "react-native-storybook-loader": "^1.8.1",
