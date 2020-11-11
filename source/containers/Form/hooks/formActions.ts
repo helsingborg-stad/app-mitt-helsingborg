@@ -82,6 +82,7 @@ export function goNext(state: FormReducerState) {
         level: currentPosition.level,
         currentMainStep:
           state.currentPosition.currentMainStep + (currentPosition.level === 0 ? 1 : 0),
+        currentMainStepIndex: currentPosition.level === 0 ? nextIndex : currentPosition.currentMainStepIndex,
       },
     };
   }
@@ -107,6 +108,7 @@ export function goBack(state: FormReducerState) {
         index: backIndex,
         currentMainStep:
           state.currentPosition.currentMainStep - (currentPosition.level === 0 ? 1 : 0),
+        currentMainStepIndex: currentPosition.level === 0 ? backIndex : currentPosition.currentMainStepIndex,
       },
     };
   }
