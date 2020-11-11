@@ -15,7 +15,7 @@ const ListBody = styled.View`
   height: auto;
 `;
 
-const ListBodyFieldLabel = styled(Heading) <{ colorSchema: string }>`
+const ListBodyFieldLabel = styled(Heading)<{ colorSchema: string }>`
   margin-top: 5px;
   margin-left: 3px;
   font-weight: ${props => props.theme.fontWeights[1]};
@@ -107,7 +107,7 @@ GroupedList.propTypes = {
   /**
    *  Controls the color scheme of the list
    */
-  color: PropTypes.oneOf(Object.keys(theme.groupedList)),
+  color: PropTypes.oneOf(Object.keys(theme.colors.primary)),
   /**
    * Whether or not to show the edit button
    */
