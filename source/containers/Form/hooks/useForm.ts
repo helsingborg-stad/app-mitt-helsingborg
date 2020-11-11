@@ -5,7 +5,12 @@ import { User } from '../../../types/UserTypes';
 
 export interface FormReducerState {
   submitted: boolean;
-  currentPosition: { index: number; level: number; currentMainStep: number };
+  currentPosition: {
+    index: number;
+    level: number;
+    currentMainStep: number;
+    currentMainStepIndex: number;
+  };
   steps: Step[];
   user: User;
   connectivityMatrix: StepperActions[][];
@@ -112,7 +117,7 @@ function useForm(initialState: FormReducerState) {
   // const closeForm = (callback: (s: { state: FormReducerState }, isLastStep: boolean) => any) =>
   //   callback({ state: formState }, isLastStep());
 
-  function closeForm() { }
+  function closeForm() {}
   /**
    * Function for updating answer.
    */
