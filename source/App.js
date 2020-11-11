@@ -5,11 +5,12 @@ import React from 'react';
 import { Platform, UIManager } from 'react-native';
 import Config from 'react-native-config';
 import { ThemeProvider } from 'styled-components/native';
-import { setJSExceptionHandler, setNativeExceptionHandler } from 'react-native-exception-handler';
+import { setJSExceptionHandler } from 'react-native-exception-handler';
 import Navigator from './navigator';
 import StorybookUIRoot from '../storybook';
 import theme from './styles/theme';
 
+import ErrorHandler from './helpers/error-handler/ErrorHandler';
 import { CaseProvider } from './store/CaseContext';
 import { AuthProvider } from './store/AuthContext';
 import { FormProvider } from './store/FormContext';
@@ -18,19 +19,14 @@ import { NotificationProvider } from './store/NotificationContext';
  * Any setup and init for application goes here:
  * Platform specific handling, global listeners, providers, etc.
  */
-// Handler for app crashes
-const errorHandler = (error, isFatal) => {
-  if (isFatal) {
-    // TODO: Handle fatal errors: Splash screen and error log.
-    console.log('Error!');
-  } else {
-    // Error has been notified
-    console.warn(error);
-  }
-};
 
 const App = () => {
-  setJSExceptionHandler(errorHandler);
+  /**
+   * Setup error boundary handler.
+   * Set ENABLE_DEV_ERROR_BOUNDARY=true in .env file to enable error boundary in dev mode (simulator).
+   */
+  setJSExceptionHandler(ErrorHandler, Config.ENABLE_DEV_ERROR_BOUNDARY === 'true');
+
   // turn on layout animation.
   if (Platform.OS === 'android') {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
