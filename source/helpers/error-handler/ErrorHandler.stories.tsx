@@ -8,7 +8,7 @@ storiesOf('Error boundary', module).add('Default', () => (
   <StoryWrapper>
     <Button
       onClick={() => {
-        throw new Error('This is an JS error, handle me!');
+        throw new Error('This is an JS error in storybook, handle me!');
       }}
       block
       variant="outlined"

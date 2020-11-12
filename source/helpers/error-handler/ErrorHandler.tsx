@@ -1,11 +1,21 @@
-const ErrorHandler = (error, isFatal) => {
-  if (isFatal) {
-    // TODO: Handle fatal errors: Splash screen and error log.
-    console.log('Error boundary: ', error);
+import { Alert } from 'react-native';
+import Config from 'react-native-config';
+import RNRestart from 'react-native-restart';
+import { string } from 'prop-types';
+
+const boundaryErrorHandler = (error = { message: string }) => {
+  if (Config.IS_STORYBOOK === 'true') {
+    Alert.alert('Something went wrong in storybook', `${error.message}`, [{ text: 'OK' }]);
   } else {
-    // Error has been notified
-    console.warn(error);
+    Alert.alert('Something went wrong in Mitt Helsingborg', `${error.message}`, [
+      {
+        text: 'Restart',
+        onPress: () => {
+          RNRestart.Restart();
+        },
+      },
+    ]);
   }
 };
 
-export default ErrorHandler;
+export default boundaryErrorHandler;
