@@ -53,6 +53,10 @@ interface Props {
   onChange: (answers: Record<string, any> | string | number, fieldId: string) => void;
   color: string;
   answers: Record<string, any>;
+  validationErrors?: Record<
+    string,
+    { isValid: boolean; message: string } | Record<string, { isValid: boolean; message: string }>[]
+  >;
   showSum: boolean;
   startEditable?: boolean;
 }
@@ -68,6 +72,7 @@ const SummaryList: React.FC<Props> = ({
   onChange,
   color,
   answers,
+  validationErrors,
   showSum,
   startEditable,
 }) => {
@@ -106,10 +111,10 @@ const SummaryList: React.FC<Props> = ({
     }
   };
 
-  /** Generates a list item */
   const generateListItem = (
     item: SummaryListItem,
     value: string | number | Record<string, any>,
+    validationError?: { isValid: boolean; message: string },
     index?: number
   ) => ({
     category: item.category,
@@ -121,6 +126,7 @@ const SummaryList: React.FC<Props> = ({
         changeFromInput={changeFromInput(item, index)}
         removeItem={removeListItem(item, index)}
         color={color}
+        validationError={validationError}
       />
     ),
   });
@@ -148,7 +154,16 @@ const SummaryList: React.FC<Props> = ({
         const values: Record<string, string | number>[] = answers[item.id];
         if (values && values?.length > 0) {
           values.forEach((v, index) => {
-            listItems.push(generateListItem(item, v[item?.inputId || item.id], index));
+            listItems.push(
+              generateListItem(
+                item,
+                v[item?.inputId],
+                validationErrors[item.id][index]
+                  ? validationErrors[item.id][index][item?.inputId]
+                  : undefined,
+                index
+              )
+            );
             if (item.type === 'arrayNumber') {
               const numericValue: string | number = v[item?.inputId || item.id];
               addToSum(numericValue);
@@ -156,7 +171,13 @@ const SummaryList: React.FC<Props> = ({
           });
         }
       } else {
-        listItems.push(generateListItem(item, answers[item.id]));
+        listItems.push(
+          generateListItem(
+            item,
+            answers[item.id],
+            validationErrors ? (validationErrors as Record<string,  { isValid: boolean; message: string }>)[item.id] : undefined
+          )
+        );
         if (item.type === 'number') {
           const numericValue: number | string = answers[item.id];
           addToSum(numericValue);
@@ -212,6 +233,10 @@ SummaryList.propTypes = {
    * The form state answers
    */
   answers: PropTypes.object,
+  /** 
+   * Object containing all validation errors for the entire form 
+   */
+  validationErrors: PropTypes.object,
   /**
    * Whether or not to show a sum of all numeric values at the bottom. Defaults to true.
    */
