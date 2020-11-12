@@ -15,7 +15,7 @@ const Body = styled.View`
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  elevation: 4;
+  elevation: 2;
   shadow-offset: 0px 2px;
   shadow-color: ${props => props.theme.colors.neutrals[4]};
   shadow-opacity: 0.5;
@@ -32,10 +32,20 @@ const CardText = styled(Text)`
   ${props => props.italic && `color: ${props.theme.colors.neutrals[3]};`}
 `;
 
-const CardButton = styled(Button)``;
+const Outset = styled.View`
+  padding-top: 6px;
+  padding-bottom: 6px;
+`;
 
-function Card({ children, ...props }) {
-  return <Container {...props}>{children}</Container>;
+function Card({ children, colorSchema, ...props }) {
+  const clonedChildren = React.Children.map(children, child =>
+    React.cloneElement(child, { colorSchema: 'red' })
+  );
+
+  console.log('container colorSchema', colorSchema);
+  console.log('clonedChildren', clonedChildren);
+
+  return <Container {...props}>{clonedChildren}</Container>;
 }
 
 Card.Body = ({ children, ...props }) => <Body {...props}>{children}</Body>;
@@ -44,12 +54,22 @@ Card.Title = ({ children, ...props }) => <Heading {...props}>{children}</Heading
 
 Card.SubTitle = ({ children, ...props }) => <CardSubTitle {...props}>{children}</CardSubTitle>;
 
-Card.Text = ({ children, ...props }) => <CardText {...props}>{children}</CardText>;
-
-Card.Button = ({ children, ...props }) => (
-  <CardButton block {...props}>
-    {children}
-  </CardButton>
+Card.Text = ({ children, ...props }) => (
+  <Outset>
+    <CardText {...props}>{children}</CardText>
+  </Outset>
 );
+
+Card.Button = ({ children, colorSchema, ...props }) => {
+  console.log('Props', props);
+  console.log('button colorSchema', colorSchema);
+  return (
+    <Outset>
+      <Button size="small" block {...props}>
+        {children}
+      </Button>
+    </Outset>
+  );
+};
 
 export default Card;
