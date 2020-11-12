@@ -10,13 +10,13 @@ const MaterialTopTabBarWrapper = props => {
 
   // TODO: pass color and borderColor as props
   let color = '#2196f3';
-  color = index === 0 ? '#75C9A8' : color;
-  color = index === 1 ? '#DD6161' : color;
+  color = index === 0 ? '#DD6161' : color;
+  color = index === 1 ? '#75C9A8' : color;
   color = index === 2 ? '#477C9C' : color;
 
   let borderColor = '#2196f3';
-  borderColor = index === 0 ? '#75C9A8' : borderColor;
-  borderColor = index === 1 ? '#DD6161' : borderColor;
+  borderColor = index === 0 ? '#DD6161' : borderColor;
+  borderColor = index === 1 ? '#75C9A8' : borderColor;
   borderColor = index === 2 ? '#477C9C' : borderColor;
 
   const indicatorStyle = {
