@@ -29,7 +29,9 @@ export interface Props {
   };
 }
 
-// TODO: Move navigation logic outside of component
+// TODO: Move navigation logic to a smart container component,
+// this dumb component do not need to know about how formNavigation is handled.
+// Only that an onClick event should be triggerd.
 const NavigationButtonField: React.FC<Props> = ({
   iconName,
   text,
@@ -38,6 +40,7 @@ const NavigationButtonField: React.FC<Props> = ({
   colorSchema
 }) => {
   const onClick = () => {
+    // This logic could be broken out and placed elsewhere.
     switch (navigationType.type) {
       case 'navigateDown':
         formNavigation.down(navigationType.stepId);
@@ -67,6 +70,7 @@ const NavigationButtonField: React.FC<Props> = ({
     </ButtonFieldWrapper>
   );
 };
+
 NavigationButtonField.propTypes = {
   /**
    * Name of the icon to be displayed
@@ -84,6 +88,9 @@ NavigationButtonField.propTypes = {
    * Color schema of the button
    */
   colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
+  /**
+   * Object with navigation event for a form.
+   */
   formNavigation: PropTypes.any,
 };
 
