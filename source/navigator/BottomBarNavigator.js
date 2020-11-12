@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { ProfileScreen, HomeScreen } from 'app/screens';
+import { ProfileScreen, HomeScreen, UserEvents } from 'app/screens';
 import { TabBarImage, MaterialTopTabBarWrapper } from 'source/components/molecules';
 import CaseNavigator from './CaseNavigator';
 
@@ -23,7 +23,7 @@ const BottomBarStack = () => (
   >
     <Tab.Screen
       name="UserEvents"
-      component={CaseNavigator}
+      component={UserEvents}
       options={{
         title: 'Ärende',
         tabBarIcon: TabBarImage(require('../images/task.png')),
