@@ -10,7 +10,7 @@ import Navigator from './navigator';
 import StorybookUIRoot from '../storybook';
 import theme from './styles/theme';
 
-import ErrorHandler from './helpers/error-handler/ErrorHandler';
+import boundaryErrorHandler from './helpers/error-handler/ErrorHandler';
 import { CaseProvider } from './store/CaseContext';
 import { AuthProvider } from './store/AuthContext';
 import { FormProvider } from './store/FormContext';
@@ -23,9 +23,9 @@ import { NotificationProvider } from './store/NotificationContext';
 const App = () => {
   /**
    * Setup error boundary handler.
-   * Set ENABLE_DEV_ERROR_BOUNDARY=true in .env file to enable error boundary in dev mode (simulator).
+   * Set ENABLE_DEV_ERROR_BOUNDARY=true in .env file to enable error boundary in dev mode (non release build of app).
    */
-  setJSExceptionHandler(ErrorHandler, Config.ENABLE_DEV_ERROR_BOUNDARY === 'true');
+  setJSExceptionHandler(boundaryErrorHandler, Config.ENABLE_DEV_ERROR_BOUNDARY === 'true');
 
   // turn on layout animation.
   if (Platform.OS === 'android') {
