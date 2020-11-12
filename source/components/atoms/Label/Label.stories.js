@@ -11,16 +11,22 @@ const Background = styled.View`
 
 storiesOf('Field Label', module).add('default', () => (
   <StoryWrapper>
-    <FieldLabel size="small">Small light label</FieldLabel>
-    <FieldLabel color="red" size="small" underline={false}>
+    <FieldLabel size="small" help={{ text: 'Some help text' }}>
+      Small light label
+    </FieldLabel>
+    <FieldLabel color="red" size="small" underline={false} help={{ text: 'Some help text' }}>
       Small red label without line
     </FieldLabel>
     <FieldLabel color="green">Normal green Label</FieldLabel>
-    <FieldLabel color="orange">Normal orange Label</FieldLabel>
-    <FieldLabel size="large">Large label</FieldLabel>
+    <FieldLabel color="orange" help={{ text: 'Some help text' }}>
+      Normal orange Label
+    </FieldLabel>
+    <FieldLabel size="large" help={{ text: 'Some help text' }}>
+      Large label
+    </FieldLabel>
     <Background>
       <FieldLabel color="blue">Normal blue Label</FieldLabel>
-      <FieldLabel color="dark" size="large">
+      <FieldLabel color="dark" size="large" help={{ text: 'Some help text' }}>
         Large dark label
       </FieldLabel>
     </Background>
