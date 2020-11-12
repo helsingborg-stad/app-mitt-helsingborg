@@ -29,6 +29,7 @@ export interface Props {
   };
 }
 
+// TODO: Move navigation logic outside of component
 const NavigationButtonField: React.FC<Props> = ({
   iconName,
   text,
@@ -36,22 +37,24 @@ const NavigationButtonField: React.FC<Props> = ({
   formNavigation,
   colorSchema
 }) => {
-  let onClick = (targetId?: string) => {};
-  switch (navigationType.type) {
-    case 'navigateDown':
-      onClick = () => formNavigation.down(navigationType.stepId);
-      break;
-    case 'navigateUp':
-      onClick = () => formNavigation.up();
-      break;
-    case 'navigateNext':
-      onClick = formNavigation.next;
-      break;
-    case 'navigateBack':
-      onClick = formNavigation.back;
-      break;
+  const onClick = () => {
+    switch (navigationType.type) {
+      case 'navigateDown':
+        formNavigation.down(navigationType.stepId);
+        break;
+      case 'navigateUp':
+        formNavigation.up();
+        break;
+      case 'navigateNext':
+        formNavigation.next();
+        break;
+      case 'navigateBack':
+        formNavigation.back();
+        break;
 
-    default:
+      default:
+        break;
+    }
   }
 
   console.log(iconName)
