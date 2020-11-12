@@ -483,80 +483,100 @@ const theme = {
       ...deprecatedPalette.green,
     },
   },
-  fieldLabel: {
-    purple: {
-      text: deprecatedPalette.mono.white,
-      underline: deprecatedPalette.purple[2],
+  label: {
+    small: {
+      font: '12px',
+      paddingBottom: '3px',
+      lineWidth: '2px',
+      marginBottom: '6px',
     },
-    purpleLight: {
-      text: deprecatedPalette.mono.white,
-      underline: deprecatedPalette.purple[1],
+    medium: {
+      font: '14px',
+      paddingBottom: '7px',
+      lineWidth: '3px',
+      marginBottom: '12px',
     },
-    blue: {
-      text: deprecatedPalette.mono.white,
-      underline: deprecatedPalette.blue[6],
+    large: {
+      font: '18px',
+      paddingBottom: '10px',
+      lineWidth: '4px',
+      marginBottom: '18px',
     },
-    white: {
-      text: deprecatedPalette.mono.darker,
-      underline: 'rgba(255, 255, 255, 0.0)',
+    colors: {
+      purple: {
+        text: deprecatedPalette.mono.white,
+        underline: deprecatedPalette.purple[2],
+      },
+      purpleLight: {
+        text: deprecatedPalette.mono.white,
+        underline: deprecatedPalette.purple[1],
+      },
+      blue: {
+        text: deprecatedPalette.mono.white,
+        underline: deprecatedPalette.blue[6],
+      },
+      white: {
+        text: deprecatedPalette.mono.darker,
+        underline: 'rgba(255, 255, 255, 0.0)',
+      },
+      light: {
+        text: deprecatedPalette.mono.darker,
+        underline: deprecatedPalette.mono.light,
+      },
+      gray: {
+        text: deprecatedPalette.mono.darker,
+        underline: deprecatedPalette.mono.gray,
+      },
+      dark: {
+        text: deprecatedPalette.mono.lightest,
+        underline: deprecatedPalette.mono.light,
+      },
+      darkBlue: {
+        text: deprecatedPalette.mono.lightest,
+        underline: deprecatedPalette.mono.light,
+      },
+      swipe: {
+        text: deprecatedPalette.mono.darker,
+        underline: 'rgba(255, 255, 255, 0.0)',
+      },
+      red: {
+        text: deprecatedPalette.red[5],
+        underline: deprecatedPalette.red[2],
+      },
+      green: {
+        text: deprecatedPalette.mono.darker,
+        underline: deprecatedPalette.green[6],
+      },
+      orange: {
+        text: deprecatedPalette.mono.blue,
+        underline: deprecatedPalette.red[6],
+      },
     },
-    light: {
-      text: deprecatedPalette.mono.darker,
-      underline: deprecatedPalette.mono.light,
-    },
-    gray: {
-      text: deprecatedPalette.mono.darker,
-      underline: deprecatedPalette.mono.gray,
-    },
-    dark: {
-      text: deprecatedPalette.mono.lightest,
-      underline: deprecatedPalette.mono.light,
-    },
-    darkBlue: {
-      text: deprecatedPalette.mono.lightest,
-      underline: deprecatedPalette.mono.light,
-    },
-    swipe: {
-      text: deprecatedPalette.mono.darker,
-      underline: 'rgba(255, 255, 255, 0.0)',
-    },
-    red: {
-      text: deprecatedPalette.red[5],
-      underline: deprecatedPalette.red[2],
-    },
-    green: {
-      text: deprecatedPalette.mono.darker,
-      underline: deprecatedPalette.green[6],
-    },
-    orange: {
-      text: deprecatedPalette.mono.blue,
-      underline: deprecatedPalette.red[6],
-    },
-  },
-  input: {
-    light: {
-      text: deprecatedPalette.mono.black,
-      background: deprecatedPalette.mono.white,
-      border: deprecatedPalette.mono.light,
-      placeholder: deprecatedPalette.mono.darker,
-    },
-    dark: {
-      text: deprecatedPalette.mono.white,
-      background: deprecatedPalette.blue[6],
-      border: deprecatedPalette.blue[6],
-      placeholder: deprecatedPalette.mono.light,
-    },
-    red: {
-      text: deprecatedPalette.mono.black,
-      background: deprecatedPalette.red[6],
-      border: deprecatedPalette.red[4],
-      placeholder: deprecatedPalette.mono.darker,
-    },
-    green: {
-      text: deprecatedPalette.mono.black,
-      background: deprecatedPalette.green[6],
-      border: deprecatedPalette.green[5],
-      placeholder: deprecatedPalette.mono.darker,
+    input: {
+      light: {
+        text: deprecatedPalette.mono.black,
+        background: deprecatedPalette.mono.white,
+        border: deprecatedPalette.mono.light,
+        placeholder: deprecatedPalette.mono.darker,
+      },
+      dark: {
+        text: deprecatedPalette.mono.white,
+        background: deprecatedPalette.blue[6],
+        border: deprecatedPalette.blue[6],
+        placeholder: deprecatedPalette.mono.light,
+      },
+      red: {
+        text: deprecatedPalette.mono.black,
+        background: deprecatedPalette.red[6],
+        border: deprecatedPalette.red[4],
+        placeholder: deprecatedPalette.mono.darker,
+      },
+      green: {
+        text: deprecatedPalette.mono.black,
+        background: deprecatedPalette.green[6],
+        border: deprecatedPalette.green[5],
+        placeholder: deprecatedPalette.mono.darker,
+      },
     },
   },
   checkboxField: {
