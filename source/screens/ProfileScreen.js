@@ -10,7 +10,6 @@ import { StorageService } from 'app/services';
 
 const ProfileScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
-  background-color: #f5f5f5;
 `;
 
 const Container = styled.ScrollView`
