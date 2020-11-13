@@ -50,6 +50,7 @@ export default class Select extends Component {
               </PickerAcessoryLink>
             </PickerAcessoryWrapper>
             <Picker
+              style={{ minWidth: 200 }}
               selectedValue={currentValue}
               onValueChange={(itemValue, _itemIndex) => {
                 if (typeof onValueChange === 'function') {
@@ -58,7 +59,7 @@ export default class Select extends Component {
                 this.setState({ currentValue: itemValue });
               }}
             >
-              <Picker.Item label={placeholder} value="" color="gray" />
+              {/* <Picker.Item label={placeholder} value="" color="gray" /> */}
               {items.map((item, index) => (
                 <Picker.Item label={item.label} value={item.value} key={`${index}-${item.value}`} />
               ))}
@@ -86,8 +87,15 @@ Select.defaultProps = {
   placeholder: 'Select an item',
 };
 
-const SelectInput = styled(Input)`
-  flex: 0 1 auto;
+const SelectInput = styled.TextInput`
+  flex: 5;
+  align-items: flex-end;
+  justify-content: center;
+  text-align: right;
+  min-width: 80%;
+  font-weight: 500;
+  color: ${props => props.theme.colors.neutrals[1]};
+  padding: 6px;
 `;
 
 const PickerAcessoryLink = styled(Text)`
