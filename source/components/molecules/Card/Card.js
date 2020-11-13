@@ -39,6 +39,7 @@ const CardText = styled(Text)`
 const Outset = styled.View`
   padding-top: 6px;
   padding-bottom: 6px;
+  ${props => props.firstChild && `padding-top: 0px;`}
   ${props => props.lastChild && `padding-bottom: 0px;`}
 `;
 
@@ -79,17 +80,24 @@ Card.Title = ({ children, colorSchema, ...props }) => (
 
 Card.SubTitle = ({ children, ...props }) => <CardSubTitle {...props}>{children}</CardSubTitle>;
 
-Card.Text = ({ children, lastChild, ...props }) => (
-  <Outset lastChild>
-    <CardText {...props}>{children}</CardText>
-  </Outset>
-);
-
-Card.Button = ({ children, colorSchema, lastChild, ...props }) => {
-  console.log('colorSchema', colorSchema);
+Card.Text = ({ children, lastChild, firstChild, ...props }) => {
+  console.log('TEXT');
+  console.log('firstChild', firstChild);
   console.log('lastChild', lastChild);
   return (
-    <Outset lastChild>
+    <Outset lastChild={lastChild} firstChild={firstChild}>
+      <CardText {...props}>{children}</CardText>
+    </Outset>
+  )
+};
+
+Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => {
+  console.log('BUTTON');
+  console.log('colorSchema', colorSchema);
+  console.log('firstChild', firstChild);
+  console.log('lastChild', lastChild);
+  return (
+    <Outset lastChild={lastChild} firstChild={firstChild}>
       <Button colorSchema={colorSchema} size="small" block {...props}>
         {children}
       </Button>
