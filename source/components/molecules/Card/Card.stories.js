@@ -28,7 +28,7 @@ storiesOf('Card', module).add('default', () => (
         Aktuell period
       </Text>
 
-      <Card>
+      <Card colorSchema="green">
         <Card.Body>
           <Card.Title>Oktober</Card.Title>
           <Card.SubTitle>Ansökan inlämnad</Card.SubTitle>
@@ -45,7 +45,7 @@ storiesOf('Card', module).add('default', () => (
         Mina kontaktpersoner
       </Text>
 
-      <Card>
+      <Card colorSchema="purple">
         <Card.Body>
           <Card.Title>Anna Andersson</Card.Title>
           <Card.SubTitle>Socialsekreterare</Card.SubTitle>
@@ -57,7 +57,7 @@ storiesOf('Card', module).add('default', () => (
         Tidigare ansökningar
       </Text>
 
-      <Card>
+      <Card colorSchema="blue">
         <Card.Text italic>Här kan du titta på dina tidigare ansökningar.</Card.Text>
         <Card.Button>
           <Text>Link</Text>
