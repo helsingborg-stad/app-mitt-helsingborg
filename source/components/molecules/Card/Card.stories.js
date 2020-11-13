@@ -5,6 +5,8 @@ import { Text, Icon } from 'app/components/atoms';
 import StoryWrapper from '../StoryWrapper';
 import Card from './Card';
 
+const ILLU_INCOME = require('source/assets/images/icons/icn_inkomster_1x.png');
+
 storiesOf('Card', module).add('default', () => (
   <StoryWrapper>
     <ScrollView style={{ backgroundColor: '#efefef', flex: 1, padding: 16 }}>
@@ -14,7 +16,7 @@ storiesOf('Card', module).add('default', () => (
 
       <Card>
         <Card.Body>
-          {/* <Card.Image src={movie.image} alt={movie.title} /> */}
+          <Card.Image source={ILLU_INCOME} />
           <Card.Title>Ekonomiskt bistånd</Card.Title>
           <Card.SubTitle>Ofullständig</Card.SubTitle>
           <Card.Button>
