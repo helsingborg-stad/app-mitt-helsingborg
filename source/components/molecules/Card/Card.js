@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button, Text, Heading } from 'app/components/atoms';
 
@@ -37,21 +38,18 @@ const Outset = styled.View`
   padding-bottom: 6px;
 `;
 
-function Card({ children, colorSchema, ...props }) {
-  console.log('container colorSchema', colorSchema);
-
+const Card = ({ children, colorSchema, ...props }) => {
+  // Clone child elements and add additional props
   const childrenWithProps = React.Children.map(children, child =>
-    React.cloneElement(child, { colorSchema, someProp: 'test' })
+    React.cloneElement(child, { colorSchema })
   );
 
-  console.log('childrenWithProps', childrenWithProps);
-
   return <Container {...props}>{childrenWithProps}</Container>;
-}
+};
 
 Card.Body = ({ children, colorSchema, ...props }) => {
   const childrenWithProps = React.Children.map(children, child =>
-    React.cloneElement(child, { colorSchema, someProp: 'test' })
+    React.cloneElement(child, { colorSchema })
   );
 
   return (
@@ -71,17 +69,43 @@ Card.Text = ({ children, ...props }) => (
   </Outset>
 );
 
-Card.Button = ({ children, colorSchema, someProp, ...props }) => {
-  console.log('Props', props);
-  console.log('chuld someProp', someProp);
-  console.log('button colorSchema', colorSchema);
-  return (
-    <Outset>
-      <Button colorSchema={colorSchema} size="small" block {...props}>
-        {children}
-      </Button>
-    </Outset>
-  );
+Card.Button = ({ children, colorSchema, ...props }) => (
+  <Outset>
+    <Button colorSchema={colorSchema} size="small" block {...props}>
+      {children}
+    </Button>
+  </Outset>
+);
+
+Card.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  colorSchema: PropTypes.oneOf('blue', 'red', 'purple', 'green'),
+};
+
+Card.defaultProps = {
+  colorSchema: 'purple',
+};
+
+Card.Body.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  colorSchema: PropTypes.oneOf('blue', 'red', 'purple', 'green'),
+};
+
+Card.Title.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+};
+
+Card.SubTitle.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+};
+
+Card.Text.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+};
+
+Card.Button.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  colorSchema: PropTypes.oneOf('blue', 'red', 'purple', 'green'),
 };
 
 export default Card;
