@@ -23,6 +23,9 @@ const Body = styled.View`
   shadow-radius: 2;
 `;
 
+const CardHeading = styled(Heading)`
+`;
+
 const CardSubTitle = styled(Text)`
   font-size: ${props => props.theme.fontSizes[2]};
   font-weight: ${props => props.theme.fontWeights[1]};
@@ -36,20 +39,29 @@ const CardText = styled(Text)`
 const Outset = styled.View`
   padding-top: 6px;
   padding-bottom: 6px;
+  ${props => props.lastChild && `padding-bottom: 0px;`}
 `;
 
 const Card = ({ children, colorSchema, ...props }) => {
   // Clone child elements and add additional props
-  const childrenWithProps = React.Children.map(children, child =>
-    React.cloneElement(child, { colorSchema })
+  const childrenWithProps = React.Children.map(children, (child, index) =>
+    React.cloneElement(child, {
+      colorSchema,
+      firstChild: index === 0,
+      lastChild: index === children.length - 1,
+    })
   );
 
   return <Container {...props}>{childrenWithProps}</Container>;
 };
 
 Card.Body = ({ children, colorSchema, ...props }) => {
-  const childrenWithProps = React.Children.map(children, child =>
-    React.cloneElement(child, { colorSchema })
+  const childrenWithProps = React.Children.map(children, (child, index) =>
+    React.cloneElement(child, {
+      colorSchema,
+      firstChild: index === 0,
+      lastChild: index === children.length - 1,
+    })
   );
 
   return (
@@ -59,23 +71,31 @@ Card.Body = ({ children, colorSchema, ...props }) => {
   );
 };
 
-Card.Title = ({ children, ...props }) => <Heading {...props}>{children}</Heading>;
+Card.Title = ({ children, colorSchema, ...props }) => (
+  <CardHeading colorSchema={colorSchema} {...props}>
+    {children}
+  </CardHeading>
+);
 
 Card.SubTitle = ({ children, ...props }) => <CardSubTitle {...props}>{children}</CardSubTitle>;
 
-Card.Text = ({ children, ...props }) => (
-  <Outset>
+Card.Text = ({ children, lastChild, ...props }) => (
+  <Outset lastChild>
     <CardText {...props}>{children}</CardText>
   </Outset>
 );
 
-Card.Button = ({ children, colorSchema, ...props }) => (
-  <Outset>
-    <Button colorSchema={colorSchema} size="small" block {...props}>
-      {children}
-    </Button>
-  </Outset>
-);
+Card.Button = ({ children, colorSchema, lastChild, ...props }) => {
+  console.log('colorSchema', colorSchema);
+  console.log('lastChild', lastChild);
+  return (
+    <Outset lastChild>
+      <Button colorSchema={colorSchema} size="small" block {...props}>
+        {children}
+      </Button>
+    </Outset>
+  );
+};
 
 Card.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
