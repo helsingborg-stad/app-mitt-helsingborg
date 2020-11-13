@@ -1,4 +1,5 @@
 import React from 'react';
+import { Image} from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button, Text, Heading } from 'app/components/atoms';
@@ -45,6 +46,10 @@ const Outset = styled.View`
   ${props => props.lastChild && `padding-bottom: 0px;`}
 `;
 
+const CardImage = styled.Image`
+  border:1px solid green;
+`;
+
 const Card = ({ children, colorSchema, ...props }) => {
   // Clone child elements and add additional props
   const childrenWithProps = React.Children.map(children, (child, index) =>
@@ -82,13 +87,10 @@ Card.Title = ({ children, colorSchema, ...props }) => (
 
 Card.SubTitle = ({ children, colorSchema, ...props }) => <CardSubTitle colorSchema={colorSchema} {...props}>{children}</CardSubTitle>;
 
-Card.Text = ({ children, lastChild, firstChild, ...props }) => {
-  return (
-    <Outset lastChild={lastChild} firstChild={firstChild}>
+Card.Text = ({ children, lastChild, firstChild, ...props }) =>
+   <Outset lastChild={lastChild} firstChild={firstChild}>
       <CardText {...props}>{children}</CardText>
-    </Outset>
-  )
-};
+    </Outset>;
 
 // TODO: Implement new button variant "Link" when its done
 Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => {
@@ -99,6 +101,12 @@ Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => {
       </Button>
     </Outset>
   );
+};
+
+Card.Image = ({ children, ...props }) => {
+  return (
+    <CardImage {...props}/>
+  )
 };
 
 Card.propTypes = {
