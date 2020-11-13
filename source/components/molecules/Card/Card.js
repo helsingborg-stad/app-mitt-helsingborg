@@ -38,17 +38,28 @@ const Outset = styled.View`
 `;
 
 function Card({ children, colorSchema, ...props }) {
-  const clonedChildren = React.Children.map(children, child =>
-    React.cloneElement(child, { colorSchema: 'red' })
+  console.log('container colorSchema', colorSchema);
+
+  const childrenWithProps = React.Children.map(children, child =>
+    React.cloneElement(child, { colorSchema, someProp: 'test' })
   );
 
-  console.log('container colorSchema', colorSchema);
-  console.log('clonedChildren', clonedChildren);
+  console.log('childrenWithProps', childrenWithProps);
 
-  return <Container {...props}>{clonedChildren}</Container>;
+  return <Container {...props}>{childrenWithProps}</Container>;
 }
 
-Card.Body = ({ children, ...props }) => <Body {...props}>{children}</Body>;
+Card.Body = ({ children, colorSchema, ...props }) => {
+  const childrenWithProps = React.Children.map(children, child =>
+    React.cloneElement(child, { colorSchema, someProp: 'test' })
+  );
+
+  return (
+    <Body colorSchema={colorSchema} {...props}>
+      {childrenWithProps}
+    </Body>
+  );
+};
 
 Card.Title = ({ children, ...props }) => <Heading {...props}>{children}</Heading>;
 
@@ -60,12 +71,13 @@ Card.Text = ({ children, ...props }) => (
   </Outset>
 );
 
-Card.Button = ({ children, colorSchema, ...props }) => {
+Card.Button = ({ children, colorSchema, someProp, ...props }) => {
   console.log('Props', props);
+  console.log('chuld someProp', someProp);
   console.log('button colorSchema', colorSchema);
   return (
     <Outset>
-      <Button size="small" block {...props}>
+      <Button colorSchema={colorSchema} size="small" block {...props}>
         {children}
       </Button>
     </Outset>
