@@ -3,11 +3,7 @@ import { LayoutAnimation } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Text, Button, Fieldset } from '../../atoms';
-
-/**
- * EditableList
- * A Molecule Component to use for rendering a list with the possibility of editing the list values.
- */
+import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
 
 const EditableListBody = styled.View`
   padding-top: 33px;
@@ -70,6 +66,10 @@ const getInitialState = (inputs, value) => {
   return inputs.reduce((prev, current) => ({ ...prev, [current.key]: current.value }), {});
 };
 
+/**
+ * EditableList
+ * A Molecule Component to use for rendering a list with the possibility of editing the list values.
+ */
 function EditableList({
   colorSchema,
   title,
@@ -93,7 +93,45 @@ function EditableList({
     onInputChange(updatedState);
     setState(updatedState);
   };
+  /** Switch between different input types */
+  const getInputComponent = input => {
+    switch (input.type) {
+      case 'number':
+        return (
+          <EditableListItemInput
+            multiline /** Temporary fix to make field scrollable inside scrollview */
+            numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
+            colorSchema={colorSchema}
+            editable={editable}
+            onChangeText={text => onChange(input.key, text)}
+            value={value && value !== '' ? value[input.key] : state[input.key]}
+            keyboardType="numeric"
+          />
+        );
+      case 'date':
+        return (
+          <CalendarPicker
+            date={value && value !== '' ? value[input.key] : state[input.key]}
+            onSelect={date => onChange(input.key, date)}
+            editable={editable}
+            transparent
+          />
+        );
+      default:
+        return (
+          <EditableListItemInput
+            multiline /** Temporary fix to make field scrollable inside scrollview */
+            numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
+            colorSchema={colorSchema}
+            editable={editable}
+            onChangeText={text => onChange(input.key, text)}
+            value={value && value !== '' ? value[input.key] : state[input.key]}
+          />
+        );
+    }
+  };
 
+  console.log('inputs', inputs);
   return (
     <Fieldset
       colorSchema={colorSchema}
@@ -119,16 +157,7 @@ function EditableList({
             <EditableListItemLabelWrapper>
               <EditableListItemLabel>{input.label}</EditableListItemLabel>
             </EditableListItemLabelWrapper>
-            <EditableListItemInputWrapper>
-              <EditableListItemInput
-                multiline /** Temporary fix to make field scrollable inside scrollview */
-                numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
-                colorSchema={colorSchema}
-                editable={editable}
-                onChangeText={text => onChange(input.key, text)}
-                value={value && value !== '' ? value[input.key] : state[input.key]}
-              />
-            </EditableListItemInputWrapper>
+            <EditableListItemInputWrapper>{getInputComponent(input)}</EditableListItemInputWrapper>
           </EditableListItem>
         ))}
       </EditableListBody>
