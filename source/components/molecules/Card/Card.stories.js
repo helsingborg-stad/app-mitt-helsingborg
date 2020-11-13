@@ -12,7 +12,7 @@ storiesOf('Card', module).add('default', () => (
         Aktiva
       </Text>
 
-      <Card colorSchema="red">
+      <Card>
         <Card.Body>
           {/* <Card.Image src={movie.image} alt={movie.title} /> */}
           <Card.Title>Ekonomiskt bistånd</Card.Title>
@@ -28,7 +28,7 @@ storiesOf('Card', module).add('default', () => (
         Aktuell period
       </Text>
 
-      <Card colorSchema="green">
+      <Card colorSchema="red">
         <Card.Body>
           <Card.Title>Oktober</Card.Title>
           <Card.SubTitle>Ansökan inlämnad</Card.SubTitle>
