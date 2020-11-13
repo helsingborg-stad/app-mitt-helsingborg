@@ -53,6 +53,15 @@ storiesOf('Card', module).add('default', () => (
         </Card.Body>
       </Card>
 
+      <Card colorSchema="green">
+        <Card.Body>
+          <Card.Title>Anna Andersson</Card.Title>
+          <Card.SubTitle>Socialsekreterare</Card.SubTitle>
+          <Card.Text>042 - 52 52 52</Card.Text>
+        </Card.Body>
+      </Card>
+
+
       <Text style={{ paddingBottom: 8 }} strong>
         Tidigare ansökningar
       </Text>

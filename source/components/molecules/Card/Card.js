@@ -24,9 +24,11 @@ const Body = styled.View`
 `;
 
 const CardHeading = styled(Heading)`
+  color: ${(props) => props.theme.colors.primary[props.colorSchema][0]};
 `;
 
 const CardSubTitle = styled(Text)`
+  color: ${(props) => props.theme.colors.primary[props.colorSchema][3]};
   font-size: ${props => props.theme.fontSizes[2]};
   font-weight: ${props => props.theme.fontWeights[1]};
 `;
@@ -78,12 +80,9 @@ Card.Title = ({ children, colorSchema, ...props }) => (
   </CardHeading>
 );
 
-Card.SubTitle = ({ children, ...props }) => <CardSubTitle {...props}>{children}</CardSubTitle>;
+Card.SubTitle = ({ children, colorSchema, ...props }) => <CardSubTitle colorSchema={colorSchema} {...props}>{children}</CardSubTitle>;
 
 Card.Text = ({ children, lastChild, firstChild, ...props }) => {
-  console.log('TEXT');
-  console.log('firstChild', firstChild);
-  console.log('lastChild', lastChild);
   return (
     <Outset lastChild={lastChild} firstChild={firstChild}>
       <CardText {...props}>{children}</CardText>
@@ -91,14 +90,11 @@ Card.Text = ({ children, lastChild, firstChild, ...props }) => {
   )
 };
 
+// TODO: Implement new button variant "Link" when its done
 Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => {
-  console.log('BUTTON');
-  console.log('colorSchema', colorSchema);
-  console.log('firstChild', firstChild);
-  console.log('lastChild', lastChild);
   return (
     <Outset lastChild={lastChild} firstChild={firstChild}>
-      <Button colorSchema={colorSchema} size="small" block {...props}>
+      <Button variant="outlined" colorSchema={colorSchema} size="small" block {...props}>
         {children}
       </Button>
     </Outset>
