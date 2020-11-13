@@ -1,5 +1,4 @@
 import React from 'react';
-import { Image} from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button, Text, Heading } from 'app/components/atoms';
@@ -25,11 +24,11 @@ const Body = styled.View`
 `;
 
 const CardHeading = styled(Heading)`
-  color: ${(props) => props.theme.colors.primary[props.colorSchema][0]};
+  color: ${props => props.theme.colors.primary[props.colorSchema][0]};
 `;
 
 const CardSubTitle = styled(Text)`
-  color: ${(props) => props.theme.colors.primary[props.colorSchema][3]};
+  color: ${props => props.theme.colors.primary[props.colorSchema][3]};
   font-size: ${props => props.theme.fontSizes[2]};
   font-weight: ${props => props.theme.fontWeights[1]};
 `;
@@ -47,7 +46,7 @@ const Outset = styled.View`
 `;
 
 const CardImage = styled.Image`
-  border:1px solid green;
+  border: 1px solid green;
 `;
 
 const Card = ({ children, colorSchema, ...props }) => {
@@ -85,29 +84,28 @@ Card.Title = ({ children, colorSchema, ...props }) => (
   </CardHeading>
 );
 
-Card.SubTitle = ({ children, colorSchema, ...props }) => <CardSubTitle colorSchema={colorSchema} {...props}>{children}</CardSubTitle>;
+Card.SubTitle = ({ children, colorSchema, ...props }) => (
+  <CardSubTitle colorSchema={colorSchema} {...props}>
+    {children}
+  </CardSubTitle>
+);
 
-Card.Text = ({ children, lastChild, firstChild, ...props }) =>
-   <Outset lastChild={lastChild} firstChild={firstChild}>
-      <CardText {...props}>{children}</CardText>
-    </Outset>;
+Card.Text = ({ children, lastChild, firstChild, ...props }) => (
+  <Outset lastChild={lastChild} firstChild={firstChild}>
+    <CardText {...props}>{children}</CardText>
+  </Outset>
+);
 
 // TODO: Implement new button variant "Link" when its done
-Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => {
-  return (
-    <Outset lastChild={lastChild} firstChild={firstChild}>
-      <Button variant="outlined" colorSchema={colorSchema} size="small" block {...props}>
-        {children}
-      </Button>
-    </Outset>
-  );
-};
+Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => (
+  <Outset lastChild={lastChild} firstChild={firstChild}>
+    <Button variant="outlined" colorSchema={colorSchema} size="small" block {...props}>
+      {children}
+    </Button>
+  </Outset>
+);
 
-Card.Image = ({ children, ...props }) => {
-  return (
-    <CardImage {...props}/>
-  )
-};
+Card.Image = ({ children, ...props }) => <CardImage {...props} />;
 
 Card.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
@@ -132,6 +130,10 @@ Card.SubTitle.propTypes = {
 };
 
 Card.Text.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+};
+
+Card.Image.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 };
 
