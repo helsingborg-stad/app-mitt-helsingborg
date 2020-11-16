@@ -187,14 +187,14 @@ const validationTestForm = {
           categories: [
             {
               category: 'cat_1',
-              description: 'Fruit',
+              description: 'User info',
             },
           ],
           type: 'summaryList',
           items: [
             {
               id: 'text_1',
-              title: 'Apple',
+              title: 'email',
               category: 'cat_1',
               type: 'text',
               inputSelectValue: 'text',
@@ -205,7 +205,7 @@ const validationTestForm = {
             },
             {
               id: 'number_1',
-              title: 'Pear',
+              title: 'phone',
               category: 'cat_1',
               type: 'number',
               inputSelectValue: 'number',
