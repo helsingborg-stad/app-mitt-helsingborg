@@ -65,7 +65,7 @@ const Outset = styled.View`
 `;
 
 const CardImage = styled.Image`
-  ${({ circle }) => circle && `border-radius: 40px;`}
+  ${({ circle }) => circle && `border-radius: 50px;`}
 `;
 
 const Card = ({ children, colorSchema, ...props }) => {
