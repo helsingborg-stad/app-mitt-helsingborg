@@ -3,8 +3,11 @@ import { LayoutAnimation } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Text, Button, Fieldset } from '../../atoms';
-import Select from '../../atoms/Select';
-import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
+
+/**
+ * EditableList
+ * A Molecule Component to use for rendering a list with the possibility of editing the list values.
+ */
 
 const EditableListBody = styled.View`
   padding-top: 33px;
@@ -67,10 +70,6 @@ const getInitialState = (inputs, value) => {
   return inputs.reduce((prev, current) => ({ ...prev, [current.key]: current.value }), {});
 };
 
-/**
- * EditableList
- * A Molecule Component to use for rendering a list with the possibility of editing the list values.
- */
 function EditableList({
   colorSchema,
   title,
@@ -93,55 +92,6 @@ function EditableList({
     updatedState[key] = text;
     onInputChange(updatedState);
     setState(updatedState);
-  };
-  /** Switch between different input types */
-  const getInputComponent = input => {
-    switch (input.type) {
-      case 'number':
-        return (
-          <EditableListItemInput
-            multiline /** Temporary fix to make field scrollable inside scrollview */
-            numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
-            colorSchema={colorSchema}
-            editable={editable}
-            onChangeText={text => onChange(input.key, text)}
-            value={value && value !== '' ? value[input.key] : state[input.key]}
-            keyboardType="numeric"
-          />
-        );
-      case 'date':
-        return (
-          <CalendarPicker
-            date={value && value !== '' ? value[input.key] : state[input.key]}
-            onSelect={date => onChange(input.key, date)}
-            editable={editable}
-            transparent
-          />
-        );
-      case 'select':
-        return (
-          <Select
-            onValueChange={value => onChange(input.key, value)}
-            value={value && value !== '' ? value[input.key] : state[input.key]}
-            items={[
-              { label: 'Nikolas', value: 'nikolas' },
-              { label: 'Ehsan', value: 'Ehsan' },
-              { label: 'Jonatan', value: 'jonatan' },
-            ]}
-          />
-        );
-      default:
-        return (
-          <EditableListItemInput
-            multiline /** Temporary fix to make field scrollable inside scrollview */
-            numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
-            colorSchema={colorSchema}
-            editable={editable}
-            onChangeText={text => onChange(input.key, text)}
-            value={value && value !== '' ? value[input.key] : state[input.key]}
-          />
-        );
-    }
   };
 
   return (
@@ -169,7 +119,16 @@ function EditableList({
             <EditableListItemLabelWrapper>
               <EditableListItemLabel>{input.label}</EditableListItemLabel>
             </EditableListItemLabelWrapper>
-            <EditableListItemInputWrapper>{getInputComponent(input)}</EditableListItemInputWrapper>
+            <EditableListItemInputWrapper>
+              <EditableListItemInput
+                multiline /** Temporary fix to make field scrollable inside scrollview */
+                numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
+                colorSchema={colorSchema}
+                editable={editable}
+                onChangeText={text => onChange(input.key, text)}
+                value={value && value !== '' ? value[input.key] : state[input.key]}
+              />
+            </EditableListItemInputWrapper>
           </EditableListItem>
         ))}
       </EditableListBody>
