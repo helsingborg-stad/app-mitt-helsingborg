@@ -23,6 +23,12 @@ const inputs = [
     value: 'Helsingborgshem',
   },
   {
+    key: 'key-5',
+    label: 'person',
+    type: 'select',
+    value: '',
+  },
+  {
     key: 'key-4',
     label: 'Inflyttningsdatum',
     type: 'date',
