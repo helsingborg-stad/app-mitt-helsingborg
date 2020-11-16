@@ -17,9 +17,9 @@ export type NavigationActionType =
   | { type: 'navigateBack' };
 
 export interface Props {
-  iconName: string;
+  iconName?: string;
   text?: string;
-  colorSchema: string;
+  colorSchema?: string;
   navigationType: NavigationActionType;
   formNavigation: {
     next: () => void;
