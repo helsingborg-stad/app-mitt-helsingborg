@@ -11,7 +11,7 @@ const Container = styled.View`
 `;
 
 const Body = styled.View`
-  padding: 20px;
+  padding: 24px;
   background-color: ${props => props.theme.colors.neutrals[7]};
   border-radius: 8px;
   display: flex;
@@ -39,15 +39,13 @@ const CardText = styled(Text)`
 `;
 
 const Outset = styled.View`
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   ${props => props.firstChild && `padding-top: 0px;`}
   ${props => props.lastChild && `padding-bottom: 0px;`}
 `;
 
-const CardImage = styled.Image`
-  border: 1px solid green;
-`;
+const CardImage = styled.Image``;
 
 const Card = ({ children, colorSchema, ...props }) => {
   // Clone child elements and add additional props
@@ -105,7 +103,11 @@ Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => (
   </Outset>
 );
 
-Card.Image = ({ children, ...props }) => <CardImage {...props} />;
+Card.Image = ({ children, firstChild, lastChild, ...props }) => (
+  <Outset lastChild={lastChild} firstChild={firstChild}>
+    <CardImage {...props} />
+  </Outset>
+);
 
 Card.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
