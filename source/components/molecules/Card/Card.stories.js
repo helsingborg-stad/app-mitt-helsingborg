@@ -7,6 +7,8 @@ import Card from './Card';
 
 const ILLU_INCOME = require('source/assets/images/icons/icn_inkomster_1x.png');
 
+const ILLU_PROFILE = { uri: 'https://reactnative.dev/img/tiny_logo.png' };
+
 storiesOf('Card', module).add('default', () => (
   <StoryWrapper>
     <ScrollView style={{ backgroundColor: '#efefef', flex: 1, padding: 16 }}>
@@ -17,11 +19,22 @@ storiesOf('Card', module).add('default', () => (
       <Card>
         <Card.Body>
           <Card.Image source={ILLU_INCOME} />
-
           <Card.Title>Ekonomiskt bistånd</Card.Title>
           <Card.SubTitle>Ofullständig</Card.SubTitle>
           <Card.Button>
             <Text>Ange hyra</Text>
+            <Icon name="arrow-forward" />
+          </Card.Button>
+        </Card.Body>
+      </Card>
+
+      <Card colorSchema="purple">
+        <Card.Body color="green">
+          <Card.Image source={ILLU_INCOME} />
+          <Card.Title>Ekonomiskt bistånd</Card.Title>
+          <Card.SubTitle>Inskickad</Card.SubTitle>
+          <Card.Button>
+            <Text>Öppna</Text>
             <Icon name="arrow-forward" />
           </Card.Button>
         </Card.Body>
@@ -32,7 +45,7 @@ storiesOf('Card', module).add('default', () => (
       </Text>
 
       <Card colorSchema="red">
-        <Card.Body>
+        <Card.Body color="neutral">
           <Card.Title>Oktober</Card.Title>
           <Card.SubTitle>Ansökan inlämnad</Card.SubTitle>
           <Card.Text>Vi har mottagit din ansökan för perioden 1-31 oktober.</Card.Text>
@@ -49,7 +62,11 @@ storiesOf('Card', module).add('default', () => (
       </Text>
 
       <Card colorSchema="blue">
-        <Card.Body>
+        <Card.Body color="neutral">
+          <Card.Image
+            circle
+            source={{ uri: 'https://i.vimeocdn.com/portrait/58832_300x300.jpg' }}
+          />
           <Card.Title>Anna Andersson</Card.Title>
           <Card.SubTitle>Socialsekreterare</Card.SubTitle>
           <Card.Text>042 - 52 52 52</Card.Text>
