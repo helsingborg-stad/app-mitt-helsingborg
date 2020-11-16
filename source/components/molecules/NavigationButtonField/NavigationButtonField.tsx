@@ -5,7 +5,7 @@ import { Button, Icon, Text } from '../../atoms';
 import Box from '../../atoms/Box/Box';
 
 const ButtonFieldWrapper = styled(Box).attrs({
-  m: "2px",
+  m: '2px',
 })`
   flex: 1;
 `;
@@ -18,7 +18,7 @@ export type NavigationActionType =
 
 export interface Props {
   iconName: string;
-  text: string;
+  text?: string;
   colorSchema: string;
   navigationType: NavigationActionType;
   formNavigation: {
@@ -31,13 +31,13 @@ export interface Props {
 
 // TODO: Move navigation logic to a smart container component,
 // this dumb component do not need to know about how formNavigation is handled.
-// Only that an onClick event should be triggerd.
+// Only that an onClick event should be triggered.
 const NavigationButtonField: React.FC<Props> = ({
   iconName,
   text,
   navigationType,
   formNavigation,
-  colorSchema
+  colorSchema,
 }) => {
   const onClick = () => {
     // This logic could be broken out and placed elsewhere.
@@ -58,14 +58,13 @@ const NavigationButtonField: React.FC<Props> = ({
       default:
         break;
     }
-  }
+  };
 
-  console.log(iconName)
   return (
     <ButtonFieldWrapper>
       <Button variant="outlined" onClick={onClick} colorSchema={colorSchema}>
         {iconName.length ? <Icon name={iconName} /> : null}
-        <Text>{text}</Text>
+        {text && <Text>{text}</Text>}
       </Button>
     </ButtonFieldWrapper>
   );
