@@ -33,51 +33,32 @@ const ButtonContainer = styled.View`
   margin: 0 auto;
   justify-content: center;
 `;
-const DateInput = styled(Input)<{ transparent: boolean }>`
-  ${({ transparent }) => transparent && 'background: transparent;'}
-  border: none;
-  text-align: right;
-  min-width: 80%;
-  font-weight: 500;
-  color: ${props => props.theme.colors.neutrals[1]};
-`;
 
 interface PropInterface {
   onSelect: (data: Date) => void;
   date: any;
-  editable?: boolean;
-  transparent?: boolean;
 }
-const CalendarPickerForm: React.FC<PropInterface> = ({
-  onSelect,
-  date,
-  editable = true,
-  transparent,
-}) => {
+const CalendarPickerForm: React.FC<PropInterface> = ({ onSelect, date }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   // Handle selected date and hide calendar modal.
-  const handleCalendarDateChange = (selectedDate: moment.Moment) => {
-    onSelect(selectedDate.toDate());
+  const handleCalendarDateChange = selectedDate => {
+    onSelect(selectedDate);
     setIsVisible(!isVisible);
   };
 
   return (
     <View>
       <TouchableOpacity
-        disabled={!editable}
         onPress={() => {
           setIsVisible(!isVisible);
         }}
       >
-        <DateInput
+        <Input
           placeholder="Välj datum"
           value={date ? moment(date).format('Y-MM-DD') : undefined}
-          multiline /** Temporary fix to make field scrollable inside scrollview */
-          numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
           editable={false}
           pointerEvents="none"
-          transparent={transparent}
         />
       </TouchableOpacity>
 
@@ -133,10 +114,6 @@ CalendarPickerForm.propTypes = {
    * Date value. Used for storing and displaying date in components.
    */
   date: PropTypes.oneOfType([PropTypes.instanceOf(moment), PropTypes.string]),
-  /** Turn the input field of. Defaults to true. */
-  editable: PropTypes.bool,
-  /** Turn the background of input field transparent */
-  transparent: PropTypes.bool,
 };
 
 export default CalendarPickerForm;

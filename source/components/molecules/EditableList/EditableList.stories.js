@@ -22,18 +22,6 @@ const inputs = [
     type: 'text',
     value: 'Helsingborgshem',
   },
-  {
-    key: 'key-5',
-    label: 'person',
-    type: 'select',
-    value: '',
-  },
-  {
-    key: 'key-4',
-    label: 'Inflyttningsdatum',
-    type: 'date',
-    value: '2020-12-24',
-  },
 ];
 
 storiesOf('EditableList', module).add('Default', () => (
