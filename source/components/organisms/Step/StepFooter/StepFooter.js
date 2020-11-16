@@ -30,7 +30,7 @@ const StepFooter = ({
   currentPosition,
   children,
 }) => {
-  const { user, handleSign, status } = useContext(AuthContext);
+  const { user, handleSign, status, isLoading } = useContext(AuthContext);
 
   useEffect(() => {
     const signCase = () => {
@@ -94,7 +94,7 @@ const StepFooter = ({
       <Button
         onClick={actionMap(action.type)}
         color={action.color}
-        disabled={checkCondition(action.conditionalOn)}
+        disabled={isLoading || checkCondition(action.conditionalOn)}
         z={0}
       >
         <Text>{action.label}</Text>

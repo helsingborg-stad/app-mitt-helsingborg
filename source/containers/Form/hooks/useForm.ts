@@ -5,7 +5,12 @@ import { User } from '../../../types/UserTypes';
 
 export interface FormReducerState {
   submitted: boolean;
-  currentPosition: { index: number; level: number; currentMainStep: number };
+  currentPosition: {
+    index: number;
+    level: number;
+    currentMainStep: number;
+    currentMainStepIndex: number;
+  };
   steps: Step[];
   allQuestions: Question[];
   user: User;

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TouchableOpacity } from 'react-native';
 import RnModal from 'react-native-modal';
 import styled from 'styled-components/native';
 
@@ -8,33 +7,22 @@ const ModalContainer = styled(RnModal)`
   margin-left: 0px;
   margin-right: 0px;
   margin-bottom: 0px;
-  margin-top: 24px;
+  margin-top: 30px;
   border-top-left-radius: 17.5px;
   border-top-right-radius: 17.5px;
+  background-color: #00213f;
 `;
-
-const ModalWrapper = styled.View({
-  backgroundColor: '#00213F',
-  flexGrow: 1,
-});
-
-const Content = styled.ScrollView``;
 
 const Modal = ({ visible, children, ...other }) => (
   <ModalContainer
-    animationInTiming={400}
-    animationOutTiming={400}
-    backdropOpacity={0}
+    animationInTiming={500}
+    animationOutTiming={500}
     propagateSwipe
-    swipeDirection="down"
     isVisible={visible}
+    transparent
     {...other}
   >
-    <ModalWrapper>
-      <Content>
-        <TouchableOpacity activeOpacity={1}>{children}</TouchableOpacity>
-      </Content>
-    </ModalWrapper>
+    {children}
   </ModalContainer>
 );
 

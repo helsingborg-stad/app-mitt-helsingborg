@@ -6,6 +6,8 @@ import { Step as StepType, StepperActions } from '../../types/FormTypes';
 import { CaseStatus } from '../../types/CaseType';
 import { User } from '../../types/UserTypes';
 import useForm, { FormReducerState } from './hooks/useForm';
+import Modal from '../../components/molecules/Modal';
+
 
 const FormContainer = styled.View`
   flex: 1;
@@ -42,7 +44,12 @@ const Form: React.FC<Props> = ({
   status,
   updateCaseInContext,
 }) => {
-  const currentPosition = { index: startAt, level: 0, currentMainStep: 1 };
+  const currentPosition = {
+    index: startAt,
+    level: 0,
+    currentMainStep: 1,
+    currentMainStepIndex: startAt,
+  };
   const initialState: FormReducerState = {
     submitted: false,
     currentPosition,
@@ -91,8 +98,16 @@ const Form: React.FC<Props> = ({
       />
     )
   );
-
-  return <FormContainer>{stepComponents[formState.currentPosition.index]}</FormContainer>;
+  return (
+    <>
+      <FormContainer>
+        {stepComponents[formState.currentPosition.currentMainStepIndex]}
+      </FormContainer>
+      <Modal visible={formState.currentPosition.level > 0}>
+        {stepComponents[formState.currentPosition.index]}
+      </Modal>
+    </>
+  );
 };
 
 Form.propTypes = {

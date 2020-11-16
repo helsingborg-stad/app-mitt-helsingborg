@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Button, Icon, Text } from '../../atoms';
-import theme from '../../../styles/theme';
+import Box from '../../atoms/Box/Box';
 
-const ButtonFieldWrapper = styled.View`
+const ButtonFieldWrapper = styled(Box).attrs({
+  m: '2px',
+})`
   flex: 1;
-  margin: 2px;
 `;
 
 export type NavigationActionType =
@@ -16,9 +17,9 @@ export type NavigationActionType =
   | { type: 'navigateBack' };
 
 export interface Props {
-  iconName: string;
-  text: string;
-  color: string;
+  iconName?: string;
+  text?: string;
+  colorSchema?: string;
   navigationType: NavigationActionType;
   formNavigation: {
     next: () => void;
@@ -28,39 +29,47 @@ export interface Props {
   };
 }
 
+// TODO: Move navigation logic to a smart container component,
+// this dumb component do not need to know about how formNavigation is handled.
+// Only that an onClick event should be triggered.
 const NavigationButtonField: React.FC<Props> = ({
   iconName,
   text,
-  color,
   navigationType,
   formNavigation,
+  colorSchema,
 }) => {
-  let onClick = (targetId?: string) => {};
-  switch (navigationType.type) {
-    case 'navigateDown':
-      onClick = () => formNavigation.down(navigationType.stepId);
-      break;
-    case 'navigateUp':
-      onClick = () => formNavigation.up();
-      break;
-    case 'navigateNext':
-      onClick = formNavigation.next;
-      break;
-    case 'navigateBack':
-      onClick = formNavigation.back;
-      break;
+  const onClick = () => {
+    // This logic could be broken out and placed elsewhere.
+    switch (navigationType.type) {
+      case 'navigateDown':
+        formNavigation.down(navigationType.stepId);
+        break;
+      case 'navigateUp':
+        formNavigation.up();
+        break;
+      case 'navigateNext':
+        formNavigation.next();
+        break;
+      case 'navigateBack':
+        formNavigation.back();
+        break;
 
-    default:
-  }
+      default:
+        break;
+    }
+  };
+
   return (
     <ButtonFieldWrapper>
-      <Button onClick={onClick} color={color} block>
-        <Text>{text}</Text>
+      <Button variant="outlined" onClick={onClick} colorSchema={colorSchema}>
         {iconName.length ? <Icon name={iconName} /> : null}
+        {text && <Text>{text}</Text>}
       </Button>
     </ButtonFieldWrapper>
   );
 };
+
 NavigationButtonField.propTypes = {
   /**
    * Name of the icon to be displayed
@@ -75,16 +84,19 @@ NavigationButtonField.propTypes = {
    */
   navigationType: PropTypes.any,
   /**
-   * Color of the button
+   * Color schema of the button
    */
-  color: PropTypes.oneOf(Object.keys(theme.button)),
+  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
+  /**
+   * Object with navigation event for a form.
+   */
   formNavigation: PropTypes.any,
 };
 
 NavigationButtonField.defaultProps = {
-  iconName: '',
+  iconName: 'add',
   text: '',
-  color: 'white',
+  colorSchema: 'blue',
 };
 
 export default NavigationButtonField;
