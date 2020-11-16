@@ -1,6 +1,6 @@
 import { useReducer, useEffect } from 'react';
 import formReducer from './formReducer';
-import { Step, StepperActions } from '../../../types/FormTypes';
+import { Question, Step, StepperActions } from '../../../types/FormTypes';
 import { User } from '../../../types/UserTypes';
 
 export interface FormReducerState {
@@ -12,6 +12,7 @@ export interface FormReducerState {
     currentMainStepIndex: number;
   };
   steps: Step[];
+  allQuestions: Question[];
   user: User;
   connectivityMatrix: StepperActions[][];
   formAnswers: Record<string, any>;
@@ -22,21 +23,6 @@ export interface FormReducerState {
 function useForm(initialState: FormReducerState) {
   const [formState, dispatch] = useReducer(formReducer, initialState);
 
-  /**
-   * Computes the number of main steps in the matrix, by following the 'next' steps until they run out.
-   * returns -1 if it encounters an infinite loop.
-   * @param matrix C
-   */
-  const computeNumberMainSteps = (matrix: StepperActions[][]) => {
-    const countNext = (m: StepperActions[][], currentRow: number, history: number[]) => {
-      const nextIndex = m[currentRow].findIndex(a => a === 'next');
-      if (history.includes(nextIndex)) return 1;
-      return nextIndex >= 0 ? 2 + countNext(m, nextIndex, [...history, nextIndex]) : 2;
-    };
-    const count = countNext(matrix, 0, []);
-    return count % 2 === 0 ? count / 2 : -1;
-  };
-
   useEffect(() => {
     dispatch({
       type: 'REPLACE_MARKDOWN_TEXT',
@@ -46,6 +32,11 @@ function useForm(initialState: FormReducerState) {
     });
   }, [formState.connectivityMatrix]);
 
+  useEffect(() => {
+    dispatch({
+      type: 'GET_ALL_QUESTIONS',
+    });
+  }, [formState.steps]);
   /**
    * Function for going forward in the form
    */

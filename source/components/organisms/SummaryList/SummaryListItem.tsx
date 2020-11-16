@@ -88,8 +88,10 @@ const DeleteButtonHighligth = styled(TouchableHighlight)`
 const dateStyle: CSSProp = {
   textAlign: 'right',
   minWidth: '80%',
-  padding: 6,
+  padding: 5,
   fontWeight: '500',
+  backgroundColor:'transparent',
+  borderWidth: 0,
 };
 
 interface Props {
@@ -100,7 +102,7 @@ interface Props {
   changeFromInput: (text: string | number) => void;
   removeItem: () => void;
   color: string;
-  error?: { isValid: boolean; validationMessage: string };
+  validationError?: { isValid: boolean; message: string };
 }
 /** The rows for the summary list. */
 const SummaryListItem: React.FC<Props> = ({
@@ -111,7 +113,7 @@ const SummaryListItem: React.FC<Props> = ({
   editable,
   removeItem,
   color,
-  error,
+  validationError,
 }) => {
   const inputComponent = (input: SummaryListItemType, editable: boolean) => {
     switch (input.type) {
@@ -161,7 +163,7 @@ const SummaryListItem: React.FC<Props> = ({
   const colorSchema = Object.keys(colorPalette.primary).includes(color) ? color : 'blue';
   return (
     <Row>
-      <ItemWrapper key={`${item.title}`} colorSchema={colorSchema} editable={editable} error={error}>
+      <ItemWrapper key={`${item.title}`} colorSchema={colorSchema} editable={editable} error={validationError}>
         <LabelWrapper>
           <SmallText>
             {`${item.title}`}
@@ -205,6 +207,7 @@ SummaryListItem.propTypes = {
    * Whether or not to make the
    */
   editable: PropTypes.bool,
+  validationError: PropTypes.object,
 };
 SummaryListItem.defaultProps = {
   color: 'blue',

@@ -5,8 +5,9 @@ import Step from '../../components/organisms/Step/Step';
 import { Step as StepType, StepperActions } from '../../types/FormTypes';
 import { CaseStatus } from '../../types/CaseType';
 import { User } from '../../types/UserTypes';
-import useForm from './hooks/useForm';
+import useForm, { FormReducerState } from './hooks/useForm';
 import Modal from '../../components/molecules/Modal';
+
 
 const FormContainer = styled.View`
   flex: 1;
@@ -49,7 +50,7 @@ const Form: React.FC<Props> = ({
     currentMainStep: 1,
     currentMainStepIndex: startAt,
   };
-  const initialState = {
+  const initialState: FormReducerState = {
     submitted: false,
     currentPosition,
     steps,
@@ -57,6 +58,7 @@ const Form: React.FC<Props> = ({
     formAnswers: initialAnswers,
     validations: {},
     connectivityMatrix,
+    allQuestions: [],
   };
 
   const { formState, formNavigation, handleInputChange, handleSubmit } = useForm(initialState);

@@ -72,12 +72,12 @@ const inputTypes = {
   summaryList: {
     component: SummaryList,
     changeEvent: 'onChange',
-    props: { answers: true },
+    props: { answers: true, validation: true },
   },
   repeaterField: {
     component: RepeaterField,
     changeEvent: 'onChange',
-    props: { answers: true },
+    props: {},
   },
 };
 
@@ -90,7 +90,7 @@ const FormField = ({
   onChange,
   value,
   answers,
-  error,
+  validationErrors,
   conditionalOn,
   labelHelp,
   ...other
@@ -116,10 +116,11 @@ const FormField = ({
     help:
       other.inputHelp && other.text ? { text: other.inputHelp, heading: other.text } : undefined,
     ...inputProps,
-    error,
+    error: validationErrors[id],
     ...other,
   };
   if (input?.props?.answers) inputCompProps.answers = answers;
+  if (input?.props?.validation) inputCompProps.validationErrors = validationErrors;
   if (input && input.changeEvent) inputCompProps[input.changeEvent] = saveInput;
 
   /** Checks if the field is conditional on another input, and if so,
@@ -195,7 +196,7 @@ FormField.propTypes = {
    * All the form state answers. Needed because of conditional checks.
    */
   answers: PropTypes.object,
-  error: PropTypes.string,
+  validationErrors: PropTypes.object,
   formNavigation: PropTypes.shape({
     next: PropTypes.func,
     back: PropTypes.func,

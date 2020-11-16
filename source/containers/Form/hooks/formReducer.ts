@@ -9,6 +9,7 @@ import {
   submitForm,
   updateAnswer,
   computeNumberMainSteps,
+  getAllQuestions,
   validateAnswer,
 } from './formActions';
 
@@ -18,6 +19,9 @@ type Action =
     }
   | {
       type: 'COUNT_MAIN_STEPS';
+    }
+  | {
+      type: 'GET_ALL_QUESTIONS';
     }
   | {
       type: 'GO_NEXT';
@@ -118,6 +122,11 @@ function formReducer(state: FormReducerState, action: Action) {
      */
     case 'SUBMIT_FORM': {
       return submitForm(state, action.payload);
+    }
+
+    /** Update the list of all questions */
+    case 'GET_ALL_QUESTIONS': {
+      return getAllQuestions(state);
     }
 
     default:
