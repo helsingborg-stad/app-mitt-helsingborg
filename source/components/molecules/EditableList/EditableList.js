@@ -3,6 +3,7 @@ import { LayoutAnimation } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Text, Button, Fieldset } from '../../atoms';
+import Select from '../../atoms/Select';
 import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
 
 const EditableListBody = styled.View`
@@ -30,7 +31,7 @@ const EditableListItem = styled.View`
 
 const EditableListItemLabelWrapper = styled.View`
   flex: 4;
-  justify-content: center;
+  justify-content: ${props => (props.alignAtStart ? 'flex-start' : 'center')};
 `;
 
 const EditableListItemLabel = styled.Text`
@@ -117,6 +118,14 @@ function EditableList({
             transparent
           />
         );
+      case 'select':
+        return (
+          <Select
+            onValueChange={value => onChange(input.key, value)}
+            value={value && value !== '' ? value[input.key] : state[input.key]}
+            items={input.choices}
+          />
+        );
       default:
         return (
           <EditableListItemInput
@@ -154,7 +163,7 @@ function EditableList({
             key={input.key}
             error={error ? error[input.key] : undefined}
           >
-            <EditableListItemLabelWrapper>
+            <EditableListItemLabelWrapper alignAtStart={input.type === 'select'}>
               <EditableListItemLabel>{input.label}</EditableListItemLabel>
             </EditableListItemLabelWrapper>
             <EditableListItemInputWrapper>{getInputComponent(input)}</EditableListItemInputWrapper>
