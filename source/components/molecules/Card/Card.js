@@ -16,6 +16,7 @@ const Body = styled.View`
       ? props.theme.colors.neutrals[7]
       : props.theme.colors.complementary[props.colorSchema][3]};
   ${props => {
+    // Overrides colorSchema without affecting it's children
     if (props.color) {
       switch (props.color) {
         case 'neutral':
@@ -38,9 +39,19 @@ const Body = styled.View`
   shadow-opacity: 0.5;
   shadow-radius: 2px;
   `}
+  ${props => {
+    if (props.outlined) {
+      switch (props.colorSchema) {
+        case 'neutral':
+          return `border: 2px solid ${props.theme.colors.neutrals[0]};`;
+        default:
+          return `border: 2px solid ${props.theme.colors.primary[props.colorSchema][0]};`;
+      }
+    }
+  }}
 `;
 
-const CardHeading = styled(Heading)`
+const CardTitle = styled(Heading)`
   color: ${props =>
     props.colorSchema === 'neutral'
       ? props.theme.colors.neutrals[0]
@@ -102,9 +113,9 @@ Card.Body = ({ children, colorSchema, color, ...props }) => {
 };
 
 Card.Title = ({ children, colorSchema, ...props }) => (
-  <CardHeading colorSchema={colorSchema} {...props}>
+  <CardTitle colorSchema={colorSchema} {...props}>
     {children}
-  </CardHeading>
+  </CardTitle>
 );
 
 Card.SubTitle = ({ children, colorSchema, ...props }) => (
