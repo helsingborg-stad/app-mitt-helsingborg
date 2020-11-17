@@ -119,7 +119,6 @@ Card.Body = ({ children, colorSchema, color, ...props }) => {
         firstChild: index === 0,
         lastChild: index === React.Children.count(children) - 1,
       });
-
       return;
     }
 
@@ -205,15 +204,21 @@ Card.SubTitle.propTypes = {
 
 Card.Text.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  firstChild: PropTypes.bool,
+  lastChild: PropTypes.bool,
 };
 
 Card.Image.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  firstChild: PropTypes.bool,
+  lastChild: PropTypes.bool,
 };
 
 Card.Button.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
   colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+  firstChild: PropTypes.bool,
+  lastChild: PropTypes.bool,
 };
 
 export default Card;
