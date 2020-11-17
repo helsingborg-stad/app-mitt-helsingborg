@@ -38,13 +38,12 @@ storiesOf('Card', module).add('default', () => (
         </Card.Body>
       </Card>
 
-      <Card colorSchema="purple">
-        <Card.Body shadow>
-          <Card.Image source={ILLU_INCOME} />
-          <Card.Title>Ekonomiskt bistånd</Card.Title>
-          <Card.SubTitle>Inskickad</Card.SubTitle>
+      <Card colorSchema="red">
+        <Card.Body outlined>
+          <Card.Title>Stickprovskontroll</Card.Title>
+          <Card.Text>Du har blivit utvald för en stickprovskontroll.</Card.Text>
           <Card.Button>
-            <Text>Öppna</Text>
+            <Text>Lämna kontrolluppgifter</Text>
             <Icon name="arrow-forward" />
           </Card.Button>
         </Card.Body>
