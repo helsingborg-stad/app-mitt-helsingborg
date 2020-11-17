@@ -1,4 +1,5 @@
 export { default as AuthLoading } from './AuthLoading';
+export { default as Card } from './Card';
 export { default as DateTimePicker } from './DateTimePicker';
 export { default as GroupedList } from './GroupedList';
 export { default as GroupListWithAvatar } from './GroupedListWithAvatar';
