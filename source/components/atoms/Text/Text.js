@@ -20,6 +20,11 @@ const Text = styled(RNText)`
     `
       font-weight: bold;
     `}
+  ${({ italic }) =>
+    italic &&
+    `
+      font-style: italic;
+    `}
 `;
 
 Text.defaultProps = {
