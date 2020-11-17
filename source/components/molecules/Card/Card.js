@@ -96,6 +96,10 @@ const BodyContainer = styled.View`
   flex-grow: 1;
 `;
 
+/**
+ * Card component
+ * @param {props} props
+ */
 const Card = ({ children, colorSchema, ...props }) => {
   // Clone child elements and add additional props
   const childrenWithProps = React.Children.map(children, (child, index) =>
@@ -110,12 +114,17 @@ const Card = ({ children, colorSchema, ...props }) => {
   return <Container {...props}>{childrenWithProps}</Container>;
 };
 
+/**
+ * Renders body component and it's children components
+ * @param {props} props
+ */
 Card.Body = ({ children, colorSchema, color, ...props }) => {
-  const childrenImageWithProps = [];
+  const imageWithProps = [];
   const childrenWithProps = [];
   React.Children.map(children, (child, index) => {
+    // Clone children and separate image from other children to make positioning easier
     if (index === 0 && child.type === Card.Image) {
-      childrenImageWithProps[index] = React.cloneElement(child, {
+      imageWithProps[index] = React.cloneElement(child, {
         key: index,
         colorSchema,
         firstChild: index === 0,
@@ -134,33 +143,47 @@ Card.Body = ({ children, colorSchema, color, ...props }) => {
 
   return (
     <Body colorSchema={colorSchema} color={color} {...props}>
-      {childrenImageWithProps.length > 0 && (
-        <BodyImageContainer>{childrenImageWithProps}</BodyImageContainer>
-      )}
+      {imageWithProps.length > 0 && <BodyImageContainer>{imageWithProps}</BodyImageContainer>}
       <BodyContainer>{childrenWithProps}</BodyContainer>
     </Body>
   );
 };
 
+/**
+ * Renders a title
+ * @param {props} props
+ */
 Card.Title = ({ children, colorSchema, ...props }) => (
   <CardTitle colorSchema={colorSchema} {...props}>
     {children}
   </CardTitle>
 );
 
+/**
+ * Renders sub title
+ * @param {props} props
+ */
 Card.SubTitle = ({ children, colorSchema, ...props }) => (
   <CardSubTitle colorSchema={colorSchema} {...props}>
     {children}
   </CardSubTitle>
 );
 
+/**
+ * Renders text
+ * @param {props} props
+ */
 Card.Text = ({ children, lastChild, firstChild, ...props }) => (
   <Outset lastChild={lastChild} firstChild={firstChild}>
     <CardText {...props}>{children}</CardText>
   </Outset>
 );
 
-// TODO: Implement new button variant "Link" when its done
+/**
+ * Renders a button
+ * TODO: Implement new button variant "Link" when its done
+ * @param {props} props
+ */
 Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => {
   const buttonColors = ['blue', 'red', 'purple', 'green'];
   const color = buttonColors.includes(colorSchema) ? colorSchema : buttonColors[0];
@@ -173,6 +196,10 @@ Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => {
   );
 };
 
+/**
+ * Renders an image
+ * @param {props} props
+ */
 Card.Image = ({ children, firstChild, lastChild, ...props }) => (
   <Outset lastChild={lastChild} firstChild={firstChild}>
     <CardImage {...props} />
