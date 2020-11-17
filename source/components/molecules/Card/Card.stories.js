@@ -14,8 +14,8 @@ storiesOf('Card', module).add('default', () => (
         Aktiva
       </Text>
 
-      <Card>
-        <Card.Body shadow>
+      <Card colorSchema="red">
+        <Card.Body shadow color="neutral">
           <Card.Image source={ILLU_INCOME} />
           <Card.Title>Ekonomiskt bistånd</Card.Title>
           <Card.SubTitle>Ofullständig</Card.SubTitle>
@@ -28,7 +28,7 @@ storiesOf('Card', module).add('default', () => (
 
       <Card colorSchema="red">
         <Card.Body color="neutral">
-          <Card.Image source={ILLU_INCOME} />
+          <Card.Image circle source={ILLU_INCOME} />
           <Card.Title>Ekonomiskt bistånd</Card.Title>
           <Card.SubTitle>Inskickad</Card.SubTitle>
           <Card.Button>
@@ -73,6 +73,7 @@ storiesOf('Card', module).add('default', () => (
       <Card colorSchema="blue">
         <Card.Body color="neutral">
           <Card.Image circle source={ILLU_INCOME} />
+
           <Card.Title>Anna Andersson</Card.Title>
           <Card.SubTitle>Socialsekreterare</Card.SubTitle>
           <Card.Text>042 - 52 52 52</Card.Text>
