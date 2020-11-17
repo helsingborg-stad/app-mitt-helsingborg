@@ -1,5 +1,4 @@
 import React from 'react';
-import { ScrollView } from 'react-native';
 import { storiesOf } from '@storybook/react-native';
 import { Text, Icon } from 'app/components/atoms';
 import styled from 'styled-components/native';
@@ -9,7 +8,7 @@ import Card from './Card';
 const ILLU_INCOME = require('source/assets/images/icons/icn_inkomster_1x.png');
 
 const FlexContainer = styled.ScrollView`
-  background-color: #efefef;
+  background-color: #fff;
   padding: 16px;
 `;
 
@@ -35,7 +34,7 @@ storiesOf('Card', module)
       <ColorSchemas />
     </StoryWrapper>
   ))
-  .add('Examples', props => (
+  .add('Example combinations', props => (
     <StoryWrapper {...props}>
       <CardExamples />
     </StoryWrapper>
@@ -44,6 +43,7 @@ storiesOf('Card', module)
 const ChildComponents = () => (
   <FlexContainer>
     <Title>Body</Title>
+    <Prop>(Defaults to no borders or shadow)</Prop>
     <Card>
       <Card.Body></Card.Body>
     </Card>
@@ -69,21 +69,21 @@ const ChildComponents = () => (
 
     <Title>Title</Title>
     <Card>
-      <Card.Body>
+      <Card.Body shadow>
         <Card.Title>Title</Card.Title>
       </Card.Body>
     </Card>
 
     <Title>Sub title</Title>
     <Card>
-      <Card.Body>
+      <Card.Body shadow>
         <Card.SubTitle>Sub title</Card.SubTitle>
       </Card.Body>
     </Card>
 
     <Title>Text</Title>
     <Card>
-      <Card.Body>
+      <Card.Body shadow>
         <Card.Text>Lorem ipsum dolor sit amet</Card.Text>
       </Card.Body>
     </Card>
@@ -91,14 +91,14 @@ const ChildComponents = () => (
     <Title>Text</Title>
     <Prop>Prop: italic</Prop>
     <Card>
-      <Card.Body>
+      <Card.Body shadow>
         <Card.Text italic>Lorem ipsum dolor sit amet</Card.Text>
       </Card.Body>
     </Card>
 
     <Title>Image</Title>
     <Card>
-      <Card.Body>
+      <Card.Body shadow>
         <Card.Image source={ILLU_INCOME} />
       </Card.Body>
     </Card>
@@ -106,14 +106,14 @@ const ChildComponents = () => (
     <Title>Image</Title>
     <Prop>Prop: circle</Prop>
     <Card>
-      <Card.Body>
+      <Card.Body shadow>
         <Card.Image circle source={ILLU_INCOME} />
       </Card.Body>
     </Card>
 
     <Title>Button</Title>
     <Card>
-      <Card.Body>
+      <Card.Body shadow>
         <Card.Button>
           <Text>Button text</Text>
           <Icon name="arrow-forward" />
@@ -208,7 +208,7 @@ const CardExamples = () => (
     </Card>
 
     <Title>Sally message</Title>
-    <Card colorSchema="purple">
+    <Card colorSchema="green">
       <Card.Body outlined>
         <Card.Title>Hej!</Card.Title>
         <Card.Text>
@@ -218,7 +218,7 @@ const CardExamples = () => (
       </Card.Body>
     </Card>
 
-    <Card colorSchema="purple">
+    <Card colorSchema="green">
       <Card.Body outlined>
         <Card.Title>Stickprovskontroll</Card.Title>
         <Card.Text>Du har blivit utvald för en stickprovskontroll.</Card.Text>
@@ -272,6 +272,40 @@ const CardExamples = () => (
         <Text>1-31 augusti</Text>
         <Icon name="arrow-forward" />
       </Card.Button>
+    </Card>
+
+    <Title>Tack för din ansökan!</Title>
+    <Card colorSchema="purple">
+      <Card.Body>
+        <Card.Text>
+          Om du är i akut behov av pengar, eller har några frågor, kan du ringa din handläggare.
+        </Card.Text>
+        <Card.Text>
+          Kontaktuppgifter till din handläggare hittar du på ärendesidan i appen.
+        </Card.Text>
+      </Card.Body>
+    </Card>
+
+    <Card colorSchema="purple">
+      <Card.Body>
+        <Card.Image source={ILLU_INCOME} />
+        <Card.Title>Ekonomiskt bistånd</Card.Title>
+        <Card.SubTitle>Inskickad</Card.SubTitle>
+        <Card.Button>
+          <Text>Öppna</Text>
+          <Icon name="arrow-forward" />
+        </Card.Button>
+      </Card.Body>
+    </Card>
+
+    <Card colorSchema="purple">
+      <Card.Body>
+        <Card.Text italic>Eller ring stadens kontaktcenter på nummer 042 - 10 50 60</Card.Text>
+        <Card.Button>
+          <Text>Ring kontaktcenter</Text>
+          <Icon name="help-outline" />
+        </Card.Button>
+      </Card.Body>
     </Card>
   </FlexContainer>
 );
