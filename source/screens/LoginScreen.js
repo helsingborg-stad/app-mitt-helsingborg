@@ -21,6 +21,7 @@ const Logo = styled.Image`
 `;
 
 const LoginScreenWrapper = styled(ScreenWrapper)`
+  padding: 16px;
   background-color: #f5f5f5;
 `;
 
