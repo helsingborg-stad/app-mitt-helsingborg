@@ -29,11 +29,15 @@ const Body = styled.View`
   border-radius: 8px;
   display: flex;
   flex-direction: column;
+  ${({ shadow }) =>
+    shadow &&
+    `
   elevation: 2;
   shadow-offset: 0px 2px;
   shadow-color: ${props => props.theme.colors.neutrals[4]};
   shadow-opacity: 0.5;
   shadow-radius: 2px;
+  `}
 `;
 
 const CardHeading = styled(Heading)`
