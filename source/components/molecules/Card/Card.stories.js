@@ -2,99 +2,276 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import { storiesOf } from '@storybook/react-native';
 import { Text, Icon } from 'app/components/atoms';
+import styled from 'styled-components/native';
 import StoryWrapper from '../StoryWrapper';
 import Card from './Card';
 
 const ILLU_INCOME = require('source/assets/images/icons/icn_inkomster_1x.png');
 
-storiesOf('Card', module).add('default', () => (
-  <StoryWrapper>
-    <ScrollView style={{ backgroundColor: '#efefef', flex: 1, padding: 16 }}>
-      <Text style={{ paddingBottom: 8 }} strong>
-        Aktiva
-      </Text>
+const FlexContainer = styled.ScrollView`
+  background-color: #efefef;
+  padding: 16px;
+`;
 
-      <Card colorSchema="red">
-        <Card.Body shadow color="neutral">
-          <Card.Image source={ILLU_INCOME} />
-          <Card.Title>Ekonomiskt bistånd</Card.Title>
-          <Card.SubTitle>Ofullständig</Card.SubTitle>
-          <Card.Button>
-            <Text>Ange hyra</Text>
-            <Icon name="arrow-forward" />
-          </Card.Button>
-        </Card.Body>
-      </Card>
+const Title = styled(Text)`
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 6px;
+`;
+const Prop = styled(Text)`
+  font-size: 14px;
+  margin-bottom: 6px;
+`;
 
-      <Card colorSchema="red">
-        <Card.Body color="neutral">
-          <Card.Image circle source={ILLU_INCOME} />
-          <Card.Title>Ekonomiskt bistånd</Card.Title>
-          <Card.SubTitle>Inskickad</Card.SubTitle>
-          <Card.Button>
-            <Text>Öppna</Text>
-            <Icon name="arrow-forward" />
-          </Card.Button>
-        </Card.Body>
-      </Card>
+storiesOf('Card', module)
+  .add('Child components', props => (
+    <StoryWrapper {...props}>
+      <ChildComponents />
+    </StoryWrapper>
+  ))
+  .add('Color schemas', props => (
+    <StoryWrapper {...props}>
+      <ColorSchemas />
+    </StoryWrapper>
+  ))
+  .add('Examples', props => (
+    <StoryWrapper {...props}>
+      <CardExamples />
+    </StoryWrapper>
+  ));
 
-      <Card colorSchema="red">
-        <Card.Body outlined>
-          <Card.Title>Stickprovskontroll</Card.Title>
-          <Card.Text>Du har blivit utvald för en stickprovskontroll.</Card.Text>
-          <Card.Button>
-            <Text>Lämna kontrolluppgifter</Text>
-            <Icon name="arrow-forward" />
-          </Card.Button>
-        </Card.Body>
-      </Card>
+const ChildComponents = () => (
+  <FlexContainer>
+    <Title>Body</Title>
+    <Card>
+      <Card.Body></Card.Body>
+    </Card>
 
-      <Text style={{ paddingBottom: 8 }} strong>
-        Aktuell period
-      </Text>
+    <Title>Body</Title>
+    <Prop>Prop: color</Prop>
+    <Prop>Values: neutral, green, blue, purple, red</Prop>
+    <Card>
+      <Card.Body color="green"></Card.Body>
+    </Card>
 
-      <Card colorSchema="red">
-        <Card.Body color="neutral">
-          <Card.Title>Oktober</Card.Title>
-          <Card.SubTitle>Ansökan inlämnad</Card.SubTitle>
-          <Card.Text>Vi har mottagit din ansökan för perioden 1-31 oktober.</Card.Text>
-          <Card.Text italic>Vi skickar ut en notis när status för din ansökan ändras.</Card.Text>
-          <Card.Button>
-            <Text>Visa ansökan</Text>
-            <Icon name="arrow-forward" />
-          </Card.Button>
-        </Card.Body>
-      </Card>
+    <Title>Body</Title>
+    <Prop>Prop: shadow</Prop>
+    <Card>
+      <Card.Body shadow></Card.Body>
+    </Card>
 
-      <Text style={{ paddingBottom: 8 }} strong>
-        Mina kontaktpersoner
-      </Text>
+    <Title>Body</Title>
+    <Prop>Prop: outlined</Prop>
+    <Card colorSchema="red">
+      <Card.Body outlined></Card.Body>
+    </Card>
 
-      <Card colorSchema="blue">
-        <Card.Body color="neutral">
-          <Card.Image circle source={ILLU_INCOME} />
+    <Title>Title</Title>
+    <Card>
+      <Card.Body>
+        <Card.Title>Title</Card.Title>
+      </Card.Body>
+    </Card>
 
-          <Card.Title>Anna Andersson</Card.Title>
-          <Card.SubTitle>Socialsekreterare</Card.SubTitle>
-          <Card.Text>042 - 52 52 52</Card.Text>
-        </Card.Body>
-      </Card>
+    <Title>Sub title</Title>
+    <Card>
+      <Card.Body>
+        <Card.SubTitle>Sub title</Card.SubTitle>
+      </Card.Body>
+    </Card>
 
-      <Text style={{ paddingBottom: 8 }} strong>
-        Tidigare ansökningar
-      </Text>
+    <Title>Text</Title>
+    <Card>
+      <Card.Body>
+        <Card.Text>Lorem ipsum dolor sit amet</Card.Text>
+      </Card.Body>
+    </Card>
 
-      <Card colorSchema="green">
-        <Card.Text italic>Här kan du titta på dina tidigare ansökningar.</Card.Text>
+    <Title>Text</Title>
+    <Prop>Prop: italic</Prop>
+    <Card>
+      <Card.Body>
+        <Card.Text italic>Lorem ipsum dolor sit amet</Card.Text>
+      </Card.Body>
+    </Card>
+
+    <Title>Image</Title>
+    <Card>
+      <Card.Body>
+        <Card.Image source={ILLU_INCOME} />
+      </Card.Body>
+    </Card>
+
+    <Title>Image</Title>
+    <Prop>Prop: circle</Prop>
+    <Card>
+      <Card.Body>
+        <Card.Image circle source={ILLU_INCOME} />
+      </Card.Body>
+    </Card>
+
+    <Title>Button</Title>
+    <Card>
+      <Card.Body>
         <Card.Button>
-          <Text>1-30 september</Text>
+          <Text>Button text</Text>
           <Icon name="arrow-forward" />
         </Card.Button>
+      </Card.Body>
+    </Card>
+  </FlexContainer>
+);
+
+const ColorSchemas = () => (
+  <FlexContainer>
+    <Card colorSchema="neutral">
+      <Card.Body>
+        <Card.Image source={ILLU_INCOME} />
+        <Card.Title>Neutral</Card.Title>
+        <Card.SubTitle>Card sub title</Card.SubTitle>
+        <Card.Text>Text here lorem ipsum dolor sit amet</Card.Text>
         <Card.Button>
-          <Text>1-31 augusti</Text>
+          <Text>Button text</Text>
           <Icon name="arrow-forward" />
         </Card.Button>
-      </Card>
-    </ScrollView>
-  </StoryWrapper>
-));
+      </Card.Body>
+    </Card>
+
+    <Card colorSchema="red">
+      <Card.Body>
+        <Card.Image source={ILLU_INCOME} />
+        <Card.Title>Red</Card.Title>
+        <Card.SubTitle>Card sub title</Card.SubTitle>
+        <Card.Text>Text here lorem ipsum dolor sit amet</Card.Text>
+        <Card.Button>
+          <Text>Button text</Text>
+          <Icon name="arrow-forward" />
+        </Card.Button>
+      </Card.Body>
+    </Card>
+
+    <Card colorSchema="blue">
+      <Card.Body>
+        <Card.Image source={ILLU_INCOME} />
+        <Card.Title>Blue</Card.Title>
+        <Card.SubTitle>Card sub title</Card.SubTitle>
+        <Card.Text>Text here lorem ipsum dolor sit amet</Card.Text>
+        <Card.Button>
+          <Text>Button text</Text>
+          <Icon name="arrow-forward" />
+        </Card.Button>
+      </Card.Body>
+    </Card>
+
+    <Card colorSchema="green">
+      <Card.Body>
+        <Card.Image source={ILLU_INCOME} />
+        <Card.Title>Green</Card.Title>
+        <Card.SubTitle>Card sub title</Card.SubTitle>
+        <Card.Text>Text here lorem ipsum dolor sit amet</Card.Text>
+        <Card.Button>
+          <Text>Button text</Text>
+          <Icon name="arrow-forward" />
+        </Card.Button>
+      </Card.Body>
+    </Card>
+
+    <Card colorSchema="purple">
+      <Card.Body>
+        <Card.Image source={ILLU_INCOME} />
+        <Card.Title>Purple</Card.Title>
+        <Card.SubTitle>Card sub title</Card.SubTitle>
+        <Card.Text>Text here lorem ipsum dolor sit amet</Card.Text>
+        <Card.Button>
+          <Text>Button text</Text>
+          <Icon name="arrow-forward" />
+        </Card.Button>
+      </Card.Body>
+    </Card>
+  </FlexContainer>
+);
+
+const CardExamples = () => (
+  <FlexContainer>
+    <Title>Aktiva</Title>
+    <Card colorSchema="red">
+      <Card.Body shadow color="neutral">
+        <Card.Image source={ILLU_INCOME} />
+        <Card.Title>Ekonomiskt bistånd</Card.Title>
+        <Card.SubTitle>Ofullständig</Card.SubTitle>
+        <Card.Button>
+          <Text>Ange hyra</Text>
+          <Icon name="arrow-forward" />
+        </Card.Button>
+      </Card.Body>
+    </Card>
+
+    <Title>Sally message</Title>
+    <Card colorSchema="purple">
+      <Card.Body outlined>
+        <Card.Title>Hej!</Card.Title>
+        <Card.Text>
+          Helsingborgs Stad testar att göra självservice lite mer personlig och i första steget så
+          är det just Ekonomiskt Bistånd som står i fokus.
+        </Card.Text>
+      </Card.Body>
+    </Card>
+
+    <Card colorSchema="purple">
+      <Card.Body outlined>
+        <Card.Title>Stickprovskontroll</Card.Title>
+        <Card.Text>Du har blivit utvald för en stickprovskontroll.</Card.Text>
+        <Card.Button>
+          <Text>Lämna kontrolluppgifter</Text>
+          <Icon name="arrow-forward" />
+        </Card.Button>
+      </Card.Body>
+    </Card>
+
+    <Title>Aktuell period</Title>
+    <Card colorSchema="red">
+      <Card.Body shadow color="neutral">
+        <Card.Title>Oktober</Card.Title>
+        <Card.SubTitle>Ansökan inlämnad</Card.SubTitle>
+        <Card.Text>Vi har mottagit din ansökan för perioden 1-31 oktober.</Card.Text>
+        <Card.Text italic>Vi skickar ut en notis när status för din ansökan ändras.</Card.Text>
+        <Card.Button>
+          <Text>Visa ansökan</Text>
+          <Icon name="arrow-forward" />
+        </Card.Button>
+      </Card.Body>
+    </Card>
+
+    <Title>Mina kontaktpersoner</Title>
+    <Card colorSchema="red">
+      <Card.Body shadow color="neutral">
+        <Card.Image circle source={ILLU_INCOME} />
+        <Card.Title>Anna Andersson</Card.Title>
+        <Card.SubTitle>Socialsekreterare</Card.SubTitle>
+        <Card.Text>042 - 52 52 52</Card.Text>
+      </Card.Body>
+    </Card>
+    <Card colorSchema="blue">
+      <Card.Body shadow color="neutral">
+        <Card.Image circle source={ILLU_INCOME} />
+        <Card.Title>Foo Bar</Card.Title>
+        <Card.SubTitle>Foobar</Card.SubTitle>
+        <Card.Text>042 - 52 52 52</Card.Text>
+      </Card.Body>
+    </Card>
+
+    <Title>Tidigare ansökningar</Title>
+    <Card colorSchema="red">
+      <Card.Text italic>Här kan du titta på dina tidigare ansökningar.</Card.Text>
+      <Card.Button>
+        <Text>1-30 september</Text>
+        <Icon name="arrow-forward" />
+      </Card.Button>
+      <Card.Button>
+        <Text>1-31 augusti</Text>
+        <Icon name="arrow-forward" />
+      </Card.Button>
+    </Card>
+  </FlexContainer>
+);
