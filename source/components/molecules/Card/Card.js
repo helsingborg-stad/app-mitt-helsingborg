@@ -98,9 +98,10 @@ const Card = ({ children, colorSchema, ...props }) => {
   // Clone child elements and add additional props
   const childrenWithProps = React.Children.map(children, (child, index) =>
     React.cloneElement(child, {
+      key: index,
       colorSchema,
       firstChild: index === 0,
-      lastChild: index === children.length - 1,
+      lastChild: index === React.Children.count(children) - 1,
     })
   );
 
@@ -111,22 +112,22 @@ Card.Body = ({ children, colorSchema, color, ...props }) => {
   const childrenImageWithProps = [];
   const childrenWithProps = [];
   React.Children.map(children, (child, index) => {
-    console.log('child.type', child.type);
-
     if (index === 0 && child.type === Card.Image) {
       childrenImageWithProps[index] = React.cloneElement(child, {
+        key: index,
         colorSchema,
         firstChild: index === 0,
-        lastChild: index === children.length - 1,
+        lastChild: index === React.Children.count(children) - 1,
       });
 
       return;
     }
 
     childrenWithProps[index] = React.cloneElement(child, {
+      key: index,
       colorSchema,
       firstChild: index === 0,
-      lastChild: index === children.length - 1,
+      lastChild: index === React.Children.count(children) - 1,
     });
   });
 
@@ -212,7 +213,7 @@ Card.Image.propTypes = {
 
 Card.Button.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
-  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
 };
 
 export default Card;
