@@ -23,6 +23,19 @@ const inputs = [
     value: 'Helsingborgshem',
   },
   {
+    key: 'key-5',
+    label: 'Person',
+    type: 'select',
+    value: '',
+    choices: [
+      { label: 'Ehsan', value: 'ehsan' },
+      { label: 'Jonatan', value: 'jonatan' },
+      { label: 'Dan', value: 'dan' },
+      { label: 'Teddy', value: 'teddy' },
+      { label: 'Jacob', value: 'jacob' },
+    ],
+  },
+  {
     key: 'key-4',
     label: 'Inflyttningsdatum',
     type: 'date',
