@@ -1,5 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
+import { ScrollView } from 'react-native';
 import StoryWrapper from '../StoryWrapper';
 import EditableList from './EditableList';
 
@@ -62,9 +63,11 @@ storiesOf('EditableList', module).add('Input is editable', () => (
 
 storiesOf('EditableList', module).add('Color Schema', () => (
   <StoryWrapper>
-    <EditableList onInputChange={() => {}} inputs={inputs} title="Blue (Default)" />
-    <EditableList colorSchema="red" onInputChange={() => {}} inputs={inputs} title="Red" />
-    <EditableList colorSchema="purple" onInputChange={() => {}} inputs={inputs} title="Purple" />
-    <EditableList colorSchema="green" onInputChange={() => {}} inputs={inputs} title="Green" />
+    <ScrollView>
+      <EditableList onInputChange={() => {}} inputs={inputs} title="Blue (Default)" />
+      <EditableList colorSchema="red" onInputChange={() => {}} inputs={inputs} title="Red" />
+      <EditableList colorSchema="purple" onInputChange={() => {}} inputs={inputs} title="Purple" />
+      <EditableList colorSchema="green" onInputChange={() => {}} inputs={inputs} title="Green" />
+    </ScrollView>
   </StoryWrapper>
 ));

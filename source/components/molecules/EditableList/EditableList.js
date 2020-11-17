@@ -125,6 +125,7 @@ function EditableList({
             value={value && value !== '' ? value[input.key] : state[input.key]}
             editable={editable}
             items={input.choices}
+            transparent
           />
         );
       default:
