@@ -29,7 +29,7 @@ const Body = styled.View`
   padding: 24px;
   border-radius: 8px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   ${({ shadow }) =>
     shadow &&
     `
@@ -83,6 +83,17 @@ const CardImage = styled.Image`
   ${({ circle }) => circle && `border-radius: 50px;`}
 `;
 
+const BodyImageContainer = styled.View`
+  padding-right: 24px;
+`;
+
+const BodyContainer = styled.View`
+  width: 0;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+`;
+
 const Card = ({ children, colorSchema, ...props }) => {
   // Clone child elements and add additional props
   const childrenWithProps = React.Children.map(children, (child, index) =>
@@ -97,17 +108,34 @@ const Card = ({ children, colorSchema, ...props }) => {
 };
 
 Card.Body = ({ children, colorSchema, color, ...props }) => {
-  const childrenWithProps = React.Children.map(children, (child, index) =>
-    React.cloneElement(child, {
+  const childrenImageWithProps = [];
+  const childrenWithProps = [];
+  React.Children.map(children, (child, index) => {
+    console.log('child.type', child.type);
+
+    if (index === 0 && child.type === Card.Image) {
+      childrenImageWithProps[index] = React.cloneElement(child, {
+        colorSchema,
+        firstChild: index === 0,
+        lastChild: index === children.length - 1,
+      });
+
+      return;
+    }
+
+    childrenWithProps[index] = React.cloneElement(child, {
       colorSchema,
       firstChild: index === 0,
       lastChild: index === children.length - 1,
-    })
-  );
+    });
+  });
 
   return (
     <Body colorSchema={colorSchema} color={color} {...props}>
-      {childrenWithProps}
+      {childrenImageWithProps.length > 0 && (
+        <BodyImageContainer>{childrenImageWithProps}</BodyImageContainer>
+      )}
+      <BodyContainer>{childrenWithProps}</BodyContainer>
     </Body>
   );
 };
