@@ -8,6 +8,8 @@ const Container = styled.View`
   flex-direction: column;
   border-radius: 10px;
   margin-bottom: 16px;
+  padding-left: 1px;
+  padding-right: 1px;
 `;
 
 const Body = styled.View`
@@ -35,8 +37,8 @@ const Body = styled.View`
     `
   elevation: 2;
   shadow-offset: 0px 2px;
-  shadow-color: ${props => props.theme.colors.neutrals[4]};
-  shadow-opacity: 0.5;
+  shadow-color: black;
+  shadow-opacity: 0.3;
   shadow-radius: 2px;
   `}
   ${props => {
