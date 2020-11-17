@@ -15,7 +15,7 @@ storiesOf('Card', module).add('default', () => (
       </Text>
 
       <Card>
-        <Card.Body>
+        <Card.Body shadow>
           <Card.Image source={ILLU_INCOME} />
           <Card.Title>Ekonomiskt bistånd</Card.Title>
           <Card.SubTitle>Ofullständig</Card.SubTitle>
@@ -39,7 +39,7 @@ storiesOf('Card', module).add('default', () => (
       </Card>
 
       <Card colorSchema="purple">
-        <Card.Body>
+        <Card.Body shadow>
           <Card.Image source={ILLU_INCOME} />
           <Card.Title>Ekonomiskt bistånd</Card.Title>
           <Card.SubTitle>Inskickad</Card.SubTitle>
