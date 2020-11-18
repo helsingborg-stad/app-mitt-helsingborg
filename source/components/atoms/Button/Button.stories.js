@@ -25,6 +25,11 @@ storiesOf('Button', module)
       <ButtonColors variant="outlined" />
     </StoryWrapper>
   ))
+  .add('Link Buttons', props => (
+    <StoryWrapper {...props}>
+      <ButtonColors variant="link" />
+    </StoryWrapper>
+  ))
   .add('Sizes', props => (
     <StoryWrapper {...props}>
       <ButtonSizes />

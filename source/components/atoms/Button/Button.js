@@ -25,6 +25,12 @@ Styles.outlined = css`
   ${Styles.elevation[0]}
 `;
 
+Styles.link = css`
+  padding: 6px 10px;
+  justify-content: flex-end;
+  background-color: ${props => props.theme.colors.complementary[props.colorSchema][1]};
+`;
+
 Styles.contained = css``;
 
 /* Styles for size variants */
@@ -63,6 +69,8 @@ const ButtonBase = styled.View`
     ${props => props.size === 'medium' && Styles.medium}
     ${props => props.size === 'large' && Styles.large}
 
+    ${props => props.size === 'large' && Styles.large}
+
     ${props => Styles.elevation[props.elevation]}
     shadow-color: ${props => props.theme.button[props.colorSchema].shadow};
 
@@ -74,6 +82,11 @@ const ButtonText = styled(Text)`
   font-weight: ${props => props.theme.fontWeights[1]};
   color: ${props =>
     props.variant === 'outlined' ? props.theme.colors.neutrals[1] : props.theme.colors.neutrals[7]};
+  ${props =>
+    props.variant === 'link' &&
+    `
+    color: ${props.theme.colors.primary[props.colorSchema][1]};
+  `}
 `;
 const ButtonIcon = styled(Icon)`
   color: ${props =>
@@ -84,6 +97,16 @@ const ButtonIcon = styled(Icon)`
   height: 26px;
   width: 26px;
   line-height: 26px;
+  ${props =>
+    props.variant === 'link' &&
+    `
+    height: 20px;
+    width: 18px;
+    font-size: 20px;
+    line-height: 20px;
+    margin-left: 10px;
+    color: ${props.theme.colors.primary[props.colorSchema][1]};
+  `}
 `;
 
 const LeftButtonIcon = styled(ButtonIcon)`
@@ -176,6 +199,9 @@ const Button = props => {
           variant={variant}
         >
           {children || (value ? <ButtonText>{value}</ButtonText> : null)}
+          {variant === 'link' ? (
+            <ButtonIcon colorSchema={colorSchema} variant={variant} name="arrow-forward" />
+          ) : null}
         </ButtonBase>
       </ButtonTouchable>
     </ButtonWrapper>
@@ -186,7 +212,7 @@ Button.propTypes = {
   /**
    * The button layout variant to use.
    */
-  variant: PropTypes.oneOf(['outlined', 'contained']),
+  variant: PropTypes.oneOf(['outlined', 'contained', 'link']),
   /**
    * If true, the button will take up the full width of its container.
    */
