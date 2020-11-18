@@ -54,7 +54,7 @@ function ProfileScreen({ navigation }) {
                 );
               }}
             >
-              <Text>Starta ansökan</Text>
+              <Text>Sök ekonomiskt bistånd</Text>
               <Icon name="arrow-forward" />
             </Card.Button>
           </Card.Body>
