@@ -1,41 +1,38 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Heading, Text, Button } from 'app/components/atoms';
-import { ScreenWrapper } from 'app/components/molecules';
-import { CaseState, caseStatus, caseTypes } from 'app/store/CaseContext';
+import { Heading, Text, Button, Icon } from 'app/components/atoms';
+import { Card, Header, ScreenWrapper } from 'app/components/molecules';
+import { CaseDispatch, CaseState, caseStatus, caseTypes } from 'app/store/CaseContext';
 import FormContext from 'app/store/FormContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { CaseTypeListItem } from '../../components/molecules/ListItem';
 import { formatUpdatedAt } from '../../helpers/DateHelpers';
 
-const CaseOverviewWrapper = styled(ScreenWrapper)`
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 40px;
-  padding-bottom: 0;
-  background-color: #f5f5f5;
-`;
+// TODO: Temp fix, handle this better
+const FORM_ID = 'f94790e0-0c86-11eb-bf56-efbb7e9336b3';
+const ILLU_WALLET = require('source/assets/images/icons/icn_inkomster_red_1x.png');
+
 const Container = styled.ScrollView`
+  flex: 1;
   padding-left: 16px;
   padding-right: 16px;
 `;
-const ButtonContainer = styled.View`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 25px;
-  width: 100%;
-`;
-const List = styled.View`
-  margin-top: 24px;
-`;
-const ListHeading = styled(Heading)`
+
+const ListHeading = styled(Text)`
   margin-left: 4px;
   margin-bottom: 8px;
 `;
 
-const computeCaseComponent = (status, latestCase, navigation) => {
+const WelcomeMessage = styled(Card)`
+  margin-top: 32px;
+  margin-bottom: 32px;
+`;
+
+const caseType = caseTypes[0];
+
+const computeCaseComponent = (status, latestCase, navigation, form, createCase) => {
+  console.log('status', status);
+
   let updatedAt = '';
   if (latestCase) {
     updatedAt = formatUpdatedAt(latestCase.updatedAt);
@@ -43,30 +40,78 @@ const computeCaseComponent = (status, latestCase, navigation) => {
 
   switch (status) {
     case caseStatus.untouched:
-      return <Text small>Inga ärenden</Text>;
+      return (
+        <Card colorSchema="red">
+          <Card.Body shadow color="neutral">
+            <Card.Image source={ILLU_WALLET} />
+            <Card.Title>Ekonomiskt{'\n'}bistånd</Card.Title>
+            <Card.Button
+              onClick={async () => {
+                createCase(
+                  form,
+                  async newCase => {
+                    navigation.navigate('Form', { caseData: newCase });
+                  },
+                  true
+                );
+              }}
+            >
+              <Text>Sök ekonomiskt bistånd</Text>
+              <Icon name="arrow-forward" />
+            </Card.Button>
+          </Card.Body>
+        </Card>
+      );
 
     case caseStatus.unfinishedNoCompleted:
     case caseStatus.unfinished:
       return (
         <>
-          <Text small style={{ color: 'red' }}>
-            Påbörjad ansökan, uppdaterad {updatedAt}
-          </Text>
-          <ButtonContainer>
-            <Button
-              color="orange"
-              onClick={() => {
-                navigation.navigate('Form', { caseId: latestCase.id });
-              }}
-            >
-              <Text>Fortsätt ansökan</Text>
-            </Button>
-          </ButtonContainer>
+          <ListHeading type="h5">Aktiva</ListHeading>
+
+          <Card colorSchema="red">
+            <Card.Body shadow color="neutral">
+              <Card.Image source={ILLU_WALLET} />
+              <Card.Title>Ekonomiskt{'\n'}bistånd</Card.Title>
+              <Card.Text>Påbörjad ansökan, uppdaterad {updatedAt}</Card.Text>
+              <Card.Button
+                onClick={() => {
+                  navigation.navigate('Form', { caseId: latestCase.id });
+                }}
+              >
+                <Text>Fortsätt ansökan</Text>
+                <Icon name="arrow-forward" />
+              </Card.Button>
+            </Card.Body>
+          </Card>
         </>
       );
 
     case caseStatus.recentlyCompleted:
-      return <Text small>Inskickad ansökan {updatedAt}</Text>;
+      return (
+        <>
+          <ListHeading type="h5">Aktiva</ListHeading>
+
+          <Card colorSchema="red">
+            <Card.Body shadow color="neutral">
+              <Card.Image source={ILLU_WALLET} />
+              <Card.Title>Ekonomiskt{'\n'}bistånd</Card.Title>
+              <Card.Text>Inskickad ansökan {updatedAt}</Card.Text>
+              <Card.Button
+                onClick={() => {
+                  navigation.navigate('UserEvents', {
+                    screen: caseType.navigateTo,
+                    params: { caseType },
+                  });
+                }}
+              >
+                <Text>Visa ansökan</Text>
+                <Icon name="arrow-forward" />
+              </Card.Button>
+            </Card.Body>
+          </Card>
+        </>
+      );
 
     case caseStatus.onlyOldCases:
       return <Text small>Inga aktiva ärenden</Text>;
@@ -77,71 +122,45 @@ const computeCaseComponent = (status, latestCase, navigation) => {
 };
 
 const CaseOverview = ({ navigation }) => {
-  const [caseItems, setCaseItems] = useState([]);
+  const [caseItem, setCaseItem] = useState({});
   const { getCasesByFormIds } = useContext(CaseState);
-  const { getFormIdsByFormTypes } = useContext(FormContext);
+  const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
+  const { createCase } = useContext(CaseDispatch);
+
+  console.log('caseTypes', caseTypes);
 
   useEffect(() => {
     const updateItems = async () => {
-      const updateItemsPromises = caseTypes.map(async caseType => {
-        const formIds = await getFormIdsByFormTypes(caseType.formTypes);
-
-        const [status, latestCase, relevantCases] = await getCasesByFormIds(formIds);
-        const component = computeCaseComponent(status, latestCase, navigation);
-        return { caseType, status, latestCase, component, cases: relevantCases };
-      });
-
-      await Promise.all(updateItemsPromises).then(updatedItems => {
-        setCaseItems(updatedItems);
+      const [status, latestCase, relevantCases] = await getCasesByFormIds([FORM_ID]);
+      const form = await getForm(FORM_ID);
+      console.log('relevantCases', relevantCases);
+      setCaseItem({
+        status,
+        item: latestCase,
+        component: computeCaseComponent(status, latestCase, navigation, form, createCase),
       });
     };
+
     updateItems();
-  }, [getCasesByFormIds, getFormIdsByFormTypes, navigation]);
+  }, [createCase, getCasesByFormIds, getForm, getFormIdsByFormTypes, navigation]);
 
   return (
-    <CaseOverviewWrapper>
+    <ScreenWrapper>
+      <Header title="Mina ärenden" />
       <Container>
-        <List>
-          <ListHeading type="h3">Aktiva ansökningar</ListHeading>
-          {caseItems?.length > 0 &&
-            caseItems
-              .filter(
-                item =>
-                  item.status !== caseStatus.untouched && item.status !== caseStatus.onlyOldCases
-              )
-              .map(item => {
-                const { caseType, component } = item;
-                return (
-                  <CaseTypeListItem
-                    key={caseType.name}
-                    title={caseType.name}
-                    icon={caseType.icon}
-                    onClick={() => {
-                      navigation.navigate('UserEvents', {
-                        screen: caseType.navigateTo,
-                        params: { caseType },
-                      });
-                    }}
-                  >
-                    {component}
-                  </CaseTypeListItem>
-                );
-              })}
-        </List>
+        <WelcomeMessage colorSchema="red">
+          <Card.Body outlined>
+            <Card.Title>Hej!</Card.Title>
+            <Card.Text>
+              Helsingborgs Stad testar att göra självservice lite mer personlig och i första steget
+              så är det just Ekonomiskt Bistånd som står i fokus.
+            </Card.Text>
+          </Card.Body>
+        </WelcomeMessage>
+
+        {caseItem.component}
       </Container>
-      <ButtonContainer style={{ marginBottom: 20 }}>
-        <Button
-          color="green"
-          onClick={() => {
-            navigation.navigate('UserEvents', {
-              screen: 'Services',
-            });
-          }}
-        >
-          <Text>Starta ny ansökan</Text>
-        </Button>
-      </ButtonContainer>
-    </CaseOverviewWrapper>
+    </ScreenWrapper>
   );
 };
 
