@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { ScreenWrapper } from 'app/components/molecules';
+import { Card, Header, ScreenWrapper } from 'app/components/molecules';
 import { Button, Text } from 'app/components/atoms';
 import { StatusBar, ActivityIndicator } from 'react-native';
 import Form from '../containers/Form/Form';
@@ -9,12 +9,14 @@ import AuthContext from '../store/AuthContext';
 import FormContext from '../store/FormContext';
 import { CaseDispatch, CaseState } from '../store/CaseContext';
 import { getFormQuestions } from '../helpers/CaseDataConverter';
+import generateInitialCaseAnswers from '../store/actions/dynamicFormData';
 
 const SpinnerContainer = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
 `;
+
 const FormScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
   flex: 1;
@@ -28,7 +30,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   const { caseData, caseId } = route && route.params ? route.params : {};
   const { user } = useContext(AuthContext);
   const { getForm } = useContext(FormContext);
-  const { getCase } = useContext(CaseState);
+  const { getCase, getCasesByFormIds } = useContext(CaseState);
   const { updateCase } = useContext(CaseDispatch);
 
   useEffect(() => {
@@ -40,13 +42,21 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       setInitialCase(caseData);
     } else if (caseId) {
       const initCase = getCase(caseId);
-      setInitialCase(initCase);
-      getForm(initCase.formId).then(form => {
+      getForm(initCase.formId).then(async form => {
+        console.log('initCase', initCase);
+        const [status, latestCase, relevantCases] = await getCasesByFormIds([form.id]);
+        const initialAnswersObject = generateInitialCaseAnswers(form, user, relevantCases);
+        initCase.data = initialAnswersObject;
+        setInitialCase(initCase);
+
         setForm(form);
         setFormQuestions(getFormQuestions(form));
       });
     }
-  }, [caseData, caseId, getForm, getCase]);
+  }, [caseData, caseId, getForm, getCase, user, getCasesByFormIds]);
+
+  console.log('caseData', caseData);
+  console.log('caseId', caseId);
 
   function handleCloseForm() {
     navigation.goBack();

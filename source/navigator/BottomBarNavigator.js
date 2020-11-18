@@ -23,7 +23,7 @@ const BottomBarStack = () => (
   >
     <Tab.Screen
       name="UserEvents"
-      component={UserEvents}
+      component={CaseNavigator}
       options={{
         title: 'Ärende',
         tabBarIcon: TabBarImage(require('../images/task.png')),

@@ -5,7 +5,7 @@ const icons = {
   ILLU_EXPENSES: require('source/assets/images/illustrations/illu_utgifter_margins_1x.png'),
   ICON_TELL: require('source/assets/images/icons/icn_beratta_1x.png'),
   ICON_INCOME: require('source/assets/images/icons/icn_inkomster_1x.png'),
-  ICON_EKB: require('source/assets/images/icons/icn_Main_ekonomiskt-bistand_1x.png'),
+  ICON_EKB: require('source/assets/images/icons/icn_inkomster_red_1x.png'),
   ICON_SUMMARY: require('source/assets/images/icons/icn_sammanstallning_1x.png'),
   ICON_HEALTHCARE: require('source/assets/images/icons/icn_sjukvard_1x.png'),
   ICON_EXPENSES: require('source/assets/images/icons/icn_utgifter_1x.png'),
