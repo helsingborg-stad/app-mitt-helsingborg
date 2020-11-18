@@ -142,7 +142,6 @@ function EditableList({
     }
   };
 
-  console.log('inputs', inputs);
   return (
     <Fieldset
       colorSchema={colorSchema}
@@ -212,7 +211,7 @@ EditableList.propTypes = {
   /**
    * The color schema/theme of the component
    */
-  colorSchema: PropTypes.oneOf('blue', 'green', 'red', 'purple'),
+  colorSchema: PropTypes.oneOf(['blue', 'green', 'red', 'purple']),
 };
 
 EditableList.defaultProps = {
