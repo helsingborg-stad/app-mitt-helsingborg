@@ -25,7 +25,7 @@ const HeaderContainer = styled.View`
 
 const HeaderHeading = styled(Heading)`
   margin-top: 4px;
-  color: ${props => props.theme.colors.neutrals[1]};
+  color: ${props => props.theme.colors.neutrals[0]};
 `;
 
 const HeaderContent = styled.View`
