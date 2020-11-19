@@ -26,7 +26,7 @@ const ListHeading = styled(Text)`
   margin-bottom: 8px;
 `;
 
-const WelcomeMessage = styled(Card)`
+const Message = styled(Card)`
   margin-top: 32px;
   margin-bottom: 32px;
 `;
@@ -102,7 +102,7 @@ function computeCaseComponent(status, caseItem, form, navigation, createCase) {
                 onClick={() => {
                   navigation.navigate('UserEvents', {
                     screen: 'CaseSummary',
-                    params: { name: EKB.name, status, caseItem, form },
+                    params: { name: EKB.name, status, caseData: caseItem, form },
                   });
                 }}
               >
@@ -148,7 +148,7 @@ function CaseOverview({ navigation }) {
     <ScreenWrapper>
       <Header title="Mina ärenden" />
       <Container>
-        <WelcomeMessage colorSchema="red">
+        <Message colorSchema="red">
           <Card.Body outlined>
             <Card.Title>Hej!</Card.Title>
             <Card.Text>
@@ -156,7 +156,7 @@ function CaseOverview({ navigation }) {
               så är det just Ekonomiskt Bistånd som står i fokus.
             </Card.Text>
           </Card.Body>
-        </WelcomeMessage>
+        </Message>
         {caseItems.map(({ component }) => component)}
       </Container>
     </ScreenWrapper>
