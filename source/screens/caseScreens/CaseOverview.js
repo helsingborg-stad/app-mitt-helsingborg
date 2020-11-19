@@ -5,15 +5,8 @@ import { CaseDispatch, CaseState, caseStatus, caseTypes } from 'app/store/CaseCo
 import FormContext from 'app/store/FormContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
+import icons from 'source/helpers/Icons';
 import { formatUpdatedAt } from '../../helpers/DateHelpers';
-
-const ILLU_WALLET = require('source/assets/images/icons/icn_inkomster_red_1x.png');
-// TODO: Handle hardcoded form data
-const EKB = {
-  name: 'Ekonomiskt bistånd',
-  formId: 'f94790e0-0c86-11eb-bf56-efbb7e9336b3',
-  icon: ILLU_WALLET,
-};
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -31,18 +24,19 @@ const Message = styled(Card)`
   margin-bottom: 32px;
 `;
 
-function computeCaseComponent(status, caseItem, form, navigation, createCase) {
-  const updatedAt = caseItem?.updatedAt ? formatUpdatedAt(caseItem.updatedAt) : '';
-  const currentStep = caseItem?.currentStep || '';
+function computeCaseComponent(status, latestCase, form, caseType, navigation, createCase) {
+  const updatedAt = latestCase?.updatedAt ? formatUpdatedAt(latestCase.updatedAt) : '';
+  const currentStep = latestCase?.currentStep || '';
   const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
 
   switch (status) {
+    case caseStatus.onlyOldCases:
     case caseStatus.untouched:
       return (
         <Card colorSchema="red">
           <Card.Body shadow color="neutral">
-            <Card.Image source={EKB.icon} />
-            <Card.Title>{EKB.name}</Card.Title>
+            <Card.Image source={icons[caseType.icon]} />
+            <Card.Title>{caseType.name}</Card.Title>
             <Card.Button
               onClick={async () => {
                 createCase(
@@ -69,15 +63,15 @@ function computeCaseComponent(status, caseItem, form, navigation, createCase) {
 
           <Card colorSchema="red">
             <Card.Body shadow color="neutral">
-              <Card.Image source={EKB.icon} />
-              <Card.Title>{EKB.name}</Card.Title>
+              <Card.Image source={icons[caseType.icon]} />
+              <Card.Title>{caseType.name}</Card.Title>
               <Card.SubTitle>
                 Steg {currentStep} / {totalSteps}
               </Card.SubTitle>
               <Card.Text italic>Senast uppdaterad {updatedAt}</Card.Text>
               <Card.Button
                 onClick={() => {
-                  navigation.navigate('Form', { caseId: caseItem.id });
+                  navigation.navigate('Form', { caseId: latestCase.id });
                 }}
               >
                 <Text>Fortsätt ansökan</Text>
@@ -94,15 +88,15 @@ function computeCaseComponent(status, caseItem, form, navigation, createCase) {
           <ListHeading type="h5">Aktiva</ListHeading>
           <Card colorSchema="red">
             <Card.Body shadow color="neutral">
-              <Card.Image source={EKB.icon} />
-              <Card.Title>{EKB.name}</Card.Title>
+              <Card.Image source={icons[caseType.icon]} />
+              <Card.Title>{caseType.name}</Card.Title>
               <Card.SubTitle>Inskickad</Card.SubTitle>
               <Card.Text italic>Skickades in {updatedAt}</Card.Text>
               <Card.Button
                 onClick={() => {
                   navigation.navigate('UserEvents', {
-                    screen: 'CaseSummary',
-                    params: { name: EKB.name, status, caseData: caseItem, form },
+                    screen: caseType.navigateTo,
+                    params: { name: caseType.name, status, caseData: latestCase, form },
                   });
                 }}
               >
@@ -113,9 +107,6 @@ function computeCaseComponent(status, caseItem, form, navigation, createCase) {
           </Card>
         </>
       );
-
-    case caseStatus.onlyOldCases:
-      return <Text small>Inga aktiva ärenden</Text>;
 
     default:
       return null;
@@ -130,19 +121,27 @@ function CaseOverview({ navigation }) {
 
   useEffect(() => {
     const updateItems = async () => {
-      // Using hardcoded form id and only the latest EKB case for now
-      const form = await getForm(EKB.formId);
-      const [status, latestCase, relevantCases] = await getCasesByFormIds([form.id]);
-      console.log('latestCase', latestCase);
-      console.log('relevantCases', relevantCases);
-      const component = computeCaseComponent(status, latestCase, form, navigation, createCase);
-      const updatedCase = { component, status, form, item: latestCase };
-      setCaseItems([updatedCase]);
-    };
+      const updateItemsPromises = caseTypes.map(async caseType => {
+        const formIds = await getFormIdsByFormTypes(caseType.formTypes);
+        const [status, latestCase, relevantCases] = await getCasesByFormIds(formIds);
+        const form = await getForm(latestCase?.formId || formIds[0]);
+        const component = computeCaseComponent(
+          status,
+          latestCase,
+          form,
+          caseType,
+          navigation,
+          createCase
+        );
+        return { caseType, status, latestCase, component, cases: relevantCases };
+      });
 
+      await Promise.all(updateItemsPromises).then(updatedItems => {
+        setCaseItems(updatedItems);
+      });
+    };
     updateItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getCasesByFormIds, getFormIdsByFormTypes, getForm, navigation]);
+  }, [createCase, getCasesByFormIds, getForm, getFormIdsByFormTypes, navigation]);
 
   return (
     <ScreenWrapper>
