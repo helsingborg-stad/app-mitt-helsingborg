@@ -220,6 +220,8 @@ formStories.add('Default', () => (
       steps={DefaultStoryData.steps}
       firstName="FakeName"
       connectivityMatrix={DefaultStoryData.connectivityMatrix}
+      startAt={0}
+      onClose={() => {}}
       status="ongoing"
     />
   </StoryWrapper>
@@ -311,6 +313,211 @@ formStories.add('Themed Form', () => (
       connectivityMatrix={ThemedFormStoryData.connectivityMatrix}
       firstName="FakeName"
       status="ongoing"
+      startAt={0}
+      onClose={() => {}}
+    />
+  </StoryWrapper>
+));
+
+const SubstepsDemoStoryData = {
+  updatedAt: 1605794610210,
+  connectivityMatrix: [
+    ['none', 'next', 'none', 'down', 'none', 'down', 'none'],
+    ['back', 'none', 'next', 'none', 'none', 'none', 'none'],
+    ['none', 'back', 'none', 'none', 'none', 'none', 'none'],
+    ['up', 'none', 'none', 'none', 'next', 'none', 'none'],
+    ['up', 'none', 'none', 'back', 'none', 'none', 'none'],
+    ['up', 'none', 'none', 'none', 'none', 'none', 'down'],
+    ['none', 'none', 'none', 'none', 'none', 'up', 'none'],
+  ],
+  createdAt: 1605794610210,
+  steps: [
+    {
+      questions: [
+        {
+          description: '',
+          label: '',
+          id: 'navGroup1',
+          buttons: [
+            {
+              navigationType: {
+                type: 'navigateDown',
+                stepId: '13a860d7-3971-40fa-9ee7-33680f4393a0',
+              },
+              color: 'red',
+              text: 'Sub 1',
+            },
+            {
+              navigationType: {
+                type: 'navigateDown',
+                stepId: '9958e6df-00eb-4226-b1ce-3dfbe6cee4b3',
+              },
+              text: 'Other sub',
+            },
+          ],
+          type: 'navigationButtonGroup',
+          inputSelectValue: 'navigationButtonGroup',
+        },
+      ],
+      description: '',
+      banner: {
+        iconSrc: '',
+        imageSrc: '',
+        backgroundColor: '',
+      },
+      id: 'f3ea3110-2fb9-47f5-827e-b94888565224',
+      title: 'Main 1',
+      actions: [
+        {
+          type: 'next',
+          color: 'blue',
+          label: 'Next',
+        },
+      ],
+      group: '',
+    },
+    {
+      description: '',
+      banner: {
+        iconSrc: '',
+        imageSrc: '',
+        backgroundColor: '',
+      },
+      id: '02b3e565-92ce-44b9-8d6a-e41e7d18a5bc',
+      title: 'Main 2',
+      actions: [
+        {
+          type: 'next',
+          color: 'green',
+          label: 'Next',
+        },
+      ],
+      group: '',
+    },
+    {
+      description: '',
+      banner: {
+        iconSrc: '',
+        imageSrc: '',
+        backgroundColor: '',
+      },
+      id: '6651824f-58da-410a-bd0f-02343da14d7f',
+      title: 'Main 3',
+      actions: [
+        {
+          type: 'close',
+          color: 'red',
+          label: 'Close',
+        },
+      ],
+      group: '',
+    },
+    {
+      description: '',
+      banner: {
+        iconSrc: '',
+        imageSrc: '',
+        backgroundColor: '',
+      },
+      id: '13a860d7-3971-40fa-9ee7-33680f4393a0',
+      title: 'Sub 1 1',
+      actions: [
+        {
+          type: 'next',
+          label: 'Next',
+        },
+      ],
+      group: '',
+    },
+    {
+      description: '',
+      banner: {
+        iconSrc: '',
+        imageSrc: '',
+        backgroundColor: '',
+      },
+      id: '30741077-4a26-4a49-b81f-85f55bc2d3fc',
+      title: 'Sub 1 2',
+      actions: [
+        {
+          type: 'next',
+          label: 'Next (back to top)',
+        },
+      ],
+      group: '',
+    },
+    {
+      questions: [
+        {
+          description: '',
+          label: '',
+          id: 'navGroup2',
+          buttons: [
+            {
+              navigationType: {
+                type: 'navigateDown',
+                stepId: '1f65b332-c3ca-4f1c-b67b-5e5449d56dbe',
+              },
+              text: 'Go down',
+            },
+          ],
+          type: 'navigationButtonGroup',
+          inputSelectValue: 'navigationButtonGroup',
+        },
+      ],
+      description: '',
+      banner: {
+        iconSrc: '',
+        imageSrc: '',
+        backgroundColor: '',
+      },
+      id: '9958e6df-00eb-4226-b1ce-3dfbe6cee4b3',
+      title: 'Other sub',
+      actions: [
+        {
+          type: 'next',
+          color: 'green',
+          label: 'Go back',
+        },
+      ],
+      group: '',
+    },
+    {
+      description: '',
+      banner: {
+        iconSrc: '',
+        imageSrc: '',
+        backgroundColor: '',
+      },
+      id: '1f65b332-c3ca-4f1c-b67b-5e5449d56dbe',
+      title: 'Sub sub',
+      actions: [
+        {
+          type: 'next',
+          color: 'blue',
+          label: 'Go up',
+        },
+      ],
+      group: '',
+    },
+  ],
+  provider: 'TEST',
+  subform: false,
+  PK: 'FORM#00be0910-2a70-11eb-a9af-ddffd6ddc5a0',
+  description: 'small form for testing purposes',
+  id: '00be0910-2a70-11eb-a9af-ddffd6ddc5a0',
+  name: 'Grupperingstester',
+};
+
+formStories.add('Substep Form', () => (
+  <StoryWrapper>
+    <Form
+      steps={SubstepsDemoStoryData.steps}
+      connectivityMatrix={SubstepsDemoStoryData.connectivityMatrix}
+      firstName="FakeName"
+      status="ongoing"
+      onClose={() => {}}
+      startAt={0}
     />
   </StoryWrapper>
 ));

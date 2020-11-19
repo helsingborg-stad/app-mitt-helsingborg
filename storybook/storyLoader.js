@@ -40,6 +40,7 @@ function loadStories() {
 	require('../source/components/organisms/Step/StepDescription/StepDescription.stories');
 	require('../source/components/organisms/Step/StepFooter/StepFooter.stories');
 	require('../source/components/organisms/SummaryList/SummaryList.stories');
+	require('../source/containers/Form/Form.stories');
 }
 
 const stories = [
@@ -78,7 +79,8 @@ const stories = [
 	'../source/components/organisms/Step/StepBanner/StepBanner.stories',
 	'../source/components/organisms/Step/StepDescription/StepDescription.stories',
 	'../source/components/organisms/Step/StepFooter/StepFooter.stories',
-	'../source/components/organisms/SummaryList/SummaryList.stories'
+	'../source/components/organisms/SummaryList/SummaryList.stories',
+	'../source/containers/Form/Form.stories'
 ];
 
 module.exports = {
