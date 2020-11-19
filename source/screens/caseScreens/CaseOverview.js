@@ -24,6 +24,8 @@ const Message = styled(Card)`
   margin-bottom: 32px;
 `;
 
+const colorSchema = 'red';
+
 function computeCaseComponent(status, latestCase, form, caseType, navigation, createCase) {
   const updatedAt = latestCase?.updatedAt ? formatUpdatedAt(latestCase.updatedAt) : '';
   const currentStep = latestCase?.currentStep || '';
@@ -33,7 +35,7 @@ function computeCaseComponent(status, latestCase, form, caseType, navigation, cr
     case caseStatus.onlyOldCases:
     case caseStatus.untouched:
       return (
-        <Card colorSchema="red">
+        <Card colorSchema={colorSchema}>
           <Card.Body shadow color="neutral">
             <Card.Image source={icons[caseType.icon]} />
             <Card.Title>{caseType.name}</Card.Title>
@@ -61,7 +63,7 @@ function computeCaseComponent(status, latestCase, form, caseType, navigation, cr
         <>
           <ListHeading type="h5">Aktiva</ListHeading>
 
-          <Card colorSchema="red">
+          <Card colorSchema={colorSchema}>
             <Card.Body shadow color="neutral">
               <Card.Image source={icons[caseType.icon]} />
               <Card.Title>{caseType.name}</Card.Title>
@@ -86,7 +88,7 @@ function computeCaseComponent(status, latestCase, form, caseType, navigation, cr
       return (
         <>
           <ListHeading type="h5">Aktiva</ListHeading>
-          <Card colorSchema="red">
+          <Card colorSchema={colorSchema}>
             <Card.Body shadow color="neutral">
               <Card.Image source={icons[caseType.icon]} />
               <Card.Title>{caseType.name}</Card.Title>
@@ -147,7 +149,7 @@ function CaseOverview({ navigation }) {
     <ScreenWrapper>
       <Header title="Mina ärenden" />
       <Container>
-        <Message colorSchema="red">
+        <Message colorSchema={colorSchema}>
           <Card.Body outlined>
             <Card.Title>Hej!</Card.Title>
             <Card.Text>
