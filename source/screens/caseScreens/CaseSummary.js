@@ -27,8 +27,6 @@ const CaseSummary = ({ navigation, route }) => {
   const { startDate, endDate } = caseData.details.period;
   const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(startDate, true);
 
-  console.log('caseData', caseData);
-
   return (
     <ScreenWrapper>
       <Container>
@@ -38,13 +36,14 @@ const CaseSummary = ({ navigation, route }) => {
             <Card.Title>{applicationPeriodMonth}</Card.Title>
             <Card.SubTitle>Ansökan inlämnad</Card.SubTitle>
             <Card.Text>
-              Vi har mottagit din ansökan för perioden {formatUpdatedAt(startDate)} -{' '}
-              {formatUpdatedAt(endDate)}.
+              Vi har mottagit din ansökan för perioden{' '}
+              {`${formatUpdatedAt(startDate)} - ${formatUpdatedAt(endDate)}`}.
             </Card.Text>
             <Card.Text italic>Vi skickar ut en notis när status för din ansökan ändras.</Card.Text>
           </Card.Body>
         </Card>
 
+        {/* Mock data, needs to be replaced */}
         <SummaryHeading type="h5">Nästa period</SummaryHeading>
         <Card>
           <Card.Text italic>Du kan ansöka om nästa period från den 10 oktober.</Card.Text>
@@ -66,6 +65,7 @@ const CaseSummary = ({ navigation, route }) => {
           </View>
         )}
 
+        {/* Mock data, needs to be replaced */}
         <SummaryHeading type="h5">Tidigare ansökningar</SummaryHeading>
         <Card colorSchema={colorSchema}>
           <Card.Text italic>Här kan du titta på dina tidigare ansökningar.</Card.Text>
