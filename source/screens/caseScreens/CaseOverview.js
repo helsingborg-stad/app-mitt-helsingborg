@@ -1,11 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Text, Icon } from 'app/components/atoms';
+import { Icon, Text } from 'app/components/atoms';
 import { Card, Header, ScreenWrapper } from 'app/components/molecules';
 import { CaseDispatch, CaseState, caseStatus, caseTypes } from 'app/store/CaseContext';
 import FormContext from 'app/store/FormContext';
 import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
+import React, { useContext, useEffect, useState } from 'react';
 import icons from 'source/helpers/Icons';
+import styled from 'styled-components/native';
 import { formatUpdatedAt } from '../../helpers/DateHelpers';
 
 const Container = styled.ScrollView`
@@ -26,7 +26,16 @@ const Message = styled(Card)`
 
 const colorSchema = 'red';
 
-function computeCaseComponent(status, latestCase, form, caseType, navigation, createCase) {
+/**
+ * Returns a case card component depending on it's status
+ * @param {string} status
+ * @param {obj} latestCase
+ * @param {obj} form
+ * @param {obj} caseType
+ * @param {obj} navigation
+ * @param {func} createCase
+ */
+const computeCaseComponent = (status, latestCase, form, caseType, navigation, createCase) => {
   const updatedAt = latestCase?.updatedAt ? formatUpdatedAt(latestCase.updatedAt) : '';
   const currentStep = latestCase?.currentStep || '';
   const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
@@ -113,8 +122,12 @@ function computeCaseComponent(status, latestCase, form, caseType, navigation, cr
     default:
       return null;
   }
-}
+};
 
+/**
+ * Case overview screen
+ * @param {obj} props
+ */
 function CaseOverview({ navigation }) {
   const [caseItems, setCaseItems] = useState([]);
   const { getCasesByFormIds } = useContext(CaseState);

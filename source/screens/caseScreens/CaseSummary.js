@@ -1,10 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { View } from 'react-native';
-import { Text, Icon } from 'app/components/atoms';
-import { Card, Header, ScreenWrapper } from 'app/components/molecules';
-import { CaseDispatch, CaseState, caseStatus, caseTypes } from 'app/store/CaseContext';
-import FormContext from 'app/store/FormContext';
+import { Icon, Text } from 'app/components/atoms';
+import { Card, ScreenWrapper } from 'app/components/molecules';
 import PropTypes from 'prop-types';
+import React from 'react';
+import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { formatUpdatedAt, getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 
@@ -20,6 +18,10 @@ const SummaryHeading = styled(Text)`
   margin-bottom: 16px;
 `;
 
+/**
+ * Case summary screen
+ * @param {obj} props
+ */
 const CaseSummary = ({ navigation, route }) => {
   const colorSchema = 'red';
   const { caseData } = route.params;
