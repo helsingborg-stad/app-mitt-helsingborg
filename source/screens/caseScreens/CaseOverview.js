@@ -1,11 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Heading, Text, Button, Icon } from 'app/components/atoms';
+import { Text, Icon } from 'app/components/atoms';
 import { Card, Header, ScreenWrapper } from 'app/components/molecules';
 import { CaseDispatch, CaseState, caseStatus, caseTypes } from 'app/store/CaseContext';
 import FormContext from 'app/store/FormContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { CaseTypeListItem } from '../../components/molecules/ListItem';
 import { formatUpdatedAt } from '../../helpers/DateHelpers';
 
 // TODO: Temp fix, handle this better
@@ -28,14 +27,10 @@ const WelcomeMessage = styled(Card)`
   margin-bottom: 32px;
 `;
 
-const caseType = caseTypes[0];
-
-const computeCaseComponent = (status, latestCase, navigation, form, createCase) => {
-  console.log('status', status);
-
+function computeCaseComponent(status, caseItem, form, navigation, createCase) {
   let updatedAt = '';
-  if (latestCase) {
-    updatedAt = formatUpdatedAt(latestCase.updatedAt);
+  if (caseItem) {
+    updatedAt = formatUpdatedAt(caseItem.updatedAt);
   }
 
   switch (status) {
@@ -44,7 +39,7 @@ const computeCaseComponent = (status, latestCase, navigation, form, createCase) 
         <Card colorSchema="red">
           <Card.Body shadow color="neutral">
             <Card.Image source={ILLU_WALLET} />
-            <Card.Title>Ekonomiskt{'\n'}bistånd</Card.Title>
+            <Card.Title>{form.name}</Card.Title>
             <Card.Button
               onClick={async () => {
                 createCase(
@@ -72,11 +67,11 @@ const computeCaseComponent = (status, latestCase, navigation, form, createCase) 
           <Card colorSchema="red">
             <Card.Body shadow color="neutral">
               <Card.Image source={ILLU_WALLET} />
-              <Card.Title>Ekonomiskt{'\n'}bistånd</Card.Title>
+              <Card.Title>{form.name}</Card.Title>
               <Card.Text>Påbörjad ansökan, uppdaterad {updatedAt}</Card.Text>
               <Card.Button
                 onClick={() => {
-                  navigation.navigate('Form', { caseId: latestCase.id });
+                  navigation.navigate('Form', { caseId: caseItem.id });
                 }}
               >
                 <Text>Fortsätt ansökan</Text>
@@ -95,13 +90,13 @@ const computeCaseComponent = (status, latestCase, navigation, form, createCase) 
           <Card colorSchema="red">
             <Card.Body shadow color="neutral">
               <Card.Image source={ILLU_WALLET} />
-              <Card.Title>Ekonomiskt{'\n'}bistånd</Card.Title>
+              <Card.Title>{form.name}</Card.Title>
               <Card.Text>Inskickad ansökan {updatedAt}</Card.Text>
               <Card.Button
                 onClick={() => {
                   navigation.navigate('UserEvents', {
-                    screen: caseType.navigateTo,
-                    params: { caseType },
+                    screen: 'CaseSummary',
+                    params: { name: form.name, status, caseItem, form },
                   });
                 }}
               >
@@ -119,30 +114,31 @@ const computeCaseComponent = (status, latestCase, navigation, form, createCase) 
     default:
       return null;
   }
-};
+}
 
-const CaseOverview = ({ navigation }) => {
-  const [caseItem, setCaseItem] = useState({});
+function CaseOverview({ navigation }) {
+  const [caseItems, setCaseItems] = useState([]);
   const { getCasesByFormIds } = useContext(CaseState);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const { createCase } = useContext(CaseDispatch);
 
-  console.log('caseTypes', caseTypes);
-
   useEffect(() => {
     const updateItems = async () => {
-      const [status, latestCase, relevantCases] = await getCasesByFormIds([FORM_ID]);
-      const form = await getForm(FORM_ID);
+      // Using hardcoded form id for now
+      const formIds = [FORM_ID];
+      const [status, latestCase, relevantCases] = await getCasesByFormIds(formIds);
+      console.log('latestCase', latestCase);
       console.log('relevantCases', relevantCases);
-      setCaseItem({
-        status,
-        item: latestCase,
-        component: computeCaseComponent(status, latestCase, navigation, form, createCase),
-      });
+      if (latestCase) {
+        const form = await getForm(latestCase.formId);
+        const updatedCase = { status, form, item: latestCase };
+        setCaseItems([updatedCase]);
+      }
     };
 
     updateItems();
-  }, [createCase, getCasesByFormIds, getForm, getFormIdsByFormTypes, navigation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getCasesByFormIds, getFormIdsByFormTypes, getForm, navigation]);
 
   return (
     <ScreenWrapper>
@@ -157,12 +153,13 @@ const CaseOverview = ({ navigation }) => {
             </Card.Text>
           </Card.Body>
         </WelcomeMessage>
-
-        {caseItem.component}
+        {caseItems.map(({ item, form, status }) =>
+          computeCaseComponent(status, item, form, navigation, createCase)
+        )}
       </Container>
     </ScreenWrapper>
   );
-};
+}
 
 CaseOverview.propTypes = {
   navigation: PropTypes.object,
