@@ -7,9 +7,13 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { formatUpdatedAt } from '../../helpers/DateHelpers';
 
-// TODO: Temp fix, handle this better
-const FORM_ID = 'f94790e0-0c86-11eb-bf56-efbb7e9336b3';
 const ILLU_WALLET = require('source/assets/images/icons/icn_inkomster_red_1x.png');
+// TODO: Handle hardcoded form data
+const EKB = {
+  name: 'Ekonomiskt bistånd',
+  formId: 'f94790e0-0c86-11eb-bf56-efbb7e9336b3',
+  icon: ILLU_WALLET,
+};
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -28,18 +32,17 @@ const WelcomeMessage = styled(Card)`
 `;
 
 function computeCaseComponent(status, caseItem, form, navigation, createCase) {
-  let updatedAt = '';
-  if (caseItem) {
-    updatedAt = formatUpdatedAt(caseItem.updatedAt);
-  }
+  const updatedAt = caseItem?.updatedAt ? formatUpdatedAt(caseItem.updatedAt) : '';
+  const currentStep = caseItem?.currentStep || '';
+  const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
 
   switch (status) {
     case caseStatus.untouched:
       return (
         <Card colorSchema="red">
           <Card.Body shadow color="neutral">
-            <Card.Image source={ILLU_WALLET} />
-            <Card.Title>{form.name}</Card.Title>
+            <Card.Image source={EKB.icon} />
+            <Card.Title>{EKB.name}</Card.Title>
             <Card.Button
               onClick={async () => {
                 createCase(
@@ -66,9 +69,12 @@ function computeCaseComponent(status, caseItem, form, navigation, createCase) {
 
           <Card colorSchema="red">
             <Card.Body shadow color="neutral">
-              <Card.Image source={ILLU_WALLET} />
-              <Card.Title>{form.name}</Card.Title>
-              <Card.Text>Påbörjad ansökan, uppdaterad {updatedAt}</Card.Text>
+              <Card.Image source={EKB.icon} />
+              <Card.Title>{EKB.name}</Card.Title>
+              <Card.SubTitle>
+                Steg {currentStep} / {totalSteps}
+              </Card.SubTitle>
+              <Card.Text italic>Senast uppdaterad {updatedAt}</Card.Text>
               <Card.Button
                 onClick={() => {
                   navigation.navigate('Form', { caseId: caseItem.id });
@@ -86,17 +92,17 @@ function computeCaseComponent(status, caseItem, form, navigation, createCase) {
       return (
         <>
           <ListHeading type="h5">Aktiva</ListHeading>
-
           <Card colorSchema="red">
             <Card.Body shadow color="neutral">
-              <Card.Image source={ILLU_WALLET} />
-              <Card.Title>{form.name}</Card.Title>
-              <Card.Text>Inskickad ansökan {updatedAt}</Card.Text>
+              <Card.Image source={EKB.icon} />
+              <Card.Title>{EKB.name}</Card.Title>
+              <Card.SubTitle>Inskickad</Card.SubTitle>
+              <Card.Text italic>Skickades in {updatedAt}</Card.Text>
               <Card.Button
                 onClick={() => {
                   navigation.navigate('UserEvents', {
                     screen: 'CaseSummary',
-                    params: { name: form.name, status, caseItem, form },
+                    params: { name: EKB.name, status, caseItem, form },
                   });
                 }}
               >
@@ -124,16 +130,14 @@ function CaseOverview({ navigation }) {
 
   useEffect(() => {
     const updateItems = async () => {
-      // Using hardcoded form id for now
-      const formIds = [FORM_ID];
-      const [status, latestCase, relevantCases] = await getCasesByFormIds(formIds);
+      // Using hardcoded form id and only the latest EKB case for now
+      const form = await getForm(EKB.formId);
+      const [status, latestCase, relevantCases] = await getCasesByFormIds([form.id]);
       console.log('latestCase', latestCase);
       console.log('relevantCases', relevantCases);
-      if (latestCase) {
-        const form = await getForm(latestCase.formId);
-        const updatedCase = { status, form, item: latestCase };
-        setCaseItems([updatedCase]);
-      }
+      const component = computeCaseComponent(status, latestCase, form, navigation, createCase);
+      const updatedCase = { component, status, form, item: latestCase };
+      setCaseItems([updatedCase]);
     };
 
     updateItems();
@@ -153,9 +157,7 @@ function CaseOverview({ navigation }) {
             </Card.Text>
           </Card.Body>
         </WelcomeMessage>
-        {caseItems.map(({ item, form, status }) =>
-          computeCaseComponent(status, item, form, navigation, createCase)
-        )}
+        {caseItems.map(({ component }) => component)}
       </Container>
     </ScreenWrapper>
   );
