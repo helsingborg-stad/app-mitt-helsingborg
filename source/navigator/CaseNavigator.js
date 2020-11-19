@@ -1,26 +1,33 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import CaseOverview from 'app/screens/caseScreens/CaseOverview';
-import EKBCases from 'app/screens/caseScreens/EKBCases';
-import BVCases from 'app/screens/caseScreens/BVCases';
-import ServicesMenu from 'app/screens/caseScreens/ServicesMenu';
+import CaseSummary from 'app/screens/caseScreens/CaseSummary';
+import { Icon } from 'app/components/atoms';
+import styled from 'styled-components/native';
 
 const Stack = createStackNavigator();
+
+const BackIcon = styled(Icon)`
+  margin-left: 12px;
+`;
 
 const CaseNavigator = () => (
   <Stack.Navigator screenOptions={{ headerShown: true }}>
     <Stack.Screen
       name="CaseOverview"
       component={CaseOverview}
-      options={{ title: 'Tjänster', headerShown: false }}
+      options={{ title: 'Ärenden', headerShown: false }}
     />
     <Stack.Screen
-      name="Services"
-      component={ServicesMenu}
-      options={{ title: 'Tjänster', headerShown: false }}
+      name="CaseSummary"
+      component={CaseSummary}
+      options={({ route }) => ({
+        title: route.params.name,
+        headerBackImage: () => <BackIcon name="arrow-back" />,
+        headerBackTitle: '',
+        headerTruncatedBackTitle: '',
+      })}
     />
-    <Stack.Screen name="EKBCases" component={EKBCases} options={{ title: 'Ekonomiskt bistånd' }} />
-    <Stack.Screen name="BVCases" component={BVCases} options={{ title: 'Borgerlig vigsel' }} />
   </Stack.Navigator>
 );
 
