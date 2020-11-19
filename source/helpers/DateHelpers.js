@@ -9,3 +9,45 @@ export const formatUpdatedAt = updatedAt => {
   }
   return '';
 };
+
+/**
+ * Capitalize first letter
+ * @param {string} string
+ */
+const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
+
+/**
+ * Returns the Swedish name of a month
+ * @param {int} month
+ */
+export const getSwedishMonthName = month => {
+  const months = [
+    'januari',
+    'februari',
+    'mars',
+    'april',
+    'maj',
+    'juni',
+    'juli',
+    'augusti',
+    'september',
+    'oktober',
+    'november',
+    'december',
+  ];
+  return months[parseInt(month) - 1];
+};
+
+/**
+ * Returns the Swedish name of a month by timestamp
+ * @param {int} month
+ */
+export const getSwedishMonthNameByTimeStamp = (timestamp, capitalized = false) => {
+  const date = new Date(timestamp);
+  if (!date) {
+    return '';
+  }
+  const monthName = getSwedishMonthName(date.getMonth() + 1);
+
+  return capitalized ? capitalizeFirstLetter(monthName) : monthName;
+};
