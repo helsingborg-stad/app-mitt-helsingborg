@@ -5,6 +5,7 @@ import {
   goBack,
   goDown,
   goUp,
+  goBackToMainForm,
   startForm,
   submitForm,
   updateAnswer,
@@ -36,6 +37,9 @@ type Action =
   | {
       type: 'GO_DOWN';
       payload: { targetStep: number | string };
+    }
+  | {
+      type: 'GO_TO_MAIN_FORM';
     }
   | {
       type: 'START_FORM';
@@ -103,6 +107,10 @@ function formReducer(state: FormReducerState, action: Action) {
      */
     case 'GO_UP': {
       return goUp(state, action.payload.targetStep);
+    }
+
+    case 'GO_TO_MAIN_FORM': {
+      return goBackToMainForm(state);
     }
 
     case 'START_FORM': {

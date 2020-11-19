@@ -71,6 +71,11 @@ function useForm(initialState: FormReducerState) {
       payload: { targetStep },
     });
 
+  /** Goes back to the main form. 'Closes' the substep modal. */
+  const goToMainForm = () => {
+    dispatch({ type: 'GO_TO_MAIN_FORM' });
+  };
+
   const isLastStep = () => false; // Need to think and fix this. //formState.steps.length === formState.counter;
 
   /**
@@ -125,6 +130,7 @@ function useForm(initialState: FormReducerState) {
     down: goIntoStep,
     start: startForm,
     close: closeForm,
+    goToMainForm,
     isLastStep,
   };
 
