@@ -38,10 +38,12 @@ export interface Question {
   inputs?: ListInput[];
   validation?: ValidationObject;
 }
-
+export type ActionType = 'start' | 'next' | 'submit' | 'sign' | 'close' | 'backToMain';
 export interface Action {
-  type: string;
+  type: ActionType;
   label: string;
+  color?: string;
+  conditionalOn?: string;
 }
 
 export interface Banner {
