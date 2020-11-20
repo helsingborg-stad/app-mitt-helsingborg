@@ -109,7 +109,6 @@
   "config": {
     "react-native-storybook-loader": {
       "searchDir": [
-        "./source/components,",
         "./source"
       ],
       "pattern": "**/*.stories.js",
