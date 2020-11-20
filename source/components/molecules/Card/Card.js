@@ -85,6 +85,10 @@ const CardImage = styled.Image`
   ${({ circle }) => circle && `border-radius: 50px;`}
 `;
 
+const CardProgressbar = styled(Progressbar)`
+  height: 7px;
+`;
+
 const BodyImageContainer = styled.View`
   padding-right: 24px;
 `;
@@ -209,9 +213,9 @@ Card.Image = ({ children, firstChild, lastChild, ...props }) => (
  * Renders a progress bar
  * @param {props} props
  */
-Card.Progressbar = ({ children, firstChild, lastChild, ...props }) => (
+Card.Progressbar = ({ children, firstChild, lastChild, colorSchema, ...props }) => (
   <Outset lastChild={lastChild} firstChild={firstChild}>
-    <Progressbar {...props} />
+    <CardProgressbar rounded colorSchema={colorSchema} {...props} />
   </Outset>
 );
 

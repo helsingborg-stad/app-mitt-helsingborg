@@ -18,6 +18,7 @@ const Title = styled(Text)`
   margin-top: 20px;
   margin-bottom: 6px;
 `;
+
 const Prop = styled(Text)`
   font-size: 14px;
   margin-bottom: 6px;
@@ -122,10 +123,9 @@ const ChildComponents = () => (
     </Card>
 
     <Title>Progressbar</Title>
-    <Prop>Prop: currentStep, totalStepNumber</Prop>
-    <Card>
-      <Card.Body shadow>
-        <Card.Progressbar currentStep={0} totalStepNumber={2} />
+    <Card colorSchema="neutral">
+      <Card.Body shadow color="neutral">
+        <Card.Progressbar currentStep={2} totalStepNumber={5} />
       </Card.Body>
     </Card>
   </FlexContainer>
@@ -207,7 +207,8 @@ const CardExamples = () => (
       <Card.Body shadow color="neutral">
         <Card.Image source={ILLU_INCOME} />
         <Card.Title>Ekonomiskt bistånd</Card.Title>
-        <Card.SubTitle>Ofullständig</Card.SubTitle>
+        <Card.SubTitle>Steg 3 / 7</Card.SubTitle>
+        <Card.Progressbar currentStep={3} totalStepNumber={7} />
         <Card.Button>
           <Text>Ange hyra</Text>
           <Icon name="arrow-forward" />
