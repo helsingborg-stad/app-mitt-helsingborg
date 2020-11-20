@@ -34,7 +34,7 @@ storiesOf('Button', module)
           </Button>
         </Flex>
         <Flex>
-          <Button colorSchema="green" variant="link">
+          <Button colorSchema="green" block variant="link">
             <Text>Icon right</Text>
             <Icon name="arrow-forward" />
           </Button>
