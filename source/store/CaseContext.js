@@ -19,19 +19,10 @@ const CaseDispatch = React.createContext();
 export const caseTypes = [
   {
     name: 'Ekonomiskt Bistånd',
-    formTypes: [
-      'EKB-recurring',
-      // 'EKB-new'
-    ],
+    formTypes: ['EKB-recurring'],
     icon: 'ICON_EKB',
     navigateTo: 'CaseSummary',
   },
-  // {
-  //   name: 'Borgerlig Vigsel',
-  //   formTypes: [],
-  //   icon: '',
-  //   navigateTo: 'BVCases',
-  // },
 ];
 
 /** An enum for describing the state of the user with respect to a given case type. */
