@@ -497,6 +497,11 @@ const SubstepsDemoStoryData = {
           color: 'blue',
           label: 'Go up',
         },
+        {
+          type: 'backToMain',
+          color: 'green',
+          label: 'Go to main form',
+        },
       ],
       group: '',
     },

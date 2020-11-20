@@ -1,13 +1,16 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
-import AuthContext from 'app/store/AuthContext';
+import AuthContext from '../../../../store/AuthContext';
 import { Button, Text } from '../../../atoms';
+import { Action, ActionType } from '../../../../types/FormTypes';
+import { CaseStatus } from '../../../../types/CaseType';
+import { CurrentFormPosition } from '../../../../containers/Form/hooks/useForm';
 
-const ActionContainer = styled.View(props => ({
-  flex: 1,
-  backgroundColor: props.theme.colors.neutrals[5],
-}));
+const ActionContainer = styled.View`
+  flex: 1;
+  background-color: ${props => props.theme.colors.neutrals[5]};
+`;
 const Flex = styled.View`
   padding: 5px;
   align-items: flex-end;
@@ -18,10 +21,34 @@ const ButtonWrapper = styled.View`
   margin-right: 32px;
 `;
 
-const StepFooter = ({
+interface Props {
+  actions: Action[];
+  caseStatus: CaseStatus;
+  background?: string;
+  answers: Record<string, any>;
+  formNavigation: {
+    next: () => void;
+    back: () => void;
+    up: (targetStep: number | string) => void;
+    down: (targetStep: number | string) => void;
+    start: (callback: () => void) => void;
+    close: () => void;
+    goToMainForm: () => void;
+    isLastStep: () => boolean;
+  };
+  onUpdate: (answers: Record<string, any>) => void;
+  onSubmit: () => void;
+  updateCaseInContext: (
+    answers: Record<string, any>,
+    status: CaseStatus,
+    currentMainStep: number
+  ) => void;
+  currentPosition: CurrentFormPosition;
+}
+
+const StepFooter: React.FC<Props> = ({
   actions,
   caseStatus,
-  background,
   answers,
   formNavigation,
   onUpdate,
@@ -45,7 +72,7 @@ const StepFooter = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
-  const actionMap = type => {
+  const actionMap = (type: ActionType) => {
     switch (type) {
       case 'start': {
         return formNavigation.start || null;
@@ -64,6 +91,9 @@ const StepFooter = ({
           await handleSign(user.personalNumber, 'Signering för Mitt Helsingborg');
         };
       }
+      case 'backToMain': {
+        return formNavigation.goToMainForm;
+      }
       default: {
         return () => {
           if (onUpdate && caseStatus === 'ongoing') onUpdate(answers);
@@ -75,7 +105,7 @@ const StepFooter = ({
     }
   };
 
-  const checkCondition = questionId => {
+  const checkCondition = (questionId: string) => {
     if (!questionId) return false;
 
     if (typeof questionId === 'string') {
@@ -92,7 +122,7 @@ const StepFooter = ({
     <Flex key={`${index}-${action.label}`}>
       <Button
         onClick={actionMap(action.type)}
-        color={action.color}
+        colorSchema={action.color}
         disabled={isLoading || checkCondition(action.conditionalOn)}
         z={0}
       >
@@ -102,7 +132,7 @@ const StepFooter = ({
   ));
 
   return (
-    <ActionContainer background={background}>
+    <ActionContainer>
       <ButtonWrapper>
         {buttons}
         {children}
@@ -119,12 +149,12 @@ StepFooter.propTypes = {
    */
   actions: PropTypes.arrayOf(
     PropTypes.shape({
-      type: PropTypes.string,
-      label: PropTypes.string,
+      type: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
       color: PropTypes.string,
       conditionalOn: PropTypes.string,
     })
-  ),
+  ).isRequired,
   /**
    * Background color for the footer
    */
@@ -153,9 +183,11 @@ StepFooter.propTypes = {
     close: PropTypes.func,
     /** action to trigger when starting the form */
     start: PropTypes.func,
+    /** action to return to main form */
+    goToMainForm: PropTypes.func,
     /** whether we are at the last of the main steps */
     isLastStep: PropTypes.func,
-  }),
+  }).isRequired,
   onUpdate: PropTypes.func,
   /** Behaviour for the submit action */
   onSubmit: PropTypes.func,
@@ -166,7 +198,8 @@ StepFooter.propTypes = {
     index: PropTypes.number,
     level: PropTypes.number,
     currentMainStep: PropTypes.number,
-  }),
+    currentMainStepIndex: PropTypes.number,
+  }).isRequired,
 };
 
 StepFooter.defaultProps = {
