@@ -79,6 +79,7 @@ const computeCaseComponent = (status, latestCase, form, caseType, navigation, cr
               <Card.SubTitle>
                 Steg {currentStep} / {totalSteps}
               </Card.SubTitle>
+              <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
               <Card.Text italic>Senast uppdaterad {updatedAt}</Card.Text>
               <Card.Button
                 onClick={() => {
