@@ -43,7 +43,6 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
     } else if (caseId) {
       const initCase = getCase(caseId);
       getForm(initCase.formId).then(async form => {
-        console.log('initCase', initCase);
         const [status, latestCase, relevantCases] = await getCasesByFormIds([form.id]);
         const initialAnswersObject = generateInitialCaseAnswers(form, user, relevantCases);
         initCase.data = initialAnswersObject;
@@ -54,9 +53,6 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       });
     }
   }, [caseData, caseId, getForm, getCase, user, getCasesByFormIds]);
-
-  console.log('caseData', caseData);
-  console.log('caseId', caseId);
 
   function handleCloseForm() {
     navigation.goBack();
