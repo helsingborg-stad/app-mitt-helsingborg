@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components/native';
 import SHADOW from '../../../styles/shadow';
 import Text from '../Text';
 import Icon from '../Icon';
+import { startForm } from '../../../containers/Form/hooks/formActions';
 
 /** Button styles */
 const Styles = { elevation: SHADOW };
@@ -27,7 +28,7 @@ Styles.outlined = css`
 
 Styles.link = css`
   padding: 6px 10px;
-  justify-content: flex-end;
+  justify-content: space-between;
   background-color: ${props => props.theme.colors.complementary[props.colorSchema][1]};
 `;
 
