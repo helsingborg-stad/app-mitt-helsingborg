@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Button, Text, Heading } from 'app/components/atoms';
+import { Button, Text, Heading, Progressbar } from 'app/components/atoms';
 
 const Container = styled.View`
   display: flex;
@@ -202,6 +202,16 @@ Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => {
 Card.Image = ({ children, firstChild, lastChild, ...props }) => (
   <Outset lastChild={lastChild} firstChild={firstChild}>
     <CardImage {...props} />
+  </Outset>
+);
+
+/**
+ * Renders a progress bar
+ * @param {props} props
+ */
+Card.Progressbar = ({ children, firstChild, lastChild, ...props }) => (
+  <Outset lastChild={lastChild} firstChild={firstChild}>
+    <Progressbar {...props} />
   </Outset>
 );
 
