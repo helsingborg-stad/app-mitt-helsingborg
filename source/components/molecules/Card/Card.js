@@ -181,7 +181,6 @@ Card.Text = ({ children, lastChild, firstChild, ...props }) => (
 
 /**
  * Renders a button
- * TODO: Implement new button variant "Link" when its done
  * @param {props} props
  */
 Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => {
@@ -189,7 +188,7 @@ Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => {
   const color = buttonColors.includes(colorSchema) ? colorSchema : buttonColors[0];
   return (
     <Outset lastChild={lastChild} firstChild={firstChild}>
-      <Button variant="outlined" colorSchema={color} size="small" block {...props}>
+      <Button variant="link" z={0} colorSchema={color} block {...props}>
         {children}
       </Button>
     </Outset>
