@@ -120,6 +120,14 @@ const ChildComponents = () => (
         </Card.Button>
       </Card.Body>
     </Card>
+
+    <Title>Progressbar</Title>
+    <Prop>Prop: currentStep, totalStepNumber</Prop>
+    <Card>
+      <Card.Body shadow>
+        <Card.Progressbar currentStep={0} totalStepNumber={2} />
+      </Card.Body>
+    </Card>
   </FlexContainer>
 );
 
