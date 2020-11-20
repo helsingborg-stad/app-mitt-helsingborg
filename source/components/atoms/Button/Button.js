@@ -104,7 +104,6 @@ const ButtonIcon = styled(Icon)`
     width: 18px;
     font-size: 20px;
     line-height: 20px;
-    margin-left: 10px;
     color: ${props.theme.colors.primary[props.colorSchema][1]};
   `}
 `;
@@ -199,9 +198,6 @@ const Button = props => {
           variant={variant}
         >
           {children || (value ? <ButtonText>{value}</ButtonText> : null)}
-          {variant === 'link' ? (
-            <ButtonIcon colorSchema={colorSchema} variant={variant} name="arrow-forward" />
-          ) : null}
         </ButtonBase>
       </ButtonTouchable>
     </ButtonWrapper>

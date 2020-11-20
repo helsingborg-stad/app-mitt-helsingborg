@@ -27,7 +27,30 @@ storiesOf('Button', module)
   ))
   .add('Link Buttons', props => (
     <StoryWrapper {...props}>
-      <ButtonColors variant="link" />
+      <FlexContainer>
+        <Flex>
+          <Button colorSchema="purple" variant="link">
+            <Icon name="arrow-forward" />
+          </Button>
+        </Flex>
+        <Flex>
+          <Button colorSchema="green" variant="link">
+            <Text>Icon right</Text>
+            <Icon name="arrow-forward" />
+          </Button>
+        </Flex>
+        <Flex>
+          <Button colorSchema="blue" variant="link">
+            <Icon name="arrow-back" />
+            <Text>Icon left</Text>
+          </Button>
+        </Flex>
+        <Flex>
+          <Button variant="link" colorSchema="red" rounded>
+            <Text>No icon</Text>
+          </Button>
+        </Flex>
+      </FlexContainer>
     </StoryWrapper>
   ))
   .add('Sizes', props => (
