@@ -7,7 +7,7 @@ import Input from './index';
 storiesOf('Input', module)
   .add('Keyboard type default', () => (
     <StoryWrapper>
-      <Input placeholder="Type something, blue input" />
+      <Input placeholder="Type some numbers, blue theme" keyboardType="numeric" />
       <Input colorSchema="purple" placeholder="Purple input" center />
       <Input colorSchema="red" placeholder="Red input" />
       <Input colorSchema="green" placeholder="Green input" />
@@ -27,5 +27,14 @@ storiesOf('Input', module)
       <Input colorSchema="purple" placeholder="Purple input" keyboardType="phone-pad" />
       <Input colorSchema="red" placeholder="Red input" keyboardType="phone-pad" />
       <Input colorSchema="green" placeholder="Green input" keyboardType="phone-pad" />
+    </StoryWrapper>
+  ))
+  .add('Input with failed validation', () => (
+    <StoryWrapper>
+      <Input
+        placeholder="Type something, blue input"
+        value="This is an input with failed validation"
+        error={{ isValid: false, message: 'Validation failed' }}
+      />
     </StoryWrapper>
   ));
