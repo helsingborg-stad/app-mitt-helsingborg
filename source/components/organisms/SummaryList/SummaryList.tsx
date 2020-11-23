@@ -36,7 +36,7 @@ const SumContainer = styled.View<{ colorSchema: string }>`
 export interface SummaryListItem {
   title: string;
   id: string;
-  type: 'number' | 'text' | 'date' | 'arrayNumber' | 'arrayText' | 'arrayDate';
+  type: 'number' | 'text' | 'date' | 'checkbox' | 'arrayNumber' | 'arrayText' | 'arrayDate';
   category?: string;
   inputId?: string;
 }
@@ -50,7 +50,7 @@ interface Props {
   heading: string;
   items: SummaryListItem[];
   categories?: SummaryListCategory[];
-  onChange: (answers: Record<string, any> | string | number, fieldId: string) => void;
+  onChange: (answers: Record<string, any> | string | number | boolean, fieldId: string) => void;
   color: string;
   answers: Record<string, any>;
   validationErrors?: Record<
@@ -82,17 +82,17 @@ const SummaryList: React.FC<Props> = ({
    * @param item The list item
    * @param index The index, when summarizing a repeater field with multiple answers
    */
-  const changeFromInput = (item: SummaryListItem, index?: number) => (text: string) => {
+  const changeFromInput = (item: SummaryListItem, index?: number) => (value: string | number | boolean) => {
     if (
       ['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type) &&
       typeof index !== 'undefined' &&
       item.inputId
     ) {
-      const oldAnswer: Record<string, string | number>[] = answers[item.id];
-      oldAnswer[index][item.inputId] = text;
+      const oldAnswer: Record<string, string | number | boolean>[] = answers[item.id];
+      oldAnswer[index][item.inputId] = value;
       onChange(oldAnswer, item.id);
     } else {
-      onChange(text, item.id);
+      onChange(value, item.id);
     }
   };
   /**

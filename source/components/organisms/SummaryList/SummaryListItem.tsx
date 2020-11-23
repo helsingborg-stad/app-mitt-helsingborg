@@ -4,7 +4,7 @@ import { View, TextInput } from "react-native";
 import { TouchableHighlight } from "react-native-gesture-handler";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
-import { Text, Icon } from "../../atoms";
+import { Text, Icon, Checkbox } from "../../atoms";
 import { SummaryListItem as SummaryListItemType } from "./SummaryList";
 import DateTimePickerForm from "../../molecules/DateTimePicker/DateTimePickerForm";
 import { colorPalette } from '../../../styles/palette';
@@ -96,10 +96,10 @@ const dateStyle: CSSProp = {
 
 interface Props {
   item: SummaryListItemType;
-  value: Record<string, any> | string | number;
+  value: Record<string, any> | string | number | boolean;
   index?: number;
   editable?: boolean;
-  changeFromInput: (text: string | number) => void;
+  changeFromInput: (value: string | number | boolean) => void;
   removeItem: () => void;
   color: string;
   validationError?: { isValid: boolean; message: string };
@@ -149,6 +149,11 @@ const SummaryListItem: React.FC<Props> = ({
             editable={editable}
           />
         );
+      case 'checkbox':
+        const checked = value as boolean;
+        return (
+          <Checkbox checked={checked} color={color} disabled={!editable} onChange={() => changeFromInput(!checked)} />
+        )
       default:
         return (
           <SmallInput
