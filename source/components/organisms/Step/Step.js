@@ -79,8 +79,7 @@ function Step({
   const closeForm = () => {
     if (status === 'ongoing') {
       if (onFieldChange) onFieldChange(answers);
-      if (updateCaseInContext)
-        updateCaseInContext(answers, 'ongoing', currentPosition.currentMainStep);
+      if (updateCaseInContext) updateCaseInContext(answers, 'ongoing', currentPosition);
     }
     if (formNavigation?.close) formNavigation.close(() => {});
   };

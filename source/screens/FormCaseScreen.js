@@ -58,10 +58,10 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
     navigation.navigate('UserEvents', { screen: 'CaseOverview' });
   }
 
-  const updateCaseContext = (data, status, currentStep) => {
+  const updateCaseContext = (data, status, currentPosition) => {
     // If the case is submitted, we should not actually update its data...
     if (initialCase.status === 'ongoing') {
-      updateCase(initialCase.id, data, status, currentStep, formQuestions);
+      updateCase(initialCase.id, data, status, currentPosition, formQuestions);
     }
   };
   /*
@@ -84,7 +84,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
         <Form
           steps={form.steps}
           connectivityMatrix={form.connectivityMatrix}
-          startAt={caseData?.currentStep || initialCase?.currentStep || 0}
+          initialPosition={caseData?.currentStep || initialCase?.currentStep}
           user={user}
           onClose={handleCloseForm}
           onStart={handleStartForm}

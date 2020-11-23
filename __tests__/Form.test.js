@@ -47,13 +47,18 @@ it('Starts the form and moves to the next step', async () => {
       firstName: 'Gandalf Ståhl',
     },
     formAnswers: {},
-    currentStep: 1,
+    currentStep: {
+      index: 0,
+      level: 0,
+      currentMainStep: 1,
+      currentMainStepIndex: 0,
+    },
   };
 
   const { getByText, findByText } = render(
     <Form
       steps={mockForm.steps}
-      startAt={mockForm.currentStep}
+      initialPosition={mockForm.currentStep}
       firstName={mockForm.user.firstName}
       onClose={mockFn}
       onStart={mockFn}

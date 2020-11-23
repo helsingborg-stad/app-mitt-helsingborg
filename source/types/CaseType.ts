@@ -1,9 +1,11 @@
+import { FormPosition } from '../containers/Form/hooks/useForm';
+
 export type CaseStatus = 'ongoing' | 'submitted';
 
 interface CaseWithoutAnswers {
   createdAt: number;
   updatedAt: number;
-  currentStep: number;
+  currentStep: FormPosition;
   formId: string;
   id: string;
   type: string;
