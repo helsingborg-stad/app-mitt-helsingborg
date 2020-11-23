@@ -24,32 +24,62 @@ const SummaryHeading = styled(Text)`
  */
 const CaseSummary = ({ navigation, route }) => {
   const colorSchema = 'red';
-  const { caseData } = route.params;
-  const { administrators } = caseData.details;
+  const { caseData, updatedAt, currentStep, totalSteps } = route.params;
   const { startDate, endDate } = caseData.details.period;
+  const { administrators } = caseData.details;
   const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(startDate, true);
 
   return (
     <ScreenWrapper>
       <Container>
-        <SummaryHeading type="h5">Aktuell period</SummaryHeading>
-        <Card colorSchema={colorSchema}>
-          <Card.Body shadow color="neutral">
-            <Card.Title>{applicationPeriodMonth}</Card.Title>
-            <Card.SubTitle>Ansökan inlämnad</Card.SubTitle>
-            <Card.Text>
-              Vi har mottagit din ansökan för perioden{' '}
-              {`${formatUpdatedAt(startDate)} - ${formatUpdatedAt(endDate)}`}.
-            </Card.Text>
-            <Card.Text italic>Vi skickar ut en notis när status för din ansökan ändras.</Card.Text>
-          </Card.Body>
-        </Card>
+        {caseData.status === 'submitted' && (
+          <>
+            <SummaryHeading type="h5">Aktuell period</SummaryHeading>
+            <Card colorSchema={colorSchema}>
+              <Card.Body shadow color="neutral">
+                <Card.Title>{applicationPeriodMonth}</Card.Title>
+                <Card.SubTitle>Ansökan inlämnad</Card.SubTitle>
+                <Card.Text>
+                  Vi har mottagit din ansökan för perioden{' '}
+                  {`${formatUpdatedAt(startDate)} - ${formatUpdatedAt(endDate)}`}.
+                </Card.Text>
+                <Card.Text italic>
+                  Vi skickar ut en notis när status för din ansökan ändras.
+                </Card.Text>
+              </Card.Body>
+            </Card>
 
-        {/* Mock data, needs to be replaced */}
-        <SummaryHeading type="h5">Nästa period</SummaryHeading>
-        <Card>
-          <Card.Text italic>Du kan ansöka om nästa period från den 10 oktober.</Card.Text>
-        </Card>
+            {/* Mock data, needs to be replaced */}
+            <SummaryHeading type="h5">Nästa period</SummaryHeading>
+            <Card>
+              <Card.Text italic>Du kan ansöka om nästa period från den 10 oktober.</Card.Text>
+            </Card>
+          </>
+        )}
+
+        {caseData.status === 'ongoing' && (
+          <>
+            <SummaryHeading type="h5">Pågående ansökan</SummaryHeading>
+
+            <Card colorSchema={colorSchema}>
+              <Card.Body shadow color="neutral">
+                <Card.Title>
+                  Steg {currentStep} / {totalSteps}
+                </Card.Title>
+                <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
+                <Card.Text italic>Senast uppdaterad {updatedAt}</Card.Text>
+                <Card.Button
+                  onClick={() => {
+                    navigation.navigate('Form', { caseId: caseData.id });
+                  }}
+                >
+                  <Text>Fortsätt ansökan</Text>
+                  <Icon name="arrow-forward" />
+                </Card.Button>
+              </Card.Body>
+            </Card>
+          </>
+        )}
 
         {administrators && (
           <View>
@@ -86,7 +116,9 @@ const CaseSummary = ({ navigation, route }) => {
 };
 
 CaseSummary.propTypes = {
-  navigation: PropTypes.any,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }),
   route: PropTypes.shape({
     params: PropTypes.shape({
       caseData: PropTypes.shape({
@@ -99,7 +131,12 @@ CaseSummary.propTypes = {
             endDate: PropTypes.any,
           }),
         }),
+        id: PropTypes.any,
+        status: PropTypes.string,
       }),
+      updatedAt: PropTypes.any,
+      currentStep: PropTypes.any,
+      totalSteps: PropTypes.any,
     }),
   }),
 };

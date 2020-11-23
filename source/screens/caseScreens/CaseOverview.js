@@ -79,7 +79,16 @@ const computeCaseComponent = (status, latestCase, form, caseType, navigation, cr
               onPress={() => {
                 navigation.navigate('UserEvents', {
                   screen: caseType.navigateTo,
-                  params: { name: caseType.name, status, caseData: latestCase, form },
+                  params: {
+                    name: caseType.name,
+                    status,
+                    caseData: latestCase,
+                    form,
+                    totalSteps,
+                    currentStep,
+                    updatedAt,
+                    caseType,
+                  },
                 });
               }}
             >
@@ -117,7 +126,16 @@ const computeCaseComponent = (status, latestCase, form, caseType, navigation, cr
                 onClick={() => {
                   navigation.navigate('UserEvents', {
                     screen: caseType.navigateTo,
-                    params: { name: caseType.name, status, caseData: latestCase, form },
+                    params: {
+                      name: caseType.name,
+                      status,
+                      caseData: latestCase,
+                      form,
+                      totalSteps,
+                      currentStep,
+                      updatedAt,
+                      caseType,
+                    },
                   });
                 }}
               >
