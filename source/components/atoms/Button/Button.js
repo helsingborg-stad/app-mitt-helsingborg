@@ -16,20 +16,33 @@ Styles.buttonbase = css`
   align-items: center;
   max-width: 100%;
   border-radius: 4.5px;
-  background-color: ${props => props.theme.colors.primary[props.colorSchema][0]};
+  background-color: ${props =>
+    props.colorSchema === 'neutral'
+      ? props.theme.colors.neutrals[1]
+      : props.theme.colors.primary[props.colorSchema][0]};
 `;
 
 /* Styles for different button variants outlined, contained etc */
 Styles.outlined = css`
-  border: 2px solid ${props => props.theme.colors.primary[props.colorSchema][1]};
-  background-color: ${props => props.theme.colors.complementary[props.colorSchema][1]};
+  border: 2px solid
+    ${props =>
+      props.colorSchema === 'neutral'
+        ? props.theme.colors.neutrals[2]
+        : props.theme.colors.primary[props.colorSchema][1]};
+  background-color: ${props =>
+    props.colorSchema === 'neutral'
+      ? props.theme.colors.neutrals[5]
+      : props.theme.colors.complementary[props.colorSchema][1]};
   ${Styles.elevation[0]}
 `;
 
 Styles.link = css`
   padding: 6px 10px;
   justify-content: space-between;
-  background-color: ${props => props.theme.colors.complementary[props.colorSchema][1]};
+  background-color: ${props =>
+    props.colorSchema === 'neutral'
+      ? props.theme.colors.neutrals[5]
+      : props.theme.colors.complementary[props.colorSchema][1]};
 `;
 
 Styles.contained = css``;
@@ -73,7 +86,11 @@ const ButtonBase = styled.View`
     ${props => props.size === 'large' && Styles.large}
 
     ${props => Styles.elevation[props.elevation]}
-    shadow-color: ${props => props.theme.button[props.colorSchema].shadow};
+
+    shadow-color: ${props =>
+      props.colorSchema === 'neutral'
+        ? props.theme.button.gray.shadow
+        : props.theme.button[props.colorSchema].shadow};
 
     ${props => Styles[props.variant]}
 `;
@@ -86,7 +103,11 @@ const ButtonText = styled(Text)`
   ${props =>
     props.variant === 'link' &&
     `
-    color: ${props.theme.colors.primary[props.colorSchema][1]};
+    color: ${
+      props.colorSchema === 'neutral'
+        ? `${props.theme.colors.neutrals[2]}`
+        : `${props.theme.colors.primary[props.colorSchema][1]}`
+    };
   `}
 `;
 const ButtonIcon = styled(Icon)`
@@ -105,7 +126,11 @@ const ButtonIcon = styled(Icon)`
     width: 18px;
     font-size: 20px;
     line-height: 20px;
-    color: ${props.theme.colors.primary[props.colorSchema][1]};
+    color: ${
+      props.colorSchema === 'neutral'
+        ? `${props.theme.colors.neutrals[2]}`
+        : `${props.theme.colors.primary[props.colorSchema][1]}`
+    };
   `}
 `;
 
