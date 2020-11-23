@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components/native';
 import SHADOW from '../../../styles/shadow';
 import Text from '../Text';
 import Icon from '../Icon';
-import { startForm } from '../../../containers/Form/hooks/formActions';
 
 /** Button styles */
 const Styles = { elevation: SHADOW };
@@ -36,9 +35,52 @@ Styles.outlined = css`
   ${Styles.elevation[0]}
 `;
 
+const ButtonIcon = styled(Icon)`
+  color: ${props =>
+    props.variant === 'outlined'
+      ? props.theme.colors.primary[props.colorSchema][1]
+      : props.theme.colors.neutrals[7]};
+  font-size: 26px;
+  height: 26px;
+  width: 26px;
+  line-height: 26px;
+  ${props =>
+    props.variant === 'link' &&
+    `
+    height: 20px;
+    width: 18px;
+    font-size: 20px;
+    line-height: 20px;
+    color: ${
+      props.colorSchema === 'neutral'
+        ? `${props.theme.colors.neutrals[2]}`
+        : `${props.theme.colors.primary[props.colorSchema][1]}`
+    };
+  `}
+`;
+
+const LeftButtonIcon = styled(ButtonIcon)`
+  margin-right: 16px;
+  ${props => (props.push ? 'margin-right: auto;' : null)}
+`;
+
+const RightButtonIcon = styled(ButtonIcon)`
+  margin-left: 16px;
+  ${props => (props.push ? 'margin-left: auto;' : null)}
+`;
+
 Styles.link = css`
   padding: 6px 10px;
-  justify-content: space-between;
+  ${props => {
+    console.log('props', props);
+  }}
+  justify-content: flex-start;
+  ${props => {
+    const lastChild = props.children[React.Children.count(props.children) - 1];
+    if (lastChild && lastChild.type === RightButtonIcon) {
+      return `justify-content: space-between;`;
+    }
+  }}
   background-color: ${props =>
     props.colorSchema === 'neutral'
       ? props.theme.colors.neutrals[5]
@@ -109,39 +151,6 @@ const ButtonText = styled(Text)`
         : `${props.theme.colors.primary[props.colorSchema][1]}`
     };
   `}
-`;
-const ButtonIcon = styled(Icon)`
-  color: ${props =>
-    props.variant === 'outlined'
-      ? props.theme.colors.primary[props.colorSchema][1]
-      : props.theme.colors.neutrals[7]};
-  font-size: 26px;
-  height: 26px;
-  width: 26px;
-  line-height: 26px;
-  ${props =>
-    props.variant === 'link' &&
-    `
-    height: 20px;
-    width: 18px;
-    font-size: 20px;
-    line-height: 20px;
-    color: ${
-      props.colorSchema === 'neutral'
-        ? `${props.theme.colors.neutrals[2]}`
-        : `${props.theme.colors.primary[props.colorSchema][1]}`
-    };
-  `}
-`;
-
-const LeftButtonIcon = styled(ButtonIcon)`
-  margin-right: 16px;
-  ${props => (props.push ? 'margin-right: auto;' : null)}
-`;
-
-const RightButtonIcon = styled(ButtonIcon)`
-  margin-left: 16px;
-  ${props => (props.push ? 'margin-left: auto;' : null)}
 `;
 
 /** Button utils */
