@@ -40,13 +40,19 @@ storiesOf('Button', module)
           </Button>
         </Flex>
         <Flex>
+          <Button block variant="link" colorSchema="neutral">
+            <Icon name="phone" />
+            <Text>Icon left</Text>
+          </Button>
+        </Flex>
+        <Flex>
           <Button colorSchema="blue" variant="link">
             <Icon name="arrow-back" />
             <Text>Icon left</Text>
           </Button>
         </Flex>
         <Flex>
-          <Button variant="link" colorSchema="red" rounded>
+          <Button variant="link" colorSchema="red">
             <Text>No icon</Text>
           </Button>
         </Flex>
@@ -143,6 +149,12 @@ storiesOf('Button', module)
 
 const ButtonColors = injectProps => (
   <FlexContainer>
+    <Flex>
+      <Button colorSchema="neutral" {...injectProps}>
+        <Text>Neutral</Text>
+      </Button>
+    </Flex>
+
     <Flex>
       <Button colorSchema="blue" {...injectProps}>
         <Text>Blue</Text>
