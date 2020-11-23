@@ -55,7 +55,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   }, [caseData, caseId, getForm, getCase, user, getCasesByFormIds]);
 
   function handleCloseForm() {
-    navigation.goBack();
+    navigation.navigate('UserEvents', { screen: 'CaseOverview' });
   }
 
   const updateCaseContext = (data, status, currentStep) => {
