@@ -10,13 +10,13 @@ export const actionTypes = {
   apiError: 'API_ERROR',
 };
 
-export async function updateCase(caseId, data, status, currentStep, formQuestions, callback) {
+export async function updateCase(caseId, data, status, currentPosition, formQuestions, callback) {
   const answers = convertAnswersToArray(data, formQuestions);
 
   const body = {
     status,
     answers,
-    currentStep,
+    currentStep: currentPosition,
   };
 
   try {
@@ -47,7 +47,12 @@ export async function createCase(form, user, cases, callback) {
     formId: form.id,
     provider: 'VIVA',
     status: 'ongoing',
-    currentStep: 0,
+    currentStep: {
+      index: 0,
+      level: 0,
+      currentMainStep: 1,
+      currentMainStepIndex: 0,
+    },
     details: {
       period: {
         startDate: 1601994748326,
