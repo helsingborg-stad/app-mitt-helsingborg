@@ -4,11 +4,12 @@ import CaseOverview from 'app/screens/caseScreens/CaseOverview';
 import CaseSummary from 'app/screens/caseScreens/CaseSummary';
 import { Icon } from 'app/components/atoms';
 import styled from 'styled-components/native';
+import { Platform } from 'react-native';
 
 const Stack = createStackNavigator();
 
 const BackIcon = styled(Icon)`
-  margin-left: 12px;
+  ${Platform.OS === 'ios' && `margin-left: 16px;`}
 `;
 
 const CaseNavigator = () => (
