@@ -26,7 +26,7 @@ const StyledErrorText = styled(Text)`
   font-family: Roboto;
   font-size: 16px;
   color: #dd6161;
-  font-weight: bold;
+  font-weight: ${({ theme }) => theme.fontWeights[1]};
   padding-top: 8px;
 `;
 
