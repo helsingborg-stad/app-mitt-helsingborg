@@ -24,7 +24,7 @@ const SummaryHeading = styled(Text)`
  */
 const CaseSummary = ({ navigation, route }) => {
   const colorSchema = 'red';
-  const { caseData, updatedAt, currentStep, totalSteps } = route.params;
+  const { caseData, updatedAt, currentStep, totalSteps, caseType } = route.params;
   const { startDate, endDate } = caseData.details.period;
   const { administrators } = caseData.details;
   const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(startDate, true);
@@ -63,9 +63,10 @@ const CaseSummary = ({ navigation, route }) => {
 
             <Card colorSchema={colorSchema}>
               <Card.Body shadow color="neutral">
-                <Card.Title>
+                <Card.Title>{caseType.name}</Card.Title>
+                <Card.SubTitle>
                   Steg {currentStep} / {totalSteps}
-                </Card.Title>
+                </Card.SubTitle>
                 <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
                 <Card.Text italic>Senast uppdaterad {updatedAt}</Card.Text>
                 <Card.Button
@@ -137,6 +138,9 @@ CaseSummary.propTypes = {
       updatedAt: PropTypes.any,
       currentStep: PropTypes.any,
       totalSteps: PropTypes.any,
+      caseType: PropTypes.shape({
+        name: PropTypes.any,
+      }),
     }),
   }),
 };
