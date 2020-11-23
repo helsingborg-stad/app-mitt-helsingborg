@@ -14,7 +14,8 @@ export const formatUpdatedAt = updatedAt => {
  * Capitalize first letter
  * @param {string} string
  */
-const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
+const capitalizeFirstLetter = string =>
+  string ? string.charAt(0).toUpperCase() + string.slice(1) : '';
 
 /**
  * Returns the Swedish name of a month
