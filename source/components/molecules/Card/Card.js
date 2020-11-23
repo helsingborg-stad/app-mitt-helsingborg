@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button, Text, Heading, Progressbar } from 'app/components/atoms';
+import { colorPalette } from '../../../styles/palette';
 
 const Container = styled.View`
   display: flex;
@@ -12,7 +13,7 @@ const Container = styled.View`
   padding-right: 1px;
 `;
 
-const Body = styled.View`
+const Body = styled.TouchableHighlight`
   background-color: ${props =>
     props.colorSchema === 'neutral'
       ? props.theme.colors.neutrals[7]
@@ -30,7 +31,6 @@ const Body = styled.View`
   }}
   padding: 24px;
   border-radius: 8px;
-  display: flex;
   flex-direction: row;
   ${({ shadow }) =>
     shadow &&
@@ -51,6 +51,23 @@ const Body = styled.View`
       }
     }
   }}
+`;
+
+const BodyWrapper = styled.View`
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+`;
+
+const BodyImageContainer = styled.View`
+  padding-right: 24px;
+`;
+
+const BodyContainer = styled.View`
+  width: 0;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 `;
 
 const CardTitle = styled(Heading)`
@@ -89,17 +106,6 @@ const CardProgressbar = styled(Progressbar)`
   height: 7px;
 `;
 
-const BodyImageContainer = styled.View`
-  padding-right: 24px;
-`;
-
-const BodyContainer = styled.View`
-  width: 0;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-`;
-
 /**
  * Card component
  * @param {props} props
@@ -123,6 +129,15 @@ const Card = ({ children, colorSchema, ...props }) => {
  * @param {props} props
  */
 Card.Body = ({ children, colorSchema, color, ...props }) => {
+  let underlayColor =
+    colorSchema === 'neutral'
+      ? colorPalette.neutrals[5]
+      : colorPalette.complementary[colorSchema][2];
+  if (color) {
+    underlayColor =
+      color === 'neutral' ? colorPalette.neutrals[5] : colorPalette.complementary[color][2];
+  }
+
   const imageWithProps = [];
   const childrenWithProps = [];
   React.Children.map(children, (child, index) => {
@@ -146,9 +161,17 @@ Card.Body = ({ children, colorSchema, color, ...props }) => {
   });
 
   return (
-    <Body colorSchema={colorSchema} color={color} {...props}>
-      {imageWithProps.length > 0 && <BodyImageContainer>{imageWithProps}</BodyImageContainer>}
-      <BodyContainer>{childrenWithProps}</BodyContainer>
+    <Body
+      activeOpacity={1}
+      underlayColor={underlayColor}
+      colorSchema={colorSchema}
+      color={color}
+      {...props}
+    >
+      <BodyWrapper>
+        {imageWithProps.length > 0 && <BodyImageContainer>{imageWithProps}</BodyImageContainer>}
+        <BodyContainer>{childrenWithProps}</BodyContainer>
+      </BodyWrapper>
     </Body>
   );
 };
