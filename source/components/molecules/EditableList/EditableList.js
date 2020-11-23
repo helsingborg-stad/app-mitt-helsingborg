@@ -131,7 +131,6 @@ function EditableList({
     }
   };
 
-  console.log('inputs', inputs);
   return (
     <Fieldset
       colorSchema={colorSchema}
