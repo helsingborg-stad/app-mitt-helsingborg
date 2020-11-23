@@ -251,7 +251,7 @@ Button.propTypes = {
   /**
    * The color schema of the component. colors is defined in the application theme.
    */
-  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
   /**
    * If true button will display Icon component passed as children.
    */
