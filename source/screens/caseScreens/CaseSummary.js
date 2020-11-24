@@ -7,6 +7,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 import icons from 'source/helpers/Icons';
+import { callNumber } from 'source/helpers/PhoneCall';
 import { formatUpdatedAt, getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 
 const Container = styled.ScrollView`
@@ -83,7 +84,7 @@ const CaseSummary = props => {
               </Card.Body>
             </Card>
 
-            {/* Mock data, needs to be replaced */}
+            {/* TODO: Mock data, needs to be replaced */}
             <SummaryHeading type="h5">Nästa period</SummaryHeading>
             <Card>
               <Card.Text italic>Du kan ansöka om nästa period från den 10 oktober.</Card.Text>
@@ -133,7 +134,7 @@ const CaseSummary = props => {
                   </Card.Section>
 
                   {phone && (
-                    <Card.Button colorSchema="neutral">
+                    <Card.Button colorSchema="neutral" onClick={() => callNumber(phone)}>
                       <Icon name="phone" />
                       <Text>{phone}</Text>
                     </Card.Button>
@@ -151,7 +152,7 @@ const CaseSummary = props => {
           </View>
         )}
 
-        {/* Mock data, needs to be replaced */}
+        {/* TODO: Mock data, needs to be replaced */}
         <SummaryHeading type="h5">Tidigare ansökningar</SummaryHeading>
         <Card colorSchema={colorSchema}>
           <Card.Text italic>Här kan du titta på dina tidigare ansökningar.</Card.Text>
