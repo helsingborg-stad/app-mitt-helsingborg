@@ -238,7 +238,7 @@ Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => (
  * Renders an image
  * @param {props} props
  */
-Card.Image = ({ children, firstChild, lastChild, ...props }) => (
+Card.Image = ({ firstChild, lastChild, ...props }) => (
   <Outset lastChild={lastChild} firstChild={firstChild}>
     <CardImage {...props} />
   </Outset>
@@ -255,7 +255,9 @@ Card.Progressbar = ({ children, firstChild, lastChild, colorSchema, ...props }) 
 );
 
 Card.propTypes = {
+  /** List of every immediate child */
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  /** Sets a color schema for the component */
   colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
 };
 
@@ -264,37 +266,65 @@ Card.defaultProps = {
 };
 
 Card.Body.propTypes = {
+  /** List of every immediate child */
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  /** Sets a color schema for the component */
   colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+  /** Sets a color for the body that does not overrides colorSchema  */
   color: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
 };
 
 Card.Title.propTypes = {
+  /** List of every immediate child */
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  /** Sets a color schema for the component */
   colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
 };
 
 Card.SubTitle.propTypes = {
+  /** List of every immediate child */
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  /** Sets a color schema for the component */
   colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
 };
 
 Card.Text.propTypes = {
+  /** List of every immediate child */
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  /** Equals true if child is first in children array */
   firstChild: PropTypes.bool,
+  /** Equals true if child is last in children array */
   lastChild: PropTypes.bool,
 };
 
 Card.Image.propTypes = {
+  /** List of every immediate child */
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  /** Equals true if child is first in children array */
   firstChild: PropTypes.bool,
+  /** Equals true if child is last in children array */
   lastChild: PropTypes.bool,
 };
 
-Card.Button.propTypes = {
+Card.Progressbar.propTypes = {
+  /** List of every immediate child */
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
-  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+  /** Equals true if child is first in children array */
   firstChild: PropTypes.bool,
+  /** Equals true if child is last in children array */
+  lastChild: PropTypes.bool,
+  /** Sets a color schema for the component */
+  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+};
+
+Card.Button.propTypes = {
+  /** List of every immediate child */
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  /** Sets a color schema for the component */
+  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+  /** Equals true if child is first in children array */
+  firstChild: PropTypes.bool,
+  /** Equals true if child is last in children array */
   lastChild: PropTypes.bool,
 };
 
