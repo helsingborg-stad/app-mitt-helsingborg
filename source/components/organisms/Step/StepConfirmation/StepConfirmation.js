@@ -58,7 +58,7 @@ const StepConfirmation = ({ colorSchema }) => (
     <Card colorSchema={colorSchema}>
       <Card.Body>
         <Card.Image source={icons.ICON_EKB_OUTLINE} />
-        <Card.Title>Ekonomiskt bistånd</Card.Title>
+        <Card.Title>Ekonomiskt{'\n'}bistånd</Card.Title>
         <Card.SubTitle>Inskickad</Card.SubTitle>
         <Card.Button>
           <Text>Öppna</Text>
