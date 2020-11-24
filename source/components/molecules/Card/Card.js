@@ -210,17 +210,13 @@ Card.Text = ({ children, lastChild, firstChild, ...props }) => (
  * Renders a button
  * @param {props} props
  */
-Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => {
-  const buttonColors = ['blue', 'red', 'purple', 'green'];
-  const color = buttonColors.includes(colorSchema) ? colorSchema : buttonColors[0];
-  return (
-    <Outset lastChild={lastChild} firstChild={firstChild}>
-      <Button variant="link" z={0} colorSchema={color} block {...props}>
-        {children}
-      </Button>
-    </Outset>
-  );
-};
+Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => (
+  <Outset lastChild={lastChild} firstChild={firstChild}>
+    <Button variant="link" z={0} colorSchema={colorSchema} block {...props}>
+      {children}
+    </Button>
+  </Outset>
+);
 
 /**
  * Renders an image
