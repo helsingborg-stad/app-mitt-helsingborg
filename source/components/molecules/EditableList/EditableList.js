@@ -3,6 +3,7 @@ import { LayoutAnimation } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Text, Button, Fieldset } from '../../atoms';
+import Select from '../../atoms/Select';
 import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
 
 const EditableListBody = styled.View`
@@ -30,7 +31,7 @@ const EditableListItem = styled.View`
 
 const EditableListItemLabelWrapper = styled.View`
   flex: 4;
-  justify-content: center;
+  justify-content: ${props => (props.alignAtStart ? 'flex-start' : 'center')};
 `;
 
 const EditableListItemLabel = styled.Text`
@@ -77,9 +78,10 @@ function EditableList({
   value,
   onInputChange,
   inputIsEditable,
+  startEditable,
   error,
 }) {
-  const [editable, setEditable] = useState(false);
+  const [editable, setEditable] = useState(startEditable);
   const [state, setState] = useState(getInitialState(inputs, value));
 
   const changeEditable = () => {
@@ -117,6 +119,16 @@ function EditableList({
             transparent
           />
         );
+      case 'select':
+        return (
+          <Select
+            onValueChange={value => onChange(input.key, value)}
+            value={value && value !== '' ? value[input.key] : state[input.key]}
+            editable={editable}
+            items={input.choices}
+            transparent
+          />
+        );
       default:
         return (
           <EditableListItemInput
@@ -131,7 +143,6 @@ function EditableList({
     }
   };
 
-  console.log('inputs', inputs);
   return (
     <Fieldset
       colorSchema={colorSchema}
@@ -154,7 +165,7 @@ function EditableList({
             key={input.key}
             error={error ? error[input.key] : undefined}
           >
-            <EditableListItemLabelWrapper>
+            <EditableListItemLabelWrapper alignAtStart={input.type === 'select'}>
               <EditableListItemLabel>{input.label}</EditableListItemLabel>
             </EditableListItemLabelWrapper>
             <EditableListItemInputWrapper>{getInputComponent(input)}</EditableListItemInputWrapper>
@@ -194,18 +205,19 @@ EditableList.propTypes = {
    * Decides of the inputs are editable or not
    */
   inputIsEditable: PropTypes.bool,
-
+  /** Whether the inputs starts editable or not */
+  startEditable: PropTypes.bool,
   /** Validation error object */
   error: PropTypes.object,
-
   /**
    * The color schema/theme of the component
    */
-  colorSchema: PropTypes.oneOf('blue', 'green', 'red', 'purple'),
+  colorSchema: PropTypes.oneOf(['blue', 'green', 'red', 'purple']),
 };
 
 EditableList.defaultProps = {
   inputIsEditable: true,
+  startEditable: false,
   inputs: [],
   colorSchema: 'blue',
 };

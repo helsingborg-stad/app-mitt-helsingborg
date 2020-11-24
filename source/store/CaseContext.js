@@ -19,15 +19,9 @@ const CaseDispatch = React.createContext();
 export const caseTypes = [
   {
     name: 'Ekonomiskt Bistånd',
-    formTypes: ['EKB-recurring', 'EKB-new'],
+    formTypes: ['EKB-recurring'],
     icon: 'ICON_EKB',
-    navigateTo: 'EKBCases',
-  },
-  {
-    name: 'Borgerlig Vigsel',
-    formTypes: [],
-    icon: '',
-    navigateTo: 'BVCases',
+    navigateTo: 'CaseSummary',
   },
 ];
 
@@ -50,8 +44,8 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
     dispatch(await create(form, user, Object.values(state.cases), callback));
   }
 
-  async function updateCase(caseId, data, status, currentStep, form) {
-    dispatch(await update(caseId, data, status, currentStep, form));
+  async function updateCase(caseId, data, status, currentPosition, form) {
+    dispatch(await update(caseId, data, status, currentPosition, form));
   }
 
   function getCase(caseId) {

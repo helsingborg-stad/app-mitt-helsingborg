@@ -15,20 +15,76 @@ Styles.buttonbase = css`
   align-items: center;
   max-width: 100%;
   border-radius: 4.5px;
-  background-color: ${props => props.theme.colors.primary[props.colorSchema][0]};
+  background-color: ${props =>
+    props.colorSchema === 'neutral'
+      ? props.theme.colors.neutrals[1]
+      : props.theme.colors.primary[props.colorSchema][0]};
 `;
 
 /* Styles for different button variants outlined, contained etc */
 Styles.outlined = css`
-  border: 2px solid ${props => props.theme.colors.primary[props.colorSchema][1]};
-  background-color: ${props => props.theme.colors.complementary[props.colorSchema][1]};
+  border: 2px solid
+    ${props =>
+      props.colorSchema === 'neutral'
+        ? props.theme.colors.neutrals[2]
+        : props.theme.colors.primary[props.colorSchema][1]};
+  background-color: ${props =>
+    props.colorSchema === 'neutral'
+      ? props.theme.colors.neutrals[5]
+      : props.theme.colors.complementary[props.colorSchema][1]};
   ${Styles.elevation[0]}
+`;
+
+const ButtonIcon = styled(Icon)`
+  color: ${props =>
+    props.variant === 'outlined'
+      ? props.theme.colors.primary[props.colorSchema][1]
+      : props.theme.colors.neutrals[7]};
+  font-size: 26px;
+  height: 26px;
+  width: 26px;
+  line-height: 26px;
+  ${props =>
+    props.variant === 'link' &&
+    `
+    height: 20px;
+    width: 18px;
+    font-size: 20px;
+    line-height: 20px;
+    color: ${
+      props.colorSchema === 'neutral'
+        ? `${props.theme.colors.neutrals[2]}`
+        : `${props.theme.colors.primary[props.colorSchema][1]}`
+    };
+  `}
+`;
+
+const LeftButtonIcon = styled(ButtonIcon)`
+  margin-right: 16px;
+  ${props => (props.push ? 'margin-right: auto;' : null)}
+`;
+
+const RightButtonIcon = styled(ButtonIcon)`
+  margin-left: 16px;
+  ${props => (props.push ? 'margin-left: auto;' : null)}
 `;
 
 Styles.link = css`
   padding: 6px 10px;
-  justify-content: flex-end;
-  background-color: ${props => props.theme.colors.complementary[props.colorSchema][1]};
+  ${props => {
+    console.log('props', props);
+  }}
+  justify-content: flex-start;
+  ${props => {
+    const lastChild = props.children[React.Children.count(props.children) - 1];
+    if (lastChild && lastChild.type === RightButtonIcon) {
+      return `justify-content: space-between;`;
+    }
+  }}
+  background-color: ${props =>
+    props.colorSchema === 'neutral'
+      ? props.theme.colors.neutrals[5]
+      : props.theme.colors.complementary[props.colorSchema][1]};
 `;
 
 Styles.contained = css``;
@@ -72,7 +128,11 @@ const ButtonBase = styled.View`
     ${props => props.size === 'large' && Styles.large}
 
     ${props => Styles.elevation[props.elevation]}
-    shadow-color: ${props => props.theme.button[props.colorSchema].shadow};
+
+    shadow-color: ${props =>
+      props.colorSchema === 'neutral'
+        ? props.theme.button.gray.shadow
+        : props.theme.button[props.colorSchema].shadow};
 
     ${props => Styles[props.variant]}
 `;
@@ -85,38 +145,12 @@ const ButtonText = styled(Text)`
   ${props =>
     props.variant === 'link' &&
     `
-    color: ${props.theme.colors.primary[props.colorSchema][1]};
+    color: ${
+      props.colorSchema === 'neutral'
+        ? `${props.theme.colors.neutrals[2]}`
+        : `${props.theme.colors.primary[props.colorSchema][1]}`
+    };
   `}
-`;
-const ButtonIcon = styled(Icon)`
-  color: ${props =>
-    props.variant === 'outlined'
-      ? props.theme.colors.primary[props.colorSchema][1]
-      : props.theme.colors.neutrals[7]};
-  font-size: 26px;
-  height: 26px;
-  width: 26px;
-  line-height: 26px;
-  ${props =>
-    props.variant === 'link' &&
-    `
-    height: 20px;
-    width: 18px;
-    font-size: 20px;
-    line-height: 20px;
-    margin-left: 10px;
-    color: ${props.theme.colors.primary[props.colorSchema][1]};
-  `}
-`;
-
-const LeftButtonIcon = styled(ButtonIcon)`
-  margin-right: 16px;
-  ${props => (props.push ? 'margin-right: auto;' : null)}
-`;
-
-const RightButtonIcon = styled(ButtonIcon)`
-  margin-left: 16px;
-  ${props => (props.push ? 'margin-left: auto;' : null)}
 `;
 
 /** Button utils */
@@ -199,9 +233,6 @@ const Button = props => {
           variant={variant}
         >
           {children || (value ? <ButtonText>{value}</ButtonText> : null)}
-          {variant === 'link' ? (
-            <ButtonIcon colorSchema={colorSchema} variant={variant} name="arrow-forward" />
-          ) : null}
         </ButtonBase>
       </ButtonTouchable>
     </ButtonWrapper>
@@ -220,7 +251,7 @@ Button.propTypes = {
   /**
    * The color schema of the component. colors is defined in the application theme.
    */
-  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
   /**
    * If true button will display Icon component passed as children.
    */

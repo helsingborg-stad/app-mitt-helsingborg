@@ -9,7 +9,7 @@ const Tab = createMaterialTopTabNavigator();
 const BottomBarStack = () => (
   <Tab.Navigator
     screenOptions={{ headerShown: false }}
-    initialRouteName="Home"
+    initialRouteName="UserEvents"
     tabBarPosition="bottom"
     tabBar={props => <MaterialTopTabBarWrapper {...props} />}
     swipeEnabled
@@ -22,22 +22,22 @@ const BottomBarStack = () => (
     }}
   >
     <Tab.Screen
-      name="Home"
-      component={HomeScreen}
-      options={{
-        headerTintColor: 'black',
-        tabBarLabel: 'Hem',
-        title: 'Hem',
-        tabBarIcon: TabBarImage(require('../images/home.png')),
-      }}
-    />
-    <Tab.Screen
       name="UserEvents"
       component={CaseNavigator}
       options={{
         title: 'Ärende',
         tabBarIcon: TabBarImage(require('../images/task.png')),
         tabBarLabel: 'Ärende',
+      }}
+    />
+    <Tab.Screen
+      name="Chat"
+      component={HomeScreen}
+      options={{
+        headerTintColor: 'black',
+        tabBarLabel: 'Sally',
+        title: 'Sally',
+        tabBarIcon: TabBarImage(require('../images/home.png')),
       }}
     />
     <Tab.Screen

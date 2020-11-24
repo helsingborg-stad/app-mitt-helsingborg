@@ -5,7 +5,7 @@ import { Platform } from 'react-native';
 
 const Container = styled.KeyboardAvoidingView`
   flex: 1;
-  padding: 16px;
+  background-color: ${props => props.theme.colors.neutrals[6]};
 `;
 
 const ScreenWrapper = props => {

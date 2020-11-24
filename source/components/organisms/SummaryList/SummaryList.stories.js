@@ -4,6 +4,7 @@ import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from '../../molecules/StoryWrapper';
 import SummaryList from './SummaryList';
 import { Input, Label, Text } from '../../atoms';
+import CheckboxField from '../../molecules/CheckboxField/CheckboxField';
 import Form from '../../../containers/Form/Form';
 
 const stories = storiesOf('Summary List', module);
@@ -13,6 +14,7 @@ const items = [
   { id: 'f2', type: 'text', title: 'grönsak', category: 'vegetable' },
   { id: 'pris1', type: 'number', title: 'pris1', category: 'fruit' },
   { id: 'pris2', type: 'number', title: 'pris2', category: 'vegetable' },
+  { id: 'box1', type: 'checkbox', title: 'Checkbox', category: 'vegetable' },
 ];
 
 const categories = [
@@ -73,6 +75,19 @@ const SummaryStory = () => {
           });
         }}
       />
+      <CheckboxField
+        text="Do you feel it?"
+        color="blue"
+        size="small"
+        value={state.box1}
+        onChange={() => {
+          setState(oldState => {
+            oldState.box1 = !oldState.box1;
+            return { ...oldState };
+          });
+        }}
+        help={{ text: 'some other helper text' }}
+      />
       <SummaryList
         heading="Sammanfattning"
         items={items}
@@ -132,7 +147,7 @@ const validationTestForm = {
             rules: [
               {
                 method: 'isEmail',
-                message: 'Du måste ange en giltig emailadress',
+                message: 'Epostadressen ser inte ut att vara korrekt',
                 validWhen: true,
               },
               {

@@ -3,14 +3,15 @@ import formReducer from './formReducer';
 import { Question, Step, StepperActions } from '../../../types/FormTypes';
 import { User } from '../../../types/UserTypes';
 
+export interface FormPosition {
+  index: number;
+  level: number;
+  currentMainStep: number;
+  currentMainStepIndex: number;
+}
 export interface FormReducerState {
   submitted: boolean;
-  currentPosition: {
-    index: number;
-    level: number;
-    currentMainStep: number;
-    currentMainStepIndex: number;
-  };
+  currentPosition: FormPosition;
   steps: Step[];
   allQuestions: Question[];
   user: User;
