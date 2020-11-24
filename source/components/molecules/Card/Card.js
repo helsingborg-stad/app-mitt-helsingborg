@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button, Text, Heading, Progressbar } from 'app/components/atoms';
+import { View } from 'react-native';
 import { colorPalette } from '../../../styles/palette';
 
 const Container = styled.View`
@@ -155,6 +156,7 @@ Card.Body = ({ children, colorSchema, color, ...props }) => {
     childrenWithProps[index] = React.cloneElement(child, {
       key: index,
       colorSchema: child.props?.colorSchema || colorSchema,
+      color,
       firstChild: index === 0,
       lastChild: index === React.Children.count(children) - 1,
     });
@@ -185,6 +187,15 @@ Card.Title = ({ children, colorSchema, ...props }) => (
     {children}
   </CardTitle>
 );
+
+/**
+ * Renders a card section that wraps a group of components in a row
+ * @param {props} props
+ */
+Card.Section = ({ children, colorSchema, color, ...props }) => {
+  const element = React.cloneElement(<Card.Body />, { colorSchema, color, ...props }, children);
+  return element;
+};
 
 /**
  * Renders sub title
