@@ -97,7 +97,7 @@ function EditableList({
     setState(updatedState);
   };
   const onInputBlur = () => {
-    onBlur(state);
+    if (onBlur) onBlur(state);
   };
   /** Switch between different input types */
   const getInputComponent = input => {

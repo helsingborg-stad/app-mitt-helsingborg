@@ -127,7 +127,7 @@ function Step({
                     <FormField
                       key={`${field.id}`}
                       onChange={status === 'ongoing' ? onFieldChange : null}
-                      handleBlur={onFieldBlur}
+                      onBlur={onFieldBlur}
                       inputType={field.type}
                       value={answers[field.id] || ''}
                       answers={answers}

@@ -93,7 +93,7 @@ const FormField = ({
   color,
   id,
   onChange,
-  handleBlur,
+  onBlur,
   value,
   answers,
   validationErrors,
@@ -108,8 +108,8 @@ const FormField = ({
   const saveInput = (value, fieldId = id) => {
     if (onChange) onChange({ [fieldId]: value }, fieldId);
   };
-  const onBlur = (value, fieldId = id) => {
-    if (handleBlur) handleBlur({ [fieldId]: value }, fieldId);
+  const onInputBlur = (value, fieldId = id) => {
+    if (onBlur) onBlur({ [fieldId]: value }, fieldId);
   };
   if (!input) {
     return <Text>{`Invalid field type: ${inputType}`}</Text>;
@@ -131,7 +131,7 @@ const FormField = ({
   if (input?.props?.answers) inputCompProps.answers = answers;
   if (input?.props?.validation) inputCompProps.validationErrors = validationErrors;
   if (input && input.changeEvent) inputCompProps[input.changeEvent] = saveInput;
-  if (input && input.blurEvent) inputCompProps[input.blurEvent] = onBlur;
+  if (input && input.blurEvent) inputCompProps[input.blurEvent] = onInputBlur;
 
   /** Checks if the field is conditional on another input, and if so,
    * evaluates whether this field should be active or not */
@@ -199,7 +199,7 @@ FormField.propTypes = {
    */
   onChange: PropTypes.func,
   /** What happens when an input field looses focus.  */
-  handleBlur: PropTypes.func,
+  onBlur: PropTypes.func,
   /**
    * sets the value, since the input field component should be managed.
    */
