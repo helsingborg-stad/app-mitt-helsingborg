@@ -36,6 +36,7 @@
     <string>tel</string>
     <string>telprompt</string>
 		<string>bankid</string>
+		<string>mailto</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
