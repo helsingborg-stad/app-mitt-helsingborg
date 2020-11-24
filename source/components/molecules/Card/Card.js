@@ -154,7 +154,7 @@ Card.Body = ({ children, colorSchema, color, ...props }) => {
 
     childrenWithProps[index] = React.cloneElement(child, {
       key: index,
-      colorSchema,
+      colorSchema: child.props?.colorSchema || colorSchema,
       firstChild: index === 0,
       lastChild: index === React.Children.count(children) - 1,
     });
