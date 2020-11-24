@@ -83,13 +83,15 @@ function Step({
     }
     if (formNavigation?.close) formNavigation.close(() => {});
   };
+  const inSubstep = currentPosition.level !== 0;
+  const backButtonBehavior = inSubstep ? formNavigation.goToMainForm : formNavigation.back;
 
   return (
     <StepContainer>
       <StepBackNavigation
         showBackButton={isBackBtnVisible}
-        inSubstep={currentPosition.level !== 0}
-        onBack={formNavigation?.back ? formNavigation.back : undefined}
+        inSubstep={inSubstep}
+        onBack={backButtonBehavior}
         onClose={closeForm}
       />
       <StepContentContainer
@@ -209,6 +211,7 @@ Step.propTypes = {
     up: PropTypes.func,
     down: PropTypes.func,
     close: PropTypes.func,
+    goToMainForm: PropTypes.func,
     start: PropTypes.func,
     isLastStep: PropTypes.func,
   }),

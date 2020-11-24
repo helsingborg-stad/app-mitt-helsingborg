@@ -155,6 +155,17 @@ export function goUp(state: FormReducerState, targetStep: number | string) {
     };
   }
 }
+/**
+ * Goes back to the main form. Can be thought of as 'closing' the substep modal.
+ * @param state current form state
+ */
+export function goBackToMainForm(state: FormReducerState) {
+  const { currentPosition } = state;
+  return {
+    ...state,
+    currentPosition: {...currentPosition, index: currentPosition.currentMainStepIndex, level: 0 }
+  }
+}
 
 /**
  * Action to run when starting a form.
