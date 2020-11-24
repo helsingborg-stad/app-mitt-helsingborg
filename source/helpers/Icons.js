@@ -12,6 +12,7 @@ const icons = {
   ICON_DONE: require('source/assets/images/icons/illu_fardig_1x.png'),
   ICON_HELP: require('source/assets/images/icons/illu_hjalp_1x.png'),
   ICON_ADD: require('source/assets/images/icons/icon_add.png'),
+  ICON_CONTACT_PERSON: require('source/assets/images/icons/icn_contact_person_1x.png'),
 };
 
 export default icons;
