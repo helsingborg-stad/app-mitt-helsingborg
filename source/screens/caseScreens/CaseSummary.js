@@ -121,7 +121,7 @@ const CaseSummary = props => {
           <View>
             <SummaryHeading type="h5">Mina kontaktpersoner</SummaryHeading>
             {administrators.map(({ name, title, phone, email }) => (
-              <Card colorSchema="red">
+              <Card colorSchema={colorSchema}>
                 <Card.Body shadow color="neutral">
                   <Card.Section>
                     <Card.Image
