@@ -32,7 +32,9 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSApplicationQueriesSchemes</key>
-	<array>
+  <array>
+    <string>tel</string>
+    <string>telprompt</string>
 		<string>bankid</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
