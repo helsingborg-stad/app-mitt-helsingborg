@@ -7,7 +7,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 import icons from 'source/helpers/Icons';
-import { callNumber } from 'source/helpers/PhoneCall';
+import { launchPhone, launchEmail } from 'source/helpers/LaunchExternalApp';
 import { formatUpdatedAt, getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 
 const Container = styled.ScrollView`
@@ -132,16 +132,14 @@ const CaseSummary = props => {
                     {name && <Card.Title>{name}</Card.Title>}
                     {title && <Card.SubTitle>{title}</Card.SubTitle>}
                   </Card.Section>
-
                   {phone && (
-                    <Card.Button colorSchema="neutral" onClick={() => callNumber(phone)}>
+                    <Card.Button colorSchema="neutral" onClick={() => launchPhone(phone)}>
                       <Icon name="phone" />
                       <Text>{phone}</Text>
                     </Card.Button>
                   )}
-
                   {email && (
-                    <Card.Button colorSchema="neutral">
+                    <Card.Button colorSchema="neutral" onClick={() => launchEmail(email)}>
                       <Icon name="email" />
                       <Text>{email}</Text>
                     </Card.Button>
