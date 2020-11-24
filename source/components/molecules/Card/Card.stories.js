@@ -2,10 +2,12 @@ import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { Text, Icon } from 'app/components/atoms';
 import styled from 'styled-components/native';
+import { Linking } from 'react-native';
 import StoryWrapper from '../StoryWrapper';
 import Card from './Card';
 
-const ILLU_INCOME = require('source/assets/images/icons/icn_inkomster_1x.png');
+const ICON_INCOME = require('source/assets/images/icons/icn_inkomster_1x.png');
+const ICON_CONTACT = require('source/assets/images/icons/icn_contact_person_1x.png');
 
 const FlexContainer = styled.ScrollView`
   background-color: #fff;
@@ -100,7 +102,7 @@ const ChildComponents = () => (
     <Title>Image</Title>
     <Card>
       <Card.Body shadow>
-        <Card.Image source={ILLU_INCOME} />
+        <Card.Image source={ICON_INCOME} />
       </Card.Body>
     </Card>
 
@@ -108,7 +110,7 @@ const ChildComponents = () => (
     <Prop>Prop: circle</Prop>
     <Card>
       <Card.Body shadow>
-        <Card.Image circle source={ILLU_INCOME} />
+        <Card.Image circle source={ICON_INCOME} />
       </Card.Body>
     </Card>
 
@@ -135,7 +137,7 @@ const ColorSchemas = () => (
   <FlexContainer>
     <Card colorSchema="neutral">
       <Card.Body>
-        <Card.Image source={ILLU_INCOME} />
+        <Card.Image source={ICON_INCOME} />
         <Card.Title>Neutral</Card.Title>
         <Card.SubTitle>Card sub title</Card.SubTitle>
         <Card.Text>Text here lorem ipsum dolor sit amet</Card.Text>
@@ -148,7 +150,7 @@ const ColorSchemas = () => (
 
     <Card colorSchema="red">
       <Card.Body>
-        <Card.Image source={ILLU_INCOME} />
+        <Card.Image source={ICON_INCOME} />
         <Card.Title>Red</Card.Title>
         <Card.SubTitle>Card sub title</Card.SubTitle>
         <Card.Text>Text here lorem ipsum dolor sit amet</Card.Text>
@@ -161,7 +163,7 @@ const ColorSchemas = () => (
 
     <Card colorSchema="blue">
       <Card.Body>
-        <Card.Image source={ILLU_INCOME} />
+        <Card.Image source={ICON_INCOME} />
         <Card.Title>Blue</Card.Title>
         <Card.SubTitle>Card sub title</Card.SubTitle>
         <Card.Text>Text here lorem ipsum dolor sit amet</Card.Text>
@@ -174,7 +176,7 @@ const ColorSchemas = () => (
 
     <Card colorSchema="green">
       <Card.Body>
-        <Card.Image source={ILLU_INCOME} />
+        <Card.Image source={ICON_INCOME} />
         <Card.Title>Green</Card.Title>
         <Card.SubTitle>Card sub title</Card.SubTitle>
         <Card.Text>Text here lorem ipsum dolor sit amet</Card.Text>
@@ -187,7 +189,7 @@ const ColorSchemas = () => (
 
     <Card colorSchema="purple">
       <Card.Body>
-        <Card.Image source={ILLU_INCOME} />
+        <Card.Image source={ICON_INCOME} />
         <Card.Title>Purple</Card.Title>
         <Card.SubTitle>Card sub title</Card.SubTitle>
         <Card.Text>Text here lorem ipsum dolor sit amet</Card.Text>
@@ -202,10 +204,31 @@ const ColorSchemas = () => (
 
 const CardExamples = () => (
   <FlexContainer>
+    <Title>Mina kontaktpersoner</Title>
+
+    <Card colorSchema="red">
+      <Card.Body shadow color="neutral">
+        <Card.Section>
+          <Card.Image style={{ width: 50, height: 50 }} circle source={ICON_CONTACT} />
+          <Card.Title>Anna Andersson</Card.Title>
+          <Card.SubTitle>Socialsekreterare</Card.SubTitle>
+        </Card.Section>
+
+        <Card.Button colorSchema="neutral" onClick={() => Linking.openURL(`tel:042525252`)}>
+          <Icon name="phone" />
+          <Text>042 - 52 52 52</Text>
+        </Card.Button>
+        <Card.Button colorSchema="neutral">
+          <Icon name="email" />
+          <Text>Ange hyra</Text>
+        </Card.Button>
+      </Card.Body>
+    </Card>
+
     <Title>Aktiva</Title>
     <Card colorSchema="red">
       <Card.Body shadow color="neutral">
-        <Card.Image source={ILLU_INCOME} />
+        <Card.Image source={ICON_INCOME} />
         <Card.Title>Ekonomiskt bistånd</Card.Title>
         <Card.SubTitle>Steg 3 / 7</Card.SubTitle>
         <Card.Progressbar currentStep={3} totalStepNumber={7} />
@@ -252,24 +275,6 @@ const CardExamples = () => (
       </Card.Body>
     </Card>
 
-    <Title>Mina kontaktpersoner</Title>
-    <Card colorSchema="red">
-      <Card.Body shadow color="neutral">
-        <Card.Image circle source={ILLU_INCOME} />
-        <Card.Title>Anna Andersson</Card.Title>
-        <Card.SubTitle>Socialsekreterare</Card.SubTitle>
-        <Card.Text>042 - 52 52 52</Card.Text>
-      </Card.Body>
-    </Card>
-    <Card colorSchema="blue">
-      <Card.Body shadow color="neutral">
-        <Card.Image circle source={ILLU_INCOME} />
-        <Card.Title>Foo Bar</Card.Title>
-        <Card.SubTitle>Foobar</Card.SubTitle>
-        <Card.Text>042 - 52 52 52</Card.Text>
-      </Card.Body>
-    </Card>
-
     <Title>Tidigare ansökningar</Title>
     <Card colorSchema="red">
       <Card.Text italic>Här kan du titta på dina tidigare ansökningar.</Card.Text>
@@ -297,7 +302,7 @@ const CardExamples = () => (
 
     <Card colorSchema="purple">
       <Card.Body>
-        <Card.Image source={ILLU_INCOME} />
+        <Card.Image source={ICON_INCOME} />
         <Card.Title>Ekonomiskt bistånd</Card.Title>
         <Card.SubTitle>Inskickad</Card.SubTitle>
         <Card.Button>
