@@ -47,15 +47,14 @@ const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChan
   };
 
   const onInputBlur = () => {
-    // localAnswers[index][input.id] = text;
     if (onBlur) onBlur(localAnswers);
-    // setLocalAnswers([...localAnswers]);
   };
 
   const removeAnswer = (index: number) => () => {
     setLocalAnswers(prev => {
       prev.splice(index, 1);
       onChange(prev);
+      if (onBlur) onBlur(prev);
       return [...prev];
     });
   };
