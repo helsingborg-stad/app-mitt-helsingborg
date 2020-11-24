@@ -6,6 +6,7 @@ const icons = {
   ICON_TELL: require('source/assets/images/icons/icn_beratta_1x.png'),
   ICON_INCOME: require('source/assets/images/icons/icn_inkomster_1x.png'),
   ICON_EKB: require('source/assets/images/icons/icn_utgifter_3x.png'),
+  ICON_EKB_OUTLINE: require('source/assets/images/icons/icn_inkomster_outline_1x.png'),
   ICON_SUMMARY: require('source/assets/images/icons/icn_sammanstallning_1x.png'),
   ICON_HEALTHCARE: require('source/assets/images/icons/icn_sjukvard_1x.png'),
   ICON_EXPENSES: require('source/assets/images/icons/icn_utgifter_1x.png'),
