@@ -2,7 +2,6 @@ import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { Text, Icon } from 'app/components/atoms';
 import styled from 'styled-components/native';
-import { Linking } from 'react-native';
 import StoryWrapper from '../StoryWrapper';
 import Card from './Card';
 
@@ -130,6 +129,25 @@ const ChildComponents = () => (
         <Card.Progressbar currentStep={2} totalStepNumber={5} />
       </Card.Body>
     </Card>
+
+    <Title>Section</Title>
+    <Card colorSchema="red">
+      <Card.Body>
+        <Card.Section>
+          <Card.Image style={{ width: 50, height: 50 }} circle source={ICON_CONTACT} />
+          <Card.Title>Foo Bar</Card.Title>
+          <Card.SubTitle>Foobar</Card.SubTitle>
+        </Card.Section>
+        <Card.Button>
+          <Icon name="email" />
+          <Text>Foo bar</Text>
+        </Card.Button>
+        <Card.Button>
+          <Icon name="email" />
+          <Text>Foo bar</Text>
+        </Card.Button>
+      </Card.Body>
+    </Card>
   </FlexContainer>
 );
 
@@ -205,7 +223,6 @@ const ColorSchemas = () => (
 const CardExamples = () => (
   <FlexContainer>
     <Title>Mina kontaktpersoner</Title>
-
     <Card colorSchema="red">
       <Card.Body shadow color="neutral">
         <Card.Section>
@@ -213,8 +230,7 @@ const CardExamples = () => (
           <Card.Title>Anna Andersson</Card.Title>
           <Card.SubTitle>Socialsekreterare</Card.SubTitle>
         </Card.Section>
-
-        <Card.Button colorSchema="neutral" onClick={() => Linking.openURL(`tel:042525252`)}>
+        <Card.Button colorSchema="neutral">
           <Icon name="phone" />
           <Text>042 - 52 52 52</Text>
         </Card.Button>
