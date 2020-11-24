@@ -71,9 +71,6 @@ const RightButtonIcon = styled(ButtonIcon)`
 
 Styles.link = css`
   padding: 6px 10px;
-  ${props => {
-    console.log('props', props);
-  }}
   justify-content: flex-start;
   ${props => {
     const lastChild = props.children[React.Children.count(props.children) - 1];
