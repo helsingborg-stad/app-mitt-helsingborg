@@ -147,7 +147,7 @@ const validationTestForm = {
             rules: [
               {
                 method: 'isEmail',
-                message: 'Du måste ange en giltig emailadress',
+                message: 'Epostadressen ser inte ut att vara korrekt',
                 validWhen: true,
               },
               {
