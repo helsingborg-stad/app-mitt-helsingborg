@@ -77,6 +77,7 @@ function EditableList({
   inputs,
   value,
   onInputChange,
+  onBlur,
   inputIsEditable,
   startEditable,
   error,
@@ -95,6 +96,9 @@ function EditableList({
     onInputChange(updatedState);
     setState(updatedState);
   };
+  const onInputBlur = () => {
+    onBlur(state);
+  };
   /** Switch between different input types */
   const getInputComponent = input => {
     switch (input.type) {
@@ -106,6 +110,7 @@ function EditableList({
             colorSchema={colorSchema}
             editable={editable}
             onChangeText={text => onChange(input.key, text)}
+            onBlur={onInputBlur}
             value={value && value !== '' ? value[input.key] : state[input.key]}
             keyboardType="numeric"
           />
@@ -115,6 +120,7 @@ function EditableList({
           <CalendarPicker
             date={value && value !== '' ? value[input.key] : state[input.key]}
             onSelect={date => onChange(input.key, date)}
+            onBlur={onInputBlur}
             editable={editable}
             transparent
           />
@@ -122,6 +128,7 @@ function EditableList({
       case 'select':
         return (
           <Select
+            onBlur={onInputBlur}
             onValueChange={value => onChange(input.key, value)}
             value={value && value !== '' ? value[input.key] : state[input.key]}
             editable={editable}
@@ -137,6 +144,7 @@ function EditableList({
             colorSchema={colorSchema}
             editable={editable}
             onChangeText={text => onChange(input.key, text)}
+            onBlur={onInputBlur}
             value={value && value !== '' ? value[input.key] : state[input.key]}
           />
         );
@@ -185,7 +193,10 @@ EditableList.propTypes = {
    * Function for handling input events
    */
   onInputChange: PropTypes.func.isRequired,
-
+  /**
+   * Function for handling inputs losing focus
+   */
+  onBlur: PropTypes.func,
   /**
    * The title of the list
    */

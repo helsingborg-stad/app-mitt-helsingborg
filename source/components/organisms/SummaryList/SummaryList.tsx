@@ -51,6 +51,7 @@ interface Props {
   items: SummaryListItem[];
   categories?: SummaryListCategory[];
   onChange: (answers: Record<string, any> | string | number | boolean, fieldId: string) => void;
+  onBlur: (answers: Record<string, any> | string | number | boolean, fieldId: string) => void;
   color: string;
   answers: Record<string, any>;
   validationErrors?: Record<
@@ -70,6 +71,7 @@ const SummaryList: React.FC<Props> = ({
   items,
   categories,
   onChange,
+  onBlur,
   color,
   answers,
   validationErrors,
@@ -95,6 +97,18 @@ const SummaryList: React.FC<Props> = ({
       onChange(value, item.id);
     }
   };
+
+  const onItemBlur = (item: SummaryListItem, index?: number) => (value: string | number | boolean) => {
+    if (
+      ['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type) &&
+      typeof index !== 'undefined' &&
+      item.inputId
+    ){
+      if(onBlur) onBlur(answers[item.id], item.id);
+    } else {
+      if(onBlur) onBlur(value, item.id);
+    }
+  }
   /**
    * Given an item, and index in the case of repeater fields, this generates the function for clearing the associated data
    * in the form state.
@@ -124,6 +138,7 @@ const SummaryList: React.FC<Props> = ({
         index={index ? index + 1 : undefined}
         value={value}
         changeFromInput={changeFromInput(item, index)}
+        onBlur={onItemBlur(item, index)}
         removeItem={removeListItem(item, index)}
         color={color}
         validationError={validationError}
@@ -143,7 +158,7 @@ const SummaryList: React.FC<Props> = ({
     }
   };
 
-  const listItems = [];
+  const listItems: {category: string; component: JSX.Element}[] = [];
   items
     .filter(item => {
       const answer = answers[item.id];
@@ -158,7 +173,7 @@ const SummaryList: React.FC<Props> = ({
               generateListItem(
                 item,
                 v[item?.inputId],
-                validationErrors[item.id][index]
+                validationErrors?.[item.id]?.[index]
                   ? validationErrors[item.id][index][item?.inputId]
                   : undefined,
                 index
@@ -225,6 +240,10 @@ SummaryList.propTypes = {
    * What should happen to update the values
    */
   onChange: PropTypes.func,
+  /**
+   * What should happen when a field loses focus.
+   */
+  onBlur: PropTypes.func,
   /**
    * Sets the color scheme of the list. default is red.
    */

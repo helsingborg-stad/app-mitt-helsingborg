@@ -15,9 +15,11 @@ const inputTypes = {
   text: {
     component: Input,
     changeEvent: 'onChangeText',
+    blurEvent: 'onBlur',
   },
   number: {
     component: Input,
+    blurEvent: 'onBlur',
     changeEvent: 'onChangeText',
     props: {
       keyboardType: 'numeric',
@@ -42,6 +44,7 @@ const inputTypes = {
   editableList: {
     component: EditableList,
     changeEvent: 'onInputChange',
+    blurEvent: 'onBlur',
     props: {},
     initialValue: {},
   },
@@ -72,10 +75,12 @@ const inputTypes = {
   summaryList: {
     component: SummaryList,
     changeEvent: 'onChange',
+    blurEvent: 'onBlur',
     props: { answers: true, validation: true },
   },
   repeaterField: {
     component: RepeaterField,
+    blurEvent: 'onBlur',
     changeEvent: 'onChange',
     props: {},
   },
@@ -88,6 +93,7 @@ const FormField = ({
   color,
   id,
   onChange,
+  handleBlur,
   value,
   answers,
   validationErrors,
@@ -101,6 +107,9 @@ const FormField = ({
   }
   const saveInput = (value, fieldId = id) => {
     if (onChange) onChange({ [fieldId]: value }, fieldId);
+  };
+  const onBlur = (value, fieldId = id) => {
+    if (handleBlur) handleBlur({ [fieldId]: value }, fieldId);
   };
   if (!input) {
     return <Text>{`Invalid field type: ${inputType}`}</Text>;
@@ -122,6 +131,7 @@ const FormField = ({
   if (input?.props?.answers) inputCompProps.answers = answers;
   if (input?.props?.validation) inputCompProps.validationErrors = validationErrors;
   if (input && input.changeEvent) inputCompProps[input.changeEvent] = saveInput;
+  if (input && input.blurEvent) inputCompProps[input.blurEvent] = onBlur;
 
   /** Checks if the field is conditional on another input, and if so,
    * evaluates whether this field should be active or not */
@@ -188,6 +198,8 @@ FormField.propTypes = {
    * Should handle objects on the form { id : value }, where value is the new value and id is the uuid for the input-field.
    */
   onChange: PropTypes.func,
+  /** What happens when an input field looses focus.  */
+  handleBlur: PropTypes.func,
   /**
    * sets the value, since the input field component should be managed.
    */

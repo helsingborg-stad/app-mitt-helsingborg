@@ -100,6 +100,7 @@ interface Props {
   index?: number;
   editable?: boolean;
   changeFromInput: (value: string | number | boolean) => void;
+  onBlur?: (value: Record<string, any> | string | number | boolean) => void;
   removeItem: () => void;
   color: string;
   validationError?: { isValid: boolean; message: string };
@@ -110,11 +111,15 @@ const SummaryListItem: React.FC<Props> = ({
   value,
   index,
   changeFromInput,
+  onBlur,
   editable,
   removeItem,
   color,
   validationError,
 }) => {
+  const onInputBlur = () => {
+    if(onBlur) onBlur(value);
+  }
   const inputComponent = (input: SummaryListItemType, editable: boolean) => {
     switch (input.type) {
       case 'text':
@@ -123,6 +128,7 @@ const SummaryListItem: React.FC<Props> = ({
           <SmallInput
             value={value as string}
             onChangeText={changeFromInput}
+            onBlur={onInputBlur}
             editable={editable}
           />
         );
@@ -132,6 +138,7 @@ const SummaryListItem: React.FC<Props> = ({
           <SmallInput
             keyboardType="numeric"
             value={value as string}
+            onBlur={onInputBlur}
             onChangeText={changeFromInput}
             editable={editable}
           />
@@ -143,6 +150,7 @@ const SummaryListItem: React.FC<Props> = ({
             value={value as string}
             mode="date"
             selectorProps={{ locale: "sv" }}
+            onBlur={onInputBlur}
             onSelect={changeFromInput}
             color={color}
             style={dateStyle}
@@ -158,6 +166,7 @@ const SummaryListItem: React.FC<Props> = ({
         return (
           <SmallInput
             value={value as string}
+            onBlur={onInputBlur}
             onChangeText={changeFromInput}
             editable={editable}
           />
@@ -200,6 +209,7 @@ SummaryListItem.propTypes = {
    * What should happen to update the values
    */
   changeFromInput: PropTypes.func,
+  onBlur: PropTypes.func,
   /**
    * The function to remove the row and clear the associated input
    */

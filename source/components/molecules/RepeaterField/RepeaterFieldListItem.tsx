@@ -84,6 +84,7 @@ interface Props {
   value: Record<string, string | number>;
   error?: Record<string, {isValid: boolean, validationMessage: string}>;
   changeFromInput: (input: InputRow) => (text: string | number) => void;
+  onBlur?: () => void;
   removeItem: () => void;
   color: string;
 }
@@ -94,6 +95,7 @@ const RepeaterFieldListItem: React.FC<Props> = ({
   value,
   error,
   changeFromInput,
+  onBlur,
   removeItem,
   color,
 }) => {
@@ -108,6 +110,7 @@ const RepeaterFieldListItem: React.FC<Props> = ({
             colorSchema={validColorSchema}
             value={value[input.id] || ''}
             onChangeText={changeFromInput(input)}
+            onBlur={onBlur}
           />
         );
       case 'number':
@@ -118,6 +121,7 @@ const RepeaterFieldListItem: React.FC<Props> = ({
             keyboardType="numeric"
             value={value[input.id] || ''}
             onChangeText={changeFromInput(input)}
+            onBlur={onBlur}
           />
         );
       case 'date':
@@ -129,6 +133,7 @@ const RepeaterFieldListItem: React.FC<Props> = ({
             onSelect={changeFromInput(input)}
             color={color}
             style={dateStyle}
+            onBlur={onBlur}
           />
         );
       default:
@@ -138,6 +143,7 @@ const RepeaterFieldListItem: React.FC<Props> = ({
             textAlign="right"
             value={value[input.id] || ''}
             onChangeText={changeFromInput(input)}
+            onBlur={onBlur}
           />
         );
     }
