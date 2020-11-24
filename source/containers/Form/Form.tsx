@@ -64,7 +64,9 @@ const Form: React.FC<Props> = ({
     allQuestions: [],
   };
 
-  const { formState, formNavigation, handleInputChange, handleSubmit } = useForm(initialState);
+  const { formState, formNavigation, handleInputChange, handleSubmit, handleBlur } = useForm(
+    initialState
+  );
 
   formNavigation.close = () => {
     onClose();
@@ -91,6 +93,7 @@ const Form: React.FC<Props> = ({
         formNavigation={formNavigation}
         onSubmit={() => handleSubmit(onSubmit)}
         onFieldChange={handleInputChange}
+        onFieldBlur={handleBlur}
         updateCaseInContext={updateCaseInContext}
         currentPosition={formState.currentPosition}
         totalStepNumber={formState.numberOfMainSteps}

@@ -116,12 +116,18 @@ function useForm(initialState: FormReducerState) {
 
   function closeForm() {}
   /**
+   * Function to trigger when a form field looses focus.
+   */
+  const handleBlur = (answer: Record<string, any>, questionId) => {
+    dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId } });
+  };
+  /**
    * Function for updating answer.
    */
   const handleInputChange = (answer: Record<string, any>, questionId: string) => {
     dispatch({ type: 'UPDATE_ANSWER', payload: answer });
 
-    dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId } });
+    // dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId } });
   };
 
   const formNavigation = {
@@ -139,6 +145,7 @@ function useForm(initialState: FormReducerState) {
     formState,
     formNavigation,
     handleInputChange,
+    handleBlur,
     handleSubmit,
   };
 }

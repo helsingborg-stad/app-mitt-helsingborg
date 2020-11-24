@@ -51,6 +51,7 @@ function Step({
   formNavigation,
   onSubmit,
   onFieldChange,
+  onFieldBlur,
   isBackBtnVisible,
   updateCaseInContext,
   currentPosition,
@@ -126,6 +127,7 @@ function Step({
                     <FormField
                       key={`${field.id}`}
                       onChange={status === 'ongoing' ? onFieldChange : null}
+                      handleBlur={onFieldBlur}
                       inputType={field.type}
                       value={answers[field.id] || ''}
                       answers={answers}
@@ -202,6 +204,8 @@ Step.propTypes = {
    * The function to handle field input changes
    */
   onFieldChange: PropTypes.func,
+  /** The function to handle fields losing focus */
+  onFieldBlur: PropTypes.func,
   /*
    * A object with form navigation actions
    */

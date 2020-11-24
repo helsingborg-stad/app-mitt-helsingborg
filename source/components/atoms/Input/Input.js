@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
+import styled, { useTheme } from 'styled-components/native';
 import Text from '../Text';
 
-const StyledInput = styled.TextInput`
+const StyledTextInput = styled.TextInput`
   width: 100%;
   font-weight: ${({ theme }) => theme.fontWeights[1]}
   background-color: ${({ theme, colorSchema }) => theme.colors.complementary[colorSchema][2]};
@@ -31,11 +31,19 @@ const StyledErrorText = styled(Text)`
 `;
 
 const Input = props => {
-  const { error } = props;
+  const { value, onBlur, error } = props;
 
+  const handleBlur = () => {
+    if (onBlur) onBlur(value);
+  };
+  const theme = useTheme();
   return (
     <>
-      <StyledInput {...props} />
+      <StyledTextInput
+        {...props}
+        onBlur={handleBlur}
+        placeholderTextColor={theme.colors.neutrals[1]}
+      />
       {error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
     </>
   );
