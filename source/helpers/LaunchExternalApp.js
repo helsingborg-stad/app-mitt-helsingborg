@@ -5,8 +5,6 @@ import { Linking, Platform } from 'react-native';
  * @param {string} phone
  */
 export const launchPhone = phone => {
-  console.log('TRIGGER launch phone app');
-
   let phoneNumber = phone;
   if (Platform.OS !== 'android') {
     phoneNumber = `telprompt:${phone}`;
@@ -29,8 +27,6 @@ export const launchPhone = phone => {
  * @param {string} email
  */
 export const launchEmail = email => {
-  console.log('TRIGGER launch email app');
-
   const mailto = `mailto:${email}`;
   Linking.canOpenURL(mailto)
     .then(supported => {
