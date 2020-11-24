@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Button, Text, Heading, Progressbar } from 'app/components/atoms';
-import { View } from 'react-native';
 import { colorPalette } from '../../../styles/palette';
 
 const Container = styled.View`
