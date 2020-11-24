@@ -78,9 +78,10 @@ function EditableList({
   value,
   onInputChange,
   inputIsEditable,
+  startEditable,
   error,
 }) {
-  const [editable, setEditable] = useState(false);
+  const [editable, setEditable] = useState(startEditable);
   const [state, setState] = useState(getInitialState(inputs, value));
 
   const changeEditable = () => {
@@ -204,10 +205,10 @@ EditableList.propTypes = {
    * Decides of the inputs are editable or not
    */
   inputIsEditable: PropTypes.bool,
-
+  /** Whether the inputs starts editable or not */
+  startEditable: PropTypes.bool,
   /** Validation error object */
   error: PropTypes.object,
-
   /**
    * The color schema/theme of the component
    */
@@ -216,6 +217,7 @@ EditableList.propTypes = {
 
 EditableList.defaultProps = {
   inputIsEditable: true,
+  startEditable: false,
   inputs: [],
   colorSchema: 'blue',
 };
