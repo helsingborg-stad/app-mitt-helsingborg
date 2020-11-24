@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
+import icons from 'source/helpers/Icons';
 import { formatUpdatedAt, getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 
 const Container = styled.ScrollView`
@@ -119,12 +120,31 @@ const CaseSummary = props => {
           <View>
             <SummaryHeading type="h5">Mina kontaktpersoner</SummaryHeading>
             {administrators.map(({ name, title, phone, email }) => (
-              <Card colorSchema={colorSchema}>
+              <Card colorSchema="red">
                 <Card.Body shadow color="neutral">
-                  {name && <Card.Title>{name}</Card.Title>}
-                  {title && <Card.SubTitle>{title}</Card.SubTitle>}
-                  {phone && <Card.Text>{phone}</Card.Text>}
-                  {email && <Card.Text>{email}</Card.Text>}
+                  <Card.Section>
+                    <Card.Image
+                      style={{ width: 50, height: 50 }}
+                      circle
+                      source={icons.ICON_CONTACT_PERSON}
+                    />
+                    {name && <Card.Title>{name}</Card.Title>}
+                    {title && <Card.SubTitle>{title}</Card.SubTitle>}
+                  </Card.Section>
+
+                  {phone && (
+                    <Card.Button colorSchema="neutral">
+                      <Icon name="phone" />
+                      <Text>{phone}</Text>
+                    </Card.Button>
+                  )}
+
+                  {email && (
+                    <Card.Button colorSchema="neutral">
+                      <Icon name="email" />
+                      <Text>{email}</Text>
+                    </Card.Button>
+                  )}
                 </Card.Body>
               </Card>
             ))}
