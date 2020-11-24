@@ -1,5 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
+import { ScrollView } from 'react-native';
 import StoryWrapper from '../StoryWrapper';
 import EditableList from './EditableList';
 
@@ -23,6 +24,19 @@ const inputs = [
     value: 'Helsingborgshem',
   },
   {
+    key: 'key-5',
+    label: 'Person',
+    type: 'select',
+    value: '',
+    choices: [
+      { label: 'Ehsan', value: 'ehsan' },
+      { label: 'Jonatan', value: 'jonatan' },
+      { label: 'Dan', value: 'dan' },
+      { label: 'Teddy', value: 'teddy' },
+      { label: 'Jacob', value: 'jacob' },
+    ],
+  },
+  {
     key: 'key-4',
     label: 'Inflyttningsdatum',
     type: 'date',
@@ -43,15 +57,20 @@ storiesOf('EditableList', module).add('Default', () => (
 
 storiesOf('EditableList', module).add('Input is editable', () => (
   <StoryWrapper>
-    <EditableList onInputChange={() => {}} inputs={inputs} title="Editable List" />
+    <ScrollView>
+      <EditableList onInputChange={() => {}} inputs={inputs} title="Editable List" />
+      <EditableList onInputChange={() => {}} inputs={inputs} title="Start editable" startEditable />
+    </ScrollView>
   </StoryWrapper>
 ));
 
 storiesOf('EditableList', module).add('Color Schema', () => (
   <StoryWrapper>
-    <EditableList onInputChange={() => {}} inputs={inputs} title="Blue (Default)" />
-    <EditableList colorSchema="red" onInputChange={() => {}} inputs={inputs} title="Red" />
-    <EditableList colorSchema="purple" onInputChange={() => {}} inputs={inputs} title="Purple" />
-    <EditableList colorSchema="green" onInputChange={() => {}} inputs={inputs} title="Green" />
+    <ScrollView>
+      <EditableList onInputChange={() => {}} inputs={inputs} title="Blue (Default)" />
+      <EditableList colorSchema="red" onInputChange={() => {}} inputs={inputs} title="Red" />
+      <EditableList colorSchema="purple" onInputChange={() => {}} inputs={inputs} title="Purple" />
+      <EditableList colorSchema="green" onInputChange={() => {}} inputs={inputs} title="Green" />
+    </ScrollView>
   </StoryWrapper>
 ));

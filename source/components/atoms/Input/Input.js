@@ -1,9 +1,9 @@
 import React from 'react';
-import { TextInput } from 'react-native';
 import PropTypes from 'prop-types';
-import styled, { css } from 'styled-components/native';
+import styled from 'styled-components/native';
+import Text from '../Text';
 
-const input = css`
+const StyledInput = styled.TextInput`
   width: 100%;
   font-weight: ${({ theme }) => theme.fontWeights[1]}
   background-color: ${({ theme, colorSchema }) => theme.colors.complementary[colorSchema][2]};
@@ -22,17 +22,34 @@ const input = css`
   ${props => (props.center ? 'text-align: center;' : null)}
 `;
 
-const Input = styled(TextInput).attrs(props => ({
-  placeholderTextColor: props.theme.colors.neutrals[1],
-}))`
-  ${input}
+const StyledErrorText = styled(Text)`
+  font-family: Roboto;
+  font-size: 16px;
+  color: ${props => props.theme.textInput.errorTextColor}
+  font-weight: ${({ theme }) => theme.fontWeights[1]};
+  padding-top: 8px;
 `;
+
+const Input = props => {
+  const { error } = props;
+
+  return (
+    <>
+      <StyledInput {...props} />
+      {error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
+    </>
+  );
+};
 
 Input.propTypes = {
   /**
    * Sets the color schema for the component, default is blue.
    */
   colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
+  /**
+   * Object with the validation result (isValid) and message to be displayed if validation failed.
+   */
+  error: PropTypes.shape({ isValid: PropTypes.bool, message: PropTypes.string }),
 };
 
 Input.defaultProps = {
@@ -40,4 +57,3 @@ Input.defaultProps = {
 };
 
 export default Input;
-export { input };

@@ -5,7 +5,6 @@ import styled from 'styled-components/native';
 import Heading from '../../atoms/Heading';
 import Text from '../../atoms/Text';
 import Icon from '../../atoms/Icon';
-import shadow from '../../../styles/shadow';
 import HeaderNav from './HeaderNav';
 import Button from '../../atoms/Button/Button';
 
@@ -19,18 +18,19 @@ const BackButton = styled(Button)`
 const HeaderContainer = styled.View`
   padding: 16px;
   justify-content: flex-end;
-  background-color: white;
-  ${() => shadow[1]}
+  background-color: ${props => props.theme.colors.neutrals[5]};
+  border-bottom-color: ${props => props.theme.border.default};
+  border-bottom-width: 1px;
 `;
 
 const HeaderHeading = styled(Heading)`
   margin-top: 4px;
-  color: ${props => props.theme.heading[props.color][1]};
+  color: ${props => props.theme.colors.neutrals[0]};
 `;
 
 const HeaderContent = styled.View`
   justify-content: flex-end;
-  height: 130px;
+  height: 110px;
 `;
 
 const Separator = styled.View`
@@ -50,7 +50,11 @@ const Header = ({ message, title, themeColor, navItems, backButton }) => (
         </BackButton>
       )}
       {message && <Text>{message}</Text>}
-      {title && <HeaderHeading color={themeColor}>{title}</HeaderHeading>}
+      {title && (
+        <HeaderHeading type="h1" color={themeColor}>
+          {title}
+        </HeaderHeading>
+      )}
     </HeaderContent>
     {navItems && (
       <View>

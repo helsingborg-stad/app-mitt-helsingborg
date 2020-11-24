@@ -691,6 +691,9 @@ const theme = {
       inputText: '#FFFFFF',
     },
   },
+  textInput: {
+    errorTextColor: '#DD6161',
+  },
 };
 
 /**

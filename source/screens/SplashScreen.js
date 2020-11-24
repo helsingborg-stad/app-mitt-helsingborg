@@ -39,7 +39,7 @@ function SplashScreen(props) {
         if (await isUserAuthenticated()) {
           handleLogin();
           await handleAddProfile();
-          navigate('App', { screen: 'Home' });
+          navigate('App', { screen: 'UserEvents' });
         } else {
           await handleLogout();
           handleRemoveProfile();

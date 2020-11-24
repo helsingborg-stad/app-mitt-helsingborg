@@ -35,8 +35,7 @@ const StepFooter = ({
   useEffect(() => {
     const signCase = () => {
       if (onUpdate) onUpdate(answers);
-      if (updateCaseInContext)
-        updateCaseInContext(answers, 'submitted', currentPosition.currentMainStep);
+      if (updateCaseInContext) updateCaseInContext(answers, 'submitted', currentPosition);
       if (formNavigation.next) formNavigation.next();
     };
 
@@ -69,7 +68,7 @@ const StepFooter = ({
         return () => {
           if (onUpdate && caseStatus === 'ongoing') onUpdate(answers);
           if (updateCaseInContext && caseStatus === 'ongoing')
-            updateCaseInContext(answers, 'ongoing', currentPosition.currentMainStep);
+            updateCaseInContext(answers, 'ongoing', currentPosition);
           if (formNavigation.next) formNavigation.next();
         };
       }

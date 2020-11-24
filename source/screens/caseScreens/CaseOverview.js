@@ -1,93 +1,181 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Heading, Text, Button } from 'app/components/atoms';
-import { ScreenWrapper } from 'app/components/molecules';
-import { CaseState, caseStatus, caseTypes } from 'app/store/CaseContext';
+import { Icon, Text } from 'app/components/atoms';
+import { Card, Header, ScreenWrapper } from 'app/components/molecules';
+import { CaseDispatch, CaseState, caseStatus, caseTypes } from 'app/store/CaseContext';
 import FormContext from 'app/store/FormContext';
 import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useState } from 'react';
+import icons from 'source/helpers/Icons';
 import styled from 'styled-components/native';
-import { CaseTypeListItem } from '../../components/molecules/ListItem';
 import { formatUpdatedAt } from '../../helpers/DateHelpers';
 
-const CaseOverviewWrapper = styled(ScreenWrapper)`
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 40px;
-  padding-bottom: 0;
-  background-color: #f5f5f5;
-`;
 const Container = styled.ScrollView`
+  flex: 1;
   padding-left: 16px;
   padding-right: 16px;
 `;
-const ButtonContainer = styled.View`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 25px;
-  width: 100%;
-`;
-const List = styled.View`
-  margin-top: 24px;
-`;
-const ListHeading = styled(Heading)`
+
+const ListHeading = styled(Text)`
   margin-left: 4px;
   margin-bottom: 8px;
 `;
 
-const computeCaseComponent = (status, latestCase, navigation) => {
-  let updatedAt = '';
-  if (latestCase) {
-    updatedAt = formatUpdatedAt(latestCase.updatedAt);
-  }
+const Message = styled(Card)`
+  margin-top: 32px;
+  margin-bottom: 32px;
+`;
+
+const colorSchema = 'red';
+
+/**
+ * Returns a case card component depending on it's status
+ * @param {string} status
+ * @param {obj} latestCase
+ * @param {obj} form
+ * @param {obj} caseType
+ * @param {obj} navigation
+ * @param {func} createCase
+ */
+const computeCaseComponent = (status, latestCase, form, caseType, navigation, createCase) => {
+  const updatedAt = latestCase?.updatedAt ? formatUpdatedAt(latestCase.updatedAt) : '';
+  const currentStep = latestCase?.currentStep?.currentMainStep || '';
+  const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
 
   switch (status) {
+    case caseStatus.onlyOldCases:
     case caseStatus.untouched:
-      return <Text small>Inga ärenden</Text>;
+      return (
+        <Card colorSchema={colorSchema}>
+          <Card.Body shadow color="neutral">
+            <Card.Image source={icons[caseType.icon]} />
+            <Card.Title>{caseType.name}</Card.Title>
+            <Card.Button
+              onClick={async () => {
+                createCase(
+                  form,
+                  async newCase => {
+                    navigation.navigate('Form', { caseData: newCase });
+                  },
+                  true
+                );
+              }}
+            >
+              <Text>Sök ekonomiskt bistånd</Text>
+              <Icon name="arrow-forward" />
+            </Card.Button>
+          </Card.Body>
+        </Card>
+      );
 
     case caseStatus.unfinishedNoCompleted:
     case caseStatus.unfinished:
       return (
         <>
-          <Text small style={{ color: 'red' }}>
-            Påbörjad ansökan, uppdaterad {updatedAt}
-          </Text>
-          <ButtonContainer>
-            <Button
-              color="orange"
-              onClick={() => {
-                navigation.navigate('Form', { caseId: latestCase.id });
+          <ListHeading type="h5">Aktiva</ListHeading>
+
+          <Card colorSchema={colorSchema}>
+            <Card.Body
+              shadow
+              color="neutral"
+              onPress={() => {
+                navigation.navigate('UserEvents', {
+                  screen: caseType.navigateTo,
+                  params: {
+                    name: caseType.name,
+                    status,
+                    caseData: latestCase,
+                    form,
+                    totalSteps,
+                    currentStep,
+                    updatedAt,
+                    caseType,
+                  },
+                });
               }}
             >
-              <Text>Fortsätt ansökan</Text>
-            </Button>
-          </ButtonContainer>
+              <Card.Image source={icons[caseType.icon]} />
+              <Card.Title>{caseType.name}</Card.Title>
+              <Card.SubTitle>
+                Steg {currentStep} / {totalSteps}
+              </Card.SubTitle>
+              <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
+              <Card.Text italic>Senast uppdaterad {updatedAt}</Card.Text>
+              <Card.Button
+                onClick={() => {
+                  navigation.navigate('Form', { caseId: latestCase.id });
+                }}
+              >
+                <Text>Fortsätt ansökan</Text>
+                <Icon name="arrow-forward" />
+              </Card.Button>
+            </Card.Body>
+          </Card>
         </>
       );
 
     case caseStatus.recentlyCompleted:
-      return <Text small>Inskickad ansökan {updatedAt}</Text>;
-
-    case caseStatus.onlyOldCases:
-      return <Text small>Inga aktiva ärenden</Text>;
+      return (
+        <>
+          <ListHeading type="h5">Aktiva</ListHeading>
+          <Card colorSchema={colorSchema}>
+            <Card.Body shadow color="neutral">
+              <Card.Image source={icons[caseType.icon]} />
+              <Card.Title>{caseType.name}</Card.Title>
+              <Card.SubTitle>Inskickad</Card.SubTitle>
+              <Card.Text italic>Skickades in {updatedAt}</Card.Text>
+              <Card.Button
+                onClick={() => {
+                  navigation.navigate('UserEvents', {
+                    screen: caseType.navigateTo,
+                    params: {
+                      name: caseType.name,
+                      status,
+                      caseData: latestCase,
+                      form,
+                      totalSteps,
+                      currentStep,
+                      updatedAt,
+                      caseType,
+                    },
+                  });
+                }}
+              >
+                <Text>Visa ansökan</Text>
+                <Icon name="arrow-forward" />
+              </Card.Button>
+            </Card.Body>
+          </Card>
+        </>
+      );
 
     default:
       return null;
   }
 };
 
-const CaseOverview = ({ navigation }) => {
+/**
+ * Case overview screen
+ * @param {obj} props
+ */
+function CaseOverview({ navigation }) {
   const [caseItems, setCaseItems] = useState([]);
   const { getCasesByFormIds } = useContext(CaseState);
-  const { getFormIdsByFormTypes } = useContext(FormContext);
+  const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
+  const { createCase } = useContext(CaseDispatch);
 
   useEffect(() => {
     const updateItems = async () => {
       const updateItemsPromises = caseTypes.map(async caseType => {
         const formIds = await getFormIdsByFormTypes(caseType.formTypes);
-
         const [status, latestCase, relevantCases] = await getCasesByFormIds(formIds);
-        const component = computeCaseComponent(status, latestCase, navigation);
+        const form = await getForm(latestCase?.formId || formIds[0]);
+        const component = computeCaseComponent(
+          status,
+          latestCase,
+          form,
+          caseType,
+          navigation,
+          createCase
+        );
         return { caseType, status, latestCase, component, cases: relevantCases };
       });
 
@@ -96,54 +184,26 @@ const CaseOverview = ({ navigation }) => {
       });
     };
     updateItems();
-  }, [getCasesByFormIds, getFormIdsByFormTypes, navigation]);
+  }, [createCase, getCasesByFormIds, getForm, getFormIdsByFormTypes, navigation]);
 
   return (
-    <CaseOverviewWrapper>
+    <ScreenWrapper>
+      <Header title="Mina ärenden" />
       <Container>
-        <List>
-          <ListHeading type="h3">Aktiva ansökningar</ListHeading>
-          {caseItems?.length > 0 &&
-            caseItems
-              .filter(
-                item =>
-                  item.status !== caseStatus.untouched && item.status !== caseStatus.onlyOldCases
-              )
-              .map(item => {
-                const { caseType, component } = item;
-                return (
-                  <CaseTypeListItem
-                    key={caseType.name}
-                    title={caseType.name}
-                    icon={caseType.icon}
-                    onClick={() => {
-                      navigation.navigate('UserEvents', {
-                        screen: caseType.navigateTo,
-                        params: { caseType },
-                      });
-                    }}
-                  >
-                    {component}
-                  </CaseTypeListItem>
-                );
-              })}
-        </List>
+        <Message colorSchema={colorSchema}>
+          <Card.Body outlined>
+            <Card.Title>Hej!</Card.Title>
+            <Card.Text>
+              Helsingborgs Stad testar att göra självservice lite mer personlig och i första steget
+              så är det just Ekonomiskt Bistånd som står i fokus.
+            </Card.Text>
+          </Card.Body>
+        </Message>
+        {caseItems.map(({ component }) => component)}
       </Container>
-      <ButtonContainer style={{ marginBottom: 20 }}>
-        <Button
-          color="green"
-          onClick={() => {
-            navigation.navigate('UserEvents', {
-              screen: 'Services',
-            });
-          }}
-        >
-          <Text>Starta ny ansökan</Text>
-        </Button>
-      </ButtonContainer>
-    </CaseOverviewWrapper>
+    </ScreenWrapper>
   );
-};
+}
 
 CaseOverview.propTypes = {
   navigation: PropTypes.object,

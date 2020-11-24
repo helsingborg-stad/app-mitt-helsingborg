@@ -5,9 +5,8 @@ import Step from '../../components/organisms/Step/Step';
 import { Step as StepType, StepperActions } from '../../types/FormTypes';
 import { CaseStatus } from '../../types/CaseType';
 import { User } from '../../types/UserTypes';
-import useForm, { FormReducerState } from './hooks/useForm';
+import useForm, { FormReducerState, FormPosition } from './hooks/useForm';
 import Modal from '../../components/molecules/Modal';
-
 
 const FormContainer = styled.View`
   flex: 1;
@@ -15,7 +14,7 @@ const FormContainer = styled.View`
 `;
 
 interface Props {
-  startAt: number;
+  initialPosition?: FormPosition;
   steps: StepType[];
   connectivityMatrix: StepperActions[][];
   user: User;
@@ -24,7 +23,11 @@ interface Props {
   onClose: () => void;
   onSubmit: () => void;
   onStart: () => any;
-  updateCaseInContext: (data: Record<string, any>, status: CaseStatus, currentStep: number) => void;
+  updateCaseInContext: (
+    data: Record<string, any>,
+    status: CaseStatus,
+    currentPosition: FormPosition
+  ) => void;
 }
 
 /**
@@ -33,7 +36,7 @@ interface Props {
  * data and modify the data in your application.
  */
 const Form: React.FC<Props> = ({
-  startAt,
+  initialPosition,
   steps,
   connectivityMatrix,
   user,
@@ -44,15 +47,15 @@ const Form: React.FC<Props> = ({
   status,
   updateCaseInContext,
 }) => {
-  const currentPosition = {
-    index: startAt,
+  const defaultInitialPosition: FormPosition = {
+    index: 0,
     level: 0,
     currentMainStep: 1,
-    currentMainStepIndex: startAt,
+    currentMainStepIndex: 0,
   };
   const initialState: FormReducerState = {
     submitted: false,
-    currentPosition,
+    currentPosition: initialPosition || defaultInitialPosition,
     steps,
     user,
     formAnswers: initialAnswers,
@@ -112,9 +115,14 @@ const Form: React.FC<Props> = ({
 
 Form.propTypes = {
   /**
-   * Number that decides which step to start on in the form.
+   * FormPosition object that determines where to start the form.
    */
-  startAt: PropTypes.number,
+  initialPosition: PropTypes.shape({
+    index: PropTypes.number,
+    level: PropTypes.number,
+    currentMainStep: PropTypes.number,
+    currentMainStepIndex: PropTypes.number,
+  }),
   /**
    * Function to handle a close action in the form.
    */
@@ -151,7 +159,6 @@ Form.propTypes = {
 };
 
 Form.defaultProps = {
-  startAt: 1,
   initialAnswers: {},
 };
 
