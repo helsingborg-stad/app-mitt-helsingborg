@@ -193,8 +193,14 @@ Card.Title = ({ children, colorSchema, ...props }) => (
  * @param {props} props
  */
 Card.Section = ({ children, colorSchema, color, ...props }) => {
-  const element = React.cloneElement(<Card.Body />, { colorSchema, color, ...props }, children);
-  return element;
+  // Reset padding for sections
+  const style = { paddingLeft: 0, paddingRight: 0, paddingTop: 0, paddingBottom: 0 };
+  const sectionElement = React.cloneElement(
+    <Card.Body />,
+    { colorSchema, color, style, ...props },
+    children
+  );
+  return sectionElement;
 };
 
 /**
