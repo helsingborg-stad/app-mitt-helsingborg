@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Text, Heading } from 'app/components/atoms';
+import StepConfirmation from '../StepConfirmation';
 
 const StepDescriptionWrapper = styled.View`
   margin-left: 25px;
@@ -22,6 +23,7 @@ const StepDescriptionTagline = styled(Text)`
 const StepDescriptionText = styled(Text)`
   line-height: ${props => props.theme.typography[props.type].lineHeight}px;
   margin-top: 16px;
+  font-size: ${props => props.theme.fontSizes[3]};
 `;
 
 function StepDescription({
@@ -34,17 +36,25 @@ function StepDescription({
   totalStepNumber,
 }) {
   return (
-    <StepDescriptionWrapper style={style}>
-      {tagline.length !== 0 && (
-        <StepDescriptionTagline colorSchema={colorSchema}>
-          {tagline}
-          {tagline && currentStep && totalStepNumber && ' • '}
-          {currentStep && totalStepNumber && `${currentStep} / ${totalStepNumber}`}
-        </StepDescriptionTagline>
-      )}
-      <Heading>{heading}</Heading>
-      {text.length !== 0 && <StepDescriptionText>{text}</StepDescriptionText>}
-    </StepDescriptionWrapper>
+    <>
+      <StepDescriptionWrapper style={style}>
+        {tagline.length !== 0 && (
+          <StepDescriptionTagline colorSchema={colorSchema}>
+            {tagline}
+
+            {tagline && currentStep && totalStepNumber && currentStep !== totalStepNumber && ' • '}
+            {currentStep &&
+              totalStepNumber &&
+              currentStep !== totalStepNumber &&
+              `${currentStep} / ${totalStepNumber}`}
+          </StepDescriptionTagline>
+        )}
+        <Heading>{heading}</Heading>
+        {text.length !== 0 && <StepDescriptionText>{text}</StepDescriptionText>}
+      </StepDescriptionWrapper>
+
+      {currentStep === totalStepNumber && <StepConfirmation colorSchema={colorSchema} />}
+    </>
   );
 }
 
