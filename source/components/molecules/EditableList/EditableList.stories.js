@@ -57,7 +57,10 @@ storiesOf('EditableList', module).add('Default', () => (
 
 storiesOf('EditableList', module).add('Input is editable', () => (
   <StoryWrapper>
-    <EditableList onInputChange={() => {}} inputs={inputs} title="Editable List" />
+    <ScrollView>
+      <EditableList onInputChange={() => {}} inputs={inputs} title="Editable List" />
+      <EditableList onInputChange={() => {}} inputs={inputs} title="Start editable" startEditable />
+    </ScrollView>
   </StoryWrapper>
 ));
 
