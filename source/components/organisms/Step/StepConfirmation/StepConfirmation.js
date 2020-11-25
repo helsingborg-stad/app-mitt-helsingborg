@@ -6,9 +6,7 @@ import { Text, Icon } from 'app/components/atoms';
 import icons from 'source/helpers/Icons';
 import { launchPhone } from 'source/helpers/LaunchExternalApp';
 
-const Container = styled.View`
-  padding: 24px;
-`;
+const Container = styled.View``;
 
 const CardBody = styled(Card.Body)`
   padding-top: 8px;
@@ -19,27 +17,27 @@ const StepConfirmation = ({ colorSchema }) => (
   <Container>
     <Card colorSchema="neutral">
       <CardBody>
-        <Card.Image source={icons.ICON_EKB} />
+        <Card.Image source={icons.ICON_CASE_SUCCESS_1} />
         <Card.Text>
-          Blir din ansökan godkänd får du besked om vilket datum som utbetalningen sker.{' '}
+          Blir din ansökan godkänd får du besked om vilket datum som utbetalningen sker.
         </Card.Text>
       </CardBody>
     </Card>
 
     <Card colorSchema="neutral">
       <CardBody>
-        <Card.Image source={icons.ICON_EKB} />
+        <Card.Image source={icons.ICON_CASE_SUCCESS_2} />
         <Card.Text>
-          Om din ansökan blir delvis godkänd är det vissa kostnader du inte får ersättning för.{' '}
+          Om din ansökan blir delvis godkänd är det vissa kostnader du inte får ersättning för.
         </Card.Text>
       </CardBody>
     </Card>
 
     <Card colorSchema="neutral">
       <CardBody>
-        <Card.Image source={icons.ICON_EKB} />
+        <Card.Image source={icons.ICON_CASE_SUCCESS_3} />
         <Card.Text>
-          Blir din ansökan däremot avslagen får du inga pengar. Ett avslag går att överklaga.{' '}
+          Blir din ansökan däremot avslagen får du inga pengar. Ett avslag går att överklaga.
         </Card.Text>
       </CardBody>
     </Card>
