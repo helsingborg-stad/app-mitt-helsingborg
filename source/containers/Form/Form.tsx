@@ -60,6 +60,7 @@ const Form: React.FC<Props> = ({
     user,
     formAnswers: initialAnswers,
     validations: {},
+    dirtyFields: {},
     connectivityMatrix,
     allQuestions: [],
   };

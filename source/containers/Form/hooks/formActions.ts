@@ -226,11 +226,13 @@ export function getAllQuestions(state: FormReducerState) {
  * @param state State of current form.
  * @param answer User input / question.
  * @param questionId  Id of answered question.
+ * @param checkIfDirty whether to only validate if the field is dirty or not.
  */
 export function validateAnswer(
   state: FormReducerState,
   answer: Record<string, any>,
-  questionId: string
+  questionId: string,
+  checkIfDirty: boolean = false,
 ) {
   const { allQuestions } = state;
 
@@ -242,7 +244,7 @@ export function validateAnswer(
 
   if (['text', 'number', 'date'].includes(question.type)) {
     const { validation } = question;
-    if (validation) {
+    if (validation && ((checkIfDirty && state.dirtyFields?.[questionId]) || !checkIfDirty)) {
       const [isValid, validationMessage] = validateInput(answer[questionId], validation.rules);
 
       return {
@@ -257,7 +259,7 @@ export function validateAnswer(
   if (question.type === 'editableList') {
     const validationResults: Record<string, {isValid:boolean, validationMessage: string}> = {};
     question.inputs.forEach(input => {
-      if (input.validation && answer[questionId][input.key] !== undefined) {
+      if (input.validation && answer[questionId][input.key] !== undefined && ((checkIfDirty && state.dirtyFields?.[questionId]?.[input.key]) || !checkIfDirty)) {
         const [isValid, validationMessage] = validateInput(
           answer[questionId][input.key],
           input.validation.rules
@@ -276,10 +278,10 @@ export function validateAnswer(
   if (question.type === 'repeaterField') {
     const validationResults: Record<string, {isValid:boolean, validationMessage: string}>[] = [];
     if (answer[questionId]?.length > 0){
-      (answer[questionId] as Record<string, string>[]).forEach(a => {
+      (answer[questionId] as Record<string, string>[]).forEach((a,index) => {
         const localValidationResults = {};
         question.inputs.forEach(input => {
-          if(input.validation && a[input.id] !== undefined){
+          if(input.validation && a[input.id] !== undefined && ((checkIfDirty && state.dirtyFields?.[questionId]?.[index]?.[input.id]) || !checkIfDirty)){
             const [isValid, validationMessage] = validateInput(a[input.id], input.validation.rules);
             localValidationResults[input.id] = { isValid, validationMessage};
           }
@@ -292,6 +294,73 @@ export function validateAnswer(
       validations: {
         ...state.validations,
         [questionId]: validationResults,
+      },
+    };
+  }
+  return state;
+}
+
+/**
+ * Dirty a field, i.e. mark that it's been touched by the user. Used for validation. 
+ *
+ * @param state State of current form.
+ * @param answer User input / question.
+ * @param questionId  Id of answered question.
+ */
+export function dirtyField(
+  state: FormReducerState,
+  answer: Record<string, any>,
+  questionId: string
+) {
+  const { allQuestions } = state;
+  // Return if question or question ID is undefined.
+  if (!allQuestions || !questionId) return state;
+
+  const question = allQuestions.find(q => q.id === questionId);
+  if (!question) return state;
+
+  if (['text', 'number', 'date'].includes(question.type)) {
+    return {
+      ...state,
+      dirtyFields: {
+        ...state.dirtyFields,
+        [questionId]: true,
+      },
+    };
+  }
+  if (question.type === 'editableList') {
+    const inputs: Record<string, boolean> = {};
+    question.inputs.forEach(input => {
+      if (input.validation && answer[questionId][input.key] !== undefined) {
+        inputs[input.key] = true;
+      }
+    });
+    return {
+      ...state,
+      dirtyFields: {
+        ...state.dirtyFields,
+        [questionId]: inputs,
+      },
+    };
+  }
+  if (question.type === 'repeaterField') {
+    const inputs: Record<string, boolean>[] = [];
+    if (answer[questionId]?.length > 0){
+      (answer[questionId] as Record<string, string>[]).forEach(a => {
+        const localDirtyFields: Record<string, boolean> = {};
+        question.inputs.forEach(input => {
+          if(input.validation && a[input.id] !== undefined){
+            localDirtyFields[input.id] = true;
+          }
+        });
+        inputs.push(localDirtyFields);
+      });
+    }
+    return {
+      ...state,
+      dirtyFields: {
+        ...state.dirtyFields,
+        [questionId]: inputs,
       },
     };
   }

@@ -18,6 +18,7 @@ export interface FormReducerState {
   connectivityMatrix: StepperActions[][];
   formAnswers: Record<string, any>;
   validations: Record<string, any>;
+  dirtyFields: Record<string, any>;
   numberOfMainSteps?: number;
 }
 
@@ -120,12 +121,14 @@ function useForm(initialState: FormReducerState) {
    */
   const handleBlur = (answer: Record<string, any>, questionId) => {
     dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId } });
+    dispatch({ type: 'DIRTY_FIELD', payload: { answer, id: questionId } });
   };
   /**
    * Function for updating answer.
    */
   const handleInputChange = (answer: Record<string, any>, questionId: string) => {
     dispatch({ type: 'UPDATE_ANSWER', payload: answer });
+    dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId, checkIfDirty: true } });
   };
 
   const formNavigation = {
