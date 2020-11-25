@@ -5,10 +5,15 @@ import { Text, Heading } from 'app/components/atoms';
 import StepConfirmation from '../StepConfirmation';
 
 const StepDescriptionWrapper = styled.View`
-  margin-left: 25px;
+  margin-left: 24px;
+  margin-right: 24px;
   margin-top: 76px;
   margin-bottom: 48px;
+`;
+
+const StepDescriptionContent = styled.View`
   width: 285px;
+  margin-bottom: 40px;
 `;
 
 const StepDescriptionTagline = styled(Text)`
@@ -36,8 +41,8 @@ function StepDescription({
   totalStepNumber,
 }) {
   return (
-    <>
-      <StepDescriptionWrapper style={style}>
+    <StepDescriptionWrapper style={style}>
+      <StepDescriptionContent>
         {tagline.length !== 0 && (
           <StepDescriptionTagline colorSchema={colorSchema}>
             {tagline}
@@ -51,10 +56,10 @@ function StepDescription({
         )}
         <Heading>{heading}</Heading>
         {text.length !== 0 && <StepDescriptionText>{text}</StepDescriptionText>}
-      </StepDescriptionWrapper>
-
+      </StepDescriptionContent>
+      {/* TODO: Replace hardcoded view with dynamically added data */}
       {currentStep === totalStepNumber && <StepConfirmation colorSchema={colorSchema} />}
-    </>
+    </StepDescriptionWrapper>
   );
 }
 
