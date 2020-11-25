@@ -99,6 +99,8 @@ const Outset = styled.View`
 `;
 
 const CardImage = styled.Image`
+  width: 80px;
+  height: 80px;
   ${({ circle }) => circle && `border-radius: 50px;`}
 `;
 
