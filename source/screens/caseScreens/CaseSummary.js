@@ -1,7 +1,9 @@
 import { Icon, Text } from 'app/components/atoms';
 import { Card, ScreenWrapper } from 'app/components/molecules';
+import { CaseState } from 'app/store/CaseContext';
+import FormContext from 'app/store/FormContext';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { formatUpdatedAt, getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
@@ -22,17 +24,48 @@ const SummaryHeading = styled(Text)`
  * Case summary screen
  * @param {obj} props
  */
-const CaseSummary = ({ navigation, route }) => {
-  const colorSchema = 'red';
-  const { caseData, updatedAt, currentStep, totalSteps, caseType } = route.params;
-  const { startDate, endDate } = caseData.details.period;
-  const { administrators } = caseData.details;
+const CaseSummary = props => {
+  const { getCase } = useContext(CaseState);
+  const { getForm } = useContext(FormContext);
+
+  const [caseData, setCaseData] = useState({});
+  const [form, setForm] = useState({});
+
+  const {
+    colorSchema,
+    navigation,
+    route: {
+      params: { id: caseId },
+    },
+  } = props;
+
+  const {
+    status,
+    currentStep: { currentMainStep: currentStep } = {},
+    details: { administrators, period: { startDate, endDate } = {} } = {},
+    updatedAt,
+  } = caseData;
+
+  const { name: formName } = form;
+  const totalSteps = form?.stepStructure?.length;
   const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(startDate, true);
+
+  useEffect(() => {
+    const caseData = getCase(caseId);
+    setCaseData(caseData);
+
+    const getFormObject = async id => {
+      setForm(await getForm(id));
+    };
+
+    getFormObject(caseData.formId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caseId, status]);
 
   return (
     <ScreenWrapper>
       <Container>
-        {caseData.status === 'submitted' && (
+        {status === 'submitted' && (
           <>
             <SummaryHeading type="h5">Aktuell period</SummaryHeading>
             <Card colorSchema={colorSchema}>
@@ -57,18 +90,18 @@ const CaseSummary = ({ navigation, route }) => {
           </>
         )}
 
-        {caseData.status === 'ongoing' && (
+        {status === 'ongoing' && (
           <>
             <SummaryHeading type="h5">Pågående ansökan</SummaryHeading>
 
             <Card colorSchema={colorSchema}>
               <Card.Body shadow color="neutral">
-                <Card.Title>{caseType.name}</Card.Title>
+                <Card.Title>{formName}</Card.Title>
                 <Card.SubTitle>
                   Steg {currentStep} / {totalSteps}
                 </Card.SubTitle>
                 <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
-                <Card.Text italic>Senast uppdaterad {updatedAt}</Card.Text>
+                <Card.Text italic>Senast uppdaterad {formatUpdatedAt(updatedAt)}</Card.Text>
                 <Card.Button
                   onClick={() => {
                     navigation.navigate('Form', { caseId: caseData.id });
@@ -117,32 +150,15 @@ const CaseSummary = ({ navigation, route }) => {
 };
 
 CaseSummary.propTypes = {
+  colorSchema: PropTypes.string,
+  route: PropTypes.object,
   navigation: PropTypes.shape({
     navigate: PropTypes.func,
   }),
-  route: PropTypes.shape({
-    params: PropTypes.shape({
-      caseData: PropTypes.shape({
-        details: PropTypes.shape({
-          administrators: PropTypes.shape({
-            map: PropTypes.func,
-          }),
-          period: PropTypes.shape({
-            startDate: PropTypes.any,
-            endDate: PropTypes.any,
-          }),
-        }),
-        id: PropTypes.any,
-        status: PropTypes.string,
-      }),
-      updatedAt: PropTypes.any,
-      currentStep: PropTypes.any,
-      totalSteps: PropTypes.any,
-      caseType: PropTypes.shape({
-        name: PropTypes.any,
-      }),
-    }),
-  }),
+};
+
+CaseSummary.defaultProps = {
+  colorSchema: 'red',
 };
 
 export default CaseSummary;
