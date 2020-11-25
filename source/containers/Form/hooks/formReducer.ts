@@ -12,6 +12,7 @@ import {
   computeNumberMainSteps,
   getAllQuestions,
   validateAnswer,
+  dirtyField,
 } from './formActions';
 
 type Action =
@@ -51,6 +52,10 @@ type Action =
     }
   | {
       type: 'VALIDATE_ANSWER';
+      payload: { answer: Record<string, any>; id: string; checkIfDirty?: boolean };
+    }
+  | {
+      type: 'DIRTY_FIELD';
       payload: { answer: Record<string, any>; id: string };
     }
   | {
@@ -122,7 +127,16 @@ function formReducer(state: FormReducerState, action: Action) {
     }
 
     case 'VALIDATE_ANSWER': {
-      return validateAnswer(state, action.payload.answer, action.payload.id);
+      return validateAnswer(
+        state,
+        action.payload.answer,
+        action.payload.id,
+        action.payload.checkIfDirty
+      );
+    }
+
+    case 'DIRTY_FIELD': {
+      return dirtyField(state, action.payload.answer, action.payload.id);
     }
 
     /**
