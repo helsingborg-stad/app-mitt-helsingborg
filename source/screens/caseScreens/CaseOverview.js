@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import icons from 'source/helpers/Icons';
 import styled from 'styled-components/native';
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { View, Animated, Easing } from 'react-native';
+import { Animated, Easing } from 'react-native';
 import { formatUpdatedAt } from '../../helpers/DateHelpers';
 
 const Container = styled.ScrollView`
@@ -82,6 +82,7 @@ const computeCaseComponent = (status, latestCase, form, caseType, navigation, cr
                   screen: caseType.navigateTo,
                   params: {
                     id: latestCase.id,
+                    name: caseType.name,
                   },
                 });
               }}
@@ -134,6 +135,7 @@ const computeCaseComponent = (status, latestCase, form, caseType, navigation, cr
                     screen: caseType.navigateTo,
                     params: {
                       id: latestCase.id,
+                      name: caseType.name,
                     },
                   });
                 }}
