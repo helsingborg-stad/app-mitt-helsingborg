@@ -66,7 +66,7 @@ const CaseSummary = props => {
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
-  React.useEffect(() => {
+  useEffect(() => {
     Animated.timing(fadeAnimation, {
       toValue: 1,
       easing: Easing.back(),
@@ -131,7 +131,7 @@ const CaseSummary = props => {
           <View>
             <SummaryHeading type="h5">Mina kontaktpersoner</SummaryHeading>
             {administrators.map(({ name, title, phone, email }) => (
-              <Card colorSchema={colorSchema}>
+              <Card key={`${name}`} colorSchema={colorSchema}>
                 <Card.Body shadow color="neutral">
                   <Card.Section>
                     <Card.Image
