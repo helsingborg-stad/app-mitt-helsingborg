@@ -3,8 +3,8 @@ import { Card, ScreenWrapper } from 'app/components/molecules';
 import { CaseState } from 'app/store/CaseContext';
 import FormContext from 'app/store/FormContext';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import React, { useContext, useEffect, useState, useRef } from 'react';
+import { View, Animated, Easing } from 'react-native';
 import styled from 'styled-components/native';
 import icons from 'source/helpers/Icons';
 import { launchPhone, launchEmail } from 'source/helpers/LaunchExternalApp';
@@ -64,9 +64,19 @@ const CaseSummary = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseId, status]);
 
+  const fadeAnimation = useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    Animated.timing(fadeAnimation, {
+      toValue: 1,
+      easing: Easing.back(),
+      duration: 400,
+    }).start();
+  }, [fadeAnimation]);
+
   return (
     <ScreenWrapper>
-      <Container>
+      <Container as={Animated.ScrollView} style={{ opacity: fadeAnimation }}>
         {status === 'submitted' && (
           <>
             <SummaryHeading type="h5">Aktuell period</SummaryHeading>
