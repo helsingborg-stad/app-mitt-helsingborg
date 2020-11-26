@@ -113,15 +113,19 @@ const CardProgressbar = styled(Progressbar)`
  * @param {props} props
  */
 const Card = ({ children, colorSchema, ...props }) => {
-  // Clone child elements and add additional props
-  const childrenWithProps = React.Children.map(children, (child, index) =>
-    React.cloneElement(child, {
-      key: index,
-      colorSchema,
-      firstChild: index === 0,
-      lastChild: index === React.Children.count(children) - 1,
-    })
-  );
+  // First filter out falsy child components. Then clone each child and add additional props
+  const childrenWithProps = React.Children.toArray(children).reduce((filtered, child, index) => {
+    if (child) {
+      const childWithProps = React.cloneElement(child, {
+        key: index,
+        colorSchema,
+        firstChild: index === 0,
+        lastChild: index === React.Children.count(children) - 1,
+      });
+      filtered.push(childWithProps);
+    }
+    return filtered;
+  }, []);
 
   return <Container {...props}>{childrenWithProps}</Container>;
 };
@@ -131,6 +135,9 @@ const Card = ({ children, colorSchema, ...props }) => {
  * @param {props} props
  */
 Card.Body = ({ children, colorSchema, color, ...props }) => {
+  // Remove falsy child components
+  const filteredChildren = React.Children.toArray(children).filter(Boolean);
+
   let underlayColor =
     colorSchema === 'neutral'
       ? colorPalette.neutrals[5]
@@ -142,14 +149,14 @@ Card.Body = ({ children, colorSchema, color, ...props }) => {
 
   const imageWithProps = [];
   const childrenWithProps = [];
-  React.Children.map(children, (child, index) => {
+  React.Children.map(filteredChildren, (child, index) => {
     // Clone children and separate image from other children to make positioning easier
     if (index === 0 && child.type === Card.Image) {
       imageWithProps[index] = React.cloneElement(child, {
         key: index,
         colorSchema,
         firstChild: index === 0,
-        lastChild: index === React.Children.count(children) - 1,
+        lastChild: index === React.Children.count(filteredChildren) - 1,
       });
       return;
     }
@@ -159,7 +166,7 @@ Card.Body = ({ children, colorSchema, color, ...props }) => {
       colorSchema: child.props?.colorSchema || colorSchema,
       color,
       firstChild: index === 0,
-      lastChild: index === React.Children.count(children) - 1,
+      lastChild: index === React.Children.count(filteredChildren) - 1,
     });
   });
 
