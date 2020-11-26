@@ -41,6 +41,7 @@ const SignStepWrapper = styled.View`
 
 function Step({
   theme,
+  navigation,
   banner,
   description,
   questions,
@@ -115,6 +116,7 @@ function Step({
             <>
               <StepDescription
                 theme={theme}
+                navigation={navigation}
                 currentStep={
                   currentPosition.level === 0 ? currentPosition.currentMainStep : undefined
                 }
@@ -276,6 +278,8 @@ Step.propTypes = {
   }),
   /** Total number of steps in the form */
   totalStepNumber: PropTypes.number,
+  /** React Navigation object */
+  navigation: PropTypes.object,
 };
 
 Step.defaultProps = {
