@@ -49,7 +49,7 @@ const CaseSummary = props => {
   } = caseData;
 
   const { name: formName } = form;
-  const totalSteps = form?.stepStructure?.length;
+  const totalSteps = form?.stepStructure?.length || 0;
   const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(startDate, true);
 
   useEffect(() => {
