@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import RnModal from 'react-native-modal';
 import styled from 'styled-components/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const ModalContainer = styled(RnModal)`
   margin-left: 0px;
@@ -22,7 +23,7 @@ const Modal = ({ visible, children, ...other }) => (
     transparent
     {...other}
   >
-    {children}
+    <KeyboardAwareScrollView>{children}</KeyboardAwareScrollView>
   </ModalContainer>
 );
 
