@@ -3,9 +3,10 @@ import { Card, Header, ScreenWrapper } from 'app/components/molecules';
 import { CaseDispatch, CaseState, caseStatus, caseTypes } from 'app/store/CaseContext';
 import FormContext from 'app/store/FormContext';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useState } from 'react';
 import icons from 'source/helpers/Icons';
 import styled from 'styled-components/native';
+import React, { useContext, useEffect, useState, useRef } from 'react';
+import { View, Animated, Easing } from 'react-native';
 import { formatUpdatedAt } from '../../helpers/DateHelpers';
 
 const Container = styled.ScrollView`
@@ -147,6 +148,15 @@ function CaseOverview({ navigation }) {
   const { getCasesByFormIds } = useContext(CaseState);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const { createCase } = useContext(CaseDispatch);
+  const fadeAnimation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(fadeAnimation, {
+      toValue: 1,
+      easing: Easing.back(),
+      duration: 700,
+    }).start();
+  }, [fadeAnimation]);
 
   useEffect(() => {
     const updateItems = async () => {
@@ -185,7 +195,11 @@ function CaseOverview({ navigation }) {
             </Card.Text>
           </Card.Body>
         </Message>
-        {caseItems.map(({ component }) => component)}
+        {caseItems.length > 0 && (
+          <Animated.View style={{ opacity: fadeAnimation }}>
+            {caseItems.map(({ component }) => component)}
+          </Animated.View>
+        )}
       </Container>
     </ScreenWrapper>
   );
