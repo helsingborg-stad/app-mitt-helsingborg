@@ -111,7 +111,19 @@ const computeCaseComponent = (status, latestCase, form, caseType, navigation, cr
         <>
           <ListHeading type="h5">Aktiva</ListHeading>
           <Card colorSchema={colorSchema}>
-            <Card.Body shadow color="neutral">
+            <Card.Body
+              shadow
+              color="neutral"
+              onPress={() => {
+                navigation.navigate('UserEvents', {
+                  screen: caseType.navigateTo,
+                  params: {
+                    id: latestCase.id,
+                    name: caseType.name,
+                  },
+                });
+              }}
+            >
               <Card.Image source={icons[caseType.icon]} />
               <Card.Title>{caseType.name}</Card.Title>
               <Card.SubTitle>Inskickad</Card.SubTitle>
