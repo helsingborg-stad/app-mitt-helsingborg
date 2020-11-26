@@ -23,7 +23,7 @@ const CaseNavigator = () => (
       name="CaseSummary"
       component={CaseSummary}
       options={({ route }) => ({
-        title: route.params.name,
+        title: route.params.name || 'Ärenden',
         headerBackImage: () => <BackIcon name="arrow-back" />,
         headerBackTitle: '',
         headerTruncatedBackTitle: '',
