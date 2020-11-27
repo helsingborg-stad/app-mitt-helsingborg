@@ -3,12 +3,10 @@ import React from 'react';
 import StoryWrapper from '../../../molecules/StoryWrapper';
 import Banner from './StepBanner';
 
-const ILLU_EXPENSES = require('source/assets/images/illustrations/illu_utgifter_margins_1x.png');
-
 storiesOf('StepBanner', module)
   .add('Image', props => (
     <StoryWrapper {...props}>
-      <Banner imageSrc={ILLU_EXPENSES} />
+      <Banner imageSrc="ILLU_EXPENSES" />
     </StoryWrapper>
   ))
   .add('Custom Styling', props => (
