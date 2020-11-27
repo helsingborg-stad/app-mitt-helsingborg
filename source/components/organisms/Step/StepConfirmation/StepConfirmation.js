@@ -1,11 +1,12 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
+import { Icon, Text } from 'app/components/atoms';
 import { Card } from 'app/components/molecules';
-import { Text, Icon } from 'app/components/atoms';
+import { CaseState } from 'app/store/CaseContext';
+import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
 import icons from 'source/helpers/Icons';
 import { launchPhone } from 'source/helpers/LaunchExternalApp';
-import { CaseState } from 'app/store/CaseContext';
+import styled from 'styled-components/native';
 
 const Container = styled.View``;
 
@@ -14,7 +15,8 @@ const CardBody = styled(Card.Body)`
   padding-bottom: 8px;
 `;
 
-const StepConfirmation = ({ navigation, colorSchema }) => {
+const StepConfirmation = ({ colorSchema }) => {
+  const navigation = useNavigation();
   const { cases } = useContext(CaseState);
   const casesArray = Object.keys(cases);
   const latestCase = casesArray[casesArray.length - 1];
