@@ -39,7 +39,6 @@ function StepDescription({
   colorSchema,
   currentStep,
   totalStepNumber,
-  navigation,
 }) {
   return (
     <StepDescriptionWrapper style={style}>
@@ -59,15 +58,12 @@ function StepDescription({
         {text.length !== 0 && <StepDescriptionText>{text}</StepDescriptionText>}
       </StepDescriptionContent>
       {/* TODO: Replace hardcoded view with dynamically added data */}
-      {currentStep === totalStepNumber && (
-        <StepConfirmation navigation={navigation} colorSchema={colorSchema} />
-      )}
+      {currentStep === totalStepNumber && <StepConfirmation colorSchema={colorSchema} />}
     </StepDescriptionWrapper>
   );
 }
 
 StepDescription.propTypes = {
-  navigation: PropTypes.object,
   style: PropTypes.object,
   tagline: PropTypes.string,
   heading: PropTypes.string.isRequired,

@@ -82,7 +82,6 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       <StatusBar hidden />
       {form?.steps ? (
         <Form
-          navigation={navigation}
           steps={form.steps}
           connectivityMatrix={form.connectivityMatrix}
           initialPosition={caseData?.currentStep || initialCase?.currentStep}
