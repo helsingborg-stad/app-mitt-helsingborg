@@ -26,7 +26,7 @@ const BottomBarStack = () => (
       component={CaseNavigator}
       options={{
         title: 'Ärende',
-        tabBarIcon: TabBarImage(require('../images/task.png')),
+        tabBarIcon: TabBarImage(require('../images/task_3x.png')),
         tabBarLabel: 'Ärende',
       }}
     />
@@ -37,7 +37,7 @@ const BottomBarStack = () => (
         headerTintColor: 'black',
         tabBarLabel: 'Sally',
         title: 'Sally',
-        tabBarIcon: TabBarImage(require('../images/home.png')),
+        tabBarIcon: TabBarImage(require('../images/chat_3x.png')),
       }}
     />
     <Tab.Screen
@@ -45,7 +45,7 @@ const BottomBarStack = () => (
       component={ProfileScreen}
       options={{
         title: 'Profil',
-        tabBarIcon: TabBarImage(require('../images/profile.png')),
+        tabBarIcon: TabBarImage(require('../images/profile_3x.png')),
         tabBarLabel: 'Profil',
       }}
     />
