@@ -16,7 +16,7 @@ export async function updateCase(caseId, data, status, currentPosition, formQues
   const body = {
     status,
     answers,
-    currentStep: currentPosition,
+    currentPosition,
   };
 
   try {
@@ -47,7 +47,7 @@ export async function createCase(form, user, cases, callback) {
     formId: form.id,
     provider: 'VIVA',
     status: 'ongoing',
-    currentStep: {
+    currentPosition: {
       index: 0,
       level: 0,
       currentMainStep: 1,
