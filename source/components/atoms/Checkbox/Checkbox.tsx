@@ -59,7 +59,7 @@ const Checkbox: React.FC<Props> = ({checked, onChange, size, disabled, color}) =
       underlayColor={theme.colors.primary[validColorSchema][2]}
       size={size || 'small'}
     >
-      {checked && <CheckboxTick size={theme.checkbox[size].icon} name="done" />}
+      {checked ? <CheckboxTick size={theme.checkbox[size].icon} name="done" /> : <></>}
     </CheckboxBox>
   );
 };
