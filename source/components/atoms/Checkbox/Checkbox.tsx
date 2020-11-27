@@ -2,15 +2,25 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled, { ThemeContext } from 'styled-components/native';
 import { getValidColorSchema } from '../../../styles/theme';
-
 import Icon from '../Icon';
 
-const CheckboxBox = styled.TouchableHighlight`
+interface BoxProps {
+  checked: boolean; 
+  colorSchema: 'blue' | 'green' | 'red' | 'purple'; 
+  size: 'small' | 'medium' | 'large'
+}
+const CheckboxBox = styled.TouchableHighlight<BoxProps>`
   border-style: solid;
   border-color: ${props =>
     props.checked ? 'transparent' : props.theme.colors.complementary[props.colorSchema][0]};
   background-color: ${props =>
     props.checked ? props.theme.colors.primary[props.colorSchema][3] : 'transparent'};
+  width: ${props => props.theme.checkbox[size].width}px;
+  height: ${props => props.theme.checkbox[size].height}px;
+  padding: ${props => props.theme.checkbox[size].padding}px;
+  margin: ${props => props.theme.checkbox[size].margin}px;
+  border-width: ${props => props.theme.checkbox[size].borderWidth}px;
+  border-radius: ${props => props.theme.checkbox[size].borderRadius}px;
 `;
 
 const CheckboxTick = styled(Icon)`
@@ -19,48 +29,24 @@ const CheckboxTick = styled(Icon)`
   margin-top: -3px;
 `;
 
-// TODO: THEME/STYLING MOVE sizes to theme declaration in theme.js
-const sizes = {
-  small: {
-    width: 18,
-    height: 18,
-    padding: 0.5,
-    margin: 4,
-    borderWidth: 2,
-    borderRadius: 3,
-  },
-  medium: {
-    width: 35,
-    height: 35,
-    padding: 0.5,
-    margin: 4,
-    borderWidth: 2,
-    borderRadius: 7,
-  },
-  large: {
-    width: 52,
-    height: 52,
-    padding: 0,
-    margin: 4,
-    borderWidth: 3.2,
-    borderRadius: 10,
-  },
-};
+interface Props {
+  checked?: boolean;
+  onChange: () => void;
+  disabled?: boolean;
+  size?: 'small' | 'medium' | 'large';
+  color: string;
+}
 
-const iconSizes = {
-  small: 18,
-  medium: 36,
-  large: 50,
-};
-
-const Checkbox = props => {
-  const { checked, onChange, size, disabled, color } = props;
+const Checkbox: React.FC<Props> = ({checked, onChange, size, disabled, color}) => {
   const theme = useContext(ThemeContext);
-  const style = {
-    ...sizes[size],
-  };
-  const validColorSchema = getValidColorSchema(color);
-  const tickIcon = <CheckboxTick size={iconSizes[size]} name="done" />;
+
+  // some type trickery to make typescript happy
+  let validColorSchema: 'blue' | 'green' | 'red' | 'purple'; 
+  const vCS = getValidColorSchema(color);
+  if (['blue', 'green', 'red', 'purple'].includes(vCS)) {
+    validColorSchema = (vCS as 'blue' | 'green' | 'red' | 'green');
+  } else { validColorSchema = 'blue'; }
+
   return (
     <CheckboxBox
       onPress={() => {
@@ -71,9 +57,9 @@ const Checkbox = props => {
       checked={checked}
       colorSchema={validColorSchema}
       underlayColor={theme.colors.primary[validColorSchema][2]}
-      style={style}
+      size={size || 'small'}
     >
-      {checked ? tickIcon : <></>}
+      {checked ? <CheckboxTick size={theme.checkbox[size].icon} name="done" /> : <></>}
     </CheckboxBox>
   );
 };
@@ -94,7 +80,7 @@ Checkbox.propTypes = {
   /**
    * One of small, medium, large
    */
-  size: PropTypes.oneOf(Object.keys(sizes)),
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
   /**
    * Disables the checkbox if true.
    */
