@@ -19,7 +19,6 @@ interface Props {
   connectivityMatrix: StepperActions[][];
   user: User;
   initialAnswers: Record<string, any>;
-  navigation: Record<string, any>;
   status?: CaseStatus;
   onClose: () => void;
   onSubmit: () => void;
@@ -37,7 +36,6 @@ interface Props {
  * data and modify the data in your application.
  */
 const Form: React.FC<Props> = ({
-  navigation,
   initialPosition,
   steps,
   connectivityMatrix,
@@ -79,7 +77,6 @@ const Form: React.FC<Props> = ({
     ({ id, banner, theme, title, group, description, questions, actions }) => (
       <Step
         key={`${id}`}
-        navigation={navigation}
         banner={{
           ...banner,
         }}
