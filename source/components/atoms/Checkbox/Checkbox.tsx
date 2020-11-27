@@ -15,12 +15,12 @@ const CheckboxBox = styled.TouchableHighlight<BoxProps>`
     props.checked ? 'transparent' : props.theme.colors.complementary[props.colorSchema][0]};
   background-color: ${props =>
     props.checked ? props.theme.colors.primary[props.colorSchema][3] : 'transparent'};
-  width: ${props => props.theme.checkbox[size].width}px;
-  height: ${props => props.theme.checkbox[size].height}px;
-  padding: ${props => props.theme.checkbox[size].padding}px;
-  margin: ${props => props.theme.checkbox[size].margin}px;
-  border-width: ${props => props.theme.checkbox[size].borderWidth}px;
-  border-radius: ${props => props.theme.checkbox[size].borderRadius}px;
+  width: ${props => props.theme.checkbox[props.size].width}px;
+  height: ${props => props.theme.checkbox[props.size].height}px;
+  padding: ${props => props.theme.checkbox[props.size].padding}px;
+  margin: ${props => props.theme.checkbox[props.size].margin}px;
+  border-width: ${props => props.theme.checkbox[props.size].borderWidth}px;
+  border-radius: ${props => props.theme.checkbox[props.size].borderRadius}px;
 `;
 
 const CheckboxTick = styled(Icon)`
