@@ -51,15 +51,6 @@ interface Button {
         type: 'navigate';
         screen: string;
       }
-    | {
-        type: 'help';
-        help: {
-          text: string;
-          tagline?: string;
-          url?: string;
-          title?: string;
-        };
-      };
 }
 
 type CardComponent = Image | Text | Title | Subtitle | Button;
@@ -84,6 +75,7 @@ const renderCardComponent = (component: CardComponent, navigation: any) => {
       );
   }
 
+  // Treat buttons separately, because they have some more complicated behavior
   if (component.type === 'button') {
     const { icon, iconPosition, text, action } = component;
     let onClick: () => void = () => null;
@@ -96,9 +88,6 @@ const renderCardComponent = (component: CardComponent, navigation: any) => {
         break;
       case 'navigate':
         onClick = () => { if (navigation?.navigate) navigation.navigate(action.screen) }; // TODO think about sending parameters here
-        break;
-      case 'help':
-        onClick = () => { console.log('open help...')}; // TODO: fix this more properly.
         break;
     }
     return (

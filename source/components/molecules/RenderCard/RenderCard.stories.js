@@ -66,7 +66,7 @@ const cardData3 = {
 };
 
 const cardData4 = {
-  shadow: true,
+  shadow: false,
   outlined: true,
   bodyColor: 'purple',
   colorSchema: 'purple',
