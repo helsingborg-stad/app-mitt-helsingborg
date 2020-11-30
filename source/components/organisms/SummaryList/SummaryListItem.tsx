@@ -138,10 +138,11 @@ const SummaryListItem: React.FC<Props> = ({
       case 'arrayDate':
         return (
           <CalendarPicker
-            date={new Date(value as string)}
-            onSelect={(date: Date) => { changeFromInput(moment(date).format('Y-MM-DD'))}}
+            value={value as string}
+            onSelect={changeFromInput}
             editable={editable}
             transparent
+            style={ {paddingRight: 10, paddingTop:5, paddingBottom:5}}
           />
         );
       case 'checkbox':

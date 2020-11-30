@@ -62,21 +62,13 @@ const ItemInput = styled.TextInput<{colorSchema: string}>`
   min-width: 80%;
   font-weight: 500;
   color: ${props => props.theme.repeater[props.colorSchema].inputText};
-  padding: 6px;
+  padding: 5px;
 `;
 const DeleteButton = styled(Button)<{color: string}>`
   margin-top: 10px;
   margin-bottom: 10px;
   background: ${props => theme.repeater[props.color].deleteButton}
 `
-const dateStyle = {
-  textAlign: 'right',
-  minWidth: '80%',
-  padding: 6,
-  backgroundColor: 'transparent',
-  fontWeight: '500',
-  margin: 0,
-};
 
 interface Props {
   heading?: string;
@@ -128,8 +120,8 @@ const RepeaterFieldListItem: React.FC<Props> = ({
       case 'date':
         return (
           <CalendarPicker
-            date={ value[input.id] ? new Date(value[input.id] as string) : undefined }
-            onSelect={(date: Date) => { changeFromInput(input)(moment(date).format('Y-MM-DD'))}}
+            value={value[input.id] as string}
+            onSelect={changeFromInput(input)}
             editable={true}
             transparent
           />

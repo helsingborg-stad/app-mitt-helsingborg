@@ -4,6 +4,7 @@ import { View, LayoutAnimation } from 'react-native';
 import { Input, Label, Select, Text } from 'source/components/atoms';
 import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
 import DateTimePickerForm from '../DateTimePicker/DateTimePickerForm';
+import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
 import NavigationButtonField from '../NavigationButtonField/NavigationButtonField';
 import NavigationButtonGroup from '../NavigationButtonGroup/NavigationButtonGroup';
 import SummaryList from '../../organisms/SummaryList/SummaryList';
@@ -26,13 +27,9 @@ const inputTypes = {
     },
   },
   date: {
-    component: DateTimePickerForm,
+    component: CalendarPicker,
     changeEvent: 'onSelect',
-    props: {
-      mode: 'date',
-      selectorProps: { locale: 'sv' },
-    },
-    initialValue: '',
+    initialValue: undefined,
   },
   list: {},
   checkbox: {
