@@ -6,9 +6,9 @@ import styled from "styled-components/native";
 import PropTypes from "prop-types";
 import { Text, Icon, Checkbox } from "../../atoms";
 import { SummaryListItem as SummaryListItemType } from "./SummaryList";
-import DateTimePickerForm from "../../molecules/DateTimePicker/DateTimePickerForm";
+import moment from 'moment';
+import CalendarPicker from '../../molecules/CalendarPicker/CalendarPickerForm';
 import { colorPalette } from '../../../styles/palette';
-import { CSSProp } from "styled-components";
 
 interface ItemWrapperProps {
   error?: { isValid: boolean; validationMessage: string; };
@@ -85,15 +85,6 @@ const DeleteButtonHighligth = styled(TouchableHighlight)`
   padding: 0;
   margin: 0;
 `;
-const dateStyle: CSSProp = {
-  textAlign: 'right',
-  minWidth: '80%',
-  padding: 5,
-  fontWeight: '500',
-  backgroundColor:'transparent',
-  borderWidth: 0,
-};
-
 interface Props {
   item: SummaryListItemType;
   value: Record<string, any> | string | number | boolean;
@@ -146,15 +137,11 @@ const SummaryListItem: React.FC<Props> = ({
       case 'date':
       case 'arrayDate':
         return (
-          <DateTimePickerForm
-            value={value as string}
-            mode="date"
-            selectorProps={{ locale: "sv" }}
-            onBlur={onInputBlur}
-            onSelect={changeFromInput}
-            color={color}
-            style={dateStyle}
+          <CalendarPicker
+            date={new Date(value as string)}
+            onSelect={(date: Date) => { changeFromInput(moment(date).format('Y-MM-DD'))}}
             editable={editable}
+            transparent
           />
         );
       case 'checkbox':

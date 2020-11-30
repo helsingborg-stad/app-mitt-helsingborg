@@ -38,6 +38,9 @@ const DateInput = styled(Input)<{ transparent: boolean }>`
   border: none;
   text-align: right;
   min-width: 80%;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   font-weight: 500;
   color: ${props => props.theme.colors.neutrals[1]};
 `;

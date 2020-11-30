@@ -1,12 +1,13 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import styled from 'styled-components/native';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Text } from '../../atoms';
 import Button from '../../atoms/Button';
 import Label from '../../atoms/Label';
 import { InputRow } from './RepeaterField';
-import DateTimePickerForm from '../DateTimePicker/DateTimePickerForm';
+import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
 import theme from '../../../styles/theme';
 
 const Base = styled.View`
@@ -126,14 +127,11 @@ const RepeaterFieldListItem: React.FC<Props> = ({
         );
       case 'date':
         return (
-          <DateTimePickerForm
-            value={value[input.id]?.toString() || ''}
-            mode="date"
-            selectorProps={{ locale: 'sv' }}
-            onSelect={changeFromInput(input)}
-            color={color}
-            style={dateStyle}
-            onBlur={onBlur}
+          <CalendarPicker
+            date={ value[input.id] ? new Date(value[input.id] as string) : undefined }
+            onSelect={(date: Date) => { changeFromInput(input)(moment(date).format('Y-MM-DD'))}}
+            editable={true}
+            transparent
           />
         );
       default:
