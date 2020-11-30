@@ -28,7 +28,7 @@ const inputs = [
     label: 'Person',
     type: 'select',
     value: '',
-    choices: [
+    items: [
       { label: 'Ehsan', value: 'ehsan' },
       { label: 'Jonatan', value: 'jonatan' },
       { label: 'Dan', value: 'dan' },

@@ -14,19 +14,15 @@ const EnhancedSafeAreaView = styled.SafeAreaView`
   margin-bottom: 18px;
 `;
 
-const ModifiedScreenWrapper = styled(ScreenWrapper)`
-  justify-content: flex-start;
-`;
-
 const StoryWrapper = props => {
   const { style, kind, name, children } = props;
 
   return (
     <EnhancedSafeAreaView>
-      <ModifiedScreenWrapper style={style}>
+      <ScreenWrapper style={style}>
         {kind ? <StoryHeading type="h2">{`${kind} / ${name}`}</StoryHeading> : null}
         {children}
-      </ModifiedScreenWrapper>
+      </ScreenWrapper>
     </EnhancedSafeAreaView>
   );
 };
