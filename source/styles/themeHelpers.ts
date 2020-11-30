@@ -1,12 +1,12 @@
 import theme from './theme';
 
-export type MainColor = keyof typeof theme.colors.primary;
-export type SecondaryColor = keyof typeof theme.colors.complementary;
+export type PrimaryColor = keyof typeof theme.colors.primary;
+export type ComplementaryColor = keyof typeof theme.colors.complementary;
 
-function isMainColor(color: string): color is MainColor {
+function isPrimaryColor(color: string): color is MainColor {
   return Object.keys(theme.colors.primary).includes(color);
 }
-function isSecondaryColor(color: string): color is MainColor {
+function isComplementaryColor(color: string): color is MainColor {
   return Object.keys(theme.colors.primary).includes(color);
 }
 /**
@@ -16,7 +16,7 @@ function isSecondaryColor(color: string): color is MainColor {
 export const getValidColorSchema = (
   colorSchema: string,
   variant: 'primary' | 'complementary' = 'primary'
-): MainColor | SecondaryColor => {
+): PrimaryColor | ComplementaryColor => {
   if (variant === 'primary' && isMainColor(colorSchema)) return colorSchema;
   if (variant === 'complementary' && isSecondaryColor(colorSchema)) return colorSchema;
   return 'blue';
