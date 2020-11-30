@@ -19,10 +19,10 @@ const Title = styled(Text)`
 
 const cardData = {
   colorSchema: 'blue',
-  bodyColor: 'blue',
+  backgroundColor: 'blue',
   components: [
     { type: 'image', image: 'ICON_EXPENSES' },
-    { type: 'title', text: 'Card Title' },
+    { type: 'title', text: 'Flat Card' },
     { type: 'subtitle', text: 'Subtitle' },
     { type: 'text', text: 'Some card text here' },
   ],
@@ -31,7 +31,7 @@ const cardData = {
 const cardData2 = {
   shadow: true,
   colorSchema: 'green',
-  bodyColor: 'neutral',
+  backgroundColor: 'neutral',
   components: [
     { type: 'image', image: 'ICON_CONTACT_PERSON', circle: true },
     { type: 'title', text: 'Contact us' },
@@ -50,7 +50,7 @@ const cardData2 = {
 const cardData3 = {
   shadow: true,
   outlined: true,
-  bodyColor: 'red',
+  backgroundColor: 'red',
   colorSchema: 'red',
   components: [
     { type: 'title', text: 'Navigate somewhere' },
@@ -68,7 +68,7 @@ const cardData3 = {
 const cardData4 = {
   shadow: false,
   outlined: true,
-  bodyColor: 'purple',
+  backgroundColor: 'purple',
   colorSchema: 'purple',
   components: [
     { type: 'image', image: 'ICON_CONTACT_PERSON', circle: true },
@@ -77,6 +77,25 @@ const cardData4 = {
     { type: 'text', text: 'Some italic text here', italic: true },
   ],
 };
+
+const cardData5 = {
+  shadow: true,
+  outlined: false,
+  backgroundColor: 'green',
+  colorSchema: 'green',
+  components: [
+    { type: 'image', image: 'ICON_TELL' },
+    { type: 'subtitle', text: 'Subtitle' },
+    { type: 'title', text: 'Green theme' },
+    {
+      type: 'button',
+      text: 'Helsingborg.se',
+      action: { type: 'url', url: 'https://www.helsingborg.se' },
+      icon: 'arrow-forward',
+    },
+  ],
+};
+
 storiesOf('Card Renderer', module).add('default', props => (
   <StoryWrapper {...props}>
     <FlexContainer>
@@ -85,6 +104,7 @@ storiesOf('Card Renderer', module).add('default', props => (
       <RenderCard {...cardData2} />
       <RenderCard {...cardData3} />
       <RenderCard {...cardData4} />
+      <RenderCard {...cardData5} />
     </FlexContainer>
   </StoryWrapper>
 ));

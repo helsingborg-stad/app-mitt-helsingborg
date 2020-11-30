@@ -1,6 +1,7 @@
 /* eslint-disable default-case */
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { Linking } from 'react-native';
 import Card from '../Card/Card';
 import PropTypes from 'prop-types';
 import TextComponent from '../../atoms/Text';
@@ -51,6 +52,10 @@ interface Button {
         type: 'navigate';
         screen: string;
       }
+    | {
+        type: 'url',
+        url: string;
+    }
 }
 
 type CardComponent = Image | Text | Title | Subtitle | Button;
@@ -88,6 +93,9 @@ const renderCardComponent = (component: CardComponent, navigation: any) => {
         break;
       case 'navigate':
         onClick = () => { if (navigation?.navigate) navigation.navigate(action.screen) }; // TODO think about sending parameters here
+        break;
+      case 'url':
+        onClick = () => { Linking.openURL(action.url)};
         break;
     }
     return (
