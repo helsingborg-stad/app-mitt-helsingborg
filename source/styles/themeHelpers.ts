@@ -3,10 +3,10 @@ import theme from './theme';
 export type PrimaryColor = keyof typeof theme.colors.primary;
 export type ComplementaryColor = keyof typeof theme.colors.complementary;
 
-function isPrimaryColor(color: string): color is MainColor {
+function isPrimaryColor(color: string): color is PrimaryColor {
   return Object.keys(theme.colors.primary).includes(color);
 }
-function isComplementaryColor(color: string): color is MainColor {
+function isComplementaryColor(color: string): color is PrimaryColor {
   return Object.keys(theme.colors.primary).includes(color);
 }
 /**
@@ -17,8 +17,8 @@ export const getValidColorSchema = (
   colorSchema: string,
   variant: 'primary' | 'complementary' = 'primary'
 ): PrimaryColor | ComplementaryColor => {
-  if (variant === 'primary' && isMainColor(colorSchema)) return colorSchema;
-  if (variant === 'complementary' && isSecondaryColor(colorSchema)) return colorSchema;
+  if (variant === 'primary' && isPrimaryColor(colorSchema)) return colorSchema;
+  if (variant === 'complementary' && isComplementaryColor(colorSchema)) return colorSchema;
   return 'blue';
 }
 
