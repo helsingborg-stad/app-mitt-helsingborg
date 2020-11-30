@@ -38,30 +38,29 @@ const DateInput = styled(Input)<{ transparent: boolean }>`
   border: none;
   text-align: right;
   min-width: 80%;
-  padding-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
   font-weight: 500;
   color: ${props => props.theme.colors.neutrals[1]};
 `;
 
 interface PropInterface {
-  onSelect: (data: Date) => void;
-  date: any;
+  onSelect: (date: string) => void;
+  value: string;
   editable?: boolean;
   transparent?: boolean;
+  style?: React.CSSProperties;
 }
 const CalendarPickerForm: React.FC<PropInterface> = ({
   onSelect,
-  date,
+  value,
   editable = true,
   transparent,
+  style,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   // Handle selected date and hide calendar modal.
   const handleCalendarDateChange = (selectedDate: moment.Moment) => {
-    onSelect(selectedDate.toDate());
+    onSelect(selectedDate.format('Y-MM-DD'));
     setIsVisible(!isVisible);
   };
 
@@ -75,12 +74,13 @@ const CalendarPickerForm: React.FC<PropInterface> = ({
       >
         <DateInput
           placeholder="Välj datum"
-          value={date ? moment(date).format('Y-MM-DD') : undefined}
+          value={value}
           multiline /** Temporary fix to make field scrollable inside scrollview */
           numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
           editable={false}
           pointerEvents="none"
           transparent={transparent}
+          style={style}
         />
       </TouchableOpacity>
 
@@ -113,7 +113,7 @@ const CalendarPickerForm: React.FC<PropInterface> = ({
               }}
               previousTitle="Tidigare"
               nextTitle="Nästa"
-              selectedStartDate={date ? new Date(date) : undefined}
+              selectedStartDate={value ? new Date(value) : undefined}
             />
           </CalendarStyle>
         </CalendarContainer>
@@ -135,11 +135,13 @@ CalendarPickerForm.propTypes = {
   /**
    * Date value. Used for storing and displaying date in components.
    */
-  date: PropTypes.oneOfType([PropTypes.instanceOf(moment), PropTypes.string]),
+  value: PropTypes.string,
   /** Turn the input field of. Defaults to true. */
   editable: PropTypes.bool,
   /** Turn the background of input field transparent */
   transparent: PropTypes.bool,
+  /** Additional styling for the input box */
+  style: PropTypes.object,
 };
 
 export default CalendarPickerForm;
