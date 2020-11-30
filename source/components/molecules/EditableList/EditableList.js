@@ -132,7 +132,7 @@ function EditableList({
             onValueChange={value => onChange(input.key, value)}
             value={value && value !== '' ? value[input.key] : state[input.key]}
             editable={editable}
-            items={input.choices}
+            items={input?.items || []}
             transparent
           />
         );
