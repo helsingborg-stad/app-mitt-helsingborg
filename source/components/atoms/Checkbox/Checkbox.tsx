@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled, { ThemeContext } from 'styled-components/native';
-import { getValidColorSchema } from '../../../styles/theme';
+import { getValidColorSchema, MainColor } from '../../../styles/themeHelpers';
 import Icon from '../Icon';
 
 interface BoxProps {
-  checked: boolean; 
-  colorSchema: 'blue' | 'green' | 'red' | 'purple'; 
-  size: 'small' | 'medium' | 'large'
+  checked: boolean;
+  colorSchema: MainColor;
+  size: 'small' | 'medium' | 'large';
 }
 const CheckboxBox = styled.TouchableHighlight<BoxProps>`
   border-style: solid;
@@ -37,15 +37,9 @@ interface Props {
   color: string;
 }
 
-const Checkbox: React.FC<Props> = ({checked, onChange, size, disabled, color}) => {
+const Checkbox: React.FC<Props> = ({ checked, onChange, size, disabled, color }) => {
   const theme = useContext(ThemeContext);
-
-  // some type trickery to make typescript happy
-  let validColorSchema: 'blue' | 'green' | 'red' | 'purple'; 
-  const colorSchema = getValidColorSchema(color);
-  if (['blue', 'green', 'red', 'purple'].includes(colorSchema)) {
-    validColorSchema = (colorSchema as 'blue' | 'green' | 'red' | 'green');
-  } else { validColorSchema = 'blue'; }
+  const validColorSchema = getValidColorSchema(color);
 
   return (
     <CheckboxBox
