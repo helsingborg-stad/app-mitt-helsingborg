@@ -42,9 +42,9 @@ const Checkbox: React.FC<Props> = ({checked, onChange, size, disabled, color}) =
 
   // some type trickery to make typescript happy
   let validColorSchema: 'blue' | 'green' | 'red' | 'purple'; 
-  const vCS = getValidColorSchema(color);
-  if (['blue', 'green', 'red', 'purple'].includes(vCS)) {
-    validColorSchema = (vCS as 'blue' | 'green' | 'red' | 'green');
+  const colorSchema = getValidColorSchema(color);
+  if (['blue', 'green', 'red', 'purple'].includes(colorSchema)) {
+    validColorSchema = (colorSchema as 'blue' | 'green' | 'red' | 'green');
   } else { validColorSchema = 'blue'; }
 
   return (
