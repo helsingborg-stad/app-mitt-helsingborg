@@ -1,16 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Notification } from '../../../store/NotificationContext';
+import { Notification, Popup } from '../../../store/NotificationContext';
 import Toast from './Toast';
+import PopupComponent from '../Popup/Popup';
+
+import Text from '../../atoms/Text/Text';
+
+function isNotification (n: Notification | Popup): n is Notification {
+  return Object.prototype.hasOwnProperty.call(n, 'severity');
+}
 
 interface Props {
-  notifications: Notification[];
+  notifications: (Notification | Popup)[];
   removeNotification: (id: number) => void;
 }
 const ToastNotifications: React.FC<Props> = ({ notifications, removeNotification }) => (
   <>
     {notifications.map((n, index) => (
-      <Toast key={n.id} index={index} notification={n} onClose={() => removeNotification(n.id)} />
+      isNotification(n) 
+      ? <Toast key={n.id} index={index} notification={n} onClose={() => removeNotification(n.id)} /> 
+      : <PopupComponent key={n.id} autoHideDuration={n.autoHideDuration} onClose={() => removeNotification(n.id)}>{n.children}<Text>Hello</Text></PopupComponent> 
     ))}
   </>
 );

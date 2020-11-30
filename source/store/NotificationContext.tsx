@@ -9,16 +9,22 @@ export interface Notification {
   mainText: string;
   secondaryText: string;
 }
-const initialState: Notification[] = [];
+
+export interface Popup {
+  id: number;
+  autoHideDuration: number;
+  children: React.ReactNode;
+}
+const initialState: (Notification | Popup)[] = [];
 type ReducerAction =
-  | { type: 'ADD'; payload: Omit<Notification, 'id'> }
+  | { type: 'ADD'; payload: Omit<Notification, 'id'> | Omit<Popup, 'id'> }
   | { type: 'REMOVE'; payload: { id: number } }
   | { type: 'REMOVE_ALL' };
 
 export const notificationReducer = (
-  state: Notification[],
+  state: (Notification | Popup)[],
   action: ReducerAction
-): Notification[] => {
+): (Notification | Popup)[] => {
   switch (action.type) {
     case 'ADD':
       return [
@@ -48,11 +54,13 @@ interface NotificationContextType {
     severity: Severity,
     autoHideDuration?: number
   ) => void;
+  showPopup: (children: React.ReactNode, autoHideDuration?: number) => void;
   removeNotification: (id: number) => void;
   clearAll: () => void;
 }
 const defaultVal = {
   showNotification: (m: string, s: string, severity: Severity) => {},
+  showPopup: (c: React.ReactNode) => {},
   removeNotification: (id: number) => {},
   clearAll: () => {},
 };
@@ -63,6 +71,11 @@ const NotificationContext = React.createContext<NotificationContextType>(default
 export const useNotification = () => {
   const { showNotification } = useContext(NotificationContext);
   return useCallback(showNotification, []);
+};
+/** Custom hook that just gives access to the showNotification method, for ease of use.  */
+export const usePopup = () => {
+  const { showPopup } = useContext(NotificationContext);
+  return useCallback(showPopup, []);
 };
 
 export const NotificationProvider: React.FC<Props> = ({ children }: Props) => {
@@ -80,6 +93,13 @@ export const NotificationProvider: React.FC<Props> = ({ children }: Props) => {
     });
   };
 
+  const showPopup = (children: React.ReactNode, autoHideDuration?: number) => {
+    dispatch({
+      type: 'ADD',
+      payload: { autoHideDuration: autoHideDuration || -1, children },
+    });
+  };
+
   const removeNotification = (id: number) => {
     dispatch({ type: 'REMOVE', payload: { id } });
   };
@@ -87,7 +107,9 @@ export const NotificationProvider: React.FC<Props> = ({ children }: Props) => {
     dispatch({ type: 'REMOVE_ALL' });
   };
   return (
-    <NotificationContext.Provider value={{ showNotification, removeNotification, clearAll }}>
+    <NotificationContext.Provider
+      value={{ showNotification, showPopup, removeNotification, clearAll }}
+    >
       <NotificationView notifications={notifications} removeNotification={removeNotification} />
       {children}
     </NotificationContext.Provider>
