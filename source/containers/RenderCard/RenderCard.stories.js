@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { Text } from 'app/components/atoms';
 import styled from 'styled-components/native';
-import StoryWrapper from '../StoryWrapper';
+import StoryWrapper from '../../components/molecules/StoryWrapper';
 import RenderCard from './RenderCard';
 
 const FlexContainer = styled.ScrollView`
