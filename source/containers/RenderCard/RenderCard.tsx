@@ -2,12 +2,12 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Linking } from 'react-native';
-import Card from '../Card/Card';
+import Card from '../../components/molecules/Card/Card';
 import PropTypes from 'prop-types';
-import TextComponent from '../../atoms/Text';
-import Icon from '../../atoms/Icon';
-import icons from '../../../helpers/Icons';
-import { launchPhone, launchEmail } from '../../../helpers/LaunchExternalApp';
+import TextComponent from '../../components/atoms/Text';
+import Icon from '../../components/atoms/Icon';
+import icons from '../../helpers/Icons';
+import { launchPhone, launchEmail } from '../../helpers/LaunchExternalApp';
 
 /***** types describing how we should send in the data to render our cards  */
 interface Image {
