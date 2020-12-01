@@ -6,6 +6,7 @@ import Text from '../../atoms/Text/Text';
 import Heading from '../../atoms/Heading';
 import SummaryListItemComponent from './SummaryListItem';
 import { getValidColorSchema } from '../../../styles/theme';
+import { Help } from '../../../types/FormTypes';
 
 const SumLabel = styled(Heading)<{ colorSchema: string }>`
   margin-top: 5px;
@@ -60,6 +61,7 @@ interface Props {
   >;
   showSum: boolean;
   startEditable?: boolean;
+  help? : Help;
 }
 /**
  * Summary list, that is linked and summarizes values from other input components.
@@ -77,6 +79,7 @@ const SummaryList: React.FC<Props> = ({
   validationErrors,
   showSum,
   startEditable,
+  help,
 }) => {
   /**
    * Given an item, and possibly an index in the case of repeater fields, this generates a function that
@@ -211,6 +214,7 @@ const SummaryList: React.FC<Props> = ({
           color={color}
           showEditButton
           startEditable={startEditable}
+          help={help}
         />
         {showSum && (
           <SumContainer colorSchema={validColorSchema}>
@@ -264,6 +268,16 @@ SummaryList.propTypes = {
    * Whether to start in editable mode or not.
    */
   startEditable: PropTypes.bool,
+    /**
+   * Show an help button
+   */
+  help: PropTypes.shape({
+    text: PropTypes.string,
+    size: PropTypes.number,
+    heading: PropTypes.string,
+    tagline: PropTypes.string,
+    url: PropTypes.string,
+  }),
 };
 
 SummaryList.defaultProps = {

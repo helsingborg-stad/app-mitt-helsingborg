@@ -1,5 +1,11 @@
 import { ValidationObject } from './Validation';
 
+export interface Help {
+  text?: string;
+  heading?: string;
+  tagline?: string;
+  url?: string;
+}
 export interface SummaryItem {
   category: string;
   title: string;
@@ -37,7 +43,9 @@ export interface Question {
   items?: SummaryItem[];
   inputs?: ListInput[];
   validation?: ValidationObject;
+  help?: Help;
 }
+
 export type ActionType = 'start' | 'next' | 'submit' | 'sign' | 'close' | 'backToMain';
 export interface Action {
   type: ActionType;

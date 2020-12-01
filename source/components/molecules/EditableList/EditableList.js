@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Text, Button, Fieldset } from '../../atoms';
 import Select from '../../atoms/Select';
+import HelpButton from '../HelpButton';
 import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
 
 const EditableListBody = styled.View`
@@ -80,11 +81,11 @@ function EditableList({
   onBlur,
   inputIsEditable,
   startEditable,
+  help,
   error,
 }) {
   const [editable, setEditable] = useState(startEditable);
   const [state, setState] = useState(getInitialState(inputs, value));
-
   const changeEditable = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setEditable(!editable);
@@ -155,15 +156,16 @@ function EditableList({
     <Fieldset
       colorSchema={colorSchema}
       legend={title || ''}
-      onIconPress={() => console.log('Icon is pressed')}
-      iconName="help-outline"
-      renderHeaderActions={() =>
-        inputIsEditable && (
-          <FieldsetButton colorSchema={colorSchema} z={0} size="small" onClick={changeEditable}>
-            <Text>{editable ? 'Färdig' : 'Ändra'}</Text>
-          </FieldsetButton>
-        )
-      }
+      renderHeaderActions={() => (
+        <>
+          {help && Object.keys(help).length > 0 && <HelpButton {...help} />}
+          {inputIsEditable && (
+            <FieldsetButton colorSchema={colorSchema} z={0} size="small" onClick={changeEditable}>
+              <Text>{editable ? 'Färdig' : 'Ändra'}</Text>
+            </FieldsetButton>
+          )}
+        </>
+      )}
     >
       <EditableListBody>
         {inputs.map(input => (
@@ -220,6 +222,16 @@ EditableList.propTypes = {
   startEditable: PropTypes.bool,
   /** Validation error object */
   error: PropTypes.object,
+  /**
+   * Show an help button
+   */
+  help: PropTypes.shape({
+    text: PropTypes.string,
+    size: PropTypes.number,
+    heading: PropTypes.string,
+    tagline: PropTypes.string,
+    url: PropTypes.string,
+  }),
   /**
    * The color schema/theme of the component
    */
