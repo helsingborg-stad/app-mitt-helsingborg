@@ -12,15 +12,21 @@ interface Props {
   notifications: (Notification | Popup)[];
   removeNotification: (id: number) => void;
 }
-const ToastNotifications: React.FC<Props> = ({ notifications, removeNotification }) => (
-  <>
-    {notifications.map((n, index) => (
-      isNotification(n) 
-      ? <Toast key={n.id} index={index} notification={n} onClose={() => removeNotification(n.id)} /> 
-      : <PopupComponent key={n.id} autoHideDuration={n.autoHideDuration} onClose={() => removeNotification(n.id)} renderPopup={n.renderPopup} />
-    ))}
-  </>
-);
+const ToastNotifications: React.FC<Props> = ({ notifications, removeNotification }) => {
+  const mapToComponent = (n: Notification | Popup, index: number) => {
+    if (isNotification(n)) {
+      return <Toast key={n.id} index={index} notification={n} onClose={() => removeNotification(n.id)} />; 
+    } else {
+      return <PopupComponent key={n.id} onClose={() => removeNotification(n.id)} renderPopup={n.renderPopup} />;
+    }
+  }
+  
+  return (
+    <>
+      {notifications.map(mapToComponent)}
+    </>
+  );
+}
 
 ToastNotifications.propTypes = {
   notifications: PropTypes.array,
