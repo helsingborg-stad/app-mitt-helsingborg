@@ -5,7 +5,7 @@ import Text from '../atoms/Text';
 import Button from '../atoms/Button/Button';
 
 const AuthActivityIndicator = styled.ActivityIndicator`
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 `;
 
 const AuthLoadingWrapper = styled.View`
@@ -33,7 +33,7 @@ const AuthLoading = props => {
         {!isBankidInstalled && <Text>Väntar på att BankID ska startas på en annan enhet</Text>}
       </AuthLoadingBody>
       <AuthLoadingAction>
-        <Button color="purple" onClick={cancelSignIn} block>
+        <Button color="blue" onClick={cancelSignIn} block>
           <Text>Avbryt</Text>
         </Button>
       </AuthLoadingAction>
