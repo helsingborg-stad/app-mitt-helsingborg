@@ -75,6 +75,12 @@ const LoginHeading = styled(Heading)`
   color: ${props => props.theme.colors.primary.blue[0]};
 `;
 
+const LoginText = styled(Text)`
+  font-size: ${props => props.theme.fontSizes[3]}px;
+  font-weight: bold;
+  color: ${props => props.theme.colors.primary.blue[0]};
+`;
+
 const Separator = styled.View`
   border-radius: 40px;
   height: 2px;
@@ -190,7 +196,7 @@ function LoginScreen(props) {
           <Title>Mitt Helsingborg</Title>
           <Separator />
           <LoginHeading>Välkommen!</LoginHeading>
-          <Text>Till en enklare och säkrare kontakt med Helsingborgs Stad.</Text>
+          <LoginText>Till en enklare och säkrare kontakt med Helsingborgs Stad.</LoginText>
         </LoginHeader>
 
         <LoginForm>
