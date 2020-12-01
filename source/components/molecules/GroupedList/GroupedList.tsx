@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { View, LayoutAnimation } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import Label from '../../atoms/Label/Label';
+import { Help } from '../../../types/FormTypes';
 import Text from '../../atoms/Text';
+import HelpButton from '../HelpButton';
 import Fieldset, { FieldsetButton } from '../../atoms/Fieldset/Fieldset';
 import { colorPalette } from '../../../styles/palette';
 import theme from '../../../styles/theme';
@@ -30,6 +31,7 @@ interface Props {
   color: string;
   showEditButton?: boolean;
   startEditable?: boolean;
+  help?: Help;
 }
 
 /**
@@ -43,6 +45,7 @@ const GroupedList: React.FC<Props> = ({
   color,
   showEditButton,
   startEditable,
+  help,
 }) => {
   const [editable, setEditable] = useState(startEditable);
 
@@ -64,15 +67,16 @@ const GroupedList: React.FC<Props> = ({
     <Fieldset
       colorSchema={colorSchema}
       legend={heading || ''}
-      onIconPress={() => console.log('Icon is pressed')}
-      iconName="help-outline"
-      renderHeaderActions={() =>
-        showEditButton && (
-          <FieldsetButton colorSchema={colorSchema} z={0} size="small" onClick={changeEditable}>
-            <Text>{editable ? 'Färdig' : 'Ändra'}</Text>
-          </FieldsetButton>
-        )
-      }
+      renderHeaderActions={() => (
+        <>
+          {help && Object.keys(help).length > 0 && <HelpButton {...help} />}
+          {showEditButton && (
+            <FieldsetButton colorSchema={colorSchema} z={0} size="small" onClick={changeEditable}>
+              <Text>{editable ? 'Färdig' : 'Ändra'}</Text>
+            </FieldsetButton>
+          )}
+        </>
+      )}
     >
       <ListBody>
         {Object.keys(groupedItems).map((key, index) => (
@@ -116,6 +120,16 @@ GroupedList.propTypes = {
    * Whether to start in editable mode or not
    */
   startEditable: PropTypes.bool,
+  /**
+   * Show an help button
+   */
+  help: PropTypes.shape({
+    text: PropTypes.string,
+    size: PropTypes.number,
+    heading: PropTypes.string,
+    tagline: PropTypes.string,
+    url: PropTypes.string,
+  }),
 };
 
 GroupedList.defaultProps = {

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { View, LayoutAnimation } from 'react-native';
 import { Input, Label, Select, Text } from 'source/components/atoms';
 import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
-import DateTimePickerForm from '../DateTimePicker/DateTimePickerForm';
 import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
 import NavigationButtonField from '../NavigationButtonField/NavigationButtonField';
 import NavigationButtonGroup from '../NavigationButtonGroup/NavigationButtonGroup';
@@ -35,6 +34,8 @@ const inputTypes = {
   checkbox: {
     component: CheckboxField,
     changeEvent: 'onChange',
+    helpInComponent: true,
+    helpProp: 'help',
     props: {},
     initialValue: false,
   },
@@ -42,6 +43,8 @@ const inputTypes = {
     component: EditableList,
     changeEvent: 'onInputChange',
     blurEvent: 'onBlur',
+    helpInComponent: true,
+    helpProp: 'help',
     props: {},
     initialValue: {},
   },
@@ -73,6 +76,8 @@ const inputTypes = {
     component: SummaryList,
     changeEvent: 'onChange',
     blurEvent: 'onBlur',
+    helpInComponent: true,
+    helpProp: 'help',
     props: { answers: true, validation: true },
   },
   repeaterField: {
@@ -95,7 +100,7 @@ const FormField = ({
   answers,
   validationErrors,
   conditionalOn,
-  labelHelp,
+  help,
   ...other
 }) => {
   const input = inputTypes[inputType];
@@ -119,8 +124,6 @@ const FormField = ({
   const inputCompProps = {
     color,
     value: initialValue,
-    help:
-      other.inputHelp && other.text ? { text: other.inputHelp, heading: other.text } : undefined,
     ...inputProps,
     error: validationErrors[id],
     ...other,
@@ -129,6 +132,7 @@ const FormField = ({
   if (input?.props?.validation) inputCompProps.validationErrors = validationErrors;
   if (input && input.changeEvent) inputCompProps[input.changeEvent] = saveInput;
   if (input && input.blurEvent) inputCompProps[input.blurEvent] = onInputBlur;
+  if (input && input.helpInComponent) inputCompProps[input.helpProp || 'help'] = help;
 
   /** Checks if the field is conditional on another input, and if so,
    * evaluates whether this field should be active or not */
@@ -160,7 +164,7 @@ const FormField = ({
           <Label
             color={color}
             underline={labelLine}
-            help={labelHelp ? { heading: label, text: labelHelp } : {}}
+            help={!input.helpInComponent && help && Object.keys(help).length > 0 ? help : {}}
           >
             {label}
           </Label>
@@ -230,9 +234,15 @@ FormField.propTypes = {
    */
   conditionalOn: PropTypes.string,
   /**
-   * Property to show a help button
+   * Show an help button
    */
-  labelHelp: PropTypes.string,
+  help: PropTypes.shape({
+    text: PropTypes.string,
+    size: PropTypes.number,
+    heading: PropTypes.string,
+    tagline: PropTypes.string,
+    url: PropTypes.string,
+  }),
 };
 
 FormField.defaultProps = {
