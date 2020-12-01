@@ -13,7 +13,7 @@ export interface Notification {
 export interface Popup {
   id: number;
   autoHideDuration: number;
-  children: React.ReactNode;
+  renderPopup: (close: () => void) => React.ReactNode;
 }
 const initialState: (Notification | Popup)[] = [];
 type ReducerAction =
@@ -54,13 +54,16 @@ interface NotificationContextType {
     severity: Severity,
     autoHideDuration?: number
   ) => void;
-  showPopup: (children: React.ReactNode, autoHideDuration?: number) => void;
+  showPopup: (
+    renderPopup: (close: () => void) => React.ReactNode,
+    autoHideDuration?: number
+  ) => void;
   removeNotification: (id: number) => void;
   clearAll: () => void;
 }
 const defaultVal = {
   showNotification: (m: string, s: string, severity: Severity) => {},
-  showPopup: (c: React.ReactNode) => {},
+  showPopup: (renderPopup: (close: () => void) => React.ReactNode) => {},
   removeNotification: (id: number) => {},
   clearAll: () => {},
 };
@@ -72,7 +75,7 @@ export const useNotification = () => {
   const { showNotification } = useContext(NotificationContext);
   return useCallback(showNotification, []);
 };
-/** Custom hook that just gives access to the showNotification method, for ease of use.  */
+/** Custom hook that just gives access to the showPopup method, for ease of use.  */
 export const usePopup = () => {
   const { showPopup } = useContext(NotificationContext);
   return useCallback(showPopup, []);
@@ -93,10 +96,13 @@ export const NotificationProvider: React.FC<Props> = ({ children }: Props) => {
     });
   };
 
-  const showPopup = (children: React.ReactNode, autoHideDuration?: number) => {
+  const showPopup = (
+    renderPopup: (close: () => void) => React.ReactNode,
+    autoHideDuration?: number
+  ) => {
     dispatch({
       type: 'ADD',
-      payload: { autoHideDuration: autoHideDuration || -1, children },
+      payload: { autoHideDuration: autoHideDuration || -1, renderPopup },
     });
   };
 
