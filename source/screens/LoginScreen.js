@@ -71,24 +71,7 @@ function LoginScreen(props) {
     error,
   } = useContext(AuthContext);
 
-  const [hideLogo, setHideLogo] = useState(false);
   const [personalNumber, setPersonalNumber] = useState('');
-
-  useFocusEffect(
-    useCallback(() => {
-      const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () =>
-        setHideLogo(true)
-      );
-      const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () =>
-        setHideLogo(false)
-      );
-
-      return () => {
-        keyboardDidHideListener.remove();
-        keyboardDidShowListener.remove();
-      };
-    }, [])
-  );
 
   /**
    * Function for navigating to a screen in the application.
@@ -150,7 +133,7 @@ function LoginScreen(props) {
     <LoginSafeAreaView behavior="padding" enabled>
       <LoginScreenWrapper>
         <LoginHeader>
-          {hideLogo ? null : <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />}
+          <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />
         </LoginHeader>
         <LoginBody>
           <LoginForm>
