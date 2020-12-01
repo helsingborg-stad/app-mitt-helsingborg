@@ -42,6 +42,7 @@ async function collect(orderRef) {
     return { success: false, data: getMessage('unkownError') };
   }
 }
+
 /**
  * Function for handling a BankID Authentication request.
  * @param {string} ssn A Swedish Social Security Number.
