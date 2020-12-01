@@ -9,6 +9,8 @@ import Banner from './StepBanner/StepBanner';
 import StepFooter from './StepFooter/StepFooter';
 import StepDescription from './StepDescription/StepDescription';
 import Progressbar from '../../atoms/Progressbar/Progressbar';
+import { usePopup } from '../../../store/NotificationContext';
+import CloseDialog from './CloseDialog/CloseDialog';
 
 const StepContainer = styled.View`
   background: ${props => props.theme.colors.neutrals[7]};
@@ -67,7 +69,7 @@ function Step({
     isBankidInstalled,
     handleSetStatus,
   } = useContext(AuthContext);
-
+  const showPopup = usePopup();
   /**
    * Set auth context status to idle when navigating
    */
@@ -84,6 +86,11 @@ function Step({
     }
     if (formNavigation?.close) formNavigation.close(() => {});
   };
+
+  const onPressClose = () => {
+    showPopup(CloseDialog(closeForm));
+  };
+
   const inSubstep = currentPosition.level !== 0;
   const backButtonBehavior = inSubstep ? formNavigation.goToMainForm : formNavigation.back;
 
@@ -93,7 +100,7 @@ function Step({
         showBackButton={isBackBtnVisible}
         inSubstep={inSubstep}
         onBack={backButtonBehavior}
-        onClose={closeForm}
+        onClose={onPressClose}
       />
       <StepContentContainer
         contentContainerStyle={{
