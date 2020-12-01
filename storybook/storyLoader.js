@@ -31,7 +31,6 @@ function loadStories() {
 	require('../source/components/molecules/Markdown.stories');
 	require('../source/components/molecules/Modal/Modal.stories');
 	require('../source/components/molecules/PersonField/PersonField.stories');
-	require('../source/components/molecules/Popup/Popup.stories');
 	require('../source/components/molecules/RadioGroup/RadioGroup.stories');
 	require('../source/components/molecules/RepeaterField/RepeaterField.stories');
 	require('../source/components/molecules/ToastNotification/ToastNotifications.stories');
@@ -42,6 +41,7 @@ function loadStories() {
 	require('../source/components/organisms/Step/StepFooter/StepFooter.stories');
 	require('../source/components/organisms/SummaryList/SummaryList.stories');
 	require('../source/containers/Form/Form.stories');
+	require('../source/containers/Popup/Popup.stories');
 }
 
 const stories = [
@@ -72,7 +72,6 @@ const stories = [
 	'../source/components/molecules/Markdown.stories',
 	'../source/components/molecules/Modal/Modal.stories',
 	'../source/components/molecules/PersonField/PersonField.stories',
-	'../source/components/molecules/Popup/Popup.stories',
 	'../source/components/molecules/RadioGroup/RadioGroup.stories',
 	'../source/components/molecules/RepeaterField/RepeaterField.stories',
 	'../source/components/molecules/ToastNotification/ToastNotifications.stories',
@@ -82,7 +81,8 @@ const stories = [
 	'../source/components/organisms/Step/StepDescription/StepDescription.stories',
 	'../source/components/organisms/Step/StepFooter/StepFooter.stories',
 	'../source/components/organisms/SummaryList/SummaryList.stories',
-	'../source/containers/Form/Form.stories'
+	'../source/containers/Form/Form.stories',
+	'../source/containers/Popup/Popup.stories'
 ];
 
 module.exports = {

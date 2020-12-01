@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Notification, Popup } from '../../../store/NotificationContext';
 import Toast from './Toast';
-import PopupComponent from '../Popup/Popup';
+import PopupComponent from '../../../containers/Popup/Popup';
 
 function isNotification (n: Notification | Popup): n is Notification {
   return Object.prototype.hasOwnProperty.call(n, 'severity');

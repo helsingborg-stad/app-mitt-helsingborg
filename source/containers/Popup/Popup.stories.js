@@ -2,10 +2,10 @@ import React from 'react';
 import { View } from 'react-native';
 import { storiesOf } from '@storybook/react-native';
 import styled from 'styled-components/native';
-import StoryWrapper from '../StoryWrapper';
-import Button from '../../atoms/Button/Button';
-import Text from '../../atoms/Text';
-import { usePopup } from '../../../store/NotificationContext';
+import StoryWrapper from '../../components/molecules/StoryWrapper';
+import Button from '../../components/atoms/Button/Button';
+import Text from '../../components/atoms/Text';
+import { usePopup } from '../../store/NotificationContext';
 
 const PopupContainer = styled.View`
   position: absolute;
