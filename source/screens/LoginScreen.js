@@ -13,6 +13,7 @@ import Heading from 'app/components/atoms/Heading';
 import Input from 'app/components/atoms/Input';
 import { SLIDES } from 'app/assets/images';
 import BackNavigation from 'app/components/molecules/BackNavigation';
+import Label from 'app/components/atoms/Label';
 import AuthContext from '../store/AuthContext';
 import { useNotification } from '../store/NotificationContext';
 
@@ -31,27 +32,28 @@ const LoginSafeAreaView = styled.SafeAreaView`
 `;
 
 const LoginBody = styled.View`
-  flex-grow: 1;
   flex: 1;
-  flex-direction: column;
 `;
 
 const LoginHeader = styled.View`
   justify-content: center;
   flex: 4;
-  padding-left: 40px;
-  padding-right: 40px;
+  padding-left: 48px;
+  padding-right: 48px;
 `;
 
 const LoginForm = styled.View`
   flex: 1;
-  padding-left: 40px;
-  padding-right: 40px;
+  padding-left: 48px;
+  padding-right: 48px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  justify-content: center;
 `;
 
 const LoginFooter = styled.View`
   flex: 1;
-  padding: 24px 40px 24px 40px;
+  padding: 24px 48px 24px 48px;
   border-top-color: ${props => props.theme.border.default};
   border-top-width: 1px;
   background-color: ${props => props.theme.colors.neutrals[5]};
@@ -69,15 +71,23 @@ const Title = styled(Heading)`
 `;
 
 const LoginHeading = styled(Heading)`
-  font-size: ${props => props.theme.fontSizes[10]}px;
+  font-size: ${props => props.theme.fontSizes[13]}px;
+  font-weight: bold;
+  line-height: 50;
+  color: ${props => props.theme.colors.primary.blue[0]};
+`;
+
+const ModalHeading = styled(Heading)`
+  font-size: ${props => props.theme.fontSizes[9]}px;
   font-weight: bold;
   line-height: 40;
   color: ${props => props.theme.colors.primary.blue[0]};
 `;
 
 const LoginText = styled(Text)`
-  font-size: ${props => props.theme.fontSizes[3]}px;
-  font-weight: bold;
+  font-size: ${props => props.theme.fontSizes[4]}px;
+  line-height: 28px;
+  font-weight: ${props => props.theme.fontWeights[0]};
   color: ${props => props.theme.colors.primary.blue[0]};
 `;
 
@@ -95,12 +105,12 @@ const LoginModal = styled(Modal)`
 `;
 
 const ModalScreenWrapper = styled.View`
-  padding-left: 40px;
-  padding-right: 40px;
+  padding-left: 48px;
+  padding-right: 48px;
 `;
 
 const CloseModalButton = styled(BackNavigation)`
-  padding: 16px;
+  padding: 24px;
 `;
 
 const FooterText = styled(Text)`
@@ -108,11 +118,15 @@ const FooterText = styled(Text)`
   color: ${props => props.theme.colors.primary.blue[0]};
 `;
 
+const MoreOptionsLink = styled(Link)`
+  color: ${props => props.theme.colors.primary.blue[0]};
+`;
+
 const FooterLink = styled(Link)`
   font-style: italic;
   font-size: ${props => props.theme.fontSizes[2]}px;
   font-weight: bold;
-  text-decoration: underline;
+  text-decoration-color: ${props => props.theme.colors.primary.blue[0]};
   color: ${props => props.theme.colors.primary.blue[0]};
 `;
 
@@ -199,19 +213,19 @@ function LoginScreen(props) {
           <LoginText>Till en enklare och säkrare kontakt med Helsingborgs Stad.</LoginText>
         </LoginHeader>
 
-        <LoginForm>
-          {isLoading ? (
+        {isLoading ? (
+          <LoginForm>
             <AuthLoading cancelSignIn={() => handleCancelOrder()} isBankidInstalled />
-          ) : (
-            <>
-              <Button block onClick={() => handleSubmit(false)}>
-                <Text>Logga in med Mobilt BankID</Text>
-              </Button>
+          </LoginForm>
+        ) : (
+          <LoginForm>
+            <Button size="large" block onClick={() => handleSubmit(false)}>
+              <Text>Logga in med Mobilt BankID</Text>
+            </Button>
 
-              <Link onPress={() => setModalVisible(true)}>Fler alternativ</Link>
-            </>
-          )}
-        </LoginForm>
+            <MoreOptionsLink onPress={() => setModalVisible(true)}>Fler alternativ</MoreOptionsLink>
+          </LoginForm>
+        )}
 
         <LoginFooter>
           <FooterText>
@@ -243,17 +257,22 @@ function LoginScreen(props) {
       <LoginModal visible={modalVisible}>
         <CloseModalButton onClose={() => setModalVisible(false)} showBackButton={false} />
 
-        <ModalScreenWrapper>
-          <Heading>Logga in med BankID på en annan enhet</Heading>
-          <Text italic>
-            Öppna Mobilt BankID eller BankID på din andra enhet innan du trycker på logga in här
-            nedaför.
-          </Text>
+        <LoginBody>
+          <LoginHeader>
+            <ModalHeading>Logga in med BankID på en annan enhet</ModalHeading>
+            <LoginText>
+              Öppna Mobilt BankID eller BankID på din andra enhet innan du trycker på logga in här
+              nedaför.
+            </LoginText>
+          </LoginHeader>
 
           {isLoading ? (
-            <AuthLoading cancelSignIn={() => handleCancelOrder()} isBankidInstalled={false} />
+            <LoginForm>
+              <AuthLoading cancelSignIn={() => handleCancelOrder()} isBankidInstalled={false} />
+            </LoginForm>
           ) : (
-            <>
+            <LoginForm>
+              <Label color="dark">Personnummer</Label>
               <Input
                 placeholder="ååååmmddxxxx"
                 value={personalNumber}
@@ -265,6 +284,7 @@ function LoginScreen(props) {
                 center
               />
               <Button
+                size="large"
                 block
                 onClick={() => {
                   handleSubmit(true);
@@ -272,12 +292,18 @@ function LoginScreen(props) {
               >
                 <Text>Logga in</Text>
               </Button>
-            </>
+            </LoginForm>
           )}
-        </ModalScreenWrapper>
+        </LoginBody>
       </LoginModal>
     </LoginSafeAreaView>
   );
 }
+
+LoginScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }),
+};
 
 export default LoginScreen;
