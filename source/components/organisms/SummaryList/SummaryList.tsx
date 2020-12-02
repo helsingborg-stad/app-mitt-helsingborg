@@ -269,7 +269,7 @@ SummaryList.propTypes = {
    */
   startEditable: PropTypes.bool,
     /**
-   * Show an help button
+   * Show a help button
    */
   help: PropTypes.shape({
     text: PropTypes.string,
