@@ -7,13 +7,13 @@ import AuthLoading from 'app/components/molecules/AuthLoading';
 import ScreenWrapper from 'app/components/molecules/ScreenWrapper';
 import { ValidationHelper } from 'app/helpers';
 import Button from 'app/components/atoms/Button';
+import Icon from 'app/components/atoms/Icon';
 import Text from 'app/components/atoms/Text';
 import Modal from 'app/components/molecules/Modal';
 import Heading from 'app/components/atoms/Heading';
 import Input from 'app/components/atoms/Input';
 import { SLIDES } from 'app/assets/images';
 import BackNavigation from 'app/components/molecules/BackNavigation';
-import Label from 'app/components/atoms/Label';
 import AuthContext from '../store/AuthContext';
 import { useNotification } from '../store/NotificationContext';
 
@@ -72,14 +72,14 @@ const Title = styled(Heading)`
 
 const LoginHeading = styled(Heading)`
   font-size: ${props => props.theme.fontSizes[13]}px;
-  font-weight: bold;
+  font-weight: ${props => props.theme.fontWeights[1]};
   line-height: 50;
   color: ${props => props.theme.colors.primary.blue[0]};
 `;
 
 const ModalHeading = styled(Heading)`
   font-size: ${props => props.theme.fontSizes[9]}px;
-  font-weight: bold;
+  font-weight: ${props => props.theme.fontWeights[1]};
   line-height: 40;
   color: ${props => props.theme.colors.primary.blue[0]};
 `;
@@ -101,12 +101,7 @@ const Separator = styled.View`
 `;
 
 const LoginModal = styled(Modal)`
-  background-color: white;
-`;
-
-const ModalScreenWrapper = styled.View`
-  padding-left: 48px;
-  padding-right: 48px;
+  background-color: ${props => props.theme.colors.neutrals[6]};
 `;
 
 const CloseModalButton = styled(BackNavigation)`
@@ -130,14 +125,33 @@ const FooterLink = styled(Link)`
   color: ${props => props.theme.colors.primary.blue[0]};
 `;
 
+const LoginInput = styled(Input)`
+  margin: 0px;
+  margin-bottom: 32px;
+`;
+
+const Label = styled(Text)`
+  color: ${props => props.theme.colors.primary.blue[0]};
+  font-weight: ${props => props.theme.fontWeights[1]};
+  text-align: center;
+  margin-bottom: 8px;
+`;
+
+const LoginSuccessIcon = styled(Icon)`
+  color: ${props => props.theme.colors.primary.blue[0]};
+  align-self: center;
+`;
+
 function LoginScreen(props) {
   const {
     isAuthenticated,
     handleAuth,
-    isLoading,
     handleCancelOrder,
     isBankidInstalled,
+    isLoading,
+    isIdle,
     isRejected,
+    isResolved,
     error,
   } = useContext(AuthContext);
 
@@ -213,19 +227,29 @@ function LoginScreen(props) {
           <LoginText>Till en enklare och säkrare kontakt med Helsingborgs Stad.</LoginText>
         </LoginHeader>
 
-        {isLoading ? (
+        {isResolved && (
           <LoginForm>
-            <AuthLoading cancelSignIn={() => handleCancelOrder()} isBankidInstalled />
-          </LoginForm>
-        ) : (
-          <LoginForm>
-            <Button size="large" block onClick={() => handleSubmit(false)}>
-              <Text>Logga in med Mobilt BankID</Text>
-            </Button>
-
-            <MoreOptionsLink onPress={() => setModalVisible(true)}>Fler alternativ</MoreOptionsLink>
+            <LoginSuccessIcon size={48} name="check-circle" />
           </LoginForm>
         )}
+
+        {isLoading && (
+          <LoginForm>
+            <AuthLoading cancelSignIn={() => handleCancelOrder()} isBankidInstalled={false} />
+          </LoginForm>
+        )}
+
+        {isIdle ||
+          (isRejected && (
+            <LoginForm>
+              <Button size="large" block onClick={() => handleSubmit(false)}>
+                <Text>Logga in med Mobilt BankID</Text>
+              </Button>
+              <MoreOptionsLink onPress={() => setModalVisible(true)}>
+                Fler alternativ
+              </MoreOptionsLink>
+            </LoginForm>
+          ))}
 
         <LoginFooter>
           <FooterText>
@@ -266,34 +290,43 @@ function LoginScreen(props) {
             </LoginText>
           </LoginHeader>
 
-          {isLoading ? (
+          {isResolved && (
+            <LoginForm>
+              <LoginSuccessIcon size={48} name="check-circle" />
+            </LoginForm>
+          )}
+
+          {isLoading && (
             <LoginForm>
               <AuthLoading cancelSignIn={() => handleCancelOrder()} isBankidInstalled={false} />
             </LoginForm>
-          ) : (
-            <LoginForm>
-              <Label color="dark">Personnummer</Label>
-              <Input
-                placeholder="ååååmmddxxxx"
-                value={personalNumber}
-                onChangeText={handlePersonalNumber}
-                keyboardType="number-pad"
-                returnKeyType="done"
-                maxLength={12}
-                onSubmitEditing={() => handleSubmit(true)}
-                center
-              />
-              <Button
-                size="large"
-                block
-                onClick={() => {
-                  handleSubmit(true);
-                }}
-              >
-                <Text>Logga in</Text>
-              </Button>
-            </LoginForm>
           )}
+
+          {isIdle ||
+            (isRejected && (
+              <LoginForm>
+                <Label>PERSONNUMMER</Label>
+                <LoginInput
+                  placeholder="ååååmmddxxxx"
+                  value={personalNumber}
+                  onChangeText={handlePersonalNumber}
+                  keyboardType="number-pad"
+                  returnKeyType="done"
+                  maxLength={12}
+                  onSubmitEditing={() => handleSubmit(true)}
+                  center
+                />
+                <Button
+                  size="large"
+                  block
+                  onClick={() => {
+                    handleSubmit(true);
+                  }}
+                >
+                  <Text>Logga in</Text>
+                </Button>
+              </LoginForm>
+            ))}
         </LoginBody>
       </LoginModal>
     </LoginSafeAreaView>
