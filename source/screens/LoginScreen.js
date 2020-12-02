@@ -37,23 +37,19 @@ const LoginBody = styled.View`
 
 const LoginHeader = styled.View`
   justify-content: center;
-  flex: 4;
-  padding-left: 48px;
-  padding-right: 48px;
+  flex: 3;
+  padding: 0px 48px 24px 48px;
 `;
 
 const LoginForm = styled.View`
   flex: 1;
-  padding-left: 48px;
-  padding-right: 48px;
-  padding-top: 24px;
-  padding-bottom: 24px;
+  padding: 24px 48px 24px 48px;
   justify-content: center;
 `;
 
 const LoginFooter = styled.View`
   flex: 1;
-  padding: 24px 48px 24px 48px;
+  padding: 24px 48px 8px 48px;
   border-top-color: ${props => props.theme.border.default};
   border-top-width: 1px;
   background-color: ${props => props.theme.colors.neutrals[5]};
@@ -113,7 +109,7 @@ const FooterText = styled(Text)`
   color: ${props => props.theme.colors.primary.blue[0]};
 `;
 
-const MoreOptionsLink = styled(Link)`
+const FormLink = styled(Link)`
   color: ${props => props.theme.colors.primary.blue[0]};
 `;
 
@@ -159,6 +155,7 @@ function LoginScreen(props) {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [personalNumber, setPersonalNumber] = useState('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   /**
    * Function for navigating to a screen in the application.
@@ -188,6 +185,10 @@ function LoginScreen(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
+
+  useEffect(() => {
+    setIsButtonDisabled(personalNumber.length !== 12);
+  }, [isButtonDisabled, personalNumber]);
 
   /**
    * Handles the personal number input field changes and updates state.
@@ -245,9 +246,7 @@ function LoginScreen(props) {
               <Button size="large" block onClick={() => handleSubmit(false)}>
                 <Text>Logga in med Mobilt BankID</Text>
               </Button>
-              <MoreOptionsLink onPress={() => setModalVisible(true)}>
-                Fler alternativ
-              </MoreOptionsLink>
+              <FormLink onPress={() => setModalVisible(true)}>Fler alternativ</FormLink>
             </LoginForm>
           ))}
 
@@ -258,7 +257,7 @@ function LoginScreen(props) {
               onPress={() =>
                 Linking.openURL(
                   'https://helsingborg.se/toppmeny/om-webbplatsen/sa-har-behandlar-vi-dina-personuppgifter/'
-                ).catch(() => console.log('Couldnt open url'))
+                )
               }
             >
               användaravtal
@@ -268,7 +267,7 @@ function LoginScreen(props) {
               onPress={() =>
                 Linking.openURL(
                   'https://helsingborg.se/toppmeny/om-webbplatsen/sa-har-behandlar-vi-dina-personuppgifter/'
-                ).catch(() => console.log('Couldnt open url'))
+                )
               }
             >
               personuppgifter
@@ -311,12 +310,12 @@ function LoginScreen(props) {
                   value={personalNumber}
                   onChangeText={handlePersonalNumber}
                   keyboardType="number-pad"
-                  returnKeyType="done"
                   maxLength={12}
                   onSubmitEditing={() => handleSubmit(true)}
                   center
                 />
                 <Button
+                  disabled={isButtonDisabled}
                   size="large"
                   block
                   onClick={() => {
