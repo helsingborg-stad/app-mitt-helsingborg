@@ -67,9 +67,9 @@ const GroupedList: React.FC<Props> = ({
     <Fieldset
       colorSchema={colorSchema}
       legend={heading || ''}
+      help={help}
       renderHeaderActions={() => (
         <>
-          {help && Object.keys(help).length > 0 && <HelpButton {...help} />}
           {showEditButton && (
             <FieldsetButton colorSchema={colorSchema} z={0} size="small" onClick={changeEditable}>
               <Text>{editable ? 'Färdig' : 'Ändra'}</Text>
