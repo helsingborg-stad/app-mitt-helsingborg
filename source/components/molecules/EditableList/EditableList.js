@@ -223,7 +223,7 @@ EditableList.propTypes = {
   /** Validation error object */
   error: PropTypes.object,
   /**
-   * Show an help button
+   * Show a help button
    */
   help: PropTypes.shape({
     text: PropTypes.string,

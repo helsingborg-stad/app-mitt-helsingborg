@@ -36,7 +36,7 @@ interface Props {
 
 /**
  * A grouped list, grouping items according to categories.
- * Can show an edit-button, which toggles an editable prop in the children.
+ * Can show an edit-button, which toggles an editable prop in the children, and an help button that opens a help modal.
  */
 const GroupedList: React.FC<Props> = ({
   heading,
@@ -121,7 +121,7 @@ GroupedList.propTypes = {
    */
   startEditable: PropTypes.bool,
   /**
-   * Show an help button
+   * Show a help button
    */
   help: PropTypes.shape({
     text: PropTypes.string,

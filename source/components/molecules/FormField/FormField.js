@@ -11,6 +11,16 @@ import RepeaterField from '../RepeaterField/RepeaterField';
 import theme from '../../../styles/theme';
 import RadioGroup from '../RadioGroup/RadioGroup';
 
+/**
+ * Explanation of the properties in this data structure:
+ *
+ * component: which React component to render.
+ * changeEvent: the name of the event that the component should update the form value on. For example 'onChangeText' for a field input, or 'onChange' for a checkbox etc.
+ * blurEvent: if the component can be blurred, this is the name of the corresponding prop, typically 'onBlur'
+ * helpInComponent: set to true if the component has a help button 'inside', where the help should go instead of in the label.
+ * helpProp: the name of the prop where the help object should be sent, typically just 'help'.
+ * props: additional props to send into the generated component
+ */
 const inputTypes = {
   text: {
     component: Input,
@@ -234,7 +244,7 @@ FormField.propTypes = {
    */
   conditionalOn: PropTypes.string,
   /**
-   * Show an help button
+   * Show a help button
    */
   help: PropTypes.shape({
     text: PropTypes.string,
