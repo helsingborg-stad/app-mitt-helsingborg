@@ -325,6 +325,14 @@ function LoginScreen(props) {
                 >
                   <Text>Logga in</Text>
                 </Button>
+
+                <FormLink
+                  onPress={() => {
+                    Linking.openURL('https://support.bankid.com/sv/bankid/mobilt-bankid');
+                  }}
+                >
+                  Läs mer om hur du skaffar mobilt BankID
+                </FormLink>
               </LoginForm>
             ))}
         </LoginBody>
