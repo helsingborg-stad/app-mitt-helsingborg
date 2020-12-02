@@ -73,7 +73,7 @@ const HelpButton = props => {
     Linking.openURL(url);
   };
 
-  if (heading.length === 0 && text.length === 0 && url.length) {
+  if ((!heading || heading.length === 0) && (!text || text?.length === 0) && url.length) {
     return (
       <>
         <TouchableHighlight onPress={link} underlayColor="transparent">
@@ -107,7 +107,7 @@ const HelpButton = props => {
             >
               <Tagline>{tagline}</Tagline>
               <Heading>{heading}</Heading>
-              <HelpText>{text.length ? text : 'Text not available'}</HelpText>
+              <HelpText>{text?.length ? text : 'Text not available'}</HelpText>
               {url.length > 0 ? (
                 <LinkButton onClick={link} color="floral" block>
                   <Text>Läs mer</Text>
