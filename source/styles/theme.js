@@ -6,15 +6,29 @@ const calculateSizeScale = (size, scale) => scale * size;
 const setTypography = () => {
   const defaultSize = 12;
 
-  const fontSizes = [0.75, 0.87, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3].map(scale =>
-    calculateSizeScale(defaultSize, scale)
-  );
+  const fontSizes = [
+    0.75,
+    0.87,
+    1,
+    1.25,
+    1.5,
+    1.75,
+    2,
+    2.25,
+    2.5,
+    2.75,
+    3,
+    3.25,
+    3.5,
+    3.75,
+    4,
+  ].map(scale => calculateSizeScale(defaultSize, scale));
 
   const lineHeights = [1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3].map(scale =>
     calculateSizeScale(defaultSize, scale)
   );
 
-  const fontWeights = [400, 700];
+  const fontWeights = [500, 700];
   return {
     fontFamily: '"Roboto", "Arial", sans-serif"',
     fontSizes,
