@@ -51,13 +51,14 @@ function AuthProvider({ children, initialState }) {
   /**
    * This function starts up the authorization process.
    * @param {string} ssn Swedish Social Security Number (SSN)
+   * @param {bool} launchBankidApp Will automatically launch BankID app if set to true
    */
-  async function handleAuth(ssn) {
+  async function handleAuth(ssn, launchBankidApp = true) {
     if (env.USE_BANKID === 'false') {
       dispatch(await mockedAuth());
     } else {
       dispatch(setStatus('pending'));
-      dispatch(await startAuth(ssn));
+      dispatch(await startAuth(ssn, launchBankidApp));
     }
   }
 
@@ -66,14 +67,14 @@ function AuthProvider({ children, initialState }) {
    * @param {string} personalNumber Personal Identity Number
    * @param {string} userVisibleData Message to be shown when signing order
    */
-  async function handleSign(personalNumber, userVisibleData) {
+  async function handleSign(personalNumber, userVisibleData, launchBankidApp = true) {
     if (env.USE_BANKID === 'false') {
       dispatch(setStatus('signResolved'));
       return;
     }
 
     dispatch(setStatus('pending'));
-    dispatch(await startSign(personalNumber, userVisibleData));
+    dispatch(await startSign(personalNumber, userVisibleData, launchBankidApp));
   }
 
   /**

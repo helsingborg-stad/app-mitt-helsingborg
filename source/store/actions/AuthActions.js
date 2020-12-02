@@ -84,13 +84,18 @@ export function removeProfile() {
   };
 }
 
-export async function startAuth(ssn) {
+export async function startAuth(ssn, launchBankidApp) {
   try {
     const response = await bankid.auth(ssn);
     if (response.success === false) {
       throw new Error(response.data);
     }
     const { orderRef, autoStartToken } = response.data;
+
+    if (launchBankidApp) {
+      // Tries to start the bankId app on the device for user authorization.
+      await bankid.launchApp(autoStartToken);
+    }
 
     return {
       type: actionTypes.authStarted,
@@ -109,7 +114,7 @@ export async function startAuth(ssn) {
   }
 }
 
-export async function startSign(personalNumber, userVisibleData) {
+export async function startSign(personalNumber, userVisibleData, launchBankidApp) {
   try {
     const response = await bankid.sign(personalNumber, userVisibleData);
 
@@ -118,6 +123,11 @@ export async function startSign(personalNumber, userVisibleData) {
     }
 
     const { orderRef, autoStartToken } = response.data;
+
+    if (launchBankidApp) {
+      // Tries to start the bankId app on the device for user authorization.
+      await bankid.launchApp(autoStartToken);
+    }
 
     return {
       type: actionTypes.signStarted,
@@ -138,9 +148,6 @@ export async function startSign(personalNumber, userVisibleData) {
 
 export async function checkOrderStatus(autoStartToken, orderRef, isUserAuthenticated) {
   try {
-    // Tries to start the bankId app on the device for user authorization.
-    await bankid.launchApp(autoStartToken);
-
     // Try to collect a successfull collect response from bankid.
     const response = await bankid.collect(orderRef);
 
