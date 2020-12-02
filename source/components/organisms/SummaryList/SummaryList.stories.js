@@ -103,7 +103,8 @@ const SummaryStory = () => {
         showSum
       />
       <SummaryList
-        heading="Blå, ingen summa"
+        heading="Blå, ingen summa, med hjälp"
+        help={{ text: 'hello from the help text', heading: 'Do not fear, help is here' }}
         items={items}
         categories={categories}
         color="blue"

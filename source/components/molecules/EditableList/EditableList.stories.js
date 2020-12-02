@@ -58,7 +58,12 @@ storiesOf('EditableList', module).add('Default', () => (
 storiesOf('EditableList', module).add('Input is editable', () => (
   <StoryWrapper>
     <ScrollView>
-      <EditableList onInputChange={() => {}} inputs={inputs} title="Editable List" />
+      <EditableList
+        onInputChange={() => {}}
+        inputs={inputs}
+        title="Editable List"
+        help={{ text: 'hello from the help text', heading: 'Do not fear, help is here' }}
+      />
       <EditableList onInputChange={() => {}} inputs={inputs} title="Start editable" startEditable />
     </ScrollView>
   </StoryWrapper>
@@ -67,10 +72,33 @@ storiesOf('EditableList', module).add('Input is editable', () => (
 storiesOf('EditableList', module).add('Color Schema', () => (
   <StoryWrapper>
     <ScrollView>
-      <EditableList onInputChange={() => {}} inputs={inputs} title="Blue (Default)" />
-      <EditableList colorSchema="red" onInputChange={() => {}} inputs={inputs} title="Red" />
-      <EditableList colorSchema="purple" onInputChange={() => {}} inputs={inputs} title="Purple" />
-      <EditableList colorSchema="green" onInputChange={() => {}} inputs={inputs} title="Green" />
+      <EditableList
+        onInputChange={() => {}}
+        inputs={inputs}
+        title="Blue (Default)"
+        help={{ text: 'hello from the help text', heading: 'Do not fear, help is here' }}
+      />
+      <EditableList
+        colorSchema="red"
+        onInputChange={() => {}}
+        inputs={inputs}
+        title="Red"
+        help={{ text: 'hello from the help text', heading: 'Do not fear, help is here' }}
+      />
+      <EditableList
+        colorSchema="purple"
+        onInputChange={() => {}}
+        inputs={inputs}
+        title="Purple"
+        help={{ text: 'hello from the help text', heading: 'Do not fear, help is here' }}
+      />
+      <EditableList
+        colorSchema="green"
+        onInputChange={() => {}}
+        inputs={inputs}
+        title="Green"
+        help={{ text: 'hello from the help text', heading: 'Do not fear, help is here' }}
+      />
     </ScrollView>
   </StoryWrapper>
 ));
