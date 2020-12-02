@@ -69,14 +69,14 @@ const Title = styled(Heading)`
 const LoginHeading = styled(Heading)`
   font-size: ${props => props.theme.fontSizes[13]}px;
   font-weight: ${props => props.theme.fontWeights[1]};
-  line-height: 50;
+  line-height: 50px;
   color: ${props => props.theme.colors.primary.blue[0]};
 `;
 
 const ModalHeading = styled(Heading)`
   font-size: ${props => props.theme.fontSizes[9]}px;
   font-weight: ${props => props.theme.fontWeights[1]};
-  line-height: 40;
+  line-height: 40px;
   color: ${props => props.theme.colors.primary.blue[0]};
 `;
 
@@ -200,8 +200,9 @@ function LoginScreen(props) {
   /**
    * Handles the submission of the login form.
    */
-  const handleSubmit = async (externalDevice = false) => {
-    if (externalDevice) {
+  const handleLogin = async (authOnExternalDevice = false) => {
+    // Validate personal number if authentication is chosen to be triggered on an external device
+    if (authOnExternalDevice) {
       if (personalNumber.length <= 0) {
         return;
       }
@@ -211,10 +212,11 @@ function LoginScreen(props) {
         return;
       }
 
-      await handleAuth(personalNumber);
+      await handleAuth(personalNumber, false);
+      return;
     }
-
-    await handleAuth();
+    // Send empty personal number to use the personal number from users BankID app
+    await handleAuth(undefined, true);
   };
 
   return (
@@ -243,7 +245,7 @@ function LoginScreen(props) {
         {isIdle ||
           (isRejected && (
             <LoginForm>
-              <Button size="large" block onClick={() => handleSubmit(false)}>
+              <Button size="large" block onClick={() => handleLogin()}>
                 <Text>Logga in med Mobilt BankID</Text>
               </Button>
               <FormLink onPress={() => setModalVisible(true)}>Fler alternativ</FormLink>
@@ -311,7 +313,7 @@ function LoginScreen(props) {
                   onChangeText={handlePersonalNumber}
                   keyboardType="number-pad"
                   maxLength={12}
-                  onSubmitEditing={() => handleSubmit(true)}
+                  onSubmitEditing={() => handleLogin(true)}
                   center
                 />
                 <Button
@@ -319,7 +321,7 @@ function LoginScreen(props) {
                   size="large"
                   block
                   onClick={() => {
-                    handleSubmit(true);
+                    handleLogin(true);
                   }}
                 >
                   <Text>Logga in</Text>
