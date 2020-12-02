@@ -122,8 +122,6 @@ const ButtonBase = styled.View`
     ${props => props.size === 'medium' && Styles.medium}
     ${props => props.size === 'large' && Styles.large}
 
-    ${props => props.size === 'large' && Styles.large}
-
     ${props => Styles.elevation[props.elevation]}
 
     shadow-color: ${props =>
@@ -136,6 +134,7 @@ const ButtonBase = styled.View`
 
 /** Button child component overrides */
 const ButtonText = styled(Text)`
+  ${props => props.size === 'large' && `font-size:${props.theme.fontSizes[3]}px;`}
   font-weight: ${props => props.theme.fontWeights[1]};
   color: ${props =>
     props.variant === 'outlined' ? props.theme.colors.neutrals[1] : props.theme.colors.neutrals[7]};
