@@ -55,7 +55,7 @@ interface Props {
 }
 /** Simple popup dialog asking the user if they really want to exit the form. Partially masks the background. */
 const CloseDialog: React.FC<Props> = ({ visible, closeForm, closeDialog }) => (
-  <Modal visible={visible} transparent presentationStyle="overFullScreen">
+  <Modal visible={visible} transparent presentationStyle="overFullScreen" animationType="fade">
     <BackgroundBlur>
       <PopupContainer>
         <ContentContainer>
