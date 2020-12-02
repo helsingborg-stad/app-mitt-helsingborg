@@ -1,8 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import Text from '../Text/Text';
 import Icon from '../Icon';
 import Button from '../Button';
+import { Help } from '../../../types/FormTypes';
+import HelpButton from '../../molecules/HelpButton';
 
 interface FieldsetContainerProps {
   colorSchema: string;
@@ -74,51 +77,57 @@ const FieldsetLegendBorder = styled.View<FieldsetLegendBorderProps>`
 `;
 
 interface FieldsetProps {
-  children: React.ReactNode;
   legend: string;
-  onIconPress?: () => void;
-  iconName?: string;
-  iconSize?: number;
   colorSchema: string;
   empty?: boolean;
+  help?: Help;
   renderHeaderActions?: () => void;
 }
 
-function Fieldset({
+const Fieldset: React.FC<FieldsetProps> = ({
   children,
   legend,
-  onIconPress,
-  iconName,
-  iconSize,
+  help,
   colorSchema,
   renderHeaderActions,
   empty,
-}: FieldsetProps) {
-  const showIcon = onIconPress && iconName;
-  return (
-    <FieldsetContainer colorSchema={colorSchema} empty={empty}>
-      <FieldsetHeader>
-        <FieldsetHeaderSection justifyContent="flex-start">
-          <FieldsetLegendBorder colorSchema={colorSchema}>
-            <FieldsetLegend colorSchema={colorSchema}>{legend.toUpperCase()}</FieldsetLegend>
-          </FieldsetLegendBorder>
-        </FieldsetHeaderSection>
+}) => (
+  <FieldsetContainer colorSchema={colorSchema} empty={empty}>
+    <FieldsetHeader>
+      <FieldsetHeaderSection justifyContent="flex-start">
+        <FieldsetLegendBorder colorSchema={colorSchema}>
+          <FieldsetLegend colorSchema={colorSchema}>{legend.toUpperCase()}</FieldsetLegend>
+        </FieldsetLegendBorder>
+      </FieldsetHeaderSection>
+      <FieldsetHeaderSection justifyContent="flex-end">
+        {help && Object.keys(help).length > 0 && <HelpButton {...help} />}
+        {renderHeaderActions && renderHeaderActions()}
+      </FieldsetHeaderSection>
+    </FieldsetHeader>
+    <FieldsetBody>{children}</FieldsetBody>
+  </FieldsetContainer>
+);
 
-        <FieldsetHeaderSection justifyContent="flex-end">
-          {showIcon && <Icon onPress={onIconPress} name={iconName} size={iconSize} />}
-          {renderHeaderActions && renderHeaderActions()}
-        </FieldsetHeaderSection>
-      </FieldsetHeader>
-      <FieldsetBody>{children}</FieldsetBody>
-    </FieldsetContainer>
-  );
-}
+Fieldset.propTypes = {
+  empty: PropTypes.bool,
+  /**
+   * Show a help button
+   */
+  help: PropTypes.shape({
+    text: PropTypes.string,
+    size: PropTypes.number,
+    heading: PropTypes.string,
+    tagline: PropTypes.string,
+    url: PropTypes.string,
+  }),
+  renderHeaderActions: PropTypes.func,
+  colorSchema: PropTypes.string,
+  legend: PropTypes.string,
+  children: PropTypes.node,
+};
 
 Fieldset.defaultProps = {
   colorSchema: 'blue',
-  iconName: undefined,
-  renderHeaderActions: undefined,
-  iconSize: 22,
 };
 
 export default Fieldset;

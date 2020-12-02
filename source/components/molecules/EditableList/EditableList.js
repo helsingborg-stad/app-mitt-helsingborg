@@ -156,9 +156,9 @@ function EditableList({
     <Fieldset
       colorSchema={colorSchema}
       legend={title || ''}
+      help={help}
       renderHeaderActions={() => (
         <>
-          {help && Object.keys(help).length > 0 && <HelpButton {...help} />}
           {inputIsEditable && (
             <FieldsetButton colorSchema={colorSchema} z={0} size="small" onClick={changeEditable}>
               <Text>{editable ? 'Färdig' : 'Ändra'}</Text>
