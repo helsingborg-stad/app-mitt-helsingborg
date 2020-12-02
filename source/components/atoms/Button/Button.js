@@ -106,7 +106,7 @@ Styles.fullWidth = css`
 /* Styles for a disabled button */
 Styles.disabled = css`
   opacity: 0.2;
-  background-color: #e5e5e5;
+  background-color: ${props => props.theme.colors.neutrals[1]};
 `;
 
 const ButtonBase = styled.View`
