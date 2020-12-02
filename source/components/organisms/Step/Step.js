@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import AuthContext from 'app/store/AuthContext';
@@ -9,6 +9,7 @@ import Banner from './StepBanner/StepBanner';
 import StepFooter from './StepFooter/StepFooter';
 import StepDescription from './StepDescription/StepDescription';
 import Progressbar from '../../atoms/Progressbar/Progressbar';
+import CloseDialog from './CloseDialog/CloseDialog';
 
 const StepContainer = styled.View`
   background: ${props => props.theme.colors.neutrals[7]};
@@ -67,7 +68,7 @@ function Step({
     isBankidInstalled,
     handleSetStatus,
   } = useContext(AuthContext);
-
+  const [closeDialogVisible, setCloseDialogVisible] = useState(false);
   /**
    * Set auth context status to idle when navigating
    */
@@ -89,11 +90,16 @@ function Step({
 
   return (
     <StepContainer>
+      <CloseDialog
+        visible={closeDialogVisible}
+        closeForm={closeForm}
+        closeDialog={() => setCloseDialogVisible(false)}
+      />
       <StepBackNavigation
         showBackButton={isBackBtnVisible}
         inSubstep={inSubstep}
         onBack={backButtonBehavior}
-        onClose={closeForm}
+        onClose={() => setCloseDialogVisible(true)}
       />
       <StepContentContainer
         contentContainerStyle={{
