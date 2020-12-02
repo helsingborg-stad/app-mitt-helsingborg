@@ -11,12 +11,11 @@ fieldsetStories.add('default', () => (
   </StoryWrapper>
 ));
 
-fieldsetStories.add('With Icon', () => (
+fieldsetStories.add('With Help', () => (
   <StoryWrapper>
     <Fieldset
       legend="Tillgångar"
-      onIconPress={() => console.log('Icon is pressed')}
-      iconName="help-outline"
+      help={{ text: 'hello from the help text', heading: 'Do not fear, help is here' }}
     />
   </StoryWrapper>
 ));
@@ -24,26 +23,14 @@ fieldsetStories.add('Color Schemas', () => (
   <StoryWrapper>
     <Fieldset
       legend="Blue (default)"
-      onIconPress={() => console.log('Icon is pressed')}
-      iconName="help-outline"
+      help={{ text: 'hello from the help text', heading: 'Do not fear, help is here' }}
     />
     <Fieldset
       legend="Red"
-      onIconPress={() => console.log('Icon is pressed')}
-      iconName="help-outline"
       colorSchema="red"
+      help={{ text: 'hello from the help text', heading: 'Do not fear, help is here' }}
     />
-    <Fieldset
-      legend="Purple"
-      onIconPress={() => console.log('Icon is pressed')}
-      iconName="help-outline"
-      colorSchema="purple"
-    />
-    <Fieldset
-      legend="Green"
-      onIconPress={() => console.log('Icon is pressed')}
-      iconName="help-outline"
-      colorSchema="green"
-    />
+    <Fieldset legend="Purple" colorSchema="purple" />
+    <Fieldset legend="Green" colorSchema="green" />
   </StoryWrapper>
 ));
