@@ -48,6 +48,7 @@ function Step({
   actions,
   answers,
   validation,
+  validateStepAnswers,
   status,
   formNavigation,
   onSubmit,
@@ -174,6 +175,7 @@ function Step({
             currentPosition={currentPosition}
             onUpdate={onFieldChange}
             updateCaseInContext={updateCaseInContext}
+            validateStepAnswers={validateStepAnswers}
           />
         ) : null}
       </StepContentContainer>
@@ -194,6 +196,10 @@ Step.propTypes = {
    * User input validation result.
    */
   validation: PropTypes.object,
+  /**
+   * Function that runs validation for all inputs in a step.
+   */
+  validateStepAnswers: PropTypes.func,
   /**
    * The answers of a form.
    */
