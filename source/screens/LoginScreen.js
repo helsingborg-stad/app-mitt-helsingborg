@@ -299,7 +299,6 @@ function LoginScreen(props) {
                 keyboardType="number-pad"
                 maxLength={12}
                 onSubmitEditing={() => handleLogin(true)}
-                returnKeyType="done"
                 center
               />
               <Button
