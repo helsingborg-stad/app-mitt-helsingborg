@@ -57,7 +57,7 @@ const AuthLoading = props => {
         {!isBankidInstalled && <Text>Väntar på att BankID ska startas på en annan enhet</Text>}
       </AuthLoadingBody>
       <AuthLoadingAction>
-        <Button colorSchema={colorSchema} size="large" onClick={cancelSignIn} block>
+        <Button z={0} colorSchema={colorSchema} size="large" onClick={cancelSignIn} block>
           <Text>Avbryt</Text>
         </Button>
       </AuthLoadingAction>
