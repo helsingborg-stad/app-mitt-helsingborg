@@ -14,7 +14,7 @@ const ModalContainer = styled(RnModal)`
   background-color: #00213f;
 `;
 
-const Modal = ({ visible, children, ...other }) => (
+const Modal = ({ visible, children, scrollViewProps, ...other }) => (
   <ModalContainer
     animationInTiming={500}
     animationOutTiming={500}
@@ -23,9 +23,7 @@ const Modal = ({ visible, children, ...other }) => (
     transparent
     {...other}
   >
-    <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
-      {children}
-    </KeyboardAwareScrollView>
+    <KeyboardAwareScrollView {...scrollViewProps}>{children}</KeyboardAwareScrollView>
   </ModalContainer>
 );
 
