@@ -354,7 +354,6 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
       }
     } else if (question.type === 'repeaterField') {               // Checks for isValid in repeaterField.
       const repeaterField = state.validations[question.id];       // repeater are stored in an array and we need to check isValid for every one.
-      console.log(repeaterField);
 
       for (const repeaterIndexIndex in repeaterField) {
         const repeater = repeaterField[repeaterIndexIndex];
