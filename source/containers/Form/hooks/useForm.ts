@@ -39,6 +39,14 @@ function useForm(initialState: FormReducerState) {
       type: 'GET_ALL_QUESTIONS',
     });
   }, [formState.steps]);
+
+  const validateStepAnswers = (onErrorCallback, onValidCallback) => {
+    dispatch({
+      type: 'VALIDATE_ALL_STEP_ANSWERS',
+      payload: { onErrorCallback, onValidCallback },
+    });
+  };
+
   /**
    * Function for going forward in the form
    */
@@ -148,6 +156,7 @@ function useForm(initialState: FormReducerState) {
     handleInputChange,
     handleBlur,
     handleSubmit,
+    validateStepAnswers,
   };
 }
 
