@@ -331,12 +331,39 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
   });
 
   // Find out if any validation failed.
-  const fieldKeys = state.validations;
-  for(const fieldKey in fieldKeys) {
-    if (state.validations[fieldKey]?.isValid === false) {
-      allInputsValid = false;
+  for (const questionIndex in currentStepQuestions) {
+    const question = currentStepQuestions[questionIndex]
 
-      break;
+    if (['text', 'number'].includes(question.type)) {
+      if (state.validations[question.id]?.isValid === false) {
+        allInputsValid = false;
+
+        break;
+      }
+    } else if (question.type === 'editableList') {
+      const editableList = state.validations[question.id];
+
+      for (const editableListKey in editableList) {
+        if (editableList[editableListKey]?.isValid === false) {
+          allInputsValid = false;
+
+          break;
+        }
+      }
+    } else if (question.type === 'repeaterField') {
+      const repeaterField = state.validations[question.id];
+
+      for (const repeaterIndexIndex in repeaterField) {
+        const repeater = repeaterField[repeaterIndexIndex];
+
+        for (const repeaterIndex in repeater) {
+          if (repeater[repeaterIndex]?.isValid === false) {
+            allInputsValid = false;
+
+            break;
+          }
+        }
+      }
     }
   }
 
