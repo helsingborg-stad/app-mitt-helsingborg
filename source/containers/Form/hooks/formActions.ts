@@ -330,18 +330,20 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
     state = validateAnswer(state, { [id]: answer }, id);
   });
 
-  // Find out if any validation failed.
+  // Find out if any validation failed for types text, input, editableList and repeaterField.
+  // Validation field unique so different handling required for the different types.
+  // Will break at the very first found instance of isValid === false and set allInputsValid = false.
   for (const questionIndex in currentStepQuestions) {
     const question = currentStepQuestions[questionIndex]
 
-    if (['text', 'number'].includes(question.type)) {
+    if (['text', 'number'].includes(question.type)) {             // Checks for isValid in text and number.
       if (state.validations[question.id]?.isValid === false) {
         allInputsValid = false;
 
         break;
       }
-    } else if (question.type === 'editableList') {
-      const editableList = state.validations[question.id];
+    } else if (question.type === 'editableList') {                // Checks for isValid in editableList.
+      const editableList = state.validations[question.id];        // editableList can have many elements and we need to check isValid for every one.
 
       for (const editableListKey in editableList) {
         if (editableList[editableListKey]?.isValid === false) {
@@ -350,8 +352,9 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
           break;
         }
       }
-    } else if (question.type === 'repeaterField') {
-      const repeaterField = state.validations[question.id];
+    } else if (question.type === 'repeaterField') {               // Checks for isValid in repeaterField.
+      const repeaterField = state.validations[question.id];       // repeater are stored in an array and we need to check isValid for every one.
+      console.log(repeaterField);
 
       for (const repeaterIndexIndex in repeaterField) {
         const repeater = repeaterField[repeaterIndexIndex];
