@@ -185,26 +185,10 @@ function EditableList({
 }
 
 EditableList.propTypes = {
-  /**
-   * The values
-   */
   value: PropTypes.object,
-  /**
-   * Function for handling input events
-   */
   onInputChange: PropTypes.func.isRequired,
-  /**
-   * Function for handling inputs losing focus
-   */
   onBlur: PropTypes.func,
-  /**
-   * The title of the list
-   */
   title: PropTypes.string.isRequired,
-
-  /**
-   * The inputs that will be rendered
-   */
   inputs: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
@@ -212,11 +196,7 @@ EditableList.propTypes = {
       type: PropTypes.string.isRequired,
     })
   ),
-  /**
-   * Decides of the inputs are editable or not
-   */
   inputIsEditable: PropTypes.bool,
-  /** Whether the inputs starts editable or not */
   startEditable: PropTypes.bool,
   /** Validation error object */
   error: PropTypes.object,
@@ -231,7 +211,7 @@ EditableList.propTypes = {
     url: PropTypes.string,
   }),
   /**
-   * The color schema/theme of the component
+   * The color schema/theme of the component, default is blue.
    */
   colorSchema: PropTypes.oneOf(['blue', 'green', 'red', 'purple']),
 };

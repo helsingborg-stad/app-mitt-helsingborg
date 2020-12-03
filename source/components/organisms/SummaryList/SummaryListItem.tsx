@@ -8,6 +8,7 @@ import { Text, Icon, Checkbox, Input } from "../../atoms";
 import { SummaryListItem as SummaryListItemType } from "./SummaryList";
 import CalendarPicker from '../../molecules/CalendarPicker/CalendarPickerForm';
 import { colorPalette } from '../../../styles/palette';
+import { getValidColorSchema } from '../../../styles/themeHelpers';
 
 interface ItemWrapperProps {
   error?: { isValid: boolean; validationMessage: string; };
@@ -159,8 +160,7 @@ const SummaryListItem: React.FC<Props> = ({
         );
     }
   };
-  // TODO: we probably want to change how the color prop is handled in the future.
-  const colorSchema = Object.keys(colorPalette.primary).includes(color) ? color : 'blue';
+  const colorSchema = getValidColorSchema(color);
   return (
     <Row>
       <ItemWrapper key={`${item.title}`} colorSchema={colorSchema} editable={editable} error={validationError}>
@@ -183,17 +183,11 @@ const SummaryListItem: React.FC<Props> = ({
   );
 };
 SummaryListItem.propTypes = {
-  /**
-   * The header text of the list.
-   */
   item: PropTypes.any,
   /**
    * The values of the entire list object
    */
   value: PropTypes.any,
-  /**
-   * What should happen to update the values
-   */
   changeFromInput: PropTypes.func,
   onBlur: PropTypes.func,
   /**
@@ -201,12 +195,9 @@ SummaryListItem.propTypes = {
    */
   removeItem: PropTypes.func,
   /**
-   * Sets the color scheme of the list. default is red.
+   * Default is blue
    */
   color: PropTypes.string,
-  /**
-   * Whether or not to make the
-   */
   editable: PropTypes.bool,
   validationError: PropTypes.object,
 };
