@@ -60,14 +60,14 @@ const Title = styled(Heading)`
 const LoginHeading = styled(Heading)`
   font-size: ${props => props.theme.fontSizes[13]}px;
   font-weight: ${props => props.theme.fontWeights[1]};
-  line-height: 50px;
+  line-height: 60px;
   color: ${props => props.theme.colors.neutrals[0]};
 `;
 
 const ModalHeading = styled(Heading)`
   font-size: ${props => props.theme.fontSizes[9]}px;
   font-weight: ${props => props.theme.fontWeights[1]};
-  line-height: 40px;
+  line-height: 44px;
   color: ${props => props.theme.colors.neutrals[0]};
 `;
 
@@ -99,7 +99,6 @@ const FooterText = styled(Text)`
 `;
 
 const Link = styled(Text)`
-  color: ${props => props.theme.colors.primary.blue[0]};
   font-size: ${props => props.theme.fontSizes[3]}px;
   text-align: center;
   margin-top: 16px;
