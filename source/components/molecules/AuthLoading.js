@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import Icon from 'app/components/atoms/Icon';
+import { Animated, Easing } from 'react-native';
 import Text from '../atoms/Text';
 import Button from '../atoms/Button/Button';
 
@@ -31,17 +32,26 @@ const AuthResolvedIcon = styled(Icon)`
 
 const AuthLoading = props => {
   const { isBankidInstalled, cancelSignIn, colorSchema, isResolved } = props;
+  const fadeAnimation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(fadeAnimation, {
+      toValue: 1,
+      easing: Easing.back(),
+      duration: 250,
+    }).start();
+  }, [fadeAnimation]);
 
   if (isResolved) {
     return (
-      <AuthLoadingWrapper>
+      <AuthLoadingWrapper as={Animated.View} style={{ opacity: fadeAnimation }}>
         <AuthResolvedIcon size={48} name="check-circle" colorSchema={colorSchema} />
       </AuthLoadingWrapper>
     );
   }
 
   return (
-    <AuthLoadingWrapper>
+    <AuthLoadingWrapper as={Animated.View} style={{ opacity: fadeAnimation }}>
       <AuthLoadingBody>
         <AuthActivityIndicator size="large" color="slategray" />
         {!isBankidInstalled && <Text>Väntar på att BankID ska startas på en annan enhet</Text>}
