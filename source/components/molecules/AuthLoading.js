@@ -6,28 +6,20 @@ import { Animated, Easing } from 'react-native';
 import Text from '../atoms/Text';
 import Button from '../atoms/Button/Button';
 
+const Container = styled.View`
+  align-items: center;
+`;
+
 const AuthActivityIndicator = styled.ActivityIndicator`
   margin-bottom: 24px;
 `;
 
-const AuthLoadingWrapper = styled.View`
-  flex: 1;
-`;
-
-const AuthLoadingBody = styled.View`
-  flex: 1;
-  justify-content: flex-end;
+const InfoText = styled(Text)`
   margin-bottom: 24px;
 `;
 
-const AuthLoadingAction = styled.View`
-  flex-grow: 0;
-  justify-content: flex-end;
-`;
-
-const AuthResolvedIcon = styled(Icon)`
+const ResolvedIcon = styled(Icon)`
   color: ${props => props.theme.colors.primary[props.colorSchema][0]};
-  align-self: center;
 `;
 
 const AuthLoading = props => {
@@ -44,24 +36,22 @@ const AuthLoading = props => {
 
   if (isResolved) {
     return (
-      <AuthLoadingWrapper as={Animated.View} style={{ opacity: fadeAnimation }}>
-        <AuthResolvedIcon size={48} name="check-circle" colorSchema={colorSchema} />
-      </AuthLoadingWrapper>
+      <Container as={Animated.View} style={{ opacity: fadeAnimation }}>
+        <ResolvedIcon size={48} name="check-circle" colorSchema={colorSchema} />
+      </Container>
     );
   }
 
   return (
-    <AuthLoadingWrapper as={Animated.View} style={{ opacity: fadeAnimation }}>
-      <AuthLoadingBody>
-        <AuthActivityIndicator size="large" color="slategray" />
-        {!isBankidInstalled && <Text>Väntar på att BankID ska startas på en annan enhet</Text>}
-      </AuthLoadingBody>
-      <AuthLoadingAction>
-        <Button z={0} colorSchema={colorSchema} size="large" onClick={cancelSignIn} block>
-          <Text>Avbryt</Text>
-        </Button>
-      </AuthLoadingAction>
-    </AuthLoadingWrapper>
+    <Container as={Animated.View} style={{ opacity: fadeAnimation }}>
+      <AuthActivityIndicator size="large" color="slategray" />
+      {!isBankidInstalled && (
+        <InfoText>Väntar på att BankID ska startas på en annan enhet</InfoText>
+      )}
+      <Button z={0} colorSchema={colorSchema} size="large" onClick={cancelSignIn} block>
+        <Text>Avbryt</Text>
+      </Button>
+    </Container>
   );
 };
 
