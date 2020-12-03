@@ -273,6 +273,7 @@ function LoginScreen(props) {
         scrollViewProps={{
           keyboardShouldPersistTaps: 'handled',
           contentContainerStyle: { flexGrow: 1 },
+          extraScrollHeight: 50,
         }}
       >
         <CloseModalButton onClose={() => setModalVisible(false)} showBackButton={false} />
