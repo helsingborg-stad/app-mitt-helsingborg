@@ -26,12 +26,16 @@ const inputTypes = {
     component: Input,
     changeEvent: 'onChangeText',
     blurEvent: 'onBlur',
+    props: {
+      showErrorMessage: true,
+    },
   },
   number: {
     component: Input,
     blurEvent: 'onBlur',
     changeEvent: 'onChangeText',
     props: {
+      showErrorMessage: true,
       keyboardType: 'numeric',
     },
   },
