@@ -23,7 +23,9 @@ const Modal = ({ visible, children, ...other }) => (
     transparent
     {...other}
   >
-    <KeyboardAwareScrollView>{children}</KeyboardAwareScrollView>
+    <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
+      {children}
+    </KeyboardAwareScrollView>
   </ModalContainer>
 );
 
