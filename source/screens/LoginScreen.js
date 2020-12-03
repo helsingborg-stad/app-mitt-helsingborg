@@ -118,8 +118,6 @@ const LoginInput = styled(Input)`
 `;
 
 const Label = styled(Text)`
-  color: ${props => props.theme.colors.primary.blue[0]};
-  font-weight: ${props => props.theme.fontWeights[1]};
   text-align: center;
   margin-bottom: 8px;
 `;
@@ -291,7 +289,7 @@ function LoginScreen(props) {
 
           {(isIdle || isRejected) && (
             <Form>
-              <Label>PERSONNUMMER</Label>
+              <Label strong>PERSONNUMMER</Label>
               <LoginInput
                 placeholder="ååååmmddxxxx"
                 value={personalNumber}
