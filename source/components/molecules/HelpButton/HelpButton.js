@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Modal, TouchableHighlight, ScrollView, Image, Linking } from 'react-native';
 import styled from 'styled-components/native';
-import { Text, Icon, Button } from 'app/components/atoms';
+import { Icon, Button } from 'app/components/atoms';
 import PropTypes from 'prop-types';
 import icons from 'source/helpers/Icons';
+import Text from '../../atoms/Text';
 import BackNavigation from '../BackNavigation/BackNavigation';
 
 const ModalContainer = styled.View({
