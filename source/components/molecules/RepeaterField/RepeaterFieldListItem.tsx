@@ -1,14 +1,14 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import styled from 'styled-components/native';
-import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Text } from '../../atoms';
+import { Text, Input } from '../../atoms';
 import Button from '../../atoms/Button';
 import Label from '../../atoms/Label';
 import { InputRow } from './RepeaterField';
 import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
 import theme from '../../../styles/theme';
+import { getValidColorSchema } from '../../../styles/themeHelpers';
 
 const Base = styled.View`
   padding: 0px;
@@ -57,7 +57,7 @@ const InputWrapper = styled.View<{colorSchema: string}>`
   flex: 5;
 `;
 // eslint-disable-next-line prettier/prettier
-const ItemInput = styled.TextInput<{colorSchema: string}>`
+const ItemInput = styled(Input)`
   text-align: right;
   min-width: 80%;
   font-weight: 500;
@@ -76,7 +76,7 @@ interface Props {
   inputs: InputRow[];
   value: Record<string, string | number>;
   error?: Record<string, {isValid: boolean, validationMessage: string}>;
-  changeFromInput: (input: InputRow) => (text: string | number) => void;
+  changeFromInput: (input: InputRow) => (text: string) => void;
   onBlur?: () => void;
   removeItem: () => void;
   color: string;
@@ -92,7 +92,7 @@ const RepeaterFieldListItem: React.FC<Props> = ({
   removeItem,
   color,
 }) => {
-  const validColorSchema = Object.keys(theme.repeater).includes(color) ? color : 'blue';
+  const validColorSchema = getValidColorSchema(color);
 
   const inputComponent = (input: InputRow) => {
     switch (input.type) {
@@ -101,9 +101,10 @@ const RepeaterFieldListItem: React.FC<Props> = ({
           <ItemInput
             textAlign="right"
             colorSchema={validColorSchema}
-            value={value[input.id] || ''}
+            value={(value[input.id]?.toString()) || ''}
             onChangeText={changeFromInput(input)}
             onBlur={onBlur}
+            transparent
           />
         );
       case 'number':
@@ -112,9 +113,10 @@ const RepeaterFieldListItem: React.FC<Props> = ({
             textAlign="right"
             colorSchema={validColorSchema}
             keyboardType="numeric"
-            value={value[input.id] || ''}
+            value={value[input.id]?.toString() || ''}
             onChangeText={changeFromInput(input)}
             onBlur={onBlur}
+            transparent
           />
         );
       case 'date':
@@ -131,9 +133,10 @@ const RepeaterFieldListItem: React.FC<Props> = ({
           <ItemInput
             colorSchema={validColorSchema}
             textAlign="right"
-            value={value[input.id] || ''}
+            value={value[input.id]?.toString() || ''}
             onChangeText={changeFromInput(input)}
             onBlur={onBlur}
+            transparent
           />
         );
     }

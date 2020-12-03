@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { LayoutAnimation } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { Text, Button, Fieldset } from '../../atoms';
+import { Text, Button, Fieldset, Input } from '../../atoms';
 import Select from '../../atoms/Select';
 import HelpButton from '../HelpButton';
 import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
@@ -49,7 +49,7 @@ const EditableListItemInputWrapper = styled.View`
 `;
 
 // eslint-disable-next-line prettier/prettier
-const EditableListItemInput = styled.TextInput`
+const EditableListItemInput = styled(Input)`
   text-align: right;
   min-width: 80%;
   font-weight: 500;
@@ -106,14 +106,13 @@ function EditableList({
       case 'number':
         return (
           <EditableListItemInput
-            multiline /** Temporary fix to make field scrollable inside scrollview */
-            numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
             colorSchema={colorSchema}
             editable={editable}
             onChangeText={text => onChange(input.key, text)}
             onBlur={onInputBlur}
             value={value && value !== '' ? value[input.key] : state[input.key]}
             keyboardType="numeric"
+            transparent
           />
         );
       case 'date':
@@ -140,13 +139,12 @@ function EditableList({
       default:
         return (
           <EditableListItemInput
-            multiline /** Temporary fix to make field scrollable inside scrollview */
-            numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
             colorSchema={colorSchema}
             editable={editable}
             onChangeText={text => onChange(input.key, text)}
             onBlur={onInputBlur}
             value={value && value !== '' ? value[input.key] : state[input.key]}
+            transparent
           />
         );
     }

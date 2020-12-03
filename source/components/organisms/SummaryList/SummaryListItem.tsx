@@ -1,12 +1,11 @@
 /* eslint-disable no-nested-ternary */
 import React from "react";
-import { View, TextInput } from "react-native";
+import { View } from "react-native";
 import { TouchableHighlight } from "react-native-gesture-handler";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
-import { Text, Icon, Checkbox } from "../../atoms";
+import { Text, Icon, Checkbox, Input } from "../../atoms";
 import { SummaryListItem as SummaryListItemType } from "./SummaryList";
-import moment from 'moment';
 import CalendarPicker from '../../molecules/CalendarPicker/CalendarPickerForm';
 import { colorPalette } from '../../../styles/palette';
 
@@ -15,14 +14,6 @@ interface ItemWrapperProps {
   colorSchema: string;
   editable: boolean;
 }
-
-/**
- * Fixes a bug in React Native that makes input fields not scrollable inside ScrollViews on Android
- * Issue: https://github.com/facebook/react-native/issues/25594
- * @param props
- */
-const TextInputRight = (props) =>
-  <TextInput {...props} multiline={true} numberOfLines={1} textAlign="right" />;
 
 const Row = styled(View)`
   flex-direction: row;
@@ -55,9 +46,10 @@ const InputWrapper = styled.View`
   flex: 5;
 `;
 
-const SmallInput = styled(TextInputRight)`
+const SmallInput = styled(Input)`
   min-width: 80%;
   font-weight: 500;
+  color: ${props => props.theme.colors.neutrals[1]};
   padding: 6px;
 `;
 
@@ -121,6 +113,8 @@ const SummaryListItem: React.FC<Props> = ({
             onChangeText={changeFromInput}
             onBlur={onInputBlur}
             editable={editable}
+            transparent
+            textAlign="right"
           />
         );
       case 'number':
@@ -132,6 +126,8 @@ const SummaryListItem: React.FC<Props> = ({
             onBlur={onInputBlur}
             onChangeText={changeFromInput}
             editable={editable}
+            transparent
+            textAlign="right"
           />
         );
       case 'date':
@@ -156,7 +152,9 @@ const SummaryListItem: React.FC<Props> = ({
             value={value as string}
             onBlur={onInputBlur}
             onChangeText={changeFromInput}
+            transparent
             editable={editable}
+            textAlign="right"
           />
         );
     }
