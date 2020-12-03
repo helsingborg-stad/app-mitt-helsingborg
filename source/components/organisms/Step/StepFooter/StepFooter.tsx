@@ -6,6 +6,7 @@ import { Button, Text } from '../../../atoms';
 import { Action, ActionType } from '../../../../types/FormTypes';
 import { CaseStatus } from '../../../../types/CaseType';
 import { CurrentFormPosition } from '../../../../containers/Form/hooks/useForm';
+import { useNotification } from '../../../../store/NotificationContext';
 
 const ActionContainer = styled.View`
   flex: 1;
@@ -44,6 +45,7 @@ interface Props {
     currentMainStep: number
   ) => void;
   currentPosition: CurrentFormPosition;
+  validateStepAnswers: () => void;
 }
 
 const StepFooter: React.FC<Props> = ({
@@ -56,8 +58,10 @@ const StepFooter: React.FC<Props> = ({
   updateCaseInContext,
   currentPosition,
   children,
+  validateStepAnswers,
 }) => {
   const { user, handleSign, status, isLoading } = useContext(AuthContext);
+  const showNotification = useNotification();
 
   useEffect(() => {
     const signCase = () => {
@@ -96,10 +100,23 @@ const StepFooter: React.FC<Props> = ({
       }
       default: {
         return () => {
+          const errorCallback = () => {
+            showNotification(
+              'Oj, fel inmatning!',
+              'Vänligen rätta fel innan ni går vidare',
+              'error',
+              8000
+            );
+          };
+          const onValidCallback = () => {
+            if (formNavigation.next) formNavigation.next();
+          };
+
           if (onUpdate && caseStatus === 'ongoing') onUpdate(answers);
           if (updateCaseInContext && caseStatus === 'ongoing')
             updateCaseInContext(answers, 'ongoing', currentPosition);
-          if (formNavigation.next) formNavigation.next();
+
+          validateStepAnswers(errorCallback, onValidCallback);
         };
       }
     }
@@ -200,6 +217,8 @@ StepFooter.propTypes = {
     currentMainStep: PropTypes.number,
     currentMainStepIndex: PropTypes.number,
   }).isRequired,
+  /** Validate all answers in current step * */
+  validateStepAnswers: PropTypes.func,
 };
 
 StepFooter.defaultProps = {
