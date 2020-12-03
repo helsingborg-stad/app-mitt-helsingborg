@@ -17,35 +17,28 @@ import { useNotification } from '../store/NotificationContext';
 
 const { sanitizePin, validatePin } = ValidationHelper;
 
-const Link = styled(Text)`
-  font-size: ${props => props.theme.fontSizes[3]}px;
-  text-align: center;
-  margin-top: 16px;
-  margin-bottom: 8px;
-`;
-
 const LoginSafeAreaView = styled.SafeAreaView`
   flex: 1;
   background-color: ${props => props.theme.colors.neutrals[6]};
 `;
 
-const LoginBody = styled.View`
+const Body = styled.View`
   flex: 1;
 `;
 
-const LoginHeader = styled.View`
+const Header = styled.View`
   justify-content: center;
   flex: 3;
   padding: 0px 48px 24px 48px;
 `;
 
-const LoginForm = styled.View`
+const Form = styled.View`
   flex: 1;
   padding: 24px 48px 24px 48px;
   justify-content: center;
 `;
 
-const LoginFooter = styled.View`
+const Footer = styled.View`
   flex: 1;
   padding: 24px 48px 8px 48px;
   border-top-color: ${props => props.theme.border.default};
@@ -78,7 +71,7 @@ const ModalHeading = styled(Heading)`
   color: ${props => props.theme.colors.primary.blue[0]};
 `;
 
-const LoginText = styled(Text)`
+const ContentText = styled(Text)`
   font-size: ${props => props.theme.fontSizes[4]}px;
   line-height: 28px;
   font-weight: ${props => props.theme.fontWeights[0]};
@@ -107,11 +100,14 @@ const FooterText = styled(Text)`
   color: ${props => props.theme.colors.primary.blue[0]};
 `;
 
-const FormLink = styled(Link)`
+const Link = styled(Text)`
   color: ${props => props.theme.colors.primary.blue[0]};
+  font-size: ${props => props.theme.fontSizes[3]}px;
+  text-align: center;
+  margin-top: 16px;
 `;
 
-const FooterLink = styled(Link)`
+const ParagraphLink = styled(Text)`
   font-style: italic;
   font-size: ${props => props.theme.fontSizes[2]}px;
   font-weight: bold;
@@ -218,39 +214,39 @@ function LoginScreen(props) {
 
   return (
     <LoginSafeAreaView behavior="padding" enabled>
-      <LoginBody>
-        <LoginHeader>
+      <Body>
+        <Header>
           <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />
           <Title>Mitt Helsingborg</Title>
           <Separator />
           <LoginHeading>Välkommen!</LoginHeading>
-          <LoginText>Till en enklare och säkrare kontakt med Helsingborgs Stad.</LoginText>
-        </LoginHeader>
+          <ContentText>Till en enklare och säkrare kontakt med Helsingborgs Stad.</ContentText>
+        </Header>
 
         {(isLoading || isResolved) && (
-          <LoginForm>
+          <Form>
             <AuthLoading
               colorSchema="blue"
               isResolved={isResolved}
               cancelSignIn={() => handleCancelOrder()}
               isBankidInstalled
             />
-          </LoginForm>
+          </Form>
         )}
 
         {(isIdle || isRejected) && (
-          <LoginForm>
+          <Form>
             <Button size="large" block onClick={() => handleLogin()}>
               <Text>Logga in med Mobilt BankID</Text>
             </Button>
-            <FormLink onPress={() => setModalVisible(true)}>Fler alternativ</FormLink>
-          </LoginForm>
+            <Link onPress={() => setModalVisible(true)}>Fler alternativ</Link>
+          </Form>
         )}
 
-        <LoginFooter>
+        <Footer>
           <FooterText>
             När du använder tjänsten Mitt Helsingborg godkänner du vårt{' '}
-            <FooterLink
+            <ParagraphLink
               onPress={() =>
                 Linking.openURL(
                   'https://helsingborg.se/toppmeny/om-webbplatsen/sa-har-behandlar-vi-dina-personuppgifter/'
@@ -258,9 +254,9 @@ function LoginScreen(props) {
               }
             >
               användaravtal
-            </FooterLink>{' '}
+            </ParagraphLink>{' '}
             och att du har tagit del av hur vi hanterar dina{' '}
-            <FooterLink
+            <ParagraphLink
               onPress={() =>
                 Linking.openURL(
                   'https://helsingborg.se/toppmeny/om-webbplatsen/sa-har-behandlar-vi-dina-personuppgifter/'
@@ -268,36 +264,36 @@ function LoginScreen(props) {
               }
             >
               personuppgifter
-            </FooterLink>
+            </ParagraphLink>
             .
           </FooterText>
-        </LoginFooter>
-      </LoginBody>
+        </Footer>
+      </Body>
 
       <LoginModal visible={modalVisible}>
         <CloseModalButton onClose={() => setModalVisible(false)} showBackButton={false} />
-        <LoginBody>
-          <LoginHeader>
+        <Body>
+          <Header>
             <ModalHeading>Logga in med BankID på en annan enhet</ModalHeading>
-            <LoginText>
+            <ContentText>
               Öppna Mobilt BankID eller BankID på din andra enhet innan du trycker på logga in här
               nedaför.
-            </LoginText>
-          </LoginHeader>
+            </ContentText>
+          </Header>
 
           {(isLoading || isResolved) && (
-            <LoginForm>
+            <Form>
               <AuthLoading
                 colorSchema="blue"
                 isResolved={isResolved}
                 cancelSignIn={() => handleCancelOrder()}
                 isBankidInstalled={false}
               />
-            </LoginForm>
+            </Form>
           )}
 
           {(isIdle || isRejected) && (
-            <LoginForm>
+            <Form>
               <Label>PERSONNUMMER</Label>
               <LoginInput
                 placeholder="ååååmmddxxxx"
@@ -319,16 +315,16 @@ function LoginScreen(props) {
                 <Text>Logga in</Text>
               </Button>
 
-              <FormLink
+              <Link
                 onPress={() => {
                   Linking.openURL('https://support.bankid.com/sv/bankid/mobilt-bankid');
                 }}
               >
                 Läs mer om hur du skaffar mobilt BankID
-              </FormLink>
-            </LoginForm>
+              </Link>
+            </Form>
           )}
-        </LoginBody>
+        </Body>
       </LoginModal>
     </LoginSafeAreaView>
   );
