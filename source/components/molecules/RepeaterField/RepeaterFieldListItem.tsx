@@ -165,23 +165,16 @@ const RepeaterFieldListItem: React.FC<Props> = ({
   );
 };
 RepeaterFieldListItem.propTypes = {
-  heading: PropTypes.string,
   /**
    * The header text of the list.
    */
+  heading: PropTypes.string,
   inputs: PropTypes.any,
-  /**
-   * The values of the entire list object
-   */
   value: PropTypes.any,
-  /**
-   * What should happen to update the values
-   */
   changeFromInput: PropTypes.func,
-  /** Function to remove the item from the repeater */
   removeItem: PropTypes.func,
   /**
-   * Sets the color scheme of the list. default is red.
+   * Default is blue.
    */
   color: PropTypes.string,
 };

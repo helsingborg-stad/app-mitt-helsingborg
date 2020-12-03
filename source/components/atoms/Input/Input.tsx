@@ -62,17 +62,13 @@ const Input: React.FC<InputProps> = ({ onBlur, showErrorMessage, ...props }) => 
 };
 
 Input.propTypes = {
-  /** The text value */
   value: PropTypes.string,
   /**
-   * Sets the color schema for the component, default is blue.
+   * Default is blue.
    */
   colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
   /** Whether or not to show the error message as red text below the input field */
   showErrorMessage: PropTypes.bool,
-  /**
-   * Object with the validation result (isValid) and message to be displayed if validation failed.
-   */
   error: PropTypes.shape({
     isValid: PropTypes.bool.isRequired,
     message: PropTypes.string.isRequired,
