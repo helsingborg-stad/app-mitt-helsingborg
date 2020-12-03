@@ -9,13 +9,13 @@ type Props = TextProps & {
   italic?: boolean;
 };
 
-const Text = styled(RNText)<Props>`
+const Text = styled(RNText) <Props>`
   font-style: normal;
   font-weight: ${props => props.theme.typography[props.type || 'text'].fontWeight};
   line-height: ${props => props.theme.typography[props.type || 'text'].lineHeight}px;
   font-size: ${props => props.theme.typography[props.type || 'text'].fontSize}px;
   flex-shrink: 1;
-  color: ${props => props.theme.colors.neutrals[0]};
+  color: ${props => props.theme.colors.neutrals[1]};
   ${({ small }) =>
     small &&
     `

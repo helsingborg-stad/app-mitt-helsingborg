@@ -54,28 +54,26 @@ const Logo = styled.Image`
 
 const Title = styled(Heading)`
   font-size: ${props => props.theme.fontSizes[3]}px;
-  color: ${props => props.theme.colors.primary.red[0]};
+  color: ${props => props.theme.colors.primary.blue[0]};
 `;
 
 const LoginHeading = styled(Heading)`
   font-size: ${props => props.theme.fontSizes[13]}px;
   font-weight: ${props => props.theme.fontWeights[1]};
   line-height: 50px;
-  color: ${props => props.theme.colors.primary.blue[0]};
+  color: ${props => props.theme.colors.neutrals[0]};
 `;
 
 const ModalHeading = styled(Heading)`
   font-size: ${props => props.theme.fontSizes[9]}px;
   font-weight: ${props => props.theme.fontWeights[1]};
   line-height: 40px;
-  color: ${props => props.theme.colors.primary.blue[0]};
+  color: ${props => props.theme.colors.neutrals[0]};
 `;
 
 const ContentText = styled(Text)`
   font-size: ${props => props.theme.fontSizes[4]}px;
-  line-height: 28px;
-  font-weight: ${props => props.theme.fontWeights[0]};
-  color: ${props => props.theme.colors.primary.blue[0]};
+  line-height: 30px;
 `;
 
 const Separator = styled.View`
@@ -236,7 +234,7 @@ function LoginScreen(props) {
 
         {(isIdle || isRejected) && (
           <Form>
-            <Button size="large" block onClick={() => handleLogin()}>
+            <Button z={0} size="large" block onClick={() => handleLogin()}>
               <Text>Logga in med Mobilt BankID</Text>
             </Button>
             <Link onPress={() => setModalVisible(true)}>Fler alternativ</Link>
@@ -306,6 +304,7 @@ function LoginScreen(props) {
                 center
               />
               <Button
+                z={0}
                 disabled={isButtonDisabled}
                 size="large"
                 block
