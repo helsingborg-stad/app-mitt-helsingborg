@@ -65,7 +65,6 @@ const YoutubePopup: React.FC<Props> = ({ visible, closePopup, youtubeVideoId }) 
 );
 
 YoutubePopup.propTypes = {
-  /** whether to show the dialog or not */
   visible: PropTypes.bool,
   closePopup: PropTypes.func,
   /** for a youtube link to a video, like https://www.youtube.com/watch?v=dQw4w9WgXcQ, the id is the string aftter ?v=  */
