@@ -256,7 +256,7 @@ Button.propTypes = {
   /**
    * The size of the button. small is equivalent to the dense button styling.
    */
-  size: PropTypes.oneOf(['small', 'medium']),
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
   /**
    * Override or extend the styles applied to the component.
    */
