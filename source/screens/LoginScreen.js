@@ -27,20 +27,23 @@ const Body = styled.View`
 `;
 
 const Header = styled.View`
-  justify-content: center;
   flex: 3;
-  padding: 0px 48px 24px 48px;
+  justify-content: center;
+  padding: 0px 48px 0px 48px;
 `;
 
 const Form = styled.View`
   flex: 1;
   padding: 24px 48px 24px 48px;
   justify-content: center;
+  align-items: center;
+  height: 250px;
 `;
 
 const Footer = styled.View`
   flex: 1;
-  padding: 24px 48px 8px 48px;
+  max-height: 130px;
+  padding: 24px 48px 24px 48px;
   border-top-color: ${props => props.theme.border.default};
   border-top-width: 1px;
   background-color: ${props => props.theme.colors.neutrals[5]};
@@ -265,7 +268,13 @@ function LoginScreen(props) {
         </Footer>
       </Body>
 
-      <LoginModal visible={modalVisible}>
+      <LoginModal
+        visible={modalVisible}
+        scrollViewProps={{
+          keyboardShouldPersistTaps: 'handled',
+          contentContainerStyle: { flexGrow: 1 },
+        }}
+      >
         <CloseModalButton onClose={() => setModalVisible(false)} showBackButton={false} />
         <Body>
           <Header>
