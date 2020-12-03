@@ -30,6 +30,10 @@ const Modal = ({ visible, children, scrollViewProps, ...other }) => (
 Modal.propTypes = {
   visible: PropTypes.bool.isRequired,
   children: PropTypes.any,
+  /**
+   * Props specific for KeyboardAwareScrollView
+   */
+  scrollViewProps: PropTypes.object,
 };
 
 export default Modal;
