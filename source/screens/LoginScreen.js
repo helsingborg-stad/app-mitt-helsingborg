@@ -1,19 +1,17 @@
-import PropTypes from 'prop-types';
-import React, { useState, useContext, useCallback, useEffect } from 'react';
-import { Alert, Keyboard, Linking } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import styled from 'styled-components/native';
-import AuthLoading from 'app/components/molecules/AuthLoading';
-import ScreenWrapper from 'app/components/molecules/ScreenWrapper';
-import { ValidationHelper } from 'app/helpers';
+import { SLIDES } from 'app/assets/images';
 import Button from 'app/components/atoms/Button';
-import Icon from 'app/components/atoms/Icon';
-import Text from 'app/components/atoms/Text';
-import Modal from 'app/components/molecules/Modal';
 import Heading from 'app/components/atoms/Heading';
 import Input from 'app/components/atoms/Input';
-import { SLIDES } from 'app/assets/images';
+import Text from 'app/components/atoms/Text';
+import AuthLoading from 'app/components/molecules/AuthLoading';
 import BackNavigation from 'app/components/molecules/BackNavigation';
+import Modal from 'app/components/molecules/Modal';
+import { ValidationHelper } from 'app/helpers';
+import PropTypes from 'prop-types';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { Alert, Linking } from 'react-native';
+import styled from 'styled-components/native';
 import AuthContext from '../store/AuthContext';
 import { useNotification } from '../store/NotificationContext';
 
@@ -133,24 +131,17 @@ const Label = styled(Text)`
   margin-bottom: 8px;
 `;
 
-const LoginSuccessIcon = styled(Icon)`
-  color: ${props => props.theme.colors.primary.blue[0]};
-  align-self: center;
-`;
-
 function LoginScreen(props) {
   const {
     isAuthenticated,
     handleAuth,
     handleCancelOrder,
-    isBankidInstalled,
     isLoading,
     isIdle,
     isRejected,
     isResolved,
     error,
   } = useContext(AuthContext);
-
   const showNotification = useNotification();
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -179,6 +170,9 @@ function LoginScreen(props) {
     }, [isAuthenticated, navigateToScreen])
   );
 
+  /**
+   * Effect for showing notification if an error occurs
+   */
   useEffect(() => {
     if (isRejected && error?.message) {
       showNotification(error.message, '', 'error');
@@ -186,6 +180,9 @@ function LoginScreen(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
+  /**
+   * Effect for disabling login button if personal number is not required length
+   */
   useEffect(() => {
     setIsButtonDisabled(personalNumber.length !== 12);
   }, [isButtonDisabled, personalNumber]);
@@ -230,27 +227,25 @@ function LoginScreen(props) {
           <LoginText>Till en enklare och säkrare kontakt med Helsingborgs Stad.</LoginText>
         </LoginHeader>
 
-        {isResolved && (
+        {(isLoading || isResolved) && (
           <LoginForm>
-            <LoginSuccessIcon size={48} name="check-circle" />
+            <AuthLoading
+              colorSchema="blue"
+              isResolved={isResolved}
+              cancelSignIn={() => handleCancelOrder()}
+              isBankidInstalled
+            />
           </LoginForm>
         )}
 
-        {isLoading && (
+        {(isIdle || isRejected) && (
           <LoginForm>
-            <AuthLoading cancelSignIn={() => handleCancelOrder()} isBankidInstalled={false} />
+            <Button size="large" block onClick={() => handleLogin()}>
+              <Text>Logga in med Mobilt BankID</Text>
+            </Button>
+            <FormLink onPress={() => setModalVisible(true)}>Fler alternativ</FormLink>
           </LoginForm>
         )}
-
-        {isIdle ||
-          (isRejected && (
-            <LoginForm>
-              <Button size="large" block onClick={() => handleLogin()}>
-                <Text>Logga in med Mobilt BankID</Text>
-              </Button>
-              <FormLink onPress={() => setModalVisible(true)}>Fler alternativ</FormLink>
-            </LoginForm>
-          ))}
 
         <LoginFooter>
           <FooterText>
@@ -281,7 +276,6 @@ function LoginScreen(props) {
 
       <LoginModal visible={modalVisible}>
         <CloseModalButton onClose={() => setModalVisible(false)} showBackButton={false} />
-
         <LoginBody>
           <LoginHeader>
             <ModalHeading>Logga in med BankID på en annan enhet</ModalHeading>
@@ -291,51 +285,49 @@ function LoginScreen(props) {
             </LoginText>
           </LoginHeader>
 
-          {isResolved && (
+          {(isLoading || isResolved) && (
             <LoginForm>
-              <LoginSuccessIcon size={48} name="check-circle" />
+              <AuthLoading
+                colorSchema="blue"
+                isResolved={isResolved}
+                cancelSignIn={() => handleCancelOrder()}
+                isBankidInstalled={false}
+              />
             </LoginForm>
           )}
 
-          {isLoading && (
+          {(isIdle || isRejected) && (
             <LoginForm>
-              <AuthLoading cancelSignIn={() => handleCancelOrder()} isBankidInstalled={false} />
+              <Label>PERSONNUMMER</Label>
+              <LoginInput
+                placeholder="ååååmmddxxxx"
+                value={personalNumber}
+                onChangeText={handlePersonalNumber}
+                keyboardType="number-pad"
+                maxLength={12}
+                onSubmitEditing={() => handleLogin(true)}
+                center
+              />
+              <Button
+                disabled={isButtonDisabled}
+                size="large"
+                block
+                onClick={() => {
+                  handleLogin(true);
+                }}
+              >
+                <Text>Logga in</Text>
+              </Button>
+
+              <FormLink
+                onPress={() => {
+                  Linking.openURL('https://support.bankid.com/sv/bankid/mobilt-bankid');
+                }}
+              >
+                Läs mer om hur du skaffar mobilt BankID
+              </FormLink>
             </LoginForm>
           )}
-
-          {isIdle ||
-            (isRejected && (
-              <LoginForm>
-                <Label>PERSONNUMMER</Label>
-                <LoginInput
-                  placeholder="ååååmmddxxxx"
-                  value={personalNumber}
-                  onChangeText={handlePersonalNumber}
-                  keyboardType="number-pad"
-                  maxLength={12}
-                  onSubmitEditing={() => handleLogin(true)}
-                  center
-                />
-                <Button
-                  disabled={isButtonDisabled}
-                  size="large"
-                  block
-                  onClick={() => {
-                    handleLogin(true);
-                  }}
-                >
-                  <Text>Logga in</Text>
-                </Button>
-
-                <FormLink
-                  onPress={() => {
-                    Linking.openURL('https://support.bankid.com/sv/bankid/mobilt-bankid');
-                  }}
-                >
-                  Läs mer om hur du skaffar mobilt BankID
-                </FormLink>
-              </LoginForm>
-            ))}
         </LoginBody>
       </LoginModal>
     </LoginSafeAreaView>

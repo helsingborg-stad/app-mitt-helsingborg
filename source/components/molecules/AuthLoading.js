@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
+import Icon from 'app/components/atoms/Icon';
 import Text from '../atoms/Text';
 import Button from '../atoms/Button/Button';
 
@@ -23,8 +24,21 @@ const AuthLoadingAction = styled.View`
   justify-content: flex-end;
 `;
 
+const AuthResolvedIcon = styled(Icon)`
+  color: ${props => props.theme.colors.primary[props.colorSchema][0]};
+  align-self: center;
+`;
+
 const AuthLoading = props => {
-  const { isBankidInstalled, cancelSignIn } = props;
+  const { isBankidInstalled, cancelSignIn, colorSchema, isResolved } = props;
+
+  if (isResolved) {
+    return (
+      <AuthLoadingWrapper>
+        <AuthResolvedIcon size={48} name="check-circle" colorSchema={colorSchema} />
+      </AuthLoadingWrapper>
+    );
+  }
 
   return (
     <AuthLoadingWrapper>
@@ -33,7 +47,7 @@ const AuthLoading = props => {
         {!isBankidInstalled && <Text>Väntar på att BankID ska startas på en annan enhet</Text>}
       </AuthLoadingBody>
       <AuthLoadingAction>
-        <Button color="blue" size="large" onClick={cancelSignIn} block>
+        <Button colorSchema={colorSchema} size="large" onClick={cancelSignIn} block>
           <Text>Avbryt</Text>
         </Button>
       </AuthLoadingAction>
@@ -44,6 +58,16 @@ const AuthLoading = props => {
 AuthLoading.propTypes = {
   isBankidInstalled: PropTypes.bool.isRequired,
   cancelSignIn: PropTypes.func.isRequired,
+  isResolved: PropTypes.bool,
+  /**
+   * The color schema of the component. colors is defined in the application theme.
+   */
+  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+};
+
+AuthLoading.defaultProps = {
+  colorSchema: 'neutral',
+  isResolved: false,
 };
 
 export default AuthLoading;
