@@ -12,6 +12,7 @@ import {
   computeNumberMainSteps,
   getAllQuestions,
   validateAnswer,
+  validateAllStepAnswers,
   dirtyField,
 } from './formActions';
 
@@ -53,6 +54,10 @@ type Action =
   | {
       type: 'VALIDATE_ANSWER';
       payload: { answer: Record<string, any>; id: string; checkIfDirty?: boolean };
+    }
+  | {
+      type: 'VALIDATE_ALL_STEP_ANSWERS';
+      payload: { onErrorCallback: () => void; onValidCallback: () => void };
     }
   | {
       type: 'DIRTY_FIELD';
@@ -132,6 +137,14 @@ function formReducer(state: FormReducerState, action: Action) {
         action.payload.answer,
         action.payload.id,
         action.payload.checkIfDirty
+      );
+    }
+
+    case 'VALIDATE_ALL_STEP_ANSWERS': {
+      return validateAllStepAnswers(
+        state,
+        action.payload.onErrorCallback,
+        action.payload.onValidCallback
       );
     }
 

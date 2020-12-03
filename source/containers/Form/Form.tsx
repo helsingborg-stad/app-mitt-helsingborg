@@ -65,9 +65,14 @@ const Form: React.FC<Props> = ({
     allQuestions: [],
   };
 
-  const { formState, formNavigation, handleInputChange, handleSubmit, handleBlur } = useForm(
-    initialState
-  );
+  const {
+    formState,
+    formNavigation,
+    handleInputChange,
+    handleSubmit,
+    handleBlur,
+    validateStepAnswers,
+  } = useForm(initialState);
 
   formNavigation.close = () => {
     onClose();
@@ -88,6 +93,7 @@ const Form: React.FC<Props> = ({
         }}
         answers={formState.formAnswers}
         validation={formState.validations}
+        validateStepAnswers={validateStepAnswers}
         status={status}
         questions={questions}
         actions={actions}

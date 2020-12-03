@@ -301,7 +301,63 @@ export function validateAnswer(
 }
 
 /**
- * Dirty a field, i.e. mark that it's been touched by the user. Used for validation. 
+ * Shall validate all inputs in a step that have validation rules.
+ * Callbacks can be passed for handling validation fail and succeed.
+ *
+ * Function will first collect all inputs for current step and then validate
+ * each and every input.
+ * Once done, a callback will be called for failed (errors found) or success (all inputs valid).
+ *
+ * @param state             State of current form.
+ * @param onErrorCallback   Called when validation failed for an input field.
+ * @param onValidCallback   Called when all field validated successfully.
+ */
+export function validateAllStepAnswers( state: FormReducerState, onErrorCallback, onValidCallback ) {
+  // Collect all questions.
+  const currentStepIndex = state.currentPosition.index;
+  const currentStepQuestions = state.steps[currentStepIndex].questions;
+  let allInputsValid = true;
+
+  if (!currentStepQuestions) return state
+
+  // Set dirtyFields for handling input onFocus.
+  let dirtyFields = {}
+
+  // Validate all question inputs.
+  currentStepQuestions.map(({ id }) => {
+    const answer = state.formAnswers[id] || '';
+    dirtyFields[id] = true;
+    state = validateAnswer(state, { [id]: answer }, id);
+  });
+
+  // Find out if any validation failed.
+  const fieldKeys = state.validations;
+  for(const fieldKey in fieldKeys) {
+    if (state.validations[fieldKey]?.isValid === false) {
+      allInputsValid = false;
+
+      break;
+    }
+  }
+
+  // Handle callbacks.
+  if (allInputsValid) {
+    if (onValidCallback) onValidCallback();
+  } else {
+    if (onErrorCallback) onErrorCallback();
+  }
+
+  return {
+    ...state,
+    dirtyFields: {
+      ...state.dirtyFields = dirtyFields
+    },
+    allInputsValid
+  }
+}
+
+/**
+ * Dirty a field, i.e. mark that it's been touched by the user. Used for validation.
  *
  * @param state State of current form.
  * @param answer User input / question.
