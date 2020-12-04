@@ -268,7 +268,11 @@ function LoginScreen(props) {
           extraScrollHeight: 50,
         }}
       >
-        <CloseModalButton onClose={() => setModalVisible(false)} primary={false} showBackButton={false} />
+        <CloseModalButton
+          onClose={() => setModalVisible(false)}
+          primary={false}
+          showBackButton={false}
+        />
         <Body>
           <Header>
             <ModalHeading>Logga in med BankID på en annan enhet</ModalHeading>
@@ -294,6 +298,7 @@ function LoginScreen(props) {
               <Label strong>PERSONNUMMER</Label>
               <LoginInput
                 colorSchema="neutral"
+                returnKeyType={null}
                 placeholder="ååååmmddxxxx"
                 value={personalNumber}
                 onChangeText={handlePersonalNumber}
