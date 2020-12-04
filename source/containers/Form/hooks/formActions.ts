@@ -318,7 +318,10 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
   const currentStepQuestions = state.steps[currentStepIndex].questions;
   let allInputsValid = true;
 
-  if (!currentStepQuestions) return state
+  if (!currentStepQuestions || currentStepQuestions.length === 0){
+    onValidCallback();
+    return state
+  } 
 
   // Set dirtyFields for handling input onFocus.
   let dirtyFields = {}
