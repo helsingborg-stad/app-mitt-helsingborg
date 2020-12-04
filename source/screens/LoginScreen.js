@@ -140,7 +140,6 @@ function LoginScreen(props) {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [personalNumber, setPersonalNumber] = useState('');
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   /**
    * Function for navigating to a screen in the application.
@@ -173,13 +172,6 @@ function LoginScreen(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
-
-  /**
-   * Effect for disabling login button if personal number is not required length
-   */
-  useEffect(() => {
-    setIsButtonDisabled(personalNumber.length !== 12);
-  }, [isButtonDisabled, personalNumber]);
 
   /**
    * Handles the personal number input field changes and updates state.
@@ -311,7 +303,7 @@ function LoginScreen(props) {
               />
               <Button
                 z={0}
-                disabled={isButtonDisabled}
+                disabled={personalNumber.length !== 12}
                 size="large"
                 block
                 onClick={() => {
