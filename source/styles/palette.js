@@ -9,6 +9,7 @@ const primary = {
   green: ['#205400', '#50811B', '#6F9725', '#80B14A'],
   red: ['#770000', '#AE0B05', '#B23700', '#E84C31'],
   purple: ['#4B0034', '#7B075E', '#9E166A', '#AD428B'],
+  neutral: ['#000000', '#3D3D3D', '#565656', '#707070'],
 };
 
 /**
@@ -22,6 +23,7 @@ const complementary = {
   green: ['#C9D6C2', '#E1E9DB', '#EAF0E4', '#F2F6EE'],
   red: ['#DEC2C2', '#F0DBD9', '#F5E4E3', '#FAEEEC'],
   purple: ['#D4C2CE', '#E8DAE4', '#EFE4EB', '#F6EDF3'],
+  neutral: ['#C5C5C5', '#D5D5D5', '#F5F5F5', '#FFFFFF'],
 };
 
 /**

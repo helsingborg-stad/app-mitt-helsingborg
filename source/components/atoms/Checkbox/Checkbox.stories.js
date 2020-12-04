@@ -61,6 +61,16 @@ const Checkboxes = injectProps => {
       </FlexRow>
       <FlexRow>
         <Checkbox
+          onChange={handleChange('box3')}
+          checked={checkboxValues.box3}
+          color="neutral"
+          size="small"
+          {...injectProps}
+        />
+        <Text>Small, neutral color scheme</Text>
+      </FlexRow>
+      <FlexRow>
+        <Checkbox
           onChange={handleChange('box4')}
           checked={checkboxValues.box4}
           color="purple"
