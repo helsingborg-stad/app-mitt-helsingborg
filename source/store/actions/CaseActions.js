@@ -46,7 +46,6 @@ export async function createCase(form, user, cases, callback) {
   const body = {
     formId: form.id,
     provider: 'VIVA',
-    status: 'ongoing',
     currentPosition: {
       index: 0,
       level: 0,
@@ -61,7 +60,7 @@ export async function createCase(form, user, cases, callback) {
     },
     answers: initialAnswersArray || [],
   };
-
+  console.log(JSON.stringify(body));
   try {
     const response = await post('/cases', JSON.stringify(body));
     const newCase = response.data.data;
