@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TextInputProps } from 'react-native';
+import { TextInputProps, Keyboard } from 'react-native';
 import styled, { useTheme } from 'styled-components/native';
 import Text from '../Text';
 
@@ -56,6 +56,11 @@ const Input: React.FC<InputProps> = ({ onBlur, showErrorMessage, ...props }) => 
         numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
         onBlur={handleBlur}
         placeholderTextColor={theme.colors.neutrals[1]}
+        returnKeyType="done"
+        blurOnSubmit
+        onSubmitEditing={() => {
+          Keyboard.dismiss();
+        }}
         {...props}
       />
       {showErrorMessage && error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
