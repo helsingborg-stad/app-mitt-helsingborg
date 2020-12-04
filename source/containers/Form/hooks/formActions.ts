@@ -336,14 +336,14 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
   for (const questionIndex in currentStepQuestions) {
     const question = currentStepQuestions[questionIndex]
 
-    if (['text', 'number'].includes(question.type)) {             // Checks for isValid in text and number.
+    if (['text', 'number'].includes(question.type)) {
       if (state.validations[question.id]?.isValid === false) {
         allInputsValid = false;
 
         break;
       }
-    } else if (question.type === 'editableList') {                // Checks for isValid in editableList.
-      const editableList = state.validations[question.id];        // editableList can have many elements and we need to check isValid for every one.
+    } else if (question.type === 'editableList') {
+      const editableList = state.validations[question.id];
 
       for (const editableListKey in editableList) {
         if (editableList[editableListKey]?.isValid === false) {
@@ -352,8 +352,8 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
           break;
         }
       }
-    } else if (question.type === 'repeaterField') {               // Checks for isValid in repeaterField.
-      const repeaterField = state.validations[question.id];       // repeater are stored in an array and we need to check isValid for every one.
+    } else if (question.type === 'repeaterField') {
+      const repeaterField = state.validations[question.id];
 
       for (const repeaterIndexIndex in repeaterField) {
         const repeater = repeaterField[repeaterIndexIndex];
