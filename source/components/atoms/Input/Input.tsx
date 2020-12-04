@@ -17,10 +17,7 @@ type InputProps = Omit<TextInputProps, 'onBlur'> & {
 const StyledTextInput = styled.TextInput<InputProps>`
   width: 100%;
   font-weight: ${({ theme }) => theme.fontWeights[0]}
-  background-color: ${props =>
-    props.colorSchema === 'neutral'
-      ? props.theme.colors.neutrals[5]
-      : props.theme.colors.complementary[props.colorSchema][2]};
+  background-color: ${props => props.theme.colors.complementary[props.colorSchema][2]};
   ${({ transparent }) => transparent && `background-color: transparent;`}
   border-radius: 4.5px;
   border: solid 1px

@@ -37,6 +37,14 @@ const CheckboxFields = () => {
         help={{ text: 'some other helper text' }}
       />
       <CheckboxField
+        text="Do you feel it? Neutral theme, small"
+        color="neutral"
+        size="small"
+        value={checkboxValues.box1}
+        onChange={handleChange('box1')}
+        help={{ text: 'some other helper text' }}
+      />
+      <CheckboxField
         text="Does it feel good? Can I ask longer questions here? How does it handle long strings?"
         color="red"
         size="small"
