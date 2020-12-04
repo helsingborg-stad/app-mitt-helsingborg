@@ -16,7 +16,7 @@ type InputProps = Omit<TextInputProps, 'onBlur'> & {
 
 const StyledTextInput = styled.TextInput<InputProps>`
   width: 100%;
-  font-weight: ${({ theme }) => theme.fontWeights[1]}
+  font-weight: ${({ theme }) => theme.fontWeights[0]}
   background-color: ${props =>
     props.colorSchema === 'neutral'
       ? props.theme.colors.neutrals[5]
@@ -38,7 +38,7 @@ const StyledTextInput = styled.TextInput<InputProps>`
 const StyledErrorText = styled(Text)`
   font-size: ${({ theme }) => theme.fontSizes[3]};
   color: ${props => props.theme.textInput.errorTextColor};
-  font-weight: ${({ theme }) => theme.fontWeights[1]};
+  font-weight: ${({ theme }) => theme.fontWeights[0]};
   padding-top: 8px;
 `;
 
