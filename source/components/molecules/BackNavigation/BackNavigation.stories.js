@@ -43,6 +43,7 @@ backNavigationStories.add('Color Schema Red', props => (
 
 backNavigationStories.add('Primary color schema', props => (
   <StoryWrapper {...props}>
+    <BackNavigation colorSchema="red" primary isBackBtnVisible={false} />
     <BackNavigation colorSchema="red" primary={false} isBackBtnVisible={false} />
   </StoryWrapper>
 ));
