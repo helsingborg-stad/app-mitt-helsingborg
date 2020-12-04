@@ -33,7 +33,7 @@ const StyledTextInput = styled.TextInput<InputProps>`
 `;
 
 const StyledErrorText = styled(Text)`
-  font-size: ${({ theme }) => theme.typography.fontSizes[2]};
+  font-size: ${({ theme }) => theme.fontSizes[3]};
   color: ${props => props.theme.textInput.errorTextColor};
   font-weight: ${({ theme }) => theme.fontWeights[1]};
   padding-top: 8px;
