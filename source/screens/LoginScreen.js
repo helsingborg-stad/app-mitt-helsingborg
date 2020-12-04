@@ -293,6 +293,7 @@ function LoginScreen(props) {
             <Form>
               <Label strong>PERSONNUMMER</Label>
               <LoginInput
+                colorSchema="neutral"
                 placeholder="ååååmmddxxxx"
                 value={personalNumber}
                 onChangeText={handlePersonalNumber}
