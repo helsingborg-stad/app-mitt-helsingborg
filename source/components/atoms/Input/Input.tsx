@@ -33,9 +33,8 @@ const StyledTextInput = styled.TextInput<InputProps>`
 `;
 
 const StyledErrorText = styled(Text)`
-  font-family: Roboto;
-  font-size: 16px;
-  color: ${props => props.theme.textInput.errorTextColor}
+  font-size: ${({ theme }) => theme.typography.fontSizes[2]};
+  color: ${props => props.theme.textInput.errorTextColor};
   font-weight: ${({ theme }) => theme.fontWeights[1]};
   padding-top: 8px;
 `;
