@@ -43,12 +43,17 @@ const CloseButton = styled.View(props => ({
   margin: 0,
   height: 32,
   width: 32,
-  backgroundColor: props.theme.colors.primary[props.colorSchema][0],
+  backgroundColor: props.primary
+    ? props.theme.colors.primary[props.colorSchema][0]
+    : props.theme.colors.complementary[props.colorSchema][3],
 }));
 
-const CloseButtonIcon = styled(Icon).attrs(({ theme }) => ({
-  color: theme.colors.neutrals[7],
-}))``;
+const CloseButtonIcon = styled(Icon)`
+  color: ${props =>
+    props.primary
+      ? props.theme.colors.neutrals[7]
+      : props.theme.colors.primary[props.colorSchema][0]};
+`;
 
 const BackNavigation = ({
   style,
@@ -58,6 +63,7 @@ const BackNavigation = ({
   showBackButton,
   showCloseButton,
   inSubstep,
+  primary,
 }) =>
   !inSubstep ? (
     <BackNavigationWrapper style={style}>
@@ -70,8 +76,12 @@ const BackNavigation = ({
       )}
 
       {showCloseButton ? (
-        <CloseButton colorSchema={colorSchema} onStartShouldSetResponder={onClose}>
-          <CloseButtonIcon name="close" />
+        <CloseButton
+          primary={primary}
+          colorSchema={colorSchema}
+          onStartShouldSetResponder={onClose}
+        >
+          <CloseButtonIcon colorSchema={colorSchema} primary={primary} name="close" />
         </CloseButton>
       ) : null}
     </BackNavigationWrapper>
@@ -100,6 +110,7 @@ BackNavigation.propTypes = {
   showBackButton: PropTypes.bool,
   showCloseButton: PropTypes.bool,
   inSubstep: PropTypes.bool,
+  primary: PropTypes.bool,
 };
 
 BackNavigation.defaultProps = {
@@ -107,6 +118,7 @@ BackNavigation.defaultProps = {
   style: [],
   showBackButton: true,
   showCloseButton: true,
+  primary: true,
 };
 
 export default BackNavigation;
