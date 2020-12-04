@@ -8,7 +8,7 @@ type InputProps = Omit<TextInputProps, 'onBlur'> & {
   onBlur: (value: string) => void;
   center?: boolean;
   transparent?: boolean;
-  colorSchema?: 'blue' | 'green' | 'red' | 'purple';
+  colorSchema?: 'neutral' | 'blue' | 'green' | 'red' | 'purple';
   showErrorMessage?: boolean;
   error?: { isValid: boolean; message: string };
   textAlign?: 'left' | 'center' | 'right';
@@ -17,8 +17,11 @@ type InputProps = Omit<TextInputProps, 'onBlur'> & {
 const StyledTextInput = styled.TextInput<InputProps>`
   width: 100%;
   font-weight: ${({ theme }) => theme.fontWeights[1]}
-  background-color: ${({ theme, colorSchema, transparent }) =>
-    transparent ? 'transparent' : theme.colors.complementary[colorSchema][2]};
+  background-color: ${props =>
+    props.colorSchema === 'neutral'
+      ? props.theme.colors.neutrals[5]
+      : props.theme.colors.complementary[props.colorSchema][2]};
+  ${({ transparent }) => transparent && `background-color: transparent;`}
   border-radius: 4.5px;
   border: solid 1px
   ${({ theme, error }) =>
@@ -65,7 +68,7 @@ Input.propTypes = {
   /**
    * Default is blue.
    */
-  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
   /** Whether or not to show the error message as red text below the input field */
   showErrorMessage: PropTypes.bool,
   error: PropTypes.shape({

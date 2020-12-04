@@ -11,6 +11,7 @@ storiesOf('Input', module)
       <Input colorSchema="purple" placeholder="Purple input" center />
       <Input colorSchema="red" placeholder="Red input" />
       <Input colorSchema="green" placeholder="Green input" />
+      <Input colorSchema="neutral" placeholder="Neutral input" />
     </StoryWrapper>
   ))
   .add('Keyboard type numeric', () => (
@@ -19,6 +20,7 @@ storiesOf('Input', module)
       <Input colorSchema="purple" placeholder="Purple input" keyboardType="numeric" />
       <Input colorSchema="red" placeholder="Red input" keyboardType="numeric" />
       <Input colorSchema="green" placeholder="Green input" keyboardType="numeric" />
+      <Input colorSchema="neutral" placeholder="Neutral input" keyboardType="numeric" />
     </StoryWrapper>
   ))
   .add('Keyboard type phone pad', () => (
@@ -27,6 +29,7 @@ storiesOf('Input', module)
       <Input colorSchema="purple" placeholder="Purple input" keyboardType="phone-pad" />
       <Input colorSchema="red" placeholder="Red input" keyboardType="phone-pad" />
       <Input colorSchema="green" placeholder="Green input" keyboardType="phone-pad" />
+      <Input colorSchema="neutral" placeholder="Neutral input" keyboardType="phone-pad" />
     </StoryWrapper>
   ))
   .add('Input with failed validation', () => (
