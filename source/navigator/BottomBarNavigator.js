@@ -2,31 +2,20 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { ProfileScreen, HomeScreen } from 'app/screens';
-import { TabBarImage, MaterialTopTabBarWrapper } from 'source/components/molecules';
+import { TabBarImage } from 'source/components/molecules';
 import CaseNavigator from './CaseNavigator';
+import TabNavigator from '../components/molecules/TabNavigator';
 
 const Tab = createMaterialTopTabNavigator();
 const BottomBarStack = () => (
-  <Tab.Navigator
-    screenOptions={{ headerShown: false }}
-    initialRouteName="UserEvents"
-    tabBarPosition="bottom"
-    tabBar={props => <MaterialTopTabBarWrapper {...props} />}
-    swipeEnabled
-    tabBarOptions={{
-      showIcon: true,
-      showLabel: true,
-      tabStyle: {
-        flexDirection: 'row',
-      },
-    }}
-  >
+  <TabNavigator screenOptions={{ headerShown: false }} initialRouteName="UserEvents">
     <Tab.Screen
       name="UserEvents"
       component={CaseNavigator}
       options={{
         title: 'Ärende',
         tabBarIcon: TabBarImage(require('../images/task_3x.png')),
+        tabBarIconInactive: TabBarImage(require('../images/task_3x_gray.png')),
         tabBarLabel: 'Ärende',
       }}
     />
@@ -38,6 +27,7 @@ const BottomBarStack = () => (
         tabBarLabel: 'Sally',
         title: 'Sally',
         tabBarIcon: TabBarImage(require('../images/chat_3x.png')),
+        tabBarIconInactive: TabBarImage(require('../images/chat_3x_gray.png')),
       }}
     />
     <Tab.Screen
@@ -46,9 +36,10 @@ const BottomBarStack = () => (
       options={{
         title: 'Profil',
         tabBarIcon: TabBarImage(require('../images/profile_3x.png')),
+        tabBarIconInactive: TabBarImage(require('../images/profile_3x_gray.png')),
         tabBarLabel: 'Profil',
       }}
     />
-  </Tab.Navigator>
+  </TabNavigator>
 );
 export default BottomBarStack;
