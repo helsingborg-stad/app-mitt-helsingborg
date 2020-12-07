@@ -12,11 +12,29 @@ const replacementRules = [
   ['#lastName', 'user.lastName'],
   ['#datum1', 'date.nextMonth.first'],
   ['#datum2', 'date.nextMonth.last'],
+  ['#månad-1', 'date.month.currentMonth-1'],
+  ['#månad-2', 'date.month.currentMonth-2'],
   ['#year', 'date.currentYear'], // this is the current year of next month
+];
+
+const swedishMonthTable = [
+  'januari',
+  'februari',
+  'mars',
+  'april',
+  'maj',
+  'juni',
+  'juli',
+  'augusti',
+  'september',
+  'oktober',
+  'november',
+  'december',
 ];
 
 const replaceDates = (descriptor: string[]): string => {
   const today = new Date();
+
   if (descriptor[1] === 'nextMonth') {
     const month = today.getMonth() + 2;
     if (descriptor[2] === 'first') {
@@ -27,10 +45,22 @@ const replaceDates = (descriptor: string[]): string => {
       return `${days}/${month}`;
     }
   }
+
   if (descriptor[1] === 'currentYear') {
     const year = new Date(today.getFullYear(), today.getMonth() + 1, 1).getFullYear();
     return `${year}`;
   }
+
+  if (descriptor[1] === 'month') {
+    const currentMonth = today.getMonth();
+    if (descriptor[2] === 'currentMonth-1') {
+      return `${swedishMonthTable[currentMonth - 1]}`;
+    }
+    if (descriptor[2] === 'currentMonth-2') {
+      return `${swedishMonthTable[currentMonth - 2]}`;
+    }
+  }
+
   return '';
 };
 
