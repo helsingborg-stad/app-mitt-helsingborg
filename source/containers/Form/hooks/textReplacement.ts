@@ -12,8 +12,8 @@ const replacementRules = [
   ['#lastName', 'user.lastName'],
   ['#datum1', 'date.nextMonth.first'],
   ['#datum2', 'date.nextMonth.last'],
-  ['#månad-1', 'date.month.currentMonth-1'],
-  ['#månad-2', 'date.month.currentMonth-2'],
+  ['#månad-1', 'date.previousMonth.currentMonth-1'],
+  ['#månad-2', 'date.previousMonth.currentMonth-2'],
   ['#year', 'date.currentYear'], // this is the current year of next month
 ];
 
@@ -51,7 +51,7 @@ const replaceDates = (descriptor: string[]): string => {
     return `${year}`;
   }
 
-  if (descriptor[1] === 'month') {
+  if (descriptor[1] === 'previousMonth') {
     const currentMonth = today.getMonth();
     if (descriptor[2] === 'currentMonth-1') {
       return `${swedishMonthTable[currentMonth - 1]}`;
