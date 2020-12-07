@@ -5,7 +5,6 @@ export { default as GroupedList } from './GroupedList';
 export { default as GroupListWithAvatar } from './GroupedListWithAvatar';
 export { default as Header } from './Header';
 export { default as ListItem } from './ListItem';
-export { default as MaterialTopTabBarWrapper } from './MaterialTopTabBarWrapper';
 export { default as ScreenWrapper } from './ScreenWrapper';
 export { default as StoryWrapper } from './StoryWrapper';
 export { default as HelpButton } from './HelpButton';

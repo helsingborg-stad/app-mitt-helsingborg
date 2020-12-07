@@ -20,7 +20,7 @@ const RootStack = () => (
     <Stack.Screen
       name="App"
       component={BottomBarNavigator}
-      options={{ cardStyleInterpolator: forFade }}
+      options={{ cardStyleInterpolator: forFade, gestureEnabled: false }}
     />
     <Stack.Screen
       name="Form"
