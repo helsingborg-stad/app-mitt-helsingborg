@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react-native';
 import { Text } from 'app/components/atoms';
 import styled from 'styled-components/native';
 import StoryWrapper from '../../components/molecules/StoryWrapper';
-import RenderCard from './RenderCard';
+import DynamicCardRenderer from './DynamicCardRenderer';
 
 const FlexContainer = styled.ScrollView`
   background-color: #fff;
@@ -96,15 +96,15 @@ const cardData5 = {
   ],
 };
 
-storiesOf('Card Renderer', module).add('default', props => (
+storiesOf('Dynamic Card Renderer', module).add('default', props => (
   <StoryWrapper {...props}>
     <FlexContainer>
       <Title>Some different card variants</Title>
-      <RenderCard {...cardData} />
-      <RenderCard {...cardData2} />
-      <RenderCard {...cardData3} />
-      <RenderCard {...cardData4} />
-      <RenderCard {...cardData5} />
+      <DynamicCardRenderer {...cardData} />
+      <DynamicCardRenderer {...cardData2} />
+      <DynamicCardRenderer {...cardData3} />
+      <DynamicCardRenderer {...cardData4} />
+      <DynamicCardRenderer {...cardData5} />
     </FlexContainer>
   </StoryWrapper>
 ));
