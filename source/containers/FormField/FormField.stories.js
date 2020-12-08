@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import StoryWrapper from '../StoryWrapper';
+import StoryWrapper from '../../components/molecules/StoryWrapper';
 import FormField from './FormField';
 
 const heading = 'Green things';
