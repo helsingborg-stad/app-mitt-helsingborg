@@ -117,7 +117,7 @@ interface Props {
 }
 
 /** Dynamically renders a card with the sent in children as an array of json objects. */
-const RenderCard: React.FC<Props> = ({
+const DynamicCardRenderer: React.FC<Props> = ({
   colorSchema,
   backgroundColor,
   shadow,
@@ -139,7 +139,7 @@ const RenderCard: React.FC<Props> = ({
   );
 }
 
-RenderCard.propTypes = {
+DynamicCardRenderer.propTypes = {
   /** Color schema for all child components */
   colorSchema: PropTypes.oneOf(['blue', 'red', 'green', 'purple', 'neutral']),
   /** Card background color */
@@ -152,4 +152,4 @@ RenderCard.propTypes = {
   components: PropTypes.array,
 }
 
-export default RenderCard;
+export default DynamicCardRenderer;

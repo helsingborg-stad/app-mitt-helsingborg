@@ -33,7 +33,7 @@ const App = () => {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
   }
-  if (Config.IS_STORYBOOK === 'true') {
+  if (Config.IS_STORYBOOK !== 'true') {
     return (
       <AuthProvider>
         <CaseProvider>
