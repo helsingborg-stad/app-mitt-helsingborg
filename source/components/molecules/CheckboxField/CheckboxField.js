@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled, { ThemeContext } from 'styled-components/native';
 import { TouchableHighlight } from 'react-native';
-import { HelpButton } from 'source/components/molecules';
+import { HelpButton } from '..';
 import Text from '../../atoms/Text/Text';
 import Checkbox from '../../atoms/Checkbox/Checkbox';
 import theme, { getValidColorSchema } from '../../../styles/theme';

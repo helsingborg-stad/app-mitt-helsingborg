@@ -1,16 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, LayoutAnimation } from 'react-native';
-import { Input, Label, Select, Text } from 'source/components/atoms';
-import { CheckboxField, EditableList, GroupListWithAvatar } from 'source/components/molecules';
-import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
-import NavigationButtonField from '../NavigationButtonField/NavigationButtonField';
-import NavigationButtonGroup from '../NavigationButtonGroup/NavigationButtonGroup';
-import SummaryList from '../../organisms/SummaryList/SummaryList';
-import RepeaterField from '../RepeaterField/RepeaterField';
-import theme from '../../../styles/theme';
-import RadioGroup from '../RadioGroup/RadioGroup';
-import DynamicCardRenderer from '../../../containers/DynamicCardRenderer/DynamicCardRenderer';
+import DynamicCardRenderer from '../DynamicCardRenderer/DynamicCardRenderer';
+import { Input, Label, Select, Text } from '../../components/atoms';
+import {
+  CheckboxField,
+  EditableList,
+  GroupListWithAvatar,
+  CalendarPicker,
+  NavigationButtonField,
+  NavigationButtonGroup,
+  RepeaterField,
+  RadioGroup,
+} from '../../components/molecules';
+import theme from '../../styles/theme';
+import SummaryList from '../../components/organisms/SummaryList/SummaryList';
+
 /**
  * Explanation of the properties in this data structure:
  *
