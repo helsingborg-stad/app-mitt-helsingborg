@@ -43,7 +43,7 @@ const CaseSummary = props => {
 
   const {
     status,
-    currentStep: { currentMainStep: currentStep } = {},
+    currentPosition: { currentMainStep: currentStep } = {},
     details: { administrators, period: { startDate, endDate } = {} } = {},
     updatedAt,
   } = caseData;
