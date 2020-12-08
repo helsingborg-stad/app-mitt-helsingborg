@@ -41,8 +41,8 @@ function loadStories() {
 	require('../source/components/organisms/Step/StepFooter/StepFooter.stories');
 	require('../source/components/organisms/SummaryList/SummaryList.stories');
 	require('../source/components/organisms/YoutubePopup/YoutubePopup.stories');
+	require('../source/containers/DynamicCardRenderer/DynamicCardRenderer.stories');
 	require('../source/containers/Form/Form.stories');
-	require('../source/containers/RenderCard/DynamicCardRenderer.stories');
 }
 
 const stories = [
@@ -83,8 +83,8 @@ const stories = [
 	'../source/components/organisms/Step/StepFooter/StepFooter.stories',
 	'../source/components/organisms/SummaryList/SummaryList.stories',
 	'../source/components/organisms/YoutubePopup/YoutubePopup.stories',
-	'../source/containers/Form/Form.stories',
-	'../source/containers/RenderCard/DynamicCardRenderer.stories'
+	'../source/containers/DynamicCardRenderer/DynamicCardRenderer.stories',
+	'../source/containers/Form/Form.stories'
 ];
 
 module.exports = {

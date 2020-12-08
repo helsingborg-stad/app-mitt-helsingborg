@@ -33,30 +33,19 @@ interface Subtitle {
   text: string;
 }
 
-interface Button {
+interface ButtonBase {
   type: 'button';
   text: string;
   colorSchema?: 'blue' | 'red' | 'green' | 'purple';
   icon?: string;
   iconPosition?: 'left' | 'right';
-  action:
-    | {
-        type: 'email';
-        email: string;
-      }
-    | {
-        type: 'phone';
-        phonenumber: string;
-      }
-    | {
-        type: 'navigate';
-        screen: string;
-      }
-    | {
-        type: 'url',
-        url: string;
-    }
 }
+type Button = ButtonBase & (
+  { action: 'email'; email: string } |
+  { action: 'phone'; phonenumber: string } |
+  { action: 'url'; url: string } |
+  { action: 'navigate'; screen: string }
+);
 
 type CardComponent = Image | Text | Title | Subtitle | Button;
 /***** end of types */
@@ -82,20 +71,20 @@ const renderCardComponent = (component: CardComponent, navigation: any) => {
 
   // Treat buttons separately, because they have some more complicated behavior
   if (component.type === 'button') {
-    const { icon, iconPosition, text, action } = component;
+    const { icon, iconPosition, text } = component;
     let onClick: () => void = () => null;
-    switch (action.type) {
+    switch (component.action) {
       case 'email':
-        onClick = () => { launchEmail(action.email)};
+        onClick = () => { launchEmail(component.email)};
         break;
       case 'phone':
-        onClick = () => { launchPhone(action.phonenumber)};
+        onClick = () => { launchPhone(component.phonenumber)};
         break;
       case 'navigate':
-        onClick = () => { if (navigation?.navigate) navigation.navigate(action.screen) }; // TODO think about sending parameters here
+        onClick = () => { if (navigation?.navigate) navigation.navigate(component.screen) }; // TODO think about sending parameters here
         break;
       case 'url':
-        onClick = () => { Linking.openURL(action.url)};
+        onClick = () => { Linking.openURL(component.url)};
         break;
     }
     return (
