@@ -38,7 +38,7 @@ const colorSchema = 'red';
  */
 const computeCaseComponent = (status, latestCase, form, caseType, navigation, createCase) => {
   const updatedAt = latestCase?.updatedAt ? formatUpdatedAt(latestCase.updatedAt) : '';
-  const currentStep = latestCase?.currentStep?.currentMainStep || '';
+  const currentStep = latestCase?.currentPosition?.currentMainStep || '';
   const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
 
   switch (status) {
