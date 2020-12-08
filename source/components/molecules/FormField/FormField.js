@@ -10,7 +10,7 @@ import SummaryList from '../../organisms/SummaryList/SummaryList';
 import RepeaterField from '../RepeaterField/RepeaterField';
 import theme from '../../../styles/theme';
 import RadioGroup from '../RadioGroup/RadioGroup';
-
+import DynamicCardRenderer from '../../../containers/DynamicCardRenderer/DynamicCardRenderer';
 /**
  * Explanation of the properties in this data structure:
  *
@@ -99,6 +99,9 @@ const inputTypes = {
     blurEvent: 'onBlur',
     changeEvent: 'onChange',
     props: {},
+  },
+  card: {
+    component: DynamicCardRenderer,
   },
 };
 

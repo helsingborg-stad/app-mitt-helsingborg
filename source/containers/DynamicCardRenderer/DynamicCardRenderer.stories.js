@@ -40,7 +40,8 @@ const cardData2 = {
     {
       type: 'button',
       text: 'Do it!',
-      action: { type: 'email', email: 'test@test.com' },
+      action: 'email',
+      email: 'test@test.com',
       icon: 'email',
       iconPosition: 'left',
     },
@@ -59,7 +60,8 @@ const cardData3 = {
     {
       type: 'button',
       text: 'Do it!',
-      action: { type: 'navigate', email: 'test@test.com' },
+      action: 'navigate',
+      screen: 'UserEvents',
       icon: 'arrow-forward',
     },
   ],
@@ -90,7 +92,8 @@ const cardData5 = {
     {
       type: 'button',
       text: 'Helsingborg.se',
-      action: { type: 'url', url: 'https://www.helsingborg.se' },
+      action: 'url',
+      url: 'https://www.helsingborg.se',
       icon: 'arrow-forward',
     },
   ],
