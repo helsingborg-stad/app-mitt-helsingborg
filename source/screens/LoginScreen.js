@@ -10,10 +10,12 @@ import Modal from 'app/components/molecules/Modal';
 import { ValidationHelper } from 'app/helpers';
 import PropTypes from 'prop-types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Alert, Linking } from 'react-native';
+import { Alert, Linking, View } from 'react-native';
 import styled from 'styled-components/native';
 import AuthContext from '../store/AuthContext';
 import { useNotification } from '../store/NotificationContext';
+import MarkdownConstructor from '../helpers/MarkdownConstructor';
+import userAgreementText from '../assets/text/userAgreementText';
 
 const { sanitizePin, validatePin } = ValidationHelper;
 
@@ -38,6 +40,10 @@ const Form = styled.View`
   justify-content: center;
   align-items: center;
   height: 250px;
+`;
+
+const UserAgreementForm = styled.View`
+  padding: 24px 48px 24px 48px;
 `;
 
 const Footer = styled.View`
@@ -139,7 +145,24 @@ function LoginScreen(props) {
   const showNotification = useNotification();
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [userAgreementModal, setUserAgreementModalVisible] = useState(false);
   const [personalNumber, setPersonalNumber] = useState('');
+
+  /**
+   * Setup for markdown formatter used to render user agreement text.
+   */
+  const userAgreementMarkdownRules = {
+    text: (node, _children, _parent, _styles) => (
+      <Text style={{ fontSize: 16 }} key={node.key}>
+        {node.content}
+      </Text>
+    ),
+    bullet_list: (node, children, parent, styles) => (
+      <View key={node.key} style={[styles.list, styles.listUnordered]}>
+        {children}
+      </View>
+    ),
+  };
 
   /**
    * Function for navigating to a screen in the application.
@@ -237,11 +260,9 @@ function LoginScreen(props) {
           <FooterText>
             När du använder tjänsten Mitt Helsingborg godkänner du vårt{' '}
             <ParagraphLink
-              onPress={() =>
-                Linking.openURL(
-                  'https://helsingborg.se/toppmeny/om-webbplatsen/sa-har-behandlar-vi-dina-personuppgifter/'
-                )
-              }
+              onPress={() => {
+                setUserAgreementModalVisible(true);
+              }}
             >
               användaravtal
             </ParagraphLink>{' '}
@@ -328,6 +349,26 @@ function LoginScreen(props) {
               </Link>
             </Form>
           )}
+        </Body>
+      </LoginModal>
+
+      <LoginModal
+        visible={userAgreementModal}
+        scrollViewProps={{
+          keyboardShouldPersistTaps: 'handled',
+          contentContainerStyle: { flexGrow: 1 },
+          extraScrollHeight: 50,
+        }}
+      >
+        <CloseModalButton
+          onClose={() => setUserAgreementModalVisible(false)}
+          primary={false}
+          showBackButton={false}
+        />
+        <Body>
+          <UserAgreementForm>
+            <MarkdownConstructor rules={userAgreementMarkdownRules} rawText={userAgreementText} />
+          </UserAgreementForm>
         </Body>
       </LoginModal>
     </LoginSafeAreaView>
