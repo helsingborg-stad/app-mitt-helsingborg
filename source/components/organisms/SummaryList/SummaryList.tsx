@@ -187,6 +187,8 @@ const SummaryList: React.FC<Props> = ({
               addToSum(numericValue);
             }
           });
+        } else if (values && values?.length > 0) {
+          console.log(`Possible type error in the form; SummaryList ${heading}, at item {id:${item.id}, inputId: ${item?.inputId}, title: ${item.title}} expected to get values as array, but got something else. Check the form configuration.`);
         }
       } else {
         listItems.push(
