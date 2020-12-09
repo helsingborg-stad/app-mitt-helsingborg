@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, ViewStyle } from 'react-native';
+import { ViewStyle } from 'react-native';
 import styled from 'styled-components/native';
 import {
   NavigationHelpersContext,
@@ -16,6 +16,9 @@ const BarWrapper = styled.View`
   box-shadow: 0px -1px 0px rgba(86, 86, 86, 0.1);
   padding-left: 20px;
   padding-right: 20px;
+`;
+const FlexWrapper = styled.View`
+  flex: 1;
 `;
 
 const colors: PrimaryColor[] = ['red', 'green', 'blue'];
@@ -48,9 +51,9 @@ const TabNavigator: React.FC<Props> = ({
 
   return (
     <NavigationHelpersContext.Provider value={navigation}>
-      <View style={[{ flex: 1 }, contentStyle]}>
+      <FlexWrapper style={[contentStyle]}>
         {descriptors[state.routes[state.index].key].render()}
-      </View>
+      </FlexWrapper>
       <BarWrapper>
         {state.routes.map((route, index) => (
           <TabNavigatorItem

@@ -6,6 +6,9 @@ import PropTypes from 'prop-types';
 import Text from '../../atoms/Text';
 import { PrimaryColor } from '../../../styles/themeHelpers';
 
+const FlexWrapper = styled.TouchableOpacity`
+  flex: 1;
+`;
 const TabBarItem = styled.View`
   height: 70px;
   flex-direction: column;
@@ -51,7 +54,7 @@ const TabNavigatorItem: React.FC<Props> = ({
   descriptor,
   state,
 }) => (
-  <TouchableOpacity
+  <FlexWrapper
     key={route.key}
     onPress={() => {
       const event = navigation.emit({
@@ -67,7 +70,6 @@ const TabNavigatorItem: React.FC<Props> = ({
         });
       }
     }}
-    style={{ flex: 1 }}
   >
     <TabBarItem>
       <Row>
@@ -76,7 +78,7 @@ const TabNavigatorItem: React.FC<Props> = ({
       </Row>
       <Underline color={color} visible={active} />
     </TabBarItem>
-  </TouchableOpacity>
+  </FlexWrapper>
 );
 
 TabNavigatorItem.propTypes = {
