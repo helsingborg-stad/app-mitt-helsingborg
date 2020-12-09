@@ -144,7 +144,7 @@ function LoginScreen(props) {
   } = useContext(AuthContext);
   const showNotification = useNotification();
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const [loginModal, setLoginModalVisible] = useState(false);
   const [userAgreementModal, setUserAgreementModalVisible] = useState(false);
   const [personalNumber, setPersonalNumber] = useState('');
 
@@ -252,7 +252,7 @@ function LoginScreen(props) {
             <Button z={0} size="large" block onClick={() => handleLogin()}>
               <Text>Logga in med Mobilt BankID</Text>
             </Button>
-            <Link onPress={() => setModalVisible(true)}>Fler alternativ</Link>
+            <Link onPress={() => setLoginModalVisible(true)}>Fler alternativ</Link>
           </Form>
         )}
 
@@ -282,7 +282,7 @@ function LoginScreen(props) {
       </Body>
 
       <LoginModal
-        visible={modalVisible}
+        visible={loginModal}
         scrollViewProps={{
           keyboardShouldPersistTaps: 'handled',
           contentContainerStyle: { flexGrow: 1 },
@@ -290,7 +290,7 @@ function LoginScreen(props) {
         }}
       >
         <CloseModalButton
-          onClose={() => setModalVisible(false)}
+          onClose={() => setLoginModalVisible(false)}
           primary={false}
           showBackButton={false}
         />
