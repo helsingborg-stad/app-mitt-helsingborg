@@ -170,7 +170,7 @@ const SummaryList: React.FC<Props> = ({
     .forEach(item => {
       if (['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type)) {
         const values: Record<string, string | number>[] = answers[item.id];
-        if (values && values?.length > 0) {
+        if (values && values?.length > 0 && Array.isArray(values)) {
           values.forEach((v, index) => {
             listItems.push(
               generateListItem(
