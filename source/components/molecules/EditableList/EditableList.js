@@ -56,6 +56,11 @@ const EditableListItemInput = styled(Input)`
   color: ${props => props.theme.colors.neutrals[1]};
   padding: 6px;
 `;
+const EditableListItemSelect = styled(Select)`
+  min-width: 80%;
+  font-weight: 500;
+  margin-bottom: 0px;
+`;
 
 const FieldsetButton = styled(Button)`
   margin-left: 26px;
@@ -127,13 +132,12 @@ function EditableList({
         );
       case 'select':
         return (
-          <Select
+          <EditableListItemSelect
             onBlur={onInputBlur}
             onValueChange={value => onChange(input.key, value)}
             value={value && value !== '' ? value[input.key] : state[input.key]}
             editable={editable}
             items={input?.items || []}
-            transparent
           />
         );
       default:
