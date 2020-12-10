@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Text, Heading } from 'app/components/atoms';
-import StepConfirmation from '../StepConfirmation';
 
 const StepDescriptionWrapper = styled.View`
   margin-left: 24px;
@@ -57,8 +56,6 @@ function StepDescription({
         <Heading>{heading}</Heading>
         {text.length !== 0 && <StepDescriptionText>{text}</StepDescriptionText>}
       </StepDescriptionContent>
-      {/* TODO: Replace hardcoded view with dynamically added data */}
-      {currentStep === totalStepNumber && <StepConfirmation colorSchema={colorSchema} />}
     </StepDescriptionWrapper>
   );
 }
