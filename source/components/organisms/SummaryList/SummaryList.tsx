@@ -7,6 +7,8 @@ import Heading from '../../atoms/Heading';
 import SummaryListItemComponent from './SummaryListItem';
 import { getValidColorSchema } from '../../../styles/theme';
 import { Help } from '../../../types/FormTypes';
+import { useNotification } from '../../../store/NotificationContext';
+import env from 'react-native-config';
 
 const SumLabel = styled(Heading)<{ colorSchema: string }>`
   margin-top: 5px;
@@ -81,6 +83,8 @@ const SummaryList: React.FC<Props> = ({
   startEditable,
   help,
 }) => {
+  // For development: show an error popup when something is configured wrong.
+  const showNotification = useNotification();
   /**
    * Given an item, and possibly an index in the case of repeater fields, this generates a function that
    * updates the form data from the input.
@@ -170,7 +174,14 @@ const SummaryList: React.FC<Props> = ({
     .forEach(item => {
       if (['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type)) {
         const values: Record<string, string | number>[] = answers[item.id];
-        if (values && values?.length > 0 && Array.isArray(values)) {
+        if (!Array.isArray(values) && values !== undefined) {
+          const diagnosticMessage = `Possible type error in the form; SummaryList ${heading}, at item {id:${item.id}, inputId: ${item?.inputId}, title: ${item.title}} expected to get values as array, but got something else. Check the form configuration.`;
+          console.log(diagnosticMessage);
+          // Showing a notification to alert the user, if we are in development
+          if (env.APP_ENV === 'development') {
+            showNotification('Summary list error', diagnosticMessage, 'error', -1);
+          }
+        } else if (values && values?.length > 0) {
           values.forEach((v, index) => {
             listItems.push(
               generateListItem(
@@ -187,9 +198,7 @@ const SummaryList: React.FC<Props> = ({
               addToSum(numericValue);
             }
           });
-        } else if (values && values?.length > 0) {
-          console.log(`Possible type error in the form; SummaryList ${heading}, at item {id:${item.id}, inputId: ${item?.inputId}, title: ${item.title}} expected to get values as array, but got something else. Check the form configuration.`);
-        }
+        } 
       } else {
         listItems.push(
           generateListItem(
