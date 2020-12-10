@@ -18,6 +18,7 @@ import MarkdownConstructor from '../helpers/MarkdownConstructor';
 import userAgreementText from '../assets/text/userAgreementText';
 
 const { sanitizePin, validatePin } = ValidationHelper;
+const UnifiedPadding = [24, 48]; // Vertical padding, Horizontal padding
 
 const LoginSafeAreaView = styled.SafeAreaView`
   flex: 1;
@@ -36,20 +37,28 @@ const Header = styled.View`
 
 const Form = styled.View`
   flex: 1;
-  padding: 24px 48px 24px 48px;
+  padding: ${UnifiedPadding[0]}px ${UnifiedPadding[1]}px ${UnifiedPadding[0]}px
+    ${UnifiedPadding[1]}px;
   justify-content: center;
   align-items: center;
   height: 250px;
 `;
 
 const UserAgreementForm = styled.View`
-  padding: 24px 48px 24px 48px;
+  padding: ${UnifiedPadding[0]}px ${UnifiedPadding[1]}px ${UnifiedPadding[0]}px
+    ${UnifiedPadding[1]}px;
+`;
+
+const UserAgreementFooter = styled.View`
+  padding: ${UnifiedPadding[0]}px ${UnifiedPadding[1]}px ${UnifiedPadding[0]}px
+    ${UnifiedPadding[1]}px;
 `;
 
 const Footer = styled.View`
   flex: 1;
   max-height: 130px;
-  padding: 24px 48px 24px 48px;
+  padding: ${UnifiedPadding[0]}px ${UnifiedPadding[1]}px ${UnifiedPadding[0]}px
+    ${UnifiedPadding[1]}px;
   border-top-color: ${props => props.theme.border.default};
   border-top-width: 1px;
   background-color: ${props => props.theme.colors.neutrals[5]};
@@ -144,8 +153,8 @@ function LoginScreen(props) {
   } = useContext(AuthContext);
   const showNotification = useNotification();
 
-  const [loginModal, setLoginModalVisible] = useState(false);
-  const [userAgreementModal, setUserAgreementModalVisible] = useState(false);
+  const [loginModal, loginModalVisible] = useState(false);
+  const [userAgreementModal, userAgreementModalVisible] = useState(false);
   const [personalNumber, setPersonalNumber] = useState('');
 
   /**
@@ -252,7 +261,7 @@ function LoginScreen(props) {
             <Button z={0} size="large" block onClick={() => handleLogin()}>
               <Text>Logga in med Mobilt BankID</Text>
             </Button>
-            <Link onPress={() => setLoginModalVisible(true)}>Fler alternativ</Link>
+            <Link onPress={() => loginModalVisible(true)}>Fler alternativ</Link>
           </Form>
         )}
 
@@ -261,7 +270,7 @@ function LoginScreen(props) {
             När du använder tjänsten Mitt Helsingborg godkänner du vårt{' '}
             <ParagraphLink
               onPress={() => {
-                setUserAgreementModalVisible(true);
+                userAgreementModalVisible(true);
               }}
             >
               användaravtal
@@ -290,7 +299,7 @@ function LoginScreen(props) {
         }}
       >
         <CloseModalButton
-          onClose={() => setLoginModalVisible(false)}
+          onClose={() => loginModalVisible(false)}
           primary={false}
           showBackButton={false}
         />
@@ -361,7 +370,7 @@ function LoginScreen(props) {
         }}
       >
         <CloseModalButton
-          onClose={() => setUserAgreementModalVisible(false)}
+          onClose={() => userAgreementModalVisible(false)}
           primary={false}
           showBackButton={false}
         />
@@ -369,6 +378,17 @@ function LoginScreen(props) {
           <UserAgreementForm>
             <MarkdownConstructor rules={userAgreementMarkdownRules} rawText={userAgreementText} />
           </UserAgreementForm>
+          <UserAgreementFooter>
+            <Button
+              z={0}
+              block
+              onClick={() => {
+                userAgreementModalVisible(false);
+              }}
+            >
+              <Text>Återvänd till inloggning</Text>
+            </Button>
+          </UserAgreementFooter>
         </Body>
       </LoginModal>
     </LoginSafeAreaView>
