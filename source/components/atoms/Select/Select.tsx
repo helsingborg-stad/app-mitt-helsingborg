@@ -44,17 +44,16 @@ const Select: React.FC<Props> = ({
   style,
 }) => {
   const currentItem = items.find(item => item.value === value);
-
   return (
     <Wrapper style={style}>
       <RNPickerSelect
         style={pickerSelectStyles}
-        placeholder={placeholder}
+        placeholder={{ label: placeholder, value: null }}
         disabled={!editable}
-        value={currentItem?.value || ''}
+        value={currentItem?.value || null}
         onValueChange={(itemValue, _itemIndex) => {
           if (typeof onValueChange === 'function') {
-            onValueChange(itemValue.toString());
+            onValueChange(itemValue ? itemValue.toString() : null);
           }
         }}
         items={items}
