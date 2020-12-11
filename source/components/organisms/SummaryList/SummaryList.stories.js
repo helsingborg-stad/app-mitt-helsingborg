@@ -161,27 +161,6 @@ const validationTestForm = {
           tags: ['tagsHere', 'moreTags'],
         },
         {
-          labelHelp: 'Check me!',
-          loadPrevious: ['checkbox_1'],
-          inputSelectValue: 'checkbox_1',
-          description: 'checkbox',
-          label: 'Check box',
-          text: 'Check me!',
-          id: 'checkbox_1',
-          type: 'checkbox',
-          validation: {
-            isRequired: true,
-            rules: [
-              {
-                arg: 'true',
-                method: 'equals',
-                message: 'Måste checks i för att gå vidare',
-                validWhen: true,
-              },
-            ],
-          },
-        },
-        {
           loadPrevious: ['number_1'],
           inputSelectValue: 'phone',
           description: 'Number222',
@@ -376,6 +355,27 @@ const validationTestForm = {
           label: 'Repeater',
           id: 'repeater_1',
           type: 'repeaterField',
+        },
+        {
+          labelHelp: 'Check me!',
+          loadPrevious: ['checkbox_1'],
+          inputSelectValue: 'checkbox_1',
+          description: 'checkbox',
+          label: 'Check box',
+          text: 'Check me!',
+          id: 'checkbox_1',
+          type: 'checkbox',
+          validation: {
+            isRequired: true,
+            rules: [
+              {
+                arg: 'true',
+                method: 'equals',
+                message: 'Måste checks i för att gå vidare',
+                validWhen: true,
+              },
+            ],
+          },
         },
       ],
       description: 'step 1',
