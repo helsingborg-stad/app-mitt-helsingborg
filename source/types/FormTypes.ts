@@ -1,3 +1,4 @@
+import { PrimaryColor } from '../styles/themeHelpers';
 import { ValidationObject } from './Validation';
 
 export interface Help {
@@ -70,6 +71,7 @@ export interface Step {
   questions?: Question[];
   actions?: Action[];
   banner?: Banner;
+  colorSchema: PrimaryColor | '';
 }
 
 export interface Form {

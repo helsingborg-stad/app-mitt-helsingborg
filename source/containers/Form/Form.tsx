@@ -79,12 +79,13 @@ const Form: React.FC<Props> = ({
   };
 
   const stepComponents = formState.steps.map(
-    ({ id, banner, theme, title, group, description, questions, actions }) => (
+    ({ id, banner, theme, title, group, description, questions, actions, colorSchema }) => (
       <Step
         key={`${id}`}
         banner={{
           ...banner,
         }}
+        colorSchema={colorSchema}
         theme={theme}
         description={{
           heading: title,
