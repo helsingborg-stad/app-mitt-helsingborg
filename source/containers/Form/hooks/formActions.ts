@@ -242,7 +242,7 @@ export function validateAnswer(
   const question = allQuestions.find(q => q.id === questionId);
   if (!question) return state;
 
-  if (['text', 'number', 'date'].includes(question.type)) {
+  if (['text', 'number', 'date', 'checkbox'].includes(question.type)) {
     const { validation } = question;
     if (validation && ((checkIfDirty && state.dirtyFields?.[questionId]) || !checkIfDirty)) {
       const [isValid, validationMessage] = validateInput(answer[questionId], validation.rules);
@@ -321,7 +321,7 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
   if (!currentStepQuestions || currentStepQuestions.length === 0){
     onValidCallback();
     return state
-  } 
+  }
 
   // Set dirtyFields for handling input onFocus.
   let dirtyFields = {}
@@ -339,7 +339,7 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
   for (const questionIndex in currentStepQuestions) {
     const question = currentStepQuestions[questionIndex]
 
-    if (['text', 'number'].includes(question.type)) {
+    if (['text', 'number, checkbox'].includes(question.type)) {
       if (state.validations[question.id]?.isValid === false) {
         allInputsValid = false;
 
@@ -407,7 +407,7 @@ export function dirtyField(
   const question = allQuestions.find(q => q.id === questionId);
   if (!question) return state;
 
-  if (['text', 'number', 'date'].includes(question.type)) {
+  if (['text', 'number', 'date', 'checkbox'].includes(question.type)) {
     return {
       ...state,
       dirtyFields: {
