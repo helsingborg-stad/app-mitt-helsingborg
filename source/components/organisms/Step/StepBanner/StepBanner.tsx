@@ -1,17 +1,15 @@
 import React from 'react';
-import { Image } from 'react-native';
+import { Image, ViewStyle } from 'react-native';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import icons from '../../../../helpers/Icons';
+import {PrimaryColor} from '../../../../styles/themeHelpers';
 
-const BannerWrapper = styled.View`
+const BannerWrapper = styled.View<{ colorSchema: PrimaryColor; image?: boolean }>`
   margin: 0;
   padding: 0;
-  min-height: ${(props) => (props.image ? '256px' : '192px')};
-  background-color: ${(props) =>
-    props.backgroundColor
-      ? props.backgroundColor
-      : props.theme.colors.complementary[props.colorSchema][0]};
+  min-height: ${props => (props.image ? '256px' : '192px')};
+  background-color: ${props => props.theme.colors.complementary[props.colorSchema][0]};
   position: relative;
   justify-content: flex-end;
 `;
@@ -24,8 +22,14 @@ const BannerImage = styled(Image)`
   height: 100%;
 `;
 
-const StepBanner = ({ style, imageSrc, colorSchema }) => (
-  <BannerWrapper style={style} image={imageSrc} colorSchema={colorSchema}>
+interface Props {
+  style?: ViewStyle;
+  imageSrc?: string;
+  colorSchema: PrimaryColor;
+}
+
+const StepBanner: React.FC<Props> = ({ style, imageSrc, colorSchema }) => (
+  <BannerWrapper style={style} image={!!imageSrc && imageSrc !== ''} colorSchema={colorSchema}>
     {Object.prototype.hasOwnProperty.call(icons, imageSrc) ? (
       <BannerImageWrapper>
         <BannerImage resizeMode="contain" source={icons[imageSrc]} />
@@ -46,11 +50,10 @@ StepBanner.propTypes = {
   /**
    * The color schema that the component should apply, colors are retrived from ThemeProvider
    */
-  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green', 'neutral']),
 };
 StepBanner.defaultProps = {
   imageSrc: undefined,
   colorSchema: 'blue',
-  style: [],
 };
 export default StepBanner;

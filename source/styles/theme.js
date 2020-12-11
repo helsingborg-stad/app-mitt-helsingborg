@@ -473,23 +473,23 @@ const theme = {
     },
     colors: {
       purple: {
-        text: deprecatedPalette.mono.white,
-        underline: deprecatedPalette.purple[2],
+        text: colorPalette.neutrals[2],
+        underline: colorPalette.complementary.purple[1],
       },
       purpleLight: {
         text: deprecatedPalette.mono.white,
         underline: deprecatedPalette.purple[1],
       },
       blue: {
-        text: deprecatedPalette.mono.white,
-        underline: deprecatedPalette.blue[6],
+        text: colorPalette.neutrals[2],
+        underline: colorPalette.complementary.blue[1],
       },
       white: {
-        text: deprecatedPalette.mono.darker,
+        text: colorPalette.neutrals[2],
         underline: 'rgba(255, 255, 255, 0.0)',
       },
-      light: {
-        text: deprecatedPalette.mono.darker,
+      neutral: {
+        text: colorPalette.neutrals[2],
         underline: deprecatedPalette.mono.light,
       },
       gray: {
@@ -509,12 +509,12 @@ const theme = {
         underline: 'rgba(255, 255, 255, 0.0)',
       },
       red: {
-        text: deprecatedPalette.red[5],
-        underline: deprecatedPalette.red[2],
+        text: colorPalette.neutrals[2],
+        underline: colorPalette.complementary.red[1],
       },
       green: {
-        text: deprecatedPalette.mono.darker,
-        underline: deprecatedPalette.green[6],
+        text: colorPalette.neutrals[2],
+        underline: colorPalette.complementary.green[1],
       },
       orange: {
         text: deprecatedPalette.mono.blue,

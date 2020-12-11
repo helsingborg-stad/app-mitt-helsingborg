@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Help } from '../../../types/FormTypes';
 import Text from '../../atoms/Text';
-import HelpButton from '../HelpButton';
 import Fieldset, { FieldsetButton } from '../../atoms/Fieldset/Fieldset';
 import { colorPalette } from '../../../styles/palette';
 import theme from '../../../styles/theme';
+import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
 import { Heading } from '../../atoms';
 
 const ListBody = styled.View`
@@ -28,7 +28,7 @@ interface Props {
   heading?: string;
   items: { category: string; component: JSX.Element }[];
   categories: { category: string; description: string }[];
-  color: string;
+  colorSchema: string;
   showEditButton?: boolean;
   startEditable?: boolean;
   help?: Help;
@@ -42,7 +42,7 @@ const GroupedList: React.FC<Props> = ({
   heading,
   items,
   categories,
-  color,
+  colorSchema,
   showEditButton,
   startEditable,
   help,
@@ -61,17 +61,22 @@ const GroupedList: React.FC<Props> = ({
       groupedItems[cat.category] = catItems;
     }
   });
-  const colorSchema = Object.keys(colorPalette.primary).includes(color) ? color : 'blue';
+  const validColorSchema = getValidColorSchema(colorSchema);
 
   return (
     <Fieldset
-      colorSchema={colorSchema}
+      colorSchema={validColorSchema}
       legend={heading || ''}
       help={help}
       renderHeaderActions={() => (
         <>
           {showEditButton && (
-            <FieldsetButton colorSchema={colorSchema} z={0} size="small" onClick={changeEditable}>
+            <FieldsetButton
+              colorSchema={validColorSchema}
+              z={0}
+              size="small"
+              onClick={changeEditable}
+            >
               <Text>{editable ? 'Färdig' : 'Ändra'}</Text>
             </FieldsetButton>
           )}
@@ -81,7 +86,7 @@ const GroupedList: React.FC<Props> = ({
       <ListBody>
         {Object.keys(groupedItems).map((key, index) => (
           <View key={`${index}-${key}`}>
-            <ListBodyFieldLabel colorSchema={colorSchema}>
+            <ListBodyFieldLabel colorSchema={validColorSchema}>
               {categories.find(c => c.category === key).description}
             </ListBodyFieldLabel>
             {groupedItems[key].map(item => ({
@@ -111,7 +116,7 @@ GroupedList.propTypes = {
   /**
    *  Controls the color scheme of the list
    */
-  color: PropTypes.oneOf(Object.keys(theme.colors.primary)),
+  colorSchema: PropTypes.oneOf(Object.keys(theme.colors.primary)),
   /**
    * Whether or not to show the edit button
    */
@@ -135,6 +140,6 @@ GroupedList.propTypes = {
 GroupedList.defaultProps = {
   items: [],
   categories: [],
-  color: 'blue',
+  colorSchema: 'blue',
 };
 export default GroupedList;

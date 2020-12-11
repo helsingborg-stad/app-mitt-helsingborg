@@ -72,7 +72,6 @@ function Step({
     handleSetStatus,
   } = useContext(AuthContext);
   const [closeDialogVisible, setCloseDialogVisible] = useState(false);
-  console.log('step colorSchema', colorSchema);
   /**
    * Set auth context status to idle when navigating
    */
@@ -110,6 +109,7 @@ function Step({
         inSubstep={inSubstep}
         onBack={backButtonBehavior}
         onClose={() => setCloseDialogVisible(true)}
+        colorSchema={colorSchema || 'blue'}
       />
       <StepContentContainer
         contentContainerStyle={{
@@ -118,7 +118,7 @@ function Step({
         showsHorizontalScrollIndicator={false}
       >
         {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
-          <StepBanner {...banner} />
+          <StepBanner {...banner} colorSchema={colorSchema || 'blue'} />
         )}
         {currentPosition.level === 0 && (
           <Progressbar
@@ -149,7 +149,7 @@ function Step({
                       value={answers[field.id] || ''}
                       answers={answers}
                       validationErrors={validation}
-                      color={field.color}
+                      colorSchema={field.color && field.color !== '' ? field.color : colorSchema }
                       id={field.id}
                       formNavigation={formNavigation}
                       {...field}
