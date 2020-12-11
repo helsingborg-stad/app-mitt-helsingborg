@@ -371,7 +371,7 @@ const validationTestForm = {
               {
                 arg: 'true',
                 method: 'equals',
-                message: 'Måste checks i för att gå vidare',
+                message: 'Måste checkas i för att gå vidare',
                 validWhen: true,
               },
             ],
