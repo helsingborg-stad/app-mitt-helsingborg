@@ -48,14 +48,15 @@ export const validateInput = (value, rules) =>
       const valueToValidate = String(value);
 
       /**
-       * Retrieve the validation method defined in the rule from the validator.js package and execute
+       * Retrieve the validation method defined in the rule from the validator.js package and execute.
+       * An array of args will be created if multiple args defined. Single arg will be passed as is.
        */
-      const validationMethodArgs = rule.args || [];
-      const arrayOfArgs = Object.keys(validationMethodArgs).map((key) => validationMethodArgs[key]);
+      const ruleArgs = rule.args || [];
+      const validationMethodArgs = rule.arg || Object.keys(ruleArgs).map((key) => ruleArgs[key]);
       const validationMethod =
         typeof rule.method === 'string' ? validator[rule.method] : rule.method;
       const isValidationRuleMeet =
-        validationMethod(valueToValidate, arrayOfArgs) === rule.validWhen;
+        validationMethod(valueToValidate, validationMethodArgs) === rule.validWhen;
 
       /**
        * Only return true if the current and previous rule is met
