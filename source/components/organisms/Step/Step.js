@@ -43,6 +43,7 @@ const SignStepWrapper = styled.View`
 
 function Step({
   theme,
+  colorSchema,
   banner,
   description,
   questions,
@@ -71,6 +72,7 @@ function Step({
     handleSetStatus,
   } = useContext(AuthContext);
   const [closeDialogVisible, setCloseDialogVisible] = useState(false);
+  console.log('step colorSchema', colorSchema);
   /**
    * Set auth context status to idle when navigating
    */
@@ -133,6 +135,7 @@ function Step({
                   currentPosition.level === 0 ? currentPosition.currentMainStep : undefined
                 }
                 totalStepNumber={totalStepNumber}
+                colorSchema={colorSchema || 'blue'}
                 {...description}
               />
               {questions && (
