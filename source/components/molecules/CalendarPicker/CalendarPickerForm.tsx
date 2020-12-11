@@ -7,7 +7,7 @@ import moment from 'moment';
 import 'moment/locale/sv';
 import Input from '../../atoms/Input';
 import { colorPalette } from '../../../styles/palette';
-
+import { PrimaryColor } from '../../../styles/themeHelpers';
 import Button from '../../atoms/Button';
 import Text from '../../atoms/Text';
 import Modal from '../Modal/Modal';
@@ -48,12 +48,14 @@ interface PropInterface {
   editable?: boolean;
   transparent?: boolean;
   style?: React.CSSProperties;
+  colorSchema: PrimaryColor;
 }
 const CalendarPickerForm: React.FC<PropInterface> = ({
   onSelect,
   value,
   editable = true,
   transparent,
+  colorSchema,
   style,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -81,6 +83,7 @@ const CalendarPickerForm: React.FC<PropInterface> = ({
           pointerEvents="none"
           transparent={transparent}
           style={style}
+          colorSchema={colorSchema}
         />
       </TouchableOpacity>
 

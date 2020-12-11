@@ -5,7 +5,7 @@ import { LayoutAnimation } from 'react-native';
 import { Button, Icon, Text } from '../../atoms';
 import RepeaterFieldListItem from './RepeaterFieldListItem';
 import Fieldset from '../../atoms/Fieldset/Fieldset';
-import theme from '../../../styles/theme';
+import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
 
 const AddButton = styled(Button)`
   margin-top: 30px;
@@ -25,7 +25,7 @@ interface Props {
   value: string | Record<string, string | number>[];
   onChange: (answers: Record<string, any> | string | number, fieldId?: string) => void;
   onBlur?: (answers: Record<string, any> | string | number, fieldId?: string) => void;
-  color: string;
+  colorSchema: PrimaryColor;
   error?: Record<string, {isValid: boolean, validationMessage: string}>[];
 }
 const emptyInput: Record<string, string | number>[] = [];
@@ -37,7 +37,7 @@ function isRecordArray(value: string | Record<string,string|number>[]): value is
  * Repeater field component, for adding multiple copies of a particular kind of input.
  * The input-prop specifies the form of each input-group.
  */
-const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChange, onBlur, color, value, error }) => {
+const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChange, onBlur, colorSchema, value, error }) => {
   const [localAnswers, setLocalAnswers] = useState( isRecordArray(value) ? value : emptyInput);
   
   const changeFromInput = (index: number) => (input: InputRow) => (text: string) => {
@@ -64,7 +64,7 @@ const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChan
     setLocalAnswers(prev => [...prev, {}]);
   };
 
-  const validColorSchema = Object.keys(theme.repeater).includes(color) ? color : 'blue';
+  const validColorSchema = getValidColorSchema(colorSchema);
 
   const listItems: JSX.Element[] = [];
   localAnswers.forEach((answer, index) => {

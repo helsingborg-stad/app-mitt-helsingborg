@@ -34,12 +34,12 @@ interface Props {
   onChange: () => void;
   disabled?: boolean;
   size?: 'small' | 'medium' | 'large';
-  color: string;
+  colorSchema: PrimaryColor;
 }
 
-const Checkbox: React.FC<Props> = ({ checked, onChange, size, disabled, color }) => {
+const Checkbox: React.FC<Props> = ({ checked, onChange, size, disabled, colorSchema }) => {
   const theme = useContext(ThemeContext);
-  const validColorSchema = getValidColorSchema(color);
+  const validColorSchema = getValidColorSchema(colorSchema);
 
   return (
     <CheckboxBox
@@ -70,7 +70,7 @@ Checkbox.propTypes = {
   /**
    * sets the color theme.
    */
-  color: PropTypes.string,
+  colorSchema: PropTypes.oneOf(['red', 'blue', 'green', 'purple', 'neutral']),
   /**
    * One of small, medium, large
    */
@@ -83,7 +83,7 @@ Checkbox.propTypes = {
 
 Checkbox.defaultProps = {
   onChange: () => {},
-  color: 'blue',
+  colorSchema: 'blue',
   size: 'small',
   disabled: false,
 };

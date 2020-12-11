@@ -5,7 +5,7 @@ import GroupedList from '../../molecules/GroupedList/GroupedList';
 import Text from '../../atoms/Text/Text';
 import Heading from '../../atoms/Heading';
 import SummaryListItemComponent from './SummaryListItem';
-import { getValidColorSchema } from '../../../styles/theme';
+import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
 import { Help } from '../../../types/FormTypes';
 import { useNotification } from '../../../store/NotificationContext';
 import env from 'react-native-config';
@@ -55,7 +55,7 @@ interface Props {
   categories?: SummaryListCategory[];
   onChange: (answers: Record<string, any> | string | number | boolean, fieldId: string) => void;
   onBlur: (answers: Record<string, any> | string | number | boolean, fieldId: string) => void;
-  color: string;
+  colorSchema: PrimaryColor;
   answers: Record<string, any>;
   validationErrors?: Record<
     string,
@@ -76,7 +76,7 @@ const SummaryList: React.FC<Props> = ({
   categories,
   onChange,
   onBlur,
-  color,
+  colorSchema,
   answers,
   validationErrors,
   showSum,
@@ -147,7 +147,7 @@ const SummaryList: React.FC<Props> = ({
         changeFromInput={changeFromInput(item, index)}
         onBlur={onItemBlur(item, index)}
         removeItem={removeListItem(item, index)}
-        color={color}
+        colorSchema={colorSchema}
         validationError={validationError}
       />
     ),
@@ -214,7 +214,7 @@ const SummaryList: React.FC<Props> = ({
       }
     });
 
-  const validColorSchema = getValidColorSchema(color);
+  const validColorSchema = getValidColorSchema(colorSchema);
   return (
     listItems.length > 0 && (
       <>
@@ -222,7 +222,7 @@ const SummaryList: React.FC<Props> = ({
           heading={heading}
           items={listItems}
           categories={categories}
-          color={color}
+          colorSchema={validColorSchema}
           showEditButton
           startEditable={startEditable}
           help={help}

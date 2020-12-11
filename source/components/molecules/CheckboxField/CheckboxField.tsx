@@ -5,7 +5,9 @@ import { TouchableHighlight } from 'react-native';
 import { HelpButton } from '..';
 import Text from '../../atoms/Text/Text';
 import Checkbox from '../../atoms/Checkbox/Checkbox';
-import theme, { getValidColorSchema } from '../../../styles/theme';
+import theme from '../../../styles/theme';
+import { getValidColorSchema } from '../../../styles/themeHelpers';
+
 // TODO: MOVE TO THEME.
 const sizes = {
   small: {
@@ -58,14 +60,14 @@ const CheckboxFieldText = styled(Text)`
 
 const StyledErrorText = styled(Text)`
   font-size: ${({ theme }) => theme.fontSizes[3]};
-  color: ${props => props.theme.textInput.errorTextColor};
+  color: ${(props) => props.theme.textInput.errorTextColor};
   font-weight: ${({ theme }) => theme.fontWeights[0]};
   margin-left: -50px;
   margin-right: -50px;
   padding-left: 60px;
   padding-right: 60px;
-  padding-top: ${props => props.theme.sizes[1]}px;
-  padding-bottom: ${props => props.theme.sizes[1]}px;
+  padding-top: ${(props) => props.theme.sizes[1]}px;
+  padding-bottom: ${(props) => props.theme.sizes[1]}px;
 `;
 
 interface CheckBoxProps {
@@ -79,26 +81,16 @@ interface CheckBoxProps {
 }
 
 /** A component with a checkbox next to a descriptive text, and possibly a help button */
-const CheckboxField: React.FC<CheckBoxProps> = ({
-  text,
-  color,
-  size,
-  value,
-  onChange,
-  help,
-  error,
-  ...other
-}) => {
+const CheckboxField = ({ text, colorSchema, size, value, onChange, help, error, ...other }) => {
   const theme = useContext(ThemeContext);
-  let boolValue;
+  let boolValue: boolean;
   if (typeof value === 'boolean') {
     boolValue = value;
   } else {
     boolValue = value === 'true';
   }
   const update = () => onChange(!boolValue);
-  const validColorSchema = getValidColorSchema(color);
-
+  const validColorSchema = getValidColorSchema(colorSchema);
   return (
     <>
       <TouchableWrapper
@@ -107,8 +99,14 @@ const CheckboxField: React.FC<CheckBoxProps> = ({
       >
         <FlexContainer>
           <BoxTextWrapper>
-            <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
-            <CheckboxFieldText color={color} size={size}>
+            <Checkbox
+              colorSchema={validColorSchema}
+              size={size}
+              onChange={update}
+              checked={boolValue}
+              {...other}
+            />
+            <CheckboxFieldText color={validColorSchema} size={size}>
               {text}
             </CheckboxFieldText>
           </BoxTextWrapper>
@@ -136,7 +134,7 @@ CheckboxField.propTypes = {
   /**
    * sets the color theme.
    */
-  color: PropTypes.oneOf(Object.keys(theme.colors.primary)),
+  colorSchema: PropTypes.oneOf(Object.keys(theme.colors.primary)),
   /**
    * One of small, medium, large
    */
@@ -163,7 +161,7 @@ CheckboxField.propTypes = {
 
 CheckboxField.defaultProps = {
   onChange: () => {},
-  color: 'light',
+  colorSchema: 'blue',
   size: 'small',
   disabled: false,
   help: {},

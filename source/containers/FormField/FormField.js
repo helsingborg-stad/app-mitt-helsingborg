@@ -114,7 +114,7 @@ const FormField = ({
   label,
   labelLine,
   inputType,
-  color,
+  colorSchema,
   id,
   onChange,
   onBlur,
@@ -144,7 +144,7 @@ const FormField = ({
       ? input.initialValue
       : value;
   const inputCompProps = {
-    color,
+    colorSchema,
     value: initialValue,
     ...inputProps,
     error: validationErrors[id],
@@ -184,7 +184,7 @@ const FormField = ({
       <View>
         {label ? (
           <Label
-            color={color}
+            color={colorSchema}
             underline={labelLine}
             help={!input.helpInComponent && help && Object.keys(help).length > 0 ? help : {}}
           >
@@ -244,7 +244,7 @@ FormField.propTypes = {
   /**
    * sets the color theme.
    */
-  color: PropTypes.oneOf(Object.keys(theme.formField)),
+  colorSchema: PropTypes.oneOf(Object.keys(theme.colors.primary)),
   /*
    * The function triggers when the button is clicked.
    */
@@ -270,7 +270,6 @@ FormField.propTypes = {
 FormField.defaultProps = {
   onClick: () => {},
   onChange: () => {},
-  color: 'light',
   labelLine: true,
   inputType: 'text',
 };

@@ -8,7 +8,7 @@ import { Text, Icon, Checkbox, Input } from "../../atoms";
 import { SummaryListItem as SummaryListItemType } from "./SummaryList";
 import CalendarPicker from '../../molecules/CalendarPicker/CalendarPickerForm';
 import { colorPalette } from '../../../styles/palette';
-import { getValidColorSchema } from '../../../styles/themeHelpers';
+import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
 
 interface ItemWrapperProps {
   error?: { isValid: boolean; validationMessage: string; };
@@ -86,7 +86,7 @@ interface Props {
   changeFromInput: (value: string | number | boolean) => void;
   onBlur?: (value: Record<string, any> | string | number | boolean) => void;
   removeItem: () => void;
-  color: string;
+  colorSchema: PrimaryColor;
   validationError?: { isValid: boolean; message: string };
 }
 /** The rows for the summary list. */
@@ -98,12 +98,14 @@ const SummaryListItem: React.FC<Props> = ({
   onBlur,
   editable,
   removeItem,
-  color,
+  colorSchema,
   validationError,
 }) => {
   const onInputBlur = () => {
     if(onBlur) onBlur(value);
   }
+  const validColorSchema = getValidColorSchema(colorSchema);
+  
   const inputComponent = (input: SummaryListItemType, editable: boolean) => {
     switch (input.type) {
       case 'text':
@@ -145,7 +147,7 @@ const SummaryListItem: React.FC<Props> = ({
       case 'checkbox':
         const checked = value as boolean;
         return (
-          <Checkbox checked={checked} color={color} disabled={!editable} onChange={() => changeFromInput(!checked)} />
+          <Checkbox checked={checked} colorSchema={validColorSchema} disabled={!editable} onChange={() => changeFromInput(!checked)} />
         )
       default:
         return (
@@ -160,10 +162,9 @@ const SummaryListItem: React.FC<Props> = ({
         );
     }
   };
-  const colorSchema = getValidColorSchema(color);
   return (
     <Row>
-      <ItemWrapper key={`${item.title}`} colorSchema={colorSchema} editable={editable} error={validationError}>
+      <ItemWrapper key={`${item.title}`} colorSchema={validColorSchema} editable={editable} error={validationError}>
         <LabelWrapper>
           <SmallText>
             {`${item.title}`}
@@ -175,7 +176,7 @@ const SummaryListItem: React.FC<Props> = ({
       { editable &&
         (<DeleteButtonHighligth
           activeOpacity={0.6}
-          underlayColor={colorPalette.complementary[colorSchema][1]}
+          underlayColor={colorPalette.complementary[validColorSchema][1]}
           onPress={removeItem}>
           <DeleteButton name="clear" />
         </DeleteButtonHighligth>)}
