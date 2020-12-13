@@ -55,8 +55,40 @@ const CheckboxFieldText = styled(Text)`
   margin-right: ${(props) => props.theme.sizes[1]}px;
   font-size: ${(props) => sizes[props.size].fontSize}px;
 `;
+
+const StyledErrorText = styled(Text)`
+  font-size: ${({ theme }) => theme.fontSizes[3]};
+  color: ${props => props.theme.textInput.errorTextColor};
+  font-weight: ${({ theme }) => theme.fontWeights[0]};
+  margin-left: -50px;
+  margin-right: -50px;
+  padding-left: 60px;
+  padding-right: 60px;
+  padding-top: ${props => props.theme.sizes[1]}px;
+  padding-bottom: ${props => props.theme.sizes[1]}px;
+`;
+
+interface CheckBoxProps {
+  text?: string;
+  color?: string;
+  size?: 'small' | 'medium' | 'large';
+  value: boolean;
+  onChange?: () => void;
+  help?: { text: string; size?: number; heading?: string; tagline?: string; url?: string };
+  error?: { isValid: boolean; message: string };
+}
+
 /** A component with a checkbox next to a descriptive text, and possibly a help button */
-const CheckboxField = ({ text, color, size, value, onChange, help, ...other }) => {
+const CheckboxField: React.FC<CheckBoxProps> = ({
+  text,
+  color,
+  size,
+  value,
+  onChange,
+  help,
+  error,
+  ...other
+}) => {
   const theme = useContext(ThemeContext);
   let boolValue;
   if (typeof value === 'boolean') {
@@ -68,20 +100,23 @@ const CheckboxField = ({ text, color, size, value, onChange, help, ...other }) =
   const validColorSchema = getValidColorSchema(color);
 
   return (
-    <TouchableWrapper
-      underlayColor={theme.colors.complementary[validColorSchema][3]}
-      onPress={update}
-    >
-      <FlexContainer toggled={boolValue}>
-        <BoxTextWrapper>
-          <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
-          <CheckboxFieldText color={color} size={size}>
-            {text}
-          </CheckboxFieldText>
-        </BoxTextWrapper>
-        {Object.keys(help).length > 0 && <HelpButton {...help} />}
-      </FlexContainer>
-    </TouchableWrapper>
+    <>
+      <TouchableWrapper
+        underlayColor={theme.colors.complementary[validColorSchema][3]}
+        onPress={update}
+      >
+        <FlexContainer>
+          <BoxTextWrapper>
+            <Checkbox color={color} size={size} onChange={update} checked={boolValue} {...other} />
+            <CheckboxFieldText color={color} size={size}>
+              {text}
+            </CheckboxFieldText>
+          </BoxTextWrapper>
+          {Object.keys(help).length > 0 && <HelpButton {...help} />}
+        </FlexContainer>
+      </TouchableWrapper>
+      {error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
+    </>
   );
 };
 
@@ -119,6 +154,10 @@ CheckboxField.propTypes = {
     heading: PropTypes.string,
     tagline: PropTypes.string,
     url: PropTypes.string,
+  }),
+  error: PropTypes.shape({
+    isValid: PropTypes.bool.isRequired,
+    message: PropTypes.string.isRequired,
   }),
 };
 
