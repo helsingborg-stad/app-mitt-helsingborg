@@ -3,18 +3,12 @@ import PropTypes from 'prop-types';
 import styled, { ThemeContext } from 'styled-components/native';
 import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
 import Icon from '../Icon';
-import Text from '../Text';
 
 interface BoxProps {
   checked: boolean;
   colorSchema: PrimaryColor;
   size: 'small' | 'medium' | 'large';
 }
-
-const Container = styled.View`
-  flex: 1;
-`;
-
 const CheckboxBox = styled.TouchableHighlight<BoxProps>`
   border-style: solid;
   border-color: ${props =>
@@ -35,13 +29,6 @@ const CheckboxTick = styled(Icon)`
   margin-top: -3px;
 `;
 
-const StyledErrorText = styled(Text)`
-  font-size: ${({ theme }) => theme.fontSizes[3]};
-  color: ${props => props.theme.textInput.errorTextColor};
-  font-weight: ${({ theme }) => theme.fontWeights[0]};
-  padding-top: 8px;
-`;
-
 interface Props {
   checked?: boolean;
   onChange: () => void;
@@ -50,27 +37,24 @@ interface Props {
   color: string;
 }
 
-const Checkbox: React.FC<Props> = ({ checked, onChange, size, disabled, color, error }) => {
+const Checkbox: React.FC<Props> = ({ checked, onChange, size, disabled, color }) => {
   const theme = useContext(ThemeContext);
   const validColorSchema = getValidColorSchema(color);
 
   return (
-    <Container>
-      <CheckboxBox
-        onPress={() => {
-          if (!disabled) {
-            onChange();
-          }
-        }}
-        checked={checked}
-        colorSchema={validColorSchema}
-        underlayColor={theme.colors.primary[validColorSchema][2]}
-        size={size || 'small'}
-      >
-        {checked ? <CheckboxTick size={theme.checkbox[size].icon} name="done" /> : <></>}
-      </CheckboxBox>
-      {error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
-    </Container>
+    <CheckboxBox
+      onPress={() => {
+        if (!disabled) {
+          onChange();
+        }
+      }}
+      checked={checked}
+      colorSchema={validColorSchema}
+      underlayColor={theme.colors.primary[validColorSchema][2]}
+      size={size || 'small'}
+    >
+      {checked ? <CheckboxTick size={theme.checkbox[size].icon} name="done" /> : <></>}
+    </CheckboxBox>
   );
 };
 
@@ -95,10 +79,6 @@ Checkbox.propTypes = {
    * Disables the checkbox if true.
    */
   disabled: PropTypes.bool,
-  error: PropTypes.shape({
-    isValid: PropTypes.bool.isRequired,
-    message: PropTypes.string.isRequired,
-  }),
 };
 
 Checkbox.defaultProps = {
