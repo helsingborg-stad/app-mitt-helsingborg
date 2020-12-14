@@ -181,6 +181,7 @@ function CaseOverview({navigation}) {
       toValue: 1,
       easing: Easing.back(),
       duration: 700,
+      useNativeDriver: true,
     }).start();
   }, [fadeAnimation]);
 

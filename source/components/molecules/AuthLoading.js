@@ -31,6 +31,7 @@ const AuthLoading = (props) => {
       toValue: 1,
       easing: Easing.back(),
       duration: 250,
+      useNativeDriver: true,
     }).start();
   }, [fadeAnimation]);
 
