@@ -5,8 +5,8 @@ import styled from 'styled-components/native';
 import StoryWrapper from '../StoryWrapper';
 import Card from './Card';
 
-const ICON_INCOME = require('source/assets/images/icons/icn_inkomster_1x.png');
-const ICON_CONTACT = require('source/assets/images/icons/icn_contact_person_1x.png');
+import ICON_INCOME from '@app/assets/images/icons/icn_inkomster_1x.png';
+import ICON_CONTACT from '@app/assets/images/icons/icn_contact_person_1x.png';
 
 const FlexContainer = styled.ScrollView`
   background-color: #fff;
