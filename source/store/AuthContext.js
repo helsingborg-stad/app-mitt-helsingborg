@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import env from 'react-native-config';
 import * as authService from '../services/AuthService';
@@ -15,7 +15,9 @@ import {
   startSign,
   setStatus,
   checkIsBankidInstalled,
+  updateIsActive,
 } from './actions/AuthActions';
+import useTouchActivityTimer from '../hooks/useTouchActivityTimer';
 
 const AuthContext = React.createContext();
 
@@ -91,11 +93,22 @@ function AuthProvider({ children, initialState }) {
     dispatch(loginSuccess());
   }
 
+  function handleTouchActivity(date, active) {
+    console.log(date, active);
+    if (!active) {
+      dispatch(updateIsActive(false));
+    }
+  }
+
   /**
    * This function triggers an action to logout the user.
    */
   async function handleLogout() {
     dispatch(await loginFailure());
+  }
+
+  async function handleContinueSession() {
+    dispatch(updateIsActive(true));
   }
 
   /**
@@ -139,7 +152,14 @@ function AuthProvider({ children, initialState }) {
     return false;
   }
 
+  const { panResponder } = useTouchActivityTimer({
+    isActive: false,
+    onTouchActivity: handleTouchActivity,
+    inactivityTimeoutTime: 15000,
+  });
+
   const contextValues = {
+    panResponder,
     handleLogin,
     handleLogout,
     handleAddProfile,
@@ -149,6 +169,7 @@ function AuthProvider({ children, initialState }) {
     handleSetStatus,
     isUserAuthenticated,
     handleSign,
+    handleContinueSession,
     isLoading: state.status === 'pending',
     isIdle: state.status === 'idle',
     isResolved: state.status === 'authResolved' || state.status === 'signResolved',
