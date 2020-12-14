@@ -4043,9 +4043,9 @@ can-use-dom@^0.1.0:
   integrity sha1-IsxKNKCrxDlQ9CxkEQJKP2NmtFo=
 
 caniuse-lite@^1.0.30000989, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001165:
-  version "1.0.30001165"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001165.tgz#32955490d2f60290bb186bb754f2981917fa744f"
-  integrity sha512-8cEsSMwXfx7lWSUMA2s08z9dIgsnR5NAqjXP23stdsU3AUWkCr/rr4s4OFtHXn5XXr6+7kam3QFVoYyXNPdJPA==
+  version "1.0.30001166"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001166.tgz#ca73e8747acfd16a4fd6c4b784f1b995f9698cf8"
+  integrity sha512-nCL4LzYK7F4mL0TjEMeYavafOGnBa98vTudH5c8lW9izUjnB99InG6pmC1ElAI1p0GlyZajv4ltUdFXvOHIl1A==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -7214,9 +7214,9 @@ is-hexadecimal@^1.0.0:
   integrity sha512-gyPJuv83bHMpocVYoqof5VDiZveEoGoFL8m3BXNb2VW8Xs+rz9kqO8LOQ5DH6EsuvilT1ApazU0pyl+ytbPtlw==
 
 is-map@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/is-map/-/is-map-2.0.1.tgz#520dafc4307bb8ebc33b813de5ce7c9400d644a1"
-  integrity sha512-T/S49scO8plUiAOA2DBTBG3JHpn1yiw0kRp6dgiZ0v2/6twi5eiB0rHtHFH9ZIrvlWc6+4O+m4zg5+Z833aXgw==
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/is-map/-/is-map-2.0.2.tgz#00922db8c9bf73e81b7a335827bc2a43f2b91127"
+  integrity sha512-cOZFQQozTha1f4MxLFzlgKYPTyj26picdZTx82hbc/Xf4K/tZOOXSCkMvU4pKioRXGDLJRn0GM7Upe7kR721yg==
 
 is-negative-zero@^2.0.0:
   version "2.0.1"
@@ -10457,10 +10457,9 @@ react-native-calendar-picker@^7.0.5:
     prop-types "^15.6.0"
     recyclerlistview "^3.0.0"
 
-react-native-config@^1.4.1:
+react-native-config@luggit/react-native-config#master:
   version "1.4.1"
-  resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-1.4.1.tgz#3549d0d1f4545e45659b2c2105c0866bdce9967f"
-  integrity sha512-isK9z1ibzG0Z8HPRhCk0krmvtLknONCpEHLGSpBtf+oQ02PllAXljGMFN/XJCnq3G3MdmP1CffZh3vm4e/A50w==
+  resolved "https://codeload.github.com/luggit/react-native-config/tar.gz/caecb14ded9009713cffccdd37710c8555d284bc"
 
 react-native-elements@^3.0.0-alpha.1:
   version "3.0.0-alpha.1"
@@ -10503,9 +10502,9 @@ react-native-gesture-handler@^1.9.0:
     prop-types "^15.7.2"
 
 react-native-image-picker@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-3.0.1.tgz#2b361904793ea108b61342ee25fab898de19bbdf"
-  integrity sha512-jVWiKT24jxr7K8dAixlsfHURZd+eDA4WWYeZhhKeJDGITCtFPphcTuFomTMtaWYE/gJgNTEL8TiLedcfeqJ9qw==
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-3.1.0.tgz#1bc0d18201abc71daf9c7573f03349d86f28e6e8"
+  integrity sha512-LaRyr6bX3Sij4XeLub1CYtF8MgRkybOcosrv2sTwW6d5h2Q4wDsFKri/7JEU2eY5H3d2MWLC7Gf3r4Arb5mW/g==
 
 react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.3.0:
   version "1.3.1"
