@@ -1,7 +1,7 @@
 import env from 'react-native-config';
 import JwtDecode from 'jwt-decode';
-import StorageService, { TOKEN_KEY } from 'app/services/StorageService';
-import { post, get } from 'app/helpers/ApiRequest';
+import StorageService, {TOKEN_KEY} from '../services/StorageService';
+import {post, get} from '../helpers/ApiRequest';
 
 /**
  * This function retrives the accessToken from AsyncStorage and decodes it.
@@ -31,7 +31,9 @@ export async function saveAccessTokenToStorage(accessToken) {
     await StorageService.saveData(TOKEN_KEY, accessToken);
     // TODO: Add real expired at time from token.
     const decodedAccessToken = JwtDecode(accessToken);
-    const expiresAt = JSON.stringify(decodedAccessToken.exp * 10000 + new Date().getTime());
+    const expiresAt = JSON.stringify(
+      decodedAccessToken.exp * 10000 + new Date().getTime(),
+    );
     await StorageService.saveData('expiresAt', expiresAt);
     return {
       accessToken,
@@ -58,14 +60,14 @@ export async function grantAccessToken(ssn) {
   try {
     const response = await post(
       '/auth/token',
-      { personalNumber: ssn },
-      { 'x-api-key': env.MITTHELSINGBORG_IO_APIKEY }
+      {personalNumber: ssn},
+      {'x-api-key': env.MITTHELSINGBORG_IO_APIKEY},
     );
 
     if (response.status !== 200) {
       throw new Error(response.data);
     }
-    const { token: accessToken } = response.data.data.attributes;
+    const {token: accessToken} = response.data.data.attributes;
     const decodedAccessToken = await saveAccessTokenToStorage(accessToken);
     return [decodedAccessToken, null];
   } catch (error) {
@@ -75,7 +77,7 @@ export async function grantAccessToken(ssn) {
 }
 
 async function wait(ms = 1000) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
@@ -104,14 +106,14 @@ export async function getUserProfile(accessToken) {
     if (decodedToken && decodedToken.personalNumber) {
       let timesRun = 0;
       const response = await poll(
-        function() {
+        function () {
           timesRun += 1;
           return get(`/users/${decodedToken.personalNumber}`, {
             Authorization: accessToken,
           });
         },
-        response => timesRun < 5 && response.status !== 200,
-        1000
+        (response) => timesRun < 5 && response.status !== 200,
+        1000,
       );
       if (response.status === 200) {
         return [response.data.data.attributes.item, null];

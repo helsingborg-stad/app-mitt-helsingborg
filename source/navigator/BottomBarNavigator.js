@@ -1,14 +1,16 @@
 /* eslint-disable global-require */
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { ProfileScreen, HomeScreen } from 'app/screens';
-import { TabBarImage } from 'app/components/molecules';
+import { ProfileScreen, HomeScreen } from '../screens';
+import { TabBarImage } from '../components/molecules';
 import CaseNavigator from './CaseNavigator';
 import TabNavigator from '../components/molecules/TabNavigator';
 
 const Tab = createMaterialTopTabNavigator();
 const BottomBarStack = () => (
-  <TabNavigator screenOptions={{ headerShown: false }} initialRouteName="UserEvents">
+  <TabNavigator
+    screenOptions={{headerShown: false}}
+    initialRouteName="UserEvents">
     <Tab.Screen
       name="UserEvents"
       component={CaseNavigator}
@@ -36,7 +38,9 @@ const BottomBarStack = () => (
       options={{
         title: 'Profil',
         tabBarIcon: TabBarImage(require('../images/profile_3x.png')),
-        tabBarIconInactive: TabBarImage(require('../images/profile_3x_gray.png')),
+        tabBarIconInactive: TabBarImage(
+          require('../images/profile_3x_gray.png'),
+        ),
         tabBarLabel: 'Profil',
       }}
     />

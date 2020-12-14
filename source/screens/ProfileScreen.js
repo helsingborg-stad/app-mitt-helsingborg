@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
-import { View } from 'react-native';
-import { Button, Text, Heading } from 'app/components/atoms';
-import { ScreenWrapper, Header } from 'app/components/molecules';
-import AuthContext from 'app/store/AuthContext';
+import {View} from 'react-native';
+import {Button, Text, Heading} from '../components/atoms';
+import {ScreenWrapper, Header} from '../components/molecules';
+import AuthContext from '../store/AuthContext';
 import PropTypes from 'prop-types';
 import env from 'react-native-config';
-import { StorageService } from 'app/services';
+import {StorageService} from '../services';
 
 const ProfileScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
@@ -43,16 +43,17 @@ const EmptyValue = styled(Text)`
 const Label = styled(Text)`
   margin-top: 12px;
   margin-bottom: 4px;
-  color: ${props => props.theme.background.light};
+  color: ${(props) => props.theme.background.light};
 `;
 
 function ProfileScreen(props) {
   const {
-    navigation: { navigate },
+    navigation: {navigate},
   } = props;
   const authContext = useContext(AuthContext);
-  const { user } = authContext;
-  const renderField = value => (value ? <Text>{value}</Text> : <EmptyValue>Ej angivet</EmptyValue>);
+  const {user} = authContext;
+  const renderField = (value) =>
+    value ? <Text>{value}</Text> : <EmptyValue>Ej angivet</EmptyValue>;
 
   return (
     <ProfileScreenWrapper>
@@ -84,8 +85,7 @@ function ProfileScreen(props) {
             onClick={async () => {
               await authContext.handleLogout();
               navigate('Start');
-            }}
-          >
+            }}>
             <Text>Logga ut</Text>
           </SignOutButton>
 
@@ -97,8 +97,7 @@ function ProfileScreen(props) {
                 StorageService.default.clearData();
                 await authContext.handleLogout();
                 navigate('Start');
-              }}
-            >
+              }}>
               <Text>Nollställ data</Text>
             </SignOutButton>
           )}

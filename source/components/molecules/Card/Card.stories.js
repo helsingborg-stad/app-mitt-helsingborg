@@ -1,6 +1,6 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react-native';
-import { Text, Icon } from 'app/components/atoms';
+import {storiesOf} from '@storybook/react-native';
+import {Text, Icon} from '../../atoms';
 import styled from 'styled-components/native';
 import StoryWrapper from '../StoryWrapper';
 import Card from './Card';
@@ -26,17 +26,17 @@ const Prop = styled(Text)`
 `;
 
 storiesOf('Card', module)
-  .add('Child components', props => (
+  .add('Child components', (props) => (
     <StoryWrapper {...props}>
       <ChildComponents />
     </StoryWrapper>
   ))
-  .add('Color schemas', props => (
+  .add('Color schemas', (props) => (
     <StoryWrapper {...props}>
       <ColorSchemas />
     </StoryWrapper>
   ))
-  .add('Example combinations', props => (
+  .add('Example combinations', (props) => (
     <StoryWrapper {...props}>
       <CardExamples />
     </StoryWrapper>
@@ -47,26 +47,26 @@ const ChildComponents = () => (
     <Title>Body</Title>
     <Prop>(Defaults to no borders or shadow)</Prop>
     <Card>
-      <Card.Body></Card.Body>
+      <Card.Body />
     </Card>
 
     <Title>Body</Title>
     <Prop>Prop: color</Prop>
     <Prop>Values: neutral, green, blue, purple, red</Prop>
     <Card>
-      <Card.Body color="green"></Card.Body>
+      <Card.Body color="green" />
     </Card>
 
     <Title>Body</Title>
     <Prop>Prop: shadow</Prop>
     <Card>
-      <Card.Body shadow></Card.Body>
+      <Card.Body shadow />
     </Card>
 
     <Title>Body</Title>
     <Prop>Prop: outlined</Prop>
     <Card colorSchema="red">
-      <Card.Body outlined></Card.Body>
+      <Card.Body outlined />
     </Card>
 
     <Title>Title</Title>
@@ -134,7 +134,11 @@ const ChildComponents = () => (
     <Card colorSchema="red">
       <Card.Body>
         <Card.Section>
-          <Card.Image style={{ width: 50, height: 50 }} circle source={ICON_CONTACT} />
+          <Card.Image
+            style={{width: 50, height: 50}}
+            circle
+            source={ICON_CONTACT}
+          />
           <Card.Title>Foo Bar</Card.Title>
           <Card.SubTitle>Foobar</Card.SubTitle>
         </Card.Section>
@@ -226,7 +230,11 @@ const CardExamples = () => (
     <Card colorSchema="red">
       <Card.Body shadow color="neutral">
         <Card.Section>
-          <Card.Image style={{ width: 50, height: 50 }} circle source={ICON_CONTACT} />
+          <Card.Image
+            style={{width: 50, height: 50}}
+            circle
+            source={ICON_CONTACT}
+          />
           <Card.Title>Anna Andersson</Card.Title>
           <Card.SubTitle>Socialsekreterare</Card.SubTitle>
         </Card.Section>
@@ -260,8 +268,8 @@ const CardExamples = () => (
       <Card.Body outlined>
         <Card.Title>Hej!</Card.Title>
         <Card.Text>
-          Helsingborgs Stad testar att göra självservice lite mer personlig och i första steget så
-          är det just Ekonomiskt Bistånd som står i fokus.
+          Helsingborgs Stad testar att göra självservice lite mer personlig och
+          i första steget så är det just Ekonomiskt Bistånd som står i fokus.
         </Card.Text>
       </Card.Body>
     </Card>
@@ -282,8 +290,12 @@ const CardExamples = () => (
       <Card.Body shadow color="neutral">
         <Card.Title>Oktober</Card.Title>
         <Card.SubTitle>Ansökan inlämnad</Card.SubTitle>
-        <Card.Text>Vi har mottagit din ansökan för perioden 1-31 oktober.</Card.Text>
-        <Card.Text italic>Vi skickar ut en notis när status för din ansökan ändras.</Card.Text>
+        <Card.Text>
+          Vi har mottagit din ansökan för perioden 1-31 oktober.
+        </Card.Text>
+        <Card.Text italic>
+          Vi skickar ut en notis när status för din ansökan ändras.
+        </Card.Text>
         <Card.Button>
           <Text>Visa ansökan</Text>
           <Icon name="arrow-forward" />
@@ -293,7 +305,9 @@ const CardExamples = () => (
 
     <Title>Tidigare ansökningar</Title>
     <Card colorSchema="red">
-      <Card.Text italic>Här kan du titta på dina tidigare ansökningar.</Card.Text>
+      <Card.Text italic>
+        Här kan du titta på dina tidigare ansökningar.
+      </Card.Text>
       <Card.Button>
         <Text>1-30 september</Text>
         <Icon name="arrow-forward" />
@@ -308,10 +322,12 @@ const CardExamples = () => (
     <Card colorSchema="purple">
       <Card.Body>
         <Card.Text>
-          Om du är i akut behov av pengar, eller har några frågor, kan du ringa din handläggare.
+          Om du är i akut behov av pengar, eller har några frågor, kan du ringa
+          din handläggare.
         </Card.Text>
         <Card.Text>
-          Kontaktuppgifter till din handläggare hittar du på ärendesidan i appen.
+          Kontaktuppgifter till din handläggare hittar du på ärendesidan i
+          appen.
         </Card.Text>
       </Card.Body>
     </Card>
@@ -330,7 +346,9 @@ const CardExamples = () => (
 
     <Card colorSchema="purple">
       <Card.Body>
-        <Card.Text italic>Eller ring stadens kontaktcenter på nummer 042 - 10 50 60</Card.Text>
+        <Card.Text italic>
+          Eller ring stadens kontaktcenter på nummer 042 - 10 50 60
+        </Card.Text>
         <Card.Button>
           <Text>Ring kontaktcenter</Text>
           <Icon name="help-outline" />

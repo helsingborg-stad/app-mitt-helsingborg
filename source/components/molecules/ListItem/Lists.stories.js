@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { storiesOf } from '@storybook/react-native';
-import GroupListWithAvatar from 'app/components/molecules/GroupedListWithAvatar';
+import React, {useState} from 'react';
+import {storiesOf} from '@storybook/react-native';
+import GroupListWithAvatar from '../../molecules/GroupedListWithAvatar';
 import StoryWrapper from '../StoryWrapper';
 import ListItem from './index';
 
@@ -41,20 +41,26 @@ const HighlightedData = [
   },
 ];
 
-const AvatarListStory = props => {
+const AvatarListStory = (props) => {
   const [answers, setAnswers] = useState([
-    { firstName: 'Eva', lastName: 'Erikson', email: 'test@test.dev' },
+    {firstName: 'Eva', lastName: 'Erikson', email: 'test@test.dev'},
   ]);
-  const change = value => {
+  const change = (value) => {
     setAnswers(value);
   };
-  const [answersKids, setAnswersKids] = useState([{ firstName: 'Lotta', lastName: 'Erikson' }]);
-  const changeKids = value => {
+  const [answersKids, setAnswersKids] = useState([
+    {firstName: 'Lotta', lastName: 'Erikson'},
+  ]);
+  const changeKids = (value) => {
     setAnswersKids(value);
   };
   return (
-    <StoryWrapper {...props} style={{ backgroundColor: '#FFAA9B' }}>
-      <GroupListWithAvatar heading="VUXNA JAG DELAR BOENDE MED" value={answers} onChange={change} />
+    <StoryWrapper {...props} style={{backgroundColor: '#FFAA9B'}}>
+      <GroupListWithAvatar
+        heading="VUXNA JAG DELAR BOENDE MED"
+        value={answers}
+        onChange={change}
+      />
       <GroupListWithAvatar
         heading="BARN JAG DELAR BOENDE MED"
         value={answersKids}
@@ -66,9 +72,9 @@ const AvatarListStory = props => {
 };
 
 storiesOf('Lists', module)
-  .add('Highlight colors', props => (
+  .add('Highlight colors', (props) => (
     <StoryWrapper {...props}>
-      {HighlightedData.map(item => (
+      {HighlightedData.map((item) => (
         <ListItem highlighted key={item.id} {...item} />
       ))}
     </StoryWrapper>
