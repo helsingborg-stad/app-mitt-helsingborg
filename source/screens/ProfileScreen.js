@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
+import { Button, Text, Heading } from 'app/components/atoms';
+import { Header } from 'app/components/molecules';
+import AuthContext from 'app/store/AuthContext';
 import PropTypes from 'prop-types';
 import env from 'react-native-config';
-import { Button, Text, Heading } from '../components/atoms';
-import { ScreenWrapper, Header } from '../components/molecules';
-import AuthContext from '../store/AuthContext';
-import { StorageService } from '../services';
+import { StorageService } from 'app/services';
+import UserInactivity from '../containers/UserInactivity/UserInactivity';
 
-const ProfileScreenWrapper = styled(ScreenWrapper)`
+const ProfileScreenWrapper = styled(UserInactivity)`
   padding: 0;
 `;
 
