@@ -1,10 +1,3 @@
-import { Icon, Text } from 'app/components/atoms';
-import { Card, Header } from 'app/components/molecules';
-import { CaseDispatch, CaseState, caseStatus, caseTypes } from 'app/store/CaseContext';
-import FormContext from 'app/store/FormContext';
-import PropTypes from 'prop-types';
-import icons from 'source/helpers/Icons';
-import styled from 'styled-components/native';
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { Animated, Easing } from 'react-native';
 import PropTypes from 'prop-types';
