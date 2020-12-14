@@ -7,7 +7,7 @@ const ScreenWrapper = styled(KeyboardAwareScrollView)`
   background-color: ${(props) => props.theme.colors.neutrals[6]};
 `;
 
-const ScreenWrapper = props => {
+const ScreenWrapper = (props) => {
   const { style, children, ...rest } = props;
 
   return (
