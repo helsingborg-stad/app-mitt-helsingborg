@@ -7,9 +7,9 @@ import {
   Linking,
 } from 'react-native';
 import styled from 'styled-components/native';
-import {Icon, Button} from '../components/atoms';
+import {Icon, Button} from '../../../components/atoms';
 import PropTypes from 'prop-types';
-import icons from 'source/helpers/Icons';
+import icons from '../../../helpers/Icons';
 import Text from '../../atoms/Text';
 import BackNavigation from '../BackNavigation/BackNavigation';
 

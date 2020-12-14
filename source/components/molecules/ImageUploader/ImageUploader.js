@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import {TouchableHighlight, ActivityIndicator} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import styled from 'styled-components/native';
-import {Heading, Text, Button, Icon} from '../components/atoms';
-import {ScreenWrapper} from '../components/molecules';
-import uploadFile from '../helpers/FileUpload';
+import {Heading, Text, Button, Icon} from '../../../components/atoms';
+import {ScreenWrapper} from '../../../components/molecules';
+import uploadFile from '../../../helpers/FileUpload';
 import {excludePropetiesWithKey} from '../../../helpers/Objects';
 
 const Wrapper = styled(ScreenWrapper)`

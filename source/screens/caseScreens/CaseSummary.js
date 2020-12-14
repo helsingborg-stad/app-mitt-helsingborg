@@ -1,13 +1,13 @@
-import {Icon, Text} from '../components/atoms';
-import {Card, ScreenWrapper} from '../components/molecules';
-import {CaseState} from '../store/CaseContext';
-import FormContext from '../store/FormContext';
+import {Icon, Text} from '../../components/atoms';
+import {Card, ScreenWrapper} from '../../components/molecules';
+import {CaseState} from '../../store/CaseContext';
+import FormContext from '../../store/FormContext';
 import PropTypes from 'prop-types';
 import React, {useContext, useEffect, useState, useRef} from 'react';
 import {View, Animated, Easing} from 'react-native';
 import styled from 'styled-components/native';
-import icons from 'source/helpers/Icons';
-import {launchPhone, launchEmail} from 'source/helpers/LaunchExternalApp';
+import icons from '../../helpers/Icons';
+import {launchPhone, launchEmail} from '../../helpers/LaunchExternalApp';
 import {
   formatUpdatedAt,
   getSwedishMonthNameByTimeStamp,

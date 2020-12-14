@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components/native';
-import icons from 'source/helpers/Icons';
+import icons from '../../../helpers/Icons';
 import Text from '../../atoms/Text';
 import Icon from '../../atoms/Icon';
 import Button from '../../atoms/Button/Button';

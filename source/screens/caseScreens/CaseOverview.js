@@ -1,14 +1,14 @@
-import {Icon, Text} from '../components/atoms';
-import {Card, Header, ScreenWrapper} from '../components/molecules';
+import {Icon, Text} from '../../components/atoms';
+import {Card, Header, ScreenWrapper} from '../../components/molecules';
 import {
   CaseDispatch,
   CaseState,
   caseStatus,
   caseTypes,
-} from '../store/CaseContext';
-import FormContext from '../store/FormContext';
+} from '../../store/CaseContext';
+import FormContext from '../../store/FormContext';
 import PropTypes from 'prop-types';
-import icons from 'source/helpers/Icons';
+import icons from '../../helpers/Icons';
 import styled from 'styled-components/native';
 import React, {useContext, useEffect, useState, useRef} from 'react';
 import {Animated, Easing} from 'react-native';

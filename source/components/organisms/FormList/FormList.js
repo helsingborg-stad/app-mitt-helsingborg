@@ -1,7 +1,7 @@
 import React, {useContext, useState, useEffect} from 'react';
-import {Heading, Text} from '../components/atoms';
-import {ListItem} from '../components/molecules';
-import FormContext from '../store/FormContext';
+import {Heading, Text} from '../../../components/atoms';
+import {ListItem} from '../../../components/molecules';
+import FormContext from '../../../store/FormContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 
