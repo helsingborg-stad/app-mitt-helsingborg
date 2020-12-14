@@ -1,9 +1,10 @@
 import React from 'react';
-import {storiesOf} from '@storybook/react-native';
-import {Text} from '../components/atoms';
 import styled from 'styled-components/native';
-import StoryWrapper from '../../components/molecules/StoryWrapper';
-import DynamicCardRenderer from './DynamicCardRenderer';
+import {storiesOf} from '@storybook/react-native';
+
+import {Text} from '@app/components/atoms';
+import StoryWrapper from '@app/components/molecules/StoryWrapper';
+import DynamicCardRenderer from '@app/containers/DynamicCardRenderer';
 
 const FlexContainer = styled.ScrollView`
   background-color: #fff;
