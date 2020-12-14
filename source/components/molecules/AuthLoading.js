@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
-import Icon from '../components/atoms/Icon';
+import Icon from '../../components/atoms/Icon';
 import {Animated, Easing} from 'react-native';
 import Text from '../atoms/Text';
 import Button from '../atoms/Button/Button';

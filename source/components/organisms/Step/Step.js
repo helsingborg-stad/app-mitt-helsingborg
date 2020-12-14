@@ -1,10 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import AuthContext from '../store/AuthContext';
+import AuthContext from '../../../store/AuthContext';
 import {Text} from 'react-native';
-import {AuthLoading} from '../components/molecules';
-import FormField from '../containers/FormField';
+import {AuthLoading} from '../../../components/molecules';
+import FormField from '../../../containers/FormField';
 import BackNavigation from '../../molecules/BackNavigation/BackNavigation';
 import Banner from './StepBanner/StepBanner';
 import StepFooter from './StepFooter/StepFooter';

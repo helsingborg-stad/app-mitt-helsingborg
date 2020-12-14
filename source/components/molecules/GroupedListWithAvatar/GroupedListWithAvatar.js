@@ -2,7 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import AvatarListItem from '../components/molecules/ListItem/AvatarListItem';
+import AvatarListItem from '../../../components/molecules/ListItem/AvatarListItem';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import {Text, Icon} from '../../atoms';
 import Button from '../../atoms/Button/Button';
