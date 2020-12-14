@@ -9,6 +9,7 @@ import FormContext from '../../store/FormContext';
 import icons from '../../helpers/Icons';
 import { launchPhone, launchEmail } from '../../helpers/LaunchExternalApp';
 import { formatUpdatedAt, getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
+import UserInactivity from '../../containers/UserInactivity/UserInactivity';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -76,7 +77,7 @@ const CaseSummary = (props) => {
   }, [fadeAnimation]);
 
   return (
-    <ScreenWrapper>
+    <UserInactivity {...props}>
       <Container as={Animated.ScrollView} style={{ opacity: fadeAnimation }}>
         {status === 'submitted' && (
           <>
@@ -155,7 +156,7 @@ const CaseSummary = (props) => {
           </View>
         )}
       </Container>
-    </ScreenWrapper>
+    </UserInactivity>
   );
 };
 

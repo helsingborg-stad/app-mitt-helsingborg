@@ -1,3 +1,10 @@
+import { Icon, Text } from 'app/components/atoms';
+import { Card, Header } from 'app/components/molecules';
+import { CaseDispatch, CaseState, caseStatus, caseTypes } from 'app/store/CaseContext';
+import FormContext from 'app/store/FormContext';
+import PropTypes from 'prop-types';
+import icons from 'source/helpers/Icons';
+import styled from 'styled-components/native';
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { Animated, Easing } from 'react-native';
 import PropTypes from 'prop-types';
@@ -8,6 +15,7 @@ import { CaseDispatch, CaseState, caseStatus, caseTypes } from '../../store/Case
 import FormContext from '../../store/FormContext';
 import icons from '../../helpers/Icons';
 import { formatUpdatedAt } from '../../helpers/DateHelpers';
+import UserInactivity from '../../containers/UserInactivity/UserInactivity';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -153,11 +161,13 @@ const computeCaseCardComponent = (status, latestCase, form, caseType, navigation
  * Case overview screen
  * @param {obj} props
  */
-function CaseOverview({ navigation }) {
+function CaseOverview(props) {
+  const { navigation } = props;
   const [caseItems, setCaseItems] = useState([]);
   const { getCasesByFormIds } = useContext(CaseState);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const { createCase } = useContext(CaseDispatch);
+
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -194,7 +204,7 @@ function CaseOverview({ navigation }) {
   }, [createCase, getCasesByFormIds, getForm, getFormIdsByFormTypes, navigation]);
 
   return (
-    <ScreenWrapper>
+    <UserInactivity {...props}>
       <Header title="Mina ärenden" />
       <Container>
         <Message colorSchema={colorSchema}>
@@ -221,7 +231,7 @@ function CaseOverview({ navigation }) {
           </Animated.View>
         )}
       </Container>
-    </ScreenWrapper>
+    </UserInactivity>
   );
 }
 

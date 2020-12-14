@@ -2,17 +2,23 @@ import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import { Button, Text } from 'app/components/atoms';
+import { StatusBar, ActivityIndicator } from 'react-native';
 import Form from '../containers/Form/Form';
 import { getFormQuestions } from '../helpers/CaseDataConverter';
 import generateInitialCaseAnswers from '../store/actions/dynamicFormData';
-import AuthContext from '../store/AuthContext';
-import { CaseDispatch, CaseState } from '../store/CaseContext';
-import FormContext from '../store/FormContext';
+import UserInactivity from '../containers/UserInactivity/UserInactivity';
 
 const SpinnerContainer = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
+`;
+
+const FormScreenWrapper = styled(UserInactivity)`
+  padding: 0;
+  flex: 1;
 `;
 
 const FormCaseScreen = ({ route, navigation, ...props }) => {
