@@ -2,7 +2,7 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { ProfileScreen, HomeScreen } from 'app/screens';
-import { TabBarImage } from 'source/components/molecules';
+import { TabBarImage } from 'app/components/molecules';
 import CaseNavigator from './CaseNavigator';
 import TabNavigator from '../components/molecules/TabNavigator';
 

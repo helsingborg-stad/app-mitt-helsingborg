@@ -1,6 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import { Text } from 'source/components/atoms';
+import { Text } from 'app/components/atoms';
 import StoryWrapper from '../StoryWrapper';
 import GroupedList from './GroupedList';
 
