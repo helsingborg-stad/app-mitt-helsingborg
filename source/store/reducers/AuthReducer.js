@@ -1,6 +1,7 @@
 import { actionTypes } from '../actions/AuthActions';
 
 export const initialState = {
+  isActive: true,
   isAuthenticated: false,
   user: {},
   error: null,
@@ -12,10 +13,18 @@ export default function AuthReducer(state, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case actionTypes.updateIsActive: {
+      return {
+        ...state,
+        isActive: payload.isActive,
+      };
+    }
+
     case actionTypes.loginSuccess:
       return {
         ...state,
         ...payload,
+        isActive: true,
         isAuthenticated: true,
         status: 'authResolved',
         orderRef: undefined,
@@ -26,6 +35,7 @@ export default function AuthReducer(state, action) {
       return {
         ...state,
         ...payload,
+        isActive: false,
         isAuthenticated: false,
         status: 'rejected',
         orderRef: undefined,

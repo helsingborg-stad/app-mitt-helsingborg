@@ -19,7 +19,18 @@ export const actionTypes = {
   setStatus: 'SET_STATUS',
   signSuccess: 'SIGN_SUCCESS',
   setIsBankidInstalled: 'SET_INSTALLED',
+  updateIsActive: 'UPDATE_IS_ACTIVE',
 };
+
+export function updateIsActive(active) {
+  console.log('UpdateIsActive', active);
+  return {
+    type: actionTypes.updateIsActive,
+    payload: {
+      isActive: active,
+    },
+  };
+}
 
 export async function mockedAuth() {
   try {
