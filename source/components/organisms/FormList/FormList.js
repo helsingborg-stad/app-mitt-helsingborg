@@ -1,7 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Heading, Text } from 'app/components/atoms';
-import { ListItem } from 'app/components/molecules';
-import FormContext from 'app/store/FormContext';
+import React, {useContext, useState, useEffect} from 'react';
+import {Heading, Text} from '../components/atoms';
+import {ListItem} from '../components/molecules';
+import FormContext from '../store/FormContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 
@@ -14,14 +14,16 @@ const ListHeading = styled(Heading)`
   margin-bottom: 8px;
 `;
 
-const FormList = ({ onClickCallback, heading, showSubforms }) => {
+const FormList = ({onClickCallback, heading, showSubforms}) => {
   const [formSummaries, setFormSummaries] = useState([]);
-  const { getFormSummaries, getForm } = useContext(FormContext);
+  const {getFormSummaries, getForm} = useContext(FormContext);
 
   useEffect(() => {
     async function fetchForms() {
       const formSummaries = await getFormSummaries();
-      setFormSummaries(formSummaries.filter(f => (showSubforms ? f.subform : !f.subform)));
+      setFormSummaries(
+        formSummaries.filter((f) => (showSubforms ? f.subform : !f.subform)),
+      );
     }
     fetchForms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -31,7 +33,7 @@ const FormList = ({ onClickCallback, heading, showSubforms }) => {
     <List>
       <ListHeading type="h3">{heading}</ListHeading>
       {formSummaries.length > 0 ? (
-        formSummaries.map(form => (
+        formSummaries.map((form) => (
           <ListItem
             key={form.id}
             highlighted
@@ -46,7 +48,7 @@ const FormList = ({ onClickCallback, heading, showSubforms }) => {
           />
         ))
       ) : (
-        <Text style={{ marginLeft: 4 }}>Laddar...</Text>
+        <Text style={{marginLeft: 4}}>Laddar...</Text>
       )}
     </List>
   );

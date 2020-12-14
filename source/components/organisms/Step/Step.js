@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import AuthContext from 'app/store/AuthContext';
-import { Text } from 'react-native';
-import { AuthLoading } from 'app/components/molecules';
-import FormField from 'app/containers/FormField';
+import AuthContext from '../store/AuthContext';
+import {Text} from 'react-native';
+import {AuthLoading} from '../components/molecules';
+import FormField from '../containers/FormField';
 import BackNavigation from '../../molecules/BackNavigation/BackNavigation';
 import Banner from './StepBanner/StepBanner';
 import StepFooter from './StepFooter/StepFooter';
@@ -13,7 +13,7 @@ import Progressbar from '../../atoms/Progressbar/Progressbar';
 import CloseDialog from './CloseDialog/CloseDialog';
 
 const StepContainer = styled.View`
-  background: ${props => props.theme.colors.neutrals[7]};
+  background: ${(props) => props.theme.colors.neutrals[7]};
   flex: 1;
 `;
 
@@ -82,13 +82,21 @@ function Step({
   /** TODO: move out of this scope, this logic should be defined on the form component */
   const closeForm = () => {
     if (status === 'ongoing') {
-      if (onFieldChange) onFieldChange(answers);
-      if (updateCaseInContext) updateCaseInContext(answers, 'ongoing', currentPosition);
+      if (onFieldChange) {
+        onFieldChange(answers);
+      }
+      if (updateCaseInContext) {
+        updateCaseInContext(answers, 'ongoing', currentPosition);
+      }
     }
-    if (formNavigation?.close) formNavigation.close(() => {});
+    if (formNavigation?.close) {
+      formNavigation.close(() => {});
+    }
   };
   const inSubstep = currentPosition.level !== 0;
-  const backButtonBehavior = inSubstep ? formNavigation.goToMainForm : formNavigation.back;
+  const backButtonBehavior = inSubstep
+    ? formNavigation.goToMainForm
+    : formNavigation.back;
 
   return (
     <StepContainer>
@@ -107,11 +115,10 @@ function Step({
         contentContainerStyle={{
           flexGrow: 1,
         }}
-        showsHorizontalScrollIndicator={false}
-      >
-        {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
-          <StepBanner {...banner} />
-        )}
+        showsHorizontalScrollIndicator={false}>
+        {banner &&
+          banner.constructor === Object &&
+          Object.keys(banner).length > 0 && <StepBanner {...banner} />}
         {currentPosition.level === 0 && (
           <Progressbar
             currentStep={currentPosition.currentMainStep}
@@ -124,14 +131,16 @@ function Step({
               <StepDescription
                 theme={theme}
                 currentStep={
-                  currentPosition.level === 0 ? currentPosition.currentMainStep : undefined
+                  currentPosition.level === 0
+                    ? currentPosition.currentMainStep
+                    : undefined
                 }
                 totalStepNumber={totalStepNumber}
                 {...description}
               />
               {questions && (
                 <StepFieldListWrapper>
-                  {questions.map(field => (
+                  {questions.map((field) => (
                     <FormField
                       key={`${field.id}`}
                       onChange={status === 'ongoing' ? onFieldChange : null}
@@ -263,7 +272,7 @@ Step.propTypes = {
       label: PropTypes.string,
       color: PropTypes.string,
       conditionalOn: PropTypes.string,
-    })
+    }),
   ),
   /** Background color for the footer */
   footerBg: PropTypes.string,

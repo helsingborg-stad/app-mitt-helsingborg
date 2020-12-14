@@ -1,28 +1,28 @@
-import { useFocusEffect } from '@react-navigation/native';
-import { SLIDES } from 'app/assets/images';
-import Button from 'app/components/atoms/Button';
-import Heading from 'app/components/atoms/Heading';
-import Input from 'app/components/atoms/Input';
-import Text from 'app/components/atoms/Text';
-import AuthLoading from 'app/components/molecules/AuthLoading';
-import BackNavigation from 'app/components/molecules/BackNavigation';
-import Modal from 'app/components/molecules/Modal';
-import { ValidationHelper } from 'app/helpers';
+import {useFocusEffect} from '@react-navigation/native';
+import {SLIDES} from '../assets/images';
+import Button from '../components/atoms/Button';
+import Heading from '../components/atoms/Heading';
+import Input from '../components/atoms/Input';
+import Text from '../components/atoms/Text';
+import AuthLoading from '../components/molecules/AuthLoading';
+import BackNavigation from '../components/molecules/BackNavigation';
+import Modal from '../components/molecules/Modal';
+import {ValidationHelper} from '../helpers';
 import PropTypes from 'prop-types';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Alert, Linking, View } from 'react-native';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
+import {Alert, Linking, View} from 'react-native';
 import styled from 'styled-components/native';
 import AuthContext from '../store/AuthContext';
-import { useNotification } from '../store/NotificationContext';
+import {useNotification} from '../store/NotificationContext';
 import MarkdownConstructor from '../helpers/MarkdownConstructor';
 import userAgreementText from '../assets/text/userAgreementText';
 
-const { sanitizePin, validatePin } = ValidationHelper;
+const {sanitizePin, validatePin} = ValidationHelper;
 const UnifiedPadding = [24, 48]; // Vertical padding, Horizontal padding
 
 const LoginSafeAreaView = styled.SafeAreaView`
   flex: 1;
-  background-color: ${props => props.theme.colors.neutrals[6]};
+  background-color: ${(props) => props.theme.colors.neutrals[6]};
 `;
 
 const Body = styled.View`
@@ -59,9 +59,9 @@ const Footer = styled.View`
   max-height: 130px;
   padding: ${UnifiedPadding[0]}px ${UnifiedPadding[1]}px ${UnifiedPadding[0]}px
     ${UnifiedPadding[1]}px;
-  border-top-color: ${props => props.theme.border.default};
+  border-top-color: ${(props) => props.theme.border.default};
   border-top-width: 1px;
-  background-color: ${props => props.theme.colors.neutrals[5]};
+  background-color: ${(props) => props.theme.colors.neutrals[5]};
 `;
 
 const Logo = styled.Image`
@@ -71,26 +71,26 @@ const Logo = styled.Image`
 `;
 
 const Title = styled(Heading)`
-  font-size: ${props => props.theme.fontSizes[3]}px;
-  color: ${props => props.theme.colors.primary.blue[0]};
+  font-size: ${(props) => props.theme.fontSizes[3]}px;
+  color: ${(props) => props.theme.colors.primary.blue[0]};
 `;
 
 const LoginHeading = styled(Heading)`
-  font-size: ${props => props.theme.fontSizes[13]}px;
-  font-weight: ${props => props.theme.fontWeights[1]};
+  font-size: ${(props) => props.theme.fontSizes[13]}px;
+  font-weight: ${(props) => props.theme.fontWeights[1]};
   line-height: 60px;
-  color: ${props => props.theme.colors.neutrals[0]};
+  color: ${(props) => props.theme.colors.neutrals[0]};
 `;
 
 const ModalHeading = styled(Heading)`
-  font-size: ${props => props.theme.fontSizes[9]}px;
-  font-weight: ${props => props.theme.fontWeights[1]};
+  font-size: ${(props) => props.theme.fontSizes[9]}px;
+  font-weight: ${(props) => props.theme.fontWeights[1]};
   line-height: 44px;
-  color: ${props => props.theme.colors.neutrals[0]};
+  color: ${(props) => props.theme.colors.neutrals[0]};
 `;
 
 const ContentText = styled(Text)`
-  font-size: ${props => props.theme.fontSizes[4]}px;
+  font-size: ${(props) => props.theme.fontSizes[4]}px;
   line-height: 30px;
 `;
 
@@ -99,12 +99,12 @@ const Separator = styled.View`
   height: 2px;
   width: 25px;
   opacity: 0.2;
-  background-color: ${props => props.theme.colors.neutrals[0]};
+  background-color: ${(props) => props.theme.colors.neutrals[0]};
   margin-bottom: 16px;
 `;
 
 const LoginModal = styled(Modal)`
-  background-color: ${props => props.theme.colors.neutrals[6]};
+  background-color: ${(props) => props.theme.colors.neutrals[6]};
 `;
 
 const CloseModalButton = styled(BackNavigation)`
@@ -113,21 +113,21 @@ const CloseModalButton = styled(BackNavigation)`
 
 const FooterText = styled(Text)`
   font-style: italic;
-  color: ${props => props.theme.colors.primary.blue[0]};
+  color: ${(props) => props.theme.colors.primary.blue[0]};
 `;
 
 const Link = styled(Text)`
-  font-size: ${props => props.theme.fontSizes[3]}px;
+  font-size: ${(props) => props.theme.fontSizes[3]}px;
   text-align: center;
   margin-top: 16px;
 `;
 
 const ParagraphLink = styled(Text)`
   font-style: italic;
-  font-size: ${props => props.theme.fontSizes[2]}px;
+  font-size: ${(props) => props.theme.fontSizes[2]}px;
   font-weight: bold;
-  text-decoration-color: ${props => props.theme.colors.primary.blue[0]};
-  color: ${props => props.theme.colors.primary.blue[0]};
+  text-decoration-color: ${(props) => props.theme.colors.primary.blue[0]};
+  color: ${(props) => props.theme.colors.primary.blue[0]};
 `;
 
 const LoginInput = styled(Input)`
@@ -162,7 +162,7 @@ function LoginScreen(props) {
    */
   const userAgreementMarkdownRules = {
     text: (node, _children, _parent, _styles) => (
-      <Text style={{ fontSize: 16 }} key={node.key}>
+      <Text style={{fontSize: 16}} key={node.key}>
         {node.content}
       </Text>
     ),
@@ -176,7 +176,7 @@ function LoginScreen(props) {
   /**
    * Function for navigating to a screen in the application.
    */
-  const navigateToScreen = useCallback(screen => {
+  const navigateToScreen = useCallback((screen) => {
     props.navigation.navigate(screen);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -192,7 +192,7 @@ function LoginScreen(props) {
         }
       };
       handleNavigateToScreen();
-    }, [isAuthenticated, navigateToScreen])
+    }, [isAuthenticated, navigateToScreen]),
   );
 
   /**
@@ -208,7 +208,7 @@ function LoginScreen(props) {
   /**
    * Handles the personal number input field changes and updates state.
    */
-  const handlePersonalNumber = value => {
+  const handlePersonalNumber = (value) => {
     setPersonalNumber(sanitizePin(value));
   };
 
@@ -242,7 +242,9 @@ function LoginScreen(props) {
           <Title>Mitt Helsingborg</Title>
           <Separator />
           <LoginHeading>Välkommen!</LoginHeading>
-          <ContentText>Till en enklare och säkrare kontakt med Helsingborgs Stad.</ContentText>
+          <ContentText>
+            Till en enklare och säkrare kontakt med Helsingborgs Stad.
+          </ContentText>
         </Header>
 
         {(isLoading || isResolved) && (
@@ -271,18 +273,16 @@ function LoginScreen(props) {
             <ParagraphLink
               onPress={() => {
                 userAgreementModalVisible(true);
-              }}
-            >
+              }}>
               användaravtal
             </ParagraphLink>{' '}
             och att du har tagit del av hur vi hanterar dina{' '}
             <ParagraphLink
               onPress={() =>
                 Linking.openURL(
-                  'https://helsingborg.se/toppmeny/om-webbplatsen/sa-har-behandlar-vi-dina-personuppgifter/'
+                  'https://helsingborg.se/toppmeny/om-webbplatsen/sa-har-behandlar-vi-dina-personuppgifter/',
                 )
-              }
-            >
+              }>
               personuppgifter
             </ParagraphLink>
             .
@@ -294,10 +294,9 @@ function LoginScreen(props) {
         visible={loginModal}
         scrollViewProps={{
           keyboardShouldPersistTaps: 'handled',
-          contentContainerStyle: { flexGrow: 1 },
+          contentContainerStyle: {flexGrow: 1},
           extraScrollHeight: 50,
-        }}
-      >
+        }}>
         <CloseModalButton
           onClose={() => loginModalVisible(false)}
           primary={false}
@@ -307,8 +306,8 @@ function LoginScreen(props) {
           <Header>
             <ModalHeading>Logga in med BankID på en annan enhet</ModalHeading>
             <ContentText>
-              Öppna Mobilt BankID eller BankID på din andra enhet innan du trycker på logga in här
-              nedaför.
+              Öppna Mobilt BankID eller BankID på din andra enhet innan du
+              trycker på logga in här nedaför.
             </ContentText>
           </Header>
 
@@ -344,16 +343,16 @@ function LoginScreen(props) {
                 block
                 onClick={() => {
                   handleLogin(true);
-                }}
-              >
+                }}>
                 <Text>Logga in</Text>
               </Button>
 
               <Link
                 onPress={() => {
-                  Linking.openURL('https://support.bankid.com/sv/bankid/mobilt-bankid');
-                }}
-              >
+                  Linking.openURL(
+                    'https://support.bankid.com/sv/bankid/mobilt-bankid',
+                  );
+                }}>
                 Läs mer om hur du skaffar mobilt BankID
               </Link>
             </Form>
@@ -365,10 +364,9 @@ function LoginScreen(props) {
         visible={userAgreementModal}
         scrollViewProps={{
           keyboardShouldPersistTaps: 'handled',
-          contentContainerStyle: { flexGrow: 1 },
+          contentContainerStyle: {flexGrow: 1},
           extraScrollHeight: 50,
-        }}
-      >
+        }}>
         <CloseModalButton
           onClose={() => userAgreementModalVisible(false)}
           primary={false}
@@ -376,7 +374,10 @@ function LoginScreen(props) {
         />
         <Body>
           <UserAgreementForm>
-            <MarkdownConstructor rules={userAgreementMarkdownRules} rawText={userAgreementText} />
+            <MarkdownConstructor
+              rules={userAgreementMarkdownRules}
+              rawText={userAgreementText}
+            />
           </UserAgreementForm>
           <UserAgreementFooter>
             <Button
@@ -384,8 +385,7 @@ function LoginScreen(props) {
               block
               onClick={() => {
                 userAgreementModalVisible(false);
-              }}
-            >
+              }}>
               <Text>Återvänd till inloggning</Text>
             </Button>
           </UserAgreementFooter>

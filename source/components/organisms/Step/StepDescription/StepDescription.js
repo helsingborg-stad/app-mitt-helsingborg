@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { Text, Heading } from 'app/components/atoms';
+import {Text, Heading} from '../components/atoms';
 
 const StepDescriptionWrapper = styled.View`
   margin-left: 24px;
@@ -16,18 +16,18 @@ const StepDescriptionContent = styled.View`
 `;
 
 const StepDescriptionTagline = styled(Text)`
-  font-size: ${props => props.theme.typography[props.type].fontSize}px;
+  font-size: ${(props) => props.theme.typography[props.type].fontSize}px;
   font-weight: bold;
   margin-bottom: 10px;
-  color: ${props => props.theme.colors.primary[props.colorSchema][1]};
-  line-height: ${props => props.theme.typography[props.type].lineHeight}px;
+  color: ${(props) => props.theme.colors.primary[props.colorSchema][1]};
+  line-height: ${(props) => props.theme.typography[props.type].lineHeight}px;
   letter-spacing: 0.5px;
 `;
 
 const StepDescriptionText = styled(Text)`
-  line-height: ${props => props.theme.typography[props.type].lineHeight}px;
+  line-height: ${(props) => props.theme.typography[props.type].lineHeight}px;
   margin-top: 16px;
-  font-size: ${props => props.theme.fontSizes[3]};
+  font-size: ${(props) => props.theme.fontSizes[3]};
 `;
 
 function StepDescription({
@@ -46,7 +46,11 @@ function StepDescription({
           <StepDescriptionTagline colorSchema={colorSchema}>
             {tagline}
 
-            {tagline && currentStep && totalStepNumber && currentStep !== totalStepNumber && ' • '}
+            {tagline &&
+              currentStep &&
+              totalStepNumber &&
+              currentStep !== totalStepNumber &&
+              ' • '}
             {currentStep &&
               totalStepNumber &&
               currentStep !== totalStepNumber &&

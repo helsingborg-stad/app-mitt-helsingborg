@@ -1,19 +1,15 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react-native';
+import {storiesOf} from '@storybook/react-native';
 import StoryWrapper from '../../molecules/StoryWrapper';
 import Step from './Step';
 
-const ILLU_INCOME = require('source/assets/images/illustrations/illu_inkomster_margins_2x.png');
-const ICON_INCOME = require('source/assets/images/icons/icn_inkomster_1x.png');
+// const ILLU_INCOME = require('source/assets/images/illustrations/illu_inkomster_margins_2x.png');
+// const ICON_INCOME = require('source/assets/images/icons/icn_inkomster_1x.png');
 
 storiesOf('Step', module)
   .add('Default', () => (
     <StoryWrapper>
       <Step
-        banner={{
-          imageSrc: ILLU_INCOME,
-          iconSrc: ICON_INCOME,
-        }}
         currentPosition={{
           index: 0,
           level: 0,
@@ -24,7 +20,8 @@ storiesOf('Step', module)
         description={{
           heading: 'Vill du ansöka om Ekonomiskt bistånd igen?',
           tagline: 'Ansökan',
-          text: 'Du kommer behöva ange inkomster, utgifter och kontrollera dina boende detaljer.',
+          text:
+            'Du kommer behöva ange inkomster, utgifter och kontrollera dina boende detaljer.',
         }}
         formNavigation={{
           next: () => console.log('clicked next'),
@@ -63,7 +60,8 @@ storiesOf('Step', module)
         description={{
           heading: 'Vill du ansöka om Ekonomiskt bistånd igen?',
           tagline: 'Ansökan',
-          text: 'Du kommer behöva ange inkomster, utgifter och kontrollera dina boende detaljer.',
+          text:
+            'Du kommer behöva ange inkomster, utgifter och kontrollera dina boende detaljer.',
         }}
       />
     </StoryWrapper>
@@ -91,7 +89,8 @@ storiesOf('Step', module)
         description={{
           heading: 'Vill du ansöka om Ekonomiskt bistånd igen?',
           tagline: 'Ansökan',
-          text: 'Du kommer behöva ange inkomster, utgifter och kontrollera dina boende detaljer.',
+          text:
+            'Du kommer behöva ange inkomster, utgifter och kontrollera dina boende detaljer.',
         }}
         answers={{}}
         questions={[

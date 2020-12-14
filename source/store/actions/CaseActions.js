@@ -1,5 +1,8 @@
-import { get, post, put } from 'app/helpers/ApiRequest';
-import { convertAnswersToArray, getFormQuestions } from 'app/helpers/CaseDataConverter';
+import {get, post, put} from '../../helpers/ApiRequest';
+import {
+  convertAnswersToArray,
+  getFormQuestions,
+} from '../../helpers/CaseDataConverter';
 import generateInitialCaseAnswers from './dynamicFormData';
 
 export const actionTypes = {
@@ -10,7 +13,14 @@ export const actionTypes = {
   apiError: 'API_ERROR',
 };
 
-export async function updateCase(caseId, data, status, currentPosition, formQuestions, callback) {
+export async function updateCase(
+  caseId,
+  data,
+  status,
+  currentPosition,
+  formQuestions,
+  callback,
+) {
   const answers = convertAnswersToArray(data, formQuestions);
 
   const body = {
@@ -21,9 +31,11 @@ export async function updateCase(caseId, data, status, currentPosition, formQues
 
   try {
     const res = await put(`/cases/${caseId}`, JSON.stringify(body));
-    const { id, attributes } = res.data.data;
-    const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
-    if (callback) callback(flatUpdatedCase);
+    const {id, attributes} = res.data.data;
+    const flatUpdatedCase = {id, updatedAt: Date.now(), ...attributes};
+    if (callback) {
+      callback(flatUpdatedCase);
+    }
     return {
       type: actionTypes.updateCase,
       payload: flatUpdatedCase,
@@ -41,7 +53,10 @@ export async function createCase(form, user, cases, callback) {
   const initialAnswersObject = generateInitialCaseAnswers(form, user, cases);
   const formQuestions = getFormQuestions(form);
   // Convert to new data strucure to be saved in Cases API
-  const initialAnswersArray = convertAnswersToArray(initialAnswersObject, formQuestions);
+  const initialAnswersArray = convertAnswersToArray(
+    initialAnswersObject,
+    formQuestions,
+  );
 
   const body = {
     formId: form.id,
@@ -94,7 +109,7 @@ export async function fetchCases(callback) {
     const response = await get('/cases');
     if (response?.data?.data?.attributes?.cases) {
       const cases = {};
-      response.data.data.attributes.cases.forEach(c => (cases[c.id] = c));
+      response.data.data.attributes.cases.forEach((c) => (cases[c.id] = c));
 
       callback(cases);
       return {

@@ -1,13 +1,13 @@
 /* eslint-disable no-nested-ternary */
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import { TouchableHighlight, ActivityIndicator } from 'react-native';
+import {TouchableHighlight, ActivityIndicator} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import styled from 'styled-components/native';
-import { Heading, Text, Button, Icon } from 'app/components/atoms';
-import { ScreenWrapper } from 'app/components/molecules';
-import uploadFile from 'app/helpers/FileUpload';
-import { excludePropetiesWithKey } from '../../../helpers/Objects';
+import {Heading, Text, Button, Icon} from '../components/atoms';
+import {ScreenWrapper} from '../components/molecules';
+import uploadFile from '../helpers/FileUpload';
+import {excludePropetiesWithKey} from '../../../helpers/Objects';
 
 const Wrapper = styled(ScreenWrapper)`
   padding-left: 0;
@@ -85,12 +85,12 @@ const ImageStatus = {
   uploadError: 'UPLOAD_ERROR',
 };
 
-const ImageItem = ({ imageData, fileName, onRemove, status }) => (
+const ImageItem = ({imageData, fileName, onRemove, status}) => (
   <DefaultItem>
     <Flex>
       <IconContainer highlighted>
         <IconFlex>
-          <ImageIcon source={{ uri: `data:image/jpeg;base64,${imageData}` }} />
+          <ImageIcon source={{uri: `data:image/jpeg;base64,${imageData}`}} />
         </IconFlex>
       </IconContainer>
       <Content>
@@ -118,42 +118,50 @@ ImageItem.propTypes = {
   status: PropTypes.oneOf(Object.values(ImageStatus)),
 };
 
-const ImageUploader = ({ heading, buttonText, images: imgs, onChange, maxImages }) => {
+const ImageUploader = ({
+  heading,
+  buttonText,
+  images: imgs,
+  onChange,
+  maxImages,
+}) => {
   const [images, setImages] = useState([]);
   const [imageData, setImageData] = useState([]);
   const [loadedStatus, setLoadedStatus] = useState([]);
 
   useEffect(() => {
-    if (imgs) setImages(imgs);
+    if (imgs) {
+      setImages(imgs);
+    }
     // need more logic here to load in images, using their local uris...
   }, [imgs]);
 
-  const addImageToState = img => {
+  const addImageToState = (img) => {
     const index = images.length;
     const newImage = excludePropetiesWithKey(img, ['data']);
-    setImages(old => [...old, newImage]);
-    setImageData(old => [...old, img.data]);
-    setLoadedStatus(old => [...old, ImageStatus.loading]);
+    setImages((old) => [...old, newImage]);
+    setImageData((old) => [...old, img.data]);
+    setLoadedStatus((old) => [...old, ImageStatus.loading]);
 
     return index;
   };
 
-  const removeImageFromState = index => () => {
-    setImages(old => {
+  const removeImageFromState = (index) => () => {
+    setImages((old) => {
       old.splice(index, 1);
       return [...old];
     });
-    setImageData(old => {
+    setImageData((old) => {
       old.splice(index, 1);
       return [...old];
     });
-    setLoadedStatus(old => {
+    setLoadedStatus((old) => {
       old.splice(index, 1);
       return [...old];
     });
   };
 
-  const getBlob = async fileUri => {
+  const getBlob = async (fileUri) => {
     const resp = await fetch(fileUri);
     const imageBody = await resp.blob();
     return imageBody;
@@ -166,29 +174,33 @@ const ImageUploader = ({ heading, buttonText, images: imgs, onChange, maxImages 
       'users/me/attachments',
       imageData.fileName,
       imageFileType,
-      imageBlob
+      imageBlob,
     );
 
     if (uploadResponse.error) {
       // more error handling needed, display some error message and stuff.
-      setLoadedStatus(old => {
+      setLoadedStatus((old) => {
         old[index] = ImageStatus.uploadError;
         return [...old];
       });
-      setImages(old => {
+      setImages((old) => {
         old[index].errorMessage = uploadResponse.message;
-        if (onChange) onChange(old);
+        if (onChange) {
+          onChange(old);
+        }
         return [...old];
       });
     } else {
-      setLoadedStatus(old => {
+      setLoadedStatus((old) => {
         old[index] = ImageStatus.finished;
         return [...old];
       });
       // update the images at the right index with the returned info.
-      setImages(old => {
+      setImages((old) => {
         old[index].uploadedFileName = uploadResponse.uploadedFileName;
-        if (onChange) onChange(old);
+        if (onChange) {
+          onChange(old);
+        }
         return [...old];
       });
     }
@@ -207,7 +219,7 @@ const ImageUploader = ({ heading, buttonText, images: imgs, onChange, maxImages 
           waitUntilSaved: true,
         },
       },
-      res => {
+      (res) => {
         if (res.didCancel) {
           console.log('User cancelled!');
         } else if (res.error) {
@@ -221,7 +233,7 @@ const ImageUploader = ({ heading, buttonText, images: imgs, onChange, maxImages 
 
           uploadImage(res, index);
         }
-      }
+      },
     );
   };
 
@@ -242,7 +254,12 @@ const ImageUploader = ({ heading, buttonText, images: imgs, onChange, maxImages 
         <ButtonContainer>
           {maxImages && maxImages > 0 && images.length < maxImages && (
             <Button onClick={addImage}>
-              <Text> {buttonText && buttonText !== '' ? buttonText : 'Ladda upp bild'}</Text>
+              <Text>
+                {' '}
+                {buttonText && buttonText !== ''
+                  ? buttonText
+                  : 'Ladda upp bild'}
+              </Text>
             </Button>
           )}
         </ButtonContainer>

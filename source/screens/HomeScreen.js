@@ -1,14 +1,14 @@
 /* eslint-disable react/destructuring-assignment */
 import PropTypes from 'prop-types';
-import React, { useState, useContext } from 'react';
+import React, {useState, useContext} from 'react';
 import styled from 'styled-components/native';
-import { ScreenWrapper } from 'app/components/molecules';
-import { View } from 'react-native';
-import { Text, Button } from 'app/components/atoms';
-import { CaseDispatch } from 'app/store/CaseContext';
-import FormList from 'app/components/organisms/FormList/FormList';
+import {ScreenWrapper} from '../components/molecules';
+import {View} from 'react-native';
+import {Text, Button} from '../components/atoms';
+import {CaseDispatch} from '../store/CaseContext';
+import FormList from '../components/organisms/FormList/FormList';
 
-import { useNotification } from '../store/NotificationContext';
+import {useNotification} from '../store/NotificationContext';
 
 const ButtonContainer = styled.View`
   display: flex;
@@ -32,10 +32,10 @@ const ChatScreenWrapper = styled(ScreenWrapper)`
   padding-bottom: 0px;
 `;
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({navigation}) => {
   const [isInputVisible, setInputVisible] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const { createCase } = useContext(CaseDispatch);
+  const {createCase} = useContext(CaseDispatch);
 
   const toggleInput = () => {
     setInputVisible(true);
@@ -44,16 +44,16 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <>
-      <View style={{ padding: 20, marginTop: 40, height: '73%' }}>
+      <View style={{padding: 20, marginTop: 40, height: '73%'}}>
         <FormList
           heading="Ansökningsformulär"
-          onClickCallback={async form => {
+          onClickCallback={async (form) => {
             createCase(
               form,
-              async newCase => {
-                navigation.navigate('Form', { caseData: newCase });
+              async (newCase) => {
+                navigation.navigate('Form', {caseData: newCase});
               },
-              true
+              true,
             );
           }}
         />
@@ -61,7 +61,10 @@ const HomeScreen = ({ navigation }) => {
 
       <ButtonContainer>
         {showChat ? (
-          <HomeScreenButton color="purpleLight" onClick={() => toggleInput()} block>
+          <HomeScreenButton
+            color="purpleLight"
+            onClick={() => toggleInput()}
+            block>
             <Text>Ställ en fråga</Text>
           </HomeScreenButton>
         ) : null}
