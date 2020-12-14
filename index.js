@@ -5,12 +5,12 @@
  * @format
  */
 
-import { AppRegistry, YellowBox } from 'react-native';
+import { AppRegistry, LogBox } from 'react-native';
 import { name as appName } from './app.json';
 import App from './source/App';
 
 // TODO: Fix tab navigation and remove ignore warning.
-YellowBox.ignoreWarnings([
+LogBox.ignoreWarnings([
   'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
 ]);
 
