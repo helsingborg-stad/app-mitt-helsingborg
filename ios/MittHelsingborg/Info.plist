@@ -72,5 +72,9 @@
 		<string>Zocial.ttf</string>
 		<string>Fontisto.ttf</string>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+    	<array>
+        	<string>bankid</string>
+    	</array>
 </dict>
 </plist>
