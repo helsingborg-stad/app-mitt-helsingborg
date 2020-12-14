@@ -35,7 +35,7 @@
     "react": "16.13.1",
     "react-native": "0.63.4",
     "react-native-calendar-picker": "^7.0.5",
-    "react-native-config": "^1.4.1",
+    "react-native-config": "luggit/react-native-config#master",
     "react-native-elements": "^3.0.0-alpha.1",
     "react-native-exception-handler": "^2.10.9",
     "react-native-gesture-handler": "^1.9.0",
