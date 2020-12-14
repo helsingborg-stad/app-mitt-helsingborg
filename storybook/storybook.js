@@ -14,6 +14,7 @@ const StorybookUI = getStorybookUI({
   onDeviceUI: true,
   resetStorybook: false,
   shouldDisableKeyboardAvoidingView: true,
+  asyncStorage: require('@react-native-community/async-storage').default,
 });
 
 class StorybookUIHMRRoot extends Component {
