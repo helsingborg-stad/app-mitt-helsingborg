@@ -77,6 +77,7 @@ const CaseSummary = (props) => {
       toValue: 1,
       easing: Easing.back(),
       duration: 400,
+      useNativeDriver: true,
     }).start();
   }, [fadeAnimation]);
 
