@@ -5,13 +5,13 @@ import StoryWrapper from '../../molecules/StoryWrapper';
 import Text from '../Text';
 import Checkbox from './Checkbox';
 
-storiesOf('Checkbox', module).add('Default', props => (
+storiesOf('Checkbox', module).add('Default', (props) => (
   <StoryWrapper {...props}>
     <Checkboxes />
   </StoryWrapper>
 ));
 
-const Checkboxes = injectProps => {
+const Checkboxes = (injectProps) => {
   const [checkboxValues, setCValues] = useState({
     box1: false,
     box2: false,

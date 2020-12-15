@@ -7,7 +7,7 @@ import Button from '../../atoms/Button/Button';
 
 const DefaultItem = styled.TouchableHighlight`
   border-bottom-width: 1px;
-  border-color: ${props => props.theme.background.lighter};
+  border-color: ${(props) => props.theme.background.lighter};
 `;
 
 const HighlightedItem = styled(Button)`
@@ -22,13 +22,13 @@ const Flex = styled.View`
 `;
 
 const Title = styled(Text)`
-  color: ${props => props.theme.background.darkest};
+  color: ${(props) => props.theme.background.darkest};
   margin-bottom: 4px;
 `;
 
 const IconContainer = styled.View`
   width: 64px;
-  background: ${props => props.background};
+  background: ${(props) => props.background};
   border-top-left-radius: 12.5px;
   border-bottom-left-radius: 12.5px;
 `;
@@ -58,7 +58,7 @@ const ImageIcon = styled.Image`
   height: 32px;
 `;
 
-const ListItem = props => {
+const ListItem = (props) => {
   const {
     highlighted,
     iconName,

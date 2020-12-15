@@ -8,7 +8,7 @@ const EventHandler = {
       return;
     }
 
-    this.events[event].forEach(callback => callback(data));
+    this.events[event].forEach((callback) => callback(data));
   },
   subscribe(event, callback) {
     if (!this.events[event]) {

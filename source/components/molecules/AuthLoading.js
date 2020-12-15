@@ -1,8 +1,8 @@
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
-import Icon from '../../components/atoms/Icon';
-import {Animated, Easing} from 'react-native';
+import { Animated, Easing } from 'react-native';
+import Icon from '../atoms/Icon';
 import Text from '../atoms/Text';
 import Button from '../atoms/Button/Button';
 
@@ -23,7 +23,7 @@ const ResolvedIcon = styled(Icon)`
 `;
 
 const AuthLoading = (props) => {
-  const {isBankidInstalled, cancelSignIn, colorSchema, isResolved} = props;
+  const { isBankidInstalled, cancelSignIn, colorSchema, isResolved } = props;
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -37,24 +37,19 @@ const AuthLoading = (props) => {
 
   if (isResolved) {
     return (
-      <Container as={Animated.View} style={{opacity: fadeAnimation}}>
+      <Container as={Animated.View} style={{ opacity: fadeAnimation }}>
         <ResolvedIcon size={48} name="check-circle" colorSchema={colorSchema} />
       </Container>
     );
   }
 
   return (
-    <Container as={Animated.View} style={{opacity: fadeAnimation}}>
+    <Container as={Animated.View} style={{ opacity: fadeAnimation }}>
       <AuthActivityIndicator size="large" color="slategray" />
       {!isBankidInstalled && (
         <InfoText>Väntar på att BankID ska startas på en annan enhet</InfoText>
       )}
-      <Button
-        z={0}
-        colorSchema={colorSchema}
-        size="large"
-        onClick={cancelSignIn}
-        block>
+      <Button z={0} colorSchema={colorSchema} size="large" onClick={cancelSignIn} block>
         <Text>Avbryt</Text>
       </Button>
     </Container>

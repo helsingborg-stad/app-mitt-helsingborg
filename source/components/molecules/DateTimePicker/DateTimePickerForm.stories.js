@@ -9,7 +9,7 @@ const DateTimePicker = () => {
   return (
     <DateTimePickerForm
       value={value}
-      onSelect={date => setvalue(date)}
+      onSelect={(date) => setvalue(date)}
       mode="datetime"
       placeholder="Date time"
       selectorProps={{
@@ -27,7 +27,7 @@ const DatePicker = () => {
   return (
     <DateTimePickerForm
       value={value}
-      onSelect={date => setvalue(date)}
+      onSelect={(date) => setvalue(date)}
       placeholder="åååå-mm-dd"
       color="dark"
       mode="date"
@@ -44,7 +44,7 @@ const TimePicker = () => {
   return (
     <DateTimePickerForm
       value={value}
-      onSelect={date => setvalue(date)}
+      onSelect={(date) => setvalue(date)}
       mode="time"
       placeholder="Time"
       selectorProps={{

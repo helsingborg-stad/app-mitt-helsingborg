@@ -1,30 +1,27 @@
 import React from 'react';
-import {View} from 'react-native';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import AvatarListItem from '../../../components/molecules/ListItem/AvatarListItem';
-import {TouchableHighlight} from 'react-native-gesture-handler';
-import {Text, Icon} from '../../atoms';
+import { TouchableHighlight } from 'react-native-gesture-handler';
+import AvatarListItem from '../ListItem/AvatarListItem';
+import { Text, Icon } from '../../atoms';
 import Button from '../../atoms/Button/Button';
 
 const SectionHeader = styled(Text)`
   margin-left: 15px;
   margin-bottom: 15px;
-  color: ${(props) =>
-    props.theme.list.onLightBackground.listWithAvatar.headerColor};
+  color: ${(props) => props.theme.list.onLightBackground.listWithAvatar.headerColor};
 `;
 
 // TODO: Dynamically set separator width.
 const Separator = styled(View)`
   width: 75%;
-  height: ${(props) =>
-    props.theme.list.onLightBackground.listWithAvatar.headerBorderHeight};
+  height: ${(props) => props.theme.list.onLightBackground.listWithAvatar.headerBorderHeight};
   margin-right: 15px;
   margin-left: 15px;
   margin-bottom: 15px;
   background-color: ${(props) =>
-    props.theme.list.onLightBackground.listWithAvatar
-      .headerSeparatorBackground};
+    props.theme.list.onLightBackground.listWithAvatar.headerSeparatorBackground};
 `;
 
 const HeadingWrapper = styled(View)`
@@ -33,29 +30,26 @@ const HeadingWrapper = styled(View)`
 `;
 
 // TODO: this component needs fixing, so that it works with new stepper logic.
-const GroupListWithAvatar = ({heading, value, onChange, formId}) => {
+const GroupListWithAvatar = ({ heading, value, onChange, formId }) => {
   const [isDisable, setIsDisable] = React.useState(false);
   const [showModal, setShowModal] = React.useState(false);
 
   const updateValue = (index) => (newValue) => {
-    const vs =
-      value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
+    const vs = value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
     vs[index] = newValue;
     onChange(vs);
   };
 
   const addItem = () => {
     setShowModal(true);
-    const vs =
-      value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
+    const vs = value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
     vs.push({});
     onChange(vs);
   };
 
   const removeItem = (index) => () => {
     setShowModal(false);
-    const vs =
-      value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
+    const vs = value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
     vs.splice(index, 1);
     onChange(vs);
   };
@@ -89,14 +83,7 @@ const GroupListWithAvatar = ({heading, value, onChange, formId}) => {
             />
           ))
         : null}
-      {isDisable ? (
-        <Button
-          text="Lägg till"
-          iconName="add"
-          onClick={addItem}
-          color="blue"
-        />
-      ) : null}
+      {isDisable ? <Button text="Lägg till" iconName="add" onClick={addItem} color="blue" /> : null}
     </>
   );
 };

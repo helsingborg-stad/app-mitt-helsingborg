@@ -33,12 +33,12 @@ const heading = 'Så här fungerar ekonomiskt bistånd';
 const url = 'https://helsingborg.se/';
 
 storiesOf('HelpButton', module)
-  .add('With Text', props => (
+  .add('With Text', (props) => (
     <StoryWrapper {...props}>
       <HelpButton text={text} heading={heading} tagline={tagline} url={url} />
     </StoryWrapper>
   ))
-  .add('With Link', props => (
+  .add('With Link', (props) => (
     <StoryWrapper {...props}>
       <HelpButton url={url} />
     </StoryWrapper>

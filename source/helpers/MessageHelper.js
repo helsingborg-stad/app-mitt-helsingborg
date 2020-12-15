@@ -19,6 +19,6 @@ const messages = {
  * @param {String} key  Key for the message
  * @return {String}     Value of the message
  */
-const getMessage = key => messages[key] || messages.unknownError;
+const getMessage = (key) => messages[key] || messages.unknownError;
 
 export { getMessage };

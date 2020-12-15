@@ -1,5 +1,9 @@
-import {useFocusEffect} from '@react-navigation/native';
-import {SLIDES} from '../assets/images';
+import { useFocusEffect } from '@react-navigation/native';
+import PropTypes from 'prop-types';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { Alert, Linking, View } from 'react-native';
+import styled from 'styled-components/native';
+import { SLIDES } from '../assets/images';
 import Button from '../components/atoms/Button';
 import Heading from '../components/atoms/Heading';
 import Input from '../components/atoms/Input';
@@ -7,17 +11,13 @@ import Text from '../components/atoms/Text';
 import AuthLoading from '../components/molecules/AuthLoading';
 import BackNavigation from '../components/molecules/BackNavigation';
 import Modal from '../components/molecules/Modal';
-import {ValidationHelper} from '../helpers';
-import PropTypes from 'prop-types';
-import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {Alert, Linking, View} from 'react-native';
-import styled from 'styled-components/native';
+import { ValidationHelper } from '../helpers';
 import AuthContext from '../store/AuthContext';
-import {useNotification} from '../store/NotificationContext';
+import { useNotification } from '../store/NotificationContext';
 import MarkdownConstructor from '../helpers/MarkdownConstructor';
 import userAgreementText from '../assets/text/userAgreementText';
 
-const {sanitizePin, validatePin} = ValidationHelper;
+const { sanitizePin, validatePin } = ValidationHelper;
 const UnifiedPadding = [24, 48]; // Vertical padding, Horizontal padding
 
 const LoginSafeAreaView = styled.SafeAreaView`
@@ -162,7 +162,7 @@ function LoginScreen(props) {
    */
   const userAgreementMarkdownRules = {
     text: (node, _children, _parent, _styles) => (
-      <Text style={{fontSize: 16}} key={node.key}>
+      <Text style={{ fontSize: 16 }} key={node.key}>
         {node.content}
       </Text>
     ),
@@ -192,7 +192,7 @@ function LoginScreen(props) {
         }
       };
       handleNavigateToScreen();
-    }, [isAuthenticated, navigateToScreen]),
+    }, [isAuthenticated, navigateToScreen])
   );
 
   /**
@@ -242,9 +242,7 @@ function LoginScreen(props) {
           <Title>Mitt Helsingborg</Title>
           <Separator />
           <LoginHeading>Välkommen!</LoginHeading>
-          <ContentText>
-            Till en enklare och säkrare kontakt med Helsingborgs Stad.
-          </ContentText>
+          <ContentText>Till en enklare och säkrare kontakt med Helsingborgs Stad.</ContentText>
         </Header>
 
         {(isLoading || isResolved) && (
@@ -273,16 +271,18 @@ function LoginScreen(props) {
             <ParagraphLink
               onPress={() => {
                 userAgreementModalVisible(true);
-              }}>
+              }}
+            >
               användaravtal
             </ParagraphLink>{' '}
             och att du har tagit del av hur vi hanterar dina{' '}
             <ParagraphLink
               onPress={() =>
                 Linking.openURL(
-                  'https://helsingborg.se/toppmeny/om-webbplatsen/sa-har-behandlar-vi-dina-personuppgifter/',
+                  'https://helsingborg.se/toppmeny/om-webbplatsen/sa-har-behandlar-vi-dina-personuppgifter/'
                 )
-              }>
+              }
+            >
               personuppgifter
             </ParagraphLink>
             .
@@ -294,9 +294,10 @@ function LoginScreen(props) {
         visible={loginModal}
         scrollViewProps={{
           keyboardShouldPersistTaps: 'handled',
-          contentContainerStyle: {flexGrow: 1},
+          contentContainerStyle: { flexGrow: 1 },
           extraScrollHeight: 50,
-        }}>
+        }}
+      >
         <CloseModalButton
           onClose={() => loginModalVisible(false)}
           primary={false}
@@ -306,8 +307,8 @@ function LoginScreen(props) {
           <Header>
             <ModalHeading>Logga in med BankID på en annan enhet</ModalHeading>
             <ContentText>
-              Öppna Mobilt BankID eller BankID på din andra enhet innan du
-              trycker på logga in här nedaför.
+              Öppna Mobilt BankID eller BankID på din andra enhet innan du trycker på logga in här
+              nedaför.
             </ContentText>
           </Header>
 
@@ -343,16 +344,16 @@ function LoginScreen(props) {
                 block
                 onClick={() => {
                   handleLogin(true);
-                }}>
+                }}
+              >
                 <Text>Logga in</Text>
               </Button>
 
               <Link
                 onPress={() => {
-                  Linking.openURL(
-                    'https://support.bankid.com/sv/bankid/mobilt-bankid',
-                  );
-                }}>
+                  Linking.openURL('https://support.bankid.com/sv/bankid/mobilt-bankid');
+                }}
+              >
                 Läs mer om hur du skaffar mobilt BankID
               </Link>
             </Form>
@@ -364,9 +365,10 @@ function LoginScreen(props) {
         visible={userAgreementModal}
         scrollViewProps={{
           keyboardShouldPersistTaps: 'handled',
-          contentContainerStyle: {flexGrow: 1},
+          contentContainerStyle: { flexGrow: 1 },
           extraScrollHeight: 50,
-        }}>
+        }}
+      >
         <CloseModalButton
           onClose={() => userAgreementModalVisible(false)}
           primary={false}
@@ -374,10 +376,7 @@ function LoginScreen(props) {
         />
         <Body>
           <UserAgreementForm>
-            <MarkdownConstructor
-              rules={userAgreementMarkdownRules}
-              rawText={userAgreementText}
-            />
+            <MarkdownConstructor rules={userAgreementMarkdownRules} rawText={userAgreementText} />
           </UserAgreementForm>
           <UserAgreementFooter>
             <Button
@@ -385,7 +384,8 @@ function LoginScreen(props) {
               block
               onClick={() => {
                 userAgreementModalVisible(false);
-              }}>
+              }}
+            >
               <Text>Återvänd till inloggning</Text>
             </Button>
           </UserAgreementFooter>

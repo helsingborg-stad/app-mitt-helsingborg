@@ -32,8 +32,8 @@ const SummaryStory = () => {
       </Label>
       <Input
         value={state.f1}
-        onChangeText={text => {
-          setState(oldState => {
+        onChangeText={(text) => {
+          setState((oldState) => {
             oldState.f1 = text;
             return { ...oldState };
           });
@@ -44,8 +44,8 @@ const SummaryStory = () => {
       </Label>
       <Input
         value={state.pris1}
-        onChangeText={text => {
-          setState(oldState => {
+        onChangeText={(text) => {
+          setState((oldState) => {
             oldState.pris1 = text;
             return { ...oldState };
           });
@@ -56,8 +56,8 @@ const SummaryStory = () => {
       </Label>
       <Input
         value={state.f2}
-        onChangeText={text => {
-          setState(oldState => {
+        onChangeText={(text) => {
+          setState((oldState) => {
             oldState.f2 = text;
             return { ...oldState };
           });
@@ -68,8 +68,8 @@ const SummaryStory = () => {
       </Label>
       <Input
         value={state.pris2}
-        onChangeText={text => {
-          setState(oldState => {
+        onChangeText={(text) => {
+          setState((oldState) => {
             oldState.pris2 = text;
             return { ...oldState };
           });
@@ -81,7 +81,7 @@ const SummaryStory = () => {
         size="small"
         value={state.box1}
         onChange={() => {
-          setState(oldState => {
+          setState((oldState) => {
             oldState.box1 = !oldState.box1;
             return { ...oldState };
           });
@@ -94,7 +94,7 @@ const SummaryStory = () => {
         categories={categories}
         color="green"
         onChange={(answer, id) => {
-          setState(oldState => {
+          setState((oldState) => {
             oldState[id] = answer;
             return { ...oldState };
           });
@@ -109,7 +109,7 @@ const SummaryStory = () => {
         categories={categories}
         color="blue"
         onChange={(answer, id) => {
-          setState(oldState => {
+          setState((oldState) => {
             oldState[id] = answer;
             return { ...oldState };
           });

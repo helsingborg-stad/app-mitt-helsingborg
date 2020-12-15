@@ -15,17 +15,17 @@ const FlexContainer = styled.View`
 `;
 
 storiesOf('Button', module)
-  .add('Contained Buttons', props => (
+  .add('Contained Buttons', (props) => (
     <StoryWrapper {...props}>
       <ButtonColors />
     </StoryWrapper>
   ))
-  .add('Outlined Buttons', props => (
+  .add('Outlined Buttons', (props) => (
     <StoryWrapper {...props}>
       <ButtonColors variant="outlined" />
     </StoryWrapper>
   ))
-  .add('Link Buttons', props => (
+  .add('Link Buttons', (props) => (
     <StoryWrapper {...props}>
       <FlexContainer>
         <Flex>
@@ -59,18 +59,18 @@ storiesOf('Button', module)
       </FlexContainer>
     </StoryWrapper>
   ))
-  .add('Sizes', props => (
+  .add('Sizes', (props) => (
     <StoryWrapper {...props}>
       <ButtonSizes />
     </StoryWrapper>
   ))
-  .add('Block', props => (
+  .add('Block', (props) => (
     <StoryWrapper {...props}>
       <ButtonColors block />
       <ButtonColors block variant="outlined" />
     </StoryWrapper>
   ))
-  .add('Icon', props => (
+  .add('Icon', (props) => (
     <StoryWrapper {...props}>
       <FlexContainer>
         <Flex>
@@ -110,7 +110,7 @@ storiesOf('Button', module)
       </FlexContainer>
     </StoryWrapper>
   ))
-  .add('Elevation', props => (
+  .add('Elevation', (props) => (
     <StoryWrapper {...props}>
       <FlexContainer>
         <Flex>
@@ -147,7 +147,7 @@ storiesOf('Button', module)
     </StoryWrapper>
   ));
 
-const ButtonColors = injectProps => (
+const ButtonColors = (injectProps) => (
   <FlexContainer>
     <Flex>
       <Button colorSchema="neutral" {...injectProps}>
@@ -178,7 +178,7 @@ const ButtonColors = injectProps => (
   </FlexContainer>
 );
 
-const ButtonSizes = injectProps => (
+const ButtonSizes = (injectProps) => (
   <FlexContainer>
     <Flex>
       <Button size="small" {...injectProps}>

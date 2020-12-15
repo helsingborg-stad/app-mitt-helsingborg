@@ -1,14 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import {Card, Header, ScreenWrapper} from '../components/molecules';
-import {Button, Text} from '../components/atoms';
-import {StatusBar, ActivityIndicator} from 'react-native';
+import { StatusBar, ActivityIndicator } from 'react-native';
+import { Card, Header, ScreenWrapper } from '../components/molecules';
+import { Button, Text } from '../components/atoms';
 import Form from '../containers/Form/Form';
 import AuthContext from '../store/AuthContext';
 import FormContext from '../store/FormContext';
-import {CaseDispatch, CaseState} from '../store/CaseContext';
-import {getFormQuestions} from '../helpers/CaseDataConverter';
+import { CaseDispatch, CaseState } from '../store/CaseContext';
+import { getFormQuestions } from '../helpers/CaseDataConverter';
 import generateInitialCaseAnswers from '../store/actions/dynamicFormData';
 
 const SpinnerContainer = styled.View`
@@ -22,16 +22,16 @@ const FormScreenWrapper = styled(ScreenWrapper)`
   flex: 1;
 `;
 
-const FormCaseScreen = ({route, navigation, ...props}) => {
+const FormCaseScreen = ({ route, navigation, ...props }) => {
   const [form, setForm] = useState(undefined);
   const [formQuestions, setFormQuestions] = useState(undefined);
   const [initialCase, setInitialCase] = useState(undefined);
 
-  const {caseData, caseId} = route && route.params ? route.params : {};
-  const {user} = useContext(AuthContext);
-  const {getForm} = useContext(FormContext);
-  const {getCase, getCasesByFormIds} = useContext(CaseState);
-  const {updateCase} = useContext(CaseDispatch);
+  const { caseData, caseId } = route && route.params ? route.params : {};
+  const { user } = useContext(AuthContext);
+  const { getForm } = useContext(FormContext);
+  const { getCase, getCasesByFormIds } = useContext(CaseState);
+  const { updateCase } = useContext(CaseDispatch);
 
   useEffect(() => {
     if (caseData?.formId) {
@@ -43,14 +43,8 @@ const FormCaseScreen = ({route, navigation, ...props}) => {
     } else if (caseId) {
       const initCase = getCase(caseId);
       getForm(initCase.formId).then(async (form) => {
-        const [status, latestCase, relevantCases] = await getCasesByFormIds([
-          form.id,
-        ]);
-        const initialAnswersObject = generateInitialCaseAnswers(
-          form,
-          user,
-          relevantCases,
-        );
+        const [status, latestCase, relevantCases] = await getCasesByFormIds([form.id]);
+        const initialAnswersObject = generateInitialCaseAnswers(form, user, relevantCases);
         initCase.data = initialAnswersObject;
         setInitialCase(initCase);
 
@@ -61,7 +55,7 @@ const FormCaseScreen = ({route, navigation, ...props}) => {
   }, [caseData, caseId, getForm, getCase, user, getCasesByFormIds]);
 
   function handleCloseForm() {
-    navigation.navigate('UserEvents', {screen: 'CaseOverview'});
+    navigation.navigate('UserEvents', { screen: 'CaseOverview' });
   }
 
   const updateCaseContext = (data, status, currentPosition) => {
@@ -80,7 +74,7 @@ const FormCaseScreen = ({route, navigation, ...props}) => {
 
   // TODO: Update case on form submit.
   function handleSubmitForm() {
-    navigation.navigate('App', {screen: 'UserEvents'});
+    navigation.navigate('App', { screen: 'UserEvents' });
   }
 
   return (
@@ -90,9 +84,7 @@ const FormCaseScreen = ({route, navigation, ...props}) => {
         <Form
           steps={form.steps}
           connectivityMatrix={form.connectivityMatrix}
-          initialPosition={
-            caseData?.currentPosition || initialCase?.currentPosition
-          }
+          initialPosition={caseData?.currentPosition || initialCase?.currentPosition}
           user={user}
           onClose={handleCloseForm}
           onStart={handleStartForm}
@@ -109,7 +101,8 @@ const FormCaseScreen = ({route, navigation, ...props}) => {
             onClick={() => {
               navigation.goBack();
             }}
-            style={[{marginTop: 100}]}>
+            style={[{ marginTop: 100 }]}
+          >
             <Text>Avbryt</Text>
           </Button>
         </SpinnerContainer>

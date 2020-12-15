@@ -1,7 +1,7 @@
-import {ICON_RINGS} from '../assets/images';
-import {ValidationHelper} from '../helpers';
+import { ICON_RINGS } from '../assets/images';
+import { ValidationHelper } from '../helpers';
 
-const {sanitizePin} = ValidationHelper;
+const { sanitizePin } = ValidationHelper;
 
 const BVL_FORM = {
   id: 1,
@@ -28,8 +28,7 @@ const BVL_FORM = {
   questions: [
     {
       id: 'partnerName',
-      name:
-        'Vi börjar med information om din partner. Vad heter personen du ska gifta dig med?',
+      name: 'Vi börjar med information om din partner. Vad heter personen du ska gifta dig med?',
       details: {
         group: 'partner',
         label: 'Namn',
@@ -49,8 +48,7 @@ const BVL_FORM = {
     },
     {
       id: 'partnerSocialNumber',
-      name: ({answers}) =>
-        `Vilket personnummer har ${answers.partnerName.split(' ')[0]}?`,
+      name: ({ answers }) => `Vilket personnummer har ${answers.partnerName.split(' ')[0]}?`,
       details: {
         group: 'partner',
         label: 'Personummer',
@@ -91,8 +89,7 @@ const BVL_FORM = {
     },
     {
       id: 'partnerSameAddress',
-      name: ({answers}) =>
-        `Bor ${answers.partnerName.split(' ')[0]} på samma adress som du?`,
+      name: ({ answers }) => `Bor ${answers.partnerName.split(' ')[0]} på samma adress som du?`,
       type: 'radio',
       options: [
         {
@@ -107,8 +104,7 @@ const BVL_FORM = {
     },
     {
       id: 'partnerAddress',
-      name: ({answers}) =>
-        `Vilken adress har ${answers.partnerName.split(' ')[0]}?`,
+      name: ({ answers }) => `Vilken adress har ${answers.partnerName.split(' ')[0]}?`,
       type: 'text',
       details: {
         group: 'partner',
@@ -432,9 +428,8 @@ const BVL_FORM = {
       validations: [
         {
           method: 'isInt',
-          args: [{min: 0, max: 17}],
-          message:
-            'I Rådhuset får ni som mest ha 17 gäster. Ange antal mellan 2-17.',
+          args: [{ min: 0, max: 17 }],
+          message: 'I Rådhuset får ni som mest ha 17 gäster. Ange antal mellan 2-17.',
           valid_when: true,
         },
       ],
@@ -516,13 +511,8 @@ const BVL_FORM = {
       name: [
         (data) => `Då har jag följande uppgifter om din bokning. 
                 &nbsp;
-                Vigsel för: ${data.user.givenName} och ${
-          data.answers.partnerName.split(' ')[0]
-        }
-                Plats: ${
-                  data.answers.weddingLocationCustom ||
-                  data.answers.weddingLocation
-                }
+                Vigsel för: ${data.user.givenName} och ${data.answers.partnerName.split(' ')[0]}
+                Plats: ${data.answers.weddingLocationCustom || data.answers.weddingLocation}
                 Datum: ${data.answers.weddingDate}
                 Tid: ${data.answers.weddingTime}${
           data.answers.guestsTotal

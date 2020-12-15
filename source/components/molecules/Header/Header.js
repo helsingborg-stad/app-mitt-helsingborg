@@ -18,14 +18,14 @@ const BackButton = styled(Button)`
 const HeaderContainer = styled.View`
   padding: 16px;
   justify-content: flex-end;
-  background-color: ${props => props.theme.colors.neutrals[5]};
-  border-bottom-color: ${props => props.theme.border.default};
+  background-color: ${(props) => props.theme.colors.neutrals[5]};
+  border-bottom-color: ${(props) => props.theme.border.default};
   border-bottom-width: 1px;
 `;
 
 const HeaderHeading = styled(Heading)`
   margin-top: 4px;
-  color: ${props => props.theme.colors.neutrals[0]};
+  color: ${(props) => props.theme.colors.neutrals[0]};
 `;
 
 const HeaderContent = styled.View`
@@ -37,7 +37,7 @@ const Separator = styled.View`
   margin: 16px 0 16px 0;
   width: 100%;
   height: 1px;
-  background-color: ${props => props.theme.background.lighter};
+  background-color: ${(props) => props.theme.background.lighter};
 `;
 
 const Header = ({ message, title, themeColor, navItems, backButton }) => (

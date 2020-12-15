@@ -1,17 +1,14 @@
-import {Icon, Text} from '../../components/atoms';
-import {Card, ScreenWrapper} from '../../components/molecules';
-import {CaseState} from '../../store/CaseContext';
-import FormContext from '../../store/FormContext';
 import PropTypes from 'prop-types';
-import React, {useContext, useEffect, useState, useRef} from 'react';
-import {View, Animated, Easing} from 'react-native';
+import React, { useContext, useEffect, useState, useRef } from 'react';
+import { View, Animated, Easing } from 'react-native';
 import styled from 'styled-components/native';
+import { Icon, Text } from '../../components/atoms';
+import { Card, ScreenWrapper } from '../../components/molecules';
+import { CaseState } from '../../store/CaseContext';
+import FormContext from '../../store/FormContext';
 import icons from '../../helpers/Icons';
-import {launchPhone, launchEmail} from '../../helpers/LaunchExternalApp';
-import {
-  formatUpdatedAt,
-  getSwedishMonthNameByTimeStamp,
-} from '../../helpers/DateHelpers';
+import { launchPhone, launchEmail } from '../../helpers/LaunchExternalApp';
+import { formatUpdatedAt, getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -30,8 +27,8 @@ const SummaryHeading = styled(Text)`
  * @param {obj} props
  */
 const CaseSummary = (props) => {
-  const {getCase} = useContext(CaseState);
-  const {getForm} = useContext(FormContext);
+  const { getCase } = useContext(CaseState);
+  const { getForm } = useContext(FormContext);
 
   const [caseData, setCaseData] = useState({});
   const [form, setForm] = useState({});
@@ -40,23 +37,20 @@ const CaseSummary = (props) => {
     colorSchema,
     navigation,
     route: {
-      params: {id: caseId},
+      params: { id: caseId },
     },
   } = props;
 
   const {
     status,
-    currentPosition: {currentMainStep: currentStep} = {},
-    details: {administrators, period: {startDate, endDate} = {}} = {},
+    currentPosition: { currentMainStep: currentStep } = {},
+    details: { administrators, period: { startDate, endDate } = {} } = {},
     updatedAt,
   } = caseData;
 
-  const {name: formName} = form;
+  const { name: formName } = form;
   const totalSteps = form?.stepStructure?.length || 0;
-  const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(
-    startDate,
-    true,
-  );
+  const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(startDate, true);
 
   useEffect(() => {
     const caseData = getCase(caseId);
@@ -83,7 +77,7 @@ const CaseSummary = (props) => {
 
   return (
     <ScreenWrapper>
-      <Container as={Animated.ScrollView} style={{opacity: fadeAnimation}}>
+      <Container as={Animated.ScrollView} style={{ opacity: fadeAnimation }}>
         {status === 'submitted' && (
           <>
             <SummaryHeading type="h5">Aktuell period</SummaryHeading>
@@ -93,10 +87,7 @@ const CaseSummary = (props) => {
                 <Card.SubTitle>Ansökan inlämnad</Card.SubTitle>
                 <Card.Text>
                   Vi har mottagit din ansökan för perioden{' '}
-                  {`${formatUpdatedAt(startDate)} - ${formatUpdatedAt(
-                    endDate,
-                  )}`}
-                  .
+                  {`${formatUpdatedAt(startDate)} - ${formatUpdatedAt(endDate)}`}.
                 </Card.Text>
                 <Card.Text italic>
                   Vi skickar ut en notis när status för din ansökan ändras.
@@ -107,9 +98,7 @@ const CaseSummary = (props) => {
             {/* TODO: Mock data, needs to be replaced */}
             <SummaryHeading type="h5">Nästa period</SummaryHeading>
             <Card>
-              <Card.Text italic>
-                Du kan ansöka om nästa period från den 10 oktober.
-              </Card.Text>
+              <Card.Text italic>Du kan ansöka om nästa period från den 10 oktober.</Card.Text>
             </Card>
           </>
         )}
@@ -124,17 +113,13 @@ const CaseSummary = (props) => {
                 <Card.SubTitle>
                   Steg {currentStep} / {totalSteps}
                 </Card.SubTitle>
-                <Card.Progressbar
-                  currentStep={currentStep}
-                  totalStepNumber={totalSteps}
-                />
-                <Card.Text italic>
-                  Senast uppdaterad {formatUpdatedAt(updatedAt)}
-                </Card.Text>
+                <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
+                <Card.Text italic>Senast uppdaterad {formatUpdatedAt(updatedAt)}</Card.Text>
                 <Card.Button
                   onClick={() => {
-                    navigation.navigate('Form', {caseId: caseData.id});
-                  }}>
+                    navigation.navigate('Form', { caseId: caseData.id });
+                  }}
+                >
                   <Text>Fortsätt ansökan</Text>
                   <Icon name="arrow-forward" />
                 </Card.Button>
@@ -146,12 +131,12 @@ const CaseSummary = (props) => {
         {administrators && (
           <View>
             <SummaryHeading type="h5">Mina kontaktpersoner</SummaryHeading>
-            {administrators.map(({name, title, phone, email}) => (
+            {administrators.map(({ name, title, phone, email }) => (
               <Card key={`${name}`} colorSchema={colorSchema}>
                 <Card.Body shadow color="neutral">
                   <Card.Section>
                     <Card.Image
-                      style={{width: 50, height: 50}}
+                      style={{ width: 50, height: 50 }}
                       circle
                       source={icons.ICON_CONTACT_PERSON}
                     />
@@ -159,17 +144,13 @@ const CaseSummary = (props) => {
                     {title && <Card.SubTitle>{title}</Card.SubTitle>}
                   </Card.Section>
                   {phone && (
-                    <Card.Button
-                      colorSchema="neutral"
-                      onClick={() => launchPhone(phone)}>
+                    <Card.Button colorSchema="neutral" onClick={() => launchPhone(phone)}>
                       <Icon name="phone" />
                       <Text>{phone}</Text>
                     </Card.Button>
                   )}
                   {email && (
-                    <Card.Button
-                      colorSchema="neutral"
-                      onClick={() => launchEmail(email)}>
+                    <Card.Button colorSchema="neutral" onClick={() => launchEmail(email)}>
                       <Icon name="email" />
                       <Text>{email}</Text>
                     </Card.Button>
@@ -183,9 +164,7 @@ const CaseSummary = (props) => {
         {/* TODO: Mock data, needs to be replaced */}
         <SummaryHeading type="h5">Tidigare ansökningar</SummaryHeading>
         <Card colorSchema={colorSchema}>
-          <Card.Text italic>
-            Här kan du titta på dina tidigare ansökningar.
-          </Card.Text>
+          <Card.Text italic>Här kan du titta på dina tidigare ansökningar.</Card.Text>
           <Card.Button>
             <Text>1-30 september</Text>
             <Icon name="arrow-forward" />

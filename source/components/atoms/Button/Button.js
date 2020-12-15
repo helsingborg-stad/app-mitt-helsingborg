@@ -15,7 +15,7 @@ Styles.buttonbase = css`
   align-items: center;
   max-width: 100%;
   border-radius: 4.5px;
-  background-color: ${props =>
+  background-color: ${(props) =>
     props.colorSchema === 'neutral'
       ? props.theme.colors.neutrals[1]
       : props.theme.colors.primary[props.colorSchema][0]};
@@ -24,11 +24,11 @@ Styles.buttonbase = css`
 /* Styles for different button variants outlined, contained etc */
 Styles.outlined = css`
   border: 2px solid
-    ${props =>
+    ${(props) =>
       props.colorSchema === 'neutral'
         ? props.theme.colors.neutrals[2]
         : props.theme.colors.primary[props.colorSchema][1]};
-  background-color: ${props =>
+  background-color: ${(props) =>
     props.colorSchema === 'neutral'
       ? props.theme.colors.neutrals[5]
       : props.theme.colors.complementary[props.colorSchema][1]};
@@ -36,7 +36,7 @@ Styles.outlined = css`
 `;
 
 const ButtonIcon = styled(Icon)`
-  color: ${props =>
+  color: ${(props) =>
     props.variant === 'outlined'
       ? props.theme.colors.primary[props.colorSchema][1]
       : props.theme.colors.neutrals[7]};
@@ -44,7 +44,7 @@ const ButtonIcon = styled(Icon)`
   height: 26px;
   width: 26px;
   line-height: 26px;
-  ${props =>
+  ${(props) =>
     props.variant === 'link' &&
     `
     height: 20px;
@@ -61,24 +61,24 @@ const ButtonIcon = styled(Icon)`
 
 const LeftButtonIcon = styled(ButtonIcon)`
   margin-right: 16px;
-  ${props => (props.push ? 'margin-right: auto;' : null)}
+  ${(props) => (props.push ? 'margin-right: auto;' : null)}
 `;
 
 const RightButtonIcon = styled(ButtonIcon)`
   margin-left: 16px;
-  ${props => (props.push ? 'margin-left: auto;' : null)}
+  ${(props) => (props.push ? 'margin-left: auto;' : null)}
 `;
 
 Styles.link = css`
   padding: 6px 10px;
   justify-content: flex-start;
-  ${props => {
+  ${(props) => {
     const lastChild = props.children[React.Children.count(props.children) - 1];
     if (lastChild && lastChild.type === RightButtonIcon) {
       return `justify-content: space-between;`;
     }
   }}
-  background-color: ${props =>
+  background-color: ${(props) =>
     props.colorSchema === 'neutral'
       ? props.theme.colors.neutrals[5]
       : props.theme.colors.complementary[props.colorSchema][1]};
@@ -106,39 +106,39 @@ Styles.fullWidth = css`
 /* Styles for a disabled button */
 Styles.disabled = css`
   opacity: 0.2;
-  background-color: ${props => props.theme.colors.neutrals[1]};
+  background-color: ${(props) => props.theme.colors.neutrals[1]};
 `;
 
 const ButtonBase = styled.View`
-    ${Styles.buttonbase};
+  ${Styles.buttonbase};
 
-    padding: ${props => (!props.icon ? '12px 20px' : '16px 16px')};
-    min-width: ${props => (!props.icon ? '124px' : '169px')};
+  padding: ${(props) => (!props.icon ? '12px 20px' : '16px 16px')};
+  min-width: ${(props) => (!props.icon ? '124px' : '169px')};
 
-    ${props => props.disabled && Styles.disabled}
-    ${props => props.fullWidth && Styles.fullWidth}
+  ${(props) => props.disabled && Styles.disabled}
+  ${(props) => props.fullWidth && Styles.fullWidth}
 
-    ${props => props.size === 'small' && Styles.small}
-    ${props => props.size === 'medium' && Styles.medium}
-    ${props => props.size === 'large' && Styles.large}
+    ${(props) => props.size === 'small' && Styles.small}
+    ${(props) => props.size === 'medium' && Styles.medium}
+    ${(props) => props.size === 'large' && Styles.large}
 
-    ${props => Styles.elevation[props.elevation]}
+    ${(props) => Styles.elevation[props.elevation]}
 
-    shadow-color: ${props =>
-      props.colorSchema === 'neutral'
-        ? props.theme.button.gray.shadow
-        : props.theme.button[props.colorSchema].shadow};
+    shadow-color: ${(props) =>
+    props.colorSchema === 'neutral'
+      ? props.theme.button.gray.shadow
+      : props.theme.button[props.colorSchema].shadow};
 
-    ${props => Styles[props.variant]}
+  ${(props) => Styles[props.variant]}
 `;
 
 /** Button child component overrides */
 const ButtonText = styled(Text)`
-  ${props => props.size === 'large' && `font-size:${props.theme.fontSizes[3]}px;`}
-  font-weight: ${props => props.theme.fontWeights[1]};
-  color: ${props =>
+  ${(props) => props.size === 'large' && `font-size:${props.theme.fontSizes[3]}px;`}
+  font-weight: ${(props) => props.theme.fontWeights[1]};
+  color: ${(props) =>
     props.variant === 'outlined' ? props.theme.colors.neutrals[1] : props.theme.colors.neutrals[7]};
-  ${props =>
+  ${(props) =>
     props.variant === 'link' &&
     `
     color: ${
@@ -155,12 +155,12 @@ const ButtonWrapper = styled.View`
 `;
 
 const ButtonTouchable = styled.TouchableOpacity`
-    ${props => (props.block ? 'flex: 1;' : null)};
-    ${props => Styles.elevation[props.elevation]}
-    shadow-color: ${props => props.theme.shadow.default};
+  ${(props) => (props.block ? 'flex: 1;' : null)};
+  ${(props) => Styles.elevation[props.elevation]}
+  shadow-color: ${(props) => props.theme.shadow.default};
 `;
 
-const Button = props => {
+const Button = (props) => {
   const {
     value,
     onClick,
@@ -269,7 +269,7 @@ Button.propTypes = {
    * If true, the button will be disabled.
    */
   disabled: PropTypes.bool,
-  z: PropTypes.oneOf(Object.keys(SHADOW).map(number => parseInt(number))),
+  z: PropTypes.oneOf(Object.keys(SHADOW).map((number) => parseInt(number))),
 };
 
 Button.defaultProps = {

@@ -10,10 +10,10 @@ import Heading from '../Heading';
 
 import { categories } from '../../../assets/material-icons.json';
 
-storiesOf('Icon', module).add('Material Icons', props => (
+storiesOf('Icon', module).add('Material Icons', (props) => (
   <StoryWrapper {...props}>
     <Flex>
-      <IconCategory {...categories.find(category => category.name === 'navigation')} />
+      <IconCategory {...categories.find((category) => category.name === 'navigation')} />
     </Flex>
   </StoryWrapper>
 ));
@@ -23,7 +23,7 @@ const Flex = styled.View`
   flex-wrap: wrap;
 `;
 
-const IconCategory = props => {
+const IconCategory = (props) => {
   const { name, icons } = props;
 
   return (

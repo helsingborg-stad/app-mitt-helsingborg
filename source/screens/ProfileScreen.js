@@ -1,12 +1,12 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components/native';
-import {View} from 'react-native';
-import {Button, Text, Heading} from '../components/atoms';
-import {ScreenWrapper, Header} from '../components/molecules';
-import AuthContext from '../store/AuthContext';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import env from 'react-native-config';
-import {StorageService} from '../services';
+import { Button, Text, Heading } from '../components/atoms';
+import { ScreenWrapper, Header } from '../components/molecules';
+import AuthContext from '../store/AuthContext';
+import { StorageService } from '../services';
 
 const ProfileScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
@@ -48,10 +48,10 @@ const Label = styled(Text)`
 
 function ProfileScreen(props) {
   const {
-    navigation: {navigate},
+    navigation: { navigate },
   } = props;
   const authContext = useContext(AuthContext);
-  const {user} = authContext;
+  const { user } = authContext;
   const renderField = (value) =>
     value ? <Text>{value}</Text> : <EmptyValue>Ej angivet</EmptyValue>;
 
@@ -85,7 +85,8 @@ function ProfileScreen(props) {
             onClick={async () => {
               await authContext.handleLogout();
               navigate('Start');
-            }}>
+            }}
+          >
             <Text>Logga ut</Text>
           </SignOutButton>
 
@@ -97,7 +98,8 @@ function ProfileScreen(props) {
                 StorageService.default.clearData();
                 await authContext.handleLogout();
                 navigate('Start');
-              }}>
+              }}
+            >
               <Text>Nollställ data</Text>
             </SignOutButton>
           )}

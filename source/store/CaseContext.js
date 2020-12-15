@@ -1,9 +1,7 @@
-import React, {useContext, useReducer, useEffect, useCallback} from 'react';
+import React, { useContext, useReducer, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import AuthContext from '../store/AuthContext';
-import CaseReducer, {
-  initialState as defaultInitialState,
-} from './reducers/CaseReducer';
+import AuthContext from './AuthContext';
+import CaseReducer, { initialState as defaultInitialState } from './reducers/CaseReducer';
 import {
   updateCase as update,
   createCase as create,
@@ -38,9 +36,9 @@ export const caseStatus = {
 
 const oldCaseLimit = 4 * 30 * 24 * 60 * 60 * 1000; // cases older than 4 months are classified as old.
 
-function CaseProvider({children, initialState = defaultInitialState}) {
+function CaseProvider({ children, initialState = defaultInitialState }) {
   const [state, dispatch] = useReducer(CaseReducer, initialState);
-  const {user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   // console.log('reducer state', state);
   async function createCase(form, callback = (response) => {}) {
     dispatch(await create(form, user, Object.values(state.cases), callback));
@@ -100,7 +98,7 @@ function CaseProvider({children, initialState = defaultInitialState}) {
     async function loadCases(callback = () => {}) {
       dispatch(await fetch(callback));
     },
-    [dispatch],
+    [dispatch]
   );
 
   useEffect(() => {
@@ -111,9 +109,8 @@ function CaseProvider({children, initialState = defaultInitialState}) {
   }, [user]);
 
   return (
-    <CaseState.Provider
-      value={{cases: state.cases, getCase, getCasesByFormIds}}>
-      <CaseDispatch.Provider value={{createCase, updateCase, deleteCase}}>
+    <CaseState.Provider value={{ cases: state.cases, getCase, getCasesByFormIds }}>
+      <CaseDispatch.Provider value={{ createCase, updateCase, deleteCase }}>
         {children}
       </CaseDispatch.Provider>
     </CaseState.Provider>
@@ -129,4 +126,4 @@ CaseProvider.defaultProps = {
   initialState: defaultInitialState,
 };
 
-export {CaseProvider, CaseState, CaseDispatch};
+export { CaseProvider, CaseState, CaseDispatch };

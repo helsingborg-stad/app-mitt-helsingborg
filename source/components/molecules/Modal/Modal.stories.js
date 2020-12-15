@@ -46,7 +46,7 @@ class ModalExample extends Component {
           visible={visible}
           heading={heading}
           closeButtonText={closeButtonText}
-          changeModal={isVisible => this.changeModal(isVisible)}
+          changeModal={(isVisible) => this.changeModal(isVisible)}
         >
           <Text>Trying out children</Text>
           <Button onClick={() => this.changeModal(!visible)}>

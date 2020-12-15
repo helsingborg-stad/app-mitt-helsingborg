@@ -5,7 +5,7 @@ import Text from '../../atoms/Text';
 
 const HeaderNav = ({ themeColor, navItems }) => (
   <Nav>
-    {navItems.map(item => (
+    {navItems.map((item) => (
       <NavItem key={item.id}>
         <NavTitleWrapper>
           <NavTitle active={item.active}>{item.title}</NavTitle>
@@ -34,7 +34,7 @@ const NavTitleWrapper = styled.View`
 `;
 
 const NavTitle = styled(Text)`
-  color: ${props => props.theme.background.gray};
+  color: ${(props) => props.theme.background.gray};
   ${({ active }) =>
     active &&
     `
@@ -45,7 +45,7 @@ const NavTitle = styled(Text)`
 const ActiveItemBar = styled.View`
   height: 2px;
   width: 25px;
-  background-color: ${props =>
+  background-color: ${(props) =>
     props.active ? props.theme.heading[props.color][2] : 'transparent'};
 `;
 

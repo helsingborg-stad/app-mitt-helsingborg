@@ -1,9 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
+import { Text } from 'react-native';
 import AuthContext from '../../../store/AuthContext';
-import {Text} from 'react-native';
-import {AuthLoading} from '../../../components/molecules';
+import { AuthLoading } from '../../molecules';
 import FormField from '../../../containers/FormField';
 import BackNavigation from '../../molecules/BackNavigation/BackNavigation';
 import Banner from './StepBanner/StepBanner';
@@ -94,9 +94,7 @@ function Step({
     }
   };
   const inSubstep = currentPosition.level !== 0;
-  const backButtonBehavior = inSubstep
-    ? formNavigation.goToMainForm
-    : formNavigation.back;
+  const backButtonBehavior = inSubstep ? formNavigation.goToMainForm : formNavigation.back;
 
   return (
     <StepContainer>
@@ -115,10 +113,11 @@ function Step({
         contentContainerStyle={{
           flexGrow: 1,
         }}
-        showsHorizontalScrollIndicator={false}>
-        {banner &&
-          banner.constructor === Object &&
-          Object.keys(banner).length > 0 && <StepBanner {...banner} />}
+        showsHorizontalScrollIndicator={false}
+      >
+        {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
+          <StepBanner {...banner} />
+        )}
         {currentPosition.level === 0 && (
           <Progressbar
             currentStep={currentPosition.currentMainStep}
@@ -131,9 +130,7 @@ function Step({
               <StepDescription
                 theme={theme}
                 currentStep={
-                  currentPosition.level === 0
-                    ? currentPosition.currentMainStep
-                    : undefined
+                  currentPosition.level === 0 ? currentPosition.currentMainStep : undefined
                 }
                 totalStepNumber={totalStepNumber}
                 {...description}
@@ -272,7 +269,7 @@ Step.propTypes = {
       label: PropTypes.string,
       color: PropTypes.string,
       conditionalOn: PropTypes.string,
-    }),
+    })
   ),
   /** Background color for the footer */
   footerBg: PropTypes.string,
