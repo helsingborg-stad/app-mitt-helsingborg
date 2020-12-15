@@ -73,8 +73,11 @@
 		<string>Fontisto.ttf</string>
 	</array>
 	<key>LSApplicationQueriesSchemes</key>
-    	<array>
-        	<string>bankid</string>
-    	</array>
+  <array>
+    <string>tel</string>
+    <string>telprompt</string>
+		<string>bankid</string>
+		<string>mailto</string>
+	</array>
 </dict>
 </plist>
