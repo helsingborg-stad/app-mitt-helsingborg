@@ -22,6 +22,8 @@ const styles = StyleSheet.create({
   },
   footerContent: {
     flex: 1,
+    flexDirection: 'row',
+    paddingTop: 20,
   },
   pagination: {
     paddingLeft: 40,
@@ -41,31 +43,26 @@ const slides = [
   {
     title: 'Mitt Helsingborg',
     color: '#FBF7F0',
-    picture: require('./assets/0.png'),
   },
   {
     title: 'Ställ frågor',
     content: 'Undrar du något eller behöver hjälp?',
     color: '#F2E5CF',
-    picture: require('./assets/1.png'),
   },
   {
     title: 'Gör ansökan',
     content: 'Vill du ansöka om bl.a. Bygglov, Ekonomiskt bistånd eller busskort till barnen.',
     color: '#D0D9DC',
-    picture: require('./assets/311.png'),
   },
   {
     title: 'Hantera ärenden',
     content: 'Se status eller ändra i pågående ärenden.',
     color: '#F4D3CE',
-    picture: require('./assets/41.png'),
   },
   {
     title: 'Kontakt med handläggare',
     content: 'Få personliga uppdateringar och ställ frågor direkt till rätt tjänsteperson.',
     color: '#DBECE0',
-    picture: require('./assets/0.png'),
   },
 ];
 
