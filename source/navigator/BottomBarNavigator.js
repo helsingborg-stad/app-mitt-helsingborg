@@ -1,10 +1,15 @@
 /* eslint-disable global-require */
 import React from 'react';
+import styled from 'styled-components/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { ProfileScreen, HomeScreen } from '../screens';
-import { TabBarImage } from '../components/molecules';
 import CaseNavigator from './CaseNavigator';
 import TabNavigator from '../components/molecules/TabNavigator';
+
+const TabBarImage = styled.Image`
+  width: 25px;
+  height: 25px;
+`;
 
 const Tab = createMaterialTopTabNavigator();
 const BottomBarStack = () => (
@@ -14,8 +19,8 @@ const BottomBarStack = () => (
       component={CaseNavigator}
       options={{
         title: 'Ärende',
-        tabBarIcon: TabBarImage(require('../images/task_3x.png')),
-        tabBarIconInactive: TabBarImage(require('../images/task_3x_gray.png')),
+        tabBarIcon: () => <TabBarImage source={require('../images/task_3x.png')} />,
+        tabBarIconInactive: () => <TabBarImage source={require('../images/task_3x_gray.png')} />,
         tabBarLabel: 'Ärende',
       }}
     />
@@ -26,8 +31,8 @@ const BottomBarStack = () => (
         headerTintColor: 'black',
         tabBarLabel: 'Sally',
         title: 'Sally',
-        tabBarIcon: TabBarImage(require('../images/chat_3x.png')),
-        tabBarIconInactive: TabBarImage(require('../images/chat_3x_gray.png')),
+        tabBarIcon: () => <TabBarImage source={require('../images/chat_3x.png')} />,
+        tabBarIconInactive: () => <TabBarImage source={require('../images/chat_3x_gray.png')} />,
       }}
     />
     <Tab.Screen
@@ -35,8 +40,8 @@ const BottomBarStack = () => (
       component={ProfileScreen}
       options={{
         title: 'Profil',
-        tabBarIcon: TabBarImage(require('../images/profile_3x.png')),
-        tabBarIconInactive: TabBarImage(require('../images/profile_3x_gray.png')),
+        tabBarIcon: () => <TabBarImage source={require('../images/profile_3x.png')} />,
+        tabBarIconInactive: () => <TabBarImage source={require('../images/profile_3x_gray.png')} />,
         tabBarLabel: 'Profil',
       }}
     />
