@@ -63,7 +63,7 @@ interface SliderProps {
   picture: number;
 }
 
-const Slide = ({ title, right, content, picture }: SliderProps) => {
+const Slide = ({ title, content, picture }: SliderProps) => {
   const transform = [{ translateY: (SLIDE_HEIGHT - 300) / 2 }];
 
   return (
