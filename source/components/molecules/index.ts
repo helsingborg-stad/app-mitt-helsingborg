@@ -9,7 +9,6 @@ export { default as ListItem } from './ListItem';
 export { default as ScreenWrapper } from './ScreenWrapper';
 export { default as StoryWrapper } from './StoryWrapper';
 export { default as HelpButton } from './HelpButton';
-export { default as TabBarImage } from './TabBarImage';
 export { default as EditableList } from './EditableList';
 export { default as CheckboxField } from './CheckboxField';
 export { default as Modal } from './Modal';
