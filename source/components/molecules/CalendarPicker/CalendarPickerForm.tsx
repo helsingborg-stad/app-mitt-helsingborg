@@ -39,7 +39,7 @@ const DateInput = styled(Input)<{ transparent: boolean }>`
   text-align: right;
   min-width: 80%;
   font-weight: 500;
-  color: ${props => props.theme.colors.neutrals[1]};
+  color: ${(props) => props.theme.colors.neutrals[1]};
 `;
 
 interface PropInterface {
