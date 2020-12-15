@@ -8,17 +8,17 @@ import Button from '../Button/Button';
 import Text from '../Text/Text';
 
 storiesOf('Progressbar', module)
-  .add('Default', props => (
+  .add('Default', (props) => (
     <StoryWrapper {...props}>
       <ProgressBar />
     </StoryWrapper>
   ))
-  .add('Rounded', props => (
+  .add('Rounded', (props) => (
     <StoryWrapper {...props}>
       <Progressbar rounded currentStep={3} totalStepNumber={6} />
     </StoryWrapper>
   ))
-  .add('Color schemas', props => (
+  .add('Color schemas', (props) => (
     <StoryWrapper {...props}>
       <ColorSchemas />
     </StoryWrapper>

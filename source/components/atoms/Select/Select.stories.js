@@ -11,7 +11,7 @@ const SelectStory = () => {
   return (
     <>
       <Select
-        onValueChange={developer => {
+        onValueChange={(developer) => {
           setValue(developer);
         }}
         placeholder="Select a developer"
@@ -33,13 +33,13 @@ const SelectStoryDisabled = () => {
   return (
     <>
       <View style={{ padding: 10, flexDirection: 'row', justifyContent: 'space-around' }}>
-        <Button onClick={() => setEditable(e => !e)}>
+        <Button onClick={() => setEditable((e) => !e)}>
           <Text>Toggle Editable</Text>
         </Button>
         <Text>Can edit country input below: {JSON.stringify(editable)}</Text>
       </View>
       <Select
-        onValueChange={developer => {
+        onValueChange={(developer) => {
           setValue(developer);
         }}
         editable={editable}

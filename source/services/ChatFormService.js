@@ -8,7 +8,7 @@ import env from 'react-native-config';
 import { post } from '../helpers/ApiRequest';
 import StorageService, { TOKEN_KEY } from './StorageService';
 
-const getService = async endpoint => {
+const getService = async (endpoint) => {
   const token = await StorageService.getData(TOKEN_KEY);
 
   return axios({
@@ -20,14 +20,14 @@ const getService = async endpoint => {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then(result => Promise.resolve(result.data))
-    .catch(err => {
+    .then((result) => Promise.resolve(result.data))
+    .catch((err) => {
       console.log('Error in request call', err.request);
       return Promise.reject(err);
     });
 };
 
-export const constructGetFormTemplate = async endpoint => {
+export const constructGetFormTemplate = async (endpoint) => {
   try {
     const reqChatResult = await getService(endpoint);
 
@@ -37,7 +37,7 @@ export const constructGetFormTemplate = async endpoint => {
   }
 };
 
-export const getFormTemplate = formId => {
+export const getFormTemplate = (formId) => {
   const endpoint = `forms/${formId}/questions`;
 
   return constructGetFormTemplate(endpoint);

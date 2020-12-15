@@ -20,18 +20,18 @@ const Flex = styled.View`
 `;
 
 const Title = styled(Text)`
-  color: ${props => props.theme.list.onLightBackground.listWithAvatar.text};
+  color: ${(props) => props.theme.list.onLightBackground.listWithAvatar.text};
   font-weight: bold;
   margin-bottom: 4px;
 `;
 
 const Body = styled(Text)`
-  color: ${props => props.theme.list.onLightBackground.listWithAvatar.bodyTextColor};
+  color: ${(props) => props.theme.list.onLightBackground.listWithAvatar.bodyTextColor};
 `;
 
 const IconContainer = styled.View`
   width: 64px;
-  background: ${props => props.background};
+  background: ${(props) => props.background};
 `;
 
 const IconFlex = styled.View`

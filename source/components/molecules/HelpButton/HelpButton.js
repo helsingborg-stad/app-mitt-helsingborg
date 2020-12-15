@@ -1,14 +1,8 @@
-import React, {useState} from 'react';
-import {
-  Modal,
-  TouchableHighlight,
-  ScrollView,
-  Image,
-  Linking,
-} from 'react-native';
+import React, { useState } from 'react';
+import { Modal, TouchableHighlight, ScrollView, Image, Linking } from 'react-native';
 import styled from 'styled-components/native';
-import {Icon, Button} from '../../../components/atoms';
 import PropTypes from 'prop-types';
+import { Icon, Button } from '../../atoms';
 import icons from '../../../helpers/Icons';
 import Text from '../../atoms/Text';
 import BackNavigation from '../BackNavigation/BackNavigation';
@@ -73,18 +67,14 @@ const LinkButton = styled(Button)`
 `;
 
 const HelpButton = (props) => {
-  const {text, size, heading, tagline, url} = props;
+  const { text, size, heading, tagline, url } = props;
   const [modalVisible, setModalVisible] = useState(false);
 
   const link = () => {
     Linking.openURL(url);
   };
 
-  if (
-    (!heading || heading.length === 0) &&
-    (!text || text?.length === 0) &&
-    url.length
-  ) {
+  if ((!heading || heading.length === 0) && (!text || text?.length === 0) && url.length) {
     return (
       <>
         <TouchableHighlight onPress={link} underlayColor="transparent">
@@ -102,12 +92,10 @@ const HelpButton = (props) => {
         onRequestClose={() => {
           setModalVisible(false);
         }}
-        presentationStyle="pageSheet">
+        presentationStyle="pageSheet"
+      >
         <ModalContainer>
-          <CloseModal
-            showBackButton={false}
-            onClose={() => setModalVisible(false)}
-          />
+          <CloseModal showBackButton={false} onClose={() => setModalVisible(false)} />
           <BannerWrapper>
             <BannerIcon resizeMode="contain" source={icons.ICON_HELP} />
           </BannerWrapper>
@@ -116,7 +104,8 @@ const HelpButton = (props) => {
               contentContainerStyle={{
                 marginBottom: 10,
                 justifyContent: 'space-between',
-              }}>
+              }}
+            >
               <Tagline>{tagline}</Tagline>
               <Heading>{heading}</Heading>
               <HelpText>{text?.length ? text : 'Text not available'}</HelpText>
@@ -135,7 +124,8 @@ const HelpButton = (props) => {
         onPress={() => {
           setModalVisible(true);
         }}
-        underlayColor="transparent">
+        underlayColor="transparent"
+      >
         <Icon name="help-outline" size={size} />
       </TouchableHighlight>
     </>

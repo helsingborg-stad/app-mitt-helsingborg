@@ -6,7 +6,7 @@ import { Text } from 'react-native';
 
 const Stack = createStackNavigator();
 
-const MockStartScreen = props => <Text>Welcome to the start screen</Text>;
+const MockStartScreen = (props) => <Text>Welcome to the start screen</Text>;
 
 const MockNavigator = ({ component, params }) => (
   <NavigationContainer>

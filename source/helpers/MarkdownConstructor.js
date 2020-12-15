@@ -10,7 +10,7 @@ import Text from '../components/atoms/Text';
  *
  */
 const markdownRules = {
-  text: node => <Text key={node.key}>{node.content}</Text>,
+  text: (node) => <Text key={node.key}>{node.content}</Text>,
   strong: (node, children, _parent, _styles) => (
     <Text key={node.key}>
       {React.Children.map(children, (child, _index) =>
@@ -43,7 +43,7 @@ const markDownStyles = {
   },
 };
 
-const MarkdownConstructor = props => {
+const MarkdownConstructor = (props) => {
   const { rawText } = props;
 
   return (

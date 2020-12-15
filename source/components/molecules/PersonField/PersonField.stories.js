@@ -24,7 +24,7 @@ const inputs = [
   },
 ];
 
-storiesOf('Person Field Card', module).add('Default', props => (
+storiesOf('Person Field Card', module).add('Default', (props) => (
   <StoryWrapper {...props}>
     <PersonFieldCard
       firstName="Tuva"
@@ -36,7 +36,7 @@ storiesOf('Person Field Card', module).add('Default', props => (
   </StoryWrapper>
 ));
 
-storiesOf('Person Field Card', module).add('Editable', props => (
+storiesOf('Person Field Card', module).add('Editable', (props) => (
   <StoryWrapper {...props}>
     <PersonFieldCard
       firstName="Tuva"

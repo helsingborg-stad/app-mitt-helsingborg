@@ -5,10 +5,10 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
-  background-color: ${props => props.theme.colors.neutrals[6]};
+  background-color: ${(props) => props.theme.colors.neutrals[6]};
 `;
 
-const ScreenWrapper = props => {
+const ScreenWrapper = (props) => {
   const { style, children } = props;
 
   return <Container style={style}>{children}</Container>;

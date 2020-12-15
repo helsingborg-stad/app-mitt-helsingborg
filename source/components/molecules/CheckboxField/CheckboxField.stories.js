@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import StoryWrapper from '../StoryWrapper';
 import CheckboxField from './CheckboxField';
 
-storiesOf('CheckboxField', module).add('Default', props => (
+storiesOf('CheckboxField', module).add('Default', (props) => (
   <StoryWrapper {...props}>
     <CheckboxFields />
   </StoryWrapper>

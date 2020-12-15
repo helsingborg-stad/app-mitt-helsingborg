@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import {Text, Heading} from '../../../../components/atoms';
+import { Text, Heading } from '../../../atoms';
 
 const StepDescriptionWrapper = styled.View`
   margin-left: 24px;
@@ -46,11 +46,7 @@ function StepDescription({
           <StepDescriptionTagline colorSchema={colorSchema}>
             {tagline}
 
-            {tagline &&
-              currentStep &&
-              totalStepNumber &&
-              currentStep !== totalStepNumber &&
-              ' • '}
+            {tagline && currentStep && totalStepNumber && currentStep !== totalStepNumber && ' • '}
             {currentStep &&
               totalStepNumber &&
               currentStep !== totalStepNumber &&

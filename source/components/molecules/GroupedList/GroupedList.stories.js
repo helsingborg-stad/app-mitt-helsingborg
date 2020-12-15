@@ -30,7 +30,7 @@ const items = [
   },
 ];
 
-storiesOf('Lists 2', module).add('Grouped list', props => (
+storiesOf('Lists 2', module).add('Grouped list', (props) => (
   <StoryWrapper {...props}>
     <GroupedList
       heading="Green things"

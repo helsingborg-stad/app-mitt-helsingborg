@@ -1,10 +1,10 @@
 import env from 'react-native-config';
 import bankid from '../../services/BankidService';
 import * as authService from '../../services/AuthService';
-import StorageService, {TOKEN_KEY} from '../../services/StorageService';
-import {UrlHelper} from '../../helpers';
+import StorageService, { TOKEN_KEY } from '../../services/StorageService';
+import { UrlHelper } from '../../helpers';
 
-const {canOpenUrl} = UrlHelper;
+const { canOpenUrl } = UrlHelper;
 
 export const actionTypes = {
   loginSuccess: 'LOGIN_SUCCESS',
@@ -60,9 +60,7 @@ export async function loginFailure() {
 export async function addProfile() {
   try {
     const decodedToken = await authService.getAccessTokenFromStorage();
-    const [userProfile, userError] = await authService.getUserProfile(
-      decodedToken.accessToken,
-    );
+    const [userProfile, userError] = await authService.getUserProfile(decodedToken.accessToken);
 
     if (userError) {
       throw new Error(userError);
@@ -92,7 +90,7 @@ export async function startAuth(ssn, launchBankidApp) {
     if (response.success === false) {
       throw new Error(response.data);
     }
-    const {orderRef, autoStartToken} = response.data;
+    const { orderRef, autoStartToken } = response.data;
 
     if (launchBankidApp) {
       // Tries to start the bankId app on the device for user authorization.
@@ -116,11 +114,7 @@ export async function startAuth(ssn, launchBankidApp) {
   }
 }
 
-export async function startSign(
-  personalNumber,
-  userVisibleData,
-  launchBankidApp,
-) {
+export async function startSign(personalNumber, userVisibleData, launchBankidApp) {
   try {
     const response = await bankid.sign(personalNumber, userVisibleData);
 
@@ -128,7 +122,7 @@ export async function startSign(
       throw new Error(response.data);
     }
 
-    const {orderRef, autoStartToken} = response.data;
+    const { orderRef, autoStartToken } = response.data;
 
     if (launchBankidApp) {
       // Tries to start the bankId app on the device for user authorization.
@@ -152,11 +146,7 @@ export async function startSign(
   }
 }
 
-export async function checkOrderStatus(
-  autoStartToken,
-  orderRef,
-  isUserAuthenticated,
-) {
+export async function checkOrderStatus(autoStartToken, orderRef, isUserAuthenticated) {
   try {
     // Try to collect a successfull collect response from bankid.
     const response = await bankid.collect(orderRef);
@@ -166,26 +156,20 @@ export async function checkOrderStatus(
     }
 
     // Tries to grant a token from the authorization endpoint in the api.
-    const {personalNumber} = response.data.attributes.completionData.user;
+    const { personalNumber } = response.data.attributes.completionData.user;
 
     // eslint-disable-next-line no-unused-vars
-    const [__, grantTokenError] = await authService.grantAccessToken(
-      personalNumber,
-    );
+    const [__, grantTokenError] = await authService.grantAccessToken(personalNumber);
     if (grantTokenError) {
       throw new Error(grantTokenError);
     }
 
     return {
-      type: !isUserAuthenticated
-        ? actionTypes.loginSuccess
-        : actionTypes.signSuccess,
+      type: !isUserAuthenticated ? actionTypes.loginSuccess : actionTypes.signSuccess,
     };
   } catch (error) {
     return {
-      type: !isUserAuthenticated
-        ? actionTypes.loginFailure
-        : actionTypes.signFailure,
+      type: !isUserAuthenticated ? actionTypes.loginFailure : actionTypes.signFailure,
       payload: {
         error,
       },

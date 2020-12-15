@@ -46,7 +46,7 @@ const DateFormField = () => {
       label="Date input"
       labelLine="true"
       value={date[7]}
-      onChange={v => setDate(v)}
+      onChange={(v) => setDate(v)}
       color="light"
       inputType="date"
     />
@@ -60,7 +60,7 @@ const RadioGroupFormField = () => {
       label="Radio group"
       labelLine
       choices={radioChoices}
-      onChange={choice => setValue(choice)}
+      onChange={(choice) => setValue(choice)}
       value={value[8]}
       inputType="radioGroup"
     />

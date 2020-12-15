@@ -21,14 +21,14 @@ const Flex = styled.View`
 `;
 
 const Title = styled(Text)`
-  color: ${props => props.theme.background.darkest};
+  color: ${(props) => props.theme.background.darkest};
   margin-bottom: 4px;
   font-size: 25px;
 `;
 
 const IconContainer = styled.View`
   width: 64px;
-  background: ${props => props.background};
+  background: ${(props) => props.background};
   border-top-left-radius: 12.5px;
   border-bottom-left-radius: 12.5px;
   margin-right: 14px;
@@ -55,7 +55,7 @@ const ImageIcon = styled.Image`
   height: 64px;
 `;
 
-const CaseTypeListItem = props => {
+const CaseTypeListItem = (props) => {
   const { title, color, onClick, icon, children } = props;
 
   const background =

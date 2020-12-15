@@ -65,7 +65,7 @@ const RadioButtons = () => {
   );
 };
 
-storiesOf('RadioButtons', module).add('Default', props => (
+storiesOf('RadioButtons', module).add('Default', (props) => (
   <StoryWrapper {...props}>
     <RadioButtons />
   </StoryWrapper>

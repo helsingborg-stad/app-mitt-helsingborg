@@ -13,7 +13,7 @@ const EditableListBody = styled.View`
 `;
 
 const EditableListItem = styled.View`
-  font-size: ${props => props.theme.fontSizes[4]}px;
+  font-size: ${(props) => props.theme.fontSizes[4]}px;
   flex-direction: row;
   height: auto;
   background-color: transparent;
@@ -21,7 +21,7 @@ const EditableListItem = styled.View`
   margin-bottom: 10px;
   ${({ theme, error }) =>
     !(error?.isValid || !error) && `border: solid 1px ${theme.colors.primary.red[0]}`}
-  ${props =>
+  ${(props) =>
     props.editable
       ? `
       background-color: ${props.theme.colors.complementary[props.colorSchema][2]};
@@ -32,13 +32,13 @@ const EditableListItem = styled.View`
 
 const EditableListItemLabelWrapper = styled.View`
   flex: 4;
-  justify-content: ${props => (props.alignAtStart ? 'flex-start' : 'center')};
+  justify-content: ${(props) => (props.alignAtStart ? 'flex-start' : 'center')};
 `;
 
 const EditableListItemLabel = styled.Text`
   padding: 4px;
-  font-weight: ${props => props.theme.fontWeights[1]};
-  color: ${props => props.theme.colors.neutrals[1]};
+  font-weight: ${(props) => props.theme.fontWeights[1]};
+  color: ${(props) => props.theme.colors.neutrals[1]};
 `;
 
 const EditableListItemInputWrapper = styled.View`
@@ -53,7 +53,7 @@ const EditableListItemInput = styled(Input)`
   text-align: right;
   min-width: 80%;
   font-weight: 500;
-  color: ${props => props.theme.colors.neutrals[1]};
+  color: ${(props) => props.theme.colors.neutrals[1]};
   padding: 6px;
 `;
 const EditableListItemSelect = styled(Select)`
@@ -106,14 +106,14 @@ function EditableList({
     if (onBlur) onBlur(state);
   };
   /** Switch between different input types */
-  const getInputComponent = input => {
+  const getInputComponent = (input) => {
     switch (input.type) {
       case 'number':
         return (
           <EditableListItemInput
             colorSchema={colorSchema}
             editable={editable}
-            onChangeText={text => onChange(input.key, text)}
+            onChangeText={(text) => onChange(input.key, text)}
             onBlur={onInputBlur}
             value={value && value !== '' ? value[input.key] : state[input.key]}
             keyboardType="numeric"
@@ -124,7 +124,7 @@ function EditableList({
         return (
           <CalendarPicker
             date={value && value !== '' ? value[input.key] : state[input.key]}
-            onSelect={date => onChange(input.key, date)}
+            onSelect={(date) => onChange(input.key, date)}
             onBlur={onInputBlur}
             editable={editable}
             transparent
@@ -134,7 +134,7 @@ function EditableList({
         return (
           <EditableListItemSelect
             onBlur={onInputBlur}
-            onValueChange={value => onChange(input.key, value)}
+            onValueChange={(value) => onChange(input.key, value)}
             value={value && value !== '' ? value[input.key] : state[input.key]}
             editable={editable}
             items={input?.items || []}
@@ -145,7 +145,7 @@ function EditableList({
           <EditableListItemInput
             colorSchema={colorSchema}
             editable={editable}
-            onChangeText={text => onChange(input.key, text)}
+            onChangeText={(text) => onChange(input.key, text)}
             onBlur={onInputBlur}
             value={value && value !== '' ? value[input.key] : state[input.key]}
             transparent
@@ -170,7 +170,7 @@ function EditableList({
       )}
     >
       <EditableListBody>
-        {inputs.map(input => (
+        {inputs.map((input) => (
           <EditableListItem
             colorSchema={colorSchema}
             editable={editable}

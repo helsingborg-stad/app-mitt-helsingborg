@@ -158,7 +158,7 @@ const FormField = ({
 
   /** Checks if the field is conditional on another input, and if so,
    * evaluates whether this field should be active or not */
-  const checkCondition = questionId => {
+  const checkCondition = (questionId) => {
     if (!questionId) return true;
 
     if (typeof questionId === 'string') {

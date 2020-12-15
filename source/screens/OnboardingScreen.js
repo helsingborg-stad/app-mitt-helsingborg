@@ -1,15 +1,15 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
-import {ImageBackground, PanResponder} from 'react-native';
+import React, { Component } from 'react';
+import { ImageBackground, PanResponder } from 'react-native';
 import Swiper from 'react-native-swiper';
 import styled from 'styled-components/native';
-import {SLIDES} from '../assets/images';
-import {Button, Heading, Icon, Text} from '../components/atoms';
-import {ScreenWrapper} from '../components/molecules';
-import {SHOW_SPLASH_SCREEN} from '../services/StorageService';
+import { SLIDES } from '../assets/images';
+import { Button, Heading, Icon, Text } from '../components/atoms';
+import { ScreenWrapper } from '../components/molecules';
+import { SHOW_SPLASH_SCREEN } from '../services/StorageService';
 
-const {SLIDE_001_PNG, SLIDE_002_PNG, SLIDE_003_PNG, STADSVAPEN_PNG} = SLIDES;
+const { SLIDE_001_PNG, SLIDE_002_PNG, SLIDE_003_PNG, STADSVAPEN_PNG } = SLIDES;
 
 const Slide = styled.View`
   flex: 1;
@@ -93,18 +93,18 @@ const buttonWrapperStyle = {
 class OnboardingScreen extends Component {
   _panResponder = PanResponder.create({
     onPanResponderMove: (_evt, gestureState) => {
-      const {swipeIndex, showSwipeInterface} = this.state;
+      const { swipeIndex, showSwipeInterface } = this.state;
       if (swipeIndex === 2 && showSwipeInterface === true) {
         if (gestureState.dx < 0) {
-          this.setState({showSwipeInterface: false});
+          this.setState({ showSwipeInterface: false });
         }
       }
     },
     onPanResponderRelease: (_evt, _gestureState) => {
       setTimeout(() => {
-        const {swipeIndex} = this.state;
+        const { swipeIndex } = this.state;
         if (swipeIndex <= 2) {
-          this.setState({showSwipeInterface: true});
+          this.setState({ showSwipeInterface: true });
         }
       }, 400);
     },
@@ -128,7 +128,7 @@ class OnboardingScreen extends Component {
   showSplash = () => {
     AsyncStorage.getItem(SHOW_SPLASH_SCREEN).then((value) => {
       const {
-        navigation: {navigate},
+        navigation: { navigate },
       } = this.props;
       let showSplash = true;
       if (value) {
@@ -136,7 +136,7 @@ class OnboardingScreen extends Component {
       }
 
       if (!showSplash) {
-        navigate('Auth', {screen: 'Login'});
+        navigate('Auth', { screen: 'Login' });
       }
     });
   };
@@ -146,12 +146,12 @@ class OnboardingScreen extends Component {
    */
   disableSplash = () => {
     const {
-      navigation: {navigate},
+      navigation: { navigate },
     } = this.props;
 
     AsyncStorage.setItem(SHOW_SPLASH_SCREEN, JSON.stringify(false));
 
-    navigate('Auth', {screen: 'Login'});
+    navigate('Auth', { screen: 'Login' });
   };
 
   /**
@@ -168,10 +168,7 @@ class OnboardingScreen extends Component {
   swipeWelcome = () => (
     <Slide>
       <SlideImageContainer>
-        <ImageBackground
-          style={{width: 130, height: 200}}
-          source={STADSVAPEN_PNG}
-        />
+        <ImageBackground style={{ width: 130, height: 200 }} source={STADSVAPEN_PNG} />
       </SlideImageContainer>
       <Flex value="2">
         <Flex>
@@ -188,10 +185,7 @@ class OnboardingScreen extends Component {
   slideEasy = () => (
     <Slide>
       <SlideImageContainer>
-        <ImageBackground
-          source={SLIDE_001_PNG}
-          style={{width: 300, height: 300}}
-        />
+        <ImageBackground source={SLIDE_001_PNG} style={{ width: 300, height: 300 }} />
       </SlideImageContainer>
       <Flex value="2">
         <Flex>
@@ -200,8 +194,8 @@ class OnboardingScreen extends Component {
 
         <Flex value="2">
           <SlideText>
-            Mitt Helsingborg är appen där du enkelt får tillgång till tjänster
-            och information från kommunen.
+            Mitt Helsingborg är appen där du enkelt får tillgång till tjänster och information från
+            kommunen.
           </SlideText>
         </Flex>
       </Flex>
@@ -212,10 +206,7 @@ class OnboardingScreen extends Component {
   slideAccessible = () => (
     <Slide>
       <SlideImageContainer>
-        <ImageBackground
-          source={SLIDE_002_PNG}
-          style={{width: 230, height: 260}}
-        />
+        <ImageBackground source={SLIDE_002_PNG} style={{ width: 230, height: 260 }} />
       </SlideImageContainer>
       <Flex value="2">
         <Flex>
@@ -224,8 +215,8 @@ class OnboardingScreen extends Component {
 
         <Flex value="2">
           <SlideText>
-            Du kan följa och hantera dina ärenden, få personlig service eller
-            bli tipsad om saker som händer nära dig.
+            Du kan följa och hantera dina ärenden, få personlig service eller bli tipsad om saker
+            som händer nära dig.
           </SlideText>
         </Flex>
       </Flex>
@@ -234,14 +225,11 @@ class OnboardingScreen extends Component {
   );
 
   slidePersonal = () => {
-    const {ButtonDisableSplash} = this;
+    const { ButtonDisableSplash } = this;
     return (
       <Slide>
         <SlideImageContainer>
-          <ImageBackground
-            source={SLIDE_003_PNG}
-            style={{width: 300, height: 300}}
-          />
+          <ImageBackground source={SLIDE_003_PNG} style={{ width: 300, height: 300 }} />
         </SlideImageContainer>
         <Flex value="2">
           <Flex>
@@ -249,8 +237,7 @@ class OnboardingScreen extends Component {
           </Flex>
           <Flex value="2">
             <SlideText>
-              Inloggad ger mer. Som inloggad får du en personlig upplevelse
-              anpassad för dig.
+              Inloggad ger mer. Som inloggad får du en personlig upplevelse anpassad för dig.
               {'\n\n'}
               Allt samlat i mobilen.
             </SlideText>
@@ -269,30 +256,30 @@ class OnboardingScreen extends Component {
    */
   swipeAction = (index) => {
     if (index === 0) {
-      this.setState({swipeButtonText: 'Kom igång'});
+      this.setState({ swipeButtonText: 'Kom igång' });
     } else if (index === 2) {
-      this.setState({showSwipeInterface: true});
+      this.setState({ showSwipeInterface: true });
     } else if (index === 3) {
-      this.setState({showSwipeInterface: false});
+      this.setState({ showSwipeInterface: false });
     } else {
       // this.setState({ disableSwipeInterface: true })
-      this.setState({swipeButtonText: 'Nästa'});
+      this.setState({ swipeButtonText: 'Nästa' });
     }
 
-    this.setState({swipeIndex: index});
+    this.setState({ swipeIndex: index });
   };
 
   swipeToNext = () => {
-    const {swipeIndex} = this.state;
+    const { swipeIndex } = this.state;
     this._swiper.scrollBy(1);
 
     if (swipeIndex === 2) {
-      this.setState({showSwipeInterface: false});
+      this.setState({ showSwipeInterface: false });
     }
   };
 
   render() {
-    const {showSwipeInterface, swipeButtonText} = this.state;
+    const { showSwipeInterface, swipeButtonText } = this.state;
 
     return (
       <EnhancedScreenWrapper>
@@ -301,7 +288,7 @@ class OnboardingScreen extends Component {
           ref={(swiper) => {
             this._swiper = swiper;
           }}
-          style={{overflow: 'visible'}}
+          style={{ overflow: 'visible' }}
           buttonWrapperStyle={buttonWrapperStyle}
           showsPagination={showSwipeInterface}
           showsButtons={showSwipeInterface}
@@ -314,9 +301,10 @@ class OnboardingScreen extends Component {
           }
           dot={<Dot />}
           activeDot={<ActiveDot />}
-          paginationStyle={{paddingEnd: 195}}
+          paginationStyle={{ paddingEnd: 195 }}
           onIndexChanged={(index) => this.swipeAction(index)}
-          loop={false}>
+          loop={false}
+        >
           {this.swipeWelcome()}
           {this.slideEasy()}
           {this.slideAccessible()}

@@ -7,14 +7,14 @@ const FormListStory = () => {
   const [formId, setFormId] = useState('');
   return (
     <FormList
-      onClickCallback={async id => {
+      onClickCallback={async (id) => {
         setFormId(id);
       }}
     />
   );
 };
 
-storiesOf('Form List', module).add('default', props => (
+storiesOf('Form List', module).add('default', (props) => (
   <StoryWrapper {...props}>
     <FormListStory />
   </StoryWrapper>

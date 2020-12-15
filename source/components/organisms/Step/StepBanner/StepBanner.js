@@ -7,8 +7,8 @@ import icons from '../../../../helpers/Icons';
 const BannerWrapper = styled.View`
   margin: 0;
   padding: 0;
-  min-height: ${props => (props.image ? '256px' : '192px')};
-  background-color: ${props =>
+  min-height: ${(props) => (props.image ? '256px' : '192px')};
+  background-color: ${(props) =>
     props.backgroundColor
       ? props.backgroundColor
       : props.theme.colors.complementary[props.colorSchema][0]};

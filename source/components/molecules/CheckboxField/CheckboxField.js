@@ -33,9 +33,9 @@ const FlexContainer = styled.View`
   margin-right: -50px;
   padding-left: 60px;
   padding-right: 60px;
-  padding-top: ${props => props.theme.sizes[1]}px;
-  padding-bottom: ${props => props.theme.sizes[1]}px;
-  background-color: ${props => (props.toggled ? 'transparent' : props.theme.colors.neutrals[5])};
+  padding-top: ${(props) => props.theme.sizes[1]}px;
+  padding-bottom: ${(props) => props.theme.sizes[1]}px;
+  background-color: ${(props) => (props.toggled ? 'transparent' : props.theme.colors.neutrals[5])};
 `;
 
 const BoxTextWrapper = styled.View`
@@ -51,9 +51,9 @@ const TouchableWrapper = styled(TouchableHighlight)`
   padding-right: 24px;
 `;
 const CheckboxFieldText = styled(Text)`
-  margin-left: ${props => props.theme.sizes[1]}px;
-  margin-right: ${props => props.theme.sizes[1]}px;
-  font-size: ${props => sizes[props.size].fontSize}px;
+  margin-left: ${(props) => props.theme.sizes[1]}px;
+  margin-right: ${(props) => props.theme.sizes[1]}px;
+  font-size: ${(props) => sizes[props.size].fontSize}px;
 `;
 /** A component with a checkbox next to a descriptive text, and possibly a help button */
 const CheckboxField = ({ text, color, size, value, onChange, help, ...other }) => {

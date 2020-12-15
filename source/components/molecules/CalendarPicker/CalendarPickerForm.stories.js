@@ -9,7 +9,7 @@ const CalendarPicker = () => {
   return (
     <CalendarPickerForm
       date={date}
-      onSelect={selectedDate => {
+      onSelect={(selectedDate) => {
         setDate(selectedDate);
       }}
     />

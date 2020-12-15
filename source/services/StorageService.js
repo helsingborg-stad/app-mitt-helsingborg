@@ -23,7 +23,7 @@ export default class StorageService extends Component {
    * @returns {Promise}
    */
   static async getData(key) {
-    return AsyncStorage.getItem(key).then(value => {
+    return AsyncStorage.getItem(key).then((value) => {
       try {
         return JSON.parse(value);
       } catch (e) {
@@ -56,7 +56,7 @@ export default class StorageService extends Component {
    * @param {String} key The AsyncStorage key
    * @returns {Promise}
    */
-  static removeData = key => AsyncStorage.removeItem(key);
+  static removeData = (key) => AsyncStorage.removeItem(key);
 
   /**
    * Remove all data from storage

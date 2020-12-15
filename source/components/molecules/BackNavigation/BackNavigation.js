@@ -21,7 +21,7 @@ const BackNavigationSingleWrapper = styled.View({
   zIndex: 999,
 });
 
-const BackButton = styled.View(props => ({
+const BackButton = styled.View((props) => ({
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: 30,
@@ -35,7 +35,7 @@ const BackButtonIcon = styled(Icon).attrs(({ theme, colorSchema }) => ({
   color: theme.colors.primary[colorSchema][0],
 }))``;
 
-const CloseButton = styled.View(props => ({
+const CloseButton = styled.View((props) => ({
   alignItems: 'center',
   borderRadius: 30,
   justifyContent: 'center',
@@ -49,7 +49,7 @@ const CloseButton = styled.View(props => ({
 }));
 
 const CloseButtonIcon = styled(Icon)`
-  color: ${props =>
+  color: ${(props) =>
     props.primary
       ? props.theme.colors.neutrals[7]
       : props.theme.colors.primary[props.colorSchema][0]};

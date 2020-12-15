@@ -1,13 +1,13 @@
 /* eslint-disable no-nested-ternary */
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {TouchableHighlight, ActivityIndicator} from 'react-native';
+import { TouchableHighlight, ActivityIndicator } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import styled from 'styled-components/native';
-import {Heading, Text, Button, Icon} from '../../../components/atoms';
-import {ScreenWrapper} from '../../../components/molecules';
+import { Heading, Text, Button, Icon } from '../../atoms';
+import { ScreenWrapper } from '..';
 import uploadFile from '../../../helpers/FileUpload';
-import {excludePropetiesWithKey} from '../../../helpers/Objects';
+import { excludePropetiesWithKey } from '../../../helpers/Objects';
 
 const Wrapper = styled(ScreenWrapper)`
   padding-left: 0;
@@ -85,12 +85,12 @@ const ImageStatus = {
   uploadError: 'UPLOAD_ERROR',
 };
 
-const ImageItem = ({imageData, fileName, onRemove, status}) => (
+const ImageItem = ({ imageData, fileName, onRemove, status }) => (
   <DefaultItem>
     <Flex>
       <IconContainer highlighted>
         <IconFlex>
-          <ImageIcon source={{uri: `data:image/jpeg;base64,${imageData}`}} />
+          <ImageIcon source={{ uri: `data:image/jpeg;base64,${imageData}` }} />
         </IconFlex>
       </IconContainer>
       <Content>
@@ -118,13 +118,7 @@ ImageItem.propTypes = {
   status: PropTypes.oneOf(Object.values(ImageStatus)),
 };
 
-const ImageUploader = ({
-  heading,
-  buttonText,
-  images: imgs,
-  onChange,
-  maxImages,
-}) => {
+const ImageUploader = ({ heading, buttonText, images: imgs, onChange, maxImages }) => {
   const [images, setImages] = useState([]);
   const [imageData, setImageData] = useState([]);
   const [loadedStatus, setLoadedStatus] = useState([]);
@@ -174,7 +168,7 @@ const ImageUploader = ({
       'users/me/attachments',
       imageData.fileName,
       imageFileType,
-      imageBlob,
+      imageBlob
     );
 
     if (uploadResponse.error) {
@@ -233,7 +227,7 @@ const ImageUploader = ({
 
           uploadImage(res, index);
         }
-      },
+      }
     );
   };
 
@@ -254,12 +248,7 @@ const ImageUploader = ({
         <ButtonContainer>
           {maxImages && maxImages > 0 && images.length < maxImages && (
             <Button onClick={addImage}>
-              <Text>
-                {' '}
-                {buttonText && buttonText !== ''
-                  ? buttonText
-                  : 'Ladda upp bild'}
-              </Text>
+              <Text> {buttonText && buttonText !== '' ? buttonText : 'Ladda upp bild'}</Text>
             </Button>
           )}
         </ButtonContainer>

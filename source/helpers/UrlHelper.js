@@ -6,7 +6,7 @@ import { Linking, Platform } from 'react-native';
  *
  * @param {String} url
  */
-export const openUrl = url =>
+export const openUrl = (url) =>
   Linking.openURL(url)
     .then(() => true)
     .catch(() => false);
@@ -15,15 +15,15 @@ export const openUrl = url =>
  * Test if URL can be opened
  * @param {string} url
  */
-export const canOpenUrl = url =>
+export const canOpenUrl = (url) =>
   Linking.canOpenURL(url)
-    .then(supported => {
+    .then((supported) => {
       if (supported) {
         return true;
       }
       return false;
     })
-    .catch(err => {
+    .catch((err) => {
       console.error('An error occurred', err);
       return false;
     });
@@ -32,7 +32,7 @@ export const canOpenUrl = url =>
  * Build query URL
  * @param {obj} queryParams
  */
-const encodeQueryData = queryParams => {
+const encodeQueryData = (queryParams) => {
   const data = [];
   const entries = Object.entries(queryParams);
   entries.forEach(([key, value]) => {
@@ -65,7 +65,7 @@ export const buildServiceUrl = (endpoint = '', params = {}) => {
  * Builds the BankID client URL
  * @param {string} autoStartToken
  */
-export const buildBankIdClientUrl = autoStartToken => {
+export const buildBankIdClientUrl = (autoStartToken) => {
   let url = 'bankid:///';
   let queryString = `?autostarttoken=${autoStartToken}&redirect=null`;
 

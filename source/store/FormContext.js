@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import env from 'react-native-config';
 import PropTypes from 'prop-types';
-import {get} from '../helpers/ApiRequest';
+import { get } from '../helpers/ApiRequest';
 import FormTypes from '../assets/formTypes';
 
 const FormContext = React.createContext();
 
 export const FormConsumer = FormContext.Consumer;
 
-export function FormProvider({children}) {
+export function FormProvider({ children }) {
   const [forms, setForms] = useState({});
   const [formSummaries, setFormSummaries] = useState([]);
 
@@ -40,7 +40,7 @@ export function FormProvider({children}) {
       })
         .then((res) => {
           if (res && res.data) {
-            setForms({...forms, [res.data.data.id]: res.data.data});
+            setForms({ ...forms, [res.data.data.id]: res.data.data });
             return res;
           }
           console.log('Form data not found');
@@ -84,7 +84,8 @@ export function FormProvider({children}) {
         findFormByType,
         getForm,
         getFormSummaries,
-      }}>
+      }}
+    >
       {children}
     </FormContext.Provider>
   );

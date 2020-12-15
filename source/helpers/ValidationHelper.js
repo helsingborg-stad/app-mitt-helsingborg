@@ -5,7 +5,7 @@ import validator from 'validator';
  * @param {string} pin Personal identity number
  * @return {boolean} Return true if PIN is valid, else return false
  */
-export const validatePin = pin => {
+export const validatePin = (pin) => {
   const pinRegex = /^[0-9]{12}$/;
 
   return pinRegex.test(pin);
@@ -16,7 +16,7 @@ export const validatePin = pin => {
  * @param {string} pin Personal identity number
  * @return {string} Personal identity number
  */
-export const sanitizePin = pin => {
+export const sanitizePin = (pin) => {
   // Remove non digits
   let sanitizedPin = pin.replace(/\D/g, '');
   const pinInt = parseInt(sanitizedPin);
@@ -51,7 +51,7 @@ export const validateInput = (value, rules) =>
        * Retrieve the validation method defined in the rule from the validator.js package and execute
        */
       const validationMethodArgs = rule.args || [];
-      const arrayOfArgs = Object.keys(validationMethodArgs).map(key => validationMethodArgs[key]);
+      const arrayOfArgs = Object.keys(validationMethodArgs).map((key) => validationMethodArgs[key]);
       const validationMethod =
         typeof rule.method === 'string' ? validator[rule.method] : rule.method;
       const isValidationRuleMeet =

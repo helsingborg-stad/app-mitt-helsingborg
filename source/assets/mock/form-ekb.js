@@ -1,4 +1,4 @@
-const ekbQuestion = args => {
+const ekbQuestion = (args) => {
   const { key, question, group, title } = args;
 
   const dependency = {
@@ -209,7 +209,7 @@ const EKB_FORM = {
      * Confirm
      */
     {
-      name: data => {
+      name: (data) => {
         const { answers } = data;
         return JSON.stringify(answers);
       },

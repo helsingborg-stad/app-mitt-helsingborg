@@ -22,9 +22,9 @@ const setTypography = () => {
     3.5,
     3.75,
     4,
-  ].map(scale => calculateSizeScale(defaultSize, scale));
+  ].map((scale) => calculateSizeScale(defaultSize, scale));
 
-  const lineHeights = [1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3].map(scale =>
+  const lineHeights = [1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3].map((scale) =>
     calculateSizeScale(defaultSize, scale)
   );
 

@@ -5,7 +5,7 @@ import StoryWrapper from '../StoryWrapper';
 import RadioGroup from './RadioGroup';
 import Label from '../../atoms/Label';
 
-storiesOf('RadioGroup', module).add('Default', props => (
+storiesOf('RadioGroup', module).add('Default', (props) => (
   <StoryWrapper {...props}>
     <RadioGroupStory />
   </StoryWrapper>

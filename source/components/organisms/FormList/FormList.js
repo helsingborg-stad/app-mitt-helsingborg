@@ -1,9 +1,9 @@
-import React, {useContext, useState, useEffect} from 'react';
-import {Heading, Text} from '../../../components/atoms';
-import {ListItem} from '../../../components/molecules';
-import FormContext from '../../../store/FormContext';
+import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
+import { Heading, Text } from '../../atoms';
+import { ListItem } from '../../molecules';
+import FormContext from '../../../store/FormContext';
 
 const List = styled.ScrollView`
   margin-top: 24px;
@@ -14,16 +14,14 @@ const ListHeading = styled(Heading)`
   margin-bottom: 8px;
 `;
 
-const FormList = ({onClickCallback, heading, showSubforms}) => {
+const FormList = ({ onClickCallback, heading, showSubforms }) => {
   const [formSummaries, setFormSummaries] = useState([]);
-  const {getFormSummaries, getForm} = useContext(FormContext);
+  const { getFormSummaries, getForm } = useContext(FormContext);
 
   useEffect(() => {
     async function fetchForms() {
       const formSummaries = await getFormSummaries();
-      setFormSummaries(
-        formSummaries.filter((f) => (showSubforms ? f.subform : !f.subform)),
-      );
+      setFormSummaries(formSummaries.filter((f) => (showSubforms ? f.subform : !f.subform)));
     }
     fetchForms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -48,7 +46,7 @@ const FormList = ({onClickCallback, heading, showSubforms}) => {
           />
         ))
       ) : (
-        <Text style={{marginLeft: 4}}>Laddar...</Text>
+        <Text style={{ marginLeft: 4 }}>Laddar...</Text>
       )}
     </List>
   );

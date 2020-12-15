@@ -14,7 +14,7 @@ const EnhancedSafeAreaView = styled.SafeAreaView`
   margin-bottom: 18px;
 `;
 
-const StoryWrapper = props => {
+const StoryWrapper = (props) => {
   const { style, kind, name, children } = props;
 
   return (

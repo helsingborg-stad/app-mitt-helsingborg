@@ -30,7 +30,7 @@ const actions3 = [
   },
 ];
 
-storiesOf('Footer', module).add('Forward/ Cancel', props => (
+storiesOf('Footer', module).add('Forward/ Cancel', (props) => (
   <StoryWrapper {...props}>
     <StepFooter actions={actions1} />
     <StepFooter actions={actions2} background="#FFAA9B" />

@@ -1,10 +1,10 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import styled from 'styled-components/native';
+import { Platform } from 'react-native';
 import CaseOverview from '../screens/caseScreens/CaseOverview';
 import CaseSummary from '../screens/caseScreens/CaseSummary';
-import {Icon} from '../components/atoms';
-import styled from 'styled-components/native';
-import {Platform} from 'react-native';
+import { Icon } from '../components/atoms';
 
 const Stack = createStackNavigator();
 
@@ -13,16 +13,16 @@ const BackIcon = styled(Icon)`
 `;
 
 const CaseNavigator = () => (
-  <Stack.Navigator screenOptions={{headerShown: true}}>
+  <Stack.Navigator screenOptions={{ headerShown: true }}>
     <Stack.Screen
       name="CaseOverview"
       component={CaseOverview}
-      options={{title: 'Ärenden', headerShown: false}}
+      options={{ title: 'Ärenden', headerShown: false }}
     />
     <Stack.Screen
       name="CaseSummary"
       component={CaseSummary}
-      options={({route}) => ({
+      options={({ route }) => ({
         title: route.params.name || 'Ärenden',
         headerBackImage: () => <BackIcon name="arrow-back" />,
         headerBackTitle: '',
