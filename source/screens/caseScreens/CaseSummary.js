@@ -94,12 +94,6 @@ const CaseSummary = (props) => {
                 </Card.Text>
               </Card.Body>
             </Card>
-
-            {/* TODO: Mock data, needs to be replaced */}
-            <SummaryHeading type="h5">Nästa period</SummaryHeading>
-            <Card>
-              <Card.Text italic>Du kan ansöka om nästa period från den 10 oktober.</Card.Text>
-            </Card>
           </>
         )}
 
