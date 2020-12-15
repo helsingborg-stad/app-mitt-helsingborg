@@ -1,15 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
-import Animated, { divide, multiply } from 'react-native-reanimated';
+import { Dimensions, StyleSheet, View } from 'react-native';
+import Animated, { divide } from 'react-native-reanimated';
 import { interpolateColor, useScrollHandler } from 'react-native-redash';
 
-import Slide, { SLIDE_HEIGHT } from './Slide';
-import SubSlide from './SubSlide';
+import Slide from './Slide';
 import Dot from './Dot';
-import OnboardingFooter from './OnboardingFooter';
 import Button from './components/Button';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -95,8 +93,8 @@ const Onboarding = () => {
           }}
           {...scrollHandler}
         >
-          {slides.map(({ title, picture, content }, index) => (
-            <Slide key={index} right={!!(index % 2)} {...{ title, picture, content }} />
+          {slides.map(({ title, content }, index) => (
+            <Slide key={index} right={!!(index % 2)} {...{ title, content }} />
           ))}
         </Animated.ScrollView>
       </Animated.View>
