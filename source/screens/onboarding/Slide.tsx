@@ -60,7 +60,7 @@ interface SliderProps {
   title: string;
   content: string;
   right: boolean;
-  picture: number;
+  picture?: number;
 }
 
 const Slide = ({ title, content, picture }: SliderProps) => {
@@ -69,7 +69,6 @@ const Slide = ({ title, content, picture }: SliderProps) => {
   return (
     <View style={[styles.container, { transform }]}>
       <View>
-        <Image source={require('./assets/STADSVAPEN.png')} />
         <Text style={styles.subTitle}>Mitt Helsingborg</Text>
         <View style={styles.subTitleHrRule} />
       </View>
