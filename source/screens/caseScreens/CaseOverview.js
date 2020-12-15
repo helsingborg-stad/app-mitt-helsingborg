@@ -7,7 +7,6 @@ import { Card, Header, ScreenWrapper } from '../../components/molecules';
 import { CaseDispatch, CaseState, caseStatus, caseTypes } from '../../store/CaseContext';
 import FormContext from '../../store/FormContext';
 import icons from '../../helpers/Icons';
-import { formatUpdatedAt } from '../../helpers/DateHelpers';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -37,7 +36,6 @@ const colorSchema = 'red';
  * @param {func} createCase
  */
 const computeCaseComponent = (status, latestCase, form, caseType, navigation, createCase) => {
-  const updatedAt = latestCase?.updatedAt ? formatUpdatedAt(latestCase.updatedAt) : '';
   const currentStep = latestCase?.currentPosition?.currentMainStep || '';
   const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
 
@@ -93,7 +91,6 @@ const computeCaseComponent = (status, latestCase, form, caseType, navigation, cr
                 Steg {currentStep} / {totalSteps}
               </Card.SubTitle>
               <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
-              <Card.Text italic>Senast uppdaterad {updatedAt}</Card.Text>
               <Card.Button
                 onClick={() => {
                   navigation.navigate('Form', { caseId: latestCase.id });
@@ -128,7 +125,6 @@ const computeCaseComponent = (status, latestCase, form, caseType, navigation, cr
               <Card.Image source={icons[caseType.icon]} />
               <Card.Title>{caseType.name}</Card.Title>
               <Card.SubTitle>Inskickad</Card.SubTitle>
-              <Card.Text italic>Skickades in {updatedAt}</Card.Text>
               <Card.Button
                 onClick={() => {
                   navigation.navigate('UserEvents', {
