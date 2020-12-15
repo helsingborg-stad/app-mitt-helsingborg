@@ -154,20 +154,6 @@ const CaseSummary = (props) => {
             ))}
           </View>
         )}
-
-        {/* TODO: Mock data, needs to be replaced */}
-        <SummaryHeading type="h5">Tidigare ansökningar</SummaryHeading>
-        <Card colorSchema={colorSchema}>
-          <Card.Text italic>Här kan du titta på dina tidigare ansökningar.</Card.Text>
-          <Card.Button>
-            <Text>1-30 september</Text>
-            <Icon name="arrow-forward" />
-          </Card.Button>
-          <Card.Button>
-            <Text>1-31 augusti</Text>
-            <Icon name="arrow-forward" />
-          </Card.Button>
-        </Card>
       </Container>
     </ScreenWrapper>
   );
