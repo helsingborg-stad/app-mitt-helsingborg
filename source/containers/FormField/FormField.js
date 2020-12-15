@@ -14,6 +14,7 @@ import {
   RadioGroup,
 } from '../../components/molecules';
 import theme from '../../styles/theme';
+import { getValidColorSchema } from '../../styles/themeHelpers';
 import SummaryList from '../../components/organisms/SummaryList/SummaryList';
 
 /**
@@ -125,6 +126,7 @@ const FormField = ({
   help,
   ...other
 }) => {
+  const validColorSchema = getValidColorSchema(colorSchema);
   const input = inputTypes[inputType];
   if (!input) {
     return <Text>{`Invalid field type: ${inputType}`}</Text>;
@@ -144,7 +146,7 @@ const FormField = ({
       ? input.initialValue
       : value;
   const inputCompProps = {
-    colorSchema,
+    colorSchema: validColorSchema,
     value: initialValue,
     ...inputProps,
     error: validationErrors[id],
@@ -184,7 +186,7 @@ const FormField = ({
       <View>
         {label ? (
           <Label
-            color={colorSchema}
+            colorSchema={validColorSchema}
             underline={labelLine}
             help={!input.helpInComponent && help && Object.keys(help).length > 0 ? help : {}}
           >
