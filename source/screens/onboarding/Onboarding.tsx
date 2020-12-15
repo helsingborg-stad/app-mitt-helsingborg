@@ -74,6 +74,7 @@ const Onboarding = () => {
     inputRange: slides.map((_, i) => i * width),
     outputRange: slides.map(slide => slide.color),
   });
+  const lastScrollPos = width * (slides.length - 2);
 
   return (
     <View style={styles.container}>
@@ -102,7 +103,7 @@ const Onboarding = () => {
             backgroundColor,
           }}
         />
-        <View style={{ flex: 1, flexDirection: 'row', paddingTop: 20 }}>
+        <View style={styles.footerContent}>
           <View>
             <View style={styles.pagination}>
               {slides.map((_, index) => (
@@ -112,10 +113,13 @@ const Onboarding = () => {
           </View>
           <View style={styles.slideButtonContainer}>
             <Button
-              label="Fortsätt"
+              label={scrollPos <= lastScrollPos ? 'Fortsätt' : 'Logga in'}
               onPress={() => {
-                // TODO: Check if last slade before scrolling.
-                scroll.current.getNode().scrollTo({ x: width + scrollPos, animated: true });
+                if (scrollPos <= lastScrollPos) {
+                  scroll.current.getNode().scrollTo({ x: width + scrollPos, animated: true });
+                } else {
+                  // TODO: Add navigation to login page.
+                }
               }}
             />
           </View>
