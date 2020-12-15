@@ -23,9 +23,7 @@ const PopupContainer = styled.View`
   top: 33%;
   left: 10%;
   right: 10%;
-  bottom: 0;
   padding: 0px;
-  max-height: 50%;
   width: 80%;
   background-color: white;
   flex-direction: column;
@@ -36,7 +34,7 @@ const PopupContainer = styled.View`
 `;
 const ContentContainer = styled.View`
   padding: 10px;
-  padding-bottom: 20px;
+  padding-bottom: 15px;
   flex-direction: column;
   justify-content: space-between;
   flex: 10;
@@ -44,8 +42,8 @@ const ContentContainer = styled.View`
 const ButtonRow = styled.View`
   flex-direction: row;
   justify-content: space-evenly;
-  padding: 20px;
-  margin-bottom: 10px;
+  padding: 15px;
+  margin-bottom: 0px;
 `;
 
 interface Props {
