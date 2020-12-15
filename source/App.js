@@ -1,20 +1,16 @@
-/* eslint-disable react/state-in-constructor */
-/* eslint-disable react/no-unused-state */
-/* eslint-disable react/sort-comp */
 import React from 'react';
 import { Platform, UIManager } from 'react-native';
 import Config from 'react-native-config';
-import { ThemeProvider } from 'styled-components/native';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
-import Navigator from './navigator';
+import { ThemeProvider } from 'styled-components/native';
 import StorybookUIRoot from '../storybook';
-import theme from './styles/theme';
-
 import boundaryErrorHandler from './helpers/error-handler/ErrorHandler';
-import { CaseProvider } from './store/CaseContext';
+import Navigator from './navigator';
 import { AuthProvider } from './store/AuthContext';
+import { CaseProvider } from './store/CaseContext';
 import { FormProvider } from './store/FormContext';
 import { NotificationProvider } from './store/NotificationContext';
+import theme from './styles/theme';
 
 /**
  * Any setup and init for application goes here:
