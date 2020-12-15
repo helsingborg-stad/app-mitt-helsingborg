@@ -12,6 +12,7 @@ const CalendarPicker = () => {
       onSelect={(selectedDate) => {
         setDate(selectedDate);
       }}
+      value=""
     />
   );
 };
