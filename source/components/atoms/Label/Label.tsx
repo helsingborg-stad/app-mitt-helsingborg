@@ -5,18 +5,19 @@ import HelpButton from '../../molecules/HelpButton';
 import Text from '../Text';
 import theme from '../../../styles/theme';
 import { StyleProp, TextStyle } from 'react-native';
+import { PrimaryColor, getValidColorSchema } from '../../../styles/themeHelpers';
 
-const LabelText = styled(Text)<{size: 'small' | 'medium' | 'large'; color: keyof typeof theme.label.colors; }>`
-  font-size: ${props => theme.label[props.size].font};
-  color: ${props => theme.label.colors[props.color].text};
+const LabelText = styled(Text)<{size: 'small' | 'medium' | 'large'; color: PrimaryColor }>`
+  font-size: ${props => props.theme.label[props.size].font};
+  color: ${props => props.theme.label.colors[props.color].text};
   text-transform: uppercase;
   font-weight: bold;
   padding-bottom: 7px;
   padding-top: 5px;
 `;
-const LabelBorder = styled.View<{size: 'small' | 'medium' | 'large'; color: keyof typeof theme.label.colors; underline?: boolean; }>`
-  padding-bottom: ${props => theme.label[props.size].paddingBottom};
-  border-bottom-color: ${props => theme.label.colors[props.color].underline};
+const LabelBorder = styled.View<{size: 'small' | 'medium' | 'large'; color: PrimaryColor; underline?: boolean; }>`
+  padding-bottom: ${props => props.theme.label[props.size].paddingBottom};
+  border-bottom-color: ${props => props.theme.label.colors[props.color].underline};
   border-bottom-width: ${props => {
     if (props.underline === false) {
       return '0px';
@@ -49,7 +50,7 @@ const HelpWrapper = styled.View`
 
 interface Props {
   size?: 'small' | 'medium' | 'large';
-  color?: keyof typeof theme.label.colors;
+  colorSchema?: PrimaryColor;
   underline?: boolean;
   style: StyleProp<TextStyle>;
   help?: { text: string; size?: number; heading?: string; tagline?: string; url?: string };
@@ -59,11 +60,13 @@ interface Props {
  * Simple label for field inputs, that styles the text to all-caps, bold and optionally puts a line under.
  * Use like a Text component.
  */
-const Label: React.FC<Props> = ({ size, color, underline, style, help, ...other } ) => (
+const Label: React.FC<Props> = ({ size, colorSchema, underline, style, help, ...other } ) => {
+  const validColorSchema = getValidColorSchema(colorSchema);
+  return (
     <LabelContainer>
       <LabelWrapper>
-      <LabelBorder size={size} color={color} underline={underline}>
-        <LabelText size={size} color={color} style={style}>
+      <LabelBorder size={size} color={validColorSchema} underline={underline}>
+        <LabelText size={size} color={validColorSchema} style={style}>
           {other.children}
         </LabelText>
       </LabelBorder>
@@ -71,6 +74,7 @@ const Label: React.FC<Props> = ({ size, color, underline, style, help, ...other 
       {help && Object.keys(help).length > 0 && <HelpWrapper><HelpButton {...help} /></HelpWrapper>}
     </LabelContainer>
   );
+};
 
 Label.propTypes = {
   /**
@@ -80,7 +84,7 @@ Label.propTypes = {
   /**
    * Set a color theme which changes the text color and line color accordingly. 'light' is default.
    */
-  color: PropTypes.oneOf(Object.keys(theme.label.colors)),
+  colorSchema: PropTypes.oneOf(Object.keys(theme.colors.primary)),
   /**
    * Set a size, one of small, medium, large.
    */
@@ -103,7 +107,7 @@ Label.propTypes = {
 
 Label.defaultProps = {
   underline: true,
-  color: 'light',
+  colorSchema: 'blue',
   size: 'medium',
 };
 
