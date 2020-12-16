@@ -1,7 +1,7 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '14.0'
+platform :ios, '14.2'
 
 target 'MittHelsingborg' do
   config = use_native_modules!
@@ -22,8 +22,11 @@ target 'MittHelsingborg' do
     flipper_post_install(installer)
 
     installer.pods_project.targets.each do |t|
+      if t.name == "React-Core.common-AccessibilityResources"
+        target.remove_from_project
+      end
       t.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.2'
       end
     end
   end

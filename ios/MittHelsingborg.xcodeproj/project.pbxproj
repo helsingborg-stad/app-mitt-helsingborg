@@ -62,38 +62,38 @@
 		00E356EE1AD99517003FC87E /* MittHelsingborgTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MittHelsingborgTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* MittHelsingborgTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MittHelsingborgTests.m; sourceTree = "<group>"; };
-		05B0D31048264658840BADEC /* RobotoCondensed-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-BoldItalic.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-BoldItalic.ttf"; sourceTree = "<group>"; };
-		0728A8B03C4C48DEB3ED8269 /* RobotoCondensed-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Italic.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-Italic.ttf"; sourceTree = "<group>"; };
-		074483926D2C4567BE510E06 /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-MediumItalic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-MediumItalic.ttf"; sourceTree = "<group>"; };
-		0F0A6BDFA2DE4BC8865D15D0 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Italic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Italic.ttf"; sourceTree = "<group>"; };
+		05B0D31048264658840BADEC /* RobotoCondensed-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-BoldItalic.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-BoldItalic.ttf"; sourceTree = "<group>"; };
+		0728A8B03C4C48DEB3ED8269 /* RobotoCondensed-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Italic.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-Italic.ttf"; sourceTree = "<group>"; };
+		074483926D2C4567BE510E06 /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-MediumItalic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-MediumItalic.ttf"; sourceTree = "<group>"; };
+		0F0A6BDFA2DE4BC8865D15D0 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Italic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Italic.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* MittHelsingborg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MittHelsingborg.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = MittHelsingborg/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = MittHelsingborg/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MittHelsingborg/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MittHelsingborg/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MittHelsingborg/main.m; sourceTree = "<group>"; };
-		1960C15A6EA54D909C099E54 /* RobotoCondensed-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Light.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-Light.ttf"; sourceTree = "<group>"; };
+		1960C15A6EA54D909C099E54 /* RobotoCondensed-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Light.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-Light.ttf"; sourceTree = "<group>"; };
 		1EFC753542708325CDC4FF45 /* libPods-MittHelsingborg-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MittHelsingborg-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FC1D785836B9D7FE1D90E45 /* Pods-MittHelsingborg.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg.release.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg/Pods-MittHelsingborg.release.xcconfig"; sourceTree = "<group>"; };
-		1FDACB77FCCB43A89AC50E6E /* RobotoCondensed-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Bold.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-Bold.ttf"; sourceTree = "<group>"; };
-		2093998FCDDE45D7A02490BE /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-ThinItalic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-ThinItalic.ttf"; sourceTree = "<group>"; };
+		1FDACB77FCCB43A89AC50E6E /* RobotoCondensed-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Bold.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-Bold.ttf"; sourceTree = "<group>"; };
+		2093998FCDDE45D7A02490BE /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-ThinItalic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-ThinItalic.ttf"; sourceTree = "<group>"; };
 		25B0DAE68D7408CBC5940091 /* Pods-MittHelsingborg-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-tvOSTests/Pods-MittHelsingborg-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* MittHelsingborg-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MittHelsingborg-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* MittHelsingborg-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MittHelsingborg-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3159A36AACEF4513B71671BE /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Regular.ttf"; sourceTree = "<group>"; };
-		34BCC162F1CE44C186496BB3 /* RobotoCondensed-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-LightItalic.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-LightItalic.ttf"; sourceTree = "<group>"; };
-		3D917A584BDA427591DBBD26 /* Roboto-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Light.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Light.ttf"; sourceTree = "<group>"; };
-		44EE4E1DD89840ED8D92D5B5 /* Roboto-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Black.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Black.ttf"; sourceTree = "<group>"; };
+		3159A36AACEF4513B71671BE /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		34BCC162F1CE44C186496BB3 /* RobotoCondensed-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-LightItalic.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-LightItalic.ttf"; sourceTree = "<group>"; };
+		3D917A584BDA427591DBBD26 /* Roboto-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Light.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Light.ttf"; sourceTree = "<group>"; };
+		44EE4E1DD89840ED8D92D5B5 /* Roboto-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Black.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Black.ttf"; sourceTree = "<group>"; };
 		4664D349054F76745F3E4489 /* Pods-MittHelsingborg-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-tvOSTests/Pods-MittHelsingborg-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		4DAFB2A8341147D895F641AA /* RobotoCondensed-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Regular.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-Regular.ttf"; sourceTree = "<group>"; };
+		4DAFB2A8341147D895F641AA /* RobotoCondensed-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Regular.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-Regular.ttf"; sourceTree = "<group>"; };
 		4EBCFF9D26AC71F97A2EB44E /* libPods-MittHelsingborg-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MittHelsingborg-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		512A97400AC6682161FFD9F3 /* Pods-MittHelsingborg-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-tvOS.release.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-tvOS/Pods-MittHelsingborg-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		53C8516DAAE54336B68B6A5E /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Medium.ttf"; sourceTree = "<group>"; };
-		6B61672C9D7743C89BA4441B /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BoldItalic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-BoldItalic.ttf"; sourceTree = "<group>"; };
-		7AA3DAC1B8164DFBBA19BD3D /* Roboto-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Thin.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Thin.ttf"; sourceTree = "<group>"; };
+		53C8516DAAE54336B68B6A5E /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		6B61672C9D7743C89BA4441B /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BoldItalic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-BoldItalic.ttf"; sourceTree = "<group>"; };
+		7AA3DAC1B8164DFBBA19BD3D /* Roboto-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Thin.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Thin.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MittHelsingborg/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9A326D14488E70636647260F /* libPods-MittHelsingborg.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MittHelsingborg.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A544CADD89924D05BF014496 /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-LightItalic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-LightItalic.ttf"; sourceTree = "<group>"; };
+		A544CADD89924D05BF014496 /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-LightItalic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-LightItalic.ttf"; sourceTree = "<group>"; };
 		B2BC2DEEB308C675D5A91B9B /* libPods-MittHelsingborg-MittHelsingborgTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MittHelsingborg-MittHelsingborgTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC6FD6D24CEFC6E119CFA932 /* Pods-MittHelsingborg-MittHelsingborgTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-MittHelsingborgTests.debug.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-MittHelsingborgTests/Pods-MittHelsingborg-MittHelsingborgTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D0FC8DCB88A038D8D2D892F9 /* Pods-MittHelsingborg-MittHelsingborgTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-MittHelsingborgTests.release.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-MittHelsingborgTests/Pods-MittHelsingborg-MittHelsingborgTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -101,8 +101,8 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		FBD95C809B2C3CA75DC6096C /* Pods-MittHelsingborg-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-tvOS/Pods-MittHelsingborg-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		FC5C30E68A674B91993BD43D /* Roboto-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Bold.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Bold.ttf"; sourceTree = "<group>"; };
-		FCEFA808E6CF4CCEA8AE4173 /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BlackItalic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
+		FC5C30E68A674B91993BD43D /* Roboto-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Bold.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		FCEFA808E6CF4CCEA8AE4173 /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BlackItalic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,7 +181,6 @@
 				4DAFB2A8341147D895F641AA /* RobotoCondensed-Regular.ttf */,
 			);
 			name = Resources;
-			path = "";
 			sourceTree = "<group>";
 		};
 		13B07FAE1A68108700A75B9A /* MittHelsingborg */ = {
@@ -257,7 +256,6 @@
 				4664D349054F76745F3E4489 /* Pods-MittHelsingborg-tvOSTests.debug.xcconfig */,
 				25B0DAE68D7408CBC5940091 /* Pods-MittHelsingborg-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -358,6 +356,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = MHBEW6TVG2;
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -851,16 +850,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 9;
+				DEVELOPMENT_TEAM = MHBEW6TVG2;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MittHelsingborg/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 3.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = works.hbg.MittHelsingborg;
 				PRODUCT_NAME = MittHelsingborg;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -874,15 +875,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 9;
+				DEVELOPMENT_TEAM = MHBEW6TVG2;
 				INFOPLIST_FILE = MittHelsingborg/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 3.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = works.hbg.MittHelsingborg;
 				PRODUCT_NAME = MittHelsingborg;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -909,7 +912,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.MittHelsingborg-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = works.hbg.MittHelsingborg;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -937,7 +940,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.MittHelsingborg-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = works.hbg.MittHelsingborg;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -1046,7 +1049,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
@@ -1099,7 +1102,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
