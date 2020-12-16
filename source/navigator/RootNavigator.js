@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { SplashScreen, FormCaseScreen } from '../screens';
 import AuthStack from './AuthStack';
 import BottomBarNavigator from './BottomBarNavigator';
+import CustomStackNavigator from './CutsomStackNavigator';
 
 const Stack = createStackNavigator();
 
@@ -14,7 +15,7 @@ const forFade = ({ current }) => ({
 });
 
 const RootStack = () => (
-  <Stack.Navigator initialRouteName="Start" screenOptions={{ headerShown: false }}>
+  <CustomStackNavigator initialRouteName="Start" screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Start" component={SplashScreen} />
     <Stack.Screen name="Auth" component={AuthStack} options={{ cardStyleInterpolator: forFade }} />
     <Stack.Screen
@@ -29,7 +30,7 @@ const RootStack = () => (
         gestureEnabled: false,
       }}
     />
-  </Stack.Navigator>
+  </CustomStackNavigator>
 );
 
 export default RootStack;
