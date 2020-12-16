@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { SplashScreen, FormCaseScreen } from '../screens';
 import AuthStack from './AuthStack';
 import BottomBarNavigator from './BottomBarNavigator';
-import CustomStackNavigator from './CutsomStackNavigator';
+import CustomStackNavigator from './CustomStackNavigator';
 
 const Stack = createStackNavigator();
 

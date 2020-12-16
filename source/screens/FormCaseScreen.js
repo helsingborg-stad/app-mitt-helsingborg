@@ -8,7 +8,7 @@ import { StatusBar, ActivityIndicator } from 'react-native';
 import Form from '../containers/Form/Form';
 import { getFormQuestions } from '../helpers/CaseDataConverter';
 import generateInitialCaseAnswers from '../store/actions/dynamicFormData';
-import UserInactivity from '../containers/UserInactivity/UserInactivity';
+import ScreenWrapper from '../components/molecules/ScreenWrapper';
 
 const SpinnerContainer = styled.View`
   flex: 1;
@@ -16,7 +16,7 @@ const SpinnerContainer = styled.View`
   align-items: center;
 `;
 
-const FormScreenWrapper = styled(UserInactivity)`
+const FormScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
   flex: 1;
 `;
