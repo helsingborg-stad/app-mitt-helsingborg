@@ -63,7 +63,7 @@ const CustomStackNavigator = ({
     screenOptions,
     initialRouteName,
   });
-  const { panResponder, handleLogout, handleContinueSession, isActive } = useContext(AuthContext);
+  const { panResponder, handleLogout, handleContinueSession, isActive, isAuthenticated } = useContext(AuthContext);
   
   const handleEndUserSession = async () => {
     await handleLogout();
@@ -82,7 +82,7 @@ const CustomStackNavigator = ({
       </FlexWrapper>
     </NavigationHelpersContext.Provider>
     <Modal 
-      visible={!isActive}
+      visible={!isActive && isAuthenticated}
       transparent 
       presentationStyle="overFullScreen"
       animationType="fade" >
