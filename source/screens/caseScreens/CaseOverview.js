@@ -1,12 +1,15 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { Animated, Easing } from 'react-native';
+<<<<<<< HEAD
+=======
+import { Icon, Text } from 'app/components/atoms';
+import { Card, Header } from 'app/components/molecules';
+import { CaseDispatch, CaseState, caseStatus, caseTypes } from 'app/store/CaseContext';
+import FormContext from 'app/store/FormContext';
 import PropTypes from 'prop-types';
+import icons from 'source/helpers/Icons';
 import styled from 'styled-components/native';
-import { Icon, Text } from '../../components/atoms';
-import { Card, Header, ScreenWrapper } from '../../components/molecules';
-import { CaseDispatch, CaseState, caseStatus, caseTypes } from '../../store/CaseContext';
-import FormContext from '../../store/FormContext';
-import icons from '../../helpers/Icons';
+>>>>>>> remove git merge markers that I somehow missed
+import { Animated, Easing } from 'react-native';
 import { formatUpdatedAt } from '../../helpers/DateHelpers';
 import UserInactivity from '../../containers/UserInactivity/UserInactivity';
 
