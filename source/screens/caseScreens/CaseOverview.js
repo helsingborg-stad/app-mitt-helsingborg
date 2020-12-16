@@ -95,7 +95,6 @@ const computeCaseCardComponent = (status, latestCase, form, caseType, navigation
               Steg {currentStep} / {totalSteps}
             </Card.SubTitle>
             <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
-            <Card.Text italic>Senast uppdaterad {updatedAt}</Card.Text>
             <Card.Button
               onClick={() => {
                 navigation.navigate('Form', { caseId: latestCase.id });
@@ -127,7 +126,6 @@ const computeCaseCardComponent = (status, latestCase, form, caseType, navigation
             <Card.Image source={icons[caseType.icon]} />
             <Card.Title>{caseType.name}</Card.Title>
             <Card.SubTitle>Inskickad</Card.SubTitle>
-            <Card.Text italic>Skickades in {updatedAt}</Card.Text>
             <Card.Button
               onClick={() => {
                 navigation.navigate('UserEvents', {
