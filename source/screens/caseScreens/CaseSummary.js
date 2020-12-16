@@ -9,7 +9,7 @@ import styled from 'styled-components/native';
 import icons from '../../helpers/Icons';
 import { launchPhone, launchEmail } from '../../helpers/LaunchExternalApp';
 import { formatUpdatedAt, getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
-import UserInactivity from '../../containers/UserInactivity/UserInactivity';
+import ScreenWrapper from '../../components/molecules/ScreenWrapper';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -77,7 +77,7 @@ const CaseSummary = (props) => {
   }, [fadeAnimation]);
 
   return (
-    <UserInactivity {...props}>
+    <ScreenWrapper {...props}>
       <Container as={Animated.ScrollView} style={{ opacity: fadeAnimation }}>
         {status === 'submitted' && (
           <>
@@ -156,7 +156,7 @@ const CaseSummary = (props) => {
           </View>
         )}
       </Container>
-    </UserInactivity>
+    </ScreenWrapper>
   );
 };
 

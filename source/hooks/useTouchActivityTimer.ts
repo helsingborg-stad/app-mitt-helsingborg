@@ -8,9 +8,11 @@ export interface UseTouchActivityProps {
   inactivityTimeoutTime: number;
 }
 
-
-function useTouchActivityTimer({isActive, onTouchActivity, inactivityTimeoutTime}: UseTouchActivityProps) {
-
+function useTouchActivityTimer({
+  isActive,
+  onTouchActivity,
+  inactivityTimeoutTime,
+}: UseTouchActivityProps) {
   const initialActive = isActive === undefined ? true : isActive;
   const [active, setActive] = useState(initialActive);
 
@@ -25,10 +27,15 @@ function useTouchActivityTimer({isActive, onTouchActivity, inactivityTimeoutTime
   /**
    * The timeout is reset when either `date` or `inactivityTimeoutTime` change.
    */
-  const cancelTimer = useTimeout(() => {
-    setActive(false);
-    onTouchActivity(date, false);
-  }, inactivityTimeoutTime, defaultTimeoutHandler, [date, inactivityTimeoutTime])
+  const cancelTimer = useTimeout(
+    () => {
+      setActive(false);
+      onTouchActivity(date, false);
+    },
+    inactivityTimeoutTime,
+    defaultTimeoutHandler,
+    [date, inactivityTimeoutTime]
+  );
 
   const isFirstRender = useRef(true);
 
@@ -40,7 +47,7 @@ function useTouchActivityTimer({isActive, onTouchActivity, inactivityTimeoutTime
     if (isFirstRender.current) {
       isFirstRender.current = false;
     } else {
-      onTouchActivity(date, active)
+      onTouchActivity(date, active);
     }
   }, [date, active]);
 
@@ -56,7 +63,7 @@ function useTouchActivityTimer({isActive, onTouchActivity, inactivityTimeoutTime
     /**
      * Causes useTimeout to restart
      */
-    setDate(Date.now())
+    setDate(Date.now());
   }
 
   /**
@@ -64,17 +71,19 @@ function useTouchActivityTimer({isActive, onTouchActivity, inactivityTimeoutTime
    * must return false.
    */
   function resetTimerForPanResponder() {
-    resetTimerDueToActivity()
+    resetTimerDueToActivity();
     return false;
   }
 
-  const [panResponder] = useState(PanResponder.create({
+  const [panResponder] = useState(
+    PanResponder.create({
       onMoveShouldSetPanResponderCapture: resetTimerForPanResponder,
       onPanResponderTerminationRequest: resetTimerForPanResponder,
       onStartShouldSetPanResponderCapture: resetTimerForPanResponder,
-  }),)
+    })
+  );
 
-  return {panResponder}
+  return { panResponder };
 }
 
 export default useTouchActivityTimer;

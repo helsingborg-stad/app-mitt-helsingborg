@@ -7,9 +7,9 @@ import AuthContext from 'app/store/AuthContext';
 import PropTypes from 'prop-types';
 import env from 'react-native-config';
 import { StorageService } from 'app/services';
-import UserInactivity from '../containers/UserInactivity/UserInactivity';
+import { ScreenWrapper } from '../components/molecules';
 
-const ProfileScreenWrapper = styled(UserInactivity)`
+const ProfileScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
 `;
 

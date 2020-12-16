@@ -11,7 +11,7 @@ import styled from 'styled-components/native';
 >>>>>>> remove git merge markers that I somehow missed
 import { Animated, Easing } from 'react-native';
 import { formatUpdatedAt } from '../../helpers/DateHelpers';
-import UserInactivity from '../../containers/UserInactivity/UserInactivity';
+import ScreenWrapper from '../../components/molecules/ScreenWrapper';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -200,7 +200,7 @@ function CaseOverview(props) {
   }, [createCase, getCasesByFormIds, getForm, getFormIdsByFormTypes, navigation]);
 
   return (
-    <UserInactivity {...props}>
+    <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
       <Container>
         <Message colorSchema={colorSchema}>
@@ -227,7 +227,7 @@ function CaseOverview(props) {
           </Animated.View>
         )}
       </Container>
-    </UserInactivity>
+    </ScreenWrapper>
   );
 }
 
