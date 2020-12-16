@@ -3,6 +3,11 @@ apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.grad
 
 import com.android.build.OutputFile
 
+// Load keystore
+def keystorePropertiesFile = rootProject.file("keystore.properties");
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
  * and bundleReleaseJsAndAssets).
@@ -151,6 +156,14 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            if (keystoreProperties['MH_UPLOAD_STORE_FILE']) {
+                storeFile file(keystoreProperties['MH_UPLOAD_STORE_FILE'])
+                storePassword keystoreProperties['MH_UPLOAD_STORE_PASSWORD']
+                keyAlias keystoreProperties['MH_UPLOAD_KEY_ALIAS']
+                keyPassword keystoreProperties['MH_UPLOAD_KEY_PASSWORD']
+            }
+        }
     }
     buildTypes {
         debug {
@@ -159,9 +172,9 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
 
