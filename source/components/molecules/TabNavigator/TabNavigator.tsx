@@ -11,12 +11,15 @@ import TabNavigatorItem from './TabNavigatorItem';
 import { PrimaryColor } from '../../../styles/themeHelpers';
 
 const BarWrapper = styled.View`
+  background-color: ${(props) => props.theme.colors.neutrals[5]};
+  border-top-color: ${(props) => props.theme.border.default};
+  border-top-width: 1px;
   flex-direction: row;
   justify-content: space-evenly;
-  box-shadow: 0px -1px 0px rgba(86, 86, 86, 0.1);
   padding-left: 20px;
   padding-right: 20px;
 `;
+
 const FlexWrapper = styled.View`
   flex: 1;
 `;
