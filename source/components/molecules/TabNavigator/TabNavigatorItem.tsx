@@ -9,26 +9,29 @@ import { PrimaryColor } from '../../../styles/themeHelpers';
 const FlexWrapper = styled.TouchableOpacity`
   flex: 1;
 `;
+
 const TabBarItem = styled.View`
-  height: 70px;
+  padding-top: 16px;
+  padding-bottom: 16px;
   flex-direction: column;
   justify-content: flex-start;
-  margin-top: 20px;
 `;
+
 const Row = styled.View`
   flex-direction: row;
   justify-content: space-evenly;
   margin-bottom: 5px;
 `;
-const LabelText = styled(Text)<{color: PrimaryColor}>`
-  color: ${({theme, color}) => theme.colors.primary[color][0]};
+
+const LabelText = styled(Text) <{ color: PrimaryColor }>`
+  color: ${({ theme, color }) => theme.colors.primary[color][0]};
 `;
-  
+
 const Underline = styled.View<{ color: PrimaryColor; visible: boolean }>`
   width: 70%;
   margin-left: 15%;
   height: 2px;
-  background-color: ${({theme, color, visible}) => visible ? theme.colors.complementary[color][0] : 'transparent'};
+  background-color: ${({ theme, color, visible }) => visible ? theme.colors.complementary[color][0] : 'transparent'};
   border-radius: 1px;
 `;
 
@@ -40,7 +43,7 @@ interface Props {
     title?: string;
     tabBarIcon: () => React.ReactNode;
     tabBarIconInactive: () => React.ReactNode;
-}, {}>;
+  }, {}>;
   state: TabNavigationState;
   active?: boolean;
   color: PrimaryColor;
@@ -82,9 +85,9 @@ const TabNavigatorItem: React.FC<Props> = ({
 );
 
 TabNavigatorItem.propTypes = {
-  color: PropTypes.oneOf(['red','green','purple','blue','neutral']).isRequired,
+  color: PropTypes.oneOf(['red', 'green', 'purple', 'blue', 'neutral']).isRequired,
   active: PropTypes.bool,
-  route: PropTypes.shape({ name: PropTypes.string.isRequired, key: PropTypes.string.isRequired}).isRequired,
+  route: PropTypes.shape({ name: PropTypes.string.isRequired, key: PropTypes.string.isRequired }).isRequired,
   descriptor: PropTypes.object.isRequired,
   state: PropTypes.object.isRequired,
   navigation: PropTypes.object.isRequired,
