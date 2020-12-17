@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, StatusBar } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import styled from 'styled-components';
 import { ScreenWrapper } from '../components/molecules';
 import Form from '../containers/Form/Form';
