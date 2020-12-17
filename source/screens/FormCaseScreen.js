@@ -1,15 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { StatusBar, ActivityIndicator } from 'react-native';
-import { Card, Header, ScreenWrapper } from '../components/molecules';
-import { Button, Text } from '../components/atoms';
+import React, { useContext, useEffect, useState } from 'react';
+import { ActivityIndicator, StatusBar } from 'react-native';
+import styled from 'styled-components';
+import { ScreenWrapper } from '../components/molecules';
 import Form from '../containers/Form/Form';
-import AuthContext from '../store/AuthContext';
-import FormContext from '../store/FormContext';
-import { CaseDispatch, CaseState } from '../store/CaseContext';
 import { getFormQuestions } from '../helpers/CaseDataConverter';
 import generateInitialCaseAnswers from '../store/actions/dynamicFormData';
+import AuthContext from '../store/AuthContext';
+import { CaseDispatch, CaseState } from '../store/CaseContext';
+import FormContext from '../store/FormContext';
 
 const SpinnerContainer = styled.View`
   flex: 1;
@@ -77,36 +76,30 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
     navigation.navigate('App', { screen: 'UserEvents' });
   }
 
+  if (!form?.steps) {
+    return (
+      <SpinnerContainer>
+        <ActivityIndicator size="large" color="slategray" />
+      </SpinnerContainer>
+    );
+  }
+
   return (
     <FormScreenWrapper>
       <StatusBar hidden />
-      {form?.steps ? (
-        <Form
-          steps={form.steps}
-          connectivityMatrix={form.connectivityMatrix}
-          initialPosition={caseData?.currentPosition || initialCase?.currentPosition}
-          user={user}
-          onClose={handleCloseForm}
-          onStart={handleStartForm}
-          onSubmit={handleSubmitForm}
-          initialAnswers={initialCase?.data || caseData.data || {}}
-          status={initialCase.status || 'ongoing'}
-          updateCaseInContext={updateCaseContext}
-          {...props}
-        />
-      ) : (
-        <SpinnerContainer>
-          <ActivityIndicator size="large" color="slategray" />
-          <Button
-            onClick={() => {
-              navigation.goBack();
-            }}
-            style={[{ marginTop: 100 }]}
-          >
-            <Text>Avbryt</Text>
-          </Button>
-        </SpinnerContainer>
-      )}
+      <Form
+        steps={form.steps}
+        connectivityMatrix={form.connectivityMatrix}
+        initialPosition={caseData?.currentPosition || initialCase?.currentPosition}
+        user={user}
+        onClose={handleCloseForm}
+        onStart={handleStartForm}
+        onSubmit={handleSubmitForm}
+        initialAnswers={initialCase?.data || caseData.data || {}}
+        status={initialCase.status || 'ongoing'}
+        updateCaseInContext={updateCaseContext}
+        {...props}
+      />
     </FormScreenWrapper>
   );
 };
