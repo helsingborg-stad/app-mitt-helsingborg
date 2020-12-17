@@ -7,16 +7,26 @@ export const initialState = {
   error: null,
   status: 'idle',
   isBankidInstalled: false,
+  // testing...
+  showInactivityDialog: false,
+  latestActivityTime: Date.now(),
 };
 
 export default function AuthReducer(state, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case actionTypes.updateIsActive: {
+    case actionTypes.updateActivityTime: {
       return {
         ...state,
-        isActive: payload.isActive,
+        latestActivityTime: payload.activityTime,
+      };
+    }
+
+    case actionTypes.toggleInactivityDialog: {
+      return {
+        ...state,
+        showInactivityDialog: payload.showInactivityDialog,
       };
     }
 

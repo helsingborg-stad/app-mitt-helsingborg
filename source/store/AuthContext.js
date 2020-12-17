@@ -1,8 +1,10 @@
-import React, { useEffect, useReducer, useCallback } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
+import { PanResponder } from 'react-native';
 import env from 'react-native-config';
 import * as authService from '../services/AuthService';
 import AuthReducer, { initialState as defaultInitialState } from './reducers/AuthReducer';
+import useInterval from '../helpers/useInterval';
 import {
   startAuth,
   cancelOrder,
@@ -15,9 +17,9 @@ import {
   startSign,
   setStatus,
   checkIsBankidInstalled,
-  updateIsActive,
+  updateLatestActivityTime,
+  toggleInactivityDialog,
 } from './actions/AuthActions';
-import useTouchActivityTimer from '../hooks/useTouchActivityTimer';
 
 const AuthContext = React.createContext();
 
@@ -38,6 +40,17 @@ function AuthProvider({ children, initialState }) {
     handleCheckOrderStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.status, state.orderRef, state.autoStartToken]);
+
+  // inactivity tracking logic. Not sure this is correct place for these values.
+  const inactivityTime = 15000;
+  const inactivityCheckingPeriod = 5000;
+
+  const intervalInactivityCheck = () => {
+    if (Date.now() - state.latestActivityTime > inactivityTime && !state.showInactivityDialog) {
+      dispatch(toggleInactivityDialog(true));
+    }
+  };
+  useInterval(intervalInactivityCheck, inactivityCheckingPeriod);
 
   /**
    * Check if Bankid App is installed on clients machine
@@ -93,11 +106,9 @@ function AuthProvider({ children, initialState }) {
     dispatch(loginSuccess());
   }
 
-  function handleTouchActivity(date, active) {
-    console.log(date, active);
-    if (!active) {
-      dispatch(updateIsActive(false));
-    }
+  /** Updates the latest activity time on each touch event */
+  function handleTouchActivity(date) {
+    dispatch(updateLatestActivityTime(date));
   }
 
   /**
@@ -108,7 +119,8 @@ function AuthProvider({ children, initialState }) {
   }
 
   async function handleContinueSession() {
-    dispatch(updateIsActive(true));
+    dispatch(toggleInactivityDialog(false));
+    dispatch(updateLatestActivityTime(Date.now()));
   }
 
   /**
@@ -152,10 +164,10 @@ function AuthProvider({ children, initialState }) {
     return false;
   }
 
-  const { panResponder } = useTouchActivityTimer({
-    isActive: false,
-    onTouchActivity: handleTouchActivity,
-    inactivityTimeoutTime: 15000,
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponderCapture: handleTouchActivity,
+    onPanResponderTerminationRequest: handleTouchActivity,
+    onStartShouldSetPanResponderCapture: handleTouchActivity,
   });
 
   const contextValues = {
