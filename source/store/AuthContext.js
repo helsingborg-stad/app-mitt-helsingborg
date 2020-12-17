@@ -4,7 +4,7 @@ import { PanResponder } from 'react-native';
 import env from 'react-native-config';
 import * as authService from '../services/AuthService';
 import AuthReducer, { initialState as defaultInitialState } from './reducers/AuthReducer';
-import useInterval from '../helpers/useInterval';
+import useInterval from '../hooks/useInterval';
 import {
   startAuth,
   cancelOrder,
