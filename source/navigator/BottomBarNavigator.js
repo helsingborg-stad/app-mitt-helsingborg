@@ -1,11 +1,13 @@
 /* eslint-disable global-require */
-import React from 'react';
-import styled from 'styled-components/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import React from 'react';
+import { StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ProfileScreen, HomeScreen } from '../screens';
-import CaseNavigator from './CaseNavigator';
+import styled from 'styled-components/native';
 import TabNavigator from '../components/molecules/TabNavigator';
+import { HomeScreen, ProfileScreen } from '../screens';
+import theme from '../styles/theme';
+import CaseNavigator from './CaseNavigator';
 
 const TabBarImage = styled.Image`
   width: 25px;
@@ -20,6 +22,7 @@ const SafeAreaViewContainer = styled(SafeAreaView)`
 const Tab = createMaterialTopTabNavigator();
 const BottomBarStack = () => (
   <SafeAreaViewContainer edges={['right', 'bottom', 'left']}>
+    <StatusBar barStyle="dark-content" backgroundColor={theme.colors.neutrals[5]} />
     <TabNavigator screenOptions={{ headerShown: false }} initialRouteName="UserEvents">
       <Tab.Screen
         name="UserEvents"
