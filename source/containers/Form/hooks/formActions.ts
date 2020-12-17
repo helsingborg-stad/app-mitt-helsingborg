@@ -166,7 +166,20 @@ export function goBackToMainForm(state: FormReducerState) {
     currentPosition: {...currentPosition, index: currentPosition.currentMainStepIndex, level: 0 }
   }
 }
+/**
+ * Goes back to the main form, and then to the next step.
+ * @param state current form state
+ */
+export function goBackToMainFormAndNext(state: FormReducerState) {
+  const { currentPosition } = state;
 
+  const nextMainStepIndex = currentPosition.currentMainStepIndex < state.numberOfMainSteps-2 ? currentPosition.currentMainStepIndex + 1 : currentPosition.currentMainStep;
+
+  return {
+    ...state,
+    currentPosition: {...currentPosition, index: nextMainStepIndex, currentMainStepIndex: nextMainStepIndex, level: 0 },
+  };
+}
 /**
  * Action to run when starting a form.
  * @param {object} state the current state of the form

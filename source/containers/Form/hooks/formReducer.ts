@@ -14,6 +14,7 @@ import {
   validateAnswer,
   validateAllStepAnswers,
   dirtyField,
+  goBackToMainFormAndNext,
 } from './formActions';
 
 type Action =
@@ -42,6 +43,9 @@ type Action =
     }
   | {
       type: 'GO_TO_MAIN_FORM';
+    }
+  | {
+      type: 'GO_TO_MAIN_FORM_AND_NEXT';
     }
   | {
       type: 'START_FORM';
@@ -122,7 +126,9 @@ function formReducer(state: FormReducerState, action: Action) {
     case 'GO_TO_MAIN_FORM': {
       return goBackToMainForm(state);
     }
-
+    case 'GO_TO_MAIN_FORM_AND_NEXT': {
+      return goBackToMainFormAndNext(state);
+    }
     case 'START_FORM': {
       return startForm(state, action.payload);
     }
