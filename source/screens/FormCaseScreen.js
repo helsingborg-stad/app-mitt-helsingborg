@@ -86,7 +86,6 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
 
   return (
     <FormScreenWrapper>
-      <StatusBar hidden />
       <Form
         steps={form.steps}
         connectivityMatrix={form.connectivityMatrix}
