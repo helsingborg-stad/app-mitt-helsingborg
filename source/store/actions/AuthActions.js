@@ -19,15 +19,24 @@ export const actionTypes = {
   setStatus: 'SET_STATUS',
   signSuccess: 'SIGN_SUCCESS',
   setIsBankidInstalled: 'SET_INSTALLED',
-  updateIsActive: 'UPDATE_IS_ACTIVE',
+  updateActivityTime: 'UPDATE_ACTIVITY_TIME',
+  toggleInactivityDialog: 'TOGGLE_INACTIVITY_DIALOG',
 };
 
-export function updateIsActive(active) {
-  console.log('UpdateIsActive', active);
+export function updateLatestActivityTime(date) {
   return {
-    type: actionTypes.updateIsActive,
+    type: actionTypes.updateActivityTime,
     payload: {
-      isActive: active,
+      activityTime: date,
+    },
+  };
+}
+
+export function toggleInactivityDialog(showInactivityDialog) {
+  return {
+    type: actionTypes.toggleInactivityDialog,
+    payload: {
+      showInactivityDialog,
     },
   };
 }

@@ -67,8 +67,8 @@ const CustomStackNavigator = ({
     panResponder,
     handleLogout,
     handleContinueSession,
-    isActive,
     isAuthenticated,
+    showInactivityDialog,
   } = useContext(AuthContext);
 
   const handleEndUserSession = async () => {
@@ -90,7 +90,7 @@ const CustomStackNavigator = ({
 
   const InactivityDialogComponent = (
     <Modal
-      visible={!isActive && isAuthenticated}
+      visible={showInactivityDialog && isAuthenticated}
       transparent
       presentationStyle="overFullScreen"
       animationType="fade"
