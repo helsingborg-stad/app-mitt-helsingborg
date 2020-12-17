@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { Text } from 'react-native';
+import { StatusBar, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { color } from 'react-native-reanimated';
 import AuthContext from '../../../store/AuthContext';
 import { AuthLoading } from '../../molecules';
 import FormField from '../../../containers/FormField';
@@ -11,6 +13,7 @@ import StepFooter from './StepFooter/StepFooter';
 import StepDescription from './StepDescription/StepDescription';
 import Progressbar from '../../atoms/Progressbar/Progressbar';
 import CloseDialog from './CloseDialog/CloseDialog';
+import globalTheme from '../../../styles/theme';
 
 const StepContainer = styled.View`
   background: ${(props) => props.theme.colors.neutrals[7]};
@@ -99,6 +102,10 @@ function Step({
 
   return (
     <StepContainer>
+      <SafeAreaView
+        style={{ backgroundColor: globalTheme.colors.complementary[colorSchema || 'blue'][0] }}
+        edges={['top', 'right', 'left']}
+      />
       <CloseDialog
         visible={closeDialogVisible}
         closeForm={closeForm}
@@ -149,7 +156,7 @@ function Step({
                       value={answers[field.id] || ''}
                       answers={answers}
                       validationErrors={validation}
-                      colorSchema={field.color && field.color !== '' ? field.color : colorSchema }
+                      colorSchema={field.color && field.color !== '' ? field.color : colorSchema}
                       id={field.id}
                       formNavigation={formNavigation}
                       {...field}
