@@ -1,19 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import { StatusBar, Text } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { color } from 'react-native-reanimated';
-import AuthContext from '../../../store/AuthContext';
-import { AuthLoading } from '../../molecules';
+import styled from 'styled-components/native';
 import FormField from '../../../containers/FormField';
-import BackNavigation from '../../molecules/BackNavigation/BackNavigation';
-import Banner from './StepBanner/StepBanner';
-import StepFooter from './StepFooter/StepFooter';
-import StepDescription from './StepDescription/StepDescription';
-import Progressbar from '../../atoms/Progressbar/Progressbar';
-import CloseDialog from './CloseDialog/CloseDialog';
+import AuthContext from '../../../store/AuthContext';
 import globalTheme from '../../../styles/theme';
+import Progressbar from '../../atoms/Progressbar/Progressbar';
+import { AuthLoading } from '../../molecules';
+import BackNavigation from '../../molecules/BackNavigation/BackNavigation';
+import CloseDialog from './CloseDialog/CloseDialog';
+import Banner from './StepBanner/StepBanner';
+import StepDescription from './StepDescription/StepDescription';
+import StepFooter from './StepFooter/StepFooter';
 
 const StepContainer = styled.View`
   background: ${(props) => props.theme.colors.neutrals[7]};
