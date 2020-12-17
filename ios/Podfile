@@ -22,9 +22,6 @@ target 'MittHelsingborg' do
     flipper_post_install(installer)
 
     installer.pods_project.targets.each do |t|
-      if t.name == "React-Core.common-AccessibilityResources"
-        target.remove_from_project
-      end
       t.build_configurations.each do |config|
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.2'
       end
