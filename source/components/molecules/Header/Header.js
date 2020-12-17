@@ -30,7 +30,7 @@ const HeaderHeading = styled(Heading)`
 
 const HeaderContent = styled.View`
   justify-content: flex-end;
-  height: 110px;
+  height: 90px;
 `;
 
 const Separator = styled.View`
