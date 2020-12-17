@@ -3,6 +3,7 @@ import { Platform, UIManager } from 'react-native';
 import Config from 'react-native-config';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
 import { ThemeProvider } from 'styled-components/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import StorybookUIRoot from '../storybook';
 import boundaryErrorHandler from './helpers/error-handler/ErrorHandler';
 import Navigator from './navigator';
@@ -32,32 +33,36 @@ const App = () => {
   }
   if (Config.IS_STORYBOOK === 'true') {
     return (
+      <SafeAreaProvider>
+        <AuthProvider>
+          <CaseProvider>
+            <FormProvider>
+              <ThemeProvider theme={theme}>
+                <NotificationProvider>
+                  <StorybookUIRoot />
+                </NotificationProvider>
+              </ThemeProvider>
+            </FormProvider>
+          </CaseProvider>
+        </AuthProvider>
+      </SafeAreaProvider>
+    );
+  }
+
+  return (
+    <SafeAreaProvider>
       <AuthProvider>
         <CaseProvider>
           <FormProvider>
             <ThemeProvider theme={theme}>
               <NotificationProvider>
-                <StorybookUIRoot />
+                <Navigator />
               </NotificationProvider>
             </ThemeProvider>
           </FormProvider>
         </CaseProvider>
       </AuthProvider>
-    );
-  }
-
-  return (
-    <AuthProvider>
-      <CaseProvider>
-        <FormProvider>
-          <ThemeProvider theme={theme}>
-            <NotificationProvider>
-              <Navigator />
-            </NotificationProvider>
-          </ThemeProvider>
-        </FormProvider>
-      </CaseProvider>
-    </AuthProvider>
+    </SafeAreaProvider>
   );
 };
 
