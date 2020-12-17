@@ -63,58 +63,63 @@ const CustomStackNavigator = ({
     screenOptions,
     initialRouteName,
   });
-  const { panResponder, handleLogout, handleContinueSession, isActive, isAuthenticated } = useContext(AuthContext);
-  
+  const {
+    panResponder,
+    handleLogout,
+    handleContinueSession,
+    isActive,
+    isAuthenticated,
+  } = useContext(AuthContext);
+
   const handleEndUserSession = async () => {
     await handleLogout();
     navigation.navigate('Start');
-  }
+  };
 
   const handleContinueUserSession = () => {
     handleContinueSession();
-  }
+  };
 
-  return (
-    <>
+  const NavigatorContextComponent = (
     <NavigationHelpersContext.Provider value={navigation}>
       <FlexWrapper {...panResponder.panHandlers} style={[contentStyle]}>
         {descriptors[state.routes[state.index].key].render()}
       </FlexWrapper>
     </NavigationHelpersContext.Provider>
-    <Modal 
+  );
+
+  const InactivityDialogComponent = (
+    <Modal
       visible={!isActive && isAuthenticated}
-      transparent 
+      transparent
       presentationStyle="overFullScreen"
-      animationType="fade" >
-        <BackgroundBlur>
-          <PopupContainer>
-            <ContentContainer>
-              <Card colorSchema="neutral">
-                <Card.Body>
-                  <Card.Title>Är du fortfarande där?</Card.Title>
-                  <Card.Text>
-                    Du har varit inaktiv under en längre tid, för att fortsätta använda appen behöver du göra ett aktivt val.
-                  </Card.Text>
-                  <Card.Button
-                    colorSchema="red"
-                    onClick={handleEndUserSession}
-                  >
-                    <Text>Nej</Text>
-                  </Card.Button>
-                  <Card.Button
-                    colorSchema="green"
-                    onClick={handleContinueUserSession}
-                  >
-                    <Text>Ja</Text>
-                  </Card.Button>
-                  </Card.Body>
-              </Card>
-            </ContentContainer>
-          </PopupContainer>
-        </BackgroundBlur>
-      </Modal>
-    </>
-  )
-}
+      animationType="fade"
+    >
+      <BackgroundBlur>
+        <PopupContainer>
+          <ContentContainer>
+            <Card colorSchema="neutral">
+              <Card.Body>
+                <Card.Title>Är du fortfarande där?</Card.Title>
+                <Card.Text>
+                  Du har varit inaktiv under en längre tid, för att fortsätta använda appen behöver
+                  du göra ett aktivt val.
+                </Card.Text>
+                <Card.Button colorSchema="red" onClick={handleEndUserSession}>
+                  <Text>Nej</Text>
+                </Card.Button>
+                <Card.Button colorSchema="green" onClick={handleContinueUserSession}>
+                  <Text>Ja</Text>
+                </Card.Button>
+              </Card.Body>
+            </Card>
+          </ContentContainer>
+        </PopupContainer>
+      </BackgroundBlur>
+    </Modal>
+  );
+
+  return [NavigatorContextComponent, InactivityDialogComponent];
+};
 
 export default CustomStackNavigator;
