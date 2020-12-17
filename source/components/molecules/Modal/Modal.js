@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import RnModal from 'react-native-modal';
 import styled from 'styled-components/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ModalContainer = styled(RnModal)`
   margin-left: 0px;
   margin-right: 0px;
   margin-bottom: 0px;
-  margin-top: 30px;
+  margin-top: 0px;
   border-top-left-radius: 17.5px;
   border-top-right-radius: 17.5px;
-  background-color: #00213f;
 `;
 
 const Modal = ({ visible, children, scrollViewProps, ...other }) => (
@@ -23,6 +23,7 @@ const Modal = ({ visible, children, scrollViewProps, ...other }) => (
     transparent
     {...other}
   >
+    <SafeAreaView edges={['top', 'right', 'left']} />
     <KeyboardAwareScrollView {...scrollViewProps}>{children}</KeyboardAwareScrollView>
   </ModalContainer>
 );
