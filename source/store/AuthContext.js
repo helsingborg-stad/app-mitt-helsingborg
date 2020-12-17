@@ -46,7 +46,11 @@ function AuthProvider({ children, initialState }) {
   const inactivityCheckingPeriod = 5000;
 
   const intervalInactivityCheck = () => {
-    if (Date.now() - state.latestActivityTime > inactivityTime && !state.showInactivityDialog) {
+    if (
+      Date.now() - state.latestActivityTime > inactivityTime &&
+      !state.showInactivityDialog &&
+      state.isAuthenticated
+    ) {
       dispatch(toggleInactivityDialog(true));
     }
   };
