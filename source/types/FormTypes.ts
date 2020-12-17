@@ -48,7 +48,14 @@ export interface Question {
   help?: Help;
 }
 
-export type ActionType = 'start' | 'next' | 'submit' | 'sign' | 'close' | 'backToMain';
+export type ActionType =
+  | 'start'
+  | 'next'
+  | 'submit'
+  | 'sign'
+  | 'close'
+  | 'backToMain'
+  | 'backToMainAndNext';
 export interface Action {
   type: ActionType;
   label: string;

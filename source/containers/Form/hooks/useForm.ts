@@ -86,6 +86,9 @@ function useForm(initialState: FormReducerState) {
     dispatch({ type: 'GO_TO_MAIN_FORM' });
   };
 
+  const goToMainFormAndNext = () => {
+    dispatch({ type: 'GO_TO_MAIN_FORM_AND_NEXT' });
+  };
   const isLastStep = () => false; // Need to think and fix this. //formState.steps.length === formState.counter;
 
   /**
@@ -147,6 +150,7 @@ function useForm(initialState: FormReducerState) {
     start: startForm,
     close: closeForm,
     goToMainForm,
+    goToMainFormAndNext,
     isLastStep,
   };
 

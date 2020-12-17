@@ -39,6 +39,7 @@ interface Props {
     start: (callback: () => void) => void;
     close: () => void;
     goToMainForm: () => void;
+    goToMainFormAndNext: () => void;
     isLastStep: () => boolean;
   };
   onUpdate: (answers: Record<string, any>) => void;
@@ -102,6 +103,9 @@ const StepFooter: React.FC<Props> = ({
       }
       case 'backToMain': {
         return formNavigation.goToMainForm;
+      }
+      case 'backToMainAndNext': {
+        return formNavigation.goToMainFormAndNext;
       }
       default: {
         return () => {
@@ -200,6 +204,7 @@ StepFooter.propTypes = {
     start: PropTypes.func,
     /** action to return to main form */
     goToMainForm: PropTypes.func,
+    goToMainFormAndNext: PropTypes.func,
     /** whether we are at the last of the main steps */
     isLastStep: PropTypes.func,
   }).isRequired,
