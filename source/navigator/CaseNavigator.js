@@ -5,6 +5,7 @@ import { Platform } from 'react-native';
 import CaseOverview from '../screens/caseScreens/CaseOverview';
 import CaseSummary from '../screens/caseScreens/CaseSummary';
 import { Icon } from '../components/atoms';
+import theme from '../styles/theme';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +28,9 @@ const CaseNavigator = () => (
         headerBackImage: () => <BackIcon name="arrow-back" />,
         headerBackTitle: '',
         headerTruncatedBackTitle: '',
+        headerStyle: {
+          backgroundColor: theme.colors.neutrals[5],
+        },
       })}
     />
   </Stack.Navigator>
