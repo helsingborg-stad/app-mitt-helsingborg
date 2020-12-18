@@ -19,27 +19,7 @@ export const actionTypes = {
   setStatus: 'SET_STATUS',
   signSuccess: 'SIGN_SUCCESS',
   setIsBankidInstalled: 'SET_INSTALLED',
-  updateActivityTime: 'UPDATE_ACTIVITY_TIME',
-  toggleInactivityDialog: 'TOGGLE_INACTIVITY_DIALOG',
 };
-
-export function updateLatestActivityTime(date) {
-  return {
-    type: actionTypes.updateActivityTime,
-    payload: {
-      activityTime: date,
-    },
-  };
-}
-
-export function toggleInactivityDialog(showInactivityDialog) {
-  return {
-    type: actionTypes.toggleInactivityDialog,
-    payload: {
-      showInactivityDialog,
-    },
-  };
-}
 
 export async function mockedAuth() {
   try {
