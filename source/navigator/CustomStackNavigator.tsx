@@ -6,10 +6,11 @@ import {
   StackRouter,
   DefaultRouterOptions,
 } from '@react-navigation/native';
-import { Modal } from 'react-native';
+import { Modal, PanResponder } from 'react-native';
 import AuthContext from '../store/AuthContext';
 import Card from '../components/molecules/Card/Card';
 import Text from '../components/atoms/Text/Text';
+import useTouchActivity from '../hooks/useTouchActivity';
 
 const FlexWrapper = styled.View`
   flex: 1;
@@ -63,21 +64,22 @@ const CustomStackNavigator = ({
     screenOptions,
     initialRouteName,
   });
-  const {
-    panResponder,
-    handleLogout,
-    handleContinueSession,
-    isAuthenticated,
-    showInactivityDialog,
-  } = useContext(AuthContext);
+  const { handleLogout, isAuthenticated } = useContext(AuthContext);
+
+  const { isTouching, panResponder, updateIsTouching, updateLatestTouchTime } = useTouchActivity(
+    5000,
+    true
+  );
 
   const handleEndUserSession = async () => {
     await handleLogout();
+    updateIsTouching(true);
     navigation.navigate('Start');
   };
 
   const handleContinueUserSession = () => {
-    handleContinueSession();
+    updateIsTouching(true);
+    updateLatestTouchTime();
   };
 
   const NavigatorContextComponent = (
@@ -88,9 +90,11 @@ const CustomStackNavigator = ({
     </NavigationHelpersContext.Provider>
   );
 
+  const showInactivityModal = !isTouching && isAuthenticated;
+
   const InactivityDialogComponent = (
     <Modal
-      visible={showInactivityDialog && isAuthenticated}
+      visible={showInactivityModal}
       transparent
       presentationStyle="overFullScreen"
       animationType="fade"

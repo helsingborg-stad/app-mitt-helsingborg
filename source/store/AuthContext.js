@@ -1,10 +1,8 @@
 import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { PanResponder } from 'react-native';
 import env from 'react-native-config';
 import * as authService from '../services/AuthService';
 import AuthReducer, { initialState as defaultInitialState } from './reducers/AuthReducer';
-import useInterval from '../hooks/useInterval';
 import {
   startAuth,
   cancelOrder,
@@ -17,8 +15,6 @@ import {
   startSign,
   setStatus,
   checkIsBankidInstalled,
-  updateLatestActivityTime,
-  toggleInactivityDialog,
 } from './actions/AuthActions';
 
 const AuthContext = React.createContext();
@@ -40,21 +36,6 @@ function AuthProvider({ children, initialState }) {
     handleCheckOrderStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.status, state.orderRef, state.autoStartToken]);
-
-  // inactivity tracking logic. Not sure this is correct place for these values.
-  const inactivityTime = 15000;
-  const inactivityCheckingPeriod = 5000;
-
-  const intervalInactivityCheck = () => {
-    if (
-      Date.now() - state.latestActivityTime > inactivityTime &&
-      !state.showInactivityDialog &&
-      state.isAuthenticated
-    ) {
-      dispatch(toggleInactivityDialog(true));
-    }
-  };
-  useInterval(intervalInactivityCheck, inactivityCheckingPeriod);
 
   /**
    * Check if Bankid App is installed on clients machine
@@ -110,21 +91,11 @@ function AuthProvider({ children, initialState }) {
     dispatch(loginSuccess());
   }
 
-  /** Updates the latest activity time on each touch event */
-  function handleTouchActivity(date) {
-    dispatch(updateLatestActivityTime(date));
-  }
-
   /**
    * This function triggers an action to logout the user.
    */
   async function handleLogout() {
     dispatch(await loginFailure());
-  }
-
-  async function handleContinueSession() {
-    dispatch(toggleInactivityDialog(false));
-    dispatch(updateLatestActivityTime(Date.now()));
   }
 
   /**
@@ -168,14 +139,7 @@ function AuthProvider({ children, initialState }) {
     return false;
   }
 
-  const panResponder = PanResponder.create({
-    onMoveShouldSetPanResponderCapture: handleTouchActivity,
-    onPanResponderTerminationRequest: handleTouchActivity,
-    onStartShouldSetPanResponderCapture: handleTouchActivity,
-  });
-
   const contextValues = {
-    panResponder,
     handleLogin,
     handleLogout,
     handleAddProfile,
@@ -185,7 +149,6 @@ function AuthProvider({ children, initialState }) {
     handleSetStatus,
     isUserAuthenticated,
     handleSign,
-    handleContinueSession,
     isLoading: state.status === 'pending',
     isIdle: state.status === 'idle',
     isResolved: state.status === 'authResolved' || state.status === 'signResolved',
