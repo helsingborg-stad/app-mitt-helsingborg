@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import env from 'react-native-config';
 import styled from 'styled-components/native';
 import {
   NavigationHelpersContext,
@@ -6,7 +7,7 @@ import {
   StackRouter,
   DefaultRouterOptions,
 } from '@react-navigation/native';
-import { Modal, PanResponder } from 'react-native';
+import { Modal } from 'react-native';
 import AuthContext from '../store/AuthContext';
 import Card from '../components/molecules/Card/Card';
 import Text from '../components/atoms/Text/Text';
@@ -66,19 +67,20 @@ const CustomStackNavigator = ({
   });
   const { handleLogout, isAuthenticated } = useContext(AuthContext);
 
-  const { isTouching, panResponder, updateIsTouching, updateLatestTouchTime } = useTouchActivity(
+  const { isActive, panResponder, updateIsActive, updateLatestTouchTime } = useTouchActivity(
+    parseInt(env.INACTIVITY_TIME),
     5000,
     true
   );
 
   const handleEndUserSession = async () => {
     await handleLogout();
-    updateIsTouching(true);
+    updateIsActive(true);
     navigation.navigate('Start');
   };
 
   const handleContinueUserSession = () => {
-    updateIsTouching(true);
+    updateIsActive(true);
     updateLatestTouchTime();
   };
 
@@ -90,7 +92,7 @@ const CustomStackNavigator = ({
     </NavigationHelpersContext.Provider>
   );
 
-  const showInactivityModal = !isTouching && isAuthenticated;
+  const showInactivityModal = !isActive && isAuthenticated;
 
   const InactivityDialogComponent = (
     <Modal

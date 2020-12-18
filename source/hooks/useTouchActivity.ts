@@ -2,23 +2,20 @@ import { useState } from 'react';
 import { PanResponder } from 'react-native';
 import useInterval from './useInterval';
 
-export default function useTouchActivity(intervalDelay, touching) {
+export default function useTouchActivity(inactivityTime, intervalDelay, initialActive) {
   const [latestTouchTime, setLatestTouchTime] = useState(Date.now());
-  const [isTouching, setIsTouching] = useState(touching);
+  const [isActive, setIsActive] = useState(initialActive);
 
-  const inactivityTime = 15000;
-
-  const intervalInactivityCheck = () => {
-    console.log(Date.now() - latestTouchTime);
-    if (Date.now() - latestTouchTime > inactivityTime && isTouching) {
-      setIsTouching(false);
+  const handleInterval = () => {
+    if (Date.now() - latestTouchTime > inactivityTime && isActive) {
+      setIsActive(false);
     }
   };
 
-  useInterval(intervalInactivityCheck, intervalDelay);
+  useInterval(handleInterval, intervalDelay);
 
   const onTouch = () => {
-    setIsTouching(true);
+    setIsActive(true);
     setLatestTouchTime(Date.now());
     return false;
   };
@@ -33,9 +30,9 @@ export default function useTouchActivity(intervalDelay, touching) {
     onStartShouldSetPanResponderCapture: onTouch,
   });
 
-  const updateIsTouching = (isTouching) => {
-    setIsTouching(isTouching);
+  const updateIsActive = (isActive) => {
+    setIsActive(isActive);
   };
 
-  return { panResponder, isTouching, updateIsTouching, updateLatestTouchTime };
+  return { panResponder, isActive, updateIsActive, updateLatestTouchTime };
 }
