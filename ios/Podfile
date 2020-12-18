@@ -26,8 +26,9 @@ target 'MittHelsingborg' do
       if t.name == "React-Core.common-AccessibilityResources"
         t.remove_from_project
       else
-      t.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.2'
+        t.build_configurations.each do |config|
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.2'
+        end
       end
     end
   end
