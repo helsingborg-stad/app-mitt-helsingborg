@@ -1,8 +1,9 @@
 import { useFocusEffect } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Alert, Linking, View } from 'react-native';
+import { Alert, Linking, View, StatusBar } from 'react-native';
 import styled from 'styled-components/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { SLIDES } from '../assets/images';
 import Button from '../components/atoms/Button';
 import Heading from '../components/atoms/Heading';
@@ -16,11 +17,12 @@ import AuthContext from '../store/AuthContext';
 import { useNotification } from '../store/NotificationContext';
 import MarkdownConstructor from '../helpers/MarkdownConstructor';
 import userAgreementText from '../assets/text/userAgreementText';
+import theme from '../styles/theme';
 
 const { sanitizePin, validatePin } = ValidationHelper;
 const UnifiedPadding = [24, 48]; // Vertical padding, Horizontal padding
 
-const LoginSafeAreaView = styled.SafeAreaView`
+const SafeAreaViewTop = styled(SafeAreaView)`
   flex: 1;
   background-color: ${(props) => props.theme.colors.neutrals[6]};
 `;
@@ -235,8 +237,9 @@ function LoginScreen(props) {
   };
 
   return (
-    <LoginSafeAreaView behavior="padding" enabled>
+    <SafeAreaViewTop edges={['top', 'right', 'left']}>
       <Body>
+        <StatusBar barStyle="dark-content" backgroundColor={theme.colors.neutrals[6]} />
         <Header>
           <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />
           <Title>Mitt Helsingborg</Title>
@@ -391,7 +394,7 @@ function LoginScreen(props) {
           </UserAgreementFooter>
         </Body>
       </LoginModal>
-    </LoginSafeAreaView>
+    </SafeAreaViewTop>
   );
 }
 
