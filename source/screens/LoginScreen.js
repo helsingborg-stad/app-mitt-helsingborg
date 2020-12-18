@@ -27,7 +27,7 @@ const SafeAreaViewTop = styled(SafeAreaView)`
   background-color: ${(props) => props.theme.colors.neutrals[6]};
 `;
 
-const Body = styled.View`
+const FlexView = styled.View`
   flex: 1;
 `;
 
@@ -237,61 +237,63 @@ function LoginScreen(props) {
   };
 
   return (
-    <SafeAreaViewTop edges={['top', 'right', 'left']}>
-      <Body>
-        <StatusBar barStyle="dark-content" backgroundColor={theme.colors.neutrals[6]} />
-        <Header>
-          <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />
-          <Title>Mitt Helsingborg</Title>
-          <Separator />
-          <LoginHeading>Välkommen!</LoginHeading>
-          <ContentText>Till en enklare och säkrare kontakt med Helsingborgs Stad.</ContentText>
-        </Header>
+    <FlexView>
+      <FlexView>
+        <SafeAreaViewTop edges={['top', 'right', 'left']}>
+          <StatusBar barStyle="dark-content" backgroundColor={theme.colors.neutrals[6]} />
+          <Header>
+            <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />
+            <Title>Mitt Helsingborg</Title>
+            <Separator />
+            <LoginHeading>Välkommen!</LoginHeading>
+            <ContentText>Till en enklare och säkrare kontakt med Helsingborgs Stad.</ContentText>
+          </Header>
 
-        {(isLoading || isResolved) && (
-          <Form>
-            <AuthLoading
-              colorSchema="blue"
-              isResolved={isResolved}
-              cancelSignIn={() => handleCancelOrder()}
-              isBankidInstalled
-            />
-          </Form>
-        )}
+          {(isLoading || isResolved) && (
+            <Form>
+              <AuthLoading
+                colorSchema="blue"
+                isResolved={isResolved}
+                cancelSignIn={() => handleCancelOrder()}
+                isBankidInstalled
+              />
+            </Form>
+          )}
 
-        {(isIdle || isRejected) && (
-          <Form>
-            <Button z={0} size="large" block onClick={() => handleLogin()}>
-              <Text>Logga in med Mobilt BankID</Text>
-            </Button>
-            <Link onPress={() => loginModalVisible(true)}>Fler alternativ</Link>
-          </Form>
-        )}
+          {(isIdle || isRejected) && (
+            <Form>
+              <Button z={0} size="large" block onClick={() => handleLogin()}>
+                <Text>Logga in med Mobilt BankID</Text>
+              </Button>
+              <Link onPress={() => loginModalVisible(true)}>Fler alternativ</Link>
+            </Form>
+          )}
 
-        <Footer>
-          <FooterText>
-            När du använder tjänsten Mitt Helsingborg godkänner du vårt{' '}
-            <ParagraphLink
-              onPress={() => {
-                userAgreementModalVisible(true);
-              }}
-            >
-              användaravtal
-            </ParagraphLink>{' '}
-            och att du har tagit del av hur vi hanterar dina{' '}
-            <ParagraphLink
-              onPress={() =>
-                Linking.openURL(
-                  'https://helsingborg.se/toppmeny/om-webbplatsen/sa-har-behandlar-vi-dina-personuppgifter/'
-                )
-              }
-            >
-              personuppgifter
-            </ParagraphLink>
-            .
-          </FooterText>
-        </Footer>
-      </Body>
+          <Footer>
+            <FooterText>
+              När du använder tjänsten Mitt Helsingborg godkänner du vårt{' '}
+              <ParagraphLink
+                onPress={() => {
+                  userAgreementModalVisible(true);
+                }}
+              >
+                användaravtal
+              </ParagraphLink>{' '}
+              och att du har tagit del av hur vi hanterar dina{' '}
+              <ParagraphLink
+                onPress={() =>
+                  Linking.openURL(
+                    'https://helsingborg.se/toppmeny/om-webbplatsen/sa-har-behandlar-vi-dina-personuppgifter/'
+                  )
+                }
+              >
+                personuppgifter
+              </ParagraphLink>
+              .
+            </FooterText>
+          </Footer>
+        </SafeAreaViewTop>
+      </FlexView>
 
       <LoginModal
         visible={loginModal}
@@ -306,7 +308,7 @@ function LoginScreen(props) {
           primary={false}
           showBackButton={false}
         />
-        <Body>
+        <FlexView>
           <Header>
             <ModalHeading>Logga in med BankID på en annan enhet</ModalHeading>
             <ContentText>
@@ -361,7 +363,7 @@ function LoginScreen(props) {
               </Link>
             </Form>
           )}
-        </Body>
+        </FlexView>
       </LoginModal>
 
       <LoginModal
@@ -377,7 +379,7 @@ function LoginScreen(props) {
           primary={false}
           showBackButton={false}
         />
-        <Body>
+        <FlexView>
           <UserAgreementForm>
             <MarkdownConstructor rules={userAgreementMarkdownRules} rawText={userAgreementText} />
           </UserAgreementForm>
@@ -392,9 +394,9 @@ function LoginScreen(props) {
               <Text>Återvänd till inloggning</Text>
             </Button>
           </UserAgreementFooter>
-        </Body>
+        </FlexView>
       </LoginModal>
-    </SafeAreaViewTop>
+    </FlexView>
   );
 }
 
