@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 import styled from 'styled-components';
-import { ScreenWrapper } from '../components/molecules';
 import Form from '../containers/Form/Form';
 import { getFormQuestions } from '../helpers/CaseDataConverter';
 import generateInitialCaseAnswers from '../store/actions/dynamicFormData';
@@ -14,11 +13,6 @@ const SpinnerContainer = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-`;
-
-const FormScreenWrapper = styled(ScreenWrapper)`
-  padding: 0;
-  flex: 1;
 `;
 
 const FormCaseScreen = ({ route, navigation, ...props }) => {
@@ -85,21 +79,19 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   }
 
   return (
-    <FormScreenWrapper>
-      <Form
-        steps={form.steps}
-        connectivityMatrix={form.connectivityMatrix}
-        initialPosition={caseData?.currentPosition || initialCase?.currentPosition}
-        user={user}
-        onClose={handleCloseForm}
-        onStart={handleStartForm}
-        onSubmit={handleSubmitForm}
-        initialAnswers={initialCase?.data || caseData.data || {}}
-        status={initialCase.status || 'ongoing'}
-        updateCaseInContext={updateCaseContext}
-        {...props}
-      />
-    </FormScreenWrapper>
+    <Form
+      steps={form.steps}
+      connectivityMatrix={form.connectivityMatrix}
+      initialPosition={caseData?.currentPosition || initialCase?.currentPosition}
+      user={user}
+      onClose={handleCloseForm}
+      onStart={handleStartForm}
+      onSubmit={handleSubmitForm}
+      initialAnswers={initialCase?.data || caseData.data || {}}
+      status={initialCase.status || 'ongoing'}
+      updateCaseInContext={updateCaseContext}
+      {...props}
+    />
   );
 };
 
