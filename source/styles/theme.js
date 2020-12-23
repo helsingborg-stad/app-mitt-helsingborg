@@ -217,6 +217,13 @@ const theme = {
       iconRight: deprecatedPalette.mono.light,
       shadow: 'rgba(255, 255, 255, 0.0)',
     },
+    neutral: {
+      background: deprecatedPalette.mono.lightest,
+      text: deprecatedPalette.mono.darker,
+      icon: deprecatedPalette.purple[1],
+      iconRight: deprecatedPalette.mono.light,
+      shadow: 'rgba(255, 255, 255, 0.0)',
+    },
     gray: {
       background: deprecatedPalette.mono.lighter,
       text: deprecatedPalette.mono.darker,
@@ -626,6 +633,12 @@ const theme = {
       background: colorPalette.complementary.purple[3],
       backgroundEmpty: colorPalette.complementary.purple[3],
     },
+    neutral: {
+      legend: colorPalette.primary.neutral[0],
+      legendBorder: colorPalette.complementary.neutral[1],
+      background: colorPalette.complementary.neutral[3],
+      backgroundEmpty: colorPalette.complementary.neutral[3],
+    },
     darkBlue: {
       legend: colorPalette.neutrals[7],
       legendBorder: 'rgba(0, 33, 63, 0.24)',
@@ -651,6 +664,11 @@ const theme = {
     },
     purple: {
       inputBackground: colorPalette.complementary.purple[2],
+      deleteButton: '#DD6161',
+      inputText: colorPalette.neutrals[1],
+    },
+    neutral: {
+      inputBackground: colorPalette.complementary.neutral[2],
       deleteButton: '#DD6161',
       inputText: colorPalette.neutrals[1],
     },
