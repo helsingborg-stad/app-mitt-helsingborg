@@ -5,7 +5,6 @@ import styled from 'styled-components/native';
 import { Help } from '../../../types/FormTypes';
 import Text from '../../atoms/Text';
 import Fieldset, { FieldsetButton } from '../../atoms/Fieldset/Fieldset';
-import { colorPalette } from '../../../styles/palette';
 import theme from '../../../styles/theme';
 import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
 import { Heading } from '../../atoms';
@@ -19,16 +18,16 @@ const ListBody = styled.View`
 const ListBodyFieldLabel = styled(Heading)<{ colorSchema: string }>`
   margin-top: 5px;
   margin-left: 3px;
-  font-weight: ${props => props.theme.fontWeights[1]};
-  font-size: ${props => props.theme.fontSizes[3]};
-  color: ${props => props.theme.colors.primary[props.colorSchema][1]};
+  font-weight: ${(props) => props.theme.fontWeights[1]};
+  font-size: ${(props) => props.theme.fontSizes[3]};
+  color: ${(props) => props.theme.colors.primary[props.colorSchema][1]};
 `;
 
 interface Props {
   heading?: string;
   items: { category: string; component: JSX.Element }[];
   categories: { category: string; description: string }[];
-  colorSchema: string;
+  colorSchema: PrimaryColor;
   showEditButton?: boolean;
   startEditable?: boolean;
   help?: Help;
@@ -51,12 +50,21 @@ const GroupedList: React.FC<Props> = ({
 
   const groupedItems: Record<string, { category: string; component: JSX.Element }[]> = {};
   const changeEditable = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    LayoutAnimation.configureNext({
+      duration: 300,
+      create: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+      update: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+      },
+    });
     setEditable(!editable);
   };
 
-  categories.forEach(cat => {
-    const catItems = items.filter(item => item.category === cat.category);
+  categories.forEach((cat) => {
+    const catItems = items.filter((item) => item.category === cat.category);
     if (catItems.length > 0) {
       groupedItems[cat.category] = catItems;
     }
@@ -87,9 +95,9 @@ const GroupedList: React.FC<Props> = ({
         {Object.keys(groupedItems).map((key, index) => (
           <View key={`${index}-${key}`}>
             <ListBodyFieldLabel colorSchema={validColorSchema}>
-              {categories.find(c => c.category === key).description}
+              {categories.find((c) => c.category === key).description}
             </ListBodyFieldLabel>
-            {groupedItems[key].map(item => ({
+            {groupedItems[key].map((item) => ({
               ...item.component,
               props: { ...item.component.props, editable },
             }))}

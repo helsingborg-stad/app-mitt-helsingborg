@@ -60,7 +60,16 @@ const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChan
   };
 
   const addAnswer = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    LayoutAnimation.configureNext({
+      duration: 300,
+      create: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+      update: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+      },
+    });
     setLocalAnswers(prev => [...prev, {}]);
   };
 
