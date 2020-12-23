@@ -19,7 +19,7 @@ const StepContainer = styled.View`
   flex: 1;
 `;
 
-const StepContentContainer = styled.ScrollView`
+const StepContentContainer = styled.View`
   /* Covers space occupied by the StepBackNavigation */
   margin-top: -80px;
   height: 100%;
