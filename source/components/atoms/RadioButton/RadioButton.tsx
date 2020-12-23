@@ -44,7 +44,16 @@ interface Props {
 const RadioButton: React.FC<Props> = ({ selected, onSelect, colorSchema, size }) => {
   const theme = useContext(ThemeContext);
   const onPress = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    LayoutAnimation.configureNext({
+      duration: 300,
+      create: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+      update: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+      },
+    });
     onSelect();
   };
   const validColorSchema = getValidColorSchema(colorSchema);
