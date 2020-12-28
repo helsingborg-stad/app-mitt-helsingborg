@@ -1,4 +1,4 @@
-import React, { Ref, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InteractionManager } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
@@ -44,7 +44,6 @@ const Form: React.FC<Props> = ({
   connectivityMatrix,
   user,
   onClose,
-  onStart,
   onSubmit,
   initialAnswers,
   status,
@@ -82,14 +81,13 @@ const Form: React.FC<Props> = ({
   };
 
   const stepComponents = formState.steps.map(
-    ({ id, banner, theme, title, group, description, questions, actions, colorSchema }) => (
+    ({ id, banner, title, group, description, questions, actions, colorSchema }) => (
       <Step
         key={`${id}`}
         banner={{
           ...banner,
         }}
         colorSchema={colorSchema}
-        theme={theme}
         description={{
           heading: title,
           tagline: group,
@@ -138,6 +136,55 @@ const Form: React.FC<Props> = ({
       </Modal>
     </FormScreenWrapper>
   );
+};
+
+Form.propTypes = {
+  /**
+   * FormPosition object that determines where to start the form.
+   */
+  initialPosition: PropTypes.shape({
+    index: PropTypes.number,
+    level: PropTypes.number,
+    currentMainStep: PropTypes.number,
+    currentMainStepIndex: PropTypes.number,
+  }),
+  /**
+   * Function to handle a close action in the form.
+   */
+  onClose: PropTypes.func.isRequired,
+  /**
+   * Function to handle when a form should start.
+   */
+  onStart: PropTypes.func.isRequired,
+  /**
+   * Function to handle when a form is submitting.
+   */
+  onSubmit: PropTypes.func.isRequired,
+  /**
+   * Array of steps that the Form should render.
+   */
+  steps: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  connectivityMatrix: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.any)),
+  /**
+   * The user info.
+   */
+  user: PropTypes.object,
+  /**
+   * Initial answer for each question.
+   */
+  initialAnswers: PropTypes.object,
+  /**
+   * Status, either ongoing or submitted (or others, possibly?)
+   */
+  status: PropTypes.oneOf(['ongoing', 'submitted']),
+  /**
+   * function for updating case in caseContext
+   */
+  updateCaseInContext: PropTypes.func,
+};
+
+Form.defaultProps = {
+  initialAnswers: {},
 };
 
 export default Form;
