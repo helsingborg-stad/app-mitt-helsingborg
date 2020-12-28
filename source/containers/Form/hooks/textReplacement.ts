@@ -10,10 +10,11 @@ import { User } from '../../../types/UserTypes';
 const replacementRules = [
   ['#firstName', 'user.firstName'],
   ['#lastName', 'user.lastName'],
-  ['#datum1', 'date.nextMonth.first'],
-  ['#datum2', 'date.nextMonth.last'],
-  ['#månad-1', 'date.previousMonth.currentMonth-1'],
-  ['#månad-2', 'date.previousMonth.currentMonth-2'],
+  ['#date-1', 'date.nextMonth.first'],
+  ['#date-2', 'date.nextMonth.last'],
+  ['#month', 'date.previousMonth.currentMonth'],
+  ['#month-1', 'date.previousMonth.currentMonth-1'],
+  ['#month-2', 'date.previousMonth.currentMonth-2'],
   ['#year', 'date.currentYear'], // this is the current year of next month
 ];
 
@@ -53,14 +54,18 @@ const replaceDates = (descriptor: string[]): string => {
 
   if (descriptor[1] === 'previousMonth') {
     const currentMonth = today.getMonth();
-    if (descriptor[2] === 'currentMonth-1') {
-      return `${swedishMonthTable[currentMonth - 1]}`;
-    }
-    if (descriptor[2] === 'currentMonth-2') {
-      return `${swedishMonthTable[currentMonth - 2]}`;
+
+    switch (descriptor[2]) {
+      case 'currentMonth':
+        return `${swedishMonthTable[currentMonth]}`;
+      case 'currentMonth-1':
+        return `${swedishMonthTable[currentMonth - 1]}`;
+      case 'currentMonth-2':
+        return `${swedishMonthTable[currentMonth - 2]}`;
+      default:
+        return `${swedishMonthTable[currentMonth]}`;
     }
   }
-
   return '';
 };
 
@@ -99,9 +104,9 @@ const replaceText = (text: string, user: User) => {
  * @param user the user object
  */
 export const replaceMarkdownTextInSteps = (steps: Step[], user: User): Step[] => {
-  const newSteps = steps.map(step => {
+  const newSteps = steps.map((step) => {
     if (step.questions) {
-      step.questions = step.questions.map(qs => {
+      step.questions = step.questions.map((qs) => {
         if (qs.label && qs.label !== '') {
           qs.label = replaceText(qs.label, user);
         }
