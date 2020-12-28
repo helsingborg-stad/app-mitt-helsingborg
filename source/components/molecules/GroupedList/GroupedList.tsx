@@ -85,7 +85,7 @@ const GroupedList: React.FC<Props> = ({
               size="small"
               onClick={changeEditable}
             >
-              <Text>{editable ? 'Färdig' : 'Ändra'}</Text>
+              <Text>{editable ? 'Spara' : 'Ändra'}</Text>
             </FieldsetButton>
           )}
         </>
