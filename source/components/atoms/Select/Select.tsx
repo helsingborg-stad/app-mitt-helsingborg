@@ -35,14 +35,14 @@ interface Props {
   style?: ViewStyle;
 }
 
-const Select: React.FC<Props> = ({
+const Select: React.FC<Props> = React.forwardRef(({
   items,
   onValueChange,
   placeholder,
   value,
   editable = true,
   style,
-}) => {
+}, ref) => {
   const currentItem = items.find(item => item.value === value);
   return (
     <Wrapper style={style}>
@@ -57,10 +57,11 @@ const Select: React.FC<Props> = ({
           }
         }}
         items={items}
+        ref={ref as React.LegacyRef<RNPickerSelect>}
       />
     </Wrapper>
   );
-};
+});
 
 Select.propTypes = {
   /** The list of choices */

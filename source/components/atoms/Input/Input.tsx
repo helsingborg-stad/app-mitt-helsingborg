@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TextInputProps, Keyboard } from 'react-native';
+import { TextInputProps, Keyboard, TextInput } from 'react-native';
 import styled, { useTheme } from 'styled-components/native';
 import Text from '../Text';
 
@@ -17,7 +17,7 @@ type InputProps = Omit<TextInputProps, 'onBlur'> & {
 const StyledTextInput = styled.TextInput<InputProps>`
   width: 100%;
   font-weight: ${({ theme }) => theme.fontWeights[0]}
-  background-color: ${props => props.theme.colors.complementary[props.colorSchema][2]};
+  background-color: ${(props) => props.theme.colors.complementary[props.colorSchema][2]};
   ${({ transparent }) => transparent && `background-color: transparent;`}
   border-radius: 4.5px;
   border: solid 1px
@@ -29,41 +29,44 @@ const StyledTextInput = styled.TextInput<InputProps>`
   padding-right: 16px;
   margin: 3px;
   color: ${({ theme }) => theme.colors.neutrals[0]};
-  ${props => (props.center ? 'text-align: center;' : null)}
+  ${(props) => (props.center ? 'text-align: center;' : null)}
 `;
 
 const StyledErrorText = styled(Text)`
   font-size: ${({ theme }) => theme.fontSizes[3]};
-  color: ${props => props.theme.textInput.errorTextColor};
+  color: ${(props) => props.theme.textInput.errorTextColor};
   font-weight: ${({ theme }) => theme.fontWeights[0]};
   padding-top: 8px;
 `;
 
-const Input: React.FC<InputProps> = ({ onBlur, showErrorMessage, ...props }) => {
-  const { value, error } = props;
+const Input: React.FC<InputProps> = React.forwardRef(
+  ({ onBlur, showErrorMessage, ...props }, ref) => {
+    const { value, error } = props;
 
-  const handleBlur = () => {
-    if (onBlur) onBlur(value);
-  };
-  const theme = useTheme();
-  return (
-    <>
-      <StyledTextInput
-        multiline /** Temporary fix to make field scrollable inside scrollview */
-        numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
-        onBlur={handleBlur}
-        placeholderTextColor={theme.colors.neutrals[1]}
-        returnKeyType="done"
-        blurOnSubmit
-        onSubmitEditing={() => {
-          Keyboard.dismiss();
-        }}
-        {...props}
-      />
-      {showErrorMessage && error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
-    </>
-  );
-};
+    const handleBlur = () => {
+      if (onBlur) onBlur(value);
+    };
+    const theme = useTheme();
+    return (
+      <>
+        <StyledTextInput
+          multiline /** Temporary fix to make field scrollable inside scrollview */
+          numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
+          onBlur={handleBlur}
+          placeholderTextColor={theme.colors.neutrals[1]}
+          returnKeyType="done"
+          blurOnSubmit
+          onSubmitEditing={() => {
+            Keyboard.dismiss();
+          }}
+          ref={ref as React.Ref<TextInput>}
+          {...props}
+        />
+        {showErrorMessage && error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
+      </>
+    );
+  }
+);
 
 Input.propTypes = {
   value: PropTypes.string,

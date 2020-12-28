@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { LayoutAnimation } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { Text, Button, Fieldset, Input } from '../../atoms';
 import Select from '../../atoms/Select';
-import HelpButton from '../HelpButton';
 import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
 
 const EditableListBody = styled.View`
@@ -12,7 +11,7 @@ const EditableListBody = styled.View`
   height: auto;
 `;
 
-const EditableListItem = styled.View`
+const EditableListItem = styled.TouchableOpacity`
   font-size: ${(props) => props.theme.fontSizes[4]}px;
   flex-direction: row;
   height: auto;
@@ -73,6 +72,59 @@ const getInitialState = (inputs, value) => {
   return inputs.reduce((prev, current) => ({ ...prev, [current.key]: current.value }), {});
 };
 
+/** Switch between different input types */
+const InputComponent = React.forwardRef(
+  ({ input, colorSchema, editable, onChange, onInputBlur, value }, ref) => {
+    switch (input.type) {
+      case 'number':
+        return (
+          <EditableListItemInput
+            colorSchema={colorSchema}
+            editable={editable}
+            onChangeText={(text) => onChange(input.key, text)}
+            onBlur={onInputBlur}
+            value={value && value !== '' ? value[input.key] : state[input.key]}
+            keyboardType="numeric"
+            transparent
+            ref={ref}
+          />
+        );
+      case 'date':
+        return (
+          <CalendarPicker
+            date={value && value !== '' ? value[input.key] : state[input.key]}
+            onSelect={(date) => onChange(input.key, date)}
+            onBlur={onInputBlur}
+            editable={editable}
+            transparent
+          />
+        );
+      case 'select':
+        return (
+          <EditableListItemSelect
+            onBlur={onInputBlur}
+            onValueChange={(value) => onChange(input.key, value)}
+            value={value && value !== '' ? value[input.key] : state[input.key]}
+            editable={editable}
+            items={input?.items || []}
+            ref={ref}
+          />
+        );
+      default:
+        return (
+          <EditableListItemInput
+            colorSchema={colorSchema}
+            editable={editable}
+            onChangeText={(text) => onChange(input.key, text)}
+            onBlur={onInputBlur}
+            value={value && value !== '' ? value[input.key] : state[input.key]}
+            transparent
+            ref={ref}
+          />
+        );
+    }
+  }
+);
 /**
  * EditableList
  * A Molecule Component to use for rendering a list with the possibility of editing the list values.
@@ -91,6 +143,8 @@ function EditableList({
 }) {
   const [editable, setEditable] = useState(startEditable);
   const [state, setState] = useState(getInitialState(inputs, value));
+  const inputRefs = useRef([]);
+
   const changeEditable = () => {
     LayoutAnimation.configureNext({
       duration: 300,
@@ -114,54 +168,6 @@ function EditableList({
   const onInputBlur = () => {
     if (onBlur) onBlur(state);
   };
-  /** Switch between different input types */
-  const getInputComponent = (input) => {
-    switch (input.type) {
-      case 'number':
-        return (
-          <EditableListItemInput
-            colorSchema={colorSchema}
-            editable={editable}
-            onChangeText={(text) => onChange(input.key, text)}
-            onBlur={onInputBlur}
-            value={value && value !== '' ? value[input.key] : state[input.key]}
-            keyboardType="numeric"
-            transparent
-          />
-        );
-      case 'date':
-        return (
-          <CalendarPicker
-            date={value && value !== '' ? value[input.key] : state[input.key]}
-            onSelect={(date) => onChange(input.key, date)}
-            onBlur={onInputBlur}
-            editable={editable}
-            transparent
-          />
-        );
-      case 'select':
-        return (
-          <EditableListItemSelect
-            onBlur={onInputBlur}
-            onValueChange={(value) => onChange(input.key, value)}
-            value={value && value !== '' ? value[input.key] : state[input.key]}
-            editable={editable}
-            items={input?.items || []}
-          />
-        );
-      default:
-        return (
-          <EditableListItemInput
-            colorSchema={colorSchema}
-            editable={editable}
-            onChangeText={(text) => onChange(input.key, text)}
-            onBlur={onInputBlur}
-            value={value && value !== '' ? value[input.key] : state[input.key]}
-            transparent
-          />
-        );
-    }
-  };
 
   return (
     <Fieldset
@@ -179,17 +185,31 @@ function EditableList({
       )}
     >
       <EditableListBody>
-        {inputs.map((input) => (
+        {inputs.map((input, index) => (
           <EditableListItem
             colorSchema={colorSchema}
             editable={editable}
             key={input.key}
             error={error ? error[input.key] : undefined}
+            activeOpacity={1.0}
+            onPress={() => {
+              if (inputIsEditable && inputRefs.current?.[index]?.focus)
+                inputRefs.current[index].focus();
+              else if (inputIsEditable && inputRefs.current?.[index]?.togglePicker)
+                inputRefs.current[index].togglePicker();
+            }}
           >
             <EditableListItemLabelWrapper alignAtStart={input.type === 'select'}>
               <EditableListItemLabel>{input.label}</EditableListItemLabel>
             </EditableListItemLabelWrapper>
-            <EditableListItemInputWrapper>{getInputComponent(input)}</EditableListItemInputWrapper>
+            <EditableListItemInputWrapper>
+              <InputComponent
+                {...{ input, colorSchema, editable, onChange, onInputBlur, value }}
+                ref={(el) => {
+                  inputRefs.current[index] = el;
+                }}
+              />
+            </EditableListItemInputWrapper>
           </EditableListItem>
         ))}
       </EditableListBody>
