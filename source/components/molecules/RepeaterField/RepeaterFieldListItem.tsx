@@ -1,14 +1,14 @@
 /* eslint-disable no-nested-ternary */
-import React from 'react';
+import React, {useRef} from 'react';
 import styled from 'styled-components/native';
-import PropTypes from 'prop-types';
+import PropTypes, { number } from 'prop-types';
 import { Text, Input } from '../../atoms';
 import Button from '../../atoms/Button';
 import Label from '../../atoms/Label';
 import { InputRow } from './RepeaterField';
 import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
 import theme from '../../../styles/theme';
-import { getValidColorSchema } from '../../../styles/themeHelpers';
+import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
 
 const Base = styled.View`
   padding: 0px;
@@ -17,7 +17,7 @@ const Base = styled.View`
   border-radius: 6px;
 `;
 
-const RepeaterItem = styled.View<{colorSchema: string; error: Record<string, any>}>`
+const RepeaterItem = styled.TouchableOpacity<{colorSchema: string; error: Record<string, any>}>`
   font-size: ${props => props.theme.fontSizes[4]}px;
   flex-direction: row;
   height: auto;
@@ -78,6 +78,68 @@ const DeleteButtonText = styled(Text)<{color: string}>`
   line-height: 18px;
 `;
 
+interface InputComponentProps {
+  input: InputRow;
+  colorSchema: PrimaryColor;
+  value: string | number | boolean;
+  onChange: (value: string) => void;
+  onBlur: () => void;
+}
+
+const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, onBlur }: InputComponentProps, ref) => {
+  switch (input.type) {
+    case 'text':
+      return (
+        <ItemInput
+          textAlign="right"
+          colorSchema={colorSchema}
+          value={value}
+          onChangeText={onChange}
+          onBlur={onBlur}
+          transparent
+          ref={ref}
+        />
+      );
+    case 'number':
+      return (
+        <ItemInput
+          textAlign="right"
+          colorSchema={colorSchema}
+          keyboardType="numeric"
+          value={value}
+          onChangeText={onChange}
+          onBlur={onBlur}
+          transparent
+          ref={ref}
+        />
+      );
+    case 'date':
+      return (
+        <CalendarPicker
+          colorSchema={colorSchema}
+          value={value[input.id] as string}
+          onSelect={onChange}
+          editable={true}
+          transparent
+          ref={ref}
+        />
+      );
+    default:
+      return (
+        <ItemInput
+          colorSchema={colorSchema}
+          textAlign="right"
+          value={value}
+          onChangeText={onChange}
+          onBlur={onBlur}
+          transparent
+          ref={ref}
+        />
+      );
+  }
+});
+
+
 interface Props {
   heading?: string;
   listIndex?: number;
@@ -101,74 +163,43 @@ const RepeaterFieldListItem: React.FC<Props> = ({
   color,
 }) => {
   const validColorSchema = getValidColorSchema(color);
-
-  const inputComponent = (input: InputRow) => {
-    switch (input.type) {
-      case 'text':
-        return (
-          <ItemInput
-            textAlign="right"
-            colorSchema={validColorSchema}
-            value={(value[input.id]?.toString()) || ''}
-            onChangeText={changeFromInput(input)}
-            onBlur={onBlur}
-            transparent
-          />
-        );
-      case 'number':
-        return (
-          <ItemInput
-            textAlign="right"
-            colorSchema={validColorSchema}
-            keyboardType="numeric"
-            value={value[input.id]?.toString() || ''}
-            onChangeText={changeFromInput(input)}
-            onBlur={onBlur}
-            transparent
-          />
-        );
-      case 'date':
-        return (
-          <CalendarPicker
-            value={value[input.id] as string}
-            onSelect={changeFromInput(input)}
-            editable={true}
-            transparent
-          />
-        );
-      default:
-        return (
-          <ItemInput
-            colorSchema={validColorSchema}
-            textAlign="right"
-            value={value[input.id]?.toString() || ''}
-            onChangeText={changeFromInput(input)}
-            onBlur={onBlur}
-            transparent
-          />
-        );
-    }
-  };
-
-  const rows = inputs.map((input, index) => (
-    <RepeaterItem
-      colorSchema={validColorSchema}
-      key={`${input.title}.${index}`}
-      style={index === inputs.length - 1 ? { marginBottom: 0 } : { marginBottom: 4 }}
-      error={error && error[input.id] ? error[input.id] : undefined}
-    >
-      <InputLabelWrapper>
-        <InputLabel colorSchema={validColorSchema}>{`${input.title}`}</InputLabel>
-      </InputLabelWrapper>
-      <InputWrapper colorSchema={validColorSchema}>{inputComponent(input)}</InputWrapper>
-    </RepeaterItem>
-  ));
+  const inputRefs = useRef([]);
 
   return (
     <Base>
       <ItemLabel colorSchema={validColorSchema} underline={false}>{heading || "Item"}</ItemLabel>
-      {rows}
-      <DeleteButton z={0} colorSchema="neutral" color={validColorSchema} block onClick={removeItem}><DeleteButtonText color={validColorSchema}>Ta bort</DeleteButtonText></DeleteButton>
+      {inputs.map((input, index) => (
+        <RepeaterItem
+          colorSchema={validColorSchema}
+          key={`${input.title}.${index}`}
+          style={index === inputs.length - 1 ? { marginBottom: 0 } : { marginBottom: 4 }}
+          error={error && error[input.id] ? error[input.id] : undefined}
+          onPress={ () => {
+            if (inputRefs.current?.[index]?.focus)
+              inputRefs.current[index].focus();
+            else if (inputRefs.current?.[index]?.togglePicker)
+              inputRefs.current[index].togglePicker();
+          }}
+          activeOpacity={1.0}
+        >
+          <InputLabelWrapper>
+            <InputLabel colorSchema={validColorSchema}>{`${input.title}`}</InputLabel>
+          </InputLabelWrapper>
+          <InputWrapper colorSchema={validColorSchema}>
+            <InputComponent 
+              input={input} 
+              onChange={changeFromInput(input)} 
+              onBlur={onBlur} 
+              colorSchema={validColorSchema}
+              value={(value[input.id]) || ''}
+              ref={(el) => {inputRefs.current[index] = el;}}
+              />
+            </InputWrapper>
+        </RepeaterItem>
+      ))}
+      <DeleteButton z={0} colorSchema="neutral" color={validColorSchema} block onClick={removeItem}>
+        <DeleteButtonText color={validColorSchema}>Ta bort</DeleteButtonText>
+      </DeleteButton>
     </Base>
   );
 };
