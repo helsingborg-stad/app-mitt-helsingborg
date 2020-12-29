@@ -44,11 +44,11 @@ const InputWrapper = styled.View`
   align-items: center;
   justify-content: center;
   align-items: flex-end;
-  flex: 7;
+  flex: 5;
 `;
 
 const SmallInput = styled(Input)`
-  min-width: 100%;
+  min-width: 80%;
   font-weight: 500;
   color: ${props => props.theme.colors.neutrals[1]};
   padding: 6px;
