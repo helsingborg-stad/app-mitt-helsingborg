@@ -44,11 +44,11 @@ const InputWrapper = styled.View`
   align-items: center;
   justify-content: center;
   align-items: flex-end;
-  flex: 5;
+  flex: 7;
 `;
 
 const SmallInput = styled(Input)`
-  min-width: 80%;
+  min-width: 100%;
   font-weight: 500;
   color: ${props => props.theme.colors.neutrals[1]};
   padding: 6px;
@@ -66,8 +66,8 @@ const SmallText = styled(Text)`
 const DeleteButton = styled(Icon)`
   padding-top: 0px;
   padding-left: 5px;
-  padding-right: 5px;
-  padding-bottom: 20px;
+  padding-right: 0px;
+  padding-bottom: 0px;
   margin-left: 0px;
   margin-right: 0px;
   margin-bottom: 12px;
@@ -198,11 +198,11 @@ SummaryListItem.propTypes = {
   /**
    * Default is blue
    */
-  color: PropTypes.string,
+  colorSchema: PropTypes.string,
   editable: PropTypes.bool,
   validationError: PropTypes.object,
 };
 SummaryListItem.defaultProps = {
-  color: 'blue',
+  colorSchema: 'blue',
 };
 export default SummaryListItem;
