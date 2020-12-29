@@ -25,12 +25,12 @@ const ListBodyFieldLabel = styled(Heading)<{ colorSchema: string }>`
 
 interface Props {
   heading?: string;
-  items: { category: string; component: JSX.Element }[];
   categories: { category: string; description: string }[];
-  colorSchema: PrimaryColor;
+  colorSchema?: PrimaryColor;
   showEditButton?: boolean;
   startEditable?: boolean;
   help?: Help;
+  children: React.ReactElement<{ category: string; editable?: boolean }>[];
 }
 
 /**
@@ -39,16 +39,19 @@ interface Props {
  */
 const GroupedList: React.FC<Props> = ({
   heading,
-  items,
   categories,
   colorSchema,
   showEditButton,
   startEditable,
   help,
+  children,
 }) => {
   const [editable, setEditable] = useState(startEditable);
 
-  const groupedItems: Record<string, { category: string; component: JSX.Element }[]> = {};
+  const groupedItems: Record<
+    string,
+    React.ReactElement<{ category: string; editable?: boolean }>[]
+  > = {};
   const changeEditable = () => {
     LayoutAnimation.configureNext({
       duration: 300,
@@ -64,7 +67,7 @@ const GroupedList: React.FC<Props> = ({
   };
 
   categories.forEach((cat) => {
-    const catItems = items.filter((item) => item.category === cat.category);
+    const catItems = children.filter((item) => item.props.category === cat.category);
     if (catItems.length > 0) {
       groupedItems[cat.category] = catItems;
     }
@@ -97,10 +100,7 @@ const GroupedList: React.FC<Props> = ({
             <ListBodyFieldLabel colorSchema={validColorSchema}>
               {categories.find((c) => c.category === key).description}
             </ListBodyFieldLabel>
-            {groupedItems[key].map((item) => ({
-              ...item.component,
-              props: { ...item.component.props, editable },
-            }))}
+            {groupedItems[key].map((item) => React.cloneElement(item, { editable }))}
           </View>
         ))}
       </ListBody>
@@ -113,10 +113,6 @@ GroupedList.propTypes = {
    * The header text of the list.
    */
   heading: PropTypes.string,
-  /**
-   * The items to display. Each item should have a component, a category and a remove function
-   */
-  items: PropTypes.array,
   /**
    * The allowed categories for the groupings
    */
@@ -133,6 +129,7 @@ GroupedList.propTypes = {
    * Whether to start in editable mode or not
    */
   startEditable: PropTypes.bool,
+  children: PropTypes.array,
   /**
    * Show a help button
    */

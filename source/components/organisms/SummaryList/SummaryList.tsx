@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import GroupedList from '../../molecules/GroupedList/GroupedList';
@@ -85,6 +85,7 @@ const SummaryList: React.FC<Props> = ({
 }) => {
   // For development: show an error popup when something is configured wrong.
   const showNotification = useNotification();
+
   /**
    * Given an item, and possibly an index in the case of repeater fields, this generates a function that
    * updates the form data from the input.
@@ -132,27 +133,6 @@ const SummaryList: React.FC<Props> = ({
     }
   };
 
-  const generateListItem = (
-    item: SummaryListItem,
-    value: string | number | Record<string, any>,
-    validationError?: { isValid: boolean; message: string },
-    index?: number
-  ) => ({
-    category: item.category,
-    component: (
-      <SummaryListItemComponent
-        item={item}
-        index={index ? index + 1 : undefined}
-        value={value}
-        changeFromInput={changeFromInput(item, index)}
-        onBlur={onItemBlur(item, index)}
-        removeItem={removeListItem(item, index)}
-        colorSchema={colorSchema}
-        validationError={validationError}
-      />
-    ),
-  });
-
   // Code for computing sum of all numeric values shown in the list
   let sum = 0;
   const addToSum = (value: string | number) => {
@@ -165,13 +145,13 @@ const SummaryList: React.FC<Props> = ({
     }
   };
 
-  const listItems: {category: string; component: JSX.Element}[] = [];
+  const listItems: React.ReactElement<{ category: string }>[] = [];
   items
     .filter(item => {
       const answer = answers[item.id];
       return typeof answer !== 'undefined';
     })
-    .forEach(item => {
+    .forEach((item, outerIndex) => {
       if (['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type)) {
         const values: Record<string, string | number>[] = answers[item.id];
         if (!Array.isArray(values) && values !== undefined) {
@@ -184,14 +164,19 @@ const SummaryList: React.FC<Props> = ({
         } else if (values && values?.length > 0) {
           values.forEach((v, index) => {
             listItems.push(
-              generateListItem(
-                item,
-                v[item?.inputId],
-                validationErrors?.[item.id]?.[index]
-                  ? validationErrors[item.id][index][item?.inputId]
-                  : undefined,
-                index
-              )
+              <SummaryListItemComponent
+              item={item}
+              index={index ? index + 1 : undefined}
+              value={v[item?.inputId]}
+              changeFromInput={changeFromInput(item, index)}
+              onBlur={onItemBlur(item, index)}
+              removeItem={removeListItem(item, index)}
+              colorSchema={colorSchema}
+              validationError={validationErrors?.[item.id]?.[index]
+                    ? validationErrors[item.id][index][item?.inputId]
+                    : undefined}
+              category={item.category}
+            />
             );
             if (item.type === 'arrayNumber') {
               const numericValue: string | number = v[item?.inputId || item.id];
@@ -201,11 +186,16 @@ const SummaryList: React.FC<Props> = ({
         } 
       } else {
         listItems.push(
-          generateListItem(
-            item,
-            answers[item.id],
-            validationErrors ? (validationErrors as Record<string,  { isValid: boolean; message: string }>)[item.id] : undefined
-          )
+          <SummaryListItemComponent
+              item={item}
+              value={answers[item.id]}
+              changeFromInput={changeFromInput(item)}
+              onBlur={onItemBlur(item)}
+              removeItem={removeListItem(item)}
+              colorSchema={colorSchema}
+              validationError={validationErrors ? (validationErrors as Record<string,  { isValid: boolean; message: string }>)[item.id] : undefined}
+              category={item.category}
+            />
         );
         if (item.type === 'number') {
           const numericValue: number | string = answers[item.id];
@@ -220,13 +210,14 @@ const SummaryList: React.FC<Props> = ({
       <>
         <GroupedList
           heading={heading}
-          items={listItems}
           categories={categories}
           colorSchema={validColorSchema}
           showEditButton
           startEditable={startEditable}
           help={help}
-        />
+        >
+          {listItems}
+        </GroupedList>
         {showSum && (
           <SumContainer colorSchema={validColorSchema}>
             <SumLabel colorSchema={validColorSchema}>Summa</SumLabel>

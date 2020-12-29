@@ -193,9 +193,8 @@ function EditableList({
             error={error ? error[input.key] : undefined}
             activeOpacity={1.0}
             onPress={() => {
-              if (inputIsEditable && inputRefs.current?.[index]?.focus)
-                inputRefs.current[index].focus();
-              else if (inputIsEditable && inputRefs.current?.[index]?.togglePicker)
+              if (editable && inputRefs.current?.[index]?.focus) inputRefs.current[index].focus();
+              else if (editable && inputRefs.current?.[index]?.togglePicker)
                 inputRefs.current[index].togglePicker();
             }}
           >
