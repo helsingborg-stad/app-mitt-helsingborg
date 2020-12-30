@@ -649,27 +649,32 @@ const theme = {
   repeater: {
     blue: {
       inputBackground: colorPalette.complementary.blue[2],
-      deleteButton: '#DD6161',
+      deleteButton: colorPalette.complementary.blue[0],
+      deleteButtonText: '#D73640',
       inputText: colorPalette.neutrals[1],
     },
     green: {
       inputBackground: colorPalette.complementary.green[2],
-      deleteButton: '#DD6161',
+      deleteButton: colorPalette.complementary.green[0],
+      deleteButtonText: '#D73640',
       inputText: colorPalette.neutrals[1],
     },
     red: {
       inputBackground: colorPalette.complementary.red[2],
-      deleteButton: '#DD6161',
+      deleteButton: colorPalette.complementary.red[0],
+      deleteButtonText: '#D73640',
       inputText: colorPalette.neutrals[1],
     },
     purple: {
       inputBackground: colorPalette.complementary.purple[2],
-      deleteButton: '#DD6161',
+      deleteButton: colorPalette.complementary.purple[0],
+      deleteButtonText: '#D73640',
       inputText: colorPalette.neutrals[1],
     },
     neutral: {
       inputBackground: colorPalette.complementary.neutral[2],
-      deleteButton: '#DD6161',
+      deleteButton: colorPalette.complementary.neutral[0],
+      deleteButtonText: '#D73640',
       inputText: colorPalette.neutrals[1],
     },
     darkBlue: {
