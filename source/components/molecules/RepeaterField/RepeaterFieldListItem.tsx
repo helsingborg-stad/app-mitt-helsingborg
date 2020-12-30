@@ -67,8 +67,16 @@ const ItemInput = styled(Input)`
 const DeleteButton = styled(Button)<{color: string}>`
   margin-top: 10px;
   margin-bottom: 10px;
-  background: ${props => theme.repeater[props.color].deleteButton}
-`
+  background: ${props => theme.repeater[props.color].deleteButton};
+`;
+
+const DeleteButtonText = styled(Text)<{color: string}>`
+  color: ${props => theme.repeater[props.color].deleteButtonText};
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 18px;
+`;
 
 interface Props {
   heading?: string;
@@ -160,7 +168,7 @@ const RepeaterFieldListItem: React.FC<Props> = ({
     <Base>
       <ItemLabel colorSchema={validColorSchema} underline={false}>{heading || "Item"}</ItemLabel>
       {rows}
-      <DeleteButton colorSchema="red" color={validColorSchema} block onClick={removeItem}><Text>Ta bort</Text></DeleteButton>
+      <DeleteButton colorSchema="red" color={validColorSchema} block onClick={removeItem}><DeleteButtonText color={validColorSchema}>Ta bort</DeleteButtonText></DeleteButton>
     </Base>
   );
 };
