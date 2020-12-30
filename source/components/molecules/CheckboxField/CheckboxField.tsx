@@ -2,11 +2,11 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled, { ThemeContext } from 'styled-components/native';
 import { TouchableHighlight } from 'react-native';
-import { HelpButton } from '..';
+import HelpButton from '../HelpButton/HelpButton';
 import Text from '../../atoms/Text/Text';
 import Checkbox from '../../atoms/Checkbox/Checkbox';
 import theme from '../../../styles/theme';
-import { getValidColorSchema } from '../../../styles/themeHelpers';
+import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
 
 // TODO: MOVE TO THEME.
 const sizes = {
@@ -27,7 +27,7 @@ const sizes = {
     fontSize: 18,
   },
 };
-const FlexContainer = styled.View`
+const FlexContainer = styled.View<{ toggled?: boolean }>`
   flex: auto;
   flex-direction: row;
   align-items: flex-start;
@@ -52,7 +52,7 @@ const TouchableWrapper = styled(TouchableHighlight)`
   padding-left: 24px;
   padding-right: 24px;
 `;
-const CheckboxFieldText = styled(Text)`
+const CheckboxFieldText = styled(Text)<{ size: 'small' | 'medium' | 'large' }>`
   margin-left: ${(props) => props.theme.sizes[1]}px;
   margin-right: ${(props) => props.theme.sizes[1]}px;
   font-size: ${(props) => sizes[props.size].fontSize}px;
@@ -72,16 +72,25 @@ const StyledErrorText = styled(Text)`
 
 interface CheckBoxProps {
   text?: string;
-  color?: string;
+  colorSchema?: PrimaryColor;
   size?: 'small' | 'medium' | 'large';
-  value: boolean;
-  onChange?: () => void;
+  value: boolean | string;
+  onChange?: (value: boolean) => void;
   help?: { text: string; size?: number; heading?: string; tagline?: string; url?: string };
   error?: { isValid: boolean; message: string };
 }
 
 /** A component with a checkbox next to a descriptive text, and possibly a help button */
-const CheckboxField = ({ text, colorSchema, size, value, onChange, help, error, ...other }) => {
+const CheckboxField: React.FC<CheckBoxProps> = ({
+  text,
+  colorSchema,
+  size,
+  value,
+  onChange,
+  help,
+  error,
+  ...other
+}) => {
   const theme = useContext(ThemeContext);
   let boolValue: boolean;
   if (typeof value === 'boolean') {
