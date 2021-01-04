@@ -168,7 +168,7 @@ const RepeaterFieldListItem: React.FC<Props> = ({
     <Base>
       <ItemLabel colorSchema={validColorSchema} underline={false}>{heading || "Item"}</ItemLabel>
       {rows}
-      <DeleteButton colorSchema="red" color={validColorSchema} block onClick={removeItem}><DeleteButtonText color={validColorSchema}>Ta bort</DeleteButtonText></DeleteButton>
+      <DeleteButton z={0} colorSchema="neutral" color={validColorSchema} block onClick={removeItem}><DeleteButtonText color={validColorSchema}>Ta bort</DeleteButtonText></DeleteButton>
     </Base>
   );
 };
