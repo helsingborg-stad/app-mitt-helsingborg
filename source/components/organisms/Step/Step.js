@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
-import { Text } from 'react-native';
+import { Text, Animated } from 'react-native';
 import styled from 'styled-components/native';
 import FormField from '../../../containers/FormField';
 import AuthContext from '../../../store/AuthContext';
@@ -97,98 +97,119 @@ function Step({
   const inSubstep = currentPosition.level !== 0;
   const backButtonBehavior = inSubstep ? formNavigation.goToMainForm : formNavigation.back;
 
+  const [fadeValue] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    const fadeIn = () => {
+      Animated.timing(fadeValue, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+        isInteraction: false,
+      }).start();
+    };
+    fadeIn();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <StepContainer>
-      <CloseDialog
-        visible={closeDialogVisible}
-        closeForm={closeForm}
-        closeDialog={() => setCloseDialogVisible(false)}
-      />
-      <StepBackNavigation
-        showBackButton={isBackBtnVisible}
-        inSubstep={inSubstep}
-        onBack={backButtonBehavior}
-        onClose={() => setCloseDialogVisible(true)}
-        colorSchema={colorSchema || 'blue'}
-      />
-      <StepContentContainer
-        contentContainerStyle={{
-          flexGrow: 1,
+      <Animated.View
+        style={{
+          opacity: fadeValue,
         }}
-        showsHorizontalScrollIndicator={false}
       >
-        {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
-          <StepBanner {...banner} colorSchema={colorSchema || 'blue'} />
-        )}
-        {currentPosition.level === 0 && (
-          <Progressbar
-            currentStep={currentPosition.currentMainStep}
-            totalStepNumber={totalStepNumber}
-          />
-        )}
-        <StepBody>
-          {(isResolved || isIdle) && (
-            <>
-              <StepDescription
-                theme={theme}
-                currentStep={
-                  currentPosition.level === 0 ? currentPosition.currentMainStep : undefined
-                }
-                totalStepNumber={totalStepNumber}
-                colorSchema={colorSchema || 'blue'}
-                {...description}
-              />
-              {questions && (
-                <StepFieldListWrapper>
-                  {questions.map((field) => (
-                    <FormField
-                      key={`${field.id}`}
-                      onChange={status === 'ongoing' ? onFieldChange : null}
-                      onBlur={onFieldBlur}
-                      inputType={field.type}
-                      value={answers[field.id] || ''}
-                      answers={answers}
-                      validationErrors={validation}
-                      colorSchema={field.color && field.color !== '' ? field.color : colorSchema}
-                      id={field.id}
-                      formNavigation={formNavigation}
-                      {...field}
-                    />
-                  ))}
-                </StepFieldListWrapper>
-              )}
-            </>
+        <CloseDialog
+          visible={closeDialogVisible}
+          closeForm={closeForm}
+          closeDialog={() => setCloseDialogVisible(false)}
+        />
+        <StepBackNavigation
+          showBackButton={isBackBtnVisible}
+          inSubstep={inSubstep}
+          onBack={backButtonBehavior}
+          onClose={() => setCloseDialogVisible(true)}
+          colorSchema={colorSchema || 'blue'}
+        />
+        <StepContentContainer
+          contentContainerStyle={{
+            flexGrow: 1,
+          }}
+          showsHorizontalScrollIndicator={false}
+        >
+          {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
+            <StepBanner {...banner} colorSchema={colorSchema || 'blue'} />
           )}
+          {currentPosition.level === 0 && (
+            <Progressbar
+              currentStep={currentPosition.currentMainStep}
+              totalStepNumber={totalStepNumber}
+            />
+          )}
+          <StepBody>
+            {(isResolved || isIdle) && (
+              <>
+                <StepDescription
+                  theme={theme}
+                  currentStep={
+                    currentPosition.level === 0 ? currentPosition.currentMainStep : undefined
+                  }
+                  totalStepNumber={totalStepNumber}
+                  colorSchema={colorSchema || 'blue'}
+                  {...description}
+                />
+                {questions && (
+                  <StepFieldListWrapper>
+                    {questions.map((field) => (
+                      <FormField
+                        key={`${field.id}`}
+                        onChange={status === 'ongoing' ? onFieldChange : null}
+                        onBlur={onFieldBlur}
+                        inputType={field.type}
+                        value={answers[field.id] || ''}
+                        answers={answers}
+                        validationErrors={validation}
+                        colorSchema={field.color && field.color !== '' ? field.color : colorSchema}
+                        id={field.id}
+                        formNavigation={formNavigation}
+                        {...field}
+                      />
+                    ))}
+                  </StepFieldListWrapper>
+                )}
+              </>
+            )}
 
-          {isLoading && (
-            <SignStepWrapper>
-              <AuthLoading
-                cancelSignIn={() => handleCancelOrder()}
-                isBankidInstalled={isBankidInstalled}
-              />
-            </SignStepWrapper>
-          )}
+            {isLoading && (
+              <SignStepWrapper>
+                <AuthLoading
+                  cancelSignIn={() => handleCancelOrder()}
+                  isBankidInstalled={isBankidInstalled}
+                />
+              </SignStepWrapper>
+            )}
 
-          {/* TODO: Fix how to display error messages */}
-          {isRejected && (
-            <SignStepWrapper>
-              <Text>{error && error.message}</Text>
-            </SignStepWrapper>
-          )}
-        </StepBody>
-        {actions && actions.length > 0 ? (
-          <StepFooter
-            actions={actions}
-            caseStatus={status}
-            answers={answers}
-            formNavigation={formNavigation}
-            currentPosition={currentPosition}
-            onUpdate={onFieldChange}
-            updateCaseInContext={updateCaseInContext}
-            validateStepAnswers={validateStepAnswers}
-          />
-        ) : null}
-      </StepContentContainer>
+            {/* TODO: Fix how to display error messages */}
+            {isRejected && (
+              <SignStepWrapper>
+                <Text>{error && error.message}</Text>
+              </SignStepWrapper>
+            )}
+          </StepBody>
+          {actions && actions.length > 0 ? (
+            <StepFooter
+              actions={actions}
+              caseStatus={status}
+              answers={answers}
+              formNavigation={formNavigation}
+              currentPosition={currentPosition}
+              onUpdate={onFieldChange}
+              updateCaseInContext={updateCaseInContext}
+              validateStepAnswers={validateStepAnswers}
+            />
+          ) : null}
+        </StepContentContainer>
+      </Animated.View>
     </StepContainer>
   );
 }
