@@ -10,6 +10,8 @@ import { User } from '../../types/UserTypes';
 import useForm, { FormReducerState, FormPosition } from './hooks/useForm';
 import Modal from '../../components/molecules/Modal';
 import { ScrollView } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import theme from '../../styles/theme';
 
 const FormScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
@@ -124,12 +126,18 @@ const Form: React.FC<Props> = ({
     }
   }, [mainStep, scrollViewRef]);
 
+  const colorSchema = formState?.steps[formState.currentPosition.currentMainStepIndex]?.colorSchema || 'blue';
+
   return (
     <FormScreenWrapper
       innerRef={(ref) => {
         setRef((ref as unknown) as ScrollView);
       }}
     >
+      <SafeAreaView
+        style={{ backgroundColor: theme.colors.complementary[colorSchema || 'blue'][0] }}
+        edges={['top', 'right', 'left']}
+      />
       {stepComponents[formState.currentPosition.currentMainStepIndex]}
       <Modal visible={formState.currentPosition.level > 0}>
         {stepComponents[formState.currentPosition.index]}

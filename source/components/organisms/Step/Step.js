@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import { Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import FormField from '../../../containers/FormField';
 import AuthContext from '../../../store/AuthContext';
-import globalTheme from '../../../styles/theme';
 import Progressbar from '../../atoms/Progressbar/Progressbar';
 import { AuthLoading } from '../../molecules';
 import BackNavigation from '../../molecules/BackNavigation/BackNavigation';
@@ -101,10 +99,6 @@ function Step({
 
   return (
     <StepContainer>
-      <SafeAreaView
-        style={{ backgroundColor: globalTheme.colors.complementary[colorSchema || 'blue'][0] }}
-        edges={['top', 'right', 'left']}
-      />
       <CloseDialog
         visible={closeDialogVisible}
         closeForm={closeForm}
