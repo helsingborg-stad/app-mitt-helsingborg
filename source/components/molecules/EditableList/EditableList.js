@@ -74,7 +74,7 @@ const getInitialState = (inputs, value) => {
 
 /** Switch between different input types */
 const InputComponent = React.forwardRef(
-  ({ input, colorSchema, editable, onChange, onInputBlur, value }, ref) => {
+  ({ input, colorSchema, editable, onChange, onInputBlur, value, state }, ref) => {
     switch (input.type) {
       case 'number':
         return (
@@ -125,6 +125,21 @@ const InputComponent = React.forwardRef(
     }
   }
 );
+InputComponent.propTypes = {
+  input: PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    key: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    items: PropTypes.array,
+  }),
+  colorSchema: PropTypes.oneOf(['red', 'blue', 'green', 'purple', 'neutral']),
+  editable: PropTypes.bool,
+  onChange: PropTypes.func,
+  onInputBlur: PropTypes.func,
+  value: PropTypes.string,
+  state: PropTypes.object,
+};
+
 /**
  * EditableList
  * A Molecule Component to use for rendering a list with the possibility of editing the list values.
@@ -203,7 +218,7 @@ function EditableList({
             </EditableListItemLabelWrapper>
             <EditableListItemInputWrapper>
               <InputComponent
-                {...{ input, colorSchema, editable, onChange, onInputBlur, value }}
+                {...{ input, colorSchema, editable, onChange, onInputBlur, value, state }}
                 ref={(el) => {
                   inputRefs.current[index] = el;
                 }}
