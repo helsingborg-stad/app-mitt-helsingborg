@@ -30,6 +30,7 @@ ios/Podfile.lock
 .gradle
 local.properties
 *.iml
+android/app/release
 
 # node.js
 #
