@@ -5,9 +5,6 @@ import styled from 'styled-components';
 import Form from '../containers/Form/Form';
 import { getFormQuestions } from '../helpers/CaseDataConverter';
 import generateInitialCaseAnswers from '../store/actions/dynamicFormData';
-import AuthContext from '../store/AuthContext';
-import FormContext from '../store/FormContext';
-import { CaseDispatch, CaseState } from '../store/CaseContext';
 
 const SpinnerContainer = styled.View`
   flex: 1;
@@ -48,7 +45,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   }, [caseData, caseId, getForm, getCase, user, getCasesByFormIds]);
 
   function handleCloseForm() {
-    navigation.navigate('UserEvents', { screen: 'CaseOverview' });
+    navigation.navigate('App', { screen: 'UserEvents' });
   }
 
   const updateCaseContext = (data, status, currentPosition) => {
