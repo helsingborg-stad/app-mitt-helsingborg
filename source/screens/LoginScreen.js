@@ -4,6 +4,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Alert, Linking, View, StatusBar } from 'react-native';
 import styled from 'styled-components/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SLIDES } from '../assets/images';
 import Button from '../components/atoms/Button';
 import Heading from '../components/atoms/Heading';
@@ -295,75 +296,74 @@ function LoginScreen(props) {
         </SafeAreaViewTop>
       </FlexView>
 
-      <LoginModal
-        visible={loginModal}
-        scrollViewProps={{
-          keyboardShouldPersistTaps: 'handled',
-          contentContainerStyle: { flexGrow: 1 },
-          extraScrollHeight: 50,
-        }}
-      >
-        <CloseModalButton
-          onClose={() => loginModalVisible(false)}
-          primary={false}
-          showBackButton={false}
-        />
-        <FlexView>
-          <Header>
-            <ModalHeading>Logga in med BankID på en annan enhet</ModalHeading>
-            <ContentText>
-              Öppna Mobilt BankID eller BankID på din andra enhet innan du trycker på logga in här
-              nedaför.
-            </ContentText>
-          </Header>
+      <LoginModal visible={loginModal}>
+        <KeyboardAwareScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ flexGrow: 1 }}
+          extraScrollHeight={50}
+        >
+          <CloseModalButton
+            onClose={() => loginModalVisible(false)}
+            primary={false}
+            showBackButton={false}
+          />
+          <FlexView>
+            <Header>
+              <ModalHeading>Logga in med BankID på en annan enhet</ModalHeading>
+              <ContentText>
+                Öppna Mobilt BankID eller BankID på din andra enhet innan du trycker på logga in här
+                nedaför.
+              </ContentText>
+            </Header>
 
-          {(isLoading || isResolved) && (
-            <Form>
-              <AuthLoading
-                colorSchema="blue"
-                isResolved={isResolved}
-                cancelSignIn={() => handleCancelOrder()}
-                isBankidInstalled={false}
-              />
-            </Form>
-          )}
+            {(isLoading || isResolved) && (
+              <Form>
+                <AuthLoading
+                  colorSchema="blue"
+                  isResolved={isResolved}
+                  cancelSignIn={() => handleCancelOrder()}
+                  isBankidInstalled={false}
+                />
+              </Form>
+            )}
 
-          {(isIdle || isRejected) && (
-            <Form>
-              <Label strong>PERSONNUMMER</Label>
-              <LoginInput
-                colorSchema="neutral"
-                returnKeyType={null}
-                placeholder="ååååmmddxxxx"
-                value={personalNumber}
-                onChangeText={handlePersonalNumber}
-                keyboardType="number-pad"
-                maxLength={12}
-                onSubmitEditing={() => handleLogin(true)}
-                center
-              />
-              <Button
-                z={0}
-                disabled={personalNumber.length !== 12}
-                size="large"
-                block
-                onClick={() => {
-                  handleLogin(true);
-                }}
-              >
-                <Text>Logga in</Text>
-              </Button>
+            {(isIdle || isRejected) && (
+              <Form>
+                <Label strong>PERSONNUMMER</Label>
+                <LoginInput
+                  colorSchema="neutral"
+                  returnKeyType={null}
+                  placeholder="ååååmmddxxxx"
+                  value={personalNumber}
+                  onChangeText={handlePersonalNumber}
+                  keyboardType="number-pad"
+                  maxLength={12}
+                  onSubmitEditing={() => handleLogin(true)}
+                  center
+                />
+                <Button
+                  z={0}
+                  disabled={personalNumber.length !== 12}
+                  size="large"
+                  block
+                  onClick={() => {
+                    handleLogin(true);
+                  }}
+                >
+                  <Text>Logga in</Text>
+                </Button>
 
-              <Link
-                onPress={() => {
-                  Linking.openURL('https://support.bankid.com/sv/bankid/mobilt-bankid');
-                }}
-              >
-                Läs mer om hur du skaffar mobilt BankID
-              </Link>
-            </Form>
-          )}
-        </FlexView>
+                <Link
+                  onPress={() => {
+                    Linking.openURL('https://support.bankid.com/sv/bankid/mobilt-bankid');
+                  }}
+                >
+                  Läs mer om hur du skaffar mobilt BankID
+                </Link>
+              </Form>
+            )}
+          </FlexView>
+        </KeyboardAwareScrollView>
       </LoginModal>
 
       <LoginModal
@@ -374,12 +374,12 @@ function LoginScreen(props) {
           extraScrollHeight: 50,
         }}
       >
-        <CloseModalButton
-          onClose={() => userAgreementModalVisible(false)}
-          primary={false}
-          showBackButton={false}
-        />
-        <FlexView>
+        <KeyboardAwareScrollView>
+          <CloseModalButton
+            onClose={() => userAgreementModalVisible(false)}
+            primary={false}
+            showBackButton={false}
+          />
           <UserAgreementForm>
             <MarkdownConstructor rules={userAgreementMarkdownRules} rawText={userAgreementText} />
           </UserAgreementForm>
@@ -394,7 +394,7 @@ function LoginScreen(props) {
               <Text>Återvänd till inloggning</Text>
             </Button>
           </UserAgreementFooter>
-        </FlexView>
+        </KeyboardAwareScrollView>
       </LoginModal>
     </FlexView>
   );
