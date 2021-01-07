@@ -296,7 +296,8 @@ function LoginScreen(props) {
         </SafeAreaViewTop>
       </FlexView>
 
-      <LoginModal visible={loginModal}>
+      <LoginModal visible={loginModal} setVisibility={(isVisible) => loginModalVisible(isVisible)}>
+        <StatusBar barStyle="dark-content" backgroundColor="white" />
         <KeyboardAwareScrollView
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ flexGrow: 1 }}
@@ -367,6 +368,7 @@ function LoginScreen(props) {
       </LoginModal>
 
       <LoginModal
+        setVisibility={(isVisible) => userAgreementModalVisible(isVisible)}
         visible={userAgreementModal}
         scrollViewProps={{
           keyboardShouldPersistTaps: 'handled',
