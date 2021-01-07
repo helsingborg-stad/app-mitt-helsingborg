@@ -38,7 +38,7 @@ const BackButtonIcon = styled(Icon).attrs(({ theme, colorSchema }) => ({
   color: theme.colors.primary[colorSchema][0],
 }))``;
 
-const CloseButton = styled.View((props) => ({
+const CloseButton = styled.TouchableOpacity((props) => ({
   alignItems: 'center',
   borderRadius: 30,
   justifyContent: 'center',
@@ -79,11 +79,7 @@ const BackNavigation = ({
       )}
 
       {showCloseButton ? (
-        <CloseButton
-          primary={primary}
-          colorSchema={colorSchema}
-          onStartShouldSetResponder={onClose}
-        >
+        <CloseButton primary={primary} colorSchema={colorSchema} onPress={onClose}>
           <CloseButtonIcon colorSchema={colorSchema} primary={primary} name="close" />
         </CloseButton>
       ) : null}
@@ -93,7 +89,7 @@ const BackNavigation = ({
       <CloseButton
         primary={primary}
         colorSchema={colorSchema}
-        onStartShouldSetResponder={() => {
+        onPress={() => {
           onBack();
         }}
       >
