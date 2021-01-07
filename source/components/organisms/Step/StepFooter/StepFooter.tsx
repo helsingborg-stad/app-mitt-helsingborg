@@ -3,12 +3,14 @@ import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import AuthContext from '../../../../store/AuthContext';
 import { Button, Text } from '../../../atoms';
-import { Action, ActionType } from '../../../../types/FormTypes';
+import { Action, ActionType, Question } from '../../../../types/FormTypes';
 import { CaseStatus } from '../../../../types/CaseType';
-import { CurrentFormPosition } from '../../../../containers/Form/hooks/useForm';
+import { FormPosition } from '../../../../containers/Form/hooks/useForm';
 import { useNotification } from '../../../../store/NotificationContext';
+import { parseConditionalExpression } from '../../../../helpers/conditionParser';
 
 const ActionContainer = styled.View`
+  flex: 1;
   background-color: ${(props) => props.theme.colors.neutrals[5]};
 `;
 
@@ -28,6 +30,7 @@ interface Props {
   caseStatus: CaseStatus;
   background?: string;
   answers: Record<string, any>;
+  allQuestions: Question[];
   formNavigation: {
     next: () => void;
     back: () => void;
@@ -43,16 +46,17 @@ interface Props {
   updateCaseInContext: (
     answers: Record<string, any>,
     status: CaseStatus,
-    currentMainStep: number
+    currentPosition: FormPosition
   ) => void;
-  currentPosition: CurrentFormPosition;
-  validateStepAnswers: () => void;
+  currentPosition: FormPosition;
+  validateStepAnswers: (errorCallback: () => void, onValidCallback: () => void) => void;
 }
 
 const StepFooter: React.FC<Props> = ({
   actions,
   caseStatus,
   answers,
+  allQuestions,
   formNavigation,
   onUpdate,
   onSubmit,
@@ -123,17 +127,9 @@ const StepFooter: React.FC<Props> = ({
     }
   };
 
-  const checkCondition = (questionId: string) => {
-    if (!questionId) return false;
-
-    if (typeof questionId === 'string') {
-      if (questionId[0] === '!') {
-        const qId = questionId.slice(1);
-        return answers[qId];
-      }
-      return !answers[questionId];
-    }
-    return false;
+  const checkCondition = (condition?: string) => {
+    if (!condition || condition === '') return false;
+    return !parseConditionalExpression(condition, answers, allQuestions);
   };
 
   const buttons = actions.map((action, index) => (
@@ -141,7 +137,7 @@ const StepFooter: React.FC<Props> = ({
       <Button
         onClick={actionMap(action.type)}
         colorSchema={action.color}
-        disabled={isLoading || checkCondition(action.conditionalOn)}
+        disabled={isLoading || (action.hasCondition && checkCondition(action.conditionalOn))}
         z={0}
       >
         <Text>{action.label}</Text>
@@ -185,6 +181,7 @@ StepFooter.propTypes = {
    * Current form answers, used for passing to the various actions
    */
   answers: PropTypes.object,
+  allQuestions: PropTypes.array,
   /**
    * An object bundling all functions relevant for navigation through the form.
    */

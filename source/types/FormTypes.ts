@@ -10,7 +10,8 @@ export interface Help {
 export interface SummaryItem {
   category: string;
   title: string;
-  formId: string;
+  id: string;
+  type: 'text' | 'arrayText' | 'number' | 'arrayNumber' | 'date' | 'arrayDate' | 'checkbox';
   loadPrevious?: string[];
   validation?: ValidationObject;
 }
@@ -52,6 +53,7 @@ export interface Action {
   type: ActionType;
   label: string;
   color?: string;
+  hasCondition?: boolean;
   conditionalOn?: string;
 }
 

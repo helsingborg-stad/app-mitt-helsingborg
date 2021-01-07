@@ -46,6 +46,7 @@ function Step({
   questions,
   actions,
   answers,
+  allQuestions,
   validation,
   validateStepAnswers,
   status,
@@ -200,6 +201,7 @@ function Step({
                 actions={actions}
                 caseStatus={status}
                 answers={answers}
+                allQuestions={allQuestions}
                 formNavigation={formNavigation}
                 currentPosition={currentPosition}
                 onUpdate={onFieldChange}
@@ -230,6 +232,7 @@ Step.propTypes = {
    * The array of fields that are going to be displayed in the Step
    */
   questions: PropTypes.arrayOf(PropTypes.object),
+  allQuestions: PropTypes.array,
   /**
    * The answers of a form.
    */

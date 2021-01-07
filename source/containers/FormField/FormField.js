@@ -16,6 +16,7 @@ import {
 import theme from '../../styles/theme';
 import { getValidColorSchema } from '../../styles/themeHelpers';
 import SummaryList from '../../components/organisms/SummaryList/SummaryList';
+import { parseConditionalExpression } from '../../helpers/conditionParser';
 
 /**
  * Explanation of the properties in this data structure:
@@ -121,6 +122,7 @@ const FormField = ({
   onBlur,
   value,
   answers,
+  allQuestions,
   validationErrors,
   conditionalOn,
   help,
@@ -160,17 +162,9 @@ const FormField = ({
 
   /** Checks if the field is conditional on another input, and if so,
    * evaluates whether this field should be active or not */
-  const checkCondition = (questionId) => {
-    if (!questionId) return true;
-
-    if (typeof questionId === 'string') {
-      if (questionId[0] === '!') {
-        const qId = questionId.slice(1);
-        return !answers[qId];
-      }
-      return answers[questionId];
-    }
-    return true;
+  const checkCondition = (condition) => {
+    if (!condition || condition.trim() === '') return true;
+    return parseConditionalExpression(condition, answers, allQuestions);
   };
 
   const inputComponent =
@@ -243,6 +237,7 @@ FormField.propTypes = {
    * All the form state answers. Needed because of conditional checks.
    */
   answers: PropTypes.object,
+  allQuestions: PropTypes.array,
   validationErrors: PropTypes.object,
   formNavigation: PropTypes.shape({
     next: PropTypes.func,
