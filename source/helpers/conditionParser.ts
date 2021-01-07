@@ -23,6 +23,7 @@ const evaluateSummaryList = (
   return !isEmpty;
 };
 
+/** Evaluates an answer value to a boolean. False if the value is empty or false, otherwise true. */
 export const evaluateAnswer = (
   questionId: string,
   answers: Record<string, any>,
@@ -55,10 +56,9 @@ export const evaluateAnswer = (
   }
 };
 
-// type used while parsing
 type EvaluatedValue = boolean | '!' | '&&' | '||';
 
-// evaluation
+// evaluation functions
 const evaluateNot = (array: EvaluatedValue[]) => {
   const arrCopy = [...array];
   const reversedIndex = arrCopy.reverse().findIndex(expr => expr === '!');
@@ -88,8 +88,17 @@ const evaluateOr = (array: EvaluatedValue[]) => {
 }
 
 const specialWords = ['!', '&&', '||'];
+// regex matching the special words above
 const regex = /(!|&&|\|\|)/gm;
 
+/**
+ * Evaluates an expression of the form "questionId1 && questionId2 || !questionId3".
+ * Allowed boolean operators are !, &&, ||. Parenthesis are not supported.
+ * Evaluates ! first, then && and lastly ||.
+ * @param condition the conditional expression
+ * @param answers all answers of the form
+ * @param allQuestions array of the questions in the form
+ */
 export const parseConditionalExpression = (
   condition: string,  
   answers: Record<string, any>,
