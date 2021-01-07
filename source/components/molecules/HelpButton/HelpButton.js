@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Modal, TouchableHighlight, ScrollView, Image, Linking } from 'react-native';
+import { TouchableHighlight, ScrollView, Image, Linking } from 'react-native';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import { Icon, Button } from '../../atoms';
 import icons from '../../../helpers/Icons';
 import Text from '../../atoms/Text';
 import BackNavigation from '../BackNavigation/BackNavigation';
+import { Modal, useModal } from '../Modal';
 
 const ModalContainer = styled.View({
   backgroundColor: '#00213F',
@@ -68,7 +69,7 @@ const LinkButton = styled(Button)`
 
 const HelpButton = (props) => {
   const { text, size, heading, tagline, url } = props;
-  const [modalVisible, setModalVisible] = useState(false);
+  const [visible, toggleModal] = useModal();
 
   const link = () => {
     Linking.openURL(url);
@@ -86,16 +87,9 @@ const HelpButton = (props) => {
 
   return (
     <>
-      <Modal
-        visible={modalVisible}
-        animationType="slide"
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}
-        presentationStyle="pageSheet"
-      >
+      <Modal visible={visible} hide={toggleModal}>
         <ModalContainer>
-          <CloseModal showBackButton={false} onClose={() => setModalVisible(false)} />
+          <CloseModal showBackButton={false} onClose={toggleModal} />
           <BannerWrapper>
             <BannerIcon resizeMode="contain" source={icons.ICON_HELP} />
           </BannerWrapper>
@@ -119,13 +113,7 @@ const HelpButton = (props) => {
           </Container>
         </ModalContainer>
       </Modal>
-      <TouchableHighlight
-        onPressIn={() => setModalVisible(false)}
-        onPress={() => {
-          setModalVisible(true);
-        }}
-        underlayColor="transparent"
-      >
+      <TouchableHighlight onPressIn={toggleModal} onPress={toggleModal} underlayColor="transparent">
         <Icon name="help-outline" size={size} />
       </TouchableHighlight>
     </>
