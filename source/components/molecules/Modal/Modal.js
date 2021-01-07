@@ -24,7 +24,7 @@ const Modal = ({ visible, children, scrollViewProps, ...other }) => (
     {...other}
   >
     <SafeAreaView edges={['top', 'right', 'left']} />
-    <KeyboardAwareScrollView {...scrollViewProps}>{children}</KeyboardAwareScrollView>
+    {children}
   </ModalContainer>
 );
 
