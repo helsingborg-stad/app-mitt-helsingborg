@@ -8,7 +8,7 @@ import { Step as StepType, StepperActions } from '../../types/FormTypes';
 import { CaseStatus } from '../../types/CaseType';
 import { User } from '../../types/UserTypes';
 import useForm, { FormReducerState, FormPosition } from './hooks/useForm';
-import Modal from '../../components/molecules/Modal';
+import { Modal, useModal } from '../../components/molecules/Modal';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import theme from '../../styles/theme';
@@ -117,7 +117,9 @@ const Form: React.FC<Props> = ({
   );
 
   const mainStep = formState.currentPosition.currentMainStepIndex;
+  const [visible, toggleModal] = useModal();
   const [scrollViewRef, setRef] = useState<ScrollView>(null);
+
   useEffect(() => {
     if (scrollViewRef && scrollViewRef?.scrollTo) {
       InteractionManager.runAfterInteractions(() => {
@@ -139,7 +141,7 @@ const Form: React.FC<Props> = ({
         edges={['top', 'right', 'left']}
       />
       {stepComponents[formState.currentPosition.currentMainStepIndex]}
-      <Modal visible={formState.currentPosition.level > 0}>
+      <Modal visible={formState.currentPosition.level > 0} hide={toggleModal}>
         {stepComponents[formState.currentPosition.index]}
       </Modal>
     </FormScreenWrapper>
