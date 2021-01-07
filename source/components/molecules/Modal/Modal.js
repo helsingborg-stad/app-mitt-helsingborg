@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import RnModal from 'react-native-modal';
 import styled from 'styled-components/native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ModalContainer = styled(RnModal)`
@@ -14,7 +13,7 @@ const ModalContainer = styled(RnModal)`
   border-top-right-radius: 17.5px;
 `;
 
-const Modal = ({ visible, children, scrollViewProps, ...other }) => (
+const Modal = ({ visible, children, ...other }) => (
   <ModalContainer
     animationInTiming={500}
     animationOutTiming={500}
@@ -31,10 +30,6 @@ const Modal = ({ visible, children, scrollViewProps, ...other }) => (
 Modal.propTypes = {
   visible: PropTypes.bool.isRequired,
   children: PropTypes.any,
-  /**
-   * Props specific for KeyboardAwareScrollView
-   */
-  scrollViewProps: PropTypes.object,
 };
 
 export default Modal;
