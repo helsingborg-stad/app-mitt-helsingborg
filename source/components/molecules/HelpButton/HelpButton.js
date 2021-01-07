@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TouchableHighlight, ScrollView, Image, Linking } from 'react-native';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
@@ -113,7 +113,7 @@ const HelpButton = (props) => {
           </Container>
         </ModalContainer>
       </Modal>
-      <TouchableHighlight onPressIn={toggleModal} onPress={toggleModal} underlayColor="transparent">
+      <TouchableHighlight onPress={toggleModal} underlayColor="transparent">
         <Icon name="help-outline" size={size} />
       </TouchableHighlight>
     </>
