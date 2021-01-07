@@ -9,13 +9,14 @@ import { CurrentFormPosition } from '../../../../containers/Form/hooks/useForm';
 import { useNotification } from '../../../../store/NotificationContext';
 
 const ActionContainer = styled.View`
-  flex: 1;
-  background-color: ${props => props.theme.colors.neutrals[5]};
+  background-color: ${(props) => props.theme.colors.neutrals[5]};
 `;
+
 const Flex = styled.View`
   padding: 5px;
   align-items: flex-end;
 `;
+
 const ButtonWrapper = styled.View`
   margin-top: 32px;
   margin-bottom: 49px;
