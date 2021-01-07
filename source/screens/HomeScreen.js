@@ -1,4 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
 import React, { useContext } from 'react';
 import styled from 'styled-components/native';
 import { CaseDispatch } from 'app/store/CaseContext';
