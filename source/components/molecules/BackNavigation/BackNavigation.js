@@ -12,14 +12,17 @@ const BackNavigationWrapper = styled.View({
   top: 0,
   zIndex: 999,
 });
-const BackNavigationSingleWrapper = styled.View({
+
+const BackNavigationSingleWrapper = styled.View((props) => ({
   flexDirection: 'row',
   padding: 0,
   margin: 0,
   justifyContent: 'flex-end',
   top: 0,
   zIndex: 999,
-});
+  right: 0,
+  position: props.inSubstep ? 'absolute' : 'relative',
+}));
 
 const BackButton = styled.View((props) => ({
   alignItems: 'center',
@@ -86,19 +89,16 @@ const BackNavigation = ({
       ) : null}
     </BackNavigationWrapper>
   ) : (
-    <BackNavigationSingleWrapper style={style}>
-      <BackButton
+    <BackNavigationSingleWrapper inSubstep={inSubstep} style={style}>
+      <CloseButton
+        primary={primary}
         colorSchema={colorSchema}
         onStartShouldSetResponder={() => {
           onBack();
         }}
       >
-        <BackButtonIcon
-          name="keyboard-backspace"
-          style={{ transform: [{ rotate: '-90deg' }] }}
-          colorSchema={colorSchema}
-        />
-      </BackButton>
+        <CloseButtonIcon colorSchema={colorSchema} primary={primary} name="close" />
+      </CloseButton>
     </BackNavigationSingleWrapper>
   );
 
