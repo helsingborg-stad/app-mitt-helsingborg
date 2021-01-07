@@ -413,7 +413,7 @@ const SubstepsDemoStoryData = {
       group: '',
     },
     {
-      description: '',
+      description: 'Test \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Test ',
       banner: {
         iconSrc: '',
         imageSrc: '',
