@@ -100,6 +100,7 @@ const Form: React.FC<Props> = ({
         validateStepAnswers={validateStepAnswers}
         status={status}
         questions={questions}
+        allQuestions={formState.allQuestions}
         actions={actions}
         formNavigation={formNavigation}
         onSubmit={() => handleSubmit(onSubmit)}
