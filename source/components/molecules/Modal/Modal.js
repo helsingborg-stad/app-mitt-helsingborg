@@ -1,18 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal as RnModal } from 'react-native';
 
-const Modal = ({ visible, children, setVisibility, ...other }) => (
+const Modal = ({ visible, hide, children, ...other }) => (
   <RnModal
     statusBarTranslucent={false}
     visible={visible}
     animationType="slide"
     transparent={false}
-    onRequestClose={() => {
-      if (setVisibility) {
-        setVisibility(false);
-      }
-    }}
+    onRequestClose={hide}
     presentationStyle="pageSheet"
     {...other}
   >
@@ -21,6 +17,7 @@ const Modal = ({ visible, children, setVisibility, ...other }) => (
 );
 
 Modal.propTypes = {
+  hide: PropTypes.func,
   visible: PropTypes.bool.isRequired,
   children: PropTypes.any,
 };
