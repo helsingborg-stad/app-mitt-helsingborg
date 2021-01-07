@@ -1,15 +1,14 @@
-import { Icon, Text } from 'app/components/atoms';
-import { Card } from 'app/components/molecules';
-import { CaseState } from 'app/store/CaseContext';
-import FormContext from 'app/store/FormContext';
-import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { View, Animated, Easing } from 'react-native';
+import PropTypes from 'prop-types';
+import { CaseState } from 'app/store/CaseContext';
+import FormContext from 'app/store/FormContext';
 import styled from 'styled-components/native';
 import icons from '../../helpers/Icons';
 import { launchPhone, launchEmail } from '../../helpers/LaunchExternalApp';
 import { formatUpdatedAt, getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
-import ScreenWrapper from '../../components/molecules/ScreenWrapper';
+import { Icon, Text } from '../../components/atoms';
+import { Card, ScreenWrapper } from '../../components/molecules';
 
 const Container = styled.ScrollView`
   flex: 1;

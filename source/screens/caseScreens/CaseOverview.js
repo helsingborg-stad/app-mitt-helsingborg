@@ -1,17 +1,14 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-<<<<<<< HEAD
-=======
-import { Icon, Text } from 'app/components/atoms';
-import { Card, Header } from 'app/components/molecules';
-import { CaseDispatch, CaseState, caseStatus, caseTypes } from 'app/store/CaseContext';
-import FormContext from 'app/store/FormContext';
+import { Animated, Easing } from 'react-native';
 import PropTypes from 'prop-types';
 import icons from 'source/helpers/Icons';
 import styled from 'styled-components/native';
->>>>>>> remove git merge markers that I somehow missed
-import { Animated, Easing } from 'react-native';
+
+import FormContext from '../../store/FormContext';
+import { CaseDispatch, CaseState, caseStatus, caseTypes } from '../../store/CaseContext';
+import { Icon, Text } from '../../components/atoms';
+import { Card, Header, ScreenWrapper } from '../../components/molecules';
 import { formatUpdatedAt } from '../../helpers/DateHelpers';
-import ScreenWrapper from '../../components/molecules/ScreenWrapper';
 
 const Container = styled.ScrollView`
   flex: 1;
