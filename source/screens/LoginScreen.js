@@ -12,7 +12,7 @@ import Input from '../components/atoms/Input';
 import Text from '../components/atoms/Text';
 import AuthLoading from '../components/molecules/AuthLoading';
 import BackNavigation from '../components/molecules/BackNavigation';
-import Modal from '../components/molecules/Modal';
+import { Modal, useModal } from '../components/molecules/Modal';
 import { ValidationHelper } from '../helpers';
 import AuthContext from '../store/AuthContext';
 import { useNotification } from '../store/NotificationContext';
@@ -156,8 +156,8 @@ function LoginScreen(props) {
   } = useContext(AuthContext);
   const showNotification = useNotification();
 
-  const [loginModal, loginModalVisible] = useState(false);
-  const [userAgreementModal, userAgreementModalVisible] = useState(false);
+  const [loginModalVisible, toggleLoginModal] = useModal();
+  const [agreementModalVisible, toggleAgreementModal] = useModal();
   const [personalNumber, setPersonalNumber] = useState('');
 
   /**
@@ -266,21 +266,15 @@ function LoginScreen(props) {
               <Button z={0} size="large" block onClick={() => handleLogin()}>
                 <Text>Logga in med Mobilt BankID</Text>
               </Button>
-              <Link onPress={() => loginModalVisible(true)}>Fler alternativ</Link>
+              <Link onPress={toggleLoginModal}>Fler alternativ</Link>
             </Form>
           )}
 
           <Footer>
             <FooterText>
               När du använder tjänsten Mitt Helsingborg godkänner du vårt{' '}
-              <ParagraphLink
-                onPress={() => {
-                  userAgreementModalVisible(true);
-                }}
-              >
-                användaravtal
-              </ParagraphLink>{' '}
-              och att du har tagit del av hur vi hanterar dina{' '}
+              <ParagraphLink onPress={toggleAgreementModal}>användaravtal</ParagraphLink> och att du
+              har tagit del av hur vi hanterar dina{' '}
               <ParagraphLink
                 onPress={() =>
                   Linking.openURL(
@@ -296,18 +290,14 @@ function LoginScreen(props) {
         </SafeAreaViewTop>
       </FlexView>
 
-      <LoginModal visible={loginModal} setVisibility={(isVisible) => loginModalVisible(isVisible)}>
+      <LoginModal visible={loginModalVisible} hide={toggleLoginModal}>
         <StatusBar barStyle="dark-content" backgroundColor="white" />
         <KeyboardAwareScrollView
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ flexGrow: 1 }}
           extraScrollHeight={50}
         >
-          <CloseModalButton
-            onClose={() => loginModalVisible(false)}
-            primary={false}
-            showBackButton={false}
-          />
+          <CloseModalButton onClose={toggleLoginModal} primary={false} showBackButton={false} />
           <FlexView>
             <Header>
               <ModalHeading>Logga in med BankID på en annan enhet</ModalHeading>
@@ -367,32 +357,14 @@ function LoginScreen(props) {
         </KeyboardAwareScrollView>
       </LoginModal>
 
-      <LoginModal
-        setVisibility={(isVisible) => userAgreementModalVisible(isVisible)}
-        visible={userAgreementModal}
-        scrollViewProps={{
-          keyboardShouldPersistTaps: 'handled',
-          contentContainerStyle: { flexGrow: 1 },
-          extraScrollHeight: 50,
-        }}
-      >
+      <LoginModal visible={agreementModalVisible} hide={toggleAgreementModal}>
         <KeyboardAwareScrollView>
-          <CloseModalButton
-            onClose={() => userAgreementModalVisible(false)}
-            primary={false}
-            showBackButton={false}
-          />
+          <CloseModalButton onClose={toggleAgreementModal} primary={false} showBackButton={false} />
           <UserAgreementForm>
             <MarkdownConstructor rules={userAgreementMarkdownRules} rawText={userAgreementText} />
           </UserAgreementForm>
           <UserAgreementFooter>
-            <Button
-              z={0}
-              block
-              onClick={() => {
-                userAgreementModalVisible(false);
-              }}
-            >
+            <Button z={0} block onClick={toggleAgreementModal}>
               <Text>Återvänd till inloggning</Text>
             </Button>
           </UserAgreementFooter>
