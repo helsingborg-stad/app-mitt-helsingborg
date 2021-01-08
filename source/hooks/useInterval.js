@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import BackgroundTimer from 'react-native-background-timer';
 
 export default function useInterval(callback, delay) {
   const savedCallback = useRef();
@@ -10,12 +11,13 @@ export default function useInterval(callback, delay) {
 
   // Set up the interval.
   useEffect(() => {
+    // only one background timer can run at a time, so we stop here to make sure that we don't have unintended collisions
+    BackgroundTimer.stopBackgroundTimer();
     function tick() {
       savedCallback.current();
     }
     if (delay !== null) {
-      const id = setInterval(tick, delay);
-      return () => clearInterval(id);
+      BackgroundTimer.runBackgroundTimer(tick, delay);
     }
   }, [delay]);
 }
