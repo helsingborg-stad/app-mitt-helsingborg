@@ -193,7 +193,8 @@ const SummaryList: React.FC<Props> = ({
             }
           });
         } 
-      } else if (['editableListText', 'editableListNumber', 'editableListDate'].includes(item.type) && item.inputId) { 
+      } else if (['editableListText', 'editableListNumber', 'editableListDate'].includes(item.type) && item.inputId 
+      && answers?.[item.id]?.[item.inputId]) { 
         listItems.push(
           <SummaryListItemComponent
               item={item}
@@ -210,7 +211,7 @@ const SummaryList: React.FC<Props> = ({
           const numericValue: number = answers[item.id][item.inputId];
           addToSum(numericValue);
         }
-      } else {
+      } else if (['text', 'number', 'date'].includes(item.type)) {
         listItems.push(
           <SummaryListItemComponent
               item={item}
