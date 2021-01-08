@@ -39,7 +39,8 @@ const SumContainer = styled.View<{ colorSchema: string }>`
 export interface SummaryListItem {
   title: string;
   id: string;
-  type: 'number' | 'text' | 'date' | 'checkbox' | 'arrayNumber' | 'arrayText' | 'arrayDate';
+  type: 'number' | 'text' | 'date' | 'checkbox' | 'arrayNumber' | 'arrayText' | 'arrayDate' 
+   | 'editableListText' | 'editableListNumber' | 'editableListDate' ;
   category?: string;
   inputId?: string;
 }
@@ -101,6 +102,10 @@ const SummaryList: React.FC<Props> = ({
       const oldAnswer: Record<string, string | number | boolean>[] = answers[item.id];
       oldAnswer[index][item.inputId] = value;
       onChange(oldAnswer, item.id);
+    } else if (['editableListText', 'editableListNumber', 'editableListDate'].includes(item.type) && item.inputId) {
+      const oldAnswer: Record<string, string | number | boolean> = answers[item.id];
+      oldAnswer[item.inputId] = value;
+      onChange(oldAnswer, item.id);
     } else {
       onChange(value, item.id);
     }
@@ -108,7 +113,7 @@ const SummaryList: React.FC<Props> = ({
 
   const onItemBlur = (item: SummaryListItem, index?: number) => (value: string | number | boolean) => {
     if (
-      ['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type) &&
+      ['arrayNumber', 'arrayText', 'arrayDate', 'editableListText', 'editableListNumber', 'editableListDate'].includes(item.type) &&
       typeof index !== 'undefined' &&
       item.inputId
     ){
@@ -127,6 +132,10 @@ const SummaryList: React.FC<Props> = ({
     if (typeof index !== 'undefined') {
       const oldAnswer: Record<string, string | number>[] = answers[item.id];
       oldAnswer.splice(index, 1);
+      onChange(oldAnswer, item.id);
+    } else if (['editableListText', 'editableListNumber', 'editableListDate'].includes(item.type) && item.inputId) { 
+      const oldAnswer: Record<string, string | number> = answers[item.id];
+      oldAnswer[item.inputId] = undefined;
       onChange(oldAnswer, item.id);
     } else {
       onChange(undefined, item.id);
@@ -184,6 +193,23 @@ const SummaryList: React.FC<Props> = ({
             }
           });
         } 
+      } else if (['editableListText', 'editableListNumber', 'editableListDate'].includes(item.type) && item.inputId) { 
+        listItems.push(
+          <SummaryListItemComponent
+              item={item}
+              value={answers[item.id][item.inputId]}
+              changeFromInput={changeFromInput(item)}
+              onBlur={onItemBlur(item)}
+              removeItem={removeListItem(item)}
+              colorSchema={colorSchema}
+              validationError={validationErrors?.[item.id]?.[item.inputId] ? validationErrors?.[item.id]?.[item.inputId] : undefined}
+              category={item.category}
+            />
+        );
+        if (item.type === 'editableListNumber') {
+          const numericValue: number = answers[item.id][item.inputId];
+          addToSum(numericValue);
+        }
       } else {
         listItems.push(
           <SummaryListItemComponent
@@ -198,7 +224,7 @@ const SummaryList: React.FC<Props> = ({
             />
         );
         if (item.type === 'number') {
-          const numericValue: number | string = answers[item.id];
+          const numericValue: number = answers[item.id];
           addToSum(numericValue);
         }
       }
