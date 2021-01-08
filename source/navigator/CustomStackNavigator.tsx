@@ -67,17 +67,20 @@ const CustomStackNavigator = ({
   });
   const { handleLogout, isAuthenticated } = useContext(AuthContext);
 
+  const handleEndUserSession = async () => {
+    if (isAuthenticated) {
+      await handleLogout();
+      navigation.navigate('Start');
+    }
+  };
+
   const { isActive, panResponder, updateIsActive, updateLatestTouchTime } = useTouchActivity(
     parseInt(env.INACTIVITY_TIME),
     5000,
-    true
+    true,
+    60000,
+    handleEndUserSession
   );
-
-  const handleEndUserSession = async () => {
-    await handleLogout();
-    updateIsActive(true);
-    navigation.navigate('Start');
-  };
 
   const handleContinueUserSession = () => {
     updateIsActive(true);
