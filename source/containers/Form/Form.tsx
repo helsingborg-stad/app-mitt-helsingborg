@@ -90,38 +90,38 @@ const Form: React.FC<Props> = ({
         if (!condition || condition.trim() === '') return true;
         return parseConditionalExpression(condition, formState.formAnswers, formState.allQuestions);
       });
+
       return (
         <Step
-        key={`${id}`}
-        banner={{
-          ...banner,
-        }}
-        colorSchema={colorSchema}
-        description={{
-          heading: title,
-          tagline: group,
-          text: description,
-        }}
-        answers={formState.formAnswers}
-        validation={formState.validations}
-        validateStepAnswers={validateStepAnswers}
-        status={status}
-        questions={questionsToShow}
-        allQuestions={formState.allQuestions}
-        actions={actions}
-        formNavigation={formNavigation}
-        onSubmit={() => handleSubmit(onSubmit)}
-        onFieldChange={handleInputChange}
-        onFieldBlur={handleBlur}
-        updateCaseInContext={updateCaseInContext}
-        currentPosition={formState.currentPosition}
-        totalStepNumber={formState.numberOfMainSteps}
-        isBackBtnVisible={
-          formState.currentPosition.currentMainStep > 1 &&
-          formState.currentPosition.currentMainStep < formState.numberOfMainSteps
-        }
-        />
-        );
+          key={`${id}`}
+          banner={{
+            ...banner,
+          }}
+          colorSchema={colorSchema}
+          description={{
+            heading: title,
+            tagline: group,
+            text: description,
+          }}
+          answers={formState.formAnswers}
+          validation={formState.validations}
+          validateStepAnswers={validateStepAnswers}
+          status={status}
+          questions={questionsToShow}
+          allQuestions={formState.allQuestions}
+          actions={actions}
+          formNavigation={formNavigation}
+          onSubmit={() => handleSubmit(onSubmit)}
+          onFieldChange={handleInputChange}
+          onFieldBlur={handleBlur}
+          updateCaseInContext={updateCaseInContext}
+          currentPosition={formState.currentPosition}
+          totalStepNumber={formState.numberOfMainSteps}
+          isBackBtnVisible={
+            formState.currentPosition.currentMainStep > 1 &&
+            formState.currentPosition.currentMainStep < formState.numberOfMainSteps
+          }
+        />);
       });
         
   const mainStep = formState.currentPosition.currentMainStepIndex;
@@ -186,7 +186,7 @@ Form.propTypes = {
   /**
    * The user info.
    */
-  user: PropTypes.object,
+  user: PropTypes.object.isRequired,
   /**
    * Initial answer for each question.
    */

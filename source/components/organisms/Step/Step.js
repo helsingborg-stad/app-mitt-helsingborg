@@ -237,6 +237,7 @@ Step.propTypes = {
    * The answers of a form.
    */
   answers: PropTypes.object,
+  colorSchema: PropTypes.oneOf(['blue', 'green', 'red', 'purple', 'neutral']),
   /**
    * User input validation result.
    */

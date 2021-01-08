@@ -16,7 +16,6 @@ import {
 import theme from '../../styles/theme';
 import { getValidColorSchema } from '../../styles/themeHelpers';
 import SummaryList from '../../components/organisms/SummaryList/SummaryList';
-import { parseConditionalExpression } from '../../helpers/conditionParser';
 
 /**
  * Explanation of the properties in this data structure:
