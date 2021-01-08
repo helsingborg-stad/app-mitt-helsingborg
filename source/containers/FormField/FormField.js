@@ -122,9 +122,7 @@ const FormField = ({
   onBlur,
   value,
   answers,
-  allQuestions,
   validationErrors,
-  conditionalOn,
   help,
   ...other
 }) => {
@@ -160,13 +158,6 @@ const FormField = ({
   if (input && input.blurEvent) inputCompProps[input.blurEvent] = onInputBlur;
   if (input && input.helpInComponent) inputCompProps[input.helpProp || 'help'] = help;
 
-  /** Checks if the field is conditional on another input, and if so,
-   * evaluates whether this field should be active or not */
-  const checkCondition = (condition) => {
-    if (!condition || condition.trim() === '') return true;
-    return parseConditionalExpression(condition, answers, allQuestions);
-  };
-
   const inputComponent =
     input && input.component ? (
       React.createElement(input.component, inputCompProps)
@@ -174,34 +165,31 @@ const FormField = ({
       <Text>{`Invalid field type: ${inputType}`}</Text>
     );
 
-  if (checkCondition(conditionalOn)) {
-    LayoutAnimation.configureNext({
-      duration: 300,
-      create: {
-        type: LayoutAnimation.Types.easeInEaseOut,
-        property: LayoutAnimation.Properties.opacity,
-      },
-      update: {
-        type: LayoutAnimation.Types.easeInEaseOut,
-      },
-    });
+  LayoutAnimation.configureNext({
+    duration: 300,
+    create: {
+      type: LayoutAnimation.Types.easeInEaseOut,
+      property: LayoutAnimation.Properties.opacity,
+    },
+    update: {
+      type: LayoutAnimation.Types.easeInEaseOut,
+    },
+  });
 
-    return (
-      <View>
-        {label ? (
-          <Label
-            colorSchema={validColorSchema}
-            underline={labelLine}
-            help={!input.helpInComponent && help && Object.keys(help).length > 0 ? help : {}}
-          >
-            {label}
-          </Label>
-        ) : null}
-        {inputComponent}
-      </View>
-    );
-  }
-  return null;
+  return (
+    <View>
+      {label ? (
+        <Label
+          colorSchema={validColorSchema}
+          underline={labelLine}
+          help={!input.helpInComponent && help && Object.keys(help).length > 0 ? help : {}}
+        >
+          {label}
+        </Label>
+      ) : null}
+      {inputComponent}
+    </View>
+  );
 };
 
 FormField.propTypes = {
@@ -237,7 +225,6 @@ FormField.propTypes = {
    * All the form state answers. Needed because of conditional checks.
    */
   answers: PropTypes.object,
-  allQuestions: PropTypes.array,
   validationErrors: PropTypes.object,
   formNavigation: PropTypes.shape({
     next: PropTypes.func,
@@ -256,12 +243,6 @@ FormField.propTypes = {
    * The function triggers when the button is clicked.
    */
   onClick: PropTypes.func,
-  /**
-   * The id of another input field: if supplied, the formField input will only be active (i.e. visible, for now)
-   * if the answer to the other input value evaluates as 'truthy'.
-   * One can also add an ! in front of the id to enable the field if the other input evaluates as 'falsy', i.e. !id.
-   */
-  conditionalOn: PropTypes.string,
   /**
    * Show a help button
    */
