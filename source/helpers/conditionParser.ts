@@ -27,9 +27,9 @@ const evaluateSummaryList = (
 export const evaluateAnswer = (
   questionId: string,
   answers: Record<string, any>,
-  allQuestions: Question[]
+  questions: Question[]
 ): boolean => {
-  const question = allQuestions.find((q) => q.id === questionId);
+  const question = questions.find((q) => q.id === questionId);
   if (!question) return false;
 
   switch (question.type) {
@@ -98,19 +98,19 @@ const regex = /(!|&&|\|\|)/gm;
  * Evaluates ! first, then && and lastly ||.
  * @param condition the conditional expression
  * @param answers all answers of the form
- * @param allQuestions array of the questions in the form
+ * @param questions array of all the questions in the form
  */
 export const parseConditionalExpression = (
   condition: string,  
   answers: Record<string, any>,
-  allQuestions?: Question[]): boolean => {
-    if (!Array.isArray(allQuestions)) return false;
+  questions?: Question[]): boolean => {
+    if (!Array.isArray(questions)) return false;
 
     const conditionArray = condition.split(regex).map(string => string.trim()).filter(string => string !== '');
     //evaluate all question-ids: 
     const evaluatedArray: EvaluatedValue[] = conditionArray.map(expression => {
       if (!specialWords.includes(expression))
-        return evaluateAnswer(expression, answers, allQuestions);
+        return evaluateAnswer(expression, answers, questions);
       else 
         return (expression as '!' | '&&' | '||');
     });

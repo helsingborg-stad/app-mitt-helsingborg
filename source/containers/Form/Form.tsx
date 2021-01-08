@@ -12,6 +12,7 @@ import { Modal, useModal } from '../../components/molecules/Modal';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import theme from '../../styles/theme';
+import { parseConditionalExpression } from '../../helpers/conditionParser';
 
 const FormScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
@@ -83,8 +84,14 @@ const Form: React.FC<Props> = ({
   };
 
   const stepComponents = formState.steps.map(
-    ({ id, banner, title, group, description, questions, actions, colorSchema }) => (
-      <Step
+    ({ id, banner, title, group, description, questions, actions, colorSchema }) => {
+      const questionsToShow = questions.filter(question => {
+        const condition = question.conditionalOn;
+        if (!condition || condition.trim() === '') return true;
+        return parseConditionalExpression(condition, formState.formAnswers, formState.allQuestions);
+      });
+      return (
+        <Step
         key={`${id}`}
         banner={{
           ...banner,
@@ -99,7 +106,7 @@ const Form: React.FC<Props> = ({
         validation={formState.validations}
         validateStepAnswers={validateStepAnswers}
         status={status}
-        questions={questions}
+        questions={questionsToShow}
         allQuestions={formState.allQuestions}
         actions={actions}
         formNavigation={formNavigation}
@@ -113,10 +120,10 @@ const Form: React.FC<Props> = ({
           formState.currentPosition.currentMainStep > 1 &&
           formState.currentPosition.currentMainStep < formState.numberOfMainSteps
         }
-      />
-    )
-  );
-
+        />
+        );
+      });
+        
   const mainStep = formState.currentPosition.currentMainStepIndex;
   const [visible, toggleModal] = useModal();
   const [scrollViewRef, setRef] = useState<ScrollView>(null);
