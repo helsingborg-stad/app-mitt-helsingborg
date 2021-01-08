@@ -1,7 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import React, {useRef} from "react";
-import { View } from "react-native";
-import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
+import { View, TouchableHighlight, TouchableOpacity  } from "react-native";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
 import { Text, Icon, Checkbox, Input } from "../../atoms";
