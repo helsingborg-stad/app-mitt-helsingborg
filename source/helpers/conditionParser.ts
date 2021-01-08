@@ -62,7 +62,8 @@ type EvaluatedValue = boolean | '!' | '&&' | '||';
 const evaluateNot = (array: EvaluatedValue[]) => {
   const arrCopy = [...array];
   const reversedIndex = arrCopy.reverse().findIndex(expr => expr === '!');
-  if (reversedIndex === -1) return array; 
+  if (reversedIndex === -1) return array;
+  
   const index = arrCopy.length - reversedIndex - 1;
   arrCopy.reverse()[index+1] = !arrCopy[index+1];
   arrCopy.splice(index,1);
@@ -105,7 +106,7 @@ export const parseConditionalExpression = (
   allQuestions?: Question[]): boolean => {
     if (!Array.isArray(allQuestions)) return false;
 
-    const conditionArray = condition.split(regex).map(str => str.trim()).filter(str => str !== '');
+    const conditionArray = condition.split(regex).map(string => string.trim()).filter(string => string !== '');
     //evaluate all question-ids: 
     const evaluatedArray: EvaluatedValue[] = conditionArray.map(expression => {
       if (!specialWords.includes(expression))
