@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal as RnModal } from 'react-native';
+import { Modal as ReactNativeModal } from 'react-native';
 
 const Modal = ({ visible, hide, children, ...other }) => (
-  <RnModal
+  <ReactNativeModal
     statusBarTranslucent={false}
     visible={visible}
     animationType="slide"
@@ -13,7 +13,7 @@ const Modal = ({ visible, hide, children, ...other }) => (
     {...other}
   >
     {children}
-  </RnModal>
+  </ReactNativeModal>
 );
 
 Modal.propTypes = {
