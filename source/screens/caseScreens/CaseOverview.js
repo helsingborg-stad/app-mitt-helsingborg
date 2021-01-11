@@ -204,7 +204,7 @@ function CaseOverview(props) {
           <Card.Body outlined>
             <Card.Title>Hej!</Card.Title>
             <Card.Text>
-              Helsingborgs Stad testar att göra självservice lite mer personlig och i första steget
+              Helsingborgs stad testar att göra självservice lite mer personlig och i första steget
               så är det just Ekonomiskt Bistånd som står i fokus.
             </Card.Text>
           </Card.Body>
