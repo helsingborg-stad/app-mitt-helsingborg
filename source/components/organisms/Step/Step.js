@@ -18,15 +18,11 @@ const StepContainer = styled.View`
   flex: 1;
 `;
 
-const StepContentContainer = styled.View`
-  /* Covers space occupied by the StepBackNavigation */
-  margin-top: -80px;
-  height: 100%;
-  position: relative;
-`;
+const StepContentContainer = styled.View``;
 
 const StepBackNavigation = styled(BackNavigation)`
   padding: 24px;
+  position: absolute;
 `;
 
 const StepBanner = styled(Banner)`
