@@ -133,12 +133,7 @@ function Step({
             />
           )}
 
-          <StepContentContainer
-            contentContainerStyle={{
-              flexGrow: 1,
-            }}
-            showsHorizontalScrollIndicator={false}
-          >
+          <StepContentContainer>
             {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
               <StepBanner {...banner} colorSchema={colorSchema || 'blue'} />
             )}
