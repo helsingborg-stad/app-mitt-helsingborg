@@ -10,6 +10,8 @@ const BackNavigationWrapper = styled.View({
   margin: 0,
   justifyContent: 'space-between',
   top: 0,
+  left: 0,
+  right: 0,
   zIndex: 999,
 });
 
@@ -34,6 +36,7 @@ const BackButton = styled.View((props) => ({
   width: 32,
   backgroundColor: props.theme.colors.neutrals[7],
 }));
+
 const BackButtonIcon = styled(Icon).attrs(({ theme, colorSchema }) => ({
   color: theme.colors.primary[colorSchema][0],
 }))``;
