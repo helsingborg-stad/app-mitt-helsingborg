@@ -78,10 +78,10 @@ const evaluateAnd = (array: EvaluatedValue[]) => {
   arrCopy.splice(index,2);
   return evaluateAnd(arrCopy);
 }
-const evaluateOr = (array: EvaluatedValue[]) => {
+const evaluateOr = (array: EvaluatedValue[]): boolean[] => {
   const arrCopy = [...array];
   const index = arrCopy.findIndex(expr => expr === '||');
-  if (index === -1) return array;
+  if (index === -1) return (array as boolean[]);
   
   arrCopy[index-1] = (array[index-1] || array[index+1]) as EvaluatedValue;
   arrCopy.splice(index,2);
@@ -114,6 +114,6 @@ export const parseConditionalExpression = (
       else 
         return (expression as '!' | '&&' | '||');
     });
-    const evaluated: boolean[] = evaluateOr(evaluateAnd(evaluateNot(evaluatedArray)));
-    return evaluated[0];
+    const [evaluated] = evaluateOr(evaluateAnd(evaluateNot(evaluatedArray)));
+    return evaluated;
   };
