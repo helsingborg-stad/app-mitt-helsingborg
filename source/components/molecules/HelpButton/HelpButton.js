@@ -21,6 +21,7 @@ const Container = styled.View({
 
 const CloseModal = styled(BackNavigation)`
   padding: 26px;
+  position: absolute;
 `;
 
 const BannerWrapper = styled.View`
