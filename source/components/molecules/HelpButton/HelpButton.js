@@ -69,7 +69,7 @@ const LinkButton = styled(Button)`
 
 const HelpButton = (props) => {
   const { text, size, heading, tagline, url } = props;
-  const [visible, toggleModal] = useModal();
+  const [isModalVisible, toggleModal] = useModal();
 
   const link = () => {
     Linking.openURL(url);
@@ -87,7 +87,7 @@ const HelpButton = (props) => {
 
   return (
     <>
-      <Modal visible={visible} hide={toggleModal}>
+      <Modal visible={isModalVisible} hide={toggleModal}>
         <ModalContainer>
           <CloseModal showBackButton={false} onClose={toggleModal} />
           <BannerWrapper>
