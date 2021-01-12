@@ -85,11 +85,11 @@ const Form: React.FC<Props> = ({
 
   const stepComponents = formState.steps.map(
     ({ id, banner, title, group, description, questions, actions, colorSchema }) => {
-      const questionsToShow = questions.filter(question => {
+      const questionsToShow = questions ? questions.filter(question => {
         const condition = question.conditionalOn;
         if (!condition || condition.trim() === '') return true;
         return evaluateConditionalExpression(condition, formState.formAnswers, formState.allQuestions);
-      });
+      }): [];
 
       return (
         <Step
