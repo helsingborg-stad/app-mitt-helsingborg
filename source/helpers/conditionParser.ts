@@ -59,7 +59,7 @@ export const evaluateAnswer = (
 type EvaluatedValue = boolean | '!' | '&&' | '||';
 
 // evaluation functions
-const evaluateNot = (array: EvaluatedValue[]) => {
+const evaluateNot = (array: EvaluatedValue[]): EvaluatedValue[] => {
   const arrCopy = [...array];
   const reversedIndex = arrCopy.reverse().findIndex(expr => expr === '!');
   if (reversedIndex === -1) return array;
@@ -69,7 +69,7 @@ const evaluateNot = (array: EvaluatedValue[]) => {
   arrCopy.splice(index,1);
   return evaluateNot(arrCopy);
 };
-const evaluateAnd = (array: EvaluatedValue[]) => {
+const evaluateAnd = (array: EvaluatedValue[]): EvaluatedValue[] => {
   const arrCopy = [...array];
   const index = arrCopy.findIndex(expr => expr === '&&');
   if (index === -1) return array;
@@ -88,32 +88,28 @@ const evaluateOr = (array: EvaluatedValue[]): boolean[] => {
   return evaluateOr(arrCopy);
 }
 
-const specialWords = ['!', '&&', '||'];
-// regex matching the special words above
-const regex = /(!|&&|\|\|)/gm;
+const conditionalOperators = ['!', '&&', '||'];
+const conditionalOperatorSearchPattern = /(!|&&|\|\|)/gm;
 
 /**
  * Evaluates an expression of the form "questionId1 && questionId2 || !questionId3".
  * Allowed boolean operators are !, &&, ||. Parenthesis are not supported.
  * Evaluates ! first, then && and lastly ||.
- * @param condition the conditional expression
- * @param answers all answers of the form
- * @param questions array of all the questions in the form
  */
-export const parseConditionalExpression = (
+export const evaluateConditionalExpression = (
   condition: string,  
   answers: Record<string, any>,
   questions?: Question[]): boolean => {
     if (!Array.isArray(questions)) return false;
 
-    const conditionArray = condition.split(regex).map(string => string.trim()).filter(string => string !== '');
-    //evaluate all question-ids: 
-    const evaluatedArray: EvaluatedValue[] = conditionArray.map(expression => {
-      if (!specialWords.includes(expression))
-        return evaluateAnswer(expression, answers, questions);
+    const conditionAsArray = condition.split(conditionalOperatorSearchPattern).map(string => string.trim()).filter(string => string !== '');
+
+    const evaluatedAnswers: EvaluatedValue[] = conditionAsArray.map(valueOrOperator => {
+      if (!conditionalOperators.includes(valueOrOperator))
+        return evaluateAnswer(valueOrOperator, answers, questions);
       else 
-        return (expression as '!' | '&&' | '||');
+        return (valueOrOperator as '!' | '&&' | '||');
     });
-    const [evaluated] = evaluateOr(evaluateAnd(evaluateNot(evaluatedArray)));
+    const [evaluated] = evaluateOr(evaluateAnd(evaluateNot(evaluatedAnswers)));
     return evaluated;
   };
