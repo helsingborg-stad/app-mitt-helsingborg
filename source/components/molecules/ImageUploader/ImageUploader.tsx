@@ -1,20 +1,25 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { TouchableHighlight, ActivityIndicator } from 'react-native';
-import ImagePicker from 'react-native-image-picker';
+import {
+  TouchableHighlight,
+  ActivityIndicator,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import styled from 'styled-components/native';
 import { Heading, Text, Button, Icon } from '../../atoms';
 import { ScreenWrapper } from '..';
 import uploadFile from '../../../helpers/FileUpload';
 import { excludePropetiesWithKey } from '../../../helpers/Objects';
+import HorizontalScrollIndicator from '../../atoms/HorizontalScrollIndicator';
 
 const Wrapper = styled(ScreenWrapper)`
   padding-left: 0;
   padding-right: 0;
   padding-top: 15px;
   padding-bottom: 0;
-  background-color: #f5f5f5;
 `;
 const Container = styled.ScrollView`
   padding-left: 16px;
@@ -57,7 +62,6 @@ const Flex = styled.View`
 `;
 
 const IconContainer = styled.View`
-  width: 64px;
   border-top-left-radius: 12.5px;
   border-bottom-left-radius: 12.5px;
   margin-right: 14px;
@@ -75,8 +79,12 @@ const Content = styled.View`
 `;
 
 const ImageIcon = styled.Image`
-  width: 64px;
-  height: 64px;
+  width: 126px;
+  height: 178px;
+`;
+
+const ScrollContainer = styled.ScrollView`
+  padding-bottom: 16px;
 `;
 
 const ImageStatus = {
@@ -87,16 +95,14 @@ const ImageStatus = {
 
 const ImageItem = ({ imageData, fileName, onRemove, status }) => (
   <DefaultItem>
-    <Flex>
-      <IconContainer highlighted>
-        <IconFlex>
-          <ImageIcon source={{ uri: `data:image/jpeg;base64,${imageData}` }} />
-        </IconFlex>
-      </IconContainer>
-      <Content>
+    {/* <Flex> */}
+    <IconContainer highlighted>
+      <ImageIcon source={{ uri: fileName }} />
+    </IconContainer>
+    {/* <Content>
         <Text small>{fileName}</Text>
-      </Content>
-      <UploadIconContainer>
+      </Content> */}
+    {/* <UploadIconContainer>
         {status === ImageStatus.finished ? (
           <Icon name="cloud-upload" color="green" />
         ) : status === ImageStatus.loading ? (
@@ -104,11 +110,11 @@ const ImageItem = ({ imageData, fileName, onRemove, status }) => (
         ) : (
           <Icon name="error" color="red" />
         )}
-      </UploadIconContainer>
-      <TouchableHighlight onPress={onRemove}>
+      </UploadIconContainer> */}
+    {/* <TouchableHighlight onPress={onRemove}>
         <Icon name="delete" color="#00213F" />
-      </TouchableHighlight>
-    </Flex>
+      </TouchableHighlight> */}
+    {/* </Flex> */}
   </DefaultItem>
 );
 ImageItem.propTypes = {
@@ -118,10 +124,18 @@ ImageItem.propTypes = {
   status: PropTypes.oneOf(Object.values(ImageStatus)),
 };
 
-const ImageUploader = ({ heading, buttonText, images: imgs, onChange, maxImages }) => {
+interface Props {
+  buttonText: string;
+  images: Record<string, string>[];
+  onChange: (value: Record<string, string>[]) => void;
+  maxImages?: number;
+}
+
+const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange, maxImages }) => {
   const [images, setImages] = useState([]);
   const [imageData, setImageData] = useState([]);
   const [loadedStatus, setLoadedStatus] = useState([]);
+  const [horizontalScrollPercentage, setHorizontalScrollPercentage] = useState(0);
 
   useEffect(() => {
     if (imgs) {
@@ -130,17 +144,17 @@ const ImageUploader = ({ heading, buttonText, images: imgs, onChange, maxImages 
     // need more logic here to load in images, using their local uris...
   }, [imgs]);
 
-  const addImageToState = (img) => {
+  const addImageToState = (img: Record<string, string | number>) => {
     const index = images.length;
     const newImage = excludePropetiesWithKey(img, ['data']);
     setImages((old) => [...old, newImage]);
-    setImageData((old) => [...old, img.data]);
+    // setImageData((old) => [...old, img.data]);
     setLoadedStatus((old) => [...old, ImageStatus.loading]);
 
     return index;
   };
 
-  const removeImageFromState = (index) => () => {
+  const removeImageFromState = (index: number) => () => {
     setImages((old) => {
       old.splice(index, 1);
       return [...old];
@@ -155,7 +169,7 @@ const ImageUploader = ({ heading, buttonText, images: imgs, onChange, maxImages 
     });
   };
 
-  const getBlob = async (fileUri) => {
+  const getBlob = async (fileUri: string) => {
     const resp = await fetch(fileUri);
     const imageBody = await resp.blob();
     return imageBody;
@@ -201,58 +215,66 @@ const ImageUploader = ({ heading, buttonText, images: imgs, onChange, maxImages 
   };
 
   const addImage = () => {
-    ImagePicker.showImagePicker(
-      {
-        title: 'Välj en bild',
-        maxWidth: 800,
-        maxHeight: 600,
-        allowsEditing: true,
-        storageOptions: {
-          skipBackup: true,
-          path: 'images',
-          waitUntilSaved: true,
-        },
-      },
-      (res) => {
-        if (res.didCancel) {
-          console.log('User cancelled!');
-        } else if (res.error) {
-          console.log('Error', res.error);
-        } else {
-          if (!res.fileName) {
-            res.fileName = res.uri.split('/').pop();
-          }
-          res.status = ImageStatus.loading;
-          const index = addImageToState(res);
+    ImagePicker.openPicker({
+      width: 600,
+      height: 800,
+      cropping: true,
+      // title: 'Välj en bild',
+      // maxWidth: 800,
+      // maxHeight: 600,
+      // allowsEditing: true,
+      // storageOptions: {
+      //   skipBackup: true,
+      //   path: 'images',
+      //   waitUntilSaved: true,
+    })
+      .then((res) => {
+        console.log(res);
+        addImageToState(res);
+        // if (res.didCancel) {
+        //   console.log('User cancelled!');
+        // } else if (res.error) {
+        //   console.log('Error', res.error);
+        // } else {
+        //   if (!res.fileName) {
+        //     res.fileName = res.uri.split('/').pop();
+        //   }
+        //   res.status = ImageStatus.loading;
+        //   const index = addImageToState(res);
 
-          uploadImage(res, index);
-        }
-      }
+        //   uploadImage(res, index);
+        // }
+      })
+      .catch((reason) => {
+        console.log('cancelled!');
+      });
+  };
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    setHorizontalScrollPercentage(
+      event.nativeEvent.contentOffset.x /
+        (event.nativeEvent.contentSize.width - event.nativeEvent.layoutMeasurement.width)
     );
   };
-
   return (
     <Wrapper>
-      <Container>
-        <List>
-          <ListHeading type="h3">{heading}</ListHeading>
-          {images.map((image, index) => (
-            <ImageItem
-              imageData={imageData[index]}
-              fileName={image.fileName}
-              onRemove={removeImageFromState(index)}
-              status={loadedStatus[index]}
-            />
-          ))}
-        </List>
-        <ButtonContainer>
-          {maxImages && maxImages > 0 && images.length < maxImages && (
-            <Button onClick={addImage}>
-              <Text> {buttonText && buttonText !== '' ? buttonText : 'Ladda upp bild'}</Text>
-            </Button>
-          )}
-        </ButtonContainer>
+      <Container horizontal onScroll={handleScroll} showsHorizontalScrollIndicator={false}>
+        {images.map((image, index) => (
+          <ImageItem
+            // imageData={imageData[index]}
+            fileName={image.path}
+            onRemove={removeImageFromState(index)}
+            status={loadedStatus[index]}
+          />
+        ))}
       </Container>
+      {images.length > 0 && <HorizontalScrollIndicator percentage={horizontalScrollPercentage} />}
+      <ButtonContainer>
+        {maxImages && maxImages > 0 && images.length < maxImages && (
+          <Button onClick={addImage}>
+            <Text> {buttonText && buttonText !== '' ? buttonText : 'Ladda upp bild'}</Text>
+          </Button>
+        )}
+      </ButtonContainer>
     </Wrapper>
   );
 };
