@@ -1,19 +1,16 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  TouchableHighlight,
-  ActivityIndicator,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-} from 'react-native';
+import { NativeSyntheticEvent, NativeScrollEvent, View } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import styled from 'styled-components/native';
-import { Heading, Text, Button, Icon } from '../../atoms';
+import { Text, Button } from '../../atoms';
 import { ScreenWrapper } from '..';
+import { Modal, useModal } from '../Modal';
 import uploadFile from '../../../helpers/FileUpload';
 import { excludePropetiesWithKey } from '../../../helpers/Objects';
 import HorizontalScrollIndicator from '../../atoms/HorizontalScrollIndicator';
+import ImageItem from './ImageItem';
 
 const Wrapper = styled(ScreenWrapper)`
   padding-left: 0;
@@ -25,17 +22,6 @@ const Container = styled.ScrollView`
   padding-left: 16px;
   padding-right: 16px;
 `;
-const UploadIconContainer = styled.View`
-  padding-left: 12px;
-  padding-right: 12px;
-`;
-const DefaultItem = styled.TouchableHighlight`
-  border-bottom-width: 1px;
-  border-color: #c3c3c3;
-  background-color: white;
-  margin-bottom: 6px;
-  border-radius: 8px;
-`;
 const ButtonContainer = styled.View`
   display: flex;
   flex-direction: column;
@@ -44,98 +30,51 @@ const ButtonContainer = styled.View`
   margin-top: 25px;
   width: 100%;
 `;
-const List = styled.View`
-  margin-top: 24px;
-`;
-const ListHeading = styled(Heading)`
-  margin-left: 4px;
-  margin-bottom: 8px;
+const BackgroundBlur = styled.View`
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0px;
+  background-color: rgba(0, 0, 0, 0.25);
 `;
 
-const Flex = styled.View`
+const PopupContainer = styled.View`
+  position: absolute;
+  z-index: 1000;
+  top: 80%;
+  left: 5%;
+  right: 5%;
+  padding: 0px;
+  width: 90%;
+  flex-direction: column;
+  border-radius: 6px;
+  shadow-offset: 0 0;
+  shadow-opacity: 0.1;
+  shadow-radius: 6px;
   flex-direction: row;
-  align-items: center;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-left: 15px;
-  padding-right: 15px;
+  justify-content: space-between;
 `;
 
-const IconContainer = styled.View`
-  border-top-left-radius: 12.5px;
-  border-bottom-left-radius: 12.5px;
-  margin-right: 14px;
-`;
-
-const IconFlex = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Content = styled.View`
-  flex: 1;
-  padding: 16px 0px 16px 8px;
-`;
-
-const ImageIcon = styled.Image`
-  width: 126px;
-  height: 178px;
-`;
-
-const ScrollContainer = styled.ScrollView`
-  padding-bottom: 16px;
-`;
-
-const ImageStatus = {
-  loading: 'LOADING',
-  finished: 'FINISHED',
-  uploadError: 'UPLOAD_ERROR',
-};
-
-const ImageItem = ({ imageData, fileName, onRemove, status }) => (
-  <DefaultItem>
-    {/* <Flex> */}
-    <IconContainer highlighted>
-      <ImageIcon source={{ uri: fileName }} />
-    </IconContainer>
-    {/* <Content>
-        <Text small>{fileName}</Text>
-      </Content> */}
-    {/* <UploadIconContainer>
-        {status === ImageStatus.finished ? (
-          <Icon name="cloud-upload" color="green" />
-        ) : status === ImageStatus.loading ? (
-          <ActivityIndicator size="large" color="slategray" />
-        ) : (
-          <Icon name="error" color="red" />
-        )}
-      </UploadIconContainer> */}
-    {/* <TouchableHighlight onPress={onRemove}>
-        <Icon name="delete" color="#00213F" />
-      </TouchableHighlight> */}
-    {/* </Flex> */}
-  </DefaultItem>
-);
-ImageItem.propTypes = {
-  imageData: PropTypes.any,
-  fileName: PropTypes.string,
-  onRemove: PropTypes.func,
-  status: PropTypes.oneOf(Object.values(ImageStatus)),
-};
+export type ImageStatus = 'loading' | 'uploaded' | 'error';
 
 interface Props {
   buttonText: string;
   images: Record<string, string>[];
-  onChange: (value: Record<string, string>[]) => void;
-  maxImages?: number;
+  onChange: (value: Record<string, string | number>[]) => void;
 }
 
-const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange, maxImages }) => {
-  const [images, setImages] = useState([]);
-  const [imageData, setImageData] = useState([]);
+const emptyList: Record<string, string | number>[] = [];
+const emptyStringList: string[] = [];
+
+const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) => {
+  const [images, setImages] = useState(emptyList);
+  const [imageData, setImageData] = useState(emptyStringList);
   const [loadedStatus, setLoadedStatus] = useState([]);
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] = useState(0);
+  const [visible, toggleModal] = useModal();
 
   useEffect(() => {
     if (imgs) {
@@ -144,12 +83,20 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange, ma
     // need more logic here to load in images, using their local uris...
   }, [imgs]);
 
-  const addImageToState = (img: Record<string, string | number>) => {
+  // useEffect(() => {
+  //   images.forEach(async (image, index) => {
+  //     if (imageData[index] && loadedStatus[index] === 'loading') {
+  //       await uploadImage(image, index);
+  //     }
+  //   })
+  // }, [images, imageData]);
+
+  const addImagesToState = (newImages: Record<string, string | number>[]) => {
     const index = images.length;
-    const newImage = excludePropetiesWithKey(img, ['data']);
-    setImages((old) => [...old, newImage]);
-    // setImageData((old) => [...old, img.data]);
-    setLoadedStatus((old) => [...old, ImageStatus.loading]);
+    const newImagesWithoutData = newImages.map((image) => excludePropetiesWithKey(image, ['data']));
+    setImages((old) => [...old, ...newImagesWithoutData]);
+    setImageData((old) => [...old, ...newImages.map((image) => image.data.toString())]);
+    setLoadedStatus((old) => [...old, ...newImages.map(() => 'loading')]);
 
     return index;
   };
@@ -169,26 +116,28 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange, ma
     });
   };
 
-  const getBlob = async (fileUri: string) => {
-    const resp = await fetch(fileUri);
-    const imageBody = await resp.blob();
-    return imageBody;
-  };
+  // const getBlob = async (fileUri: string) => {
+  //   const resp = await fetch(fileUri);
+  //   const imageBody = await resp.blob();
+  //   return imageBody;
+  // };
 
-  const uploadImage = async (imageData, index) => {
-    const imageFileType = imageData.fileName.split('.').pop();
-    const imageBlob = await getBlob(imageData.uri);
+  const uploadImage = async (image: Record<string, string | number>, index: number) => {
+    const imageFileType = (image.path as string).split('.').pop();
+    const filename = (image.path as string).split('/').pop();
+    // const imageBlob = await getBlob(imageData.uri);
+    const data = imageData[index];
     const uploadResponse = await uploadFile(
       'users/me/attachments',
-      imageData.fileName,
+      filename,
       imageFileType,
-      imageBlob
+      data
     );
 
     if (uploadResponse.error) {
       // more error handling needed, display some error message and stuff.
       setLoadedStatus((old) => {
-        old[index] = ImageStatus.uploadError;
+        old[index] = 'error';
         return [...old];
       });
       setImages((old) => {
@@ -200,7 +149,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange, ma
       });
     } else {
       setLoadedStatus((old) => {
-        old[index] = ImageStatus.finished;
+        old[index] = 'uploaded';
         return [...old];
       });
       // update the images at the right index with the returned info.
@@ -216,21 +165,12 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange, ma
 
   const addImage = () => {
     ImagePicker.openPicker({
-      width: 600,
-      height: 800,
       cropping: true,
-      // title: 'Välj en bild',
-      // maxWidth: 800,
-      // maxHeight: 600,
-      // allowsEditing: true,
-      // storageOptions: {
-      //   skipBackup: true,
-      //   path: 'images',
-      //   waitUntilSaved: true,
+      multiple: true,
+      includeBase64: true,
     })
       .then((res) => {
-        console.log(res);
-        addImageToState(res);
+        addImagesToState(res);
         // if (res.didCancel) {
         //   console.log('User cancelled!');
         // } else if (res.error) {
@@ -246,7 +186,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange, ma
         // }
       })
       .catch((reason) => {
-        console.log('cancelled!');
+        console.log('cancelled!', reason);
       });
   };
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -255,41 +195,58 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange, ma
         (event.nativeEvent.contentSize.width - event.nativeEvent.layoutMeasurement.width)
     );
   };
+
   return (
-    <Wrapper>
-      <Container horizontal onScroll={handleScroll} showsHorizontalScrollIndicator={false}>
-        {images.map((image, index) => (
-          <ImageItem
-            // imageData={imageData[index]}
-            fileName={image.path}
-            onRemove={removeImageFromState(index)}
-            status={loadedStatus[index]}
-          />
-        ))}
-      </Container>
-      {images.length > 0 && <HorizontalScrollIndicator percentage={horizontalScrollPercentage} />}
-      <ButtonContainer>
-        {maxImages && maxImages > 0 && images.length < maxImages && (
-          <Button onClick={addImage}>
+    <>
+      <Wrapper>
+        <Container horizontal onScroll={handleScroll} showsHorizontalScrollIndicator={false}>
+          {images.map((image, index) => (
+            <ImageItem
+              key={`${image.path}-${index}`}
+              filename={(image.path as string)}
+              onRemove={removeImageFromState(index)}
+              status={loadedStatus[index]}
+            />
+          ))}
+        </Container>
+        {images.length > 2 && <HorizontalScrollIndicator percentage={horizontalScrollPercentage} />}
+        <ButtonContainer>
+          <Button onClick={toggleModal}>
             <Text> {buttonText && buttonText !== '' ? buttonText : 'Ladda upp bild'}</Text>
           </Button>
-        )}
-      </ButtonContainer>
-    </Wrapper>
+        </ButtonContainer>
+      </Wrapper>
+      <Modal visible={visible} hide={toggleModal} presentationStyle="overFullScreen" transparent>
+        <BackgroundBlur>
+          <PopupContainer>
+            <Button>
+              <Text>Använd Kamera</Text>
+            </Button>
+            <Button
+              onClick={() => {
+                addImage();
+                toggleModal();
+              }}
+            >
+              <Text>Välj Fil</Text>
+            </Button>
+            <Button onClick={toggleModal} colorSchema="red">
+              <Text>Avbryt</Text>
+            </Button>
+          </PopupContainer>
+        </BackgroundBlur>
+      </Modal>
+    </>
   );
 };
 
 ImageUploader.propTypes = {
-  /** The heading on top of the list of pictures */
-  heading: PropTypes.string,
   /** The text on the upload button */
   buttonText: PropTypes.string,
   /** The images to initially populate the list with (i.e. their meta-data including uris) */
   images: PropTypes.array,
   /** What happens when either deleting or uploading an image */
   onChange: PropTypes.func,
-  /** The maximum number of images allowed by the component; if not specified it's arbitrarily many */
-  maxImages: PropTypes.number,
 };
 
 export default ImageUploader;
