@@ -7,7 +7,7 @@ import { Action, ActionType, Question } from '../../../../types/FormTypes';
 import { CaseStatus } from '../../../../types/CaseType';
 import { FormPosition } from '../../../../containers/Form/hooks/useForm';
 import { useNotification } from '../../../../store/NotificationContext';
-import { parseConditionalExpression } from '../../../../helpers/conditionParser';
+import { evaluateConditionalExpression } from '../../../../helpers/conditionParser';
 
 const ActionContainer = styled.View`
   flex: 1;
@@ -129,7 +129,7 @@ const StepFooter: React.FC<Props> = ({
 
   const checkCondition = (condition?: string) => {
     if (!condition || condition === '') return false;
-    return !parseConditionalExpression(condition, answers, allQuestions);
+    return !evaluateConditionalExpression(condition, answers, allQuestions);
   };
 
   const buttons = actions.map((action, index) => (

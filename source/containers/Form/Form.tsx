@@ -12,7 +12,7 @@ import { Modal, useModal } from '../../components/molecules/Modal';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import theme from '../../styles/theme';
-import { parseConditionalExpression } from '../../helpers/conditionParser';
+import { evaluateConditionalExpression } from '../../helpers/conditionParser';
 
 const FormScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
@@ -88,7 +88,7 @@ const Form: React.FC<Props> = ({
       const questionsToShow = questions.filter(question => {
         const condition = question.conditionalOn;
         if (!condition || condition.trim() === '') return true;
-        return parseConditionalExpression(condition, formState.formAnswers, formState.allQuestions);
+        return evaluateConditionalExpression(condition, formState.formAnswers, formState.allQuestions);
       });
 
       return (
