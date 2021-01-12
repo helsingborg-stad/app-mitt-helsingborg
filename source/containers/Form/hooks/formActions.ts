@@ -168,17 +168,24 @@ export function goBackToMainForm(state: FormReducerState) {
 }
 /**
  * Goes back to the main form, and then to the next step.
- * @param state current form state
  */
 export function goBackToMainFormAndNext(state: FormReducerState) {
-  const { currentPosition } = state;
+  const { connectivityMatrix, currentPosition } = state;
 
-  const nextMainStepIndex = currentPosition.currentMainStepIndex < state.numberOfMainSteps-2 ? currentPosition.currentMainStepIndex + 1 : currentPosition.currentMainStep;
-
-  return {
-    ...state,
-    currentPosition: {...currentPosition, index: nextMainStepIndex, currentMainStepIndex: nextMainStepIndex, level: 0 },
-  };
+  const newPosition = {...currentPosition, index: currentPosition.currentMainStepIndex, level: 0};
+  const nextIndex = getNextIndex(connectivityMatrix, newPosition);
+  if (nextIndex >= 0) {
+    return {
+      ...state,
+      currentPosition: {
+        index: nextIndex,
+        level: 0,
+        currentMainStep:
+          state.currentPosition.currentMainStep + 1,
+        currentMainStepIndex: nextIndex,
+      },
+    };
+  }
 }
 /**
  * Action to run when starting a form.
