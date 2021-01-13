@@ -45,13 +45,6 @@ export const evaluateAnswer = (
         (key) => answers[questionId][key] && answers[questionId][key] !== ''
       ).length > 0
     );
-  else if (question.type === 'editableList')
-    return (
-      answers[questionId] &&
-      Object.keys(answers[questionId]).filter(
-        (key) => answers[questionId][key] && answers[questionId][key] !== ''
-      ).length > 0
-    );
   else if (question.type === 'summaryList') 
     return evaluateSummaryList(answers, question.items || []);
 
