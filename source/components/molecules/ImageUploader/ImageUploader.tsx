@@ -117,7 +117,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
   const uploadImage = async (image: Image, index: number) => {
     const imageFileType = (image.path as string).split('.').pop();
     const filename = (image.path as string).split('/').pop();
-    const data = image.data;
+    const data = Buffer.from(image.data, 'base64');
     const uploadResponse = await uploadFile(
       'users/me/attachments',
       filename,
