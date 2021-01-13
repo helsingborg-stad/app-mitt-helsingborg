@@ -45,6 +45,7 @@ const uploadFile = async (endpoint, fileName, fileType, fileData, headers = {}) 
       body: fileData,
       headers: {
         'Content-Type': `image/${fileType}`,
+        'Content-Encoding': 'base64',
         'x-amz-acl': 'public-read',
       },
     });
