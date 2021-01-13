@@ -2,6 +2,8 @@
   package="com.mitthelsingborg">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"
+                     android:required="false"/>
 
     <application
       android:name=".MainApplication"
