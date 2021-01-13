@@ -1,8 +1,8 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { NativeSyntheticEvent, NativeScrollEvent, View } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
+import { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import ImagePicker, { Image as CropPickerImage } from 'react-native-image-crop-picker';
 import styled from 'styled-components/native';
 import { Text, Button } from '../../atoms';
 import { ScreenWrapper } from '..';
@@ -58,19 +58,25 @@ const PopupContainer = styled.View`
   justify-content: space-between;
 `;
 
+interface Image extends CropPickerImage {
+  errorMessage?: string;
+  uploadedFileName?: string;
+  url?: string;
+}
+
 export type ImageStatus = 'loading' | 'uploaded' | 'error';
 
 interface Props {
   buttonText: string;
-  images: Record<string, string>[];
-  onChange: (value: Record<string, string | number>[]) => void;
+  images: Image[];
+  onChange: (value: Record<string, any>[]) => void;
 }
 
-const emptyList: Record<string, string | number>[] = [];
+const emptyImageList: Image[] = [];
 const emptyStringList: string[] = [];
 
 const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) => {
-  const [images, setImages] = useState(emptyList);
+  const [images, setImages] = useState(emptyImageList);
   const [imageData, setImageData] = useState(emptyStringList);
   const [loadedStatus, setLoadedStatus] = useState([]);
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] = useState(0);
@@ -83,22 +89,14 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
     // need more logic here to load in images, using their local uris...
   }, [imgs]);
 
-  // useEffect(() => {
-  //   images.forEach(async (image, index) => {
-  //     if (imageData[index] && loadedStatus[index] === 'loading') {
-  //       await uploadImage(image, index);
-  //     }
-  //   })
-  // }, [images, imageData]);
-
-  const addImagesToState = (newImages: Record<string, string | number>[]) => {
-    const index = images.length;
-    const newImagesWithoutData = newImages.map((image) => excludePropetiesWithKey(image, ['data']));
+  const addImagesToState = (newImages: Image[]) => {
+    const oldNumberOfImages = images.length;
+    const newImagesWithoutData: Image[] = newImages.map((image) => excludePropetiesWithKey(image, ['data']) as Image);
     setImages((old) => [...old, ...newImagesWithoutData]);
     setImageData((old) => [...old, ...newImages.map((image) => image.data.toString())]);
     setLoadedStatus((old) => [...old, ...newImages.map(() => 'loading')]);
 
-    return index;
+    return oldNumberOfImages;
   };
 
   const removeImageFromState = (index: number) => () => {
@@ -116,24 +114,17 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
     });
   };
 
-  // const getBlob = async (fileUri: string) => {
-  //   const resp = await fetch(fileUri);
-  //   const imageBody = await resp.blob();
-  //   return imageBody;
-  // };
-
-  const uploadImage = async (image: Record<string, string | number>, index: number) => {
+  const uploadImage = async (image: Image, index: number) => {
     const imageFileType = (image.path as string).split('.').pop();
     const filename = (image.path as string).split('/').pop();
-    // const imageBlob = await getBlob(imageData.uri);
-    const data = imageData[index];
+    const data = image.data;
     const uploadResponse = await uploadFile(
       'users/me/attachments',
       filename,
       imageFileType,
       data
     );
-
+    
     if (uploadResponse.error) {
       // more error handling needed, display some error message and stuff.
       setLoadedStatus((old) => {
@@ -143,11 +134,12 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
       setImages((old) => {
         old[index].errorMessage = uploadResponse.message;
         if (onChange) {
-          onChange(old);
+          onChange(old as Record<string, any>[]);
         }
         return [...old];
       });
     } else {
+      console.log(uploadResponse);
       setLoadedStatus((old) => {
         old[index] = 'uploaded';
         return [...old];
@@ -155,6 +147,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
       // update the images at the right index with the returned info.
       setImages((old) => {
         old[index].uploadedFileName = uploadResponse.uploadedFileName;
+        old[index].url = uploadResponse.url;
         if (onChange) {
           onChange(old);
         }
@@ -163,27 +156,32 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
     }
   };
 
-  const addImage = () => {
+
+  const addImagesFromLibrary = () => {
     ImagePicker.openPicker({
       cropping: true,
       multiple: true,
       includeBase64: true,
     })
       .then((res) => {
-        addImagesToState(res);
-        // if (res.didCancel) {
-        //   console.log('User cancelled!');
-        // } else if (res.error) {
-        //   console.log('Error', res.error);
-        // } else {
-        //   if (!res.fileName) {
-        //     res.fileName = res.uri.split('/').pop();
-        //   }
-        //   res.status = ImageStatus.loading;
-        //   const index = addImageToState(res);
+        const length = addImagesToState(res);
+        res.forEach((img, index) => {
+          uploadImage(img, index + length);
+        });        
+      })
+      .catch((reason) => {
+        console.log('cancelled!', reason);
+      });
+  }
 
-        //   uploadImage(res, index);
-        // }
+  const addImageFromCamera = () => {
+    ImagePicker.openCamera({
+      cropping: true,
+      includeBase64: true,
+    })
+      .then((image) => {
+        const length = addImagesToState([image]);
+        uploadImage(image, length);
       })
       .catch((reason) => {
         console.log('cancelled!', reason);
@@ -219,12 +217,17 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
       <Modal visible={visible} hide={toggleModal} presentationStyle="overFullScreen" transparent>
         <BackgroundBlur>
           <PopupContainer>
-            <Button>
+            <Button
+              onClick={() => { 
+                addImageFromCamera(); 
+                toggleModal();
+              }}
+            >
               <Text>Använd Kamera</Text>
             </Button>
             <Button
               onClick={() => {
-                addImage();
+                addImagesFromLibrary();
                 toggleModal();
               }}
             >

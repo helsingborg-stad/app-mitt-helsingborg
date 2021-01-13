@@ -38,7 +38,7 @@ const uploadFile = async (endpoint, fileName, fileType, fileData, headers = {}) 
     // alternative version
     // const { url, fields } = signedUrlResponse.data.data.attributes;
 
-    const { uploadUrl, uploadedFileName } = signedUrlResponse.data.data.attributes;
+    const { uploadUrl, fileName: uploadedFileName } = signedUrlResponse.data.data.attributes;
 
     const putResponse = await fetch(uploadUrl, {
       method: 'PUT',
