@@ -32,60 +32,70 @@ export const evaluateAnswer = (
   const question = questions.find((q) => q.id === questionId);
   if (!question) return false;
 
-  switch (question.type) {
-    case 'checkbox':
-      if (answers[questionId]) return answers[questionId];
+  if (question.type === 'checkbox') {
+    if (answers[questionId]) return answers[questionId];
       return false;
-    case 'text':
-    case 'number':
-    case 'date':
-      return (answers[questionId] && answers[questionId] !== '');
-    case 'editableList':
-      return (
-        answers[questionId] &&
-        Object.keys(answers[questionId]).filter(
-          (key) => answers[questionId][key] && answers[questionId][key] !== ''
-        ).length > 0
-      );
-    case 'repeaterField':
-      return (answers[questionId] && answers[questionId].length > 0);
-    case 'summaryList':
-      return evaluateSummaryList(answers, question.items || []);
-    default:
-      return false;
-  }
+  } 
+  else if (['text','number','date'].includes(question.type))
+    return (answers[questionId] && answers[questionId] !== '');
+  else if (question.type === 'editableList')
+    return (
+      answers[questionId] &&
+      Object.keys(answers[questionId]).filter(
+        (key) => answers[questionId][key] && answers[questionId][key] !== ''
+      ).length > 0
+    );
+  else if (question.type === 'editableList')
+    return (
+      answers[questionId] &&
+      Object.keys(answers[questionId]).filter(
+        (key) => answers[questionId][key] && answers[questionId][key] !== ''
+      ).length > 0
+    );
+  else if (question.type === 'summaryList') 
+    return evaluateSummaryList(answers, question.items || []);
+
+  return false;
 };
 
-type EvaluatedValue = boolean | '!' | '&&' | '||';
+type Operator = '!' | '&&' | '||';
+type EvaluatedValue = boolean | Operator;
 
 // evaluation functions
-const evaluateNot = (array: EvaluatedValue[]): EvaluatedValue[] => {
-  const arrCopy = [...array];
-  const reversedIndex = arrCopy.reverse().findIndex(expr => expr === '!');
-  if (reversedIndex === -1) return array;
-  
-  const index = arrCopy.length - reversedIndex - 1;
-  arrCopy.reverse()[index+1] = !arrCopy[index+1];
-  arrCopy.splice(index,1);
-  return evaluateNot(arrCopy);
+const evaluateOperatorInArray = (conditionAsArray: EvaluatedValue[], operator: Operator, index: number ) => {
+  if (operator === '!') {
+    conditionAsArray[index+1] = !conditionAsArray[index+1];
+      conditionAsArray.splice(index,1);
+  } else {
+      if (operator === '&&') conditionAsArray[index-1] = (conditionAsArray[index-1] && conditionAsArray[index+1]) as EvaluatedValue;
+      if (operator === '||') conditionAsArray[index-1] = (conditionAsArray[index-1] || conditionAsArray[index+1]) as EvaluatedValue;
+      conditionAsArray.splice(index,2);
+  }
 };
-const evaluateAnd = (array: EvaluatedValue[]): EvaluatedValue[] => {
-  const arrCopy = [...array];
-  const index = arrCopy.findIndex(expr => expr === '&&');
-  if (index === -1) return array;
+const evaluateNot = (conditionAsArray: EvaluatedValue[]): EvaluatedValue[] => {
+  const arrayCopy = [...conditionAsArray];
+  const reversedIndex = arrayCopy.reverse().findIndex(expr => expr === '!');
+  if (reversedIndex === -1) return conditionAsArray;
   
-  arrCopy[index-1] = (array[index-1] && array[index+1]) as EvaluatedValue;
-  arrCopy.splice(index,2);
-  return evaluateAnd(arrCopy);
+  const index = arrayCopy.length - reversedIndex - 1;
+  evaluateOperatorInArray(arrayCopy.reverse(), '!', index);
+  return evaluateNot(arrayCopy);
+};
+const evaluateAnd = (conditionAsArray: EvaluatedValue[]): EvaluatedValue[] => {
+  const arrayCopy = [...conditionAsArray];
+  const index = arrayCopy.findIndex(expr => expr === '&&');
+  if (index === -1) return conditionAsArray;
+  
+  evaluateOperatorInArray(arrayCopy, '&&', index);
+  return evaluateAnd(arrayCopy);
 }
-const evaluateOr = (array: EvaluatedValue[]): boolean[] => {
-  const arrCopy = [...array];
-  const index = arrCopy.findIndex(expr => expr === '||');
-  if (index === -1) return (array as boolean[]);
+const evaluateOr = (conditionAsArray: EvaluatedValue[]): boolean[] => {
+  const arrayCopy = [...conditionAsArray];
+  const index = arrayCopy.findIndex(expr => expr === '||');
+  if (index === -1) return (conditionAsArray as boolean[]);
   
-  arrCopy[index-1] = (array[index-1] || array[index+1]) as EvaluatedValue;
-  arrCopy.splice(index,2);
-  return evaluateOr(arrCopy);
+  evaluateOperatorInArray(arrayCopy, '||', index);
+  return evaluateOr(arrayCopy);
 }
 
 const conditionalOperators = ['!', '&&', '||'];
