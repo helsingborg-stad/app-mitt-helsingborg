@@ -9,8 +9,8 @@ storiesOf('ImageUploader2', module).add('Default', (props) => (
     <Label>Neutral</Label>
     <ImageUploader colorSchema="neutral" buttonText="Ladda upp bilder" />
 
-    <Label>Blue</Label>
-    <ImageUploader colorSchema="blue" buttonText="Ladda upp bilder" />
+    <Label>Blue, max 3 images</Label>
+    <ImageUploader colorSchema="blue" buttonText="Ladda upp bilder" maxImages={3} />
 
     <Label>Purple</Label>
     <ImageUploader colorSchema="purple" buttonText="Ladda upp bilder" />
