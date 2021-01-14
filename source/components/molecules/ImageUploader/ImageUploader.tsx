@@ -86,18 +86,18 @@ interface Props {
   maxImages?: number;
 }
 
-const ImageUploader: React.FC<Props> = ({ buttonText, value: imgs, onChange, colorSchema, maxImages }) => {
+const ImageUploader: React.FC<Props> = ({ buttonText, value: oldImages, onChange, colorSchema, maxImages }) => {
   const [images, setImages] = useState<Image[]>([]);
   const [loadedStatus, setLoadedStatus] = useState<ImageStatus[]>([]);
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] = useState(0);
   const [choiceModalVisible, toggleModal] = useModal();
 
   useEffect(() => {
-    if (imgs) {
-      setImages(imgs);
+    // if the component is sent a list of existing images, we load them into the state
+    if (oldImages) {
+      setImages(oldImages);
     }
-    // need more logic here to load in images, using their local uris...
-  }, [imgs]);
+  }, [oldImages]);
 
   const addImagesToState = (newImages: Image[]) => {
     const oldNumberOfImages = images.length;
@@ -132,7 +132,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: imgs, onChange, col
     );
     
     if (uploadResponse.error) {
-      // more error handling needed, display some error message and stuff.
+      // we might need more error handling, like displaying an error message if the upload does not go through
       setLoadedStatus((old) => {
         old[index] = 'error';
         return [...old];
@@ -215,7 +215,6 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: imgs, onChange, col
                 removeImageFromState(index);
                 deleteImageFromCloudStorage(index);
               }}
-              status={loadedStatus[index]}
             />
           ))}
         </Container>
@@ -271,8 +270,8 @@ ImageUploader.propTypes = {
   /** The text on the upload button */
   buttonText: PropTypes.string,
   /** The images to initially populate the list with (i.e. their meta-data including uris) */
-  images: PropTypes.array,
-  /** What happens when either deleting or uploading an image */
+  value: PropTypes.array,
+  /** What happens when either deleting or uploading an image, updating the form state */
   onChange: PropTypes.func,
 };
 
