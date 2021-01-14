@@ -16,6 +16,7 @@ import {
 import theme from '../../styles/theme';
 import { getValidColorSchema } from '../../styles/themeHelpers';
 import SummaryList from '../../components/organisms/SummaryList/SummaryList';
+import ImageUploader from '../../components/molecules/ImageUploader/ImageUploader';
 
 /**
  * Explanation of the properties in this data structure:
@@ -111,6 +112,11 @@ const inputTypes = {
   },
   card: {
     component: DynamicCardRenderer,
+  },
+  imageUploader: {
+    component: ImageUploader,
+    changeEvent: 'onChange',
+    props: {},
   },
 };
 

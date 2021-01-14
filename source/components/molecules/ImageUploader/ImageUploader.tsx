@@ -5,14 +5,13 @@ import { NativeSyntheticEvent, NativeScrollEvent, TouchableOpacity } from 'react
 import ImagePicker, { Image as CropPickerImage } from 'react-native-image-crop-picker';
 import styled from 'styled-components/native';
 import { Text, Button, Icon, Label } from '../../atoms';
-import { ScreenWrapper } from '..';
 import { Modal, useModal } from '../Modal';
 import uploadFile, { getBlob } from '../../../helpers/FileUpload';
 import HorizontalScrollIndicator from '../../atoms/HorizontalScrollIndicator';
 import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
 import ImageItem from './ImageItem';
 
-const Wrapper = styled(ScreenWrapper)`
+const Wrapper = styled.View`
   padding-left: 0;
   padding-right: 0;
   padding-top: 15px;
@@ -62,7 +61,7 @@ const Row = styled.View`
   justify-content: space-between;
 `;
 
-const PopupLabel = styled(Label)`
+const PopupLabel = styled(Label)<{colorSchema: PrimaryColor}>`
   color: ${props => props.theme.colors.primary[props.colorSchema][0]}
 `;
 
@@ -81,12 +80,13 @@ export type ImageStatus = 'loading' | 'uploaded' | 'error';
 
 interface Props {
   buttonText: string;
-  images: Image[];
+  value: Image[];
   onChange: (value: Record<string, any>[]) => void;
   colorSchema?: PrimaryColor;
+  maxImages?: number;
 }
 
-const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange, colorSchema }) => {
+const ImageUploader: React.FC<Props> = ({ buttonText, value: imgs, onChange, colorSchema, maxImages }) => {
   const [images, setImages] = useState<Image[]>([]);
   const [loadedStatus, setLoadedStatus] = useState<ImageStatus[]>([]);
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] = useState(0);
@@ -221,7 +221,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange, co
         </Container>
         {images.length > 2 && <HorizontalScrollIndicator percentage={horizontalScrollPercentage} />}
         <ButtonContainer>
-          <Button onClick={toggleModal}>
+          <Button colorSchema={validColorSchema} onClick={toggleModal} disabled={maxImages && images.length >= maxImages}>
             <Icon name="add" />
             <Text> {buttonText && buttonText !== '' ? buttonText : 'Ladda upp bild'}</Text>
           </Button>
@@ -237,6 +237,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange, co
               </TouchableOpacity>
             </Row>
             <PopupButton
+              colorSchema={validColorSchema}
               block
               variant="outlined"
               onClick={() => { 
@@ -248,6 +249,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange, co
               <Text>Kamera</Text>
             </PopupButton>
             <PopupButton
+              colorSchema={validColorSchema}
               block
               variant="outlined"
               onClick={() => {
