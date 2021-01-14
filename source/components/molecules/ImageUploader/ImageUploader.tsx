@@ -1,15 +1,15 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import { NativeSyntheticEvent, NativeScrollEvent, TouchableOpacity } from 'react-native';
 import ImagePicker, { Image as CropPickerImage } from 'react-native-image-crop-picker';
 import styled from 'styled-components/native';
-import { Text, Button } from '../../atoms';
+import { Text, Button, Icon, Label } from '../../atoms';
 import { ScreenWrapper } from '..';
 import { Modal, useModal } from '../Modal';
 import uploadFile, { getBlob } from '../../../helpers/FileUpload';
-import { excludePropetiesWithKey } from '../../../helpers/Objects';
 import HorizontalScrollIndicator from '../../atoms/HorizontalScrollIndicator';
+import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
 import ImageItem from './ImageItem';
 
 const Wrapper = styled(ScreenWrapper)`
@@ -41,21 +41,34 @@ const BackgroundBlur = styled.View`
   background-color: rgba(0, 0, 0, 0.25);
 `;
 
-const PopupContainer = styled.View`
+const PopupContainer = styled.View<{colorSchema: PrimaryColor}>`
   position: absolute;
   z-index: 1000;
-  top: 80%;
+  top: 60%;
   left: 5%;
   right: 5%;
-  padding: 0px;
+  padding: 20px;
   width: 90%;
-  flex-direction: column;
+  background-color: ${(props) => props.theme.colors.complementary[props.colorSchema][0]}}
   border-radius: 6px;
   shadow-offset: 0 0;
   shadow-opacity: 0.1;
   shadow-radius: 6px;
+  justify-content: space-between;
+`;
+
+const Row = styled.View`
   flex-direction: row;
   justify-content: space-between;
+`;
+
+const PopupLabel = styled(Label)`
+  color: ${props => props.theme.colors.primary[props.colorSchema][0]}
+`;
+
+const PopupButton = styled(Button)`
+  border: 0;
+  margin-bottom: 16px;
 `;
 
 interface Image extends CropPickerImage {
@@ -70,9 +83,10 @@ interface Props {
   buttonText: string;
   images: Image[];
   onChange: (value: Record<string, any>[]) => void;
+  colorSchema?: PrimaryColor;
 }
 
-const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) => {
+const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange, colorSchema }) => {
   const [images, setImages] = useState<Image[]>([]);
   const [loadedStatus, setLoadedStatus] = useState<ImageStatus[]>([]);
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] = useState(0);
@@ -188,6 +202,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
     );
   };
 
+  const validColorSchema = getValidColorSchema(colorSchema);
   return (
     <>
       <Wrapper>
@@ -207,32 +222,42 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
         {images.length > 2 && <HorizontalScrollIndicator percentage={horizontalScrollPercentage} />}
         <ButtonContainer>
           <Button onClick={toggleModal}>
+            <Icon name="add" />
             <Text> {buttonText && buttonText !== '' ? buttonText : 'Ladda upp bild'}</Text>
           </Button>
         </ButtonContainer>
       </Wrapper>
       <Modal visible={choiceModalVisible} hide={toggleModal} presentationStyle="overFullScreen" transparent animationType="fade">
         <BackgroundBlur>
-          <PopupContainer>
-            <Button
+          <PopupContainer colorSchema={validColorSchema} >
+            <Row>
+              <PopupLabel colorSchema={validColorSchema}>Lägg till bild</PopupLabel>
+              <TouchableOpacity onPress={toggleModal} activeOpacity={1}>
+                <Icon name="clear"/>
+              </TouchableOpacity>
+            </Row>
+            <PopupButton
+              block
+              variant="outlined"
               onClick={() => { 
                 addImageFromCamera(); 
                 toggleModal();
               }}
             >
-              <Text>Använd Kamera</Text>
-            </Button>
-            <Button
+              <Icon name="camera-alt" />
+              <Text>Kamera</Text>
+            </PopupButton>
+            <PopupButton
+              block
+              variant="outlined"
               onClick={() => {
                 addImagesFromLibrary();
                 toggleModal();
               }}
             >
-              <Text>Välj Fil</Text>
-            </Button>
-            <Button onClick={toggleModal} colorSchema="red">
-              <Text>Avbryt</Text>
-            </Button>
+              <Icon name="add-photo-alternate" />
+              <Text>Bildbibliotek</Text>
+            </PopupButton>
           </PopupContainer>
         </BackgroundBlur>
       </Modal>
