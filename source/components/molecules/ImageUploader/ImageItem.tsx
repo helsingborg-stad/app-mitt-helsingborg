@@ -13,21 +13,18 @@ const DefaultItem = styled.TouchableHighlight`
   margin-bottom: 20px;
   border-radius: 8px;
 `;
-
 const Flex = styled.View`
   flex-direction: column;
   align-items: center;
   padding: 0;
   margin: 0;
 `;
-
 const Row = styled.View`
   flex-direction: row;
   align-items: center;
   padding: 0;
   margin: 0;
 `;
-
 const IconContainer = styled.View`
   border-top-left-radius: 12.5px;
   border-bottom-left-radius: 12.5px;
@@ -54,9 +51,6 @@ const ImageItem: React.FC<Props> = ({ filename, onRemove, status }) => (
       <IconContainer>
         <ImageIcon source={{ uri: filename }} />
       </IconContainer>
-      {/* <Content>
-        <Text small>{fileName}</Text>
-      </Content> */}
       <Row>
         <UploadIconContainer>
           {status === 'uploaded' ? (
@@ -77,7 +71,7 @@ const ImageItem: React.FC<Props> = ({ filename, onRemove, status }) => (
 ImageItem.propTypes = {
   filename: PropTypes.string,
   onRemove: PropTypes.func,
-  status: PropTypes.string,
+  status: PropTypes.oneOf(['loading', 'uploaded', 'error']),
 };
 
 export default ImageItem;
