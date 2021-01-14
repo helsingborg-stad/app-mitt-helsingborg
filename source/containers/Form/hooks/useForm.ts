@@ -40,7 +40,7 @@ function useForm(initialState: FormReducerState) {
     });
   }, [formState.steps]);
 
-  const validateStepAnswers = (onErrorCallback, onValidCallback) => {
+  const validateStepAnswers = (onErrorCallback: () => void, onValidCallback: () => void) => {
     dispatch({
       type: 'VALIDATE_ALL_STEP_ANSWERS',
       payload: { onErrorCallback, onValidCallback },

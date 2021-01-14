@@ -262,6 +262,7 @@ export function validateAnswer(
 
   if (['text', 'number', 'date', 'checkbox'].includes(question.type)) {
     const { validation } = question;
+    console.log('validation: ', validation, question.type);
     if (validation && ((checkIfDirty && state.dirtyFields?.[questionId]) || !checkIfDirty)) {
       const [isValid, validationMessage] = validateInput(answer[questionId], validation.rules);
 
@@ -330,7 +331,7 @@ export function validateAnswer(
  * @param onErrorCallback   Called when validation failed for an input field.
  * @param onValidCallback   Called when all field validated successfully.
  */
-export function validateAllStepAnswers( state: FormReducerState, onErrorCallback, onValidCallback ) {
+export function validateAllStepAnswers( state: FormReducerState, onErrorCallback: () => void, onValidCallback: () => void ) {
   // Collect all questions.
   const currentStepIndex = state.currentPosition.index;
   const currentStepQuestions = state.steps[currentStepIndex].questions;
@@ -357,7 +358,7 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
   for (const questionIndex in currentStepQuestions) {
     const question = currentStepQuestions[questionIndex]
 
-    if (['text', 'number, checkbox'].includes(question.type)) {
+    if (['text', 'number', 'date', 'checkbox'].includes(question.type)) {
       if (state.validations[question.id]?.isValid === false) {
         allInputsValid = false;
 
