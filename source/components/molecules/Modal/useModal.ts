@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-const useModal = () => {
+const useModal: () => [visible: boolean, toggleModal: () => void] = () => {
   const [visible, setVisible] = useState(false);
 
-  function toggleModal() {
+  const toggleModal = () => {
     setVisible(!visible);
   }
 

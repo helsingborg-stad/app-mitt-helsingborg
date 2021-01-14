@@ -2,19 +2,30 @@ import axios from 'axios';
 import StorageService, { TOKEN_KEY } from '../services/StorageService';
 import { buildServiceUrl } from './UrlHelper';
 
+export const getBlob = async (fileUri: string) => {
+  const response = await fetch(fileUri);
+  const fileBlob = await response.blob();
+  return fileBlob;
+};
+
 /**
  * Helper for uploading a file to S3
  *
  * @param {string} endpoint
  * @param {string} fileName
  * @param {string} fileType
- * @param {obj} fileData should be binary data (a blob, for example)
+ * @param {Blob | Buffer} fileData should be binary data (a blob, for example)
  * @param {obj} headers
  */
-const uploadFile = async (endpoint, fileName, fileType, fileData, headers = {}) => {
+const uploadFile = async (
+  endpoint: string,
+  fileName: string,
+  fileType: string,
+  fileData: Blob | Buffer,
+  headers: Record<string, string> = {}
+) => {
   // Build complete api url
   const reqUrl = buildServiceUrl(endpoint);
-  // console.log(reqUrl);
 
   const token = await StorageService.getData(TOKEN_KEY);
   const bearer = token || '';
@@ -34,9 +45,6 @@ const uploadFile = async (endpoint, fileName, fileType, fileData, headers = {}) 
       headers: newHeaders,
       data: { fileName, mime: `image/${fileType}` },
     });
-
-    // alternative version
-    // const { url, fields } = signedUrlResponse.data.data.attributes;
 
     const { uploadUrl, fileName: uploadedFileName } = signedUrlResponse.data.data.attributes;
 

@@ -7,7 +7,7 @@ import styled from 'styled-components/native';
 import { Text, Button } from '../../atoms';
 import { ScreenWrapper } from '..';
 import { Modal, useModal } from '../Modal';
-import uploadFile from '../../../helpers/FileUpload';
+import uploadFile, { getBlob } from '../../../helpers/FileUpload';
 import { excludePropetiesWithKey } from '../../../helpers/Objects';
 import HorizontalScrollIndicator from '../../atoms/HorizontalScrollIndicator';
 import ImageItem from './ImageItem';
@@ -72,15 +72,11 @@ interface Props {
   onChange: (value: Record<string, any>[]) => void;
 }
 
-const emptyImageList: Image[] = [];
-const emptyStringList: string[] = [];
-
 const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) => {
-  const [images, setImages] = useState(emptyImageList);
-  const [imageData, setImageData] = useState(emptyStringList);
-  const [loadedStatus, setLoadedStatus] = useState([]);
+  const [images, setImages] = useState<Image[]>([]);
+  const [loadedStatus, setLoadedStatus] = useState<ImageStatus[]>([]);
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] = useState(0);
-  const [visible, toggleModal] = useModal();
+  const [choiceModalVisible, toggleModal] = useModal();
 
   useEffect(() => {
     if (imgs) {
@@ -91,20 +87,16 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
 
   const addImagesToState = (newImages: Image[]) => {
     const oldNumberOfImages = images.length;
-    const newImagesWithoutData: Image[] = newImages.map((image) => excludePropetiesWithKey(image, ['data']) as Image);
-    setImages((old) => [...old, ...newImagesWithoutData]);
-    setImageData((old) => [...old, ...newImages.map((image) => image.data.toString())]);
-    setLoadedStatus((old) => [...old, ...newImages.map(() => 'loading')]);
+    setImages((oldImages) => [...oldImages, ...newImages]);
+
+    const newStatuses: ImageStatus[] = newImages.map(() => 'loading');
+    setLoadedStatus((oldStatuses) => [...oldStatuses, ...newStatuses]);
 
     return oldNumberOfImages;
   };
 
-  const removeImageFromState = (index: number) => () => {
+  const removeImageFromState = (index: number) => {
     setImages((old) => {
-      old.splice(index, 1);
-      return [...old];
-    });
-    setImageData((old) => {
       old.splice(index, 1);
       return [...old];
     });
@@ -116,8 +108,8 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
 
   const uploadImage = async (image: Image, index: number) => {
     const imageFileType = (image.path as string).split('.').pop();
+    const data: Blob = await getBlob(image.path);
     const filename = (image.path as string).split('/').pop();
-    const data = Buffer.from(image.data, 'base64');
     const uploadResponse = await uploadFile(
       'users/me/attachments',
       filename,
@@ -139,7 +131,6 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
         return [...old];
       });
     } else {
-      console.log(uploadResponse);
       setLoadedStatus((old) => {
         old[index] = 'uploaded';
         return [...old];
@@ -156,12 +147,15 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
     }
   };
 
+  const deleteImageFromCloudStorage = async (index: number) => {
+    console.log('Placeholder: not implemented yet in API, want to delete image ', index);
+  }
 
   const addImagesFromLibrary = () => {
     ImagePicker.openPicker({
       cropping: true,
       multiple: true,
-      includeBase64: true,
+      includeBase64: false,
     })
       .then((res) => {
         const length = addImagesToState(res);
@@ -202,7 +196,10 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
             <ImageItem
               key={`${image.path}-${index}`}
               filename={(image.path as string)}
-              onRemove={removeImageFromState(index)}
+              onRemove={() => {
+                removeImageFromState(index);
+                deleteImageFromCloudStorage(index);
+              }}
               status={loadedStatus[index]}
             />
           ))}
@@ -214,7 +211,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, images: imgs, onChange }) 
           </Button>
         </ButtonContainer>
       </Wrapper>
-      <Modal visible={visible} hide={toggleModal} presentationStyle="overFullScreen" transparent>
+      <Modal visible={choiceModalVisible} hide={toggleModal} presentationStyle="overFullScreen" transparent animationType="fade">
         <BackgroundBlur>
           <PopupContainer>
             <Button
