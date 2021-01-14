@@ -2,10 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { ActivityIndicator, TouchableHighlight } from 'react-native';
+import { TouchableHighlight } from 'react-native';
 import { Icon } from '../../atoms';
-import { ImageStatus } from './ImageUploader';
-import { PrimaryColor } from '../../../styles/themeHelpers';
 
 const DefaultItem = styled.TouchableHighlight`
   background-color: white;
