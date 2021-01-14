@@ -166,9 +166,7 @@ export function goBackToMainForm(state: FormReducerState) {
     currentPosition: {...currentPosition, index: currentPosition.currentMainStepIndex, level: 0 }
   }
 }
-/**
- * Goes back to the main form, and then to the next step.
- */
+
 export function goBackToMainFormAndNext(state: FormReducerState) {
   const { connectivityMatrix, currentPosition } = state;
 
