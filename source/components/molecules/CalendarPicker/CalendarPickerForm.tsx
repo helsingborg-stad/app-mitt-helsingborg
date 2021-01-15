@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { View, TouchableOpacity } from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
@@ -12,7 +12,6 @@ import Button from '../../atoms/Button';
 import Text from '../../atoms/Text';
 import { Modal, useModal } from '../Modal';
 
-// Set localized date form.
 moment.locale('sv');
 
 const CalendarContainer = styled.View`
@@ -62,7 +61,7 @@ const CalendarPickerForm: React.FC<PropInterface> = ({
   style,
 }) => {
   const [modalVisible, toggleModal] = useModal();
-  // Handle selected date and hide calendar modal.
+
   const handleCalendarDateChange = (selectedDate: moment.Moment) => {
     onSelect(selectedDate.format('Y-MM-DD'));
     toggleModal();
@@ -134,15 +133,11 @@ CalendarPickerForm.propTypes = {
    * Calendar date change callback.
    */
   onSelect: PropTypes.func,
-  /**
-   * Date value. Used for storing and displaying date in components.
-   */
   value: PropTypes.string,
   /** Turn the input field of. Defaults to true. */
   editable: PropTypes.bool,
   /** Turn the background of input field transparent */
   transparent: PropTypes.bool,
-  /** Additional styling for the input box */
   style: PropTypes.object,
   colorSchema: PropTypes.oneOf(['blue', 'green', 'red', 'purple', 'neutral']),
   showErrorMessage: PropTypes.bool,
