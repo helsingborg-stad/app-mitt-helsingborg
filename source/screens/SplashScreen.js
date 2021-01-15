@@ -22,7 +22,9 @@ function SplashScreen(props) {
     handleLogout,
     handleAddProfile,
     handleRemoveProfile,
-    isUserAuthenticated,
+    isAccessTokenValid,
+    isRejected,
+    user,
   } = useContext(AuthContext);
 
   /**
@@ -33,23 +35,60 @@ function SplashScreen(props) {
     return value !== false;
   };
 
+  /**
+   * Starts to fetch user object if access token is valid
+   */
   useFocusEffect(
     useCallback(() => {
       const authCheck = async () => {
-        if (await isUserAuthenticated()) {
-          handleLogin();
-          await handleAddProfile();
-          navigate('App', { screen: 'UserEvents' });
-        } else {
-          await handleLogout();
-          handleRemoveProfile();
-          const showOnboarding = await showOnboardingScreen();
-          navigate('Auth', { screen: showOnboarding ? 'Onboarding' : 'Login' });
+        if (await isAccessTokenValid()) {
+          handleAddProfile();
+          return;
         }
+
+        handleLogout();
       };
+
       authCheck();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+  );
+
+  /**
+   * Logs in user when user object exists and token is valid
+   */
+  useFocusEffect(
+    useCallback(() => {
+      const tryLogin = async () => {
+        if ((await isAccessTokenValid()) && user) {
+          handleLogin();
+          navigate('App', { screen: 'UserEvents' });
+        }
+      };
+
+      tryLogin();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user])
+  );
+
+  /**
+   * Logs out user if authentication is rejected
+   */
+  useFocusEffect(
+    useCallback(() => {
+      const logOut = async () => {
+        handleLogout();
+        handleRemoveProfile();
+        const showOnboarding = await showOnboardingScreen();
+        navigate('Auth', { screen: showOnboarding ? 'Onboarding' : 'Login' });
+      };
+
+      if (isRejected) {
+        logOut();
+      }
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isRejected])
   );
 
   return (
