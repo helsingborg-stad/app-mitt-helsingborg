@@ -28,7 +28,6 @@ const ButtonWrapper = styled.View`
 interface Props {
   actions: Action[];
   caseStatus: CaseStatus;
-  background?: string;
   answers: Record<string, any>;
   allQuestions: Question[];
   formNavigation: {
@@ -47,7 +46,11 @@ interface Props {
   updateCaseInContext: (
     answers: Record<string, any>,
     status: CaseStatus,
+<<<<<<< HEAD
     currentPosition: FormPosition
+=======
+    currentFormPosition: FormPosition
+>>>>>>> 5289c63 (feat(backToMainAndNext): remove some unnecessary comments, and fix some typing mistakes in StepFooter)
   ) => void;
   currentPosition: FormPosition;
   validateStepAnswers: (errorCallback: () => void, onValidCallback: () => void) => void;
@@ -161,7 +164,6 @@ const StepFooter: React.FC<Props> = ({
 
 StepFooter.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
-
   /**
    * Properties for actions in the footer of the step.
    */
@@ -173,10 +175,6 @@ StepFooter.propTypes = {
       conditionalOn: PropTypes.string,
     })
   ).isRequired,
-  /**
-   * Background color for the footer
-   */
-  background: PropTypes.string,
   /**
    * Status: ongoing or submitted or possibly others
    */
@@ -190,41 +188,31 @@ StepFooter.propTypes = {
    * An object bundling all functions relevant for navigation through the form.
    */
   formNavigation: PropTypes.shape({
-    /** go to next step */
     next: PropTypes.func,
-    /** go to previous step */
     back: PropTypes.func,
     /** go up a level to parent step */
     up: PropTypes.func,
     /** go down to a child step */
     down: PropTypes.func,
-    /** close the form */
     close: PropTypes.func,
     /** action to trigger when starting the form */
     start: PropTypes.func,
-    /** action to return to main form */
     goToMainForm: PropTypes.func,
     goToMainFormAndNext: PropTypes.func,
-    /** whether we are at the last of the main steps */
     isLastStep: PropTypes.func,
   }).isRequired,
   onUpdate: PropTypes.func,
-  /** Behaviour for the submit action */
   onSubmit: PropTypes.func,
   /** Behaviour for updating case in context and backend */
   updateCaseInContext: PropTypes.func,
-  /** The current position in the form */
   currentPosition: PropTypes.shape({
     index: PropTypes.number,
     level: PropTypes.number,
     currentMainStep: PropTypes.number,
     currentMainStepIndex: PropTypes.number,
   }).isRequired,
-  /** Validate all answers in current step * */
+  /** Validate all answers in current step */
   validateStepAnswers: PropTypes.func,
 };
 
-StepFooter.defaultProps = {
-  background: '#00213F',
-};
 export default StepFooter;
