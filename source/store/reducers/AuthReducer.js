@@ -3,7 +3,7 @@ import { actionTypes } from '../actions/AuthActions';
 export const initialState = {
   isActive: true,
   isAuthenticated: false,
-  user: {},
+  user: null,
   error: null,
   status: 'idle',
   isBankidInstalled: false,
