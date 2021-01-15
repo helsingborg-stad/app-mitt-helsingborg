@@ -63,7 +63,7 @@ export async function addProfile() {
     const [userProfile, userError] = await authService.getUserProfile(decodedToken.accessToken);
 
     if (userError) {
-      throw new Error(userError);
+      throw userError;
     }
 
     return {
