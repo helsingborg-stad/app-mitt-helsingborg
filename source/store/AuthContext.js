@@ -123,7 +123,7 @@ function AuthProvider({ children, initialState }) {
   /**
    * This function checks if the current accessToken is valid.
    */
-  async function isUserAuthenticated() {
+  async function isAccessTokenValid() {
     const decodedToken = await authService.getAccessTokenFromStorage();
 
     // TODO: Remove this condition when exp value is set on the jwt token in the api.
@@ -147,7 +147,7 @@ function AuthProvider({ children, initialState }) {
     handleAuth,
     handleCancelOrder,
     handleSetStatus,
-    isUserAuthenticated,
+    isAccessTokenValid,
     handleSign,
     isLoading: state.status === 'pending',
     isIdle: state.status === 'idle',
