@@ -8,24 +8,25 @@ export const getBlob = async (fileUri: string) => {
   return fileBlob;
 };
 
+interface FileUploadParams {
+  endpoint: string;
+  fileName: string;
+  fileType: string;
+  data: Blob | Buffer;
+  headers?: Record<string, string>;
+}
+
 /**
  * Helper for uploading a file to S3
- *
- * @param {string} endpoint
- * @param {string} fileName
- * @param {string} fileType
- * @param {Blob | Buffer} fileData should be binary data (a blob, for example)
- * @param {obj} headers
  */
-const uploadFile = async (
-  endpoint: string,
-  fileName: string,
-  fileType: string,
-  fileData: Blob | Buffer,
-  headers: Record<string, string> = {}
-) => {
-  // Build complete api url
-  const reqUrl = buildServiceUrl(endpoint);
+export const uploadFile = async ({
+  endpoint,
+  fileName,
+  fileType,
+  data,
+  headers,
+}: FileUploadParams) => {
+  const requestUrl = buildServiceUrl(endpoint);
 
   const token = await StorageService.getData(TOKEN_KEY);
   const bearer = token || '';
@@ -38,19 +39,19 @@ const uploadFile = async (
   };
 
   try {
-    // Do request
     const signedUrlResponse = await axios({
-      url: reqUrl,
+      url: requestUrl,
       method: 'post',
       headers: newHeaders,
       data: { fileName, mime: `image/${fileType}` },
     });
 
-    const { uploadUrl, fileName: uploadedFileName } = signedUrlResponse.data.data.attributes;
+    const fileUploadAttributes = signedUrlResponse.data.data.attributes;
+    const { uploadUrl } = fileUploadAttributes;
 
     const putResponse = await fetch(uploadUrl, {
       method: 'PUT',
-      body: fileData,
+      body: data,
       headers: {
         'Content-Type': `image/${fileType}`,
         'Content-Encoding': 'base64',
@@ -58,11 +59,9 @@ const uploadFile = async (
       },
     });
     // return the url and filename on server to the uploaded file.
-    return { url: putResponse.url, uploadedFileName };
+    return { url: putResponse.url, uploadedFileName: fileUploadAttributes.fileName };
   } catch (error) {
     console.log('axios error', error);
     return { error: true, message: error.message, ...error.response };
   }
 };
-
-export default uploadFile;

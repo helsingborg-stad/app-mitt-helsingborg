@@ -6,7 +6,7 @@ import ImagePicker, { Image as CropPickerImage } from 'react-native-image-crop-p
 import styled from 'styled-components/native';
 import { Text, Button, Icon, Label } from '../../atoms';
 import { Modal, useModal } from '../Modal';
-import uploadFile, { getBlob } from '../../../helpers/FileUpload';
+import { getBlob, uploadFile } from '../../../helpers/FileUpload';
 import HorizontalScrollIndicator from '../../atoms/HorizontalScrollIndicator';
 import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
 import ImageItem from './ImageItem';
