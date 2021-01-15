@@ -49,6 +49,9 @@ const inputTypes = {
     component: CalendarPicker,
     changeEvent: 'onSelect',
     initialValue: undefined,
+    props: {
+      showErrorMessage: true,
+    },
   },
   list: {},
   checkbox: {
