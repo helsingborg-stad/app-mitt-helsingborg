@@ -244,7 +244,6 @@ export function validateAnswer(
 
   if (['text', 'number', 'date', 'checkbox'].includes(question.type)) {
     const { validation } = question;
-    console.log('validation: ', validation, question.type);
     if (validation && ((checkIfDirty && state.dirtyFields?.[questionId]) || !checkIfDirty)) {
       const [isValid, validationMessage] = validateInput(answer[questionId], validation.rules);
 

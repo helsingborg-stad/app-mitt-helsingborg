@@ -10,7 +10,7 @@ import { colorPalette } from '../../../styles/palette';
 import { PrimaryColor } from '../../../styles/themeHelpers';
 import Button from '../../atoms/Button';
 import Text from '../../atoms/Text';
-import Modal from '../Modal/Modal';
+import { Modal, useModal } from '../Modal';
 
 // Set localized date form.
 moment.locale('sv');
@@ -35,7 +35,6 @@ const ButtonContainer = styled.View`
 `;
 const DateInput = styled(Input)<{ transparent: boolean }>`
   ${({ transparent }) => transparent && 'background: transparent;'}
-  border: none;
   text-align: right;
   min-width: 80%;
   font-weight: 500;
@@ -48,6 +47,8 @@ interface PropInterface {
   editable?: boolean;
   transparent?: boolean;
   style?: React.CSSProperties;
+  showErrorMessage?: boolean;
+  error?: { isValid: boolean; message: string };
   colorSchema: PrimaryColor;
 }
 const CalendarPickerForm: React.FC<PropInterface> = ({
@@ -56,24 +57,20 @@ const CalendarPickerForm: React.FC<PropInterface> = ({
   editable = true,
   transparent,
   colorSchema,
+  showErrorMessage,
+  error,
   style,
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
-
+  const [modalVisible, toggleModal] = useModal();
   // Handle selected date and hide calendar modal.
   const handleCalendarDateChange = (selectedDate: moment.Moment) => {
     onSelect(selectedDate.format('Y-MM-DD'));
-    setIsVisible(!isVisible);
+    toggleModal();
   };
 
   return (
     <View>
-      <TouchableOpacity
-        disabled={!editable}
-        onPress={() => {
-          setIsVisible(!isVisible);
-        }}
-      >
+      <TouchableOpacity disabled={!editable} onPress={toggleModal}>
         <DateInput
           placeholder="Välj datum"
           value={value}
@@ -84,10 +81,12 @@ const CalendarPickerForm: React.FC<PropInterface> = ({
           transparent={transparent}
           style={style}
           colorSchema={colorSchema}
+          showErrorMessage={showErrorMessage}
+          error={error}
         />
       </TouchableOpacity>
 
-      <Modal visible={isVisible} presentationStyle="overFullScreen">
+      <Modal visible={modalVisible} presentationStyle="overFullScreen" hide={toggleModal}>
         <CalendarContainer>
           <CalendarStyle>
             <CalendarPicker
@@ -121,7 +120,7 @@ const CalendarPickerForm: React.FC<PropInterface> = ({
           </CalendarStyle>
         </CalendarContainer>
         <ButtonContainer>
-          <Button colorSchema="blue" onClick={() => setIsVisible(false)}>
+          <Button colorSchema="blue" onClick={toggleModal}>
             <Text>Avbryt</Text>
           </Button>
         </ButtonContainer>
@@ -145,6 +144,12 @@ CalendarPickerForm.propTypes = {
   transparent: PropTypes.bool,
   /** Additional styling for the input box */
   style: PropTypes.object,
+  colorSchema: PropTypes.oneOf(['blue', 'green', 'red', 'purple', 'neutral']),
+  showErrorMessage: PropTypes.bool,
+  error: PropTypes.shape({
+    isValid: PropTypes.bool.isRequired,
+    message: PropTypes.string.isRequired,
+  }),
 };
 
 export default CalendarPickerForm;
