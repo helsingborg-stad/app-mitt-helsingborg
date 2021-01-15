@@ -267,11 +267,9 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: oldImages, onChange
 };
 
 ImageUploader.propTypes = {
-  /** The text on the upload button */
   buttonText: PropTypes.string,
-  /** The images to initially populate the list with (i.e. their meta-data including uris) */
+  /** Array of image objects to initially populate the list with (i.e. meta-data including uris) */
   value: PropTypes.array,
-  /** What happens when either deleting or uploading an image, updating the form state */
   onChange: PropTypes.func,
 };
 
