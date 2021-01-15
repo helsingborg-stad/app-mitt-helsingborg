@@ -147,7 +147,6 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: oldImages, onChange
         old[index] = 'uploaded';
         return [...old];
       });
-      // update the images at the right index with the returned info.
       setImages((old) => {
         old[index].uploadedFileName = uploadResponse.uploadedFileName;
         old[index].url = uploadResponse.url;
