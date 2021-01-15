@@ -122,7 +122,6 @@ export async function getUserProfile(accessToken) {
       throw new Error(response);
     }
   } catch (error) {
-    console.log(error);
     return [null, error];
   }
 }
