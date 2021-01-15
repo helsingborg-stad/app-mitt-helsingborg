@@ -2,6 +2,7 @@ import env from 'react-native-config';
 import JwtDecode from 'jwt-decode';
 import StorageService, { TOKEN_KEY } from './StorageService';
 import { post, get } from '../helpers/ApiRequest';
+import { getMessage } from '../helpers/MessageHelper';
 
 /**
  * This function retrives the accessToken from AsyncStorage and decodes it.
@@ -103,6 +104,7 @@ export async function getUserProfile(accessToken) {
 
     if (decodedToken && decodedToken.personalNumber) {
       let timesRun = 0;
+
       const response = await poll(
         function () {
           timesRun += 1;
@@ -113,13 +115,16 @@ export async function getUserProfile(accessToken) {
         (response) => timesRun < 5 && response.status !== 200,
         1000
       );
+
       if (response.status === 200) {
         return [response.data.data.attributes.item, null];
       }
+
       if (response.status === 404) {
         throw new Error('404, no such user found');
       }
-      throw new Error(response);
+
+      throw new Error(getMessage('unkownError'));
     }
   } catch (error) {
     return [null, error];
