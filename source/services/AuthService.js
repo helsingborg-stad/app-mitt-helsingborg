@@ -43,7 +43,7 @@ export async function saveAccessTokenToStorage(accessToken) {
   }
 }
 /**
- * This function saves the accessToken and it's expire time to AsyncStorage.
+ * This function removes the accessToken from AsyncStorage.
  * @param {string} accessToken json web token;
  */
 export async function removeAccessTokenFromStorage() {
