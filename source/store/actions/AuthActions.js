@@ -73,6 +73,9 @@ export async function addProfile() {
   } catch (error) {
     return {
       type: actionTypes.authError,
+      payload: {
+        error,
+      },
     };
   }
 }
