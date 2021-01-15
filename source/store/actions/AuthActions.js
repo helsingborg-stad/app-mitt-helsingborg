@@ -71,7 +71,6 @@ export async function addProfile() {
       payload: userProfile,
     };
   } catch (error) {
-    console.error(error);
     return {
       type: actionTypes.authError,
     };
