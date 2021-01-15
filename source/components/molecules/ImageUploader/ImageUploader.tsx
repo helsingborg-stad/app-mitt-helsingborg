@@ -124,15 +124,14 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: oldImages, onChange
     const imageFileType = (image.path as string).split('.').pop();
     const data: Blob = await getBlob(image.path);
     const filename = (image.path as string).split('/').pop();
-    const uploadResponse = await uploadFile(
-      'users/me/attachments',
-      filename,
-      imageFileType,
+    const uploadResponse = await uploadFile({ 
+      endpoint: 'users/me/attachments',
+      fileName: filename,
+      fileType: imageFileType,
       data
-    );
+    });
     
     if (uploadResponse.error) {
-      // we might need more error handling, like displaying an error message if the upload does not go through
       setLoadedStatus((old) => {
         old[index] = 'error';
         return [...old];
