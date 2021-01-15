@@ -93,7 +93,6 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: oldImages, onChange
   const [choiceModalVisible, toggleModal] = useModal();
 
   useEffect(() => {
-    // if the component is sent a list of existing images, we load them into the state
     if (oldImages) {
       setImages(oldImages);
     }
