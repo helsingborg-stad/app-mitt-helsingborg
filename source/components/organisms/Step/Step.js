@@ -92,10 +92,10 @@ function Step({
       formNavigation.close(() => {});
     }
   };
-  const inSubstep = currentPosition.level !== 0;
-  const inLastMainStep =
+  const isSubstep = currentPosition.level !== 0;
+  const isLastMainStep =
     currentPosition.level === 0 && currentPosition.currentMainStep === totalStepNumber;
-  const backButtonBehavior = inSubstep ? formNavigation.goToMainForm : formNavigation.back;
+  const backButtonBehavior = isSubstep ? formNavigation.goToMainForm : formNavigation.back;
 
   const [fadeValue] = useState(new Animated.Value(0));
 
@@ -126,13 +126,13 @@ function Step({
             closeDialog={() => setCloseDialogVisible(false)}
           />
 
-          {!inSubstep && (
+          {!isSubstep && (
             <StepBackNavigation
               showBackButton={isBackBtnVisible}
-              inSubstep={inSubstep}
+              isSubstep={isSubstep}
               onBack={backButtonBehavior}
               onClose={() => {
-                if (inLastMainStep) {
+                if (isLastMainStep) {
                   closeForm();
                 } else {
                   setCloseDialogVisible(true);
@@ -221,10 +221,10 @@ function Step({
         </Animated.View>
       </KeyboardAwareScrollView>
 
-      {inSubstep && (
+      {isSubstep && (
         <StepBackNavigation
           showBackButton={isBackBtnVisible}
-          inSubstep={inSubstep}
+          isSubstep={isSubstep}
           primary={false}
           onBack={backButtonBehavior}
           onClose={() => setCloseDialogVisible(true)}
