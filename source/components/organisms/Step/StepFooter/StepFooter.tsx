@@ -46,11 +46,7 @@ interface Props {
   updateCaseInContext: (
     answers: Record<string, any>,
     status: CaseStatus,
-<<<<<<< HEAD
     currentPosition: FormPosition
-=======
-    currentFormPosition: FormPosition
->>>>>>> 5289c63 (feat(backToMainAndNext): remove some unnecessary comments, and fix some typing mistakes in StepFooter)
   ) => void;
   currentPosition: FormPosition;
   validateStepAnswers: (errorCallback: () => void, onValidCallback: () => void) => void;
