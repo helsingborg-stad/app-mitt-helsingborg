@@ -72,6 +72,11 @@ const getInitialState = (inputs, value) => {
   return inputs.reduce((prev, current) => ({ ...prev, [current.key]: current.value }), {});
 };
 
+const StyledErrorText = styled(Text)`
+  padding-bottom: 20px;
+  color: ${(props) => props.theme.textInput.errorTextColor};
+`;
+
 /** Switch between different input types */
 const InputComponent = React.forwardRef(
   ({ input, colorSchema, editable, onChange, onInputBlur, value, state }, ref) => {
@@ -201,30 +206,38 @@ function EditableList({
     >
       <EditableListBody>
         {inputs.map((input, index) => (
-          <EditableListItem
-            colorSchema={colorSchema}
-            editable={editable}
-            key={input.key}
-            error={error ? error[input.key] : undefined}
-            activeOpacity={1.0}
-            onPress={() => {
-              if (editable && inputRefs.current?.[index]?.focus) inputRefs.current[index].focus();
-              else if (editable && inputRefs.current?.[index]?.togglePicker)
-                inputRefs.current[index].togglePicker();
-            }}
-          >
-            <EditableListItemLabelWrapper alignAtStart={input.type === 'select'}>
-              <EditableListItemLabel>{input.label}</EditableListItemLabel>
-            </EditableListItemLabelWrapper>
-            <EditableListItemInputWrapper>
-              <InputComponent
-                {...{ input, colorSchema, editable, onChange, onInputBlur, value, state }}
-                ref={(el) => {
-                  inputRefs.current[index] = el;
-                }}
-              />
-            </EditableListItemInputWrapper>
-          </EditableListItem>
+          <>
+            <EditableListItem
+              colorSchema={colorSchema}
+              editable={editable}
+              key={input.key}
+              error={error ? error[input.key] : undefined}
+              activeOpacity={1.0}
+              onPress={() => {
+                if (editable && inputRefs.current?.[index]?.focus) inputRefs.current[index].focus();
+                else if (editable && inputRefs.current?.[index]?.togglePicker)
+                  inputRefs.current[index].togglePicker();
+              }}
+            >
+              <EditableListItemLabelWrapper alignAtStart={input.type === 'select'}>
+                <EditableListItemLabel>{input.label}</EditableListItemLabel>
+              </EditableListItemLabelWrapper>
+              <EditableListItemInputWrapper>
+                <InputComponent
+                  {...{ input, colorSchema, editable, onChange, onInputBlur, value, state }}
+                  ref={(el) => {
+                    inputRefs.current[index] = el;
+                  }}
+                />
+              </EditableListItemInputWrapper>
+            </EditableListItem>
+
+            {error && error[input.key]?.isValid === false ? (
+              <StyledErrorText>{error[input.key].validationMessage}</StyledErrorText>
+            ) : (
+              <></>
+            )}
+          </>
         ))}
       </EditableListBody>
     </Fieldset>
