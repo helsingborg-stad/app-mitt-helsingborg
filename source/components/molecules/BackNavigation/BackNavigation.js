@@ -23,7 +23,7 @@ const BackNavigationSingleWrapper = styled.View((props) => ({
   top: 0,
   zIndex: 999,
   right: 0,
-  position: props.inSubstep ? 'absolute' : 'relative',
+  position: props.isSubstep ? 'absolute' : 'relative',
 }));
 
 const BackButton = styled.View((props) => ({
@@ -68,10 +68,10 @@ const BackNavigation = ({
   onClose,
   showBackButton,
   showCloseButton,
-  inSubstep,
+  isSubstep,
   primary,
 }) =>
-  !inSubstep ? (
+  !isSubstep ? (
     <BackNavigationWrapper style={style}>
       {showBackButton ? (
         <BackButton colorSchema={colorSchema} onStartShouldSetResponder={onBack}>
@@ -88,7 +88,7 @@ const BackNavigation = ({
       ) : null}
     </BackNavigationWrapper>
   ) : (
-    <BackNavigationSingleWrapper inSubstep={inSubstep} style={style}>
+    <BackNavigationSingleWrapper isSubstep={isSubstep} style={style}>
       <CloseButton
         primary={primary}
         colorSchema={colorSchema}
@@ -108,7 +108,7 @@ BackNavigation.propTypes = {
   onClose: PropTypes.func,
   showBackButton: PropTypes.bool,
   showCloseButton: PropTypes.bool,
-  inSubstep: PropTypes.bool,
+  isSubstep: PropTypes.bool,
   primary: PropTypes.bool,
 };
 
