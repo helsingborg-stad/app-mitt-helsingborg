@@ -49,6 +49,7 @@ const Input: React.FC<InputProps> = React.forwardRef(
     return (
       <>
         <StyledTextInput
+          value={value}
           multiline /** Temporary fix to make field scrollable inside scrollview */
           numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
           onBlur={handleBlur}
