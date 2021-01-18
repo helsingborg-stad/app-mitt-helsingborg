@@ -93,6 +93,8 @@ function Step({
     }
   };
   const inSubstep = currentPosition.level !== 0;
+  const inLastMainStep =
+    currentPosition.level === 0 && currentPosition.currentMainStep === totalStepNumber;
   const backButtonBehavior = inSubstep ? formNavigation.goToMainForm : formNavigation.back;
 
   const [fadeValue] = useState(new Animated.Value(0));
@@ -129,7 +131,13 @@ function Step({
               showBackButton={isBackBtnVisible}
               inSubstep={inSubstep}
               onBack={backButtonBehavior}
-              onClose={() => setCloseDialogVisible(true)}
+              onClose={() => {
+                if (inLastMainStep) {
+                  closeForm();
+                } else {
+                  setCloseDialogVisible(true);
+                }
+              }}
               colorSchema={colorSchema || 'blue'}
             />
           )}
