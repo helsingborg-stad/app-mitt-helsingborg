@@ -39,7 +39,7 @@ const colorSchema = 'red';
  */
 const computeCaseCardComponent = (status, latestCase, form, caseType, navigation, createCase) => {
   const updatedAt = latestCase?.updatedAt ? formatUpdatedAt(latestCase.updatedAt) : '';
-  const currentStep = latestCase?.currentPosition?.currentMainStep || '';
+  const currentStep = latestCase?.currentPosition?.currentMainStep || 0;
   const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
 
   const commonCardProps = {
