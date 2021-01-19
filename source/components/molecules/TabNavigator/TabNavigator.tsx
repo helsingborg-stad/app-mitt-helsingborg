@@ -60,6 +60,7 @@ const TabNavigator: React.FC<Props> = ({
       <BarWrapper>
         {state.routes.map((route, index) => (
           <TabNavigatorItem
+            key={`${index}-${route}`}
             route={route}
             navigation={navigation}
             descriptor={descriptors[route.key]}
