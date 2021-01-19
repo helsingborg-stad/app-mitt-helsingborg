@@ -32,15 +32,15 @@ const PersonFieldDetails = styled.View`
 
 const PersonFieldInfoName = styled(Text)`
   font-weight: ${props => props.theme.fontWeights[1]};
-  font-size: ${props => props.theme.fontSizes[4]};
+  font-size: ${props => props.theme.fontSizes[4]}px;
 `
 const PersonFieldInfoRelation = styled(Text)`
-  font-weight: ${props => props.theme.fontWeights[1]};
+  font-weight: ${props => props.theme.fontWeights[1]}px;
   color: ${props => props.theme.colors.primary.blue[1]};
 `
 const PersonFieldInfoPNO = styled(Text)`
 margin-top: 6px;
-  font-size: ${props => props.theme.fontSizes[3]};
+  font-size: ${props => props.theme.fontSizes[3]}px;
 `
 const PersonFieldDivider = styled.View<{colorSchema: string}>`
   height: 2px;

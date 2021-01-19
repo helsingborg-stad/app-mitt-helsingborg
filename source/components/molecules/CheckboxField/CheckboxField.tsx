@@ -59,7 +59,7 @@ const CheckboxFieldText = styled(Text)<{ size: 'small' | 'medium' | 'large' }>`
 `;
 
 const StyledErrorText = styled(Text)`
-  font-size: ${({ theme }) => theme.fontSizes[3]};
+  font-size: ${({ theme }) => theme.fontSizes[3]}px;
   color: ${(props) => props.theme.textInput.errorTextColor};
   font-weight: ${({ theme }) => theme.fontWeights[0]};
   margin-left: -50px;

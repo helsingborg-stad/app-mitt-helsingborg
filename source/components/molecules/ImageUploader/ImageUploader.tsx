@@ -80,7 +80,7 @@ export type ImageStatus = 'loading' | 'uploaded' | 'error';
 
 interface Props {
   buttonText: string;
-  value: Image[];
+  value: Image[] | string;
   onChange: (value: Record<string, any>[]) => void;
   colorSchema?: PrimaryColor;
   maxImages?: number;
@@ -93,7 +93,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: oldImages, onChange
   const [choiceModalVisible, toggleModal] = useModal();
 
   useEffect(() => {
-    if (oldImages) {
+    if (oldImages && typeof oldImages !== 'string') {
       setImages(oldImages);
     }
   }, [oldImages]);
@@ -182,7 +182,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: oldImages, onChange
   const addImageFromCamera = () => {
     ImagePicker.openCamera({
       cropping: true,
-      includeBase64: true,
+      includeBase64: false,
     })
       .then((image) => {
         const length = addImagesToState([image]);
