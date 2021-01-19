@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
-import { Button, Text, Heading } from 'app/components/atoms';
+import { Button, Text, Heading, Icon } from 'app/components/atoms';
 import { Header } from 'app/components/molecules';
 import AuthContext from 'app/store/AuthContext';
 import PropTypes from 'prop-types';
-import env from 'react-native-config';
-import { StorageService } from 'app/services';
 import { ScreenWrapper } from '../components/molecules';
+import AppContext from '../store/AppContext';
 
 const ProfileScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
@@ -52,6 +51,7 @@ function ProfileScreen(props) {
     navigation: { navigate },
   } = props;
   const authContext = useContext(AuthContext);
+  const { isDevMode } = useContext(AppContext);
   const { user } = authContext;
   const renderField = (value) =>
     value ? <Text>{value}</Text> : <EmptyValue>Ej angivet</EmptyValue>;
@@ -75,14 +75,14 @@ function ProfileScreen(props) {
             <Label small>E-POSTADRESS</Label>
             {renderField(user?.email)}
             <Label small>ADRESS</Label>
-            {/*     {renderField(user.address.street)}
-            {renderField(user.address.postalCode)} */}
+            {renderField(user?.address?.street)}
+            {renderField(user?.address?.postalCode)}
           </ProfileInfoContainer>
         </View>
         <BottomContainer>
           <SignOutButton
             block
-            color="purple"
+            colorSchema="blue"
             onClick={async () => {
               await authContext.handleLogout();
               navigate('Start');
@@ -91,18 +91,16 @@ function ProfileScreen(props) {
             <Text>Logga ut</Text>
           </SignOutButton>
 
-          {env.APP_ENV === 'development' && (
-            <SignOutButton
+          {isDevMode && (
+            <Button
               block
-              color="light"
-              onClick={async () => {
-                StorageService.default.clearData();
-                await authContext.handleLogout();
-                navigate('Start');
-              }}
+              variant="outlined"
+              colorSchema="neutral"
+              onClick={() => navigate('DevFeatures')}
             >
-              <Text>Nollställ data</Text>
-            </SignOutButton>
+              <Text>Utvecklarfunktioner</Text>
+              <Icon name="construction" />
+            </Button>
           )}
         </BottomContainer>
       </Container>
