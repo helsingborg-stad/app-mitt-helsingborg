@@ -15,6 +15,7 @@ export const TEMP_TOKEN_KEY = '@app:tempAccessToken';
 export const USER_KEY = '@app:user';
 export const ORDER_KEY = '@app:orderRef';
 export const COMPLETED_FORMS_KEY = '@app:completedForms';
+export const APP_ENV_KEY = '@app:appEnv';
 
 export default class StorageService extends Component {
   /**
