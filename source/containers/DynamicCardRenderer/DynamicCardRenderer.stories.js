@@ -6,6 +6,32 @@ import { Text } from '../../components/atoms';
 import StoryWrapper from '../../components/molecules/StoryWrapper';
 import DynamicCardRenderer from './';
 
+const userAgreementText = `
+För att kunna handlägga din ansökan om ekonomiskt bistånd måste vi behandla följande personuppgifter om dig/er:  
+
++ För och efternamn samt mellannamn på dig, eventuell medsökande och barn 
++ Adress för dig och eventuell medsökande 
++ Personnummer för dig och eventuell medsökande 
++ Folkbokföringsadress 
++ Information om barns boendesituation samt om barnet går i skola eller står i kö till skola 
++ Inkomster och utgifter  
++ Sökt ersättning  
++ E-postadress 
++ Telefonnummer 
++ Civilstånd 
++ Medborgarskap 
++ Bostad 
++ Ekonomisk översikt.  
++ Tillgångar i form av fastighet, fordon 
++ Sysselsättning  
++ Uppgifter om hälsa. 
+ 
+
+Den rättsliga grunden för behandlingen är rättslig förpliktelse, samtycke samt myndighetsutövning och uppgift av allmänt intresse. Uppgifterna sparas under 5 år i enlighet med Arbetsmarknadsnämndens dokumenthanteringsplan för att därefter gallras.  
+
+Helsingborgs stad, Arbetsmarknadsnämnden, är personuppgiftsansvarig för den personuppgiftsbehandling som sker i e-tjänsten.  
+`;
+
 const FlexContainer = styled.ScrollView`
   background-color: #fff;
   padding: 16px;
@@ -115,8 +141,8 @@ const cardData6 = {
       icon: 'help',
       action: 'infoModal',
       closeButtonText: 'Tillbaka',
-      markdownText: 'Hello World!',
-      heading: 'Info Modal',
+      markdownText: userAgreementText,
+      heading: 'Behandling av personuppgifter i e-tjänsten Ansök om Ekonomiskt bistånd',
     },
   ],
 };
