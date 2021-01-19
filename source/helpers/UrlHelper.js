@@ -1,5 +1,6 @@
 import env from 'react-native-config';
 import { Linking, Platform } from 'react-native';
+import StorageService, { APP_ENV_KEY } from '../services/StorageService';
 
 /**
  * Open requested URL
@@ -47,8 +48,13 @@ const encodeQueryData = (queryParams) => {
  * @param {string} endpoint
  * @param {obj} params
  */
-export const buildServiceUrl = (endpoint = '', params = {}) => {
-  let queryParams = { apikey: env.MITTHELSINGBORG_IO_APIKEY || '' };
+export const buildServiceUrl = async (endpoint = '', params = {}) => {
+  const appEnv = await StorageService.getData(APP_ENV_KEY);
+  const devMode = appEnv === 'development';
+  const apiUrl = devMode ? env.MITTHELSINGBORG_IO_DEV : env.MITTHELSINGBORG_IO;
+  const apiKey = devMode ? env.MITTHELSINGBORG_IO_DEV_APIKEY : env.MITTHELSINGBORG_IO_APIKEY;
+
+  let queryParams = { apiKey };
   // Concatenate params
   queryParams = { ...params, ...queryParams };
   // Build query url
@@ -56,7 +62,7 @@ export const buildServiceUrl = (endpoint = '', params = {}) => {
   // Trim slashes
   const sanitizedEndpoint = endpoint.replace(/^\/|\/$/g, '');
   // Build url
-  const completeUrl = `${env.MITTHELSINGBORG_IO}/${sanitizedEndpoint}?${queryString}`;
+  const completeUrl = `${apiUrl}/${sanitizedEndpoint}?${queryString}`;
 
   return completeUrl;
 };
