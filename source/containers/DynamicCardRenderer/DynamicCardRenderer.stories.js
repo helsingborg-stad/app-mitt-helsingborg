@@ -100,6 +100,27 @@ const cardData5 = {
   ],
 };
 
+const cardData6 = {
+  shadow: true,
+  outlined: false,
+  backgroundColor: 'blue',
+  colorSchema: 'blue',
+  components: [
+    { type: 'image', image: 'ICON_TELL' },
+    { type: 'subtitle', text: 'Subtitle' },
+    { type: 'title', text: 'Informationsmodal' },
+    {
+      type: 'button',
+      text: 'Se Info',
+      icon: 'help',
+      action: 'infoModal',
+      closeButtonText: 'Tillbaka',
+      markdownText: 'Hello World!',
+      heading: 'Info Modal',
+    },
+  ],
+};
+
 storiesOf('Dynamic Card Renderer', module).add('default', (props) => (
   <StoryWrapper {...props}>
     <FlexContainer>
@@ -109,6 +130,7 @@ storiesOf('Dynamic Card Renderer', module).add('default', (props) => (
       <DynamicCardRenderer {...cardData3} />
       <DynamicCardRenderer {...cardData4} />
       <DynamicCardRenderer {...cardData5} />
+      <DynamicCardRenderer {...cardData6} />
     </FlexContainer>
   </StoryWrapper>
 ));
