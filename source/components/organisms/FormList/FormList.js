@@ -29,7 +29,7 @@ const FormList = ({ onClickCallback, heading, showSubforms }) => {
 
   return (
     <List>
-      <ListHeading type="h3">{heading}</ListHeading>
+      <ListHeading type="h5">{heading}</ListHeading>
       {formSummaries.length > 0 ? (
         formSummaries.map((form) => (
           <ListItem
