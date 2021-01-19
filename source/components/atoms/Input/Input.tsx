@@ -42,6 +42,7 @@ const StyledErrorText = styled(Text)`
 const Input: React.FC<InputProps> = React.forwardRef(
   ({ onBlur, showErrorMessage, value, error, ...props }, ref) => {
 
+    console.log(value);
     const handleBlur = () => {
       if (onBlur) onBlur(value);
     };
