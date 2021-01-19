@@ -1,7 +1,9 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
 import env from 'react-native-config';
+import AppContext from './AppContext';
 import * as authService from '../services/AuthService';
+
 import AuthReducer, { initialState as defaultInitialState } from './reducers/AuthReducer';
 import {
   startAuth,
@@ -21,6 +23,8 @@ const AuthContext = React.createContext();
 
 function AuthProvider({ children, initialState }) {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
+
+  const { handleSetMode } = useContext(AppContext);
 
   /**
    * Starts polling for an order response if status is pending and orderRef and autoStartToken is set in state.
@@ -54,12 +58,19 @@ function AuthProvider({ children, initialState }) {
    * @param {bool} launchBankidApp Will automatically launch BankID app if set to true
    */
   async function handleAuth(ssn, launchBankidApp = true) {
+    // Dynamically sets app in dev mode
+    if (ssn && env.TEST_PERSONAL_NUMBER === ssn) {
+      handleSetMode('development');
+    }
+
+    // Disable BankId authentication
     if (env.USE_BANKID === 'false') {
       dispatch(await mockedAuth());
-    } else {
-      dispatch(setStatus('pending'));
-      dispatch(await startAuth(ssn, launchBankidApp));
+      return;
     }
+
+    dispatch(setStatus('pending'));
+    dispatch(await startAuth(ssn, launchBankidApp));
   }
 
   /**
