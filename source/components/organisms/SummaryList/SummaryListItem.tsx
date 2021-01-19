@@ -86,7 +86,7 @@ const DeleteButtonHighligth = styled(TouchableHighlight)`
 `;
 
 const ValidationErrorMessage = styled(Text)`
-  font-size: ${({ theme }) => theme.fontSizes[3]};
+  font-size: ${({ theme }) => theme.fontSizes[3]}px;
   color: ${(props) => props.theme.textInput.errorTextColor};
   font-weight: ${({ theme }) => theme.fontWeights[0]};
   margin-top: 8px;

@@ -461,22 +461,22 @@ const theme = {
   },
   label: {
     small: {
-      font: '12px',
-      paddingBottom: '3px',
-      lineWidth: '2px',
-      marginBottom: '6px',
+      font: 12,
+      paddingBottom: 3,
+      lineWidth: 2,
+      marginBottom: 6,
     },
     medium: {
-      font: '14px',
-      paddingBottom: '7px',
-      lineWidth: '3px',
-      marginBottom: '12px',
+      font: 14,
+      paddingBottom: 7,
+      lineWidth: 3,
+      marginBottom: 12,
     },
     large: {
-      font: '18px',
-      paddingBottom: '10px',
-      lineWidth: '4px',
-      marginBottom: '18px',
+      font: 18,
+      paddingBottom: 10,
+      lineWidth: 4,
+      marginBottom: 18,
     },
     colors: {
       purple: {

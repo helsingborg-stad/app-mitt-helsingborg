@@ -27,7 +27,7 @@ const StepDescriptionTagline = styled(Text)`
 const StepDescriptionText = styled(Text)`
   line-height: ${(props) => props.theme.typography[props.type].lineHeight}px;
   margin-top: 16px;
-  font-size: ${(props) => props.theme.fontSizes[3]};
+  font-size: ${(props) => props.theme.fontSizes[3]}px;
 `;
 
 function StepDescription({

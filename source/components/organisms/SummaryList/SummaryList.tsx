@@ -14,7 +14,7 @@ const SumLabel = styled(Heading)<{ colorSchema: string }>`
   margin-top: 5px;
   margin-left: 3px;
   font-weight: ${props => props.theme.fontWeights[1]};
-  font-size: ${props => props.theme.fontSizes[3]};
+  font-size: ${props => props.theme.fontSizes[3]}px;
   color: ${props => props.theme.colors.primary[props.colorSchema][1]};
 `;
 const SumText = styled(Text)`

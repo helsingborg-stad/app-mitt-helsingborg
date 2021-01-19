@@ -8,7 +8,7 @@ import { StyleProp, TextStyle } from 'react-native';
 import { PrimaryColor, getValidColorSchema } from '../../../styles/themeHelpers';
 
 const LabelText = styled(Text)<{size: 'small' | 'medium' | 'large'; color: PrimaryColor }>`
-  font-size: ${props => props.theme.label[props.size].font};
+  font-size: ${props => props.theme.label[props.size].font}px;
   color: ${props => props.theme.label.colors[props.color].text};
   text-transform: uppercase;
   font-weight: bold;
@@ -16,20 +16,20 @@ const LabelText = styled(Text)<{size: 'small' | 'medium' | 'large'; color: Prima
   padding-top: 5px;
 `;
 const LabelBorder = styled.View<{size: 'small' | 'medium' | 'large'; color: PrimaryColor; underline?: boolean; }>`
-  padding-bottom: ${props => props.theme.label[props.size].paddingBottom};
+  padding-bottom: ${props => props.theme.label[props.size].paddingBottom}px;
   border-bottom-color: ${props => props.theme.label.colors[props.color].underline};
   border-bottom-width: ${props => {
     if (props.underline === false) {
-      return '0px';
+      return 0;
     }
     return theme.label[props.size].lineWidth;
-  }};
+  }}px;
   margin-bottom: ${props => {
     if (props.underline === false) {
-      return '0px';
+      return 0;
     }
     return theme.label[props.size].marginBottom;
-  }};
+  }}px;
   align-self: flex-start;
   margin-right: 8px;
 `;
