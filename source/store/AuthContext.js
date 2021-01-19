@@ -137,6 +137,11 @@ function AuthProvider({ children, initialState }) {
   async function isAccessTokenValid() {
     const decodedToken = await authService.getAccessTokenFromStorage();
 
+    // Configure app in dev mode if personalnumber is defined as test account
+    if (decodedToken?.personalNumber && env.TEST_PERSONAL_NUMBER === decodedToken.personalNumber) {
+      handleSetMode('development');
+    }
+
     // TODO: Remove this condition when exp value is set on the jwt token in the api.
     if (env.USE_BANKID === 'true' && decodedToken) {
       return true;
