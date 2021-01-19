@@ -9,8 +9,6 @@ function AppProvider({ children }) {
   const defaultMode = env.APP_ENV || 'development';
   const [mode, setMode] = useState(defaultMode);
 
-  console.log('mode', mode);
-
   const provider = {
     mode,
     handleSetMode: (newMode) => setMode(newMode),
@@ -18,7 +16,6 @@ function AppProvider({ children }) {
   };
 
   React.useEffect(() => {
-    console.log('trigger update local storage', mode);
     StorageService.saveData(APP_ENV_KEY, mode);
   }, [mode]);
 
