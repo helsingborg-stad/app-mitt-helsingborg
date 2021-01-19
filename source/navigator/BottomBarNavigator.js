@@ -5,7 +5,7 @@ import { StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import TabNavigator from '../components/molecules/TabNavigator';
-import { HomeScreen, ProfileScreen } from '../screens';
+import { ChatScreen, ProfileScreen } from '../screens';
 import theme from '../styles/theme';
 import CaseNavigator from './CaseNavigator';
 
@@ -42,7 +42,7 @@ const BottomBarStack = () => (
       />
       <Tab.Screen
         name="Chat"
-        component={HomeScreen}
+        component={ChatScreen}
         options={{
           headerTintColor: 'black',
           tabBarLabel: 'Sally',
