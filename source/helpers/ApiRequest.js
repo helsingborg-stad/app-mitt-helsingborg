@@ -10,23 +10,15 @@ import { buildServiceUrl } from './UrlHelper';
  * @param {string} method
  * @param {obj} data
  * @param {obj} headers
- * @param userId  Will overwrite bearer token in header if set.
  */
-const request = async (endpoint, method, data, headers, userId) => {
-  // Build complete api url
-  const url = buildServiceUrl(endpoint);
+const request = async (endpoint, method, data, headers) => {
+  const url = await buildServiceUrl(endpoint);
+  const token = await StorageService.getData(TOKEN_KEY);
 
-  let bearer;
-  if (userId) {
-    bearer = userId;
-  } else {
     const token = await StorageService.getData(ACCESS_TOKEN_KEY);
-    bearer = token || '';
-  }
-
   // Merge custom headers
   const newHeaders = {
-    Authorization: bearer,
+    Authorization: token || '',
     'Content-Type': 'application/json',
     ...headers,
   };
