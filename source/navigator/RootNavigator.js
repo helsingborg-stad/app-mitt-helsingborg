@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { SplashScreen, FormCaseScreen } from '../screens';
+import { SplashScreen, FormCaseScreen, DevFeaturesScreen } from '../screens';
 import AuthStack from './AuthStack';
 import BottomBarNavigator from './BottomBarNavigator';
 import CustomStackNavigator from './CustomStackNavigator';
@@ -26,6 +26,13 @@ const RootStack = () => (
     <Stack.Screen
       name="Form"
       component={FormCaseScreen}
+      options={{
+        gestureEnabled: false,
+      }}
+    />
+    <Stack.Screen
+      name="DevFeatures"
+      component={DevFeaturesScreen}
       options={{
         gestureEnabled: false,
       }}
