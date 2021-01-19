@@ -3,12 +3,13 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Linking } from 'react-native';
 import Card from '../../components/molecules/Card/Card';
-import PropTypes from 'prop-types';
+import PropTypes, { string } from 'prop-types';
 import TextComponent from '../../components/atoms/Text';
 import Icon from '../../components/atoms/Icon';
 import icons from '../../helpers/Icons';
 import { launchPhone, launchEmail } from '../../helpers/LaunchExternalApp';
-
+import InfoModal from '../../components/molecules/InfoModal';
+import { useModal } from '../../components/molecules/Modal';
 /***** types describing how we should send in the data to render our cards  */
 interface Image {
   type: 'image';
@@ -44,11 +45,27 @@ type Button = ButtonBase & (
   { action: 'email'; email: string } |
   { action: 'phone'; phonenumber: string } |
   { action: 'url'; url: string } |
-  { action: 'navigate'; screen: string }
+  { action: 'navigate'; screen: string } |
+  { action: 'infoModal'; heading: string; markdownText: string; closeButtonText: string; }
 );
 
 type CardComponent = Image | Text | Title | Subtitle | Button;
+type InfoButtonProps =  ButtonBase & { action: 'infoModal'; heading: string; markdownText: string; closeButtonText: string; };
 /***** end of types */
+
+/** The info-button gets its own component, because it involves the useModal hook */
+const InfoButton: React.FC<InfoButtonProps> = ({ heading, markdownText, closeButtonText, text, colorSchema, icon, iconPosition}) => {
+  const [modalVisible, toggleModal] = useModal();
+  return (
+  <>
+  <Card.Button onClick={toggleModal}>
+    {icon && iconPosition && iconPosition === 'left' && <Icon name={icon} />}
+    <TextComponent>{text}</TextComponent>
+    {icon && (!iconPosition || iconPosition === 'right') && <Icon name={icon} />}
+  </Card.Button>
+  <InfoModal visible={modalVisible} toggleModal={toggleModal} markdownText={markdownText} heading={heading} colorSchema={colorSchema} buttonText={closeButtonText} />
+  </>);
+}
 
 /** Maps an object to a Card child component */
 const renderCardComponent = (component: CardComponent, navigation: any) => {
@@ -73,6 +90,12 @@ const renderCardComponent = (component: CardComponent, navigation: any) => {
   if (component.type === 'button') {
     const { icon, iconPosition, text } = component;
     let onClick: () => void = () => null;
+
+    // treat info-modal separately since it doesn't fit the same pattern as the other buttons. 
+    if (component.action === 'infoModal') {
+      return <InfoButton {...component} />
+    }
+
     switch (component.action) {
       case 'email':
         onClick = () => { launchEmail(component.email)};
