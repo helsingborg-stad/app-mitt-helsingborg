@@ -8,6 +8,7 @@ import StorybookUIRoot from '../storybook';
 import boundaryErrorHandler from './helpers/error-handler/ErrorHandler';
 import Navigator from './navigator';
 import { AuthProvider } from './store/AuthContext';
+import { AppProvider } from './store/AppContext';
 import { CaseProvider } from './store/CaseContext';
 import { FormProvider } from './store/FormContext';
 import { NotificationProvider } from './store/NotificationContext';
@@ -34,34 +35,38 @@ const App = () => {
   if (Config.IS_STORYBOOK === 'true') {
     return (
       <SafeAreaProvider>
-        <AuthProvider>
-          <CaseProvider>
-            <FormProvider>
-              <ThemeProvider theme={theme}>
-                <NotificationProvider>
-                  <StorybookUIRoot />
-                </NotificationProvider>
-              </ThemeProvider>
-            </FormProvider>
-          </CaseProvider>
-        </AuthProvider>
+        <AppProvider>
+          <AuthProvider>
+            <CaseProvider>
+              <FormProvider>
+                <ThemeProvider theme={theme}>
+                  <NotificationProvider>
+                    <StorybookUIRoot />
+                  </NotificationProvider>
+                </ThemeProvider>
+              </FormProvider>
+            </CaseProvider>
+          </AuthProvider>
+        </AppProvider>
       </SafeAreaProvider>
     );
   }
 
   return (
     <SafeAreaProvider>
-      <AuthProvider>
-        <CaseProvider>
-          <FormProvider>
-            <ThemeProvider theme={theme}>
-              <NotificationProvider>
-                <Navigator />
-              </NotificationProvider>
-            </ThemeProvider>
-          </FormProvider>
-        </CaseProvider>
-      </AuthProvider>
+      <AppProvider>
+        <AuthProvider>
+          <CaseProvider>
+            <FormProvider>
+              <ThemeProvider theme={theme}>
+                <NotificationProvider>
+                  <Navigator />
+                </NotificationProvider>
+              </ThemeProvider>
+            </FormProvider>
+          </CaseProvider>
+        </AuthProvider>
+      </AppProvider>
     </SafeAreaProvider>
   );
 };
