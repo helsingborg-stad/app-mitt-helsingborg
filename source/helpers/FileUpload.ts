@@ -26,8 +26,7 @@ export const uploadFile = async ({
   data,
   headers,
 }: FileUploadParams) => {
-  const requestUrl = buildServiceUrl(endpoint);
-
+  const requestUrl = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
   const bearer = token || '';
 
