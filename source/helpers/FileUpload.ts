@@ -1,5 +1,5 @@
 import axios from 'axios';
-import StorageService, { TOKEN_KEY } from '../services/StorageService';
+import StorageService, { ACCESS_TOKEN_KEY } from '../services/StorageService';
 import { buildServiceUrl } from './UrlHelper';
 
 export const getBlob = async (fileUri: string) => {
@@ -28,7 +28,7 @@ export const uploadFile = async ({
 }: FileUploadParams) => {
   const requestUrl = buildServiceUrl(endpoint);
 
-  const token = await StorageService.getData(TOKEN_KEY);
+  const token = await StorageService.getData(ACCESS_TOKEN_KEY);
   const bearer = token || '';
 
   // Merge custom headers

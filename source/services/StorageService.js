@@ -9,7 +9,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 // Storage key definitions
 export const SHOW_SPLASH_SCREEN = '@app:show_splash_screen';
-export const TOKEN_KEY = '@app:accessToken';
+export const ACCESS_TOKEN_KEY = '@app:accessToken';
+export const REFRESH_TOKEN_KEY = '@app:refreshToken';
 export const TEMP_TOKEN_KEY = '@app:tempAccessToken';
 export const USER_KEY = '@app:user';
 export const ORDER_KEY = '@app:orderRef';

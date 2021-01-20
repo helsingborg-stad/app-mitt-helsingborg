@@ -1,7 +1,7 @@
 import env from 'react-native-config';
 import bankid from '../../services/BankidService';
 import * as authService from '../../services/AuthService';
-import StorageService, { TOKEN_KEY } from '../../services/StorageService';
+import StorageService, { ACCESS_TOKEN_KEY } from '../../services/StorageService';
 import { UrlHelper } from '../../helpers';
 
 const { canOpenUrl } = UrlHelper;
@@ -23,7 +23,7 @@ export const actionTypes = {
 
 export async function mockedAuth() {
   try {
-    await StorageService.saveData(TOKEN_KEY, env.FAKE_TOKEN);
+    await StorageService.saveData(ACCESS_TOKEN_KEY, env.FAKE_TOKEN);
     return {
       type: actionTypes.loginSuccess,
     };
@@ -158,10 +158,8 @@ export async function checkOrderStatus(autoStartToken, orderRef, isUserAuthentic
     }
 
     // Tries to grant a token from the authorization endpoint in the api.
-    const { personalNumber } = response.data.attributes.completionData.user;
-
-    // eslint-disable-next-line no-unused-vars
-    const [__, grantTokenError] = await authService.grantAccessToken(personalNumber);
+    const { authorizationCode } = response.data.attributes;
+    const [, grantTokenError] = await authService.grantAccessToken(authorizationCode);
     if (grantTokenError) {
       throw new Error(grantTokenError);
     }
