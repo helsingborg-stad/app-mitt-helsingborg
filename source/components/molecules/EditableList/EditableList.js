@@ -195,6 +195,8 @@ function EditableList({
       inputRefs.current[index].togglePicker();
   };
 
+  const isInputValid = (input) => error && error[input.key]?.isValid === false;
+
   return (
     <Fieldset
       colorSchema={colorSchema}
@@ -232,7 +234,7 @@ function EditableList({
               />
             </EditableListItemInputWrapper>
           </EditableListItem>,
-          error && error[input.key]?.isValid === false ? (
+          isInputValid(input) ? (
             <StyledErrorText>{error[input.key].validationMessage}</StyledErrorText>
           ) : (
             <></>
