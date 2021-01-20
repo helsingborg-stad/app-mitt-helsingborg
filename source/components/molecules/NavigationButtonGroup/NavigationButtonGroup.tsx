@@ -10,6 +10,10 @@ import { HorizontalScrollIndicator } from '../../atoms';
 
 const ScrollContainer = styled.ScrollView`
   padding-bottom: 16px;
+  ${(props) =>
+    props.horizontal &&
+    `margin-right: -24px;
+    margin-left: -24px;`}
 `;
 interface Props {
   buttons: ButtonProps[];
