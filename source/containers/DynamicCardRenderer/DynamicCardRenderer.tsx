@@ -58,13 +58,31 @@ const InfoButton: React.FC<InfoButtonProps> = ({ heading, markdownText, closeBut
   const [modalVisible, toggleModal] = useModal();
   return (
   <>
-  <Card.Button onClick={toggleModal}>
-    {icon && iconPosition && iconPosition === 'left' && <Icon name={icon} />}
-    <TextComponent>{text}</TextComponent>
-    {icon && (!iconPosition || iconPosition === 'right') && <Icon name={icon} />}
-  </Card.Button>
-  <InfoModal visible={modalVisible} toggleModal={toggleModal} markdownText={markdownText} heading={heading} colorSchema={colorSchema} buttonText={closeButtonText} />
+    <Card.Button onClick={toggleModal}>
+      {icon && iconPosition && iconPosition === 'left' && <Icon name={icon} />}
+      <TextComponent>{text}</TextComponent>
+      {icon && (!iconPosition || iconPosition === 'right') && <Icon name={icon} />}
+    </Card.Button>
+    <InfoModal visible={modalVisible} toggleModal={toggleModal} markdownText={markdownText} heading={heading} colorSchema={colorSchema} buttonText={closeButtonText} />
   </>);
+}
+
+/** Handles the button clicks for action types email, phone, navigate and url */
+const handleClick = (button: CardComponent & { type: 'button'}, navigation: any) => () => {
+  switch (button.action) {
+      case 'email':
+        launchEmail(button.email)
+        break;
+      case 'phone':
+        launchPhone(button.phonenumber)
+        break;
+      case 'navigate':
+        if (navigation?.navigate) navigation.navigate(button.screen) // TODO think about sending parameters here
+        break;
+      case 'url':
+        Linking.openURL(button.url);
+        break;
+    }
 }
 
 /** Maps an object to a Card child component */
@@ -96,22 +114,8 @@ const renderCardComponent = (component: CardComponent, navigation: any) => {
       return <InfoButton {...component} />
     }
 
-    switch (component.action) {
-      case 'email':
-        onClick = () => { launchEmail(component.email)};
-        break;
-      case 'phone':
-        onClick = () => { launchPhone(component.phonenumber)};
-        break;
-      case 'navigate':
-        onClick = () => { if (navigation?.navigate) navigation.navigate(component.screen) }; // TODO think about sending parameters here
-        break;
-      case 'url':
-        onClick = () => { Linking.openURL(component.url)};
-        break;
-    }
     return (
-      <Card.Button onClick={onClick}>
+      <Card.Button onClick={handleClick(component, navigation)}>
         {icon && iconPosition && iconPosition === 'left' && <Icon name={icon} />}
         <TextComponent>{text}</TextComponent>
         {icon && (!iconPosition || iconPosition === 'right') && <Icon name={icon} />}
