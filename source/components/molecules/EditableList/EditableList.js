@@ -220,7 +220,7 @@ function EditableList({
             key={input.key}
             error={error ? error[input.key] : undefined}
             activeOpacity={1.0}
-            onPress={(index) => handleListItemPress(index)}
+            onPress={() => handleListItemPress(index)}
           >
             <EditableListItemLabelWrapper alignAtStart={input.type === 'select'}>
               <EditableListItemLabel>{input.label}</EditableListItemLabel>
@@ -234,10 +234,8 @@ function EditableList({
               />
             </EditableListItemInputWrapper>
           </EditableListItem>,
-          isInputValid(input) ? (
+          isInputValid(input) && (
             <StyledErrorText>{error[input.key].validationMessage}</StyledErrorText>
-          ) : (
-            <></>
           ),
         ])}
       </EditableListBody>
