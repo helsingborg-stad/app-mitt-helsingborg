@@ -35,6 +35,12 @@ export default function AuthReducer(state, action) {
         autoStartToken: undefined,
       };
 
+    case actionTypes.refreshSession:
+      return {
+        ...state,
+        isAuthenticated: true,
+      };
+
     case actionTypes.addProfile:
       return {
         ...state,

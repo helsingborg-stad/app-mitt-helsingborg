@@ -2,28 +2,42 @@ import { useState } from 'react';
 import { PanResponder } from 'react-native';
 import useInterval from './useInterval';
 
+export type UseTouchParameters = {
+  inactivityTime: number;
+  intervalDelay: number;
+  logoutDelay: number;
+  logOut: () => void;
+  refreshInterval?: number;
+  refreshSession?: () => void;
+};
+
 /**
  * @param inactivityTime how long (in ms) the user should be inactive before displaying the inactivity dialog
  * @param intervalDelay with which interval we should check for inactivity, in ms
- * @param initialActive whether to start as active or not
  * @param logoutDelay how long to wait on the dialog before logging the user out
  * @param logOut the callback for handling logging out the user
  */
-export default function useTouchActivity(
-  inactivityTime: number,
-  intervalDelay: number,
-  initialActive: boolean,
-  logoutDelay: number,
-  logOut: () => void
-) {
+export default function useTouchActivity({
+  inactivityTime,
+  intervalDelay,
+  logoutDelay,
+  logOut,
+  refreshInterval,
+  refreshSession,
+}: UseTouchParameters) {
   const [latestTouchTime, setLatestTouchTime] = useState(Date.now());
-  const [isActive, setIsActive] = useState(initialActive);
+  const [latestRefreshTime, setLatestRefreshTime] = useState(Date.now());
+  const [isActive, setIsActive] = useState(true);
 
   const handleInterval = () => {
-    if (Date.now() - latestTouchTime > inactivityTime && isActive) {
+    const now = Date.now();
+    if (now - latestTouchTime > inactivityTime && isActive) {
       setIsActive(false);
+    } else if (isActive && refreshSession && now - latestRefreshTime > refreshInterval) {
+      refreshSession();
+      setLatestRefreshTime(now);
     }
-    if (Date.now() - latestTouchTime > inactivityTime + logoutDelay && !isActive) {
+    if (now - latestTouchTime > inactivityTime + logoutDelay && !isActive) {
       logOut();
     }
   };
@@ -37,7 +51,10 @@ export default function useTouchActivity(
   };
 
   const updateLatestTouchTime = () => {
-    setLatestTouchTime(Date.now);
+    setLatestTouchTime(Date.now());
+  };
+  const updateLatestRefreshTime = () => {
+    setLatestRefreshTime(Date.now());
   };
 
   const panResponder = PanResponder.create({
@@ -50,5 +67,5 @@ export default function useTouchActivity(
     setIsActive(isActive);
   };
 
-  return { panResponder, isActive, updateIsActive, updateLatestTouchTime };
+  return { panResponder, isActive, updateIsActive, updateLatestTouchTime, updateLatestRefreshTime };
 }

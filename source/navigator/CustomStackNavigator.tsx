@@ -11,7 +11,7 @@ import { Modal } from 'react-native';
 import AuthContext from '../store/AuthContext';
 import Card from '../components/molecules/Card/Card';
 import Text from '../components/atoms/Text/Text';
-import useTouchActivity from '../hooks/useTouchActivity';
+import useTouchActivity, { UseTouchParameters } from '../hooks/useTouchActivity';
 
 const FlexWrapper = styled.View`
   flex: 1;
@@ -65,7 +65,7 @@ const CustomStackNavigator = ({
     screenOptions,
     initialRouteName,
   });
-  const { handleLogout, isAuthenticated } = useContext(AuthContext);
+  const { handleLogout, isAuthenticated, handleRefreshSession } = useContext(AuthContext);
 
   const handleEndUserSession = async () => {
     if (isAuthenticated) {
@@ -74,17 +74,28 @@ const CustomStackNavigator = ({
     }
   };
 
-  const { isActive, panResponder, updateIsActive, updateLatestTouchTime } = useTouchActivity(
-    parseInt(env.INACTIVITY_TIME),
-    5000,
-    true,
-    60000,
-    handleEndUserSession
-  );
+  const touchParameters: UseTouchParameters = {
+    inactivityTime: parseInt(env.INACTIVITY_TIME),
+    intervalDelay: 5000,
+    logoutDelay: 60000,
+    logOut: handleEndUserSession,
+    refreshInterval: 60000 * 10,
+    refreshSession: handleRefreshSession,
+  };
+  const {
+    isActive,
+    panResponder,
+    updateIsActive,
+    updateLatestTouchTime,
+    updateLatestRefreshTime,
+  } = useTouchActivity(touchParameters);
 
   const handleContinueUserSession = () => {
     updateIsActive(true);
     updateLatestTouchTime();
+
+    handleRefreshSession();
+    updateLatestRefreshTime();
   };
 
   const NavigatorContextComponent = (

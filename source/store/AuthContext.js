@@ -8,6 +8,7 @@ import {
   cancelOrder,
   loginFailure,
   loginSuccess,
+  refreshSession,
   checkOrderStatus,
   removeProfile,
   addProfile,
@@ -99,6 +100,12 @@ function AuthProvider({ children, initialState }) {
   }
 
   /**
+   * This function triggers an action to refresh the users session credentials.
+   */
+  async function handleRefreshSession() {
+    dispatch(await refreshSession());
+  }
+  /**
    * Used to save user profile data to the state.
    * @param {object} profile a user profile object
    */
@@ -142,6 +149,7 @@ function AuthProvider({ children, initialState }) {
   const contextValues = {
     handleLogin,
     handleLogout,
+    handleRefreshSession,
     handleAddProfile,
     handleRemoveProfile,
     handleAuth,

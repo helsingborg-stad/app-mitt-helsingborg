@@ -9,6 +9,7 @@ const { canOpenUrl } = UrlHelper;
 export const actionTypes = {
   loginSuccess: 'LOGIN_SUCCESS',
   loginFailure: 'LOGIN_FAILURE',
+  refreshSession: 'REFRESH_CREDENTIALS',
   addProfile: 'ADD_PROFILE',
   removeProfile: 'REMOVE_PROFILE',
   authStarted: 'AUTH_STARTED',
@@ -83,6 +84,21 @@ export async function addProfile() {
 export function removeProfile() {
   return {
     type: actionTypes.removeProfile,
+  };
+}
+
+export async function refreshSession() {
+  const [, refreshError] = await authService.refreshTokens();
+  if (refreshError) {
+    return {
+      type: actionTypes.authError,
+      payload: {
+        error: refreshError.data,
+      },
+    };
+  }
+  return {
+    type: actionTypes.refreshSession,
   };
 }
 

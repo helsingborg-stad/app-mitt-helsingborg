@@ -82,6 +82,30 @@ export async function grantAccessToken(authorizationCode) {
   }
 }
 
+export async function refreshTokens() {
+  try {
+    const oldRefreshToken = await StorageService.getData(REFRESH_TOKEN_KEY);
+    const response = await post(
+      '/auth/token',
+      {
+        grant_type: 'refresh_token',
+        refresh_token: oldRefreshToken,
+      },
+      { 'x-api-key': env.MITTHELSINGBORG_IO_APIKEY }
+    );
+
+    if (response.status !== 200) {
+      throw new Error(response.data);
+    }
+    const { accessToken, refreshToken } = response.data.data.attributes;
+    const decodedAccessToken = await saveTokensToStorage(accessToken, refreshToken);
+    return [decodedAccessToken, null];
+  } catch (error) {
+    console.error(error);
+    return [null, error];
+  }
+}
+
 async function wait(ms = 1000) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
