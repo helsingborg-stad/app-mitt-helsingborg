@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React, {useRef} from 'react';
 import styled from 'styled-components/native';
-import PropTypes, { number } from 'prop-types';
+import PropTypes from 'prop-types';
 import { Text, Input } from '../../atoms';
 import Button from '../../atoms/Button';
 import Label from '../../atoms/Label';
@@ -117,7 +117,7 @@ const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, o
       return (
         <CalendarPicker
           colorSchema={colorSchema}
-          value={value[input.id] as string}
+          value={value as string}
           onSelect={onChange}
           editable={true}
           transparent
