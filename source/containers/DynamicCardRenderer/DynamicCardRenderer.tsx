@@ -50,11 +50,11 @@ type Button = ButtonBase & (
 );
 
 type CardComponent = Image | Text | Title | Subtitle | Button;
-type InfoButtonProps =  ButtonBase & { action: 'infoModal'; heading: string; markdownText: string; closeButtonText: string; };
+type InfoModalButtonProps =  ButtonBase & { action: 'infoModal'; heading: string; markdownText: string; closeButtonText: string; };
 /***** end of types */
 
 /** The info-button gets its own component, because it involves the useModal hook */
-const InfoButton: React.FC<InfoButtonProps> = ({ heading, markdownText, closeButtonText, text, colorSchema, icon, iconPosition}) => {
+const InfoModalButton: React.FC<InfoModalButtonProps> = ({ heading, markdownText, closeButtonText, text, colorSchema, icon, iconPosition}) => {
   const [modalVisible, toggleModal] = useModal();
   return (
   <>
@@ -111,7 +111,7 @@ const renderCardComponent = (component: CardComponent, navigation: any) => {
 
     // treat info-modal separately since it doesn't fit the same pattern as the other buttons. 
     if (component.action === 'infoModal') {
-      return <InfoButton {...component} />
+      return <InfoModalButton {...component} />
     }
 
     return (
