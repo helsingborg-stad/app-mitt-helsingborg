@@ -1,6 +1,6 @@
 import env from 'react-native-config';
 import JwtDecode from 'jwt-decode';
-import StorageService, { TOKEN_KEY } from './StorageService';
+import StorageService, { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from './StorageService';
 import { post, get } from '../helpers/ApiRequest';
 import { getMessage } from '../helpers/MessageHelper';
 
@@ -9,7 +9,7 @@ import { getMessage } from '../helpers/MessageHelper';
  */
 export async function getAccessTokenFromStorage() {
   try {
-    const accessToken = await StorageService.getData(TOKEN_KEY);
+    const accessToken = await StorageService.getData(ACCESS_TOKEN_KEY);
     const decodedAccessToken = accessToken && JwtDecode(accessToken);
     if (decodedAccessToken) {
       return {
@@ -24,12 +24,16 @@ export async function getAccessTokenFromStorage() {
 }
 
 /**
- * This function saves the accessToken and it's expire time to AsyncStorage.
+ * This function saves the accessToken and it's expire time to AsyncStorage, and also optionally the refresh token.
  * @param {string} accessToken json web token;
+ * @param {string} refreshToken json web token, optional;
  */
-export async function saveAccessTokenToStorage(accessToken) {
+export async function saveTokensToStorage(accessToken, refreshToken) {
   try {
-    await StorageService.saveData(TOKEN_KEY, accessToken);
+    await StorageService.saveData(ACCESS_TOKEN_KEY, accessToken);
+    if (refreshToken) {
+      StorageService.saveData(REFRESH_TOKEN_KEY, refreshToken);
+    }
     // TODO: Add real expired at time from token.
     const decodedAccessToken = JwtDecode(accessToken);
     const expiresAt = JSON.stringify(decodedAccessToken.exp * 10000 + new Date().getTime());
@@ -48,26 +52,29 @@ export async function saveAccessTokenToStorage(accessToken) {
  * @param {string} accessToken json web token;
  */
 export async function removeAccessTokenFromStorage() {
-  await StorageService.removeData(TOKEN_KEY);
+  await StorageService.removeData(ACCESS_TOKEN_KEY);
 }
 
 /**
  * This function tries to grant an accessToken from the AWS authorization endpoint.
- * @param {string} ssn a swedish social security number.
+ * @param {string} authorizationCode a jwt token that grants access and refresh token
  */
-export async function grantAccessToken(ssn) {
+export async function grantAccessToken(authorizationCode) {
   try {
     const response = await post(
       '/auth/token',
-      { personalNumber: ssn },
+      {
+        grant_type: 'authorization_code',
+        code: authorizationCode,
+      },
       { 'x-api-key': env.MITTHELSINGBORG_IO_APIKEY }
     );
 
     if (response.status !== 200) {
       throw new Error(response.data);
     }
-    const { token: accessToken } = response.data.data.attributes;
-    const decodedAccessToken = await saveAccessTokenToStorage(accessToken);
+    const { accessToken, refreshToken } = response.data.data.attributes;
+    const decodedAccessToken = await saveTokensToStorage(accessToken, refreshToken);
     return [decodedAccessToken, null];
   } catch (error) {
     console.error(error);

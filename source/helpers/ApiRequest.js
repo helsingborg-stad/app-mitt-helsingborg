@@ -1,5 +1,5 @@
 import axios from 'axios';
-import StorageService, { TOKEN_KEY } from '../services/StorageService';
+import StorageService, { ACCESS_TOKEN_KEY } from '../services/StorageService';
 import { buildServiceUrl } from './UrlHelper';
 
 /**
@@ -20,7 +20,7 @@ const request = async (endpoint, method, data, headers, userId) => {
   if (userId) {
     bearer = userId;
   } else {
-    const token = await StorageService.getData(TOKEN_KEY);
+    const token = await StorageService.getData(ACCESS_TOKEN_KEY);
     bearer = token || '';
   }
 
