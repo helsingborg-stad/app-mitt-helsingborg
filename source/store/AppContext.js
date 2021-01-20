@@ -6,12 +6,19 @@ import StorageService, { APP_ENV_KEY } from '../services/StorageService';
 const AppContext = React.createContext();
 
 function AppProvider({ children }) {
-  const defaultMode = env.APP_ENV || 'development';
+  const acceptedModes = ['development', 'production'];
+  const defaultMode = env.APP_ENV || acceptedModes[0];
   const [mode, setMode] = useState(defaultMode);
+
+  const handleSetMode = (newMode) => {
+    if (acceptedModes.includes(newMode)) {
+      setMode(newMode);
+    }
+  };
 
   const provider = {
     mode,
-    handleSetMode: (newMode) => setMode(newMode),
+    handleSetMode: (newMode) => handleSetMode(newMode),
     isDevMode: mode === 'development',
   };
 
