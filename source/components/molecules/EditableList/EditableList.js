@@ -189,6 +189,12 @@ function EditableList({
     if (onBlur) onBlur(state);
   };
 
+  const handleListItemPress = (index) => {
+    if (editable && inputRefs.current?.[index]?.focus) inputRefs.current[index].focus();
+    else if (editable && inputRefs.current?.[index]?.togglePicker)
+      inputRefs.current[index].togglePicker();
+  };
+
   return (
     <Fieldset
       colorSchema={colorSchema}
@@ -205,40 +211,33 @@ function EditableList({
       )}
     >
       <EditableListBody>
-        {inputs.map((input, index) => (
-          <>
-            <EditableListItem
-              colorSchema={colorSchema}
-              editable={editable}
-              key={input.key}
-              error={error ? error[input.key] : undefined}
-              activeOpacity={1.0}
-              onPress={() => {
-                if (editable && inputRefs.current?.[index]?.focus) inputRefs.current[index].focus();
-                else if (editable && inputRefs.current?.[index]?.togglePicker)
-                  inputRefs.current[index].togglePicker();
-              }}
-            >
-              <EditableListItemLabelWrapper alignAtStart={input.type === 'select'}>
-                <EditableListItemLabel>{input.label}</EditableListItemLabel>
-              </EditableListItemLabelWrapper>
-              <EditableListItemInputWrapper>
-                <InputComponent
-                  {...{ input, colorSchema, editable, onChange, onInputBlur, value, state }}
-                  ref={(el) => {
-                    inputRefs.current[index] = el;
-                  }}
-                />
-              </EditableListItemInputWrapper>
-            </EditableListItem>
-
-            {error && error[input.key]?.isValid === false ? (
-              <StyledErrorText>{error[input.key].validationMessage}</StyledErrorText>
-            ) : (
-              <></>
-            )}
-          </>
-        ))}
+        {inputs.map((input, index) => [
+          <EditableListItem
+            colorSchema={colorSchema}
+            editable={editable}
+            key={input.key}
+            error={error ? error[input.key] : undefined}
+            activeOpacity={1.0}
+            onPress={(index) => handleListItemPress(index)}
+          >
+            <EditableListItemLabelWrapper alignAtStart={input.type === 'select'}>
+              <EditableListItemLabel>{input.label}</EditableListItemLabel>
+            </EditableListItemLabelWrapper>
+            <EditableListItemInputWrapper>
+              <InputComponent
+                {...{ input, colorSchema, editable, onChange, onInputBlur, value, state }}
+                ref={(el) => {
+                  inputRefs.current[index] = el;
+                }}
+              />
+            </EditableListItemInputWrapper>
+          </EditableListItem>,
+          error && error[input.key]?.isValid === false ? (
+            <StyledErrorText>{error[input.key].validationMessage}</StyledErrorText>
+          ) : (
+            <></>
+          ),
+        ])}
       </EditableListBody>
     </Fieldset>
   );
