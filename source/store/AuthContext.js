@@ -101,9 +101,12 @@ function AuthProvider({ children, initialState }) {
 
   /**
    * This function triggers an action to refresh the users session credentials.
+   * Only trigger if the user is authenticated already.
    */
   async function handleRefreshSession() {
-    dispatch(await refreshSession());
+    if (state.isAuthenticated) {
+      dispatch(await refreshSession());
+    }
   }
   /**
    * Used to save user profile data to the state.
