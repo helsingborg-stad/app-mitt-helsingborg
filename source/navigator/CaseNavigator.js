@@ -28,7 +28,7 @@ const CaseNavigator = ({ navigation }) => {
   );
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: true }}>
+    <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName="CaseOverview">
       <Stack.Screen
         name="CaseOverview"
         component={CaseOverview}
