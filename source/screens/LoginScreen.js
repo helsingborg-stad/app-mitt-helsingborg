@@ -123,7 +123,7 @@ const CloseModalButton = styled(BackNavigation)`
 
 const FooterText = styled(Text)`
   font-style: italic;
-  color: ${(props) => props.theme.colors.primary.blue[0]};
+  color: ${(props) => props.theme.colors.neutrals[2]};
 `;
 
 const Link = styled(Text)`
@@ -136,8 +136,7 @@ const ParagraphLink = styled(Text)`
   font-style: italic;
   font-size: ${(props) => props.theme.fontSizes[2]}px;
   font-weight: bold;
-  text-decoration-color: ${(props) => props.theme.colors.primary.blue[0]};
-  color: ${(props) => props.theme.colors.primary.blue[0]};
+  color: ${(props) => props.theme.colors.neutrals[1]};
 `;
 
 const LoginInput = styled(Input)`
@@ -260,7 +259,7 @@ function LoginScreen(props) {
           {(isLoading || isResolved) && (
             <Form>
               <AuthLoading
-                colorSchema="blue"
+                colorSchema="red"
                 isResolved={isResolved}
                 cancelSignIn={() => handleCancelOrder()}
                 isBankidInstalled
@@ -324,7 +323,7 @@ function LoginScreen(props) {
             {(isLoading || isResolved) && (
               <Form>
                 <AuthLoading
-                  colorSchema="blue"
+                  colorSchema="red"
                   isResolved={isResolved}
                   cancelSignIn={() => handleCancelOrder()}
                   isBankidInstalled={false}
