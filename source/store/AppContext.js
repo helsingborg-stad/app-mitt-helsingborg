@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import env from 'react-native-config';
 import StorageService, { APP_ENV_KEY } from '../services/StorageService';
 
@@ -23,7 +23,7 @@ function AppProvider({ children }) {
     isDevMode: mode === 'development',
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     StorageService.saveData(APP_ENV_KEY, mode);
   }, [mode]);
 
