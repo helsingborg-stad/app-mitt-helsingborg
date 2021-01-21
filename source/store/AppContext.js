@@ -7,7 +7,8 @@ const AppContext = React.createContext();
 
 function AppProvider({ children }) {
   const acceptedModes = ['development', 'production'];
-  const defaultMode = env.APP_ENV || acceptedModes[0];
+  const defaultMode =
+    env.APP_ENV && acceptedModes.includes(env.APP_ENV) ? env.APP_ENV : acceptedModes[0];
   const [mode, setMode] = useState(defaultMode);
 
   const handleSetMode = (newMode) => {
