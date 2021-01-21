@@ -33,6 +33,12 @@ const BottomBarStack = () => (
           tabBarIconInactive: () => <TabBarImage source={require('../images/task_3x_gray.png')} />,
           tabBarLabel: 'Ärende',
         }}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate('UserEvents', { screen: 'CaseOverview' });
+          },
+        })}
       />
       <Tab.Screen
         name="Chat"
