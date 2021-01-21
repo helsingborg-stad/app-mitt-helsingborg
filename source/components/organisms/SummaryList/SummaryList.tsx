@@ -9,6 +9,7 @@ import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers'
 import { Help } from '../../../types/FormTypes';
 import { useNotification } from '../../../store/NotificationContext';
 import env from 'react-native-config';
+import { InputType } from '../../atoms/Input/Input';
 
 const SumLabel = styled(Heading)<{ colorSchema: string }>`
   margin-top: 5px;
@@ -43,6 +44,7 @@ export interface SummaryListItem {
    | 'editableListText' | 'editableListNumber' | 'editableListDate' ;
   category?: string;
   inputId?: string;
+  inputSelectValue?: InputType;
 }
 
 interface SummaryListCategory {
@@ -174,17 +176,17 @@ const SummaryList: React.FC<Props> = ({
           values.forEach((v, index) => {
             listItems.push(
               <SummaryListItemComponent
-              item={item}
-              index={index ? index + 1 : undefined}
-              value={v[item?.inputId]}
-              changeFromInput={changeFromInput(item, index)}
-              onBlur={onItemBlur(item, index)}
-              removeItem={removeListItem(item, index)}
-              colorSchema={colorSchema}
-              validationError={validationErrors?.[item.id]?.[index]
-                    ? validationErrors[item.id][index][item?.inputId]
-                    : undefined}
-              category={item.category}
+                item={item}
+                index={index ? index + 1 : undefined}
+                value={v[item?.inputId]}
+                changeFromInput={changeFromInput(item, index)}
+                onBlur={onItemBlur(item, index)}
+                removeItem={removeListItem(item, index)}
+                colorSchema={colorSchema}
+                validationError={validationErrors?.[item.id]?.[index]
+                      ? validationErrors[item.id][index][item?.inputId]
+                      : undefined}
+                category={item.category}
             />
             );
             if (item.type === 'arrayNumber') {
