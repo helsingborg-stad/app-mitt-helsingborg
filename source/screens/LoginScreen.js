@@ -22,7 +22,7 @@ import theme from '../styles/theme';
 
 const { sanitizePin, validatePin } = ValidationHelper;
 const UnifiedPadding = [24, 48]; // Vertical padding, Horizontal padding
-const backgroundImage = require('../assets/images/illustrations/onboarding_05_logga-in.png');
+const backgroundImage = require('../assets/images/illustrations/onboarding_05_logga-in_2x.png');
 
 const SafeAreaViewTop = styled(SafeAreaView)`
   flex: 1;
