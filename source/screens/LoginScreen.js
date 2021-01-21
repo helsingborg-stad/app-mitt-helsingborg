@@ -83,6 +83,7 @@ const Logo = styled.Image`
 const Title = styled(Heading)`
   font-size: ${(props) => props.theme.fontSizes[3]}px;
   color: ${(props) => props.theme.colors.primary.red[0]};
+  font-weight: ${(props) => props.theme.fontWeights[1]};
 `;
 
 const LoginHeading = styled(Heading)`
@@ -108,7 +109,6 @@ const Separator = styled.View`
   border-radius: 40px;
   height: 2px;
   width: 25px;
-  opacity: 0.2;
   background-color: ${(props) => props.theme.colors.complementary.red[0]};
   margin-bottom: 16px;
 `;
@@ -130,6 +130,7 @@ const Link = styled(Text)`
   font-size: ${(props) => props.theme.fontSizes[3]}px;
   text-align: center;
   margin-top: 16px;
+  font-weight: normal;
 `;
 
 const ParagraphLink = styled(Text)`
