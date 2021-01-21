@@ -54,9 +54,8 @@ export const buildServiceUrl = async (endpoint = '', params = {}) => {
   const apiUrl = devMode ? env.MITTHELSINGBORG_IO_DEV : env.MITTHELSINGBORG_IO;
   const apiKey = devMode ? env.MITTHELSINGBORG_IO_DEV_APIKEY : env.MITTHELSINGBORG_IO_APIKEY;
 
-  let queryParams = { apiKey };
   // Concatenate params
-  queryParams = { ...params, ...queryParams };
+  const queryParams = { ...params, apiKey };
   // Build query url
   const queryString = encodeQueryData(queryParams);
   // Trim slashes
