@@ -113,6 +113,7 @@ const InputComponent = React.forwardRef(({ input, editable, value, onInputBlur, 
           editable={editable}
           transparent
           textAlign="right"
+          inputSelectValue={input.inputSelectValue}
           ref={ref}
         />
       );
@@ -127,6 +128,7 @@ const InputComponent = React.forwardRef(({ input, editable, value, onInputBlur, 
           editable={editable}
           transparent
           textAlign="right"
+          inputSelectValue={input.inputSelectValue}
           ref={ref}
         />
       );
@@ -156,6 +158,7 @@ const InputComponent = React.forwardRef(({ input, editable, value, onInputBlur, 
           transparent
           editable={editable}
           textAlign="right"
+          inputSelectValue={input.inputSelectValue}
           ref={ref}
         />
       );

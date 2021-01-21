@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TextInputProps, Keyboard, TextInput } from 'react-native';
+import { TextInputProps, Keyboard, TextInput, KeyboardTypeOptions } from 'react-native';
 import styled, { useTheme } from 'styled-components/native';
 import Text from '../Text';
 
+export type InputType = 'text' | 'email' | 'postalCode' | 'personalNumber' | 'phone' | 'number' | 'date';
 type InputProps = Omit<TextInputProps, 'onBlur'> & {
   onBlur: (value: string) => void;
   center?: boolean;
@@ -12,7 +13,18 @@ type InputProps = Omit<TextInputProps, 'onBlur'> & {
   showErrorMessage?: boolean;
   error?: { isValid: boolean; message: string };
   textAlign?: 'left' | 'center' | 'right';
+  inputSelectValue?: InputType; 
 };
+
+const keyboardTypes: Record<InputType, KeyboardTypeOptions> = {
+  text: 'default',
+  number: 'number-pad',
+  email: 'email-address',
+  postalCode: 'number-pad',
+  phone: 'phone-pad',
+  date: 'default',
+  personalNumber: 'number-pad',
+}
 
 const StyledTextInput = styled.TextInput<InputProps>`
   width: 100%;
@@ -40,7 +52,7 @@ const StyledErrorText = styled(Text)`
 `;
 
 const Input: React.FC<InputProps> = React.forwardRef(
-  ({ onBlur, showErrorMessage, value, error, ...props }, ref) => {
+  ({ onBlur, showErrorMessage, value, error,inputSelectValue, keyboardType, ...props }, ref) => {
     const handleBlur = () => {
       if (onBlur) onBlur(value);
     };
@@ -58,6 +70,7 @@ const Input: React.FC<InputProps> = React.forwardRef(
           onSubmitEditing={() => {
             Keyboard.dismiss();
           }}
+          keyboardType={inputSelectValue ? keyboardTypes[inputSelectValue] : keyboardType}
           ref={ref as React.Ref<TextInput>}
           {...props}
         />

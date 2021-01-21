@@ -79,7 +79,10 @@ const StyledErrorText = styled(Text)`
 
 /** Switch between different input types */
 const InputComponent = React.forwardRef(
-  ({ input, colorSchema, editable, onChange, onInputBlur, value, state }, ref) => {
+  (
+    { input, colorSchema, editable, onChange, onInputBlur, value, state, inputSelectValue },
+    ref
+  ) => {
     switch (input.type) {
       case 'number':
         return (
@@ -91,6 +94,7 @@ const InputComponent = React.forwardRef(
             value={value && value !== '' ? value[input.key] : state[input.key]}
             keyboardType="numeric"
             transparent
+            inputSelectValue={input.inputSelectValue}
             ref={ref}
           />
         );
@@ -124,6 +128,7 @@ const InputComponent = React.forwardRef(
             onBlur={onInputBlur}
             value={value && value !== '' ? value[input.key] : state[input.key]}
             transparent
+            inputSelectValue={input.inputSelectValue}
             ref={ref}
           />
         );
@@ -136,6 +141,7 @@ InputComponent.propTypes = {
     key: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     items: PropTypes.array,
+    inputSelectValue: PropTypes.string,
   }),
   colorSchema: PropTypes.oneOf(['red', 'blue', 'green', 'purple', 'neutral']),
   editable: PropTypes.bool,
