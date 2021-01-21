@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Alert, Linking, View, StatusBar } from 'react-native';
+import { Alert, Linking, View, StatusBar, Image } from 'react-native';
 import styled from 'styled-components/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -22,6 +22,7 @@ import theme from '../styles/theme';
 
 const { sanitizePin, validatePin } = ValidationHelper;
 const UnifiedPadding = [24, 48]; // Vertical padding, Horizontal padding
+const backgroundImage = require('../assets/images/illustrations/onboarding_05_logga-in.png');
 
 const SafeAreaViewTop = styled(SafeAreaView)`
   flex: 1;
@@ -30,6 +31,12 @@ const SafeAreaViewTop = styled(SafeAreaView)`
 
 const FlexView = styled.View`
   flex: 1;
+`;
+
+const FlexImageBackground = styled.ImageBackground`
+  flex: 1;
+  resize-mode: cover;
+  justify-content: center;
 `;
 
 const Header = styled.View`
@@ -75,7 +82,7 @@ const Logo = styled.Image`
 
 const Title = styled(Heading)`
   font-size: ${(props) => props.theme.fontSizes[3]}px;
-  color: ${(props) => props.theme.colors.primary.blue[0]};
+  color: ${(props) => props.theme.colors.primary.red[0]};
 `;
 
 const LoginHeading = styled(Heading)`
@@ -102,7 +109,7 @@ const Separator = styled.View`
   height: 2px;
   width: 25px;
   opacity: 0.2;
-  background-color: ${(props) => props.theme.colors.neutrals[0]};
+  background-color: ${(props) => props.theme.colors.complementary.red[0]};
   margin-bottom: 16px;
 `;
 
@@ -239,8 +246,8 @@ function LoginScreen(props) {
 
   return (
     <FlexView>
-      <FlexView>
-        <SafeAreaViewTop edges={['top', 'right', 'left']}>
+      <SafeAreaViewTop edges={['top', 'right', 'left']}>
+        <FlexImageBackground source={backgroundImage}>
           <StatusBar barStyle="dark-content" backgroundColor={theme.colors.neutrals[6]} />
           <Header>
             <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />
@@ -263,7 +270,7 @@ function LoginScreen(props) {
 
           {(isIdle || isRejected) && (
             <Form>
-              <Button z={0} size="large" block onClick={() => handleLogin()}>
+              <Button z={0} size="large" block onClick={() => handleLogin()} colorSchema="red">
                 <Text>Logga in med Mobilt BankID</Text>
               </Button>
               <Link onPress={toggleLoginModal}>Fler alternativ</Link>
@@ -287,8 +294,8 @@ function LoginScreen(props) {
               .
             </FooterText>
           </Footer>
-        </SafeAreaViewTop>
-      </FlexView>
+        </FlexImageBackground>
+      </SafeAreaViewTop>
 
       <LoginModal visible={loginModalVisible} hide={toggleLoginModal}>
         <StatusBar barStyle="dark-content" backgroundColor="white" />
@@ -297,10 +304,17 @@ function LoginScreen(props) {
           contentContainerStyle={{ flexGrow: 1 }}
           extraScrollHeight={50}
         >
-          <CloseModalButton onClose={toggleLoginModal} primary={false} showBackButton={false} />
+          <CloseModalButton
+            onClose={toggleLoginModal}
+            primary={false}
+            showBackButton={false}
+            colorSchema="red"
+          />
           <FlexView>
             <Header>
-              <ModalHeading>Logga in med BankID på en annan enhet</ModalHeading>
+              <Title>Logga in</Title>
+              <Separator />
+              <ModalHeading>BankID på en annan enhet</ModalHeading>
               <ContentText>
                 Öppna Mobilt BankID eller BankID på din andra enhet innan du trycker på logga in här
                 nedaför.
@@ -340,6 +354,7 @@ function LoginScreen(props) {
                   onClick={() => {
                     handleLogin(true);
                   }}
+                  colorSchema="red"
                 >
                   <Text>Logga in</Text>
                 </Button>
