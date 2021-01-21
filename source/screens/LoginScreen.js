@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Alert, Linking, View, StatusBar, Image } from 'react-native';
+import { Alert, Linking, View, StatusBar } from 'react-native';
 import styled from 'styled-components/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -374,12 +374,17 @@ function LoginScreen(props) {
 
       <LoginModal visible={agreementModalVisible} hide={toggleAgreementModal}>
         <KeyboardAwareScrollView>
-          <CloseModalButton onClose={toggleAgreementModal} primary={false} showBackButton={false} />
+          <CloseModalButton
+            onClose={toggleAgreementModal}
+            primary={false}
+            showBackButton={false}
+            colorSchema="red"
+          />
           <UserAgreementForm>
             <MarkdownConstructor rules={userAgreementMarkdownRules} rawText={userAgreementText} />
           </UserAgreementForm>
           <UserAgreementFooter>
-            <Button z={0} block onClick={toggleAgreementModal}>
+            <Button z={0} block onClick={toggleAgreementModal} colorSchema="red">
               <Text>Återvänd till inloggning</Text>
             </Button>
           </UserAgreementFooter>
