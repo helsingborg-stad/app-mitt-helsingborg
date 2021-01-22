@@ -52,12 +52,9 @@ export const buildServiceUrl = async (endpoint = '', params = {}) => {
   const appEnv = await StorageService.getData(APP_ENV_KEY);
   const devMode = appEnv === 'development';
   const apiUrl = devMode ? env.MITTHELSINGBORG_IO_DEV : env.MITTHELSINGBORG_IO;
-  const apiKey = devMode ? env.MITTHELSINGBORG_IO_DEV_APIKEY : env.MITTHELSINGBORG_IO_APIKEY;
 
-  // Concatenate params
-  const queryParams = { ...params, apiKey };
   // Build query url
-  const queryString = encodeQueryData(queryParams);
+  const queryString = encodeQueryData(params);
   // Trim slashes
   const sanitizedEndpoint = endpoint.replace(/^\/|\/$/g, '');
   // Build url
