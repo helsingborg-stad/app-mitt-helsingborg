@@ -17,9 +17,7 @@ export function FormProvider({ children }) {
       return formSummaries;
     }
     try {
-      const response = await get('/forms', {
-        'x-api-key': env.MITTHELSINGBORG_IO_APIKEY,
-      });
+      const response = await get('/forms');
       if (response.data.data.forms) {
         setFormSummaries(response.data.data.forms);
         return response.data.data.forms;
@@ -35,9 +33,7 @@ export function FormProvider({ children }) {
       return forms[id];
     }
     try {
-      const response = await get(`/forms/${id}`, {
-        'x-api-key': env.MITTHELSINGBORG_IO_APIKEY,
-      })
+      const response = await get(`/forms/${id}`)
         .then((res) => {
           if (res && res.data) {
             setForms({ ...forms, [res.data.data.id]: res.data.data });
