@@ -24,6 +24,16 @@ export interface ListInput {
   validation?: ValidationObject;
 }
 
+/** Different types for the Input component, corresponding to different keyboard types */
+export type InputFieldType =
+  | 'text'
+  | 'email'
+  | 'postalCode'
+  | 'personalNumber'
+  | 'phone'
+  | 'number'
+  | 'date';
+
 export type FormInputType =
   | 'text'
   | 'number'
@@ -31,7 +41,8 @@ export type FormInputType =
   | 'editableList'
   | 'checkbox'
   | 'summaryList'
-  | 'repeaterField';
+  | 'repeaterField'
+  | 'imageUploader';
 
 export interface Question {
   label: string;

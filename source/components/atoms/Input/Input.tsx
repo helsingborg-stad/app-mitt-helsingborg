@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { TextInputProps, Keyboard, TextInput, KeyboardTypeOptions } from 'react-native';
 import styled, { useTheme } from 'styled-components/native';
 import Text from '../Text';
+import { InputFieldType } from '../../../types/FormTypes';
 
-export type InputType = 'text' | 'email' | 'postalCode' | 'personalNumber' | 'phone' | 'number' | 'date';
 type InputProps = Omit<TextInputProps, 'onBlur'> & {
   onBlur: (value: string) => void;
   center?: boolean;
@@ -13,10 +13,10 @@ type InputProps = Omit<TextInputProps, 'onBlur'> & {
   showErrorMessage?: boolean;
   error?: { isValid: boolean; message: string };
   textAlign?: 'left' | 'center' | 'right';
-  inputSelectValue?: InputType; 
+  inputSelectValue?: InputFieldType; 
 };
 
-const keyboardTypes: Record<InputType, KeyboardTypeOptions> = {
+const keyboardTypes: Record<InputFieldType, KeyboardTypeOptions> = {
   text: 'default',
   number: 'number-pad',
   email: 'email-address',
