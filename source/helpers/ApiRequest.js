@@ -1,5 +1,6 @@
 import axios from 'axios';
-import StorageService, { ACCESS_TOKEN_KEY } from '../services/StorageService';
+import env from 'react-native-config';
+import StorageService, { ACCESS_TOKEN_KEY, APP_ENV_KEY } from '../services/StorageService';
 import { buildServiceUrl } from './UrlHelper';
 
 /**
@@ -14,10 +15,15 @@ import { buildServiceUrl } from './UrlHelper';
 const request = async (endpoint, method, data, headers) => {
   const url = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
+  const appEnv = await StorageService.getData(APP_ENV_KEY);
+  const devMode = appEnv === 'development';
+  const apiKey = devMode ? env.MITTHELSINGBORG_IO_DEV_APIKEY : env.MITTHELSINGBORG_IO_APIKEY;
+
   // Merge custom headers
   const newHeaders = {
     Authorization: token || '',
     'Content-Type': 'application/json',
+    'x-api-key': apiKey,
     ...headers,
   };
 
