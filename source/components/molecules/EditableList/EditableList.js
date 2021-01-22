@@ -79,10 +79,7 @@ const StyledErrorText = styled(Text)`
 
 /** Switch between different input types */
 const InputComponent = React.forwardRef(
-  (
-    { input, colorSchema, editable, onChange, onInputBlur, value, state, inputSelectValue },
-    ref
-  ) => {
+  ({ input, colorSchema, editable, onChange, onInputBlur, value, state }, ref) => {
     switch (input.type) {
       case 'number':
         return (
