@@ -19,6 +19,29 @@ const FormScreenWrapper = styled(ScreenWrapper)`
   flex: 1;
 `;
 
+interface FormNavigationType  {
+    next: () => void;
+    back: () => void;
+    up: (targetStep: string | number) => void;
+    down: (targetStep: string | number) => void;
+    start: (callback: () => void) => void;
+    close: () => void;
+    goToMainForm: () => void;
+    goToMainFormAndNext: () => void;
+    isLastStep: () => boolean;
+};
+
+interface CaseFormContextType {
+  formState: FormReducerState;
+  formNavigation: FormNavigationType;
+  handleInputChange: (value: any, questionId: string) => void;
+  handleSubmit: (callback: (formAnswers: Record<string, any>) => void) => void;
+  handleBlur: (answer: Record<string, any>, questionId: string) => void;
+  validateStepAnswers: (onErrorCallback: () => void, onValidCallback: () => void) => void;
+}
+
+export const CaseFormContext = React.createContext<CaseFormContextType>(undefined as any);
+
 interface Props {
   initialPosition?: FormPosition;
   steps: StepType[];
@@ -139,6 +162,14 @@ const Form: React.FC<Props> = ({
   const colorSchema = formState?.steps[formState.currentPosition.currentMainStepIndex]?.colorSchema || 'blue';
 
   return (
+    <CaseFormContext.Provider value={{
+      formState,
+      formNavigation,
+      handleInputChange,
+      handleSubmit,
+      handleBlur,
+      validateStepAnswers,
+    }}>
     <FormScreenWrapper
       innerRef={(ref) => {
         setRef((ref as unknown) as ScrollView);
@@ -153,6 +184,7 @@ const Form: React.FC<Props> = ({
         {stepComponents[formState.currentPosition.index]}
       </Modal>
     </FormScreenWrapper>
+    </CaseFormContext.Provider>
   );
 };
 

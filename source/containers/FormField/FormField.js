@@ -145,9 +145,6 @@ const FormField = ({
   const onInputBlur = (value, fieldId = id) => {
     if (onBlur) onBlur({ [fieldId]: value }, fieldId);
   };
-  if (!input) {
-    return <Text>{`Invalid field type: ${inputType}`}</Text>;
-  }
   const inputProps = input && input.props ? input.props : {};
   const initialValue =
     value === '' && Object.prototype.hasOwnProperty.call(input, 'initialValue')
