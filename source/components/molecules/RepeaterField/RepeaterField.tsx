@@ -6,6 +6,7 @@ import { Button, Icon, Text } from '../../atoms';
 import RepeaterFieldListItem from './RepeaterFieldListItem';
 import Fieldset from '../../atoms/Fieldset/Fieldset';
 import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
+import { InputFieldType } from '../../../types/FormTypes';
 
 const AddButton = styled(Button)`
   margin-top: 30px;
@@ -16,6 +17,7 @@ export interface InputRow {
   id: string;
   title: string;
   type: 'text' | 'date' | 'number';
+  inputSelectValue: InputFieldType;
 }
 
 interface Props {

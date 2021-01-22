@@ -93,10 +93,11 @@ const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, o
         <ItemInput
           textAlign="right"
           colorSchema={colorSchema}
-          value={value}
+          value={value.toString()}
           onChangeText={onChange}
           onBlur={onBlur}
           transparent
+          inputSelectValue={input.inputSelectValue}
           ref={ref}
         />
       );
@@ -106,10 +107,11 @@ const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, o
           textAlign="right"
           colorSchema={colorSchema}
           keyboardType="numeric"
-          value={value}
+          value={value.toString()}
           onChangeText={onChange}
           onBlur={onBlur}
           transparent
+          inputSelectValue={input.inputSelectValue}
           ref={ref}
         />
       );
@@ -121,7 +123,6 @@ const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, o
           onSelect={onChange}
           editable={true}
           transparent
-          ref={ref}
         />
       );
     default:
@@ -129,10 +130,11 @@ const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, o
         <ItemInput
           colorSchema={colorSchema}
           textAlign="right"
-          value={value}
+          value={value.toString()}
           onChangeText={onChange}
           onBlur={onBlur}
           transparent
+          inputSelectValue={input.inputSelectValue}
           ref={ref}
         />
       );
