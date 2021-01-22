@@ -61,14 +61,10 @@ export async function removeAccessTokenFromStorage() {
  */
 export async function grantAccessToken(authorizationCode) {
   try {
-    const response = await post(
-      '/auth/token',
-      {
-        grant_type: 'authorization_code',
-        code: authorizationCode,
-      },
-      { 'x-api-key': env.MITTHELSINGBORG_IO_APIKEY }
-    );
+    const response = await post('/auth/token', {
+      grant_type: 'authorization_code',
+      code: authorizationCode,
+    });
 
     if (response.status !== 200) {
       throw new Error(response.data);
