@@ -13,9 +13,7 @@ import { buildServiceUrl } from './UrlHelper';
  */
 const request = async (endpoint, method, data, headers) => {
   const url = await buildServiceUrl(endpoint);
-  const token = await StorageService.getData(TOKEN_KEY);
-
-    const token = await StorageService.getData(ACCESS_TOKEN_KEY);
+  const token = await StorageService.getData(ACCESS_TOKEN_KEY);
   // Merge custom headers
   const newHeaders = {
     Authorization: token || '',
