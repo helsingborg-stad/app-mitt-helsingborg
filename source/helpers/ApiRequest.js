@@ -35,8 +35,7 @@ const request = async (endpoint, method, data, headers) => {
   }
 };
 
-const get = (endpoint = '', headers = undefined, userId = undefined) =>
-  request(endpoint, 'get', undefined, headers, userId);
+const get = (endpoint = '', headers = undefined) => request(endpoint, 'get', undefined, headers);
 
 const post = (endpoint = '', body = undefined, headers = undefined) =>
   request(endpoint, 'post', body, headers);
