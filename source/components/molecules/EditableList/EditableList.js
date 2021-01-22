@@ -91,7 +91,7 @@ const InputComponent = React.forwardRef(
             value={value && value !== '' ? value[input.key] : state[input.key]}
             keyboardType="numeric"
             transparent
-            inputSelectValue={input.inputSelectValue}
+            inputType={input.inputSelectValue}
             ref={ref}
           />
         );
@@ -125,7 +125,7 @@ const InputComponent = React.forwardRef(
             onBlur={onInputBlur}
             value={value && value !== '' ? value[input.key] : state[input.key]}
             transparent
-            inputSelectValue={input.inputSelectValue}
+            inputType={input.inputSelectValue}
             ref={ref}
           />
         );

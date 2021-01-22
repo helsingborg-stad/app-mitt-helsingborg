@@ -13,7 +13,7 @@ type InputProps = Omit<TextInputProps, 'onBlur'> & {
   showErrorMessage?: boolean;
   error?: { isValid: boolean; message: string };
   textAlign?: 'left' | 'center' | 'right';
-  inputSelectValue?: InputFieldType; 
+  inputType?: InputFieldType; 
 };
 
 const keyboardTypes: Record<InputFieldType, KeyboardTypeOptions> = {
@@ -52,7 +52,7 @@ const StyledErrorText = styled(Text)`
 `;
 
 const Input: React.FC<InputProps> = React.forwardRef(
-  ({ onBlur, showErrorMessage, value, error,inputSelectValue, keyboardType, ...props }, ref) => {
+  ({ onBlur, showErrorMessage, value, error, inputType, keyboardType, ...props }, ref) => {
     const handleBlur = () => {
       if (onBlur) onBlur(value);
     };
@@ -70,7 +70,7 @@ const Input: React.FC<InputProps> = React.forwardRef(
           onSubmitEditing={() => {
             Keyboard.dismiss();
           }}
-          keyboardType={inputSelectValue ? keyboardTypes[inputSelectValue] : keyboardType}
+          keyboardType={inputType ? keyboardTypes[inputType] : keyboardType}
           ref={ref as React.Ref<TextInput>}
           {...props}
         />

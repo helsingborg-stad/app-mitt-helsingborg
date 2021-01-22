@@ -132,11 +132,12 @@ const FormField = ({
   answers,
   validationErrors,
   help,
+  inputSelectValue,
   ...other
 }) => {
   const validColorSchema = getValidColorSchema(colorSchema);
   const input = inputTypes[inputType];
-  if (!input) {
+  if (input === undefined) {
     return <Text>{`Invalid field type: ${inputType}`}</Text>;
   }
   const saveInput = (value, fieldId = id) => {
@@ -145,9 +146,7 @@ const FormField = ({
   const onInputBlur = (value, fieldId = id) => {
     if (onBlur) onBlur({ [fieldId]: value }, fieldId);
   };
-  if (!input) {
-    return <Text>{`Invalid field type: ${inputType}`}</Text>;
-  }
+
   const inputProps = input && input.props ? input.props : {};
   const initialValue =
     value === '' && Object.prototype.hasOwnProperty.call(input, 'initialValue')
@@ -158,6 +157,7 @@ const FormField = ({
     value: initialValue,
     ...inputProps,
     error: validationErrors[id],
+    inputType: inputSelectValue, // rename this so that we get a better name in the app
     ...other,
   };
   if (input?.props?.answers) inputCompProps.answers = answers;
@@ -261,6 +261,15 @@ FormField.propTypes = {
     tagline: PropTypes.string,
     url: PropTypes.string,
   }),
+  inputSelectValue: PropTypes.oneOf([
+    'text',
+    'number',
+    'date',
+    'email',
+    'postalCode',
+    'personalNumber',
+    'phone',
+  ]),
 };
 
 FormField.defaultProps = {

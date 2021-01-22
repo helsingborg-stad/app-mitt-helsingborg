@@ -97,7 +97,7 @@ const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, o
           onChangeText={onChange}
           onBlur={onBlur}
           transparent
-          inputSelectValue={input.inputSelectValue}
+          inputType={input.inputSelectValue}
           ref={ref}
         />
       );
@@ -111,7 +111,7 @@ const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, o
           onChangeText={onChange}
           onBlur={onBlur}
           transparent
-          inputSelectValue={input.inputSelectValue}
+          inputType={input.inputSelectValue}
           ref={ref}
         />
       );
@@ -134,7 +134,7 @@ const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, o
           onChangeText={onChange}
           onBlur={onBlur}
           transparent
-          inputSelectValue={input.inputSelectValue}
+          inputType={input.inputSelectValue}
           ref={ref}
         />
       );
