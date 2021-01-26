@@ -10708,9 +10708,10 @@ react-native-calendar-picker@^7.0.5:
     prop-types "^15.6.0"
     recyclerlistview "^3.0.0"
 
-react-native-config@luggit/react-native-config#master:
-  version "1.4.1"
-  resolved "https://codeload.github.com/luggit/react-native-config/tar.gz/601814f6066c8fb57ce138c1ca15d078ecb3befd"
+react-native-config@1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-1.4.0.tgz#76e6ba1194a4c23d2e687a0630458238692eec4b"
+  integrity sha512-j8/a9FieWRgyqIG/Bkz3mWH5M3/JYYoZWQWDIPgXve3AGhVR39mDYNyPmezetX/HgG3WX62U6+P+LmnAMQegDA==
 
 react-native-elements@^3.0.0-alpha.1:
   version "3.0.0"

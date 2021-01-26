@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios --simulator 'iPhone 11 (14.2)'",
+    "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."
@@ -38,7 +38,7 @@
     "react-native-asset": "^2.0.1",
     "react-native-background-timer": "^2.4.1",
     "react-native-calendar-picker": "^7.0.5",
-    "react-native-config": "luggit/react-native-config#master",
+    "react-native-config": "1.4.0",
     "react-native-elements": "^3.0.0-alpha.1",
     "react-native-exception-handler": "^2.10.9",
     "react-native-gesture-handler": "^1.9.0",
