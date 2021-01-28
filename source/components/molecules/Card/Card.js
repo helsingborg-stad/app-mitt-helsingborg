@@ -73,7 +73,7 @@ const BodyContainer = styled.View`
 const CardTitle = styled(Heading)`
   color: ${(props) =>
     props.colorSchema === 'neutral'
-      ? props.theme.colors.neutrals[0]
+      ? props.theme.colors.neutrals[1]
       : props.theme.colors.primary[props.colorSchema][0]};
 `;
 
@@ -81,7 +81,7 @@ const CardSubTitle = styled(Text)`
   color: ${(props) =>
     props.colorSchema === 'neutral'
       ? props.theme.colors.neutrals[0]
-      : props.theme.colors.primary[props.colorSchema][3]};
+      : props.theme.colors.primary[props.colorSchema][1]};
   font-size: ${(props) => props.theme.fontSizes[2]}px;
   font-weight: ${(props) => props.theme.fontWeights[1]};
 `;
