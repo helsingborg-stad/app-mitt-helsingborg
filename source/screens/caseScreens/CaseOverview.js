@@ -5,10 +5,9 @@ import icons from 'source/helpers/Icons';
 import styled from 'styled-components/native';
 
 import FormContext from '../../store/FormContext';
-import { CaseDispatch, CaseState, caseStatus, caseTypes } from '../../store/CaseContext';
+import { CaseState, caseTypes } from '../../store/CaseContext';
 import { Icon, Text } from '../../components/atoms';
 import { Card, Header, ScreenWrapper } from '../../components/molecules';
-import { formatUpdatedAt } from '../../helpers/DateHelpers';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -21,62 +20,28 @@ const ListHeading = styled(Text)`
   margin-bottom: 8px;
 `;
 
-const Message = styled(Card)`
-  margin-top: 32px;
-  margin-bottom: 32px;
-`;
-
 const colorSchema = 'red';
 
 /**
  * Returns a case card component depending on it's status
- * @param {string} status
- * @param {obj} latestCase
+ * @param {obj} caseData
  * @param {obj} form
  * @param {obj} caseType
  * @param {obj} navigation
- * @param {func} createCase
  */
-const computeCaseCardComponent = (status, latestCase, form, caseType, navigation, createCase) => {
-  const updatedAt = latestCase?.updatedAt ? formatUpdatedAt(latestCase.updatedAt) : '';
-  const currentStep = latestCase?.currentPosition?.currentMainStep || 0;
+const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
+  const currentStep = caseData?.currentPosition?.currentMainStep || 0;
   const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
-
   const commonCardProps = {
-    key: status,
     colorSchema,
   };
 
-  switch (status) {
-    case caseStatus.onlyOldCases:
-    case caseStatus.untouched:
+  switch (caseData.status) {
+    case 'closed':
+    case 'submitted':
+    case 'processing':
       return (
-        <Card {...commonCardProps}>
-          <Card.Body shadow color="neutral">
-            <Card.Image source={icons[caseType.icon]} />
-            <Card.Title>{caseType.name}</Card.Title>
-            <Card.Button
-              onClick={async () => {
-                createCase(
-                  form,
-                  async (newCase) => {
-                    navigation.navigate('Form', { caseData: newCase });
-                  },
-                  true
-                );
-              }}
-            >
-              <Text>Sök ekonomiskt bistånd</Text>
-              <Icon name="arrow-forward" />
-            </Card.Button>
-          </Card.Body>
-        </Card>
-      );
-
-    case caseStatus.unfinishedNoCompleted:
-    case caseStatus.unfinished:
-      return (
-        <Card {...commonCardProps}>
+        <Card key={caseData.id} {...commonCardProps}>
           <Card.Body
             shadow
             color="neutral"
@@ -84,7 +49,7 @@ const computeCaseCardComponent = (status, latestCase, form, caseType, navigation
               navigation.navigate('UserEvents', {
                 screen: caseType.navigateTo,
                 params: {
-                  id: latestCase.id,
+                  id: caseData.id,
                   name: caseType.name,
                 },
               });
@@ -92,47 +57,13 @@ const computeCaseCardComponent = (status, latestCase, form, caseType, navigation
           >
             <Card.Image source={icons[caseType.icon]} />
             <Card.Title>{caseType.name}</Card.Title>
-            <Card.SubTitle>
-              Steg {currentStep} / {totalSteps}
-            </Card.SubTitle>
-            <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
-            <Card.Button
-              onClick={() => {
-                navigation.navigate('Form', { caseId: latestCase.id });
-              }}
-            >
-              <Text>Fortsätt ansökan</Text>
-              <Icon name="arrow-forward" />
-            </Card.Button>
-          </Card.Body>
-        </Card>
-      );
-
-    case caseStatus.recentlyCompleted:
-      return (
-        <Card {...commonCardProps}>
-          <Card.Body
-            shadow
-            color="neutral"
-            onPress={() => {
-              navigation.navigate('UserEvents', {
-                screen: caseType.navigateTo,
-                params: {
-                  id: latestCase.id,
-                  name: caseType.name,
-                },
-              });
-            }}
-          >
-            <Card.Image source={icons[caseType.icon]} />
-            <Card.Title>{caseType.name}</Card.Title>
-            <Card.SubTitle>Inskickad</Card.SubTitle>
+            <Card.SubTitle>{caseData.statusDetails.name}</Card.SubTitle>
             <Card.Button
               onClick={() => {
                 navigation.navigate('UserEvents', {
                   screen: caseType.navigateTo,
                   params: {
-                    id: latestCase.id,
+                    id: caseData.id,
                     name: caseType.name,
                   },
                 });
@@ -145,8 +76,72 @@ const computeCaseCardComponent = (status, latestCase, form, caseType, navigation
         </Card>
       );
 
+    case 'ongoing':
+      return (
+        <Card key={caseData.id} {...commonCardProps}>
+          <Card.Body
+            shadow
+            color="neutral"
+            onPress={() => {
+              navigation.navigate('UserEvents', {
+                screen: caseType.navigateTo,
+                params: {
+                  id: caseData.id,
+                  name: caseType.name,
+                },
+              });
+            }}
+          >
+            <Card.Image source={icons[caseType.icon]} />
+            <Card.Title>{caseType.name}</Card.Title>
+            <Card.Title>{caseData.status}</Card.Title>
+            <Card.SubTitle>
+              Steg {currentStep} / {totalSteps}
+            </Card.SubTitle>
+            <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
+            <Card.Button
+              onClick={() => {
+                navigation.navigate('Form', { caseId: caseData.id });
+              }}
+            >
+              <Text>Fortsätt ansökan</Text>
+              <Icon name="arrow-forward" />
+            </Card.Button>
+          </Card.Body>
+        </Card>
+      );
+
+    case 'notStarted':
     default:
-      return null;
+      return (
+        <Card key={caseData.id} {...commonCardProps}>
+          <Card.Body
+            shadow
+            color="neutral"
+            onPress={() => {
+              navigation.navigate('UserEvents', {
+                screen: caseType.navigateTo,
+                params: {
+                  id: caseData.id,
+                  name: caseType.name,
+                },
+              });
+            }}
+          >
+            <Card.Image source={icons[caseType.icon]} />
+            <Card.Title>{caseType.name}</Card.Title>
+            <Card.SubTitle>{caseData.statusDetails.name}</Card.SubTitle>
+            <Card.Button
+              onClick={() => {
+                navigation.navigate('Form', { caseId: caseData.id });
+              }}
+            >
+              <Text>Starta ansökan</Text>
+              <Icon name="arrow-forward" />
+            </Card.Button>
+          </Card.Body>
+        </Card>
+      );
   }
 };
 
@@ -157,17 +152,38 @@ const computeCaseCardComponent = (status, latestCase, form, caseType, navigation
 function CaseOverview(props) {
   const { navigation } = props;
   const [caseItems, setCaseItems] = useState([]);
-  const { getCasesByFormIds } = useContext(CaseState);
+  const { cases, getCasesByFormIds, getCaseStatusDetails } = useContext(CaseState);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
-  const { createCase } = useContext(CaseDispatch);
 
+  const getCasesByStatusGroup = (status) => {
+    switch (status) {
+      case 'active':
+        return caseItems.flatMap((caseItem) =>
+          caseItem.statusDetails.group === 'active' ? [caseItem.component] : []
+        );
+      case 'closed':
+        return caseItems.flatMap((caseItem) =>
+          caseItem.statusDetails.group === 'closed' ? [caseItem.component] : []
+        );
+      case 'notStarted':
+        return caseItems.flatMap((caseItem) =>
+          caseItem.statusDetails.group === 'notStarted' ? [caseItem.component] : []
+        );
+      default:
+        return caseItems;
+    }
+  };
+
+  const activeCases = getCasesByStatusGroup('active');
+  const closedCases = getCasesByStatusGroup('closed');
+  const notStartedCases = getCasesByStatusGroup('notStarted');
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(fadeAnimation, {
       toValue: 1,
       easing: Easing.back(),
-      duration: 700,
+      duration: 200,
       useNativeDriver: true,
     }).start();
   }, [fadeAnimation]);
@@ -176,60 +192,60 @@ function CaseOverview(props) {
     const updateItems = async () => {
       const updateItemsPromises = caseTypes.map(async (caseType) => {
         const formIds = await getFormIdsByFormTypes(caseType.formTypes);
-        const [status, latestCase, relevantCases] = await getCasesByFormIds(formIds);
-        const form = await getForm(latestCase?.formId || formIds[0]);
-        const component = computeCaseCardComponent(
-          status,
-          latestCase,
-          form,
-          caseType,
-          navigation,
-          createCase
-        );
-        return { caseType, status, latestCase, component, cases: relevantCases };
+        const formCases = getCasesByFormIds(formIds);
+
+        const updatedFormCaseObjects = formCases.map(async (caseData) => {
+          const form = await getForm(caseData.formId);
+          caseData.statusDetails = getCaseStatusDetails(caseData);
+          const component = computeCaseCardComponent(caseData, form, caseType, navigation);
+          return { component, ...caseData };
+        });
+
+        return Promise.all(updatedFormCaseObjects).then((updatedItems) => updatedItems);
       });
 
       await Promise.all(updateItemsPromises).then((updatedItems) => {
-        setCaseItems(updatedItems);
+        const flattenedList = [].concat(...updatedItems);
+        setCaseItems(flattenedList);
       });
     };
+
     updateItems();
-  }, [createCase, getCasesByFormIds, getForm, getFormIdsByFormTypes, navigation]);
+  }, [navigation]);
 
   return (
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
       <Container>
-        <Message colorSchema={colorSchema}>
-          <Card.Body outlined>
-            <Card.Title>Hej!</Card.Title>
-            <Card.Text>
-              Helsingborgs stad testar att göra självservice lite mer personlig och i första steget
-              så är det just Ekonomiskt Bistånd som står i fokus.
-            </Card.Text>
-          </Card.Body>
-        </Message>
-        {caseItems.length > 0 && (
+        {Object.keys(notStartedCases).length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
-            {caseItems.map(({ status, component: CardComponent }) =>
-              status === caseStatus.untouched
-                ? [CardComponent]
-                : [
-                    <ListHeading key="case-title" type="h5">
-                      Aktiva
-                    </ListHeading>,
-                    CardComponent,
-                  ]
-            )}
+            <ListHeading key="active-cases" type="h5">
+              Öppna
+            </ListHeading>
+            {notStartedCases}
+          </Animated.View>
+        )}
+
+        {Object.keys(activeCases).length > 0 && (
+          <Animated.View style={{ opacity: fadeAnimation }}>
+            <ListHeading key="active-cases" type="h5">
+              Aktiva
+            </ListHeading>
+            {activeCases}
+          </Animated.View>
+        )}
+
+        {Object.keys(closedCases).length > 0 && (
+          <Animated.View style={{ opacity: fadeAnimation }}>
+            <ListHeading key="active-cases" type="h5">
+              Avslutade
+            </ListHeading>
+            {closedCases}
           </Animated.View>
         )}
       </Container>
     </ScreenWrapper>
   );
 }
-
-CaseOverview.propTypes = {
-  navigation: PropTypes.object,
-};
 
 export default CaseOverview;
