@@ -5,7 +5,7 @@ import icons from 'source/helpers/Icons';
 import styled from 'styled-components/native';
 
 import FormContext from '../../store/FormContext';
-import { CaseState, caseTypes, statuses } from '../../store/CaseContext';
+import { CaseState, caseTypes } from '../../store/CaseContext';
 import { Icon, Text } from '../../components/atoms';
 import { Card, Header, ScreenWrapper } from '../../components/molecules';
 
@@ -37,110 +37,108 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
     colorSchema,
   };
 
-  switch (caseData.status) {
-    case 'notStarted':
-    case 'notStarted.ekb.open':
-      return (
-        <Card key={caseData.id} {...commonCardProps}>
-          <Card.Body
-            shadow
-            color="neutral"
-            onPress={() => {
-              navigation.navigate('UserEvents', {
-                screen: caseType.navigateTo,
-                params: {
-                  id: caseData.id,
-                  name: caseType.name,
-                },
-              });
+  if (caseData?.status?.type?.includes('notStarted')) {
+    return (
+      <Card key={caseData.id} {...commonCardProps}>
+        <Card.Body
+          shadow
+          color="neutral"
+          onPress={() => {
+            navigation.navigate('UserEvents', {
+              screen: caseType.navigateTo,
+              params: {
+                id: caseData.id,
+                name: caseType.name,
+              },
+            });
+          }}
+        >
+          <Card.Image source={icons[caseType.icon]} />
+          <Card.Title>{caseType.name}</Card.Title>
+          <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
+          <Card.Button
+            onClick={() => {
+              navigation.navigate('Form', { caseId: caseData.id });
             }}
           >
-            <Card.Image source={icons[caseType.icon]} />
-            <Card.Title>{caseType.name}</Card.Title>
-            <Card.SubTitle>{caseData.statusDetails.name}</Card.SubTitle>
-            <Card.Button
-              onClick={() => {
-                navigation.navigate('Form', { caseId: caseData.id });
-              }}
-            >
-              <Text>Starta ansökan</Text>
-              <Icon name="arrow-forward" />
-            </Card.Button>
-          </Card.Body>
-        </Card>
-      );
-
-    case 'active.ongoing':
-      return (
-        <Card key={caseData.id} {...commonCardProps}>
-          <Card.Body
-            shadow
-            color="neutral"
-            onPress={() => {
-              navigation.navigate('UserEvents', {
-                screen: caseType.navigateTo,
-                params: {
-                  id: caseData.id,
-                  name: caseType.name,
-                },
-              });
-            }}
-          >
-            <Card.Image source={icons[caseType.icon]} />
-            <Card.Title>{caseType.name}</Card.Title>
-            <Card.SubTitle>
-              Steg {currentStep} / {totalSteps}
-            </Card.SubTitle>
-            <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
-            <Card.Button
-              onClick={() => {
-                navigation.navigate('Form', { caseId: caseData.id });
-              }}
-            >
-              <Text>Fortsätt ansökan</Text>
-              <Icon name="arrow-forward" />
-            </Card.Button>
-          </Card.Body>
-        </Card>
-      );
-
-    default:
-      return (
-        <Card key={caseData.id} {...commonCardProps}>
-          <Card.Body
-            shadow
-            color="neutral"
-            onPress={() => {
-              navigation.navigate('UserEvents', {
-                screen: caseType.navigateTo,
-                params: {
-                  id: caseData.id,
-                  name: caseType.name,
-                },
-              });
-            }}
-          >
-            <Card.Image source={icons[caseType.icon]} />
-            <Card.Title>{caseType.name}</Card.Title>
-            <Card.SubTitle>{caseData.statusDetails.name}</Card.SubTitle>
-            <Card.Button
-              onClick={() => {
-                navigation.navigate('UserEvents', {
-                  screen: caseType.navigateTo,
-                  params: {
-                    id: caseData.id,
-                    name: caseType.name,
-                  },
-                });
-              }}
-            >
-              <Text>Visa ansökan</Text>
-              <Icon name="arrow-forward" />
-            </Card.Button>
-          </Card.Body>
-        </Card>
-      );
+            <Text>Starta ansökan</Text>
+            <Icon name="arrow-forward" />
+          </Card.Button>
+        </Card.Body>
+      </Card>
+    );
   }
+
+  if (caseData?.status?.type?.includes('ongoing')) {
+    return (
+      <Card key={caseData.id} {...commonCardProps}>
+        <Card.Body
+          shadow
+          color="neutral"
+          onPress={() => {
+            navigation.navigate('UserEvents', {
+              screen: caseType.navigateTo,
+              params: {
+                id: caseData.id,
+                name: caseType.name,
+              },
+            });
+          }}
+        >
+          <Card.Image source={icons[caseType.icon]} />
+          <Card.Title>{caseType.name}</Card.Title>
+          <Card.SubTitle>
+            Steg {currentStep} / {totalSteps}
+          </Card.SubTitle>
+          <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
+          <Card.Button
+            onClick={() => {
+              navigation.navigate('Form', { caseId: caseData.id });
+            }}
+          >
+            <Text>Fortsätt ansökan</Text>
+            <Icon name="arrow-forward" />
+          </Card.Button>
+        </Card.Body>
+      </Card>
+    );
+  }
+
+  return (
+    <Card key={caseData.id} {...commonCardProps}>
+      <Card.Body
+        shadow
+        color="neutral"
+        onPress={() => {
+          navigation.navigate('UserEvents', {
+            screen: caseType.navigateTo,
+            params: {
+              id: caseData.id,
+              name: caseType.name,
+            },
+          });
+        }}
+      >
+        <Card.Image source={icons[caseType.icon]} />
+        <Card.Title>{caseType.name}</Card.Title>
+        <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
+        <Card.Button
+          onClick={() => {
+            navigation.navigate('UserEvents', {
+              screen: caseType.navigateTo,
+              params: {
+                id: caseData.id,
+                name: caseType.name,
+              },
+            });
+          }}
+        >
+          <Text>Visa ansökan</Text>
+          <Icon name="arrow-forward" />
+        </Card.Button>
+      </Card.Body>
+    </Card>
+  );
 };
 
 /**
@@ -150,13 +148,15 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
 function CaseOverview(props) {
   const { navigation } = props;
   const [caseItems, setCaseItems] = useState([]);
-  const { cases, getCasesByFormIds, getCaseStatusDetails } = useContext(CaseState);
+  const { getCasesByFormIds } = useContext(CaseState);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
   const getCasesByStatusGroup = (status) =>
     caseItems.flatMap((caseItem) =>
-      caseItem.status.split('.')[0] === status ? [caseItem.component] : []
+      caseItem?.status?.type && caseItem.status.type.split('.')[0] === status
+        ? [caseItem.component]
+        : []
     );
 
   useEffect(() => {
@@ -176,7 +176,6 @@ function CaseOverview(props) {
 
         const updatedFormCaseObjects = formCases.map(async (caseData) => {
           const form = await getForm(caseData.formId);
-          caseData.statusDetails = statuses[caseData.status] || {};
           const component = computeCaseCardComponent(caseData, form, caseType, navigation);
           return { component, ...caseData };
         });
@@ -199,7 +198,7 @@ function CaseOverview(props) {
       <Container>
         {Object.keys(getCasesByStatusGroup('notStarted')).length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
-            <ListHeading type="h5">Öppna</ListHeading>
+            <ListHeading type="h5">Tillgängliga</ListHeading>
             {getCasesByStatusGroup('notStarted')}
           </Animated.View>
         )}
