@@ -17,6 +17,7 @@ const Container = styled.ScrollView`
 
 const ListHeading = styled(Text)`
   margin-left: 4px;
+  margin-top: 24px;
   margin-bottom: 8px;
 `;
 
