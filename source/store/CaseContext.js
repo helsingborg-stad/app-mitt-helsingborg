@@ -25,16 +25,65 @@ export const caseTypes = [
   },
 ];
 
-/** An enum for describing the state of the user with respect to a given case type. */
-export const caseStatus = {
-  unfinished: 'UNFINISHED',
-  unfinishedNoCompleted: 'UNFINISHED_NO_COMPLETED',
-  recentlyCompleted: 'RECENTLY_COMPLETED',
-  untouched: 'UNTOUCHED',
-  onlyOldCases: 'ONLY_OLD_CASES',
+export const statuses = {
+  /** Global statuses */
+  notStarted: {
+    group: 'notStarted',
+    name: 'Ej påbörjad',
+    description: 'Ansökan är ej påbörjad.',
+  },
+  ongoing: {
+    group: 'active',
+    name: 'Pågående',
+    description:
+      'Du har påbörjat en ansökan. Du kan öppna din ansökan och fortsätta där du slutade.',
+  },
+  submitted: {
+    group: 'active',
+    name: 'Inskickad',
+    description:
+      'Ansökan är inskickad. Du kommer att få besked om ansökan när din handläggare har granskat och bedömt den.',
+  },
+  processing: {
+    group: 'active',
+    name: 'Ansökan behandlas',
+    description: 'Ditt ärende är mottaget och bearbetas.',
+  },
+  closed: {
+    group: 'closed',
+    name: 'Avslutat',
+    description: 'Ditt ärende är avslutat.',
+  },
+  /** EKB specific statuses */
+  open: {
+    group: 'notStarted',
+    name: 'Öppen',
+    description: 'Ansökan är öppen. Du kan nu söka ekonomiskt bistånd för perioden.',
+  },
+  completionRequired: {
+    group: 'active',
+    name: 'Stickprovskontroll',
+    description:
+      'Du måste komplettera din ansökan med bilder som visar dina utgifter och inkomster. Vi behöver din komplettering inom 4 dagar för att kunna betala ut pengar för perioden.',
+  },
+  approved: {
+    group: 'closed',
+    name: 'Godkänd',
+    description: 'Din ansökan är godkänd. Pengarna sätts in på ditt konto.',
+  },
+  partiallyApproved: {
+    group: 'closed',
+    name: 'Delvis godkänd',
+    description:
+      'Delar av din ansökan är godkänd, men några av de utgifter du sökt för får du inte bistånd för. Pengarna för godkända utgifter sätts in på ditt konto.',
+  },
+  rejected: {
+    group: 'closed',
+    name: 'Avslagen',
+    description:
+      'Din ansökan är inte godkänd och du kommer inte att få någon utbetalning. Vill du överklaga beslutet lämnar du en skriftlig motivering med e-post eller brev till din handläggare.',
+  },
 };
-
-const oldCaseLimit = 4 * 30 * 24 * 60 * 60 * 1000; // cases older than 4 months are classified as old.
 
 function CaseProvider({ children, initialState = defaultInitialState }) {
   const [state, dispatch] = useReducer(CaseReducer, initialState);
@@ -54,39 +103,17 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   /**
    * This functions retrives cases based on formIds
    * @param {array} formIds an array of form ids.
-   * @param {[cases]} cases array of case objects.
-   * @returns {[status, latestCase, relevantCases]}
+   * @returns {array}
    */
   function getCasesByFormIds(formIds) {
-    let latestUpdated = 0;
-    let latestCase;
-    const relevantCases = [];
-
+    const formCases = [];
     Object.values(state.cases).forEach((c) => {
       if (formIds.includes(c.formId)) {
-        relevantCases.push(c);
-        if (c.updatedAt > latestUpdated) {
-          latestUpdated = c.updatedAt;
-          latestCase = c;
-        }
+        formCases.push(c);
       }
     });
 
-    if (latestUpdated === 0) {
-      return [caseStatus.untouched, undefined, relevantCases];
-    }
-    if (latestCase.status === 'ongoing' && relevantCases.length === 1) {
-      return [caseStatus.unfinishedNoCompleted, latestCase, relevantCases];
-    }
-    if (latestCase.status === 'ongoing') {
-      return [caseStatus.unfinished, latestCase, relevantCases];
-    }
-    if (latestCase.status === 'submitted') {
-      if (Date.now() - latestUpdated > oldCaseLimit) {
-        return [caseStatus.onlyOldCases, latestCase, relevantCases];
-      }
-      return [caseStatus.recentlyCompleted, latestCase, relevantCases];
-    }
+    return formCases;
   }
 
   async function deleteCase(caseId) {
@@ -100,6 +127,13 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
     [dispatch]
   );
 
+  const getCaseStatusDetails = (data) => {
+    const statusDetails = statuses[data?.details?.status]
+      ? statuses[data.details.status]
+      : statuses[data.status];
+    return statusDetails;
+  };
+
   useEffect(() => {
     if (user) {
       fetchCases();
@@ -107,8 +141,12 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+  console.log('context cases', state.cases);
+
   return (
-    <CaseState.Provider value={{ cases: state.cases, getCase, getCasesByFormIds }}>
+    <CaseState.Provider
+      value={{ cases: state.cases, getCase, getCasesByFormIds, getCaseStatusDetails }}
+    >
       <CaseDispatch.Provider value={{ createCase, updateCase, deleteCase }}>
         {children}
       </CaseDispatch.Provider>
