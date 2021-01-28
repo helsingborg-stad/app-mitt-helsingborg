@@ -6,7 +6,7 @@ import FormContext from 'app/store/FormContext';
 import styled from 'styled-components/native';
 import icons from '../../helpers/Icons';
 import { launchPhone, launchEmail } from '../../helpers/LaunchExternalApp';
-import { formatUpdatedAt, getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
+import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 import { Icon, Text } from '../../components/atoms';
 import { Card, ScreenWrapper } from '../../components/molecules';
 
@@ -22,6 +22,69 @@ const SummaryHeading = styled(Text)`
   margin-bottom: 16px;
 `;
 
+const computeCaseCardComponent = (caseData, form, colorSchema, navigation) => {
+  const {
+    status,
+    currentPosition: { currentMainStep: currentStep } = {},
+    details: { period: { endDate } = {} } = {},
+  } = caseData;
+  const totalSteps = form?.stepStructure?.length || 0;
+  const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(endDate, true);
+
+  if (status?.type?.includes('ongoing')) {
+    return (
+      <Card colorSchema={colorSchema}>
+        <Card.Body shadow color="neutral">
+          <Card.Title colorSchema="neutral">{applicationPeriodMonth}</Card.Title>
+          <Card.SubTitle>
+            Steg {currentStep} / {totalSteps}
+          </Card.SubTitle>
+          <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
+          <Card.Text>{status.description} </Card.Text>
+          <Card.Button
+            onClick={() => {
+              navigation.navigate('Form', { caseId: caseData.id });
+            }}
+          >
+            <Text>Fortsätt ansökan</Text>
+            <Icon name="arrow-forward" />
+          </Card.Button>
+        </Card.Body>
+      </Card>
+    );
+  }
+
+  if (status?.type?.includes('notStarted')) {
+    return (
+      <Card colorSchema={colorSchema}>
+        <Card.Body shadow color="neutral">
+          <Card.Title colorSchema="neutral">{applicationPeriodMonth}</Card.Title>
+          <Card.SubTitle>{status.name}</Card.SubTitle>
+          <Card.Text>{status.description} </Card.Text>
+          <Card.Button
+            onClick={() => {
+              navigation.navigate('Form', { caseId: caseData.id });
+            }}
+          >
+            <Text>Starta ansökan</Text>
+            <Icon name="arrow-forward" />
+          </Card.Button>
+        </Card.Body>
+      </Card>
+    );
+  }
+
+  return (
+    <Card colorSchema={colorSchema}>
+      <Card.Body shadow color="neutral">
+        <Card.Title colorSchema="neutral">{applicationPeriodMonth}</Card.Title>
+        <Card.SubTitle>{status.name}</Card.SubTitle>
+        <Card.Text>{status.description} </Card.Text>
+      </Card.Body>
+    </Card>
+  );
+};
+
 /**
  * Case summary screen
  * @param {obj} props
@@ -29,7 +92,6 @@ const SummaryHeading = styled(Text)`
 const CaseSummary = (props) => {
   const { getCase } = useContext(CaseState);
   const { getForm } = useContext(FormContext);
-
   const [caseData, setCaseData] = useState({});
   const [form, setForm] = useState({});
 
@@ -41,16 +103,7 @@ const CaseSummary = (props) => {
     },
   } = props;
 
-  const {
-    status,
-    currentPosition: { currentMainStep: currentStep } = {},
-    details: { administrators, period: { startDate, endDate } = {} } = {},
-    updatedAt,
-  } = caseData;
-
-  const { name: formName } = form;
-  const totalSteps = form?.stepStructure?.length || 0;
-  const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(startDate, true);
+  const { status, details: { administrators } = {} } = caseData;
 
   useEffect(() => {
     const caseData = getCase(caseId);
@@ -70,7 +123,7 @@ const CaseSummary = (props) => {
     Animated.timing(fadeAnimation, {
       toValue: 1,
       easing: Easing.back(),
-      duration: 400,
+      duration: 200,
       useNativeDriver: true,
     }).start();
   }, [fadeAnimation]);
@@ -78,49 +131,9 @@ const CaseSummary = (props) => {
   return (
     <ScreenWrapper {...props}>
       <Container as={Animated.ScrollView} style={{ opacity: fadeAnimation }}>
-        {status === 'submitted' && (
-          <>
-            <SummaryHeading type="h5">Aktuell period</SummaryHeading>
-            <Card colorSchema={colorSchema}>
-              <Card.Body shadow color="neutral">
-                <Card.Title>{applicationPeriodMonth}</Card.Title>
-                <Card.SubTitle>Ansökan inlämnad</Card.SubTitle>
-                <Card.Text>
-                  Vi har mottagit din ansökan för perioden{' '}
-                  {`${formatUpdatedAt(startDate)} - ${formatUpdatedAt(endDate)}`}.
-                </Card.Text>
-                <Card.Text italic>
-                  Vi skickar ut en notis när status för din ansökan ändras.
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </>
-        )}
-
-        {status === 'ongoing' && (
-          <>
-            <SummaryHeading type="h5">Pågående ansökan</SummaryHeading>
-
-            <Card colorSchema={colorSchema}>
-              <Card.Body shadow color="neutral">
-                <Card.Title>{formName}</Card.Title>
-                <Card.SubTitle>
-                  Steg {currentStep} / {totalSteps}
-                </Card.SubTitle>
-                <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
-                <Card.Text italic>Senast uppdaterad {formatUpdatedAt(updatedAt)}</Card.Text>
-                <Card.Button
-                  onClick={() => {
-                    navigation.navigate('Form', { caseId: caseData.id });
-                  }}
-                >
-                  <Text>Fortsätt ansökan</Text>
-                  <Icon name="arrow-forward" />
-                </Card.Button>
-              </Card.Body>
-            </Card>
-          </>
-        )}
+        <SummaryHeading type="h5">Aktuell period</SummaryHeading>
+        {Object.keys(caseData).length > 0 &&
+          computeCaseCardComponent(caseData, form, colorSchema, navigation)}
 
         {administrators && (
           <View>
@@ -134,8 +147,8 @@ const CaseSummary = (props) => {
                       circle
                       source={icons.ICON_CONTACT_PERSON}
                     />
-                    {name && <Card.Title>{name}</Card.Title>}
                     {title && <Card.SubTitle>{title}</Card.SubTitle>}
+                    {name && <Card.Title colorSchema="neutral">{name}</Card.Title>}
                   </Card.Section>
                   {phone && (
                     <Card.Button colorSchema="neutral" onClick={() => launchPhone(phone)}>
