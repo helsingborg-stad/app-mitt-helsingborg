@@ -13,7 +13,7 @@ const icons = {
   ICON_DONE: require('../assets/images/icons/illu_fardig_1x.png'),
   ICON_HELP: require('../assets/images/icons/illu_hjalp_1x.png'),
   ICON_ADD: require('../assets/images/icons/icon_add.png'),
-  ICON_CONTACT_PERSON: require('../assets/images/icons/icn_contact_person_1x.png'),
+  ICON_CONTACT_PERSON: require('../assets/images/icons/icn_contact_person_2x.png'),
   ICON_CASE_SUCCESS_1: require('../assets/images/icons/icn_application_success_1_3x.png'),
   ICON_CASE_SUCCESS_2: require('../assets/images/icons/icn_application_success_2_3x.png'),
   ICON_CASE_SUCCESS_3: require('../assets/images/icons/icn_application_success_3_3x.png'),
