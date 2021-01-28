@@ -152,11 +152,9 @@ function CaseOverview(props) {
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
-  const getCasesByStatusGroup = (status) =>
+  const getCasesByStatus = (status) =>
     caseItems.flatMap((caseItem) =>
-      caseItem?.status?.type && caseItem.status.type.split('.')[0] === status
-        ? [caseItem.component]
-        : []
+      caseItem?.status?.type?.includes(status) ? [caseItem.component] : []
     );
 
   useEffect(() => {
@@ -196,24 +194,24 @@ function CaseOverview(props) {
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
       <Container>
-        {Object.keys(getCasesByStatusGroup('notStarted')).length > 0 && (
+        {Object.keys(getCasesByStatus('notStarted')).length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             <ListHeading type="h5">Tillgängliga</ListHeading>
-            {getCasesByStatusGroup('notStarted')}
+            {getCasesByStatus('notStarted')}
           </Animated.View>
         )}
 
-        {Object.keys(getCasesByStatusGroup('active')).length > 0 && (
+        {Object.keys(getCasesByStatus('active')).length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             <ListHeading type="h5">Aktiva</ListHeading>
-            {getCasesByStatusGroup('active')}
+            {getCasesByStatus('active')}
           </Animated.View>
         )}
 
-        {Object.keys(getCasesByStatusGroup('closed')).length > 0 && (
+        {Object.keys(getCasesByStatus('closed')).length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             <ListHeading type="h5">Avslutade</ListHeading>
-            {getCasesByStatusGroup('closed')}
+            {getCasesByStatus('closed')}
           </Animated.View>
         )}
       </Container>
