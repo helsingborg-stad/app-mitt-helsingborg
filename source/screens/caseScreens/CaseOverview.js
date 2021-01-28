@@ -54,7 +54,7 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
           }}
         >
           <Card.Image source={icons[caseType.icon]} />
-          <Card.Title>{caseType.name}</Card.Title>
+          <Card.Title colorSchema="neutral">{caseType.name}</Card.Title>
           <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
           <Card.Button
             onClick={() => {
@@ -86,7 +86,7 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
           }}
         >
           <Card.Image source={icons[caseType.icon]} />
-          <Card.Title>{caseType.name}</Card.Title>
+          <Card.Title colorSchema="neutral">{caseType.name}</Card.Title>
           <Card.SubTitle>
             Steg {currentStep} / {totalSteps}
           </Card.SubTitle>
@@ -120,7 +120,7 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
         }}
       >
         <Card.Image source={icons[caseType.icon]} />
-        <Card.Title>{caseType.name}</Card.Title>
+        <Card.Title colorSchema="neutral">{caseType.name}</Card.Title>
         <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
         <Card.Button
           onClick={() => {
@@ -168,20 +168,18 @@ function CaseOverview(props) {
 
   useEffect(() => {
     const updateItems = async () => {
-      const updateItemsPromises = caseTypes.map(async (caseType) => {
+      const updateCaseItemsPromises = caseTypes.map(async (caseType) => {
         const formIds = await getFormIdsByFormTypes(caseType.formTypes);
         const formCases = getCasesByFormIds(formIds);
-
         const updatedFormCaseObjects = formCases.map(async (caseData) => {
           const form = await getForm(caseData.formId);
           const component = computeCaseCardComponent(caseData, form, caseType, navigation);
           return { component, ...caseData };
         });
-
         return Promise.all(updatedFormCaseObjects).then((updatedItems) => updatedItems);
       });
 
-      await Promise.all(updateItemsPromises).then((updatedItems) => {
+      await Promise.all(updateCaseItemsPromises).then((updatedItems) => {
         const flattenedList = [].concat(...updatedItems);
         setCaseItems(flattenedList);
       });
