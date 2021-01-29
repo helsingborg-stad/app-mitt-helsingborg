@@ -48,7 +48,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   }, [caseData, caseId, getForm, getCase, user, getCasesByFormIds]);
 
   function handleCloseForm() {
-    navigation.navigate('App', { screen: 'UserEvents' });
+    navigation.popToTop();
   }
 
   const updateCaseContext = (data, status, currentPosition) => {
@@ -71,7 +71,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
 
   // TODO: Update case on form submit.
   function handleSubmitForm() {
-    navigation.navigate('App', { screen: 'UserEvents' });
+    navigation.popToTop();
   }
 
   if (!form?.steps) {
