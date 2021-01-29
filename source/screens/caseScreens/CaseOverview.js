@@ -152,7 +152,7 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
 function CaseOverview(props) {
   const { navigation } = props;
   const [caseItems, setCaseItems] = useState([]);
-  const { getCasesByFormIds } = useContext(CaseState);
+  const { cases, getCasesByFormIds } = useContext(CaseState);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
@@ -168,7 +168,7 @@ function CaseOverview(props) {
   useEffect(() => {
     Animated.timing(fadeAnimation, {
       toValue: 1,
-      easing: Easing.back(),
+      easing: Easing.ease,
       duration: 200,
       useNativeDriver: true,
     }).start();
@@ -195,7 +195,8 @@ function CaseOverview(props) {
     };
 
     updateItems();
-  }, [getCasesByFormIds, getForm, getFormIdsByFormTypes, navigation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cases]);
 
   return (
     <ScreenWrapper {...props}>
