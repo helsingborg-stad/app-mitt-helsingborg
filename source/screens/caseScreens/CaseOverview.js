@@ -181,6 +181,7 @@ function CaseOverview(props) {
 
       await Promise.all(updateCaseItemsPromises).then((updatedItems) => {
         const flattenedList = [].concat(...updatedItems);
+        flattenedList.sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
         setCaseItems(flattenedList);
       });
     };
