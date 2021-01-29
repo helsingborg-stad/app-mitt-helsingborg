@@ -5,7 +5,7 @@ import icons from 'source/helpers/Icons';
 import styled from 'styled-components/native';
 import { Icon, Text } from '../../components/atoms';
 import { Card, Header, ScreenWrapper } from '../../components/molecules';
-import { formatUpdatedAt, getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
+import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 import { CaseState, caseTypes } from '../../store/CaseContext';
 import FormContext from '../../store/FormContext';
 
