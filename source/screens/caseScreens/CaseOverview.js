@@ -36,6 +36,9 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
   const commonCardProps = {
     colorSchema,
   };
+  const applicationPeriodMonth = caseData?.details?.period?.endDate
+    ? getSwedishMonthNameByTimeStamp(caseData.details.period.endDate, true)
+    : '';
 
   if (caseData?.status?.type?.includes('notStarted')) {
     return (
@@ -56,11 +59,7 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
           <Card.Image source={icons[caseType.icon]} />
           <Card.Title colorSchema="neutral">{caseType.name}</Card.Title>
           <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
-          {caseData?.details?.period?.endDate && (
-            <Card.Text>
-              {getSwedishMonthNameByTimeStamp(caseData.details.period.endDate, true)}
-            </Card.Text>
-          )}
+          {applicationPeriodMonth && <Card.Text>{applicationPeriodMonth}</Card.Text>}
           <Card.Button
             onClick={() => {
               navigation.navigate('Form', { caseId: caseData.id });
