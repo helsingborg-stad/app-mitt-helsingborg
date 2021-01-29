@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { CaseState } from 'app/store/CaseContext';
 import FormContext from 'app/store/FormContext';
 import styled from 'styled-components/native';
+import { useIsFocused } from '@react-navigation/native';
 import icons from '../../helpers/Icons';
 import { launchPhone, launchEmail } from '../../helpers/LaunchExternalApp';
 import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
@@ -90,11 +91,10 @@ const computeCaseCardComponent = (caseData, form, colorSchema, navigation) => {
  * @param {obj} props
  */
 const CaseSummary = (props) => {
-  const { getCase } = useContext(CaseState);
+  const { cases, getCase } = useContext(CaseState);
   const { getForm } = useContext(FormContext);
   const [caseData, setCaseData] = useState({});
   const [form, setForm] = useState({});
-
   const {
     colorSchema,
     navigation,
@@ -102,8 +102,8 @@ const CaseSummary = (props) => {
       params: { id: caseId },
     },
   } = props;
-
-  const { status, details: { administrators } = {} } = caseData;
+  const { details: { administrators } = {} } = caseData;
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const caseData = getCase(caseId);
@@ -115,7 +115,7 @@ const CaseSummary = (props) => {
 
     getFormObject(caseData.formId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [caseId, status]);
+  }, [isFocused, cases]);
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 

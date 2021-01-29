@@ -161,6 +161,10 @@ function CaseOverview(props) {
       caseItem?.status?.type?.includes(status) ? [caseItem.component] : []
     );
 
+  const activeCases = getCasesByStatus('active');
+  const notStartedCases = getCasesByStatus('notStarted');
+  const closedCases = getCasesByStatus('closed');
+
   useEffect(() => {
     Animated.timing(fadeAnimation, {
       toValue: 1,
@@ -197,24 +201,24 @@ function CaseOverview(props) {
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
       <Container>
-        {Object.keys(getCasesByStatus('notStarted')).length > 0 && (
+        {Object.keys(notStartedCases).length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             <ListHeading type="h5">Tillgängliga</ListHeading>
-            {getCasesByStatus('notStarted')}
+            {notStartedCases}
           </Animated.View>
         )}
 
-        {Object.keys(getCasesByStatus('active')).length > 0 && (
+        {Object.keys(activeCases).length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             <ListHeading type="h5">Aktiva</ListHeading>
-            {getCasesByStatus('active')}
+            {activeCases}
           </Animated.View>
         )}
 
-        {Object.keys(getCasesByStatus('closed')).length > 0 && (
+        {Object.keys(closedCases).length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             <ListHeading type="h5">Avslutade</ListHeading>
-            {getCasesByStatus('closed')}
+            {closedCases}
           </Animated.View>
         )}
       </Container>
