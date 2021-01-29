@@ -2,6 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from '../StoryWrapper';
 import Form from '../../../containers/Form/Form';
+import statuses from '../../../assets/mock/caseStatuses';
 
 const repeaterFieldStories = storiesOf('RepeaterField', module);
 
@@ -250,7 +251,7 @@ const RepeaterStory = () => (
     connectivityMatrix={DefaultStoryForm.connectivityMatrix}
     startAt={0}
     firstName="FakeName"
-    status="ongoing"
+    status={statuses['active.ongoing']}
   />
 );
 

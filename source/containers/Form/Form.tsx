@@ -58,6 +58,7 @@ const Form: React.FC<Props> = ({
     currentMainStep: 1,
     currentMainStepIndex: 0,
   };
+
   const initialState: FormReducerState = {
     submitted: false,
     currentPosition: initialPosition || defaultInitialPosition,
@@ -89,7 +90,7 @@ const Form: React.FC<Props> = ({
         const condition = question.conditionalOn;
         if (!condition || condition.trim() === '') return true;
         return evaluateConditionalExpression(condition, formState.formAnswers, formState.allQuestions);
-      }): [];
+      }) : [];
 
       return (
         <Step
@@ -122,8 +123,8 @@ const Form: React.FC<Props> = ({
             formState.currentPosition.currentMainStep < formState.numberOfMainSteps
           }
         />);
-      });
-        
+    });
+
   const mainStep = formState.currentPosition.currentMainStepIndex;
   const [visible, toggleModal] = useModal();
   const [scrollViewRef, setRef] = useState<ScrollView>(null);
@@ -192,9 +193,13 @@ Form.propTypes = {
    */
   initialAnswers: PropTypes.object,
   /**
-   * Status, either ongoing or submitted (or others, possibly?)
+   * Status
    */
-  status: PropTypes.oneOf(['ongoing', 'submitted']),
+  status: PropTypes.shape({
+    type: PropTypes.string,
+    name: PropTypes.string,
+    description: PropTypes.string,
+  }),
   /**
    * function for updating case in caseContext
    */

@@ -12,6 +12,7 @@ import CloseDialog from './CloseDialog/CloseDialog';
 import Banner from './StepBanner/StepBanner';
 import StepDescription from './StepDescription/StepDescription';
 import StepFooter from './StepFooter/StepFooter';
+import statuses from '../../../assets/mock/caseStatuses';
 
 const StepContainer = styled.View`
   background: ${(props) => props.theme.colors.neutrals[7]};
@@ -80,12 +81,14 @@ function Step({
 
   /** TODO: move out of this scope, this logic should be defined on the form component */
   const closeForm = () => {
-    if (status === 'ongoing') {
+    console.log('close form status', status);
+    if (status.type.includes('ongoing') || status.type.includes('notStarted')) {
+      console.log('closeForm save data');
       if (onFieldChange) {
         onFieldChange(answers);
       }
       if (updateCaseInContext) {
-        updateCaseInContext(answers, 'ongoing', currentPosition);
+        updateCaseInContext(answers, statuses['active.ongoing'], currentPosition);
       }
     }
     if (formNavigation?.close) {
@@ -169,7 +172,11 @@ function Step({
                       {questions.map((field) => (
                         <FormField
                           key={`${field.id}`}
-                          onChange={status === 'ongoing' ? onFieldChange : null}
+                          onChange={
+                            status.type.includes('ongoing') || status.type.includes('notStarted')
+                              ? onFieldChange
+                              : null
+                          }
                           onBlur={onFieldBlur}
                           inputType={field.type}
                           value={answers[field.id] || ''}
@@ -257,7 +264,7 @@ Step.propTypes = {
   /**
    * The answers of a form.
    */
-  status: PropTypes.string,
+  status: PropTypes.object,
   /**
    * Property for hiding the back button in the step
    */
