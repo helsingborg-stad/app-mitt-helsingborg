@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
-import { Animated, Easing } from 'react-native';
 import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Animated, Easing } from 'react-native';
 import icons from 'source/helpers/Icons';
 import styled from 'styled-components/native';
-
-import FormContext from '../../store/FormContext';
-import { CaseState, caseTypes } from '../../store/CaseContext';
 import { Icon, Text } from '../../components/atoms';
 import { Card, Header, ScreenWrapper } from '../../components/molecules';
+import { formatUpdatedAt, getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
+import { CaseState, caseTypes } from '../../store/CaseContext';
+import FormContext from '../../store/FormContext';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -56,6 +56,11 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
           <Card.Image source={icons[caseType.icon]} />
           <Card.Title colorSchema="neutral">{caseType.name}</Card.Title>
           <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
+          {caseData?.details?.period?.endDate && (
+            <Card.Text>
+              {getSwedishMonthNameByTimeStamp(caseData.details.period.endDate, true)}
+            </Card.Text>
+          )}
           <Card.Button
             onClick={() => {
               navigation.navigate('Form', { caseId: caseData.id });
