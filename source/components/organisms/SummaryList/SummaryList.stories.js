@@ -6,6 +6,7 @@ import SummaryList from './SummaryList';
 import { Input, Label, Text } from '../../atoms';
 import CheckboxField from '../../molecules/CheckboxField/CheckboxField';
 import Form from '../../../containers/Form/Form';
+import statuses from '../../../assets/mock/caseStatuses';
 
 const stories = storiesOf('Summary List', module);
 
@@ -410,7 +411,7 @@ const SummaryValidationStory = () => (
     connectivityMatrix={validationTestForm.connectivityMatrix}
     startAt={0}
     firstName="FakeName"
-    status="ongoing"
+    status={statuses['active.ongoing']}
   />
 );
 

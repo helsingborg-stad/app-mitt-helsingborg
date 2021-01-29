@@ -8,6 +8,7 @@ import generateInitialCaseAnswers from '../store/actions/dynamicFormData';
 import AuthContext from '../store/AuthContext';
 import FormContext from '../store/FormContext';
 import { CaseDispatch, CaseState } from '../store/CaseContext';
+import statuses from '../assets/mock/caseStatuses';
 
 const SpinnerContainer = styled.View`
   flex: 1;
@@ -52,10 +53,14 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
 
   const updateCaseContext = (data, status, currentPosition) => {
     // If the case is submitted, we should not actually update its data...
-    if (initialCase.status === 'ongoing') {
+    if (
+      initialCase.status.type.includes('ongoing') ||
+      initialCase.status.type.includes('notStarted')
+    ) {
       updateCase(initialCase.id, data, status, currentPosition, formQuestions);
     }
   };
+
   /*
    * Function for handling behavior when a form starts
    * TO BE IMPLEMENTED
@@ -87,7 +92,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       onStart={handleStartForm}
       onSubmit={handleSubmitForm}
       initialAnswers={initialCase?.answers || caseData.answers || {}}
-      status={initialCase.status || 'ongoing'}
+      status={initialCase.status || statuses['active.notStarted']}
       updateCaseInContext={updateCaseContext}
       {...props}
     />

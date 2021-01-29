@@ -2,6 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from '../../components/molecules/StoryWrapper';
 import Form from './Form';
+import statuses from '../../assets/mock/caseStatuses';
 
 const formStories = storiesOf('Form', module);
 
@@ -222,7 +223,7 @@ formStories.add('Default', () => (
       connectivityMatrix={DefaultStoryData.connectivityMatrix}
       startAt={0}
       onClose={() => {}}
-      status="ongoing"
+      status={statuses['active.ongoing']}
     />
   </StoryWrapper>
 ));
@@ -312,7 +313,7 @@ formStories.add('Themed Form', () => (
       steps={ThemedFormStoryData.steps}
       connectivityMatrix={ThemedFormStoryData.connectivityMatrix}
       firstName="FakeName"
-      status="ongoing"
+      status={statuses['active.ongoing']}
       startAt={0}
       onClose={() => {}}
     />
@@ -520,7 +521,7 @@ formStories.add('Substep Form', () => (
       steps={SubstepsDemoStoryData.steps}
       connectivityMatrix={SubstepsDemoStoryData.connectivityMatrix}
       firstName="FakeName"
-      status="ongoing"
+      status={statuses['active.ongoing']}
       onClose={() => {}}
       startAt={0}
     />

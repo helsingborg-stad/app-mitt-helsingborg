@@ -8,6 +8,7 @@ import { CaseStatus } from '../../../../types/CaseType';
 import { FormPosition } from '../../../../containers/Form/hooks/useForm';
 import { useNotification } from '../../../../store/NotificationContext';
 import { evaluateConditionalExpression } from '../../../../helpers/conditionParser';
+import statuses from '../../../../assets/mock/caseStatuses';
 
 const ActionContainer = styled.View`
   flex: 1;
@@ -71,7 +72,8 @@ const StepFooter: React.FC<Props> = ({
   useEffect(() => {
     const signCase = () => {
       if (onUpdate) onUpdate(answers);
-      if (updateCaseInContext) updateCaseInContext(answers, 'submitted', currentPosition);
+      if (updateCaseInContext)
+        updateCaseInContext(answers, statuses['active.submitted'], currentPosition);
       if (formNavigation.next) formNavigation.next();
     };
 
@@ -88,7 +90,7 @@ const StepFooter: React.FC<Props> = ({
       }
       case 'close': {
         return () => {
-          if (onUpdate && caseStatus === 'ongoing') onUpdate(answers);
+          if (onUpdate && caseStatus.type.includes('ongoing')) onUpdate(answers);
           if (formNavigation.close) formNavigation.close();
         };
       }
@@ -120,9 +122,16 @@ const StepFooter: React.FC<Props> = ({
             if (formNavigation.next) formNavigation.next();
           };
 
-          if (onUpdate && caseStatus === 'ongoing') onUpdate(answers);
-          if (updateCaseInContext && caseStatus === 'ongoing')
-            updateCaseInContext(answers, 'ongoing', currentPosition);
+          if (
+            onUpdate &&
+            (caseStatus.type.includes('ongoing') || caseStatus.type.includes('notStarted'))
+          )
+            onUpdate(answers);
+          if (
+            updateCaseInContext &&
+            (caseStatus.type.includes('ongoing') || caseStatus.type.includes('notStarted'))
+          )
+            updateCaseInContext(answers, statuses['active.ongoing'], currentPosition);
 
           validateStepAnswers(errorCallback, onValidCallback);
         };
@@ -172,9 +181,9 @@ StepFooter.propTypes = {
     })
   ).isRequired,
   /**
-   * Status: ongoing or submitted or possibly others
+   * Status
    */
-  caseStatus: PropTypes.string,
+  caseStatus: PropTypes.object,
   /**
    * Current form answers, used for passing to the various actions
    */
