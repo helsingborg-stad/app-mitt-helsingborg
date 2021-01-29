@@ -81,9 +81,7 @@ function Step({
 
   /** TODO: move out of this scope, this logic should be defined on the form component */
   const closeForm = () => {
-    console.log('close form status', status);
     if (status.type.includes('ongoing') || status.type.includes('notStarted')) {
-      console.log('closeForm save data');
       if (onFieldChange) {
         onFieldChange(answers);
       }
