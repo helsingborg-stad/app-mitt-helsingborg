@@ -57,6 +57,7 @@ const Input: React.FC<InputProps> = React.forwardRef(
       if (onBlur) onBlur(value);
     };
     const theme = useTheme();
+    const smartKeyboardType = inputType ? keyboardTypes[inputType] : keyboardType;
     return (
       <>
         <StyledTextInput
@@ -70,7 +71,7 @@ const Input: React.FC<InputProps> = React.forwardRef(
           onSubmitEditing={() => {
             Keyboard.dismiss();
           }}
-          keyboardType={inputType ? keyboardTypes[inputType] : keyboardType}
+          keyboardType={smartKeyboardType}
           ref={ref as React.Ref<TextInput>}
           {...props}
         />

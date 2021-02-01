@@ -162,7 +162,7 @@ const SummaryList: React.FC<Props> = ({
       const answer = answers[item.id];
       return typeof answer !== 'undefined';
     })
-    .forEach((item, outerIndex) => {
+    .forEach((item) => {
       if (['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type)) {
         const values: Record<string, string | number>[] = answers[item.id];
         if (!Array.isArray(values) && values !== undefined) {
@@ -174,6 +174,9 @@ const SummaryList: React.FC<Props> = ({
           }
         } else if (values && values?.length > 0) {
           values.forEach((v, index) => {
+            const validationError = validationErrors?.[item.id]?.[index]
+              ? validationErrors[item.id][index][item?.inputId]
+              : undefined;
             listItems.push(
               <SummaryListItemComponent
                 item={item}
@@ -183,9 +186,7 @@ const SummaryList: React.FC<Props> = ({
                 onBlur={onItemBlur(item, index)}
                 removeItem={removeListItem(item, index)}
                 colorSchema={colorSchema}
-                validationError={validationErrors?.[item.id]?.[index]
-                      ? validationErrors[item.id][index][item?.inputId]
-                      : undefined}
+                validationError={validationError}
                 category={item.category}
             />
             );
