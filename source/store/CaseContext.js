@@ -39,7 +39,6 @@ const oldCaseLimit = 4 * 30 * 24 * 60 * 60 * 1000; // cases older than 4 months 
 function CaseProvider({ children, initialState = defaultInitialState }) {
   const [state, dispatch] = useReducer(CaseReducer, initialState);
   const { user } = useContext(AuthContext);
-  // console.log('reducer state', state);
   async function createCase(form, callback = (response) => {}) {
     dispatch(await create(form, user, Object.values(state.cases), callback));
   }

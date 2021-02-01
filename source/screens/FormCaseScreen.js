@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ActivityIndicator } from 'react-native';
 import styled from 'styled-components';
 import Form from '../containers/Form/Form';
-import { getFormQuestions } from '../helpers/CaseDataConverter';
+import { getFormQuestions, convertAnswerArrayToObject } from '../helpers/CaseDataConverter';
 import generateInitialCaseAnswers from '../store/actions/dynamicFormData';
 import AuthContext from '../store/AuthContext';
 import FormContext from '../store/FormContext';
@@ -35,12 +35,11 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       setInitialCase(caseData);
     } else if (caseId) {
       const initCase = getCase(caseId);
-      getForm(initCase.formId).then(async (form) => {
-        const [status, latestCase, relevantCases] = await getCasesByFormIds([form.id]);
-        const initialAnswersObject = generateInitialCaseAnswers(form, user, relevantCases);
-        initCase.data = initialAnswersObject;
-        setInitialCase(initCase);
+      const answersObject = convertAnswerArrayToObject(initCase.answers);
+      initCase.answers = answersObject;
+      setInitialCase(initCase);
 
+      getForm(initCase.formId).then(async (form) => {
         setForm(form);
         setFormQuestions(getFormQuestions(form));
       });
@@ -87,7 +86,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       onClose={handleCloseForm}
       onStart={handleStartForm}
       onSubmit={handleSubmitForm}
-      initialAnswers={initialCase?.data || caseData.data || {}}
+      initialAnswers={initialCase?.answers || caseData.answers || {}}
       status={initialCase.status || 'ongoing'}
       updateCaseInContext={updateCaseContext}
       {...props}
