@@ -161,8 +161,7 @@ function CaseOverview(props) {
       caseItem?.status?.type?.includes(status) ? [caseItem.component] : []
     );
 
-  const activeCases = getCasesByStatus('active');
-  const notStartedCases = getCasesByStatus('notStarted');
+  const activeCases = [...getCasesByStatus('notStarted'), ...getCasesByStatus('active')];
   const closedCases = getCasesByStatus('closed');
 
   useEffect(() => {
@@ -202,21 +201,14 @@ function CaseOverview(props) {
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
       <Container>
-        {Object.keys(notStartedCases).length > 0 && (
-          <Animated.View style={{ opacity: fadeAnimation }}>
-            <ListHeading type="h5">Tillgängliga</ListHeading>
-            {notStartedCases}
-          </Animated.View>
+        <ListHeading type="h5">Aktiva</ListHeading>
+        {activeCases.length > 0 ? (
+          <Animated.View style={{ opacity: fadeAnimation }}>{activeCases}</Animated.View>
+        ) : (
+          <Text>Du har inga aktiva ärenden.</Text>
         )}
 
-        {Object.keys(activeCases).length > 0 && (
-          <Animated.View style={{ opacity: fadeAnimation }}>
-            <ListHeading type="h5">Aktiva</ListHeading>
-            {activeCases}
-          </Animated.View>
-        )}
-
-        {Object.keys(closedCases).length > 0 && (
+        {closedCases.length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             <ListHeading type="h5">Avslutade</ListHeading>
             {closedCases}
