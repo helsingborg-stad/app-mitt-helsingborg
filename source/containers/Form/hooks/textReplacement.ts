@@ -12,9 +12,9 @@ const replacementRules = [
   ['#lastName', 'user.lastName'],
   ['#date-1', 'date.nextMonth.first'],
   ['#date-2', 'date.nextMonth.last'],
-  ['#month', 'date.previousMonth.currentMonth'],
   ['#month-1', 'date.previousMonth.currentMonth-1'],
   ['#month-2', 'date.previousMonth.currentMonth-2'],
+  ['#month', 'date.previousMonth.currentMonth'],
   ['#year', 'date.currentYear'], // this is the current year of next month
 ];
 
