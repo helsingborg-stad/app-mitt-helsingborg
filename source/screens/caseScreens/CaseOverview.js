@@ -33,83 +33,14 @@ const colorSchema = 'red';
 const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
   const currentStep = caseData?.currentPosition?.currentMainStep || 0;
   const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
-  const commonCardProps = {
-    colorSchema,
-  };
   const applicationPeriodMonth = caseData?.details?.period?.endDate
     ? getSwedishMonthNameByTimeStamp(caseData.details.period.endDate, true)
     : '';
-
-  if (caseData?.status?.type?.includes('notStarted')) {
-    return (
-      <Card key={caseData.id} {...commonCardProps}>
-        <Card.Body
-          shadow
-          color="neutral"
-          onPress={() => {
-            navigation.navigate('UserEvents', {
-              screen: caseType.navigateTo,
-              params: {
-                id: caseData.id,
-                name: caseType.name,
-              },
-            });
-          }}
-        >
-          <Card.Image source={icons[caseType.icon]} />
-          <Card.Title colorSchema="neutral">{caseType.name}</Card.Title>
-          <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
-          {applicationPeriodMonth && <Card.Text>{applicationPeriodMonth}</Card.Text>}
-          <Card.Button
-            onClick={() => {
-              navigation.navigate('Form', { caseId: caseData.id });
-            }}
-          >
-            <Text>Starta ansökan</Text>
-            <Icon name="arrow-forward" />
-          </Card.Button>
-        </Card.Body>
-      </Card>
-    );
-  }
-
-  if (caseData?.status?.type?.includes('ongoing')) {
-    return (
-      <Card key={caseData.id} {...commonCardProps}>
-        <Card.Body
-          shadow
-          color="neutral"
-          onPress={() => {
-            navigation.navigate('UserEvents', {
-              screen: caseType.navigateTo,
-              params: {
-                id: caseData.id,
-                name: caseType.name,
-              },
-            });
-          }}
-        >
-          <Card.Image source={icons[caseType.icon]} />
-          <Card.Title colorSchema="neutral">{caseType.name}</Card.Title>
-          <Card.SubTitle>
-            Steg {currentStep} / {totalSteps}
-          </Card.SubTitle>
-          <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
-          <Card.Button
-            onClick={() => {
-              navigation.navigate('Form', { caseId: caseData.id });
-            }}
-          >
-            <Text>Fortsätt ansökan</Text>
-            <Icon name="arrow-forward" />
-          </Card.Button>
-        </Card.Body>
-      </Card>
-    );
-  }
+  const isNotStarted = caseData?.status?.type?.includes('notStarted');
+  const isOngoing = caseData?.status?.type?.includes('ongoing');
 
   return (
-    <Card key={caseData.id} {...commonCardProps}>
+    <Card key={caseData.id} colorSchema={colorSchema}>
       <Card.Body
         shadow
         color="neutral"
@@ -125,21 +56,40 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
       >
         <Card.Image source={icons[caseType.icon]} />
         <Card.Title colorSchema="neutral">{caseType.name}</Card.Title>
-        <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
-        <Card.Button
-          onClick={() => {
-            navigation.navigate('UserEvents', {
-              screen: caseType.navigateTo,
-              params: {
-                id: caseData.id,
-                name: caseType.name,
-              },
-            });
-          }}
-        >
-          <Text>Visa ansökan</Text>
-          <Icon name="arrow-forward" />
-        </Card.Button>
+        {isOngoing ? (
+          <Card.SubTitle>
+            Steg {currentStep} / {totalSteps}
+          </Card.SubTitle>
+        ) : (
+          <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
+        )}
+        {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
+        {isNotStarted && applicationPeriodMonth && <Card.Text>{applicationPeriodMonth}</Card.Text>}
+        {isNotStarted || isOngoing ? (
+          <Card.Button
+            onClick={() => {
+              navigation.navigate('Form', { caseId: caseData.id });
+            }}
+          >
+            {isOngoing ? <Text>Fortsätt ansökan</Text> : <Text>Starta ansökan</Text>}
+            <Icon name="arrow-forward" />
+          </Card.Button>
+        ) : (
+          <Card.Button
+            onClick={() => {
+              navigation.navigate('UserEvents', {
+                screen: caseType.navigateTo,
+                params: {
+                  id: caseData.id,
+                  name: caseType.name,
+                },
+              });
+            }}
+          >
+            <Text>Visa ansökan</Text>
+            <Icon name="arrow-forward" />
+          </Card.Button>
+        )}
       </Card.Body>
     </Card>
   );
