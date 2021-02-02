@@ -140,7 +140,7 @@ const Form: React.FC<Props> = ({
   const colorSchema = formState?.steps[formState.currentPosition.currentMainStepIndex]?.colorSchema || 'blue';
 
   return (
-    <FormValueProvider formState={formState} formNavigation={formNavigation}>
+    <FormValueProvider formState={formState} formNavigation={formNavigation} handleInputChange={handleInputChange}>
       <FormScreenWrapper
         innerRef={(ref) => {
           setRef((ref as unknown) as ScrollView);

@@ -7,6 +7,7 @@ import { defaultInitialPosition } from './Form';
 interface FormValue {
   formState: FormReducerState;
   formNavigation: FormNavigation;
+  handleInputChange: (answer: Record<string, any>, questionId: string) => void;
 }
 
 const emptyUser: User = {
@@ -34,12 +35,13 @@ const defaultFormValue: FormValue = {
     connectivityMatrix: [],
     allQuestions: [],
   },
+  handleInputChange: () => {},
   formNavigation: {
     next: () => {},
     back: () => {},
-    up: (targetStep: number | string) => {},
-    down: (targetStep: number | string) => {},
-    start: (callback: () => void) => {},
+    up: () => {},
+    down: () => {},
+    start: () => {},
     close: () => {},
     goToMainForm: () => {},
     goToMainFormAndNext: () => {},
@@ -52,9 +54,10 @@ const FormValueContext = createContext(defaultFormValue);
 export const FormValueProvider = ({
   formState,
   formNavigation,
+  handleInputChange,
   children,
 }: React.PropsWithChildren<FormValue>) => {
-  const value: FormValue = { formState, formNavigation };
+  const value: FormValue = { formState, formNavigation, handleInputChange };
   return <FormValueContext.Provider value={value}>{children}</FormValueContext.Provider>;
 };
 
