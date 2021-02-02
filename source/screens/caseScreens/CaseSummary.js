@@ -31,56 +31,32 @@ const computeCaseCardComponent = (caseData, form, colorSchema, navigation) => {
   } = caseData;
   const totalSteps = form?.stepStructure?.length || 0;
   const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(endDate, true);
-
-  if (status?.type?.includes('ongoing')) {
-    return (
-      <Card colorSchema={colorSchema}>
-        <Card.Body shadow color="neutral">
-          <Card.Title colorSchema="neutral">{applicationPeriodMonth}</Card.Title>
-          <Card.SubTitle>
-            Steg {currentStep} / {totalSteps}
-          </Card.SubTitle>
-          <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />
-          <Card.Text>{status.description} </Card.Text>
-          <Card.Button
-            onClick={() => {
-              navigation.navigate('Form', { caseId: caseData.id });
-            }}
-          >
-            <Text>Fortsätt ansökan</Text>
-            <Icon name="arrow-forward" />
-          </Card.Button>
-        </Card.Body>
-      </Card>
-    );
-  }
-
-  if (status?.type?.includes('notStarted')) {
-    return (
-      <Card colorSchema={colorSchema}>
-        <Card.Body shadow color="neutral">
-          <Card.Title colorSchema="neutral">{applicationPeriodMonth}</Card.Title>
-          <Card.SubTitle>{status.name}</Card.SubTitle>
-          <Card.Text>{status.description} </Card.Text>
-          <Card.Button
-            onClick={() => {
-              navigation.navigate('Form', { caseId: caseData.id });
-            }}
-          >
-            <Text>Starta ansökan</Text>
-            <Icon name="arrow-forward" />
-          </Card.Button>
-        </Card.Body>
-      </Card>
-    );
-  }
+  const isNotStarted = status?.type?.includes('notStarted');
+  const isOngoing = status?.type?.includes('ongoing');
 
   return (
     <Card colorSchema={colorSchema}>
       <Card.Body shadow color="neutral">
         <Card.Title colorSchema="neutral">{applicationPeriodMonth}</Card.Title>
-        <Card.SubTitle>{status.name}</Card.SubTitle>
+        {isOngoing ? (
+          <Card.SubTitle>
+            Steg {currentStep} / {totalSteps}
+          </Card.SubTitle>
+        ) : (
+          <Card.SubTitle>{status.name}</Card.SubTitle>
+        )}
+        {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
         <Card.Text>{status.description} </Card.Text>
+        {(isOngoing || isNotStarted) && (
+          <Card.Button
+            onClick={() => {
+              navigation.navigate('Form', { caseId: caseData.id });
+            }}
+          >
+            <Text>{isOngoing ? `Fortsätt ansökan` : `Starta ansökan`}</Text>
+            <Icon name="arrow-forward" />
+          </Card.Button>
+        )}
       </Card.Body>
     </Card>
   );

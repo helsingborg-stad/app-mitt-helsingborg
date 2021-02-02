@@ -71,7 +71,7 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
               navigation.navigate('Form', { caseId: caseData.id });
             }}
           >
-            {isOngoing ? <Text>Fortsätt ansökan</Text> : <Text>Starta ansökan</Text>}
+            <Text>{isOngoing ? `Fortsätt ansökan` : `Starta ansökan`}</Text>
             <Icon name="arrow-forward" />
           </Card.Button>
         ) : (
