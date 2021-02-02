@@ -13,21 +13,25 @@
       "size" : "20x20"
     },
     {
+      "filename" : "settings@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
+      "filename" : "settings@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
+      "filename" : "spotlight@1x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
+      "filename" : "spotlight@2x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
