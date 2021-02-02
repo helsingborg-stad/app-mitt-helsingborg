@@ -111,13 +111,19 @@ function CaseOverview(props) {
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
-  const getCasesByStatus = (status) =>
-    caseItems.flatMap((caseItem) =>
-      caseItem?.status?.type?.includes(status) ? [caseItem.component] : []
-    );
+  const getCasesByStatuses = (statuses) =>
+    caseItems.filter((caseData) => {
+      let matchesStatus = false;
+      for (let i = 0; i < statuses.length; i++) {
+        if (caseData?.status?.type?.includes(statuses[i])) {
+          matchesStatus = true;
+        }
+      }
+      return matchesStatus;
+    });
 
-  const activeCases = [...getCasesByStatus('notStarted'), ...getCasesByStatus('active')];
-  const closedCases = getCasesByStatus('closed');
+  const activeCases = getCasesByStatuses(['notStarted', 'active']);
+  const closedCases = getCasesByStatuses(['closed']);
 
   useEffect(() => {
     Animated.timing(fadeAnimation, {
@@ -159,7 +165,9 @@ function CaseOverview(props) {
       <Container>
         <ListHeading type="h5">Aktiva</ListHeading>
         {activeCases.length > 0 && (
-          <Animated.View style={{ opacity: fadeAnimation }}>{activeCases}</Animated.View>
+          <Animated.View style={{ opacity: fadeAnimation }}>
+            {activeCases.map((caseData) => caseData.component)}
+          </Animated.View>
         )}
 
         {!isLoading && activeCases.length === 0 && (
@@ -175,7 +183,7 @@ function CaseOverview(props) {
         {closedCases.length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             <ListHeading type="h5">Avslutade</ListHeading>
-            {closedCases}
+            {closedCases.map((caseData) => caseData.component)}
           </Animated.View>
         )}
       </Container>
