@@ -7,40 +7,25 @@ import { ScreenWrapper } from '../../components/molecules';
 import { Step as StepType, StepperActions } from '../../types/FormTypes';
 import { CaseStatus } from '../../types/CaseType';
 import { User } from '../../types/UserTypes';
-import useForm, { FormReducerState, FormPosition } from './hooks/useForm';
+import useForm, { FormReducerState, FormPosition, FormNavigation } from './hooks/useForm';
 import { Modal, useModal } from '../../components/molecules/Modal';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import theme from '../../styles/theme';
 import { evaluateConditionalExpression } from '../../helpers/conditionParser';
+import FormValueContext, {FormValueProvider} from './FormValueContext';
 
 const FormScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
   flex: 1;
 `;
 
-interface FormNavigationType  {
-    next: () => void;
-    back: () => void;
-    up: (targetStep: string | number) => void;
-    down: (targetStep: string | number) => void;
-    start: (callback: () => void) => void;
-    close: () => void;
-    goToMainForm: () => void;
-    goToMainFormAndNext: () => void;
-    isLastStep: () => boolean;
+export const defaultInitialPosition: FormPosition = {
+  index: 0,
+  level: 0,
+  currentMainStep: 1,
+  currentMainStepIndex: 0,
 };
-
-interface CaseFormContextType {
-  formState: FormReducerState;
-  formNavigation: FormNavigationType;
-  handleInputChange: (value: any, questionId: string) => void;
-  handleSubmit: (callback: (formAnswers: Record<string, any>) => void) => void;
-  handleBlur: (answer: Record<string, any>, questionId: string) => void;
-  validateStepAnswers: (onErrorCallback: () => void, onValidCallback: () => void) => void;
-}
-
-export const CaseFormContext = React.createContext<CaseFormContextType>(undefined as any);
 
 interface Props {
   initialPosition?: FormPosition;
@@ -75,12 +60,6 @@ const Form: React.FC<Props> = ({
   status,
   updateCaseInContext,
 }) => {
-  const defaultInitialPosition: FormPosition = {
-    index: 0,
-    level: 0,
-    currentMainStep: 1,
-    currentMainStepIndex: 0,
-  };
   const initialState: FormReducerState = {
     submitted: false,
     currentPosition: initialPosition || defaultInitialPosition,
@@ -92,7 +71,6 @@ const Form: React.FC<Props> = ({
     connectivityMatrix,
     allQuestions: [],
   };
-
   const {
     formState,
     formNavigation,
@@ -162,29 +140,22 @@ const Form: React.FC<Props> = ({
   const colorSchema = formState?.steps[formState.currentPosition.currentMainStepIndex]?.colorSchema || 'blue';
 
   return (
-    <CaseFormContext.Provider value={{
-      formState,
-      formNavigation,
-      handleInputChange,
-      handleSubmit,
-      handleBlur,
-      validateStepAnswers,
-    }}>
-    <FormScreenWrapper
-      innerRef={(ref) => {
-        setRef((ref as unknown) as ScrollView);
-      }}
-    >
-      <SafeAreaView
-        style={{ backgroundColor: theme.colors.complementary[colorSchema || 'blue'][0] }}
-        edges={['top', 'right', 'left']}
-      />
-      {stepComponents[formState.currentPosition.currentMainStepIndex]}
-      <Modal visible={formState.currentPosition.level > 0} hide={toggleModal}>
-        {stepComponents[formState.currentPosition.index]}
-      </Modal>
-    </FormScreenWrapper>
-    </CaseFormContext.Provider>
+    <FormValueProvider formState={formState} formNavigation={formNavigation}>
+      <FormScreenWrapper
+        innerRef={(ref) => {
+          setRef((ref as unknown) as ScrollView);
+        }}
+      >
+        <SafeAreaView
+          style={{ backgroundColor: theme.colors.complementary[colorSchema || 'blue'][0] }}
+          edges={['top', 'right', 'left']}
+        />
+        {stepComponents[formState.currentPosition.currentMainStepIndex]}
+        <Modal visible={formState.currentPosition.level > 0} hide={toggleModal}>
+          {stepComponents[formState.currentPosition.index]}
+        </Modal>
+      </FormScreenWrapper>
+    </FormValueProvider>
   );
 };
 

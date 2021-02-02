@@ -9,6 +9,18 @@ export interface FormPosition {
   currentMainStep: number;
   currentMainStepIndex: number;
 }
+
+export interface FormNavigation {
+  next: () => void;
+  back: () => void;
+  up: (targetStep: number | string) => void;
+  down: (targetStep: number | string) => void;
+  start: (callback: () => void) => void;
+  close: () => void;
+  goToMainForm: () => void;
+  goToMainFormAndNext: () => void;
+  isLastStep: () => boolean;
+}
 export interface FormReducerState {
   submitted: boolean;
   currentPosition: FormPosition;
@@ -142,7 +154,7 @@ function useForm(initialState: FormReducerState) {
     dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId, checkIfDirty: true } });
   };
 
-  const formNavigation = {
+  const formNavigation: FormNavigation = {
     next: goToNextStep,
     back: goToPreviousStep,
     up: goOutToStep,
