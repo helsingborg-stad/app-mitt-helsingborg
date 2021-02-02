@@ -114,11 +114,9 @@ function CaseOverview(props) {
   const getCasesByStatuses = (statuses) =>
     caseItems.filter((caseData) => {
       let matchesStatus = false;
-      for (let i = 0; i < statuses.length; i++) {
-        if (caseData?.status?.type?.includes(statuses[i])) {
-          matchesStatus = true;
-        }
-      }
+      statuses.forEach((status) => {
+        matchesStatus = caseData?.status?.type?.includes(status);
+      });
       return matchesStatus;
     });
 
