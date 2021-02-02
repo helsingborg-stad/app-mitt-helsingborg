@@ -13,19 +13,12 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import theme from '../../styles/theme';
 import { evaluateConditionalExpression } from '../../helpers/conditionParser';
-import FormValueContext, {FormValueProvider} from './FormValueContext';
+import {defaultInitialPosition, FormValueProvider} from './FormValueContext';
 
 const FormScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
   flex: 1;
 `;
-
-export const defaultInitialPosition: FormPosition = {
-  index: 0,
-  level: 0,
-  currentMainStep: 1,
-  currentMainStepIndex: 0,
-};
 
 interface Props {
   initialPosition?: FormPosition;

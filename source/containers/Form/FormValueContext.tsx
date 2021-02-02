@@ -1,9 +1,14 @@
 import { createContext } from 'react';
 import PropTypes from 'prop-types';
 import { User } from '../../types/UserTypes';
-import { FormNavigation, FormReducerState } from './hooks/useForm';
-import { defaultInitialPosition } from './Form';
+import { FormNavigation, FormPosition, FormReducerState } from './hooks/useForm';
 
+export const defaultInitialPosition: FormPosition = {
+  index: 0,
+  level: 0,
+  currentMainStep: 1,
+  currentMainStepIndex: 0,
+};
 interface FormValue {
   formState: FormReducerState;
   formNavigation: FormNavigation;
