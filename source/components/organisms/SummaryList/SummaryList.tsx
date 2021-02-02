@@ -157,11 +157,12 @@ const SummaryList: React.FC<Props> = ({
   };
 
   const listItems: React.ReactElement<{ category: string }>[] = [];
-  items
-    .filter(item => {
-      const answer = answers[item.id];
-      return typeof answer !== 'undefined';
-    })
+
+  const itemsWithAnswers = items.filter(item => {
+    const answer = answers[item.id];
+    return typeof answer !== 'undefined';
+  });
+  itemsWithAnswers
     .forEach((item) => {
       if (['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type)) {
         const values: Record<string, string | number>[] = answers[item.id];
@@ -173,6 +174,7 @@ const SummaryList: React.FC<Props> = ({
             showNotification('Summary list error', diagnosticMessage, 'error', -1);
           }
         } else if (values && values?.length > 0) {
+          // in this case we have some answers from a repeater field, and need to loop over and show each one
           values.forEach((v, index) => {
             const validationError = validationErrors?.[item.id]?.[index]
               ? validationErrors[item.id][index][item?.inputId]
@@ -196,7 +198,8 @@ const SummaryList: React.FC<Props> = ({
             }
           });
         } 
-      } else if (['editableListText', 'editableListNumber', 'editableListDate'].includes(item.type) && item.inputId 
+      } 
+      if (['editableListText', 'editableListNumber', 'editableListDate'].includes(item.type) && item.inputId 
       && answers?.[item.id]?.[item.inputId]) { 
         listItems.push(
           <SummaryListItemComponent
@@ -214,7 +217,8 @@ const SummaryList: React.FC<Props> = ({
           const numericValue: number = answers[item.id][item.inputId];
           addToSum(numericValue);
         }
-      } else if (['text', 'number', 'date'].includes(item.type)) {
+      } 
+      if (['text', 'number', 'date'].includes(item.type)) {
         listItems.push(
           <SummaryListItemComponent
               item={item}
