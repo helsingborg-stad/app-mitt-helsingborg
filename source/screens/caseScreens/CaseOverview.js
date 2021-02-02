@@ -21,6 +21,10 @@ const ListHeading = styled(Text)`
   margin-bottom: 8px;
 `;
 
+Card.MessageBody = styled(Card.Body)`
+  background-color: ${(props) => props.theme.colors.neutrals[5]};
+`;
+
 const colorSchema = 'red';
 
 /**
@@ -102,6 +106,7 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
 function CaseOverview(props) {
   const { navigation } = props;
   const [caseItems, setCaseItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { cases, getCasesByFormIds } = useContext(CaseState);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
@@ -140,6 +145,7 @@ function CaseOverview(props) {
         const flattenedList = updatedItems.flat();
         flattenedList.sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
         setCaseItems(flattenedList);
+        setIsLoading(false);
       });
     };
 
@@ -152,10 +158,18 @@ function CaseOverview(props) {
       <Header title="Mina ärenden" />
       <Container>
         <ListHeading type="h5">Aktiva</ListHeading>
-        {activeCases.length > 0 ? (
+        {activeCases.length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>{activeCases}</Animated.View>
-        ) : (
-          <Text>Du har inga aktiva ärenden.</Text>
+        )}
+
+        {!isLoading && activeCases.length === 0 && (
+          <Animated.View style={{ opacity: fadeAnimation }}>
+            <Card>
+              <Card.MessageBody>
+                <Card.Text>Du har inga aktiva ärenden.</Card.Text>
+              </Card.MessageBody>
+            </Card>
+          </Animated.View>
         )}
 
         {closedCases.length > 0 && (
