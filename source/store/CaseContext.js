@@ -7,6 +7,7 @@ import {
   createCase as create,
   deleteCase as remove,
   fetchCases as fetch,
+  setCurrentForm as setForm,
 } from './actions/CaseActions';
 
 const CaseState = React.createContext();
@@ -100,6 +101,10 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
     [dispatch]
   );
 
+  async function setCurrentForm(formData) {
+    dispatch(await setForm(formData));
+  }
+
   useEffect(() => {
     if (user) {
       fetchCases();
@@ -108,8 +113,10 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   }, [user]);
 
   return (
-    <CaseState.Provider value={{ cases: state.cases, getCase, getCasesByFormIds }}>
-      <CaseDispatch.Provider value={{ createCase, updateCase, deleteCase }}>
+    <CaseState.Provider
+      value={{ cases: state.cases, currentForm: state.currentForm, getCase, getCasesByFormIds }}
+    >
+      <CaseDispatch.Provider value={{ createCase, updateCase, deleteCase, setCurrentForm }}>
         {children}
       </CaseDispatch.Provider>
     </CaseState.Provider>

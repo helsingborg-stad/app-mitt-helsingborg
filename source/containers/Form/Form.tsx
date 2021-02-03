@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { InteractionManager } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
@@ -13,7 +13,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import theme from '../../styles/theme';
 import { evaluateConditionalExpression } from '../../helpers/conditionParser';
-import {defaultInitialPosition, FormValueProvider} from './FormValueContext';
+import { CaseDispatch } from '../../store/CaseContext';
 
 const FormScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
@@ -53,6 +53,7 @@ const Form: React.FC<Props> = ({
   status,
   updateCaseInContext,
 }) => {
+  const { setCurrentForm } = useContext(CaseDispatch);
   const initialState: FormReducerState = {
     submitted: false,
     currentPosition: initialPosition || defaultInitialPosition,
@@ -72,6 +73,19 @@ const Form: React.FC<Props> = ({
     handleBlur,
     validateStepAnswers,
   } = useForm(initialState);
+   
+  /** Inject references to the currently active form into the CaseContext */
+  useEffect(() => {
+    const { allQuestions, currentPosition, formAnswers, validations, dirtyFields} = formState;
+    const formData = { 
+      questions: allQuestions, 
+      position: currentPosition, 
+      answers: formAnswers, 
+      validations, 
+      dirtyFields, 
+      formNavigation }; 
+    setCurrentForm(formData); 
+  }, []);
 
   formNavigation.close = () => {
     onClose();
@@ -133,7 +147,6 @@ const Form: React.FC<Props> = ({
   const colorSchema = formState?.steps[formState.currentPosition.currentMainStepIndex]?.colorSchema || 'blue';
 
   return (
-    <FormValueProvider formState={formState} formNavigation={formNavigation} handleInputChange={handleInputChange}>
       <FormScreenWrapper
         innerRef={(ref) => {
           setRef((ref as unknown) as ScrollView);
@@ -148,7 +161,6 @@ const Form: React.FC<Props> = ({
           {stepComponents[formState.currentPosition.index]}
         </Modal>
       </FormScreenWrapper>
-    </FormValueProvider>
   );
 };
 

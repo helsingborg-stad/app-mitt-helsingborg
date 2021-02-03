@@ -8,6 +8,7 @@ export const actionTypes = {
   deleteCase: 'DELETE_CASE',
   fetchCases: 'FETCH_CASE',
   apiError: 'API_ERROR',
+  setCurrentForm: 'SET_CURRENT_FORM',
 };
 
 export async function updateCase(caseId, data, status, currentPosition, formQuestions, callback) {
@@ -114,5 +115,12 @@ export async function fetchCases(callback) {
   return {
     type: actionTypes.fetchCases,
     payload: {},
+  };
+}
+
+export async function setCurrentForm(formData) {
+  return {
+    type: actionTypes.setCurrentForm,
+    payload: formData,
   };
 }

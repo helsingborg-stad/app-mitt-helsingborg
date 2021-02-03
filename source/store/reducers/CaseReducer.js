@@ -30,6 +30,10 @@ export default function CaseReducer(state, action) {
       newState.error = payload;
       return newState;
 
+    case actionTypes.setCurrentForm:
+      newState.currentForm = payload;
+      return newState;
+
     default:
       return state;
   }
