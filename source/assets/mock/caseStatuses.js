@@ -1,78 +1,78 @@
 /**
  * List of case statuses
- * TODO: Fetch statuses from DB instead of mock data
  */
-export default {
-  /**
-   * Global statuses
-   */
-  notStarted: {
+const statuses = [
+  {
     type: 'notStarted',
     name: 'Ej påbörjad',
     description: 'Ansökan är ej påbörjad.',
   },
-  'active.ongoing': {
+  {
     type: 'active.ongoing',
     name: 'Pågående',
     description:
       'Du har påbörjat en ansökan. Du kan öppna din ansökan och fortsätta där du slutade.',
   },
-  'active.submitted': {
+  {
     type: 'active.submitted',
     name: 'Inskickad',
     description: 'Ansökan är inskickad.',
   },
-  'active.processing': {
+  {
     type: 'active.processing',
     name: 'Ansökan behandlas',
     description: 'Ditt ärende är mottaget och bearbetas.',
   },
-  closed: {
+  {
     type: 'closed',
     name: 'Avslutat',
     description: 'Ditt ärende är avslutat.',
   },
   /**
-   * EKB specific statuses
+   * Service: Ekonomiskt bistånd
    */
-  'notStarted.ekb.open': {
+  {
     type: 'notStarted.ekb.open',
     name: 'Öppen',
     description: 'Ansökan är öppen. Du kan nu söka ekonomiskt bistånd för perioden.',
   },
-  'active.ekb.submitted': {
+  {
     type: 'active.ekb.submitted',
     name: 'Inskickad',
     description:
       'Ansökan är inskickad. Du kommer att få besked om ansökan när din handläggare har granskat och bedömt den.',
   },
-  'active.ekb.completionRequired': {
+  {
     type: 'active.ekb.completionRequired',
     name: 'Stickprovskontroll',
     description:
       'Du måste komplettera din ansökan med bilder som visar dina utgifter och inkomster. Vi behöver din komplettering inom 4 dagar för att kunna betala ut pengar för perioden.',
   },
-  'closed.ekb.approved': {
+  {
     type: 'closed.ekb.approved',
     name: 'Godkänd',
     description: 'Din ansökan är godkänd. Pengarna sätts in på ditt konto.',
   },
-  'closed.ekb.partiallyApproved': {
+  {
     type: 'closed.ekb.partiallyApproved',
     name: 'Delvis godkänd',
     description:
       'Delar av din ansökan är godkänd, men några av de utgifter du sökt för får du inte bistånd för. Pengarna för godkända utgifter sätts in på ditt konto.',
   },
-  'closed.ekb.rejected': {
+  {
     type: 'closed.ekb.rejected',
     name: 'Avslagen',
     description:
       'Din ansökan är inte godkänd och du kommer inte att få någon utbetalning. Vill du överklaga beslutet lämnar du en skriftlig motivering med e-post eller brev till din handläggare.',
   },
-  'closed.ekb.completionRejected': {
+  {
     type: 'closed.ekb.completionRejected',
     name: 'Avslagen',
     description:
       'Din ansökan är inte godkänd eftersom vi saknar stickprov för perioden. Därför kan vi inte gå vidare och godkänna din ansökan.',
   },
-};
+];
+
+export default statuses;
+
+export const getStatusByType = (type) => statuses.find((status) => status.type === type);

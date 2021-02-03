@@ -8,7 +8,7 @@ import { CaseStatus } from '../../../../types/CaseType';
 import { FormPosition } from '../../../../containers/Form/hooks/useForm';
 import { useNotification } from '../../../../store/NotificationContext';
 import { evaluateConditionalExpression } from '../../../../helpers/conditionParser';
-import statuses from '../../../../assets/mock/caseStatuses';
+import { getStatusByType } from '../../../../assets/mock/caseStatuses';
 
 const ActionContainer = styled.View`
   flex: 1;
@@ -73,7 +73,7 @@ const StepFooter: React.FC<Props> = ({
     const signCase = () => {
       if (onUpdate) onUpdate(answers);
       if (updateCaseInContext)
-        updateCaseInContext(answers, statuses['active.submitted'], currentPosition);
+        updateCaseInContext(answers, getStatusByType('active.submitted'), currentPosition);
       if (formNavigation.next) formNavigation.next();
     };
 
@@ -131,7 +131,7 @@ const StepFooter: React.FC<Props> = ({
             updateCaseInContext &&
             (caseStatus.type.includes('ongoing') || caseStatus.type.includes('notStarted'))
           )
-            updateCaseInContext(answers, statuses['active.ongoing'], currentPosition);
+            updateCaseInContext(answers, getStatusByType('active.ongoing'), currentPosition);
 
           validateStepAnswers(errorCallback, onValidCallback);
         };
