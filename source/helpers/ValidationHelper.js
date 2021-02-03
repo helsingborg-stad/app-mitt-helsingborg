@@ -47,7 +47,8 @@ export const validateInput = (value, rules) =>
        */
       let valueToValidate = String(value);
       /**
-       * If the value comes from a checkbox or select input, we want the following values to count as empty, so that the isEmpty rule can be applied correctly.
+       * If the value comes from a checkbox or select input, we want the following values to count as empty,
+       * so that the isEmpty rule can be applied correctly.
        */
       if (value === false || value === undefined || value === null) {
         valueToValidate = '';
