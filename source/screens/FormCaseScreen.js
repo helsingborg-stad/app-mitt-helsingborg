@@ -8,7 +8,7 @@ import generateInitialCaseAnswers from '../store/actions/dynamicFormData';
 import AuthContext from '../store/AuthContext';
 import FormContext from '../store/FormContext';
 import { CaseDispatch, CaseState } from '../store/CaseContext';
-import statuses from '../assets/mock/caseStatuses';
+import { getStatusByType } from '../assets/mock/caseStatuses';
 
 const SpinnerContainer = styled.View`
   flex: 1;
@@ -92,7 +92,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       onStart={handleStartForm}
       onSubmit={handleSubmitForm}
       initialAnswers={initialCase?.answers || caseData.answers || {}}
-      status={initialCase.status || statuses['active.notStarted']}
+      status={initialCase.status || getStatusByType('notStarted')}
       updateCaseInContext={updateCaseContext}
       {...props}
     />

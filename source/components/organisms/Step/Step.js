@@ -12,7 +12,7 @@ import CloseDialog from './CloseDialog/CloseDialog';
 import Banner from './StepBanner/StepBanner';
 import StepDescription from './StepDescription/StepDescription';
 import StepFooter from './StepFooter/StepFooter';
-import statuses from '../../../assets/mock/caseStatuses';
+import { getStatusByType } from '../../../assets/mock/caseStatuses';
 
 const StepContainer = styled.View`
   background: ${(props) => props.theme.colors.neutrals[7]};
@@ -86,7 +86,7 @@ function Step({
         onFieldChange(answers);
       }
       if (updateCaseInContext) {
-        updateCaseInContext(answers, statuses['active.ongoing'], currentPosition);
+        updateCaseInContext(answers, getStatusByType('active.ongoing'), currentPosition);
       }
     }
     if (formNavigation?.close) {
