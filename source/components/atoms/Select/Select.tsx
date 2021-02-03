@@ -56,6 +56,15 @@ const Select: React.FC<Props> = React.forwardRef(({
   style,
 }, ref) => {
   const currentItem = items.find(item => item.value === value);
+  const handleValueChange = (itemValue: any) => {
+    if (onValueChange && typeof onValueChange === 'function') {
+      onValueChange(itemValue ? itemValue.toString() : null);
+    }
+    if (onBlur) {
+      onBlur(currentItem?.value);
+    }
+  }
+
   return (
     <Wrapper style={style}>
       <RNPickerSelect
@@ -63,14 +72,7 @@ const Select: React.FC<Props> = React.forwardRef(({
         placeholder={{ label: placeholder, value: null }}
         disabled={!editable}
         value={currentItem?.value || null}
-        onValueChange={(itemValue, _itemIndex) => {
-          if (typeof onValueChange === 'function') {
-            onValueChange(itemValue ? itemValue.toString() : null);
-          }
-          if (onBlur) {
-            onBlur(currentItem?.value);
-          }
-        }}
+        onValueChange={handleValueChange}
         items={items}
         ref={ref as React.LegacyRef<RNPickerSelect>}
         />
