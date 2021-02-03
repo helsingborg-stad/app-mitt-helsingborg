@@ -45,8 +45,13 @@ export const validateInput = (value, rules) =>
       /**
        * Validator only accepts strings.
        */
-      const valueToValidate = String(value);
-
+      let valueToValidate = String(value);
+      /**
+       * If the value comes from a checkbox or select input, we want the following values to count as empty, so that the isEmpty rule can be applied correctly.
+       */
+      if (value === false || value === undefined || value === null) {
+        valueToValidate = '';
+      }
       /**
        * Retrieve the validation method defined in the rule from the validator.js package and execute.
        * An array of args will be created if multiple args defined. Single arg will be passed as is.

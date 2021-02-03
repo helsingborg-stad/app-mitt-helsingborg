@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import RNPickerSelect from 'react-native-picker-select';
 import theme from '../../../styles/theme';
+import Text from '../Text';
 
 // This library requires styling to follow the pattern here,
 // thus we have to use this rather than styled components
@@ -25,7 +26,12 @@ const pickerSelectStyles = StyleSheet.create({
 const Wrapper = styled.View`
   margin-bottom: 30px;
 `;
-
+const StyledErrorText = styled(Text)`
+  font-size: ${({ theme }) => theme.fontSizes[3]}px;
+  color: ${(props) => props.theme.textInput.errorTextColor};
+  font-weight: ${({ theme }) => theme.fontWeights[0]};
+  padding-top: 8px;
+`;
 interface Props {
   items: { label: string; value: string }[];
   onValueChange: (value: string, index?: number) => void;
@@ -33,14 +39,20 @@ interface Props {
   value: string;
   editable?: boolean;
   style?: ViewStyle;
+  onBlur: (value: string) => void;
+  showErrorMessage?: boolean;
+  error?: { isValid: boolean; message: string };
 }
 
 const Select: React.FC<Props> = React.forwardRef(({
   items,
   onValueChange,
+  onBlur,
   placeholder,
   value,
   editable = true,
+  showErrorMessage = true,
+  error,
   style,
 }, ref) => {
   const currentItem = items.find(item => item.value === value);
@@ -55,10 +67,14 @@ const Select: React.FC<Props> = React.forwardRef(({
           if (typeof onValueChange === 'function') {
             onValueChange(itemValue ? itemValue.toString() : null);
           }
+          if (onBlur) {
+            onBlur(currentItem?.value);
+          }
         }}
         items={items}
         ref={ref as React.LegacyRef<RNPickerSelect>}
-      />
+        />
+      {showErrorMessage && error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
     </Wrapper>
   );
 });
@@ -81,6 +97,11 @@ Select.propTypes = {
   placeholder: PropTypes.string,
   /** Style properties for the inputbox */
   style: PropTypes.shape({}),
+  error: PropTypes.shape({
+    isValid: PropTypes.bool.isRequired,
+    message: PropTypes.string.isRequired,
+  }),
+  showErrorMessage: PropTypes.bool,
 };
 
 Select.defaultProps = {
