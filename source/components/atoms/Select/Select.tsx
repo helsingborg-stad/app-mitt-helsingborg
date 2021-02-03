@@ -56,7 +56,7 @@ const Select: React.FC<Props> = React.forwardRef(({
   style,
 }, ref) => {
   const currentItem = items.find(item => item.value === value);
-  const handleValueChange = (itemValue: any) => {
+  const handleValueChange = (itemValue: string | number | boolean) => {
     if (onValueChange && typeof onValueChange === 'function') {
       onValueChange(itemValue ? itemValue.toString() : null);
     }
