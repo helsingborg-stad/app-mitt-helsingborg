@@ -83,6 +83,7 @@ const inputTypes = {
   select: {
     component: Select,
     changeEvent: 'onValueChange',
+    blurEvent: 'onBlur',
     props: {},
   },
   radioGroup: {
