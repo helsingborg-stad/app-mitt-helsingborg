@@ -277,9 +277,9 @@ export function validateAnswer(
   if (question.type === 'editableList') {
     const validationResults: Record<string, {isValid:boolean, validationMessage: string}> = {};
     question.inputs.forEach(input => {
-      if (input.validation && answer[questionId][input.key] !== undefined && ((checkIfDirty && state.dirtyFields?.[questionId]?.[input.key]) || !checkIfDirty)) {
+      if (input.validation && ((checkIfDirty && state.dirtyFields?.[questionId]?.[input.key]) || !checkIfDirty)) {
         const [isValid, validationMessage] = validateInput(
-          answer[questionId][input.key],
+          answer?.[questionId]?.[input?.key],
           input.validation.rules
         );
         validationResults[input.key] = { isValid, validationMessage };
