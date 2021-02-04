@@ -26,44 +26,44 @@ const statuses = [
     description: 'Ditt ärende är avslutat.',
   },
   /**
-   * Service: Ekonomiskt bistånd
+   * Service: VIVA
    */
   {
-    type: 'notStarted:ekb',
+    type: 'notStarted:viva',
     name: 'Öppen',
     description: 'Ansökan är öppen. Du kan nu söka ekonomiskt bistånd för perioden.',
   },
   {
-    type: 'active:submitted:ekb',
+    type: 'active:submitted:viva',
     name: 'Inskickad',
     description:
       'Ansökan är inskickad. Du kommer att få besked om ansökan när din handläggare har granskat och bedömt den.',
   },
   {
-    type: 'active:completionRequired:ekb',
+    type: 'active:completionRequired:viva',
     name: 'Stickprovskontroll',
     description:
       'Du måste komplettera din ansökan med bilder som visar dina utgifter och inkomster. Vi behöver din komplettering inom 4 dagar för att kunna betala ut pengar för perioden.',
   },
   {
-    type: 'closed:approved:ekb',
+    type: 'closed:approved:viva',
     name: 'Godkänd',
     description: 'Din ansökan är godkänd. Pengarna sätts in på ditt konto.',
   },
   {
-    type: 'closed:partiallyApproved:ekb',
+    type: 'closed:partiallyApproved:viva',
     name: 'Delvis godkänd',
     description:
       'Delar av din ansökan är godkänd, men några av de utgifter du sökt för får du inte bistånd för. Pengarna för godkända utgifter sätts in på ditt konto.',
   },
   {
-    type: 'closed:rejected:ekb',
+    type: 'closed:rejected:viva',
     name: 'Avslagen',
     description:
       'Din ansökan är inte godkänd och du kommer inte att få någon utbetalning. Vill du överklaga beslutet lämnar du en skriftlig motivering med e-post eller brev till din handläggare.',
   },
   {
-    type: 'closed:completionRejected:ekb',
+    type: 'closed:completionRejected:viva',
     name: 'Avslagen',
     description:
       'Din ansökan är inte godkänd eftersom vi saknar stickprov för perioden. Därför kan vi inte gå vidare och godkänna din ansökan.',
