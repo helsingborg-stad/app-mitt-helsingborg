@@ -73,6 +73,6 @@ const statuses = [
   },
 ];
 
-export default statuses;
-
 export const getStatusByType = (type) => statuses.find((status) => status.type === type);
+
+export default statuses;
