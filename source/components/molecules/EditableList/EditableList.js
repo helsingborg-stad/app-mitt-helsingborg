@@ -98,7 +98,7 @@ const InputComponent = React.forwardRef(
       case 'date':
         return (
           <CalendarPicker
-            date={value && value !== '' ? value[input.key] : state[input.key]}
+            value={value && value !== '' ? value[input.key] : state[input.key]}
             onSelect={(date) => onChange(input.key, date)}
             onBlur={onInputBlur}
             editable={editable}
