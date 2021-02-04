@@ -86,7 +86,7 @@ function Step({
         onFieldChange(answers);
       }
       if (updateCaseInContext) {
-        updateCaseInContext(answers, getStatusByType('active.ongoing'), currentPosition);
+        updateCaseInContext(answers, getStatusByType('active:ongoing'), currentPosition);
       }
     }
     if (formNavigation?.close) {
