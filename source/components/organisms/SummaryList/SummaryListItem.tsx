@@ -137,7 +137,7 @@ const InputComponent = React.forwardRef(({ input, editable, value, onInputBlur, 
       return (
         <CalendarPicker
           colorSchema={colorSchema}
-          value={value as string}
+          value={value as number}
           onSelect={changeFromInput}
           editable={editable}
           transparent

@@ -41,8 +41,8 @@ const DateInput = styled(Input)<{ transparent: boolean }>`
 `;
 
 interface PropInterface {
-  onSelect: (date: string) => void;
-  value: string;
+  onSelect: (date: number) => void;
+  value: number;
   editable?: boolean;
   transparent?: boolean;
   style?: React.CSSProperties;
@@ -63,7 +63,7 @@ const CalendarPickerForm: React.FC<PropInterface> = ({
   const [modalVisible, toggleModal] = useModal();
 
   const handleCalendarDateChange = (selectedDate: moment.Moment) => {
-    onSelect(selectedDate.format('Y-MM-DD'));
+    onSelect(selectedDate.toDate().valueOf());
     toggleModal();
   };
 
@@ -72,7 +72,7 @@ const CalendarPickerForm: React.FC<PropInterface> = ({
       <TouchableOpacity disabled={!editable} onPress={toggleModal}>
         <DateInput
           placeholder="Välj datum"
-          value={value}
+          value={value ? moment.utc(value).format('Y-MM-DD') : ''}
           multiline /** Temporary fix to make field scrollable inside scrollview */
           numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
           editable={false}
@@ -133,7 +133,7 @@ CalendarPickerForm.propTypes = {
    * Calendar date change callback.
    */
   onSelect: PropTypes.func,
-  value: PropTypes.string,
+  value: PropTypes.number,
   /** Turn the input field of. Defaults to true. */
   editable: PropTypes.bool,
   /** Turn the background of input field transparent */
