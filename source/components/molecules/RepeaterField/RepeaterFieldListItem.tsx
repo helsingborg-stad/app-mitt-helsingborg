@@ -82,7 +82,7 @@ interface InputComponentProps {
   input: InputRow;
   colorSchema: PrimaryColor;
   value: string | number | boolean;
-  onChange: (value: string) => void;
+  onChange: (value: string | number) => void;
   onBlur: () => void;
 }
 
@@ -119,7 +119,7 @@ const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, o
       return (
         <CalendarPicker
           colorSchema={colorSchema}
-          value={value as string}
+          value={value as number}
           onSelect={onChange}
           editable={true}
           transparent
