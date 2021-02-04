@@ -411,7 +411,7 @@ const SummaryValidationStory = () => (
     connectivityMatrix={validationTestForm.connectivityMatrix}
     startAt={0}
     firstName="FakeName"
-    status={getStatusByType('active.ongoing')}
+    status={getStatusByType('active:ongoing')}
   />
 );
 

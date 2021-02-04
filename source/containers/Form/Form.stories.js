@@ -223,7 +223,7 @@ formStories.add('Default', () => (
       connectivityMatrix={DefaultStoryData.connectivityMatrix}
       startAt={0}
       onClose={() => {}}
-      status={getStatusByType('active.ongoing')}
+      status={getStatusByType('active:ongoing')}
     />
   </StoryWrapper>
 ));
@@ -313,7 +313,7 @@ formStories.add('Themed Form', () => (
       steps={ThemedFormStoryData.steps}
       connectivityMatrix={ThemedFormStoryData.connectivityMatrix}
       firstName="FakeName"
-      status={getStatusByType('active.ongoing')}
+      status={getStatusByType('active:ongoing')}
       startAt={0}
       onClose={() => {}}
     />
@@ -521,7 +521,7 @@ formStories.add('Substep Form', () => (
       steps={SubstepsDemoStoryData.steps}
       connectivityMatrix={SubstepsDemoStoryData.connectivityMatrix}
       firstName="FakeName"
-      status={getStatusByType('active.ongoing')}
+      status={getStatusByType('active:ongoing')}
       onClose={() => {}}
       startAt={0}
     />

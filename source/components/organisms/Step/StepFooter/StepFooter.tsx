@@ -73,7 +73,7 @@ const StepFooter: React.FC<Props> = ({
     const signCase = () => {
       if (onUpdate) onUpdate(answers);
       if (updateCaseInContext)
-        updateCaseInContext(answers, getStatusByType('active.submitted.ekb'), currentPosition);
+        updateCaseInContext(answers, getStatusByType('active:submitted:ekb'), currentPosition);
       if (formNavigation.next) formNavigation.next();
     };
 
@@ -131,7 +131,7 @@ const StepFooter: React.FC<Props> = ({
             updateCaseInContext &&
             (caseStatus.type.includes('ongoing') || caseStatus.type.includes('notStarted'))
           )
-            updateCaseInContext(answers, getStatusByType('active.ongoing'), currentPosition);
+            updateCaseInContext(answers, getStatusByType('active:ongoing'), currentPosition);
 
           validateStepAnswers(errorCallback, onValidCallback);
         };

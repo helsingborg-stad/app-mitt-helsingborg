@@ -251,7 +251,7 @@ const RepeaterStory = () => (
     connectivityMatrix={DefaultStoryForm.connectivityMatrix}
     startAt={0}
     firstName="FakeName"
-    status={getStatusByType('active.ongoing')}
+    status={getStatusByType('active:ongoing')}
   />
 );
 
