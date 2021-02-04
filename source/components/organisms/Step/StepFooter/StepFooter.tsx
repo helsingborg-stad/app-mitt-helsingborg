@@ -73,7 +73,7 @@ const StepFooter: React.FC<Props> = ({
     const signCase = () => {
       if (onUpdate) onUpdate(answers);
       if (updateCaseInContext)
-        updateCaseInContext(answers, getStatusByType('active:submitted:ekb'), currentPosition);
+        updateCaseInContext(answers, getStatusByType('active:submitted:viva'), currentPosition);
       if (formNavigation.next) formNavigation.next();
     };
 
