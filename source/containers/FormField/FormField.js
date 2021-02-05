@@ -273,6 +273,8 @@ FormField.propTypes = {
     'card',
     'editableList',
     'checkbox',
+    'navigationButtonGroup',
+    'summaryList',
   ]),
 };
 
