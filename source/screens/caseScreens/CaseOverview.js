@@ -120,10 +120,8 @@ function CaseOverview(props) {
       return matchesStatus;
     });
 
-  console.log('caseItems: ', caseItems);
   const activeCases = getCasesByStatuses(['notStarted', 'active']);
   const closedCases = getCasesByStatuses(['closed']);
-  console.log('active', activeCases);
 
   useEffect(() => {
     Animated.timing(fadeAnimation, {
