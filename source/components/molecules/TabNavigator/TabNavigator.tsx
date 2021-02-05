@@ -76,7 +76,7 @@ const TabNavigator: React.FC<Props> = ({
 
 TabNavigator.propTypes = {
   initialRouteName: PropTypes.string.isRequired,
-  children: PropTypes.elementType,
+  children: PropTypes.array,
   screenOptions: PropTypes.any,
   contentStyle: PropTypes.object,
 };
