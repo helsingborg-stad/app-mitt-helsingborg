@@ -115,13 +115,15 @@ function CaseOverview(props) {
     caseItems.filter((caseData) => {
       let matchesStatus = false;
       statuses.forEach((status) => {
-        matchesStatus = caseData?.status?.type?.includes(status);
+        matchesStatus = matchesStatus || caseData?.status?.type?.includes(status);
       });
       return matchesStatus;
     });
 
+  console.log('caseItems: ', caseItems);
   const activeCases = getCasesByStatuses(['notStarted', 'active']);
   const closedCases = getCasesByStatuses(['closed']);
+  console.log('active', activeCases);
 
   useEffect(() => {
     Animated.timing(fadeAnimation, {
@@ -137,6 +139,7 @@ function CaseOverview(props) {
       const updateCaseItemsPromises = caseTypes.map(async (caseType) => {
         const formIds = await getFormIdsByFormTypes(caseType.formTypes);
         const formCases = getCasesByFormIds(formIds);
+
         const updatedFormCaseObjects = formCases.map(async (caseData) => {
           const form = await getForm(caseData.formId);
           const component = computeCaseCardComponent(caseData, form, caseType, navigation);
