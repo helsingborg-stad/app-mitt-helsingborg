@@ -270,6 +270,7 @@ FormField.propTypes = {
     'postalCode',
     'personalNumber',
     'phone',
+    'card',
   ]),
 };
 
