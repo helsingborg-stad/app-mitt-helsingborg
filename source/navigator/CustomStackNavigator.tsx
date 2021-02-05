@@ -99,7 +99,7 @@ const CustomStackNavigator = ({
   };
 
   const NavigatorContextComponent = (
-    <NavigationHelpersContext.Provider value={navigation}>
+    <NavigationHelpersContext.Provider key="navigationHelpersContext" value={navigation}>
       <FlexWrapper {...panResponder.panHandlers} style={[contentStyle]}>
         {descriptors[state.routes[state.index].key].render()}
       </FlexWrapper>
@@ -110,6 +110,7 @@ const CustomStackNavigator = ({
 
   const InactivityDialogComponent = (
     <Modal
+      key="inactivityDialogComponent"
       visible={showInactivityModal}
       transparent
       presentationStyle="overFullScreen"
