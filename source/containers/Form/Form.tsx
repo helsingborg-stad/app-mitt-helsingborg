@@ -117,7 +117,7 @@ const Form: React.FC<Props> = ({
           onFieldBlur={handleBlur}
           updateCaseInContext={updateCaseInContext}
           currentPosition={formState.currentPosition}
-          totalStepNumber={formState.numberOfMainSteps}
+          totalStepNumber={formState.numberOfMainSteps || 0}
           isBackBtnVisible={
             formState.currentPosition.currentMainStep > 1 &&
             formState.currentPosition.currentMainStep < formState.numberOfMainSteps
