@@ -271,6 +271,8 @@ FormField.propTypes = {
     'personalNumber',
     'phone',
     'card',
+    'editableList',
+    'checkbox',
   ]),
 };
 
