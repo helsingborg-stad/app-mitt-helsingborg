@@ -40,7 +40,7 @@ export const validateInput = (value, rules) =>
   rules.reduce(
     (acc, rule) => {
       const [valid] = acc;
-      let valueArray = acc;
+      const valueArray = acc;
 
       /**
        * Validator only accepts strings.
@@ -61,6 +61,11 @@ export const validateInput = (value, rules) =>
       const validationMethodArgs = rule.arg || Object.keys(ruleArgs).map((key) => ruleArgs[key]);
       const validationMethod =
         typeof rule.method === 'string' ? validator[rule.method] : rule.method;
+      /** For any other rule than the isEmpty, an empty value should be treated as valid. */
+      if (validationMethod !== validator.isEmpty && valid === true && valueToValidate === '') {
+        return [true, ''];
+      }
+
       const isValidationRuleMeet =
         validationMethod(valueToValidate, validationMethodArgs) === rule.validWhen;
 
@@ -68,14 +73,13 @@ export const validateInput = (value, rules) =>
        * Only return true if the current and previous rule is met
        */
       if (valid === true && isValidationRuleMeet) {
-        valueArray = [true, ''];
+        return [true, ''];
       }
-
       /**
        * Only change the  true if the current and previous rule is met
        */
       if (!isValidationRuleMeet) {
-        valueArray = [false, rule.message];
+        return [false, rule.message];
       }
       return valueArray;
     },
