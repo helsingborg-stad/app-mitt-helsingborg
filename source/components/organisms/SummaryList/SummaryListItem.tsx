@@ -3,7 +3,7 @@ import React, { useRef } from "react";
 import { View, TouchableHighlight } from "react-native";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
-import { Text, Icon, Checkbox, Input } from "../../atoms";
+import { Text, Icon, Input } from "../../atoms";
 import { SummaryListItem as SummaryListItemType } from "./SummaryList";
 import CalendarPicker from '../../molecules/CalendarPicker/CalendarPickerForm';
 import { colorPalette } from '../../../styles/palette';
