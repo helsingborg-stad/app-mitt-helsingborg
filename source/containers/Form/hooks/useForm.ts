@@ -130,9 +130,9 @@ function useForm(initialState: FormReducerState) {
   /**
    * Function to trigger when a form field looses focus.
    */
-  const handleBlur = (answer: Record<string, any>, questionId) => {
-    dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId } });
+  const handleBlur = (answer: Record<string, any>, questionId: string) => {
     dispatch({ type: 'DIRTY_FIELD', payload: { answer, id: questionId } });
+    dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId, checkIfDirty: true } });
   };
   /**
    * Function for updating answer.
