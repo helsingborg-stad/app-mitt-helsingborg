@@ -50,53 +50,54 @@ type Button = ButtonBase & (
 );
 
 type CardComponent = Image | Text | Title | Subtitle | Button;
-type InfoModalButtonProps =  ButtonBase & { action: 'infoModal'; heading: string; markdownText: string; closeButtonText: string; };
+type InfoModalButtonProps = ButtonBase & { action: 'infoModal'; heading: string; markdownText: string; closeButtonText: string; };
 /***** end of types */
 
 /** The info-button gets its own component, because it involves the useModal hook */
-const InfoModalButton: React.FC<InfoModalButtonProps> = ({ heading, markdownText, closeButtonText, text, colorSchema, icon, iconPosition}) => {
+const InfoModalButton: React.FC<InfoModalButtonProps> = ({ heading, markdownText, closeButtonText, text, colorSchema, icon, iconPosition }) => {
   const [modalVisible, toggleModal] = useModal();
   return (
-  <>
-    <Card.Button onClick={toggleModal}>
-      {icon && iconPosition && iconPosition === 'left' && <Icon name={icon} />}
-      <TextComponent>{text}</TextComponent>
-      {icon && (!iconPosition || iconPosition === 'right') && <Icon name={icon} />}
-    </Card.Button>
-    <InfoModal visible={modalVisible} toggleModal={toggleModal} markdownText={markdownText} heading={heading} colorSchema={colorSchema} buttonText={closeButtonText} />
-  </>);
+    <>
+      <Card.Button onClick={toggleModal}>
+        {icon && iconPosition && iconPosition === 'left' && <Icon name={icon} />}
+        <TextComponent>{text}</TextComponent>
+        {icon && (!iconPosition || iconPosition === 'right') && <Icon name={icon} />}
+      </Card.Button>
+      <InfoModal visible={modalVisible} toggleModal={toggleModal} markdownText={markdownText} heading={heading} colorSchema={colorSchema} buttonText={closeButtonText} />
+    </>);
 }
 
 /** Handles the button clicks for action types email, phone, navigate and url */
-const handleClick = (button: CardComponent & { type: 'button'}, navigation: any) => () => {
+const handleClick = (button: CardComponent & { type: 'button' }, navigation: any) => () => {
   switch (button.action) {
-      case 'email':
-        launchEmail(button.email)
-        break;
-      case 'phone':
-        launchPhone(button.phonenumber)
-        break;
-      case 'navigate':
-        if (navigation?.navigate) navigation.navigate(button.screen) // TODO think about sending parameters here
-        break;
-      case 'url':
-        Linking.openURL(button.url);
-        break;
-    }
+    case 'email':
+      launchEmail(button.email)
+      break;
+    case 'phone':
+      launchPhone(button.phonenumber)
+      break;
+    case 'navigate':
+      if (navigation?.navigate) navigation.navigate(button.screen) // TODO think about sending parameters here
+      break;
+    case 'url':
+      Linking.openURL(button.url);
+      break;
+  }
 }
 
 /** Maps an object to a Card child component */
-const renderCardComponent = (component: CardComponent, navigation: any) => {
+const renderCardComponent = (component: CardComponent, navigation: any, index: any) => {
   switch (component.type) {
     case 'text':
-      return <Card.Text italic={component.italic}>{component.text}</Card.Text>;
+      return <Card.Text key={`${index}-${component.type}`} italic={component.italic}>{component.text}</Card.Text>;
     case 'title':
-      return <Card.Title>{component.text}</Card.Title>;
+      return <Card.Title key={`${index}-${component.type}`}>{component.text}</Card.Title>;
     case 'subtitle':
-      return <Card.SubTitle>{component.text}</Card.SubTitle>;
+      return <Card.SubTitle key={`${index}-${component.type}`}>{component.text}</Card.SubTitle>;
     case 'image':
       return (
         <Card.Image
+          key={`${index}-${component.type}`}
           source={icons[component.image]}
           style={component.style}
           circle={component.circle}
@@ -109,13 +110,13 @@ const renderCardComponent = (component: CardComponent, navigation: any) => {
     const { icon, iconPosition, text } = component;
     let onClick: () => void = () => null;
 
-    // treat info-modal separately since it doesn't fit the same pattern as the other buttons. 
+    // treat info-modal separately since it doesn't fit the same pattern as the other buttons.
     if (component.action === 'infoModal') {
-      return <InfoModalButton {...component} />
+      return <InfoModalButton key={`${index}-${component.type}`} {...component} />
     }
 
     return (
-      <Card.Button onClick={handleClick(component, navigation)}>
+      <Card.Button key={`${index}-${component.type}`} onClick={handleClick(component, navigation)}>
         {icon && iconPosition && iconPosition === 'left' && <Icon name={icon} />}
         <TextComponent>{text}</TextComponent>
         {icon && (!iconPosition || iconPosition === 'right') && <Icon name={icon} />}
@@ -140,7 +141,7 @@ const DynamicCardRenderer: React.FC<Props> = ({
   outlined,
   components,
 }) => {
-  let navigation: any = {}; 
+  let navigation: any = {};
   try {
     navigation = useNavigation();
   } catch (error) {
@@ -149,7 +150,7 @@ const DynamicCardRenderer: React.FC<Props> = ({
   return (
     <Card colorSchema={colorSchema || 'neutral'}>
       <Card.Body color={backgroundColor || 'neutral'} shadow={shadow} outlined={outlined}>
-        {components.map(component => renderCardComponent(component, navigation))}
+        {components.map((component, index) => renderCardComponent(component, navigation, index))}
       </Card.Body>
     </Card>
   );
