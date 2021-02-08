@@ -86,7 +86,7 @@ const handleClick = (button: CardComponent & { type: 'button' }, navigation: any
 }
 
 /** Maps an object to a Card child component */
-const renderCardComponent = (component: CardComponent, navigation: any, index: any) => {
+const renderCardComponent = (component: CardComponent, navigation: any, index: number) => {
   switch (component.type) {
     case 'text':
       return <Card.Text key={`${index}-${component.type}`} italic={component.italic}>{component.text}</Card.Text>;
