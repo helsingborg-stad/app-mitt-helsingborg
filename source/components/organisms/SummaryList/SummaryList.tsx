@@ -218,7 +218,7 @@ const SummaryList: React.FC<Props> = ({
           addToSum(numericValue);
         }
       } 
-      if (['text', 'number', 'date'].includes(item.type)) {
+      if (['text', 'number', 'date', 'checkbox'].includes(item.type)) {
         listItems.push(
           <SummaryListItemComponent
               item={item}

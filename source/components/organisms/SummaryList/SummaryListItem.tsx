@@ -145,10 +145,7 @@ const InputComponent = React.forwardRef(({ input, editable, value, onInputBlur, 
         />
       );
     case 'checkbox':
-      const checked = value as boolean;
-      return (
-        <Checkbox checked={checked} colorSchema={colorSchema} disabled={!editable} onChange={() => changeFromInput(!checked)} />
-      )
+      return null;
     default:
       return (
         <SmallInput
