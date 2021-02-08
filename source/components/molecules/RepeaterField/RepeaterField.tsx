@@ -72,7 +72,14 @@ const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChan
         type: LayoutAnimation.Types.easeInEaseOut,
       },
     });
-    setLocalAnswers(prev => [...prev, {}]);
+    // construct a new answer object from the inputs, where each answer is an empty string to start
+    const newAnswers = {};
+    inputs.forEach(input => {
+      newAnswers[input.id] = '';
+    })
+    const updatedAnswers = [...localAnswers, newAnswers];
+    onChange(updatedAnswers);
+    setLocalAnswers(updatedAnswers);
   };
 
   const validColorSchema = getValidColorSchema(colorSchema);
