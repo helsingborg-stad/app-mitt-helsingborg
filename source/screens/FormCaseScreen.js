@@ -33,6 +33,8 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
         setForm(form);
         setFormQuestions(getFormQuestions(form));
       });
+      const answersObject = convertAnswerArrayToObject(caseData.answers);
+      caseData.answers = answersObject;
       setInitialCase(caseData);
     } else if (caseId) {
       const initCase = getCase(caseId);

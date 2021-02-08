@@ -58,6 +58,7 @@ const inputTypes = {
   checkbox: {
     component: CheckboxField,
     changeEvent: 'onChange',
+    blurEvent: 'onBlur',
     helpInComponent: true,
     helpProp: 'help',
     props: {},
