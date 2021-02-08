@@ -76,6 +76,7 @@ interface CheckBoxProps {
   size?: 'small' | 'medium' | 'large';
   value: boolean | string;
   onChange?: (value: boolean) => void;
+  onBlur?: (value: boolean) => void;
   help?: { text: string; size?: number; heading?: string; tagline?: string; url?: string };
   error?: { isValid: boolean; message: string };
 }
@@ -87,6 +88,7 @@ const CheckboxField: React.FC<CheckBoxProps> = ({
   size,
   value,
   onChange,
+  onBlur,
   help,
   error,
   ...other
@@ -98,7 +100,12 @@ const CheckboxField: React.FC<CheckBoxProps> = ({
   } else {
     boolValue = value === 'true';
   }
-  const update = () => onChange(!boolValue);
+  const update = () => { 
+    onChange(!boolValue);
+    if (onBlur) {
+      onBlur(!boolValue);
+    }
+  }
   const validColorSchema = getValidColorSchema(colorSchema);
   return (
     <>
