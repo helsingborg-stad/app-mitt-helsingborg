@@ -81,13 +81,10 @@ export async function grantAccessToken(authorizationCode) {
 export async function refreshTokens() {
   try {
     const oldRefreshToken = await StorageService.getData(REFRESH_TOKEN_KEY);
-    const response = await post(
-      '/auth/token',
-      {
-        grant_type: 'refresh_token',
-        refresh_token: oldRefreshToken,
-      },
-    );
+    const response = await post('/auth/token', {
+      grant_type: 'refresh_token',
+      refresh_token: oldRefreshToken,
+    });
 
     if (response.status !== 200) {
       throw new Error(response?.data?.data?.message);
