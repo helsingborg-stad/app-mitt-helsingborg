@@ -24,7 +24,11 @@ export const actionTypes = {
 
 export async function mockedAuth() {
   try {
-    await StorageService.saveData(ACCESS_TOKEN_KEY, env.FAKE_TOKEN);
+    const [, grantTokenError] = await authService.grantAccessToken(env.FAKE_TOKEN);
+    if (grantTokenError) {
+      throw new Error(grantTokenError);
+    }
+
     return {
       type: actionTypes.loginSuccess,
     };
