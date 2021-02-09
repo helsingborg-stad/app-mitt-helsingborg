@@ -67,7 +67,7 @@ export async function grantAccessToken(authorizationCode) {
     });
 
     if (response.status !== 200) {
-      throw new Error(response.data);
+      throw new Error(response?.data?.data?.message);
     }
     const { accessToken, refreshToken } = response.data.data.attributes;
     const decodedAccessToken = await saveTokensToStorage(accessToken, refreshToken);
@@ -91,7 +91,7 @@ export async function refreshTokens() {
     );
 
     if (response.status !== 200) {
-      throw new Error(response.data);
+      throw new Error(response?.data?.data?.message);
     }
     const { accessToken, refreshToken } = response.data.data.attributes;
     const decodedAccessToken = await saveTokensToStorage(accessToken, refreshToken);
