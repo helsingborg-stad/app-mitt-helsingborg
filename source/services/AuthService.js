@@ -87,7 +87,6 @@ export async function refreshTokens() {
         grant_type: 'refresh_token',
         refresh_token: oldRefreshToken,
       },
-      { 'x-api-key': env.MITTHELSINGBORG_IO_APIKEY }
     );
 
     if (response.status !== 200) {
