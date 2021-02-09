@@ -103,7 +103,7 @@ const BackNavigation = ({
 
 BackNavigation.propTypes = {
   style: PropTypes.array,
-  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green', 'neutral']),
   onBack: PropTypes.func,
   onClose: PropTypes.func,
   showBackButton: PropTypes.bool,
