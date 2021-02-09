@@ -93,7 +93,7 @@ export async function refreshSession() {
     return {
       type: actionTypes.authError,
       payload: {
-        error: refreshError.data,
+        error: refreshError,
       },
     };
   }
