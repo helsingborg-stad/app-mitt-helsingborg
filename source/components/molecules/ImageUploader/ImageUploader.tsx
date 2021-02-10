@@ -1,5 +1,4 @@
-/* eslint-disable no-nested-ternary */
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -197,8 +196,9 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
 ImageUploader.propTypes = {
   buttonText: PropTypes.string,
   /** Array of image objects to initially populate the list with (i.e. meta-data including uris) */
-  value: PropTypes.array,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   onChange: PropTypes.func,
+  colorSchema: PropTypes.oneOf(['blue', 'red', 'green', 'purple', 'neutral']),
 };
 
 export default ImageUploader;

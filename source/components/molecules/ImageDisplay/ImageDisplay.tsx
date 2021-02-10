@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
@@ -30,10 +29,9 @@ interface Props {
   images: Image[];
   answers: Record<string, any>;
   onChange: (value: Record<string, any>[], id?: string) => void;
-  colorSchema?: PrimaryColor;
 }
 
-const ImageDisplay: React.FC<Props> = ({ images, answers, onChange, colorSchema }) => {
+const ImageDisplay: React.FC<Props> = ({ images, answers, onChange }) => {
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] = useState(0);
 
   const deleteImageFromCloudStorage = async (image: Image) => {
@@ -58,15 +56,16 @@ const ImageDisplay: React.FC<Props> = ({ images, answers, onChange, colorSchema 
   return (
     <Wrapper>
       <Container horizontal onScroll={handleScroll} showsHorizontalScrollIndicator={false}>
-        {images.map((image, index) => (
-          <ImageItem
-            key={`${image.path}-${index}`}
-            image={image}
-            onRemove={() => {
-              removeImage(image);
-            }}
-          />
-        ))}
+        {images.length > 0 &&
+          images.map((image, index) => (
+            <ImageItem
+              key={`${image.path}-${index}`}
+              image={image}
+              onRemove={() => {
+                removeImage(image);
+              }}
+            />
+          ))}
       </Container>
       {images.length > 2 && <HorizontalScrollIndicator percentage={horizontalScrollPercentage} />}
     </Wrapper>
