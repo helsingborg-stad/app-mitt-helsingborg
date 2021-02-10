@@ -35,7 +35,6 @@ interface Props {
 
 const ImageDisplay: React.FC<Props> = ({ images, answers, onChange, colorSchema }) => {
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] = useState(0);
-  console.log('answers from display component:', answers);
 
   const deleteImageFromCloudStorage = async (image: Image) => {
     console.log('Placeholder: not implemented yet in API, want to delete image ', image.path);
