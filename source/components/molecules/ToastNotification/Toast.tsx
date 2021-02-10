@@ -6,22 +6,32 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 import { Notification } from '../../../store/NotificationContext';
 import Text from '../../atoms/Text/Text';
 import Icon from '../../atoms/Icon/Icon';
+import theme from '../../../styles/theme';
 
 const severityStyles = {
+  neutral: {
+    foregroundColor: theme.colors.neutrals[1],
+    backgroundColor: 'transparent',
+    icon: 'info',
+  },
   success: {
-    color: 'green',
+    foregroundColor: theme.colors.neutrals[6],
+    backgroundColor: 'green',
     icon: 'check',
   },
   info: {
-    color: 'yellow',
+    foregroundColor: theme.colors.neutrals[6],
+    backgroundColor: '#F7BA70',
     icon: 'info',
   },
   warning: {
-    color: 'orange',
+    foregroundColor: theme.colors.neutrals[6],
+    backgroundColor: 'orange',
     icon: 'warning',
   },
   error: {
-    color: 'red',
+    foregroundColor: theme.colors.neutrals[6],
+    backgroundColor: theme.colors.primary.red[3],
     icon: 'error',
   },
 };
@@ -29,7 +39,7 @@ const severityStyles = {
 const BaseContainer = styled.View`
   position: absolute;
   z-index: 1000;
-  top: ${props => (props.top ? `${props.top}px` : '40px')};
+  top: ${(props) => (props.top ? `${props.top}px` : '40px')};
   left: 15%;
   right: 15%;
   bottom: 0;
@@ -54,7 +64,7 @@ const IconContainer = styled.View`
   border-top-left-radius: 6px;
   align-items: center;
   justify-content: center;
-  background-color: ${props => (props.color ? `${props.color}` : 'transparent')};
+  background-color: ${(props) => (props.color ? `${props.color}` : 'transparent')};
 `;
 const CloseButtonContainer = styled.TouchableHighlight`
   padding-horizontal: 14px;
@@ -79,7 +89,7 @@ interface Props {
 }
 
 const Toast: React.FC<Props> = ({ notification, index, onClose }) => {
-  const { color, icon } = severityStyles[notification.severity];
+  const { foregroundColor, backgroundColor, icon } = severityStyles[notification.severity];
   const { mainText, secondaryText } = notification;
 
   useEffect(() => {
@@ -91,8 +101,8 @@ const Toast: React.FC<Props> = ({ notification, index, onClose }) => {
   return (
     <BaseContainer top={40 + 70 * index}>
       {icon ? (
-        <IconContainer color={color}>
-          <Icon name={icon} />
+        <IconContainer color={backgroundColor}>
+          <Icon color={foregroundColor} name={icon} />
         </IconContainer>
       ) : null}
       <ContentContainer>
@@ -120,7 +130,7 @@ Toast.propTypes = {
   notification: PropTypes.shape({
     id: PropTypes.number,
     autoHideDuration: PropTypes.number,
-    severity: PropTypes.oneOf(['success', 'info', 'warning', 'error']),
+    severity: PropTypes.oneOf(['success', 'info', 'warning', 'error', 'neutral']),
     mainText: PropTypes.string,
     secondaryText: PropTypes.string,
   }),
