@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, Animated } from 'react-native';
+import { Animated } from 'react-native';
 import styled from 'styled-components/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import FormField from '../../../containers/FormField';
@@ -13,6 +13,7 @@ import Banner from './StepBanner/StepBanner';
 import StepDescription from './StepDescription/StepDescription';
 import StepFooter from './StepFooter/StepFooter';
 import { getStatusByType } from '../../../assets/mock/caseStatuses';
+import { useNotification } from '../../../store/NotificationContext';
 
 const StepContainer = styled.View`
   background: ${(props) => props.theme.colors.neutrals[7]};
@@ -63,14 +64,15 @@ function Step({
   const {
     isLoading,
     isRejected,
-    isResolved,
-    isIdle,
     error,
     handleCancelOrder,
     isBankidInstalled,
     handleSetStatus,
+    handleSetError,
   } = useContext(AuthContext);
   const [closeDialogVisible, setCloseDialogVisible] = useState(false);
+  const showNotification = useNotification();
+
   /**
    * Set auth context status to idle when navigating
    */
@@ -78,6 +80,17 @@ function Step({
     handleSetStatus('idle');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPosition]);
+
+  /**
+   * Effect for showing notification if an error occurs
+   */
+  useEffect(() => {
+    if (isRejected && error?.message) {
+      showNotification(error.message, '', 'neutral');
+      handleSetError(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
 
   /** TODO: move out of this scope, this logic should be defined on the form component */
   const closeForm = () => {
@@ -93,6 +106,7 @@ function Step({
       formNavigation.close(() => {});
     }
   };
+
   const isSubstep = currentPosition.level !== 0;
   const isLastMainStep =
     currentPosition.level === 0 && currentPosition.currentMainStep === totalStepNumber;
@@ -154,7 +168,7 @@ function Step({
               />
             )}
             <StepBody>
-              {(isResolved || isIdle) && (
+              {!isLoading && (
                 <>
                   <StepDescription
                     theme={theme}
@@ -199,13 +213,6 @@ function Step({
                     cancelSignIn={() => handleCancelOrder()}
                     isBankidInstalled={isBankidInstalled}
                   />
-                </SignStepWrapper>
-              )}
-
-              {/* TODO: Fix how to display error messages */}
-              {isRejected && (
-                <SignStepWrapper>
-                  <Text>{error && error.message}</Text>
                 </SignStepWrapper>
               )}
             </StepBody>
