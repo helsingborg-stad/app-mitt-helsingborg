@@ -18,6 +18,7 @@ import {
   startSign,
   setStatus,
   checkIsBankidInstalled,
+  setError,
 } from './actions/AuthActions';
 
 const AuthContext = React.createContext();
@@ -135,10 +136,17 @@ function AuthProvider({ children, initialState }) {
   }
 
   /**
-   * Used to remove user profile data from the state.
+   * Set status.
    */
   function handleSetStatus(status) {
     dispatch(setStatus(status));
+  }
+
+  /**
+   * Set error object
+   */
+  function handleSetError(error) {
+    dispatch(setError(error));
   }
 
   /**
@@ -176,6 +184,7 @@ function AuthProvider({ children, initialState }) {
     handleSetStatus,
     isAccessTokenValid,
     handleSign,
+    handleSetError,
     isLoading: state.status === 'pending',
     isIdle: state.status === 'idle',
     isResolved: state.status === 'authResolved' || state.status === 'signResolved',
