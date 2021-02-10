@@ -17,6 +17,7 @@ import theme from '../../styles/theme';
 import { getValidColorSchema } from '../../styles/themeHelpers';
 import SummaryList from '../../components/organisms/SummaryList/SummaryList';
 import ImageUploader from '../../components/molecules/ImageUploader/ImageUploader';
+import ImageViewer from '../../components/molecules/ImageViewer/ImageViewer';
 
 /**
  * Explanation of the properties in this data structure:
@@ -118,7 +119,12 @@ const inputTypes = {
   imageUploader: {
     component: ImageUploader,
     changeEvent: 'onChange',
-    props: {},
+    props: { answers: true },
+  },
+  imageViewer: {
+    component: ImageViewer,
+    changeEvent: 'onChange',
+    props: { answers: true },
   },
 };
 
@@ -160,6 +166,7 @@ const FormField = ({
     ...inputProps,
     error: validationErrors[id],
     inputType: inputSelectValue, // rename this so that we get a better name in the app
+    id,
     ...other,
   };
   if (input?.props?.answers) inputCompProps.answers = answers;
