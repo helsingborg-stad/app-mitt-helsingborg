@@ -160,6 +160,7 @@ function LoginScreen(props) {
     isRejected,
     isResolved,
     error,
+    handleSetError,
   } = useContext(AuthContext);
   const showNotification = useNotification();
 
@@ -210,7 +211,8 @@ function LoginScreen(props) {
    */
   useEffect(() => {
     if (isRejected && error?.message) {
-      showNotification(error.message, '', 'error');
+      showNotification(error.message, '', 'neutral');
+      handleSetError(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
