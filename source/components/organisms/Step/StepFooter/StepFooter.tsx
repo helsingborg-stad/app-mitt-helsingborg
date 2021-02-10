@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import AuthContext from '../../../../store/AuthContext';
 import { Button, Text } from '../../../atoms';
-import { Action, ActionType, Question } from '../../../../types/FormTypes';
+import { Action, Question } from '../../../../types/FormTypes';
 import { CaseStatus } from '../../../../types/CaseType';
 import { FormPosition } from '../../../../containers/Form/hooks/useForm';
 import { useNotification } from '../../../../store/NotificationContext';
@@ -83,8 +83,8 @@ const StepFooter: React.FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
-  const actionMap = (type: ActionType) => {
-    switch (type) {
+  const actionMap = (action: Action) => {
+    switch (action.type) {
       case 'start': {
         return formNavigation.start || null;
       }
@@ -99,7 +99,7 @@ const StepFooter: React.FC<Props> = ({
       }
       case 'sign': {
         return async () => {
-          await handleSign(user.personalNumber, 'Signering för Mitt Helsingborg');
+          await handleSign(user.personalNumber, action?.message || 'Signering Mitt Helsingborg.');
         };
       }
       case 'backToMain': {
@@ -147,7 +147,7 @@ const StepFooter: React.FC<Props> = ({
   const buttons = actions.map((action, index) => (
     <Flex key={`${index}-${action.label}`}>
       <Button
-        onClick={actionMap(action.type)}
+        onClick={actionMap(action)}
         colorSchema={action.color}
         disabled={isLoading || (action.hasCondition && checkCondition(action.conditionalOn))}
         z={0}
