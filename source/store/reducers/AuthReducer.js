@@ -115,6 +115,12 @@ export default function AuthReducer(state, action) {
         isBankidInstalled: action.isBankidInstalled,
       };
 
+    case actionTypes.setError:
+      return {
+        ...state,
+        ...payload,
+      };
+
     default:
       return state;
   }
