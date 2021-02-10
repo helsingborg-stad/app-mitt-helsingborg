@@ -3,7 +3,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import ImageZoom from 'react-native-image-pan-zoom';
-import { TouchableOpacity, Dimensions, Image as RNImage } from 'react-native';
+import {
+  TouchableOpacity,
+  Dimensions,
+  Image as RNImage,
+  GestureResponderEvent,
+} from 'react-native';
 import { Icon, Button, Text } from '../../atoms';
 import { Modal, useModal } from '../Modal';
 import { Image } from './ImageDisplay';
@@ -16,13 +21,20 @@ const Flex = styled.View`
   flex-direction: column;
   align-items: center;
   padding: 0;
+  padding-top: 10px;
+  padding-right: 10px;
   margin: 0;
 `;
-const Row = styled.View`
-  flex-direction: row;
-  align-items: center;
-  padding: 0;
-  margin: 0;
+
+const DeleteBackground = styled.View`
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 4px;
+  elevation: 4;
+  background: #eeeeee;
+  z-index: 1;
+  border-radius: 20px;
 `;
 const ButtonWrapper = styled.View`
   flex-direction: row;
@@ -31,11 +43,9 @@ const ButtonWrapper = styled.View`
   margin-bottom: 10px;
 `;
 const IconContainer = styled.View`
-  border-top-left-radius: 12.5px;
-  border-bottom-left-radius: 12.5px;
   padding: 0px;
   margin-left: 8px;
-  margin-right: 8px;
+  margin-right: 0px;
   elevation: 2;
   shadow-offset: 0px 2px;
   shadow-color: black;
@@ -55,18 +65,23 @@ interface Props {
 const ImageItem: React.FC<Props> = ({ image, onRemove }) => {
   const [modalVisible, toggleModal] = useModal();
 
+  const handleRemove = (event: GestureResponderEvent) => {
+    event.stopPropagation();
+    onRemove();
+  };
+
   return (
     <>
       <DefaultItem onPress={toggleModal} activeOpacity={0.1}>
         <Flex>
+          <DeleteBackground>
+            <TouchableOpacity onPress={handleRemove} activeOpacity={0.4}>
+              <Icon name="clear" color="#00213F" />
+            </TouchableOpacity>
+          </DeleteBackground>
           <IconContainer>
             <ImageIcon source={{ uri: image.path }} />
           </IconContainer>
-          <Row>
-            <TouchableOpacity onPress={onRemove} activeOpacity={0.4}>
-              <Icon name="delete" color="#00213F" />
-            </TouchableOpacity>
-          </Row>
         </Flex>
       </DefaultItem>
       <Modal visible={modalVisible} hide={toggleModal}>
