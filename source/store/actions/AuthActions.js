@@ -18,6 +18,7 @@ export const actionTypes = {
   cancelOrder: 'CANCEL_ORDER',
   signStarted: 'SIGN_STARTED',
   setStatus: 'SET_STATUS',
+  setError: 'SET_ERROR',
   signSuccess: 'SIGN_SUCCESS',
   setIsBankidInstalled: 'SET_INSTALLED',
 };
@@ -48,6 +49,15 @@ export function setStatus(status) {
   return {
     type: actionTypes.setStatus,
     status,
+  };
+}
+
+export function setError(error) {
+  return {
+    type: actionTypes.setError,
+    payload: {
+      error,
+    },
   };
 }
 
