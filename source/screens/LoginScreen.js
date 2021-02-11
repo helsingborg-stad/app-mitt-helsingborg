@@ -263,6 +263,7 @@ function LoginScreen(props) {
             <Form>
               <AuthLoading
                 colorSchema="red"
+                isLoading={isLoading}
                 isResolved={isResolved}
                 cancelSignIn={() => handleCancelOrder()}
                 isBankidInstalled
@@ -327,6 +328,7 @@ function LoginScreen(props) {
               <Form>
                 <AuthLoading
                   colorSchema="red"
+                  isLoading={isLoading}
                   isResolved={isResolved}
                   cancelSignIn={() => handleCancelOrder()}
                   isBankidInstalled={false}

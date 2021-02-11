@@ -63,6 +63,7 @@ function Step({
 }) {
   const {
     isLoading,
+    isResolved,
     isRejected,
     error,
     handleCancelOrder,
@@ -207,9 +208,12 @@ function Step({
                 </>
               )}
 
-              {isLoading && (
+              {(isLoading || isResolved) && (
                 <SignStepWrapper>
                   <AuthLoading
+                    colorSchema={colorSchema || 'neutral'}
+                    isLoading={isLoading}
+                    isResolved={isResolved}
                     cancelSignIn={() => handleCancelOrder()}
                     isBankidInstalled={isBankidInstalled}
                   />
