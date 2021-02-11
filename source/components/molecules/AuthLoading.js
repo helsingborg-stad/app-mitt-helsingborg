@@ -37,6 +37,7 @@ const AuthActivityIndicator = styled.ActivityIndicator`
 `;
 
 const InfoText = styled(Text)`
+  font-size: ${(props) => props.theme.fontSizes[3]}px;
   margin-bottom: 24px;
   text-align: center;
   color: ${(props) => props.theme.colors.neutrals[1]};
