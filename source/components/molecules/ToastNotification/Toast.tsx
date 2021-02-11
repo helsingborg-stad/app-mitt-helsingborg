@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
+import { View, TouchableHighlight } from 'react-native';
 import styled from 'styled-components/native';
-import { TouchableHighlight } from 'react-native-gesture-handler';
 import { Notification } from '../../../store/NotificationContext';
 import Text from '../../atoms/Text/Text';
 import Icon from '../../atoms/Icon/Icon';
@@ -66,7 +65,7 @@ const IconContainer = styled.View`
   justify-content: center;
   background-color: ${(props) => (props.color ? `${props.color}` : 'transparent')};
 `;
-const CloseButtonContainer = styled.TouchableHighlight`
+const CloseButtonContainer = styled(View)`
   padding-horizontal: 14px;
   align-items: center;
   justify-content: center;
@@ -118,7 +117,7 @@ const Toast: React.FC<Props> = ({ notification, index, onClose }) => {
         )}
       </ContentContainer>
       <CloseButtonContainer>
-        <TouchableHighlight activeOpacity={1} onPress={onClose}>
+        <TouchableHighlight activeOpacity={0.6} onPress={onClose} underlayColor="transparent">
           <Icon name="close" />
         </TouchableHighlight>
       </CloseButtonContainer>
