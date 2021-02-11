@@ -22,7 +22,7 @@ const Box = styled.View`
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background: #f5f5f5;
+  background: ${(props) => props.theme.colors.neutrals[6]};
   padding: 16px;
   elevation: 2;
   shadow-offset: 0px 2px;
@@ -39,8 +39,8 @@ const AuthActivityIndicator = styled.ActivityIndicator`
 const InfoText = styled(Text)`
   margin-bottom: 24px;
   text-align: center;
-  color: #3d3d3d;
-  font-weight: bold;
+  color: ${(props) => props.theme.colors.neutrals[1]};
+  font-weight: ${(props) => props.theme.fontWeights[1]};
 `;
 
 const AbortButton = styled(Button)`
@@ -48,8 +48,8 @@ const AbortButton = styled(Button)`
 `;
 
 const ButtonText = styled(Text)`
-  color: #3d3d3d;
-  font-weight: bold;
+  color: ${(props) => props.theme.colors.neutrals[1]};
+  font-weight: ${(props) => props.theme.fontWeights[1]};
 `;
 
 const BlurredBackground = styled(BlurView)`
@@ -60,7 +60,7 @@ const BlurredBackground = styled(BlurView)`
   right: 0;
 `;
 
-const ResolvedIcon = styled(Icon)`
+const SuccessIcon = styled(Icon)`
   color: ${(props) => props.theme.colors.primary[props.colorSchema][0]};
 `;
 
@@ -81,7 +81,7 @@ const AuthLoading = (props) => {
     <>
       {isResolved && (
         <Container as={Animated.View} style={{ opacity: fadeAnimation }}>
-          <ResolvedIcon size={48} name="check-circle" colorSchema={colorSchema} />
+          <SuccessIcon size={48} name="check-circle" colorSchema={colorSchema} />
         </Container>
       )}
 
