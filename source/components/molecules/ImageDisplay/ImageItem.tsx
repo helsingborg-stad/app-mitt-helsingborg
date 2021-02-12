@@ -14,7 +14,6 @@ import { Modal, useModal } from '../Modal';
 import { Image } from './ImageDisplay';
 
 const DefaultItem = styled.TouchableOpacity`
-  background-color: white;
   margin-bottom: 20px;
 `;
 const Flex = styled.View`
@@ -42,15 +41,14 @@ const ButtonWrapper = styled.View`
   justify-content: center;
 `;
 const IconContainer = styled.View`
-  padding: 1px;
-  margin-left: 0px;
-  margin-right: 0px;
+  margin: 2px
   elevation: 2;
   shadow-offset: 0px 2px;
   shadow-color: black;
-  shadow-opacity: 0.3;
-  shadow-radius: 2px;
-  elevation: 2;
+  shadow-opacity: 0.4;
+  shadow-radius: 5px;
+  border: 1px solid transparent;
+  elevation: 1;
 `;
 const ImageIcon = styled.Image`
   width: 126px;
