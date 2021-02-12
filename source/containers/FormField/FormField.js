@@ -255,7 +255,7 @@ FormField.propTypes = {
   /**
    * sets the color theme.
    */
-  colorSchema: PropTypes.oneOf(Object.keys(theme.colors.primary)),
+  colorSchema: PropTypes.oneOf([...Object.keys(theme.colors.primary), '']),
   /*
    * The function triggers when the button is clicked.
    */
@@ -285,6 +285,7 @@ FormField.propTypes = {
     'summaryList',
     'repeaterField',
     'imageUploader',
+    'imageViewer',
   ]),
 };
 

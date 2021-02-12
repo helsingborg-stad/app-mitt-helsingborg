@@ -22,35 +22,35 @@ const Flex = styled.View`
   align-items: center;
   padding: 0;
   padding-top: 10px;
-  padding-right: 10px;
+  padding-right: 20px;
   margin: 0;
 `;
 
 const DeleteBackground = styled.View`
   position: absolute;
-  top: 0px;
-  right: 0px;
+  top: 2px;
+  right: 7px;
   padding: 4px;
-  elevation: 4;
+  elevation: 3;
   background: #eeeeee;
   z-index: 1;
   border-radius: 20px;
 `;
 const ButtonWrapper = styled.View`
+  padding: 5px;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-start;
-  margin-bottom: 10px;
 `;
 const IconContainer = styled.View`
-  padding: 0px;
-  margin-left: 8px;
+  padding: 1px;
+  margin-left: 0px;
   margin-right: 0px;
   elevation: 2;
   shadow-offset: 0px 2px;
   shadow-color: black;
   shadow-opacity: 0.3;
   shadow-radius: 2px;
+  elevation: 2;
 `;
 const ImageIcon = styled.Image`
   width: 126px;
@@ -75,7 +75,7 @@ const ImageItem: React.FC<Props> = ({ image, onRemove }) => {
       <DefaultItem onPress={toggleModal} activeOpacity={0.1}>
         <Flex>
           <DeleteBackground>
-            <TouchableOpacity onPress={handleRemove} activeOpacity={0.4}>
+            <TouchableOpacity onPress={handleRemove} activeOpacity={0.1}>
               <Icon name="clear" color="#00213F" />
             </TouchableOpacity>
           </DeleteBackground>
@@ -88,7 +88,7 @@ const ImageItem: React.FC<Props> = ({ image, onRemove }) => {
         {image && image?.path && (
           <ImageZoom
             cropWidth={Dimensions.get('window').width}
-            cropHeight={Dimensions.get('window').height * 0.9}
+            cropHeight={Dimensions.get('window').height * 0.89}
             imageWidth={image.width}
             imageHeight={image.height}
             panToMove
@@ -99,6 +99,7 @@ const ImageItem: React.FC<Props> = ({ image, onRemove }) => {
               scale: Dimensions.get('window').width / image.width,
               duration: 10,
             }}
+            minScale={Dimensions.get('window').width / image.width}
           >
             <RNImage
               style={{ width: image.width, height: image.height }}
