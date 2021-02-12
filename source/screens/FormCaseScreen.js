@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ActivityIndicator } from 'react-native';
 import styled from 'styled-components';
-import Form from '../containers/Form/Form';
+import Form, { defaultInitialPosition } from '../containers/Form/Form';
 import { getFormQuestions, convertAnswerArrayToObject } from '../helpers/CaseDataConverter';
 import AuthContext from '../store/AuthContext';
 import FormContext from '../store/FormContext';
@@ -27,8 +27,8 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   const { updateCase } = useContext(CaseDispatch);
 
   useEffect(() => {
-    if (caseData?.formId) {
-      getForm(caseData.formId).then((form) => {
+    if (caseData?.currentFormId) {
+      getForm(caseData.currentFormId).then((form) => {
         setForm(form);
         setFormQuestions(getFormQuestions(form));
       });
@@ -41,7 +41,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       initCase.answers = answersObject;
       setInitialCase(initCase);
 
-      getForm(initCase.formId).then(async (form) => {
+      getForm(initCase.currentFormId).then(async (form) => {
         setForm(form);
         setFormQuestions(getFormQuestions(form));
       });
@@ -52,13 +52,21 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
     navigation.popToTop();
   }
 
-  const updateCaseContext = (data, status, currentPosition) => {
+  const updateCaseContext = (answerObject, status, currentPosition) => {
     // If the case is submitted, we should not actually update its data...
     if (
       initialCase.status.type.includes('ongoing') ||
       initialCase.status.type.includes('notStarted')
     ) {
-      updateCase(initialCase.id, data, status, currentPosition, formQuestions);
+      const caseData = {
+        caseId: initialCase.id,
+        formId: initialCase.currentFormId,
+        answerObject,
+        status,
+        currentPosition,
+        formQuestions,
+      };
+      updateCase(caseData);
     }
   };
 
@@ -82,12 +90,14 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       </SpinnerContainer>
     );
   }
+  initialPosition =
+    initialCase?.forms?.[initialCase.currentFormId]?.currentPosition || defaultInitialPosition;
 
   return (
     <Form
       steps={form.steps}
       connectivityMatrix={form.connectivityMatrix}
-      initialPosition={caseData?.currentPosition || initialCase?.currentPosition}
+      initialPosition={initialPosition}
       user={user}
       onClose={handleCloseForm}
       onStart={handleStartForm}

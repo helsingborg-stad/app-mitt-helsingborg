@@ -10,13 +10,17 @@ export const actionTypes = {
   apiError: 'API_ERROR',
 };
 
-export async function updateCase(caseId, data, status, currentPosition, formQuestions, callback) {
-  const answers = convertAnswersToArray(data, formQuestions);
+export async function updateCase(
+  { caseId, formId, answerObject, status, currentPosition, formQuestions },
+  callback
+) {
+  const answers = convertAnswersToArray(answerObject, formQuestions);
 
   const body = {
     status,
     answers,
     currentPosition,
+    currentFormId: formId,
   };
 
   try {
