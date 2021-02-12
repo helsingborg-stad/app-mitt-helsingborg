@@ -24,11 +24,12 @@ const SummaryHeading = styled(Text)`
 `;
 
 const computeCaseCardComponent = (caseData, form, colorSchema, navigation) => {
+  const { status, details: { period: { endDate } = {} } = {} } = caseData;
   const {
-    status,
-    currentPosition: { currentMainStep: currentStep } = {},
-    details: { period: { endDate } = {} } = {},
-  } = caseData;
+    currentPosition: { currentMainStep: currentStep },
+  } = caseData.forms[caseData.currentFormId];
+
+  console.log('form', form);
   const totalSteps = form?.stepStructure?.length || 0;
   const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(endDate, true);
   const isNotStarted = status?.type?.includes('notStarted');
@@ -89,7 +90,7 @@ const CaseSummary = (props) => {
       setForm(await getForm(id));
     };
 
-    getFormObject(caseData.formId);
+    getFormObject(caseData.currentFormId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused, cases]);
 
