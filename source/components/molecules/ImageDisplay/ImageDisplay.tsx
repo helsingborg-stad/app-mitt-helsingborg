@@ -4,7 +4,6 @@ import { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { Image as CropPickerImage } from 'react-native-image-crop-picker';
 import styled from 'styled-components/native';
 import HorizontalScrollIndicator from '../../atoms/HorizontalScrollIndicator';
-import { PrimaryColor } from '../../../styles/themeHelpers';
 import ImageItem from './ImageItem';
 
 const Wrapper = styled.View`
@@ -14,7 +13,7 @@ const Wrapper = styled.View`
   padding-bottom: 0;
 `;
 const Container = styled.ScrollView`
-  padding-left: 16px;
+  padding-left: 0px;
   padding-right: 16px;
 `;
 
@@ -75,7 +74,6 @@ const ImageDisplay: React.FC<Props> = ({ images, answers, onChange }) => {
 ImageDisplay.propTypes = {
   images: PropTypes.arrayOf(PropTypes.object),
   answers: PropTypes.object,
-  colorSchema: PropTypes.oneOf(['blue', 'red', 'green', 'purple', 'neutral']),
   onChange: PropTypes.func,
 };
 
