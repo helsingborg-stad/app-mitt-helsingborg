@@ -35,7 +35,8 @@ const colorSchema = 'red';
  * @param {obj} navigation
  */
 const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
-  const currentStep = caseData?.currentPosition?.currentMainStep || 0;
+  const currentStep =
+    caseData?.forms?.[caseData.currentFormId]?.currentPosition?.currentMainStep || 0;
   const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
   const applicationPeriodMonth = caseData?.details?.period?.endDate
     ? getSwedishMonthNameByTimeStamp(caseData.details.period.endDate, true)
@@ -137,9 +138,8 @@ function CaseOverview(props) {
       const updateCaseItemsPromises = caseTypes.map(async (caseType) => {
         const formIds = await getFormIdsByFormTypes(caseType.formTypes);
         const formCases = getCasesByFormIds(formIds);
-
         const updatedFormCaseObjects = formCases.map(async (caseData) => {
-          const form = await getForm(caseData.formId);
+          const form = await getForm(caseData.currentFormId);
           const component = computeCaseCardComponent(caseData, form, caseType, navigation);
           return { component, ...caseData };
         });

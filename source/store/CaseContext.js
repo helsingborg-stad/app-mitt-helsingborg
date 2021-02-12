@@ -32,8 +32,17 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
     dispatch(await create(form, user, Object.values(state.cases), callback));
   }
 
-  async function updateCase(caseId, data, status, currentPosition, form) {
-    dispatch(await update(caseId, data, status, currentPosition, form));
+  async function updateCase({
+    caseId,
+    formId,
+    answerObject,
+    status,
+    currentPosition,
+    formQuestions,
+  }) {
+    dispatch(
+      await update({ caseId, formId, answerObject, status, currentPosition, formQuestions })
+    );
   }
 
   function getCase(caseId) {
@@ -48,7 +57,7 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   function getCasesByFormIds(formIds) {
     const formCases = [];
     Object.values(state.cases).forEach((c) => {
-      if (formIds.includes(c.formId)) {
+      if (formIds.includes(c.currentFormId)) {
         formCases.push(c);
       }
     });

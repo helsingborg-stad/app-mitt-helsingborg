@@ -36,6 +36,13 @@ interface Props {
   ) => void;
 }
 
+export const defaultInitialPosition: FormPosition = {
+  index: 0,
+  level: 0,
+  currentMainStep: 1,
+  currentMainStepIndex: 0,
+};
+
 /**
  * The Container Component Form allows you to create, process and reuse forms. The Form component
  * is a tool to help you solve the problem of allowing end-users to interact with the
@@ -52,12 +59,6 @@ const Form: React.FC<Props> = ({
   status,
   updateCaseInContext,
 }) => {
-  const defaultInitialPosition: FormPosition = {
-    index: 0,
-    level: 0,
-    currentMainStep: 1,
-    currentMainStepIndex: 0,
-  };
 
   const initialState: FormReducerState = {
     submitted: false,
