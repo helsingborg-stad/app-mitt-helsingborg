@@ -32,13 +32,31 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
         setForm(form);
         setFormQuestions(getFormQuestions(form));
       });
-      const answersObject = convertAnswerArrayToObject(caseData.answers);
-      caseData.answers = answersObject;
+      const answerArray = caseData?.forms?.[caseData.currentFormId]?.answers || [];
+      const answersObject = convertAnswerArrayToObject(answerArray);
+      caseData.forms = {
+        ...caseData.forms,
+        [caseData.currentFormId]: {
+          ...caseData.forms[caseData.currentFormId],
+          answers: answersObject,
+        },
+      };
       setInitialCase(caseData);
     } else if (caseId) {
       const initCase = getCase(caseId);
-      const answersObject = convertAnswerArrayToObject(initCase.answers);
-      initCase.answers = answersObject;
+      // Beware, dragons! Since we pass by reference, it seems like the answers
+      // can be converted to object form already, thus we do this check.
+      if (Array.isArray(initCase?.forms?.[initCase.currentFormId]?.answers)) {
+        const answerArray = initCase?.forms?.[initCase.currentFormId]?.answers || [];
+        const answersObject = convertAnswerArrayToObject(answerArray);
+        initCase.forms = {
+          ...initCase.forms,
+          [initCase.currentFormId]: {
+            ...initCase.forms[initCase.currentFormId],
+            answers: answersObject,
+          },
+        };
+      }
       setInitialCase(initCase);
 
       getForm(initCase.currentFormId).then(async (form) => {
@@ -90,8 +108,9 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       </SpinnerContainer>
     );
   }
-  initialPosition =
+  const initialPosition =
     initialCase?.forms?.[initialCase.currentFormId]?.currentPosition || defaultInitialPosition;
+  const initialAnswers = initialCase?.forms?.[initialCase.currentFormId]?.answers || {};
 
   return (
     <Form
@@ -102,7 +121,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       onClose={handleCloseForm}
       onStart={handleStartForm}
       onSubmit={handleSubmitForm}
-      initialAnswers={initialCase?.answers || caseData.answers || {}}
+      initialAnswers={initialAnswers}
       status={initialCase.status || getStatusByType('notStarted')}
       updateCaseInContext={updateCaseContext}
       {...props}
