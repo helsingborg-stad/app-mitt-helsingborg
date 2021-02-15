@@ -98,7 +98,7 @@ Select.propTypes = {
   /** What to display when no value has been chosen */
   placeholder: PropTypes.string,
   /** Style properties for the inputbox */
-  style: PropTypes.shape({}),
+  style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   error: PropTypes.shape({
     isValid: PropTypes.bool.isRequired,
     message: PropTypes.string.isRequired,

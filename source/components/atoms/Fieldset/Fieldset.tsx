@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import Text from '../Text/Text';
-import Icon from '../Icon';
 import Button from '../Button';
 import { Help } from '../../../types/FormTypes';
 import HelpButton from '../../molecules/HelpButton';
@@ -25,7 +24,7 @@ const FieldsetContainer = styled.View<FieldsetContainerProps>`
   padding-top: 16px;
   padding-left: 16px;
   padding-right: 16px;
-  background: ${props =>
+  background: ${(props) =>
     props?.empty
       ? props.theme.fieldset[props.colorSchema].backgroundEmpty
       : props.theme.fieldset[props.colorSchema].background};
@@ -48,7 +47,7 @@ interface FieldsetHeaderSectionProps {
 const FieldsetHeaderSection = styled.View<FieldsetHeaderSectionProps>`
   flex: 1;
   flex-direction: row;
-  justify-content: ${props => props.justifyContent};
+  justify-content: ${(props) => props.justifyContent};
   align-items: center;
 `;
 
@@ -59,7 +58,7 @@ interface FieldsetLegendProps {
 }
 
 const FieldsetLegend = styled(Text)<FieldsetLegendProps>`
-  color: ${props => props.theme.fieldset[props.colorSchema].legend}
+  color: ${(props) => props.theme.fieldset[props.colorSchema].legend}
   font-size: 12px;
   padding-bottom: 12px;
   font-weight: bold;
@@ -71,7 +70,7 @@ interface FieldsetLegendBorderProps {
 }
 
 const FieldsetLegendBorder = styled.View<FieldsetLegendBorderProps>`
-  border-bottom-color: ${props => props.theme.fieldset[props.colorSchema].legendBorder}
+  border-bottom-color: ${(props) => props.theme.fieldset[props.colorSchema].legendBorder}
   border-bottom-width: 2px;
   align-self: flex-start;
 `;
