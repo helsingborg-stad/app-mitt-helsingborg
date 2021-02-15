@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import AuthContext from '../../../../store/AuthContext';
@@ -67,18 +67,21 @@ const StepFooter: React.FC<Props> = ({
   validateStepAnswers,
 }) => {
   const { user, handleSign, status, isLoading } = useContext(AuthContext);
+  const [isSigning, setSigning] = useState(false);
   const showNotification = useNotification();
 
   useEffect(() => {
     const signCase = () => {
       if (onUpdate) onUpdate(answers);
-      if (updateCaseInContext)
+      if (updateCaseInContext) {
         updateCaseInContext(answers, getStatusByType('active:submitted:viva'), currentPosition);
+      }
       if (formNavigation.next) formNavigation.next();
     };
 
-    if (status === 'signResolved') {
+    if (status === 'signResolved' && isSigning) {
       signCase();
+      setSigning(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
@@ -99,6 +102,7 @@ const StepFooter: React.FC<Props> = ({
       }
       case 'sign': {
         return async () => {
+          setSigning(true);
           await handleSign(user.personalNumber, action?.message || 'Signering Mitt Helsingborg.');
         };
       }
