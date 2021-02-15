@@ -4,7 +4,6 @@ import { ActivityIndicator } from 'react-native';
 import styled from 'styled-components';
 import Form from '../containers/Form/Form';
 import { getFormQuestions, convertAnswerArrayToObject } from '../helpers/CaseDataConverter';
-import generateInitialCaseAnswers from '../store/actions/dynamicFormData';
 import AuthContext from '../store/AuthContext';
 import FormContext from '../store/FormContext';
 import { CaseDispatch, CaseState } from '../store/CaseContext';

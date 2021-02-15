@@ -144,7 +144,7 @@ InputComponent.propTypes = {
   editable: PropTypes.bool,
   onChange: PropTypes.func,
   onInputBlur: PropTypes.func,
-  value: PropTypes.string,
+  value: PropTypes.object,
   state: PropTypes.object,
 };
 
@@ -220,7 +220,7 @@ function EditableList({
           <EditableListItem
             colorSchema={colorSchema}
             editable={editable}
-            key={input.key}
+            key={`${input.key}-${index}`}
             error={error ? error[input.key] : undefined}
             activeOpacity={1.0}
             onPress={() => handleListItemPress(index)}
