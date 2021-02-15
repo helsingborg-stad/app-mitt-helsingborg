@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import env from 'react-native-config';
 import PropTypes from 'prop-types';
 import { get } from '../helpers/ApiRequest';
 import FormTypes from '../assets/formTypes';
