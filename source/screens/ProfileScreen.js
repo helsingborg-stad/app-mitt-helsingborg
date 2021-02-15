@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
-import { Button, Text, Heading, Icon } from 'app/components/atoms';
-import { Header } from 'app/components/molecules';
-import AuthContext from 'app/store/AuthContext';
-import PropTypes from 'prop-types';
-import { ScreenWrapper } from '../components/molecules';
+import { Button, Text, Heading, Icon } from '../components/atoms';
+import { ScreenWrapper, Header } from '../components/molecules';
+import AuthContext from '../store/AuthContext';
 import AppContext from '../store/AppContext';
 
 const ProfileScreenWrapper = styled(ScreenWrapper)`
