@@ -2,24 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { StyleProp, ViewStyle } from 'react-native';
 
 const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
   background-color: ${(props) => props.theme.colors.neutrals[6]};
 `;
 
-const ScreenWrapper = (props) => {
-  const { style, children, ...rest } = props;
+interface Props {
+  style?: StyleProp<ViewStyle>;
+}
 
-  return (
-    <Container style={style} {...rest}>
-      {children}
-    </Container>
-  );
-};
+const ScreenWrapper: React.FC<Props> = ({ style, children, ...rest }) => (
+  <Container style={style} {...rest}>
+    {children}
+  </Container>
+);
 
 ScreenWrapper.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
   style: PropTypes.array,
 };
 export default ScreenWrapper;
