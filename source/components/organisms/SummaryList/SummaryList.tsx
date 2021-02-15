@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import GroupedList from '../../molecules/GroupedList/GroupedList';
@@ -183,6 +183,7 @@ const SummaryList: React.FC<Props> = ({
               <SummaryListItemComponent
                 item={item}
                 index={index ? index + 1 : undefined}
+                key={`${item.id}-${index}`}
                 value={v[item?.inputId]}
                 changeFromInput={changeFromInput(item, index)}
                 onBlur={onItemBlur(item, index)}
@@ -204,6 +205,7 @@ const SummaryList: React.FC<Props> = ({
         listItems.push(
           <SummaryListItemComponent
               item={item}
+              key={`${item.id}`}
               value={answers[item.id][item.inputId]}
               changeFromInput={changeFromInput(item)}
               onBlur={onItemBlur(item)}
@@ -222,6 +224,7 @@ const SummaryList: React.FC<Props> = ({
         listItems.push(
           <SummaryListItemComponent
               item={item}
+              key={`${item.id}`}
               value={answers[item.id]}
               changeFromInput={changeFromInput(item)}
               onBlur={onItemBlur(item)}
