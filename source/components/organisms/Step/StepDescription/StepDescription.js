@@ -72,7 +72,7 @@ StepDescription.propTypes = {
   /**
    * The color schema for the description,
    */
-  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green', 'neutral']),
 };
 
 StepDescription.defaultProps = {
