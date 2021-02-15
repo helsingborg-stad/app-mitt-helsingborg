@@ -19,7 +19,7 @@ const CaseDispatch = React.createContext();
 export const caseTypes = [
   {
     name: 'Ekonomiskt Bistånd',
-    formTypes: ['EKB-recurring'],
+    formTypes: ['EKB-recurring', 'EKB-completion', 'EKB-new'],
     icon: 'ICON_EKB',
     navigateTo: 'CaseSummary',
   },
