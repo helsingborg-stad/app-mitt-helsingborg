@@ -276,6 +276,8 @@ FormField.propTypes = {
     'checkbox',
     'navigationButtonGroup',
     'summaryList',
+    'repeaterField',
+    'imageUploader',
   ]),
 };
 
