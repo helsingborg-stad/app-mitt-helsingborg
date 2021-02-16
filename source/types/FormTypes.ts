@@ -73,7 +73,7 @@ export interface Action {
   color?: string;
   hasCondition?: boolean;
   conditionalOn?: string;
-  message?: string;
+  signMessage?: string;
 }
 
 export interface Banner {
