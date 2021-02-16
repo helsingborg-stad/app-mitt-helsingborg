@@ -2,10 +2,10 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import CloseDialog, { Props as CloseDialogProps } from './CloseDialog';
 
-type DialogTemplateKeyType = 'mainStep' | 'subStep';
+type TemplateKeys = 'mainStep' | 'subStep';
 
 const DIALOG_TEMPLATES: {
-  [DialogTemplateKeyType: string]: CloseDialogProps;
+  [TemplateKeys: string]: CloseDialogProps;
 } = {
   mainStep: {
     title: 'Vill du avbryta ansökan',
@@ -42,10 +42,10 @@ const DIALOG_TEMPLATES: {
 };
 
 interface Props extends Partial<CloseDialogProps> {
-  template: DialogTemplateKeyType;
+  template: TemplateKeys;
 }
 
-/** Simple popup dialog asking the user if they really want to exit the form. Partially masks the background. */
+/** Template wrapper for CloseDialog within Form */
 const FormDialog = ({ template, ...props }: Props) => (
   <CloseDialog {...DIALOG_TEMPLATES[template]} {...props} />
 );
