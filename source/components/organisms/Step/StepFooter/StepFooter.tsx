@@ -66,8 +66,7 @@ const StepFooter: React.FC<Props> = ({
   children,
   validateStepAnswers,
 }) => {
-  const { user, handleSign, status, isLoading } = useContext(AuthContext);
-  const [isSigning, setSigning] = useState(false);
+  const { user, handleSign, status, isLoading, handleSetStatus } = useContext(AuthContext);
   const showNotification = useNotification();
 
   useEffect(() => {
@@ -76,12 +75,12 @@ const StepFooter: React.FC<Props> = ({
       if (updateCaseInContext) {
         updateCaseInContext(answers, getStatusByType('active:submitted:viva'), currentPosition);
       }
+      handleSetStatus('idle');
       if (formNavigation.next) formNavigation.next();
     };
 
-    if (status === 'signResolved' && isSigning) {
+    if (status === 'signResolved') {
       signCase();
-      setSigning(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
@@ -102,7 +101,6 @@ const StepFooter: React.FC<Props> = ({
       }
       case 'sign': {
         return async () => {
-          setSigning(true);
           await handleSign(
             user.personalNumber,
             action?.signMessage || 'Signering Mitt Helsingborg.'
