@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { BlurView } from '@react-native-community/blur';
-import PropTypes from 'prop-types';
 import { Modal } from 'react-native';
 import Button from '../../../atoms/Button';
 import Heading from '../../../atoms/Heading';
@@ -81,8 +80,45 @@ interface Props {
   visible: boolean;
   closeForm: () => void;
   closeDialog: () => void;
+  title: string;
+  body: string;
+  buttons: Array<{
+    text: string;
+    color: string;
+    clickHandler: () => void;
+  }>;
 }
+
 /** Simple popup dialog asking the user if they really want to exit the form. Partially masks the background. */
+const CloseDialog: React.FC<Props> = ({
+  visible,
+  closeForm,
+  closeDialog,
+  title,
+  body,
+  buttons,
+}) => (
+  <Modal visible={visible} transparent presentationStyle="overFullScreen" animationType="fade">
+    <BackgroundBlur>
+      <PopupContainer>
+        <ContentContainer>
+          <Card colorSchema="neutral">
+            <Card.Body>
+              <Card.Title>{title}</Card.Title>
+              {body && body.length > 0 && <Card.Text>{body}</Card.Text>}
+            </Card.Body>
+          </Card>
+          <ButtonRow>
+            {buttons.map(({ text, color, clickHandler }) => (
+              /* @ts-ignore */
+              <Button colorSchema={color} onClick={clickHandler}>
+                <Text>{text}</Text>
+              </Button>
+            ))}
+          </ButtonRow>
+        </ContentContainer>
+      </PopupContainer>
+    </BackgroundBlur>
 const CloseDialog: React.FC<Props> = ({ visible, closeForm, closeDialog }) => (
   <Modal
     visible={visible}
@@ -125,14 +161,5 @@ const CloseDialog: React.FC<Props> = ({ visible, closeForm, closeDialog }) => (
     </PopupContainer>
   </Modal>
 );
-
-CloseDialog.propTypes = {
-  /** whether to show the dialog or not */
-  visible: PropTypes.bool,
-  /** callback to navigate out of the form */
-  closeForm: PropTypes.func,
-  /** callback to close the dialog */
-  closeDialog: PropTypes.func,
-};
 
 export default CloseDialog;
