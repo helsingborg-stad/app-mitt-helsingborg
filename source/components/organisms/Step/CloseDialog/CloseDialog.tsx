@@ -75,30 +75,27 @@ const ButtonWrapper = styled.View`
 const ButtonDivider = styled.View`
   width: 8px;
 `;
-
-interface Props {
-  visible: boolean;
-  closeForm: () => void;
-  closeDialog: () => void;
+export interface Props {
+  visible?: boolean;
+  closeForm?: () => void;
+  closeDialog?: () => void;
   title: string;
   body: string;
   buttons: Array<{
     text: string;
-    color: string;
+    color?: 'neutral' | 'blue' | 'red' | 'purple' | 'green';
     clickHandler: () => void;
   }>;
 }
 
 /** Simple popup dialog asking the user if they really want to exit the form. Partially masks the background. */
-const CloseDialog: React.FC<Props> = ({
-  visible,
-  closeForm,
-  closeDialog,
-  title,
-  body,
-  buttons,
-}) => (
-  <Modal visible={visible} transparent presentationStyle="overFullScreen" animationType="fade">
+const CloseDialog: React.FC<Props> = ({ visible, title, body, buttons }) => (
+  <Modal
+    visible={visible ?? false}
+    transparent
+    presentationStyle="overFullScreen"
+    animationType="fade"
+  >
     <BackgroundBlur>
       <PopupContainer>
         <ContentContainer>
@@ -111,7 +108,10 @@ const CloseDialog: React.FC<Props> = ({
           <ButtonRow>
             {buttons.map(({ text, color, clickHandler }) => (
               /* @ts-ignore */
-              <Button colorSchema={color} onClick={clickHandler}>
+              <Button
+                colorSchema={color && color.length > 0 ? color : 'blue'}
+                onClick={clickHandler}
+              >
                 <Text>{text}</Text>
               </Button>
             ))}
