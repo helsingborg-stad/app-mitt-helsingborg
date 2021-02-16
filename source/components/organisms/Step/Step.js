@@ -13,6 +13,7 @@ import Banner from './StepBanner/StepBanner';
 import StepDescription from './StepDescription/StepDescription';
 import StepFooter from './StepFooter/StepFooter';
 import { getStatusByType } from '../../../assets/mock/caseStatuses';
+import FormDialog from './CloseDialog/FormDialog';
 import { useNotification } from '../../../store/NotificationContext';
 
 const StepContainer = styled.View`
@@ -60,6 +61,7 @@ function Step({
   updateCaseInContext,
   currentPosition,
   totalStepNumber,
+  answerSnapshot,
 }) {
   const {
     isLoading,
@@ -71,6 +73,7 @@ function Step({
     handleSetStatus,
     handleSetError,
   } = useContext(AuthContext);
+
   const [closeDialogVisible, setCloseDialogVisible] = useState(false);
   const showNotification = useNotification();
 
@@ -111,9 +114,42 @@ function Step({
   const isSubstep = currentPosition.level !== 0;
   const isLastMainStep =
     currentPosition.level === 0 && currentPosition.currentMainStep === totalStepNumber;
-  const backButtonBehavior = isSubstep ? formNavigation.goToMainForm : formNavigation.back;
 
   const [fadeValue] = useState(new Animated.Value(0));
+
+  const isDirtySubStep = JSON.stringify(answers) !== JSON.stringify(answerSnapshot) && isSubstep;
+  const [dialogTemplate, setDialogTemplate] = useState('mainStep');
+
+  const dialogButtons = {
+    mainStep: [
+      {
+        text: 'Nej',
+        color: 'red',
+        clickHandler: () => setCloseDialogVisible(false),
+      },
+      {
+        text: 'Ja',
+        clickHandler: () => {
+          setCloseDialogVisible(false);
+          closeForm();
+        },
+      },
+    ],
+    subStep: [
+      {
+        text: 'Nej',
+        color: 'red',
+        clickHandler: () => setCloseDialogVisible(false),
+      },
+      {
+        text: 'Ja',
+        clickHandler: () => {
+          formNavigation.restoreSnapshot();
+          formNavigation.goToMainForm();
+        },
+      },
+    ],
+  };
 
   useEffect(() => {
     const fadeIn = () => {
@@ -128,6 +164,22 @@ function Step({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const backButtonBehavior = isSubstep
+    ? () => {
+        if (isDirtySubStep) {
+          if (dialogTemplate !== 'subStep') setDialogTemplate('subStep');
+          setCloseDialogVisible(true);
+          return;
+        }
+
+        formNavigation.deleteSnapshot();
+        formNavigation.goToMainForm();
+      }
+    : () => {
+        if (dialogTemplate !== 'mainStep') setDialogTemplate('mainStep');
+        formNavigation.back();
+      };
+
   return (
     <StepContainer>
       <KeyboardAwareScrollView>
@@ -136,10 +188,10 @@ function Step({
             opacity: fadeValue,
           }}
         >
-          <CloseDialog
+          <FormDialog
             visible={closeDialogVisible}
-            closeForm={closeForm}
-            closeDialog={() => setCloseDialogVisible(false)}
+            template={dialogTemplate}
+            buttons={dialogButtons[dialogTemplate]}
           />
 
           {!isSubstep && (
@@ -261,6 +313,8 @@ Step.propTypes = {
    * The answers of a form.
    */
   answers: PropTypes.object,
+  answerSnapshot: PropTypes.object,
+  isDirtySubStep: PropTypes.bool,
   colorSchema: PropTypes.oneOf(['blue', 'green', 'red', 'purple', 'neutral']),
   /**
    * User input validation result.
@@ -300,6 +354,8 @@ Step.propTypes = {
     goToMainForm: PropTypes.func,
     start: PropTypes.func,
     isLastStep: PropTypes.func,
+    restoreSnapshot: PropTypes.func,
+    deleteSnapshot: PropTypes.func,
   }),
   /**
    * The function to update values in context (and thus the backend)
