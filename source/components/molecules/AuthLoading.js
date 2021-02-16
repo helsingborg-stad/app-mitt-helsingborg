@@ -22,8 +22,8 @@ const Box = styled.View`
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background: ${(props) => props.theme.colors.neutrals[6]};
-  padding: 16px;
+  background: ${(props) => props.theme.colors.neutrals[5]};
+  padding: 12px;
   elevation: 2;
   shadow-offset: 0px 2px;
   shadow-color: black;
