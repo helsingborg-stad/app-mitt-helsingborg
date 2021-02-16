@@ -26,6 +26,7 @@ export interface Props {
     back: () => void;
     down: (targetStepId: string) => void;
     up: () => void;
+    createSnapshot: () => void;
   };
 }
 
@@ -43,6 +44,7 @@ const NavigationButtonField: React.FC<Props> = ({
     // This logic could be broken out and placed elsewhere.
     switch (navigationType.type) {
       case 'navigateDown':
+        formNavigation.createSnapshot();
         formNavigation.down(navigationType.stepId);
         break;
       case 'navigateUp':

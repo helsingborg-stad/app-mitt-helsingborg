@@ -65,6 +65,7 @@ const Form: React.FC<Props> = ({
     steps,
     user,
     formAnswers: initialAnswers,
+    formAnswerSnapshot: {},
     validations: {},
     dirtyFields: {},
     connectivityMatrix,
@@ -78,6 +79,9 @@ const Form: React.FC<Props> = ({
     handleSubmit,
     handleBlur,
     validateStepAnswers,
+    createSnapshot,
+    restoreSnapshot,
+    deleteSnapshot,
   } = useForm(initialState);
 
   formNavigation.close = () => {
@@ -105,6 +109,7 @@ const Form: React.FC<Props> = ({
             text: description,
           }}
           answers={formState.formAnswers}
+          answerSnapshot={formState.formAnswerSnapshot}
           validation={formState.validations}
           validateStepAnswers={validateStepAnswers}
           status={status}

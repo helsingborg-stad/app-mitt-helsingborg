@@ -15,6 +15,9 @@ import {
   validateAllStepAnswers,
   dirtyField,
   goBackToMainFormAndNext,
+  createSnapshot,
+  restoreSnapshot,
+  deleteSnapshot,
 } from './formActions';
 
 type Action =
@@ -70,6 +73,15 @@ type Action =
   | {
       type: 'SUBMIT_FORM';
       payload: { callback: (formAnswers: Record<string, any>) => void };
+    }
+  | {
+      type: 'CREATE_SNAPSHOT';
+    }
+  | {
+      type: 'RESTORE_SNAPSHOT';
+    }
+  | {
+      type: 'DELETE_SNAPSHOT';
     };
 
 /**
@@ -168,6 +180,21 @@ function formReducer(state: FormReducerState, action: Action) {
     /** Update the list of all questions */
     case 'GET_ALL_QUESTIONS': {
       return getAllQuestions(state);
+    }
+
+    /** Create snapshot of current answers */
+    case 'CREATE_SNAPSHOT': {
+      return createSnapshot(state);
+    }
+
+    /** Restore answers snapshot */
+    case 'RESTORE_SNAPSHOT': {
+      return restoreSnapshot(state);
+    }
+
+    /** Delete answers snapshot */
+    case 'DELETE_SNAPSHOT': {
+      return deleteSnapshot(state);
     }
 
     default:
