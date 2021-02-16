@@ -17,6 +17,7 @@ export interface FormReducerState {
   user: User;
   connectivityMatrix: StepperActions[][];
   formAnswers: Record<string, any>;
+  formAnswerSnapshot: Record<string, any>;
   validations: Record<string, any>;
   dirtyFields: Record<string, any>;
   numberOfMainSteps?: number;
@@ -46,6 +47,30 @@ function useForm(initialState: FormReducerState) {
       payload: { onErrorCallback, onValidCallback },
     });
   };
+
+  /**
+   * Function for creating snapshot
+   */
+  const createSnapshot = () =>
+    dispatch({
+      type: 'CREATE_SNAPSHOT',
+    });
+
+  /**
+   * Function for deleting snapshot
+   */
+  const deleteSnapshot = () =>
+    dispatch({
+      type: 'DELETE_SNAPSHOT',
+    });
+
+  /**
+   * Function for restoring & deleting snapshot
+   */
+  const restoreSnapshot = () =>
+    dispatch({
+      type: 'RESTORE_SNAPSHOT',
+    });
 
   /**
    * Function for going forward in the form
@@ -132,7 +157,6 @@ function useForm(initialState: FormReducerState) {
    */
   const handleBlur = (answer: Record<string, any>, questionId: string) => {
     dispatch({ type: 'DIRTY_FIELD', payload: { answer, id: questionId } });
-    dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId, checkIfDirty: true } });
   };
   /**
    * Function for updating answer.
@@ -152,6 +176,9 @@ function useForm(initialState: FormReducerState) {
     goToMainForm,
     goToMainFormAndNext,
     isLastStep,
+    createSnapshot,
+    restoreSnapshot,
+    deleteSnapshot,
   };
 
   return {
