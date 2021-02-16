@@ -103,7 +103,10 @@ const StepFooter: React.FC<Props> = ({
       case 'sign': {
         return async () => {
           setSigning(true);
-          await handleSign(user.personalNumber, action?.message || 'Signering Mitt Helsingborg.');
+          await handleSign(
+            user.personalNumber,
+            action?.signMessage || 'Signering Mitt Helsingborg.'
+          );
         };
       }
       case 'backToMain': {
