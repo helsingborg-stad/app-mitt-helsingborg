@@ -29,7 +29,6 @@ const computeCaseCardComponent = (caseData, form, colorSchema, navigation) => {
     currentPosition: { currentMainStep: currentStep },
   } = caseData.forms[caseData.currentFormId];
 
-  console.log('form', form);
   const totalSteps = form?.stepStructure?.length || 0;
   const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(endDate, true);
   const isNotStarted = status?.type?.includes('notStarted');
