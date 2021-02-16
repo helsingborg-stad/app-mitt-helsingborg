@@ -45,7 +45,7 @@ interface Props extends Partial<CloseDialogProps> {
   template: TemplateKeys;
 }
 
-/** Template wrapper for CloseDialog within Form */
+/** Template wrapper for CloseDialog within Form. Override template by forwarding props to CloseDialog */
 const FormDialog = ({ template, ...props }: Props) => (
   <CloseDialog {...DIALOG_TEMPLATES[template]} {...props} />
 );
