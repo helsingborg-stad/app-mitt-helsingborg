@@ -182,17 +182,14 @@ function formReducer(state: FormReducerState, action: Action) {
       return getAllQuestions(state);
     }
 
-    /** Create snapshot of current answers */
     case 'CREATE_SNAPSHOT': {
       return createSnapshot(state);
     }
 
-    /** Restore answers snapshot */
     case 'RESTORE_SNAPSHOT': {
       return restoreSnapshot(state);
     }
 
-    /** Delete answers snapshot */
     case 'DELETE_SNAPSHOT': {
       return deleteSnapshot(state);
     }
