@@ -48,33 +48,21 @@ function useForm(initialState: FormReducerState) {
     });
   };
 
-  /**
-   * Function for creating snapshot
-   */
   const createSnapshot = () =>
     dispatch({
       type: 'CREATE_SNAPSHOT',
     });
 
-  /**
-   * Function for deleting snapshot
-   */
   const deleteSnapshot = () =>
     dispatch({
       type: 'DELETE_SNAPSHOT',
     });
 
-  /**
-   * Function for restoring & deleting snapshot
-   */
   const restoreSnapshot = () =>
     dispatch({
       type: 'RESTORE_SNAPSHOT',
     });
 
-  /**
-   * Function for going forward in the form
-   */
   const goToNextStep = () =>
     dispatch({
       type: 'GO_NEXT',
