@@ -5,6 +5,8 @@ import { Modal } from 'react-native';
 import Button from '../../../atoms/Button';
 import Heading from '../../../atoms/Heading';
 import Text from '../../../atoms/Text';
+import Card from '../../../molecules/Card';
+import { PrimaryColor } from '../../../../styles/themeHelpers';
 
 const BackgroundBlur = styled(BlurView)`
   position: absolute;
@@ -75,6 +77,7 @@ const ButtonWrapper = styled.View`
 const ButtonDivider = styled.View`
   width: 8px;
 `;
+
 export interface Props {
   visible?: boolean;
   closeForm?: () => void;
@@ -83,7 +86,7 @@ export interface Props {
   body: string;
   buttons: Array<{
     text: string;
-    color?: 'neutral' | 'blue' | 'red' | 'purple' | 'green';
+    color?: PrimaryColor;
     clickHandler: () => void;
   }>;
 }
