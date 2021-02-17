@@ -113,22 +113,27 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
       includeBase64: false,
     };
 
-    launchImageLibrary(libraryOptions, (response) => {
-      if (response?.didCancel) return;
+    try {
+      launchImageLibrary(libraryOptions, (response) => {
+        console.log('response object:', response);
+        if (response?.didCancel) return;
 
-      const imageToAdd: Image = {
-        questionId: id,
-        path: response.uri,
-        filename: response.fileName,
-        width: response.width,
-        height: response.height,
-        size: response.fileSize,
-        mime: response.fileName.split('.').pop(),
-      };
-      const originalLength = images.length;
-      const updatedImages = addImagesToState([imageToAdd]);
-      uploadImage(imageToAdd, originalLength, updatedImages);
-    })
+        const imageToAdd: Image = {
+          questionId: id,
+          path: response.uri,
+          filename: response.fileName,
+          width: response.width,
+          height: response.height,
+          size: response.fileSize,
+          mime: response.fileName.split('.').pop(),
+        };
+        const originalLength = images.length;
+        const updatedImages = addImagesToState([imageToAdd]);
+        uploadImage(imageToAdd, originalLength, updatedImages);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const addImageFromCamera = () => {
@@ -174,8 +179,8 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
               block
               variant="outlined"
               onClick={() => { 
-                addImageFromCamera(); 
                 toggleModal();
+                setTimeout(addImageFromCamera, 100); 
               }}
             >
               <Icon name="camera-alt" />
@@ -186,8 +191,8 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
               block
               variant="outlined"
               onClick={() => {
-                addImagesFromLibrary();
                 toggleModal();
+                setTimeout(addImagesFromLibrary, 100);
               }}
             >
               <Icon name="add-photo-alternate" />
