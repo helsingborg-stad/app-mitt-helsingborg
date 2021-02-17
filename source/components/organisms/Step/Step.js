@@ -123,7 +123,7 @@ function Step({
     mainStep: [
       {
         text: 'Nej',
-        color: 'red',
+        color: 'neutral',
         clickHandler: () => setDialogIsVisible(false),
       },
       {
@@ -137,7 +137,7 @@ function Step({
     subStep: [
       {
         text: 'Nej',
-        color: 'red',
+        color: 'neutral',
         clickHandler: () => setDialogIsVisible(false),
       },
       {
