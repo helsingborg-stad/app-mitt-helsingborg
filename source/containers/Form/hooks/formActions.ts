@@ -471,26 +471,17 @@ export function dirtyField(
   }
   return state;
 }
-/**
- * Create snapshot of answers
- * @param state 
- */
+
 export const createSnapshot = (state: FormReducerState) => ({
   ...state,
   formAnswerSnapshot: JSON.parse(JSON.stringify(state.formAnswers)),
 });
 
-/**
- * Restore snapshot of answers
- * @param state 
- */
 export const restoreSnapshot = (state: FormReducerState) => {
-  // Make sure snapshot is not empty to avoid data loss (THIS CHECK HAS LIMITATIONS: eg. Will not restore forms without answers)
   if (Object.entries(state.formAnswerSnapshot).length <= 0) {
     return state;
   }
 
-  // Bail if no changes
   if (JSON.stringify(state.formAnswers) === JSON.stringify(state.formAnswerSnapshot)) {
     return state;
   }
@@ -502,10 +493,6 @@ export const restoreSnapshot = (state: FormReducerState) => {
   };
 }
 
-/**
- * Delete snapshot of answers
- * @param state 
- */
 export const deleteSnapshot = (state: FormReducerState) => ({
   ...state,
   formAnswerSnapshot: {},
