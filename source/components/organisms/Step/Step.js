@@ -8,7 +8,6 @@ import AuthContext from '../../../store/AuthContext';
 import Progressbar from '../../atoms/Progressbar/Progressbar';
 import { AuthLoading } from '../../molecules';
 import BackNavigation from '../../molecules/BackNavigation/BackNavigation';
-import CloseDialog from './CloseDialog/CloseDialog';
 import Banner from './StepBanner/StepBanner';
 import StepDescription from './StepDescription/StepDescription';
 import StepFooter from './StepFooter/StepFooter';
@@ -74,7 +73,6 @@ function Step({
     handleSetError,
   } = useContext(AuthContext);
 
-  const [closeDialogVisible, setCloseDialogVisible] = useState(false);
   const showNotification = useNotification();
 
   /**
@@ -118,19 +116,20 @@ function Step({
   const [fadeValue] = useState(new Animated.Value(0));
 
   const isDirtySubStep = JSON.stringify(answers) !== JSON.stringify(answerSnapshot) && isSubstep;
-  const [dialogTemplate, setDialogTemplate] = useState('mainStep');
 
-  const dialogButtons = {
+  const [dialogIsVisible, setDialogIsVisible] = useState(false);
+  const [dialogTemplate, setDialogTemplate] = useState('mainStep');
+  const dialogButtonProps = {
     mainStep: [
       {
         text: 'Nej',
         color: 'red',
-        clickHandler: () => setCloseDialogVisible(false),
+        clickHandler: () => setDialogIsVisible(false),
       },
       {
         text: 'Ja',
         clickHandler: () => {
-          setCloseDialogVisible(false);
+          setDialogIsVisible(false);
           closeForm();
         },
       },
@@ -139,7 +138,7 @@ function Step({
       {
         text: 'Nej',
         color: 'red',
-        clickHandler: () => setCloseDialogVisible(false),
+        clickHandler: () => setDialogIsVisible(false),
       },
       {
         text: 'Ja',
@@ -168,7 +167,7 @@ function Step({
     ? () => {
         if (isDirtySubStep) {
           if (dialogTemplate !== 'subStep') setDialogTemplate('subStep');
-          setCloseDialogVisible(true);
+          setDialogIsVisible(true);
           return;
         }
 
@@ -189,9 +188,9 @@ function Step({
           }}
         >
           <FormDialog
-            visible={closeDialogVisible}
+            visible={dialogIsVisible}
             template={dialogTemplate}
-            buttons={dialogButtons[dialogTemplate]}
+            buttons={dialogButtonProps[dialogTemplate]}
           />
 
           {!isSubstep && (
@@ -203,7 +202,7 @@ function Step({
                 if (isLastMainStep) {
                   closeForm();
                 } else {
-                  setCloseDialogVisible(true);
+                  setDialogIsVisible(true);
                 }
               }}
               colorSchema={colorSchema || 'blue'}
@@ -295,7 +294,7 @@ function Step({
           isSubstep={isSubstep}
           primary={false}
           onBack={backButtonBehavior}
-          onClose={() => setCloseDialogVisible(true)}
+          onClose={() => setDialogIsVisible(true)}
           colorSchema={colorSchema || 'blue'}
         />
       )}

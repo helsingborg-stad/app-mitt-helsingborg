@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+
 import CloseDialog, { Props as CloseDialogProps } from './CloseDialog';
 
 type TemplateKeys = 'mainStep' | 'subStep';
