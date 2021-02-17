@@ -104,7 +104,7 @@ const CloseDialog: React.FC<Props> = ({ visible, title, body, buttons }) => (
         <ButtonRow>
           {buttons.map(({ text, color, clickHandler }, index) => (
             /* @ts-ignore */
-            <ButtonWrapper>
+            <ButtonWrapper key={index}>
               <DialogButton
                 block
                 z={0}
