@@ -2,12 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import {launchImageLibrary, ImageLibraryOptions} from 'react-native-image-picker';
 import styled from 'styled-components/native';
 import { Text, Button, Icon, Label } from '../../atoms';
 import { Modal, useModal } from '../Modal';
 import { getBlob, uploadFile } from '../../../helpers/FileUpload';
 import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
 import ImageDisplay, { Image } from '../ImageDisplay/ImageDisplay';
+
 
 const Wrapper = styled.View`
   padding-left: 0;
@@ -106,23 +108,28 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
   };
 
   const addImagesFromLibrary = () => {
-    ImagePicker.openPicker({
-      cropping: true,
-      multiple: true,
+    const libraryOptions: ImageLibraryOptions = {
+      mediaType: 'photo',
       includeBase64: false,
+    };
+
+    launchImageLibrary(libraryOptions, (response) => {
+      if (response?.didCancel) return;
+
+      const imageToAdd: Image = {
+        questionId: id,
+        path: response.uri,
+        filename: response.fileName,
+        width: response.width,
+        height: response.height,
+        size: response.fileSize,
+        mime: response.fileName.split('.').pop(),
+      };
+      const originalLength = images.length;
+      const updatedImages = addImagesToState([imageToAdd]);
+      uploadImage(imageToAdd, originalLength, updatedImages);
     })
-      .then((result) => {
-        const imagesToAdd: Image[] = result.map(img => { return { ...img, questionId: id } });
-        const originalLength = images.length;
-        const updatedImages = addImagesToState(imagesToAdd);
-        imagesToAdd.forEach((img, index) => {
-          uploadImage(img, index + originalLength, updatedImages);
-        });        
-      })
-      .catch((reason) => {
-        console.log('cancelled!', reason);
-      });
-  }
+  };
 
   const addImageFromCamera = () => {
     ImagePicker.openCamera({
