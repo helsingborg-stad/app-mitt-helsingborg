@@ -5,7 +5,6 @@ import { Modal } from 'react-native';
 import Button from '../../../atoms/Button';
 import Heading from '../../../atoms/Heading';
 import Text from '../../../atoms/Text';
-import Card from '../../../molecules/Card';
 import { PrimaryColor } from '../../../../styles/themeHelpers';
 
 const BackgroundBlur = styled(BlurView)`
@@ -29,6 +28,7 @@ const Dialog = styled.View`
   align-items: center;
   justify-content: center;
   border-radius: 10px;
+  /* @ts-ignore */
   background: ${(props) => props.theme.colors.neutrals[5]};
   padding: 12px;
   elevation: 2;
@@ -59,25 +59,20 @@ const DialogButton = styled(Button)`
   ${({ colorSchema }) => colorSchema === 'neutral' && `background: #e5e5e5; `}
 `;
 
-const ButtonText = styled(Text)`
-  color: ${(props) => props.theme.colors.neutrals[1]};
-  font-weight: ${(props) => props.theme.fontWeights[1]};
-`;
-
 const ButtonRow = styled.View`
   flex-direction: row;
   justify-content: space-evenly;
   margin: 0px;
 `;
 
+const ButtonText = styled(Text)`
+  color: ${(props) => props.theme.colors.neutrals[1]};
+  font-weight: ${(props) => props.theme.fontWeights[1]};
+`;
+
 const ButtonWrapper = styled.View`
   flex: 1;
 `;
-
-const ButtonDivider = styled.View`
-  width: 8px;
-`;
-
 export interface Props {
   visible?: boolean;
   closeForm?: () => void;
@@ -91,40 +86,10 @@ export interface Props {
   }>;
 }
 
-/** Simple popup dialog asking the user if they really want to exit the form. Partially masks the background. */
+/** Simple popup dialog asking the user if they really want to exit the form. Partially asks the background. */
 const CloseDialog: React.FC<Props> = ({ visible, title, body, buttons }) => (
   <Modal
     visible={visible ?? false}
-    transparent
-    presentationStyle="overFullScreen"
-    animationType="fade"
-  >
-    <BackgroundBlur>
-      <PopupContainer>
-        <ContentContainer>
-          <Card colorSchema="neutral">
-            <Card.Body>
-              <Card.Title>{title}</Card.Title>
-              {body && body.length > 0 && <Card.Text>{body}</Card.Text>}
-            </Card.Body>
-          </Card>
-          <ButtonRow>
-            {buttons.map(({ text, color, clickHandler }) => (
-              /* @ts-ignore */
-              <Button
-                colorSchema={color && color.length > 0 ? color : 'blue'}
-                onClick={clickHandler}
-              >
-                <Text>{text}</Text>
-              </Button>
-            ))}
-          </ButtonRow>
-        </ContentContainer>
-      </PopupContainer>
-    </BackgroundBlur>
-const CloseDialog: React.FC<Props> = ({ visible, closeForm, closeDialog }) => (
-  <Modal
-    visible={visible}
     transparent
     presentationStyle="overFullScreen"
     animationType="fade"
@@ -133,31 +98,23 @@ const CloseDialog: React.FC<Props> = ({ visible, closeForm, closeDialog }) => (
     <PopupContainer>
       <Dialog>
         <Content>
-          <Title>Vill du avbryta ansökan?</Title>
-          <DialogText>
-            Ansökan sparas i 3 dagar. Efter det raderas den och du får starta en ny.
-          </DialogText>
+          <Title>{title}</Title>
+          {body && body.length > 0 ? <DialogText>{body}</DialogText> : null}
         </Content>
         <ButtonRow>
-          <ButtonWrapper>
-            <DialogButton block z={0} colorSchema="neutral" onClick={closeDialog}>
-              <ButtonText>Nej</ButtonText>
-            </DialogButton>
-          </ButtonWrapper>
-          <ButtonDivider />
-          <ButtonWrapper>
-            <DialogButton
-              block
-              z={0}
-              colorSchema="blue"
-              onClick={() => {
-                closeDialog();
-                closeForm();
-              }}
-            >
-              <Text>Ja</Text>
-            </DialogButton>
-          </ButtonWrapper>
+          {buttons.map(({ text, color, clickHandler }, index) => (
+            /* @ts-ignore */
+            <ButtonWrapper>
+              <DialogButton
+                block
+                z={0}
+                colorSchema={color && color.length > 0 ? color : 'blue'}
+                onClick={clickHandler}
+              >
+                {color === 'neutral' ? <ButtonText>{text}</ButtonText> : <Text>{text}</Text>}
+              </DialogButton>
+            </ButtonWrapper>
+          ))}
         </ButtonRow>
       </Dialog>
       <BackgroundBlur blurType="dark" blurAmount={15} reducedTransparencyFallbackColor="white" />

@@ -13,7 +13,7 @@ const DIALOG_TEMPLATES: {
     buttons: [
       {
         text: 'Nej',
-        color: 'red',
+        color: 'neutral',
         clickHandler: () => {},
       },
       {
@@ -29,7 +29,7 @@ const DIALOG_TEMPLATES: {
     buttons: [
       {
         text: 'Nej',
-        color: 'red',
+        color: 'neutral',
         clickHandler: () => {},
       },
       {
