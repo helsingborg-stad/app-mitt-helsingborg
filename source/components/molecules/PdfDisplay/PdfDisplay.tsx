@@ -4,7 +4,7 @@ import { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import styled from 'styled-components/native';
 import { DocumentPickerResponse } from 'react-native-document-picker';
 import HorizontalScrollIndicator from '../../atoms/HorizontalScrollIndicator';
-import ImageItem from './PdfItem';
+import PdfItem from './PdfItem';
 
 const Wrapper = styled.View`
   padding-left: 0;
@@ -57,9 +57,9 @@ const PdfDisplay: React.FC<Props> = ({ pdfs, answers, onChange }) => {
       <Container horizontal onScroll={handleScroll} showsHorizontalScrollIndicator={false}>
         {pdfs.length > 0 &&
           pdfs.map((pdf, index) => (
-            <ImageItem
+            <PdfItem
               key={`${pdf.uri}-${index}`}
-              image={pdf}
+              pdf={pdf}
               onRemove={() => {
                 removePdf(pdf);
               }}
