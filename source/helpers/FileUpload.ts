@@ -8,10 +8,17 @@ export const getBlob = async (fileUri: string) => {
   return fileBlob;
 };
 
+type AllowedFileTypes = 'jpg' | 'jpeg' | 'png' | 'pdf';
+const MIMEs: Record<AllowedFileTypes, string> = {
+  jpg: 'image/jpg',
+  jpeg: 'image/jpg',
+  png: 'image/png',
+  pdf: 'application/pdf',
+};
 interface FileUploadParams {
   endpoint: string;
   fileName: string;
-  fileType: string;
+  fileType: AllowedFileTypes;
   data: Blob | Buffer;
   headers?: Record<string, string>;
 }
@@ -42,7 +49,7 @@ export const uploadFile = async ({
       url: requestUrl,
       method: 'post',
       headers: newHeaders,
-      data: { fileName, mime: `image/${fileType}` },
+      data: { fileName, mime: MIMEs[fileType] },
     });
 
     const fileUploadAttributes = signedUrlResponse.data.data.attributes;
@@ -52,7 +59,7 @@ export const uploadFile = async ({
       method: 'PUT',
       body: data,
       headers: {
-        'Content-Type': `image/${fileType}`,
+        'Content-Type': MIMEs[fileType],
         'Content-Encoding': 'base64',
         'x-amz-acl': 'public-read',
       },
