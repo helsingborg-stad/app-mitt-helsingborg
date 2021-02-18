@@ -18,7 +18,8 @@ import { getValidColorSchema } from '../../styles/themeHelpers';
 import SummaryList from '../../components/organisms/SummaryList/SummaryList';
 import ImageUploader from '../../components/molecules/ImageUploader/ImageUploader';
 import ImageViewer from '../../components/molecules/ImageViewer/ImageViewer';
-
+import PdfUploader from '../../components/molecules/PdfUploader/PdfUploader';
+import PdfViewer from '../../components/molecules/PdfViewer/PdfViewer';
 /**
  * Explanation of the properties in this data structure:
  *
@@ -123,6 +124,16 @@ const inputTypes = {
   },
   imageViewer: {
     component: ImageViewer,
+    changeEvent: 'onChange',
+    props: { answers: true },
+  },
+  pdfUploader: {
+    component: PdfUploader,
+    changeEvent: 'onChange',
+    props: { answers: true },
+  },
+  pdfViewer: {
+    component: PdfViewer,
     changeEvent: 'onChange',
     props: { answers: true },
   },
@@ -286,6 +297,8 @@ FormField.propTypes = {
     'repeaterField',
     'imageUploader',
     'imageViewer',
+    'pdfUploader',
+    'pdfViewer',
   ]),
 };
 
