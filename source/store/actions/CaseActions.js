@@ -95,14 +95,12 @@ export function deleteCase(caseId) {
   };
 }
 
-export async function fetchCases(callback) {
+export async function fetchCases() {
   try {
     const response = await get('/cases');
     if (response?.data?.data?.attributes?.cases) {
       const cases = {};
       response.data.data.attributes.cases.forEach((c) => (cases[c.id] = c));
-
-      callback(cases);
       return {
         type: actionTypes.fetchCases,
         payload: cases,
