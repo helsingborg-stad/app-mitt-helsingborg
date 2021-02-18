@@ -89,12 +89,16 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
 
   const uploadImage = async (image: Image, index: number, updatedImages: Image[]) => {
     const imageFileType = (image.path as string).split('.').pop();
+    if (!['jpg', 'jpeg', 'png'].includes(imageFileType)) {
+      console.error(`Trying to upload a forbidden type of image, ${imageFileType}, allowed file types are [jpg, jpeg, png].`);
+      return;
+    }
     const data: Blob = await getBlob(image.path);
     const filename = (image.path as string).split('/').pop();
     const uploadResponse = await uploadFile({ 
       endpoint: 'users/me/attachments',
       fileName: filename,
-      fileType: imageFileType,
+      fileType: (imageFileType as 'jpg' | 'jpeg' | 'png'),
       data
     });
     

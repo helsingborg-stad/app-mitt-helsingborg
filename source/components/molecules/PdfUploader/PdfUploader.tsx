@@ -75,7 +75,7 @@ const PdfUploader: React.FC<Props> = ({
       const pdf: Pdf = { questionId: id, ...fileInfo };
       const originalLength = pdfs.length;
       const updatedPdfs = addPdf(pdf);
-      // uploadPdf(pdf, originalLength, updatedPdfs);
+      uploadPdf(pdf, originalLength, updatedPdfs);
     } catch (error) {
       console.log(error);
     }
