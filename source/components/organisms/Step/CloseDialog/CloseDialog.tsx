@@ -102,7 +102,7 @@ const CloseDialog: React.FC<Props> = ({ visible, title, body, buttons }) => (
           {body && body.length > 0 ? <DialogText>{body}</DialogText> : null}
         </Content>
         <ButtonRow>
-          {buttons.map(({ text, color, clickHandler }) => (
+          {buttons.map(({ text, color, clickHandler }, index) => (
             /* @ts-ignore */
             <ButtonWrapper key={index}>
               <DialogButton
