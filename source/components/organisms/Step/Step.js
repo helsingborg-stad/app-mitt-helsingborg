@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import { Animated } from 'react-native';
 import styled from 'styled-components/native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import FormField from '../../../containers/FormField';
 import AuthContext from '../../../store/AuthContext';
 import Progressbar from '../../atoms/Progressbar/Progressbar';
@@ -181,112 +180,108 @@ function Step({
 
   return (
     <StepContainer>
-      <KeyboardAwareScrollView>
-        <Animated.View
-          style={{
-            opacity: fadeValue,
-          }}
-        >
-          <FormDialog
-            visible={dialogIsVisible}
-            template={dialogTemplate}
-            buttons={dialogButtonProps[dialogTemplate]}
-          />
+      <Animated.View
+        style={{
+          opacity: fadeValue,
+        }}
+      >
+        <FormDialog
+          visible={dialogIsVisible}
+          template={dialogTemplate}
+          buttons={dialogButtonProps[dialogTemplate]}
+        />
 
-          {!isSubstep && (
-            <StepBackNavigation
-              showBackButton={isBackBtnVisible}
-              isSubstep={isSubstep}
-              onBack={backButtonBehavior}
-              onClose={() => {
-                if (isLastMainStep) {
-                  closeForm();
-                } else {
-                  setDialogIsVisible(true);
-                }
-              }}
-              colorSchema={colorSchema || 'blue'}
+        {!isSubstep && (
+          <StepBackNavigation
+            showBackButton={isBackBtnVisible}
+            isSubstep={isSubstep}
+            onBack={backButtonBehavior}
+            onClose={() => {
+              if (isLastMainStep) {
+                closeForm();
+              } else {
+                setDialogIsVisible(true);
+              }
+            }}
+            colorSchema={colorSchema || 'blue'}
+          />
+        )}
+
+        <StepContentContainer>
+          {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
+            <StepBanner {...banner} colorSchema={colorSchema || 'blue'} />
+          )}
+          {currentPosition.level === 0 && (
+            <Progressbar
+              currentStep={currentPosition.currentMainStep}
+              totalStepNumber={totalStepNumber}
             />
           )}
-
-          <StepContentContainer>
-            {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
-              <StepBanner {...banner} colorSchema={colorSchema || 'blue'} />
+          <StepBody>
+            {!isLoading && (
+              <>
+                <StepDescription
+                  theme={theme}
+                  currentStep={
+                    currentPosition.level === 0 ? currentPosition.currentMainStep : undefined
+                  }
+                  totalStepNumber={totalStepNumber}
+                  colorSchema={colorSchema || 'blue'}
+                  {...description}
+                />
+                {questions && (
+                  <StepFieldListWrapper>
+                    {questions.map((field) => (
+                      <FormField
+                        key={`${field.id}`}
+                        onChange={
+                          status.type.includes('ongoing') || status.type.includes('notStarted')
+                            ? onFieldChange
+                            : null
+                        }
+                        onBlur={onFieldBlur}
+                        inputType={field.type}
+                        value={answers[field.id] || ''}
+                        answers={answers}
+                        validationErrors={validation}
+                        colorSchema={field.color && field.color !== '' ? field.color : colorSchema}
+                        id={field.id}
+                        formNavigation={formNavigation}
+                        {...field}
+                      />
+                    ))}
+                  </StepFieldListWrapper>
+                )}
+              </>
             )}
-            {currentPosition.level === 0 && (
-              <Progressbar
-                currentStep={currentPosition.currentMainStep}
-                totalStepNumber={totalStepNumber}
-              />
-            )}
-            <StepBody>
-              {!isLoading && (
-                <>
-                  <StepDescription
-                    theme={theme}
-                    currentStep={
-                      currentPosition.level === 0 ? currentPosition.currentMainStep : undefined
-                    }
-                    totalStepNumber={totalStepNumber}
-                    colorSchema={colorSchema || 'blue'}
-                    {...description}
-                  />
-                  {questions && (
-                    <StepFieldListWrapper>
-                      {questions.map((field) => (
-                        <FormField
-                          key={`${field.id}`}
-                          onChange={
-                            status.type.includes('ongoing') || status.type.includes('notStarted')
-                              ? onFieldChange
-                              : null
-                          }
-                          onBlur={onFieldBlur}
-                          inputType={field.type}
-                          value={answers[field.id] || ''}
-                          answers={answers}
-                          validationErrors={validation}
-                          colorSchema={
-                            field.color && field.color !== '' ? field.color : colorSchema
-                          }
-                          id={field.id}
-                          formNavigation={formNavigation}
-                          {...field}
-                        />
-                      ))}
-                    </StepFieldListWrapper>
-                  )}
-                </>
-              )}
 
-              {(isLoading || isResolved) && (
-                <SignStepWrapper>
-                  <AuthLoading
-                    colorSchema={colorSchema || 'neutral'}
-                    isLoading={isLoading}
-                    isResolved={isResolved}
-                    cancelSignIn={() => handleCancelOrder()}
-                    isBankidInstalled={isBankidInstalled}
-                  />
-                </SignStepWrapper>
-              )}
-            </StepBody>
-            {actions && actions.length > 0 ? (
-              <StepFooter
-                actions={actions}
-                caseStatus={status}
-                answers={answers}
-                allQuestions={allQuestions}
-                formNavigation={formNavigation}
-                currentPosition={currentPosition}
-                onUpdate={onFieldChange}
-                updateCaseInContext={updateCaseInContext}
-                validateStepAnswers={validateStepAnswers}
-              />
-            ) : null}
-          </StepContentContainer>
-        </Animated.View>
-      </KeyboardAwareScrollView>
+            {(isLoading || isResolved) && (
+              <SignStepWrapper>
+                <AuthLoading
+                  colorSchema={colorSchema || 'neutral'}
+                  isLoading={isLoading}
+                  isResolved={isResolved}
+                  cancelSignIn={() => handleCancelOrder()}
+                  isBankidInstalled={isBankidInstalled}
+                />
+              </SignStepWrapper>
+            )}
+          </StepBody>
+          {actions && actions.length > 0 ? (
+            <StepFooter
+              actions={actions}
+              caseStatus={status}
+              answers={answers}
+              allQuestions={allQuestions}
+              formNavigation={formNavigation}
+              currentPosition={currentPosition}
+              onUpdate={onFieldChange}
+              updateCaseInContext={updateCaseInContext}
+              validateStepAnswers={validateStepAnswers}
+            />
+          ) : null}
+        </StepContentContainer>
+      </Animated.View>
 
       {isSubstep && (
         <StepBackNavigation
