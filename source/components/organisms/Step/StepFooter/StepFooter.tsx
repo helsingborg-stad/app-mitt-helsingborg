@@ -11,7 +11,6 @@ import { evaluateConditionalExpression } from '../../../../helpers/conditionPars
 import { getStatusByType } from '../../../../assets/mock/caseStatuses';
 
 const ActionContainer = styled.View`
-  flex: 1;
   background-color: ${(props) => props.theme.colors.neutrals[5]};
 `;
 
