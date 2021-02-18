@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { InteractionManager } from 'react-native';
 import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import Step from '../../components/organisms/Step/Step';
-import { ScreenWrapper } from '../../components/molecules';
-import { Step as StepType, StepperActions } from '../../types/FormTypes';
-import { CaseStatus } from '../../types/CaseType';
-import { User } from '../../types/UserTypes';
-import useForm, { FormReducerState, FormPosition } from './hooks/useForm';
-import { Modal, useModal } from '../../components/molecules/Modal';
+import React, { useEffect, useState } from 'react';
+import { InteractionManager, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import theme from '../../styles/theme';
+import styled from 'styled-components/native';
+import { Modal, useModal } from '../../components/molecules/Modal';
+import Step from '../../components/organisms/Step/Step';
 import { evaluateConditionalExpression } from '../../helpers/conditionParser';
+import theme from '../../styles/theme';
+import { CaseStatus } from '../../types/CaseType';
+import { Step as StepType, StepperActions } from '../../types/FormTypes';
+import { User } from '../../types/UserTypes';
+import useForm, { FormPosition, FormReducerState } from './hooks/useForm';
 
-const FormScreenWrapper = styled(ScreenWrapper)`
-  padding: 0;
+const FormScreenWrapper = styled(KeyboardAwareScrollView)`
   flex: 1;
+  background-color: ${(props) => props.theme.colors.neutrals[6]};
 `;
 
 interface Props {
