@@ -69,12 +69,9 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
     dispatch(remove(caseId));
   }
 
-  const fetchCases = useCallback(
-    async function loadCases(callback = () => {}) {
-      dispatch(await fetch(callback));
-    },
-    [dispatch]
-  );
+  const fetchCases = async () => {
+    dispatch(await fetch());
+  };
 
   useEffect(() => {
     if (user) {
@@ -84,7 +81,7 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   }, [user]);
 
   return (
-    <CaseState.Provider value={{ cases: state.cases, getCase, getCasesByFormIds }}>
+    <CaseState.Provider value={{ cases: state.cases, getCase, getCasesByFormIds, fetchCases }}>
       <CaseDispatch.Provider value={{ createCase, updateCase, deleteCase }}>
         {children}
       </CaseDispatch.Provider>
