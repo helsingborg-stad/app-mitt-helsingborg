@@ -28,7 +28,6 @@ const Dialog = styled.View`
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  /* @ts-ignore */
   background: ${(props) => props.theme.colors.neutrals[5]};
   padding: 12px;
   elevation: 2;
@@ -63,6 +62,8 @@ const ButtonRow = styled.View`
   flex-direction: row;
   justify-content: space-evenly;
   margin: 0px;
+  margin-left: -4px;
+  margin-right: -4px;
 `;
 
 const ButtonText = styled(Text)`
@@ -72,11 +73,10 @@ const ButtonText = styled(Text)`
 
 const ButtonWrapper = styled.View`
   flex: 1;
+  padding: 4px;
 `;
 export interface Props {
   visible?: boolean;
-  closeForm?: () => void;
-  closeDialog?: () => void;
   title: string;
   body: string;
   buttons: Array<{
@@ -102,7 +102,7 @@ const CloseDialog: React.FC<Props> = ({ visible, title, body, buttons }) => (
           {body && body.length > 0 ? <DialogText>{body}</DialogText> : null}
         </Content>
         <ButtonRow>
-          {buttons.map(({ text, color, clickHandler }, index) => (
+          {buttons.map(({ text, color, clickHandler }) => (
             /* @ts-ignore */
             <ButtonWrapper key={index}>
               <DialogButton
