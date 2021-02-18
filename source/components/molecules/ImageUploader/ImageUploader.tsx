@@ -180,6 +180,8 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
               variant="outlined"
               onClick={() => { 
                 toggleModal();
+                /** There's an issue on iOS with triggering the library before the modal has closed,
+                 * so as a simple fix, we add a timeout (since toggleModal is async) */
                 setTimeout(addImageFromCamera, 100); 
               }}
             >
@@ -192,6 +194,8 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
               variant="outlined"
               onClick={() => {
                 toggleModal();
+                /** There's an issue on iOS with triggering the library before the modal has closed,
+                 * so as a simple fix, we add a timeout (since toggleModal is async) */
                 setTimeout(addImagesFromLibrary, 100);
               }}
             >
