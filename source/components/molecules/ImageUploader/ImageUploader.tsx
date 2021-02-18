@@ -135,7 +135,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
         uploadImage(imageToAdd, originalLength, updatedImages);
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

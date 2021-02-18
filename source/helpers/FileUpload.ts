@@ -15,6 +15,7 @@ const MIMEs: Record<AllowedFileTypes, string> = {
   png: 'image/png',
   pdf: 'application/pdf',
 };
+
 interface FileUploadParams {
   endpoint: string;
   fileName: string;
@@ -67,7 +68,7 @@ export const uploadFile = async ({
     // return the url and filename on server to the uploaded file.
     return { url: putResponse.url, uploadedFileName: fileUploadAttributes.fileName };
   } catch (error) {
-    console.log('axios error', error);
+    console.error('Axios error while uploading file:', error);
     return { error: true, message: error.message, ...error.response };
   }
 };
