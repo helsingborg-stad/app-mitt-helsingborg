@@ -10614,6 +10614,11 @@ react-native-config@1.4.0:
   resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-1.4.0.tgz#76e6ba1194a4c23d2e687a0630458238692eec4b"
   integrity sha512-j8/a9FieWRgyqIG/Bkz3mWH5M3/JYYoZWQWDIPgXve3AGhVR39mDYNyPmezetX/HgG3WX62U6+P+LmnAMQegDA==
 
+react-native-document-picker@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-5.0.0.tgz#15c2557edd6c3ebc129b529e52556ec378c99853"
+  integrity sha512-VL1fcYyAx5d9/JlGI3hyuZm3JRGPHAYaU6rKD2Kn3K4b11xB4NdjVvtAiRRFEwDm8BCBKxDoTXRWoGYOhtefyQ==
+
 react-native-elements@^3.0.0-alpha.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-3.1.0.tgz#ff2d6fd0ed91b1ebdd15598c4da1fcb2d5780c5f"
