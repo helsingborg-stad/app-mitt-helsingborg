@@ -15,7 +15,6 @@ const Flex = styled.View`
   margin: 0;
   margin-bottom: 12px;
 `;
-
 const DeleteBackground = styled.View`
   position: absolute;
   top: 2px;
@@ -26,7 +25,6 @@ const DeleteBackground = styled.View`
   z-index: 1;
   border-radius: 20px;
 `;
-
 const Container = styled.View`
   margin: 2px
   flex: 1;

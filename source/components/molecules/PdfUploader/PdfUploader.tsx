@@ -66,6 +66,7 @@ const PdfUploader: React.FC<Props> = ({
 
   const addPdfFromLibrary = async () => {
     const pickerOptions: DocumentPickerOptions<'android' | 'ios'> = {
+      /* @ts-ignore */
       type: DocumentPicker.types.pdf,
     };
 
@@ -77,27 +78,25 @@ const PdfUploader: React.FC<Props> = ({
       const updatedPdfs = addPdf(pdf);
       uploadPdf(pdf, originalLength, updatedPdfs);
     } catch (error) {
-      console.log(error);
+      console.error('Error while adding pdf from library:', error);
     }
   };
 
   const validColorSchema = getValidColorSchema(colorSchema);
   return (
-    <>
-      <Wrapper>
-        {pdfs !== '' && <PdfDisplay pdfs={pdfs} onChange={onChange} answers={answers} />}
-        <ButtonContainer>
-          <Button
-            colorSchema={validColorSchema}
-            onClick={addPdfFromLibrary}
-            disabled={maxDocuments && pdfs.length >= maxDocuments}
-          >
-            <Icon name="add" />
-            <Text> {buttonText && buttonText !== '' ? buttonText : 'Ladda upp PDF'}</Text>
-          </Button>
-        </ButtonContainer>
-      </Wrapper>
-    </>
+    <Wrapper>
+      {pdfs !== '' && <PdfDisplay pdfs={pdfs} onChange={onChange} answers={answers} />}
+      <ButtonContainer>
+        <Button
+          colorSchema={validColorSchema}
+          onClick={addPdfFromLibrary}
+          disabled={maxDocuments && pdfs.length >= maxDocuments}
+        >
+          <Icon name="add" />
+          <Text> {buttonText && buttonText !== '' ? buttonText : 'Ladda upp PDF'}</Text>
+        </Button>
+      </ButtonContainer>
+    </Wrapper>
   );
 };
 
