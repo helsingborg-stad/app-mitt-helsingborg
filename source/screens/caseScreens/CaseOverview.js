@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Animated, Easing } from 'react-native';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { Animated, Easing, RefreshControl } from 'react-native';
 import icons from 'source/helpers/Icons';
 import styled from 'styled-components/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Icon, Text } from '../../components/atoms';
 import { Card, Header, ScreenWrapper } from '../../components/molecules';
 import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
@@ -108,9 +109,12 @@ function CaseOverview(props) {
   const { navigation } = props;
   const [caseItems, setCaseItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { cases, getCasesByFormIds } = useContext(CaseState);
+  const [refreshing, setRefreshing] = useState(false);
+  const { cases, getCasesByFormIds, fetchCases } = useContext(CaseState);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
+
+  const wait = (timeout) => new Promise((resolve) => setTimeout(resolve, timeout));
 
   const getCasesByStatuses = (statuses) =>
     caseItems.filter((caseData) => {
@@ -124,7 +128,22 @@ function CaseOverview(props) {
   const activeCases = getCasesByStatuses(['notStarted', 'active']);
   const closedCases = getCasesByStatuses(['closed']);
 
-  useEffect(() => {
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchCases();
+    wait(500).then(() => {
+      setRefreshing(false);
+    });
+  }, [fetchCases]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchCases();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+  );
+
+  useFocusEffect(() => {
     Animated.timing(fadeAnimation, {
       toValue: 1,
       easing: Easing.ease,
@@ -161,7 +180,7 @@ function CaseOverview(props) {
   return (
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
-      <Container>
+      <Container refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <ListHeading type="h5">Aktiva</ListHeading>
         {activeCases.length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
