@@ -2,9 +2,11 @@ import React from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from '../../atoms/Icon/Icon';
 
 const BackNavigationWrapper = styled.View({
+  position: 'absolute',
   flexDirection: 'row',
   padding: 0,
   margin: 0,
@@ -16,6 +18,7 @@ const BackNavigationWrapper = styled.View({
 });
 
 const BackNavigationSingleWrapper = styled.View((props) => ({
+  position: 'absolute',
   flexDirection: 'row',
   padding: 0,
   margin: 0,
@@ -23,7 +26,6 @@ const BackNavigationSingleWrapper = styled.View((props) => ({
   top: 0,
   zIndex: 999,
   right: 0,
-  position: props.isSubstep ? 'absolute' : 'relative',
 }));
 
 const BackButton = styled.View((props) => ({
@@ -88,7 +90,7 @@ const BackNavigation = ({
       ) : null}
     </BackNavigationWrapper>
   ) : (
-    <BackNavigationSingleWrapper isSubstep={isSubstep} style={style}>
+    <BackNavigationSingleWrapper style={style}>
       <CloseButton
         primary={primary}
         colorSchema={colorSchema}
