@@ -1,23 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { InteractionManager, View } from 'react-native';
+import { InteractionManager, StatusBar } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import styled from 'styled-components/native';
 import { Modal, useModal } from '../../components/molecules/Modal';
+import ScreenWrapper from '../../components/molecules/ScreenWrapper';
 import Step from '../../components/organisms/Step/Step';
 import { evaluateConditionalExpression } from '../../helpers/conditionParser';
-import theme from '../../styles/theme';
 import { CaseStatus } from '../../types/CaseType';
 import { Step as StepType, StepperActions } from '../../types/FormTypes';
 import { User } from '../../types/UserTypes';
 import useForm, { FormPosition, FormReducerState } from './hooks/useForm';
-
-const FormScreenWrapper = styled(KeyboardAwareScrollView)`
-  flex: 1;
-  background-color: ${(props) => props.theme.colors.neutrals[6]};
-`;
 
 interface Props {
   initialPosition?: FormPosition;
@@ -143,23 +135,20 @@ const Form: React.FC<Props> = ({
     }
   }, [mainStep, scrollViewRef]);
 
-  const colorSchema = formState?.steps[formState.currentPosition.currentMainStepIndex]?.colorSchema || 'blue';
-
   return (
-    <FormScreenWrapper
-      innerRef={(ref) => {
-        setRef((ref as unknown) as ScrollView);
-      }}
-    >
-      <SafeAreaView
-        style={{ backgroundColor: theme.colors.complementary[colorSchema || 'blue'][0] }}
-        edges={['top', 'right', 'left']}
-      />
-      {stepComponents[formState.currentPosition.currentMainStepIndex]}
+    <>
+      <ScreenWrapper
+        innerRef={(ref) => {
+          setRef((ref as unknown) as ScrollView);
+        }}
+      >
+        <StatusBar hidden={true} />
+        {stepComponents[formState.currentPosition.currentMainStepIndex]}
+      </ScreenWrapper>
       <Modal visible={formState.currentPosition.level > 0} hide={toggleModal}>
         {stepComponents[formState.currentPosition.index]}
       </Modal>
-    </FormScreenWrapper>
+    </>
   );
 };
 
