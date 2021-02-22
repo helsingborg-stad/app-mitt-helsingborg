@@ -5,7 +5,7 @@ import { Image as CropPickerImage } from 'react-native-image-crop-picker';
 import styled from 'styled-components/native';
 import HorizontalScrollIndicator from '../../atoms/HorizontalScrollIndicator';
 import ImageItem from './ImageItem';
-import { remove } from '../../../helpers/ApiRequest';
+import { deleteUploadedFile } from '../../../helpers/FileUpload';
 
 const Wrapper = styled.View`
   padding-left: 0;
@@ -35,7 +35,10 @@ const ImageDisplay: React.FC<Props> = ({ images, answers, onChange }) => {
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] = useState(0);
 
   const deleteImageFromCloudStorage = async (image: Image) => {
-    remove(`users/me/attachments/${image.uploadedFileName}`);
+    deleteUploadedFile({
+      endpoint: 'users/me/attachments',
+      fileName: image.uploadedFileName,
+    });
   };
   const removeImage = (image: Image) => {
     const answer: Image[] = answers[image.questionId];
