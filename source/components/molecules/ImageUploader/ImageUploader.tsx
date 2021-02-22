@@ -101,7 +101,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
     if (uploadResponse.error) {
       updatedImages[index].errorMessage = uploadResponse.message;
     } else {
-      updatedImages[index].uploadedFileName = uploadResponse.uploadedFilename;
+      updatedImages[index].uploadedFileName = uploadResponse.uploadedFileName;
       updatedImages[index].url = uploadResponse.url;
     }
     onChange(updatedImages); 
@@ -115,7 +115,6 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
 
     try {
       launchImageLibrary(libraryOptions, (response) => {
-        console.log('response object:', response);
         if (response?.didCancel) return;
 
         const imageToAdd: Image = {
