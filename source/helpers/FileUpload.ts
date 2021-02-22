@@ -72,3 +72,28 @@ export const uploadFile = async ({
     return { error: true, message: error.message, ...error.response };
   }
 };
+
+interface FileDeleteParams {
+  endpoint: string;
+  fileName: string;
+}
+export const deleteUploadedFile = async ({ endpoint, fileName }: FileDeleteParams) => {
+  const requestUrl = await buildServiceUrl(`${endpoint}/${fileName}`);
+  const token = await StorageService.getData(ACCESS_TOKEN_KEY);
+  const bearer = token || '';
+
+  try {
+    await axios({
+      url: requestUrl,
+      method: 'delete',
+      headers: {
+        Authorization: bearer,
+      },
+    });
+
+    return { status: 200, deletedFile: fileName };
+  } catch (error) {
+    console.log('axios error', error);
+    return { error: true, message: error.message, ...error.response };
+  }
+};
