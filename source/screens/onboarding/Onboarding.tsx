@@ -3,6 +3,7 @@ import { Dimensions, StyleSheet, View } from 'react-native';
 import Animated, { divide } from 'react-native-reanimated';
 import { interpolateColor, useScrollHandler } from 'react-native-redash';
 
+import { SHOW_SPLASH_SCREEN } from '../../services/StorageService';
 import Slide from './Slide';
 import Dot from './Dot';
 import Button from './components/Button';
@@ -66,7 +67,20 @@ const slides = [
   },
 ];
 
-const Onboarding = () => {
+const disableOnboarding = async () => {
+  await AsyncStorage.setItem(SHOW_SPLASH_SCREEN, JSON.stringify(false));
+};
+
+const navigationResetToLoginScreen = (navigation) => {
+  disableOnboarding().then(
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }],
+    })
+  );
+};
+
+const Onboarding = (props) => {
   const [scrollPos, setScrollPos] = useState(0);
   const scroll = useRef<Animated.ScrollView>(null);
   const { scrollHandler, x } = useScrollHandler();
@@ -75,6 +89,7 @@ const Onboarding = () => {
     outputRange: slides.map(slide => slide.color),
   });
   const lastScrollPos = width * (slides.length - 2);
+  const { navigation } = props;
 
   return (
     <View style={styles.container}>
@@ -118,7 +133,7 @@ const Onboarding = () => {
                 if (scrollPos <= lastScrollPos) {
                   scroll.current.getNode().scrollTo({ x: width + scrollPos, animated: true });
                 } else {
-                  // TODO: Add navigation to login page.
+                  navigationResetToLoginScreen(navigation);
                 }
               }}
             />
