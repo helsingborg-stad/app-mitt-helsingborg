@@ -11,7 +11,8 @@ import StorageService from '../services/StorageService';
 
 const Container = styled.ScrollView`
   flex: 1;
-  padding: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
 `;
 
 const FieldWrapper = styled.View`

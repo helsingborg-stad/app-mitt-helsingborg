@@ -14,7 +14,8 @@ const ProfileScreenWrapper = styled(ScreenWrapper)`
 
 const Container = styled.ScrollView`
   flex: 1;
-  padding: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
 `;
 
 const BottomContainer = styled.View`
@@ -22,6 +23,7 @@ const BottomContainer = styled.View`
   margin-bottom: 16px;
   flex: 1;
   justify-content: flex-end;
+  padding-bottom: 16px;
 `;
 
 const SignOutButton = styled(Button)`
