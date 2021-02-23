@@ -39,7 +39,6 @@ const StyledTextInput = styled.TextInput<InputProps>`
   padding-bottom: 16px;
   padding-left: 16px;
   padding-right: 16px;
-  margin: 3px;
   color: ${({ theme }) => theme.colors.neutrals[0]};
   ${(props) => (props.center ? 'text-align: center;' : null)}
 `;
