@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Heading from '../../atoms/Heading';
 import Text from '../../atoms/Text';
 import Icon from '../../atoms/Icon';
@@ -34,7 +35,7 @@ const HeaderHeading = styled(Heading)`
 
 const HeaderContent = styled.View`
   justify-content: flex-end;
-  height: 120px;
+  height: 80px;
 `;
 
 const Separator = styled.View`
@@ -46,6 +47,7 @@ const Separator = styled.View`
 
 const Header = ({ message, title, themeColor, navItems, backButton }) => (
   <HeaderContainer>
+    <SafeAreaView edges={['top', 'right', 'left']} />
     <HeaderContent>
       {backButton && (
         <BackButton z={0} onClick={backButton.onClick}>
