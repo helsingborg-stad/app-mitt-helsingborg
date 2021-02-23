@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 
@@ -15,7 +14,6 @@ const GestureButtonLabel = styled.Text`
 
 interface ButtonProps {
   label: string;
-  variant: 'default' | 'primary';
   onPress: () => void;
 }
 
