@@ -67,8 +67,8 @@ const Content = styled.Text`
 interface SliderPropsInterface {
   title: string;
   content: string;
-  right: boolean;
   picture?: number;
+  headingColor?: string;
 }
 
 const Slide = ({ headingColor, title, content, picture }: SliderPropsInterface) => (
