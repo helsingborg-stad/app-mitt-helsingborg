@@ -27,10 +27,7 @@ const HeaderHeading = styled(Heading)`
   margin-top: 0px;
   margin-bottom: 0px;
   color: ${(props) => props.theme.text.darkest};
-  font-weight: ${(props) => {
-    console.log(props.theme);
-    return props.theme.fontWeights[1];
-  }};
+  font-weight: ${(props) => props.theme.fontWeights[1]};
   font-size: 36px;
   line-height: 40px;
 `;
