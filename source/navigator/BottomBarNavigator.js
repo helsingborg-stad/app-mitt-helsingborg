@@ -41,17 +41,6 @@ const BottomBarStack = () => (
         })}
       />
       <Tab.Screen
-        name="Chat"
-        component={ChatScreen}
-        options={{
-          headerTintColor: 'black',
-          tabBarLabel: 'Sally',
-          title: 'Sally',
-          tabBarIcon: () => <TabBarImage source={require('../images/chat_3x.png')} />,
-          tabBarIconInactive: () => <TabBarImage source={require('../images/chat_3x_gray.png')} />,
-        }}
-      />
-      <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
@@ -61,6 +50,17 @@ const BottomBarStack = () => (
             <TabBarImage source={require('../images/profile_3x_gray.png')} />
           ),
           tabBarLabel: 'Profil',
+        }}
+      />
+      <Tab.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{
+          headerTintColor: 'black',
+          tabBarLabel: 'Sally',
+          title: 'Sally',
+          tabBarIcon: () => <TabBarImage source={require('../images/chat_3x.png')} />,
+          tabBarIconInactive: () => <TabBarImage source={require('../images/chat_3x_gray.png')} />,
         }}
       />
     </TabNavigator>
