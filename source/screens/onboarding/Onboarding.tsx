@@ -46,28 +46,25 @@ const styles = StyleSheet.create({
 
 const slides = [
   {
-    title: 'Mitt Helsingborg',
-    color: '#FBF7F0',
+    headingColor: '#003359',
+    title: 'Gör ansökan för ekonomiskt bistånd',
+    content: '',
+    color: '#E4EBF0',
+    picture: SLIDE_BACKGROUND_ANSOKAN,
   },
   {
-    title: 'Ställ frågor',
-    content: 'Undrar du något eller behöver hjälp?',
-    color: '#F2E5CF',
+    headingColor: '#770000',
+    title: 'Följ status för ansökan',
+    content: '',
+    color: '#F5E4E3',
+    picture: SLIDE_BACKGROUND_ARENDEN,
   },
   {
-    title: 'Gör ansökan',
-    content: 'Vill du ansöka om bl.a. Bygglov, Ekonomiskt bistånd eller busskort till barnen.',
-    color: '#D0D9DC',
-  },
-  {
-    title: 'Hantera ärenden',
-    content: 'Se status eller ändra i pågående ärenden.',
-    color: '#F4D3CE',
-  },
-  {
-    title: 'Kontakt med handläggare',
-    content: 'Få personliga uppdateringar och ställ frågor direkt till rätt tjänsteperson.',
-    color: '#DBECE0',
+    headingColor: '#4B0034',
+    title: 'Kontakta din handläggare',
+    content: '',
+    color: '#E8DAE4',
+    picture: SLIDE_BACKGROUND_KONTAKT,
   },
 ];
 
