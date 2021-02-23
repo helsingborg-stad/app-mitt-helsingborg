@@ -49,7 +49,7 @@ const TitleContainer = styled.View`
 
 const Title = styled.Text`
   font-size: 30px;
-  line-height: 44;
+  line-height: 44px;
   font-weight: ${Platform.OS === 'android' ? 'bold' : '900'};
   color: #000000;
   text-align: left;
