@@ -120,8 +120,8 @@ const Onboarding = (props) => {
           }}
           {...scrollHandler}
         >
-          {slides.map(({ title, content }, index) => (
-            <Slide key={index} right={!!(index % 2)} {...{ title, content }} />
+          {slides.map(({ headingColor, title, content, picture }, index) => (
+            <Slide key={index} {...{ headingColor, title, content, picture }} />
           ))}
         </Animated.ScrollView>
       </AnimatedScrollContainer>
