@@ -16,35 +16,45 @@ const SLIDE_BACKGROUND_KONTAKT = require('../../assets/images/slides/onboarding_
 
 const { width } = Dimensions.get('window');
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  slider: {
-    flex: 6,
-  },
-  footer: {
-    flex: 1,
-  },
-  footerContent: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingTop: 20,
-  },
-  pagination: {
-    paddingLeft: 40,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  slideButtonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingRight: 58,
-  },
-});
+const OnboardingContainer = styled.View`
+  flex: 1;
+`;
+
+const AnimatedScrollContainer = styled(Animated.View)`
+  flex: 6;
+`;
+
+const FooterContainer = styled.View`
+  flex: 1;
+`;
+
+const AnimatedFooterBackground = styled(Animated.View)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+`;
+
+const FooterContent = styled.View`
+  flex: 1;
+  flex-direction: row;
+  padding-top: 20px;
+`;
+
+const FooterPagination = styled.View`
+  padding-left: 40px;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+const SliderContinueButtonContainer = styled.View`
+  flex: 1;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding-right: 58px;
+`;
 
 const slides = [
   {
@@ -95,8 +105,9 @@ const Onboarding = (props) => {
   const { navigation } = props;
 
   return (
-    <View style={styles.container}>
-      <Animated.View style={[styles.slider, { backgroundColor }]}>
+    <OnboardingContainer>
+      {/* <Animated.View style={[styles.slider, { backgroundColor }]}> */}
+      <AnimatedScrollContainer backgroundColor={backgroundColor}>
         <Animated.ScrollView
           ref={scroll}
           horizontal
@@ -113,23 +124,18 @@ const Onboarding = (props) => {
             <Slide key={index} right={!!(index % 2)} {...{ title, content }} />
           ))}
         </Animated.ScrollView>
-      </Animated.View>
-      <View style={styles.footer}>
-        <Animated.View
-          style={{
-            ...StyleSheet.absoluteFillObject,
-            backgroundColor,
-          }}
-        />
-        <View style={styles.footerContent}>
+      </AnimatedScrollContainer>
+      <FooterContainer>
+        <AnimatedFooterBackground backgroundColor={backgroundColor} />
+        <FooterContent>
           <View>
-            <View style={styles.pagination}>
+            <FooterPagination>
               {slides.map((_, index) => (
                 <Dot key={index} currentIndex={divide(x, width)} {...{ index }} />
               ))}
-            </View>
+            </FooterPagination>
           </View>
-          <View style={styles.slideButtonContainer}>
+          <SliderContinueButtonContainer>
             <Button
               label={scrollPos <= lastScrollPos ? 'Fortsätt' : 'Logga in'}
               onPress={() => {
@@ -140,10 +146,10 @@ const Onboarding = (props) => {
                 }
               }}
             />
-          </View>
-        </View>
-      </View>
-    </View>
+          </SliderContinueButtonContainer>
+        </FooterContent>
+      </FooterContainer>
+    </OnboardingContainer>
   );
 };
 
