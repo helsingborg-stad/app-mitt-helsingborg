@@ -8,6 +8,10 @@ import Slide from './Slide';
 import Dot from './Dot';
 import Button from './components/Button';
 
+const SLIDE_BACKGROUND_ANSOKAN = require('../../assets/images/slides/onboarding_02_ansokan_in_3x.png');
+const SLIDE_BACKGROUND_ARENDEN = require('../../assets/images/slides/onboarding_03_arenden_in_3x.png');
+const SLIDE_BACKGROUND_KONTAKT = require('../../assets/images/slides/onboarding_04_kontakt_in_3x.png');
+
 const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
