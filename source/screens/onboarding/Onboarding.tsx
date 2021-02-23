@@ -1,7 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, View, Text } from 'react-native';
 import Animated, { divide } from 'react-native-reanimated';
-import { interpolateColor, useScrollHandler } from 'react-native-redash';
+import { useScrollHandler, interpolateColor } from 'react-native-redash';
+import styled from 'styled-components/native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { SHOW_SPLASH_SCREEN } from '../../services/StorageService';
 import Slide from './Slide';
