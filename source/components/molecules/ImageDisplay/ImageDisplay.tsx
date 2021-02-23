@@ -52,7 +52,6 @@ const ImageDisplay: React.FC<Props> = ({ images, answers, onChange }) => {
         (event.nativeEvent.contentSize.width - event.nativeEvent.layoutMeasurement.width)
     );
   };
-
   return (
     <Wrapper>
       <Container horizontal onScroll={handleScroll} showsHorizontalScrollIndicator={false}>

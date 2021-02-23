@@ -155,6 +155,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
       });
   };
 
+  console.log('images from uploader:', images);
   const validColorSchema = getValidColorSchema(colorSchema);
   return (
     <>
