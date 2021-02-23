@@ -1,8 +1,9 @@
 /* eslint-disable no-nested-ternary */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import ImageZoom from 'react-native-image-pan-zoom';
+import { existsAssets, exists, readFile } from 'react-native-fs';
 import {
   TouchableOpacity,
   Dimensions,
@@ -55,6 +56,12 @@ const ImageIcon = styled.Image`
   height: 178px;
 `;
 
+type FileStatus =
+  | 'checkLocalFile'
+  | 'localFileAvailable'
+  | 'downloading'
+  | 'downloadedFileAvailable';
+
 interface Props {
   image: Image;
   onRemove: () => void;
@@ -62,6 +69,28 @@ interface Props {
 
 const ImageItem: React.FC<Props> = ({ image, onRemove }) => {
   const [modalVisible, toggleModal] = useModal();
+  const [fileStatus, setFileStatus] = useState<FileStatus>('checkLocalFile');
+  const [downloadedFilePath, setDownloadedFilePath] = useState('');
+
+  const downloadImage = async () => {
+    console.log('download file, to be implemented...');
+  };
+
+  useEffect(() => {
+    const checkStatus = async () => {
+      if (fileStatus === 'checkLocalFile') {
+        try {
+          await readFile(image.path, 'base64');
+          setFileStatus('localFileAvailable');
+        } catch (fileNotFoundError) {
+          setFileStatus('downloading');
+          downloadImage();
+        }
+      }
+    };
+
+    checkStatus();
+  }, [fileStatus, image.path]);
 
   const handleRemove = (event: GestureResponderEvent) => {
     event.stopPropagation();
@@ -78,12 +107,19 @@ const ImageItem: React.FC<Props> = ({ image, onRemove }) => {
             </TouchableOpacity>
           </DeleteBackground>
           <IconContainer>
-            <ImageIcon source={{ uri: image.path }} />
+            {fileStatus === 'checkLocalFile' && <Text>Checking</Text>}
+            {image && image?.path && fileStatus === 'localFileAvailable' && (
+              <ImageIcon source={{ uri: image.path }} />
+            )}
+            {fileStatus === 'downloading' && <Text>Downloading</Text>}
+            {image && image?.path && fileStatus === 'downloadedFileAvailable' && (
+              <ImageIcon source={{ uri: downloadedFilePath }} />
+            )}
           </IconContainer>
         </Flex>
       </DefaultItem>
       <Modal visible={modalVisible} hide={toggleModal}>
-        {image && image?.path && (
+        {image && image?.path && fileStatus === 'localFileAvailable' && (
           <ImageZoom
             cropWidth={Dimensions.get('window').width}
             cropHeight={Dimensions.get('window').height * 0.89}
@@ -102,6 +138,28 @@ const ImageItem: React.FC<Props> = ({ image, onRemove }) => {
             <RNImage
               style={{ width: image.width, height: image.height }}
               source={{ uri: image.path }}
+            />
+          </ImageZoom>
+        )}
+        {image && fileStatus === 'downloadedFileAvailable' && (
+          <ImageZoom
+            cropWidth={Dimensions.get('window').width}
+            cropHeight={Dimensions.get('window').height * 0.89}
+            imageWidth={image.width}
+            imageHeight={image.height}
+            panToMove
+            enableCenterFocus={false}
+            centerOn={{
+              x: 0,
+              y: 0,
+              scale: Dimensions.get('window').width / image.width,
+              duration: 10,
+            }}
+            minScale={Dimensions.get('window').width / image.width}
+          >
+            <RNImage
+              style={{ width: image.width, height: image.height }}
+              source={{ uri: downloadedFilePath }}
             />
           </ImageZoom>
         )}
