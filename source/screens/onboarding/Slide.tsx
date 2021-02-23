@@ -59,17 +59,16 @@ const styles = StyleSheet.create({
 interface SliderProps {
   title: string;
   content: string;
-  right: boolean;
-  picture: number;
+  picture?: number;
+  headingColor?: string;
 }
 
-const Slide = ({ title, right, content, picture }: SliderProps) => {
+const Slide = ({ title, content, picture }: SliderProps) => {
   const transform = [{ translateY: (SLIDE_HEIGHT - 300) / 2 }];
 
   return (
     <View style={[styles.container, { transform }]}>
       <View>
-        <Image source={require('./assets/STADSVAPEN.png')} />
         <Text style={styles.subTitle}>Mitt Helsingborg</Text>
         <View style={styles.subTitleHrRule} />
       </View>
