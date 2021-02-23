@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -155,6 +155,24 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
       });
   };
 
+  /** 
+   * Using a status and useEffect to get around a bug when opening the camera/library
+   * from inside a modal in iOS. This way I can check and make sure that the modal is 
+   * closed before calling the library that opens the camera/library.
+   */
+  type ImageLoadStatus = 'doNothing' | 'openCamera' | 'openLibrary';
+  const [imageLoadStatus, setImageLoadStatus] = useState<ImageLoadStatus>('doNothing')
+  useEffect(() =>{
+    if (imageLoadStatus === 'openCamera' && !choiceModalVisible ){
+      setImageLoadStatus('doNothing');
+      addImageFromCamera();
+    }
+    if (imageLoadStatus === 'openLibrary' && !choiceModalVisible){
+      setImageLoadStatus('doNothing');
+      addImagesFromLibrary();
+    }
+  }, [imageLoadStatus, choiceModalVisible]);
+
   const validColorSchema = getValidColorSchema(colorSchema);
   return (
     <>
@@ -183,9 +201,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
               variant="outlined"
               onClick={() => { 
                 toggleModal();
-                /** There's an issue on iOS with triggering the library before the modal has closed,
-                 * so as a simple fix, we add a timeout (since toggleModal is async) */
-                setTimeout(addImageFromCamera, 100); 
+                setImageLoadStatus('openCamera')
               }}
             >
               <Icon name="camera-alt" />
@@ -197,9 +213,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
               variant="outlined"
               onClick={() => {
                 toggleModal();
-                /** There's an issue on iOS with triggering the library before the modal has closed,
-                 * so as a simple fix, we add a timeout (since toggleModal is async) */
-                setTimeout(addImagesFromLibrary, 100);
+                setImageLoadStatus('openLibrary');
               }}
             >
               <Icon name="add-photo-alternate" />
