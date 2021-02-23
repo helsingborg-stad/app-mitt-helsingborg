@@ -12,8 +12,8 @@ const LabelText = styled(Text)<{size: 'small' | 'medium' | 'large'; color: Prima
   color: ${props => props.theme.label.colors[props.color].text};
   text-transform: uppercase;
   font-weight: bold;
-  padding-bottom: 7px;
-  padding-top: 5px;
+  padding-bottom: 8px;
+  padding-top: 4px;
 `;
 const LabelBorder = styled.View<{size: 'small' | 'medium' | 'large'; color: PrimaryColor; underline?: boolean; }>`
   padding-bottom: ${props => {
