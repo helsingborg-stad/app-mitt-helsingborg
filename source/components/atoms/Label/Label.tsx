@@ -16,7 +16,11 @@ const LabelText = styled(Text)<{size: 'small' | 'medium' | 'large'; color: Prima
   padding-top: 5px;
 `;
 const LabelBorder = styled.View<{size: 'small' | 'medium' | 'large'; color: PrimaryColor; underline?: boolean; }>`
-  padding-bottom: ${props => props.theme.label[props.size].paddingBottom}px;
+  padding-bottom: ${props => {
+    if (props.underline === false)
+      return 0;  
+    return props.theme.label[props.size].paddingBottom;
+  }}px;
   border-bottom-color: ${props => props.theme.label.colors[props.color].underline};
   border-bottom-width: ${props => {
     if (props.underline === false) {
