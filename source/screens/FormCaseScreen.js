@@ -56,12 +56,13 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
             answers: answersObject,
           },
         };
-      setInitialCase(initCase);
+        setInitialCase(initCase);
 
-      getForm(initCase.currentFormId).then(async (form) => {
-        setForm(form);
-        setFormQuestions(getFormQuestions(form));
-      });
+        getForm(initCase.currentFormId).then(async (form) => {
+          setForm(form);
+          setFormQuestions(getFormQuestions(form));
+        });
+      }
     }
   }, [caseData, caseId, getForm, getCase, user, getCasesByFormIds]);
 
