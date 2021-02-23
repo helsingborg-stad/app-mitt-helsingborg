@@ -24,13 +24,20 @@ const HeaderContainer = styled.View`
 `;
 
 const HeaderHeading = styled(Heading)`
-  margin-top: 4px;
-  color: ${(props) => props.theme.colors.neutrals[0]};
+  margin-top: 0px;
+  margin-bottom: 0px;
+  color: ${(props) => props.theme.text.darkest};
+  font-weight: ${(props) => {
+    console.log(props.theme);
+    return props.theme.fontWeights[1];
+  }};
+  font-size: 36px;
+  line-height: 40px;
 `;
 
 const HeaderContent = styled.View`
   justify-content: flex-end;
-  height: 90px;
+  height: 120px;
 `;
 
 const Separator = styled.View`
