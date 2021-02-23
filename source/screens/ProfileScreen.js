@@ -6,6 +6,7 @@ import { Button, Text, Heading, Icon } from '../components/atoms';
 import { ScreenWrapper, Header } from '../components/molecules';
 import AuthContext from '../store/AuthContext';
 import AppContext from '../store/AppContext';
+import Label from '../components/atoms/Label/Label';
 
 const ProfileScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
@@ -17,6 +18,8 @@ const Container = styled.ScrollView`
 `;
 
 const BottomContainer = styled.View`
+  margin-top: 32px;
+  margin-bottom: 16px;
   flex: 1;
   justify-content: flex-end;
 `;
@@ -31,18 +34,27 @@ const ProfileInfoContainer = styled.View`
 `;
 
 const ProfileInfoHeading = styled(Heading)`
-  margin-bottom: 8px;
+  color: ${(props) => props.theme.text.darkest};
+  margin-top: 16px;
+  margin-bottom: 0px;
 `;
 
-const EmptyValue = styled(Text)`
+const ProfileInfoText = styled(Text)`
+  font-size: 16px;
+  color: ${(props) => props.theme.text.darkest};
+`;
+
+const ProfileInfoTextItalic = styled(ProfileInfoText)`
   font-style: italic;
   font-weight: normal;
 `;
 
-const Label = styled(Text)`
-  margin-top: 12px;
-  margin-bottom: 4px;
-  color: ${(props) => props.theme.background.light};
+const ProfileLabel = styled(Label)`
+  font-size: 12px;
+  margin-top: 16px;
+  margin-bottom: 0px;
+  font-weight: ${(props) => props.theme.fontWeights[1]};
+  color: ${(props) => props.theme.text.blue[4]};
 `;
 
 function ProfileScreen(props) {
@@ -53,7 +65,11 @@ function ProfileScreen(props) {
   const { isDevMode } = useContext(AppContext);
   const { user } = authContext;
   const renderField = (value) =>
-    value ? <Text>{value}</Text> : <EmptyValue>Ej angivet</EmptyValue>;
+    value ? (
+      <ProfileInfoText>{value}</ProfileInfoText>
+    ) : (
+      <ProfileInfoTextItalic>Ej angivet</ProfileInfoTextItalic>
+    );
 
   return (
     <ProfileScreenWrapper>
@@ -61,22 +77,45 @@ function ProfileScreen(props) {
       <Container>
         <View>
           <ProfileInfoContainer>
-            <ProfileInfoHeading type="h3">Personuppgifter</ProfileInfoHeading>
-            <Label small>NAMN</Label>
+            <ProfileInfoHeading type="h5">Personuppgifter</ProfileInfoHeading>
+            <ProfileLabel underline={false} small>
+              NAMN
+            </ProfileLabel>
             {renderField(`${user?.firstName || ''} ${user?.lastName || ''}`)}
-            <Label small>PERSONNUMMER</Label>
+            <ProfileLabel underline={false} small>
+              PERSONNUMMER
+            </ProfileLabel>
             {renderField(user?.personalNumber)}
           </ProfileInfoContainer>
           <ProfileInfoContainer>
-            <ProfileInfoHeading type="h3">Kontaktuppgifter</ProfileInfoHeading>
-            <Label small>TELEFONNUMMER</Label>
+            <ProfileInfoHeading type="h5">Kontaktuppgifter</ProfileInfoHeading>
+            <ProfileLabel underline={false} small>
+              TELEFONNUMMER
+            </ProfileLabel>
             {renderField(user?.mobilePhone)}
-            <Label small>E-POSTADRESS</Label>
+            <ProfileLabel underline={false} small>
+              E-POSTADRESS
+            </ProfileLabel>
             {renderField(user?.email)}
-            <Label small>ADRESS</Label>
-            {renderField(user?.address?.street)}
-            {renderField(user?.address?.postalCode)}
           </ProfileInfoContainer>
+          <ProfileInfoContainer>
+            <ProfileInfoHeading type="h5">Adress</ProfileInfoHeading>
+            <ProfileLabel underline={false} small>
+              GATUADRESS
+            </ProfileLabel>
+            {renderField(user?.address?.street)}
+            <ProfileLabel underline={false} small>
+              POSTNUMMER
+            </ProfileLabel>
+            {renderField(user?.address?.postalCode)}
+            <ProfileLabel underline={false} small>
+              ORT
+            </ProfileLabel>
+            {renderField(user?.address?.city)}
+          </ProfileInfoContainer>
+          <ProfileInfoTextItalic>
+            Dessa uppgifter hämtade vi från Skatteverket när du identifierade dig med BankID
+          </ProfileInfoTextItalic>
         </View>
         <BottomContainer>
           <SignOutButton
