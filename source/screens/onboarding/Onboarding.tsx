@@ -99,7 +99,7 @@ const Onboarding = (props) => {
   const { scrollHandler, x } = useScrollHandler();
   const backgroundColor = interpolateColor(x, {
     inputRange: slides.map((_, i) => i * width),
-    outputRange: slides.map(slide => slide.color),
+    outputRange: slides.map((slide) => slide.color),
   });
   const lastScrollPos = width * (slides.length - 2);
   const { navigation } = props;
@@ -115,7 +115,7 @@ const Onboarding = (props) => {
           decelerationRate="fast"
           showsHorizontalScrollIndicator={false}
           bounces={false}
-          onMomentumScrollEnd={event => {
+          onMomentumScrollEnd={(event) => {
             setScrollPos(event.nativeEvent.contentOffset.x);
           }}
           {...scrollHandler}
