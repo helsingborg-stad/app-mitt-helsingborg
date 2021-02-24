@@ -4,8 +4,9 @@ import React from 'react';
 import { StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
+import { Icon } from '../components/atoms';
 import TabNavigator from '../components/molecules/TabNavigator';
-import { ChatScreen, ProfileScreen } from '../screens';
+import { AboutScreen, ProfileScreen } from '../screens';
 import theme from '../styles/theme';
 import CaseNavigator from './CaseNavigator';
 
@@ -53,14 +54,14 @@ const BottomBarStack = () => (
         }}
       />
       <Tab.Screen
-        name="Chat"
-        component={ChatScreen}
+        name="About"
+        component={AboutScreen}
         options={{
           headerTintColor: 'black',
-          tabBarLabel: 'Sally',
-          title: 'Sally',
-          tabBarIcon: () => <TabBarImage source={require('../images/chat_3x.png')} />,
-          tabBarIconInactive: () => <TabBarImage source={require('../images/chat_3x_gray.png')} />,
+          tabBarLabel: 'Om',
+          title: 'Om',
+          tabBarIcon: () => <Icon color="#80B14A" name="help-outline" />,
+          tabBarIconInactive: () => <Icon color="#A3A3A3" name="help-outline" />,
         }}
       />
     </TabNavigator>
