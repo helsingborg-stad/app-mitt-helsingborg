@@ -17,7 +17,7 @@ export async function updateCase(
   const answers = convertAnswersToArray(answerObject, formQuestions);
 
   const body = {
-    status,
+    statusType: status.type,
     answers,
     currentPosition,
     currentFormId: formId,
@@ -50,22 +50,18 @@ export async function createCase(form, user, cases, callback) {
   const initialAnswersArray = convertAnswersToArray(initialAnswersObject, formQuestions);
 
   const body = {
-    formId: form.id,
-    provider: 'VIVA',
-    currentPosition: {
-      index: 0,
-      level: 0,
-      currentMainStep: 1,
-      currentMainStepIndex: 0,
-    },
-    details: {
-      period: {
-        startDate: 1601994748326,
-        endDate: 1701994748326,
+    provider: form.provider,
+    statusType: 'notStarted',
+    currentFormId: form.id,
+    forms: {
+      [form.id]: {
+        answers: initialAnswersArray || [],
+        currentPosition: { index: 0, level: 0, currentMainStep: 1, currentMainStepIndex: 0 },
       },
     },
-    answers: initialAnswersArray || [],
+    details: {},
   };
+
   try {
     const response = await post('/cases', JSON.stringify(body));
     const newCase = response.data.data;
@@ -74,7 +70,9 @@ export async function createCase(form, user, cases, callback) {
       ...newCase.attributes,
       data: initialAnswersObject,
     };
+
     callback(flattenedNewCase);
+
     return {
       type: actionTypes.createCase,
       payload: flattenedNewCase,
