@@ -1,4 +1,5 @@
 import axios from 'axios';
+import RNFetchBlob from 'rn-fetch-blob';
 import StorageService, { ACCESS_TOKEN_KEY } from '../services/StorageService';
 import { buildServiceUrl } from './UrlHelper';
 
@@ -91,16 +92,15 @@ export const downloadFile = async ({ endpoint, filename }: FileDownloadParams) =
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
   const bearer = token || '';
 
+  const { dirs } = RNFetchBlob.fs;
   try {
-    const downloadResponse = await axios({
-      url: requestUrl,
-      method: 'get',
-      headers: {
-        Authorization: bearer,
-        Accept: mime,
-      },
+    const downloadResult = await RNFetchBlob.config({
+      path: `${dirs.CacheDir}/${filename}`,
+    }).fetch('GET', requestUrl, {
+      Authorization: bearer,
+      Accept: mime,
     });
-    console.log(downloadResponse);
+    return `file://${downloadResult.path()}`;
   } catch (error) {
     console.log('axios download error: ', error);
     return { error: true, message: error.message, ...error.response };

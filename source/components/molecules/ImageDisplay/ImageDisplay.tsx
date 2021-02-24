@@ -46,6 +46,13 @@ const ImageDisplay: React.FC<Props> = ({ images, answers, onChange }) => {
     deleteImageFromCloudStorage(image);
   };
 
+  const updateImage = (image: Image) => (newImage: Image) => {
+    const answer: Image[] = answers[image.questionId];
+    const index = answer.findIndex((img) => img.uploadedFileName === image.uploadedFileName);
+    answer[index] = newImage;
+    onChange(answer, image.questionId);
+  };
+
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     setHorizontalScrollPercentage(
       event.nativeEvent.contentOffset.x /
@@ -63,6 +70,7 @@ const ImageDisplay: React.FC<Props> = ({ images, answers, onChange }) => {
               onRemove={() => {
                 removeImage(image);
               }}
+              onChange={updateImage(image)}
             />
           ))}
       </Container>
