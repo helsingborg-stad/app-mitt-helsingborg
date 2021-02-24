@@ -143,6 +143,11 @@ const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
               label={scrollPos <= lastScrollPos ? 'Fortsätt' : 'Logga in'}
               onPress={() => {
                 if (scrollPos <= lastScrollPos) {
+                  if (Platform.OS === 'android') {
+                    // Fix for Android bug where onMomentumScrollEnd not called when setting scroll with scrollTo.
+                    setScrollPos(scrollPos + width);
+                  }
+
                   scroll.current.getNode().scrollTo({ x: width + scrollPos, animated: true });
                 } else {
                   navigationResetToLoginScreen(navigation);
