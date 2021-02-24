@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import ImageZoom from 'react-native-image-pan-zoom';
-import { existsAssets, exists, readFile } from 'react-native-fs';
+import { readFile } from 'react-native-fs';
 import {
   TouchableOpacity,
   Dimensions,

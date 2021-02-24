@@ -72,3 +72,37 @@ export const uploadFile = async ({
     return { error: true, message: error.message, ...error.response };
   }
 };
+
+const MimeTypes = {
+  jpg: 'image/jpeg',
+  png: 'image/png',
+  pdf: 'application/pdf',
+};
+
+interface FileDownloadParams {
+  endpoint: string;
+  filename: string;
+}
+
+export const downloadFile = async ({ endpoint, filename }: FileDownloadParams) => {
+  const fileEnding = filename.split('.').pop();
+  const mime = MimeTypes[fileEnding];
+  const requestUrl = await buildServiceUrl(`${endpoint}/${filename}`);
+  const token = await StorageService.getData(ACCESS_TOKEN_KEY);
+  const bearer = token || '';
+
+  try {
+    const downloadResponse = await axios({
+      url: requestUrl,
+      method: 'get',
+      headers: {
+        Authorization: bearer,
+        Accept: mime,
+      },
+    });
+    console.log(downloadResponse);
+  } catch (error) {
+    console.log('axios download error: ', error);
+    return { error: true, message: error.message, ...error.response };
+  }
+};
