@@ -25,13 +25,13 @@ const AboutScreen = () => (
     <Container>
       <Heading type="h1">Hej! 👋</Heading>
       <Paragraph>
-        Just nu utvecklar Helsingborgs stad appen Mitt Helsingborg, för att testa att
-        görasjälvservice enklare och mer personligt.
+        Just nu utvecklar Helsingborgs stad appen Mitt Helsingborg, för att testa att göra
+        självservice enklare och mer personligt.
       </Paragraph>
       <Paragraph>
-        I första steget jobbar vi på att göra det lättare att ansöka om ekonomiskt bistånd, men
-        påsikt ska du kunna hitta fler tjänster, mer information och personlig service från
-        kommunenhär.
+        I första steget jobbar vi på att göra det lättare att ansöka om ekonomiskt bistånd, men på
+        sikt ska du kunna hitta fler tjänster, mer information och personlig service från kommunen
+        här.
       </Paragraph>
     </Container>
   </AboutScreenWrapper>
