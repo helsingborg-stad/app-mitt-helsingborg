@@ -5,7 +5,6 @@ import { Image as CropPickerImage } from 'react-native-image-crop-picker';
 import styled from 'styled-components/native';
 import HorizontalScrollIndicator from '../../atoms/HorizontalScrollIndicator';
 import ImageItem from './ImageItem';
-import { deleteUploadedFile } from '../../../helpers/FileUpload';
 import { remove } from '../../../helpers/ApiRequest';
 
 const Wrapper = styled.View`
