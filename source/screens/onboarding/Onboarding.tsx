@@ -106,7 +106,6 @@ const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
     outputRange: slides.map((slide) => slide.color),
   });
   const lastScrollPos = width * (slides.length - 2);
-  const { navigation } = props;
 
   return (
     <OnboardingContainer>
