@@ -24,7 +24,7 @@ const FlexWrapper = styled.View`
   flex: 1;
 `;
 
-const colors: PrimaryColor[] = ['red', 'green', 'blue'];
+const colors: PrimaryColor[] = ['red', 'blue', 'green'];
 
 interface Props {
   swipeEnabled?: boolean;
