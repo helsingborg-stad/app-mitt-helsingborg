@@ -93,7 +93,11 @@ const navigationResetToLoginScreen = (navigation) => {
   );
 };
 
-const Onboarding = (props) => {
+interface OnboardingPropsInterface {
+  navigation: () => {};
+}
+
+const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
   const [scrollPos, setScrollPos] = useState(0);
   const scroll = useRef<Animated.ScrollView>(null);
   const { scrollHandler, x } = useScrollHandler();
