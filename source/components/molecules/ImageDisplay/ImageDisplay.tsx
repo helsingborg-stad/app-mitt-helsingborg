@@ -6,6 +6,7 @@ import styled from 'styled-components/native';
 import HorizontalScrollIndicator from '../../atoms/HorizontalScrollIndicator';
 import ImageItem from './ImageItem';
 import { deleteUploadedFile } from '../../../helpers/FileUpload';
+import { remove } from '../../../helpers/ApiRequest';
 
 const Wrapper = styled.View`
   padding-left: 0;
@@ -35,10 +36,7 @@ const ImageDisplay: React.FC<Props> = ({ images, answers, onChange }) => {
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] = useState(0);
 
   const deleteImageFromCloudStorage = async (image: Image) => {
-    deleteUploadedFile({
-      endpoint: 'users/me/attachments',
-      fileName: image.uploadedFileName,
-    });
+    remove(`users/me/attachments/${image.uploadedFileName}`);
   };
   const removeImage = (image: Image) => {
     const answer: Image[] = answers[image.questionId];
