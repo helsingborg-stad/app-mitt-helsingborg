@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { View, Animated, Easing } from 'react-native';
+import { View, Animated, Easing, ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import { CaseState } from 'app/store/CaseContext';
 import FormContext from 'app/store/FormContext';
@@ -10,6 +10,11 @@ import { launchPhone, launchEmail } from '../../helpers/LaunchExternalApp';
 import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 import { Icon, Text } from '../../components/atoms';
 import { Card, ScreenWrapper } from '../../components/molecules';
+import { Modal, useModal } from '../../components/molecules/Modal';
+import BackNavigation from '../../components/molecules/BackNavigation';
+import Heading from '../../components/atoms/Heading';
+import Button from '../../components/atoms/Button';
+import Label from '../../components/atoms/Label';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -23,7 +28,37 @@ const SummaryHeading = styled(Text)`
   margin-bottom: 16px;
 `;
 
-const computeCaseCardComponent = (caseData, form, colorSchema, navigation) => {
+const CloseModalButton = styled(BackNavigation)`
+  padding: 24px 24px 0px 24px;
+`;
+
+const ModalContent = styled.View`
+  margin: 32px;
+  margin-top: 32px;
+`;
+
+const ModalFooter = styled.View`
+  margin: 32px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalText = styled(Text)`
+  font-size: ${(props) => props.theme.fontSizes[3]}px;
+`;
+
+const ModalHeading = styled(Heading)`
+  margin-top: 24px;
+`;
+
+const ModalLabel = styled(Label)`
+  font-size: 12px;
+  margin-top: 16px;
+  margin-bottom: 0px;
+  font-weight: ${(props) => props.theme.fontWeights[1]};
+`;
+
+const computeCaseCardComponent = (caseData, form, colorSchema, navigation, toggleModal) => {
   const { status, details: { period: { endDate } = {} } = {} } = caseData;
   const {
     currentPosition: { currentMainStep: currentStep },
@@ -33,6 +68,7 @@ const computeCaseCardComponent = (caseData, form, colorSchema, navigation) => {
   const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(endDate, true);
   const isNotStarted = status?.type?.includes('notStarted');
   const isOngoing = status?.type?.includes('ongoing');
+  const isClosed = status?.type?.includes('closed');
 
   return (
     <Card colorSchema={colorSchema}>
@@ -57,6 +93,12 @@ const computeCaseCardComponent = (caseData, form, colorSchema, navigation) => {
             <Icon name="arrow-forward" />
           </Card.Button>
         )}
+        {isClosed && (
+          <Card.Button onClick={toggleModal}>
+            <Text>Visa beslut</Text>
+            <Icon name="remove-red-eye" />
+          </Card.Button>
+        )}
       </Card.Body>
     </Card>
   );
@@ -78,8 +120,9 @@ const CaseSummary = (props) => {
       params: { id: caseId },
     },
   } = props;
-  const { details: { administrators } = {} } = caseData;
+  const { details: { administrators, workflow: { decision, payments } = {} } = {} } = caseData;
   const isFocused = useIsFocused();
+  const [isModalVisible, toggleModal] = useModal();
 
   useEffect(() => {
     const caseData = getCase(caseId);
@@ -95,6 +138,9 @@ const CaseSummary = (props) => {
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
+  console.log('decision', decision);
+  console.log('payments', payments);
+
   useEffect(() => {
     Animated.timing(fadeAnimation, {
       toValue: 1,
@@ -109,7 +155,7 @@ const CaseSummary = (props) => {
       <Container as={Animated.ScrollView} style={{ opacity: fadeAnimation }}>
         <SummaryHeading type="h5">Aktuell period</SummaryHeading>
         {Object.keys(caseData).length > 0 &&
-          computeCaseCardComponent(caseData, form, colorSchema, navigation)}
+          computeCaseCardComponent(caseData, form, colorSchema, navigation, toggleModal)}
 
         {administrators && (
           <View>
@@ -144,6 +190,56 @@ const CaseSummary = (props) => {
           </View>
         )}
       </Container>
+
+      <Modal visible={isModalVisible} hide={toggleModal}>
+        <CloseModalButton
+          onClose={toggleModal}
+          primary={false}
+          showBackButton={false}
+          colorSchema="red"
+        />
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: 'space-between',
+          }}
+        >
+          <ModalContent>
+            <ModalHeading type="h1">Beslut</ModalHeading>
+            <ModalLabel underline={false} small>
+              Beskrivning
+            </ModalLabel>
+            <ModalText>{decision?.subject}</ModalText>
+
+            <ModalLabel underline={false} small>
+              Förklaring
+            </ModalLabel>
+            <ModalText>{decision?.decisions?.decision?.explanation}</ModalText>
+
+            <ModalHeading type="h1">Utbetalning</ModalHeading>
+
+            <ModalLabel underline={false} small>
+              Beskrivning
+            </ModalLabel>
+            <ModalText>{payments?.payment?.subject}</ModalText>
+
+            <ModalLabel underline={false} small>
+              Summa
+            </ModalLabel>
+            <ModalText>{`${payments?.payment?.amount} kr`}</ModalText>
+
+            <ModalLabel underline={false} small>
+              Utbetalas
+            </ModalLabel>
+            <ModalText>{payments?.payment?.givedate}</ModalText>
+          </ModalContent>
+          <ModalFooter>
+            <Button z={0} block onClick={toggleModal} colorSchema="red">
+              <Text>Stäng</Text>
+            </Button>
+          </ModalFooter>
+        </ScrollView>
+      </Modal>
     </ScreenWrapper>
   );
 };
