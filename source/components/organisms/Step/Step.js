@@ -23,8 +23,7 @@ const StepContainer = styled.View`
 const StepContentContainer = styled.View``;
 
 const StepBackNavigation = styled(BackNavigation)`
-  padding: 24px;
-  position: absolute;
+  padding: 24px 24px 0px 24px;
 `;
 
 const StepBanner = styled(Banner)`
