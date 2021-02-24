@@ -2,7 +2,6 @@ import React from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from '../../atoms/Icon/Icon';
 
 const BackNavigationWrapper = styled.View({
@@ -17,7 +16,7 @@ const BackNavigationWrapper = styled.View({
   zIndex: 999,
 });
 
-const BackNavigationSingleWrapper = styled.View((props) => ({
+const BackNavigationSingleWrapper = styled.View(() => ({
   position: 'absolute',
   flexDirection: 'row',
   padding: 0,
