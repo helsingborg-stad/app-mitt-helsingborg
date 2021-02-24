@@ -37,7 +37,7 @@ const computeCaseCardComponent = (caseData, form, colorSchema, navigation) => {
   return (
     <Card colorSchema={colorSchema}>
       <Card.Body shadow color="neutral">
-        <Card.Title colorSchema="neutral">{applicationPeriodMonth}</Card.Title>
+        <Card.Title colorSchema="neutral">{applicationPeriodMonth || status.name}</Card.Title>
         {isOngoing ? (
           <Card.SubTitle>
             Steg {currentStep} / {totalSteps}
