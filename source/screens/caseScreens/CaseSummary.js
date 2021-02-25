@@ -48,6 +48,12 @@ Card.CalculationRow = styled.View`
   justify-content: space-between;
 `;
 
+Card.CalculationRowCell = styled.View`
+  flex: 1;
+  align-self: stretch;
+  padding-right: 4px;
+`;
+
 Card.Separator = styled.View`
   height: 2px;
   width: 100%;
@@ -55,6 +61,11 @@ Card.Separator = styled.View`
   margin-top: 8px;
   margin-bottom: 8px;
   background-color: ${(props) => props.theme.colors.complementary.neutral[1]};
+`;
+
+Card.DetailsTitle = styled(Text)`
+  margin-top: 30px;
+  margin-bottom: 16px;
 `;
 
 const computeCaseCardComponent = (caseData, form, colorSchema, navigation, toggleModal) => {
@@ -252,6 +263,7 @@ const CaseSummary = (props) => {
                   <Card.Body shadow color="neutral">
                     <Card.Title colorSchema="neutral">Beräkning</Card.Title>
                     <Card.SubTitle>{`Beräkningsperiod: ${calculation.periodstartdate} - ${calculation.periodenddate} `}</Card.SubTitle>
+                    <Card.Separator />
                     <Card.CalculationRow>
                       <Card.Text>Totalt belopp enligt norm</Card.Text>
                       <Card.Text>{`${formatCost(calculation.normsum)} kr`}</Card.Text>
@@ -288,13 +300,14 @@ const CaseSummary = (props) => {
                     </Card.Button>
                     {isCalculationDetailsVisible && (
                       <>
-                        <SummaryHeading type="h5">Personer som påverkar normen</SummaryHeading>
-
+                        <Card.DetailsTitle type="h5">
+                          Personer som påverkar normen
+                        </Card.DetailsTitle>
                         {calculation?.calculationpersons?.calculationperson &&
                           convertDataToArray(
                             calculation?.calculationpersons?.calculationperson
                           ).map((person, index) => (
-                            <Card key={`${index}-${person.name}`} colorSchema="red">
+                            <Card key={`${index}-${person?.name}`} colorSchema="red">
                               <Card.Body shadow color="neutral">
                                 <Card.Image
                                   style={{ width: 50, height: 50 }}
@@ -302,18 +315,87 @@ const CaseSummary = (props) => {
                                   source={icons.ICON_CONTACT_PERSON}
                                 />
                                 {person.name && (
-                                  <Card.Title colorSchema="neutral">{person.name}</Card.Title>
+                                  <Card.Title colorSchema="neutral">{person?.name}</Card.Title>
                                 )}
-                                <Text>Med i norm: {person.norm}</Text>
-                                <Text>Dagar: {person.days}</Text>
-                                <Text>Hushåll: {person.home}</Text>
+                                <Text>Med i norm: {person?.norm}</Text>
+                                <Text>Dagar: {person?.days}</Text>
+                                <Text>Hushåll: {person?.home}</Text>
                               </Card.Body>
                             </Card>
                           ))}
 
-                        <SummaryHeading type="h5">Utgifter</SummaryHeading>
-                        <SummaryHeading type="h5">Inkomster</SummaryHeading>
-                        <SummaryHeading type="h5">Reduceringar</SummaryHeading>
+                        <Card.DetailsTitle type="h5">Utgifter</Card.DetailsTitle>
+                        {calculation?.costs?.cost ? (
+                          <>
+                            <Card.CalculationRow>
+                              <Card.CalculationRowCell>
+                                <Card.Text strong>Utgift</Card.Text>
+                              </Card.CalculationRowCell>
+                              <Card.CalculationRowCell>
+                                <Card.Text strong>Faktiska</Card.Text>
+                              </Card.CalculationRowCell>
+                              <Card.CalculationRowCell>
+                                <Card.Text strong>Godkända</Card.Text>
+                              </Card.CalculationRowCell>
+                            </Card.CalculationRow>
+                            <Card.Separator />
+
+                            {convertDataToArray(calculation?.costs?.cost).map((cost, index) => (
+                              <Card.CalculationRow key={`${index}-${cost.type}`}>
+                                <Card.CalculationRowCell>
+                                  <Text>{cost?.type}</Text>
+                                </Card.CalculationRowCell>
+                                <Card.CalculationRowCell>
+                                  <Text>{cost?.actual} kr</Text>
+                                </Card.CalculationRowCell>
+                                <Card.CalculationRowCell>
+                                  <Text>{cost?.approved} kr</Text>
+                                </Card.CalculationRowCell>
+                              </Card.CalculationRow>
+                            ))}
+                            <Card.Separator />
+                            <Card.CalculationRow>
+                              <Card.Text strong>Summa</Card.Text>
+                              <Card.Text strong>
+                                {`${convertDataToArray(calculation?.costs?.cost).reduce(
+                                  (acc, obj) => acc + parseInt(obj.approved),
+                                  0
+                                )} kr`}
+                              </Card.Text>
+                            </Card.CalculationRow>
+                          </>
+                        ) : (
+                          <Card.Text>Det finns inga registrerade utgifter.</Card.Text>
+                        )}
+
+                        <Card.DetailsTitle type="h5">Inkomster</Card.DetailsTitle>
+                        {calculation?.incomes?.income ? (
+                          <>
+                            <Card.Separator />
+                            {convertDataToArray(calculation?.incomes?.income).map(
+                              (income, index) => (
+                                <Card.CalculationRow key={`${index}-${income.type}`}>
+                                  <Text>{income?.type}</Text>
+                                  <Text>{income?.amount} kr</Text>
+                                </Card.CalculationRow>
+                              )
+                            )}
+                            <Card.Separator />
+                            <Card.CalculationRow>
+                              <Card.Text strong>Summa</Card.Text>
+                              <Card.Text strong>
+                                {`${convertDataToArray(calculation?.incomes?.income).reduce(
+                                  (acc, obj) => acc + parseInt(obj.amount),
+                                  0
+                                )} kr`}
+                              </Card.Text>
+                            </Card.CalculationRow>
+                          </>
+                        ) : (
+                          <Card.Text>Det finns inga registrerade inkomster.</Card.Text>
+                        )}
+
+                        <Card.DetailsTitle type="h5">Reduceringar</Card.DetailsTitle>
                       </>
                     )}
                   </Card.Body>
