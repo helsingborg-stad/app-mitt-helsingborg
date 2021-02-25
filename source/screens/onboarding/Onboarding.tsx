@@ -110,7 +110,6 @@ const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
   return (
     <OnboardingContainer>
       <StatusBar hidden />
-      {/* <Animated.View style={[styles.slider, { backgroundColor }]}> */}
       <AnimatedScrollContainer backgroundColor={backgroundColor}>
         <Animated.ScrollView
           ref={scroll}
