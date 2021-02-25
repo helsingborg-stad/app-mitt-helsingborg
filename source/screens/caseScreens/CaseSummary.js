@@ -12,9 +12,7 @@ import { Icon, Text } from '../../components/atoms';
 import { Card, ScreenWrapper } from '../../components/molecules';
 import { Modal, useModal } from '../../components/molecules/Modal';
 import BackNavigation from '../../components/molecules/BackNavigation';
-import Heading from '../../components/atoms/Heading';
 import Button from '../../components/atoms/Button';
-import Label from '../../components/atoms/Label';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -41,21 +39,6 @@ const ModalFooter = styled.View`
   margin: 32px;
   justify-content: center;
   align-items: center;
-`;
-
-const ModalText = styled(Text)`
-  font-size: ${(props) => props.theme.fontSizes[3]}px;
-`;
-
-const ModalHeading = styled(Heading)`
-  margin-top: 24px;
-`;
-
-const ModalLabel = styled(Label)`
-  font-size: 12px;
-  margin-top: 16px;
-  margin-bottom: 0px;
-  font-weight: ${(props) => props.theme.fontWeights[1]};
 `;
 
 const computeCaseCardComponent = (caseData, form, colorSchema, navigation, toggleModal) => {
@@ -120,7 +103,9 @@ const CaseSummary = (props) => {
       params: { id: caseId },
     },
   } = props;
-  const { details: { administrators, workflow: { decision, payments } = {} } = {} } = caseData;
+  const {
+    details: { administrators, workflow: { decision = {}, payments = {} } = {} } = {},
+  } = caseData;
   const isFocused = useIsFocused();
   const [isModalVisible, toggleModal] = useModal();
 
@@ -137,7 +122,6 @@ const CaseSummary = (props) => {
   }, [isFocused, cases]);
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
-
   console.log('decision', decision);
   console.log('payments', payments);
 
@@ -205,33 +189,40 @@ const CaseSummary = (props) => {
           }}
         >
           <ModalContent>
-            <ModalHeading type="h1">Beslut</ModalHeading>
-            <ModalLabel underline={false} small>
-              Beskrivning
-            </ModalLabel>
-            <ModalText>{decision?.subject}</ModalText>
+            <SummaryHeading type="h5">Beslut</SummaryHeading>
 
-            <ModalLabel underline={false} small>
-              Förklaring
-            </ModalLabel>
-            <ModalText>{decision?.decisions?.decision?.explanation}</ModalText>
+            {decision?.decisions &&
+              Object.keys(decision.decisions).length > 0 &&
+              Object.keys(decision.decisions).map((key) => {
+                const caseDecision = decision.decisions[key];
+                return (
+                  <Card key={key} colorSchema="red">
+                    <Card.Body color="neutral" shadow>
+                      <Card.Title colorSchema="neutral">{caseDecision.type}</Card.Title>
+                      <Card.SubTitle>{caseDecision.causetext}</Card.SubTitle>
+                      <Card.Text>{caseDecision.explanation}</Card.Text>
+                    </Card.Body>
+                  </Card>
+                );
+              })}
 
-            <ModalHeading type="h1">Utbetalning</ModalHeading>
+            {Object.keys(payments).length > 0 && (
+              <SummaryHeading type="h5">Utbetalningar</SummaryHeading>
+            )}
 
-            <ModalLabel underline={false} small>
-              Beskrivning
-            </ModalLabel>
-            <ModalText>{payments?.payment?.subject}</ModalText>
-
-            <ModalLabel underline={false} small>
-              Summa
-            </ModalLabel>
-            <ModalText>{`${payments?.payment?.amount} kr`}</ModalText>
-
-            <ModalLabel underline={false} small>
-              Utbetalas
-            </ModalLabel>
-            <ModalText>{payments?.payment?.givedate}</ModalText>
+            {Object.keys(payments).map((key) => {
+              const payment = payments[key];
+              return (
+                <Card key={key} colorSchema="red">
+                  <Card.Body shadow color="neutral">
+                    <Card.Image source={icons.ICON_EKB_OUTLINE} />
+                    <Card.Title colorSchema="neutral">{payment.givedate}</Card.Title>
+                    <Card.SubTitle>Summa</Card.SubTitle>
+                    <Card.Text>{`${payment.amount} kr`}</Card.Text>
+                  </Card.Body>
+                </Card>
+              );
+            })}
           </ModalContent>
           <ModalFooter>
             <Button z={0} block onClick={toggleModal} colorSchema="red">
