@@ -46,7 +46,7 @@ const computeCaseCardComponent = (caseData, form, colorSchema, navigation, toggl
   const {
     currentPosition: { currentMainStep: currentStep },
   } = caseData.forms[caseData.currentFormId];
-
+  const { details: { workflow: { decision = {} } = {} } = {} } = caseData;
   const totalSteps = form?.stepStructure?.length || 0;
   const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(endDate, true);
   const isNotStarted = status?.type?.includes('notStarted');
@@ -76,7 +76,7 @@ const computeCaseCardComponent = (caseData, form, colorSchema, navigation, toggl
             <Icon name="arrow-forward" />
           </Card.Button>
         )}
-        {isClosed && (
+        {isClosed && decision?.decisions && (
           <Card.Button onClick={toggleModal}>
             <Text>Visa beslut</Text>
             <Icon name="remove-red-eye" />
