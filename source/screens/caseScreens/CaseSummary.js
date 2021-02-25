@@ -51,8 +51,8 @@ Card.Separator = styled.View`
   height: 2px;
   width: 100%;
   border-radius: 50px;
-  margin-top: 4px;
-  margin-bottom: 4px;
+  margin-top: 8px;
+  margin-bottom: 8px;
   background-color: ${(props) => props.theme.colors.neutrals[4]};
 `;
 
@@ -127,6 +127,8 @@ const CaseSummary = (props) => {
   const isFocused = useIsFocused();
   const [isModalVisible, toggleModal] = useModal();
 
+  const formatCost = (cost) => (cost === '0' ? cost : `-${cost.replace('-', '')}`);
+
   useEffect(() => {
     const caseData = getCase(caseId);
     setCaseData(caseData);
@@ -140,9 +142,6 @@ const CaseSummary = (props) => {
   }, [isFocused, cases]);
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
-  console.log('calculations', calculations);
-  console.log('decision', decision);
-  console.log('payments', payments);
 
   useEffect(() => {
     Animated.timing(fadeAnimation, {
@@ -234,11 +233,11 @@ const CaseSummary = (props) => {
                     <Card.SubTitle>{`Beräkningsperiod: ${calculation.periodstartdate} - ${calculation.periodenddate} `}</Card.SubTitle>
                     <Card.CalculationRow>
                       <Card.Text>Totalt belopp enligt norm</Card.Text>
-                      <Card.Text>{`-${calculation.normsum} kr`}</Card.Text>
+                      <Card.Text>{`${formatCost(calculation.normsum)} kr`}</Card.Text>
                     </Card.CalculationRow>
                     <Card.CalculationRow>
                       <Card.Text>Utgifter</Card.Text>
-                      <Card.Text>{`-${calculation.costsum} kr`}</Card.Text>
+                      <Card.Text>{`${formatCost(calculation.costsum)} kr`}</Card.Text>
                     </Card.CalculationRow>
                     <Card.CalculationRow>
                       <Card.Text>Inkomster</Card.Text>
