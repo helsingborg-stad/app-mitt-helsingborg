@@ -143,14 +143,16 @@ function CaseOverview(props) {
     }, [])
   );
 
-  useFocusEffect(() => {
-    Animated.timing(fadeAnimation, {
-      toValue: 1,
-      easing: Easing.ease,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnimation]);
+  useFocusEffect(
+    useCallback(() => {
+      Animated.timing(fadeAnimation, {
+        toValue: 1,
+        easing: Easing.ease,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+    }, [fadeAnimation])
+  );
 
   useEffect(() => {
     const updateItems = async () => {
