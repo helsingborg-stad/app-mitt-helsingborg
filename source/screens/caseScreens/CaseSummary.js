@@ -31,12 +31,13 @@ const CloseModalButton = styled(BackNavigation)`
 `;
 
 const ModalContent = styled.View`
-  margin: 32px;
+  margin: 16px;
   margin-top: 32px;
 `;
 
 const ModalFooter = styled.View`
-  margin: 32px;
+  margin: 16px;
+  margin-bottom: 32px;
   justify-content: center;
   align-items: center;
 `;
@@ -53,7 +54,7 @@ Card.Separator = styled.View`
   border-radius: 50px;
   margin-top: 8px;
   margin-bottom: 8px;
-  background-color: ${(props) => props.theme.colors.neutrals[4]};
+  background-color: ${(props) => props.theme.colors.complementary.neutral[1]};
 `;
 
 const computeCaseCardComponent = (caseData, form, colorSchema, navigation, toggleModal) => {
@@ -126,7 +127,9 @@ const CaseSummary = (props) => {
   } = caseData;
   const isFocused = useIsFocused();
   const [isModalVisible, toggleModal] = useModal();
+  const [isCalculationDetailsVisible, setCalculationDetailsVisibility] = useState(false);
 
+  const convertDataToArray = (data) => (Array.isArray(data) ? data : [data]);
   const formatCost = (cost) => (cost === '0' ? cost : `-${cost.replace('-', '')}`);
 
   useEffect(() => {
@@ -270,6 +273,49 @@ const CaseSummary = (props) => {
                       <Card.Text strong>Summa (underskott)</Card.Text>
                       <Card.Text strong>{`${calculation.calculationsum} kr`}</Card.Text>
                     </Card.CalculationRow>
+
+                    <Card.Button
+                      style={{ marginTop: 12 }}
+                      colorSchema="neutral"
+                      onClick={() => setCalculationDetailsVisibility(!isCalculationDetailsVisible)}
+                    >
+                      <Text>Detaljer</Text>
+                      <Icon
+                        name={
+                          isCalculationDetailsVisible ? 'keyboard-arrow-up' : 'keyboard-arrow-down'
+                        }
+                      />
+                    </Card.Button>
+                    {isCalculationDetailsVisible && (
+                      <>
+                        <SummaryHeading type="h5">Personer som påverkar normen</SummaryHeading>
+
+                        {calculation?.calculationpersons?.calculationperson &&
+                          convertDataToArray(
+                            calculation?.calculationpersons?.calculationperson
+                          ).map((person, index) => (
+                            <Card key={`${index}-${person.name}`} colorSchema="red">
+                              <Card.Body shadow color="neutral">
+                                <Card.Image
+                                  style={{ width: 50, height: 50 }}
+                                  circle
+                                  source={icons.ICON_CONTACT_PERSON}
+                                />
+                                {person.name && (
+                                  <Card.Title colorSchema="neutral">{person.name}</Card.Title>
+                                )}
+                                <Text>Med i norm: {person.norm}</Text>
+                                <Text>Dagar: {person.days}</Text>
+                                <Text>Hushåll: {person.home}</Text>
+                              </Card.Body>
+                            </Card>
+                          ))}
+
+                        <SummaryHeading type="h5">Utgifter</SummaryHeading>
+                        <SummaryHeading type="h5">Inkomster</SummaryHeading>
+                        <SummaryHeading type="h5">Reduceringar</SummaryHeading>
+                      </>
+                    )}
                   </Card.Body>
                 </Card>
               );
