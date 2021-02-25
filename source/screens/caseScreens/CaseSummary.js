@@ -309,17 +309,31 @@ const CaseSummary = (props) => {
                           ).map((person, index) => (
                             <Card key={`${index}-${person?.name}`} colorSchema="red">
                               <Card.Body shadow color="neutral">
-                                <Card.Image
-                                  style={{ width: 50, height: 50 }}
-                                  circle
-                                  source={icons.ICON_CONTACT_PERSON}
-                                />
                                 {person.name && (
                                   <Card.Title colorSchema="neutral">{person?.name}</Card.Title>
                                 )}
-                                <Text>Med i norm: {person?.norm}</Text>
-                                <Text>Dagar: {person?.days}</Text>
-                                <Text>Hushåll: {person?.home}</Text>
+                                <Card.CalculationRow>
+                                  <Card.CalculationRowCell>
+                                    <Text strong>Med i norm</Text>
+                                  </Card.CalculationRowCell>
+                                  <Card.CalculationRowCell>
+                                    <Text strong>Dagar</Text>
+                                  </Card.CalculationRowCell>
+                                  <Card.CalculationRowCell>
+                                    <Text strong>Hushåll</Text>
+                                  </Card.CalculationRowCell>
+                                </Card.CalculationRow>
+                                <Card.CalculationRow>
+                                  <Card.CalculationRowCell>
+                                    <Text>{person?.norm}</Text>
+                                  </Card.CalculationRowCell>
+                                  <Card.CalculationRowCell>
+                                    <Text>{person?.days}</Text>
+                                  </Card.CalculationRowCell>
+                                  <Card.CalculationRowCell>
+                                    <Text>{person?.home}</Text>
+                                  </Card.CalculationRowCell>
+                                </Card.CalculationRow>
                               </Card.Body>
                             </Card>
                           ))}
@@ -329,13 +343,13 @@ const CaseSummary = (props) => {
                           <>
                             <Card.CalculationRow>
                               <Card.CalculationRowCell>
-                                <Card.Text strong>Utgift</Card.Text>
+                                <Text strong>Utgift</Text>
                               </Card.CalculationRowCell>
                               <Card.CalculationRowCell>
-                                <Card.Text strong>Faktiska</Card.Text>
+                                <Text strong>Faktiska</Text>
                               </Card.CalculationRowCell>
                               <Card.CalculationRowCell>
-                                <Card.Text strong>Godkända</Card.Text>
+                                <Text strong>Godkända</Text>
                               </Card.CalculationRowCell>
                             </Card.CalculationRow>
                             <Card.Separator />
@@ -365,7 +379,7 @@ const CaseSummary = (props) => {
                             </Card.CalculationRow>
                           </>
                         ) : (
-                          <Card.Text>Det finns inga registrerade utgifter.</Card.Text>
+                          <Card.Text italic>Det finns inga registrerade utgifter.</Card.Text>
                         )}
 
                         <Card.DetailsTitle type="h5">Inkomster</Card.DetailsTitle>
@@ -392,10 +406,8 @@ const CaseSummary = (props) => {
                             </Card.CalculationRow>
                           </>
                         ) : (
-                          <Card.Text>Det finns inga registrerade inkomster.</Card.Text>
+                          <Card.Text italic>Det finns inga registrerade inkomster.</Card.Text>
                         )}
-
-                        <Card.DetailsTitle type="h5">Reduceringar</Card.DetailsTitle>
                       </>
                     )}
                   </Card.Body>
