@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Platform, Dimensions, View } from 'react-native';
+import { Platform, Dimensions, StatusBar, View } from 'react-native';
 import Animated, { divide } from 'react-native-reanimated';
 import { useScrollHandler, interpolateColor } from 'react-native-redash';
 import styled from 'styled-components/native';
@@ -109,6 +109,7 @@ const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
 
   return (
     <OnboardingContainer>
+      <StatusBar hidden />
       {/* <Animated.View style={[styles.slider, { backgroundColor }]}> */}
       <AnimatedScrollContainer backgroundColor={backgroundColor}>
         <Animated.ScrollView
