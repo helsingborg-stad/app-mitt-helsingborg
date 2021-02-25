@@ -159,6 +159,24 @@ const CaseSummary = (props) => {
         {Object.keys(caseData).length > 0 &&
           computeCaseCardComponent(caseData, form, colorSchema, navigation, toggleModal)}
 
+        {Object.keys(payments).length > 0 && (
+          <SummaryHeading type="h5">Utbetalningar</SummaryHeading>
+        )}
+
+        {Object.keys(payments).map((key) => {
+          const payment = payments[key];
+          return (
+            <Card key={key} colorSchema="red">
+              <Card.Body shadow color="neutral">
+                <Card.Image source={icons.ICON_EKB_OUTLINE} />
+                <Card.Title colorSchema="neutral">{`${payment.amount} kr`}</Card.Title>
+                <Card.SubTitle>Utbetalas</Card.SubTitle>
+                <Card.Text>{payment.givedate}</Card.Text>
+              </Card.Body>
+            </Card>
+          );
+        })}
+
         {administrators && (
           <View>
             <SummaryHeading type="h5">Mina kontaktpersoner</SummaryHeading>
@@ -252,24 +270,6 @@ const CaseSummary = (props) => {
                       <Card.Text strong>Summa (underskott)</Card.Text>
                       <Card.Text strong>{`${calculation.calculationsum} kr`}</Card.Text>
                     </Card.CalculationRow>
-                  </Card.Body>
-                </Card>
-              );
-            })}
-
-            {Object.keys(payments).length > 0 && (
-              <SummaryHeading type="h5">Utbetalningar</SummaryHeading>
-            )}
-
-            {Object.keys(payments).map((key) => {
-              const payment = payments[key];
-              return (
-                <Card key={key} colorSchema="red">
-                  <Card.Body shadow color="neutral">
-                    <Card.Image source={icons.ICON_EKB_OUTLINE} />
-                    <Card.Title colorSchema="neutral">{payment.givedate}</Card.Title>
-                    <Card.SubTitle>Summa</Card.SubTitle>
-                    <Card.Text>{`${payment.amount} kr`}</Card.Text>
                   </Card.Body>
                 </Card>
               );
