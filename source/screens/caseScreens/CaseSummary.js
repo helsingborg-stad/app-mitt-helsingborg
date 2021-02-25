@@ -42,29 +42,46 @@ const ModalFooter = styled.View`
   align-items: center;
 `;
 
+Card.CalculationTable = styled.View`
+  flex: 1;
+  border: 1px solid ${(props) => props.theme.colors.complementary.neutral[1]};
+  border-radius: 5px;
+  padding-bottom: 8px;
+`;
+
 Card.CalculationRow = styled.View`
   flex: 1;
   flex-direction: row;
   justify-content: space-between;
 `;
 
+Card.CalculationRowHeader = styled(Card.CalculationRow)`
+  padding: 4px 0px;
+  margin-bottom: 8px;
+  border-radius: 5px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  background-color: ${(props) => props.theme.colors.neutrals[5]};
+`;
+
 Card.CalculationRowCell = styled.View`
   flex: 1;
   align-self: stretch;
-  padding-right: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
 `;
 
 Card.Separator = styled.View`
   height: 2px;
   width: 100%;
   border-radius: 50px;
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin-top: 16px;
+  margin-bottom: 16px;
   background-color: ${(props) => props.theme.colors.complementary.neutral[1]};
 `;
 
 Card.DetailsTitle = styled(Text)`
-  margin-top: 30px;
+  margin-top: 16px;
   margin-bottom: 16px;
 `;
 
@@ -260,7 +277,7 @@ const CaseSummary = (props) => {
               const calculation = calculations[key];
               return (
                 <Card key={key} colorSchema="red">
-                  <Card.Body shadow color="neutral">
+                  <Card.Body color="neutral" shadow>
                     <Card.Title colorSchema="neutral">Beräkning</Card.Title>
                     <Card.SubTitle>{`Beräkningsperiod: ${calculation.periodstartdate} - ${calculation.periodenddate} `}</Card.SubTitle>
                     <Card.Separator />
@@ -280,14 +297,12 @@ const CaseSummary = (props) => {
                       <Card.Text>Reducering</Card.Text>
                       <Card.Text>{`${calculation.reductionsum} kr`}</Card.Text>
                     </Card.CalculationRow>
-                    <Card.Separator />
                     <Card.CalculationRow>
                       <Card.Text strong>Summa (underskott)</Card.Text>
                       <Card.Text strong>{`${calculation.calculationsum} kr`}</Card.Text>
                     </Card.CalculationRow>
 
                     <Card.Button
-                      style={{ marginTop: 12 }}
                       colorSchema="neutral"
                       onClick={() => setCalculationDetailsVisibility(!isCalculationDetailsVisible)}
                     >
@@ -309,31 +324,32 @@ const CaseSummary = (props) => {
                           ).map((person, index) => (
                             <Card key={`${index}-${person?.name}`} colorSchema="red">
                               <Card.Body shadow color="neutral">
-                                {person.name && (
-                                  <Card.Title colorSchema="neutral">{person?.name}</Card.Title>
-                                )}
-                                <Card.CalculationRow>
-                                  <Card.CalculationRowCell>
-                                    <Text strong>Med i norm</Text>
-                                  </Card.CalculationRowCell>
-                                  <Card.CalculationRowCell>
-                                    <Text strong>Dagar</Text>
-                                  </Card.CalculationRowCell>
-                                  <Card.CalculationRowCell>
-                                    <Text strong>Hushåll</Text>
-                                  </Card.CalculationRowCell>
-                                </Card.CalculationRow>
-                                <Card.CalculationRow>
-                                  <Card.CalculationRowCell>
-                                    <Text>{person?.norm}</Text>
-                                  </Card.CalculationRowCell>
-                                  <Card.CalculationRowCell>
-                                    <Text>{person?.days}</Text>
-                                  </Card.CalculationRowCell>
-                                  <Card.CalculationRowCell>
-                                    <Text>{person?.home}</Text>
-                                  </Card.CalculationRowCell>
-                                </Card.CalculationRow>
+                                <Card.SubTitle>Namn</Card.SubTitle>
+                                <Card.Title colorSchema="neutral">{person?.name}</Card.Title>
+                                <Card.CalculationTable>
+                                  <Card.CalculationRowHeader>
+                                    <Card.CalculationRowCell>
+                                      <Text strong>Med i norm</Text>
+                                    </Card.CalculationRowCell>
+                                    <Card.CalculationRowCell>
+                                      <Text strong>Dagar</Text>
+                                    </Card.CalculationRowCell>
+                                    <Card.CalculationRowCell>
+                                      <Text strong>Hushåll</Text>
+                                    </Card.CalculationRowCell>
+                                  </Card.CalculationRowHeader>
+                                  <Card.CalculationRow>
+                                    <Card.CalculationRowCell>
+                                      <Text>{person?.norm}</Text>
+                                    </Card.CalculationRowCell>
+                                    <Card.CalculationRowCell>
+                                      <Text>{person?.days}</Text>
+                                    </Card.CalculationRowCell>
+                                    <Card.CalculationRowCell>
+                                      <Text>{person?.home}</Text>
+                                    </Card.CalculationRowCell>
+                                  </Card.CalculationRow>
+                                </Card.CalculationTable>
                               </Card.Body>
                             </Card>
                           ))}
@@ -341,33 +357,33 @@ const CaseSummary = (props) => {
                         <Card.DetailsTitle type="h5">Utgifter</Card.DetailsTitle>
                         {calculation?.costs?.cost ? (
                           <>
-                            <Card.CalculationRow>
-                              <Card.CalculationRowCell>
-                                <Text strong>Utgift</Text>
-                              </Card.CalculationRowCell>
-                              <Card.CalculationRowCell>
-                                <Text strong>Faktiska</Text>
-                              </Card.CalculationRowCell>
-                              <Card.CalculationRowCell>
-                                <Text strong>Godkända</Text>
-                              </Card.CalculationRowCell>
-                            </Card.CalculationRow>
-                            <Card.Separator />
+                            <Card.CalculationTable>
+                              <Card.CalculationRowHeader>
+                                <Card.CalculationRowCell>
+                                  <Text strong>Utgift</Text>
+                                </Card.CalculationRowCell>
+                                <Card.CalculationRowCell>
+                                  <Text strong>Faktiska</Text>
+                                </Card.CalculationRowCell>
+                                <Card.CalculationRowCell>
+                                  <Text strong>Godkända</Text>
+                                </Card.CalculationRowCell>
+                              </Card.CalculationRowHeader>
 
-                            {convertDataToArray(calculation?.costs?.cost).map((cost, index) => (
-                              <Card.CalculationRow key={`${index}-${cost.type}`}>
-                                <Card.CalculationRowCell>
-                                  <Text>{cost?.type}</Text>
-                                </Card.CalculationRowCell>
-                                <Card.CalculationRowCell>
-                                  <Text>{cost?.actual} kr</Text>
-                                </Card.CalculationRowCell>
-                                <Card.CalculationRowCell>
-                                  <Text>{cost?.approved} kr</Text>
-                                </Card.CalculationRowCell>
-                              </Card.CalculationRow>
-                            ))}
-                            <Card.Separator />
+                              {convertDataToArray(calculation?.costs?.cost).map((cost, index) => (
+                                <Card.CalculationRow key={`${index}-${cost.type}`}>
+                                  <Card.CalculationRowCell>
+                                    <Text>{cost?.type}</Text>
+                                  </Card.CalculationRowCell>
+                                  <Card.CalculationRowCell>
+                                    <Text>{cost?.actual} kr</Text>
+                                  </Card.CalculationRowCell>
+                                  <Card.CalculationRowCell>
+                                    <Text>{cost?.approved} kr</Text>
+                                  </Card.CalculationRowCell>
+                                </Card.CalculationRow>
+                              ))}
+                            </Card.CalculationTable>
                             <Card.CalculationRow>
                               <Card.Text strong>Summa</Card.Text>
                               <Card.Text strong>
@@ -385,16 +401,29 @@ const CaseSummary = (props) => {
                         <Card.DetailsTitle type="h5">Inkomster</Card.DetailsTitle>
                         {calculation?.incomes?.income ? (
                           <>
-                            <Card.Separator />
-                            {convertDataToArray(calculation?.incomes?.income).map(
-                              (income, index) => (
-                                <Card.CalculationRow key={`${index}-${income.type}`}>
-                                  <Text>{income?.type}</Text>
-                                  <Text>{income?.amount} kr</Text>
-                                </Card.CalculationRow>
-                              )
-                            )}
-                            <Card.Separator />
+                            <Card.CalculationTable>
+                              <Card.CalculationRowHeader>
+                                <Card.CalculationRowCell>
+                                  <Text strong>Inkomst</Text>
+                                </Card.CalculationRowCell>
+                                <Card.CalculationRowCell>
+                                  <Text strong>Summa</Text>
+                                </Card.CalculationRowCell>
+                              </Card.CalculationRowHeader>
+
+                              {convertDataToArray(calculation?.incomes?.income).map(
+                                (income, index) => (
+                                  <Card.CalculationRow key={`${index}-${income.type}`}>
+                                    <Card.CalculationRowCell>
+                                      <Text>{income?.type}</Text>
+                                    </Card.CalculationRowCell>
+                                    <Card.CalculationRowCell>
+                                      <Text>{income?.amount} kr</Text>
+                                    </Card.CalculationRowCell>
+                                  </Card.CalculationRow>
+                                )
+                              )}
+                            </Card.CalculationTable>
                             <Card.CalculationRow>
                               <Card.Text strong>Summa</Card.Text>
                               <Card.Text strong>
