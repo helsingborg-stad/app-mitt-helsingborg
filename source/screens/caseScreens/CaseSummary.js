@@ -41,6 +41,21 @@ const ModalFooter = styled.View`
   align-items: center;
 `;
 
+Card.CalculationRow = styled.View`
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+Card.Separator = styled.View`
+  height: 2px;
+  width: 100%;
+  border-radius: 50px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  background-color: ${(props) => props.theme.colors.neutrals[4]};
+`;
+
 const computeCaseCardComponent = (caseData, form, colorSchema, navigation, toggleModal) => {
   const { status, details: { period: { endDate } = {} } = {} } = caseData;
   const {
@@ -104,7 +119,10 @@ const CaseSummary = (props) => {
     },
   } = props;
   const {
-    details: { administrators, workflow: { decision = {}, payments = {} } = {} } = {},
+    details: {
+      administrators,
+      workflow: { decision = {}, payments = {}, calculations = {} } = {},
+    } = {},
   } = caseData;
   const isFocused = useIsFocused();
   const [isModalVisible, toggleModal] = useModal();
@@ -122,6 +140,7 @@ const CaseSummary = (props) => {
   }, [isFocused, cases]);
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
+  console.log('calculations', calculations);
   console.log('decision', decision);
   console.log('payments', payments);
 
@@ -205,6 +224,39 @@ const CaseSummary = (props) => {
                   </Card>
                 );
               })}
+
+            {Object.keys(calculations).map((key) => {
+              const calculation = calculations[key];
+              return (
+                <Card key={key} colorSchema="red">
+                  <Card.Body shadow color="neutral">
+                    <Card.Title colorSchema="neutral">Beräkning</Card.Title>
+                    <Card.SubTitle>{`Beräkningsperiod: ${calculation.periodstartdate} - ${calculation.periodenddate} `}</Card.SubTitle>
+                    <Card.CalculationRow>
+                      <Card.Text>Totalt belopp enligt norm</Card.Text>
+                      <Card.Text>{`-${calculation.normsum} kr`}</Card.Text>
+                    </Card.CalculationRow>
+                    <Card.CalculationRow>
+                      <Card.Text>Utgifter</Card.Text>
+                      <Card.Text>{`-${calculation.costsum} kr`}</Card.Text>
+                    </Card.CalculationRow>
+                    <Card.CalculationRow>
+                      <Card.Text>Inkomster</Card.Text>
+                      <Card.Text>{`${calculation.incomesum} kr`}</Card.Text>
+                    </Card.CalculationRow>
+                    <Card.CalculationRow>
+                      <Card.Text>Reducering</Card.Text>
+                      <Card.Text>{`${calculation.reductionsum} kr`}</Card.Text>
+                    </Card.CalculationRow>
+                    <Card.Separator />
+                    <Card.CalculationRow>
+                      <Card.Text strong>Summa (underskott)</Card.Text>
+                      <Card.Text strong>{`${calculation.calculationsum} kr`}</Card.Text>
+                    </Card.CalculationRow>
+                  </Card.Body>
+                </Card>
+              );
+            })}
 
             {Object.keys(payments).length > 0 && (
               <SummaryHeading type="h5">Utbetalningar</SummaryHeading>
