@@ -44,6 +44,7 @@ const ModalFooter = styled.View`
 
 Card.CalculationTable = styled.View`
   flex: 1;
+  margin-top: 8px;
   border: 1px solid ${(props) => props.theme.colors.complementary.neutral[1]};
   border-radius: 5px;
   padding-bottom: 8px;
@@ -82,7 +83,7 @@ Card.Separator = styled.View`
 
 Card.DetailsTitle = styled(Text)`
   margin-top: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 `;
 
 const computeCaseCardComponent = (caseData, form, colorSchema, navigation, toggleModal) => {
@@ -324,8 +325,15 @@ const CaseSummary = (props) => {
                           ).map((person, index) => (
                             <Card key={`${index}-${person?.name}`} colorSchema="red">
                               <Card.Body shadow color="neutral">
-                                <Card.SubTitle>Namn</Card.SubTitle>
-                                <Card.Title colorSchema="neutral">{person?.name}</Card.Title>
+                                <Card.Section>
+                                  <Card.Image
+                                    style={{ width: 50, height: 50 }}
+                                    circle
+                                    source={icons.ICON_CONTACT_PERSON}
+                                  />
+                                  <Card.SubTitle>Namn</Card.SubTitle>
+                                  <Card.Title colorSchema="neutral">{person?.name}</Card.Title>
+                                </Card.Section>
                                 <Card.CalculationTable>
                                   <Card.CalculationRowHeader>
                                     <Card.CalculationRowCell>
@@ -413,7 +421,7 @@ const CaseSummary = (props) => {
 
                               {convertDataToArray(calculation?.incomes?.income).map(
                                 (income, index) => (
-                                  <Card.CalculationRow key={`${index}-${income.type}`}>
+                                  <Card.CalculationRow key={`${index}-${income?.type}`}>
                                     <Card.CalculationRowCell>
                                       <Text>{income?.type}</Text>
                                     </Card.CalculationRowCell>
