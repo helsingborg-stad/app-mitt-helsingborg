@@ -44,7 +44,6 @@ const ModalFooter = styled.View`
 
 Card.CalculationTable = styled.View`
   flex: 1;
-  margin-top: 8px;
   border: 1px solid ${(props) => props.theme.colors.complementary.neutral[1]};
   border-radius: 5px;
   padding-bottom: 8px;
@@ -83,7 +82,7 @@ Card.Separator = styled.View`
 
 Card.DetailsTitle = styled(Text)`
   margin-top: 16px;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 `;
 
 const computeCaseCardComponent = (caseData, form, colorSchema, navigation, toggleModal) => {
