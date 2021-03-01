@@ -78,7 +78,8 @@ const PdfUploader: React.FC<Props> = ({
       const updatedPdfs = addPdf(pdf);
       uploadPdf(pdf, originalLength, updatedPdfs);
     } catch (error) {
-      console.error('Error while adding pdf from library:', error);
+      if (!DocumentPicker.isCancel(error))
+        console.error('Error while adding pdf from library:', error);
     }
   };
 
