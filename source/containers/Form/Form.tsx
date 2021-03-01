@@ -72,9 +72,6 @@ const Form: React.FC<Props> = ({
     handleSubmit,
     handleBlur,
     validateStepAnswers,
-    createSnapshot,
-    restoreSnapshot,
-    deleteSnapshot,
   } = useForm(initialState);
 
   formNavigation.close = () => {
