@@ -98,14 +98,6 @@ const StepFooter: React.FC<Props> = ({
       case 'submit': {
         return onSubmit || null;
       }
-      case 'sign': {
-        return async () => {
-          await handleSign(
-            user.personalNumber,
-            action?.signMessage || 'Signering Mitt Helsingborg.'
-          );
-        };
-      }
       case 'backToMain': {
         return formNavigation.goToMainForm;
       }
@@ -122,7 +114,17 @@ const StepFooter: React.FC<Props> = ({
               8000
             );
           };
-          const onValidCallback = () => {
+
+          const onValidCallback = async () => {
+            if (action.type === 'sign') {
+              await handleSign(
+                user.personalNumber,
+                action?.signMessage || 'Signering Mitt Helsingborg.'
+              );
+
+              return;
+            }
+
             if (formNavigation.next) formNavigation.next();
           };
 
