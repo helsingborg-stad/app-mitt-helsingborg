@@ -317,6 +317,18 @@ export function validateAnswer(
   return state;
 }
 
+const recursiveValidationReducer = (isValidAccumulator: boolean, item: any) : boolean => {
+  if (!isValidAccumulator) return false;
+  const { isValid } = item;
+  
+  if (isValid === undefined) {
+    const nestedValidationArray = Array.isArray(item) ? item : Object.values(item);
+    return nestedValidationArray.reduce(recursiveValidationReducer, isValidAccumulator);
+  }
+
+  return isValid;
+}
+
 /**
  * Shall validate all inputs in a step that have validation rules.
  * Callbacks can be passed for handling validation fail and succeed.
@@ -335,7 +347,7 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
   const currentStepQuestions = state.steps[currentStepIndex].questions;
   let allInputsValid = true;
 
-  if (!currentStepQuestions || currentStepQuestions.length === 0){
+  if (!currentStepQuestions || currentStepQuestions.length === 0) {
     onValidCallback();
     return state
   }
@@ -344,49 +356,26 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
   let dirtyFields = {}
 
   // Validate all question inputs.
-  currentStepQuestions.map(({ id }) => {
-    const answer = state.formAnswers[id] || '';
-    dirtyFields[id] = true;
-    state = validateAnswer(state, { [id]: answer }, id);
+  currentStepQuestions.forEach((question: any) => {
+    const { type, items } = question;
+    let itemsToValidate = [question];
+
+    if (type === 'summaryList') {
+      itemsToValidate = items?.length > 0 ? items : [];
+    }
+
+    if (itemsToValidate.length > 0) {
+      itemsToValidate.forEach(validationItem => {
+        const answer = state.formAnswers[validationItem.id] || '';
+        dirtyFields[validationItem.id] = true;
+        state = validateAnswer(state, { [validationItem.id]: answer }, validationItem.id);
+      }) 
+    }
   });
 
-  // Find out if any validation failed for types text, input, editableList and repeaterField.
-  // Validation field unique so different handling required for the different types.
-  // Will break at the very first found instance of isValid === false and set allInputsValid = false.
-  for (const questionIndex in currentStepQuestions) {
-    const question = currentStepQuestions[questionIndex]
-
-    if (['text', 'number', 'date', 'checkbox', 'select'].includes(question.type)) {
-      if (state.validations[question.id]?.isValid === false) {
-        allInputsValid = false;
-
-        break;
-      }
-    } else if (question.type === 'editableList') {
-      const editableList = state.validations[question.id];
-
-      for (const editableListKey in editableList) {
-        if (editableList[editableListKey]?.isValid === false) {
-          allInputsValid = false;
-
-          break;
-        }
-      }
-    } else if (question.type === 'repeaterField') {
-      const repeaterField = state.validations[question.id];
-
-      for (const repeaterIndexIndex in repeaterField) {
-        const repeater = repeaterField[repeaterIndexIndex];
-
-        for (const repeaterIndex in repeater) {
-          if (repeater[repeaterIndex]?.isValid === false) {
-            allInputsValid = false;
-
-            break;
-          }
-        }
-      }
-    }
+  const validationArray = Object.values(state.validations);
+  if (validationArray.length > 0) {
+    allInputsValid = validationArray.reduce(recursiveValidationReducer, allInputsValid);
   }
 
   // Handle callbacks.
