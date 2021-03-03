@@ -94,7 +94,7 @@ function Step({
 
   /** TODO: move out of this scope, this logic should be defined on the form component */
   const closeForm = () => {
-    if (status.type.includes('ongoing') || status.type.includes('notStarted')) {
+    if (!status.type.includes('submitted')) {
       if (onFieldChange) {
         onFieldChange(answers);
       }
