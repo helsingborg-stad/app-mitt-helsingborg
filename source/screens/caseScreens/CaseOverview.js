@@ -44,7 +44,6 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
     : '';
   const isNotStarted = caseData?.status?.type?.includes('notStarted');
   const isOngoing = caseData?.status?.type?.includes('ongoing');
-  const isCompletionRequired = caseData?.status?.type?.includes('completionRequired');
 
   return (
     <Card key={caseData.id} colorSchema={colorSchema}>
@@ -72,15 +71,13 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
         )}
         {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
         {isNotStarted && applicationPeriodMonth && <Card.Text>{applicationPeriodMonth}</Card.Text>}
-        {isNotStarted || isOngoing || isCompletionRequired ? (
+        {isNotStarted || isOngoing ? (
           <Card.Button
             onClick={() => {
               navigation.navigate('Form', { caseId: caseData.id });
             }}
           >
-            {isOngoing && <Text>Fortsätt ansökan</Text>}
-            {isNotStarted && <Text>Starta ansökan</Text>}
-            {isCompletionRequired && <Text>Starta stickprov</Text>}
+            <Text>{isOngoing ? `Fortsätt ansökan` : `Starta ansökan`}</Text>
             <Icon name="arrow-forward" />
           </Card.Button>
         ) : (

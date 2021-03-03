@@ -72,7 +72,10 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
 
   const updateCaseContext = (answerObject, status, currentPosition) => {
     // If the case is submitted, we should not actually update its data...
-    if (!initialCase.status.type.includes('submitted')) {
+    if (
+      initialCase.status.type.includes('ongoing') ||
+      initialCase.status.type.includes('notStarted')
+    ) {
       const caseData = {
         caseId: initialCase.id,
         formId: initialCase.currentFormId,
