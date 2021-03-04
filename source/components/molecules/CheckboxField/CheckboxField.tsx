@@ -46,6 +46,7 @@ const TouchableWrapper = styled(TouchableHighlight)`
   margin-right: -24px;
   padding-left: 24px;
   padding-right: 24px;
+  margin-top: 24px;
 `;
 const CheckboxFieldText = styled(Text)<{ size: 'small' | 'medium' | 'large' }>`
   margin-left: ${(props) => props.theme.sizes[1]}px;
