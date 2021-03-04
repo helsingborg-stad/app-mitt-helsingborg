@@ -37,7 +37,6 @@ const FlexContainer = styled.View<{ toggled?: boolean }>`
   padding-right: 60px;
   padding-top: ${(props) => props.theme.sizes[1]}px;
   padding-bottom: ${(props) => props.theme.sizes[1]}px;
-  background-color: ${(props) => (props.toggled ? 'transparent' : props.theme.colors.neutrals[5])};
 `;
 
 const BoxTextWrapper = styled.View`
