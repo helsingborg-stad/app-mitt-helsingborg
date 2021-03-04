@@ -354,8 +354,9 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
 
   // Set dirtyFields for handling input onFocus.
   let dirtyFields = {}
-
+  
   // Validate all question inputs.
+  state.validations = {};
   currentStepQuestions.forEach((question: any) => {
     const { type, items } = question;
     let itemsToValidate = [question];
