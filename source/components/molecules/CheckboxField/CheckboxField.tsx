@@ -31,10 +31,6 @@ const FlexContainer = styled.View<{ toggled?: boolean }>`
   flex: auto;
   flex-direction: row;
   align-items: flex-start;
-  margin-left: -50px;
-  margin-right: -50px;
-  padding-left: 60px;
-  padding-right: 60px;
   padding-top: ${(props) => props.theme.sizes[1]}px;
   padding-bottom: ${(props) => props.theme.sizes[1]}px;
 `;
