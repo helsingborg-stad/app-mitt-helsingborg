@@ -4,21 +4,17 @@ import styled from 'styled-components/native';
 import { Text, Heading } from '../../../atoms';
 
 const StepDescriptionWrapper = styled.View`
-  margin-left: 24px;
-  margin-right: 24px;
-  margin-top: 76px;
-  margin-bottom: 48px;
+  padding-left: 24px;
+  padding-right: 24px;
+  margin-top: 80px;
 `;
 
-const StepDescriptionContent = styled.View`
-  width: 285px;
-  margin-bottom: 40px;
-`;
+const StepDescriptionContent = styled.View``;
 
 const StepDescriptionTagline = styled(Text)`
   font-size: ${(props) => props.theme.typography[props.type].fontSize}px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   color: ${(props) => props.theme.colors.primary[props.colorSchema][1]};
   line-height: ${(props) => props.theme.typography[props.type].lineHeight}px;
   letter-spacing: 0.5px;
