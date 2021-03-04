@@ -10,41 +10,26 @@ import BackNavigation from '../BackNavigation/BackNavigation';
 import { Modal, useModal } from '../Modal';
 
 const ModalContainer = styled.View({
-  backgroundColor: '#00213F',
   flexGrow: 1,
 });
 
-const Container = styled.View({
-  padding: '20px',
-  marginBottom: '20px',
-  flex: 1,
-});
+const Container = styled.View`
+  padding: 24px;
+  flex: 1;
+`;
 
+const StyledScrollView = styled.ScrollView`
+  padding-bottom: 24px;
+  padding-top: 84px;
+`;
 const CloseModal = styled(BackNavigation)`
   padding: 26px;
   position: absolute;
 `;
 
-const BannerWrapper = styled.View`
-  top: -85px;
-  padding: 0;
-  margin-bottom: 0;
-  min-height: 190px;
-  background: #1f3c56;
-  position: relative;
-`;
-
-const BannerIcon = styled(Image)`
-  width: 72px;
-  position: absolute;
-  bottom: -35px;
-  left: 25px;
-`;
-
 const Tagline = styled(Text)`
   font-size: 14px;
   font-weight: bold;
-  color: #fbf7f0;
   line-height: 20px;
   text-transform: uppercase;
 `;
@@ -54,7 +39,6 @@ const Heading = styled(Text)`
   font-size: 30px;
   font-weight: bold;
   line-height: 40px;
-  color: #fbf7f0;
 `;
 
 const HelpText = styled(Text)`
@@ -62,7 +46,6 @@ const HelpText = styled(Text)`
   font-size: 16px;
   font-weight: bold;
   line-height: 25px;
-  color: #fbf7f0;
 `;
 
 const LinkButton = styled(Button)`
@@ -92,16 +75,8 @@ const HelpButton = (props) => {
       <Modal visible={isModalVisible} hide={toggleModal}>
         <ModalContainer>
           <CloseModal showBackButton={false} onClose={toggleModal} />
-          <BannerWrapper>
-            <BannerIcon resizeMode="contain" source={icons.ICON_HELP} />
-          </BannerWrapper>
           <Container>
-            <ScrollView
-              contentContainerStyle={{
-                marginBottom: 10,
-                justifyContent: 'space-between',
-              }}
-            >
+            <StyledScrollView>
               <Tagline>{tagline}</Tagline>
               <Heading>{heading}</Heading>
               <HelpText>{text?.length ? text : 'Text not available'}</HelpText>
@@ -111,7 +86,7 @@ const HelpButton = (props) => {
                   <Icon name="launch" />
                 </LinkButton>
               ) : null}
-            </ScrollView>
+            </StyledScrollView>
           </Container>
         </ModalContainer>
       </Modal>
