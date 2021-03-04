@@ -164,7 +164,7 @@ function Step({
 
   return (
     <StepContainer>
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
         <FormDialog
           visible={dialogIsVisible}
           template={dialogTemplate}
