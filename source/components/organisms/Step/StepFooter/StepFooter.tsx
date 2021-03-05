@@ -11,18 +11,20 @@ import { evaluateConditionalExpression } from '../../../../helpers/conditionPars
 import { getStatusByType } from '../../../../assets/mock/caseStatuses';
 
 const ActionContainer = styled.View`
+  width: 100%;
   background-color: ${(props) => props.theme.colors.neutrals[5]};
+  flex-grow: 0;
 `;
 
 const Flex = styled.View`
-  padding: 5px;
   align-items: flex-end;
 `;
 
 const ButtonWrapper = styled.View`
   margin-top: 32px;
-  margin-bottom: 49px;
-  margin-right: 32px;
+  margin-bottom: 48px;
+  padding-right: 24px;
+  padding-left: 24px;
 `;
 
 interface Props {
