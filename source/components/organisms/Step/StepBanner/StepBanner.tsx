@@ -8,7 +8,7 @@ import {PrimaryColor} from '../../../../styles/themeHelpers';
 const BannerWrapper = styled.View<{ colorSchema: PrimaryColor; image?: boolean }>`
   margin: 0;
   padding: 0;
-  min-height: ${props => (props.image ? '256px' : '192px')};
+  min-height: 256px;
   background-color: ${props => props.theme.colors.complementary[props.colorSchema][0]};
   position: relative;
   justify-content: flex-end;
