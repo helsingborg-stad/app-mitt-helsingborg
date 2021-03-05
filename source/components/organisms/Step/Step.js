@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
+import { Dimensions } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components/native';
 import { getStatusByType } from '../../../assets/mock/caseStatuses';
@@ -16,10 +17,7 @@ import StepFooter from './StepFooter/StepFooter';
 
 const StepContainer = styled.View`
   background: ${(props) => props.theme.colors.neutrals[7]};
-  flex: 1;
 `;
-
-const StepContentContainer = styled.View``;
 
 const StepBackNavigation = styled(BackNavigation)`
   padding: 24px 24px 0px 24px;
@@ -29,7 +27,18 @@ const StepBanner = styled(Banner)`
   flex: 1;
 `;
 
-const StepBody = styled.View``;
+const StepContentContainer = styled.View``;
+
+const StepLayout = styled.View`
+  flex: 1;
+  min-height: ${Dimensions.get('window').height - 256}px;
+  flex-direction: column;
+`;
+
+const StepBody = styled.View`
+  flex-grow: 1;
+`;
+
 const StepFieldListWrapper = styled.View`
   margin: 24px;
 `;
@@ -181,69 +190,73 @@ function Step({
               totalStepNumber={totalStepNumber}
             />
           )}
-          <StepBody>
-            {!isLoading && (
-              <>
-                <StepDescription
-                  theme={theme}
-                  currentStep={
-                    currentPosition.level === 0 ? currentPosition.currentMainStep : undefined
-                  }
-                  totalStepNumber={totalStepNumber}
-                  colorSchema={colorSchema || 'blue'}
-                  {...description}
-                />
-                {questions && (
-                  <StepFieldListWrapper>
-                    {questions.map((field) => (
-                      <FormField
-                        key={`${field.id}`}
-                        onChange={
-                          status.type.includes('ongoing') || status.type.includes('notStarted')
-                            ? onFieldChange
-                            : null
-                        }
-                        onBlur={onFieldBlur}
-                        inputType={field.type}
-                        value={answers[field.id] || ''}
-                        answers={answers}
-                        validationErrors={validation}
-                        colorSchema={field.color && field.color !== '' ? field.color : colorSchema}
-                        id={field.id}
-                        formNavigation={formNavigation}
-                        {...field}
-                      />
-                    ))}
-                  </StepFieldListWrapper>
-                )}
-              </>
-            )}
+          <StepLayout>
+            <StepBody>
+              {!isLoading && (
+                <>
+                  <StepDescription
+                    theme={theme}
+                    currentStep={
+                      currentPosition.level === 0 ? currentPosition.currentMainStep : undefined
+                    }
+                    totalStepNumber={totalStepNumber}
+                    colorSchema={colorSchema || 'blue'}
+                    {...description}
+                  />
+                  {questions && (
+                    <StepFieldListWrapper>
+                      {questions.map((field) => (
+                        <FormField
+                          key={`${field.id}`}
+                          onChange={
+                            status.type.includes('ongoing') || status.type.includes('notStarted')
+                              ? onFieldChange
+                              : null
+                          }
+                          onBlur={onFieldBlur}
+                          inputType={field.type}
+                          value={answers[field.id] || ''}
+                          answers={answers}
+                          validationErrors={validation}
+                          colorSchema={
+                            field.color && field.color !== '' ? field.color : colorSchema
+                          }
+                          id={field.id}
+                          formNavigation={formNavigation}
+                          {...field}
+                        />
+                      ))}
+                    </StepFieldListWrapper>
+                  )}
+                </>
+              )}
 
-            {(isLoading || isResolved) && (
-              <SignStepWrapper>
-                <AuthLoading
-                  colorSchema={colorSchema || 'neutral'}
-                  isLoading={isLoading}
-                  isResolved={isResolved}
-                  cancelSignIn={() => handleCancelOrder()}
-                  isBankidInstalled={isBankidInstalled}
-                />
-              </SignStepWrapper>
-            )}
-          </StepBody>
-          {actions && actions.length > 0 ? (
-            <StepFooter
-              actions={actions}
-              caseStatus={status}
-              answers={answers}
-              allQuestions={allQuestions}
-              formNavigation={formNavigation}
-              currentPosition={currentPosition}
-              onUpdate={onFieldChange}
-              updateCaseInContext={updateCaseInContext}
-              validateStepAnswers={validateStepAnswers}
-            />
-          ) : null}
+              {(isLoading || isResolved) && (
+                <SignStepWrapper>
+                  <AuthLoading
+                    colorSchema={colorSchema || 'neutral'}
+                    isLoading={isLoading}
+                    isResolved={isResolved}
+                    cancelSignIn={() => handleCancelOrder()}
+                    isBankidInstalled={isBankidInstalled}
+                  />
+                </SignStepWrapper>
+              )}
+            </StepBody>
+            {actions && actions.length > 0 ? (
+              <StepFooter
+                actions={actions}
+                caseStatus={status}
+                answers={answers}
+                allQuestions={allQuestions}
+                formNavigation={formNavigation}
+                currentPosition={currentPosition}
+                onUpdate={onFieldChange}
+                updateCaseInContext={updateCaseInContext}
+                validateStepAnswers={validateStepAnswers}
+              />
+            ) : null}
+          </StepLayout>
         </StepContentContainer>
       </KeyboardAwareScrollView>
 
