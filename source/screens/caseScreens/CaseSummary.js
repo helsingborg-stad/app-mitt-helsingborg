@@ -85,7 +85,14 @@ Card.DetailsTitle = styled(Text)`
   margin-bottom: 16px;
 `;
 
-const computeCaseCardComponent = (caseData, form, colorSchema, navigation, toggleModal) => {
+const computeCaseCardComponent = (
+  caseData,
+  form,
+  formName,
+  colorSchema,
+  navigation,
+  toggleModal
+) => {
   const { status, details: { period: { endDate } = {} } = {} } = caseData;
   const {
     currentPosition: { currentMainStep: currentStep },
@@ -101,14 +108,8 @@ const computeCaseCardComponent = (caseData, form, colorSchema, navigation, toggl
   return (
     <Card colorSchema={colorSchema}>
       <Card.Body shadow color="neutral">
-        <Card.Title colorSchema="neutral">{applicationPeriodMonth || status.name}</Card.Title>
-        {isOngoing ? (
-          <Card.SubTitle>
-            Steg {currentStep} / {totalSteps}
-          </Card.SubTitle>
-        ) : (
-          <Card.SubTitle>{status.name}</Card.SubTitle>
-        )}
+        <Card.Title colorSchema="neutral">{applicationPeriodMonth || formName}</Card.Title>
+        <Card.SubTitle>{status.name}</Card.SubTitle>
         {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
         <Card.Text>{status.description} </Card.Text>
         {(isOngoing || isNotStarted || isCompletionRequired) && (
@@ -147,7 +148,7 @@ const CaseSummary = (props) => {
     colorSchema,
     navigation,
     route: {
-      params: { id: caseId },
+      params: { id: caseId, name: formName },
     },
   } = props;
   const {
@@ -191,7 +192,7 @@ const CaseSummary = (props) => {
       <Container as={Animated.ScrollView} style={{ opacity: fadeAnimation }}>
         <SummaryHeading type="h5">Aktuell period</SummaryHeading>
         {Object.keys(caseData).length > 0 &&
-          computeCaseCardComponent(caseData, form, colorSchema, navigation, toggleModal)}
+          computeCaseCardComponent(caseData, form, formName, colorSchema, navigation, toggleModal)}
 
         {Object.keys(payments).length > 0 && (
           <SummaryHeading type="h5">Utbetalningar</SummaryHeading>
