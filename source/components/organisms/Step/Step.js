@@ -208,11 +208,7 @@ function Step({
                       {questions.map((field) => (
                         <FormField
                           key={`${field.id}`}
-                          onChange={
-                            status.type.includes('ongoing') || status.type.includes('notStarted')
-                              ? onFieldChange
-                              : null
-                          }
+                          onChange={!status.type.includes('submitted') ? onFieldChange : null}
                           onBlur={onFieldBlur}
                           inputType={field.type}
                           value={answers[field.id] || ''}
