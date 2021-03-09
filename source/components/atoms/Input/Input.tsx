@@ -50,6 +50,8 @@ const StyledErrorText = styled(Text)`
   padding-top: 8px;
 `;
 
+const _replaceSpace = str => (str?.replace ? str.replace(/\u0020/, '\u00a0') : str);
+
 const Input: React.FC<InputProps> = React.forwardRef(
   ({ onBlur, showErrorMessage, value, error, inputType, keyboardType, ...props }, ref) => {
     const handleBlur = () => {
@@ -60,7 +62,7 @@ const Input: React.FC<InputProps> = React.forwardRef(
     return (
       <>
         <StyledTextInput
-          value={value}
+          value={_replaceSpace(value)}
           multiline /** Temporary fix to make field scrollable inside scrollview */
           numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
           onBlur={handleBlur}
