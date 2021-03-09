@@ -63,13 +63,7 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
       >
         <Card.Image source={icons[caseType.icon]} />
         <Card.Title colorSchema="neutral">{caseType.name}</Card.Title>
-        {isOngoing ? (
-          <Card.SubTitle>
-            Steg {currentStep} / {totalSteps}
-          </Card.SubTitle>
-        ) : (
-          <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
-        )}
+        <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
         {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
         {isNotStarted && applicationPeriodMonth && <Card.Text>{applicationPeriodMonth}</Card.Text>}
         {isNotStarted || isOngoing || isCompletionRequired ? (
