@@ -33,6 +33,7 @@ Styles.outlined = css`
       ? props.theme.colors.neutrals[5]
       : props.theme.colors.complementary[props.colorSchema][1]};
   ${Styles.elevation[0]}
+  ${(props) => props.disabled && `border: 2px solid ${props.theme.colors.neutrals[4]}}`};
 `;
 
 const ButtonIcon = styled(Icon)`
@@ -137,12 +138,7 @@ const ButtonText = styled(Text)`
   font-weight: ${(props) => props.theme.fontWeights[1]};
   color: ${(props) =>
     props.variant === 'outlined' ? props.theme.colors.neutrals[1] : props.theme.colors.neutrals[7]};
-  ${(props) =>
-    props.disabled &&
-    Styles.disabled &&
-    `
-      color: ${props.theme.colors.neutrals[4]};
-    `}
+  ${(props) => props.disabled && `color: ${props.theme.colors.neutrals[4]};`}
   ${(props) =>
     props.variant === 'link' &&
     `
@@ -216,6 +212,7 @@ const Button = (props) => {
         colorSchema,
         size,
         variant,
+        disabled,
       });
     }
 
