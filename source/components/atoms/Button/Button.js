@@ -105,8 +105,7 @@ Styles.fullWidth = css`
 
 /* Styles for a disabled button */
 Styles.disabled = css`
-  opacity: 0.2;
-  background-color: ${(props) => props.theme.colors.neutrals[1]};
+  background-color: ${(props) => props.theme.colors.neutrals[5]};
 `;
 
 const ButtonBase = styled.View`
@@ -139,6 +138,11 @@ const ButtonText = styled(Text)`
   color: ${(props) =>
     props.variant === 'outlined' ? props.theme.colors.neutrals[1] : props.theme.colors.neutrals[7]};
   ${(props) =>
+    Styles.disabled &&
+    `
+      color: ${props.theme.colors.neutrals[4]};
+    `}
+  ${(props) =>
     props.variant === 'link' &&
     `
     color: ${
@@ -146,6 +150,7 @@ const ButtonText = styled(Text)`
         ? `${props.theme.colors.neutrals[2]}`
         : `${props.theme.colors.primary[props.colorSchema][1]}`
     };
+    
   `}
 `;
 
@@ -277,7 +282,7 @@ Button.defaultProps = {
   icon: false,
   z: 1,
   size: 'medium',
-  disabled: false,
+  disabled: true,
   variant: 'contained',
 };
 
