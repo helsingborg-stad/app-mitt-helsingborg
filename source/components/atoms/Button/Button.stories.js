@@ -175,6 +175,11 @@ const ButtonColors = (injectProps) => (
         <Text>Green</Text>
       </Button>
     </Flex>
+    <Flex>
+      <Button colorSchema="neutral" {...injectProps} disabled>
+        <Text>Disable</Text>
+      </Button>
+    </Flex>
   </FlexContainer>
 );
 
