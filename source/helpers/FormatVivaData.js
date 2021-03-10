@@ -3,7 +3,6 @@
  * @param {string} value
  */
 const formatAmount = (value, negative = false) => {
-  console.log('formatAmount', value);
   if (!value || typeof value !== 'string') {
     return '';
   }
