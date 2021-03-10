@@ -162,7 +162,8 @@ const CaseSummary = (props) => {
   const [isCalculationDetailsVisible, setCalculationDetailsVisibility] = useState(false);
 
   const convertDataToArray = (data) => (Array.isArray(data) ? data : [data]);
-  const formatCost = (cost) => (cost === '0' ? cost : `-${cost.replace('-', '')}`);
+  const formatCost = (cost) =>
+    typeof cost !== 'string' || cost === '0' ? cost : `-${cost.replace('-', '')}`;
 
   useEffect(() => {
     const caseData = getCase(caseId);
