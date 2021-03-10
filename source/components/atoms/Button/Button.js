@@ -282,7 +282,7 @@ Button.defaultProps = {
   icon: false,
   z: 1,
   size: 'medium',
-  disabled: true,
+  disabled: false,
   variant: 'contained',
 };
 
