@@ -3,7 +3,8 @@ import { RectButton } from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 
 const GestureButton = styled(RectButton)`
-  height: 20px;
+  height: 40px;
+  padding: 10px;
   background-color: transparent;
 `;
 
