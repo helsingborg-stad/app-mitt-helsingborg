@@ -138,6 +138,7 @@ const ButtonText = styled(Text)`
   color: ${(props) =>
     props.variant === 'outlined' ? props.theme.colors.neutrals[1] : props.theme.colors.neutrals[7]};
   ${(props) =>
+    props.disabled &&
     Styles.disabled &&
     `
       color: ${props.theme.colors.neutrals[4]};
