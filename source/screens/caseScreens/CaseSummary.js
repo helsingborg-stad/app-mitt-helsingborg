@@ -13,6 +13,12 @@ import { Card, ScreenWrapper } from '../../components/molecules';
 import { Modal, useModal } from '../../components/molecules/Modal';
 import BackNavigation from '../../components/molecules/BackNavigation';
 import Button from '../../components/atoms/Button';
+import {
+  formatAmount,
+  calculateSum,
+  convertDataToArray,
+  translateNormAcronym,
+} from '../../helpers/FormatVivaData';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -161,10 +167,6 @@ const CaseSummary = (props) => {
   const [isModalVisible, toggleModal] = useModal();
   const [isCalculationDetailsVisible, setCalculationDetailsVisibility] = useState(false);
 
-  const convertDataToArray = (data) => (Array.isArray(data) ? data : [data]);
-  const formatCost = (cost) =>
-    typeof cost !== 'string' || cost === '0' ? cost : `-${cost.replace('-', '')}`;
-
   useEffect(() => {
     const caseData = getCase(caseId);
     setCaseData(caseData);
@@ -205,7 +207,7 @@ const CaseSummary = (props) => {
             <Card key={key} colorSchema="red">
               <Card.Body shadow color="neutral">
                 <Card.Image source={icons.ICON_EKB_OUTLINE} />
-                <Card.Title colorSchema="neutral">{`${payment.amount} kr`}</Card.Title>
+                <Card.Title colorSchema="neutral">{formatAmount(payment.amount)}</Card.Title>
                 <Card.SubTitle>Utbetalas</Card.SubTitle>
                 <Card.Text>{payment.givedate}</Card.Text>
               </Card.Body>
@@ -284,27 +286,31 @@ const CaseSummary = (props) => {
                 <Card key={key} colorSchema="red">
                   <Card.Body color="neutral" shadow>
                     <Card.Title colorSchema="neutral">Beräkning</Card.Title>
-                    <Card.SubTitle>{`Beräkningsperiod: ${calculation.periodstartdate} - ${calculation.periodenddate} `}</Card.SubTitle>
+                    {calculation.periodstartdate && calculation.periodenddate && (
+                      <Card.SubTitle>{`Beräkningsperiod: ${calculation.periodstartdate} - ${calculation.periodenddate} `}</Card.SubTitle>
+                    )}
                     <Card.Separator />
                     <Card.CalculationRow>
                       <Card.Text>Totalt belopp enligt norm</Card.Text>
-                      <Card.Text>{`${formatCost(calculation.normsum)} kr`}</Card.Text>
+                      <Card.Text>{formatAmount(calculation.normsum, true)}</Card.Text>
                     </Card.CalculationRow>
                     <Card.CalculationRow>
                       <Card.Text>Utgifter</Card.Text>
-                      <Card.Text>{`${formatCost(calculation.costsum)} kr`}</Card.Text>
+                      <Card.Text>{formatAmount(calculation.costsum, true)}</Card.Text>
                     </Card.CalculationRow>
                     <Card.CalculationRow>
                       <Card.Text>Inkomster</Card.Text>
-                      <Card.Text>{`${calculation.incomesum} kr`}</Card.Text>
+                      <Card.Text>{formatAmount(calculation.incomesum)}</Card.Text>
                     </Card.CalculationRow>
                     <Card.CalculationRow>
                       <Card.Text>Reducering</Card.Text>
-                      <Card.Text>{`${calculation.reductionsum} kr`}</Card.Text>
+                      <Card.Text>
+                        <Card.Text>{formatAmount(calculation.reductionsum)}</Card.Text>
+                      </Card.Text>
                     </Card.CalculationRow>
                     <Card.CalculationRow>
                       <Card.Text strong>Summa (underskott)</Card.Text>
-                      <Card.Text strong>{`${calculation.calculationsum} kr`}</Card.Text>
+                      <Card.Text strong>{formatAmount(calculation.calculationsum)}</Card.Text>
                     </Card.CalculationRow>
 
                     <Card.Button
@@ -352,13 +358,13 @@ const CaseSummary = (props) => {
                                   </Card.CalculationRowHeader>
                                   <Card.CalculationRow>
                                     <Card.CalculationRowCell>
-                                      <Text>{person?.norm}</Text>
+                                      <Text>{translateNormAcronym(person?.norm)}</Text>
                                     </Card.CalculationRowCell>
                                     <Card.CalculationRowCell>
                                       <Text>{person?.days}</Text>
                                     </Card.CalculationRowCell>
                                     <Card.CalculationRowCell>
-                                      <Text>{person?.home}</Text>
+                                      <Text>{translateNormAcronym(person?.home)}</Text>
                                     </Card.CalculationRowCell>
                                   </Card.CalculationRow>
                                 </Card.CalculationTable>
@@ -381,17 +387,16 @@ const CaseSummary = (props) => {
                                   <Text strong>Godkända</Text>
                                 </Card.CalculationRowCell>
                               </Card.CalculationRowHeader>
-
                               {convertDataToArray(calculation?.costs?.cost).map((cost, index) => (
                                 <Card.CalculationRow key={`${index}-${cost.type}`}>
                                   <Card.CalculationRowCell>
                                     <Text>{cost?.type}</Text>
                                   </Card.CalculationRowCell>
                                   <Card.CalculationRowCell>
-                                    <Text>{cost?.actual} kr</Text>
+                                    <Text>{formatAmount(cost.actual)}</Text>
                                   </Card.CalculationRowCell>
                                   <Card.CalculationRowCell>
-                                    <Text>{cost?.approved} kr</Text>
+                                    <Text>{formatAmount(cost.approved)}</Text>
                                   </Card.CalculationRowCell>
                                 </Card.CalculationRow>
                               ))}
@@ -399,10 +404,7 @@ const CaseSummary = (props) => {
                             <Card.CalculationRow>
                               <Card.Text strong>Summa</Card.Text>
                               <Card.Text strong>
-                                {`${convertDataToArray(calculation?.costs?.cost).reduce(
-                                  (acc, obj) => acc + parseInt(obj.approved),
-                                  0
-                                )} kr`}
+                                {calculation?.costs?.cost && calculateSum(calculation.costs.cost)}
                               </Card.Text>
                             </Card.CalculationRow>
                           </>
@@ -439,10 +441,8 @@ const CaseSummary = (props) => {
                             <Card.CalculationRow>
                               <Card.Text strong>Summa</Card.Text>
                               <Card.Text strong>
-                                {`${convertDataToArray(calculation?.incomes?.income).reduce(
-                                  (acc, obj) => acc + parseInt(obj.amount),
-                                  0
-                                )} kr`}
+                                {calculation?.incomes?.income &&
+                                  calculateSum(calculation?.incomes?.income)}
                               </Card.Text>
                             </Card.CalculationRow>
                           </>
