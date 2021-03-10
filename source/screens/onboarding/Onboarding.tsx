@@ -39,11 +39,11 @@ const AnimatedFooterBackground = styled(Animated.View)`
 const FooterContent = styled.View`
   flex: 1;
   flex-direction: row;
-  padding-top: 20px;
+  padding-top: 10px;
 `;
 
 const FooterPagination = styled.View`
-  padding-left: 40px;
+  padding: 10px 0 0 40px;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
@@ -53,7 +53,7 @@ const SliderContinueButtonContainer = styled.View`
   flex: 1;
   flex-direction: row;
   justify-content: flex-end;
-  padding-right: 58px;
+  padding-right: 48px;
 `;
 
 const slides = [
