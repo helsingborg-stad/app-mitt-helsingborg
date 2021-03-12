@@ -43,7 +43,8 @@ const FooterContent = styled.View`
 `;
 
 const FooterPagination = styled.View`
-  padding: 10px 0 0 40px;
+  padding-top: 10px;
+  padding-left: 40px;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
