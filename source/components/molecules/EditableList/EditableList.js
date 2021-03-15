@@ -209,7 +209,7 @@ function EditableList({
         <>
           {inputIsEditable && (
             <FieldsetButton colorSchema={colorSchema} z={0} size="small" onClick={changeEditable}>
-              <Text>{editable ? 'Spara' : 'Ändra'}</Text>
+              <Text>{editable ? 'Spara' : 'Stäng'}</Text>
             </FieldsetButton>
           )}
         </>
