@@ -131,7 +131,7 @@ export async function getUserProfile(accessToken) {
       const response = await poll(
         function () {
           timesRun += 1;
-          return get(`/users/${decodedToken.personalNumber}`, {
+          return get(`/users/me`, {
             Authorization: accessToken,
           });
         },
