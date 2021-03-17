@@ -17,12 +17,13 @@ interface ItemWrapperProps {
 
 const Container = styled(View)`
   margin-bottom: 10px;
+
 `
 
 const Row = styled(View)`
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: center;  
 `
 
 const ItemWrapper = styled.TouchableOpacity <ItemWrapperProps>`
@@ -30,15 +31,14 @@ const ItemWrapper = styled.TouchableOpacity <ItemWrapperProps>`
   font-size: ${props => props.theme.fontSizes[4]}px;
   flex-direction: row;
   height: auto;
-  background-color: transparent;
-  border-radius: 4.5px;
+  border-radius: 4.5px;  
   ${({ theme, error }) =>
     !(error?.isValid || !error) && `border: solid 1px ${theme.colors.primary.red[0]}`}
   ${props =>
     props.editable
       ? `
       background-color: ${props.theme.colors.complementary[props.colorSchema][2]};
-      padding: 10px;
+      
       `
       : 'color: blue;'};
 `;
@@ -48,35 +48,52 @@ const InputWrapper = styled.View`
   justify-content: center;
   align-items: flex-end;
   flex: 5;
+  ${(props) => 
+    props.editable &&
+    `
+    flex: 6;
+    `};
+
 `;
 
 const SmallInput = styled(Input)`
   min-width: 80%;
   font-weight: 500;
   color: ${props => props.theme.colors.neutrals[1]};
-  padding: 6px;
+  padding: 0px;
+  
+  ${(props) => 
+    props.editable &&
+    `
+    margin: 16px;
+    margin-left: 0;
+    `};
 `;
 
 const LabelWrapper = styled.View`
   flex: 4;
   justify-content: center;
+  
 `
 
 const SmallText = styled(Text)`
+  width: 80%;
   padding: 4px;
   font-weight: ${props => props.theme.fontWeights[1]};
   color: ${props => props.theme.colors.neutrals[2]};
+  ${(props) => 
+    props.editable &&
+    `
+    padding: 0;
+    margin: 16px;
+    margin-right: 0;
+    `};
 `;
 
 const DeleteButton = styled(Icon)`
-  padding-top: 0px;
   padding-left: 5px;
-  padding-right: 0px;
-  padding-bottom: 0px;
-  margin-left: 0px;
-  margin-right: 0px;
-  margin-bottom: 12px;
-  margin-top: 0px;
+  margin-bottom: 8px;
+  margin-top: 8px;
   color: ${props => props.theme.colors.neutrals[4]};
 `;
 
@@ -204,12 +221,12 @@ const SummaryListItem: React.FC<Props> = ({
           activeOpacity={1.0}
         >
           <LabelWrapper>
-            <SmallText>
+            <SmallText editable={editable}>
               {`${item.title}`}
               {index ? ` ${index}` : null}
             </SmallText>
           </LabelWrapper>
-          <InputWrapper>
+          <InputWrapper editable={editable}>
             <InputComponent {...{ input: item, editable, value, onInputBlur, changeFromInput, colorSchema: validColorSchema }}
               ref={(el) => { inputRef.current = el; }} />
           </InputWrapper>

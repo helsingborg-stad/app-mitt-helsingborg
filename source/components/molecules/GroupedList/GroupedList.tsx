@@ -56,11 +56,14 @@ const GroupedList: React.FC<Props> = ({
     LayoutAnimation.configureNext({
       duration: 300,
       create: {
+        duration: 300,
         type: LayoutAnimation.Types.easeInEaseOut,
         property: LayoutAnimation.Properties.opacity,
       },
       update: {
+        duration: 300,
         type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
       },
     });
     setEditable(!editable);
@@ -88,7 +91,7 @@ const GroupedList: React.FC<Props> = ({
               size="small"
               onClick={changeEditable}
             >
-              <Text>{editable ? 'Spara' : 'Ändra'}</Text>
+              <Text>{editable ? 'Stäng' : 'Ändra'}</Text>
             </FieldsetButton>
           )}
         </>
