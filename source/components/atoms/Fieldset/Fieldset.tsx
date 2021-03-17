@@ -20,10 +20,7 @@ const FieldsetContainer = styled.View<FieldsetContainerProps>`
   overflow: hidden;
   margin-bottom: 24px;
   margin-top: 16px;
-  padding-bottom: 20px;
-  padding-top: 16px;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding: 16px;
   background: ${(props) =>
     props?.empty
       ? props.theme.fieldset[props.colorSchema].backgroundEmpty
