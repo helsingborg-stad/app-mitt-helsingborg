@@ -24,7 +24,6 @@ const EditableListItem = styled.TouchableOpacity`
     props.editable
       ? `
       background-color: ${props.theme.colors.complementary[props.colorSchema][2]};
-      padding: 10px;
       `
       : 'color: blue;'};
 `;
@@ -35,9 +34,15 @@ const EditableListItemLabelWrapper = styled.View`
 `;
 
 const EditableListItemLabel = styled.Text`
-  padding: 4px;
+  width: 80%;
   font-weight: ${(props) => props.theme.fontWeights[1]};
   color: ${(props) => props.theme.colors.neutrals[1]};
+  ${(props) =>
+    props.editable &&
+    `
+    margin: 16px;
+    margin-right: 0;
+      `};
 `;
 
 const EditableListItemInputWrapper = styled.View`
@@ -52,13 +57,26 @@ const EditableListItemInput = styled(Input)`
   text-align: right;
   min-width: 80%;
   font-weight: 500;
+  padding: 0px;
   color: ${(props) => props.theme.colors.neutrals[1]};
-  padding: 6px;
+  ${(props) =>
+    props.editable &&
+    `
+    margin: 16px; 
+    margin-left: 0;
+      `};
 `;
+
 const EditableListItemSelect = styled(Select)`
   min-width: 80%;
   font-weight: 500;
   margin-bottom: 0px;
+  ${(props) =>
+    props.editable &&
+    `
+    margin: 16px; 
+    margin-left: 0;
+      `};
 `;
 
 const FieldsetButton = styled(Button)`
@@ -172,11 +190,14 @@ function EditableList({
     LayoutAnimation.configureNext({
       duration: 300,
       create: {
+        duration: 300,
         type: LayoutAnimation.Types.easeInEaseOut,
         property: LayoutAnimation.Properties.opacity,
       },
       update: {
+        duration: 300,
         type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
       },
     });
     setEditable(!editable);
@@ -209,7 +230,7 @@ function EditableList({
         <>
           {inputIsEditable && (
             <FieldsetButton colorSchema={colorSchema} z={0} size="small" onClick={changeEditable}>
-              <Text>{editable ? 'Spara' : 'Stäng'}</Text>
+              <Text>{editable ? 'Stäng' : 'Ändra'}</Text>
             </FieldsetButton>
           )}
         </>
@@ -226,9 +247,9 @@ function EditableList({
             onPress={() => handleListItemPress(index)}
           >
             <EditableListItemLabelWrapper alignAtStart={input.type === 'select'}>
-              <EditableListItemLabel>{input.label}</EditableListItemLabel>
+              <EditableListItemLabel editable={editable}>{input.label}</EditableListItemLabel>
             </EditableListItemLabelWrapper>
-            <EditableListItemInputWrapper>
+            <EditableListItemInputWrapper >
               <InputComponent
                 {...{ input, colorSchema, editable, onChange, onInputBlur, value, state }}
                 ref={(el) => {
