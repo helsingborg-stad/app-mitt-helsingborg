@@ -28,8 +28,8 @@ export const caseTypes = [
 function CaseProvider({ children, initialState = defaultInitialState }) {
   const [state, dispatch] = useReducer(CaseReducer, initialState);
   const { user } = useContext(AuthContext);
-  async function createCase(form, callback = (response) => {}) {
-    dispatch(await create(form, user, Object.values(state.cases), callback));
+  async function createCase(form, callback) {
+    dispatch(await create(form, callback));
   }
 
   async function updateCase({

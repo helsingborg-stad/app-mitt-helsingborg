@@ -1,6 +1,5 @@
 import { get, post, put } from '../../helpers/ApiRequest';
-import { convertAnswersToArray, getFormQuestions } from '../../helpers/CaseDataConverter';
-import generateInitialCaseAnswers from './dynamicFormData';
+import { convertAnswersToArray } from '../../helpers/CaseDataConverter';
 
 export const actionTypes = {
   updateCase: 'UPDATE_CASE',
@@ -43,19 +42,14 @@ export async function updateCase(
   }
 }
 
-export async function createCase(form, user, cases, callback) {
-  const initialAnswersObject = generateInitialCaseAnswers(form, user, cases);
-  const formQuestions = getFormQuestions(form);
-  // Convert to new data strucure to be saved in Cases API
-  const initialAnswersArray = convertAnswersToArray(initialAnswersObject, formQuestions);
-
+export async function createCase(form, callback) {
   const body = {
     provider: form.provider,
     statusType: 'notStarted',
     currentFormId: form.id,
     forms: {
       [form.id]: {
-        answers: initialAnswersArray || [],
+        answers: [],
         currentPosition: { index: 0, level: 0, currentMainStep: 1, currentMainStepIndex: 0 },
       },
     },
@@ -68,7 +62,6 @@ export async function createCase(form, user, cases, callback) {
     const flattenedNewCase = {
       id: newCase.id,
       ...newCase.attributes,
-      data: initialAnswersObject,
     };
 
     callback(flattenedNewCase);
