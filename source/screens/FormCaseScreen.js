@@ -23,7 +23,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   const { caseData, caseId } = route && route.params ? route.params : {};
   const { user } = useContext(AuthContext);
   const { getForm } = useContext(FormContext);
-  const { getCase, getCasesByFormIds } = useContext(CaseState);
+  const { getCase } = useContext(CaseState);
   const { updateCase } = useContext(CaseDispatch);
 
   useEffect(() => {
@@ -64,7 +64,8 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
         });
       }
     }
-  }, [caseData, caseId, getForm, getCase, user, getCasesByFormIds]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caseData, getForm]);
 
   function handleCloseForm() {
     navigation.popToTop();
