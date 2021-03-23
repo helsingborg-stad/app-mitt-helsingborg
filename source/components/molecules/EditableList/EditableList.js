@@ -62,7 +62,7 @@ const EditableListItemInput = styled(Input)`
   ${(props) =>
     props.editable &&
     `
-    margin: 16px; 
+    margin: 16px;
     margin-left: 0;
       `};
 `;
@@ -74,7 +74,7 @@ const EditableListItemSelect = styled(Select)`
   ${(props) =>
     props.editable &&
     `
-    margin: 16px; 
+    margin: 16px;
     margin-left: 0;
       `};
 `;
@@ -249,7 +249,7 @@ function EditableList({
             <EditableListItemLabelWrapper alignAtStart={input.type === 'select'}>
               <EditableListItemLabel editable={editable}>{input.label}</EditableListItemLabel>
             </EditableListItemLabelWrapper>
-            <EditableListItemInputWrapper >
+            <EditableListItemInputWrapper>
               <InputComponent
                 {...{ input, colorSchema, editable, onChange, onInputBlur, value, state }}
                 ref={(el) => {
