@@ -44,7 +44,7 @@ const PopupContainer = styled.View<{colorSchema: PrimaryColor}>`
   right: 5%;
   padding: 20px;
   width: 90%;
-  background-color: ${(props) => props.theme.colors.complementary[props.colorSchema][0]}}
+  background-color: ${(props) => props.theme.colors.complementary[props.colorSchema][0]};
   border-radius: 6px;
   shadow-offset: 0 0;
   shadow-opacity: 0.1;
@@ -58,7 +58,7 @@ const Row = styled.View`
 `;
 
 const PopupLabel = styled(Label)<{colorSchema: PrimaryColor}>`
-  color: ${props => props.theme.colors.primary[props.colorSchema][0]}
+  color: ${props => props.theme.colors.primary[props.colorSchema][0]};
 `;
 
 const PopupButton = styled(Button)`
