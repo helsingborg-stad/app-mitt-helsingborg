@@ -95,20 +95,20 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
     }
     const data: Blob = await getBlob(image.path);
     const filename = (image.path as string).split('/').pop();
-    const uploadResponse = await uploadFile({ 
+    const uploadResponse = await uploadFile({
       endpoint: 'users/me/attachments',
       fileName: filename,
       fileType: (imageFileType as 'jpg' | 'jpeg' | 'png'),
       data
     });
-    
+
     if (uploadResponse.error) {
       updatedImages[index].errorMessage = uploadResponse.message;
     } else {
       updatedImages[index].uploadedFileName = uploadResponse.uploadedFileName;
       updatedImages[index].url = uploadResponse.url;
     }
-    onChange(updatedImages); 
+    onChange(updatedImages);
   };
 
   const addImagesFromLibrary = () => {
@@ -184,11 +184,11 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
               colorSchema={validColorSchema}
               block
               variant="outlined"
-              onClick={() => { 
+              onClick={() => {
                 toggleModal();
                 /** There's an issue on iOS with triggering the library before the modal has closed,
                  * so as a simple fix, we add a timeout (since toggleModal is async) */
-                setTimeout(addImageFromCamera, 100); 
+                setTimeout(addImageFromCamera, 700);
               }}
             >
               <Icon name="camera-alt" />
@@ -202,7 +202,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
                 toggleModal();
                 /** There's an issue on iOS with triggering the library before the modal has closed,
                  * so as a simple fix, we add a timeout (since toggleModal is async) */
-                setTimeout(addImagesFromLibrary, 100);
+                setTimeout(addImagesFromLibrary, 700);
               }}
             >
               <Icon name="add-photo-alternate" />
