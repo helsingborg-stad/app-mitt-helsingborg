@@ -115,6 +115,9 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
     const libraryOptions: ImageLibraryOptions = {
       mediaType: 'photo',
       includeBase64: false,
+      maxWidth: 800,
+      maxHeight: 800,
+      quality: 0.5
     };
 
     try {
