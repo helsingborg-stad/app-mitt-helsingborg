@@ -1,5 +1,5 @@
 /* eslint-disable default-case */
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Linking } from 'react-native';
 import Card from '../../components/molecules/Card/Card';
@@ -10,6 +10,9 @@ import icons from '../../helpers/Icons';
 import { launchPhone, launchEmail } from '../../helpers/LaunchExternalApp';
 import InfoModal from '../../components/molecules/InfoModal';
 import { useModal } from '../../components/molecules/Modal';
+import { replaceText } from '../Form/hooks/textReplacement';
+import AuthContext from '../../store/AuthContext';
+import { User } from '../../types/UserTypes';
 /***** types describing how we should send in the data to render our cards  */
 interface Image {
   type: 'image';
@@ -86,10 +89,10 @@ const handleClick = (button: CardComponent & { type: 'button' }, navigation: any
 }
 
 /** Maps an object to a Card child component */
-const renderCardComponent = (component: CardComponent, navigation: any, index: number) => {
+const renderCardComponent = (component: CardComponent, navigation: any, index: number, user: User) => {
   switch (component.type) {
     case 'text':
-      return <Card.Text key={`${index}-${component.type}`} italic={component.italic}>{component.text}</Card.Text>;
+      return <Card.Text key={`${index}-${component.type}`} italic={component.italic}>{replaceText(component.text, user)}</Card.Text>;
     case 'title':
       return <Card.Title key={`${index}-${component.type}`}>{component.text}</Card.Title>;
     case 'subtitle':
@@ -142,6 +145,9 @@ const DynamicCardRenderer: React.FC<Props> = ({
   components,
 }) => {
   let navigation: any = {};
+
+  const { user } = useContext(AuthContext);
+
   try {
     navigation = useNavigation();
   } catch (error) {
@@ -150,7 +156,7 @@ const DynamicCardRenderer: React.FC<Props> = ({
   return (
     <Card colorSchema={colorSchema || 'neutral'}>
       <Card.Body color={backgroundColor || 'neutral'} shadow={shadow} outlined={outlined}>
-        {components.map((component, index) => renderCardComponent(component, navigation, index))}
+        {components.map((component, index) => renderCardComponent(component, navigation, index, user))}
       </Card.Body>
     </Card>
   );
