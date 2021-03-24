@@ -26,12 +26,14 @@ const pickerSelectStyles = StyleSheet.create({
 const Wrapper = styled.View`
   margin-bottom: 30px;
 `;
+
 const StyledErrorText = styled(Text)`
   font-size: ${({ theme }) => theme.fontSizes[3]}px;
   color: ${(props) => props.theme.textInput.errorTextColor};
   font-weight: ${({ theme }) => theme.fontWeights[0]};
   padding-top: 8px;
 `;
+
 interface Props {
   items: { label: string; value: string }[];
   onValueChange: (value: string, index?: number) => void;
@@ -55,11 +57,17 @@ const Select: React.FC<Props> = React.forwardRef(({
   error,
   style,
 }, ref) => {
+
   const currentItem = items.find(item => item.value === value);
   const handleValueChange = (itemValue: string | number | boolean) => {
     if (onValueChange && typeof onValueChange === 'function') {
       onValueChange(itemValue ? itemValue.toString() : null);
     }
+
+    if (itemValue == currentItem?.value) {
+      return;
+    }
+
     if (onBlur) {
       onBlur(currentItem?.value);
     }
@@ -75,7 +83,7 @@ const Select: React.FC<Props> = React.forwardRef(({
         onValueChange={handleValueChange}
         items={items}
         ref={ref as React.LegacyRef<RNPickerSelect>}
-        />
+      />
       {showErrorMessage && error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
     </Wrapper>
   );
