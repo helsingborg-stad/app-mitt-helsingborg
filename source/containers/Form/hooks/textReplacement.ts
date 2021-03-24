@@ -16,6 +16,7 @@ const replacementRules = [
   ['#month-2', 'date.previousMonth.currentMonth-2'],
   ['#month', 'date.previousMonth.currentMonth'],
   ['#year', 'date.currentYear'], // this is the current year of next month
+  ['#today', 'date.currentDate'], // this is the current year of next month
 ];
 
 const swedishMonthTable = [
@@ -50,6 +51,10 @@ const replaceDates = (descriptor: string[]): string => {
   if (descriptor[1] === 'currentYear') {
     const year = new Date(today.getFullYear(), today.getMonth() + 1, 1).getFullYear();
     return `${year}`;
+  }
+
+  if (descriptor[1] === 'currentDate') {
+    return `${today.getDate()}`;
   }
 
   if (descriptor[1] === 'previousMonth') {
@@ -88,7 +93,7 @@ const computeText = (descriptor: string, user: User): string => {
   return '';
 };
 
-const replaceText = (text: string, user: User) => {
+export const replaceText = (text: string, user: User) => {
   // This way of doing it might be a bit overkill, but the idea is that this in principle
   // allows for nesting replacement rules and then applying them in order one after the other.
   let res = text;
