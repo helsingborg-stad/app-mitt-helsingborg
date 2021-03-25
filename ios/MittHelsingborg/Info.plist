@@ -48,6 +48,8 @@
 	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Denna appen har tillgång till dina bilder.</string>
+  <key>NSCameraUsageDescription</key>
+  <string>Denna appen har tillgång till kamera för att ta bilder.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
