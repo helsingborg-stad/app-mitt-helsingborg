@@ -166,6 +166,9 @@ const CaseSummary = (props) => {
   const isFocused = useIsFocused();
   const [isModalVisible, toggleModal] = useModal();
   const [isCalculationDetailsVisible, setCalculationDetailsVisibility] = useState(false);
+  const decisions = decision?.decisions?.decision
+    ? convertDataToArray(decision.decisions.decision)
+    : [];
 
   useEffect(() => {
     const caseData = getCase(caseId);
@@ -264,21 +267,15 @@ const CaseSummary = (props) => {
         >
           <ModalContent>
             <SummaryHeading type="h5">Beslut</SummaryHeading>
-
-            {decision?.decisions &&
-              Object.keys(decision.decisions).length > 0 &&
-              Object.keys(decision.decisions).map((key) => {
-                const caseDecision = decision.decisions[key];
-                return (
-                  <Card key={key} colorSchema="red">
-                    <Card.Body color="neutral" shadow>
-                      <Card.Title colorSchema="neutral">{caseDecision.type}</Card.Title>
-                      <Card.SubTitle>{caseDecision.causetext}</Card.SubTitle>
-                      <Card.Text>{caseDecision.explanation}</Card.Text>
-                    </Card.Body>
-                  </Card>
-                );
-              })}
+            {decisions.map((caseDecision, index) => (
+              <Card key={index} colorSchema="red">
+                <Card.Body color="neutral" shadow>
+                  <Card.Title colorSchema="neutral">{caseDecision.type}</Card.Title>
+                  <Card.SubTitle>{caseDecision.causetext}</Card.SubTitle>
+                  <Card.Text>{caseDecision.explanation}</Card.Text>
+                </Card.Body>
+              </Card>
+            ))}
 
             {Object.keys(calculations).map((key) => {
               const calculation = calculations[key];
