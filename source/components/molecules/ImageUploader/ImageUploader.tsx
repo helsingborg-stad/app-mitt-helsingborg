@@ -163,9 +163,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
     })
       .then((image) => {
         const imageToAdd: Image = {...image, questionId: id};
-        const originalLength = images.length;
-        const updatedImages = addImagesToState([imageToAdd]);
-        uploadImage(imageToAdd, originalLength, updatedImages);
+        addImagesToState([imageToAdd]);
       })
       .catch((reason) => {
         console.log('cancelled!', reason);
