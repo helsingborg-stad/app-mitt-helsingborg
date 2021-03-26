@@ -7,6 +7,7 @@ type Props = TextProps & {
   small?: boolean;
   strong?: boolean;
   italic?: boolean;
+  align?: 'left' | 'center' | 'right';
 };
 
 const Text = styled(RNText) <Props>`
@@ -16,6 +17,7 @@ const Text = styled(RNText) <Props>`
   font-size: ${props => props.theme.typography[props.type || 'text'].fontSize}px;
   flex-shrink: 1;
   color: ${props => props.theme.colors.neutrals[1]};
+  text-align: ${props => props.align || 'left'};
   ${({ small }) =>
     small &&
     `
