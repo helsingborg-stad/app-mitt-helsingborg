@@ -22,6 +22,7 @@ export interface Image extends CropPickerImage {
   errorMessage?: string;
   uploadedFileName?: string;
   url?: string;
+  index?: number;
   questionId: string;
 }
 
