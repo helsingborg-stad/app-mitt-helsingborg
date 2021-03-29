@@ -11,6 +11,8 @@ const messages = {
   /** Other * */
   technicalError: 'Ett tekniskt fel uppstod. Försök igen.',
   unknownError: 'Okänt fel. Försök igen.',
+  userNotFound:
+    'Du har tyvärr inte åtkomst till tjänsten. För vidare hjälp ring kontaktcenter på 042-10 50 00.',
 };
 
 /**
