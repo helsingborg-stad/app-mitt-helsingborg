@@ -53,7 +53,7 @@ const setTypography = () => {
       h4: {
         fontWeight: fontWeights[1],
         fontSize: fontSizes[5],
-        lineHeight: lineHeights[1],
+        lineHeight: lineHeights[5],
       },
       h5: {
         fontWeight: fontWeights[1],
