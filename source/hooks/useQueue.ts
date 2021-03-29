@@ -44,16 +44,16 @@ function useQueue<T>(
     setQueue(updatedQueue);
   };
 
-  const onResolved = (uploadedAttachment) => {
-    const updatedUploaded = [...resolved];
-    updatedUploaded.push(uploadedAttachment);
-    setResolved(updatedUploaded);
+  const onResolved = (resolvedItem) => {
+    const updatedResolved = [...resolved];
+    updatedResolved.push(resolvedItem);
+    setResolved(updatedResolved);
   };
 
-  const onRejected = (failedAttachment) => {
-    const updatedFailed = [...rejected];
-    updatedFailed.push(failedAttachment);
-    setRejected(updatedFailed);
+  const onRejected = (rejectedItem) => {
+    const updatedRejected = [...rejected];
+    updatedRejected.push(rejectedItem);
+    setRejected(updatedRejected);
   };
 
   const setPendingState = () => {
