@@ -41,8 +41,8 @@ const BaseContainer = styled.View`
   top: ${(props) => (props.top ? `${props.top}px` : '40px')};
   left: 15%;
   right: 15%;
-  bottom: 0;
-  height: 60px;
+  min-height: 60px;
+  height: auto;
   padding: 0px;
   width: 70%;
   background-color: white;
@@ -55,6 +55,8 @@ const BaseContainer = styled.View`
 `;
 const ContentContainer = styled.View`
   flex: 1;
+  padding-top: 8px;
+  padding-bottom: 8px;
   padding-left: 12px;
   justify-content: center;
 `;
@@ -72,14 +74,13 @@ const CloseButtonContainer = styled(View)`
   justify-content: center;
 `;
 const PrimaryText = styled(Text)`
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
   margin-bottom: 3px;
 `;
 const SecondaryText = styled(Text)`
-  font-size: 10px;
+  font-size: 12px;
   color: #333333;
-  margin-bottom: 3px;
 `;
 
 interface Props {
@@ -99,7 +100,7 @@ const Toast: React.FC<Props> = ({ notification, index, onClose }) => {
   }, [notification, onClose]);
 
   return (
-    <BaseContainer top={40 + 70 * index}>
+    <BaseContainer top={40 + 90 * index}>
       {icon ? (
         <IconContainer color={backgroundColor}>
           <Icon color={foregroundColor} name={icon} />
@@ -108,12 +109,12 @@ const Toast: React.FC<Props> = ({ notification, index, onClose }) => {
       <ContentContainer>
         {mainText !== undefined && mainText.trim() !== '' && (
           <View>
-            <PrimaryText numberOfLines={1}>{mainText}</PrimaryText>
+            <PrimaryText>{mainText}</PrimaryText>
           </View>
         )}
         {secondaryText !== undefined && secondaryText.trim() !== '' && (
           <View>
-            <SecondaryText numberOfLines={2}>{secondaryText}</SecondaryText>
+            <SecondaryText>{secondaryText}</SecondaryText>
           </View>
         )}
       </ContentContainer>

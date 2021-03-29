@@ -144,7 +144,7 @@ export async function getUserProfile(accessToken) {
       }
 
       if (response.status === 404) {
-        throw new Error('404, no such user found');
+        throw new Error(getMessage('userNotFound'));
       }
 
       throw new Error(getMessage('unkownError'));

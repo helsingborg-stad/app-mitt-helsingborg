@@ -16,7 +16,7 @@ const NotificationsExample = () => {
   return (
     <View>
       <NotificationButton
-        color="green"
+        colorSchema="green"
         block
         onClick={() => {
           showNotification('This is a success notification!', 'meep', 'success');
@@ -25,7 +25,7 @@ const NotificationsExample = () => {
         <Text>Show success notification</Text>
       </NotificationButton>
       <NotificationButton
-        color="purple"
+        colorSchema="purple"
         block
         onClick={() => {
           showNotification('This is an info notification!', 'foo', 'info');
@@ -34,7 +34,7 @@ const NotificationsExample = () => {
         <Text>Show info notification</Text>
       </NotificationButton>
       <NotificationButton
-        color="blue"
+        colorSchema="blue"
         block
         onClick={() => {
           showNotification(
@@ -48,13 +48,22 @@ const NotificationsExample = () => {
         <Text>Show warning notification</Text>
       </NotificationButton>
       <NotificationButton
-        color="red"
+        colorSchema="red"
         block
         onClick={() => {
           showNotification('This is an error notification!', 'It will stay for ever', 'error', 0);
         }}
       >
         <Text>Show error notification</Text>
+      </NotificationButton>
+      <NotificationButton
+        colorSchema="neutral"
+        block
+        onClick={() => {
+          showNotification('This is a notification', 'Message here!', 'neutral', 1500);
+        }}
+      >
+        <Text>Show neutral notification</Text>
       </NotificationButton>
     </View>
   );

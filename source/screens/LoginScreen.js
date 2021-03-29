@@ -211,7 +211,7 @@ function LoginScreen(props) {
    */
   useEffect(() => {
     if (isRejected && error?.message) {
-      showNotification(error.message, '', 'neutral');
+      showNotification('Ett fel inträffade', error.message, 'neutral', 5000);
       handleSetError(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -265,7 +265,7 @@ function LoginScreen(props) {
                 colorSchema="red"
                 isLoading={isLoading}
                 isResolved={isResolved}
-                cancelSignIn={() => handleCancelOrder()}
+                cancelSignIn={handleCancelOrder}
                 isBankidInstalled
               />
             </Form>
@@ -330,7 +330,7 @@ function LoginScreen(props) {
                   colorSchema="red"
                   isLoading={isLoading}
                   isResolved={isResolved}
-                  cancelSignIn={() => handleCancelOrder()}
+                  cancelSignIn={handleCancelOrder}
                   isBankidInstalled={false}
                 />
               </Form>
