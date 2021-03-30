@@ -89,13 +89,24 @@ export const convertAnswersToArray = (data, formQuestions) => {
           Object.entries(childItems).forEach((childItem) => {
             const [repeaterItemId, repeaterItemValue] = childItem;
             const repeaterFieldItem = other.inputs.find((obj) => obj.id === repeaterItemId);
-            const { tags: repeaterFieldItemTags } = repeaterFieldItem;
+            const { tags } = repeaterFieldItem;
+            let newTags = [];
+            if (Array.isArray(tags)) {
+              const dyanmicTagRegex = new RegExp('.+:x');
+              newTags = tags.map((tag) => {
+                if (dyanmicTagRegex.test(tag)) {
+                  const strArray = tag.split(':');
+                  return `${strArray?.[0] || tag}:${childFieldId}`;
+                }
+                return tag;
+              });
+            }
 
             answers.push(
               createAnswerObject({
                 fieldId: `${id}.${childFieldId}.${repeaterItemId}`,
                 value: repeaterItemValue,
-                tags: repeaterFieldItemTags ?? [],
+                tags: newTags,
               })
             );
           });
