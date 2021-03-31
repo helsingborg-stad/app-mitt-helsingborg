@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
-import { LayoutAnimation } from 'react-native';
 import PropTypes from 'prop-types';
+import React, { useRef, useState } from 'react';
+import { LayoutAnimation, Platform } from 'react-native';
 import styled from 'styled-components/native';
-import { Text, Button, Fieldset, Input } from '../../atoms';
+import { Button, Fieldset, Input, Text } from '../../atoms';
 import Select from '../../atoms/Select';
 import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
 
@@ -17,15 +17,13 @@ const EditableListItem = styled.TouchableOpacity`
   height: auto;
   background-color: transparent;
   border-radius: 4.5px;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
   ${({ theme, error }) =>
     !(error?.isValid || !error) && `border: solid 1px ${theme.colors.primary.red[0]}`}
   ${(props) =>
-    props.editable
-      ? `
-      background-color: ${props.theme.colors.complementary[props.colorSchema][2]};
-      `
-      : 'color: blue;'};
+    props.editable &&
+    `background-color: ${props.theme.colors.complementary[props.colorSchema][2]};`};
+  ${({ editable }) => editable && Platform.OS === 'ios' && `padding: 16px;`};
 `;
 
 const EditableListItemLabelWrapper = styled.View`
@@ -39,10 +37,11 @@ const EditableListItemLabel = styled.Text`
   color: ${(props) => props.theme.colors.neutrals[1]};
   ${(props) =>
     props.editable &&
+    Platform.OS === 'android' &&
     `
     margin: 16px;
     margin-right: 0;
-      `};
+    `};
 `;
 
 const EditableListItemInputWrapper = styled.View`
@@ -61,6 +60,7 @@ const EditableListItemInput = styled(Input)`
   color: ${(props) => props.theme.colors.neutrals[1]};
   ${(props) =>
     props.editable &&
+    Platform.OS === 'android' &&
     `
     margin: 16px;
     margin-left: 0;
@@ -73,10 +73,11 @@ const EditableListItemSelect = styled(Select)`
   margin-bottom: 0px;
   ${(props) =>
     props.editable &&
+    Platform.OS === 'android' &&
     `
     margin: 16px;
     margin-left: 0;
-      `};
+  `};
 `;
 
 const FieldsetButton = styled(Button)`
@@ -188,14 +189,14 @@ function EditableList({
 
   const changeEditable = () => {
     LayoutAnimation.configureNext({
-      duration: 300,
+      duration: 250,
       create: {
-        duration: 300,
+        duration: 250,
         type: LayoutAnimation.Types.easeInEaseOut,
         property: LayoutAnimation.Properties.opacity,
       },
       update: {
-        duration: 300,
+        duration: 250,
         type: LayoutAnimation.Types.easeInEaseOut,
         property: LayoutAnimation.Properties.opacity,
       },
