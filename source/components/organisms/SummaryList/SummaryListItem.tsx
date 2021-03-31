@@ -1,13 +1,13 @@
 /* eslint-disable no-nested-ternary */
-import React, { useRef } from "react";
-import { View, TouchableHighlight } from "react-native";
-import styled from "styled-components/native";
 import PropTypes from "prop-types";
-import { Text, Icon, Input } from "../../atoms";
-import { SummaryListItem as SummaryListItemType } from "./SummaryList";
-import CalendarPicker from '../../molecules/CalendarPicker/CalendarPickerForm';
+import React, { useRef } from "react";
+import { Platform } from "react-native";
+import styled from "styled-components/native";
 import { colorPalette } from '../../../styles/palette';
 import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
+import { Icon, Input, Text } from "../../atoms";
+import CalendarPicker from '../../molecules/CalendarPicker/CalendarPickerForm';
+import { SummaryListItem as SummaryListItemType } from "./SummaryList";
 
 interface ItemWrapperProps {
   error?: { isValid: boolean; message: string; };
@@ -15,32 +15,33 @@ interface ItemWrapperProps {
   editable: boolean;
 }
 
-const Container = styled(View)`
+const Container = styled.View`
   margin-bottom: 10px;
+`;
 
-`
-
-const Row = styled(View)`
+const Row = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;  
-`
+  align-items: center;
+`;
 
 const ItemWrapper = styled.TouchableOpacity <ItemWrapperProps>`
   flex: 10;
   font-size: ${props => props.theme.fontSizes[4]}px;
   flex-direction: row;
   height: auto;
-  border-radius: 4.5px;  
+  border-radius: 4.5px;
   ${({ theme, error }) =>
-    !(error?.isValid || !error) && `border: solid 1px ${theme.colors.primary.red[0]}`}
-  ${props =>
-    props.editable
-      ? `
-      background-color: ${props.theme.colors.complementary[props.colorSchema][2]};
-      
-      `
-      : 'color: blue;'};
+    !(error?.isValid || !error) && `border: solid 1px ${theme.colors.primary.red[0]};`}
+  ${(props) => props.editable && `
+    background-color: ${props.theme.colors.complementary[props.colorSchema][2]};`
+  }
+  ${({ editable }) =>
+    editable &&
+    Platform.OS === 'ios' &&
+    `
+    padding: 16px;
+  `}
 `;
 
 const InputWrapper = styled.View`
@@ -48,12 +49,6 @@ const InputWrapper = styled.View`
   justify-content: center;
   align-items: flex-end;
   flex: 5;
-  ${(props) => 
-    props.editable &&
-    `
-    flex: 6;
-    `};
-
 `;
 
 const SmallInput = styled(Input)`
@@ -61,33 +56,37 @@ const SmallInput = styled(Input)`
   font-weight: 500;
   color: ${props => props.theme.colors.neutrals[1]};
   padding: 0px;
-  
-  ${(props) => 
-    props.editable &&
+  ${({ editable }) =>
+    editable &&
+    Platform.OS === 'android' &&
     `
     margin: 16px;
-    margin-left: 0;
-    `};
+    margin-left: 0px;
+    `}
 `;
 
 const LabelWrapper = styled.View`
   flex: 4;
   justify-content: center;
-  
-`
+`;
 
 const SmallText = styled(Text)`
   width: 80%;
   padding: 4px;
   font-weight: ${props => props.theme.fontWeights[1]};
   color: ${props => props.theme.colors.neutrals[2]};
-  ${(props) => 
+  ${(props) =>
     props.editable &&
     `
-    padding: 0;
+    padding: 0px;
+  `}
+  ${({ editable }) =>
+    editable &&
+    Platform.OS === 'android' &&
+    `
     margin: 16px;
-    margin-right: 0;
-    `};
+    margin-right: 0px;
+  `}
 `;
 
 const DeleteButton = styled(Icon)`
@@ -97,9 +96,9 @@ const DeleteButton = styled(Icon)`
   color: ${props => props.theme.colors.neutrals[4]};
 `;
 
-const DeleteButtonHighligth = styled(TouchableHighlight)`
-  padding: 0;
-  margin: 0;
+const DeleteButtonHighligth = styled.TouchableHighlight`
+  padding: 0px;
+  margin: 0px;
 `;
 
 const ValidationErrorMessage = styled(Text)`
