@@ -34,6 +34,11 @@ const statuses = [
     description: 'Ansökan är öppen. Du kan nu söka ekonomiskt bistånd för perioden.',
   },
   {
+    type: 'active:signed:viva',
+    name: 'Signerad',
+    description: 'Ansökan är signerad, ladda upp filer & dokument för att skicka in ansökan.',
+  },
+  {
     type: 'active:submitted:viva',
     name: 'Inskickad',
     description:
