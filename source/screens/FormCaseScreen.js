@@ -18,54 +18,61 @@ const SpinnerContainer = styled.View`
 const FormCaseScreen = ({ route, navigation, ...props }) => {
   const [form, setForm] = useState(undefined);
   const [formQuestions, setFormQuestions] = useState(undefined);
-  const [initialCase, setInitialCase] = useState(undefined);
 
-  const { caseData, caseId } = route && route.params ? route.params : {};
+  const { caseId } = route && route.params ? route.params : {};
   const { user } = useContext(AuthContext);
   const { getForm } = useContext(FormContext);
-  const { getCase } = useContext(CaseState);
-  const { updateCase } = useContext(CaseDispatch);
+  const { cases } = useContext(CaseState);
+  const { updateCase, getCase } = useContext(CaseDispatch);
+
+  const currentCase = getCase(caseId);
+  console.log('🚀 ~ file: FormCaseScreen.js ~ line 29 ~ FormCaseScreen ~ currentCase', currentCase);
 
   useEffect(() => {
-    if (caseData?.currentFormId) {
-      getForm(caseData.currentFormId).then((form) => {
-        setForm(form);
-        setFormQuestions(getFormQuestions(form));
-      });
-      const answerArray = caseData?.forms?.[caseData.currentFormId]?.answers || [];
-      const answersObject = convertAnswerArrayToObject(answerArray);
-      caseData.forms = {
-        ...caseData.forms,
-        [caseData.currentFormId]: {
-          ...caseData.forms[caseData.currentFormId],
-          answers: answersObject,
-        },
-      };
-      setInitialCase(caseData);
-    } else if (caseId) {
-      const initCase = getCase(caseId);
-      // Beware, dragons! Since we pass by reference, it seems like the answers
-      // can be converted to object form already, thus we do this check.
-      if (Array.isArray(initCase?.forms?.[initCase.currentFormId]?.answers)) {
-        const answerArray = initCase?.forms?.[initCase.currentFormId]?.answers || [];
-        const answersObject = convertAnswerArrayToObject(answerArray);
-        initCase.forms = {
-          ...initCase.forms,
-          [initCase.currentFormId]: {
-            ...initCase.forms[initCase.currentFormId],
-            answers: answersObject,
-          },
-        };
-        setInitialCase(initCase);
+    getForm(currentCase.currentFormId).then((form) => {
+      setForm(form);
+      setFormQuestions(getFormQuestions(form));
+    });
+  }, []);
 
-        getForm(initCase.currentFormId).then(async (form) => {
-          setForm(form);
-          setFormQuestions(getFormQuestions(form));
-        });
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [caseData, getForm]);
+  // useEffect(() => {
+  //   if (caseData?.currentFormId) {
+  //     getForm(caseData.currentFormId).then((form) => {
+  //       setForm(form);
+  //       setFormQuestions(getFormQuestions(form));
+  //     });
+  //     const answerArray = caseData?.forms?.[caseData.currentFormId]?.answers || [];
+  //     const answersObject = convertAnswerArrayToObject(answerArray);
+  //     caseData.forms = {
+  //       ...caseData.forms,
+  //       [caseData.currentFormId]: {
+  //         ...caseData.forms[caseData.currentFormId],
+  //         answers: answersObject,
+  //       },
+  //     };
+  //   } else if (caseId) {
+  //     const initCase = getCase(caseId);
+  //     // Beware, dragons! Since we pass by reference, it seems like the answers
+  //     // can be converted to object form already, thus we do this check.
+  //     if (Array.isArray(initCase?.forms?.[initCase.currentFormId]?.answers)) {
+  //       const answerArray = initCase?.forms?.[initCase.currentFormId]?.answers || [];
+  //       const answersObject = convertAnswerArrayToObject(answerArray);
+  //       initCase.forms = {
+  //         ...initCase.forms,
+  //         [initCase.currentFormId]: {
+  //           ...initCase.forms[initCase.currentFormId],
+  //           answers: answersObject,
+  //         },
+  //       };
+
+  //       getForm(initCase.currentFormId).then(async (form) => {
+  //         setForm(form);
+  //         setFormQuestions(getFormQuestions(form));
+  //       });
+  //     }
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [caseData, getForm]);
 
   function handleCloseForm() {
     navigation.popToTop();
@@ -73,10 +80,10 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
 
   const updateCaseContext = (answerObject, status, currentPosition) => {
     // If the case is submitted, we should not actually update its data...
-    if (!initialCase.status.type.includes('submitted')) {
+    if (!currentCase.status.type.includes('submitted')) {
       const caseData = {
-        caseId: initialCase.id,
-        formId: initialCase.currentFormId,
+        caseId: currentCase.id,
+        formId: currentCase.currentFormId,
         answerObject,
         status,
         currentPosition,
@@ -107,8 +114,8 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
     );
   }
   const initialPosition =
-    initialCase?.forms?.[initialCase.currentFormId]?.currentPosition || defaultInitialPosition;
-  const initialAnswers = initialCase?.forms?.[initialCase.currentFormId]?.answers || {};
+    currentCase?.forms?.[currentCase.currentFormId]?.currentPosition || defaultInitialPosition;
+  const initialAnswers = currentCase?.forms?.[currentCase.currentFormId]?.answers || {};
 
   return (
     <Form
@@ -120,7 +127,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       onStart={handleStartForm}
       onSubmit={handleSubmitForm}
       initialAnswers={initialAnswers}
-      status={initialCase.status || getStatusByType('notStarted')}
+      status={currentCase.status}
       updateCaseInContext={updateCaseContext}
       {...props}
     />
