@@ -82,7 +82,7 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
 
   return (
     <CaseState.Provider value={{ cases: state.cases, getCase, getCasesByFormIds, fetchCases }}>
-      <CaseDispatch.Provider value={{ createCase, updateCase, deleteCase }}>
+      <CaseDispatch.Provider value={{ createCase, updateCase, deleteCase, getCase }}>
         {children}
       </CaseDispatch.Provider>
     </CaseState.Provider>
