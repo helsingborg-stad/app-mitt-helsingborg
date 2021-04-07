@@ -1,8 +1,8 @@
 import FormList from 'app/components/organisms/FormList/FormList';
 import AuthContext from 'app/store/AuthContext';
-import { CaseDispatch } from 'app/store/CaseContext';
+import { CaseDispatch, CaseState } from 'app/store/CaseContext';
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Button, Text } from '../components/atoms';
 import Header from '../components/molecules/Header';
@@ -22,8 +22,18 @@ const FieldWrapper = styled.View`
 
 const DeveloperScreen = (props) => {
   const { navigation } = props;
-  const { createCase } = useContext(CaseDispatch);
+  const { cases } = useContext(CaseState);
+  const { createCase, getCase } = useContext(CaseDispatch);
+  const [newCaseId, setNewCaseId] = useState(undefined);
   const authContext = useContext(AuthContext);
+
+  useEffect(() => {
+    if (newCaseId && getCase(newCaseId)) {
+      const newCase = getCase(newCaseId);
+      navigation.navigate('Form', { caseData: newCase, caseId: newCase.id });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cases, newCaseId]);
 
   const colorSchema = 'neutral';
 
@@ -37,8 +47,8 @@ const DeveloperScreen = (props) => {
           onClickCallback={async (form) => {
             createCase(
               form,
-              async (newCase) => {
-                navigation.navigate('Form', { caseData: newCase });
+              async ({ id }) => {
+                setNewCaseId(id);
               },
               true
             );
