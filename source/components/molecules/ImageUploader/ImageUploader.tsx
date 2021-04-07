@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
-import {launchImageLibrary, ImageLibraryOptions} from 'react-native-image-picker';
+import ImagePicker, { Options } from 'react-native-image-crop-picker';
+// import {launchImageLibrary, ImageLibraryOptions} from 'react-native-image-picker';
 import styled from 'styled-components/native';
 import { Text, Button, Icon, Label } from '../../atoms';
 import { Modal, useModal } from '../Modal';
@@ -78,6 +78,12 @@ interface Props {
   id: string;
 }
 
+const asyncForEach = async (array: any[], callback: Function) => {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array)
+  }
+}
+
 const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, onChange, colorSchema, maxImages, id }) => {
   const [choiceModalVisible, toggleModal] = useModal();
 
@@ -111,32 +117,57 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
     onChange(updatedImages);
   };
 
-  const addImagesFromLibrary = () => {
-    const libraryOptions: ImageLibraryOptions = {
-      mediaType: 'photo',
-      includeBase64: false,
-      maxWidth: 800,
-      maxHeight: 800,
-      quality: 0.5
-    };
+  const addImagesFromLibrary = async () => {
+    // const libraryOptions: ImageLibraryOptions = {
+    //   mediaType: 'photo',
+    //   includeBase64: false,
+    //   maxWidth: 800,
+    //   maxHeight: 800,
+    //   quality: 0.5
+    // };
 
     try {
-      launchImageLibrary(libraryOptions, (response) => {
-        if (response?.didCancel) return;
+      // launchImageLibrary(libraryOptions, (response) => {
+      //   if (response?.didCancel) return;
 
+      //   const imageToAdd: Image = {
+      //     questionId: id,
+      //     path: response.uri,
+      //     filename: response.fileName,
+      //     width: response.width,
+      //     height: response.height,
+      //     size: response.fileSize,
+      //     mime: response.fileName.split('.').pop(),
+      //   };
+      //   const originalLength = images.length;
+      //   const updatedImages = addImagesToState([imageToAdd]);
+      //   uploadImage(imageToAdd, originalLength, updatedImages);
+      // });
+      const images = await ImagePicker.openPicker({
+        multiple: true,
+        mediaType: 'photo',
+        width: 800,
+        height: 800,
+        includeBase64: false,
+        compressImageQuality: 0.5,
+        compressImageMaxHeight: 800,
+        compressImageMaxWidth: 800,
+      });
+
+      asyncForEach(images, async (image) => {
         const imageToAdd: Image = {
+          ...image,
           questionId: id,
-          path: response.uri,
-          filename: response.fileName,
-          width: response.width,
-          height: response.height,
-          size: response.fileSize,
-          mime: response.fileName.split('.').pop(),
-        };
+        }
+
         const originalLength = images.length;
         const updatedImages = addImagesToState([imageToAdd]);
-        uploadImage(imageToAdd, originalLength, updatedImages);
-      });
+        await uploadImage(imageToAdd, originalLength, updatedImages);
+      })
+      
+      console.log("images", images)
+
+
     } catch (error) {
       console.error(error);
     }
