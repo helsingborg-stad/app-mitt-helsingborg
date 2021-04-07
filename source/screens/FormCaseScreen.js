@@ -26,7 +26,6 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   const { updateCase, getCase } = useContext(CaseDispatch);
 
   const currentCase = getCase(caseId);
-  console.log('🚀 ~ file: FormCaseScreen.js ~ line 29 ~ FormCaseScreen ~ currentCase', currentCase);
 
   useEffect(() => {
     getForm(currentCase.currentFormId).then((form) => {
@@ -34,45 +33,6 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       setFormQuestions(getFormQuestions(form));
     });
   }, []);
-
-  // useEffect(() => {
-  //   if (caseData?.currentFormId) {
-  //     getForm(caseData.currentFormId).then((form) => {
-  //       setForm(form);
-  //       setFormQuestions(getFormQuestions(form));
-  //     });
-  //     const answerArray = caseData?.forms?.[caseData.currentFormId]?.answers || [];
-  //     const answersObject = convertAnswerArrayToObject(answerArray);
-  //     caseData.forms = {
-  //       ...caseData.forms,
-  //       [caseData.currentFormId]: {
-  //         ...caseData.forms[caseData.currentFormId],
-  //         answers: answersObject,
-  //       },
-  //     };
-  //   } else if (caseId) {
-  //     const initCase = getCase(caseId);
-  //     // Beware, dragons! Since we pass by reference, it seems like the answers
-  //     // can be converted to object form already, thus we do this check.
-  //     if (Array.isArray(initCase?.forms?.[initCase.currentFormId]?.answers)) {
-  //       const answerArray = initCase?.forms?.[initCase.currentFormId]?.answers || [];
-  //       const answersObject = convertAnswerArrayToObject(answerArray);
-  //       initCase.forms = {
-  //         ...initCase.forms,
-  //         [initCase.currentFormId]: {
-  //           ...initCase.forms[initCase.currentFormId],
-  //           answers: answersObject,
-  //         },
-  //       };
-
-  //       getForm(initCase.currentFormId).then(async (form) => {
-  //         setForm(form);
-  //         setFormQuestions(getFormQuestions(form));
-  //       });
-  //     }
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [caseData, getForm]);
 
   function handleCloseForm() {
     navigation.popToTop();
