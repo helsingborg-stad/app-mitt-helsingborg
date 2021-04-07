@@ -67,7 +67,26 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseData, getForm]);
 
-  function handleCloseForm() {
+  const handleCloseForm = () => {
+    /* This works to set the case status as submitted, but only when a user opens a submitted case.
+     * To trigger it, the user first needs to submit a case and sign it, then click the X button to close.
+     * Once opened, click the X to close again, and this will run.
+     *
+     * It should run on the first close, but the current logic won't work, as it's impossible to know that the case
+     *    has gone through the final signing step, due to an issue where the initialCase data doesn't exist, i.e
+     *    the status is set to "not started" and the form and answer objects are empty.
+     */
+    const currentStep = initialCase?.forms?.[initialCase.currentFormId]?.currentPosition?.currentMainStep || 0;
+    const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
+
+    if (currentStep === totalSteps) {
+      if (updateCase && initialCase.status.type.includes('ongoing')) {
+        const currentForm = initialCase?.forms?.[initialCase.currentFormId];
+
+        updateCaseContext(currentForm.answers, getStatusByType('active:submitted', currentForm.currentPosition));
+      }
+    }
+
     navigation.popToTop();
   }
 
