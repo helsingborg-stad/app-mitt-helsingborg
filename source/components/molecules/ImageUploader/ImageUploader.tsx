@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import ImagePicker, { Options } from 'react-native-image-crop-picker';
-// import {launchImageLibrary, ImageLibraryOptions} from 'react-native-image-picker';
 import styled from 'styled-components/native';
 import { Text, Button, Icon, Label } from '../../atoms';
 import { Modal, useModal } from '../Modal';
@@ -118,31 +117,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
   };
 
   const addImagesFromLibrary = async () => {
-    // const libraryOptions: ImageLibraryOptions = {
-    //   mediaType: 'photo',
-    //   includeBase64: false,
-    //   maxWidth: 800,
-    //   maxHeight: 800,
-    //   quality: 0.5
-    // };
-
     try {
-      // launchImageLibrary(libraryOptions, (response) => {
-      //   if (response?.didCancel) return;
-
-      //   const imageToAdd: Image = {
-      //     questionId: id,
-      //     path: response.uri,
-      //     filename: response.fileName,
-      //     width: response.width,
-      //     height: response.height,
-      //     size: response.fileSize,
-      //     mime: response.fileName.split('.').pop(),
-      //   };
-      //   const originalLength = images.length;
-      //   const updatedImages = addImagesToState([imageToAdd]);
-      //   uploadImage(imageToAdd, originalLength, updatedImages);
-      // });
       const pickedImages = await ImagePicker.openPicker({
         multiple: true,
         mediaType: 'photo',
@@ -158,16 +133,15 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
 
       const originalLength = images.length;
 
-      asyncForEach(pickedImages, async (image) => {
+      let addedImages = []
+
+      await asyncForEach(pickedImages, async (image) => {
         const imageToAdd: Image = {...image, questionId: id};
 
-        console.log("imageToAdd", imageToAdd)
+        addedImages.push(imageToAdd)
 
         const originalLength = images.length;
         const updatedImages = addImagesToState([imageToAdd]);
-
-        console.log("updatedImages", updatedImages)
-
         try {
           await uploadImage(imageToAdd, originalLength, updatedImages);
         } catch (e) {
@@ -175,8 +149,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
         }
       })
 
-      console.log("pickedImages", pickedImages)
-
+      addImagesToState(addedImages)
 
     } catch (error) {
       console.error(error);
