@@ -68,27 +68,8 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   }, [caseData, getForm]);
 
   const handleCloseForm = () => {
-    /* This works to set the case status as submitted, but only when a user opens a submitted case.
-     * To trigger it, the user first needs to submit a case and sign it, then click the X button to close.
-     * Once opened, click the X to close again, and this will run.
-     *
-     * It should run on the first close, but the current logic won't work, as it's impossible to know that the case
-     *    has gone through the final signing step, due to an issue where the initialCase data doesn't exist, i.e
-     *    the status is set to "not started" and the form and answer objects are empty.
-     */
-    const currentStep = initialCase?.forms?.[initialCase.currentFormId]?.currentPosition?.currentMainStep || 0;
-    const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
-
-    if (currentStep === totalSteps) {
-      if (updateCase && initialCase.status.type.includes('ongoing')) {
-        const currentForm = initialCase?.forms?.[initialCase.currentFormId];
-
-        updateCaseContext(currentForm.answers, getStatusByType('active:submitted', currentForm.currentPosition));
-      }
-    }
-
     navigation.popToTop();
-  }
+  };
 
   const updateCaseContext = (answerObject, status, currentPosition) => {
     // If the case is submitted, we should not actually update its data...
@@ -101,6 +82,28 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
         currentPosition,
         formQuestions,
       };
+
+      // We set the initial case to prevent desync issues with the above logic.
+      // If we don't, the case will be updated all the time, because the initialCase
+      //    still has the "not started" status.
+      setInitialCase({
+        ...initialCase,
+        status,
+        forms: {
+          ...initialCase.forms,
+          [initialCase.currentFormId]: {
+            ...initialCase.forms[initialCase.currentFormId],
+            answers: {
+              ...initialCase.forms[initialCase.currentFormId].answers,
+              ...answerObject,
+            },
+            currentPosition: {
+              ...initialCase.forms[initialCase.currentFormId].currentPosition,
+              ...currentPosition,
+            },
+          },
+        },
+      });
       updateCase(caseData);
     }
   };
@@ -109,14 +112,12 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
    * Function for handling behavior when a form starts
    * TO BE IMPLEMENTED
    * */
-  function handleStartForm() {
-    return null;
-  }
+  const handleStartForm = () => null;
 
   // TODO: Update case on form submit.
-  function handleSubmitForm() {
+  const handleSubmitForm = () => {
     navigation.popToTop();
-  }
+  };
 
   if (!form?.steps) {
     return (
