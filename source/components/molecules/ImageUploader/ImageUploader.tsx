@@ -94,7 +94,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
   };
 
   const uploadImage = async (image: Image, index: number, updatedImages: Image[]) => {
-    const imageFileType = (image.path as string).split('.').pop();
+    const imageFileType = (image.path as string).split('.').pop().toLowerCase();
     if (!['jpg', 'jpeg', 'png'].includes(imageFileType)) {
       console.error(`Trying to upload a forbidden type of image, ${imageFileType}, allowed file types are [jpg, jpeg, png].`);
       return;
@@ -143,7 +143,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
       //   const updatedImages = addImagesToState([imageToAdd]);
       //   uploadImage(imageToAdd, originalLength, updatedImages);
       // });
-      const images = await ImagePicker.openPicker({
+      const pickedImages = await ImagePicker.openPicker({
         multiple: true,
         mediaType: 'photo',
         width: 800,
@@ -152,20 +152,30 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
         compressImageQuality: 0.5,
         compressImageMaxHeight: 800,
         compressImageMaxWidth: 800,
+        writeTempFile: true,
+        cropping: true,
       });
 
-      asyncForEach(images, async (image) => {
-        const imageToAdd: Image = {
-          ...image,
-          questionId: id,
-        }
+      const originalLength = images.length;
+
+      asyncForEach(pickedImages, async (image) => {
+        const imageToAdd: Image = {...image, questionId: id};
+
+        console.log("imageToAdd", imageToAdd)
 
         const originalLength = images.length;
         const updatedImages = addImagesToState([imageToAdd]);
-        await uploadImage(imageToAdd, originalLength, updatedImages);
+
+        console.log("updatedImages", updatedImages)
+
+        try {
+          await uploadImage(imageToAdd, originalLength, updatedImages);
+        } catch (e) {
+          console.error(e)
+        }
       })
-      
-      console.log("images", images)
+
+      console.log("pickedImages", pickedImages)
 
 
     } catch (error) {
