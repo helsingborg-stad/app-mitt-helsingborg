@@ -92,9 +92,9 @@ export const convertAnswersToArray = (data, formQuestions) => {
             const { tags } = repeaterFieldItem;
             let newTags = [];
             if (Array.isArray(tags)) {
-              const dyanmicTagRegex = new RegExp('.+:x');
+              const dynamicTagRegex = new RegExp('.+:x');
               newTags = tags.map((tag) => {
-                if (dyanmicTagRegex.test(tag)) {
+                if (dynamicTagRegex.test(tag)) {
                   const strArray = tag.split(':');
                   return `${strArray?.[0] || tag}:${childFieldId}`;
                 }
