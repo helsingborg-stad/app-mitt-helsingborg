@@ -1,5 +1,6 @@
 import { get, post, put } from '../../helpers/ApiRequest';
 import { convertAnswersToArray } from '../../helpers/CaseDataConverter';
+import { encryptWithAesKey, decryptWithAesKey } from '../../services/encryption';
 
 export const actionTypes = {
   updateCase: 'UPDATE_CASE',
@@ -10,10 +11,15 @@ export const actionTypes = {
 };
 
 export async function updateCase(
-  { caseId, formId, answerObject, status, currentPosition, formQuestions },
+  { user, caseId, formId, answerObject, status, currentPosition, formQuestions },
   callback
 ) {
-  const answers = convertAnswersToArray(answerObject, formQuestions);
+  let answers = convertAnswersToArray(answerObject, formQuestions);
+
+  if (status?.type === 'active:ongoing') {
+    const encryptedAnswers = await encryptWithAesKey(user, JSON.stringify(answers));
+    answers = { encryptedAnswers };
+  }
 
   const body = {
     statusType: status.type,
@@ -86,12 +92,24 @@ export function deleteCase(caseId) {
   };
 }
 
-export async function fetchCases() {
+export async function fetchCases(user) {
   try {
     const response = await get('/cases');
     if (response?.data?.data?.attributes?.cases) {
       const cases = {};
-      response.data.data.attributes.cases.forEach((c) => (cases[c.id] = c));
+
+      // eslint-disable-next-line no-restricted-syntax
+      for await (const c of response.data.data.attributes.cases) {
+        if (c?.status.type === 'active:ongoing') {
+          const { encryptedAnswers } = c.forms[c.currentFormId].answers;
+
+          const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
+
+          c.forms[c.currentFormId].answers = JSON.parse(decryptedAnswers);
+        }
+        cases[c.id] = c;
+      }
+
       return {
         type: actionTypes.fetchCases,
         payload: cases,
