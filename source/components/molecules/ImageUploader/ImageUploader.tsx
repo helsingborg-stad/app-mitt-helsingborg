@@ -67,6 +67,32 @@ const PopupButton = styled(Button)`
 
 export type ImageStatus = 'loading' | 'uploaded' | 'error';
 
+export const uploadImage = async (image: Image) => {
+    const imageFileType = (image.path as string).split('.').pop();
+    
+    if (!['jpg', 'jpeg', 'png'].includes(imageFileType)) {
+      console.error(`Trying to upload a forbidden type of image, ${imageFileType}, allowed file types are [jpg, jpeg, png].`);
+    }
+
+    const data: Blob = await getBlob(image.path);
+    const filename = (image.path as string).split('/').pop();
+    const uploadResponse = await uploadFile({
+      endpoint: 'users/me/attachments',
+      fileName: filename,
+      fileType: (imageFileType as 'jpg' | 'jpeg' | 'png'),
+      data
+    });
+
+    if (uploadResponse.error) {
+      throw uploadResponse?.message;
+    }
+
+    image.uploadedFileName = uploadResponse.uploadedFileName;
+    image.url = uploadResponse.url;
+
+  return image;
+};
+
 interface Props {
   buttonText: string;
   value: Image[] | '';
@@ -88,32 +114,11 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
 
   const addImagesToState = (newImages: Image[]) => {
     const updatedImages = images === '' ? [...newImages] : [...images, ...newImages];
-    onChange(updatedImages);
+
+    if (updatedImages.length > 0 && updatedImages[0].questionId) {
+      onChange(updatedImages, updatedImages[0].questionId);
+    }
     return updatedImages;
-  };
-
-  const uploadImage = async (image: Image, index: number, updatedImages: Image[]) => {
-    const imageFileType = (image.path as string).split('.').pop().toLowerCase();
-    if (!['jpg', 'jpeg', 'png'].includes(imageFileType)) {
-      console.error(`Trying to upload a forbidden type of image, ${imageFileType}, allowed file types are [jpg, jpeg, png].`);
-      return;
-    }
-    const data: Blob = await getBlob(image.path);
-    const filename = (image.path as string).split('/').pop();
-    const uploadResponse = await uploadFile({
-      endpoint: 'users/me/attachments',
-      fileName: filename,
-      fileType: (imageFileType as 'jpg' | 'jpeg' | 'png'),
-      data
-    });
-
-    if (uploadResponse.error) {
-      updatedImages[index].errorMessage = uploadResponse.message;
-    } else {
-      updatedImages[index].uploadedFileName = uploadResponse.uploadedFileName;
-      updatedImages[index].url = uploadResponse.url;
-    }
-    onChange(updatedImages);
   };
 
   const addImagesFromLibrary = async () => {
@@ -196,7 +201,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
               colorSchema={validColorSchema}
               block
               variant="outlined"
-              onClick={() => {
+              onClick={() => { 
                 toggleModal();
                 /** There's an issue on iOS with triggering the library before the modal has closed,
                  * so as a simple fix, we add a timeout (since toggleModal is async) */
