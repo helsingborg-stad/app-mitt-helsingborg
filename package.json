@@ -40,6 +40,7 @@
     "prop-types": "^15.7.2",
     "react": "16.13.1",
     "react-native": "0.63.4",
+    "react-native-aes-crypto": "^1.3.10",
     "react-native-asset": "^2.0.1",
     "react-native-background-timer": "^2.4.1",
     "react-native-calendar-picker": "^7.0.5",
