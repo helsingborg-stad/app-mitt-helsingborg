@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TextInputProps, Keyboard, TextInput, KeyboardTypeOptions } from 'react-native';
+import { TextInputProps, Keyboard, TextInput, KeyboardTypeOptions, InputAccessoryView, View, Button, Dimensions, Platform } from 'react-native';
 import styled, { useTheme } from 'styled-components/native';
 import Text from '../Text';
 import { InputFieldType } from '../../../types/FormTypes';
@@ -50,6 +50,16 @@ const StyledErrorText = styled(Text)`
   padding-top: 8px;
 `;
 
+const StyledAccessoryViewChild = styled(View)`
+  width: ${Dimensions.get('window').width}px;
+  height: 48px;
+  flexDirection: row;
+  justifyContent: flex-end;
+  alignItems: center;
+  backgroundColor: #F8F8F8;
+  paddingHorizontal: 8px; 
+`;
+
 const _replaceSpace = str => (str?.replace ? str.replace(/\u0020/, '\u00a0') : str);
 
 const Input: React.FC<InputProps> = React.forwardRef(
@@ -68,16 +78,30 @@ const Input: React.FC<InputProps> = React.forwardRef(
           onBlur={handleBlur}
           placeholderTextColor={theme.colors.neutrals[1]}
           returnKeyType="done"
+          returnKeyLabel="Klar" // Only works on Android  
           blurOnSubmit
           onSubmitEditing={() => {
             Keyboard.dismiss();
           }}
+          inputAccessoryViewID="klar-accessory"
           keyboardType={smartKeyboardType}
           ref={ref as React.Ref<TextInput>}
           {...props}
         />
         {showErrorMessage && error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
+      
+        {Platform.OS === 'ios' ? (
+          <InputAccessoryView nativeID="klar-accessory">
+            <StyledAccessoryViewChild>
+              <Button
+                title="Klar"
+                onPress={() => Keyboard.dismiss()}
+              />
+            </StyledAccessoryViewChild>
+          </InputAccessoryView>
+        ) : null}
       </>
+      
     );
   }
 );
