@@ -83,6 +83,7 @@ const Select: React.FC<Props> = React.forwardRef(({
         onValueChange={handleValueChange}
         items={items}
         ref={ref as React.LegacyRef<RNPickerSelect>}
+        doneText="Klar"
       />
       {showErrorMessage && error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
     </Wrapper>

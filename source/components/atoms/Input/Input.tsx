@@ -57,7 +57,7 @@ const StyledAccessoryViewChild = styled(View)`
   justifyContent: flex-end;
   alignItems: center;
   backgroundColor: #F8F8F8;
-  paddingHorizontal: 8px; 
+  paddingHorizontal: 8px;
 `;
 
 const _replaceSpace = str => (str?.replace ? str.replace(/\u0020/, '\u00a0') : str);
