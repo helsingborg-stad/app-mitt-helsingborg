@@ -90,7 +90,7 @@ const Input: React.FC<InputProps> = React.forwardRef(
         />
         {showErrorMessage && error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
       
-        {Platform.OS === 'ios' ? (
+        {Platform.OS === 'ios' && inputType !== 'email' && inputType !== 'text' ? (
           <InputAccessoryView nativeID="klar-accessory">
             <StyledAccessoryViewChild>
               <Button
