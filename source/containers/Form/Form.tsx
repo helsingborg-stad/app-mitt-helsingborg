@@ -12,6 +12,8 @@ import { User } from '../../types/UserTypes';
 import useForm, { FormPosition, FormReducerState } from './hooks/useForm';
 import AuthContext from '../../store/AuthContext';
 import { useNotification } from '../../store/NotificationContext';
+import FormUploader from '../../containers/Form/FormUploader';
+import { getStatusByType } from '../../assets/mock/caseStatuses';
 import { AuthLoading } from '../../components/molecules';
 
 interface Props {
@@ -77,6 +79,10 @@ const Form: React.FC<Props> = ({
     validateStepAnswers,
   } = useForm(initialState);
 
+  const [hasSigned, setHasSigned] = useState(false);
+  const [hasUploaded, setHasUploaded] = useState(false);
+
+
   const {
     status: authStatus,
     isLoading,
@@ -112,6 +118,14 @@ const Form: React.FC<Props> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
+
+  useEffect(() => {
+    if (!hasSigned && authStatus === 'signResolved') {
+      setHasSigned(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authStatus]);
+
   formNavigation.close = () => {
     onClose();
   };
@@ -157,7 +171,7 @@ const Form: React.FC<Props> = ({
           }
         />);
     });
-
+    
   const mainStep = formState.currentPosition.currentMainStepIndex;
   const [visible, toggleModal] = useModal();
   const [scrollViewRef, setRef] = useState<ScrollView>(null);
@@ -182,6 +196,19 @@ const Form: React.FC<Props> = ({
       </ScreenWrapper>
       <Modal visible={formState.currentPosition.level > 0} hide={toggleModal}>
         {stepComponents[formState.currentPosition.index]}
+      </Modal>
+      <Modal visible={hasSigned && !hasUploaded} hide={toggleModal}>
+        <FormUploader
+          allQuestions={formState.allQuestions}
+          caseStatus={status}
+          answers={formState.formAnswers}
+          onChange={handleInputChange}
+          onResolved={() => {
+            setHasUploaded(true);
+            formNavigation.next();
+            updateCaseInContext(formState.formAnswers, getStatusByType('active:submitted:viva'), formState.currentPosition);
+          }}
+        />
       </Modal>
       {(isLoading || isResolved) && (
           <AuthLoading
