@@ -320,7 +320,7 @@ function LoginScreen(props) {
               <ModalHeading>BankID på en annan enhet</ModalHeading>
               <ContentText>
                 Öppna Mobilt BankID eller BankID på din andra enhet innan du trycker på logga in här
-                nedaför.
+                nedanför.
               </ContentText>
             </Header>
 
