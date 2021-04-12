@@ -74,7 +74,7 @@ const slides = [
   },
   {
     headingColor: '#4B0034',
-    title: 'Kontakta din handläggare',
+    title: 'Läs beslut och få kontaktuppgifter till handläggare',
     content: '',
     color: '#E8DAE4',
     picture: SLIDE_BACKGROUND_KONTAKT,
