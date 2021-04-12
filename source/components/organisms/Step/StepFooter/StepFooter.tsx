@@ -74,10 +74,9 @@ const StepFooter: React.FC<Props> = ({
     const signCase = () => {
       if (onUpdate) onUpdate(answers);
       if (updateCaseInContext) {
-        updateCaseInContext(answers, getStatusByType('active:submitted:viva'), currentPosition);
+        updateCaseInContext(answers, getStatusByType('active:signed:viva'), currentPosition);
       }
       handleSetStatus('idle');
-      if (formNavigation.next) formNavigation.next();
     };
 
     if (status === 'signResolved') {
