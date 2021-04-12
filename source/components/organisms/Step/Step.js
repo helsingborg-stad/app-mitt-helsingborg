@@ -1,14 +1,11 @@
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Dimensions } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components/native';
 import { getStatusByType } from '../../../assets/mock/caseStatuses';
 import FormField from '../../../containers/FormField';
-import AuthContext from '../../../store/AuthContext';
-import { useNotification } from '../../../store/NotificationContext';
 import Progressbar from '../../atoms/Progressbar/Progressbar';
-import { AuthLoading } from '../../molecules';
 import BackNavigation from '../../molecules/BackNavigation/BackNavigation';
 import FormDialog from './CloseDialog/FormDialog';
 import Banner from './StepBanner/StepBanner';
@@ -69,38 +66,6 @@ function Step({
   totalStepNumber,
   answerSnapshot,
 }) {
-  const {
-    isLoading,
-    isResolved,
-    isRejected,
-    error,
-    handleCancelOrder,
-    isBankidInstalled,
-    handleSetStatus,
-    handleSetError,
-  } = useContext(AuthContext);
-
-  const showNotification = useNotification();
-
-  /**
-   * Set auth context status to idle when navigating
-   */
-  useEffect(() => {
-    handleSetStatus('idle');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPosition]);
-
-  /**
-   * Effect for showing notification if an error occurs
-   */
-  useEffect(() => {
-    if (isRejected && error?.message) {
-      showNotification(error.message, '', 'neutral');
-      handleSetError(null);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
-
   /** TODO: move out of this scope, this logic should be defined on the form component */
   const closeForm = () => {
     if (!status.type.includes('submitted')) {
@@ -192,51 +157,33 @@ function Step({
           )}
           <StepLayout>
             <StepBody>
-              {!isLoading && (
-                <>
-                  <StepDescription
-                    theme={theme}
-                    currentStep={
-                      currentPosition.level === 0 ? currentPosition.currentMainStep : undefined
-                    }
-                    totalStepNumber={totalStepNumber}
-                    colorSchema={colorSchema || 'blue'}
-                    {...description}
-                  />
-                  {questions && (
-                    <StepFieldListWrapper>
-                      {questions.map((field) => (
-                        <FormField
-                          key={`${field.id}`}
-                          onChange={!status.type.includes('submitted') ? onFieldChange : null}
-                          onBlur={onFieldBlur}
-                          inputType={field.type}
-                          value={answers[field.id] || ''}
-                          answers={answers}
-                          validationErrors={validation}
-                          colorSchema={
-                            field.color && field.color !== '' ? field.color : colorSchema
-                          }
-                          id={field.id}
-                          formNavigation={formNavigation}
-                          {...field}
-                        />
-                      ))}
-                    </StepFieldListWrapper>
-                  )}
-                </>
-              )}
-
-              {(isLoading || isResolved) && (
-                <SignStepWrapper>
-                  <AuthLoading
-                    colorSchema={colorSchema || 'neutral'}
-                    isLoading={isLoading}
-                    isResolved={isResolved}
-                    cancelSignIn={() => handleCancelOrder()}
-                    isBankidInstalled={isBankidInstalled}
-                  />
-                </SignStepWrapper>
+              <StepDescription
+                theme={theme}
+                currentStep={
+                  currentPosition.level === 0 ? currentPosition.currentMainStep : undefined
+                }
+                totalStepNumber={totalStepNumber}
+                colorSchema={colorSchema || 'blue'}
+                {...description}
+              />
+              {questions && (
+                <StepFieldListWrapper>
+                  {questions.map((field) => (
+                    <FormField
+                      key={`${field.id}`}
+                      onChange={!status.type.includes('submitted') ? onFieldChange : null}
+                      onBlur={onFieldBlur}
+                      inputType={field.type}
+                      value={answers[field.id] || ''}
+                      answers={answers}
+                      validationErrors={validation}
+                      colorSchema={field.color && field.color !== '' ? field.color : colorSchema}
+                      id={field.id}
+                      formNavigation={formNavigation}
+                      {...field}
+                    />
+                  ))}
+                </StepFieldListWrapper>
               )}
             </StepBody>
             {actions && actions.length > 0 ? (

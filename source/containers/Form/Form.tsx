@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { InteractionManager, StatusBar } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modal, useModal } from '../../components/molecules/Modal';
@@ -10,6 +10,9 @@ import { CaseStatus } from '../../types/CaseType';
 import { Step as StepType, StepperActions } from '../../types/FormTypes';
 import { User } from '../../types/UserTypes';
 import useForm, { FormPosition, FormReducerState } from './hooks/useForm';
+import AuthContext from '../../store/AuthContext';
+import { useNotification } from '../../store/NotificationContext';
+import { AuthLoading } from '../../components/molecules';
 
 interface Props {
   initialPosition?: FormPosition;
@@ -74,6 +77,41 @@ const Form: React.FC<Props> = ({
     validateStepAnswers,
   } = useForm(initialState);
 
+  const {
+    status: authStatus,
+    isLoading,
+    isResolved,
+    isRejected,
+    error,
+    handleCancelOrder,
+    isBankidInstalled,
+    handleSetStatus,
+    handleSetError,
+  } = useContext(AuthContext);
+
+
+  const showNotification = useNotification();
+
+  /**
+   * Set auth context status to idle when navigating
+   */
+  useEffect(() => {
+    if (authStatus !== 'idle') {
+      handleSetStatus('idle');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formState.currentPosition]);
+
+  /**
+   * Effect for showing notification if an error occurs
+   */
+  useEffect(() => {
+    if (isRejected && error?.message) {
+      showNotification(error.message, '', 'neutral');
+      handleSetError(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
   formNavigation.close = () => {
     onClose();
   };
@@ -145,6 +183,15 @@ const Form: React.FC<Props> = ({
       <Modal visible={formState.currentPosition.level > 0} hide={toggleModal}>
         {stepComponents[formState.currentPosition.index]}
       </Modal>
+      {(isLoading || isResolved) && (
+          <AuthLoading
+            colorSchema={'neutral'}
+            isLoading={isLoading}
+            isResolved={isResolved}
+            cancelSignIn={() => handleCancelOrder()}
+            isBankidInstalled={isBankidInstalled}
+          />
+      )}
     </>
   );
 };
