@@ -44,6 +44,7 @@ function loadStories() {
   require('../source/containers/DynamicCardRenderer/DynamicCardRenderer.stories');
   require('../source/containers/Form/Form.stories');
   require('../source/containers/FormField/FormField.stories');
+  require('../source/services/encryption/EncryptionService.stories');
 }
 
 const stories = [
@@ -87,6 +88,7 @@ const stories = [
   '../source/containers/DynamicCardRenderer/DynamicCardRenderer.stories',
   '../source/containers/Form/Form.stories',
   '../source/containers/FormField/FormField.stories',
+  '../source/services/encryption/EncryptionService.stories',
 ];
 
 module.exports = {
