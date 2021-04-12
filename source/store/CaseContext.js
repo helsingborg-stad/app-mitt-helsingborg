@@ -41,7 +41,15 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
     formQuestions,
   }) {
     dispatch(
-      await update({ caseId, formId, answerObject, status, currentPosition, formQuestions })
+      await update({
+        user,
+        caseId,
+        formId,
+        answerObject,
+        status,
+        currentPosition,
+        formQuestions,
+      })
     );
   }
 
@@ -70,7 +78,7 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   }
 
   const fetchCases = async () => {
-    dispatch(await fetch());
+    dispatch(await fetch(user));
   };
 
   useEffect(() => {
