@@ -442,6 +442,27 @@ const CaseSummary = (props) => {
                         )}
 
                         <Card.DetailsTitle type="h5">Reducering</Card.DetailsTitle>
+
+                        {calculation?.reductions?.reduction ? (
+                          <>
+                            <Card.CalculationRow>
+                              <Card.CalculationRowCell>
+                                <Text>{calculation.reductions.reduction}</Text>
+                              </Card.CalculationRowCell>
+                              <Card.CalculationRowCell />
+                              <Card.CalculationRowCell>
+                                <Text>{formatAmount(calculation.reductions.reduction.amount)}</Text>
+                              </Card.CalculationRowCell>
+                            </Card.CalculationRow>
+                          </>
+                        ) : (
+                          <Card.Text italic>Det finns inga registrerade reduceringar.</Card.Text>
+                        )}
+
+                        <Card.CalculationRow>
+                          <Card.Text strong>Summa</Card.Text>
+                          <Card.Text strong>{formatAmount(calculation.calculationsum)}</Card.Text>
+                        </Card.CalculationRow>
                       </>
                     )}
                   </Card.Body>
