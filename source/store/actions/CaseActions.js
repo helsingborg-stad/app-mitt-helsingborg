@@ -1,3 +1,4 @@
+import Config from 'react-native-config';
 import { get, post, put } from '../../helpers/ApiRequest';
 import { convertAnswersToArray } from '../../helpers/CaseDataConverter';
 import { encryptWithAesKey, decryptWithAesKey } from '../../services/encryption';
@@ -16,10 +17,11 @@ export async function updateCase(
 ) {
   let answers = convertAnswersToArray(answerObject, formQuestions);
 
-  if (status?.type === 'active:ongoing') {
-    const encryptedAnswers = await encryptWithAesKey(user, JSON.stringify(answers));
-    answers = { encryptedAnswers };
-  }
+  if (Config?.DISABLE_CLIENT_ENCRYPTION !== 'true')
+    if (status?.type === 'active:ongoing') {
+      const encryptedAnswers = await encryptWithAesKey(user, JSON.stringify(answers));
+      answers = { encryptedAnswers };
+    }
 
   const body = {
     statusType: status.type,
