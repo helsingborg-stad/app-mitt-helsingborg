@@ -281,26 +281,25 @@ const CaseSummary = (props) => {
               const calculation = calculations[key];
               return (
                 <Card key={key} colorSchema="red">
-                  <Card.Body color="neutral" shadow>
+                  <Card.Body color="neutral">
                     <Card.Title colorSchema="neutral">Beräkning</Card.Title>
                     {calculation.periodstartdate && calculation.periodenddate && (
-                      <Card.SubTitle>{`Beräkningsperiod: ${calculation.periodstartdate} - ${calculation.periodenddate} `}</Card.SubTitle>
+                      <Card.Text>{`Period: ${calculation.periodstartdate} - ${calculation.periodenddate} `}</Card.Text>
                     )}
-                    <Card.Separator />
                     <Card.CalculationRow>
-                      <Card.Text>Totalt belopp enligt norm</Card.Text>
-                      <Card.Text>{formatAmount(calculation.normsum, true)}</Card.Text>
-                    </Card.CalculationRow>
-                    <Card.CalculationRow>
-                      <Card.Text>Utgifter</Card.Text>
-                      <Card.Text>{formatAmount(calculation.costsum, true)}</Card.Text>
-                    </Card.CalculationRow>
-                    <Card.CalculationRow>
-                      <Card.Text>Inkomster</Card.Text>
+                      <Card.Text strong>Inkomster</Card.Text>
                       <Card.Text>{formatAmount(calculation.incomesum)}</Card.Text>
                     </Card.CalculationRow>
                     <Card.CalculationRow>
-                      <Card.Text>Reducering</Card.Text>
+                      <Card.Text strong>Utgifter</Card.Text>
+                      <Card.Text>{formatAmount(calculation.costsum, true)}</Card.Text>
+                    </Card.CalculationRow>
+                    <Card.CalculationRow>
+                      <Card.Text strong>Belopp enligt norm</Card.Text>
+                      <Card.Text>{formatAmount(calculation.normsubtotal, true)}</Card.Text>
+                    </Card.CalculationRow>
+                    <Card.CalculationRow>
+                      <Card.Text strong>Reducering</Card.Text>
                       <Card.Text>
                         <Card.Text>{formatAmount(calculation.reductionsum)}</Card.Text>
                       </Card.Text>
