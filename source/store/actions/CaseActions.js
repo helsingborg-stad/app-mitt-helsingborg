@@ -103,9 +103,10 @@ export async function fetchCases(user) {
         if (c?.status.type === 'active:ongoing') {
           const { encryptedAnswers } = c.forms[c.currentFormId].answers;
 
-          const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
-
-          c.forms[c.currentFormId].answers = JSON.parse(decryptedAnswers);
+          if (encryptedAnswers) {
+            const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
+            c.forms[c.currentFormId].answers = JSON.parse(decryptedAnswers);
+          }
         }
         cases[c.id] = c;
       }
