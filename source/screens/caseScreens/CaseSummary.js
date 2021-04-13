@@ -193,6 +193,8 @@ const CaseSummary = (props) => {
     }).start();
   }, [fadeAnimation]);
 
+  console.log('case', caseData);
+
   return (
     <ScreenWrapper {...props}>
       <Container as={Animated.ScrollView} style={{ opacity: fadeAnimation }}>
@@ -322,91 +324,27 @@ const CaseSummary = (props) => {
                     </Card.Button>
                     {isCalculationDetailsVisible && (
                       <>
-                        <Card.DetailsTitle type="h5">
+                        <Card.DetailsTitle type="h6">
                           Personer som påverkar normen
                         </Card.DetailsTitle>
                         {calculation?.calculationpersons?.calculationperson &&
                           convertDataToArray(
                             calculation?.calculationpersons?.calculationperson
                           ).map((person, index) => (
-                            <Card key={`${index}-${person?.name}`} colorSchema="red">
-                              <Card.Body shadow color="neutral">
-                                <Card.Section>
-                                  <Card.Image
-                                    style={{ width: 50, height: 50 }}
-                                    circle
-                                    source={icons.ICON_CONTACT_PERSON}
-                                  />
-                                  <Card.SubTitle>Namn</Card.SubTitle>
-                                  <Card.Title colorSchema="neutral">{person?.name}</Card.Title>
-                                </Card.Section>
-                                <Card.CalculationTable>
-                                  <Card.CalculationRowHeader>
-                                    <Card.CalculationRowCell>
-                                      <Text strong>Med i norm</Text>
-                                    </Card.CalculationRowCell>
-                                    <Card.CalculationRowCell>
-                                      <Text strong>Dagar</Text>
-                                    </Card.CalculationRowCell>
-                                    <Card.CalculationRowCell>
-                                      <Text strong>Hushåll</Text>
-                                    </Card.CalculationRowCell>
-                                  </Card.CalculationRowHeader>
-                                  <Card.CalculationRow>
-                                    <Card.CalculationRowCell>
-                                      <Text>{translateNormAcronym(person?.norm)}</Text>
-                                    </Card.CalculationRowCell>
-                                    <Card.CalculationRowCell>
-                                      <Text>{person?.days}</Text>
-                                    </Card.CalculationRowCell>
-                                    <Card.CalculationRowCell>
-                                      <Text>{translateNormAcronym(person?.home)}</Text>
-                                    </Card.CalculationRowCell>
-                                  </Card.CalculationRow>
-                                </Card.CalculationTable>
-                              </Card.Body>
+                            <Card key={`${index}-${person?.name}`} colorSchema="neutral">
+                              <Card.Title colorSchema="neutral" strong>
+                                {person?.name}
+                              </Card.Title>
+                              <Card.SubTitle colorSchema="neutral" strong>
+                                {person?.pnumber}
+                              </Card.SubTitle>
+                              <Card.Text>Norm beräknad på {person?.days} dagar</Card.Text>
                             </Card>
                           ))}
 
-                        <Card.DetailsTitle type="h5">Utgifter</Card.DetailsTitle>
-                        {calculation?.costs?.cost ? (
-                          <>
-                            <Card.CalculationTable>
-                              <Card.CalculationRowHeader>
-                                <Card.CalculationRowCell>
-                                  <Text strong>Utgift</Text>
-                                </Card.CalculationRowCell>
-                                <Card.CalculationRowCell>
-                                  <Text strong>Faktiska</Text>
-                                </Card.CalculationRowCell>
-                                <Card.CalculationRowCell>
-                                  <Text strong>Godkända</Text>
-                                </Card.CalculationRowCell>
-                              </Card.CalculationRowHeader>
-                              {convertDataToArray(calculation?.costs?.cost).map((cost, index) => (
-                                <Card.CalculationRow key={`${index}-${cost.type}`}>
-                                  <Card.CalculationRowCell>
-                                    <Text>{cost?.type}</Text>
-                                  </Card.CalculationRowCell>
-                                  <Card.CalculationRowCell>
-                                    <Text>{formatAmount(cost.actual)}</Text>
-                                  </Card.CalculationRowCell>
-                                  <Card.CalculationRowCell>
-                                    <Text>{formatAmount(cost.approved)}</Text>
-                                  </Card.CalculationRowCell>
-                                </Card.CalculationRow>
-                              ))}
-                            </Card.CalculationTable>
-                            <Card.CalculationRow>
-                              <Card.Text strong>Summa</Card.Text>
-                              <Card.Text strong>
-                                {calculation?.costs?.cost && calculateSum(calculation.costs.cost)}
-                              </Card.Text>
-                            </Card.CalculationRow>
-                          </>
-                        ) : (
-                          <Card.Text italic>Det finns inga registrerade utgifter.</Card.Text>
-                        )}
+                        <Text strong type="h6">
+                          Detaljerad beräkning
+                        </Text>
 
                         <Card.DetailsTitle type="h5">Inkomster</Card.DetailsTitle>
                         {calculation?.incomes?.income ? (
@@ -419,6 +357,9 @@ const CaseSummary = (props) => {
                                 <Card.CalculationRowCell>
                                   <Text strong>Summa</Text>
                                 </Card.CalculationRowCell>
+                                <Card.CalculationRowCell>
+                                  <Text strong>Info button</Text>
+                                </Card.CalculationRowCell>
                               </Card.CalculationRowHeader>
 
                               {convertDataToArray(calculation?.incomes?.income).map(
@@ -430,21 +371,77 @@ const CaseSummary = (props) => {
                                     <Card.CalculationRowCell>
                                       <Text>{income?.amount} kr</Text>
                                     </Card.CalculationRowCell>
+                                    <Card.CalculationRowCell>
+                                      <Icon name="info" />
+                                    </Card.CalculationRowCell>
                                   </Card.CalculationRow>
                                 )
                               )}
                             </Card.CalculationTable>
-                            <Card.CalculationRow>
-                              <Card.Text strong>Summa</Card.Text>
-                              <Card.Text strong>
-                                {calculation?.incomes?.income &&
-                                  calculateSum(calculation?.incomes?.income)}
-                              </Card.Text>
-                            </Card.CalculationRow>
                           </>
                         ) : (
                           <Card.Text italic>Det finns inga registrerade inkomster.</Card.Text>
                         )}
+
+                        <Card.DetailsTitle type="h5">Utgifter</Card.DetailsTitle>
+                        {calculation?.costs?.cost ? (
+                          <>
+                            <Card.CalculationTable>
+                              <Card.CalculationRowHeader>
+                                <Card.CalculationRowCell />
+                                <Card.CalculationRowCell>
+                                  <Text strong>Ansökt</Text>
+                                </Card.CalculationRowCell>
+                                <Card.CalculationRowCell>
+                                  <Text strong>Godkänt</Text>
+                                </Card.CalculationRowCell>
+                                <Card.CalculationRowCell />
+                              </Card.CalculationRowHeader>
+                              {convertDataToArray(calculation?.costs?.cost).map((cost, index) => (
+                                <Card.CalculationRow key={`${index}-${cost.type}`}>
+                                  <Card.CalculationRowCell>
+                                    <Text>{cost?.type}</Text>
+                                  </Card.CalculationRowCell>
+                                  <Card.CalculationRowCell>
+                                    <Text>{formatAmount(cost.actual)}</Text>
+                                  </Card.CalculationRowCell>
+                                  <Card.CalculationRowCell>
+                                    <Text>{formatAmount(cost.approved)}</Text>
+                                  </Card.CalculationRowCell>
+                                  <Card.CalculationRowCell>
+                                    <Text>
+                                      <Icon name="info" />
+                                    </Text>
+                                  </Card.CalculationRowCell>
+                                </Card.CalculationRow>
+                              ))}
+                            </Card.CalculationTable>
+                          </>
+                        ) : (
+                          <Card.Text italic>Det finns inga registrerade utgifter.</Card.Text>
+                        )}
+
+                        <Card.DetailsTitle type="h5">Belopp enligt norm</Card.DetailsTitle>
+
+                        {calculation?.norm?.normpart ? (
+                          <>
+                            {calculation?.norm?.normpart?.map((normpart, index) => (
+                              <Card.CalculationRow key={`${index}-${normpart.type}`}>
+                                <Card.CalculationRowCell>
+                                  <Text>{normpart?.type}</Text>
+                                </Card.CalculationRowCell>
+                                <Card.CalculationRowCell />
+                                <Card.CalculationRowCell>
+                                  <Text>{formatAmount(normpart.amount)}</Text>
+                                </Card.CalculationRowCell>
+                              </Card.CalculationRow>
+                            ))}
+                          </>
+                        ) : (
+                          <Card.Text italic>Det finns inga registrerade normer.</Card.Text>
+                        )}
+
+                        <Card.DetailsTitle type="h5">Reducering</Card.DetailsTitle>
                       </>
                     )}
                   </Card.Body>
