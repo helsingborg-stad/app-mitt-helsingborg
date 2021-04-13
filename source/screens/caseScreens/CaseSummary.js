@@ -160,7 +160,7 @@ const CaseSummary = (props) => {
   const {
     details: {
       administrators,
-      workflow: { decision = {}, payments = {}, calculations = {} } = {},
+      workflow: { decision = {}, payments = {}, calculations = {}, journals = {} } = {},
     } = {},
   } = caseData;
   const isFocused = useIsFocused();
@@ -463,6 +463,19 @@ const CaseSummary = (props) => {
                           <Card.Text strong>Summa</Card.Text>
                           <Card.Text strong>{formatAmount(calculation.calculationsum)}</Card.Text>
                         </Card.CalculationRow>
+
+                        <Card.DetailsTitle type="h5">Dokumentation</Card.DetailsTitle>
+
+                        {journals?.journal?.notes?.note?.length > 0 ? (
+                          <>
+                            {journals.journal.notes?.note.map((note, index) => (
+                              <Card>
+                                <Text type="h3">{note.label}</Text>
+                                <Card.Text>{note.text}</Card.Text>
+                              </Card>
+                            ))}
+                          </>
+                        ) : null}
                       </>
                     )}
                   </Card.Body>
