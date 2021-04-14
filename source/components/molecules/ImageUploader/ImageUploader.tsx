@@ -103,12 +103,6 @@ interface Props {
   id: string;
 }
 
-const asyncForEach = async (array: any[], callback: Function) => {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array)
-  }
-}
-
 const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, onChange, colorSchema, maxImages, id }) => {
   const [choiceModalVisible, toggleModal] = useModal();
 
@@ -136,17 +130,19 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
         cropping: true,
       });
 
-      addImagesToState(pickedImages.map((response) => {
-        return {
-          questionId: id,
-          path: response.path,
-          filename: response.filename,
-          width: response.width,
-          height: response.height,
-          size: response.size,
-          mime: response.filename.split('.').pop(),
-        } as Image;
-      }));
+      if (pickedImages && pickedImages.length > 0) {
+        addImagesToState(pickedImages.map((response) => {
+          return {
+            questionId: id,
+            path: response.path,
+            filename: response.filename,
+            width: response.width,
+            height: response.height,
+            size: response.size,
+            mime: response.filename.split('.').pop(),
+          } as Image;
+        }));
+      }
       
     } catch (error) {
       console.error(error);
