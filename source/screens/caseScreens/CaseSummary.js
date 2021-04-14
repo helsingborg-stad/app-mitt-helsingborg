@@ -13,12 +13,7 @@ import { Card, HelpButton, ScreenWrapper } from '../../components/molecules';
 import { Modal, useModal } from '../../components/molecules/Modal';
 import BackNavigation from '../../components/molecules/BackNavigation';
 import Button from '../../components/atoms/Button';
-import {
-  formatAmount,
-  calculateSum,
-  convertDataToArray,
-  translateNormAcronym,
-} from '../../helpers/FormatVivaData';
+import { formatAmount, convertDataToArray } from '../../helpers/FormatVivaData';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -192,8 +187,6 @@ const CaseSummary = (props) => {
       useNativeDriver: true,
     }).start();
   }, [fadeAnimation]);
-
-  console.log('case', caseData);
 
   return (
     <ScreenWrapper {...props}>
@@ -378,7 +371,14 @@ const CaseSummary = (props) => {
                                       <Text>{income?.amount} kr</Text>
                                     </Card.CalculationRowCell>
                                     <Card.CalculationRowCell>
-                                      {income.note ? <Icon name="info" /> : null}
+                                      {income.note ? (
+                                        <HelpButton
+                                          text={income.note}
+                                          heading={income.type}
+                                          tagline=""
+                                          icon="info"
+                                        />
+                                      ) : null}
                                     </Card.CalculationRowCell>
                                   </Card.CalculationRow>
                                 )
@@ -416,13 +416,10 @@ const CaseSummary = (props) => {
                                   </Card.CalculationRowCell>
                                   <Card.CalculationRowCell>
                                     {cost.note ? (
-                                      // <Text>
-                                      //   <Icon name="info" />
-                                      // </Text>
                                       <HelpButton
-                                        text="Text"
-                                        heading="Heading"
-                                        tagline="tagline"
+                                        text={cost.note}
+                                        heading={cost.type}
+                                        tagline=""
                                         icon="info"
                                       />
                                     ) : null}
