@@ -65,6 +65,7 @@ function Step({
   currentPosition,
   totalStepNumber,
   answerSnapshot,
+  attachments,
 }) {
   /** TODO: move out of this scope, this logic should be defined on the form component */
   const closeForm = () => {
@@ -197,6 +198,7 @@ function Step({
                 onUpdate={onFieldChange}
                 updateCaseInContext={updateCaseInContext}
                 validateStepAnswers={validateStepAnswers}
+                attachments={attachments}
               />
             ) : null}
           </StepLayout>
@@ -332,6 +334,7 @@ Step.propTypes = {
   }),
   /** Total number of steps in the form */
   totalStepNumber: PropTypes.number,
+  attachments: PropTypes.array,
 };
 
 Step.defaultProps = {
