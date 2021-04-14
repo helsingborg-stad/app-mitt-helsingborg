@@ -37,17 +37,22 @@ const FormUploader: React.FunctionComponent<Props> = ({
     .flat();
 
   const handleUpload = async (image: Image) => {
-    const uploadedImage = await uploadImage(image);
-    const updatedQuestion: Image[] = [...answers[image.questionId]];
-    updatedQuestion[image.index] = uploadedImage;
+    try {
+      const uploadedImage = await uploadImage(image);
+      const updatedQuestion: Image[] = [...answers[image.questionId]];
+      updatedQuestion[image.index] = uploadedImage;
 
-    const updateAnswer: Record<string, any> = {
-      [updatedQuestion[0].questionId]: updatedQuestion,
-    };
+      const updateAnswer: Record<string, any> = {
+        [updatedQuestion[0].questionId]: updatedQuestion,
+      };
 
-    onChange(updateAnswer, updatedQuestion[0].questionId);
+      onChange(updateAnswer, updatedQuestion[0].questionId);
 
-    return image;
+      return uploadedImage;
+    } catch (e) {
+      image.errorMessage = e;
+      throw image;
+    }
   };
 
   const options: Options<Image> = {
