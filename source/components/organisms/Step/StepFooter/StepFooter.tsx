@@ -9,6 +9,7 @@ import { FormPosition } from '../../../../containers/Form/hooks/useForm';
 import { useNotification } from '../../../../store/NotificationContext';
 import { evaluateConditionalExpression } from '../../../../helpers/conditionParser';
 import { getStatusByType } from '../../../../assets/mock/caseStatuses';
+import { Image } from '../../../molecules/ImageDisplay/ImageDisplay';
 
 const ActionContainer = styled.View`
   width: 100%;
@@ -52,6 +53,7 @@ interface Props {
   ) => void;
   currentPosition: FormPosition;
   validateStepAnswers: (errorCallback: () => void, onValidCallback: () => void) => void;
+  attachments: Image[];
 }
 
 const StepFooter: React.FC<Props> = ({
@@ -66,6 +68,7 @@ const StepFooter: React.FC<Props> = ({
   currentPosition,
   children,
   validateStepAnswers,
+  attachments,
 }) => {
   const { user, handleSign, status, isLoading, handleSetStatus } = useContext(AuthContext);
   const showNotification = useNotification();
@@ -74,7 +77,12 @@ const StepFooter: React.FC<Props> = ({
     const signCase = () => {
       if (onUpdate) onUpdate(answers);
       if (updateCaseInContext) {
-        updateCaseInContext(answers, getStatusByType('active:signed:viva'), currentPosition);
+        if (attachments.length > 0) {
+          updateCaseInContext(answers, getStatusByType('active:signed:viva'), currentPosition);
+        } else {
+          formNavigation.next();
+          updateCaseInContext(answers, getStatusByType('active:submitted:viva'), currentPosition);
+        }
       }
       handleSetStatus('idle');
     };
