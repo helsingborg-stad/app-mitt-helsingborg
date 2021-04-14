@@ -9,6 +9,7 @@ import { Card, Header, ScreenWrapper } from '../../components/molecules';
 import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 import { CaseState, caseTypes } from '../../store/CaseContext';
 import FormContext from '../../store/FormContext';
+import { convertDataToArray, calculateSum } from '../../helpers/FormatVivaData';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -24,6 +25,11 @@ const ListHeading = styled(Text)`
 
 Card.MessageBody = styled(Card.Body)`
   background-color: ${(props) => props.theme.colors.neutrals[5]};
+`;
+
+Card.LargeText = styled(Card.Text)`
+  font-size: ${(props) => props.theme.fontSizes[4]}px;
+  font-weight: ${(props) => props.theme.fontWeights[1]};
 `;
 
 const colorSchema = 'red';
@@ -42,9 +48,16 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
   const applicationPeriodMonth = caseData?.details?.period?.endDate
     ? getSwedishMonthNameByTimeStamp(caseData.details.period.endDate, true)
     : '';
-  const isNotStarted = caseData?.status?.type?.includes('notStarted');
-  const isOngoing = caseData?.status?.type?.includes('ongoing');
-  const isCompletionRequired = caseData?.status?.type?.includes('completionRequired');
+  const { details: { workflow: { decision = {}, payments = {} } = {} } = {} } = caseData;
+  const decisions = decision?.decisions?.decision
+    ? convertDataToArray(decision.decisions.decision)
+    : [];
+  const partiallyApprovedDecisions = decisions.filter((decision) => decision.typecode === '03');
+  const paymentsArray = payments?.payment ? convertDataToArray(payments?.payment) : [];
+  const statusType = caseData?.status?.type || '';
+  const isNotStarted = statusType.includes('notStarted');
+  const isOngoing = statusType.includes('ongoing');
+  const isCompletionRequired = statusType.includes('completionRequired');
 
   return (
     <Card key={caseData.id} colorSchema={colorSchema}>
@@ -65,33 +78,29 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
         <Card.Title colorSchema="neutral">{caseType.name}</Card.Title>
         <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
         {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
-        {isNotStarted && applicationPeriodMonth && <Card.Text>{applicationPeriodMonth}</Card.Text>}
-        {isNotStarted || isOngoing || isCompletionRequired ? (
+        {applicationPeriodMonth && <Card.LargeText>{applicationPeriodMonth}</Card.LargeText>}
+        {(isNotStarted || isOngoing || isCompletionRequired) && (
           <Card.Button
             onClick={() => {
               navigation.navigate('Form', { caseId: caseData.id });
             }}
           >
-            {isOngoing && <Text>Fortsätt ansökan</Text>}
+            {isOngoing && <Text>Fortsätt</Text>}
             {isNotStarted && <Text>Starta ansökan</Text>}
             {isCompletionRequired && <Text>Starta stickprov</Text>}
             <Icon name="arrow-forward" />
           </Card.Button>
-        ) : (
-          <Card.Button
-            onClick={() => {
-              navigation.navigate('UserEvents', {
-                screen: caseType.navigateTo,
-                params: {
-                  id: caseData.id,
-                  name: caseType.name,
-                },
-              });
-            }}
-          >
-            <Text>Visa ansökan</Text>
-            <Icon name="arrow-forward" />
-          </Card.Button>
+        )}
+
+        {Object.keys(paymentsArray).length > 0 && (
+          <Card.Text strong colorSchema="neutral">
+            Utbetalning: {calculateSum(paymentsArray)}
+          </Card.Text>
+        )}
+        {Object.keys(partiallyApprovedDecisions).length > 0 && (
+          <Card.Text colorSchema="neutral">
+            Avslaget: {calculateSum(partiallyApprovedDecisions)}
+          </Card.Text>
         )}
       </Card.Body>
     </Card>
