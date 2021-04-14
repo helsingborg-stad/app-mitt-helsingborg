@@ -110,6 +110,7 @@ const computeCaseCardComponent = (
   const isOngoing = status?.type?.includes('ongoing');
   const isClosed = status?.type?.includes('closed');
   const isCompletionRequired = status?.type?.includes('completionRequired');
+  const isSigned = status?.type?.includes('signed');
 
   return (
     <Card colorSchema={colorSchema}>
@@ -118,7 +119,7 @@ const computeCaseCardComponent = (
         <Card.SubTitle>{status.name}</Card.SubTitle>
         {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
         <Card.Text>{status.description} </Card.Text>
-        {(isOngoing || isNotStarted || isCompletionRequired) && (
+        {(isOngoing || isNotStarted || isCompletionRequired || isSigned) && (
           <Card.Button
             onClick={() => {
               navigation.navigate('Form', { caseId: caseData.id });
@@ -127,6 +128,7 @@ const computeCaseCardComponent = (
             {isOngoing && <Text>Fortsätt ansökan</Text>}
             {isNotStarted && <Text>Starta ansökan</Text>}
             {isCompletionRequired && <Text>Starta stickprov</Text>}
+            {isSigned && <Text>Ladda upp filer och dokument</Text>}
             <Icon name="arrow-forward" />
           </Card.Button>
         )}
