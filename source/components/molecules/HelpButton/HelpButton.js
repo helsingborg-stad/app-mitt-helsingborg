@@ -53,7 +53,7 @@ const LinkButton = styled(Button)`
 `;
 
 const HelpButton = (props) => {
-  const { text, size, heading, tagline, url } = props;
+  const { text, size, heading, tagline, url, icon } = props;
   const [isModalVisible, toggleModal] = useModal();
 
   const link = () => {
@@ -91,7 +91,7 @@ const HelpButton = (props) => {
         </ModalContainer>
       </Modal>
       <TouchableHighlight onPress={toggleModal} underlayColor="transparent">
-        <Icon name="help-outline" size={size} />
+        <Icon name={icon} size={size} />
       </TouchableHighlight>
     </>
   );
@@ -103,6 +103,7 @@ HelpButton.propTypes = {
   heading: PropTypes.string,
   tagline: PropTypes.string,
   url: PropTypes.string,
+  icon: PropTypes.string,
 };
 
 HelpButton.defaultProps = {
@@ -111,6 +112,7 @@ HelpButton.defaultProps = {
   size: 24,
   heading: '',
   url: '',
+  icon: 'help-outline',
 };
 
 export default HelpButton;
