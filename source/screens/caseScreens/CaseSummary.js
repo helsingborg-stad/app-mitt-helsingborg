@@ -169,6 +169,7 @@ const CaseSummary = (props) => {
   const decisions = decision?.decisions?.decision
     ? convertDataToArray(decision.decisions.decision)
     : [];
+  const paymentsArray = payments?.payment ? convertDataToArray(payments?.payment) : [];
 
   useEffect(() => {
     const caseData = getCase(caseId);
@@ -200,23 +201,17 @@ const CaseSummary = (props) => {
         {Object.keys(caseData).length > 0 &&
           computeCaseCardComponent(caseData, form, formName, colorSchema, navigation, toggleModal)}
 
-        {Object.keys(payments).length > 0 && (
-          <SummaryHeading type="h5">Utbetalningar</SummaryHeading>
-        )}
-
-        {Object.keys(payments).map((key) => {
-          const payment = payments[key];
-          return (
-            <Card key={key} colorSchema="red">
-              <Card.Body shadow color="neutral">
-                <Card.Image source={icons.ICON_EKB_OUTLINE} />
-                <Card.Title colorSchema="neutral">{formatAmount(payment.amount)}</Card.Title>
-                <Card.SubTitle>Utbetalas</Card.SubTitle>
-                <Card.Text>{payment.givedate}</Card.Text>
-              </Card.Body>
-            </Card>
-          );
-        })}
+        {paymentsArray.length > 0 && <SummaryHeading type="h5">Utbetalningar</SummaryHeading>}
+        {paymentsArray.map((payment, index) => (
+          <Card key={index} colorSchema="red">
+            <Card.Body shadow color="neutral">
+              <Card.Image source={icons.ICON_EKB_OUTLINE} />
+              <Card.Title colorSchema="neutral">{formatAmount(payment.amount)}</Card.Title>
+              <Card.SubTitle>Utbetalas</Card.SubTitle>
+              <Card.Text>{payment.givedate}</Card.Text>
+            </Card.Body>
+          </Card>
+        ))}
 
         {administrators && (
           <View>
