@@ -56,7 +56,6 @@ const Form: React.FC<Props> = ({
   status,
   updateCaseInContext,
 }) => {
-  console.log("🚀 ~ file: Form.tsx ~ line 59 ~ status", status)
 
   const initialState: FormReducerState = {
     submitted: false,
