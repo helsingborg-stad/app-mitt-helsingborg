@@ -136,26 +136,18 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
         cropping: true,
       });
 
-      const originalLength = images.length;
-
-      let addedImages = []
-
-      await asyncForEach(pickedImages, async (image) => {
-        const imageToAdd: Image = {...image, questionId: id};
-
-        addedImages.push(imageToAdd)
-
-        const originalLength = images.length;
-        const updatedImages = addImagesToState([imageToAdd]);
-        try {
-          await uploadImage(imageToAdd, originalLength, updatedImages);
-        } catch (e) {
-          console.error(e)
-        }
-      })
-
-      addImagesToState(addedImages)
-
+      addImagesToState(pickedImages.map((response) => {
+        return {
+          questionId: id,
+          path: response.path,
+          filename: response.filename,
+          width: response.width,
+          height: response.height,
+          size: response.size,
+          mime: response.filename.split('.').pop(),
+        } as Image;
+      }));
+      
     } catch (error) {
       console.error(error);
     }
