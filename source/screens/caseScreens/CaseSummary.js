@@ -9,7 +9,7 @@ import icons from '../../helpers/Icons';
 import { launchPhone, launchEmail } from '../../helpers/LaunchExternalApp';
 import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 import { Icon, Text } from '../../components/atoms';
-import { Card, ScreenWrapper } from '../../components/molecules';
+import { Card, HelpButton, ScreenWrapper } from '../../components/molecules';
 import { Modal, useModal } from '../../components/molecules/Modal';
 import BackNavigation from '../../components/molecules/BackNavigation';
 import Button from '../../components/atoms/Button';
@@ -268,6 +268,13 @@ const CaseSummary = (props) => {
           }}
         >
           <ModalContent>
+            <CloseModalButton
+              onClose={toggleModal}
+              primary={false}
+              showBackButton={false}
+              colorSchema="red"
+            />
+
             <SummaryHeading type="h5">Beslut</SummaryHeading>
 
             {decisions.map((caseDecision, index) => (
@@ -308,7 +315,7 @@ const CaseSummary = (props) => {
                       </Card.Text>
                     </Card.CalculationRow>
                     <Card.CalculationRow>
-                      <Card.Text strong>Summa (underskott)</Card.Text>
+                      <Card.Text strong>Summa</Card.Text>
                       <Card.Text strong>{formatAmount(calculation.calculationsum)}</Card.Text>
                     </Card.CalculationRow>
 
@@ -358,9 +365,7 @@ const CaseSummary = (props) => {
                                 <Card.CalculationRowCell>
                                   <Text strong>Summa</Text>
                                 </Card.CalculationRowCell>
-                                <Card.CalculationRowCell>
-                                  <Text strong>Info button</Text>
-                                </Card.CalculationRowCell>
+                                <Card.CalculationRowCell />
                               </Card.CalculationRowHeader>
 
                               {convertDataToArray(calculation?.incomes?.income).map(
@@ -373,7 +378,7 @@ const CaseSummary = (props) => {
                                       <Text>{income?.amount} kr</Text>
                                     </Card.CalculationRowCell>
                                     <Card.CalculationRowCell>
-                                      <Icon name="info" />
+                                      {income.note ? <Icon name="info" /> : null}
                                     </Card.CalculationRowCell>
                                   </Card.CalculationRow>
                                 )
@@ -410,9 +415,17 @@ const CaseSummary = (props) => {
                                     <Text>{formatAmount(cost.approved)}</Text>
                                   </Card.CalculationRowCell>
                                   <Card.CalculationRowCell>
-                                    <Text>
-                                      <Icon name="info" />
-                                    </Text>
+                                    {cost.note ? (
+                                      // <Text>
+                                      //   <Icon name="info" />
+                                      // </Text>
+                                      <HelpButton
+                                        text="Text"
+                                        heading="Heading"
+                                        tagline="tagline"
+                                        icon="info"
+                                      />
+                                    ) : null}
                                   </Card.CalculationRowCell>
                                 </Card.CalculationRow>
                               ))}
