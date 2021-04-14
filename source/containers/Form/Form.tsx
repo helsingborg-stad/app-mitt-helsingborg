@@ -15,7 +15,7 @@ import { useNotification } from '../../store/NotificationContext';
 import FormUploader from '../../containers/Form/FormUploader';
 import { getStatusByType } from '../../assets/mock/caseStatuses';
 import { AuthLoading } from '../../components/molecules';
-
+import { Image } from '../../components/molecules/ImageDisplay/ImageDisplay';
 interface Props {
   initialPosition?: FormPosition;
   steps: StepType[];
@@ -56,6 +56,7 @@ const Form: React.FC<Props> = ({
   status,
   updateCaseInContext,
 }) => {
+  console.log("🚀 ~ file: Form.tsx ~ line 59 ~ status", status)
 
   const initialState: FormReducerState = {
     submitted: false,
@@ -79,10 +80,6 @@ const Form: React.FC<Props> = ({
     validateStepAnswers,
   } = useForm(initialState);
 
-  const [hasSigned, setHasSigned] = useState(false);
-  const [hasUploaded, setHasUploaded] = useState(false);
-
-
   const {
     status: authStatus,
     isLoading,
@@ -95,6 +92,17 @@ const Form: React.FC<Props> = ({
     handleSetError,
   } = useContext(AuthContext);
 
+  const answers: Record<string, Image | any> = formState.formAnswers;
+
+  const attachments: Image[] = Object.values(answers)
+    .filter((item) => Array.isArray(item) && item.length > 0 && item[0]?.path)
+    .map((attachmentsArr) =>
+      attachmentsArr.map((attachmentAnswer, index) => ({ ...attachmentAnswer, index }))
+    )
+    .flat();
+    
+  const [hasSigned, setHasSigned] = useState(status.type.includes('signed'));
+  const [hasUploaded, setHasUploaded] = useState(attachments?.length && attachments.filter(({uploadedFileName}) => uploadedFileName).length == attachments.length);
 
   const showNotification = useNotification();
 
@@ -169,6 +177,7 @@ const Form: React.FC<Props> = ({
             formState.currentPosition.currentMainStep > 1 &&
             formState.currentPosition.currentMainStep < formState.numberOfMainSteps
           }
+          attachments={attachments}
         />);
     });
     
@@ -197,7 +206,7 @@ const Form: React.FC<Props> = ({
       <Modal visible={formState.currentPosition.level > 0} hide={toggleModal}>
         {stepComponents[formState.currentPosition.index]}
       </Modal>
-      <Modal visible={hasSigned && !hasUploaded} hide={toggleModal}>
+      <Modal visible={hasSigned && !hasUploaded && attachments.length > 0} hide={toggleModal}>
         <FormUploader
           allQuestions={formState.allQuestions}
           caseStatus={status}
