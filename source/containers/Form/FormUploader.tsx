@@ -64,7 +64,7 @@ const FormUploader: React.FunctionComponent<Props> = ({
   );
 
   useEffect(() => {
-    if (!isPending && resolved.length + rejected.length === count) {
+    if (!isPending && resolved.length === count) {
       if (onResolved) {
         onResolved();
       }
