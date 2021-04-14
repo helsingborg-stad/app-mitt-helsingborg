@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components';
+import Config from 'react-native-config';
 import { Button, Heading, Text } from '../../components/atoms';
 import { Image } from '../../components/molecules/ImageDisplay/ImageDisplay';
 import { uploadImage } from '../../components/molecules/ImageUploader/ImageUploader';
@@ -50,7 +51,11 @@ const FormUploader: React.FunctionComponent<Props> = ({
 
       return uploadedImage;
     } catch (e) {
+      if (Config?.APP_ENV === 'development')
+        console.error('FormUploader: Failed to upload image. Error: ', e);
       image.errorMessage = e;
+
+      // useQueue requires throws to include image as parameter, can probably be improved
       throw image;
     }
   };
@@ -74,6 +79,7 @@ const FormUploader: React.FunctionComponent<Props> = ({
         onResolved();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resolved, rejected, isPending, count]);
 
   return (
