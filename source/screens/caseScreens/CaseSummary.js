@@ -269,6 +269,7 @@ const CaseSummary = (props) => {
         >
           <ModalContent>
             <SummaryHeading type="h5">Beslut</SummaryHeading>
+
             {decisions.map((caseDecision, index) => (
               <Card key={index} colorSchema="red">
                 <Card.Body color="neutral" shadow>
@@ -469,7 +470,7 @@ const CaseSummary = (props) => {
                         {journals?.journal?.notes?.note?.length > 0 ? (
                           <>
                             {journals.journal.notes?.note.map((note, index) => (
-                              <Card>
+                              <Card key={`journal-${index}`}>
                                 <Text type="h3">{note.label}</Text>
                                 <Card.Text>{note.text}</Card.Text>
                               </Card>
@@ -484,7 +485,7 @@ const CaseSummary = (props) => {
             })}
           </ModalContent>
           <ModalFooter>
-            <Button z={0} block onClick={toggleModal} colorSchema="red">
+            <Button z={0} block onClick={toggleModal} colorSchema="neutral">
               <Text>Stäng</Text>
             </Button>
           </ModalFooter>
