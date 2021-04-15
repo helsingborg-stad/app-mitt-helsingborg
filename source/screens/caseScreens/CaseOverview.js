@@ -52,8 +52,10 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
   const decisions = decision?.decisions?.decision
     ? convertDataToArray(decision.decisions.decision)
     : [];
+
+  const paymentsArray = decisions.filter((decision) => decision.typecode === '01');
   const partiallyApprovedDecisions = decisions.filter((decision) => decision.typecode === '03');
-  const paymentsArray = payments?.payment ? convertDataToArray(payments?.payment) : [];
+
   const statusType = caseData?.status?.type || '';
   const isNotStarted = statusType.includes('notStarted');
   const isOngoing = statusType.includes('ongoing');
