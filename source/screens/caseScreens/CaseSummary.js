@@ -13,7 +13,7 @@ import { Card, HelpButton, ScreenWrapper } from '../../components/molecules';
 import { Modal, useModal } from '../../components/molecules/Modal';
 import BackNavigation from '../../components/molecules/BackNavigation';
 import Button from '../../components/atoms/Button';
-import { formatAmount, convertDataToArray } from '../../helpers/FormatVivaData';
+import { formatAmount, convertDataToArray, calculateSum } from '../../helpers/FormatVivaData';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -107,6 +107,13 @@ const computeCaseCardComponent = (
   const isCompletionRequired = status?.type?.includes('completionRequired');
   const isSigned = status?.type?.includes('signed');
 
+  const decisions = decision?.decisions?.decision
+    ? convertDataToArray(decision.decisions.decision)
+    : [];
+
+  const paymentsArray = decisions.filter((decision) => decision.typecode === '01');
+  const partiallyApprovedDecisions = decisions.filter((decision) => decision.typecode === '03');
+
   return (
     <Card colorSchema={colorSchema}>
       <Card.Body shadow color="neutral">
@@ -114,6 +121,17 @@ const computeCaseCardComponent = (
         <Card.SubTitle>{status.name}</Card.SubTitle>
         {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
         <Card.Text>{status.description} </Card.Text>
+        {Object.keys(paymentsArray).length > 0 && (
+          <Card.Text strong colorSchema="neutral">
+            Utbetalas: {calculateSum(paymentsArray)}
+          </Card.Text>
+        )}
+        {Object.keys(partiallyApprovedDecisions).length > 0 && (
+          <Card.Text colorSchema="neutral">
+            Avslaget: {calculateSum(partiallyApprovedDecisions)}
+          </Card.Text>
+        )}
+
         {(isOngoing || isNotStarted || isCompletionRequired || isSigned) && (
           <Card.Button
             onClick={() => {
@@ -197,18 +215,6 @@ const CaseSummary = (props) => {
         <SummaryHeading type="h5">Aktuell period</SummaryHeading>
         {Object.keys(caseData).length > 0 &&
           computeCaseCardComponent(caseData, form, formName, colorSchema, navigation, toggleModal)}
-
-        {paymentsArray.length > 0 && <SummaryHeading type="h5">Utbetalningar</SummaryHeading>}
-        {paymentsArray.map((payment, index) => (
-          <Card key={index} colorSchema="red">
-            <Card.Body shadow color="neutral">
-              <Card.Image source={icons.ICON_EKB_OUTLINE} />
-              <Card.Title colorSchema="neutral">{formatAmount(payment.amount)}</Card.Title>
-              <Card.SubTitle>Utbetalas</Card.SubTitle>
-              <Card.Text>{payment.givedate}</Card.Text>
-            </Card.Body>
-          </Card>
-        ))}
 
         {administrators && (
           <View>
