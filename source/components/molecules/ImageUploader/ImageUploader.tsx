@@ -69,7 +69,7 @@ export type ImageStatus = 'loading' | 'uploaded' | 'error';
 
 export const uploadImage = async (image: Image) => {
     const imageFileType = (image.path as string).split('.').pop();
-    
+
     if (!['jpg', 'jpeg', 'png'].includes(imageFileType)) {
       console.error(`Trying to upload a forbidden type of image, ${imageFileType}, allowed file types are [jpg, jpeg, png].`);
     }
@@ -128,6 +128,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
         compressImageMaxWidth: 800,
         writeTempFile: true,
         cropping: true,
+        includeExif: false,
       });
 
       if (pickedImages && pickedImages.length > 0) {
@@ -143,7 +144,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
           } as Image;
         }));
       }
-      
+
     } catch (error) {
       console.error(error);
     }
@@ -151,8 +152,12 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
 
   const addImageFromCamera = () => {
     ImagePicker.openCamera({
-      cropping: true,
       includeBase64: false,
+      compressImageQuality: 0.8,
+      compressImageMaxHeight: 1200,
+      compressImageMaxWidth: 1200,
+      cropping: true,
+      includeExif: false,
     })
       .then((image) => {
         const imageToAdd: Image = {...image, questionId: id};
@@ -189,7 +194,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
               colorSchema={validColorSchema}
               block
               variant="outlined"
-              onClick={() => { 
+              onClick={() => {
                 toggleModal();
                 /** There's an issue on iOS with triggering the library before the modal has closed,
                  * so as a simple fix, we add a timeout (since toggleModal is async) */
