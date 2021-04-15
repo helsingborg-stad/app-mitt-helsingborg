@@ -261,13 +261,6 @@ const CaseSummary = (props) => {
           }}
         >
           <ModalContent>
-            <CloseModalButton
-              onClose={toggleModal}
-              primary={false}
-              showBackButton={false}
-              colorSchema="red"
-            />
-
             <SummaryHeading type="h5">Beslut</SummaryHeading>
 
             {decisions.map((caseDecision, index) => (
