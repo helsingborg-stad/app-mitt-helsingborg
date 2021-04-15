@@ -60,6 +60,7 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
   const isNotStarted = statusType.includes('notStarted');
   const isOngoing = statusType.includes('ongoing');
   const isCompletionRequired = statusType.includes('completionRequired');
+  const isSigned = statusType.includes('signed');
 
   return (
     <Card key={caseData.id} colorSchema={colorSchema}>
@@ -90,6 +91,7 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
             {isOngoing && <Text>Fortsätt</Text>}
             {isNotStarted && <Text>Starta ansökan</Text>}
             {isCompletionRequired && <Text>Starta stickprov</Text>}
+            {isSigned && <Text>Ladda upp filer och dokument</Text>}
             <Icon name="arrow-forward" />
           </Card.Button>
         )}
