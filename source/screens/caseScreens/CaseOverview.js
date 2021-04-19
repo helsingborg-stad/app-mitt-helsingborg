@@ -82,7 +82,7 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
         <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
         {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
         {applicationPeriodMonth && <Card.LargeText>{applicationPeriodMonth}</Card.LargeText>}
-        {(isNotStarted || isOngoing || isCompletionRequired) && (
+        {(isNotStarted || isOngoing || isCompletionRequired || isSigned) && (
           <Card.Button
             onClick={() => {
               navigation.navigate('Form', { caseId: caseData.id });
