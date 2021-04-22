@@ -73,14 +73,14 @@ const FormUploader: React.FunctionComponent<Props> = ({
     options
   );
 
-  useEffect(() => {
-    if (!isPending && resolved.length === count) {
-      if (onResolved) {
+  const handleResolved = () => {
+    if (!isPending && resolved.length === count && onResolved) {
         onResolved();
       }
-    }
+  };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resolved, rejected, isPending, count]);
+  useEffect(handleResolved, [resolved, rejected, isPending, count]);
 
   return (
     <Wrapper>
