@@ -115,9 +115,19 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
     return updatedImages;
   };
 
+  const transformRawImage = (rawImage) => ({
+    questionId: id,
+    path: rawImage.path,
+    filename: rawImage.filename,
+    width: rawImage.width,
+    height: rawImage.height,
+    size: rawImage.size,
+    mime: rawImage.filename.split('.').pop(),
+  } as Image);
+
   const addImagesFromLibrary = async () => {
     try {
-      const pickedImages = await ImagePicker.openPicker({
+      const rawImages = await ImagePicker.openPicker({
         multiple: true,
         mediaType: 'photo',
         width: 800,
@@ -131,41 +141,35 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
         includeExif: false,
       });
 
-      if (pickedImages && pickedImages.length > 0) {
-        addImagesToState(pickedImages.map((response) => {
-          return {
-            questionId: id,
-            path: response.path,
-            filename: response.filename,
-            width: response.width,
-            height: response.height,
-            size: response.size,
-            mime: response.filename.split('.').pop(),
-          } as Image;
-        }));
+      if (rawImages && rawImages.length > 0) {
+        addImagesToState(rawImages.map(transformRawImage));
       }
 
     } catch (error) {
-      console.error(error);
+      if (error.code !== 'E_PICKER_CANCELLED')
+        console.error(error);
     }
   };
 
-  const addImageFromCamera = () => {
-    ImagePicker.openCamera({
-      includeBase64: false,
-      compressImageQuality: 0.8,
-      compressImageMaxHeight: 1200,
-      compressImageMaxWidth: 1200,
-      cropping: true,
-      includeExif: false,
-    })
-      .then((image) => {
-        const imageToAdd: Image = {...image, questionId: id};
-        addImagesToState([imageToAdd]);
-      })
-      .catch((reason) => {
-        console.log('cancelled!', reason);
+  const addImageFromCamera =  async () => {
+    try {
+      const rawImage = await ImagePicker.openCamera({
+        includeBase64: false,
+        compressImageQuality: 0.8,
+        compressImageMaxHeight: 1200,
+        compressImageMaxWidth: 1200,
+        cropping: true,
+        includeExif: false,
       });
+
+      if (rawImage) {
+        addImagesToState([rawImage].map(transformRawImage));
+      }
+
+    } catch(error) {
+      if (error.code !== 'E_PICKER_CANCELLED')
+        console.error(error);
+    }
   };
 
   const validColorSchema = getValidColorSchema(colorSchema);
