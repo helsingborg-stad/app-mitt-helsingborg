@@ -196,7 +196,7 @@ PLATFORMS
   x86_64-darwin-20
 
 DEPENDENCIES
-  fastlane (~> 2.180)
+  fastlane (~> 2.180.1)
 
 BUNDLED WITH
    2.2.16
