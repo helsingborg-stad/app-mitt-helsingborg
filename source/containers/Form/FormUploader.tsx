@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
-import styled from 'styled-components';
+import { ActivityIndicator } from 'react-native';
+import styled, { withTheme } from 'styled-components';
 import Config from 'react-native-config';
-import { Button, Heading, Text } from '../../components/atoms';
+import { Button, Heading, Icon, Text } from '../../components/atoms';
 import { Image } from '../../components/molecules/ImageDisplay/ImageDisplay';
 import { uploadImage } from '../../components/molecules/ImageUploader/ImageUploader';
 import useQueue, { Options } from '../../hooks/useQueue';
-import { updateAnswer } from './hooks/formActions';
+import Dialog from '../../components/molecules/Dialog/Dialog';
 
 export interface Props {
   caseStatus: any;
@@ -14,14 +14,22 @@ export interface Props {
   allQuestions: Record<string, any>;
   onChange: (value: Record<string, any>, id?: string) => void;
   onResolved?: () => void;
+  theme?: any;
 }
 
-const Wrapper = styled(View)`
-  background-color: #f7a600;
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
+const DialogActivityIndicator = styled(ActivityIndicator)`
+  margin-bottom: 16px;
+  margin-top: 16px;
+`;
+
+const DialogButton = styled(Button)`
+  margin-top: 16px;
+`;
+
+const DialogIcon = styled(Icon)`
+  margin-bottom: 16px;
+  margin-top: 16px;
+  color: ${(props) => props.theme.colors.primary.blue[1]};
 `;
 
 const FormUploader: React.FunctionComponent<Props> = ({
@@ -29,6 +37,7 @@ const FormUploader: React.FunctionComponent<Props> = ({
   allQuestions,
   onChange,
   onResolved,
+  theme,
 }) => {
   const attachments: Image[] = Object.values(answers)
     .filter((item) => Array.isArray(item) && item.length > 0 && item[0]?.path)
@@ -75,46 +84,45 @@ const FormUploader: React.FunctionComponent<Props> = ({
 
   const handleResolved = () => {
     if (!isPending && resolved.length === count && onResolved) {
-        onResolved();
-      }
+      onResolved();
+    }
   };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(handleResolved, [resolved, rejected, isPending, count]);
 
   return (
-    <Wrapper>
+    <Dialog visible>
       {isPending && (
-        <Wrapper>
-          <Heading align="center" type="h1">
-            Laddar upp information
+        <>
+          <DialogActivityIndicator
+            size="large"
+            color={theme?.colors?.primary?.blue[1] ?? '#003359'}
+          />
+          <Heading align="center" type="h2">
+            Laddar upp filer
           </Heading>
           <Text align="center">
-            Laddar upp filer ({resolved.length}/{count})
+            ({resolved.length} av {count})
           </Text>
-        </Wrapper>
-      )}
-
-      {!isPending && rejected.length <= 0 && (
-        <Wrapper>
-          <Heading align="center" type="h1">
-            Success!!!
-          </Heading>
-        </Wrapper>
+          <Text align="center">Stäng inte av appen eller internet</Text>
+        </>
       )}
 
       {!isPending && rejected.length > 0 && (
-        <Wrapper>
-          <Heading align="center" type="h1">
-            rejected to complete upload
+        <>
+          <DialogIcon size="48" name="close" />
+          <Heading align="center" type="h2">
+            Någonting gick fel
           </Heading>
           <Text align="center">
-            rejected to upload ({rejected.length}/{count})
+            Säkerställ att du har internet uppkoppling och försök igen. Om problemet kvarstår,
+            kontakta din handläggare.
           </Text>
-          <Button value="Retry" onClick={retry} />
-        </Wrapper>
+          <DialogButton block value="Förösk igen" onClick={retry} />
+        </>
       )}
-    </Wrapper>
+    </Dialog>
   );
 };
 
@@ -122,4 +130,4 @@ FormUploader.defaultProps = {
   answers: {},
 };
 
-export default FormUploader;
+export default withTheme(FormUploader);
