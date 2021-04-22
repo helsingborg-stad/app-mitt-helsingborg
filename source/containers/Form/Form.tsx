@@ -16,6 +16,7 @@ import FormUploader from '../../containers/Form/FormUploader';
 import { getStatusByType } from '../../assets/mock/caseStatuses';
 import { AuthLoading } from '../../components/molecules';
 import { Image } from '../../components/molecules/ImageDisplay/ImageDisplay';
+
 interface Props {
   initialPosition?: FormPosition;
   steps: StepType[];
@@ -205,7 +206,8 @@ const Form: React.FC<Props> = ({
       <Modal visible={formState.currentPosition.level > 0} hide={toggleModal}>
         {stepComponents[formState.currentPosition.index]}
       </Modal>
-      <Modal visible={hasSigned && !hasUploaded && attachments.length > 0} hide={toggleModal}>
+
+      {hasSigned && !hasUploaded && attachments.length > 0 && (
         <FormUploader
           allQuestions={formState.allQuestions}
           caseStatus={status}
@@ -217,7 +219,8 @@ const Form: React.FC<Props> = ({
             updateCaseInContext(formState.formAnswers, getStatusByType('active:submitted:viva'), formState.currentPosition);
           }}
         />
-      </Modal>
+      )}
+         
       {(isLoading || isResolved) && (
           <AuthLoading
             colorSchema={'neutral'}
