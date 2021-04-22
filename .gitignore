@@ -61,12 +61,14 @@ buck-out/
 /ios/*.cer
 /ios/*.dSYM.zip
 /ios/*.mobileprovision
+/ios/.build_logs
 
 # Bundle artifact
 *.jsbundle
 
 # CocoaPods
 /ios/Pods/
+/ios/.local_derived_data
 
 # Local environment files
 .env
