@@ -57,9 +57,16 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+*/fastlane/.env
+/ios/*.cer
+/ios/*.dSYM.zip
+/ios/*.mobileprovision
 
 # Bundle artifact
 *.jsbundle
+
+# CocoaPods
+/ios/Pods/
 
 # Local environment files
 .env
