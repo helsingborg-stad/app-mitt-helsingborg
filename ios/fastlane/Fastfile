@@ -121,14 +121,42 @@ platform :ios do
     # run the build lane
     build
 
+    changelog = get_changelog()
+      
+    puts "changelog=#{changelog}"
+
     # upload
     upload_to_testflight(
       skip_submission: true,
       notify_external_testers: false,
+      changelog: changelog,
 
       # note: skipping this sacrifices some flexibility in post-processing but reduces CI minutes and costs significantly
       skip_waiting_for_build_processing: true
     )
+
+  end
+
+
+  desc "print the changelog"
+  lane :print_changelog do
+
+    puts "changelog:\n#{get_changelog()}"
+
+  end
+
+
+  def get_changelog()
+    
+    Dir.chdir("..") do
+
+      branch_name = git_branch
+      commit = last_git_commit
+      changelog_msg = "(automatically built from #{commit[:abbreviated_commit_hash]} on #{branch_name})"
+
+      return changelog_msg
+
+    end
 
   end
 
