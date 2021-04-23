@@ -40,7 +40,7 @@ const SumContainer = styled.View<{ colorSchema: string }>`
 export interface SummaryListItem {
   title: string;
   id: string;
-  type: 'number' | 'text' | 'date' | 'checkbox' | 'arrayNumber' | 'arrayText' | 'arrayDate' 
+  type: 'number' | 'text' | 'date' | 'checkbox' | 'arrayNumber' | 'arrayText' | 'arrayDate'
    | 'editableListText' | 'editableListNumber' | 'editableListDate' ;
   category?: string;
   inputId?: string;
@@ -135,7 +135,7 @@ const SummaryList: React.FC<Props> = ({
       const oldAnswer: Record<string, string | number>[] = answers[item.id];
       oldAnswer.splice(index, 1);
       onChange(oldAnswer, item.id);
-    } else if (['editableListText', 'editableListNumber', 'editableListDate'].includes(item.type) && item.inputId) { 
+    } else if (['editableListText', 'editableListNumber', 'editableListDate'].includes(item.type) && item.inputId) {
       const oldAnswer: Record<string, string | number> = answers[item.id];
       oldAnswer[item.inputId] = undefined;
       onChange(oldAnswer, item.id);
@@ -163,7 +163,7 @@ const SummaryList: React.FC<Props> = ({
     return typeof answer !== 'undefined';
   });
   itemsWithAnswers
-    .forEach((item) => {
+    .forEach(( item) => {
       if (['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type)) {
         const values: Record<string, string | number>[] = answers[item.id];
         if (!Array.isArray(values) && values !== undefined) {
@@ -183,6 +183,7 @@ const SummaryList: React.FC<Props> = ({
               <SummaryListItemComponent
                 item={item}
                 index={index ? index + 1 : undefined}
+                userDescriptionLabel={v.text}
                 key={`${item.id}-${index}`}
                 value={v[item?.inputId]}
                 changeFromInput={changeFromInput(item, index)}
@@ -198,10 +199,10 @@ const SummaryList: React.FC<Props> = ({
               addToSum(numericValue);
             }
           });
-        } 
-      } 
-      if (['editableListText', 'editableListNumber', 'editableListDate'].includes(item.type) && item.inputId 
-      && answers?.[item.id]?.[item.inputId]) { 
+        }
+      }
+      if (['editableListText', 'editableListNumber', 'editableListDate'].includes(item.type) && item.inputId
+      && answers?.[item.id]?.[item.inputId]) {
         listItems.push(
           <SummaryListItemComponent
               item={item}
@@ -219,7 +220,7 @@ const SummaryList: React.FC<Props> = ({
           const numericValue: number = answers[item.id][item.inputId];
           addToSum(numericValue);
         }
-      } 
+      }
       if (['text', 'number', 'date', 'checkbox'].includes(item.type)) {
         listItems.push(
           <SummaryListItemComponent
@@ -295,8 +296,8 @@ SummaryList.propTypes = {
    * The form state answers
    */
   answers: PropTypes.object,
-  /** 
-   * Object containing all validation errors for the entire form 
+  /**
+   * Object containing all validation errors for the entire form
    */
   validationErrors: PropTypes.object,
   /**

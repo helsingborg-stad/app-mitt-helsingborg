@@ -180,6 +180,7 @@ const InputComponent = React.forwardRef(({ input, editable, value, onInputBlur, 
 interface Props {
   item: SummaryListItemType;
   value: string | number | boolean;
+  userDescriptionLabel?: string;
   index?: number;
   editable?: boolean;
   changeFromInput: (value: string | number | boolean) => void;
@@ -192,6 +193,7 @@ interface Props {
 const SummaryListItem: React.FC<Props> = ({
   item,
   value,
+  userDescriptionLabel ,
   index,
   changeFromInput,
   onBlur,
@@ -221,8 +223,7 @@ const SummaryListItem: React.FC<Props> = ({
         >
           <LabelWrapper>
             <SmallText editable={editable}>
-              {`${item.title}`}
-              {index ? ` ${index}` : null}
+              {userDescriptionLabel || item.title}
             </SmallText>
           </LabelWrapper>
           <InputWrapper editable={editable}>
