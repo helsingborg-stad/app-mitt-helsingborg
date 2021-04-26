@@ -163,7 +163,7 @@ const SummaryList: React.FC<Props> = ({
     return typeof answer !== 'undefined';
   });
   itemsWithAnswers
-    .forEach(( item) => {
+    .forEach((item) => {
       if (['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type)) {
         const values: Record<string, string | number>[] = answers[item.id];
         if (!Array.isArray(values) && values !== undefined) {
