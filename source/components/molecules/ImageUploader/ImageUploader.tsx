@@ -146,7 +146,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
       }
 
     } catch (error) {
-      if (error.code !== 'E_PICKER_CANCELLED')
+      if (error?.code !== 'E_PICKER_CANCELLED')
         console.error(error);
     }
   };
