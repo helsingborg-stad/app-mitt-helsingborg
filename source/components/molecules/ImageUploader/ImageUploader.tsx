@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
-import ImagePicker, { Options } from 'react-native-image-crop-picker';
+import ImagePicker, { Options, ImageOrVideo } from 'react-native-image-crop-picker';
 import styled from 'styled-components/native';
 import { Text, Button, Icon, Label } from '../../atoms';
 import { Modal, useModal } from '../Modal';
@@ -115,7 +115,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
     return updatedImages;
   };
 
-  const transformRawImage = (rawImage) => ({
+  const transformRawImage = (rawImage: ImageOrVideo): Image => ({
     questionId: id,
     path: rawImage.path,
     filename: rawImage?.filename,
@@ -123,7 +123,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
     height: rawImage.height,
     size: rawImage.size,
     mime: rawImage?.filename?.split('.')?.pop() ?? rawImage.path?.split('.')?.pop()
-  } as Image);
+  });
 
   const addImagesFromLibrary = async () => {
     try {
