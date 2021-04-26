@@ -118,11 +118,11 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
   const transformRawImage = (rawImage) => ({
     questionId: id,
     path: rawImage.path,
-    filename: rawImage.filename,
+    filename: rawImage?.filename,
     width: rawImage.width,
     height: rawImage.height,
     size: rawImage.size,
-    mime: rawImage.filename.split('.').pop(),
+    mime: rawImage?.filename?.split('.')?.pop() ?? rawImage.path?.split('.')?.pop()
   } as Image);
 
   const addImagesFromLibrary = async () => {
@@ -137,7 +137,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
         compressImageMaxHeight: 800,
         compressImageMaxWidth: 800,
         writeTempFile: true,
-        cropping: true,
+        cropping: false,
         includeExif: false,
       });
 
@@ -158,7 +158,7 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
         compressImageQuality: 0.8,
         compressImageMaxHeight: 1200,
         compressImageMaxWidth: 1200,
-        cropping: true,
+        cropping: false,
         includeExif: false,
       });
 
