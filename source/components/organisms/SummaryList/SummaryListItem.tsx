@@ -193,7 +193,7 @@ interface Props {
 const SummaryListItem: React.FC<Props> = ({
   item,
   value,
-  userDescriptionLabel ,
+  userDescriptionLabel,
   index,
   changeFromInput,
   onBlur,
