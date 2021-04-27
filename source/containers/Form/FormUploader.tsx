@@ -119,7 +119,7 @@ const FormUploader: React.FunctionComponent<Props> = ({
             Säkerställ att du har internet uppkoppling och försök igen. Om problemet kvarstår,
             kontakta din handläggare.
           </Text>
-          <DialogButton block value="Förösk igen" onClick={retry} />
+          <DialogButton block value="Försök igen" onClick={retry} />
         </>
       )}
     </Dialog>
