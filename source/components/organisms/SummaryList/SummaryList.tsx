@@ -183,7 +183,7 @@ const SummaryList: React.FC<Props> = ({
               <SummaryListItemComponent
                 item={item}
                 index={index ? index + 1 : undefined}
-                userDescriptionLabel={v.text}
+                userDescriptionLabel={v.text || v.description}
                 key={`${item.id}-${index}`}
                 value={v[item?.inputId]}
                 changeFromInput={changeFromInput(item, index)}
