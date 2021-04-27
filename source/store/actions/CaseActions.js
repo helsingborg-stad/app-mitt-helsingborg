@@ -106,11 +106,17 @@ export async function fetchCases(user) {
           const { encryptedAnswers } = c.forms[c.currentFormId].answers;
 
           if (encryptedAnswers) {
-            const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
-            c.forms[c.currentFormId].answers = JSON.parse(decryptedAnswers);
+            try {
+              const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
+              c.forms[c.currentFormId].answers = JSON.parse(decryptedAnswers);
+              cases[c.id] = c;
+            } catch (e) {
+              console.log(`Failed to decrypt answers (Case ID: ${c?.id}), Error: `, e);
+            }
           }
+        } else {
+          cases[c.id] = c;
         }
-        cases[c.id] = c;
       }
 
       return {
