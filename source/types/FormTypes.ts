@@ -32,11 +32,13 @@ export type InputFieldType =
   | 'personalNumber'
   | 'phone'
   | 'number'
+  | 'hidden'
   | 'date';
 
 export type FormInputType =
   | 'text'
   | 'number'
+  | 'hidden'
   | 'date'
   | 'editableList'
   | 'checkbox'

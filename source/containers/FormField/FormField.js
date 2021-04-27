@@ -48,6 +48,15 @@ const inputTypes = {
       keyboardType: 'numeric',
     },
   },
+  hidden: {
+    component: Input,
+    blurEvent: 'onBlur',
+    changeEvent: 'onMount',
+    props: {
+      showErrorMessage: false,
+      hidden: true,
+    },
+  },
   date: {
     component: CalendarPicker,
     changeEvent: 'onSelect',
@@ -284,6 +293,7 @@ FormField.propTypes = {
   inputSelectValue: PropTypes.oneOf([
     'text',
     'number',
+    'hidden',
     'date',
     'email',
     'postalCode',
