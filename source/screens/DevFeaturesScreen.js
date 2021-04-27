@@ -4,6 +4,7 @@ import { CaseDispatch } from 'app/store/CaseContext';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import styled from 'styled-components/native';
+import env from 'react-native-config';
 import { Button, Text } from '../components/atoms';
 import Header from '../components/molecules/Header';
 import ScreenWrapper from '../components/molecules/ScreenWrapper';
@@ -71,6 +72,19 @@ const DeveloperScreen = (props) => {
           >
             <Text>Tillbaka</Text>
           </Button>
+        </FieldWrapper>
+
+        <FieldWrapper>
+          {Object.keys(env)
+            .filter((key) => typeof env[key] !== typeof Object)
+            .map((key) => (
+              <FieldWrapper key={key}>
+                <Text>
+                  {key} ({typeof env[key]})
+                </Text>
+                <Text>{JSON.stringify(env[key])}</Text>
+              </FieldWrapper>
+            ))}
         </FieldWrapper>
       </Container>
     </ScreenWrapper>
