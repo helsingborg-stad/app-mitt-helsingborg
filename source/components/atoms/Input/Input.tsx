@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { TextInputProps, Keyboard, TextInput, KeyboardTypeOptions, InputAccessoryView, View, Button, Dimensions, Platform } from 'react-native';
 import styled, { useTheme } from 'styled-components/native';
@@ -7,10 +7,12 @@ import { InputFieldType } from '../../../types/FormTypes';
 
 type InputProps = Omit<TextInputProps, 'onBlur'> & {
   onBlur: (value: string) => void;
+  onMount: (value: string) => void;
   center?: boolean;
   transparent?: boolean;
   colorSchema?: 'neutral' | 'blue' | 'green' | 'red' | 'purple';
   showErrorMessage?: boolean;
+  hidden?: boolean;
   error?: { isValid: boolean; message: string };
   textAlign?: 'left' | 'center' | 'right';
   inputType?: InputFieldType; 
@@ -28,7 +30,7 @@ const keyboardTypes: Record<InputFieldType, KeyboardTypeOptions> = {
 
 const StyledTextInput = styled.TextInput<InputProps>`
   width: 100%;
-  font-weight: ${({ theme }) => theme.fontWeights[0]}
+  font-weight: ${({ theme }) => theme.fontWeights[0]};
   background-color: ${(props) => props.theme.colors.complementary[props.colorSchema][2]};
   ${({ transparent }) => transparent && `background-color: transparent;`}
   border-radius: 4.5px;
@@ -41,6 +43,7 @@ const StyledTextInput = styled.TextInput<InputProps>`
   padding-right: 16px;
   color: ${({ theme }) => theme.colors.neutrals[0]};
   ${(props) => (props.center ? 'text-align: center;' : null)}
+  ${(props) => (props.hidden ? 'display: none;' : null)}
 `;
 
 const StyledErrorText = styled(Text)`
@@ -63,12 +66,19 @@ const StyledAccessoryViewChild = styled(View)`
 const _replaceSpace = str => (str?.replace ? str.replace(/\u0020/, '\u00a0') : str);
 
 const Input: React.FC<InputProps> = React.forwardRef(
-  ({ onBlur, showErrorMessage, value, error, inputType, keyboardType, ...props }, ref) => {
+  ({ onBlur, onMount, showErrorMessage, value, error, inputType, keyboardType, ...props }, ref) => {
     const handleBlur = () => {
       if (onBlur) onBlur(value);
     };
+    const handleMount = () => {
+      if (onMount) onMount(value);
+    };
     const theme = useTheme();
     const smartKeyboardType = inputType ? keyboardTypes[inputType] : keyboardType;
+
+
+    useEffect(handleMount, []);
+
     return (
       <>
         <StyledTextInput
