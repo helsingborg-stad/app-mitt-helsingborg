@@ -12,7 +12,7 @@ clearWatchman() {
 
 install() {
     echo $(yarn install)
-    echo $(cd ios;pod install)
+    echo $(cd ios;pod install --repo-update)
 }
 
 init() {
