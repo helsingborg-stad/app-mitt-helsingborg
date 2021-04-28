@@ -112,7 +112,9 @@ const computeCaseCardComponent = (
     : [];
 
   const paymentsArray = decisions.filter((decision) => decision.typecode === '01');
-  const partiallyApprovedDecisions = decisions.filter((decision) => decision.typecode === '03');
+  const partiallyApprovedDecisionsAndRejected = decisions.filter((decision) =>
+    ['03', '02'].includes(decision.typecode)
+  );
 
   return (
     <Card colorSchema={colorSchema}>
@@ -126,9 +128,9 @@ const computeCaseCardComponent = (
             Utbetalas: {calculateSum(paymentsArray)}
           </Card.Text>
         )}
-        {Object.keys(partiallyApprovedDecisions).length > 0 && (
+        {Object.keys(partiallyApprovedDecisionsAndRejected).length > 0 && (
           <Card.Text colorSchema="neutral">
-            Avslaget: {calculateSum(partiallyApprovedDecisions)}
+            Avslaget: {calculateSum(partiallyApprovedDecisionsAndRejected)}
           </Card.Text>
         )}
 
