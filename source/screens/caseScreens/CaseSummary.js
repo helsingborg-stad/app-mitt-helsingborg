@@ -270,7 +270,6 @@ const CaseSummary = (props) => {
               <Card key={index} colorSchema="red">
                 <Card.Body color="neutral" shadow>
                   <Card.Title colorSchema="neutral">{caseDecision.type}</Card.Title>
-                  <Card.SubTitle>{caseDecision.causetext}</Card.SubTitle>
                   <Card.Text>{caseDecision.explanation}</Card.Text>
                 </Card.Body>
               </Card>
