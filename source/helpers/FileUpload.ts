@@ -66,10 +66,15 @@ export const uploadFile = async ({
         'x-amz-acl': 'public-read',
       },
     });
+
+    if (!putResponse.ok) {
+      throw new Error(`${putResponse.status} ${putResponse.statusText}`);
+    }
+
     // return the url and filename on server to the uploaded file.
     return { url: putResponse.url, uploadedFileName: fileUploadAttributes.fileName };
   } catch (error) {
-    console.error('Axios error while uploading file:', error);
+    console.error('Error while uploading file:', error);
     return { error: true, message: error.message, ...error.response };
   }
 };
