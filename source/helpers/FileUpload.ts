@@ -57,19 +57,17 @@ export const uploadFile = async ({
     const fileUploadAttributes = signedUrlResponse.data.data.attributes;
     const { uploadUrl } = fileUploadAttributes;
 
-    await axios({
-      url: uploadUrl,
+    const putResponse = await fetch(uploadUrl, {
       method: 'PUT',
-      data,
+      body: data,
       headers: {
         'Content-Type': MIMEs[fileType],
         'Content-Encoding': 'base64',
         'x-amz-acl': 'public-read',
       },
     });
-
     // return the url and filename on server to the uploaded file.
-    return { url: uploadUrl, uploadedFileName: fileUploadAttributes.fileName };
+    return { url: putResponse.url, uploadedFileName: fileUploadAttributes.fileName };
   } catch (error) {
     console.error('Axios error while uploading file:', error);
     return { error: true, message: error.message, ...error.response };
