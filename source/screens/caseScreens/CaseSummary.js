@@ -123,12 +123,14 @@ const computeCaseCardComponent = (
         <Card.SubTitle>{status.name}</Card.SubTitle>
         {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
         <Card.Text>{status.description} </Card.Text>
-        {Object.keys(paymentsArray).length > 0 && (
+
+        {isClosed && Object.keys(paymentsArray).length > 0 && (
           <Card.Text strong colorSchema="neutral">
             Utbetalas: {calculateSum(paymentsArray)}
           </Card.Text>
         )}
-        {Object.keys(partiallyApprovedDecisionsAndRejected).length > 0 && (
+
+        {isClosed && Object.keys(partiallyApprovedDecisionsAndRejected).length > 0 && (
           <Card.Text colorSchema="neutral">
             Avslaget: {calculateSum(partiallyApprovedDecisionsAndRejected)}
           </Card.Text>

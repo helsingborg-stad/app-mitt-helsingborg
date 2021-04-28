@@ -61,6 +61,7 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
   const isOngoing = statusType.includes('ongoing');
   const isCompletionRequired = statusType.includes('completionRequired');
   const isSigned = statusType.includes('signed');
+  const isClosed = statusType.includes('closed');
 
   return (
     <Card key={caseData.id} colorSchema={colorSchema}>
@@ -96,12 +97,12 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
           </Card.Button>
         )}
 
-        {Object.keys(paymentsArray).length > 0 && (
+        {isClosed && Object.keys(paymentsArray).length > 0 && (
           <Card.Text strong colorSchema="neutral">
             Utbetalning: {calculateSum(paymentsArray)}
           </Card.Text>
         )}
-        {Object.keys(partiallyApprovedDecisions).length > 0 && (
+        {isClosed && Object.keys(partiallyApprovedDecisions).length > 0 && (
           <Card.Text colorSchema="neutral">
             Avslaget: {calculateSum(partiallyApprovedDecisions)}
           </Card.Text>
