@@ -102,17 +102,14 @@ export async function fetchCases(user) {
 
       // eslint-disable-next-line no-restricted-syntax
       for await (const c of response.data.data.attributes.cases) {
-        if (c?.status.type === 'active:ongoing') {
-          const { encryptedAnswers } = c.forms[c.currentFormId].answers;
-
-          if (encryptedAnswers) {
-            try {
-              const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
-              c.forms[c.currentFormId].answers = JSON.parse(decryptedAnswers);
-              cases[c.id] = c;
-            } catch (e) {
-              console.log(`Failed to decrypt answers (Case ID: ${c?.id}), Error: `, e);
-            }
+        const { encryptedAnswers } = c.forms[c.currentFormId].answers;
+        if (c?.status.type === 'active:ongoing' && encryptedAnswers) {
+          try {
+            const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
+            c.forms[c.currentFormId].answers = JSON.parse(decryptedAnswers);
+            cases[c.id] = c;
+          } catch (e) {
+            console.log(`Failed to decrypt answers (Case ID: ${c?.id}), Error: `, e);
           }
         } else {
           cases[c.id] = c;
