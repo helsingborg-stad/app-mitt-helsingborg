@@ -54,7 +54,9 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
     : [];
 
   const paymentsArray = decisions.filter((decision) => decision.typecode === '01');
-  const partiallyApprovedDecisions = decisions.filter((decision) => decision.typecode === '03');
+  const partiallyApprovedDecisionsAndRejected = decisions.filter((decision) =>
+    ['03', '02'].includes(decision.typecode)
+  );
 
   const statusType = caseData?.status?.type || '';
   const isNotStarted = statusType.includes('notStarted');
@@ -102,9 +104,9 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
             Utbetalning: {calculateSum(paymentsArray)}
           </Card.Text>
         )}
-        {isClosed && Object.keys(partiallyApprovedDecisions).length > 0 && (
+        {isClosed && Object.keys(partiallyApprovedDecisionsAndRejected).length > 0 && (
           <Card.Text colorSchema="neutral">
-            Avslaget: {calculateSum(partiallyApprovedDecisions)}
+            Avslaget: {calculateSum(partiallyApprovedDecisionsAndRejected)}
           </Card.Text>
         )}
       </Card.Body>
