@@ -12,6 +12,30 @@
 
 default_platform(:ios)
 
+
+def get_changelog()
+  
+  Dir.chdir("..") do
+
+    branch_name = git_branch
+    commit = last_git_commit
+    changelog_msg = "(automatically built from #{commit[:abbreviated_commit_hash]} on #{branch_name})"
+
+    return changelog_msg
+
+  end
+
+end
+
+
+desc "Print the changelog"
+lane :print_changelog do
+
+  puts "changelog:\n#{get_changelog()}"
+
+end
+
+
 platform :ios do
 
   desc "build the app with correct distribution signing"
@@ -136,27 +160,6 @@ platform :ios do
     )
 
   end
-
-
-  desc "print the changelog"
-  lane :print_changelog do
-
-    puts "changelog:\n#{get_changelog()}"
-
-  end
-
-
-  def get_changelog()
-    
-    Dir.chdir("..") do
-
-      branch_name = git_branch
-      commit = last_git_commit
-      changelog_msg = "(automatically built from #{commit[:abbreviated_commit_hash]} on #{branch_name})"
-
-      return changelog_msg
-
-    end
 
   end
 
