@@ -38,7 +38,12 @@ end
 
 platform :ios do
 
-  desc "build the app with correct distribution signing"
+
+  before_all do |lane, options|
+    xcversion(version: "~> 12.4")
+  end
+
+  desc "Build the app with correct distribution signing"
   lane :build do
     
     # fetch the latest certificates and provisioning profile
