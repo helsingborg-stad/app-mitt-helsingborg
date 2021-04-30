@@ -41,6 +41,11 @@ platform :ios do
 
   before_all do |lane, options|
     xcversion(version: "~> 12.4")
+
+    app_store_connect_api_key(
+      key_content: ENV["CONNECT_API_KEY_CONTENT"],
+      in_house: false
+    )
   end
 
   desc "Build the app with correct distribution signing"
