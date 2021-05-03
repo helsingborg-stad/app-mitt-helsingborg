@@ -135,7 +135,9 @@ jobs:
 
       # save xcode output since it's not printed to stdout
       - name: Save build log
+        if: ${{ always() }}
         uses: actions/upload-artifact@v2
+        continue-on-error: true
         with:
           name: build-logs
           path: ios/.build_logs
