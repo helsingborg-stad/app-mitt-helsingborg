@@ -1,0 +1,145 @@
+# Workflow for building and uploading a production-ready Testflight build
+
+name: iOS - Build
+
+on:
+  push:
+    branches:
+      # any commit to a release branch will trigger a new build
+      - release/**
+
+  workflow_dispatch:
+    inputs:
+      forcedVersion:
+        description: Force Version Number String
+
+# prevents multiple build workflows from running 
+# (in-progress and queued will be cancelled in favor of pending)
+concurrency: 
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and upload production ipa to TestFlight
+    environment: production
+
+    runs-on: macos-10.15
+
+    env:
+      CERT_KEYCHAIN_PASSWORD: ${{ secrets.CERT_KEYCHAIN_PASSWORD }}
+      NODE_ENV: production
+
+    steps:
+      # checkout the repo
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # get the yarn cache dir and pipe it to the next step
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      # enable yarn cache
+      - name: cache yarn
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      # enable pod cache
+      - name: cache cocoapods
+        uses: actions/cache@v2
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      # enable ocoapods derived data cache
+      # note: use env.PODS_DD_PREFIX (random unique string) to invalidate/force a re-cache
+      - name: cache cocoapods DD
+        uses: actions/cache@v2
+        with:
+          path: ios/.local_derived_data
+          key: ${{ runner.os }}-pods-derived-data-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-derived-data-${{ secrets.PODS_DD_PREFIX }}-
+
+      # install dependencies
+      - name: yarn install
+        run: yarn install
+
+      # create a new keychain from env var data with cert and profile
+      - name: Install cert and profile
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+        run: |
+          # create variables
+          CERT_PATH=build_certificate.p12
+          CERT_KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          # import certificate and provisioning profile from secrets
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERT_PATH
+
+          # create temporary keychain
+          security create-keychain -p $CERT_KEYCHAIN_PASSWORD $CERT_KEYCHAIN_PATH
+          security set-keychain-settings -lut 3600 $CERT_KEYCHAIN_PATH
+          security unlock-keychain -p $CERT_KEYCHAIN_PASSWORD $CERT_KEYCHAIN_PATH
+
+          # import certificate to keychain
+          security import $CERT_PATH -P $P12_PASSWORD -A -t cert -f pkcs12 -k $CERT_KEYCHAIN_PATH
+          security list-keychain -d user -s $CERT_KEYCHAIN_PATH
+
+      # copy additional env vars to root .env file
+      - name: Set env vars
+        env:
+          ADDITIONAL_ENV_VARS: ${{ secrets.ADDITIONAL_ENV_VARS }}
+        run: |
+          echo $ADDITIONAL_ENV_VARS > .env
+          wc -w .env
+
+      # perform some basic integrity checks
+      - name: echo checks
+        run: |
+          ls -lah . ios/ node_modules/react-native/scripts/
+          ls .env
+
+      # main build step
+      - name: Build
+        timeout-minutes: 60
+        env:
+          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+          APP_IDENTIFIER: ${{ secrets.APP_IDENTIFIER }}
+          CONNECT_API_KEY_CONTENT: ${{ secrets.CONNECT_API_KEY_CONTENT }}
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          GYM_SCHEME: ${{ secrets.GYM_SCHEME }}
+          MAIN_PROJECT: ${{ secrets.MAIN_PROJECT }}
+          MAIN_WORKSPACE: ${{ secrets.MAIN_WORKSPACE }}
+          FORCED_VERSION_NUMBER_STRING: ${{ github.event.inputs.forcedVersion }}
+          PERFORM_LONG_UPLOAD: ${{ secrets.PERFORM_LONG_UPLOAD }}
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+          FASTLANE_SKIP_UPDATE_CHECK: 1
+        run: |
+          export CERT_KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          cd ios
+          fastlane beta --verbose
+
+      # save xcode output since it's not printed to stdout
+      - name: Save build log
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-logs
+          path: ios/.build_logs
+
+      # remove temporary keychain
+      - name: Clean up cert
+        if: ${{ always() }}
+        run:  |
+          CERT_KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          security delete-keychain $CERT_KEYCHAIN_PATH
