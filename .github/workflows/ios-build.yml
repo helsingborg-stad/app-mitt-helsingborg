@@ -8,6 +8,9 @@ on:
       # any commit to a release branch will trigger a new build
       - release/**
 
+  # temporarily run on pull_requests in order to test before merging into develop (TODO: REMOVE BEFORE MERGE)
+  pull_request:
+
   workflow_dispatch:
     inputs:
       forcedVersion:
