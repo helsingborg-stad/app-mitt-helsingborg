@@ -168,7 +168,6 @@ platform :ios do
         notify_external_testers: true,
         changelog: changelog,
         skip_waiting_for_build_processing: false,
-        uses_non_exempt_encryption: false,
         groups: "CD Builds"
       )
 
