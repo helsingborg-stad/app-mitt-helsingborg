@@ -18,6 +18,11 @@ def get_changelog()
   Dir.chdir("..") do
 
     branch_name = git_branch
+
+    if branch_name.empty?
+      branch_name = "<no branch>"
+    end
+
     commit = last_git_commit
     changelog_msg = "(automatically built from #{commit[:abbreviated_commit_hash]} on #{branch_name})"
 
