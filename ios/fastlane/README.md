@@ -15,22 +15,25 @@ Install _fastlane_ using
 or alternatively using `brew install fastlane`
 
 # Available Actions
+### print_changelog
+```
+fastlane print_changelog
+```
+Print the changelog
+
+----
+
 ## iOS
 ### ios build
 ```
 fastlane ios build
 ```
-build the app with correct distribution signing
+Build the app with correct distribution signing
 ### ios beta
 ```
 fastlane ios beta
 ```
 Push a new beta build to TestFlight
-### ios print_changelog
-```
-fastlane ios print_changelog
-```
-print the changelog
 
 ----
 
