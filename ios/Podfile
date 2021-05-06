@@ -1,7 +1,7 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '14.2'
+platform :ios, '12.4'
 
 target 'MittHelsingborg' do
   config = use_native_modules!
@@ -28,7 +28,7 @@ target 'MittHelsingborg' do
         t.remove_from_project
       else
         t.build_configurations.each do |config|
-          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.2'
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'
         end
       end
     end
