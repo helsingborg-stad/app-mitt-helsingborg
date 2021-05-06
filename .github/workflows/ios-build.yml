@@ -12,7 +12,9 @@ on:
     inputs:
       forcedVersion:
         description: Force Version Number String
-
+      forcedEnvironment:
+        description: Force environment used for .env file content
+	
 # prevents multiple build workflows from running 
 # (in-progress and queued will be cancelled in favor of pending)
 concurrency: 
@@ -34,6 +36,42 @@ jobs:
       # checkout the repo
       - name: Checkout
         uses: actions/checkout@v2
+
+
+      ######################
+      # Set .env file vars (develop/release/production)
+      ######################
+      - name: Set env vars (production)
+        if: ${{ github.event.inputs.forcedEnvironment == 'production' || (github.event.inputs.forcedEnvironment == null && endsWith(github.ref, '/master')) }}
+        env:
+          ADDITIONAL_ENV_VARS: ${{ secrets.PRODUCTION_ADDITIONAL_ENV_VARS }}
+        run: |
+          echo "using production environment"
+          echo $ADDITIONAL_ENV_VARS > .env
+          echo "CI_MATCHED_ENV=production" >> $GITHUB_ENV
+
+      - name: Set env vars (release)
+        if: ${{ github.event.inputs.forcedEnvironment == 'release' || (github.event.inputs.forcedEnvironment == null && contains(github.ref, '/release/')) }}
+        env:
+          ADDITIONAL_ENV_VARS: ${{ secrets.RELEASE_ADDITIONAL_ENV_VARS }}
+        run: |
+          echo "using release environment"
+          echo $ADDITIONAL_ENV_VARS > .env
+          echo "CI_MATCHED_ENV=release" >> $GITHUB_ENV
+
+      - name: Set env vars (develop)
+        env:
+          ADDITIONAL_ENV_VARS: ${{ secrets.DEVELOP_ADDITIONAL_ENV_VARS }}
+        run: |
+          if [[ ! -f ".env" ]]; then
+            echo "fallback to develop environment"
+            echo $ADDITIONAL_ENV_VARS > .env
+            echo "CI_MATCHED_ENV=develop" >> $GITHUB_ENV
+          fi
+      ######################
+      # END Set .env file vars (develop/release/production)
+      ######################
+
 
       # get the yarn cache dir and pipe it to the next step
       - name: Get yarn cache directory path
@@ -95,19 +133,12 @@ jobs:
           security import $CERT_PATH -P $P12_PASSWORD -A -t cert -f pkcs12 -k $CERT_KEYCHAIN_PATH
           security list-keychain -d user -s $CERT_KEYCHAIN_PATH
 
-      # copy additional env vars to root .env file
-      - name: Set env vars
-        env:
-          ADDITIONAL_ENV_VARS: ${{ secrets.ADDITIONAL_ENV_VARS }}
-        run: |
-          echo $ADDITIONAL_ENV_VARS > .env
-          wc -w .env
-
       # perform some basic integrity checks
-      - name: echo checks
+      - name: Minor checks
         run: |
           ls -lah . ios/ node_modules/react-native/scripts/
           ls .env
+          wc -w .env
 
       # main build step
       - name: Build
@@ -116,6 +147,7 @@ jobs:
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
           APP_IDENTIFIER: ${{ secrets.APP_IDENTIFIER }}
+          CI_MATCHED_ENV: ${{ env.CI_MATCHED_ENV }}
           CONNECT_API_KEY_CONTENT: ${{ secrets.CONNECT_API_KEY_CONTENT }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           GYM_SCHEME: ${{ secrets.GYM_SCHEME }}
