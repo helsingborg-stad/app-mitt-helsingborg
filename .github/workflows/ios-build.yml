@@ -7,6 +7,7 @@ on:
     branches:
       # any commit to a release branch will trigger a new build
       - release/**
+      - master
 
   workflow_dispatch:
     inputs:
