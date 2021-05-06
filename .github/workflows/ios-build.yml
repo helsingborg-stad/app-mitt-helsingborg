@@ -3,6 +3,8 @@
 name: iOS - Build
 
 on:
+  pull_request:
+  
   push:
     branches:
       # any commit to a release branch will trigger a new build
