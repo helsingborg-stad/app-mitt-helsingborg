@@ -42,15 +42,6 @@ jest.mock('react-native-reanimated', () => {
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
 
 /**
- * Mock react-native-image-picker
- */
-NativeModules.ImagePickerManager = {
-  showImagePicker: jest.fn(),
-  launchCamera: jest.fn(),
-  launchImageLibrary: jest.fn(),
-};
-
-/**
  * Mock react-native datetimepicker
  */
 NativeModules.RNDateTimePickerManager = {};
