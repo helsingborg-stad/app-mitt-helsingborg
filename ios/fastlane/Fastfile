@@ -19,12 +19,16 @@ def get_changelog()
 
     branch_name = git_branch
     commit = last_git_commit
-
-    if branch_name.empty?
-      changelog_msg = "(automatically built from #{commit[:abbreviated_commit_hash]})"
-    else
-      changelog_msg = "(automatically built from #{commit[:abbreviated_commit_hash]} on #{branch_name})"
+    
+    matched_env_msg = nil
+    ci_matched_env = ENV["CI_MATCHED_ENV"]
+    
+    if ci_matched_env != nil && !ci_matched_env.empty?
+      matched_env_msg = " using \"#{ci_matched_env}\" environment"
     end
+
+    changelog_msg = "(automatically built from #{commit[:abbreviated_commit_hash]} on #{branch_name}#{matched_env_msg})"
+    
 
     return changelog_msg
 
