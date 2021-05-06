@@ -37,6 +37,26 @@ def get_changelog()
 end
 
 
+def get_semver_from_branch()
+
+  # official semver regex from https://semver.org/, slightly modified for branch names
+  semver_regex = /^(?:.+?\/)?v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
+  
+  branch = git_branch
+  puts "branch=#{branch}"
+
+  if m = branch.match(semver_regex)
+    version_string = m.captures[0, 3].join(".")
+    puts "extracted semantic version number from branch name \"#{branch}\" = #{m.captures.join(" ")}"
+    return version_string
+  else
+    puts "unable to determine semantic version from branch name \"#{branch}\""
+    return nil
+  end
+    
+end
+
+
 desc "Print the changelog"
 lane :print_changelog do
 
@@ -47,6 +67,12 @@ end
 
 platform :ios do
 
+  def get_project_xcode_version()
+    return get_version_number(
+      xcodeproj: ENV["MAIN_PROJECT"],
+      target: ENV["GYM_SCHEME"]
+    )
+  end
 
   before_all do |lane, options|
     xcversion(version: "~> 12.4")
@@ -57,6 +83,49 @@ platform :ios do
     )
   end
 
+  desc "Update app version number and build number based on branch name following semantic versioning (falls back to highest of latest testflight vs xcode project version)"
+  lane :update_app_version_numbers do
+    
+    version_string = ENV["FORCED_VERSION_NUMBER_STRING"]
+    xcode_project_version = nil
+    
+    if version_string != nil && version_string.length > 0
+
+      puts "using forced version \"#{version_string}\""
+
+    else
+
+      version_string = get_semver_from_branch
+
+      if version_string == nil
+
+        app_store_build_number(live: false)
+        latest_app_store_version = lane_context[SharedValues::LATEST_VERSION]
+        xcode_project_version = get_project_xcode_version
+
+        # use largest version (note ascii comparison - not sure if accurate enough)
+        version_string = latest_app_store_version > xcode_project_version ? latest_app_store_version : xcode_project_version
+        puts "using version #{version_string} (latest app store = #{latest_app_store_version}, project version = #{xcode_project_version})"
+
+      end
+
+    end
+
+    # increment build number
+    current_build_number = latest_testflight_build_number(version: version_string)
+    build_number = current_build_number + 1
+    increment_build_number(build_number: build_number)
+
+    # set version number
+    current_version_string = xcode_project_version || get_project_xcode_version
+    increment_version_number(version_number: version_string)
+
+
+    puts "build_number #{current_build_number} => #{build_number}"
+    puts "version_number #{current_version_string} => #{version_string}"
+  end
+
+
   desc "Build the app with correct distribution signing"
   lane :build do
     
@@ -65,9 +134,8 @@ platform :ios do
     get_certificates(generate_apple_certs: false)
     get_provisioning_profile
 
-    # increment build number
-    build_number = latest_testflight_build_number + 1
-    increment_build_number(build_number: build_number)
+    # set version number and build number
+    update_app_version_numbers
 
     # set xcode project to use the correct certificate and profile
     update_code_signing_settings(
