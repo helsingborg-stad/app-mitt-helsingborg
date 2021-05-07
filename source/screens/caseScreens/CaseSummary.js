@@ -98,9 +98,14 @@ const computeCaseCardComponent = (
   const {
     currentPosition: { currentMainStep: currentStep },
   } = caseData.forms[caseData.currentFormId];
-  const { details: { workflow: { decision = {} } = {} } = {} } = caseData;
+  const {
+    details: { workflow: { decision = {}, payments = {}, application = {} } = {} } = {},
+  } = caseData;
   const totalSteps = form?.stepStructure?.length || 0;
-  const applicationPeriodMonth = getSwedishMonthNameByTimeStamp(endDate, true);
+  const applicationPeriodMonth = application?.periodenddate
+    ? getSwedishMonthNameByTimeStamp(application.periodenddate, true)
+    : '';
+
   const isNotStarted = status?.type?.includes('notStarted');
   const isOngoing = status?.type?.includes('ongoing');
   const isClosed = status?.type?.includes('closed');

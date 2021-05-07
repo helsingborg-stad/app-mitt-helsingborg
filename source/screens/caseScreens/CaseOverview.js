@@ -45,10 +45,12 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
   const currentStep =
     caseData?.forms?.[caseData.currentFormId]?.currentPosition?.currentMainStep || 0;
   const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
-  const applicationPeriodMonth = caseData?.details?.period?.endDate
-    ? getSwedishMonthNameByTimeStamp(caseData.details.period.endDate, true)
+  const {
+    details: { workflow: { decision = {}, payments = {}, application = {} } = {} } = {},
+  } = caseData;
+  const applicationPeriodMonth = application?.periodenddate
+    ? getSwedishMonthNameByTimeStamp(application.periodenddate, true)
     : '';
-  const { details: { workflow: { decision = {}, payments = {} } = {} } = {} } = caseData;
   const decisions = decision?.decisions?.decision
     ? convertDataToArray(decision.decisions.decision)
     : [];
