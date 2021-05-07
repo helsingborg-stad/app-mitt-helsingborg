@@ -142,6 +142,8 @@ jobs:
           ls -lah . ios/ node_modules/react-native/scripts/
           ls .env
           wc -w .env
+          git diff yarn.lock
+          yarn list
 
       # main build step
       - name: Build
