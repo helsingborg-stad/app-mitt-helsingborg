@@ -135,6 +135,12 @@ const computeCaseCardComponent = (
           </Card.Text>
         )}
 
+        {isClosed && payments?.payment?.givedate && (
+          <Card.Text strong colorSchema="neutral">
+            Betalas ut: {payments.payment.givedate}
+          </Card.Text>
+        )}
+
         {isClosed && Object.keys(partiallyApprovedDecisionsAndRejected).length > 0 && (
           <Card.Text colorSchema="neutral">
             Avslaget: {calculateSum(partiallyApprovedDecisionsAndRejected)}
