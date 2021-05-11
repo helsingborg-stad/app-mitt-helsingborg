@@ -11,15 +11,15 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		1A8F33AB9BE9AF622C71E0D6 /* libPods-MittHelsingborg-MittHelsingborgTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 07D10FC6C224DDF37888448A /* libPods-MittHelsingborg-MittHelsingborgTests.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* MittHelsingborgTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MittHelsingborgTests.m */; };
-		38CB334C54AB0B7DB9F7DF5E /* libPods-MittHelsingborg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F7D0B004645F29170EA491 /* libPods-MittHelsingborg.a */; };
-		3CE3BF0204CD04A643C891F1 /* libPods-MittHelsingborg-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 510B55A4E45C9CEF583EB8B2 /* libPods-MittHelsingborg-tvOS.a */; };
-		7C9426DB6027F610ACAA6619 /* libPods-MittHelsingborg-MittHelsingborgTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 443D6FCC8B4871BBFD1ABBA3 /* libPods-MittHelsingborg-MittHelsingborgTests.a */; };
+		4329B1C8D5113FE2DE7488A4 /* libPods-MittHelsingborg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0865434A9557FFE12C90111C /* libPods-MittHelsingborg.a */; };
+		5288E3DBD6FCCC30AE7173DA /* libPods-MittHelsingborg-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E95BD35FFAD77C809B55B24C /* libPods-MittHelsingborg-tvOSTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		DE8C5F26B1498ABF9C60FFDA /* libPods-MittHelsingborg-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A1EC92484971DBD899A4186 /* libPods-MittHelsingborg-tvOSTests.a */; };
+		FDCCE0A76E1C011D723668A8 /* libPods-MittHelsingborg-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D3DF3D2D7F6CA42E3D5499 /* libPods-MittHelsingborg-tvOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,12 +46,12 @@
 		00E356F21AD99517003FC87E /* MittHelsingborgTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MittHelsingborgTests.m; sourceTree = "<group>"; };
 		01C75B30603549FD868BFE88 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		05B0D31048264658840BADEC /* RobotoCondensed-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-BoldItalic.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-BoldItalic.ttf"; sourceTree = "<group>"; };
-		05FF99C4E511AD5020C4C783 /* Pods-MittHelsingborg-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-tvOS.release.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-tvOS/Pods-MittHelsingborg-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		0728A8B03C4C48DEB3ED8269 /* RobotoCondensed-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Italic.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-Italic.ttf"; sourceTree = "<group>"; };
 		074483926D2C4567BE510E06 /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-MediumItalic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-MediumItalic.ttf"; sourceTree = "<group>"; };
+		07D10FC6C224DDF37888448A /* libPods-MittHelsingborg-MittHelsingborgTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MittHelsingborg-MittHelsingborgTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0865434A9557FFE12C90111C /* libPods-MittHelsingborg.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MittHelsingborg.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BEAC67B358A453ABB44D691 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		0F0A6BDFA2DE4BC8865D15D0 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Italic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Italic.ttf"; sourceTree = "<group>"; };
-		1050233624CBC951287DF3D5 /* Pods-MittHelsingborg-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-tvOSTests/Pods-MittHelsingborg-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* MittHelsingborg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MittHelsingborg.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = MittHelsingborg/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = MittHelsingborg/AppDelegate.m; sourceTree = "<group>"; };
@@ -61,7 +61,6 @@
 		16C2006B76A74C669910110A /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		16E2DC24DEC14855A1E105AB /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		1960C15A6EA54D909C099E54 /* RobotoCondensed-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Light.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-Light.ttf"; sourceTree = "<group>"; };
-		19F7D0B004645F29170EA491 /* libPods-MittHelsingborg.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MittHelsingborg.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CA1EAF53AD142809C64796B /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		1CE9E6C1E134464AAF2C4745 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		1FDACB77FCCB43A89AC50E6E /* RobotoCondensed-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Bold.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-Bold.ttf"; sourceTree = "<group>"; };
@@ -71,34 +70,35 @@
 		3159A36AACEF4513B71671BE /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		34BCC162F1CE44C186496BB3 /* RobotoCondensed-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-LightItalic.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-LightItalic.ttf"; sourceTree = "<group>"; };
 		3D917A584BDA427591DBBD26 /* Roboto-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Light.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Light.ttf"; sourceTree = "<group>"; };
-		3FDFCC803E9ADF5AB271D206 /* Pods-MittHelsingborg-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-tvOS/Pods-MittHelsingborg-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		4423FEE5F1E7539B45E320C3 /* Pods-MittHelsingborg.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg.debug.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg/Pods-MittHelsingborg.debug.xcconfig"; sourceTree = "<group>"; };
-		443D6FCC8B4871BBFD1ABBA3 /* libPods-MittHelsingborg-MittHelsingborgTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MittHelsingborg-MittHelsingborgTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		44EE4E1DD89840ED8D92D5B5 /* Roboto-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Black.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Black.ttf"; sourceTree = "<group>"; };
+		458A9DFB8066E6DF62E14261 /* Pods-MittHelsingborg-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-tvOS.release.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-tvOS/Pods-MittHelsingborg-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		4CE3E2A2A24F488AB25AB1CB /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		4DAFB2A8341147D895F641AA /* RobotoCondensed-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-Regular.ttf"; path = "../source/assets/fonts/Roboto/RobotoCondensed-Regular.ttf"; sourceTree = "<group>"; };
-		510B55A4E45C9CEF583EB8B2 /* libPods-MittHelsingborg-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MittHelsingborg-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		52D3DF3D2D7F6CA42E3D5499 /* libPods-MittHelsingborg-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MittHelsingborg-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53C8516DAAE54336B68B6A5E /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		547BB6A508C34F658D566E56 /* Pods-MittHelsingborg.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg.debug.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg/Pods-MittHelsingborg.debug.xcconfig"; sourceTree = "<group>"; };
 		5AD485EEAECA4E3BA1516B6A /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		601302B9645C411BBC370907 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		62901B593A4B45BFAEEDF144 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		6B61672C9D7743C89BA4441B /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BoldItalic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-BoldItalic.ttf"; sourceTree = "<group>"; };
 		7AA3DAC1B8164DFBBA19BD3D /* Roboto-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Thin.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Thin.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MittHelsingborg/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		84B820FE25FD6E849CC50E00 /* Pods-MittHelsingborg-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-tvOS/Pods-MittHelsingborg-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		8F11BE8BF4854AD3B4E6D879 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		9611A8AAD3E3467A849838B4 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
-		9A1EC92484971DBD899A4186 /* libPods-MittHelsingborg-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MittHelsingborg-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9CF94920553504E73CA78011 /* Pods-MittHelsingborg-MittHelsingborgTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-MittHelsingborgTests.debug.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-MittHelsingborgTests/Pods-MittHelsingborg-MittHelsingborgTests.debug.xcconfig"; sourceTree = "<group>"; };
+		9C7192B4300A83B36F100617 /* Pods-MittHelsingborg-MittHelsingborgTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-MittHelsingborgTests.release.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-MittHelsingborgTests/Pods-MittHelsingborg-MittHelsingborgTests.release.xcconfig"; sourceTree = "<group>"; };
+		A2A473F74BC0EFFB6CEA077B /* Pods-MittHelsingborg-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-tvOSTests/Pods-MittHelsingborg-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A544CADD89924D05BF014496 /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-LightItalic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-LightItalic.ttf"; sourceTree = "<group>"; };
-		C1057A1E1B1973D59D9EB34F /* Pods-MittHelsingborg-MittHelsingborgTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-MittHelsingborgTests.release.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-MittHelsingborgTests/Pods-MittHelsingborg-MittHelsingborgTests.release.xcconfig"; sourceTree = "<group>"; };
-		C8D31F07C9F0A68924E2E0AE /* Pods-MittHelsingborg.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg.release.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg/Pods-MittHelsingborg.release.xcconfig"; sourceTree = "<group>"; };
+		AB17E8E9F68EDD54A3169AF0 /* Pods-MittHelsingborg-MittHelsingborgTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-MittHelsingborgTests.debug.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-MittHelsingborgTests/Pods-MittHelsingborg-MittHelsingborgTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D04364F0B85548B7BF2A2067 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
-		D4E6E3FB7BD1C5615C51E363 /* Pods-MittHelsingborg-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-tvOSTests/Pods-MittHelsingborg-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		DB495FFFF8225476A9B4F848 /* Pods-MittHelsingborg-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg-tvOSTests/Pods-MittHelsingborg-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		E95BD35FFAD77C809B55B24C /* libPods-MittHelsingborg-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MittHelsingborg-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC3D501811E34CECB10BB90F /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		EE83DD2C3E9C407EA9062194 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		F059BCED63234D6CAE1AFD13 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
+		F442F3FE708A57BF4DA34BDB /* Pods-MittHelsingborg.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MittHelsingborg.release.xcconfig"; path = "Target Support Files/Pods-MittHelsingborg/Pods-MittHelsingborg.release.xcconfig"; sourceTree = "<group>"; };
 		FC5C30E68A674B91993BD43D /* Roboto-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Bold.ttf"; path = "../source/assets/fonts/Roboto/Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		FCEFA808E6CF4CCEA8AE4173 /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BlackItalic.ttf"; path = "../source/assets/fonts/Roboto/Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,7 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C9426DB6027F610ACAA6619 /* libPods-MittHelsingborg-MittHelsingborgTests.a in Frameworks */,
+				1A8F33AB9BE9AF622C71E0D6 /* libPods-MittHelsingborg-MittHelsingborgTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,7 +116,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				38CB334C54AB0B7DB9F7DF5E /* libPods-MittHelsingborg.a in Frameworks */,
+				4329B1C8D5113FE2DE7488A4 /* libPods-MittHelsingborg.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,7 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3CE3BF0204CD04A643C891F1 /* libPods-MittHelsingborg-tvOS.a in Frameworks */,
+				FDCCE0A76E1C011D723668A8 /* libPods-MittHelsingborg-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,7 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE8C5F26B1498ABF9C60FFDA /* libPods-MittHelsingborg-tvOSTests.a in Frameworks */,
+				5288E3DBD6FCCC30AE7173DA /* libPods-MittHelsingborg-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,10 +216,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				19F7D0B004645F29170EA491 /* libPods-MittHelsingborg.a */,
-				443D6FCC8B4871BBFD1ABBA3 /* libPods-MittHelsingborg-MittHelsingborgTests.a */,
-				510B55A4E45C9CEF583EB8B2 /* libPods-MittHelsingborg-tvOS.a */,
-				9A1EC92484971DBD899A4186 /* libPods-MittHelsingborg-tvOSTests.a */,
+				0865434A9557FFE12C90111C /* libPods-MittHelsingborg.a */,
+				07D10FC6C224DDF37888448A /* libPods-MittHelsingborg-MittHelsingborgTests.a */,
+				52D3DF3D2D7F6CA42E3D5499 /* libPods-MittHelsingborg-tvOS.a */,
+				E95BD35FFAD77C809B55B24C /* libPods-MittHelsingborg-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -261,14 +261,14 @@
 		FA6AEF87A151E4474786E5B9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				4423FEE5F1E7539B45E320C3 /* Pods-MittHelsingborg.debug.xcconfig */,
-				C8D31F07C9F0A68924E2E0AE /* Pods-MittHelsingborg.release.xcconfig */,
-				9CF94920553504E73CA78011 /* Pods-MittHelsingborg-MittHelsingborgTests.debug.xcconfig */,
-				C1057A1E1B1973D59D9EB34F /* Pods-MittHelsingborg-MittHelsingborgTests.release.xcconfig */,
-				3FDFCC803E9ADF5AB271D206 /* Pods-MittHelsingborg-tvOS.debug.xcconfig */,
-				05FF99C4E511AD5020C4C783 /* Pods-MittHelsingborg-tvOS.release.xcconfig */,
-				1050233624CBC951287DF3D5 /* Pods-MittHelsingborg-tvOSTests.debug.xcconfig */,
-				D4E6E3FB7BD1C5615C51E363 /* Pods-MittHelsingborg-tvOSTests.release.xcconfig */,
+				547BB6A508C34F658D566E56 /* Pods-MittHelsingborg.debug.xcconfig */,
+				F442F3FE708A57BF4DA34BDB /* Pods-MittHelsingborg.release.xcconfig */,
+				AB17E8E9F68EDD54A3169AF0 /* Pods-MittHelsingborg-MittHelsingborgTests.debug.xcconfig */,
+				9C7192B4300A83B36F100617 /* Pods-MittHelsingborg-MittHelsingborgTests.release.xcconfig */,
+				84B820FE25FD6E849CC50E00 /* Pods-MittHelsingborg-tvOS.debug.xcconfig */,
+				458A9DFB8066E6DF62E14261 /* Pods-MittHelsingborg-tvOS.release.xcconfig */,
+				A2A473F74BC0EFFB6CEA077B /* Pods-MittHelsingborg-tvOSTests.debug.xcconfig */,
+				DB495FFFF8225476A9B4F848 /* Pods-MittHelsingborg-tvOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -280,11 +280,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MittHelsingborgTests" */;
 			buildPhases = (
-				2B05FB9B17480A66CFE63BC5 /* [CP] Check Pods Manifest.lock */,
+				64AA3BC5718CA70126C57659 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				A6E0EE0A9EF3D35592BDD72A /* [CP] Copy Pods Resources */,
+				AF02C7376788B389B0980F66 /* [CP] Embed Pods Frameworks */,
+				2E4963547BB9B339DE30F000 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -300,13 +301,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MittHelsingborg" */;
 			buildPhases = (
-				328121321643EF9535F12712 /* [CP] Check Pods Manifest.lock */,
+				25EF878B08735F4B320A3624 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				A9A4D53ED4BEFC585379B401 /* [CP] Copy Pods Resources */,
+				EB834010E46057C8CF8B2ED0 /* [CP] Embed Pods Frameworks */,
+				6FB05D2A29F2F546767973E1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -321,13 +323,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "MittHelsingborg-tvOS" */;
 			buildPhases = (
-				CAE5A1882EF02F5CDE2CDB6C /* [CP] Check Pods Manifest.lock */,
+				E6BF30694E95651A43F1DF11 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
 				2D02E4791E0B4A5D006451C7 /* Resources */,
 				2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */,
-				DC557E5C4A4BF40BCC8C2737 /* [CP] Copy Pods Resources */,
+				D291E818B57DB1414E3C33E8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -342,7 +344,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "MittHelsingborg-tvOSTests" */;
 			buildPhases = (
-				9FDB5BF9DFDDC81A2C7E4197 /* [CP] Check Pods Manifest.lock */,
+				0D8C958D2D6FB2FEFF09DDF2 /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -457,65 +459,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		2B05FB9B17480A66CFE63BC5 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MittHelsingborg-MittHelsingborgTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Bundle React Native Code And Images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		328121321643EF9535F12712 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MittHelsingborg-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9FDB5BF9DFDDC81A2C7E4197 /* [CP] Check Pods Manifest.lock */ = {
+		0D8C958D2D6FB2FEFF09DDF2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -537,7 +481,43 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A6E0EE0A9EF3D35592BDD72A /* [CP] Copy Pods Resources */ = {
+		25EF878B08735F4B320A3624 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MittHelsingborg-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle React Native Code And Images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+		};
+		2E4963547BB9B339DE30F000 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -591,7 +571,29 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MittHelsingborg-MittHelsingborgTests/Pods-MittHelsingborg-MittHelsingborgTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A9A4D53ED4BEFC585379B401 /* [CP] Copy Pods Resources */ = {
+		64AA3BC5718CA70126C57659 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MittHelsingborg-MittHelsingborgTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6FB05D2A29F2F546767973E1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -645,29 +647,25 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MittHelsingborg/Pods-MittHelsingborg-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CAE5A1882EF02F5CDE2CDB6C /* [CP] Check Pods Manifest.lock */ = {
+		AF02C7376788B389B0980F66 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
+				"${PODS_ROOT}/Target Support Files/Pods-MittHelsingborg-MittHelsingborgTests/Pods-MittHelsingborg-MittHelsingborgTests-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
 			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MittHelsingborg-tvOS-checkManifestLockResult.txt",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MittHelsingborg-MittHelsingborgTests/Pods-MittHelsingborg-MittHelsingborgTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DC557E5C4A4BF40BCC8C2737 /* [CP] Copy Pods Resources */ = {
+		D291E818B57DB1414E3C33E8 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -715,6 +713,46 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MittHelsingborg-tvOS/Pods-MittHelsingborg-tvOS-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E6BF30694E95651A43F1DF11 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MittHelsingborg-tvOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EB834010E46057C8CF8B2ED0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MittHelsingborg/Pods-MittHelsingborg-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MittHelsingborg/Pods-MittHelsingborg-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -810,7 +848,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9CF94920553504E73CA78011 /* Pods-MittHelsingborg-MittHelsingborgTests.debug.xcconfig */;
+			baseConfigurationReference = AB17E8E9F68EDD54A3169AF0 /* Pods-MittHelsingborg-MittHelsingborgTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -835,7 +873,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C1057A1E1B1973D59D9EB34F /* Pods-MittHelsingborg-MittHelsingborgTests.release.xcconfig */;
+			baseConfigurationReference = 9C7192B4300A83B36F100617 /* Pods-MittHelsingborg-MittHelsingborgTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -857,7 +895,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4423FEE5F1E7539B45E320C3 /* Pods-MittHelsingborg.debug.xcconfig */;
+			baseConfigurationReference = 547BB6A508C34F658D566E56 /* Pods-MittHelsingborg.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -883,7 +921,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C8D31F07C9F0A68924E2E0AE /* Pods-MittHelsingborg.release.xcconfig */;
+			baseConfigurationReference = F442F3FE708A57BF4DA34BDB /* Pods-MittHelsingborg.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -907,7 +945,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3FDFCC803E9ADF5AB271D206 /* Pods-MittHelsingborg-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 84B820FE25FD6E849CC50E00 /* Pods-MittHelsingborg-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -936,7 +974,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 05FF99C4E511AD5020C4C783 /* Pods-MittHelsingborg-tvOS.release.xcconfig */;
+			baseConfigurationReference = 458A9DFB8066E6DF62E14261 /* Pods-MittHelsingborg-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -965,7 +1003,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1050233624CBC951287DF3D5 /* Pods-MittHelsingborg-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = A2A473F74BC0EFFB6CEA077B /* Pods-MittHelsingborg-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -993,7 +1031,7 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D4E6E3FB7BD1C5615C51E363 /* Pods-MittHelsingborg-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = DB495FFFF8225476A9B4F848 /* Pods-MittHelsingborg-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
