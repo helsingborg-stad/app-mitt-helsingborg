@@ -75,6 +75,7 @@ const CardTitle = styled(Heading)`
     props.colorSchema === 'neutral'
       ? props.theme.colors.neutrals[1]
       : props.theme.colors.primary[props.colorSchema][0]};
+  margin-bottom: 0;
 `;
 
 const CardSubTitle = styled(Text)`
@@ -84,11 +85,18 @@ const CardSubTitle = styled(Text)`
       : props.theme.colors.primary[props.colorSchema][1]};
   font-size: ${(props) => props.theme.fontSizes[2]}px;
   font-weight: ${(props) => props.theme.fontWeights[1]};
+  ${(props) => props.mt && `margin-top: ${8 * props.mt}px;`}
 `;
 
 const CardText = styled(Text)`
+  padding: 0;
   font-size: ${(props) => props.theme.fontSizes[3]}px;
   ${(props) => props.italic && `color: ${props.theme.colors.neutrals[3]};`}
+  ${(props) => props.mt && `margin-top: ${8 * props.mt}px;`}
+`;
+const CardButton = styled(Button)`
+  ${(props) => props.mt && `margin-top: ${8 * props.mt}px;`}
+  ${(props) => props.mb && `margin-bottom: ${8 * props.mt}px;`}
 `;
 
 const Outset = styled.View`
@@ -232,20 +240,18 @@ Card.SubTitle = ({ children, colorSchema, ...props }) => (
  * @param {props} props
  */
 Card.Text = ({ children, lastChild, firstChild, ...props }) => (
-  <Outset lastChild={lastChild} firstChild={firstChild}>
-    <CardText {...props}>{children}</CardText>
-  </Outset>
+  <CardText {...props}>{children}</CardText>
 );
 
 /**
  * Renders a button
  * @param {props} props
  */
-Card.Button = ({ children, colorSchema, firstChild, lastChild, ...props }) => (
+Card.Button = ({ children, colorSchema, firstChild, lastChild, mt, ...props }) => (
   <Outset lastChild={lastChild} firstChild={firstChild}>
-    <Button variant="link" z={0} colorSchema={colorSchema} block {...props}>
+    <CardButton variant="link" z={0} colorSchema={colorSchema} block {...props}>
       {children}
-    </Button>
+    </CardButton>
   </Outset>
 );
 
