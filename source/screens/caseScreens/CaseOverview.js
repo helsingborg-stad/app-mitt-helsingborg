@@ -32,6 +32,11 @@ Card.LargeText = styled(Card.Text)`
   font-weight: ${(props) => props.theme.fontWeights[1]};
 `;
 
+Card.Meta = styled(Card.Text)`
+  font-size: ${(props) => props.theme.fontSizes[3]}px;
+  ${(props) => `color: ${props.theme.colors.neutrals[1]};`}
+`;
+
 const colorSchema = 'red';
 
 /**
@@ -86,7 +91,9 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
         <Card.Title colorSchema="neutral">{caseType.name}</Card.Title>
         <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
         {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
-        {applicationPeriodMonth && <Card.LargeText>{applicationPeriodMonth}</Card.LargeText>}
+        {applicationPeriodMonth && (
+          <Card.LargeText mt={0.5}>{applicationPeriodMonth}</Card.LargeText>
+        )}
         {(isNotStarted || isOngoing || isCompletionRequired || isSigned) && (
           <Card.Button
             onClick={() => {
@@ -102,20 +109,24 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
         )}
 
         {isClosed && Object.keys(paymentsArray).length > 0 && (
-          <Card.Text strong colorSchema="neutral">
-            Utbetalning: {calculateSum(paymentsArray)}
+          <Card.Text mt={1.5} strong colorSchema="neutral">
+            Utbetalning: {calculateSum(paymentsArray, 'kronor')}
           </Card.Text>
         )}
 
         {isClosed && payments?.payment?.givedate && (
-          <Card.Text strong colorSchema="neutral">
-            Betalas ut: {payments.payment.givedate}
-          </Card.Text>
+          <Card.Meta colorSchema="neutral">
+            Betalas ut:{' '}
+            {`${payments.payment.givedate.split('-')[2]} ${getSwedishMonthNameByTimeStamp(
+              payments.payment.givedate,
+              true
+            )}`}
+          </Card.Meta>
         )}
 
         {isClosed && Object.keys(partiallyApprovedDecisionsAndRejected).length > 0 && (
-          <Card.Text colorSchema="neutral">
-            Avslaget: {calculateSum(partiallyApprovedDecisionsAndRejected)}
+          <Card.Text mt={1} strong colorSchema="neutral">
+            Avslaget: {calculateSum(partiallyApprovedDecisionsAndRejected, 'kronor')}
           </Card.Text>
         )}
       </Card.Body>

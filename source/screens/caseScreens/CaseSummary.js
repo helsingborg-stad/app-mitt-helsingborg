@@ -27,6 +27,10 @@ const SummaryHeading = styled(Text)`
   margin-bottom: 16px;
 `;
 
+const CardButtonWrapper = styled(View)`
+  margin-top: 8px;
+`;
+
 const CloseModalButton = styled(BackNavigation)`
   padding: 24px 24px 0px 24px;
 `;
@@ -130,20 +134,24 @@ const computeCaseCardComponent = (
         <Card.Text>{status.description} </Card.Text>
 
         {isClosed && Object.keys(paymentsArray).length > 0 && (
-          <Card.Text strong colorSchema="neutral">
-            Utbetalas: {calculateSum(paymentsArray)}
+          <Card.Text mt={1.5} strong colorSchema="neutral">
+            Utbetalning: {calculateSum(paymentsArray, 'kronor')}
           </Card.Text>
         )}
 
         {isClosed && payments?.payment?.givedate && (
-          <Card.Text strong colorSchema="neutral">
-            Betalas ut: {payments.payment.givedate}
-          </Card.Text>
+          <Card.Meta colorSchema="neutral">
+            Betalas ut:{' '}
+            {`${payments.payment.givedate.split('-')[2]} ${getSwedishMonthNameByTimeStamp(
+              payments.payment.givedate,
+              true
+            )}`}
+          </Card.Meta>
         )}
 
         {isClosed && Object.keys(partiallyApprovedDecisionsAndRejected).length > 0 && (
-          <Card.Text colorSchema="neutral">
-            Avslaget: {calculateSum(partiallyApprovedDecisionsAndRejected)}
+          <Card.Text mt={1} strong colorSchema="neutral">
+            Avslaget: {calculateSum(partiallyApprovedDecisionsAndRejected, 'kronor')}
           </Card.Text>
         )}
 
@@ -161,10 +169,12 @@ const computeCaseCardComponent = (
           </Card.Button>
         )}
         {isClosed && decision?.decisions && (
-          <Card.Button onClick={toggleModal}>
-            <Text>Visa beslut</Text>
-            <Icon name="remove-red-eye" />
-          </Card.Button>
+          <CardButtonWrapper>
+            <Card.Button colorSchema={colorSchema} mt={3} onClick={toggleModal}>
+              <Text>Visa beslut</Text>
+              <Icon name="remove-red-eye" />
+            </Card.Button>
+          </CardButtonWrapper>
         )}
       </Card.Body>
     </Card>
