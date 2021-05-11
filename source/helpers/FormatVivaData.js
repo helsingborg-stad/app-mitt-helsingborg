@@ -29,11 +29,11 @@ const convertDataToArray = (data) => (Array.isArray(data) ? data : [data]);
  * Returns sum of multiple amounts with Swedish currency
  * @param {Object|string[]} amounts
  */
-const calculateSum = (amounts) =>
+const calculateSum = (amounts, suffix = 'kr') =>
   `${convertDataToArray(amounts).reduce(
     (acc, obj) => acc + parseInt(obj.approved || obj.amount),
     0
-  )} kr`;
+  )} ${suffix}`;
 
 /**
  * Translate norm acronym to readable strings
