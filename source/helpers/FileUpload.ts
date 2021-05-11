@@ -1,6 +1,7 @@
 import axios from 'axios';
 import RNFetchBlob from 'rn-fetch-blob';
-import StorageService, { ACCESS_TOKEN_KEY } from '../services/StorageService';
+import env from 'react-native-config';
+import StorageService, { ACCESS_TOKEN_KEY, APP_ENV_KEY } from '../services/StorageService';
 import { buildServiceUrl } from './UrlHelper';
 
 export const getBlob = async (fileUri: string) => {
@@ -37,12 +38,17 @@ export const uploadFile = async ({
 }: FileUploadParams) => {
   const requestUrl = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
+  const appEnv = await StorageService.getData(APP_ENV_KEY);
+  const devMode = appEnv === 'development';
+  const apiKey = devMode ? env.MITTHELSINGBORG_IO_DEV_APIKEY : env.MITTHELSINGBORG_IO_APIKEY;
+
   const bearer = token || '';
 
   // Merge custom headers
   const newHeaders = {
     Authorization: bearer,
     'Content-Type': 'application/json',
+    'x-api-key': apiKey,
     ...headers,
   };
 
@@ -64,6 +70,7 @@ export const uploadFile = async ({
         'Content-Type': MIMEs[fileType],
         'Content-Encoding': 'base64',
         'x-amz-acl': 'public-read',
+        'x-api-key': apiKey,
       },
     });
 
