@@ -29,11 +29,11 @@ Print the changelog
 fastlane ios update_app_version_numbers
 ```
 Update app version number and build number based on branch name following semantic versioning (falls back to highest of latest testflight vs xcode project version)
-### ios build
+### ios build_adhoc
 ```
-fastlane ios build
+fastlane ios build_adhoc
 ```
-Build the app with correct distribution signing
+Build an ad-hoc ipa
 ### ios beta
 ```
 fastlane ios beta
