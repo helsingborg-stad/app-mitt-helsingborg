@@ -74,13 +74,105 @@ platform :ios do
     )
   end
 
-  before_all do |lane, options|
-    xcversion(version: "~> 12.4")
+  # Build the app with correct distribution signing
+  def build(adhoc: false)
+    
+    # fetch the latest certificates and provisioning profile
+    # todo: use match to automatically sync certs and profiles
+    get_certificates(generate_apple_certs: false)
+    get_provisioning_profile(adhoc: adhoc)
 
-    app_store_connect_api_key(
-      key_content: ENV["CONNECT_API_KEY_CONTENT"],
-      in_house: false
+    # set version number and build number
+    update_app_version_numbers
+
+    # set xcode project to use the correct certificate and profile
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      code_sign_identity: "iPhone Distribution",
+      profile_name: lane_context[SharedValues::SIGH_NAME]
     )
+    
+    # install pods
+    cocoapods
+
+    # check for pod cache (derived data)
+    scheme = ENV["GYM_SCHEME"]
+    build_configuration = "Release"
+
+    Dir.chdir("..") do
+      
+      ios_derived_data_path = File.expand_path(".local_derived_data")
+      cache_dir = File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/BuildProductsPath/#{build_configuration}-iphoneos")
+
+      puts "derived data dir = #{ios_derived_data_path}"
+      puts "cache dir = #{cache_dir}"
+
+      if(File.exist?(cache_dir))
+
+        # build with pod cache
+        puts "using cached derived data"
+
+        fastlane_require 'xcodeproj'
+        project = Xcodeproj::Project.open(ENV["MAIN_PROJECT"])
+        target = project.targets.select { |target| target.name == scheme }.first
+        phase = target.shell_script_build_phases.select { |phase| phase.name && phase.name.include?('Copy Pods Resources') }.first
+        if (!phase.shell_script.start_with?('BUILT_PRODUCTS_DIR'))
+          phase.shell_script = "BUILT_PRODUCTS_DIR=#{cache_dir} #{phase.shell_script}"
+          project.save()
+        end
+
+        gym(
+          silent: false,
+          export_method: adhoc ? "ad-hoc" : "app-store",
+          suppress_xcode_output: true,
+          include_symbols: true,
+          include_bitcode: true,
+          project: "ios/#{ENV["MAIN_PROJECT"]}",
+          scheme: scheme,
+          buildlog_path: "ios/.build_logs",
+          configuration: build_configuration,
+          output_directory: "ios",
+          xcargs: [
+              "PODS_CONFIGURATION_BUILD_DIR=#{cache_dir}",
+              "FRAMEWORK_SEARCH_PATHS='#{cache_dir} $(inherited)'",
+              "LIBRARY_SEARCH_PATHS='#{cache_dir} $(inherited)'",
+              "SWIFT_INCLUDE_PATHS=#{cache_dir}"
+          ].join(" ")
+        )
+
+      else
+        
+        # full build
+        puts "performing full build (no derived data cache)"
+
+        build_app(
+          silent: false,
+          export_method: adhoc ? "ad-hoc" : "app-store",
+          suppress_xcode_output: true,
+          include_symbols: true,
+          include_bitcode: true,
+          buildlog_path: "ios/.build_logs",
+          workspace: "ios/#{ENV["MAIN_WORKSPACE"]}",
+          derived_data_path: ios_derived_data_path,
+          configuration: build_configuration,
+          output_directory: "ios",
+        )
+
+        # remove misc artifacts to reduce cache size
+        require 'fileutils'
+        dirs = [
+          File.expand_path("#{ios_derived_data_path}/info.plist"),
+          File.expand_path("#{ios_derived_data_path}/Logs"),
+          File.expand_path("#{ios_derived_data_path}/SourcePackages"),
+          File.expand_path("#{ios_derived_data_path}/ModuleCache.noindex"),
+          File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/IntermediateBuildFilesPath/#{scheme}.build"),
+          File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/IntermediateBuildFilesPath/XCBuildData"),
+          File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/BuildProductsPath/SwiftSupport"),
+          File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/PrecompiledHeaders")
+        ]
+        dirs.each { |dir| FileUtils.rm_rf(dir) }
+      end
+    end
   end
 
   desc "Update app version number and build number based on branch name following semantic versioning (falls back to highest of latest testflight vs xcode project version)"
@@ -125,104 +217,19 @@ platform :ios do
     puts "version_number #{current_version_string} => #{version_string}"
   end
 
+  before_all do |lane, options|
+    xcversion(version: "~> 12.4")
 
-  desc "Build the app with correct distribution signing"
-  lane :build do
-    
-    # fetch the latest certificates and provisioning profile
-    # todo: use match to automatically sync certs and profiles
-    get_certificates(generate_apple_certs: false)
-    get_provisioning_profile
-
-    # set version number and build number
-    update_app_version_numbers
-
-    # set xcode project to use the correct certificate and profile
-    update_code_signing_settings(
-      use_automatic_signing: false,
-      code_sign_identity: "iPhone Distribution",
-      profile_name: lane_context[SharedValues::SIGH_NAME]
+    app_store_connect_api_key(
+      key_content: ENV["CONNECT_API_KEY_CONTENT"],
+      in_house: false
     )
-    
-    # install pods
-    cocoapods
+  end
 
-    # check for pod cache (derived data)
-    scheme = ENV["GYM_SCHEME"]
-    build_configuration = "Release"
 
-    Dir.chdir("..") do
-      
-      ios_derived_data_path = File.expand_path(".local_derived_data")
-      cache_dir = File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/BuildProductsPath/#{build_configuration}-iphoneos")
-
-      puts "derived data dir = #{ios_derived_data_path}"
-      puts "cache dir = #{cache_dir}"
-
-      if(File.exist?(cache_dir))
-
-        # build with pod cache
-        puts "using cached derived data"
-
-        fastlane_require 'xcodeproj'
-        project = Xcodeproj::Project.open(ENV["MAIN_PROJECT"])
-        target = project.targets.select { |target| target.name == scheme }.first
-        phase = target.shell_script_build_phases.select { |phase| phase.name && phase.name.include?('Copy Pods Resources') }.first
-        if (!phase.shell_script.start_with?('BUILT_PRODUCTS_DIR'))
-          phase.shell_script = "BUILT_PRODUCTS_DIR=#{cache_dir} #{phase.shell_script}"
-          project.save()
-        end
-
-        gym(
-          silent: false,
-          suppress_xcode_output: true,
-          include_symbols: true,
-          include_bitcode: true,
-          project: "ios/#{ENV["MAIN_PROJECT"]}",
-          scheme: scheme,
-          buildlog_path: "ios/.build_logs",
-          configuration: build_configuration,
-          output_directory: "ios",
-          xcargs: [
-              "PODS_CONFIGURATION_BUILD_DIR=#{cache_dir}",
-              "FRAMEWORK_SEARCH_PATHS='#{cache_dir} $(inherited)'",
-              "LIBRARY_SEARCH_PATHS='#{cache_dir} $(inherited)'",
-              "SWIFT_INCLUDE_PATHS=#{cache_dir}"
-          ].join(" ")
-        )
-
-      else
-        
-        # full build
-        puts "performing full build (no derived data cache)"
-
-        build_app(
-          silent: false,
-          suppress_xcode_output: true,
-          include_symbols: true,
-          include_bitcode: true,
-          buildlog_path: "ios/.build_logs",
-          workspace: "ios/#{ENV["MAIN_WORKSPACE"]}",
-          derived_data_path: ios_derived_data_path,
-          configuration: build_configuration,
-          output_directory: "ios",
-        )
-
-        # remove misc artifacts to reduce cache size
-        require 'fileutils'
-        dirs = [
-          File.expand_path("#{ios_derived_data_path}/info.plist"),
-          File.expand_path("#{ios_derived_data_path}/Logs"),
-          File.expand_path("#{ios_derived_data_path}/SourcePackages"),
-          File.expand_path("#{ios_derived_data_path}/ModuleCache.noindex"),
-          File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/IntermediateBuildFilesPath/#{scheme}.build"),
-          File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/IntermediateBuildFilesPath/XCBuildData"),
-          File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/BuildProductsPath/SwiftSupport"),
-          File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/PrecompiledHeaders")
-        ]
-        dirs.each { |dir| FileUtils.rm_rf(dir) }
-      end
-    end
+  desc "Build an ad-hoc ipa"
+  lane :build_adhoc do
+    build(adhoc: true)
   end
 
 
@@ -230,7 +237,7 @@ platform :ios do
   lane :beta do
 
     # run the build lane
-    build
+    build(adhoc: false)
 
     changelog = get_changelog()
       
