@@ -30,6 +30,7 @@ Card.MessageBody = styled(Card.Body)`
 Card.LargeText = styled(Card.Text)`
   font-size: ${(props) => props.theme.fontSizes[4]}px;
   font-weight: ${(props) => props.theme.fontWeights[1]};
+  margin-bottom: 4px;
 `;
 
 Card.Meta = styled(Card.Text)`
@@ -51,11 +52,17 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
     caseData?.forms?.[caseData.currentFormId]?.currentPosition?.currentMainStep || 0;
   const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
   const {
-    details: { workflow: { decision = {}, payments = {}, application = {} } = {} } = {},
+    details: {
+      period = {},
+      workflow: { decision = {}, payments = {}, application = {} } = {},
+    } = {},
   } = caseData;
-  const applicationPeriodMonth = application?.periodenddate
-    ? getSwedishMonthNameByTimeStamp(application.periodenddate, true)
+
+  const applicationPeriodTimestamp = application?.periodenddate ?? period?.endDate;
+  const applicationPeriodMonth = applicationPeriodTimestamp
+    ? getSwedishMonthNameByTimeStamp(applicationPeriodTimestamp, true)
     : '';
+
   const decisions = decision?.decisions?.decision
     ? convertDataToArray(decision.decisions.decision)
     : [];
@@ -89,11 +96,11 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
       >
         <Card.Image source={icons[caseType.icon]} />
         <Card.Title colorSchema="neutral">{caseType.name}</Card.Title>
-        <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
-        {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
         {applicationPeriodMonth && (
           <Card.LargeText mt={0.5}>{applicationPeriodMonth}</Card.LargeText>
         )}
+        <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
+        {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
         {(isNotStarted || isOngoing || isCompletionRequired || isSigned) && (
           <Card.Button
             onClick={() => {
