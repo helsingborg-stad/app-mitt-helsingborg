@@ -57,6 +57,9 @@ async function auth(ssn) {
     if (response.status === 400) {
       return await auth(ssn);
     }
+    if (response.status !== 200) {
+      throw new Error(response.message);
+    }
     return { success: true, data: response.data.data.attributes };
   } catch (error) {
     console.error(`BankID Auth Error: ${error}`);

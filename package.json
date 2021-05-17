@@ -49,7 +49,7 @@
     "react-native-config": "1.4.0",
     "react-native-document-picker": "^5.0.0",
     "react-native-elements": "^3.0.0-alpha.1",
-    "react-native-exception-handler": "^2.10.9",
+    "react-native-exception-handler": "^2.10.10",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.9.0",
     "react-native-image-crop-picker": "^0.35.2",

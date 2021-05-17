@@ -135,6 +135,7 @@ jobs:
         run: |
           ls -lah . ios/ node_modules/react-native/scripts/
           ls .env
+          cat -n .env
           wc -w .env
 
       # main build step
