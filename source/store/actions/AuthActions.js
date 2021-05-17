@@ -140,7 +140,7 @@ export async function startAuth(ssn, launchBankidApp) {
     return {
       type: actionTypes.authError,
       payload: {
-        error: error.data,
+        error,
       },
     };
   }
