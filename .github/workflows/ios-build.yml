@@ -98,13 +98,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pods-
 
-      # enable ocoapods derived data cache
+      # enable cocoapods derived data cache
       # note: use env.PODS_DD_PREFIX (random unique string) to invalidate/force a re-cache
       - name: cache cocoapods DD
         uses: actions/cache@v2
         with:
           path: ios/.local_derived_data
-          key: ${{ runner.os }}-pods-derived-data-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/Podfile.lock') }}
+          key: ${{ runner.os }}-pods-derived-data-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/Podfile.lock') }}-${{ hashFiles('.env') }}
           restore-keys: |
             ${{ runner.os }}-pods-derived-data-${{ secrets.PODS_DD_PREFIX }}-
 
