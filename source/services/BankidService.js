@@ -1,6 +1,4 @@
 import { NetworkInfo } from 'react-native-network-info';
-import { Alert } from 'react-native';
-import Config from 'react-native-config';
 import { getMessage } from '../helpers/MessageHelper';
 import { buildBankIdClientUrl, canOpenUrl, openUrl } from '../helpers/UrlHelper';
 import { post } from '../helpers/ApiRequest';
@@ -59,13 +57,9 @@ async function auth(ssn) {
     if (response.status === 400) {
       return await auth(ssn);
     }
-    if (response.status !== 200) {
-      throw new Error(response.message);
-    }
     return { success: true, data: response.data.data.attributes };
   } catch (error) {
     console.error(`BankID Auth Error: ${error}`);
-    Alert.alert('Auth error', `${error.message}\n${error}\n\n${JSON.stringify(Config)}`);
     return { success: false, data: getMessage('technicalError') };
   }
 }
