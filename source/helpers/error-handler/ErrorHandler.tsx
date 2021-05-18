@@ -37,8 +37,6 @@ const boundaryErrorHandler = (error: undefined | string | Error, isFatal: boolea
     // non-fatal errors go here
     // they are probably already logged to console so no need to log them again
   }
-
-  // TODO: send error to analytics
 };
 
 export default boundaryErrorHandler;
