@@ -1,6 +1,5 @@
 import axios from 'axios';
 import env from 'react-native-config';
-import { Alert } from 'react-native';
 import StorageService, { ACCESS_TOKEN_KEY, APP_ENV_KEY } from '../services/StorageService';
 import { buildServiceUrl } from './UrlHelper';
 
@@ -38,12 +37,6 @@ const request = async (endpoint, method, data, headers) => {
     });
     return req;
   } catch (error) {
-    Alert.alert(
-      'API error',
-      `${error.message}\nstatus=${error.request.status}\nurl=${error.request.responseURL}\nres=${
-        error.request._response
-      }\n\n${JSON.stringify(error.request)}`
-    );
     return { message: error.message, ...error.response };
   }
 };

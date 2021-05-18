@@ -1,5 +1,5 @@
-import env, { Config } from 'react-native-config';
-import { Linking, Platform, Alert } from 'react-native';
+import env from 'react-native-config';
+import { Linking, Platform } from 'react-native';
 import StorageService, { APP_ENV_KEY } from '../services/StorageService';
 
 /**
@@ -60,12 +60,6 @@ export const buildServiceUrl = async (endpoint = '', params = {}) => {
   // Build url
   const completeUrl = `${apiUrl}/${sanitizedEndpoint}?${queryString}`;
 
-  Alert.alert(
-    'service url',
-    `appEnv=${appEnv}\ndevMode=${devMode}\napiUrl=${apiUrl}\nqueryString=${queryString}\nsep=${sanitizedEndpoint}\nfinal=${completeUrl}\nenv:\n\n${JSON.stringify(
-      env
-    )}\n\nconfig:\n${JSON.stringify(Config)}`
-  );
   return completeUrl;
 };
 
