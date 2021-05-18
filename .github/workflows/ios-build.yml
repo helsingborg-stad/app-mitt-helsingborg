@@ -105,8 +105,6 @@ jobs:
         with:
           path: ios/.local_derived_data
           key: ${{ runner.os }}-pods-derived-data-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/Podfile.lock') }}-${{ hashFiles('.env') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-derived-data-${{ secrets.PODS_DD_PREFIX }}-
 
       # install dependencies
       - name: yarn install
