@@ -41,6 +41,8 @@ jobs:
 
       ######################
       # Set .env file vars (develop/release/production)
+      # ENV_VARS content has to be encoded as base64 in order to preserve newlines
+      # use "cat .env | base64 | pbcopy" to get pasteable content for GitHub secrets
       ######################
       - name: Set env vars (production)
         if: ${{ github.event.inputs.forcedEnvironment == 'production' || (github.event.inputs.forcedEnvironment == null && endsWith(github.ref, '/master')) }}
@@ -48,7 +50,7 @@ jobs:
           ADDITIONAL_ENV_VARS: ${{ secrets.PRODUCTION_ADDITIONAL_ENV_VARS }}
         run: |
           echo "using production environment"
-          echo $ADDITIONAL_ENV_VARS > .env
+          echo $ADDITIONAL_ENV_VARS | base64 -d > .env
           echo "CI_MATCHED_ENV=production" >> $GITHUB_ENV
 
       - name: Set env vars (release)
@@ -57,7 +59,7 @@ jobs:
           ADDITIONAL_ENV_VARS: ${{ secrets.RELEASE_ADDITIONAL_ENV_VARS }}
         run: |
           echo "using release environment"
-          echo $ADDITIONAL_ENV_VARS > .env
+          echo $ADDITIONAL_ENV_VARS | base64 -d > .env
           echo "CI_MATCHED_ENV=release" >> $GITHUB_ENV
 
       - name: Set env vars (develop)
@@ -66,7 +68,7 @@ jobs:
         run: |
           if [[ ! -f ".env" ]]; then
             echo "fallback to develop environment"
-            echo $ADDITIONAL_ENV_VARS > .env
+            echo $ADDITIONAL_ENV_VARS | base64 -d > .env
             echo "CI_MATCHED_ENV=develop" >> $GITHUB_ENV
           fi
       ######################
@@ -137,7 +139,6 @@ jobs:
         run: |
           ls -lah . ios/ node_modules/react-native/scripts/
           ls .env
-          wc -w .env
           git diff yarn.lock
           yarn list
 
