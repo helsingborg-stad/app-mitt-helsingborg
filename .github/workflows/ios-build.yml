@@ -47,28 +47,28 @@ jobs:
       - name: Set env vars (production)
         if: ${{ github.event.inputs.forcedEnvironment == 'production' || (github.event.inputs.forcedEnvironment == null && endsWith(github.ref, '/master')) }}
         env:
-          ADDITIONAL_ENV_VARS: ${{ secrets.PRODUCTION_ADDITIONAL_ENV_VARS }}
+          DOTENV_CONTENTS_BASE64: ${{ secrets.PRODUCTION_DOTENV_CONTENTS_BASE64 }}
         run: |
           echo "using production environment"
-          echo $ADDITIONAL_ENV_VARS | base64 -d > .env
+          echo $DOTENV_CONTENTS_BASE64 | base64 -d > .env
           echo "CI_MATCHED_ENV=production" >> $GITHUB_ENV
 
       - name: Set env vars (release)
         if: ${{ github.event.inputs.forcedEnvironment == 'release' || (github.event.inputs.forcedEnvironment == null && contains(github.ref, '/release/')) }}
         env:
-          ADDITIONAL_ENV_VARS: ${{ secrets.RELEASE_ADDITIONAL_ENV_VARS }}
+          DOTENV_CONTENTS_BASE64: ${{ secrets.RELEASE_DOTENV_CONTENTS_BASE64 }}
         run: |
           echo "using release environment"
-          echo $ADDITIONAL_ENV_VARS | base64 -d > .env
+          echo $DOTENV_CONTENTS_BASE64 | base64 -d > .env
           echo "CI_MATCHED_ENV=release" >> $GITHUB_ENV
 
       - name: Set env vars (develop)
         env:
-          ADDITIONAL_ENV_VARS: ${{ secrets.DEVELOP_ADDITIONAL_ENV_VARS }}
+          DOTENV_CONTENTS_BASE64: ${{ secrets.DEVELOP_DOTENV_CONTENTS_BASE64 }}
         run: |
           if [[ ! -f ".env" ]]; then
             echo "fallback to develop environment"
-            echo $ADDITIONAL_ENV_VARS | base64 -d > .env
+            echo $DOTENV_CONTENTS_BASE64 | base64 -d > .env
             echo "CI_MATCHED_ENV=develop" >> $GITHUB_ENV
           fi
       ######################
