@@ -1,13 +1,56 @@
+# Workflow for tagging the current commit with semver based on current branch name
+
 name: Tag master branch
 
 on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - closed
+
   workflow_dispatch:
+    inputs:
+      mockHeadRef:
+        description: 'HEAD ref to use'
+        default: 'release/0.0.0+tag-test'
+        required: true
 
 jobs:
   tag:
     name: Tag master branch
+    environment: production
+    if: ${{ github.event.inputs.mockHeadRef != null || github.event.pull_request.merged == true }}
     runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+
+      - name: Setup Git identity
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Echo
+        env:
+          GIT_BASE_REF: ${{ github.base_ref }}
+          GIT_HEAD_REF: ${{ github.event.inputs.mockHeadRef || github.head_ref }}
+          GIT_REF: ${{ github.ref }}
+        run: |
+          echo GIT_BASE_REF=$GIT_BASE_REF
+          echo GIT_HEAD_REF=$GIT_HEAD_REF
+          echo GIT_REF=$GIT_REF
+          ruby --version
+          which ruby
+
+      - name: Tag
+        env:
+          GIT_HEAD_REF: ${{ github.event.inputs.mockHeadRef || github.head_ref }}
+        run:  |
+          export GIT_TAG_TO_SET=$(echo $GIT_HEAD_REF | awk -F/ '{print $NF}')
+          cd ios
+          fastlane tag_version
