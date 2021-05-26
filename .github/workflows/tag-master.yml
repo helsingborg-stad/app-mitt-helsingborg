@@ -1,4 +1,4 @@
-# Workflow for tagging the current commit with semver based on current branch name
+# Workflow for tagging a branch with semver
 
 name: Tag master branch
 
