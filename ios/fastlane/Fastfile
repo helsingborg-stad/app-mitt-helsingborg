@@ -37,7 +37,7 @@ def get_changelog()
 end
 
 
-def get_semver_from_branch()
+def get_semver_from_branch(with_meta=false)
 
   # official semver regex from https://semver.org/, slightly modified for branch names
   semver_regex = /^(?:.+?\/)?v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
@@ -46,8 +46,9 @@ def get_semver_from_branch()
   puts "branch=#{branch}"
 
   if m = branch.match(semver_regex)
-    version_string = m.captures[0, 3].join(".")
+    version_string = with_meta ? (branch.split('/')[1] || branch) : m.captures[0, 3].join(".")
     puts "extracted semantic version number from branch name \"#{branch}\" = #{m.captures.join(" ")}"
+    puts "formatted = #{version_string}"
     return version_string
   else
     puts "unable to determine semantic version from branch name \"#{branch}\""
