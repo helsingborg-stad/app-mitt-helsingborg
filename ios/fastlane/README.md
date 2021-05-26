@@ -15,6 +15,11 @@ Install _fastlane_ using
 or alternatively using `brew install fastlane`
 
 # Available Actions
+### tag_version
+```
+fastlane tag_version
+```
+Tag the current ref with the version based on branch name or env input
 ### print_changelog
 ```
 fastlane print_changelog
