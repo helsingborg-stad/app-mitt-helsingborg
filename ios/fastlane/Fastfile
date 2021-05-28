@@ -39,7 +39,7 @@ end
 
 def get_semver_from_branch(with_meta=false)
 
-  # official semver regex from https://semver.org/, slightly modified for branch names
+  # official semver regex from https://semver.org/, modified to optionally accept a branch name with forward slash before the semver
   semver_regex = /^(?:.+?\/)?v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
   
   branch = git_branch
