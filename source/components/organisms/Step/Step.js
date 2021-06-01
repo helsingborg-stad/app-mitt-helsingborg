@@ -181,6 +181,7 @@ function Step({
                       colorSchema={field.color && field.color !== '' ? field.color : colorSchema}
                       id={field.id}
                       formNavigation={formNavigation}
+                      editable={!field.disabled}
                       {...field}
                     />
                   ))}
