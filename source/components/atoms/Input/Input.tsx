@@ -15,7 +15,7 @@ type InputProps = Omit<TextInputProps, 'onBlur'> & {
   hidden?: boolean;
   error?: { isValid: boolean; message: string };
   textAlign?: 'left' | 'center' | 'right';
-  inputType?: InputFieldType; 
+  inputType?: InputFieldType;
 };
 
 const keyboardTypes: Record<InputFieldType, KeyboardTypeOptions> = {
@@ -44,6 +44,12 @@ const StyledTextInput = styled.TextInput<InputProps>`
   color: ${({ theme }) => theme.colors.neutrals[0]};
   ${(props) => (props.center ? 'text-align: center;' : null)}
   ${(props) => (props.hidden ? 'display: none;' : null)}
+  ${({ editable, theme }) =>
+    editable === false &&
+    `
+    color: ${theme.colors.neutrals[3]};
+    background-color: ${theme.colors.complementary.neutral[2]};
+  `}
 `;
 
 const StyledErrorText = styled(Text)`
@@ -88,7 +94,7 @@ const Input: React.FC<InputProps> = React.forwardRef(
           onBlur={handleBlur}
           placeholderTextColor={theme.colors.neutrals[1]}
           returnKeyType="done"
-          returnKeyLabel="Klar" // Only works on Android  
+          returnKeyLabel="Klar" // Only works on Android
           blurOnSubmit
           onSubmitEditing={() => {
             Keyboard.dismiss();
@@ -99,7 +105,7 @@ const Input: React.FC<InputProps> = React.forwardRef(
           {...props}
         />
         {showErrorMessage && error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
-      
+
         {Platform.OS === 'ios' && inputType !== 'email' && inputType !== 'text' ? (
           <InputAccessoryView nativeID="klar-accessory">
             <StyledAccessoryViewChild>
@@ -111,7 +117,7 @@ const Input: React.FC<InputProps> = React.forwardRef(
           </InputAccessoryView>
         ) : null}
       </>
-      
+
     );
   }
 );
