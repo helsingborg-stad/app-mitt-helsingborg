@@ -12,6 +12,7 @@ storiesOf('Input', module)
       <Input colorSchema="red" placeholder="Red input" />
       <Input colorSchema="green" placeholder="Green input" />
       <Input colorSchema="neutral" placeholder="Neutral input" />
+      <Input colorSchema="blue" placeholder="Disabled input" editable={false} value="Disabled" />
     </StoryWrapper>
   ))
   .add('Keyboard type numeric', () => (
