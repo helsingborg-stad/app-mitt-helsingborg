@@ -36,7 +36,7 @@ export const evaluateAnswer = (
     if (answers[questionId]) return answers[questionId];
       return false;
   } 
-  else if (['text','number','date'].includes(question.type))
+  else if (['text','number','date','hidden'].includes(question.type))
     return (answers[questionId] && answers[questionId] !== '');
   else if (question.type === 'editableList')
     return (
