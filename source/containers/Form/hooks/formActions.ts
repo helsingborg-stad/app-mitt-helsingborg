@@ -2,6 +2,7 @@ import { Question, StepperActions } from '../../../types/FormTypes';
 import { replaceMarkdownTextInSteps } from './textReplacement';
 import { FormReducerState } from './useForm';
 import { validateInput } from '../../../helpers/ValidationHelper';
+import { evaluateConditionalExpression } from '../../../helpers/conditionParser';
 
 /**
  * Action for replacing title markdown in steps.
@@ -367,9 +368,17 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
 
     if (itemsToValidate.length > 0) {
       itemsToValidate.forEach(validationItem => {
+        let shouldValidate = true;
         const answer = state.formAnswers[validationItem.id] || '';
         dirtyFields[validationItem.id] = true;
-        state = validateAnswer(state, { [validationItem.id]: answer }, validationItem.id);
+
+        if(validationItem.hasCondition && validationItem.conditionalOn) {
+          shouldValidate = evaluateConditionalExpression(validationItem.conditionalOn, state.formAnswers, state.allQuestions);
+        }
+
+        if(shouldValidate) {
+          state = validateAnswer(state, { [validationItem.id]: answer }, validationItem.id);
+        }
       }) 
     }
   });
