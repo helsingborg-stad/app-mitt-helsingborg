@@ -318,6 +318,19 @@ export function validateAnswer(
   return state;
 }
 
+function shouldValidateAnswer(validationItem, formAnswers, allQuestions) {
+  if(validationItem) {
+    if(validationItem.hasCondition && validationItem.conditionalOn) {
+      /** Should not validate answer if answer is hidden by an unmet condition */
+      return evaluateConditionalExpression(validationItem.conditionalOn, formAnswers, allQuestions)
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
 const recursiveValidationReducer = (isValidAccumulator: boolean, item: any) : boolean => {
   if (!isValidAccumulator) return false;
   const { isValid } = item;
@@ -368,15 +381,10 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
 
     if (itemsToValidate.length > 0) {
       itemsToValidate.forEach(validationItem => {
-        let shouldValidate = true;
         const answer = state.formAnswers[validationItem.id] || '';
         dirtyFields[validationItem.id] = true;
 
-        if(validationItem.hasCondition && validationItem.conditionalOn) {
-          shouldValidate = evaluateConditionalExpression(validationItem.conditionalOn, state.formAnswers, state.allQuestions);
-        }
-
-        if(shouldValidate) {
+        if(shouldValidateAnswer(validationItem, state.formAnswers, state.allQuestions)) {
           state = validateAnswer(state, { [validationItem.id]: answer }, validationItem.id);
         }
       }) 
