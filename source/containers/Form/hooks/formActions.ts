@@ -321,7 +321,6 @@ export function validateAnswer(
 function shouldValidateAnswer(validationItem, formAnswers, allQuestions) {
   if(validationItem) {
     if(validationItem.hasCondition && validationItem.conditionalOn) {
-      /** Should not validate answer if answer is hidden by an unmet condition */
       return evaluateConditionalExpression(validationItem.conditionalOn, formAnswers, allQuestions)
     }
 
