@@ -10,6 +10,7 @@ import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 import { CaseState, caseTypes } from '../../store/CaseContext';
 import FormContext from '../../store/FormContext';
 import { convertDataToArray, calculateSum } from '../../helpers/FormatVivaData';
+import AuthContext from '../../store/AuthContext';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -47,7 +48,7 @@ const colorSchema = 'red';
  * @param {obj} caseType
  * @param {obj} navigation
  */
-const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
+const computeCaseCardComponent = (caseData, personalNumber, form, caseType, navigation) => {
   const currentStep =
     caseData?.forms?.[caseData.currentFormId]?.currentPosition?.currentMainStep || 0;
   const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
@@ -56,6 +57,7 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
       period = {},
       workflow: { decision = {}, payments = {}, application = {} } = {},
     } = {},
+    persons = [],
   } = caseData;
 
   const applicationPeriodTimestamp = application?.periodenddate ?? period?.endDate;
@@ -72,12 +74,18 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
     ['03', '02'].includes(decision.typecode)
   );
 
+  const casePersonData = persons.find((person) => person.personalNumber === personalNumber);
+
   const statusType = caseData?.status?.type || '';
   const isNotStarted = statusType.includes('notStarted');
   const isOngoing = statusType.includes('ongoing');
   const isCompletionRequired = statusType.includes('completionRequired');
   const isSigned = statusType.includes('signed');
   const isClosed = statusType.includes('closed');
+  const isCoApplicant = casePersonData?.role === 'coapplicant';
+
+  const shouldShowCTAButton =
+    !isCoApplicant && (isOngoing || isNotStarted || isCompletionRequired || isSigned);
 
   return (
     <Card key={caseData.id} colorSchema={colorSchema}>
@@ -101,7 +109,7 @@ const computeCaseCardComponent = (caseData, form, caseType, navigation) => {
         )}
         <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
         {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
-        {(isNotStarted || isOngoing || isCompletionRequired || isSigned) && (
+        {shouldShowCTAButton && (
           <Card.Button
             onClick={() => {
               navigation.navigate('Form', { caseId: caseData.id });
@@ -154,6 +162,10 @@ function CaseOverview(props) {
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
+  const {
+    user: { personalNumber },
+  } = useContext(AuthContext);
+
   const wait = (timeout) => new Promise((resolve) => setTimeout(resolve, timeout));
 
   const getCasesByStatuses = (statuses) =>
@@ -201,7 +213,13 @@ function CaseOverview(props) {
         const formCases = getCasesByFormIds(formIds);
         const updatedFormCaseObjects = formCases.map(async (caseData) => {
           const form = await getForm(caseData.currentFormId);
-          const component = computeCaseCardComponent(caseData, form, caseType, navigation);
+          const component = computeCaseCardComponent(
+            caseData,
+            personalNumber,
+            form,
+            caseType,
+            navigation
+          );
           return { component, ...caseData };
         });
         return Promise.all(updatedFormCaseObjects).then((updatedItems) => updatedItems);
