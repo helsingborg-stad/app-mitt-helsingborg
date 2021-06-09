@@ -100,11 +100,11 @@ const computeCaseCardComponent = (
   navigation,
   toggleModal
 ) => {
-  const { status, details: { period: { endDate } = {} } = {} } = caseData;
   const {
     currentPosition: { currentMainStep: currentStep },
   } = caseData.forms[caseData.currentFormId];
   const {
+    status,
     details: {
       period = {},
       workflow: { decision = {}, payments = {}, application = {} } = {},
@@ -215,7 +215,7 @@ const CaseSummary = (props) => {
   const {
     details: {
       administrators,
-      workflow: { decision = {}, payments = {}, calculations = {}, journals = {} } = {},
+      workflow: { decision = {}, calculations = {}, journals = {} } = {},
     } = {},
   } = caseData;
 
@@ -229,7 +229,6 @@ const CaseSummary = (props) => {
   const decisions = decision?.decisions?.decision
     ? convertDataToArray(decision.decisions.decision)
     : [];
-  const paymentsArray = payments?.payment ? convertDataToArray(payments?.payment) : [];
 
   useEffect(() => {
     const caseData = getCase(caseId);
