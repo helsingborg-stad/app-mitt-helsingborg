@@ -14,6 +14,7 @@ import { Modal, useModal } from '../../components/molecules/Modal';
 import BackNavigation from '../../components/molecules/BackNavigation';
 import Button from '../../components/atoms/Button';
 import { formatAmount, convertDataToArray, calculateSum } from '../../helpers/FormatVivaData';
+import AuthContext from '../../store/AuthContext';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -92,6 +93,7 @@ Card.DetailsTitle = styled(Text)`
 
 const computeCaseCardComponent = (
   caseData,
+  personalNumber,
   form,
   formName,
   colorSchema,
@@ -107,6 +109,7 @@ const computeCaseCardComponent = (
       period = {},
       workflow: { decision = {}, payments = {}, application = {} } = {},
     } = {},
+    persons = [],
   } = caseData;
 
   const totalSteps = form?.stepStructure?.length || 0;
@@ -116,11 +119,14 @@ const computeCaseCardComponent = (
     ? getSwedishMonthNameByTimeStamp(applicationPeriodTimestamp, true)
     : '';
 
+  const casePersonData = persons.find((person) => person.personalNumber === personalNumber);
+
   const isNotStarted = status?.type?.includes('notStarted');
   const isOngoing = status?.type?.includes('ongoing');
   const isClosed = status?.type?.includes('closed');
   const isCompletionRequired = status?.type?.includes('completionRequired');
   const isSigned = status?.type?.includes('signed');
+  const isCoApplicant = casePersonData?.role === 'coapplicant';
 
   const decisions = decision?.decisions?.decision
     ? convertDataToArray(decision.decisions.decision)
@@ -131,13 +137,16 @@ const computeCaseCardComponent = (
     ['03', '02'].includes(decision.typecode)
   );
 
+  const shouldShowCTAButton =
+    !isCoApplicant && (isOngoing || isNotStarted || isCompletionRequired || isSigned);
+
   return (
     <Card colorSchema={colorSchema}>
       <Card.Body shadow color="neutral">
         <Card.Title colorSchema="neutral">{applicationPeriodMonth || formName}</Card.Title>
         <Card.SubTitle>{status.name}</Card.SubTitle>
         {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
-        <Card.Text>{status.description} </Card.Text>
+        <Card.Text>{status.description}</Card.Text>
 
         {isClosed && Object.keys(paymentsArray).length > 0 && (
           <Card.Text mt={1.5} strong colorSchema="neutral">
@@ -161,7 +170,7 @@ const computeCaseCardComponent = (
           </Card.Text>
         )}
 
-        {(isOngoing || isNotStarted || isCompletionRequired || isSigned) && (
+        {shouldShowCTAButton && (
           <Card.Button
             onClick={() => {
               navigation.navigate('Form', { caseId: caseData.id });
@@ -209,6 +218,11 @@ const CaseSummary = (props) => {
       workflow: { decision = {}, payments = {}, calculations = {}, journals = {} } = {},
     } = {},
   } = caseData;
+
+  const {
+    user: { personalNumber },
+  } = useContext(AuthContext);
+
   const isFocused = useIsFocused();
   const [isModalVisible, toggleModal] = useModal();
   const [isCalculationDetailsVisible, setCalculationDetailsVisibility] = useState(false);
@@ -245,7 +259,15 @@ const CaseSummary = (props) => {
       <Container as={Animated.ScrollView} style={{ opacity: fadeAnimation }}>
         <SummaryHeading type="h5">Aktuell period</SummaryHeading>
         {Object.keys(caseData).length > 0 &&
-          computeCaseCardComponent(caseData, form, formName, colorSchema, navigation, toggleModal)}
+          computeCaseCardComponent(
+            caseData,
+            personalNumber,
+            form,
+            formName,
+            colorSchema,
+            navigation,
+            toggleModal
+          )}
 
         {administrators && (
           <View>
