@@ -82,10 +82,13 @@ const computeCaseCardComponent = (caseData, personalNumber, form, caseType, navi
   const isCompletionRequired = statusType.includes('completionRequired');
   const isSigned = statusType.includes('signed');
   const isClosed = statusType.includes('closed');
+  const isWaitingForSign = statusType.includes('active:signature:pending');
+  const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === 'coapplicant';
 
-  const shouldShowCTAButton =
-    !isCoApplicant && (isOngoing || isNotStarted || isCompletionRequired || isSigned);
+  const shouldShowCTAButton = isCoApplicant
+    ? isWaitingForSign && !selfHasSigned
+    : isOngoing || isNotStarted || isCompletionRequired || isSigned;
 
   return (
     <Card key={caseData.id} colorSchema={colorSchema}>
@@ -117,6 +120,7 @@ const computeCaseCardComponent = (caseData, personalNumber, form, caseType, navi
           >
             {isOngoing && <Text>Fortsätt</Text>}
             {isNotStarted && <Text>Starta ansökan</Text>}
+            {isWaitingForSign && !selfHasSigned && <Text>Granska och signera</Text>}
             {isCompletionRequired && <Text>Starta stickprov</Text>}
             {isSigned && <Text>Ladda upp filer och dokument</Text>}
             <Icon name="arrow-forward" />
