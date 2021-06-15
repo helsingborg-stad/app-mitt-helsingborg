@@ -227,7 +227,7 @@ function CaseOverview(props) {
 
       await Promise.all(updateCaseItemsPromises).then((updatedItems) => {
         const flattenedList = updatedItems.flat();
-        flattenedList.sort((a, b) => b.updatedAt - a.updatedAt);
+        flattenedList.sort((caseA, caseB) => caseB.updatedAt - caseA.updatedAt);
         setCaseItems(flattenedList);
         setIsLoading(false);
       });
