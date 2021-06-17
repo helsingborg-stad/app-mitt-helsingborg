@@ -12,35 +12,30 @@ const config = {
   },
   plugins: ["jest"],
   env: {
+    es2021: true,
     browser: true,
     node: true,
-    "jest/globals": true,
+    jest: true,
   },
   settings: {
     react: {
       version: "detect",
     },
   },
-  extends: ["eslint:recommended", "plugin:react/recommended", "prettier"],
+  extends: [
+    "eslint:recommended",
+    "plugin:jest/recommended",
+    "plugin:jest/style",
+    "plugin:react/recommended",
+    "prettier",
+  ],
   overrides: [
     {
       files: ["*.ts", "*.tsx"],
       parser: "@typescript-eslint/parser",
-      extends: [
-        "eslint:recommended",
-        "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended",
-        "prettier",
-      ],
+      extends: ["plugin:@typescript-eslint/recommended", "prettier"],
     },
   ],
-  rules: {
-    "jest/no-disabled-tests": "warn",
-    "jest/no-focused-tests": "error",
-    "jest/no-identical-title": "error",
-    "jest/prefer-to-have-length": "warn",
-    "jest/valid-expect": "error",
-  },
 };
 
 module.exports = config;
