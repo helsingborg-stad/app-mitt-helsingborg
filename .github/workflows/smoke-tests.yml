@@ -36,6 +36,22 @@ jobs:
       - name: yarn install
         run: yarn install
 
+      - name: lint check
+        if: ${{ github.base_ref && github.head_ref }}
+        env:
+          GIT_BASE_REF: ${{ github.base_ref }}
+          GIT_HEAD_REF: ${{ github.head_ref }}
+        run: |
+          yarn eslint $(git diff --name-only --diff-filter=d $GIT_BASE_REF $GIT_HEAD_REF | egrep -i '\.([jt]sx?|json)$')
+
+      - name: prettier check
+        if: ${{ github.base_ref && github.head_ref }}
+        env:
+          GIT_BASE_REF: ${{ github.base_ref }}
+          GIT_HEAD_REF: ${{ github.head_ref }}
+        run: |
+          yarn prettier --check $(git diff --name-only --diff-filter=d $GIT_BASE_REF $GIT_HEAD_REF | egrep -i '\.([jt]sx?|json|md|ya?ml|s?css)$')
+
       # run tests
       - name: run tests
         run: yarn test
