@@ -32,6 +32,7 @@ const config = {
   overrides: [
     {
       files: ["*.ts", "*.tsx"],
+      plugins: ["@typescript-eslint"],
       parser: "@typescript-eslint/parser",
       extends: ["plugin:@typescript-eslint/recommended", "prettier"],
     },
