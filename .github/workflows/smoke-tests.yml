@@ -43,14 +43,28 @@ jobs:
         env:
           GIT_BASE_REF: ${{ github.base_ref }}
         run: |
-          yarn eslint $(git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD | egrep -i '\.([jt]sx?)$')
+          file_list=$(git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD | egrep -i '\.([jt]sx?)$')
 
-      - name: prettier check
+          if [[ -n $file_list ]]
+          then
+              yarn eslint $file_list
+          else
+              echo "no files to lint"
+          fi
+
+      - name: style check
         if: ${{ github.base_ref }}
         env:
           GIT_BASE_REF: ${{ github.base_ref }}
         run: |
-          yarn prettier --check $(git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD | egrep -i '\.([jt]sx?|json|md|ya?ml|s?css)$')
+          file_list=$(git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD | egrep -i '\.([jt]sx?|json|md|ya?ml|s?css)$')
+
+          if [[ -n $file_list ]]
+          then
+              yarn prettier --check $file_list
+          else
+              echo "no files to style-check"
+          fi
 
       # run tests
       - name: run tests
