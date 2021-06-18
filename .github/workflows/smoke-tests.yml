@@ -43,7 +43,7 @@ jobs:
         env:
           GIT_BASE_REF: ${{ github.base_ref }}
         run: |
-          yarn eslint $(git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD | egrep -i '\.([jt]sx?|json)$')
+          yarn eslint $(git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD | egrep -i '\.([jt]sx?)$')
 
       - name: prettier check
         if: ${{ github.base_ref }}
