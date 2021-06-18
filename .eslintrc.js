@@ -24,6 +24,7 @@ const config = {
   },
   extends: [
     "eslint:recommended",
+    "airbnb",
     "plugin:jest/recommended",
     "plugin:jest/style",
     "plugin:react/recommended",
