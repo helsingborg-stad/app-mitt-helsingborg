@@ -23,11 +23,11 @@ export async function updateCase(
 
   if (Config?.DISABLE_CLIENT_ENCRYPTION !== 'true' && signature?.success === false) {
     const encryptedAnswers = await encryptWithAesKey(user, JSON.stringify(answers));
-    body.answers = { encryptedAnswers };
+    updateCaseRequestBody.answers = { encryptedAnswers };
   }
 
   if (signature?.success) {
-    body.signature = signature;
+    updateCaseRequestBody.signature = signature;
   }
 
   try {
