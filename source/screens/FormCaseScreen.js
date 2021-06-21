@@ -71,14 +71,14 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
     navigation.popToTop();
   };
 
-  const updateCaseContext = (answerObject, status, currentPosition) => {
+  const updateCaseContext = (answerObject, signature, currentPosition) => {
     // If the case is submitted, we should not actually update its data...
     if (!initialCase.status.type.includes('submitted')) {
       const caseData = {
         caseId: initialCase.id,
         formId: initialCase.currentFormId,
         answerObject,
-        status,
+        signature,
         currentPosition,
         formQuestions,
       };
@@ -88,7 +88,6 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       //    still has the "not started" status.
       setInitialCase({
         ...initialCase,
-        status,
         forms: {
           ...initialCase.forms,
           [initialCase.currentFormId]: {
