@@ -12,26 +12,26 @@ export const actionTypes = {
 };
 
 export async function updateCase(
-  { user, caseId, formId, answerObject, status, currentPosition, formQuestions },
+  { user, caseId, formId, answerObject, signature, currentPosition, formQuestions },
   callback
 ) {
-  let answers = convertAnswersToArray(answerObject, formQuestions);
-
-  if (Config?.DISABLE_CLIENT_ENCRYPTION !== 'true')
-    if (status?.type === 'active:ongoing') {
-      const encryptedAnswers = await encryptWithAesKey(user, JSON.stringify(answers));
-      answers = { encryptedAnswers };
-    }
-
-  const body = {
-    statusType: status.type,
-    answers,
+  const updateCaseRequestBody = {
+    answers: convertAnswersToArray(answerObject, formQuestions),
     currentPosition,
     currentFormId: formId,
   };
 
+  if (Config?.DISABLE_CLIENT_ENCRYPTION !== 'true' && signature?.success === false) {
+    const encryptedAnswers = await encryptWithAesKey(user, JSON.stringify(answers));
+    body.answers = { encryptedAnswers };
+  }
+
+  if (signature?.success) {
+    body.signature = signature;
+  }
+
   try {
-    const res = await put(`/cases/${caseId}`, JSON.stringify(body));
+    const res = await put(`/cases/${caseId}`, JSON.stringify(updateCaseRequestBody));
     const { id, attributes } = res.data.data;
     const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
     if (callback) {
