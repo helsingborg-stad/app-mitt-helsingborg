@@ -48,7 +48,7 @@ interface Props {
   onSubmit: () => void;
   updateCaseInContext: (
     answers: Record<string, any>,
-    status: CaseStatus,
+    signature: { success: boolean },
     currentPosition: FormPosition
   ) => void;
   currentPosition: FormPosition;
@@ -70,28 +70,27 @@ const StepFooter: React.FC<Props> = ({
   validateStepAnswers,
   attachments,
 }) => {
-  const { user, handleSign, status, isLoading, handleSetStatus } = useContext(AuthContext);
+  const { user, handleSign, status: signStatus, isLoading, handleSetStatus } = useContext(
+    AuthContext
+  );
   const showNotification = useNotification();
 
   useEffect(() => {
-    const signCase = () => {
+    if (signStatus === 'signResolved') {
+      const signature = { success: true };
       if (onUpdate) onUpdate(answers);
       if (updateCaseInContext) {
         if (attachments.length > 0) {
-          updateCaseInContext(answers, getStatusByType('active:signed:viva'), currentPosition);
+          updateCaseInContext(answers, signature, currentPosition);
         } else {
           formNavigation.next();
-          updateCaseInContext(answers, getStatusByType('active:submitted:viva'), currentPosition);
+          updateCaseInContext(answers, signature, currentPosition);
         }
       }
       handleSetStatus('idle');
-    };
-
-    if (status === 'signResolved') {
-      signCase();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  }, [signStatus]);
 
   const actionMap = (action: Action) => {
     switch (action.type) {
