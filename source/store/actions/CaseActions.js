@@ -22,7 +22,10 @@ export async function updateCase(
   };
 
   if (Config?.DISABLE_CLIENT_ENCRYPTION !== 'true' && !signature?.success) {
-    const encryptedAnswers = await encryptWithAesKey(user, JSON.stringify(answers));
+    const encryptedAnswers = await encryptWithAesKey(
+      user,
+      JSON.stringify(updateCaseRequestBody.answers)
+    );
     updateCaseRequestBody.answers = { encryptedAnswers };
   }
 
