@@ -21,7 +21,7 @@ export async function updateCase(
     currentFormId: formId,
   };
 
-  if (Config?.DISABLE_CLIENT_ENCRYPTION !== 'true' && signature?.success === false) {
+  if (Config?.DISABLE_CLIENT_ENCRYPTION !== 'true' && !signature?.success) {
     const encryptedAnswers = await encryptWithAesKey(user, JSON.stringify(answers));
     updateCaseRequestBody.answers = { encryptedAnswers };
   }
