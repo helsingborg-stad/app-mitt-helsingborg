@@ -36,7 +36,7 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
     caseId,
     formId,
     answerObject,
-    status,
+    signature,
     currentPosition,
     formQuestions,
   }) {
@@ -46,7 +46,7 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
         caseId,
         formId,
         answerObject,
-        status,
+        signature,
         currentPosition,
         formQuestions,
       })
