@@ -2,9 +2,14 @@ import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import StoryWrapper from '../StoryWrapper';
 import Form from '../../../containers/Form/Form';
-import { getStatusByType } from '../../../assets/mock/caseStatuses';
 
 const repeaterFieldStories = storiesOf('RepeaterField', module);
+
+const status = {
+  type: 'active:ongoing',
+  name: 'Pågående',
+  description: 'Du har påbörjat en ansökan. Du kan öppna din ansökan och fortsätta där du slutade.',
+};
 
 const DefaultStoryForm = {
   connectivityMatrix: [['none']],
@@ -251,7 +256,7 @@ const RepeaterStory = () => (
     connectivityMatrix={DefaultStoryForm.connectivityMatrix}
     startAt={0}
     firstName="FakeName"
-    status={getStatusByType('active:ongoing')}
+    status={status}
   />
 );
 

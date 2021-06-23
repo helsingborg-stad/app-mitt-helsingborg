@@ -6,9 +6,14 @@ import SummaryList from './SummaryList';
 import { Input, Label, Text } from '../../atoms';
 import CheckboxField from '../../molecules/CheckboxField/CheckboxField';
 import Form from '../../../containers/Form/Form';
-import { getStatusByType } from '../../../assets/mock/caseStatuses';
 
 const stories = storiesOf('Summary List', module);
+
+const status = {
+  type: 'active:ongoing',
+  name: 'Pågående',
+  description: 'Du har påbörjat en ansökan. Du kan öppna din ansökan och fortsätta där du slutade.',
+};
 
 const items = [
   { id: 'f1', type: 'text', title: 'favoritfrukt', category: 'fruit' },
@@ -411,7 +416,7 @@ const SummaryValidationStory = () => (
     connectivityMatrix={validationTestForm.connectivityMatrix}
     startAt={0}
     firstName="FakeName"
-    status={getStatusByType('active:ongoing')}
+    status={status}
   />
 );
 
