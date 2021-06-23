@@ -13,7 +13,6 @@ import useForm, { FormPosition, FormReducerState } from './hooks/useForm';
 import AuthContext from '../../store/AuthContext';
 import { useNotification } from '../../store/NotificationContext';
 import FormUploader from '../../containers/Form/FormUploader';
-import { getStatusByType } from '../../assets/mock/caseStatuses';
 import { AuthLoading } from '../../components/molecules';
 import { Image } from '../../components/molecules/ImageDisplay/ImageDisplay';
 
@@ -29,7 +28,7 @@ interface Props {
   onStart: () => any;
   updateCaseInContext: (
     data: Record<string, any>,
-    status: CaseStatus,
+    signature: { success: boolean },
     currentPosition: FormPosition
   ) => void;
 }
@@ -100,11 +99,29 @@ const Form: React.FC<Props> = ({
       attachmentsArr.map((attachmentAnswer, index) => ({ ...attachmentAnswer, index }))
     )
     .flat();
-    
+
   const [hasSigned, setHasSigned] = useState(status.type.includes('signed'));
-  const [hasUploaded, setHasUploaded] = useState(attachments?.length && attachments.filter(({uploadedFileName}) => uploadedFileName).length == attachments.length);
+
+  const [hasUploaded, setHasUploaded] = useState(attachments?.length && attachments.filter(({ uploadedFileName }) => uploadedFileName).length == attachments.length);
 
   const showNotification = useNotification();
+
+  /**
+   * Effect for signing a case.
+   * If the case has attachments, signing is handled after they are uploaded.
+   */
+  useEffect(() => {
+    if (authStatus === 'signResolved') {
+      if (attachments.length === 0) {
+        const signature = { success: true };
+        formNavigation.next();
+        updateCaseInContext(answers, signature, formState.currentPosition);
+      }
+
+      handleSetStatus('idle');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authStatus]);
 
   /**
    * Set auth context status to idle when navigating
@@ -180,7 +197,7 @@ const Form: React.FC<Props> = ({
           attachments={attachments}
         />);
     });
-    
+
   const mainStep = formState.currentPosition.currentMainStepIndex;
   const [visible, toggleModal] = useModal();
   const [scrollViewRef, setRef] = useState<ScrollView>(null);
@@ -216,19 +233,19 @@ const Form: React.FC<Props> = ({
           onResolved={() => {
             setHasUploaded(true);
             formNavigation.next();
-            updateCaseInContext(formState.formAnswers, getStatusByType('active:submitted:viva'), formState.currentPosition);
+            updateCaseInContext(formState.formAnswers, { success: true }, formState.currentPosition);
           }}
         />
       )}
-         
+
       {(isLoading || isResolved) && (
-          <AuthLoading
-            colorSchema={'neutral'}
-            isLoading={isLoading}
-            isResolved={isResolved}
-            cancelSignIn={() => handleCancelOrder()}
-            isBankidInstalled={isBankidInstalled}
-          />
+        <AuthLoading
+          colorSchema={'neutral'}
+          isLoading={isLoading}
+          isResolved={isResolved}
+          cancelSignIn={() => handleCancelOrder()}
+          isBankidInstalled={isBankidInstalled}
+        />
       )}
     </>
   );
