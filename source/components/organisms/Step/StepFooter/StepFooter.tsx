@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import AuthContext from '../../../../store/AuthContext';
@@ -8,8 +8,6 @@ import { CaseStatus } from '../../../../types/CaseType';
 import { FormPosition } from '../../../../containers/Form/hooks/useForm';
 import { useNotification } from '../../../../store/NotificationContext';
 import { evaluateConditionalExpression } from '../../../../helpers/conditionParser';
-import { getStatusByType } from '../../../../assets/mock/caseStatuses';
-import { Image } from '../../../molecules/ImageDisplay/ImageDisplay';
 
 const ActionContainer = styled.View`
   width: 100%;
@@ -53,7 +51,6 @@ interface Props {
   ) => void;
   currentPosition: FormPosition;
   validateStepAnswers: (errorCallback: () => void, onValidCallback: () => void) => void;
-  attachments: Image[];
 }
 
 const StepFooter: React.FC<Props> = ({
@@ -68,29 +65,9 @@ const StepFooter: React.FC<Props> = ({
   currentPosition,
   children,
   validateStepAnswers,
-  attachments,
 }) => {
-  const { user, handleSign, status: signStatus, isLoading, handleSetStatus } = useContext(
-    AuthContext
-  );
+  const { user, handleSign, isLoading } = useContext(AuthContext);
   const showNotification = useNotification();
-
-  useEffect(() => {
-    if (signStatus === 'signResolved') {
-      const signature = { success: true };
-      if (onUpdate) onUpdate(answers);
-      if (updateCaseInContext) {
-        if (attachments.length > 0) {
-          updateCaseInContext(answers, signature, currentPosition);
-        } else {
-          formNavigation.next();
-          updateCaseInContext(answers, signature, currentPosition);
-        }
-      }
-      handleSetStatus('idle');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signStatus]);
 
   const actionMap = (action: Action) => {
     switch (action.type) {
@@ -145,7 +122,7 @@ const StepFooter: React.FC<Props> = ({
             updateCaseInContext &&
             (caseStatus.type.includes('ongoing') || caseStatus.type.includes('notStarted'))
           )
-            updateCaseInContext(answers, getStatusByType('active:ongoing'), currentPosition);
+            updateCaseInContext(answers, undefined, currentPosition);
 
           validateStepAnswers(errorCallback, onValidCallback);
         };
