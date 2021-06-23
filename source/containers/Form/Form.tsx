@@ -40,6 +40,13 @@ export const defaultInitialPosition: FormPosition = {
   currentMainStepIndex: 0,
 };
 
+export const defaultInitialStatus =
+{
+  type: 'notStarted',
+  name: 'Ej påbörjad',
+  description: 'Ansökan är ej påbörjad.',
+};
+
 /**
  * The Container Component Form allows you to create, process and reuse forms. The Form component
  * is a tool to help you solve the problem of allowing end-users to interact with the

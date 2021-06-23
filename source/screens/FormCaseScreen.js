@@ -2,12 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ActivityIndicator } from 'react-native';
 import styled from 'styled-components';
-import Form, { defaultInitialPosition } from '../containers/Form/Form';
+import Form, { defaultInitialPosition, defaultInitialStatus } from '../containers/Form/Form';
 import { getFormQuestions, convertAnswerArrayToObject } from '../helpers/CaseDataConverter';
 import AuthContext from '../store/AuthContext';
 import FormContext from '../store/FormContext';
 import { CaseDispatch, CaseState } from '../store/CaseContext';
-import { getStatusByType } from '../assets/mock/caseStatuses';
 
 const SpinnerContainer = styled.View`
   flex: 1;
@@ -139,7 +138,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       onStart={handleStartForm}
       onSubmit={handleSubmitForm}
       initialAnswers={initialAnswers}
-      status={initialCase.status || getStatusByType('notStarted')}
+      status={initialCase.status || defaultInitialStatus}
       updateCaseInContext={updateCaseContext}
       {...props}
     />
