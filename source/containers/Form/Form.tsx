@@ -106,6 +106,12 @@ const Form: React.FC<Props> = ({
 
   const showNotification = useNotification();
 
+  const signCase = () => {
+    const signature = { success: true };
+    formNavigation.next();
+    updateCaseInContext(answers, signature, formState.currentPosition);
+  }
+
   /**
    * Effect for signing a case.
    * If the case has attachments, signing is handled after they are uploaded.
@@ -113,9 +119,7 @@ const Form: React.FC<Props> = ({
   useEffect(() => {
     if (authStatus === 'signResolved') {
       if (attachments.length === 0) {
-        const signature = { success: true };
-        formNavigation.next();
-        updateCaseInContext(answers, signature, formState.currentPosition);
+        signCase();
       }
 
       handleSetStatus('idle');
@@ -232,8 +236,7 @@ const Form: React.FC<Props> = ({
           onChange={handleInputChange}
           onResolved={() => {
             setHasUploaded(true);
-            formNavigation.next();
-            updateCaseInContext(formState.formAnswers, { success: true }, formState.currentPosition);
+            signCase();
           }}
         />
       )}
