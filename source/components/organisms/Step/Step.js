@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Dimensions } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components/native';
-import { getStatusByType } from '../../../assets/mock/caseStatuses';
 import FormField from '../../../containers/FormField';
 import Progressbar from '../../atoms/Progressbar/Progressbar';
 import BackNavigation from '../../molecules/BackNavigation/BackNavigation';
@@ -40,10 +39,6 @@ const StepFieldListWrapper = styled.View`
   margin: 24px;
 `;
 
-const SignStepWrapper = styled.View`
-  padding: 48px 24px 24px 24px;
-`;
-
 function Step({
   theme,
   colorSchema,
@@ -74,7 +69,7 @@ function Step({
         onFieldChange(answers);
       }
       if (updateCaseInContext) {
-        updateCaseInContext(answers, currentPosition);
+        updateCaseInContext(answers, undefined, currentPosition);
       }
     }
     if (formNavigation?.close) {
