@@ -44,12 +44,6 @@ const StyledTextInput = styled.TextInput<InputProps>`
   color: ${({ theme }) => theme.colors.neutrals[0]};
   ${(props) => (props.center ? 'text-align: center;' : null)}
   ${(props) => (props.hidden ? 'display: none;' : null)}
-  ${({ editable, theme }) =>
-    !editable &&
-    `
-    color: ${theme.colors.neutrals[3]};
-    background-color: ${theme.colors.complementary.neutral[2]};
-  `}
 `;
 
 const StyledErrorText = styled(Text)`
