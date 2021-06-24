@@ -84,7 +84,7 @@ const computeCaseCardComponent = (caseData, personalNumber, form, caseType, navi
   const isClosed = statusType.includes('closed');
   const isWaitingForSign = statusType.includes('active:signature:pending');
   const selfHasSigned = casePersonData?.hasSigned;
-  const isCoApplicant = casePersonData?.role === 'coapplicant';
+  const isCoApplicant = casePersonData?.role === 'coApplicant';
 
   const shouldShowCTAButton = isCoApplicant
     ? isWaitingForSign && !selfHasSigned
