@@ -17,7 +17,7 @@ There are several parts to an iOS build that can be hard to wrap your head aroun
 | App Store Connect                   | Web portal where you manage app-specific details (builds, TestFlight, App Store page info). https://appstoreconnect.apple.com/.                                                                                                                                                          |
 | Bundle ID / App ID / App Identifier | Unique identifier for the app. In this case `works.hbg.MittHelsingborg`.                                                                                                                                                                                                                 |
 | CocoaPods / Pods                    | Dependency management system for native iOS libraries.                                                                                                                                                                                                                                   |
-| Fastlane                            | Build system. Uses simply ruby code/configs to abstract away much of the build process (like handling certs etc.).                                                                                                                                                                       |
+| Fastlane                            | Build system. Uses simple ruby code/configs to abstract away much of the build process (like handling certs etc.).                                                                                                                                                                       |
 | Fastlane lane                       | A developer-configured code path that can be executed (e.g. "build adhoc" or "build and upload to App Store").                                                                                                                                                                           |
 | GitHub Actions                      | CI (Continuous Integration) system. Uses yaml to config commands to run on certain triggers (such as pull requests). Can also be executed manually (such as building and uploading to App Store).                                                                                        |
 | GitHub Actions runner               | The system that runs a workflow/job. In practice this is (probably) a virtual machine running in the cloud.                                                                                                                                                                              |
@@ -40,9 +40,9 @@ Building manually with Xcode is good for one-off local builds and for emergencie
 
 To be able to properly build:
 
-- You have to be signed into your Apple Developer Account, and that account has to be part of the Team.
+- You must be signed into your Apple Developer Account, and that account has to be part of the Team.
 - Automatic Signing should be off (if not already) and the relevant provisioning profile should be selected for the "MittHelsingborg" target in the "Mitt Helsingborg" project.
-  - Note: for the privisioning profile to appear you might have to download the profiles first from Xcode -> Preferences -> Accounts.
+  - Note: for the provisioning profile to appear you might have to download the profiles first from Xcode -> Preferences -> Accounts.
 - You need to have a valid certificate imported into your Keychain (get this certificate from an Admin or Team member with access).
 
 Sometimes Pods are not properly detected; try following the steps outlined [in the Troubleshooting section](#pods--node-modules) below in that case.
@@ -61,9 +61,9 @@ To run Fastlane locally you need an installation of Ruby matching the [project v
 Xcode Command Line Tools installed.
 
 You also need to install Fastlane itself. It is recommended to do this via the [Gemfile](../Gemfile) with [Bundler](https://bundler.io/) however
-this is not required; just make sure to install either the version specified in the Gemfile, or following the [instructions for versions](#versions) below.
+this is not required; just make sure to install the version specified in the Gemfile or follow the [instructions for versions](#versions) below.
 
-Finally, you have to create and populate a `ios/fastlane/.env` file. Full instructions (and pre-populated values) are available
+Finally, you have to create and populate an `ios/fastlane/.env` file. Full instructions (and pre-populated values) are available
 in [the example.env file](../ios/fastlane/example.env).
 
 To run, make sure you're in the `ios` directory, then run either `fastlane ios build_adhoc` (to build an AdHoc .ipa file) or `fastlane ios beta` (to build
@@ -84,14 +84,14 @@ a branch to run the workflow on. If everything is setup correctly, a workflow is
 For `iOS - Build` a new build is automatically uploaded to TestFlight. If you're part of the App Store Connect "CD Builds" group or an
 internal tester you should get a TestFlight notification when the build is ready.
 
-For `iOS - Build (Ad Hoc)` an .ipa file is produced as part of the build artifacts. This is less useful, but can be used for debugging in certain cases.
+For `iOS - Build (Ad Hoc)` an .ipa file is produced as part of the build artifacts. This is less useful but can be used for debugging in certain cases.
 Build artifacts can be accessed from the summary for the workflow run in the [Actions tab](https://github.com/helsingborg-stad/app-mitt-helsingborg/actions).
 
 In addition to running manually, **release** and **production** builds are automatically triggered on merges onto `release/*` and `master` branches respectively.
 
 > [Click here for GitHub Actions Workflow documentation](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions)
 
-Most configuration is provided to the workflow from an GitHub Actions environment. There is currently only one GitHub environment but it's used for all three
+Most configuration is provided to the workflow from a GitHub Actions environment. There is currently only one GitHub environment, but it's used for all three
 (development, release, production) app environments. The following variables are needed
 ([set here](https://github.com/helsingborg-stad/app-mitt-helsingborg/settings/environments/)):
 
@@ -117,7 +117,7 @@ For variables shared with [Fastlane](#local-fastlane) the values are the same. T
 | Name                                                                                                      | Description                                                                                                                                                                                                                                         |
 | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `BUILD_CERTIFICATE_BASE64`                                                                                | Base64-encoded contents of production certificate .p12 file ([more info](https://docs.github.com/en/actions/guides/installing-an-apple-certificate-on-macos-runners-for-xcode-development)).                                                        |
-| `CERT_KEYCHAIN_PASSWORD`                                                                                  | Password used by the build workflow when generating a temporary keychain. In theory this doesn't matter too much, however it's good practice to have this be fairly secure, as there's always the off-chance that data can leak on a GitHub runner. |
+| `CERT_KEYCHAIN_PASSWORD`                                                                                  | Password used by the build workflow when generating a temporary keychain. In theory this doesn't matter too much, however it's good practice to have this be fairly secure, as there's always the off chance that data can leak on a GitHub runner. |
 | `P12_PASSWORD`                                                                                            | Password to decode `BUILD_CERTIFICATE_BASE64` with.                                                                                                                                                                                                 |
 | `PODS_DD_PREFIX`                                                                                          | Optional. Used to force a rebuild of the pods, in case the pod cache is not working properly. Doesn't matter what this is, but it's good practice to set it to the current timestamp when changing, to avoid conflicts with old caches.             |
 | `DEVELOP_DOTENV_CONTENTS_BASE64` / `RELEASE_DOTENV_CONTENTS_BASE64` / `PRODUCTION_DOTENV_CONTENTS_BASE64` | Base64-encoded data which will be decoded and put into .env at root for the respective environment. This contains the same content as you would usually have in a `.env` file at your project root.                                                 |
@@ -140,7 +140,7 @@ as they're roughly dependent on each other and if one step fails the next are ve
 
 #### Pods / Node Modules
 
-It is generally a good idea to remove `node_modules` and `ios/Pods`, followed by `yarn install` and `cd ios; pod install` to start clean if encountering
+It is generally a good idea to remove `node_modules` and `ios/Pods`, followed by `yarn install` and `cd ios; pod install` to start from a clean slate if encountering
 dependency-related issues.
 Pods are known to cause issues sometimes, especially after pulling in a lot of changes. Installed Pods are based on `node_modules` content for native
 plugins, hence why the two are related.
@@ -150,6 +150,6 @@ plugins, hence why the two are related.
 Logs for all workflow runs are available [under the Actions tab](https://github.com/helsingborg-stad/app-mitt-helsingborg/actions). Click on a workflow run
 followed by the job name to access the full console log output.
 
-Xcode output is supressed (because of the high amounts of warnings) and instead provided as a build artifact after the workflow is done.
+Xcode output is suppressed (because of the high amounts of warnings) and instead provided as a build artifact after the workflow is done.
 
-Note that all logs are publically available; take note not to leak sensitive information if debugging.
+Note that all logs are publicly available; take note not to leak sensitive information if debugging.
