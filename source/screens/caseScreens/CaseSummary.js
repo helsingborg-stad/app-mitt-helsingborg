@@ -128,7 +128,7 @@ const computeCaseCardComponent = (
   const isSigned = status?.type?.includes('signed');
   const isWaitingForSign = status?.type?.includes('active:signature:pending');
   const selfHasSigned = casePersonData?.hasSigned;
-  const isCoApplicant = casePersonData?.role === 'coapplicant';
+  const isCoApplicant = casePersonData?.role === 'coApplicant';
 
   const decisions = decision?.decisions?.decision
     ? convertDataToArray(decision.decisions.decision)
