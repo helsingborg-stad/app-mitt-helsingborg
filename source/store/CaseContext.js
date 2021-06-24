@@ -32,24 +32,24 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
     dispatch(await create(form, callback));
   }
 
-  async function updateCase({
-    caseId,
-    formId,
-    answerObject,
-    signature,
-    currentPosition,
-    formQuestions,
-  }) {
+  async function updateCase(
+    { caseId, formId, answerObject, signature, currentPosition, formQuestions, encryptAnswers },
+    callback
+  ) {
     dispatch(
-      await update({
-        user,
-        caseId,
-        formId,
-        answerObject,
-        signature,
-        currentPosition,
-        formQuestions,
-      })
+      await update(
+        {
+          user,
+          caseId,
+          formId,
+          answerObject,
+          signature,
+          currentPosition,
+          formQuestions,
+          encryptAnswers,
+        },
+        callback
+      )
     );
   }
 
