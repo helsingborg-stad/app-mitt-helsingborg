@@ -51,7 +51,6 @@ const inputTypes = {
   hidden: {
     component: Input,
     blurEvent: 'onBlur',
-    changeEvent: 'onMount',
     props: {
       showErrorMessage: false,
       hidden: true,
