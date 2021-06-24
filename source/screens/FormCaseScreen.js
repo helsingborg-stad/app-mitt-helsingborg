@@ -18,7 +18,6 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   const [form, setForm] = useState(undefined);
   const [formQuestions, setFormQuestions] = useState(undefined);
   const [initialCase, setInitialCase] = useState(undefined);
-
   const { caseData, caseId } = route && route.params ? route.params : {};
   const { user } = useContext(AuthContext);
   const { getForm } = useContext(FormContext);
@@ -102,7 +101,15 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
           },
         },
       });
-      updateCase(caseData);
+
+      const callback = (putResponse) => {
+        if (putResponse?.status?.type?.includes('signature:completed')) {
+          caseData.encryptAnswers = false;
+          updateCase(caseData);
+        }
+      };
+
+      updateCase(caseData, callback);
     }
   };
 

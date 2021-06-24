@@ -12,7 +12,16 @@ export const actionTypes = {
 };
 
 export async function updateCase(
-  { user, caseId, formId, answerObject, signature, currentPosition, formQuestions },
+  {
+    user,
+    caseId,
+    formId,
+    answerObject,
+    signature,
+    currentPosition,
+    formQuestions,
+    encryptAnswers = true,
+  },
   callback
 ) {
   const updateCaseRequestBody = {
@@ -21,7 +30,7 @@ export async function updateCase(
     currentFormId: formId,
   };
 
-  if (Config?.DISABLE_CLIENT_ENCRYPTION !== 'true' && !signature?.success) {
+  if (encryptAnswers) {
     const encryptedAnswers = await encryptWithAesKey(
       user,
       JSON.stringify(updateCaseRequestBody.answers)
