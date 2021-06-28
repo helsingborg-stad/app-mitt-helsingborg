@@ -158,6 +158,7 @@ InputComponent.propTypes = {
     type: PropTypes.string.isRequired,
     items: PropTypes.array,
     inputSelectValue: PropTypes.string,
+    disabled: PropTypes.bool,
   }),
   colorSchema: PropTypes.oneOf(['red', 'blue', 'green', 'purple', 'neutral']),
   editable: PropTypes.bool,
@@ -241,7 +242,7 @@ function EditableList({
         {inputs.map((input, index) => [
           <EditableListItem
             colorSchema={colorSchema}
-            editable={editable}
+            editable={editable && !input.disabled}
             key={`${input.key}-${index}`}
             error={error ? error[input.key] : undefined}
             activeOpacity={1.0}
@@ -252,7 +253,8 @@ function EditableList({
             </EditableListItemLabelWrapper>
             <EditableListItemInputWrapper>
               <InputComponent
-                {...{ input, colorSchema, editable, onChange, onInputBlur, value, state }}
+                {...{ input, colorSchema, onChange, onInputBlur, value, state }}
+                editable={editable && !input.disabled}
                 ref={(el) => {
                   inputRefs.current[index] = el;
                 }}
