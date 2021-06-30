@@ -8,6 +8,12 @@ interface User {
   personalNumber: string;
 }
 
+interface Forms {
+  answers: { encryptedAnswers: string };
+  encryption: string;
+  currentFormId: string;
+}
+
 function EncryptionException(message: string) {
   this.message = message;
   this.name = 'EncryptionException';
@@ -39,6 +45,15 @@ export async function encryptWithAesKey(user: User, text: string): Promise<strin
   }
 
   return await Aes.encrypt(text, aesEncryptor.aesKey, aesEncryptor.initializationVector);
+}
+
+export async function encryptFormAnswers(user: User, forms: Forms) {
+  const encryptedAnswers = await encryptWithAesKey(user, JSON.stringify(forms.answers));
+
+  forms.answers = { encryptedAnswers };
+  forms.encryption = 'privateAesKey';
+
+  return forms;
 }
 
 export async function decryptWithAesKey(user: User, cipher: string): Promise<string> {
