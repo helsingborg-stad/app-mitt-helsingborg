@@ -110,8 +110,7 @@ export async function fetchCases(user) {
 
       // eslint-disable-next-line no-restricted-syntax
       for await (const c of response.data.data.attributes.cases) {
-        const { encryptedAnswers } = c.forms[c.currentFormId].answers;
-        if (c?.status.type === 'active:ongoing' && encryptedAnswers) {
+        if (c?.status.type === 'active:ongoing') {
           try {
             c.forms[c.currentFormId] = await decryptFormAnswers(user, c.forms[c.currentFormId]);
             cases[c.id] = c;
