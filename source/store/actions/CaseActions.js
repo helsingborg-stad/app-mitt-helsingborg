@@ -38,7 +38,6 @@ export async function updateCase(
   }
 
   try {
-    console.log(JSON.stringify(updateCaseRequestBody));
     const res = await put(`/cases/${caseId}`, JSON.stringify(updateCaseRequestBody));
     const { id, attributes } = res.data.data;
     const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
