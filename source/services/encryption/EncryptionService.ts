@@ -68,3 +68,15 @@ export async function decryptWithAesKey(user: User, cipher: string): Promise<str
 
   return Aes.decrypt(cipher, aesEncryptor.aesKey, aesEncryptor.initializationVector);
 }
+
+export async function decryptFormAnswers(user: User, forms: Forms) {
+  if (forms.encryption === 'privateAesKey') {
+    const { encryptedAnswers } = forms.answers;
+    const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
+
+    forms.answers = JSON.parse(decryptedAnswers);
+    forms.encryption = 'decrypted';
+
+    return forms;
+  }
+}
