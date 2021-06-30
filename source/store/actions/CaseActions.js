@@ -66,7 +66,7 @@ export async function createCase(form, callback) {
       [form.id]: {
         answers: [],
         currentPosition: { index: 0, level: 0, currentMainStep: 1, currentMainStepIndex: 0 },
-        encryption: 'decrypted',
+        encryption: { type: 'decrypted' },
       },
     },
     details: {},
@@ -74,6 +74,7 @@ export async function createCase(form, callback) {
 
   try {
     const response = await post('/cases', JSON.stringify(body));
+    console.log('create resp', response);
     const newCase = response.data.data;
     const flattenedNewCase = {
       id: newCase.id,

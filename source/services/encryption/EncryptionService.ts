@@ -10,7 +10,7 @@ interface User {
 
 interface Forms {
   answers: { encryptedAnswers: string };
-  encryption: string;
+  encryption: { type: string };
   currentFormId: string;
 }
 
@@ -51,7 +51,7 @@ export async function encryptFormAnswers(user: User, forms: Forms) {
   const encryptedAnswers = await encryptWithAesKey(user, JSON.stringify(forms.answers));
 
   forms.answers = { encryptedAnswers };
-  forms.encryption = 'privateAesKey';
+  forms.encryption = { type: 'privateAesKey' };
 
   return forms;
 }
@@ -70,12 +70,12 @@ async function decryptWithAesKey(user: User, cipher: string): Promise<string> {
 }
 
 export async function decryptFormAnswers(user: User, forms: Forms) {
-  if (forms.encryption === 'privateAesKey') {
+  if (forms.encryption.type === 'privateAesKey') {
     const { encryptedAnswers } = forms.answers;
     const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
 
     forms.answers = JSON.parse(decryptedAnswers);
-    forms.encryption = 'decrypted';
+    forms.encryption.type = 'decrypted';
 
     return forms;
   }
