@@ -18,7 +18,7 @@ install() {
 init() {
     removeFolders
     clearWatchman
-    install
+    #install
 }
 
 init
