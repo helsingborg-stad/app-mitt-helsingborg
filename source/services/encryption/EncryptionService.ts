@@ -28,7 +28,7 @@ async function generateAesKey(
   return Aes.pbkdf2(password, salt, cost, length);
 }
 
-export async function encryptWithAesKey(user: User, text: string): Promise<string> {
+async function encryptWithAesKey(user: User, text: string): Promise<string> {
   const storageKeyword = `${user.personalNumber}AesKey`;
 
   let aesEncryptor = await StorageService.getData(storageKeyword);
@@ -56,7 +56,7 @@ export async function encryptFormAnswers(user: User, forms: Forms) {
   return forms;
 }
 
-export async function decryptWithAesKey(user: User, cipher: string): Promise<string> {
+async function decryptWithAesKey(user: User, cipher: string): Promise<string> {
   const storageKey = `${user.personalNumber}AesKey`;
   const aesEncryptor = await StorageService.getData(storageKey);
 
