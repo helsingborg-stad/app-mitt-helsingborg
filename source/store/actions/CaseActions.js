@@ -74,7 +74,6 @@ export async function createCase(form, callback) {
 
   try {
     const response = await post('/cases', JSON.stringify(body));
-    console.log('create resp', response);
     const newCase = response.data.data;
     const flattenedNewCase = {
       id: newCase.id,
