@@ -1,7 +1,6 @@
-import Config from 'react-native-config';
 import { get, post, put } from '../../helpers/ApiRequest';
 import { convertAnswersToArray } from '../../helpers/CaseDataConverter';
-import { encryptWithAesKey, decryptWithAesKey } from '../../services/encryption';
+import { decryptFormAnswers, encryptFormAnswers } from '../../services/encryption';
 
 export const actionTypes = {
   updateCase: 'UPDATE_CASE',
@@ -24,18 +23,14 @@ export async function updateCase(
   },
   callback
 ) {
-  const updateCaseRequestBody = {
+  let updateCaseRequestBody = {
     answers: convertAnswersToArray(answerObject, formQuestions),
     currentPosition,
     currentFormId: formId,
   };
 
   if (encryptAnswers) {
-    const encryptedAnswers = await encryptWithAesKey(
-      user,
-      JSON.stringify(updateCaseRequestBody.answers)
-    );
-    updateCaseRequestBody.answers = { encryptedAnswers };
+    updateCaseRequestBody = await encryptFormAnswers(user, updateCaseRequestBody);
   }
 
   if (signature?.success) {
@@ -43,6 +38,7 @@ export async function updateCase(
   }
 
   try {
+    console.log(JSON.stringify(updateCaseRequestBody));
     const res = await put(`/cases/${caseId}`, JSON.stringify(updateCaseRequestBody));
     const { id, attributes } = res.data.data;
     const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
@@ -71,6 +67,7 @@ export async function createCase(form, callback) {
       [form.id]: {
         answers: [],
         currentPosition: { index: 0, level: 0, currentMainStep: 1, currentMainStepIndex: 0 },
+        encryption: 'decrypted',
       },
     },
     details: {},
@@ -117,8 +114,7 @@ export async function fetchCases(user) {
         const { encryptedAnswers } = c.forms[c.currentFormId].answers;
         if (c?.status.type === 'active:ongoing' && encryptedAnswers) {
           try {
-            const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
-            c.forms[c.currentFormId].answers = JSON.parse(decryptedAnswers);
+            c.forms[c.currentFormId] = await decryptFormAnswers(user, c.forms[c.currentFormId]);
             cases[c.id] = c;
           } catch (e) {
             console.log(`Failed to decrypt answers (Case ID: ${c?.id}), Error: `, e);
