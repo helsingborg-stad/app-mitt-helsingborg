@@ -1,5 +1,4 @@
 import { NativeModules } from 'react-native';
-
 import StorageService from '../StorageService';
 
 import {
@@ -30,6 +29,7 @@ export async function encryptWithAesKey(user: UserInterface, text: string): Prom
 
   if (!aesEncryptor) {
     const password = await Aes.randomKey(16);
+
     // Salt will be updated in future real.
     const aesKey = await generateAesKey(password, 'salt4D42bf960Sm1', 5000, 256);
 
@@ -39,7 +39,12 @@ export async function encryptWithAesKey(user: UserInterface, text: string): Prom
     await StorageService.saveData(storageKeyword, aesEncryptor);
   }
 
-  return await Aes.encrypt(text, aesEncryptor.aesKey, aesEncryptor.initializationVector);
+  const aesEncryptedText = await Aes.encrypt(
+    text,
+    aesEncryptor.aesKey,
+    aesEncryptor.initializationVector
+  );
+  return aesEncryptedText;
 }
 
 export async function encryptFormAnswers(user: UserInterface, forms: FormsInterface) {
