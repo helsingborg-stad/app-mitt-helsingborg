@@ -105,37 +105,37 @@ export function deleteCase(caseId) {
 export async function fetchCases(user) {
   try {
     const response = await get('/cases');
-    if (response?.data?.data?.attributes?.cases) {
-      const cases = {};
+    const caseList = response?.data?.data?.attributes?.cases;
 
-      // eslint-disable-next-line no-restricted-syntax
-      for await (const c of response.data.data.attributes.cases) {
-        if (c?.status.type === 'active:ongoing') {
-          try {
-            c.forms[c.currentFormId] = await decryptFormAnswers(user, c.forms[c.currentFormId]);
-            cases[c.id] = c;
-          } catch (e) {
-            console.log(`Failed to decrypt answers (Case ID: ${c?.id}), Error: `, e);
-          }
-        } else {
-          cases[c.id] = c;
-        }
-      }
-
+    if (!caseList) {
       return {
         type: actionTypes.fetchCases,
-        payload: cases,
+        payload: {},
       };
     }
+
+    const userCaseCollection = await caseList.reduce(async (collection, caseItem) => {
+      const currentCaseForm = caseItem.forms[caseItem.currentFormId];
+      const { encryptedAnswers } = currentCaseForm.answers;
+
+      if (caseItem.status.type === 'active:ongoing' && encryptedAnswers) {
+        caseItem.forms[caseItem.currentFormId] = await decryptFormAnswers(user, currentCaseForm);
+      }
+
+      collection[caseItem.id] = caseItem;
+
+      return collection;
+    }, {});
+
+    return {
+      type: actionTypes.fetchCases,
+      payload: userCaseCollection,
+    };
   } catch (error) {
-    console.error(error);
+    console.error('(CaseActions) fetchCases >', error);
     return {
       type: actionTypes.apiError,
       payload: error,
     };
   }
-  return {
-    type: actionTypes.fetchCases,
-    payload: {},
-  };
 }
