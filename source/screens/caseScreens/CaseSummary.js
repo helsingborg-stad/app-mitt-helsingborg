@@ -15,6 +15,8 @@ import BackNavigation from '../../components/molecules/BackNavigation';
 import Button from '../../components/atoms/Button';
 import { formatAmount, convertDataToArray, calculateSum } from '../../helpers/FormatVivaData';
 import AuthContext from '../../store/AuthContext';
+import AuthLoading from '../../components/molecules/AuthLoading';
+import { updateCase } from '../../store/actions/CaseActions';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -93,12 +95,12 @@ Card.DetailsTitle = styled(Text)`
 
 const computeCaseCardComponent = (
   caseData,
-  personalNumber,
   form,
   formName,
   colorSchema,
   navigation,
-  toggleModal
+  toggleModal,
+  authContext
 ) => {
   const {
     currentPosition: { currentMainStep: currentStep },
@@ -119,7 +121,9 @@ const computeCaseCardComponent = (
     ? getSwedishMonthNameByTimeStamp(applicationPeriodTimestamp, true)
     : '';
 
-  const casePersonData = persons.find((person) => person.personalNumber === personalNumber);
+  const casePersonData = persons.find(
+    (person) => person.personalNumber === authContext.user.personalNumber
+  );
 
   const isNotStarted = status?.type?.includes('notStarted');
   const isOngoing = status?.type?.includes('ongoing');
@@ -143,6 +147,33 @@ const computeCaseCardComponent = (
     ? isWaitingForSign && !selfHasSigned
     : isOngoing || isNotStarted || isCompletionRequired || isSigned;
 
+  const buttonProps = {
+    onClick: () => navigation.navigate('Form', { caseId: caseData.id }),
+    text: '',
+  };
+
+  if (isOngoing) {
+    buttonProps.text = 'Fortsätt';
+  }
+
+  if (isNotStarted) {
+    buttonProps.text = 'Starta ansökan';
+  }
+
+  if (isCompletionRequired) {
+    buttonProps.text = 'Starta stickprov';
+  }
+
+  if (isSigned) {
+    buttonProps.text = 'Ladda upp filer och dokument';
+  }
+
+  if (isWaitingForSign && !selfHasSigned) {
+    buttonProps.onClick = async () => {
+      await authContext.handleSign(authContext.user.personalNumber, 'Signering Mitt Helsingborg.');
+    };
+    buttonProps.text = 'Signera med BankID';
+  }
   return (
     <Card colorSchema={colorSchema}>
       <Card.Body shadow color="neutral">
@@ -174,16 +205,8 @@ const computeCaseCardComponent = (
         )}
 
         {shouldShowCTAButton && (
-          <Card.Button
-            onClick={() => {
-              navigation.navigate('Form', { caseId: caseData.id });
-            }}
-          >
-            {isOngoing && <Text>Fortsätt ansökan</Text>}
-            {isNotStarted && <Text>Starta ansökan</Text>}
-            {isWaitingForSign && !selfHasSigned && <Text>Signera med BankID</Text>}
-            {isCompletionRequired && <Text>Starta stickprov</Text>}
-            {isSigned && <Text>Ladda upp filer och dokument</Text>}
+          <Card.Button onClick={buttonProps.onClick}>
+            <Text>{buttonProps.text}</Text>
             <Icon name="arrow-forward" />
           </Card.Button>
         )}
@@ -223,9 +246,7 @@ const CaseSummary = (props) => {
     } = {},
   } = caseData;
 
-  const {
-    user: { personalNumber },
-  } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
 
   const isFocused = useIsFocused();
   const [isModalVisible, toggleModal] = useModal();
@@ -245,6 +266,20 @@ const CaseSummary = (props) => {
     getFormObject(caseData.currentFormId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused, cases]);
+  console.log(authContext);
+  useEffect(() => {
+    if (authContext.status === 'signResolved') {
+      const userCase = getCase(caseId);
+      const caseData = {
+        caseId: userCase.id,
+        formId: userCase.currentFormId,
+        answerObject: userCase.forms[userCase.currentFormId].answers,
+        signature: { success: true },
+        currentPosition: userCase.forms[userCase.currentFormId].currentPosition,
+      };
+      updateCase(caseData);
+    }
+  }, [authContext.status, caseId, getCase]);
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
@@ -264,12 +299,12 @@ const CaseSummary = (props) => {
         {Object.keys(caseData).length > 0 &&
           computeCaseCardComponent(
             caseData,
-            personalNumber,
             form,
             formName,
             colorSchema,
             navigation,
-            toggleModal
+            toggleModal,
+            authContext
           )}
 
         {administrators && (
@@ -562,6 +597,15 @@ const CaseSummary = (props) => {
           </ModalFooter>
         </ScrollView>
       </Modal>
+      {(authContext.isLoading || authContext.isResolved) && (
+        <AuthLoading
+          colorSchema="neutral"
+          isLoading={authContext.isLoading}
+          isResolved={authContext.isResolved}
+          cancelSignIn={authContext.handleCancelOrder}
+          isBankidInstalled={authContext.isBankidInstalled}
+        />
+      )}
     </ScreenWrapper>
   );
 };
