@@ -10,8 +10,15 @@ interface User {
 
 interface Forms {
   answers: { encryptedAnswers: string };
-  encryption: { type: string };
-  currentFormId: string;
+  encryption: {
+    type: string;
+    publicKey: {
+      P: number;
+      G: number;
+      symmetricKeyName: string;
+      publicKeys: Record<number, undefined | string>;
+    };
+  };
 }
 
 function EncryptionException(message: string) {
