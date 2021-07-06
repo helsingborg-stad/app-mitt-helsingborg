@@ -29,11 +29,6 @@ interface Forms {
   };
 }
 
-function EncryptionException(message: string) {
-  this.message = message;
-  this.name = 'EncryptionException';
-}
-
 async function generateAesKey(
   password: string,
   salt: string,
