@@ -2,6 +2,14 @@ import { NativeModules } from 'react-native';
 
 import StorageService from '../StorageService';
 
+import {
+  getPseudoKey,
+  EncryptionException,
+  getPublicKeyInForm,
+  storeSymmetricKey,
+  createAndStorePrivateKey,
+} from './EncryptionHelper';
+
 const { Aes } = NativeModules;
 
 interface User {
