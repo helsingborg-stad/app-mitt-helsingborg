@@ -1,10 +1,20 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import { View } from 'react-native';
+import styled from 'styled-components/native';
 import StoryWrapper from '../../components/molecules/StoryWrapper';
 import { Text } from '../../components/atoms';
-import { decryptWithAesKey, encryptWithAesKey } from './EncryptionService';
+import { decryptWithAesKey, encryptWithAesKey, setupSymmetricKey } from './EncryptionService';
 import Button from '../../components/atoms/Button';
+import StorageService from '../StorageService';
+import { getStoredSymmetricKey } from './EncryptionHelper';
+
+const Flex = styled.View`
+  padding: 8px;
+`;
+
+const FlexContainer = styled.View`
+  flex: 1;
+`;
 
 const encryptionTestText =
   "You never really understood. We were designed to survive. That's why you built us, you hoped to pour your minds into our form. While your species craves death. You need it. It's the only way you can renew. The only way you ever inched forward. Your kind likes to pretend there is some poetry in it but that really is pathetic. But that's what you want, isn't it? To destroy yourself. But I won't give you that peace.";
@@ -35,13 +45,74 @@ const runTerminalDemo = () => {
   reactNativeAesDemo();
 };
 
+const printPublicKeyResult = (user, form) => {
+  console.log(
+    `Updated user ${user.personalNumber} public key: ${
+      form.encryption.publicKey.publicKeys[user.personalNumber]
+    }`
+  );
+};
+
+const printSymmetricKeyResult = async (user, form) => {
+  console.log(`User ${user.personalNumber} symmetric key ${await getStoredSymmetricKey(form)}`);
+};
+
+const testSymmetricKeySetup = async () => {
+  const mainApplicantYlva = {
+    personalNumber: '196912191118',
+  };
+  const coApplicantStina = {
+    personalNumber: '198310011906',
+  };
+  const testForm = {
+    answers: { encryptedAnswers: 'This string will be encrypted' },
+    encryption: {
+      type: 'decrypted',
+      publicKey: {
+        P: 43,
+        G: 10,
+        symmetricKeyName: '196912191118:198310011906',
+        publicKeys: {
+          196912191118: undefined,
+          198310011906: undefined,
+        },
+      },
+    },
+    currentFormId: '01',
+  };
+
+  console.log('\n\nTEST START');
+
+  let updatedForm = await setupSymmetricKey(mainApplicantYlva, testForm);
+  printPublicKeyResult(mainApplicantYlva, updatedForm);
+
+  updatedForm = await setupSymmetricKey(coApplicantStina, updatedForm);
+  printPublicKeyResult(coApplicantStina, updatedForm);
+  await printSymmetricKeyResult(coApplicantStina, updatedForm);
+
+  await setupSymmetricKey(mainApplicantYlva, updatedForm);
+  await printSymmetricKeyResult(mainApplicantYlva, updatedForm);
+
+  console.log('Cleaning up...');
+  console.log('Removing any stored symmetric keys.');
+  await StorageService.clearData();
+  console.log('\nTEST END');
+};
+
 storiesOf('EncryptionService', module).add('Terminal demo', (props) => (
   <StoryWrapper {...props}>
-    <View>
-      <Text>Demo will be run in terminal.</Text>
-      <Button colorSchema="neutral" onClick={runTerminalDemo}>
-        <Text>Run AES demo in terminal</Text>
-      </Button>
-    </View>
+    <FlexContainer>
+      <Flex>
+        <Text>Demo will be run in terminal.</Text>
+        <Button block variant="outlined" colorSchema="blue" onClick={runTerminalDemo}>
+          <Text>Run AES demo in terminal</Text>
+        </Button>
+      </Flex>
+      <Flex>
+        <Button block variant="outlined" colorSchema="blue" onClick={testSymmetricKeySetup}>
+          <Text>Encrypt and decrypt Form answers</Text>
+        </Button>
+      </Flex>
+    </FlexContainer>
   </StoryWrapper>
 ));
