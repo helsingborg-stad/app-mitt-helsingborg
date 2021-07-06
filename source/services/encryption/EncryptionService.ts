@@ -90,3 +90,41 @@ export async function decryptFormAnswers(user: User, forms: Forms) {
     return forms;
   }
 }
+
+export async function setupSymmetricKey(user, forms) {
+  const otherUserPersonalNumber = Object.keys(forms.encryption.publicKey.publicKeys).filter(
+    (key) => key !== user.personalNumber
+  )[0];
+
+  const otherUserPublicKey = getPublicKeyInForm(otherUserPersonalNumber, forms);
+  let ownPublicKey = getPublicKeyInForm(user.personalNumber, forms);
+
+  if (!ownPublicKey) {
+    const privateKey = await createAndStorePrivateKey(user, forms);
+    ownPublicKey = await getPseudoKey(
+      forms.encryption.publicKey.G,
+      privateKey,
+      forms.encryption.publicKey.P
+    );
+
+    forms.encryption.publicKey.publicKeys[user.personalNumber] = ownPublicKey;
+  }
+
+  if (typeof ownPublicKey !== 'undefined' && typeof otherUserPublicKey !== 'undefined') {
+    // Generate symmetric key.
+    let ownPrivateKey = await StorageService.getData(
+      `aesPrivateKey${user.personalNumber}${forms.encryption.publicKey.symmetricKeyName}`
+    );
+    ownPrivateKey = JSON.parse(ownPrivateKey);
+
+    const gotSymmetricKey = getPseudoKey(
+      otherUserPublicKey,
+      ownPrivateKey.privateKey,
+      forms.encryption.publicKey.P
+    );
+
+    await storeSymmetricKey(gotSymmetricKey, forms);
+  }
+
+  return forms;
+}
