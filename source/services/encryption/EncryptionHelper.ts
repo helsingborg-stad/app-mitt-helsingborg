@@ -9,8 +9,13 @@ export function getPublicKeyInForm(personalNumber, forms) {
   return forms.encryption.publicKey.publicKeys[personalNumber];
 }
 
-export async function getStoredSymmetricKey(symmetricKeyName) {
-  const symmetricKey = await StorageService.getData(symmetricKeyName);
+function getSymmetricKeyStorageKeyword(forms) {
+  return `${forms.encryption.publicKey.symmetricKeyName}`;
+}
+
+export async function getStoredSymmetricKey(forms) {
+  const storageKeyword = getSymmetricKeyStorageKeyword(forms);
+  const symmetricKey = await StorageService.getData(storageKeyword);
   return Number(symmetricKey);
 }
 
