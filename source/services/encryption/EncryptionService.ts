@@ -38,7 +38,7 @@ async function generateAesKey(
   return Aes.pbkdf2(password, salt, cost, length);
 }
 
-async function encryptWithAesKey(user: User, text: string): Promise<string> {
+export async function encryptWithAesKey(user: User, text: string): Promise<string> {
   const storageKeyword = `${user.personalNumber}AesKey`;
 
   let aesEncryptor = await StorageService.getData(storageKeyword);
