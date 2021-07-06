@@ -58,15 +58,12 @@ export async function encryptFormAnswers(user: User, forms: Forms) {
   const encryptedAnswers = await encryptWithAesKey(user, JSON.stringify(forms.answers));
 
   forms.answers = { encryptedAnswers };
-  forms.encryption = {
-    ...forms.encryption,
-    type: 'privateAesKey',
-  };
+  forms.encryption.type = 'privateAesKey';
 
   return forms;
 }
 
-async function decryptWithAesKey(user: User, cipher: string): Promise<string> {
+export async function decryptWithAesKey(user: User, cipher: string): Promise<string> {
   const storageKey = `${user.personalNumber}AesKey`;
   const aesEncryptor = await StorageService.getData(storageKey);
 
