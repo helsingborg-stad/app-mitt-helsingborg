@@ -24,7 +24,7 @@ export async function storeSymmetricKey(symmetricKey, forms) {
   await StorageService.saveData(storageKeyword, symmetricKey.toString());
 }
 
-// Prof of concept, will be replaced with elliptic curves.
+// Prof of concept, will be replaced with Diffie-Hellman library.
 export function getPseudoKey(G, privateKey, P) {
   if (privateKey === 1) {
     return G;
@@ -37,4 +37,15 @@ export function getPseudoRandomInteger() {
   const min = 1;
   const max = 10;
   return Math.floor(min + Math.random() * (max - min));
+}
+
+export async function createAndStorePrivateKey(user, forms) {
+  const privateKey = getPseudoRandomInteger();
+
+  await StorageService.saveData(
+    `aesPrivateKey${user.personalNumber}${forms.encryption.publicKey.symmetricKeyName}`,
+    JSON.stringify({ privateKey })
+  );
+
+  return privateKey;
 }
