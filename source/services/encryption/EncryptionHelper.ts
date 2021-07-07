@@ -22,7 +22,7 @@ export function EncryptionException(message: string) {
   this.name = 'EncryptionException';
 }
 
-export function getPublicKeyInForm(personalNumber: number, forms: FormsInterface) {
+export function getPublicKeyInForm(personalNumber: string, forms: FormsInterface) {
   return forms.encryption.publicKey.publicKeys[personalNumber];
 }
 
