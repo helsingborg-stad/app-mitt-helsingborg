@@ -110,7 +110,7 @@ storiesOf('EncryptionService', module).add('Terminal demo', (props) => (
       </Flex>
       <Flex>
         <Button block variant="outlined" colorSchema="blue" onClick={testSymmetricKeySetup}>
-          <Text>Encrypt and decrypt Form answers</Text>
+          <Text>Run symmetric key demo</Text>
         </Button>
       </Flex>
     </FlexContainer>
