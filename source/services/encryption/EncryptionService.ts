@@ -8,26 +8,11 @@ import {
   getPublicKeyInForm,
   storeSymmetricKey,
   createAndStorePrivateKey,
+  FormsInterface,
+  UserInterface,
 } from './EncryptionHelper';
 
 const { Aes } = NativeModules;
-
-interface User {
-  personalNumber: string;
-}
-
-interface Forms {
-  answers: { encryptedAnswers: string };
-  encryption: {
-    type: string;
-    publicKey: {
-      P: number;
-      G: number;
-      symmetricKeyName: string;
-      publicKeys: Record<number, undefined | string>;
-    };
-  };
-}
 
 async function generateAesKey(
   password: string,
@@ -38,7 +23,7 @@ async function generateAesKey(
   return Aes.pbkdf2(password, salt, cost, length);
 }
 
-export async function encryptWithAesKey(user: User, text: string): Promise<string> {
+export async function encryptWithAesKey(user: UserInterface, text: string): Promise<string> {
   const storageKeyword = `${user.personalNumber}AesKey`;
 
   let aesEncryptor = await StorageService.getData(storageKeyword);
@@ -57,7 +42,7 @@ export async function encryptWithAesKey(user: User, text: string): Promise<strin
   return await Aes.encrypt(text, aesEncryptor.aesKey, aesEncryptor.initializationVector);
 }
 
-export async function encryptFormAnswers(user: User, forms: Forms) {
+export async function encryptFormAnswers(user: UserInterface, forms: FormsInterface) {
   const encryptedAnswers = await encryptWithAesKey(user, JSON.stringify(forms.answers));
 
   forms.answers = { encryptedAnswers };
@@ -66,7 +51,7 @@ export async function encryptFormAnswers(user: User, forms: Forms) {
   return forms;
 }
 
-export async function decryptWithAesKey(user: User, cipher: string): Promise<string> {
+export async function decryptWithAesKey(user: UserInterface, cipher: string): Promise<string> {
   const storageKey = `${user.personalNumber}AesKey`;
   const aesEncryptor = await StorageService.getData(storageKey);
 
@@ -79,7 +64,7 @@ export async function decryptWithAesKey(user: User, cipher: string): Promise<str
   return Aes.decrypt(cipher, aesEncryptor.aesKey, aesEncryptor.initializationVector);
 }
 
-export async function decryptFormAnswers(user: User, forms: Forms) {
+export async function decryptFormAnswers(user: UserInterface, forms: FormsInterface) {
   if (forms.encryption.type === 'privateAesKey') {
     const { encryptedAnswers } = forms.answers;
     const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
