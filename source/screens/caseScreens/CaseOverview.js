@@ -195,8 +195,7 @@ function CaseOverview(props) {
   useFocusEffect(
     useCallback(() => {
       fetchCases();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [fetchCases])
   );
 
   useFocusEffect(
