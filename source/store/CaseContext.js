@@ -57,16 +57,11 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
     return state?.cases[caseId];
   }
 
-  /**
-   * This functions retrives cases based on formIds
-   * @param {array} formIds an array of form ids.
-   * @returns {array}
-   */
   function getCasesByFormIds(formIds) {
     const formCases = [];
-    Object.values(state.cases).forEach((c) => {
-      if (formIds.includes(c.currentFormId)) {
-        formCases.push(c);
+    Object.values(state.cases).forEach((caseItem) => {
+      if (formIds.includes(caseItem.currentFormId)) {
+        formCases.push(caseItem);
       }
     });
 
