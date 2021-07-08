@@ -247,8 +247,6 @@ async function updateCaseSignature(caseItem, signatureSuccesful) {
  */
 const CaseSummary = (props) => {
   const authContext = useContext(AuthContext);
-  console.log('🚀 ~ file: CaseSummary.js ~ line 233 ~ CaseSummary ~ authContext', authContext);
-  console.log(authContext.isResolved);
   const { cases, getCase } = useContext(CaseState);
   const { getForm } = useContext(FormContext);
   const [caseData, setCaseData] = useState({});

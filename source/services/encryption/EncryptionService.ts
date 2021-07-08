@@ -8,6 +8,12 @@ interface User {
   personalNumber: string;
 }
 
+interface Forms {
+  answers: { encryptedAnswers: string };
+  encryption: { type: string };
+  currentFormId: string;
+}
+
 function EncryptionException(message: string) {
   this.message = message;
   this.name = 'EncryptionException';
@@ -22,7 +28,7 @@ async function generateAesKey(
   return Aes.pbkdf2(password, salt, cost, length);
 }
 
-export async function encryptWithAesKey(user: User, text: string): Promise<string> {
+async function encryptWithAesKey(user: User, text: string): Promise<string> {
   const storageKeyword = `${user.personalNumber}AesKey`;
 
   let aesEncryptor = await StorageService.getData(storageKeyword);
@@ -41,7 +47,16 @@ export async function encryptWithAesKey(user: User, text: string): Promise<strin
   return await Aes.encrypt(text, aesEncryptor.aesKey, aesEncryptor.initializationVector);
 }
 
-export async function decryptWithAesKey(user: User, cipher: string): Promise<string> {
+export async function encryptFormAnswers(user: User, forms: Forms) {
+  const encryptedAnswers = await encryptWithAesKey(user, JSON.stringify(forms.answers));
+
+  forms.answers = { encryptedAnswers };
+  forms.encryption = { type: 'privateAesKey' };
+
+  return forms;
+}
+
+async function decryptWithAesKey(user: User, cipher: string): Promise<string> {
   const storageKey = `${user.personalNumber}AesKey`;
   const aesEncryptor = await StorageService.getData(storageKey);
 
@@ -52,4 +67,16 @@ export async function decryptWithAesKey(user: User, cipher: string): Promise<str
   }
 
   return Aes.decrypt(cipher, aesEncryptor.aesKey, aesEncryptor.initializationVector);
+}
+
+export async function decryptFormAnswers(user: User, forms: Forms) {
+  if (forms.encryption.type === 'privateAesKey') {
+    const { encryptedAnswers } = forms.answers;
+    const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
+
+    forms.answers = JSON.parse(decryptedAnswers);
+    forms.encryption.type = 'decrypted';
+
+    return forms;
+  }
 }
