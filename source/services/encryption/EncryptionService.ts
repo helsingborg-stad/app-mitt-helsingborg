@@ -86,7 +86,7 @@ export async function setupSymmetricKey(user, forms) {
 
   if (!ownPublicKey) {
     const privateKey = await createAndStorePrivateKey(user, forms);
-    ownPublicKey = await getPseudoKey(
+    ownPublicKey = getPseudoKey(
       forms.encryption.publicKey.G,
       privateKey,
       forms.encryption.publicKey.P
