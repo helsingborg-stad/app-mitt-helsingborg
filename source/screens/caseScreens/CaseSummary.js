@@ -224,12 +224,31 @@ const computeCaseCardComponent = (
   );
 };
 
+async function updateCaseSignature(caseItem, signatureSuccesful) {
+  const currentForm = caseItem.forms[caseItem.currentFormId];
+
+  const updateCaseRequestBody = {
+    answers: currentForm.answers,
+    currentPosition: currentForm.currentPosition,
+    currentFormId: currentForm.id,
+    signature: { success: signatureSuccesful },
+  };
+  try {
+    const updateCaseResponse = await put(`/cases/${caseId}`, JSON.stringify(updateCaseRequestBody));
+    return updateCaseResponse;
+  } catch (error) {
+    console.log(`Could not update case with new signature: ${error}`);
+  }
+}
+
 /**
  * Case summary screen
  * @param {obj} props
  */
 const CaseSummary = (props) => {
   const authContext = useContext(AuthContext);
+  console.log('🚀 ~ file: CaseSummary.js ~ line 233 ~ CaseSummary ~ authContext', authContext);
+  console.log(authContext.isResolved);
   const { cases, getCase } = useContext(CaseState);
   const { getForm } = useContext(FormContext);
   const [caseData, setCaseData] = useState({});
@@ -269,26 +288,35 @@ const CaseSummary = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused, cases]);
 
+  const updateCaseSignature = useCallback(async (caseItem, signatureSuccessful) => {
+    const currentForm = caseItem.forms[caseItem.currentFormId];
+
+    const updateCaseRequestBody = {
+      ...currentForm,
+      signature: { success: signatureSuccessful },
+    };
+
+    try {
+      const updateCaseResponse = await put(
+        `/cases/${caseItem.id}`,
+        JSON.stringify(updateCaseRequestBody)
+      );
+      return updateCaseResponse;
+    } catch (error) {
+      console.log(`Could not update case with new signature: ${error}`);
+    }
+  }, []);
+
   useEffect(() => {
     const updateCaseAfterSignature = async () => {
       if (authContext.status === 'signResolved') {
         const userCase = getCase(caseId);
-
-        const caseData = {
-          user: authContext.user,
-          caseId: userCase.id,
-          formId: userCase.currentFormId,
-          answerObject: userCase.forms[userCase.currentFormId].answers,
-          signature: { success: true },
-          currentPosition: userCase.forms[userCase.currentFormId].currentPosition,
-        };
-
-        await updateCase(caseData);
+        await updateCaseSignature(userCase, true);
       }
     };
 
     updateCaseAfterSignature();
-  }, [authContext.status, authContext.user, caseId, getCase]);
+  }, [updateCaseSignature, authContext.status, caseId, getCase]);
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
@@ -606,7 +634,7 @@ const CaseSummary = (props) => {
           </ModalFooter>
         </ScrollView>
       </Modal>
-      {(authContext.isLoading || authContext.isResolved) && (
+      {authContext.isLoading && (
         <AuthLoading
           colorSchema="neutral"
           isLoading={authContext.isLoading}
