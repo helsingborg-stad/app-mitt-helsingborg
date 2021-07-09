@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { View, Animated, Easing, ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import { CaseState } from 'app/store/CaseContext';
@@ -16,7 +16,7 @@ import Button from '../../components/atoms/Button';
 import { formatAmount, convertDataToArray, calculateSum } from '../../helpers/FormatVivaData';
 import AuthContext from '../../store/AuthContext';
 import AuthLoading from '../../components/molecules/AuthLoading';
-import { updateCase } from '../../store/actions/CaseActions';
+import { put } from '../../helpers/ApiRequest';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -211,6 +211,7 @@ const computeCaseCardComponent = (
             <Icon name="arrow-forward" />
           </Card.Button>
         )}
+
         {isClosed && decision?.decisions && (
           <CardButtonWrapper>
             <Card.Button colorSchema={colorSchema} mt={3} onClick={toggleModal}>
@@ -223,23 +224,6 @@ const computeCaseCardComponent = (
     </Card>
   );
 };
-
-async function updateCaseSignature(caseItem, signatureSuccesful) {
-  const currentForm = caseItem.forms[caseItem.currentFormId];
-
-  const updateCaseRequestBody = {
-    answers: currentForm.answers,
-    currentPosition: currentForm.currentPosition,
-    currentFormId: currentForm.id,
-    signature: { success: signatureSuccesful },
-  };
-  try {
-    const updateCaseResponse = await put(`/cases/${caseId}`, JSON.stringify(updateCaseRequestBody));
-    return updateCaseResponse;
-  } catch (error) {
-    console.log(`Could not update case with new signature: ${error}`);
-  }
-}
 
 /**
  * Case summary screen
