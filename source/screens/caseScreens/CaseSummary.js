@@ -174,6 +174,7 @@ const computeCaseCardComponent = (
     };
     buttonProps.text = 'Signera med BankID';
   }
+
   return (
     <Card colorSchema={colorSchema}>
       <Card.Body shadow color="neutral">
@@ -286,20 +287,27 @@ const CaseSummary = (props) => {
     getFormObject(caseData.currentFormId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused, cases]);
-  console.log(authContext);
+
   useEffect(() => {
-    if (authContext.status === 'signResolved') {
-      const userCase = getCase(caseId);
-      const caseData = {
-        caseId: userCase.id,
-        formId: userCase.currentFormId,
-        answerObject: userCase.forms[userCase.currentFormId].answers,
-        signature: { success: true },
-        currentPosition: userCase.forms[userCase.currentFormId].currentPosition,
-      };
-      updateCase(caseData);
-    }
-  }, [authContext.status, caseId, getCase]);
+    const updateCaseAfterSignature = async () => {
+      if (authContext.status === 'signResolved') {
+        const userCase = getCase(caseId);
+
+        const caseData = {
+          user: authContext.user,
+          caseId: userCase.id,
+          formId: userCase.currentFormId,
+          answerObject: userCase.forms[userCase.currentFormId].answers,
+          signature: { success: true },
+          currentPosition: userCase.forms[userCase.currentFormId].currentPosition,
+        };
+
+        await updateCase(caseData);
+      }
+    };
+
+    updateCaseAfterSignature();
+  }, [authContext.status, authContext.user, caseId, getCase]);
 
   const updateCaseSignature = useCallback(async (caseItem, signatureSuccessful) => {
     const currentForm = caseItem.forms[caseItem.currentFormId];
