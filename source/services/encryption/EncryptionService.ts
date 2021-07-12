@@ -77,7 +77,7 @@ export async function decryptFormAnswers(user: UserInterface, forms: FormsInterf
   }
 }
 
-export async function setupSymmetricKey(user, forms) {
+export async function setupSymmetricKey(user: UserInterface, forms: FormsInterface) {
   const otherUserPersonalNumber = Object.keys(forms.encryption.publicKey.publicKeys).filter(
     (key) => key !== user.personalNumber
   )[0];
