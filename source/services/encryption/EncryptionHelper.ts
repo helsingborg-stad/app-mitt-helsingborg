@@ -66,3 +66,16 @@ export async function createAndStorePrivateKey(user: UserInterface, forms: Forms
 
   return privateKey;
 }
+
+export async function generateSymmetricKey(
+  user: UserInterface,
+  forms: FormsInterface,
+  otherUserPublicKey
+) {
+  let ownPrivateKey = await StorageService.getData(
+    `aesPrivateKey${user.personalNumber}${forms.encryption.publicKey.symmetricKeyName}`
+  );
+  ownPrivateKey = JSON.parse(ownPrivateKey);
+
+  return getPseudoKey(otherUserPublicKey, ownPrivateKey.privateKey, forms.encryption.publicKey.P);
+}

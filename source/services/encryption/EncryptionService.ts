@@ -3,13 +3,14 @@ import { NativeModules } from 'react-native';
 import StorageService from '../StorageService';
 
 import {
+  FormsInterface,
+  UserInterface,
   getPseudoKey,
   EncryptionException,
   getPublicKeyInForm,
   storeSymmetricKey,
   createAndStorePrivateKey,
-  FormsInterface,
-  UserInterface,
+  generateSymmetricKey,
 } from './EncryptionHelper';
 
 const { Aes } = NativeModules;
@@ -96,17 +97,7 @@ export async function setupSymmetricKey(user, forms) {
   }
 
   if (typeof ownPublicKey !== 'undefined' && typeof otherUserPublicKey !== 'undefined') {
-    // Generate symmetric key.
-    let ownPrivateKey = await StorageService.getData(
-      `aesPrivateKey${user.personalNumber}${forms.encryption.publicKey.symmetricKeyName}`
-    );
-    ownPrivateKey = JSON.parse(ownPrivateKey);
-
-    const gotSymmetricKey = getPseudoKey(
-      otherUserPublicKey,
-      ownPrivateKey.privateKey,
-      forms.encryption.publicKey.P
-    );
+    const gotSymmetricKey = await generateSymmetricKey(user, forms, otherUserPublicKey);
 
     await storeSymmetricKey(gotSymmetricKey, forms);
   }
