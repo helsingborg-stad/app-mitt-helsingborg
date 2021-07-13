@@ -5,12 +5,13 @@ import icons from 'source/helpers/Icons';
 import styled from 'styled-components/native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Text } from '../../components/atoms';
-import { Card, CaseCard, Header, ScreenWrapper } from '../../components/molecules';
+import { AuthLoading, Card, CaseCard, Header, ScreenWrapper } from '../../components/molecules';
 import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 import { CaseState, caseTypes } from '../../store/CaseContext';
 import FormContext from '../../store/FormContext';
 import { convertDataToArray, calculateSum } from '../../helpers/FormatVivaData';
 import AuthContext from '../../store/AuthContext';
+import { put } from '../../helpers/ApiRequest';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -36,7 +37,7 @@ const colorSchema = 'red';
  * @param {obj} navigation
  * @param {obj} authContext
  */
-const computeCaseCardComponent = (caseData, navigation, authContext) => {
+const computeCaseCardComponent = (caseData, navigation, authContext, signCaseFunc) => {
   const currentStep =
     caseData?.forms?.[caseData.currentFormId]?.currentPosition?.currentMainStep || 0;
   const totalSteps = caseData.form?.stepStructure ? caseData.form.stepStructure.length : 0;
@@ -102,9 +103,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext) => {
   }
 
   if (isWaitingForSign && !selfHasSigned) {
-    buttonProps.onClick = async () => {
-      await authContext.handleSign(authContext.user.personalNumber, 'Signering Mitt Helsingborg.');
-    };
+    buttonProps.onClick = () => signCaseFunc(caseData);
     buttonProps.text = 'Granska och signera';
   }
 
@@ -155,6 +154,7 @@ function CaseOverview(props) {
   const [caseItems, setCaseItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [pendingCaseSign, setPendingCaseSign] = useState(null);
   const { cases, getCasesByFormIds, fetchCases } = useContext(CaseState);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
@@ -225,6 +225,34 @@ function CaseOverview(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cases]);
 
+  const signCase = useCallback(
+    async (caseData) => {
+      setPendingCaseSign(caseData);
+      await authContext.handleSign(authContext.user.personalNumber, 'Signering Mitt Helsingborg.');
+    },
+    [authContext, setPendingCaseSign]
+  );
+
+  useEffect(() => {
+    if (pendingCaseSign && authContext.status === 'signResolved') {
+      (async () => {
+        const currentForm = pendingCaseSign.forms[pendingCaseSign.currentFormId];
+
+        const updateCaseRequestBody = {
+          ...currentForm,
+          signature: { success: true },
+        };
+
+        try {
+          await put(`/cases/${pendingCaseSign.id}`, JSON.stringify(updateCaseRequestBody));
+          setPendingCaseSign(null);
+        } catch (error) {
+          console.log(`Could not update case with new signature: ${error}`);
+        }
+      })();
+    }
+  }, [pendingCaseSign, authContext.status, setPendingCaseSign]);
+
   return (
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
@@ -233,7 +261,7 @@ function CaseOverview(props) {
         {activeCases.length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             {activeCases.map((caseData) =>
-              computeCaseCardComponent(caseData, navigation, authContext)
+              computeCaseCardComponent(caseData, navigation, authContext, signCase)
             )}
           </Animated.View>
         )}
@@ -257,6 +285,15 @@ function CaseOverview(props) {
           </Animated.View>
         )}
       </Container>
+      {authContext.isLoading && (
+        <AuthLoading
+          colorSchema="neutral"
+          isLoading={authContext.isLoading}
+          isResolved={authContext.isResolved}
+          cancelSignIn={authContext.handleCancelOrder}
+          isBankidInstalled={authContext.isBankidInstalled}
+        />
+      )}
     </ScreenWrapper>
   );
 }
