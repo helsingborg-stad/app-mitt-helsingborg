@@ -9,7 +9,7 @@ import icons from '../../helpers/Icons';
 import { launchPhone, launchEmail } from '../../helpers/LaunchExternalApp';
 import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 import { Icon, Text } from '../../components/atoms';
-import { Card, HelpButton, ScreenWrapper } from '../../components/molecules';
+import { Card, HelpButton, ScreenWrapper, CaseCard } from '../../components/molecules';
 import { Modal, useModal } from '../../components/molecules/Modal';
 import BackNavigation from '../../components/molecules/BackNavigation';
 import Button from '../../components/atoms/Button';
@@ -168,6 +168,10 @@ const computeCaseCardComponent = (
     buttonProps.text = 'Ladda upp filer och dokument';
   }
 
+  if (isClosed) {
+    buttonProps.text = 'Visa beslut';
+  }
+
   if (isWaitingForSign && !selfHasSigned) {
     buttonProps.onClick = async () => {
       await authContext.handleSign(authContext.user.personalNumber, 'Signering Mitt Helsingborg.');
@@ -175,53 +179,31 @@ const computeCaseCardComponent = (
     buttonProps.text = 'Signera med BankID';
   }
 
+  const giveDate = payments?.payment?.givedate
+    ? `${payments.payment.givedate.split('-')[2]} ${getSwedishMonthNameByTimeStamp(
+        payments.payment.givedate,
+        true
+      )}`
+    : null;
+
   return (
-    <Card colorSchema={colorSchema}>
-      <Card.Body shadow color="neutral">
-        <Card.Title colorSchema="neutral">{applicationPeriodMonth || formName}</Card.Title>
-        <Card.SubTitle>{status.name}</Card.SubTitle>
-        {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
-        <Card.Text>{status.description}</Card.Text>
-
-        {isClosed && Object.keys(paymentsArray).length > 0 && (
-          <Card.Text mt={1.5} strong colorSchema="neutral">
-            Utbetalning: {calculateSum(paymentsArray, 'kronor')}
-          </Card.Text>
-        )}
-
-        {isClosed && payments?.payment?.givedate && (
-          <Card.Meta colorSchema="neutral">
-            Betalas ut:{' '}
-            {`${payments.payment.givedate.split('-')[2]} ${getSwedishMonthNameByTimeStamp(
-              payments.payment.givedate,
-              true
-            )}`}
-          </Card.Meta>
-        )}
-
-        {isClosed && Object.keys(partiallyApprovedDecisionsAndRejected).length > 0 && (
-          <Card.Text mt={1} strong colorSchema="neutral">
-            Avslaget: {calculateSum(partiallyApprovedDecisionsAndRejected, 'kronor')}
-          </Card.Text>
-        )}
-
-        {shouldShowCTAButton && (
-          <Card.Button onClick={buttonProps.onClick}>
-            <Text>{buttonProps.text}</Text>
-            <Icon name="arrow-forward" />
-          </Card.Button>
-        )}
-
-        {isClosed && decision?.decisions && (
-          <CardButtonWrapper>
-            <Card.Button colorSchema={colorSchema} mt={3} onClick={toggleModal}>
-              <Text>Visa beslut</Text>
-              <Icon name="remove-red-eye" />
-            </Card.Button>
-          </CardButtonWrapper>
-        )}
-      </Card.Body>
-    </Card>
+    <CaseCard
+      colorSchema={colorSchema}
+      name={applicationPeriodMonth || formName}
+      subtitle={status.name}
+      showProgress={isOngoing}
+      currentStep={currentStep}
+      totalSteps={totalSteps}
+      description={status.description}
+      showPayments={isClosed && !!payments?.payment?.givedate}
+      approvedAmount={calculateSum(paymentsArray, 'kronor')}
+      givedate={giveDate}
+      declinedAmount={calculateSum(partiallyApprovedDecisionsAndRejected, 'kronor')}
+      showButton={isClosed || shouldShowCTAButton}
+      buttonText={buttonProps.text}
+      onButtonClick={isClosed ? toggleModal : buttonProps.onClick}
+      buttonIconName={isClosed ? 'remove-red-eye' : 'arrow-forward'}
+    />
   );
 };
 

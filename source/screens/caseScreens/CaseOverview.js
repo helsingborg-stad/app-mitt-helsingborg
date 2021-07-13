@@ -4,8 +4,8 @@ import { Animated, Easing, RefreshControl } from 'react-native';
 import icons from 'source/helpers/Icons';
 import styled from 'styled-components/native';
 import { useFocusEffect } from '@react-navigation/native';
-import { Icon, Text } from '../../components/atoms';
-import { Card, Header, ScreenWrapper } from '../../components/molecules';
+import { Text } from '../../components/atoms';
+import { Card, CaseCard, Header, ScreenWrapper } from '../../components/molecules';
 import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 import { CaseState, caseTypes } from '../../store/CaseContext';
 import FormContext from '../../store/FormContext';
@@ -28,30 +28,18 @@ Card.MessageBody = styled(Card.Body)`
   background-color: ${(props) => props.theme.colors.neutrals[5]};
 `;
 
-Card.LargeText = styled(Card.Text)`
-  font-size: ${(props) => props.theme.fontSizes[4]}px;
-  font-weight: ${(props) => props.theme.fontWeights[1]};
-  margin-bottom: 4px;
-`;
-
-Card.Meta = styled(Card.Text)`
-  font-size: ${(props) => props.theme.fontSizes[3]}px;
-  ${(props) => `color: ${props.theme.colors.neutrals[1]};`}
-`;
-
 const colorSchema = 'red';
 
 /**
  * Returns a case card component depending on it's status
  * @param {obj} caseData
- * @param {obj} form
- * @param {obj} caseType
  * @param {obj} navigation
+ * @param {obj} authContext
  */
-const computeCaseCardComponent = (caseData, personalNumber, form, caseType, navigation) => {
+const computeCaseCardComponent = (caseData, navigation, authContext) => {
   const currentStep =
     caseData?.forms?.[caseData.currentFormId]?.currentPosition?.currentMainStep || 0;
-  const totalSteps = form?.stepStructure ? form.stepStructure.length : 0;
+  const totalSteps = caseData.form?.stepStructure ? caseData.form.stepStructure.length : 0;
   const {
     details: {
       period = {},
@@ -74,7 +62,9 @@ const computeCaseCardComponent = (caseData, personalNumber, form, caseType, navi
     ['03', '02'].includes(decision.typecode)
   );
 
-  const casePersonData = persons.find((person) => person.personalNumber === personalNumber);
+  const casePersonData = persons.find(
+    (person) => person.personalNumber === authContext.user.personalNumber
+  );
 
   const statusType = caseData?.status?.type || '';
   const isNotStarted = statusType.includes('notStarted');
@@ -90,66 +80,69 @@ const computeCaseCardComponent = (caseData, personalNumber, form, caseType, navi
     ? isWaitingForSign && !selfHasSigned
     : isOngoing || isNotStarted || isCompletionRequired || isSigned;
 
+  const buttonProps = {
+    onClick: () => navigation.navigate('Form', { caseId: caseData.id }),
+    text: '',
+  };
+
+  if (isOngoing) {
+    buttonProps.text = 'Fortsätt';
+  }
+
+  if (isNotStarted) {
+    buttonProps.text = 'Starta ansökan';
+  }
+
+  if (isCompletionRequired) {
+    buttonProps.text = 'Starta stickprov';
+  }
+
+  if (isSigned) {
+    buttonProps.text = 'Ladda upp filer och dokument';
+  }
+
+  if (isWaitingForSign && !selfHasSigned) {
+    buttonProps.onClick = async () => {
+      await authContext.handleSign(authContext.user.personalNumber, 'Signering Mitt Helsingborg.');
+    };
+    buttonProps.text = 'Granska och signera';
+  }
+
+  const giveDate = payments?.payment?.givedate
+    ? `${payments.payment.givedate.split('-')[2]} ${getSwedishMonthNameByTimeStamp(
+        payments.payment.givedate,
+        true
+      )}`
+    : null;
+
   return (
-    <Card key={caseData.id} colorSchema={colorSchema}>
-      <Card.Body
-        shadow
-        color="neutral"
-        onPress={() => {
-          navigation.navigate('UserEvents', {
-            screen: caseType.navigateTo,
-            params: {
-              id: caseData.id,
-              name: caseType.name,
-            },
-          });
-        }}
-      >
-        <Card.Image source={icons[caseType.icon]} />
-        <Card.Title colorSchema="neutral">{caseType.name}</Card.Title>
-        {applicationPeriodMonth && (
-          <Card.LargeText mt={0.5}>{applicationPeriodMonth}</Card.LargeText>
-        )}
-        <Card.SubTitle>{caseData.status.name}</Card.SubTitle>
-        {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
-        {shouldShowCTAButton && (
-          <Card.Button
-            onClick={() => {
-              navigation.navigate('Form', { caseId: caseData.id });
-            }}
-          >
-            {isOngoing && <Text>Fortsätt</Text>}
-            {isNotStarted && <Text>Starta ansökan</Text>}
-            {isWaitingForSign && !selfHasSigned && <Text>Granska och signera</Text>}
-            {isCompletionRequired && <Text>Starta stickprov</Text>}
-            {isSigned && <Text>Ladda upp filer och dokument</Text>}
-            <Icon name="arrow-forward" />
-          </Card.Button>
-        )}
-
-        {isClosed && Object.keys(paymentsArray).length > 0 && (
-          <Card.Text mt={1.5} strong colorSchema="neutral">
-            Utbetalning: {calculateSum(paymentsArray, 'kronor')}
-          </Card.Text>
-        )}
-
-        {isClosed && payments?.payment?.givedate && (
-          <Card.Meta colorSchema="neutral">
-            Betalas ut:{' '}
-            {`${payments.payment.givedate.split('-')[2]} ${getSwedishMonthNameByTimeStamp(
-              payments.payment.givedate,
-              true
-            )}`}
-          </Card.Meta>
-        )}
-
-        {isClosed && Object.keys(partiallyApprovedDecisionsAndRejected).length > 0 && (
-          <Card.Text mt={1} strong colorSchema="neutral">
-            Avslaget: {calculateSum(partiallyApprovedDecisionsAndRejected, 'kronor')}
-          </Card.Text>
-        )}
-      </Card.Body>
-    </Card>
+    <CaseCard
+      key={caseData.id}
+      colorSchema={colorSchema}
+      name={`card${caseData.caseType.name}`}
+      subtitle={caseData.status.name}
+      month={applicationPeriodMonth}
+      icon={icons[caseData.caseType.icon]}
+      showButton={shouldShowCTAButton}
+      buttonText={buttonProps.text}
+      currentStep={currentStep}
+      totalSteps={totalSteps}
+      showPayments={isClosed}
+      showProgress={isOngoing}
+      payments={calculateSum(paymentsArray)}
+      declined={calculateSum(partiallyApprovedDecisionsAndRejected)}
+      givedate={giveDate}
+      onCardClick={() => {
+        navigation.navigate('UserEvents', {
+          screen: caseData.caseType.navigateTo,
+          params: {
+            id: caseData.id,
+            name: caseData.caseType.name,
+          },
+        });
+      }}
+      onButtonClick={buttonProps.onClick}
+    />
   );
 };
 
@@ -166,9 +159,7 @@ function CaseOverview(props) {
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
-  const {
-    user: { personalNumber },
-  } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
 
   const wait = (timeout) => new Promise((resolve) => setTimeout(resolve, timeout));
 
@@ -217,16 +208,9 @@ function CaseOverview(props) {
         const formCases = getCasesByFormIds(formIds);
         const updatedFormCaseObjects = formCases.map(async (caseData) => {
           const form = await getForm(caseData.currentFormId);
-          const component = computeCaseCardComponent(
-            caseData,
-            personalNumber,
-            form,
-            caseType,
-            navigation
-          );
-          return { component, ...caseData };
+          return { ...caseData, caseType, form };
         });
-        return Promise.all(updatedFormCaseObjects).then((updatedItems) => updatedItems);
+        return Promise.all(updatedFormCaseObjects);
       });
 
       await Promise.all(updateCaseItemsPromises).then((updatedItems) => {
@@ -248,7 +232,9 @@ function CaseOverview(props) {
         <ListHeading type="h5">Aktiva</ListHeading>
         {activeCases.length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
-            {activeCases.map((caseData) => caseData.component)}
+            {activeCases.map((caseData) =>
+              computeCaseCardComponent(caseData, navigation, authContext)
+            )}
           </Animated.View>
         )}
 
@@ -265,7 +251,9 @@ function CaseOverview(props) {
         {closedCases.length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             <ListHeading type="h5">Avslutade</ListHeading>
-            {closedCases.map((caseData) => caseData.component)}
+            {closedCases.map((caseData) =>
+              computeCaseCardComponent(caseData, navigation, authContext)
+            )}
           </Animated.View>
         )}
       </Container>
