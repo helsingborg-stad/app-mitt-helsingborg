@@ -39,7 +39,7 @@ jest.mock('react-native-reanimated', () => {
 /**
  * Mock NativeAnimatedHelper
  */
-jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
 /**
  * Mock react-native datetimepicker

@@ -2,22 +2,18 @@ import { NativeModules } from 'react-native';
 
 import StorageService from '../StorageService';
 
+import {
+  FormsInterface,
+  UserInterface,
+  getPseudoKey,
+  EncryptionException,
+  getPublicKeyInForm,
+  storeSymmetricKey,
+  createAndStorePrivateKey,
+  generateSymmetricKey,
+} from './EncryptionHelper';
+
 const { Aes } = NativeModules;
-
-interface User {
-  personalNumber: string;
-}
-
-interface Forms {
-  answers: { encryptedAnswers: string };
-  encryption: { type: string };
-  currentFormId: string;
-}
-
-function EncryptionException(message: string) {
-  this.message = message;
-  this.name = 'EncryptionException';
-}
 
 async function generateAesKey(
   password: string,
@@ -28,7 +24,7 @@ async function generateAesKey(
   return Aes.pbkdf2(password, salt, cost, length);
 }
 
-async function encryptWithAesKey(user: User, text: string): Promise<string> {
+export async function encryptWithAesKey(user: UserInterface, text: string): Promise<string> {
   const storageKeyword = `${user.personalNumber}AesKey`;
 
   let aesEncryptor = await StorageService.getData(storageKeyword);
@@ -47,16 +43,16 @@ async function encryptWithAesKey(user: User, text: string): Promise<string> {
   return await Aes.encrypt(text, aesEncryptor.aesKey, aesEncryptor.initializationVector);
 }
 
-export async function encryptFormAnswers(user: User, forms: Forms) {
+export async function encryptFormAnswers(user: UserInterface, forms: FormsInterface) {
   const encryptedAnswers = await encryptWithAesKey(user, JSON.stringify(forms.answers));
 
   forms.answers = { encryptedAnswers };
-  forms.encryption = { type: 'privateAesKey' };
+  forms.encryption.type = 'privateAesKey';
 
   return forms;
 }
 
-async function decryptWithAesKey(user: User, cipher: string): Promise<string> {
+export async function decryptWithAesKey(user: UserInterface, cipher: string): Promise<string> {
   const storageKey = `${user.personalNumber}AesKey`;
   const aesEncryptor = await StorageService.getData(storageKey);
 
@@ -69,7 +65,7 @@ async function decryptWithAesKey(user: User, cipher: string): Promise<string> {
   return Aes.decrypt(cipher, aesEncryptor.aesKey, aesEncryptor.initializationVector);
 }
 
-export async function decryptFormAnswers(user: User, forms: Forms) {
+export async function decryptFormAnswers(user: UserInterface, forms: FormsInterface) {
   if (forms.encryption.type === 'privateAesKey') {
     const { encryptedAnswers } = forms.answers;
     const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
@@ -79,4 +75,32 @@ export async function decryptFormAnswers(user: User, forms: Forms) {
 
     return forms;
   }
+}
+
+export async function setupSymmetricKey(user: UserInterface, forms: FormsInterface) {
+  const otherUserPersonalNumber = Object.keys(forms.encryption.publicKey.publicKeys).filter(
+    (key) => key !== user.personalNumber
+  )[0];
+
+  const otherUserPublicKey = getPublicKeyInForm(otherUserPersonalNumber, forms);
+  let ownPublicKey = getPublicKeyInForm(user.personalNumber, forms);
+
+  if (!ownPublicKey) {
+    const privateKey = await createAndStorePrivateKey(user, forms);
+    ownPublicKey = getPseudoKey(
+      forms.encryption.publicKey.G,
+      privateKey,
+      forms.encryption.publicKey.P
+    );
+
+    forms.encryption.publicKey.publicKeys[user.personalNumber] = ownPublicKey;
+  }
+
+  if (typeof ownPublicKey !== 'undefined' && typeof otherUserPublicKey !== 'undefined') {
+    const gotSymmetricKey = await generateSymmetricKey(user, forms, otherUserPublicKey);
+
+    await storeSymmetricKey(gotSymmetricKey, forms);
+  }
+
+  return forms;
 }
