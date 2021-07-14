@@ -27,7 +27,7 @@ export function getPublicKeyInForm(personalNumber: string, forms: FormsInterface
 }
 
 function getSymmetricKeyStorageKeyword(forms: FormsInterface) {
-  return `${forms.encryption.publicKey.symmetricKeyName}`;
+  return forms.encryption.publicKey.symmetricKeyName;
 }
 
 export async function getStoredSymmetricKey(forms: FormsInterface) {
