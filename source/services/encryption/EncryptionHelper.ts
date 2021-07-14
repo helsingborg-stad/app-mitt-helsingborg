@@ -54,6 +54,7 @@ export function getPseudoKey(G: number, privateKey: number, P: number) {
   return G ** privateKey % P;
 }
 
+// Prof of concept, will be replaced by encryption library.
 export function getPseudoRandomInteger() {
   const min = 1;
   const max = 10;
