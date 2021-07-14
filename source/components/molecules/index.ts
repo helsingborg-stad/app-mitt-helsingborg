@@ -1,5 +1,6 @@
 export { default as AuthLoading } from './AuthLoading';
 export { default as Card } from './Card';
+export { default as CaseCard } from './CaseCard';
 export { default as DateTimePicker } from './DateTimePicker';
 export { default as CalendarPicker } from './CalendarPicker';
 export { default as GroupedList } from './GroupedList';
