@@ -30,6 +30,10 @@ function getSymmetricKeyStorageKeyword(forms: FormsInterface) {
   return forms.encryption.publicKey.symmetricKeyName;
 }
 
+function getPrivateKeyStorageKeyword(user: UserInterface, forms: FormsInterface) {
+  return `aesPrivateKey${user.personalNumber}${forms.encryption.publicKey.symmetricKeyName}`;
+}
+
 export async function getStoredSymmetricKey(forms: FormsInterface) {
   const storageKeyword = getSymmetricKeyStorageKeyword(forms);
   const symmetricKey = await StorageService.getData(storageKeyword);
@@ -60,7 +64,7 @@ export async function createAndStorePrivateKey(user: UserInterface, forms: Forms
   const privateKey = getPseudoRandomInteger();
 
   await StorageService.saveData(
-    `aesPrivateKey${user.personalNumber}${forms.encryption.publicKey.symmetricKeyName}`,
+    getPrivateKeyStorageKeyword(user, forms),
     JSON.stringify({ privateKey })
   );
 
@@ -72,9 +76,7 @@ export async function generateSymmetricKey(
   forms: FormsInterface,
   otherUserPublicKey: number
 ) {
-  let ownPrivateKey = await StorageService.getData(
-    `aesPrivateKey${user.personalNumber}${forms.encryption.publicKey.symmetricKeyName}`
-  );
+  let ownPrivateKey = await StorageService.getData(getPrivateKeyStorageKeyword(user, forms));
   ownPrivateKey = JSON.parse(ownPrivateKey);
 
   return getPseudoKey(otherUserPublicKey, ownPrivateKey.privateKey, forms.encryption.publicKey.P);
