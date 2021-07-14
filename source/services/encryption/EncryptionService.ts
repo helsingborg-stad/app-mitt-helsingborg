@@ -78,29 +78,32 @@ export async function decryptFormAnswers(user: UserInterface, forms: FormsInterf
 }
 
 export async function setupSymmetricKey(user: UserInterface, forms: FormsInterface) {
-  const otherUserPersonalNumber = Object.keys(forms.encryption.publicKey.publicKeys).filter(
+  // Ugly deep copy of forms.
+  const formsCopy = JSON.parse(JSON.stringify(forms));
+
+  const otherUserPersonalNumber = Object.keys(formsCopy.encryption.publicKey.publicKeys).filter(
     (key) => key !== user.personalNumber
   )[0];
 
-  const otherUserPublicKey = getPublicKeyInForm(otherUserPersonalNumber, forms);
-  let ownPublicKey = getPublicKeyInForm(user.personalNumber, forms);
+  const otherUserPublicKey = getPublicKeyInForm(otherUserPersonalNumber, formsCopy);
+  let ownPublicKey = getPublicKeyInForm(user.personalNumber, formsCopy);
 
   if (!ownPublicKey) {
-    const privateKey = await createAndStorePrivateKey(user, forms);
+    const privateKey = await createAndStorePrivateKey(user, formsCopy);
     ownPublicKey = getPseudoKey(
-      forms.encryption.publicKey.G,
+      formsCopy.encryption.publicKey.G,
       privateKey,
-      forms.encryption.publicKey.P
+      formsCopy.encryption.publicKey.P
     );
 
-    forms.encryption.publicKey.publicKeys[user.personalNumber] = ownPublicKey;
+    formsCopy.encryption.publicKey.publicKeys[user.personalNumber] = ownPublicKey;
   }
 
   if (typeof ownPublicKey !== 'undefined' && typeof otherUserPublicKey !== 'undefined') {
-    const gotSymmetricKey = await generateSymmetricKey(user, forms, otherUserPublicKey);
+    const gotSymmetricKey = await generateSymmetricKey(user, formsCopy, otherUserPublicKey);
 
-    await storeSymmetricKey(gotSymmetricKey, forms);
+    await storeSymmetricKey(gotSymmetricKey, formsCopy);
   }
 
-  return forms;
+  return formsCopy;
 }
