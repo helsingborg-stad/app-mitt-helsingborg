@@ -48,7 +48,7 @@ const runTerminalDemo = () => {
 const printPublicKeyResult = (user, form) => {
   console.log(
     `Updated user ${user.personalNumber} public key: ${
-      form.encryption.publicKey.publicKeys[user.personalNumber]
+      form.encryption.publicKeys[user.personalNumber]
     }`
   );
 };
@@ -68,14 +68,14 @@ const testSymmetricKeySetup = async () => {
     answers: { encryptedAnswers: 'This string will be encrypted' },
     encryption: {
       type: 'decrypted',
-      publicKey: {
+      symmetricKeyName: '196912191118:198310011906',
+      primes: {
         P: 43,
         G: 10,
-        symmetricKeyName: '196912191118:198310011906',
-        publicKeys: {
-          196912191118: undefined,
-          198310011906: undefined,
-        },
+      },
+      publicKeys: {
+        196912191118: undefined,
+        198310011906: undefined,
       },
     },
     currentFormId: '01',
