@@ -45,7 +45,7 @@ export async function storeSymmetricKey(symmetricKey: number, forms: FormsInterf
   await StorageService.saveData(storageKeyword, symmetricKey.toString());
 }
 
-// Prof of concept, will be replaced with Diffie-Hellman library.
+// Proof of concept, will be replaced with Diffie-Hellman library.
 export function getPseudoKey(G: number, privateKey: number, P: number) {
   if (privateKey === 1) {
     return G;
@@ -54,7 +54,7 @@ export function getPseudoKey(G: number, privateKey: number, P: number) {
   return G ** privateKey % P;
 }
 
-// Prof of concept, will be replaced by encryption library.
+// Proof of concept, will be replaced by encryption library.
 export function getPseudoRandomInteger() {
   const min = 1;
   const max = 10;
