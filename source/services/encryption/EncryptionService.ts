@@ -81,7 +81,7 @@ export async function setupSymmetricKey(user: UserInterface, forms: FormsInterfa
   // Ugly deep copy of forms.
   const formsCopy = JSON.parse(JSON.stringify(forms));
 
-  const otherUserPersonalNumber = Object.keys(formsCopy.encryption.publicKey.publicKeys).filter(
+  const otherUserPersonalNumber = Object.keys(formsCopy.encryption.publicKeys).filter(
     (key) => key !== user.personalNumber
   )[0];
 
@@ -91,12 +91,12 @@ export async function setupSymmetricKey(user: UserInterface, forms: FormsInterfa
   if (!ownPublicKey) {
     const privateKey = await createAndStorePrivateKey(user, formsCopy);
     ownPublicKey = getPseudoKey(
-      formsCopy.encryption.publicKey.G,
+      formsCopy.encryption.primes.G,
       privateKey,
-      formsCopy.encryption.publicKey.P
+      formsCopy.encryption.primes.P
     );
 
-    formsCopy.encryption.publicKey.publicKeys[user.personalNumber] = ownPublicKey;
+    formsCopy.encryption.publicKeys[user.personalNumber] = ownPublicKey;
   }
 
   if (typeof ownPublicKey !== 'undefined' && typeof otherUserPublicKey !== 'undefined') {
