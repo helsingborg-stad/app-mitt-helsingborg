@@ -8,12 +8,12 @@ export interface FormsInterface {
   answers: { encryptedAnswers: string };
   encryption: {
     type: string;
-    publicKey: {
+    symmetricKeyName: string;
+    primes: {
       P: number;
       G: number;
-      symmetricKeyName: string;
-      publicKeys: Record<number, undefined | string>;
     };
+    publicKeys: Record<number, undefined | string>;
   };
 }
 
@@ -23,15 +23,15 @@ export function EncryptionException(message: string) {
 }
 
 export function getPublicKeyInForm(personalNumber: string, forms: FormsInterface) {
-  return forms.encryption.publicKey.publicKeys[personalNumber];
+  return forms.encryption.publicKeys[personalNumber];
 }
 
 function getSymmetricKeyStorageKeyword(forms: FormsInterface) {
-  return forms.encryption.publicKey.symmetricKeyName;
+  return forms.encryption.symmetricKeyName;
 }
 
 function getPrivateKeyStorageKeyword(user: UserInterface, forms: FormsInterface) {
-  return `aesPrivateKey${user.personalNumber}${forms.encryption.publicKey.symmetricKeyName}`;
+  return `aesPrivateKey${user.personalNumber}${forms.encryption.symmetricKeyName}`;
 }
 
 export async function getStoredSymmetricKey(forms: FormsInterface) {
@@ -80,5 +80,5 @@ export async function generateSymmetricKey(
   let ownPrivateKey = await StorageService.getData(getPrivateKeyStorageKeyword(user, forms));
   ownPrivateKey = JSON.parse(ownPrivateKey);
 
-  return getPseudoKey(otherUserPublicKey, ownPrivateKey.privateKey, forms.encryption.publicKey.P);
+  return getPseudoKey(otherUserPublicKey, ownPrivateKey.privateKey, forms.encryption.primes.P);
 }
