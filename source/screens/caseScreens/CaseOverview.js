@@ -118,7 +118,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, signCaseFun
     <CaseCard
       key={caseData.id}
       colorSchema={colorSchema}
-      name={`card${caseData.caseType.name}`}
+      name={caseData.caseType.name}
       subtitle={caseData.status.name}
       month={applicationPeriodMonth}
       icon={icons[caseData.caseType.icon]}
