@@ -44,7 +44,7 @@ const OverviewExamples = () => (
     <CaseCard
       onCardClick={() => {}}
       colorSchema="red"
-      name="Ekonomiskt Bistånd"
+      title="Ekonomiskt Bistånd"
       subtitle="Öppen"
       largeSubtitle="Juni"
       icon={icons.ICON_EKB}
@@ -56,7 +56,7 @@ const OverviewExamples = () => (
     <CaseCard
       onCardClick={() => {}}
       colorSchema="red"
-      name="Ekonomiskt Bistånd"
+      title="Ekonomiskt Bistånd"
       subtitle="Pågående"
       largeSubtitle="Juni"
       icon={icons.ICON_EKB}
@@ -71,7 +71,7 @@ const OverviewExamples = () => (
     <CaseCard
       onCardClick={() => {}}
       colorSchema="red"
-      name="Ekonomiskt Bistånd"
+      title="Ekonomiskt Bistånd"
       subtitle="Inskickad"
       largeSubtitle="Juni"
       icon={icons.ICON_EKB}
@@ -82,7 +82,7 @@ const OverviewExamples = () => (
     <CaseCard
       onCardClick={() => {}}
       colorSchema="red"
-      name="Ekonomiskt Bistånd"
+      title="Ekonomiskt Bistånd"
       subtitle="Godkänd"
       largeSubtitle="Juni"
       icon={icons.ICON_EKB}
@@ -96,7 +96,7 @@ const OverviewExamples = () => (
     <CaseCard
       onCardClick={() => {}}
       colorSchema="red"
-      name="Ekonomiskt Bistånd"
+      title="Ekonomiskt Bistånd"
       subtitle="Delvis godkänd"
       largeSubtitle="Juni"
       icon={icons.ICON_EKB}
@@ -111,7 +111,7 @@ const OverviewExamples = () => (
     <CaseCard
       onCardClick={() => {}}
       colorSchema="red"
-      name="Ekonomiskt Bistånd"
+      title="Ekonomiskt Bistånd"
       subtitle="Avslagen"
       largeSubtitle="Juni"
       icon={icons.ICON_EKB}
@@ -128,7 +128,7 @@ const SummaryExamples = () => (
     <CaseCard
       onCardClick={() => {}}
       colorSchema="red"
-      name="Juni"
+      title="Juni"
       subtitle="Öppen"
       description="Ansökan är öppen. Du kan nu söka ekonomiskt bistånd för perioden."
       showButton
@@ -139,7 +139,7 @@ const SummaryExamples = () => (
     <CaseCard
       onCardClick={() => {}}
       colorSchema="red"
-      name="Juni"
+      title="Juni"
       subtitle="Pågåenden"
       description="Ansökan är öppen. Du kan nu söka ekonomiskt bistånd för perioden."
       showButton
@@ -153,7 +153,7 @@ const SummaryExamples = () => (
     <CaseCard
       onCardClick={() => {}}
       colorSchema="red"
-      name="Juni"
+      title="Juni"
       subtitle="Pågåenden"
       description="Ansökan är öppen. Du kan nu söka ekonomiskt bistånd för perioden."
       showButton

@@ -18,7 +18,7 @@ Card.Meta = styled(Card.Text)`
 const CaseCard = ({
   colorSchema,
   icon,
-  name,
+  title,
   largeSubtitle,
   subtitle,
   description,
@@ -38,7 +38,7 @@ const CaseCard = ({
   <Card colorSchema={colorSchema}>
     <Card.Body shadow color="neutral" onPress={onCardClick}>
       {icon && <Card.Image source={icon} />}
-      <Card.Title colorSchema="neutral">{name}</Card.Title>
+      <Card.Title colorSchema="neutral">{title}</Card.Title>
       {largeSubtitle && <Card.LargeText mt={0.5}>{largeSubtitle}</Card.LargeText>}
       <Card.SubTitle>{subtitle}</Card.SubTitle>
       {description && <Card.Text>{description}</Card.Text>}
@@ -74,7 +74,7 @@ const CaseCard = ({
 CaseCard.propTypes = {
   colorSchema: PropTypes.string,
   icon: PropTypes.any,
-  name: PropTypes.string,
+  title: PropTypes.string,
   largeSubtitle: PropTypes.string,
   subtitle: PropTypes.string,
   description: PropTypes.string,

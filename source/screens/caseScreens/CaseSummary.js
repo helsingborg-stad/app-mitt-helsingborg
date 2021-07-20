@@ -189,7 +189,7 @@ const computeCaseCardComponent = (
   return (
     <CaseCard
       colorSchema={colorSchema}
-      name={applicationPeriodMonth || formName}
+      title={applicationPeriodMonth || formName}
       subtitle={status.name}
       showProgress={isOngoing}
       currentStep={currentStep}
