@@ -248,30 +248,39 @@ const CaseSummary = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused, cases]);
 
-  const updateCaseSignature = useCallback(async (caseItem, signatureSuccessful) => {
-    const currentForm = caseItem.forms[caseItem.currentFormId];
+  const updateCaseSignature = useCallback(
+    async (caseItem, signatureSuccessful) => {
+      const currentForm = caseItem.forms[caseItem.currentFormId];
 
-    const updateCaseRequestBody = {
-      currentFormId: caseItem.currentFormId,
-      ...currentForm,
-      signature: { success: signatureSuccessful },
-    };
+      const updateCaseRequestBody = {
+        currentFormId: caseItem.currentFormId,
+        ...currentForm,
+        signature: { success: signatureSuccessful },
+      };
 
-    try {
-      const updateCaseResponse = await put(
-        `/cases/${caseItem.id}`,
-        JSON.stringify(updateCaseRequestBody)
-      );
+      try {
+        const updateCaseResponse = await put(
+          `/cases/${caseItem.id}`,
+          JSON.stringify(updateCaseRequestBody)
+        );
 
-      if (updateCaseResponse.status !== 200) {
-        throw new Error(`${updateCaseResponse.status} ${updateCaseResponse?.data?.data?.message}`);
+        if (updateCaseResponse.status !== 200) {
+          throw new Error(
+            `${updateCaseResponse.status} ${updateCaseResponse?.data?.data?.message}`
+          );
+        }
+
+        // Show last screen of form
+        navigation.navigate('Form', {
+          caseId: pendingCaseSign.id,
+        });
+        return updateCaseResponse;
+      } catch (error) {
+        console.log(`Could not update case with new signature: ${error}`);
       }
-
-      return updateCaseResponse;
-    } catch (error) {
-      console.log(`Could not update case with new signature: ${error}`);
-    }
-  }, []);
+    },
+    [navigation]
+  );
 
   useEffect(() => {
     const updateCaseAfterSignature = async () => {

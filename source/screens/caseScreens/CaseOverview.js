@@ -259,12 +259,17 @@ function CaseOverview(props) {
 
           setPendingCaseSign(null);
           onRefresh();
+
+          // Show last screen of form
+          navigation.navigate('Form', {
+            caseId: pendingCaseSign.id,
+          });
         } catch (error) {
           console.log(`Could not update case with new signature: ${error}`);
         }
       })();
     }
-  }, [pendingCaseSign, authContext.status, setPendingCaseSign, onRefresh]);
+  }, [pendingCaseSign, authContext.status, setPendingCaseSign, onRefresh, navigation]);
 
   return (
     <ScreenWrapper {...props}>
