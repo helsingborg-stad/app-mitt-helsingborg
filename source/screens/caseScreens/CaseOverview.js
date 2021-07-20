@@ -121,6 +121,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, signCaseFun
       name={caseData.caseType.name}
       subtitle={caseData.status.name}
       month={applicationPeriodMonth}
+      largeSubtitle={applicationPeriodMonth}
       icon={icons[caseData.caseType.icon]}
       showButton={shouldShowCTAButton}
       buttonText={buttonProps.text}
