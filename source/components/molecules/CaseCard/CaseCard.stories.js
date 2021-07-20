@@ -1,13 +1,10 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import styled from 'styled-components/native';
-import { Text, Icon } from '../../atoms';
+import { Text } from '../../atoms';
 import StoryWrapper from '../StoryWrapper';
 import CaseCard from './CaseCard';
 import icons from '../../../helpers/Icons';
-
-import ICON_INCOME from '../../../assets/images/icons/icn_inkomster_1x.png';
-import ICON_CONTACT from '../../../assets/images/icons/icn_contact_person_1x.png';
 
 const FlexContainer = styled.ScrollView`
   background-color: #fff;
@@ -18,11 +15,6 @@ const Title = styled(Text)`
   font-size: 16px;
   font-weight: bold;
   margin-top: 20px;
-  margin-bottom: 6px;
-`;
-
-const Prop = styled(Text)`
-  font-size: 14px;
   margin-bottom: 6px;
 `;
 

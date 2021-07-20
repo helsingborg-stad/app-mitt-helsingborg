@@ -30,10 +30,6 @@ const SummaryHeading = styled(Text)`
   margin-bottom: 16px;
 `;
 
-const CardButtonWrapper = styled(View)`
-  margin-top: 8px;
-`;
-
 const CloseModalButton = styled(BackNavigation)`
   padding: 24px 24px 0px 24px;
 `;
