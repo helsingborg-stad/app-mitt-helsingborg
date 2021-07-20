@@ -98,7 +98,7 @@ const StyledErrorText = styled(Text)`
 
 /** Switch between different input types */
 const InputComponent = React.forwardRef(
-  ({ input, colorSchema, editable, onChange, onInputBlur, value, state }, ref) => {
+  ({ input, colorSchema, editable, onChange, onInputBlur, onInputFocus, value, state }, ref) => {
     switch (input.type) {
       case 'number':
         return (
@@ -107,6 +107,7 @@ const InputComponent = React.forwardRef(
             editable={editable}
             onChangeText={(text) => onChange(input.key, text)}
             onBlur={onInputBlur}
+            onFocus={onInputFocus}
             value={value && value !== '' ? value[input.key] : state[input.key]}
             keyboardType="numeric"
             transparent
@@ -120,6 +121,7 @@ const InputComponent = React.forwardRef(
             value={value && value !== '' ? value[input.key] : state[input.key]}
             onSelect={(date) => onChange(input.key, date)}
             onBlur={onInputBlur}
+            onFocus={onInputFocus}
             editable={editable}
             transparent
           />
@@ -128,6 +130,7 @@ const InputComponent = React.forwardRef(
         return (
           <EditableListItemSelect
             onBlur={onInputBlur}
+            onFocus={onInputFocus}
             onValueChange={(value) => onChange(input.key, value)}
             value={value && value !== '' ? value[input.key] : state[input.key]}
             editable={editable}
@@ -142,6 +145,7 @@ const InputComponent = React.forwardRef(
             editable={editable}
             onChangeText={(text) => onChange(input.key, text)}
             onBlur={onInputBlur}
+            onFocus={onInputFocus}
             value={value && value !== '' ? value[input.key] : state[input.key]}
             transparent
             inputType={input.inputSelectValue}
@@ -183,6 +187,7 @@ function EditableList({
   startEditable,
   help,
   error,
+  onFocus,
 }) {
   const [editable, setEditable] = useState(startEditable);
   const [state, setState] = useState(getInitialState(inputs, value));
@@ -213,6 +218,12 @@ function EditableList({
   };
   const onInputBlur = () => {
     if (onBlur) onBlur(state);
+  };
+
+  const onInputFocus = (e) => {
+    if (onFocus) {
+      onFocus(e);
+    }
   };
 
   const handleListItemPress = (index) => {
@@ -253,7 +264,7 @@ function EditableList({
             </EditableListItemLabelWrapper>
             <EditableListItemInputWrapper>
               <InputComponent
-                {...{ input, colorSchema, onChange, onInputBlur, value, state }}
+                {...{ input, colorSchema, onChange, onInputBlur, onInputFocus, value, state }}
                 editable={editable && !input.disabled}
                 ref={(el) => {
                   inputRefs.current[index] = el;
@@ -300,6 +311,7 @@ EditableList.propTypes = {
    * The color schema/theme of the component, default is blue.
    */
   colorSchema: PropTypes.oneOf(['blue', 'green', 'red', 'purple']),
+  onFocus: PropTypes.func,
 };
 
 EditableList.defaultProps = {

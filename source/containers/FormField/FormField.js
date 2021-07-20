@@ -35,6 +35,7 @@ const inputTypes = {
     component: Input,
     changeEvent: 'onChangeText',
     blurEvent: 'onBlur',
+    focusEvent: 'onFocus',
     props: {
       showErrorMessage: true,
     },
@@ -43,6 +44,7 @@ const inputTypes = {
     component: Input,
     blurEvent: 'onBlur',
     changeEvent: 'onChangeText',
+    focusEvent: 'onFocus',
     props: {
       showErrorMessage: true,
       keyboardType: 'numeric',
@@ -59,6 +61,7 @@ const inputTypes = {
   date: {
     component: CalendarPicker,
     changeEvent: 'onSelect',
+    focusEvent: 'onFocus',
     initialValue: undefined,
     props: {
       showErrorMessage: true,
@@ -68,6 +71,7 @@ const inputTypes = {
   checkbox: {
     component: CheckboxField,
     changeEvent: 'onChange',
+    focusEvent: 'onFocus',
     blurEvent: 'onBlur',
     helpInComponent: true,
     helpProp: 'help',
@@ -77,6 +81,7 @@ const inputTypes = {
   editableList: {
     component: EditableList,
     changeEvent: 'onInputChange',
+    focusEvent: 'onFocus',
     blurEvent: 'onBlur',
     helpInComponent: true,
     helpProp: 'help',
@@ -94,6 +99,7 @@ const inputTypes = {
   select: {
     component: Select,
     changeEvent: 'onValueChange',
+    focusEvent: 'onFocus',
     blurEvent: 'onBlur',
     props: {},
   },
@@ -111,6 +117,7 @@ const inputTypes = {
   summaryList: {
     component: SummaryList,
     changeEvent: 'onChange',
+    focusEvent: 'onFocus',
     blurEvent: 'onBlur',
     helpInComponent: true,
     helpProp: 'help',
@@ -118,6 +125,7 @@ const inputTypes = {
   },
   repeaterField: {
     component: RepeaterField,
+    focusEvent: 'onFocus',
     blurEvent: 'onBlur',
     changeEvent: 'onChange',
     props: {},
@@ -155,6 +163,7 @@ const FormField = ({
   id,
   onChange,
   onBlur,
+  onFocus,
   value,
   answers,
   validationErrors,
@@ -170,8 +179,15 @@ const FormField = ({
   const saveInput = (value, fieldId = id) => {
     if (onChange) onChange({ [fieldId]: value }, fieldId);
   };
+
   const onInputBlur = (value, fieldId = id) => {
     if (onBlur) onBlur({ [fieldId]: value }, fieldId);
+  };
+
+  const onInputFocus = (e) => {
+    if (onFocus) {
+      onFocus(e);
+    }
   };
 
   const inputProps = input && input.props ? input.props : {};
@@ -192,6 +208,7 @@ const FormField = ({
   if (input?.props?.validation) inputCompProps.validationErrors = validationErrors;
   if (input && input.changeEvent) inputCompProps[input.changeEvent] = saveInput;
   if (input && input.blurEvent) inputCompProps[input.blurEvent] = onInputBlur;
+  if (input && input.focusEvent) inputCompProps[input.focusEvent] = onInputFocus;
   if (input && input.helpInComponent) inputCompProps[input.helpProp || 'help'] = help;
 
   const inputComponent =
@@ -253,6 +270,7 @@ FormField.propTypes = {
   onChange: PropTypes.func,
   /** What happens when an input field looses focus.  */
   onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
   /**
    * sets the value, since the input field component should be managed.
    */

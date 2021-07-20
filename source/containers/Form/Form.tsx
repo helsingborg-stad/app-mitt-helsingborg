@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, createRef, useRef } from 'react';
 import { InteractionManager, StatusBar } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modal, useModal } from '../../components/molecules/Modal';
@@ -12,7 +12,7 @@ import { User } from '../../types/UserTypes';
 import useForm, { FormPosition, FormReducerState } from './hooks/useForm';
 import AuthContext from '../../store/AuthContext';
 import { useNotification } from '../../store/NotificationContext';
-import FormUploader from '../../containers/Form/FormUploader';
+import FormUploader from './FormUploader';
 import { AuthLoading } from '../../components/molecules';
 import { Image } from '../../components/molecules/ImageDisplay/ImageDisplay';
 
@@ -40,8 +40,7 @@ export const defaultInitialPosition: FormPosition = {
   currentMainStepIndex: 0,
 };
 
-export const defaultInitialStatus =
-{
+export const defaultInitialStatus = {
   type: 'notStarted',
   name: 'Ej påbörjad',
   description: 'Ansökan är ej påbörjad.',
@@ -63,7 +62,6 @@ const Form: React.FC<Props> = ({
   status,
   updateCaseInContext,
 }) => {
-
   const initialState: FormReducerState = {
     submitted: false,
     currentPosition: initialPosition || defaultInitialPosition,
@@ -109,7 +107,10 @@ const Form: React.FC<Props> = ({
 
   const [hasSigned, setHasSigned] = useState(status.type.includes('signed'));
 
-  const [hasUploaded, setHasUploaded] = useState(attachments?.length && attachments.filter(({ uploadedFileName }) => uploadedFileName).length == attachments.length);
+  const [hasUploaded, setHasUploaded] = useState(
+    attachments?.length &&
+      attachments.filter(({ uploadedFileName }) => uploadedFileName).length == attachments.length
+  );
 
   const showNotification = useNotification();
 
@@ -117,7 +118,7 @@ const Form: React.FC<Props> = ({
     const signature = { success: true };
     formNavigation.next();
     updateCaseInContext(answers, signature, formState.currentPosition);
-  }
+  };
 
   /**
    * Effect for signing a case.
@@ -166,13 +167,22 @@ const Form: React.FC<Props> = ({
     onClose();
   };
 
+  
+
   const stepComponents = formState.steps.map(
     ({ id, banner, title, group, description, questions, actions, colorSchema }) => {
-      const questionsToShow = questions ? questions.filter(question => {
-        const condition = question.conditionalOn;
-        if (!condition || condition.trim() === '') return true;
-        return evaluateConditionalExpression(condition, formState.formAnswers, formState.allQuestions);
-      }) : [];
+      const questionsToShow = questions
+        ? questions.filter((question) => {
+            const condition = question.conditionalOn;
+            if (!condition || condition.trim() === '') return true;
+            return evaluateConditionalExpression(
+              condition,
+              formState.formAnswers,
+              formState.allQuestions
+            );
+          })
+        : [];
+
 
       return (
         <Step
@@ -206,8 +216,10 @@ const Form: React.FC<Props> = ({
             formState.currentPosition.currentMainStep < formState.numberOfMainSteps
           }
           attachments={attachments}
-        />);
-    });
+        />
+      );
+    }
+  );
 
   const mainStep = formState.currentPosition.currentMainStepIndex;
   const [visible, toggleModal] = useModal();
@@ -228,7 +240,7 @@ const Form: React.FC<Props> = ({
           setRef((ref as unknown) as ScrollView);
         }}
       >
-        <StatusBar hidden={true} />
+        <StatusBar hidden />
         {stepComponents[formState.currentPosition.currentMainStepIndex]}
       </ScreenWrapper>
       <Modal visible={formState.currentPosition.level > 0} hide={toggleModal}>
@@ -250,7 +262,7 @@ const Form: React.FC<Props> = ({
 
       {(isLoading || isResolved) && (
         <AuthLoading
-          colorSchema={'neutral'}
+          colorSchema="neutral"
           isLoading={isLoading}
           isResolved={isResolved}
           cancelSignIn={() => handleCancelOrder()}
