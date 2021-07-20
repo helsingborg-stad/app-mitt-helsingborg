@@ -85,6 +85,7 @@ function Step({
 
   const [dialogIsVisible, setDialogIsVisible] = useState(false);
   const [dialogTemplate, setDialogTemplate] = useState('mainStep');
+
   const dialogButtonProps = {
     mainStep: [
       {
@@ -132,9 +133,20 @@ function Step({
         formNavigation.back();
       };
 
+  const [returnScrollCoords, setReturnScrollCoords] = useState({ x: 0, y: 0 });
+
+  const handleFocus = (e) => {
+    e.target.measureInWindow((x, y) => {
+      setReturnScrollCoords({ x, y });
+    });
+  };
+
   return (
     <StepContainer>
-      <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps="always"
+        resetScrollToCoords={(() => returnScrollCoords)()}
+      >
         <FormDialog
           visible={dialogIsVisible}
           template={dialogTemplate}
@@ -177,6 +189,7 @@ function Step({
                       id={field.id}
                       formNavigation={formNavigation}
                       editable={!field.disabled}
+                      onFocus={handleFocus}
                       {...field}
                     />
                   ))}
