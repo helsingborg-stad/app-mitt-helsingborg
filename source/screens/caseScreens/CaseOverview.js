@@ -240,6 +240,7 @@ function CaseOverview(props) {
         const currentForm = pendingCaseSign.forms[pendingCaseSign.currentFormId];
 
         const updateCaseRequestBody = {
+          currentFormId: pendingCaseSign.currentFormId,
           ...currentForm,
           signature: { success: true },
         };

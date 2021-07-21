@@ -273,6 +273,7 @@ const CaseSummary = (props) => {
     const currentForm = caseItem.forms[caseItem.currentFormId];
 
     const updateCaseRequestBody = {
+      currentFormId: caseItem.currentFormId,
       ...currentForm,
       signature: { success: signatureSuccessful },
     };
