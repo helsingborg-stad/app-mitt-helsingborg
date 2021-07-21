@@ -254,7 +254,7 @@ function CaseOverview(props) {
         }
       })();
     }
-  }, [pendingCaseSign, authContext.status, setPendingCaseSign]);
+  }, [pendingCaseSign, authContext.status, setPendingCaseSign, onRefresh]);
 
   return (
     <ScreenWrapper {...props}>
