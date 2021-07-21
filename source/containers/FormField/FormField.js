@@ -204,6 +204,7 @@ const FormField = ({
     id,
     ...other,
   };
+
   if (input?.props?.answers) inputCompProps.answers = answers;
   if (input?.props?.validation) inputCompProps.validationErrors = validationErrors;
   if (input && input.changeEvent) inputCompProps[input.changeEvent] = saveInput;

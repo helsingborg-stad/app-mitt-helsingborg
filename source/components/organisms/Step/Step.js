@@ -133,11 +133,24 @@ function Step({
         formNavigation.back();
       };
 
-  const [returnScrollCoords, setReturnScrollCoords] = useState({ x: 0, y: 0 });
+  const [returnScrollY, setReturnScrollY] = useState(0);
+  const scrollRef = React.useRef();
 
   const handleFocus = (e) => {
-    e.target.measureInWindow((x, y) => {
-      setReturnScrollCoords({ x, y });
+    const scrollResponder = scrollRef.current.getScrollResponder();
+
+    e.target.measure((x, y, width, height, pageX, pageY) => {
+      let keyboardHeight = 0;
+
+      if (scrollResponder.keyboardWillOpenTo) {
+        keyboardHeight = scrollResponder.keyboardWillOpenTo.startCoordinates.height;
+      }
+
+      setReturnScrollY(pageY);
+
+      const scrollToY = pageY + height + keyboardHeight;
+
+      scrollResponder.props.scrollToPosition(0, scrollToY);
     });
   };
 
@@ -145,7 +158,9 @@ function Step({
     <StepContainer>
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="always"
-        resetScrollToCoords={(() => returnScrollCoords)()}
+        resetScrollToCoords={(() => ({ x: 0, y: returnScrollY }))()}
+        innerRef={(r) => (scrollRef.current = r)}
+        enableAutomaticScroll={false}
       >
         <FormDialog
           visible={dialogIsVisible}
