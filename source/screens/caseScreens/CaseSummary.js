@@ -283,6 +283,11 @@ const CaseSummary = (props) => {
         `/cases/${caseItem.id}`,
         JSON.stringify(updateCaseRequestBody)
       );
+
+      if (updateCaseResponse.status !== 200) {
+        throw new Error(`${updateCaseResponse.status} ${updateCaseResponse?.data?.data?.message}`);
+      }
+
       return updateCaseResponse;
     } catch (error) {
       console.log(`Could not update case with new signature: ${error}`);

@@ -246,7 +246,17 @@ function CaseOverview(props) {
         };
 
         try {
-          await put(`/cases/${pendingCaseSign.id}`, JSON.stringify(updateCaseRequestBody));
+          const updateCaseResponse = await put(
+            `/cases/${pendingCaseSign.id}`,
+            JSON.stringify(updateCaseRequestBody)
+          );
+
+          if (updateCaseResponse.status !== 200) {
+            throw new Error(
+              `${updateCaseResponse.status} ${updateCaseResponse?.data?.data?.message}`
+            );
+          }
+
           setPendingCaseSign(null);
           onRefresh();
         } catch (error) {
