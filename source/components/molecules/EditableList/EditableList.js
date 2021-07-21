@@ -220,10 +220,10 @@ function EditableList({
     if (onBlur) onBlur(state);
   };
 
-  const onInputFocus = (e, index) => {
+  const onInputFocus = (e, index, isSelect = false) => {
     if (onFocus) {
       const target = inputRefs.current[index].inputRef;
-      onFocus(e || { target });
+      onFocus(e || { target }, isSelect);
     }
   };
 
@@ -270,7 +270,7 @@ function EditableList({
                 ref={(el) => {
                   inputRefs.current[index] = el;
                 }}
-                onInputFocus={(e) => onInputFocus(e, index)}
+                onInputFocus={(e, isSelect) => onInputFocus(e, index, isSelect)}
               />
             </EditableListItemInputWrapper>
           </EditableListItem>,
