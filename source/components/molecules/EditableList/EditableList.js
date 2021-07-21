@@ -130,7 +130,7 @@ const InputComponent = React.forwardRef(
         return (
           <EditableListItemSelect
             onBlur={onInputBlur}
-            onFocus={onInputFocus}
+            onOpen={onInputFocus}
             onValueChange={(value) => onChange(input.key, value)}
             value={value && value !== '' ? value[input.key] : state[input.key]}
             editable={editable}
@@ -220,9 +220,10 @@ function EditableList({
     if (onBlur) onBlur(state);
   };
 
-  const onInputFocus = (e) => {
+  const onInputFocus = (e, index) => {
     if (onFocus) {
-      onFocus(e);
+      const target = inputRefs.current[index].inputRef;
+      onFocus(e || { target });
     }
   };
 
@@ -264,11 +265,12 @@ function EditableList({
             </EditableListItemLabelWrapper>
             <EditableListItemInputWrapper>
               <InputComponent
-                {...{ input, colorSchema, onChange, onInputBlur, onInputFocus, value, state }}
+                {...{ input, colorSchema, onChange, onInputBlur, value, state }}
                 editable={editable && !input.disabled}
                 ref={(el) => {
                   inputRefs.current[index] = el;
                 }}
+                onInputFocus={(e) => onInputFocus(e, index)}
               />
             </EditableListItemInputWrapper>
           </EditableListItem>,

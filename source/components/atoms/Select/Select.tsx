@@ -42,6 +42,7 @@ interface Props {
   editable?: boolean;
   style?: ViewStyle;
   onBlur: (value: string) => void;
+  onOpen: () => void;
   showErrorMessage?: boolean;
   error?: { isValid: boolean; message: string };
 }
@@ -50,6 +51,7 @@ const Select: React.FC<Props> = React.forwardRef(({
   items,
   onValueChange,
   onBlur,
+  onOpen,
   placeholder,
   value,
   editable = true,
@@ -57,7 +59,7 @@ const Select: React.FC<Props> = React.forwardRef(({
   error,
   style,
 }, ref) => {
-
+  
   const currentItem = items.find(item => item.value === value);
   const handleValueChange = (itemValue: string | number | boolean) => {
     if (onValueChange && typeof onValueChange === 'function') {
@@ -84,6 +86,9 @@ const Select: React.FC<Props> = React.forwardRef(({
         items={items}
         ref={ref as React.LegacyRef<RNPickerSelect>}
         doneText="Klar"
+        onOpen={() => {
+          if (onOpen) onOpen();
+        }}
       />
       {showErrorMessage && error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
     </Wrapper>
