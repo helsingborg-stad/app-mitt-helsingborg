@@ -248,6 +248,7 @@ function CaseOverview(props) {
         try {
           await put(`/cases/${pendingCaseSign.id}`, JSON.stringify(updateCaseRequestBody));
           setPendingCaseSign(null);
+          onRefresh();
         } catch (error) {
           console.log(`Could not update case with new signature: ${error}`);
         }
