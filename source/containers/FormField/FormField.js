@@ -184,9 +184,9 @@ const FormField = ({
     if (onBlur) onBlur({ [fieldId]: value }, fieldId);
   };
 
-  const onInputFocus = (e) => {
+  const onInputFocus = (e, isSelect = false) => {
     if (onFocus) {
-      onFocus(e);
+      onFocus(e, isSelect);
     }
   };
 
