@@ -75,6 +75,10 @@ const Select: React.FC<Props> = React.forwardRef(({
     }
   }
 
+  const handleOpen = () => {
+    if (onOpen) onOpen(undefined, true)
+  }
+
   return (
     <Wrapper style={style}>
       <RNPickerSelect
@@ -86,9 +90,7 @@ const Select: React.FC<Props> = React.forwardRef(({
         items={items}
         ref={ref as React.LegacyRef<RNPickerSelect>}
         doneText="Klar"
-        onOpen={() => {
-          if (onOpen) onOpen(undefined, true);
-        }}
+        onOpen={handleOpen}
       />
       {showErrorMessage && error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
     </Wrapper>

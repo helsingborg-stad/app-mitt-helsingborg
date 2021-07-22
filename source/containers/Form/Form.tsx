@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext, createRef, useRef } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { InteractionManager, StatusBar } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modal, useModal } from '../../components/molecules/Modal';

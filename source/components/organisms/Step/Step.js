@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Dimensions } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components/native';
@@ -134,7 +134,7 @@ function Step({
       };
 
   const [returnScrollY, setReturnScrollY] = useState(0);
-  const scrollRef = React.useRef();
+  const scrollRef = useRef();
 
   const handleFocus = (e, isSelect = false) => {
     const scrollResponder = scrollRef.current.getScrollResponder();
@@ -146,11 +146,15 @@ function Step({
         keyboardHeight = scrollResponder.keyboardWillOpenTo.startCoordinates.height;
       }
 
-      setReturnScrollY(pageY + height);
+      const newReturnScrollY = pageY + height;
 
-      const scrollToY = pageY + height + keyboardHeight;
+      setReturnScrollY(newReturnScrollY);
 
-      if (isSelect) scrollResponder.props.scrollToPosition(0, scrollToY);
+      if (isSelect) {
+        const scrollToY = newReturnScrollY + keyboardHeight;
+
+        scrollResponder.props.scrollToPosition(0, scrollToY);
+      }
     });
   };
 
@@ -158,7 +162,7 @@ function Step({
     <StepContainer>
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="always"
-        resetScrollToCoords={(() => ({ x: 0, y: returnScrollY }))()}
+        resetScrollToCoords={{ x: 0, y: returnScrollY }}
         innerRef={(r) => (scrollRef.current = r)}
         enableAutomaticScroll
       >
