@@ -272,7 +272,7 @@ const CaseSummary = (props) => {
 
         // Show last screen of form
         navigation.navigate('Form', {
-          caseId: pendingCaseSign.id,
+          caseId: caseItem.id,
         });
         return updateCaseResponse;
       } catch (error) {
