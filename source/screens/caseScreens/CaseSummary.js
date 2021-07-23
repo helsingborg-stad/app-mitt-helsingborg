@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { View, Animated, Easing, ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import { CaseState } from 'app/store/CaseContext';
@@ -9,12 +9,14 @@ import icons from '../../helpers/Icons';
 import { launchPhone, launchEmail } from '../../helpers/LaunchExternalApp';
 import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 import { Icon, Text } from '../../components/atoms';
-import { Card, HelpButton, ScreenWrapper } from '../../components/molecules';
+import { Card, HelpButton, ScreenWrapper, CaseCard } from '../../components/molecules';
 import { Modal, useModal } from '../../components/molecules/Modal';
 import BackNavigation from '../../components/molecules/BackNavigation';
 import Button from '../../components/atoms/Button';
 import { formatAmount, convertDataToArray, calculateSum } from '../../helpers/FormatVivaData';
 import AuthContext from '../../store/AuthContext';
+import AuthLoading from '../../components/molecules/AuthLoading';
+import { put } from '../../helpers/ApiRequest';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -26,10 +28,6 @@ const SummaryHeading = styled(Text)`
   margin-left: 4px;
   margin-top: 30px;
   margin-bottom: 16px;
-`;
-
-const CardButtonWrapper = styled(View)`
-  margin-top: 8px;
 `;
 
 const CloseModalButton = styled(BackNavigation)`
@@ -93,12 +91,12 @@ Card.DetailsTitle = styled(Text)`
 
 const computeCaseCardComponent = (
   caseData,
-  personalNumber,
   form,
   formName,
   colorSchema,
   navigation,
-  toggleModal
+  toggleModal,
+  authContext
 ) => {
   const {
     currentPosition: { currentMainStep: currentStep },
@@ -119,7 +117,9 @@ const computeCaseCardComponent = (
     ? getSwedishMonthNameByTimeStamp(applicationPeriodTimestamp, true)
     : '';
 
-  const casePersonData = persons.find((person) => person.personalNumber === personalNumber);
+  const casePersonData = persons.find(
+    (person) => person.personalNumber === authContext.user.personalNumber
+  );
 
   const isNotStarted = status?.type?.includes('notStarted');
   const isOngoing = status?.type?.includes('ongoing');
@@ -143,60 +143,63 @@ const computeCaseCardComponent = (
     ? isWaitingForSign && !selfHasSigned
     : isOngoing || isNotStarted || isCompletionRequired || isSigned;
 
+  const buttonProps = {
+    onClick: () => navigation.navigate('Form', { caseId: caseData.id }),
+    text: '',
+  };
+
+  if (isOngoing) {
+    buttonProps.text = 'Fortsätt';
+  }
+
+  if (isNotStarted) {
+    buttonProps.text = 'Starta ansökan';
+  }
+
+  if (isCompletionRequired) {
+    buttonProps.text = 'Starta stickprov';
+  }
+
+  if (isSigned) {
+    buttonProps.text = 'Ladda upp filer och dokument';
+  }
+
+  if (isClosed) {
+    buttonProps.text = 'Visa beslut';
+  }
+
+  if (isWaitingForSign && !selfHasSigned) {
+    buttonProps.onClick = async () => {
+      await authContext.handleSign(authContext.user.personalNumber, 'Signering Mitt Helsingborg.');
+    };
+    buttonProps.text = 'Signera med BankID';
+  }
+
+  const giveDate = payments?.payment?.givedate
+    ? `${payments.payment.givedate.split('-')[2]} ${getSwedishMonthNameByTimeStamp(
+        payments.payment.givedate,
+        true
+      )}`
+    : null;
+
   return (
-    <Card colorSchema={colorSchema}>
-      <Card.Body shadow color="neutral">
-        <Card.Title colorSchema="neutral">{applicationPeriodMonth || formName}</Card.Title>
-        <Card.SubTitle>{status.name}</Card.SubTitle>
-        {isOngoing && <Card.Progressbar currentStep={currentStep} totalStepNumber={totalSteps} />}
-        <Card.Text>{status.description}</Card.Text>
-
-        {isClosed && Object.keys(paymentsArray).length > 0 && (
-          <Card.Text mt={1.5} strong colorSchema="neutral">
-            Utbetalning: {calculateSum(paymentsArray, 'kronor')}
-          </Card.Text>
-        )}
-
-        {isClosed && payments?.payment?.givedate && (
-          <Card.Meta colorSchema="neutral">
-            Betalas ut:{' '}
-            {`${payments.payment.givedate.split('-')[2]} ${getSwedishMonthNameByTimeStamp(
-              payments.payment.givedate,
-              true
-            )}`}
-          </Card.Meta>
-        )}
-
-        {isClosed && Object.keys(partiallyApprovedDecisionsAndRejected).length > 0 && (
-          <Card.Text mt={1} strong colorSchema="neutral">
-            Avslaget: {calculateSum(partiallyApprovedDecisionsAndRejected, 'kronor')}
-          </Card.Text>
-        )}
-
-        {shouldShowCTAButton && (
-          <Card.Button
-            onClick={() => {
-              navigation.navigate('Form', { caseId: caseData.id });
-            }}
-          >
-            {isOngoing && <Text>Fortsätt ansökan</Text>}
-            {isNotStarted && <Text>Starta ansökan</Text>}
-            {isWaitingForSign && !selfHasSigned && <Text>Signera med BankID</Text>}
-            {isCompletionRequired && <Text>Starta stickprov</Text>}
-            {isSigned && <Text>Ladda upp filer och dokument</Text>}
-            <Icon name="arrow-forward" />
-          </Card.Button>
-        )}
-        {isClosed && decision?.decisions && (
-          <CardButtonWrapper>
-            <Card.Button colorSchema={colorSchema} mt={3} onClick={toggleModal}>
-              <Text>Visa beslut</Text>
-              <Icon name="remove-red-eye" />
-            </Card.Button>
-          </CardButtonWrapper>
-        )}
-      </Card.Body>
-    </Card>
+    <CaseCard
+      colorSchema={colorSchema}
+      title={applicationPeriodMonth || formName}
+      subtitle={status.name}
+      showProgress={isOngoing}
+      currentStep={currentStep}
+      totalSteps={totalSteps}
+      description={status.description}
+      showPayments={isClosed && !!payments?.payment?.givedate}
+      approvedAmount={calculateSum(paymentsArray, 'kronor')}
+      givedate={giveDate}
+      declinedAmount={calculateSum(partiallyApprovedDecisionsAndRejected, 'kronor')}
+      showButton={isClosed || shouldShowCTAButton}
+      buttonText={buttonProps.text}
+      onButtonClick={isClosed ? toggleModal : buttonProps.onClick}
+      buttonIconName={isClosed ? 'remove-red-eye' : 'arrow-forward'}
+    />
   );
 };
 
@@ -205,10 +208,12 @@ const computeCaseCardComponent = (
  * @param {obj} props
  */
 const CaseSummary = (props) => {
+  const authContext = useContext(AuthContext);
   const { cases, getCase } = useContext(CaseState);
   const { getForm } = useContext(FormContext);
   const [caseData, setCaseData] = useState({});
   const [form, setForm] = useState({});
+
   const {
     colorSchema,
     navigation,
@@ -216,16 +221,13 @@ const CaseSummary = (props) => {
       params: { id: caseId, name: formName },
     },
   } = props;
+
   const {
     details: {
       administrators,
       workflow: { decision = {}, calculations = {}, journals = {} } = {},
     } = {},
   } = caseData;
-
-  const {
-    user: { personalNumber },
-  } = useContext(AuthContext);
 
   const isFocused = useIsFocused();
   const [isModalVisible, toggleModal] = useModal();
@@ -246,6 +248,42 @@ const CaseSummary = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused, cases]);
 
+  const updateCaseSignature = useCallback(async (caseItem, signatureSuccessful) => {
+    const currentForm = caseItem.forms[caseItem.currentFormId];
+
+    const updateCaseRequestBody = {
+      currentFormId: caseItem.currentFormId,
+      ...currentForm,
+      signature: { success: signatureSuccessful },
+    };
+
+    try {
+      const updateCaseResponse = await put(
+        `/cases/${caseItem.id}`,
+        JSON.stringify(updateCaseRequestBody)
+      );
+
+      if (updateCaseResponse.status !== 200) {
+        throw new Error(`${updateCaseResponse.status} ${updateCaseResponse?.data?.data?.message}`);
+      }
+
+      return updateCaseResponse;
+    } catch (error) {
+      console.log(`Could not update case with new signature: ${error}`);
+    }
+  }, []);
+
+  useEffect(() => {
+    const updateCaseAfterSignature = async () => {
+      if (authContext.status === 'signResolved') {
+        const userCase = getCase(caseId);
+        await updateCaseSignature(userCase, true);
+      }
+    };
+
+    updateCaseAfterSignature();
+  }, [updateCaseSignature, authContext.status, caseId, getCase]);
+
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -264,12 +302,12 @@ const CaseSummary = (props) => {
         {Object.keys(caseData).length > 0 &&
           computeCaseCardComponent(
             caseData,
-            personalNumber,
             form,
             formName,
             colorSchema,
             navigation,
-            toggleModal
+            toggleModal,
+            authContext
           )}
 
         {administrators && (
@@ -562,6 +600,15 @@ const CaseSummary = (props) => {
           </ModalFooter>
         </ScrollView>
       </Modal>
+      {authContext.isLoading && (
+        <AuthLoading
+          colorSchema="neutral"
+          isLoading={authContext.isLoading}
+          isResolved={authContext.isResolved}
+          cancelSignIn={authContext.handleCancelOrder}
+          isBankidInstalled={authContext.isBankidInstalled}
+        />
+      )}
     </ScreenWrapper>
   );
 };
