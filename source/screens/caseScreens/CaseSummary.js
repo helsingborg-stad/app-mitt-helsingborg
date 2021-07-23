@@ -248,27 +248,6 @@ const CaseSummary = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused, cases]);
 
-  useEffect(() => {
-    const updateCaseAfterSignature = async () => {
-      if (authContext.status === 'signResolved') {
-        const userCase = getCase(caseId);
-
-        const caseData = {
-          user: authContext.user,
-          caseId: userCase.id,
-          formId: userCase.currentFormId,
-          answerObject: userCase.forms[userCase.currentFormId].answers,
-          signature: { success: true },
-          currentPosition: userCase.forms[userCase.currentFormId].currentPosition,
-        };
-
-        await updateCase(caseData);
-      }
-    };
-
-    updateCaseAfterSignature();
-  }, [authContext.status, authContext.user, caseId, getCase]);
-
   const updateCaseSignature = useCallback(async (caseItem, signatureSuccessful) => {
     const currentForm = caseItem.forms[caseItem.currentFormId];
 
