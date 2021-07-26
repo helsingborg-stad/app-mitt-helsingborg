@@ -9,8 +9,9 @@ import { evaluateConditionalExpression } from '../../../helpers/conditionParser'
  * @param {FormReducerState} state the current state of the form
  */
 export function replaceMarkdownText(state: FormReducerState) {
-  const { steps, user } = state;
-  const updatedSteps = replaceMarkdownTextInSteps(steps, user);
+  const { steps, user, period } = state;
+
+  const updatedSteps = replaceMarkdownTextInSteps(steps, user, period);
   return {
     ...state,
     steps: updatedSteps,

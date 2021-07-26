@@ -146,6 +146,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       onSubmit={handleSubmitForm}
       initialAnswers={initialAnswers}
       status={initialCase.status || defaultInitialStatus}
+      period={initialCase.details.period}
       updateCaseInContext={updateCaseContext}
       {...props}
     />
