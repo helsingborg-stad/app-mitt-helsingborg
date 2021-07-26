@@ -9,6 +9,11 @@ export interface FormPosition {
   currentMainStep: number;
   currentMainStepIndex: number;
 }
+
+export interface FormPeriod {
+  startDate: number;
+  endDate: number;
+}
 export interface FormReducerState {
   submitted: boolean;
   currentPosition: FormPosition;
@@ -21,6 +26,7 @@ export interface FormReducerState {
   validations: Record<string, any>;
   dirtyFields: Record<string, any>;
   numberOfMainSteps?: number;
+  period?: FormPeriod;
 }
 
 function useForm(initialState: FormReducerState) {

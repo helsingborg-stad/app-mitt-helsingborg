@@ -9,7 +9,7 @@ import { evaluateConditionalExpression } from '../../helpers/conditionParser';
 import { CaseStatus } from '../../types/CaseType';
 import { Step as StepType, StepperActions } from '../../types/FormTypes';
 import { User } from '../../types/UserTypes';
-import useForm, { FormPosition, FormReducerState } from './hooks/useForm';
+import useForm, { FormPeriod, FormPosition, FormReducerState } from './hooks/useForm';
 import AuthContext from '../../store/AuthContext';
 import { useNotification } from '../../store/NotificationContext';
 import FormUploader from '../../containers/Form/FormUploader';
@@ -31,6 +31,7 @@ interface Props {
     signature: { success: boolean },
     currentPosition: FormPosition
   ) => void;
+  period?: FormPeriod;
 }
 
 export const defaultInitialPosition: FormPosition = {
@@ -57,6 +58,7 @@ const Form: React.FC<Props> = ({
   steps,
   connectivityMatrix,
   user,
+  period,
   onClose,
   onSubmit,
   initialAnswers,
@@ -75,6 +77,7 @@ const Form: React.FC<Props> = ({
     dirtyFields: {},
     connectivityMatrix,
     allQuestions: [],
+    period,
   };
 
   const {
@@ -85,7 +88,7 @@ const Form: React.FC<Props> = ({
     handleBlur,
     validateStepAnswers,
   } = useForm(initialState);
-
+  
   const {
     status: authStatus,
     isLoading,

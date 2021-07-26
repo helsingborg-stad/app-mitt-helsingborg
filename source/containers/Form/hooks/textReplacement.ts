@@ -1,5 +1,6 @@
 import { Step } from '../../../types/FormTypes';
 import { User } from '../../../types/UserTypes';
+import { FormPeriod } from './useForm';
 
 /**
  * The first argument is the string that should be replaced,
@@ -36,8 +37,8 @@ const swedishMonthTable = [
   'december',
 ];
 
-const replaceDates = (descriptor: string[]): string => {
-  const today = new Date();
+const replaceDates = (descriptor: string[], period?: FormPeriod): string => {
+  const today = period ? new Date(period.endDate) : new Date();
 
   if (descriptor[1] === 'nextMonth') {
     const month = today.getMonth() + 2;
@@ -88,23 +89,23 @@ const replaceUserInfo = (descriptor: string[], user: User): string => {
   return res || '';
 };
 
-const computeText = (descriptor: string, user: User): string => {
+const computeText = (descriptor: string, user: User, period?: FormPeriod): string => {
   const strArr = descriptor.split('.');
   if (strArr[0] === 'user') {
     return replaceUserInfo(strArr, user);
   }
   if (strArr[0] === 'date') {
-    return replaceDates(strArr);
+    return replaceDates(strArr, period);
   }
   return '';
 };
 
-export const replaceText = (text: string, user: User) => {
+export const replaceText = (text: string, user: User, period?: FormPeriod) => {
   // This way of doing it might be a bit overkill, but the idea is that this in principle
   // allows for nesting replacement rules and then applying them in order one after the other.
   let res = text;
   replacementRules.forEach(([template, descriptor]) => {
-    res = res.replace(template, computeText(descriptor, user));
+    res = res.replace(template, computeText(descriptor, user, period));
   });
   return res;
 };
@@ -113,19 +114,24 @@ export const replaceText = (text: string, user: User) => {
  * Replaces the markdown as specified by a set of markdown rules and logic that we've defined.
  * @param steps the steps of the form
  * @param user the user object
+ * @param period A period to use for dates
  */
-export const replaceMarkdownTextInSteps = (steps: Step[], user: User): Step[] => {
+export const replaceMarkdownTextInSteps = (
+  steps: Step[],
+  user: User,
+  period?: FormPeriod
+): Step[] => {
   const newSteps = steps.map((step) => {
     if (step.questions) {
       step.questions = step.questions.map((qs) => {
         if (qs.label && qs.label !== '') {
-          qs.label = replaceText(qs.label, user);
+          qs.label = replaceText(qs.label, user, period);
         }
         return qs;
       });
     }
-    if (step.title) step.title = replaceText(step.title, user);
-    if (step.description) step.description = replaceText(step.description, user);
+    if (step.title) step.title = replaceText(step.title, user, period);
+    if (step.description) step.description = replaceText(step.description, user, period);
     return step;
   });
   return newSteps;
