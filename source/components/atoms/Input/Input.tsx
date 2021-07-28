@@ -28,6 +28,20 @@ const keyboardTypes: Record<InputFieldType, KeyboardTypeOptions> = {
   personalNumber: 'number-pad',
 }
 
+
+const keyboardTypeExtraProp: Record<InputFieldType, Partial<InputProps>> = {
+  text: {},
+  number: {},
+  email: {
+    autoCapitalize: 'none',
+    autoCorrect: false,
+  },
+  postalCode: {},
+  phone: {},
+  date: {},
+  personalNumber: {},
+}
+
 const StyledTextInput = styled.TextInput<InputProps>`
   width: 100%;
   font-weight: ${({ theme }) => theme.fontWeights[0]};
@@ -75,6 +89,7 @@ const Input: React.FC<InputProps> = React.forwardRef(
     };
     const theme = useTheme();
     const smartKeyboardType = inputType ? keyboardTypes[inputType] : keyboardType;
+    const smartKeyboardExtraProps = inputType ? keyboardTypeExtraProp[inputType] : {};
 
 
     useEffect(handleMount, []);
@@ -96,6 +111,8 @@ const Input: React.FC<InputProps> = React.forwardRef(
           inputAccessoryViewID="klar-accessory"
           keyboardType={smartKeyboardType}
           ref={ref as React.Ref<TextInput>}
+          {...smartKeyboardExtraProps}
+          
           {...props}
         />
         {showErrorMessage && error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
