@@ -21,6 +21,11 @@ const config = {
     react: {
       version: "detect",
     },
+    "import/resolver": {
+      node: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+      },
+    },
   },
   extends: [
     "eslint:recommended",
@@ -39,6 +44,18 @@ const config = {
       extends: ["plugin:@typescript-eslint/recommended", "prettier"],
     },
   ],
+  rules: {
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        js: "never",
+        jsx: "never",
+        ts: "never",
+        tsx: "never",
+      },
+    ],
+  },
 };
 
 module.exports = config;
