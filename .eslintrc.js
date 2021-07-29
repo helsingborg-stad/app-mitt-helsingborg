@@ -45,6 +45,7 @@ const config = {
     },
   ],
   rules: {
+    "no-console": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
