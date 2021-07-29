@@ -1,6 +1,7 @@
 import { get, post, put } from '../../helpers/ApiRequest';
 import { convertAnswersToArray } from '../../helpers/CaseDataConverter';
 import { decryptFormAnswers, encryptFormAnswers } from '../../services/encryption';
+import { mergeFormAnswersAndEncryption } from '../../services/encryption/EncryptionHelper';
 
 export const actionTypes = {
   updateCase: 'UPDATE_CASE',
@@ -31,7 +32,8 @@ export async function updateCase(
   };
 
   if (encryptAnswers) {
-    updateCaseRequestBody = await encryptFormAnswers(user, updateCaseRequestBody);
+    const encryptedProperties = await encryptFormAnswers(user.personalNumber, updateCaseRequestBody);
+    updateCaseRequestBody = mergeFormAnswersAndEncryption(updateCaseRequestBody, encryptedProperties);
   }
 
   if (signature?.success) {
@@ -113,7 +115,8 @@ export async function fetchCases(user) {
       for await (const c of response.data.data.attributes.cases) {
         if (c?.status.type === 'active:ongoing' || c?.status.type === 'active:signature:pending') {
           try {
-            c.forms[c.currentFormId] = await decryptFormAnswers(user, c.forms[c.currentFormId]);
+            const updatedProperties = await decryptFormAnswers(user.personalNumber, c.forms[c.currentFormId]);
+            c.forms[c.currentFormId] = mergeFormAnswersAndEncryption(c.forms[c.currentFormId], updatedProperties);
             cases[c.id] = c;
           } catch (e) {
             console.log(`Failed to decrypt answers (Case ID: ${c?.id}), Error: `, e);
