@@ -260,6 +260,28 @@ export async function decryptFormAnswers(
 }
 
 /**
+ * Merge a form object with new answers and encryption data.
+ * @param form Base form object.
+ * @param answersAndEncryption Object with updated answers and encryption properties.
+ * @returns A new form object with the merged properties.
+ */
+export function mergeFormAnswersAndEncryption(
+  form: AnsweredForm,
+  answersAndEncryption: FormAnswersAndEncryption
+): AnsweredForm {
+  // Note: some properties from form are still copied by reference. Ideally maybe
+  // this should be a deep clone.
+  return {
+    ...form,
+    answers: answersAndEncryption.answers,
+    encryption: {
+      ...form.encryption,
+      ...answersAndEncryption.encryption,
+    },
+  };
+}
+
+/**
  * Attempt to setup the Diffie-Hellman symmetric key used for encryption. This requires
  * the co-applicant public key to be available to fully succeed.
  * @param personalNumber Personal number used for setting up the symmetric key.
