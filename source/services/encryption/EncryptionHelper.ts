@@ -342,4 +342,71 @@ export async function setupSymmetricKey(
   };
 }
 
+export type SymmetricSetupStatus = "ready" | "missingPublicKey";
+export type SymmetricSetupTuple = [SymmetricSetupStatus, AnsweredForm];
+
+/**
+ * Check that a form uses the correct encryption, or attempt to setup the correct
+ * encryption (such as symmetric key encryption) if required.
+ * @param personalNumber Personal number of the active user; used for decrypting.
+ * @param form Form containing the answers.
+ * @returns A tuple containing a status code and an updated form object.
+ */
+export async function updateFormEncryption(
+  personalNumber: string,
+  form: AnsweredForm
+): Promise<SymmetricSetupTuple> {
+  const symmetricKeyName = getSymmetricKeyNameFromForm(form);
+  console.log("setupFormEncryption - symmetricKeyName", symmetricKeyName);
+
+  if (symmetricKeyName !== null) {
+    const currentEncryptionType = form.encryption.type;
+
+    if (currentEncryptionType === "privateAesKey") {
+      const existingSymmetricKey = await getSymmetricKeyByForm(form);
+
+      if (existingSymmetricKey === null) {
+        // Create symmetric key
+        try {
+          await setupSymmetricKey(personalNumber, form);
+          const newSymmetricKey = await getSymmetricKeyByForm(form);
+
+          if (newSymmetricKey === null) {
+            throw new Error("Unable to create required symmetric key");
+          }
+        } catch (error) {
+          if (
+            (error as SymmetricKeySetupError).code ===
+            "missingCoApplicantPublicKey"
+          ) {
+            return ["missingPublicKey", form];
+          }
+          throw error;
+        }
+      }
+
+      // Re-encrypt answers
+      const decryptedAnswers = await decryptFormAnswers(personalNumber, form);
+      const decryptedForm = mergeFormAnswersAndEncryption(
+        form,
+        decryptedAnswers
+      );
+      const encryptedAnswers = await encryptFormAnswers(
+        personalNumber,
+        decryptedForm
+      );
+      const encryptedForm = mergeFormAnswersAndEncryption(
+        decryptedForm,
+        encryptedAnswers
+      );
+
+      console.log("setupFormEncryption - turned private AES into symmetric");
+      return ["ready", encryptedForm];
+    }
+  }
+
+  console.log("setupFormEncryption - nothing to setup");
+  return ["ready", form];
+}
+
 // #endregion Helpers
