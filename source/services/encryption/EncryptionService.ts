@@ -163,13 +163,7 @@ export function encryptAes(
   key: string,
   iv: string
 ): Promise<string> {
-  /* return Aes.encrypt(plainText, key, iv); */
-
-  return Aes.encrypt(
-    plainText,
-    "44141c4ff6f3b6ae19e3091a4796d7038b88cb55087f5eb1e92f199fe232b318",
-    "3ce84f398aede185b28e42dc02567926"
-  );
+  return Aes.encrypt(plainText, key, iv);
 }
 
 /**
@@ -184,13 +178,7 @@ export function decryptAes(
   key: string,
   iv: string
 ): Promise<string> {
-  /* return Aes.decrypt(plainText, key, iv); */
-
-  return Aes.decrypt(
-    cipherText,
-    "44141c4ff6f3b6ae19e3091a4796d7038b88cb55087f5eb1e92f199fe232b318",
-    "3ce84f398aede185b28e42dc02567926"
-  );
+  return Aes.decrypt(cipherText, key, iv);
 }
 
 /**
