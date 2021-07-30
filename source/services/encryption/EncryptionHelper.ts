@@ -36,10 +36,10 @@ export type EncryptionPublicKeysUpdate = Pick<EncryptionDetails, "publicKeys">;
 /**
  * Get the symmetric key name used for encryption from a form object.
  * @param form Form to get key name from.
- * @returns The symmetric key name.
+ * @returns The symmetric key name, or `null` if not found.
  */
-export function getSymmetricKeyNameFromForm(form: AnsweredForm): string {
-  return form.encryption.symmetricKeyName;
+export function getSymmetricKeyNameFromForm(form: AnsweredForm): string | null {
+  return form.encryption.symmetricKeyName ?? null;
 }
 
 /**
@@ -61,6 +61,11 @@ export async function getSymmetricKeyByForm(
   form: AnsweredForm
 ): Promise<CryptoNumber> {
   const symmetricKeyName = getSymmetricKeyNameFromForm(form);
+
+  if (symmetricKeyName === null) {
+    return null;
+  }
+
   return getSymmetricKey(symmetricKeyName);
 }
 
@@ -283,7 +288,7 @@ export async function setupSymmetricKey(
 
   const ownKeyPair = await getOrCreateSymmetricKeyPair(personalNumber, form);
 
-  if (coApplicantPublicKey) {
+  if (coApplicantPublicKey !== null) {
     const symmetricKeyName = getSymmetricKeyNameFromForm(form);
     await createAndStoreSymmetricKey(
       ownKeyPair[1],
