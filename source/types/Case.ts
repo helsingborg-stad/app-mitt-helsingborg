@@ -93,7 +93,7 @@ export interface AnswerField {
    *
    * For VIVA this is used to connect and transform answers to VIVA properties in VADA.
    */
-  tags: string[];
+  tags?: string[];
 }
 
 export interface Answer {
