@@ -1,5 +1,3 @@
-import "react-native";
-
 /**
  * Possible encryption methods.
  */

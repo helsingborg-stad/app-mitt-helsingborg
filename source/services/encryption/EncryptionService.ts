@@ -97,7 +97,7 @@ export function getAesEncryptorStoreKey(id: string): string {
  * Create a new AesEncryptor object containing the properties needed for Aes encryption/decryption.
  * @returns A new AesEncryptor object.
  */
-export async function createAesEncryptor() {
+export async function createAesEncryptor(): Promise<AesEncryptor> {
   const password = await Aes.randomKey(16);
   // Salt will be updated in future real.
   const aesKey = await generatePasswordBasedKey(
