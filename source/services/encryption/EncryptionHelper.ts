@@ -16,6 +16,8 @@ import {
   deserializeCryptoNumber,
   serializeCryptoNumber,
   encryptAesByEncryptorID,
+  encryptAes,
+  decryptAes,
 } from "./EncryptionService";
 
 // #region Helpers
@@ -127,10 +129,12 @@ export function isFormEncrypted(form: AnsweredForm): boolean {
  *
  * The encryption method used  (e.g. private AES key, common symmetric key etc.)
  * is determined by the contents of the form.
- * @param personalNumber Personal number used as encryptor ID used for encrypting the answers.
+ * @param personalNumber Personal number used as encryptor ID used for encrypting the
+ *  answers (when method is private AES).
  * @param form The form containing the (decrypted) answers.
  * @returns An object containing updated form properties which can be merged with the form object.
  *  If form is already encrypted an empty object is returned.
+ * @throws {Error} if encryption failed.
  */
 export async function encryptFormAnswers(
   personalNumber: string,
@@ -140,6 +144,31 @@ export async function encryptFormAnswers(
 
   if (!isEncrypted) {
     const plaintextAnswers = JSON.stringify(form.answers);
+
+    const symmetricKeyName = getSymmetricKeyNameFromForm(form);
+    if (symmetricKeyName !== null) {
+      // Method is common symmetric key (i.e. case with co-applicant)
+      const symmetricKey = await getSymmetricKeyByForm(form);
+
+      if (symmetricKey === null) {
+        throw new Error("Symmetric key not found (required for encryption).");
+      }
+
+      const encryptedAnswers = await encryptAes(
+        plaintextAnswers,
+        symmetricKey.toString(16),
+        "003d8999f6a4bb9800ed24b5d1846523"
+      );
+
+      return <FormAnswersAndEncryption>{
+        answers: { encryptedAnswers },
+        encryption: {
+          type: "symmetricKey",
+        },
+      };
+    }
+
+    // Method is private AES (single applicant)
     const encryptedAnswers = await encryptAesByEncryptorID(
       personalNumber,
       plaintextAnswers
@@ -155,26 +184,12 @@ export async function encryptFormAnswers(
 }
 
 /**
- * Merge a form object with new answers and encryption data.
- * @param form Base form object.
- * @param answersAndEncryption Object with updated answers and encryption properties.
- * @returns A new form object with the merged properties.
- */
-export function mergeFormAnswersAndEncryption(
-  form: AnsweredForm,
-  answersAndEncryption: FormAnswersAndEncryption
-): AnsweredForm {
-  // Note: some properties from form are still copied by reference. Ideally maybe
-  // this should be a deep clone.
-  return {
-    ...form,
-    ...answersAndEncryption,
-  };
-}
-
-/**
  * Decrypts the form answers of a given form.
- * @param personalNumber Personal number used as encryptor ID used for decrypting the answers.
+ *
+ * The decryption method used  (e.g. private AES key, common symmetric key etc.)
+ * is determined by the contents of the form.
+ * @param personalNumber Personal number used as encryptor ID used for decrypting the
+ *  answers (when method is private AES).
  * @param form The form containing the (encrypted) answers.
  * @returns An object containing updated form properties which can be merged with the form object.
  *  If form is already decrypted an empty object is returned.
@@ -197,6 +212,27 @@ export async function decryptFormAnswers(
         const decryptedAnswersRaw = await decryptAesByEncryptorID(
           personalNumber,
           encryptedAnswers
+        );
+        const decryptedAnswers = JSON.parse(decryptedAnswersRaw);
+
+        return <FormAnswersAndEncryption>{
+          answers: decryptedAnswers,
+          encryption: {
+            type: "decrypted",
+          },
+        };
+      }
+      case "symmetricKey": {
+        const symmetricKey = await getSymmetricKeyByForm(form);
+
+        if (symmetricKey === null) {
+          throw new Error("Symmetric key not found (required for encryption).");
+        }
+
+        const decryptedAnswersRaw = await decryptAes(
+          encryptedAnswers,
+          symmetricKey.toString(16),
+          "003d8999f6a4bb9800ed24b5d1846523"
         );
         const decryptedAnswers = JSON.parse(decryptedAnswersRaw);
 
