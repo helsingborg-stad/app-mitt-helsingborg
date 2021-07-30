@@ -154,10 +154,18 @@ export async function encryptFormAnswers(
   return <FormAnswersAndEncryption>{};
 }
 
+/**
+ * Merge a form object with new answers and encryption data.
+ * @param form Base form object.
+ * @param answersAndEncryption Object with updated answers and encryption properties.
+ * @returns A new form object with the merged properties.
+ */
 export function mergeFormAnswersAndEncryption(
   form: AnsweredForm,
   answersAndEncryption: FormAnswersAndEncryption
 ): AnsweredForm {
+  // Note: some properties from form are still copied by reference. Ideally maybe
+  // this should be a deep clone.
   return {
     ...form,
     ...answersAndEncryption,
