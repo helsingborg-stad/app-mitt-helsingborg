@@ -281,12 +281,24 @@ export function mergeFormAnswersAndEncryption(
   };
 }
 
+export type SymmetricKeySetupErrorCode = "missingCoApplicantPublicKey";
+
+class SymmetricKeySetupError extends Error {
+  code: SymmetricKeySetupErrorCode;
+
+  constructor(code: SymmetricKeySetupErrorCode, message: string) {
+    super(message);
+    this.code = code;
+  }
+}
+
 /**
  * Attempt to setup the Diffie-Hellman symmetric key used for encryption. This requires
  * the co-applicant public key to be available to fully succeed.
  * @param personalNumber Personal number used for setting up the symmetric key.
  * @param form Form containing the required encryption details.
  * @returns Updated encryption details.
+ * @throws {SymmetricKeySetupError} if symmetric key setup failed.
  */
 export async function setupSymmetricKey(
   personalNumber: string,
@@ -300,7 +312,10 @@ export async function setupSymmetricKey(
   );
 
   if (!coApplicantPersonalNumber) {
-    throw new Error("Missing expected co-applicant in list of public keys");
+    throw new SymmetricKeySetupError(
+      "missingCoApplicantPublicKey",
+      "Missing expected co-applicant in list of public keys"
+    );
   }
 
   const coApplicantPublicKey = getPublicKeyFromForm(
