@@ -368,7 +368,7 @@ function LoginScreen(props) {
                     Linking.openURL('https://support.bankid.com/sv/bankid/mobilt-bankid');
                   }}
                 >
-                  Läs mer om hur du skaffar mobilt BankID
+                  Läs mer om hur du skaffar Mobilt BankID
                 </Link>
               </Form>
             )}
