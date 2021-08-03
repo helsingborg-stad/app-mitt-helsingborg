@@ -57,6 +57,17 @@ const SliderContinueButtonContainer = styled.View`
   padding-right: 48px;
 `;
 
+const SkipButtonContainer = styled.View`
+  flex-direction: row;
+  align-items: flex-end;
+  align-self: flex-end;
+  height: 64px;
+  margin-top: 32px;
+  margin-bottom: -32px;
+  margin-right: 16px;
+  z-index: 10;
+`;
+
 const slides = [
   {
     headingColor: '#003359',
@@ -112,6 +123,12 @@ const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
     <OnboardingContainer>
       <StatusBar hidden />
       <AnimatedScrollContainer backgroundColor={backgroundColor}>
+        <SkipButtonContainer>
+          <Button
+            label={scrollPos <= lastScrollPos ? 'Hoppa Över' : null}
+            onPress={() => navigationResetToLoginScreen(navigation)}
+          />
+        </SkipButtonContainer>
         <Animated.ScrollView
           ref={scroll}
           horizontal
