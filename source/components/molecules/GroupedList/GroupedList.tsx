@@ -42,7 +42,7 @@ const GroupedList: React.FC<Props> = ({
   categories,
   colorSchema,
   showEditButton,
-  startEditable,
+  startEditable = false,
   help,
   children,
 }) => {
