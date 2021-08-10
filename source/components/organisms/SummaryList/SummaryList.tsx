@@ -160,8 +160,13 @@ const SummaryList: React.FC<Props> = ({
 
   const itemsWithAnswers = items.filter(item => {
     const answer = answers[item.id];
-    return typeof answer !== 'undefined';
+
+    if (typeof answer !== 'undefined') {
+      if (item.type === 'checkbox') return answer
+      return true
+    }
   });
+
   itemsWithAnswers
     .forEach((item) => {
       if (['arrayNumber', 'arrayText', 'arrayDate'].includes(item.type)) {
