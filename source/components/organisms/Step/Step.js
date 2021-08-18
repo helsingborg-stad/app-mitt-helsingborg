@@ -12,6 +12,7 @@ import StepDescription from './StepDescription/StepDescription';
 import StepFooter from './StepFooter/StepFooter';
 
 const StepContainer = styled.View`
+  flex: 1;
   background: ${(props) => props.theme.colors.neutrals[7]};
 `;
 
@@ -19,11 +20,9 @@ const StepBackNavigation = styled(BackNavigation)`
   padding: 24px 24px 0px 24px;
 `;
 
-const StepBanner = styled(Banner)`
+const StepContentContainer = styled.View`
   flex: 1;
 `;
-
-const StepContentContainer = styled.View``;
 
 const StepLayout = styled.View`
   flex: 1;
@@ -171,10 +170,9 @@ function Step({
           template={dialogTemplate}
           buttons={dialogButtonProps[dialogTemplate]}
         />
-
         <StepContentContainer>
           {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
-            <StepBanner {...banner} colorSchema={colorSchema || 'blue'} />
+            <Banner {...banner} colorSchema={colorSchema || 'blue'} />
           )}
           {currentPosition.level === 0 && (
             <Progressbar

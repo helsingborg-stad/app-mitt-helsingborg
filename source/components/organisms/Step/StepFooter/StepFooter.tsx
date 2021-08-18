@@ -12,7 +12,6 @@ import { evaluateConditionalExpression } from '../../../../helpers/conditionPars
 const ActionContainer = styled.View`
   width: 100%;
   background-color: ${(props) => props.theme.colors.neutrals[5]};
-  flex-grow: 0;
 `;
 
 const Flex = styled.View`
