@@ -6,7 +6,7 @@ import { Text, Heading } from '../../../atoms';
 const StepDescriptionWrapper = styled.View`
   padding-left: 24px;
   padding-right: 24px;
-  margin-top: 80px;
+  margin-top: 50px;
 `;
 
 const StepDescriptionContent = styled.View``;
