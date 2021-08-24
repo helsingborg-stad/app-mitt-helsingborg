@@ -45,9 +45,11 @@ export const convertAnswersToArray = (data, formQuestions) => {
 
   Object.entries(data).forEach((answer) => {
     const [fieldId, value] = answer;
-    const { id, type, tags, ...other } = formQuestions.find((element) => element.id === fieldId);
+    const { id, type, tags, disableValueStorage, ...other } = formQuestions.find(
+      (element) => element.id === fieldId
+    );
 
-    if (value === undefined) {
+    if (value === undefined || disableValueStorage) {
       return;
     }
 
