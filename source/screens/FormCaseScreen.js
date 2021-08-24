@@ -18,11 +18,15 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   const [form, setForm] = useState(undefined);
   const [formQuestions, setFormQuestions] = useState(undefined);
   const [initialCase, setInitialCase] = useState(undefined);
-  const { caseData, caseId } = route && route.params ? route.params : {};
+  const { caseData, caseId, signMode } = route && route.params ? route.params : {};
   const { user } = useContext(AuthContext);
   const { getForm } = useContext(FormContext);
   const { getCase } = useContext(CaseState);
   const { updateCase } = useContext(CaseDispatch);
+
+  const initialPosition =
+    initialCase?.forms?.[initialCase.currentFormId]?.currentPosition || defaultInitialPosition;
+  const initialAnswers = initialCase?.forms?.[initialCase.currentFormId]?.answers || {};
 
   useEffect(() => {
     if (caseData?.currentFormId) {
@@ -131,9 +135,6 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       </SpinnerContainer>
     );
   }
-  const initialPosition =
-    initialCase?.forms?.[initialCase.currentFormId]?.currentPosition || defaultInitialPosition;
-  const initialAnswers = initialCase?.forms?.[initialCase.currentFormId]?.answers || {};
 
   return (
     <Form
@@ -148,6 +149,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       status={initialCase.status || defaultInitialStatus}
       period={initialCase.details.period}
       updateCaseInContext={updateCaseContext}
+      editable={!signMode}
       {...props}
     />
   );
