@@ -11,7 +11,7 @@ import { useNotification } from '../../../store/NotificationContext';
 import env from 'react-native-config';
 import { InputType } from '../../atoms/Input/Input';
 
-const SumLabel = styled(Heading)<{ colorSchema: string }>`
+const SumLabel = styled(Heading) <{ colorSchema: string }>`
   margin-top: 5px;
   margin-left: 3px;
   font-weight: ${props => props.theme.fontWeights[1]};
@@ -41,7 +41,7 @@ export interface SummaryListItem {
   title: string;
   id: string;
   type: 'number' | 'text' | 'date' | 'checkbox' | 'arrayNumber' | 'arrayText' | 'arrayDate'
-   | 'editableListText' | 'editableListNumber' | 'editableListDate' ;
+  | 'editableListText' | 'editableListNumber' | 'editableListDate';
   category?: string;
   inputId?: string;
   inputSelectValue?: InputType;
@@ -66,7 +66,8 @@ interface Props {
   >;
   showSum: boolean;
   startEditable?: boolean;
-  help? : Help;
+  help?: Help;
+  editable?: boolean;
 }
 /**
  * Summary list, that is linked and summarizes values from other input components.
@@ -85,6 +86,7 @@ const SummaryList: React.FC<Props> = ({
   showSum,
   startEditable,
   help,
+  editable,
 }) => {
   // For development: show an error popup when something is configured wrong.
   const showNotification = useNotification();
@@ -118,10 +120,10 @@ const SummaryList: React.FC<Props> = ({
       ['arrayNumber', 'arrayText', 'arrayDate', 'editableListText', 'editableListNumber', 'editableListDate'].includes(item.type) &&
       typeof index !== 'undefined' &&
       item.inputId
-    ){
-      if(onBlur) onBlur(answers[item.id], item.id);
+    ) {
+      if (onBlur) onBlur(answers[item.id], item.id);
     } else {
-      if(onBlur) onBlur(value, item.id);
+      if (onBlur) onBlur(value, item.id);
     }
   }
   /**
@@ -197,7 +199,7 @@ const SummaryList: React.FC<Props> = ({
                 colorSchema={colorSchema}
                 validationError={validationError}
                 category={item.category}
-            />
+              />
             );
             if (item.type === 'arrayNumber') {
               const numericValue: string | number = v[item?.inputId || item.id];
@@ -207,19 +209,19 @@ const SummaryList: React.FC<Props> = ({
         }
       }
       if (['editableListText', 'editableListNumber', 'editableListDate'].includes(item.type) && item.inputId
-      && answers?.[item.id]?.[item.inputId]) {
+        && answers?.[item.id]?.[item.inputId]) {
         listItems.push(
           <SummaryListItemComponent
-              item={item}
-              key={`${item.id}`}
-              value={answers[item.id][item.inputId]}
-              changeFromInput={changeFromInput(item)}
-              onBlur={onItemBlur(item)}
-              removeItem={removeListItem(item)}
-              colorSchema={colorSchema}
-              validationError={validationErrors?.[item.id]?.[item.inputId] ? validationErrors?.[item.id]?.[item.inputId] : undefined}
-              category={item.category}
-            />
+            item={item}
+            key={`${item.id}`}
+            value={answers[item.id][item.inputId]}
+            changeFromInput={changeFromInput(item)}
+            onBlur={onItemBlur(item)}
+            removeItem={removeListItem(item)}
+            colorSchema={colorSchema}
+            validationError={validationErrors?.[item.id]?.[item.inputId] ? validationErrors?.[item.id]?.[item.inputId] : undefined}
+            category={item.category}
+          />
         );
         if (item.type === 'editableListNumber') {
           const numericValue: number = answers[item.id][item.inputId];
@@ -229,16 +231,16 @@ const SummaryList: React.FC<Props> = ({
       if (['text', 'number', 'date', 'checkbox'].includes(item.type)) {
         listItems.push(
           <SummaryListItemComponent
-              item={item}
-              key={`${item.id}`}
-              value={answers[item.id]}
-              changeFromInput={changeFromInput(item)}
-              onBlur={onItemBlur(item)}
-              removeItem={removeListItem(item)}
-              colorSchema={colorSchema}
-              validationError={validationErrors ? (validationErrors as Record<string,  { isValid: boolean; message: string }>)[item.id] : undefined}
-              category={item.category}
-            />
+            item={item}
+            key={`${item.id}`}
+            value={answers[item.id]}
+            changeFromInput={changeFromInput(item)}
+            onBlur={onItemBlur(item)}
+            removeItem={removeListItem(item)}
+            colorSchema={colorSchema}
+            validationError={validationErrors ? (validationErrors as Record<string, { isValid: boolean; message: string }>)[item.id] : undefined}
+            category={item.category}
+          />
         );
         if (item.type === 'number') {
           const numericValue: number = answers[item.id];
@@ -255,8 +257,8 @@ const SummaryList: React.FC<Props> = ({
           heading={heading}
           categories={categories}
           colorSchema={validColorSchema}
-          showEditButton
-          startEditable={startEditable}
+          showEditButton={editable}
+          startEditable={startEditable && editable}
           help={help}
         >
           {listItems}
@@ -313,9 +315,9 @@ SummaryList.propTypes = {
    * Whether to start in editable mode or not.
    */
   startEditable: PropTypes.bool,
-    /**
-   * Show a help button
-   */
+  /**
+ * Show a help button
+ */
   help: PropTypes.shape({
     text: PropTypes.string,
     size: PropTypes.number,
@@ -329,6 +331,6 @@ SummaryList.defaultProps = {
   items: [],
   color: 'blue',
   showSum: true,
-  onChange: () => {},
+  onChange: () => { },
 };
 export default SummaryList;
