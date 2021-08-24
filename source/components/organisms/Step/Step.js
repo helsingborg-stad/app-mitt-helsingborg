@@ -60,10 +60,18 @@ function Step({
   totalStepNumber,
   answerSnapshot,
   attachments,
+  isFormEditable,
 }) {
+  const isSubstep = currentPosition.level !== 0;
+  const isLastMainStep =
+    currentPosition.level === 0 && currentPosition.currentMainStep === totalStepNumber;
+  const isDirtySubStep = JSON.stringify(answers) !== JSON.stringify(answerSnapshot) && isSubstep;
+  const [dialogIsVisible, setDialogIsVisible] = useState(false);
+  const [dialogTemplate, setDialogTemplate] = useState('mainStep');
+
   /** TODO: move out of this scope, this logic should be defined on the form component */
   const closeForm = () => {
-    if (!status.type.includes('submitted')) {
+    if (!isLastMainStep && isFormEditable) {
       if (onFieldChange) {
         onFieldChange(answers);
       }
@@ -71,19 +79,11 @@ function Step({
         updateCaseInContext(answers, undefined, currentPosition);
       }
     }
+
     if (formNavigation?.close) {
       formNavigation.close(() => {});
     }
   };
-
-  const isSubstep = currentPosition.level !== 0;
-  const isLastMainStep =
-    currentPosition.level === 0 && currentPosition.currentMainStep === totalStepNumber;
-
-  const isDirtySubStep = JSON.stringify(answers) !== JSON.stringify(answerSnapshot) && isSubstep;
-
-  const [dialogIsVisible, setDialogIsVisible] = useState(false);
-  const [dialogTemplate, setDialogTemplate] = useState('mainStep');
 
   const dialogButtonProps = {
     mainStep: [
@@ -206,7 +206,7 @@ function Step({
                       colorSchema={field.color && field.color !== '' ? field.color : colorSchema}
                       id={field.id}
                       formNavigation={formNavigation}
-                      editable={!field.disabled}
+                      editable={!field.disabled && isFormEditable}
                       onFocus={(e, isSelect) => {
                         if (Platform.OS === 'android') {
                           return;
@@ -238,7 +238,7 @@ function Step({
       </KeyboardAwareScrollView>
 
       <StepBackNavigation
-        showBackButton={isBackBtnVisible}
+        showBackButton={isBackBtnVisible && isFormEditable}
         primary={!isSubstep}
         isSubstep={isSubstep}
         onBack={backButtonBehavior}
@@ -367,6 +367,7 @@ Step.propTypes = {
   /** Total number of steps in the form */
   totalStepNumber: PropTypes.number,
   attachments: PropTypes.array,
+  isFormEditable: PropTypes.bool,
 };
 
 Step.defaultProps = {
