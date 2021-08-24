@@ -32,6 +32,7 @@ interface Props {
     currentPosition: FormPosition
   ) => void;
   period?: FormPeriod;
+  editable: boolean;
 }
 
 export const defaultInitialPosition: FormPosition = {
@@ -63,6 +64,7 @@ const Form: React.FC<Props> = ({
   initialAnswers,
   status,
   updateCaseInContext,
+  editable
 }) => {
   const initialState: FormReducerState = {
     submitted: false,
@@ -76,6 +78,7 @@ const Form: React.FC<Props> = ({
     connectivityMatrix,
     allQuestions: [],
     period,
+    editable
   };
 
   const {
@@ -219,6 +222,7 @@ const Form: React.FC<Props> = ({
             formState.currentPosition.currentMainStep < formState.numberOfMainSteps
           }
           attachments={attachments}
+          isFormEditable={editable}
         />
       );
     }

@@ -27,6 +27,7 @@ export interface FormReducerState {
   dirtyFields: Record<string, any>;
   numberOfMainSteps?: number;
   period?: FormPeriod;
+  editable?: boolean;
 }
 
 function useForm(initialState: FormReducerState) {
