@@ -2,10 +2,13 @@ import { AnsweredForm, EncryptedAnswersWrapper } from "../../types/Case";
 import {
   CryptoNumber,
   EncryptionDetails,
+  EncryptionExceptionInterface,
+  EncryptionExceptionStatus,
   KeyPair,
   SerializedCryptoNumber,
 } from "../../types/Encryption";
 import {
+  EncryptionException,
   getSymmetricKey,
   getSymmetricKeyStoreKey,
   getSymmetricPrivateKey,
@@ -139,7 +142,7 @@ export function isFormEncrypted(form: AnsweredForm): boolean {
  * @param form The form containing the (decrypted) answers.
  * @returns An object containing updated form properties which can be merged with the form object.
  *  If form is already encrypted an empty object is returned.
- * @throws {Error} if encryption failed.
+ * @throws {EncryptionException} if encryption failed.
  */
 export async function encryptFormAnswers(
   personalNumber: string,
@@ -156,7 +159,10 @@ export async function encryptFormAnswers(
       const symmetricKey = await getSymmetricKeyByForm(form);
 
       if (symmetricKey === null) {
-        throw new Error("Symmetric key not found (required for encryption).");
+        throw new EncryptionException(
+          "missingSymmetricKey",
+          "Symmetric key not found (required for encryption)."
+        );
       }
 
       const encryptedAnswers = await encryptAes(
@@ -197,8 +203,7 @@ export async function encryptFormAnswers(
  *  answers (when method is private AES).
  * @param form The form containing the (encrypted) answers.
  * @returns An object containing updated form properties which can be merged with the form object.
- *  If form is already decrypted an empty object is returned.
- * @throws {Error} if decryption failed, or no decryption method for the determined encryption
+ * @throws {EncryptionException} if decryption failed, or no decryption method for the determined encryption
  *  type is implemented.
  */
 export async function decryptFormAnswers(
@@ -231,7 +236,10 @@ export async function decryptFormAnswers(
         const symmetricKey = await getSymmetricKeyByForm(form);
 
         if (symmetricKey === null) {
-          throw new Error("Symmetric key not found (required for encryption).");
+          throw new EncryptionException(
+            "missingSymmetricKey",
+            "Symmetric key not found (required for encryption)."
+          );
         }
 
         const decryptedAnswersRaw = await decryptAes(
@@ -249,7 +257,8 @@ export async function decryptFormAnswers(
         };
       }
       default: {
-        throw new Error(
+        throw new EncryptionException(
+          "invalidEncryptionType",
           `No decryption method implemented for "${encryptionType}"`
         );
       }

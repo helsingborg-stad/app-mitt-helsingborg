@@ -225,7 +225,7 @@ export function encryptWithEncryptor(
  * @param aesEncryptor Encryptor to use.
  * @param plainText String cipher data to decrypt.
  * @returns Promise that resolves to the decrypted plaintext string data.
- * @throws {Error} if decryption failed.
+ * @throws {EncryptionException} if decryption failed.
  */
 export function decryptWithEncryptor(
   aesEncryptor: AesEncryptor,
@@ -262,7 +262,7 @@ export async function encryptAesByEncryptorID(
  *    exist an Error is thrown.
  * @param cipherText String data to decrypt.
  * @returns A promise that resolves with the decrypted string data.
- * @throws {Error} if the AesEncryptor object could not be found/loaded, or decryption failed.
+ * @throws {EncryptionException} if the AesEncryptor object could not be found/loaded, or decryption failed.
  */
 export async function decryptAesByEncryptorID(
   encryptorId: string,
@@ -271,7 +271,8 @@ export async function decryptAesByEncryptorID(
   const existingEncryptor = await getAesEncryptor(encryptorId);
 
   if (!existingEncryptor) {
-    throw new Error(
+    throw new EncryptionException(
+      "missingAesKey",
       "Did not find AES key in storage: The key was either lost or encrypt not called before trying decrypt."
     );
   }
