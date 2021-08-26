@@ -149,11 +149,11 @@ export async function fetchCases(user) {
           // as the form is decrypted for the rest of its lifetime in the app until updateCase.
           const [updateStatus, updatedForm] = await updateFormEncryption(user.personalNumber, form);
 
-          const myPublicKey = form.encryption.publicKeys[user.personalNumber];
+          const myPublicKey = form.encryption.publicKeys?.[user.personalNumber];
 
           if (
             updatedForm.encryption.type !== form.encryption.type ||
-            updatedForm.encryption.publicKeys[user.personalNumber] !== myPublicKey
+            updatedForm.encryption.publicKeys?.[user.personalNumber] !== myPublicKey
           ) {
             console.log(`encryption for case ${c.id} changed - sending update`);
             await put(
