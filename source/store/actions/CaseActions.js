@@ -39,9 +39,30 @@ export async function updateCase(
     encryption,
   };
 
+  const [, updatedForm] = await updateFormEncryption(user.personalNumber, updateCaseRequestBody);
+
+  updateCaseRequestBody = updatedForm;
+
   if (encryptAnswers) {
-    const encryptedProperties = await encryptFormAnswers(user.personalNumber, updateCaseRequestBody);
-    updateCaseRequestBody = mergeFormAnswersAndEncryption(updateCaseRequestBody, encryptedProperties);
+    let encryptedAnswers;
+    try {
+      encryptedAnswers = await encryptFormAnswers(user.personalNumber, updateCaseRequestBody);
+    } catch (error) {
+      if (error?.status === 'missingSymmetricKey') {
+        // Symmetric key (co-applicant) is desired but no key has been generated yet,
+        // for now, encrypt with private AES key.
+        console.log('Missing symmetric key - using private AES key for now');
+        encryptedAnswers = await encryptFormAnswers(
+          user.personalNumber,
+          updateCaseRequestBody,
+          true
+        );
+      } else {
+        throw error;
+      }
+    }
+
+    updateCaseRequestBody = mergeFormAnswersAndEncryption(updateCaseRequestBody, encryptedAnswers);
   }
 
   if (signature?.success) {
@@ -52,9 +73,11 @@ export async function updateCase(
     const res = await put(`/cases/${caseId}`, JSON.stringify(updateCaseRequestBody));
     const { id, attributes } = res.data.data;
     const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
+
     if (callback) {
       callback(flatUpdatedCase);
     }
+
     return {
       type: actionTypes.updateCase,
       payload: flatUpdatedCase,
