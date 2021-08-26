@@ -205,7 +205,7 @@ export function encryptWithEncryptor(
  * @returns Promise that resolves to the decrypted plaintext string data.
  * @throws {Error} if decryption failed.
  */
-export function decryptWithDecryptor(
+export function decryptWithEncryptor(
   aesEncryptor: AesEncryptor,
   cipherText: string
 ): Promise<string> {
@@ -254,7 +254,7 @@ export async function decryptAesByEncryptorID(
     );
   }
 
-  return decryptWithDecryptor(existingEncryptor, cipherText);
+  return decryptWithEncryptor(existingEncryptor, cipherText);
 }
 
 // #endregion AES / Encryptor
