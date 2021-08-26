@@ -18,6 +18,14 @@ export type SerializedCryptoNumber = string;
  */
 export type KeyPair = [CryptoNumber, CryptoNumber];
 
+export type EncryptionExceptionStatus =
+  | "missingAesKey"
+  | "missingSymmetricKey"
+  | "missingCoApplicantPublicKey"
+  | "missingCoApplicantPersonalNumber"
+  | "invalidEncryptionType"
+  | null;
+
 /**
  * react-native-aes-crypto types
  */
@@ -84,4 +92,24 @@ export interface EncryptionDetails {
 export interface AesEncryptor {
   aesKey: string;
   initializationVector: string;
+}
+
+/**
+ * Custom Error subclass used to provide additional encryption error data.
+ */
+export interface EncryptionExceptionInterface extends Error {
+  /**
+   * The status type of this error.
+   */
+  status: EncryptionExceptionStatus;
+}
+
+/**
+ * The constructor for `EncryptionExceptionInterface`.
+ */
+export interface EncryptionExceptionConstructor {
+  new (
+    status: EncryptionExceptionStatus,
+    message: string
+  ): EncryptionExceptionInterface;
 }
