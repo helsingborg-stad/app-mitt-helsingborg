@@ -227,6 +227,7 @@ export async function encryptFormAnswers(
  *  answers (when method is private AES).
  * @param form The form containing the (encrypted) answers.
  * @returns An object containing updated form properties which can be merged with the form object.
+ * If the form is already decrypted then the return object contains the original answers and encryption.
  * @throws {EncryptionException} if decryption failed, or no decryption method for the determined encryption
  *  type is implemented.
  */
@@ -289,7 +290,10 @@ export async function decryptFormAnswers(
     }
   }
 
-  return <FormAnswersAndEncryption>{};
+  return <FormAnswersAndEncryption>{
+    answers: form.answers,
+    encryption: form.encryption,
+  };
 }
 
 /**
