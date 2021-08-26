@@ -191,7 +191,7 @@ export async function encryptFormAnswers(
 
       const encryptedAnswers = await encryptAes(
         plaintextAnswers,
-        symmetricKey.toString(16),
+        symmetricKey.toString(16).padStart(64, "0"),
         "003d8999f6a4bb9800ed24b5d1846523"
       );
 
@@ -268,7 +268,7 @@ export async function decryptFormAnswers(
 
         const decryptedAnswersRaw = await decryptAes(
           encryptedAnswers,
-          symmetricKey.toString(16),
+          symmetricKey.toString(16).padStart(64, "0"),
           "003d8999f6a4bb9800ed24b5d1846523"
         );
         const decryptedAnswers = JSON.parse(decryptedAnswersRaw);
