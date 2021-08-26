@@ -162,13 +162,15 @@ export function isFormEncrypted(form: AnsweredForm): boolean {
  * @param personalNumber Personal number used as encryptor ID used for encrypting the
  *  answers (when method is private AES).
  * @param form The form containing the (decrypted) answers.
+ * @param forcePrivateAes If `true` forces answers to be encrypted with private AES key. Defaults to `false`.
  * @returns An object containing updated form properties which can be merged with the form object.
  *  If form is already encrypted an empty object is returned.
  * @throws {EncryptionException} if encryption failed.
  */
 export async function encryptFormAnswers(
   personalNumber: string,
-  form: AnsweredForm
+  form: AnsweredForm,
+  forcePrivateAes = false
 ): Promise<FormAnswersAndEncryption> {
   const isEncrypted = isFormEncrypted(form);
 
@@ -176,7 +178,7 @@ export async function encryptFormAnswers(
     const plaintextAnswers = JSON.stringify(form.answers);
 
     const symmetricKeyName = getSymmetricKeyNameFromForm(form);
-    if (symmetricKeyName !== null) {
+    if (symmetricKeyName !== null && !forcePrivateAes) {
       // Method is common symmetric key (i.e. case with co-applicant)
       const symmetricKey = await getSymmetricKeyByForm(form);
 
