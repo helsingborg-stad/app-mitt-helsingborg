@@ -1,7 +1,14 @@
 import { get, post, put } from '../../helpers/ApiRequest';
 import { convertAnswersToArray } from '../../helpers/CaseDataConverter';
-import { decryptFormAnswers, encryptFormAnswers } from '../../services/encryption';
-import { mergeFormAnswersAndEncryption } from '../../services/encryption/EncryptionHelper';
+import {
+  decryptFormAnswers,
+  encryptFormAnswers,
+  EncryptionException,
+} from '../../services/encryption';
+import {
+  mergeFormAnswersAndEncryption,
+  updateFormEncryption,
+} from '../../services/encryption/EncryptionHelper';
 
 export const actionTypes = {
   updateCase: 'UPDATE_CASE',
@@ -110,26 +117,78 @@ export async function fetchCases(user) {
   try {
     const response = await get('/cases');
     if (response?.data?.data?.attributes?.cases) {
-      const cases = {};
+      const fetchedCases = response.data.data.attributes.cases;
+      const processedCases = await fetchedCases.reduce(async (cases, c) => {
+        try {
+          const form = c.forms[c.currentFormId];
 
-      // eslint-disable-next-line no-restricted-syntax
-      for await (const c of response.data.data.attributes.cases) {
-        if (c?.status.type === 'active:ongoing' || c?.status.type === 'active:signature:pending') {
-          try {
-            const updatedProperties = await decryptFormAnswers(user.personalNumber, c.forms[c.currentFormId]);
-            c.forms[c.currentFormId] = mergeFormAnswersAndEncryption(c.forms[c.currentFormId], updatedProperties);
-            cases[c.id] = c;
-          } catch (e) {
-            console.log(`Failed to decrypt answers (Case ID: ${c?.id}), Error: `, e);
+          // Updating encryption is based on the existing encryption method, so we're doing it here
+          // as the form is decrypted for the rest of its lifetime in the app until updateCase.
+          const [updateStatus, updatedForm] = await updateFormEncryption(user.personalNumber, form);
+
+          const myPublicKey = form.encryption.publicKeys[user.personalNumber];
+
+          if (
+            updatedForm.encryption.type !== form.encryption.type ||
+            updatedForm.encryption.publicKeys[user.personalNumber] !== myPublicKey
+          ) {
+            console.log(`encryption for case ${c.id} changed - sending update`);
+            await put(
+              `/cases/${c.id}`,
+              JSON.stringify({
+                currentFormId: c.currentFormId,
+                answers: updatedForm.answers,
+                currentPosition: updatedForm.currentPosition,
+                encryption: updatedForm.encryption,
+              })
+            );
           }
-        } else {
-          cases[c.id] = c;
+
+          if (updateStatus === 'ready' || updateStatus === 'missingCoApplicantPublicKey') {
+            const decryptedForm = await decryptFormAnswers(user.personalNumber, updatedForm);
+
+            const mergedForm = mergeFormAnswersAndEncryption(updatedForm, decryptedForm);
+
+            return {
+              ...cases,
+              [c.id]: {
+                ...c,
+                forms: {
+                  ...c.forms,
+                  [c.currentFormId]: mergedForm,
+                },
+              },
+            };
+          }
+
+          if (updateStatus === 'missingAesKey') {
+            const personsList = c.persons;
+            if (Array.isArray(personsList)) {
+              const me = personsList.find(
+                (person) => person.personalNumber === user.personalNumber
+              );
+              if (me && me.role === 'coApplicant') {
+                // We're the co-applicant and the main applicant has not re-encrypted yet
+                // Just add the case in encrypted form
+                return {
+                  ...cases,
+                  [c.id]: c,
+                };
+              }
+            }
+          }
+
+          throw new EncryptionException(updateStatus, updateStatus);
+        } catch (e) {
+          console.error(`Failed to process form (Case ID: ${c?.id}), Error: `, e);
         }
-      }
+
+        return cases;
+      }, {});
 
       return {
         type: actionTypes.fetchCases,
-        payload: cases,
+        payload: processedCases,
       };
     }
   } catch (error) {
