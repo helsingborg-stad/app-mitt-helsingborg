@@ -15,6 +15,8 @@ export type SerializedCryptoNumber = string;
 
 /**
  * Tuple for a public-private key pair.
+ *
+ * First value is the public key. Second value is the private key.
  */
 export type KeyPair = [CryptoNumber, CryptoNumber];
 
