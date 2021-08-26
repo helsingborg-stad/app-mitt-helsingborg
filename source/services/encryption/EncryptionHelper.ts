@@ -36,6 +36,15 @@ export type FormAnswersAndEncryption = Pick<
 
 export type EncryptionPublicKeysUpdate = Pick<EncryptionDetails, "publicKeys">;
 
+export type SymmetricSetupStatus = "ready" | EncryptionExceptionStatus;
+
+export type UpdateFormEncryptionTuple = [SymmetricSetupStatus, AnsweredForm];
+
+export type SetupSymmetricKeyTuple = [
+  SymmetricSetupStatus,
+  EncryptionPublicKeysUpdate
+];
+
 /**
  * Updates a Form with new public key(s).
  * @param form Base Form object.
@@ -318,41 +327,35 @@ export function mergeFormAnswersAndEncryption(
   };
 }
 
-export type SymmetricKeySetupErrorCode = "missingCoApplicantPublicKey";
-
-class SymmetricKeySetupError extends Error {
-  code: SymmetricKeySetupErrorCode;
-
-  constructor(code: SymmetricKeySetupErrorCode, message: string) {
-    super(message);
-    this.code = code;
-  }
-}
-
 /**
  * Attempt to setup the Diffie-Hellman symmetric key used for encryption. This requires
  * the co-applicant public key to be available to fully succeed.
  * @param personalNumber Personal number used for setting up the symmetric key.
  * @param form Form containing the required encryption details.
- * @returns Updated encryption details.
- * @throws {SymmetricKeySetupError} if symmetric key setup failed.
+ * @returns A tuple containing a status and the updated encryption details.
  */
 export async function setupSymmetricKey(
   personalNumber: string,
   form: AnsweredForm
-): Promise<EncryptionPublicKeysUpdate> {
+): Promise<SetupSymmetricKeyTuple> {
   const encryptionRelevantPersonalNumbers = Object.keys(
     form.encryption.publicKeys
   );
+
   const coApplicantPersonalNumber = encryptionRelevantPersonalNumbers.find(
     (pno) => pno !== personalNumber
   );
 
+  const ownKeyPair = await getOrCreateSymmetricKeyPair(personalNumber, form);
+
+  const encryptionPublicKeysUpdate: EncryptionPublicKeysUpdate = {
+    publicKeys: {
+      [personalNumber]: serializeCryptoNumber(ownKeyPair[0]),
+    },
+  };
+
   if (!coApplicantPersonalNumber) {
-    throw new SymmetricKeySetupError(
-      "missingCoApplicantPublicKey",
-      "Missing expected co-applicant in list of public keys"
-    );
+    return ["missingCoApplicantPersonalNumber", encryptionPublicKeysUpdate];
   }
 
   const coApplicantPublicKey = getPublicKeyFromForm(
@@ -360,89 +363,120 @@ export async function setupSymmetricKey(
     coApplicantPersonalNumber
   );
 
-  const ownKeyPair = await getOrCreateSymmetricKeyPair(personalNumber, form);
-
-  if (coApplicantPublicKey !== null) {
-    const symmetricKeyName = getSymmetricKeyNameFromForm(form);
-    await createAndStoreSymmetricKey(
-      ownKeyPair[1],
-      deserializeCryptoNumber(coApplicantPublicKey),
-      deserializeCryptoNumber(form.encryption.primes.P),
-      symmetricKeyName
-    );
+  if (coApplicantPublicKey === null) {
+    return ["missingCoApplicantPublicKey", encryptionPublicKeysUpdate];
   }
 
-  return <EncryptionPublicKeysUpdate>{
-    publicKeys: {
-      [personalNumber]: serializeCryptoNumber(ownKeyPair[0]),
-    },
-  };
-}
+  const symmetricKeyName = getSymmetricKeyNameFromForm(form);
+  await createAndStoreSymmetricKey(
+    ownKeyPair[1],
+    deserializeCryptoNumber(coApplicantPublicKey),
+    deserializeCryptoNumber(form.encryption.primes.P),
+    symmetricKeyName
+  );
 
-export type SymmetricSetupStatus = "ready" | "missingPublicKey";
-export type SymmetricSetupTuple = [SymmetricSetupStatus, AnsweredForm];
+  return ["ready", encryptionPublicKeysUpdate];
+}
 
 /**
  * Check that a form uses the correct encryption, or attempt to setup the correct
  * encryption (such as symmetric key encryption) if required.
  * @param personalNumber Personal number of the active user; used for decrypting.
  * @param form Form containing the answers.
- * @returns A tuple containing a status code and an updated form object.
+ * @returns A tuple containing a status and an updated form object.
  */
 export async function updateFormEncryption(
   personalNumber: string,
   form: AnsweredForm
-): Promise<SymmetricSetupTuple> {
+): Promise<UpdateFormEncryptionTuple> {
   const symmetricKeyName = getSymmetricKeyNameFromForm(form);
-  console.log("setupFormEncryption - symmetricKeyName", symmetricKeyName);
 
   if (symmetricKeyName !== null) {
     const currentEncryptionType = form.encryption.type;
 
-    if (currentEncryptionType === "privateAesKey") {
-      const existingSymmetricKey = await getSymmetricKeyByForm(form);
+    const existingPublicKey = getPublicKeyFromForm(form, personalNumber);
 
-      if (existingSymmetricKey === null) {
-        // Create symmetric key
-        try {
+    let encryptionPublicKeyUpdate: EncryptionPublicKeysUpdate = null;
+
+    if (existingPublicKey === null) {
+      // Create symmetric key
+      try {
+        const [encryptionUpdateStatus, encryptionUpdate] =
           await setupSymmetricKey(personalNumber, form);
-          const newSymmetricKey = await getSymmetricKeyByForm(form);
 
-          if (newSymmetricKey === null) {
-            throw new Error("Unable to create required symmetric key");
-          }
-        } catch (error) {
-          if (
-            (error as SymmetricKeySetupError).code ===
-            "missingCoApplicantPublicKey"
-          ) {
-            return ["missingPublicKey", form];
-          }
-          throw error;
+        encryptionPublicKeyUpdate = encryptionUpdate;
+
+        if (encryptionUpdateStatus !== "ready") {
+          throw new EncryptionException(
+            encryptionUpdateStatus,
+            "Unable to create required symmetric key"
+          );
         }
+      } catch (error) {
+        if (
+          (error as EncryptionExceptionInterface)?.status ===
+          "missingCoApplicantPublicKey"
+        ) {
+          // Missing co-applicant public key is a recoverable error - for now return our own public key
+          const updatedForm = encryptionPublicKeyUpdate
+            ? updatePublicKeysInForm(form, encryptionPublicKeyUpdate)
+            : form;
+          return ["missingCoApplicantPublicKey", updatedForm];
+        }
+        throw error;
       }
+    }
 
+    if (currentEncryptionType === "privateAesKey") {
       // Re-encrypt answers
-      const decryptedAnswers = await decryptFormAnswers(personalNumber, form);
-      const decryptedForm = mergeFormAnswersAndEncryption(
-        form,
-        decryptedAnswers
-      );
-      const encryptedAnswers = await encryptFormAnswers(
-        personalNumber,
-        decryptedForm
-      );
-      const encryptedForm = mergeFormAnswersAndEncryption(
-        decryptedForm,
-        encryptedAnswers
-      );
+      try {
+        const decryptedAnswers = await decryptFormAnswers(personalNumber, form);
 
-      console.log("setupFormEncryption - turned private AES into symmetric");
-      return ["ready", encryptedForm];
+        const decryptedForm = mergeFormAnswersAndEncryption(
+          form,
+          decryptedAnswers
+        );
+
+        const encryptedAnswers = await encryptFormAnswers(
+          personalNumber,
+          decryptedForm
+        );
+
+        const encryptedForm = mergeFormAnswersAndEncryption(
+          decryptedForm,
+          encryptedAnswers
+        );
+
+        const updatedForm = encryptionPublicKeyUpdate
+          ? updatePublicKeysInForm(encryptedForm, encryptionPublicKeyUpdate)
+          : encryptedForm;
+
+        updatedForm.encryption.type = "symmetricKey";
+
+        console.log("setupFormEncryption - turned private AES into symmetric");
+        return ["ready", updatedForm];
+      } catch (error) {
+        if (
+          (error as EncryptionExceptionInterface)?.status === "missingAesKey"
+        ) {
+          // We might be the co-applicant so just update with our public key so the main applicant can re-encrypt
+          const updatedForm = encryptionPublicKeyUpdate
+            ? updatePublicKeysInForm(form, encryptionPublicKeyUpdate)
+            : form;
+          return ["missingAesKey", updatedForm];
+        }
+        throw error;
+      }
+    } else if (encryptionPublicKeyUpdate) {
+      // We end up here if for example the form is decrypted (as it's initially when case is notStarted)
+      // We still want to send our public key in case it's missing
+      const updatedForm = encryptionPublicKeyUpdate
+        ? updatePublicKeysInForm(form, encryptionPublicKeyUpdate)
+        : form;
+      return ["ready", updatedForm];
     }
   }
 
-  console.log("setupFormEncryption - nothing to setup");
   return ["ready", form];
 }
 
