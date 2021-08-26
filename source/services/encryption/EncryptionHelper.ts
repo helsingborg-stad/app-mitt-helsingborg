@@ -37,6 +37,28 @@ export type FormAnswersAndEncryption = Pick<
 export type EncryptionPublicKeysUpdate = Pick<EncryptionDetails, "publicKeys">;
 
 /**
+ * Updates a Form with new public key(s).
+ * @param form Base Form object.
+ * @param encryptionPublicKeysUpdate Updated public keys.
+ * @returns A new Form updated with the provided public keys.
+ */
+export function updatePublicKeysInForm(
+  form: AnsweredForm,
+  encryptionPublicKeysUpdate: EncryptionPublicKeysUpdate
+): AnsweredForm {
+  return {
+    ...form,
+    encryption: {
+      ...form.encryption,
+      publicKeys: {
+        ...form.encryption.publicKeys,
+        ...encryptionPublicKeysUpdate.publicKeys,
+      },
+    },
+  };
+}
+
+/**
  * Get the symmetric key name used for encryption from a form object.
  * @param form Form to get key name from.
  * @returns The symmetric key name, or `null` if not found.
