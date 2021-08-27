@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useEffect, useCallback } from 'react';
+import React, { useContext, useReducer, useEffect, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import AuthContext from './AuthContext';
 import CaseReducer, { initialState as defaultInitialState } from './reducers/CaseReducer';
@@ -31,6 +31,8 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   async function createCase(form, callback) {
     dispatch(await create(form, callback));
   }
+
+  const [isFetching, setIsFetching] = useState(false);
 
   async function updateCase(
     {
@@ -87,9 +89,18 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
     dispatch(remove(caseId));
   }
 
-  const fetchCases = async () => {
-    dispatch(await fetch(user));
-  };
+  const fetchCases = useCallback(async () => {
+    if (!isFetching) {
+      setIsFetching(true);
+      try {
+        const res = await fetch(user);
+        dispatch(res);
+      } catch (error) {
+        console.error('Error fetching cases', error);
+      }
+      setIsFetching(false);
+    }
+  }, [isFetching, user]);
 
   useEffect(() => {
     if (user) {

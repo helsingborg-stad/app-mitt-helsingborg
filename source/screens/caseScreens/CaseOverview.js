@@ -177,13 +177,22 @@ function CaseOverview(props) {
   const activeCases = getCasesByStatuses(['notStarted', 'active']);
   const closedCases = getCasesByStatuses(['closed']);
 
+  const tryFetchCases = useCallback(() => {
+    if (!refreshing) {
+      setRefreshing(true);
+      fetchCases()
+        .catch((e) => {
+          console.error('Error fetching cases', e);
+        })
+        .then(() => {
+          setRefreshing(false);
+        });
+    }
+  }, [refreshing, fetchCases]);
+
   const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    fetchCases();
-    wait(500).then(() => {
-      setRefreshing(false);
-    });
-  }, [fetchCases]);
+    tryFetchCases();
+  }, [tryFetchCases]);
 
   useFocusEffect(
     useCallback(() => {
@@ -192,7 +201,7 @@ function CaseOverview(props) {
       // since we cannot react to changes as of now.
       const milliseconds = 4000;
       wait(milliseconds).then(() => {
-        fetchCases();
+        tryFetchCases();
       });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
