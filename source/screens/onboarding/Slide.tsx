@@ -44,7 +44,6 @@ const SliderImageContainer = styled.View`
 
 const TitleContainer = styled.View`
   height: 100px;
-  justify-content: center;
   flex-direction: row;
   flex: 1;
 `;
