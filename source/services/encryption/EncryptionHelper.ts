@@ -384,6 +384,7 @@ export async function setupSymmetricKey(
  * @param personalNumber Personal number of the active user; used for decrypting.
  * @param form Form containing the answers.
  * @returns A tuple containing a status and an updated form object.
+ * @throws {EncryptionException} if an unexpected error occurred.
  */
 export async function updateFormEncryption(
   personalNumber: string,
