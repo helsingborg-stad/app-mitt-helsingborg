@@ -393,12 +393,13 @@ export async function updateFormEncryption(
 
   if (symmetricKeyName !== null) {
     const currentEncryptionType = form.encryption.type;
-
+    
     const existingPublicKey = getPublicKeyFromForm(form, personalNumber);
+    const existingSymmetricKey = await getSymmetricKeyByForm(form);
 
     let encryptionPublicKeyUpdate: EncryptionPublicKeysUpdate = null;
 
-    if (existingPublicKey === null) {
+    if (existingPublicKey === null || existingSymmetricKey === null) {
       // Create symmetric key
       try {
         const [encryptionUpdateStatus, encryptionUpdate] =
@@ -450,21 +451,25 @@ export async function updateFormEncryption(
         const updatedForm = encryptionPublicKeyUpdate
           ? updatePublicKeysInForm(encryptedForm, encryptionPublicKeyUpdate)
           : encryptedForm;
-
+        
         updatedForm.encryption.type = "symmetricKey";
 
         console.log("setupFormEncryption - turned private AES into symmetric");
         return ["ready", updatedForm];
       } catch (error) {
+        const errorStatus = (error as EncryptionExceptionInterface)?.status;
         if (
-          (error as EncryptionExceptionInterface)?.status === "missingAesKey"
+          errorStatus === "missingAesKey" ||
+          errorStatus === "missingSymmetricKey"
         ) {
-          // We might be the co-applicant so just update with our public key so the main applicant can re-encrypt
+          // For "missingAesKey" - We might be the co-applicant so just update
+          // with our public key so the main applicant can re-encrypt
           const updatedForm = encryptionPublicKeyUpdate
             ? updatePublicKeysInForm(form, encryptionPublicKeyUpdate)
             : form;
-          return ["missingAesKey", updatedForm];
+          return [errorStatus, updatedForm];
         }
+
         throw error;
       }
     } else if (encryptionPublicKeyUpdate) {

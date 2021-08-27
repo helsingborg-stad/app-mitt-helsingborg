@@ -172,9 +172,12 @@ export async function fetchCases(user) {
             );
           }
 
-          if (updateStatus === 'ready' || updateStatus === 'missingCoApplicantPublicKey') {
+          if (
+            updateStatus === 'ready' ||
+            updateStatus === 'missingCoApplicantPublicKey' ||
+            updateStatus === 'missingSymmetricKey'
+          ) {
             const decryptedForm = await decryptFormAnswers(user.personalNumber, updatedForm);
-
             const mergedForm = mergeFormAnswersAndEncryption(updatedForm, decryptedForm);
 
             return {
