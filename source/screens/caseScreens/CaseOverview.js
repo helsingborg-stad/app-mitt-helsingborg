@@ -115,12 +115,37 @@ const computeCaseCardComponent = (caseData, navigation, authContext) => {
       )}`
     : null;
 
+  const getEncryptionStatusMessage = (status) => {
+    switch (status) {
+      case 'missingCoApplicantPublicKey':
+      case 'missingSymmetricKey':
+      case 'missingAesKey':
+        return 'Din partner måste logga in för att synka.';
+      case 'ready':
+      default:
+        return null;
+    }
+  };
+
+  const { encryptionStatus } = caseData.forms[caseData.currentFormId];
+  const encryptionStatusMessage = getEncryptionStatusMessage(encryptionStatus);
+  const description = isWaitingForSign
+    ? encryptionStatusMessage ?? (selfHasSigned ? 'Din partner måste logga in och signera.' : null)
+    : null;
+  console.log(
+    'encryption',
+    authContext.user.personalNumber,
+    encryptionStatus,
+    encryptionStatusMessage
+  );
+
   return (
     <CaseCard
       key={caseData.id}
       colorSchema={colorSchema}
       title={caseData.caseType.name}
       subtitle={caseData.status.name}
+      description={description}
       month={applicationPeriodMonth}
       largeSubtitle={applicationPeriodMonth}
       icon={icons[caseData.caseType.icon]}
