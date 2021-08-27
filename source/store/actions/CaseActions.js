@@ -99,7 +99,12 @@ export async function createCase(form, callback) {
     forms: {
       [form.id]: {
         answers: [],
-        currentPosition: { index: 0, level: 0, currentMainStep: 1, currentMainStepIndex: 0 },
+        currentPosition: {
+          index: 0,
+          level: 0,
+          currentMainStep: 1,
+          currentMainStepIndex: 0,
+        },
         encryption: { type: 'decrypted' },
       },
     },
