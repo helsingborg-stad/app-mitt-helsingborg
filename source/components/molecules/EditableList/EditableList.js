@@ -32,7 +32,6 @@ const EditableListItemLabelWrapper = styled.View`
 `;
 
 const EditableListItemLabel = styled.Text`
-  width: 80%;
   font-weight: ${(props) => props.theme.fontWeights[1]};
   color: ${(props) => props.theme.colors.neutrals[1]};
   ${(props) =>
