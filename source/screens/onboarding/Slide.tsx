@@ -15,7 +15,7 @@ const Heading = styled.Text`
 `;
 
 const SliderContainer = styled.View`
-  padding-top: 50px;
+  padding-top: 30px;
   padding-left: 58px;
   padding-right: 58px;
   width: ${Dimensions.get('window').width}px;
@@ -46,6 +46,7 @@ const TitleContainer = styled.View`
   height: 100px;
   flex-direction: row;
   flex: 1;
+  padding-top: 8px;
 `;
 
 const Title = styled.Text`
