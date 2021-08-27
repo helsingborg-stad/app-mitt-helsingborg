@@ -246,6 +246,7 @@ function CaseOverview(props) {
     if (pendingCaseSign && authContext.status === 'signResolved') {
       (async () => {
         const currentForm = pendingCaseSign.forms[pendingCaseSign.currentFormId];
+        delete currentForm.encryptionStatus;
 
         const updateCaseRequestBody = {
           currentFormId: pendingCaseSign.currentFormId,

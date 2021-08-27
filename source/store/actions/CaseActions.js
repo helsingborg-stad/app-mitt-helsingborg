@@ -183,7 +183,10 @@ export async function fetchCases(user) {
                 ...c,
                 forms: {
                   ...c.forms,
-                  [c.currentFormId]: mergedForm,
+                  [c.currentFormId]: {
+                    ...mergedForm,
+                    encryptionStatus: updateStatus,
+                  },
                 },
               },
             };
@@ -200,7 +203,16 @@ export async function fetchCases(user) {
                 // Just add the case in encrypted form
                 return {
                   ...cases,
-                  [c.id]: c,
+                  [c.id]: {
+                    ...c,
+                    forms: {
+                      ...c.forms,
+                      [c.currentFormId]: {
+                        ...c.forms[c.currentFormId],
+                        encryptionStatus: updateStatus,
+                      },
+                    },
+                  },
                 };
               }
             }
