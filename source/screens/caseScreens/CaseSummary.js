@@ -138,8 +138,29 @@ const computeCaseCardComponent = (
     ['03', '02'].includes(decision.typecode)
   );
 
+  const getEncryptionStatusMessage = (status) => {
+    switch (status) {
+      case 'missingCoApplicantPublicKey':
+      case 'missingSymmetricKey':
+      case 'missingAesKey':
+        return 'Din partner måste logga in för att synka.';
+      case 'ready':
+      default:
+        return null;
+    }
+  };
+
+  const { encryptionStatus } = caseData.forms[caseData.currentFormId];
+  const encryptionStatusMessage = getEncryptionStatusMessage(encryptionStatus);
+  const encryptionDescription = isWaitingForSign
+    ? encryptionStatusMessage ?? (selfHasSigned ? 'Din partner måste logga in och signera.' : null)
+    : null;
+  const description = encryptionDescription
+    ? `${status.description}\n\n${encryptionDescription}`
+    : status.description;
+
   const shouldShowCTAButton = isCoApplicant
-    ? isWaitingForSign && !selfHasSigned
+    ? isWaitingForSign && !selfHasSigned && encryptionStatus === 'ready'
     : isOngoing || isNotStarted || isCompletionRequired || isSigned;
 
   const buttonProps = {
@@ -188,7 +209,7 @@ const computeCaseCardComponent = (
       showProgress={isOngoing}
       currentStep={currentStep}
       totalSteps={totalSteps}
-      description={status.description}
+      description={description}
       showPayments={isClosed && !!payments?.payment?.givedate}
       approvedAmount={calculateSum(paymentsArray, 'kronor')}
       givedate={giveDate}
@@ -249,6 +270,7 @@ const CaseSummary = (props) => {
   const updateCaseSignature = useCallback(
     async (caseItem, signatureSuccessful) => {
       const currentForm = caseItem.forms[caseItem.currentFormId];
+      delete currentForm.encryptionStatus;
 
       const updateCaseRequestBody = {
         currentFormId: caseItem.currentFormId,
