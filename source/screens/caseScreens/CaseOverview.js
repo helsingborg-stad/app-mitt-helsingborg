@@ -77,10 +77,6 @@ const computeCaseCardComponent = (caseData, navigation, authContext) => {
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === 'coApplicant';
 
-  const shouldShowCTAButton = isCoApplicant
-    ? isWaitingForSign && !selfHasSigned
-    : isOngoing || isNotStarted || isCompletionRequired || isSigned;
-
   const buttonProps = {
     onClick: () => navigation.navigate('Form', { caseId: caseData.id }),
     text: '',
@@ -132,12 +128,10 @@ const computeCaseCardComponent = (caseData, navigation, authContext) => {
   const description = isWaitingForSign
     ? encryptionStatusMessage ?? (selfHasSigned ? 'Din partner måste logga in och signera.' : null)
     : null;
-  console.log(
-    'encryption',
-    authContext.user.personalNumber,
-    encryptionStatus,
-    encryptionStatusMessage
-  );
+
+  const shouldShowCTAButton = isCoApplicant
+    ? isWaitingForSign && !selfHasSigned && encryptionStatus === 'ready'
+    : isOngoing || isNotStarted || isCompletionRequired || isSigned;
 
   return (
     <CaseCard
