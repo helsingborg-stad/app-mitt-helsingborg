@@ -186,7 +186,13 @@ function CaseOverview(props) {
 
   useFocusEffect(
     useCallback(() => {
-      fetchCases();
+      console.log('Refreshing Cases');
+      // Sometimes new cases is not created in an instant, therefore we have to give the api some buffert time before we fetch cases.
+      const milliseconds = 2000;
+      wait(milliseconds).then(() => {
+        console.log('Start Fetching Cases');
+        fetchCases();
+      });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
   );
