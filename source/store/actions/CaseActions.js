@@ -39,7 +39,10 @@ export async function updateCase(
     encryption,
   };
 
-  const [, updatedForm] = await updateFormEncryption(user.personalNumber, updateCaseRequestBody);
+  const [encryptionStatus, updatedForm] = await updateFormEncryption(
+    user.personalNumber,
+    updateCaseRequestBody
+  );
 
   updateCaseRequestBody = updatedForm;
 
@@ -72,7 +75,18 @@ export async function updateCase(
   try {
     const res = await put(`/cases/${caseId}`, JSON.stringify(updateCaseRequestBody));
     const { id, attributes } = res.data.data;
-    const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
+    const flatUpdatedCase = {
+      id,
+      updatedAt: Date.now(),
+      ...attributes,
+      forms: {
+        ...attributes.forms,
+        [formId]: {
+          ...attributes.forms[formId],
+          encryptionStatus,
+        },
+      },
+    };
 
     if (callback) {
       callback(flatUpdatedCase);
