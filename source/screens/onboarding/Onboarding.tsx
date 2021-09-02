@@ -1,15 +1,14 @@
-import React, { useRef, useState } from 'react';
-import { Platform, Dimensions, StatusBar, View } from 'react-native';
-import Animated, { divide } from 'react-native-reanimated';
-import { useScrollHandler, interpolateColor } from 'react-native-redash';
-import styled from 'styled-components/native';
 import AsyncStorage from '@react-native-community/async-storage';
-
-import { SHOW_SPLASH_SCREEN } from '../../services/StorageService';
-import Slide from './Slide';
-import Dot from './Dot';
-import Text from '../../components/atoms/Text';
+import React, { useRef, useState } from 'react';
+import { Dimensions, Platform, StatusBar, View } from 'react-native';
+import Animated, { divide } from 'react-native-reanimated';
+import { interpolateColor, useScrollHandler } from 'react-native-redash';
+import styled from 'styled-components/native';
 import { Button } from '../../components/atoms';
+import Text from '../../components/atoms/Text';
+import { SHOW_SPLASH_SCREEN } from '../../services/StorageService';
+import Dot from './Dot';
+import Slide from './Slide';
 
 const SLIDE_BACKGROUND_ANSOKAN = require('../../assets/images/slides/onboarding_02_ansokan_in_3x.png');
 const SLIDE_BACKGROUND_ARENDEN = require('../../assets/images/slides/onboarding_03_arenden_in_3x.png');
@@ -26,7 +25,7 @@ const AnimatedScrollContainer = styled(Animated.View)`
 `;
 
 const FooterContainer = styled.View`
-  flex: 1;
+  height: 90px;
 `;
 
 const AnimatedFooterBackground = styled(Animated.View)`
@@ -55,7 +54,7 @@ const SliderContinueButtonContainer = styled.View`
   flex: 1;
   flex-direction: row;
   justify-content: flex-end;
-  padding-right: 48px;
+  padding-right: 24px;
 `;
 
 const SkipButtonContainer = styled.View`
@@ -63,8 +62,8 @@ const SkipButtonContainer = styled.View`
   align-items: flex-end;
   align-self: flex-end;
   height: 64px;
-  margin-top: 32px;
-  margin-bottom: -32px;
+  margin-top: 16px;
+  margin-bottom: -16px;
   margin-right: 16px;
   z-index: 10;
 `;
