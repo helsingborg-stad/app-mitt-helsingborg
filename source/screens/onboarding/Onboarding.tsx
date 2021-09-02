@@ -127,7 +127,7 @@ const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
   const scroll = useRef<Animated.ScrollView>(null);
   const { scrollHandler, x } = useScrollHandler();
   const lastScrollPos = width * (slides.length - 2);
-  const currentIndex = scrollPos / width;
+  const currentIndex = Math.round(scrollPos / width);
   const backgroundColor = interpolateColor(x, {
     inputRange: slides.map((_, i) => i * width),
     outputRange: slides.map((slide) => slide.color),
