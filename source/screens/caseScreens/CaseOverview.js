@@ -37,7 +37,7 @@ const colorSchema = 'red';
  * @param {obj} navigation
  * @param {obj} authContext
  */
-const computeCaseCardComponent = (caseData, navigation, authContext, signCaseFunc) => {
+const computeCaseCardComponent = (caseData, navigation, authContext) => {
   const currentStep =
     caseData?.forms?.[caseData.currentFormId]?.currentPosition?.currentMainStep || 0;
   const totalSteps = caseData.form?.stepStructure ? caseData.form.stepStructure.length : 0;
