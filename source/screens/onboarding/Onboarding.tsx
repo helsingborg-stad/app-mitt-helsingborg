@@ -8,7 +8,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { SHOW_SPLASH_SCREEN } from '../../services/StorageService';
 import Slide from './Slide';
 import Dot from './Dot';
-import Button from './components/Button';
+import Text from '../../components/atoms/Text';
+import { Button } from '../../components/atoms';
 
 const SLIDE_BACKGROUND_ANSOKAN = require('../../assets/images/slides/onboarding_02_ansokan_in_3x.png');
 const SLIDE_BACKGROUND_ARENDEN = require('../../assets/images/slides/onboarding_03_arenden_in_3x.png');
@@ -68,11 +69,21 @@ const SkipButtonContainer = styled.View`
   z-index: 10;
 `;
 
+const ContinueButton = styled(Button)`
+  background-color: transparent;
+`;
+
+const ContinueButtonText = styled(Text)`
+  color: ${(props) => props.theme.colors.primary[props.colorSchema][0]};
+  font-size: ${(props) => props.theme.fontSizes[3]}px;
+`;
+
 const slides = [
   {
     headingColor: '#003359',
     title: 'Gör ansökan för ekonomiskt bistånd',
     content: '',
+    colorSchema: 'blue',
     color: '#E4EBF0',
     picture: SLIDE_BACKGROUND_ANSOKAN,
   },
@@ -80,6 +91,7 @@ const slides = [
     headingColor: '#770000',
     title: 'Följ status för ansökan',
     content: '',
+    colorSchema: 'red',
     color: '#F5E4E3',
     picture: SLIDE_BACKGROUND_ARENDEN,
   },
@@ -87,6 +99,7 @@ const slides = [
     headingColor: '#4B0034',
     title: 'Läs beslut och få kontaktuppgifter till handläggare',
     content: '',
+    colorSchema: 'purple',
     color: '#E8DAE4',
     picture: SLIDE_BACKGROUND_KONTAKT,
   },
@@ -113,21 +126,29 @@ const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
   const [scrollPos, setScrollPos] = useState(0);
   const scroll = useRef<Animated.ScrollView>(null);
   const { scrollHandler, x } = useScrollHandler();
+  const lastScrollPos = width * (slides.length - 2);
+  const currentIndex = scrollPos / width;
   const backgroundColor = interpolateColor(x, {
     inputRange: slides.map((_, i) => i * width),
     outputRange: slides.map((slide) => slide.color),
   });
-  const lastScrollPos = width * (slides.length - 2);
 
   return (
     <OnboardingContainer>
       <StatusBar hidden />
       <AnimatedScrollContainer backgroundColor={backgroundColor}>
         <SkipButtonContainer>
-          <Button
-            label={scrollPos <= lastScrollPos ? 'Hoppa Över' : null}
-            onPress={() => navigationResetToLoginScreen(navigation)}
-          />
+          {scrollPos <= lastScrollPos && (
+            <Button
+              z={0}
+              size="small"
+              colorSchema={slides[currentIndex].colorSchema}
+              onClick={() => navigationResetToLoginScreen(navigation)}
+              variant="link"
+            >
+              <Text>HOPPA ÖVER</Text>
+            </Button>
+          )}
         </SkipButtonContainer>
         <Animated.ScrollView
           ref={scroll}
@@ -157,21 +178,47 @@ const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
             </FooterPagination>
           </View>
           <SliderContinueButtonContainer>
-            <Button
-              label={scrollPos <= lastScrollPos ? 'Fortsätt' : 'Logga in'}
-              onPress={() => {
-                if (scrollPos <= lastScrollPos) {
-                  if (Platform.OS === 'android') {
-                    // Fix for Android bug where onMomentumScrollEnd not called when setting scroll with scrollTo.
-                    setScrollPos(scrollPos + width);
-                  }
+            {scrollPos <= lastScrollPos ? (
+              <ContinueButton
+                z={0}
+                colorSchema={slides[currentIndex].colorSchema}
+                onClick={() => {
+                  if (scrollPos <= lastScrollPos) {
+                    if (Platform.OS === 'android') {
+                      // Fix for Android bug where onMomentumScrollEnd not called when setting scroll with scrollTo.
+                      setScrollPos(scrollPos + width);
+                    }
 
-                  scroll.current.getNode().scrollTo({ x: width + scrollPos, animated: true });
-                } else {
-                  navigationResetToLoginScreen(navigation);
-                }
-              }}
-            />
+                    scroll.current.getNode().scrollTo({ x: width + scrollPos, animated: true });
+                  } else {
+                    navigationResetToLoginScreen(navigation);
+                  }
+                }}
+              >
+                <ContinueButtonText colorSchema={slides[currentIndex].colorSchema}>
+                  Fortsätt
+                </ContinueButtonText>
+              </ContinueButton>
+            ) : (
+              <Button
+                z={0}
+                colorSchema={slides[currentIndex].colorSchema}
+                onClick={() => {
+                  if (scrollPos <= lastScrollPos) {
+                    if (Platform.OS === 'android') {
+                      // Fix for Android bug where onMomentumScrollEnd not called when setting scroll with scrollTo.
+                      setScrollPos(scrollPos + width);
+                    }
+
+                    scroll.current.getNode().scrollTo({ x: width + scrollPos, animated: true });
+                  } else {
+                    navigationResetToLoginScreen(navigation);
+                  }
+                }}
+              >
+                <Text>Logga in</Text>
+              </Button>
+            )}
           </SliderContinueButtonContainer>
         </FooterContent>
       </FooterContainer>
