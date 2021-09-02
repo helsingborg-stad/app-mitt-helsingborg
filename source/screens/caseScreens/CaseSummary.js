@@ -168,10 +168,9 @@ const computeCaseCardComponent = (
   }
 
   if (isWaitingForSign && !selfHasSigned) {
-    buttonProps.onClick = async () => {
-      await authContext.handleSign(authContext.user.personalNumber, 'Signering Mitt Helsingborg.');
-    };
-    buttonProps.text = 'Signera med BankID';
+    buttonProps.onClick = () =>
+      navigation.navigate('Form', { caseId: caseData.id, isSignMode: true });
+    buttonProps.text = 'Granska och signera';
   }
 
   const giveDate = payments?.payment?.givedate
