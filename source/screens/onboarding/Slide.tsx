@@ -10,12 +10,12 @@ const Heading = styled.Text`
   line-height: 20px;
   letter-spacing: 0.025px;
   color: ${(props) => props?.headingColor || '#003359'};
-  padding-top: 38px;
+  padding-top: 24px;
   font-family: 'Roboto';
 `;
 
 const SliderContainer = styled.View`
-  padding-top: 30px;
+  padding-top: 20px;
   padding-left: 58px;
   padding-right: 58px;
   width: ${Dimensions.get('window').width}px;
@@ -50,8 +50,8 @@ const TitleContainer = styled.View`
 `;
 
 const Title = styled.Text`
-  font-size: 30px;
-  line-height: 44px;
+  font-size: 26px;
+  line-height: 40px;
   font-weight: ${Platform.OS === 'android' ? 'bold' : '900'};
   color: #000000;
   text-align: left;
