@@ -104,7 +104,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext) => {
 
   if (isWaitingForSign && !selfHasSigned) {
     buttonProps.onClick = () =>
-      navigation.navigate('Form', { caseId: caseData.id, signMode: true });
+      navigation.navigate('Form', { caseId: caseData.id, isSignMode: true });
     buttonProps.text = 'Granska och signera';
   }
 

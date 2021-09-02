@@ -18,7 +18,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   const [form, setForm] = useState(undefined);
   const [formQuestions, setFormQuestions] = useState(undefined);
   const [initialCase, setInitialCase] = useState(undefined);
-  const { caseData, caseId, signMode } = route && route.params ? route.params : {};
+  const { caseData, caseId, isSignMode } = route && route.params ? route.params : {};
   const { user } = useContext(AuthContext);
   const { getForm } = useContext(FormContext);
   const { getCase } = useContext(CaseState);
@@ -149,7 +149,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       status={initialCase.status || defaultInitialStatus}
       period={initialCase.details.period}
       updateCaseInContext={updateCaseContext}
-      editable={!signMode}
+      editable={!isSignMode}
       {...props}
     />
   );
