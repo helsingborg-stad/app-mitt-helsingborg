@@ -65,7 +65,7 @@ const StepFooter: React.FC<Props> = ({
   children,
   validateStepAnswers,
 }) => {
-  const { user, handleSign, isLoading } = useContext(AuthContext);
+  const { user, handleSign, isLoading, authenticateOnExternalDevice } = useContext(AuthContext);
   const showNotification = useNotification();
 
   const actionMap = (action: Action) => {
@@ -103,7 +103,8 @@ const StepFooter: React.FC<Props> = ({
             if (action.type === 'sign') {
               await handleSign(
                 user.personalNumber,
-                action?.signMessage || 'Signering Mitt Helsingborg.'
+                action?.signMessage || 'Signering Mitt Helsingborg.',
+                authenticateOnExternalDevice
               );
 
               return;
