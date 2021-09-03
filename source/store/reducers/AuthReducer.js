@@ -6,7 +6,6 @@ export const initialState = {
   user: null,
   error: null,
   status: 'idle',
-  isBankidInstalled: false,
   authenticateOnExternalDevice: false,
 };
 
@@ -108,12 +107,6 @@ export default function AuthReducer(state, action) {
       return {
         ...state,
         status: action.status,
-      };
-
-    case actionTypes.setIsBankidInstalled:
-      return {
-        ...state,
-        isBankidInstalled: action.isBankidInstalled,
       };
 
     case actionTypes.setError:

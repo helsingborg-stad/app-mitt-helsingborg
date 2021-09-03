@@ -17,7 +17,6 @@ import {
   mockedAuth,
   startSign,
   setStatus,
-  checkIsBankidInstalled,
   setError,
   setAuthenticateOnExternalDevice,
 } from './actions/AuthActions';
@@ -43,17 +42,6 @@ function AuthProvider({ children, initialState }) {
     handleCheckOrderStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.status, state.orderRef, state.autoStartToken]);
-
-  /**
-   * Check if Bankid App is installed on clients machine
-   */
-  useEffect(() => {
-    const handleCheckIsBankidInstalled = async () => {
-      dispatch(await checkIsBankidInstalled());
-    };
-
-    handleCheckIsBankidInstalled();
-  }, []);
 
   /**
    * This function starts up the authorization process.
