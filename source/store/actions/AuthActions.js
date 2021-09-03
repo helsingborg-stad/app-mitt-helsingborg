@@ -1,7 +1,6 @@
 import env from 'react-native-config';
 import bankid from '../../services/BankidService';
 import * as authService from '../../services/AuthService';
-import StorageService, { ACCESS_TOKEN_KEY } from '../../services/StorageService';
 import { UrlHelper } from '../../helpers';
 
 const { canOpenUrl } = UrlHelper;
@@ -21,6 +20,7 @@ export const actionTypes = {
   setError: 'SET_ERROR',
   signSuccess: 'SIGN_SUCCESS',
   setIsBankidInstalled: 'SET_INSTALLED',
+  setAuthenticateOnExternalDevice: 'SET_AUTH_ON_EXTERNAL_DEVICE',
 };
 
 export async function mockedAuth() {
@@ -116,16 +116,16 @@ export async function refreshSession() {
   };
 }
 
-export async function startAuth(ssn, launchBankidApp) {
+export async function startAuth(personalNumber, authenticateOnExternalDevice) {
   try {
-    const response = await bankid.auth(ssn);
+    const response = await bankid.auth(personalNumber);
     if (response.success === false) {
       throw new Error(response.data);
     }
     const { orderRef, autoStartToken } = response.data;
 
-    if (launchBankidApp) {
-      // Tries to start the bankId app on the device for user authorization.
+    if (!authenticateOnExternalDevice) {
+      // Start the bankId app on the device for user authorization.
       await bankid.launchApp(autoStartToken);
     }
 
@@ -146,7 +146,7 @@ export async function startAuth(ssn, launchBankidApp) {
   }
 }
 
-export async function startSign(personalNumber, userVisibleData, launchBankidApp) {
+export async function startSign(personalNumber, userVisibleData, authenticateOnExternalDevice) {
   try {
     const response = await bankid.sign(personalNumber, userVisibleData);
 
@@ -156,8 +156,8 @@ export async function startSign(personalNumber, userVisibleData, launchBankidApp
 
     const { orderRef, autoStartToken } = response.data;
 
-    if (launchBankidApp) {
-      // Tries to start the bankId app on the device for user authorization.
+    if (!authenticateOnExternalDevice) {
+      // Start the bankId app on the device for user authorization.
       await bankid.launchApp(autoStartToken);
     }
 
@@ -230,5 +230,12 @@ export async function checkIsBankidInstalled() {
   return {
     type: actionTypes.setIsBankidInstalled,
     isBankidInstalled: isInstalled,
+  };
+}
+
+export function setAuthenticateOnExternalDevice(value) {
+  return {
+    type: actionTypes.setAuthenticateOnExternalDevice,
+    authenticateOnExternalDevice: value,
   };
 }

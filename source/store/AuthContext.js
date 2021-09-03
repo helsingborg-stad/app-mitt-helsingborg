@@ -19,6 +19,7 @@ import {
   setStatus,
   checkIsBankidInstalled,
   setError,
+  setAuthenticateOnExternalDevice,
 } from './actions/AuthActions';
 
 const AuthContext = React.createContext();
@@ -56,12 +57,12 @@ function AuthProvider({ children, initialState }) {
 
   /**
    * This function starts up the authorization process.
-   * @param {string} ssn Swedish Social Security Number (SSN)
-   * @param {bool} launchBankidApp Will automatically launch BankID app if set to true
+   * @param {string} personalNumber Personal identity number
+   * @param {bool} authenticateOnExternalDevice Will automatically launch BankID app if set to true
    */
-  async function handleAuth(ssn, launchBankidApp = true) {
+  async function handleAuth(personalNumber, authenticateOnExternalDevice) {
     // Dynamically sets app in dev mode
-    if (ssn && env.TEST_PERSONAL_NUMBER === ssn) {
+    if (personalNumber && env.TEST_PERSONAL_NUMBER === personalNumber) {
       handleSetMode('development');
     }
 
@@ -71,8 +72,9 @@ function AuthProvider({ children, initialState }) {
       return;
     }
 
+    dispatch(setAuthenticateOnExternalDevice(authenticateOnExternalDevice));
     dispatch(setStatus('pending'));
-    dispatch(await startAuth(ssn, launchBankidApp));
+    dispatch(await startAuth(personalNumber, authenticateOnExternalDevice));
   }
 
   /**
@@ -80,14 +82,14 @@ function AuthProvider({ children, initialState }) {
    * @param {string} personalNumber Personal Identity Number
    * @param {string} userVisibleData Message to be shown when signing order
    */
-  async function handleSign(personalNumber, userVisibleData, launchBankidApp = true) {
+  async function handleSign(personalNumber, userVisibleData, authenticateOnExternalDevice) {
     if (env.USE_BANKID === 'false') {
       dispatch(setStatus('signResolved'));
       return;
     }
 
     dispatch(setStatus('pending'));
-    dispatch(await startSign(personalNumber, userVisibleData, launchBankidApp));
+    dispatch(await startSign(personalNumber, userVisibleData, authenticateOnExternalDevice));
   }
 
   /**
