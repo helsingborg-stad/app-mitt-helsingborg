@@ -19,7 +19,6 @@ export const actionTypes = {
   setStatus: 'SET_STATUS',
   setError: 'SET_ERROR',
   signSuccess: 'SIGN_SUCCESS',
-  setIsBankidInstalled: 'SET_INSTALLED',
   setAuthenticateOnExternalDevice: 'SET_AUTH_ON_EXTERNAL_DEVICE',
 };
 
@@ -223,14 +222,6 @@ export async function cancelOrder(orderRef) {
       type: actionTypes.cancelOrder,
     };
   }
-}
-
-export async function checkIsBankidInstalled() {
-  const isInstalled = await canOpenUrl('bankid:///');
-  return {
-    type: actionTypes.setIsBankidInstalled,
-    isBankidInstalled: isInstalled,
-  };
 }
 
 export function setAuthenticateOnExternalDevice(value) {
