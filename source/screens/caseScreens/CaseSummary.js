@@ -15,7 +15,6 @@ import BackNavigation from '../../components/molecules/BackNavigation';
 import Button from '../../components/atoms/Button';
 import { formatAmount, convertDataToArray, calculateSum } from '../../helpers/FormatVivaData';
 import AuthContext from '../../store/AuthContext';
-import AuthLoading from '../../components/molecules/AuthLoading';
 import { put } from '../../helpers/ApiRequest';
 
 const Container = styled.ScrollView`
@@ -609,15 +608,6 @@ const CaseSummary = (props) => {
           </ModalFooter>
         </ScrollView>
       </Modal>
-      {authContext.isLoading && (
-        <AuthLoading
-          colorSchema="neutral"
-          isLoading={authContext.isLoading}
-          isResolved={authContext.isResolved}
-          cancelSignIn={authContext.handleCancelOrder}
-          isBankidInstalled={authContext.isBankidInstalled}
-        />
-      )}
     </ScreenWrapper>
   );
 };
