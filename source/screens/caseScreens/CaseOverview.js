@@ -5,7 +5,7 @@ import icons from 'source/helpers/Icons';
 import styled from 'styled-components/native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Text } from '../../components/atoms';
-import { AuthLoading, Card, CaseCard, Header, ScreenWrapper } from '../../components/molecules';
+import { Card, CaseCard, Header, ScreenWrapper } from '../../components/molecules';
 import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
 import { CaseState, caseTypes } from '../../store/CaseContext';
 import FormContext from '../../store/FormContext';
@@ -309,15 +309,6 @@ function CaseOverview(props) {
           </Animated.View>
         )}
       </Container>
-      {authContext.isLoading && (
-        <AuthLoading
-          colorSchema="neutral"
-          isLoading={authContext.isLoading}
-          isResolved={authContext.isResolved}
-          cancelSignIn={authContext.handleCancelOrder}
-          isBankidInstalled={authContext.isBankidInstalled}
-        />
-      )}
     </ScreenWrapper>
   );
 }
