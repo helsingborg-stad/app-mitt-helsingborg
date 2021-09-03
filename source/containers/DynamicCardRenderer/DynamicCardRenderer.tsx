@@ -61,7 +61,7 @@ const InfoModalButton: React.FC<InfoModalButtonProps> = ({ heading, markdownText
   const [modalVisible, toggleModal] = useModal();
   return (
     <>
-      <Card.Button onClick={toggleModal}>
+      <Card.Button colorSchema={colorSchema} onClick={toggleModal}>
         {icon && iconPosition && iconPosition === 'left' && <Icon name={icon} />}
         <TextComponent>{text}</TextComponent>
         {icon && (!iconPosition || iconPosition === 'right') && <Icon name={icon} />}
