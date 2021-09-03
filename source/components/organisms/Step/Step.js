@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState, useRef } from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components/native';
 import FormField from '../../../containers/FormField';
@@ -207,7 +207,12 @@ function Step({
                       id={field.id}
                       formNavigation={formNavigation}
                       editable={!field.disabled}
-                      onFocus={handleFocus}
+                      onFocus={(e, isSelect) => {
+                        if (Platform.OS === 'android') {
+                          return;
+                        }
+                        handleFocus(e, isSelect);
+                      }}
                       {...field}
                     />
                   ))}
