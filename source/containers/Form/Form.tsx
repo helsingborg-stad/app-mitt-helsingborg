@@ -269,7 +269,7 @@ const Form: React.FC<Props> = ({
           isLoading={isLoading}
           isResolved={isResolved}
           cancelSignIn={() => handleCancelOrder()}
-          isBankidInstalled={!authenticateOnExternalDevice}
+          authenticateOnExternalDevice={authenticateOnExternalDevice}
         />
       )}
     </>

@@ -66,7 +66,7 @@ const SuccessIcon = styled(Icon)`
 `;
 
 const AuthLoading = (props) => {
-  const { isBankidInstalled, cancelSignIn, colorSchema, isLoading, isResolved } = props;
+  const { authenticateOnExternalDevice, cancelSignIn, colorSchema, isLoading, isResolved } = props;
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -96,7 +96,7 @@ const AuthLoading = (props) => {
         <Container>
           <Box>
             <AuthActivityIndicator size="large" color={theme.colors.primary[colorSchema][1]} />
-            {!isBankidInstalled ? (
+            {authenticateOnExternalDevice ? (
               <InfoText>Väntar på att BankID ska startas på en annan enhet</InfoText>
             ) : (
               <InfoText>Väntar på mobilt BankID</InfoText>
@@ -117,7 +117,7 @@ const AuthLoading = (props) => {
 };
 
 AuthLoading.propTypes = {
-  isBankidInstalled: PropTypes.bool.isRequired,
+  authenticateOnExternalDevice: PropTypes.bool.isRequired,
   cancelSignIn: PropTypes.func.isRequired,
   isResolved: PropTypes.bool,
   isLoading: PropTypes.bool,
