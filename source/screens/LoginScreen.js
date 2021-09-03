@@ -227,9 +227,9 @@ function LoginScreen(props) {
   /**
    * Handles the submission of the login form.
    */
-  const handleLogin = async (authOnExternalDevice = false) => {
+  const handleLogin = async (authenticateOnExternalDevice = false) => {
     // Validate personal number if authentication is chosen to be triggered on an external device
-    if (authOnExternalDevice) {
+    if (authenticateOnExternalDevice) {
       if (personalNumber.length <= 0) {
         return;
       }
@@ -239,11 +239,11 @@ function LoginScreen(props) {
         return;
       }
 
-      await handleAuth(personalNumber, false);
+      await handleAuth(personalNumber, true);
       return;
     }
     // Send empty personal number to use the personal number from users BankID app
-    await handleAuth(undefined, true);
+    await handleAuth(undefined, false);
   };
 
   return (
