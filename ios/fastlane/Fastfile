@@ -237,9 +237,15 @@ platform :ios do
     end
 
     # increment build number
-    current_build_number = latest_testflight_build_number(version: version_string)
-    build_number = current_build_number + 1
-    increment_build_number(build_number: build_number)
+    forced_build_number = ENV["FORCED_BUILD_NUMBER"]
+    if forced_build_number != nil
+      puts "using forced build number \"#{forced_build_number}\""
+      increment_build_number(build_number: forced_build_number)
+    else
+      current_build_number = latest_testflight_build_number(version: version_string)
+      build_number = current_build_number + 1
+      increment_build_number(build_number: build_number)
+    end
 
     # set version number
     current_version_string = xcode_project_version || get_project_xcode_version
