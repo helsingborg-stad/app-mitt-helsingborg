@@ -86,7 +86,7 @@ const Form: React.FC<Props> = ({
     handleBlur,
     validateStepAnswers,
   } = useForm(initialState);
-  
+
   const {
     status: authStatus,
     isLoading,
@@ -94,9 +94,9 @@ const Form: React.FC<Props> = ({
     isRejected,
     error,
     handleCancelOrder,
-    isBankidInstalled,
     handleSetStatus,
     handleSetError,
+    authenticateOnExternalDevice
   } = useContext(AuthContext);
 
   const answers: Record<string, Image | any> = formState.formAnswers;
@@ -112,7 +112,7 @@ const Form: React.FC<Props> = ({
 
   const [hasUploaded, setHasUploaded] = useState(
     attachments?.length &&
-      attachments.filter(({ uploadedFileName }) => uploadedFileName).length == attachments.length
+    attachments.filter(({ uploadedFileName }) => uploadedFileName).length == attachments.length
   );
 
   const showNotification = useNotification();
@@ -170,20 +170,20 @@ const Form: React.FC<Props> = ({
     onClose();
   };
 
-  
+
 
   const stepComponents = formState.steps.map(
     ({ id, banner, title, group, description, questions, actions, colorSchema }) => {
       const questionsToShow = questions
         ? questions.filter((question) => {
-            const condition = question.conditionalOn;
-            if (!condition || condition.trim() === '') return true;
-            return evaluateConditionalExpression(
-              condition,
-              formState.formAnswers,
-              formState.allQuestions
-            );
-          })
+          const condition = question.conditionalOn;
+          if (!condition || condition.trim() === '') return true;
+          return evaluateConditionalExpression(
+            condition,
+            formState.formAnswers,
+            formState.allQuestions
+          );
+        })
         : [];
 
 
@@ -269,7 +269,7 @@ const Form: React.FC<Props> = ({
           isLoading={isLoading}
           isResolved={isResolved}
           cancelSignIn={() => handleCancelOrder()}
-          isBankidInstalled={isBankidInstalled}
+          isBankidInstalled={!authenticateOnExternalDevice}
         />
       )}
     </>
