@@ -266,7 +266,7 @@ function LoginScreen(props) {
                 isLoading={isLoading}
                 isResolved={isResolved}
                 cancelSignIn={handleCancelOrder}
-                isBankidInstalled
+                authenticateOnExternalDevice={false}
               />
             </Form>
           )}
@@ -331,7 +331,7 @@ function LoginScreen(props) {
                   isLoading={isLoading}
                   isResolved={isResolved}
                   cancelSignIn={handleCancelOrder}
-                  isBankidInstalled={false}
+                  authenticateOnExternalDevice
                 />
               </Form>
             )}
