@@ -46,7 +46,7 @@ function AuthProvider({ children, initialState }) {
   /**
    * This function starts up the authorization process.
    * @param {string} personalNumber Personal identity number
-   * @param {bool} authenticateOnExternalDevice Will automatically launch BankID app if set to true
+   * @param {bool} authenticateOnExternalDevice Will automatically launch BankID app if set to false
    */
   async function handleAuth(personalNumber, authenticateOnExternalDevice) {
     // Dynamically sets app in dev mode
@@ -69,6 +69,7 @@ function AuthProvider({ children, initialState }) {
    * This function starts up the sign process.
    * @param {string} personalNumber Personal Identity Number
    * @param {string} userVisibleData Message to be shown when signing order
+   * @param {bool} authenticateOnExternalDevice Will automatically launch BankID app if set to false
    */
   async function handleSign(personalNumber, userVisibleData, authenticateOnExternalDevice) {
     if (env.USE_BANKID === 'false') {
