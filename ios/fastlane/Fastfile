@@ -255,16 +255,17 @@ platform :ios do
           minor = m.captures[1]
           patch = m.captures[2]
 
+          puts "major=#{major} minor=#{minor} patch=#{patch}"
           if patch == "0"
             variation = "#{major}.#{minor}"
             current_build_number = latest_testflight_build_number(version: variation, initial_build_number: 0)
             puts "variation \"#{variation}\" = #{current_build_number}"
-          end
-
-          if current_build_number == 0 && minor == "0"
-            variation = major
-            current_build_number = latest_testflight_build_number(version: variation, initial_build_number: 0)
-            puts "variation \"#{variation}\" = #{current_build_number}"
+            
+            if current_build_number == 0 && minor == "0"
+              variation = major
+              current_build_number = latest_testflight_build_number(version: variation, initial_build_number: 0)
+              puts "variation \"#{variation}\" = #{current_build_number}"
+            end
           end
         else
           UI.important "build number is 0 and version is not semantically correct - unable to check version variations (build number may be incorrect)"
