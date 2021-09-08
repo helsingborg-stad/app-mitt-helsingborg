@@ -152,11 +152,12 @@ jobs:
           CI_MATCHED_ENV: ${{ env.CI_MATCHED_ENV }}
           CONNECT_API_KEY_CONTENT: ${{ secrets.CONNECT_API_KEY_CONTENT }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          FORCED_VERSION_NUMBER_STRING: ${{ github.event.inputs.forcedVersion }}
+          FORCED_BUILD_NUMBER: ${{ github.event.inputs.forcedBuildNumber }}
+          GIT_HEAD_REF: ${{ github.head_ref }}
           GYM_SCHEME: ${{ secrets.GYM_SCHEME }}
           MAIN_PROJECT: ${{ secrets.MAIN_PROJECT }}
           MAIN_WORKSPACE: ${{ secrets.MAIN_WORKSPACE }}
-          FORCED_VERSION_NUMBER_STRING: ${{ github.event.inputs.forcedVersion }}
-          FORCED_BUILD_NUMBER: ${{ github.event.inputs.forcedBuildNumber }}
           PERFORM_LONG_UPLOAD: ${{ secrets.PERFORM_LONG_UPLOAD }}
           TEAM_ID: ${{ secrets.TEAM_ID }}
           FASTLANE_SKIP_UPDATE_CHECK: 1

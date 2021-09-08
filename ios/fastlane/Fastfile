@@ -40,21 +40,48 @@ def get_changelog()
 end
 
 
+def extract_version_number_from_name(ref_name, with_meta=false)
+
+  if m = ref_name.match($semver_regex)
+    version_string = with_meta ? (ref_name.split('/')[1] || ref_name) : m.captures[0, 3].join(".")
+    puts "extracted semantic version number from branch/ref name \"#{ref_name}\" = #{m.captures.join(" ")}"
+    puts "formatted = #{version_string}"
+    return version_string
+  end
+
+  return nil
+
+end
+
+
 def get_semver_from_branch(with_meta=false)
 
   branch = git_branch
-  puts "branch=#{branch}"
+  puts "branch=\"#{branch}\""
 
-  if m = branch.match($semver_regex)
-    version_string = with_meta ? (branch.split('/')[1] || branch) : m.captures[0, 3].join(".")
-    puts "extracted semantic version number from branch name \"#{branch}\" = #{m.captures.join(" ")}"
-    puts "formatted = #{version_string}"
+  version_string = extract_version_number_from_name(branch, with_meta)
+
+  if version_string != nil && !version_string.empty?
     return version_string
   else
-    puts "unable to determine semantic version from branch name \"#{branch}\""
-    return nil
-  end
+    head_ref = ENV["GIT_HEAD_REF"]
     
+    if head_ref != nil && !head_ref.empty?
+      puts "head_ref=\"#{head_ref}\""
+      version_string = extract_version_number_from_name(head_ref, with_meta)
+
+      if version_string != nil && !version_string.empty?
+        return version_string
+      else
+        puts "unable to determine semantic version from either head ref \"#{head_ref}\" or branch name \"#{branch}\""
+      end
+    else
+      puts "unable to determine semantic version from branch name \"#{branch}\""
+    end
+  end
+
+  return nil
+
 end
 
 
