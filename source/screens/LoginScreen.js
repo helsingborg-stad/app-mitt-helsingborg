@@ -256,7 +256,7 @@ function LoginScreen(props) {
             <Title>Mitt Helsingborg</Title>
             <Separator />
             <LoginHeading>Välkommen!</LoginHeading>
-            <ContentText>Till en enklare och säkrare kontakt med Helsingborgs stad.</ContentText>
+            <ContentText>Till en enklare kontakt med Helsingborgs stad.</ContentText>
           </Header>
 
           {(isLoading || isResolved) && (
