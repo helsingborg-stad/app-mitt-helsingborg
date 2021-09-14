@@ -233,14 +233,6 @@ function CaseOverview(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cases]);
 
-  const signCase = useCallback(
-    async (caseData) => {
-      setPendingCaseSign(caseData);
-      await authContext.handleSign(authContext.user.personalNumber, 'Signering Mitt Helsingborg.');
-    },
-    [authContext, setPendingCaseSign]
-  );
-
   useEffect(() => {
     if (pendingCaseSign && authContext.status === 'signResolved') {
       (async () => {
@@ -286,7 +278,7 @@ function CaseOverview(props) {
         {activeCases.length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             {activeCases.map((caseData) =>
-              computeCaseCardComponent(caseData, navigation, authContext, signCase)
+              computeCaseCardComponent(caseData, navigation, authContext)
             )}
           </Animated.View>
         )}
