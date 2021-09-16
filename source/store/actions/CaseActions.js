@@ -160,9 +160,9 @@ export async function fetchCases(user) {
     const response = await get('/cases');
     if (response?.data?.data?.attributes?.cases) {
       const fetchedCases = response.data.data.attributes.cases;
-      const processedCases = await fetchedCases.reduce(async (cases, c) => {
+      const processedCases = await fetchedCases.reduce(async (cases, userCase) => {
         try {
-          const form = c.forms[c.currentFormId];
+          const form = userCase.forms[userCase.currentFormId];
 
           // Updating encryption is based on the existing encryption method, so we're doing it here
           // as the form is decrypted for the rest of its lifetime in the app until updateCase.
@@ -174,11 +174,11 @@ export async function fetchCases(user) {
             updatedForm.encryption.type !== form.encryption.type ||
             updatedForm.encryption.publicKeys?.[user.personalNumber] !== myPublicKey
           ) {
-            console.log(`encryption for case ${c.id} changed - sending update`);
+            console.log(`encryption for case ${userCase.id} changed - sending update`);
             await put(
-              `/cases/${c.id}`,
+              `/cases/${userCase.id}`,
               JSON.stringify({
-                currentFormId: c.currentFormId,
+                currentFormId: userCase.currentFormId,
                 answers: updatedForm.answers,
                 currentPosition: updatedForm.currentPosition,
                 encryption: updatedForm.encryption,
@@ -196,11 +196,11 @@ export async function fetchCases(user) {
 
             return {
               ...cases,
-              [c.id]: {
-                ...c,
+              [userCase.id]: {
+                ...userCase,
                 forms: {
-                  ...c.forms,
-                  [c.currentFormId]: {
+                  ...userCase.forms,
+                  [userCase.currentFormId]: {
                     ...mergedForm,
                     encryptionStatus: updateStatus,
                   },
@@ -210,7 +210,7 @@ export async function fetchCases(user) {
           }
 
           if (updateStatus === 'missingAesKey') {
-            const personsList = c.persons;
+            const personsList = userCase.persons;
             if (Array.isArray(personsList)) {
               const me = personsList.find(
                 (person) => person.personalNumber === user.personalNumber
@@ -220,12 +220,12 @@ export async function fetchCases(user) {
                 // Just add the case in encrypted form
                 return {
                   ...cases,
-                  [c.id]: {
-                    ...c,
+                  [userCase.id]: {
+                    ...userCase,
                     forms: {
-                      ...c.forms,
-                      [c.currentFormId]: {
-                        ...c.forms[c.currentFormId],
+                      ...userCase.forms,
+                      [userCase.currentFormId]: {
+                        ...userCase.forms[userCase.currentFormId],
                         encryptionStatus: updateStatus,
                       },
                     },
@@ -236,8 +236,8 @@ export async function fetchCases(user) {
           }
 
           throw new EncryptionException(updateStatus, updateStatus);
-        } catch (e) {
-          console.error(`Failed to process form (Case ID: ${c?.id}), Error: `, e);
+        } catch (error) {
+          console.error(`Failed to process form (Case ID: ${userCase?.id}), Error: `, error);
         }
 
         return cases;
