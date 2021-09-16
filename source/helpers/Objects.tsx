@@ -44,16 +44,16 @@ const excludePropertiesWithKey = (object = {}, keys = []) =>
  * @param { object } object Target to change
  * @param { match } match String to match
  */
-const renameMatchedKeysInObject = (obj = {}, match = '') => {
-  Object.keys(obj).forEach((key) => {
+const renameMatchedKeysInObject = (object = {}, match = '') => {
+  Object.keys(object).forEach((key) => {
     if (key.includes(match)) {
       const newObjectKey = key.replace(match, '');
-      obj[newObjectKey] = obj[key];
-      delete obj[key];
+      object[newObjectKey] = object[key];
+      delete object[key];
     }
   });
 
-  return obj;
+  return object;
 };
 
 /**
