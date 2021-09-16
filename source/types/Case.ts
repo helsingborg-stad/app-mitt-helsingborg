@@ -1,41 +1,41 @@
-import { EncryptionDetails } from "./Encryption";
+import { EncryptionDetails } from './Encryption';
 
 export type ApplicationStatusType =
   /** Application has been started by applicant, with possibly partial (and encrypted) answers. */
-  | "active:ongoing"
+  | 'active:ongoing'
   /** Application has been received by the provider and is being processed by a case worker. */
-  | "active:processing"
+  | 'active:processing'
   /** Application is fully signed by all applicant and is ready to send in. */
-  | "active:signature:completed"
+  | 'active:signature:completed'
   /** Application is not fully signed. One or more applicants need to sign this application. */
-  | "active:signature:pending"
+  | 'active:signature:pending'
   /** Application has been submitted to the provider and is awaiting processing. */
-  | "active:submitted"
+  | 'active:submitted'
   /** Application is closed. */
-  | "closed"
+  | 'closed'
   /** Application has not yet been started by the applicant. */
-  | "notStarted"
+  | 'notStarted'
 
   /** VIVA */
   /** Application has been sent to VIVA and is awaiting action from a case worker. */
-  | "active:submitted:viva"
+  | 'active:submitted:viva'
   /** Completion ("stickprovskontroll") is required. */
-  | "active:completionRequired:viva"
+  | 'active:completionRequired:viva'
   /** Application is fully approved. Calculation/payment info is available. */
-  | "closed:approved:viva"
+  | 'closed:approved:viva'
   /** Completion ("stickprovskontroll") has been rejected. */
-  | "closed:completionRejected:viva"
+  | 'closed:completionRejected:viva'
   /** Application is partially approved. Calcuation/payment info is available. */
-  | "closed:partiallyApproved:viva"
+  | 'closed:partiallyApproved:viva'
   /** Application has been processed by a case worker and has been rejected. Rejection info is available. */
-  | "closed:rejected:viva"
+  | 'closed:rejected:viva'
   /** Application has not yet been started by the applicant (VIVA-specific). */
-  | "notStarted:viva";
+  | 'notStarted:viva';
 
 /**
  * Possible roles for a person on a case.
  */
-export type PersonRole = "applicant" | "coApplicant" | "children";
+export type PersonRole = 'applicant' | 'coApplicant' | 'children';
 
 /**
  * Administrator (case worker).

@@ -394,7 +394,7 @@ export async function updateFormEncryption(
 
   if (symmetricKeyName !== null) {
     const currentEncryptionType = form.encryption.type;
-    
+
     const existingPublicKey = getPublicKeyFromForm(form, personalNumber);
     const existingSymmetricKey = await getSymmetricKeyByForm(form);
 
@@ -403,8 +403,10 @@ export async function updateFormEncryption(
     if (existingPublicKey === null || existingSymmetricKey === null) {
       // Create symmetric key
       try {
-        const [encryptionUpdateStatus, encryptionUpdate] =
-          await setupSymmetricKey(personalNumber, form);
+        const [
+          encryptionUpdateStatus,
+          encryptionUpdate,
+        ] = await setupSymmetricKey(personalNumber, form);
 
         encryptionPublicKeyUpdate = encryptionUpdate;
 
@@ -452,7 +454,7 @@ export async function updateFormEncryption(
         const updatedForm = encryptionPublicKeyUpdate
           ? updatePublicKeysInForm(encryptedForm, encryptionPublicKeyUpdate)
           : encryptedForm;
-        
+
         updatedForm.encryption.type = "symmetricKey";
 
         console.log("setupFormEncryption - turned private AES into symmetric");

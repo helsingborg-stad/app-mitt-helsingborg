@@ -1,10 +1,10 @@
-import StorageService from "../source/services/StorageService";
+import StorageService from '../source/services/StorageService';
 
-describe("StorageService", () => {
-  it("stores and fetches data", async () => {
-    const mockKey = "___jest_mockKey";
+describe('StorageService', () => {
+  it('stores and fetches data', async () => {
+    const mockKey = '___jest_mockKey';
     const mockValue = {
-      test: "Hello World",
+      test: 'Hello World',
     };
     await StorageService.saveData(mockKey, JSON.stringify(mockValue));
     const retrievedDataRaw = await StorageService.getData(mockKey);
@@ -13,13 +13,13 @@ describe("StorageService", () => {
 
     const retrievedData: typeof mockValue = JSON.parse(retrievedDataRaw);
 
-    expect(retrievedData.test).toEqual("Hello World");
+    expect(retrievedData.test).toEqual('Hello World');
   });
 
-  it("clears data", async () => {
-    const mockKey = "___jest_mockKey";
+  it('clears data', async () => {
+    const mockKey = '___jest_mockKey';
 
-    await StorageService.saveData(mockKey, JSON.stringify({ hello: "world" }));
+    await StorageService.saveData(mockKey, JSON.stringify({ hello: 'world' }));
     await StorageService.clearData();
     const retrievedData = await StorageService.getData(mockKey);
 

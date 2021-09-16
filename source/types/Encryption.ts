@@ -1,7 +1,7 @@
 /**
  * Possible encryption methods.
  */
-export type EncryptionType = "decrypted" | "privateAesKey" | "symmetricKey";
+export type EncryptionType = 'decrypted' | 'privateAesKey' | 'symmetricKey';
 
 /**
  * Number type used for cryptographic numbers.
@@ -21,23 +21,18 @@ export type SerializedCryptoNumber = string;
 export type KeyPair = [CryptoNumber, CryptoNumber];
 
 export type EncryptionExceptionStatus =
-  | "missingAesKey"
-  | "missingSymmetricKey"
-  | "missingCoApplicantPublicKey"
-  | "missingCoApplicantPersonalNumber"
-  | "invalidEncryptionType"
+  | 'missingAesKey'
+  | 'missingSymmetricKey'
+  | 'missingCoApplicantPublicKey'
+  | 'missingCoApplicantPersonalNumber'
+  | 'invalidEncryptionType'
   | null;
 
 /**
  * react-native-aes-crypto types
  */
 interface AesModule {
-  pbkdf2: (
-    password: string,
-    salt: string,
-    cost: number,
-    length: number
-  ) => Promise<string>;
+  pbkdf2: (password: string, salt: string, cost: number, length: number) => Promise<string>;
   encrypt: (text: string, key: string, iv: string) => Promise<string>;
   decrypt: (ciphertext: string, key: string, iv: string) => Promise<string>;
   hmac256: (ciphertext: string, key: string) => Promise<string>;
@@ -110,8 +105,5 @@ export interface EncryptionExceptionInterface extends Error {
  * The constructor for `EncryptionExceptionInterface`.
  */
 export interface EncryptionExceptionConstructor {
-  new (
-    status: EncryptionExceptionStatus,
-    message: string
-  ): EncryptionExceptionInterface;
+  new (status: EncryptionExceptionStatus, message: string): EncryptionExceptionInterface;
 }

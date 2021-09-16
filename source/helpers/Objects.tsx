@@ -64,7 +64,7 @@ const renameMatchedKeysInObject = (object = {}, match = '') => {
  * @returns {object} New object with merged key/values
  */
 const mergeDeep = (...objects) => {
-  const isObject = (obj) => obj && typeof obj === "object";
+  const isObject = (obj) => obj && typeof obj === 'object';
 
   return objects.reduce((prev, obj) => {
     const prevCopy = { ...prev };

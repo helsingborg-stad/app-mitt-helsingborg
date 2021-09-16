@@ -1,4 +1,4 @@
-import { NativeModules } from "react-native";
+import { NativeModules } from 'react-native';
 import {
   AesEncryptor,
   CryptoNumber,
@@ -6,8 +6,8 @@ import {
   EncryptionExceptionInterface,
   EncryptionExceptionConstructor,
   EncryptionExceptionStatus,
-} from "../../types/Encryption";
-import StorageService from "../StorageService";
+} from '../../types/Encryption';
+import StorageService from '../StorageService';
 
 const { Aes } = NativeModules;
 
@@ -18,8 +18,7 @@ const { Aes } = NativeModules;
  */
 export const EncryptionException: EncryptionExceptionConstructor = class EncryptionException
   extends Error
-  implements EncryptionExceptionInterface
-{
+  implements EncryptionExceptionInterface {
   status: EncryptionExceptionStatus = null;
 
   constructor(status: EncryptionExceptionStatus, message: string) {
@@ -65,9 +64,7 @@ export function generatePasswordBasedKey(
  * @param value Cryptographic number to serialize.
  * @returns Serialized form of the cryptographic number.
  */
-export function serializeCryptoNumber(
-  value: CryptoNumber
-): SerializedCryptoNumber {
+export function serializeCryptoNumber(value: CryptoNumber): SerializedCryptoNumber {
   return String(value);
 }
 
@@ -76,9 +73,7 @@ export function serializeCryptoNumber(
  * @param value Serialized representation of a cryptographic number to deserialize.
  * @returns Cryptographic number.
  */
-export function deserializeCryptoNumber(
-  value: SerializedCryptoNumber
-): CryptoNumber {
+export function deserializeCryptoNumber(value: SerializedCryptoNumber): CryptoNumber {
   return Number(value);
 }
 
@@ -122,12 +117,7 @@ export function getAesEncryptorStoreKey(id: string): string {
 export async function createAesEncryptor(): Promise<AesEncryptor> {
   const password = await Aes.randomKey(16);
   // Salt will be updated in future real.
-  const aesKey = await generatePasswordBasedKey(
-    password,
-    "salt4D42bf960Sm1",
-    5000,
-    256
-  );
+  const aesKey = await generatePasswordBasedKey(password, 'salt4D42bf960Sm1', 5000, 256);
 
   const initializationVector = await Aes.randomKey(16);
   const aesEncryptor: AesEncryptor = { aesKey, initializationVector };
@@ -139,10 +129,7 @@ export async function createAesEncryptor(): Promise<AesEncryptor> {
  * @param id ID to store this AesEncryptor as.
  * @param aesEncryptor AesEncryptor object to store.
  */
-export async function storeAesEncryptor(
-  id: string,
-  aesEncryptor: AesEncryptor
-): Promise<void> {
+export async function storeAesEncryptor(id: string, aesEncryptor: AesEncryptor): Promise<void> {
   const storeKey = getAesEncryptorStoreKey(id);
   await StorageService.saveData(storeKey, JSON.stringify(aesEncryptor));
 }
@@ -152,9 +139,7 @@ export async function storeAesEncryptor(
  * @param id ID to store the AesEncryptor as.
  * @returns The newly created AesEncryptor object.
  */
-export async function createAndStoreAesEncryptor(
-  id: string
-): Promise<AesEncryptor> {
+export async function createAndStoreAesEncryptor(id: string): Promise<AesEncryptor> {
   const aesEncryptor = await createAesEncryptor();
   await storeAesEncryptor(id, aesEncryptor);
   return aesEncryptor;
@@ -165,9 +150,7 @@ export async function createAndStoreAesEncryptor(
  * @param id ID for the AesEncryptor object to load.
  * @returns A promise that resolves with the AesEncryptor object, or `null` if it could not be found/loaded.
  */
-export async function getAesEncryptor(
-  id: string
-): Promise<AesEncryptor | null> {
+export async function getAesEncryptor(id: string): Promise<AesEncryptor | null> {
   const storeKey = getAesEncryptorStoreKey(id);
   const aesEncryptorRaw = await StorageService.getData(storeKey);
   return JSON.parse(aesEncryptorRaw);
@@ -180,11 +163,7 @@ export async function getAesEncryptor(
  * @param iv Initialization Vector to encrypt with.
  * @returns Promise that resolves to the encrypted string data.
  */
-export function encryptAes(
-  plainText: string,
-  key: string,
-  iv: string
-): Promise<string> {
+export function encryptAes(plainText: string, key: string, iv: string): Promise<string> {
   return Aes.encrypt(plainText, key, iv);
 }
 
@@ -195,11 +174,7 @@ export function encryptAes(
  * @param iv Initialization Vector to decrypt with.
  * @returns Promise that resolves to the decrypted string data.
  */
-export function decryptAes(
-  cipherText: string,
-  key: string,
-  iv: string
-): Promise<string> {
+export function decryptAes(cipherText: string, key: string, iv: string): Promise<string> {
   return Aes.decrypt(cipherText, key, iv);
 }
 
@@ -213,11 +188,7 @@ export function encryptWithEncryptor(
   aesEncryptor: AesEncryptor,
   plainText: string
 ): Promise<string> {
-  return encryptAes(
-    plainText,
-    aesEncryptor.aesKey,
-    aesEncryptor.initializationVector
-  );
+  return encryptAes(plainText, aesEncryptor.aesKey, aesEncryptor.initializationVector);
 }
 
 /**
@@ -231,11 +202,7 @@ export function decryptWithEncryptor(
   aesEncryptor: AesEncryptor,
   cipherText: string
 ): Promise<string> {
-  return decryptAes(
-    cipherText,
-    aesEncryptor.aesKey,
-    aesEncryptor.initializationVector
-  );
+  return decryptAes(cipherText, aesEncryptor.aesKey, aesEncryptor.initializationVector);
 }
 
 /**
@@ -250,8 +217,7 @@ export async function encryptAesByEncryptorID(
   plainText: string
 ): Promise<string> {
   const existingEncryptor = await getAesEncryptor(encryptorId);
-  const aesEncryptor =
-    existingEncryptor ?? (await createAndStoreAesEncryptor(encryptorId));
+  const aesEncryptor = existingEncryptor ?? (await createAndStoreAesEncryptor(encryptorId));
 
   return encryptWithEncryptor(aesEncryptor, plainText);
 }
@@ -272,8 +238,8 @@ export async function decryptAesByEncryptorID(
 
   if (!existingEncryptor) {
     throw new EncryptionException(
-      "missingAesKey",
-      "Did not find AES key in storage: The key was either lost or encrypt not called before trying decrypt."
+      'missingAesKey',
+      'Did not find AES key in storage: The key was either lost or encrypt not called before trying decrypt.'
     );
   }
 
@@ -290,10 +256,7 @@ export async function decryptAesByEncryptorID(
  * @param symmetricKeyName Base name for the symmetric key that is shared with any co-encryptors.
  * @returns Key used for persistent storage.
  */
-export function getSymmetricPrivateKeyStoreKey(
-  id: string,
-  symmetricKeyName: string
-): string {
+export function getSymmetricPrivateKeyStoreKey(id: string, symmetricKeyName: string): string {
   return `aesPrivateKey${id}-${symmetricKeyName}`;
 }
 
@@ -422,9 +385,7 @@ export async function createAndStoreSymmetricKey(
  * @param symmetricKeyName Unique ID shared among participants of the symmetric key.
  * @returns A promise that resolves with the symmetric key, or `null` if it could not be found/loaded.
  */
-export async function getSymmetricKey(
-  symmetricKeyName: string
-): Promise<CryptoNumber> {
+export async function getSymmetricKey(symmetricKeyName: string): Promise<CryptoNumber> {
   const storeKey = getSymmetricKeyStoreKey(symmetricKeyName);
   const symmetricKeyRaw = await StorageService.getData(storeKey);
 
