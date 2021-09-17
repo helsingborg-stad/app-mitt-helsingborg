@@ -12,6 +12,9 @@ import FormContext from '../../store/FormContext';
 import { convertDataToArray, calculateSum } from '../../helpers/FormatVivaData';
 import AuthContext from '../../store/AuthContext';
 import { put } from '../../helpers/ApiRequest';
+import {
+  getUserFriendlyEncryptionStatusMessage,
+} from '../../helpers/CaseHelper';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -111,23 +114,12 @@ const computeCaseCardComponent = (caseData, navigation, authContext) => {
       )}`
     : null;
 
-  const getEncryptionStatusMessage = (status) => {
-    switch (status) {
-      case 'missingCoApplicantPublicKey':
-      case 'missingSymmetricKey':
-      case 'missingAesKey':
-        return 'Din partner måste logga in för att synka.';
-      case 'ready':
-      default:
-        return null;
-    }
-  };
-
   const { encryptionStatus } = caseData.forms[caseData.currentFormId];
-  const encryptionStatusMessage = getEncryptionStatusMessage(encryptionStatus);
-  const description = isWaitingForSign
-    ? encryptionStatusMessage ?? (selfHasSigned ? 'Din partner måste logga in och signera.' : null)
-    : null;
+  const description = getUserFriendlyEncryptionStatusMessage(
+    encryptionStatus,
+    selfHasSigned,
+    isWaitingForSign
+  );
 
   const shouldShowCTAButton = isCoApplicant
     ? isWaitingForSign && !selfHasSigned && encryptionStatus === 'ready'

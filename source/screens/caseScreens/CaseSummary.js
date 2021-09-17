@@ -16,6 +16,9 @@ import Button from '../../components/atoms/Button';
 import { formatAmount, convertDataToArray, calculateSum } from '../../helpers/FormatVivaData';
 import AuthContext from '../../store/AuthContext';
 import { put } from '../../helpers/ApiRequest';
+import {
+  getUserFriendlyEncryptionStatusMessage,
+} from '../../helpers/CaseHelper';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -138,23 +141,13 @@ const computeCaseCardComponent = (
     ['03', '02'].includes(decision.typecode)
   );
 
-  const getEncryptionStatusMessage = (status) => {
-    switch (status) {
-      case 'missingCoApplicantPublicKey':
-      case 'missingSymmetricKey':
-      case 'missingAesKey':
-        return 'Din partner måste logga in för att synka.';
-      case 'ready':
-      default:
-        return null;
-    }
-  };
-
   const { encryptionStatus } = caseData.forms[caseData.currentFormId];
-  const encryptionStatusMessage = getEncryptionStatusMessage(encryptionStatus);
-  const encryptionDescription = isWaitingForSign
-    ? encryptionStatusMessage ?? (selfHasSigned ? 'Din partner måste logga in och signera.' : null)
-    : null;
+
+  const encryptionDescription = getUserFriendlyEncryptionStatusMessage(
+    encryptionStatus,
+    selfHasSigned,
+    isWaitingForSign
+  );
   const description = encryptionDescription
     ? `${status.description}\n\n${encryptionDescription}`
     : status.description;
