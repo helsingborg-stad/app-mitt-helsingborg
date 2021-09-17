@@ -1,4 +1,4 @@
-import { EncryptionDetails } from './Encryption';
+import { EncryptionDetails, SymmetricSetupStatus } from './Encryption';
 
 export type ApplicationStatusType =
   | 'active:ongoing'
@@ -61,6 +61,7 @@ export interface AnsweredForm {
   answers: Answer[] | EncryptedAnswersWrapper;
   currentPosition: FormPosition;
   encryption: EncryptionDetails;
+  encryptionStatus?: SymmetricSetupStatus;
 }
 
 export interface Person {

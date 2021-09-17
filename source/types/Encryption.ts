@@ -10,6 +10,7 @@ export type EncryptionExceptionStatus =
   | 'missingCoApplicantPersonalNumber'
   | 'invalidEncryptionType'
   | null;
+export type SymmetricSetupStatus = "ready" | EncryptionExceptionStatus;
 
 interface AesModule {
   pbkdf2: (password: string, salt: string, cost: number, length: number) => Promise<string>;

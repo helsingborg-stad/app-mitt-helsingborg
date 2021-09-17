@@ -3,9 +3,9 @@ import {
   CryptoNumber,
   EncryptionDetails,
   EncryptionExceptionInterface,
-  EncryptionExceptionStatus,
   KeyPair,
   SerializedCryptoNumber,
+  SymmetricSetupStatus,
 } from "../../types/Encryption";
 import {
   EncryptionException,
@@ -28,7 +28,6 @@ export type FormAnswersAndEncryption = Pick<
   "answers" | "encryption"
 >;
 export type EncryptionPublicKeysUpdate = Pick<EncryptionDetails, "publicKeys">;
-export type SymmetricSetupStatus = "ready" | EncryptionExceptionStatus;
 export type UpdateFormEncryptionTuple = [SymmetricSetupStatus, AnsweredForm];
 export type SetupSymmetricKeyTuple = [
   SymmetricSetupStatus,
