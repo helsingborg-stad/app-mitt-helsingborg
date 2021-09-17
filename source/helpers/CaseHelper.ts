@@ -23,3 +23,25 @@ export function getUserFriendlyEncryptionStatusMessage(
 
   return null;
 }
+
+export function isAnyCaseActionPossible(
+  isCoApplicant: boolean,
+  statusType: ApplicationStatusType,
+  selfHasSigned: boolean,
+  encryptionStatus: SymmetricSetupStatus
+) {
+  if (isCoApplicant) {
+    const isWaitingForSign = statusType.includes('active:signature:pending');
+    const canSign = isWaitingForSign && encryptionStatus === 'ready';
+    const shouldSign = canSign && !selfHasSigned;
+    return shouldSign;
+  }
+
+  const isOngoing = statusType.includes('ongoing');
+  const isNotStarted = statusType.includes('notStarted');
+  const isCompletionRequired = statusType.includes('completionRequired');
+  const isSigned = statusType.includes('signed');
+  const canDoSomething = isOngoing || isNotStarted || isCompletionRequired || isSigned;
+  return canDoSomething;
+}
+

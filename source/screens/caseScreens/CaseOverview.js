@@ -14,6 +14,7 @@ import AuthContext from '../../store/AuthContext';
 import { put } from '../../helpers/ApiRequest';
 import {
   getUserFriendlyEncryptionStatusMessage,
+  isAnyCaseActionPossible,
 } from '../../helpers/CaseHelper';
 
 const Container = styled.ScrollView`
@@ -121,9 +122,12 @@ const computeCaseCardComponent = (caseData, navigation, authContext) => {
     isWaitingForSign
   );
 
-  const shouldShowCTAButton = isCoApplicant
-    ? isWaitingForSign && !selfHasSigned && encryptionStatus === 'ready'
-    : isOngoing || isNotStarted || isCompletionRequired || isSigned;
+  const shouldShowCTAButton = isAnyCaseActionPossible(
+    isCoApplicant,
+    statusType,
+    selfHasSigned,
+    encryptionStatus
+  );
 
   return (
     <CaseCard
