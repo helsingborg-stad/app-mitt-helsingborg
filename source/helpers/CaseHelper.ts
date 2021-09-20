@@ -1,3 +1,4 @@
+import { ApplicationStatusType } from '../types/Case';
 import { SymmetricSetupStatus } from '../types/Encryption';
 
 export function getUserFriendlyEncryptionStatusMessage(
@@ -45,3 +46,35 @@ export function isAnyCaseActionPossible(
   return canDoSomething;
 }
 
+export function getUserFriendlyCaseActionText(
+  statusType: ApplicationStatusType,
+  selfHasSigned: boolean
+) {
+  const isNotStarted = statusType.includes('notStarted');
+  const isOngoing = statusType.includes('ongoing');
+  const isCompletionRequired = statusType.includes('completionRequired');
+  const isSigned = statusType.includes('signed');
+  const isWaitingForSign = statusType.includes('active:signature:pending');
+
+  if (isWaitingForSign && !selfHasSigned) {
+    return 'Granska och signera';
+  }
+
+  if (isOngoing) {
+    return 'Fortsätt';
+  }
+
+  if (isNotStarted) {
+    return 'Starta ansökan';
+  }
+
+  if (isCompletionRequired) {
+    return 'Starta stickprov';
+  }
+
+  if (isSigned) {
+    return 'Ladda upp filer och dokument';
+  }
+
+  return null;
+}

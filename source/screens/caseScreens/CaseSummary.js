@@ -19,6 +19,7 @@ import { put } from '../../helpers/ApiRequest';
 import {
   getUserFriendlyEncryptionStatusMessage,
   isAnyCaseActionPossible,
+  getUserFriendlyCaseActionText,
 } from '../../helpers/CaseHelper';
 
 const Container = styled.ScrollView`
@@ -124,12 +125,11 @@ const computeCaseCardComponent = (
     (person) => person.personalNumber === authContext.user.personalNumber
   );
 
-  const isNotStarted = status?.type?.includes('notStarted');
-  const isOngoing = status?.type?.includes('ongoing');
-  const isClosed = status?.type?.includes('closed');
-  const isCompletionRequired = status?.type?.includes('completionRequired');
-  const isSigned = status?.type?.includes('signed');
-  const isWaitingForSign = status?.type?.includes('active:signature:pending');
+  const statusType = status?.type || '';
+
+  const isOngoing = statusType.includes('ongoing');
+  const isClosed = statusType.includes('closed');
+  const isWaitingForSign = statusType.includes('active:signature:pending');
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === 'coApplicant';
 
@@ -165,30 +165,15 @@ const computeCaseCardComponent = (
     text: '',
   };
 
-  if (isOngoing) {
-    buttonProps.text = 'Fortsätt';
-  }
-
-  if (isNotStarted) {
-    buttonProps.text = 'Starta ansökan';
-  }
-
-  if (isCompletionRequired) {
-    buttonProps.text = 'Starta stickprov';
-  }
-
-  if (isSigned) {
-    buttonProps.text = 'Ladda upp filer och dokument';
-  }
-
   if (isClosed) {
     buttonProps.text = 'Visa beslut';
+  } else {
+    buttonProps.text = getUserFriendlyCaseActionText(statusType, selfHasSigned);
   }
 
   if (isWaitingForSign && !selfHasSigned) {
     buttonProps.onClick = () =>
       navigation.navigate('Form', { caseId: caseData.id, isSignMode: true });
-    buttonProps.text = 'Granska och signera';
   }
 
   const giveDate = payments?.payment?.givedate
