@@ -1,20 +1,8 @@
+import { AnsweredForm } from "../../types/Case";
 import StorageService from "../StorageService";
 
 export interface UserInterface {
   personalNumber: string;
-}
-
-export interface FormsInterface {
-  answers: { encryptedAnswers: string };
-  encryption: {
-    type: string;
-    symmetricKeyName: string;
-    primes: {
-      P: number;
-      G: number;
-    };
-    publicKeys: Record<number, undefined | string>;
-  };
 }
 
 export function EncryptionException(message: string) {
@@ -24,23 +12,20 @@ export function EncryptionException(message: string) {
 
 export function getPublicKeyInForm(
   personalNumber: string,
-  forms: FormsInterface
+  forms: AnsweredForm
 ) {
   return forms.encryption.publicKeys[personalNumber];
 }
 
-function getSymmetricKeyStorageKeyword(forms: FormsInterface) {
+function getSymmetricKeyStorageKeyword(forms: AnsweredForm) {
   return forms.encryption.symmetricKeyName;
 }
 
-function getPrivateKeyStorageKeyword(
-  user: UserInterface,
-  forms: FormsInterface
-) {
+function getPrivateKeyStorageKeyword(user: UserInterface, forms: AnsweredForm) {
   return `aesPrivateKey${user.personalNumber}${forms.encryption.symmetricKeyName}`;
 }
 
-export async function getStoredSymmetricKey(forms: FormsInterface) {
+export async function getStoredSymmetricKey(forms: AnsweredForm) {
   const storageKeyword = getSymmetricKeyStorageKeyword(forms);
   const symmetricKey = await StorageService.getData(storageKeyword);
   return Number(symmetricKey);
@@ -48,7 +33,7 @@ export async function getStoredSymmetricKey(forms: FormsInterface) {
 
 export async function storeSymmetricKey(
   symmetricKey: number,
-  forms: FormsInterface
+  forms: AnsweredForm
 ) {
   const storageKeyword = getSymmetricKeyStorageKeyword(forms);
   await StorageService.saveData(storageKeyword, symmetricKey.toString());
@@ -72,7 +57,7 @@ export function getPseudoRandomInteger() {
 
 export async function createAndStorePrivateKey(
   user: UserInterface,
-  forms: FormsInterface
+  forms: AnsweredForm
 ) {
   const privateKey = getPseudoRandomInteger();
 
@@ -86,7 +71,7 @@ export async function createAndStorePrivateKey(
 
 export async function generateSymmetricKey(
   user: UserInterface,
-  forms: FormsInterface,
+  forms: AnsweredForm,
   otherUserPublicKey: number
 ) {
   let ownPrivateKey = await StorageService.getData(
