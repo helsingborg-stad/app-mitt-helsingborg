@@ -11,6 +11,7 @@ import {
 import Button from "../../components/atoms/Button";
 import StorageService from "../StorageService";
 import { getStoredSymmetricKey } from "./EncryptionHelper";
+import { AnsweredForm } from "../../types/Case";
 
 const Flex = styled.View`
   padding: 8px;
@@ -73,7 +74,7 @@ const testSymmetricKeySetup = async () => {
   const coApplicantStina = {
     personalNumber: "198310011906",
   };
-  const testForm = {
+  const testForm: Partial<AnsweredForm> = {
     answers: { encryptedAnswers: "This string will be encrypted" },
     encryption: {
       type: "decrypted",
@@ -87,12 +88,14 @@ const testSymmetricKeySetup = async () => {
         198310011906: undefined,
       },
     },
-    currentFormId: "01",
   };
 
   console.log("\n\nTEST START");
 
-  let updatedForm = await setupSymmetricKey(mainApplicantYlva, testForm);
+  let updatedForm = await setupSymmetricKey(
+    mainApplicantYlva,
+    testForm as AnsweredForm
+  );
   printPublicKeyResult(mainApplicantYlva, updatedForm);
 
   updatedForm = await setupSymmetricKey(coApplicantStina, updatedForm);

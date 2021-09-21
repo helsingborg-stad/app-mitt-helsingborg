@@ -1,9 +1,9 @@
 import { NativeModules } from "react-native";
+import { AnsweredForm, EncryptedAnswersWrapper } from "../../types/Case";
 
 import StorageService from "../StorageService";
 
 import {
-  FormsInterface,
   UserInterface,
   getPseudoKey,
   EncryptionException,
@@ -48,7 +48,7 @@ export async function encryptWithAesKey(
     await StorageService.saveData(storageKeyword, aesEncryptor);
   }
 
-  return await Aes.encrypt(
+  return Aes.encrypt(
     text,
     aesEncryptor.aesKey,
     aesEncryptor.initializationVector
@@ -57,7 +57,7 @@ export async function encryptWithAesKey(
 
 export async function encryptFormAnswers(
   user: UserInterface,
-  forms: FormsInterface
+  forms: AnsweredForm
 ) {
   const encryptedAnswers = await encryptWithAesKey(
     user,
@@ -92,10 +92,10 @@ export async function decryptWithAesKey(
 
 export async function decryptFormAnswers(
   user: UserInterface,
-  forms: FormsInterface
+  forms: AnsweredForm
 ) {
   if (forms.encryption.type === "privateAesKey") {
-    const { encryptedAnswers } = forms.answers;
+    const { encryptedAnswers } = <EncryptedAnswersWrapper>forms.answers;
     const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
 
     forms.answers = JSON.parse(decryptedAnswers);
@@ -107,7 +107,7 @@ export async function decryptFormAnswers(
 
 export async function setupSymmetricKey(
   user: UserInterface,
-  forms: FormsInterface
+  forms: AnsweredForm
 ) {
   // Ugly deep copy of forms.
   const formsCopy = JSON.parse(JSON.stringify(forms));
