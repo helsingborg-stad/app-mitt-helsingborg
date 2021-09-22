@@ -1,6 +1,6 @@
 import { NativeModules } from "react-native";
 import { AnsweredForm, EncryptedAnswersWrapper } from "../../types/Case";
-import { EncryptionType } from "../../types/Encryption";
+import { EncryptionErrorStatus, EncryptionType } from "../../types/Encryption";
 
 import StorageService from "../StorageService";
 
@@ -80,6 +80,7 @@ export async function decryptWithAesKey(
 
   if (!aesEncryptor) {
     throw new EncryptionException(
+      EncryptionErrorStatus.MISSING_AES_KEY,
       "Did not find AES key in storage: The key was either lost or encrypt not called before trying decrypt."
     );
   }

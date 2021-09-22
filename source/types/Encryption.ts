@@ -4,6 +4,11 @@ export enum EncryptionType {
   SYMMETRIC_KEY = "symmetricKey",
 }
 
+export enum EncryptionErrorStatus {
+  MISSING_AES_KEY = "missingAesKey",
+}
+export type EncryptionExceptionStatus = EncryptionErrorStatus | null;
+
 interface AesModule {
   pbkdf2: (
     password: string,
@@ -25,6 +30,7 @@ declare module "react-native" {
     Aes: AesModule;
   }
 }
+
 export interface EncryptionDetails {
   type: EncryptionType;
   symmetricKeyName?: string;
@@ -35,8 +41,11 @@ export interface EncryptionDetails {
   publicKeys?: Record<string, number>;
 }
 
-export type EncryptionExceptionInterface = Error;
+export interface EncryptionExceptionInterface extends Error {
+  status: EncryptionExceptionStatus;
+}
 
 export type EncryptionExceptionConstructor = new (
+  status: EncryptionExceptionStatus,
   message: string
 ) => EncryptionExceptionInterface;
