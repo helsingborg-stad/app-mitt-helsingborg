@@ -34,3 +34,9 @@ export interface EncryptionDetails {
   };
   publicKeys?: Record<string, number>;
 }
+
+export type EncryptionExceptionInterface = Error;
+
+export type EncryptionExceptionConstructor = new (
+  message: string
+) => EncryptionExceptionInterface;

@@ -1,14 +1,26 @@
 import { AnsweredForm } from "../../types/Case";
+import {
+  EncryptionExceptionConstructor,
+  EncryptionExceptionInterface,
+} from "../../types/Encryption";
 import StorageService from "../StorageService";
 
 export interface UserInterface {
   personalNumber: string;
 }
 
-export function EncryptionException(message: string) {
-  this.message = message;
-  this.name = "EncryptionException";
-}
+export const EncryptionException: EncryptionExceptionConstructor = class EncryptionException
+  extends Error
+  implements EncryptionExceptionInterface {
+  constructor(message: string) {
+    super(message);
+
+    // See https://github.com/Microsoft/TypeScript-wiki/blob/main/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work
+    Object.setPrototypeOf(this, EncryptionException.prototype);
+
+    this.name = "EncryptionException";
+  }
+};
 
 export function getPublicKeyInForm(
   personalNumber: string,
