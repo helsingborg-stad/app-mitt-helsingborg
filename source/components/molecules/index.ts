@@ -19,3 +19,4 @@ export { default as RepeaterField } from './RepeaterField';
 export { default as RadioGroup } from './RadioGroup';
 export { default as PersonField } from './PersonField';
 export { default as InfoModal } from './InfoModal';
+export { default as DayPicker } from './DayPicker';
