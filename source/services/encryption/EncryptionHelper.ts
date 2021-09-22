@@ -2,6 +2,7 @@ import { AnsweredForm } from "../../types/Case";
 import {
   EncryptionExceptionConstructor,
   EncryptionExceptionInterface,
+  EncryptionExceptionStatus,
 } from "../../types/Encryption";
 import StorageService from "../StorageService";
 
@@ -12,13 +13,16 @@ export interface UserInterface {
 export const EncryptionException: EncryptionExceptionConstructor = class EncryptionException
   extends Error
   implements EncryptionExceptionInterface {
-  constructor(message: string) {
+  status: EncryptionExceptionStatus = null;
+
+  constructor(status: EncryptionExceptionStatus, message: string) {
     super(message);
 
     // See https://github.com/Microsoft/TypeScript-wiki/blob/main/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work
     Object.setPrototypeOf(this, EncryptionException.prototype);
 
     this.name = "EncryptionException";
+    this.status = status;
   }
 };
 
