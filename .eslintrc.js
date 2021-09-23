@@ -42,6 +42,10 @@ const config = {
       plugins: ["@typescript-eslint"],
       parser: "@typescript-eslint/parser",
       extends: ["plugin:@typescript-eslint/recommended", "prettier"],
+      rules: {
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": ["error"],
+      },
     },
   ],
   rules: {
