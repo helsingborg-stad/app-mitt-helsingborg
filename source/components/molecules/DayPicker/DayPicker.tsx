@@ -8,15 +8,15 @@ LocaleConfig.locales.se = localeConfig;
 LocaleConfig.defaultLocale = 'se';
 
 type DayPickerProps = {
-  startDate?: Date;
   availableDates: string[];
   onDateSelected: (dateString: string) => void;
+  startDate?: Date;
 };
 
-const DayPicker = ({ availableDates, startDate, onDateSelected }: DayPickerProps) => {
+const DayPicker: React.FC<DayPickerProps> = ({ availableDates, onDateSelected, startDate }) => {
   const [selectedDate, setSelectedDate] = useState();
 
-  const minDate = startDate || Date();
+  const minDate = startDate;
   const maxDate = moment(minDate).add(3, 'M').toDate();
   const markedDates = {};
   const minDateString = moment(minDate).format('yyyy-MM-DD');
@@ -53,5 +53,9 @@ const DayPicker = ({ availableDates, startDate, onDateSelected }: DayPickerProps
     />
   );
 };
+
+DayPicker.defaultProps = {
+  startDate: new Date(),
+}
 
 export default DayPicker;
