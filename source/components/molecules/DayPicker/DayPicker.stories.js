@@ -1,6 +1,7 @@
 import { storiesOf } from '@storybook/react-native';
 import React, { useState } from 'react';
 import { View } from 'react-native';
+import moment from 'moment';
 import { H1 } from '../../atoms/Heading/Heading';
 import DayPicker from './DayPicker';
 import StoryWrapper from '../StoryWrapper';
@@ -8,7 +9,7 @@ import StoryWrapper from '../StoryWrapper';
 const StoryDayPicker = () => {
   const [selectedDate, setSelectedDate] = useState('None');
 
-  const startDate = '2018-04-08';
+  const startDate = moment('2018-04-08').toDate();
   const availableDates = [
     '2018-04-13',
     '2018-04-19',
