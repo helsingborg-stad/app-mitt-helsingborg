@@ -29,6 +29,6 @@ export default {
     'dec',
   ],
   dayNames: ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'],
-  dayNamesShort: ['sön', 'mån', 'tis', 'ons', 'tor', 'fre', 'mån'],
+  dayNamesShort: ['sön', 'mån', 'tis', 'ons', 'tor', 'fre', 'lör'],
   today: 'idag',
 };
