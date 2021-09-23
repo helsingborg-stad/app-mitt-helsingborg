@@ -57,7 +57,11 @@ jobs:
         env:
           GIT_BASE_REF: ${{ github.base_ref }}
         run: |
-          file_list=$(git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD | egrep -i '\.([jt]sx?|json|md|ya?ml|s?css)$')
+          file_list=$(
+            git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD \
+            | egrep -i '\.([jt]sx?|json|md|ya?ml|s?css)$' \
+            | egrep -v "^package.json$"
+          )
 
           if [[ -n $file_list ]]
           then
