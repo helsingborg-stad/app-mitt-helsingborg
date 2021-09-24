@@ -4,7 +4,9 @@ import styled from "styled-components/native";
 import StoryWrapper from "../../components/molecules/StoryWrapper";
 import { Text } from "../../components/atoms";
 import {
+  decryptFormAnswers,
   decryptWithAesKey,
+  encryptFormAnswers,
   encryptWithAesKey,
   setupSymmetricKey,
 } from "./EncryptionService";
@@ -83,7 +85,12 @@ const testSymmetricKeySetup = async () => {
     personalNumber: "198310011906",
   };
   const testForm: Partial<AnsweredForm> = {
-    answers: { encryptedAnswers: "This string will be encrypted" },
+    answers: [
+      {
+        field: { id: "test", tags: ["a", "b"] },
+        value: "this will be encrypted",
+      },
+    ],
     encryption: {
       type: EncryptionType.DECRYPTED,
       symmetricKeyName: "196912191118:198310011906",
@@ -110,8 +117,27 @@ const testSymmetricKeySetup = async () => {
   printPublicKeyResult(coApplicantStina, updatedForm);
   await printSymmetricKeyResult(coApplicantStina, updatedForm);
 
-  await setupSymmetricKey(mainApplicantYlva, updatedForm);
+  updatedForm = await setupSymmetricKey(mainApplicantYlva, updatedForm);
   await printSymmetricKeyResult(mainApplicantYlva, updatedForm);
+
+  updatedForm = await encryptFormAnswers(mainApplicantYlva, updatedForm);
+  const encryptedFormCopy = JSON.parse(JSON.stringify(updatedForm));
+
+  const { answers: decryptedAnswers1 } = await decryptFormAnswers(
+    mainApplicantYlva,
+    updatedForm
+  );
+
+  const updatedFormCopy = JSON.parse(JSON.stringify(encryptedFormCopy));
+  const { answers: decryptedAnswers2 } = await decryptFormAnswers(
+    coApplicantStina,
+    updatedFormCopy
+  );
+
+  console.log("encrypted", encryptedFormCopy.answers);
+  console.log("encrypted type:", encryptedFormCopy.encryption.type);
+  console.log("decrypted (applicant)", decryptedAnswers1);
+  console.log("decrypted (co-applicant)", decryptedAnswers2);
 
   console.log("Cleaning up...");
   console.log("Removing any stored symmetric keys.");
