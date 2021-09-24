@@ -1,4 +1,4 @@
-import StorageService from '../StorageService';
+import StorageService from "../StorageService";
 
 export interface UserInterface {
   personalNumber: string;
@@ -19,10 +19,13 @@ export interface FormsInterface {
 
 export function EncryptionException(message: string) {
   this.message = message;
-  this.name = 'EncryptionException';
+  this.name = "EncryptionException";
 }
 
-export function getPublicKeyInForm(personalNumber: string, forms: FormsInterface) {
+export function getPublicKeyInForm(
+  personalNumber: string,
+  forms: FormsInterface
+) {
   return forms.encryption.publicKeys[personalNumber];
 }
 
@@ -30,7 +33,10 @@ function getSymmetricKeyStorageKeyword(forms: FormsInterface) {
   return forms.encryption.symmetricKeyName;
 }
 
-function getPrivateKeyStorageKeyword(user: UserInterface, forms: FormsInterface) {
+function getPrivateKeyStorageKeyword(
+  user: UserInterface,
+  forms: FormsInterface
+) {
   return `aesPrivateKey${user.personalNumber}${forms.encryption.symmetricKeyName}`;
 }
 
@@ -40,7 +46,10 @@ export async function getStoredSymmetricKey(forms: FormsInterface) {
   return Number(symmetricKey);
 }
 
-export async function storeSymmetricKey(symmetricKey: number, forms: FormsInterface) {
+export async function storeSymmetricKey(
+  symmetricKey: number,
+  forms: FormsInterface
+) {
   const storageKeyword = getSymmetricKeyStorageKeyword(forms);
   await StorageService.saveData(storageKeyword, symmetricKey.toString());
 }
@@ -61,7 +70,10 @@ export function getPseudoRandomInteger() {
   return Math.floor(min + Math.random() * (max - min));
 }
 
-export async function createAndStorePrivateKey(user: UserInterface, forms: FormsInterface) {
+export async function createAndStorePrivateKey(
+  user: UserInterface,
+  forms: FormsInterface
+) {
   const privateKey = getPseudoRandomInteger();
 
   await StorageService.saveData(
@@ -77,8 +89,14 @@ export async function generateSymmetricKey(
   forms: FormsInterface,
   otherUserPublicKey: number
 ) {
-  let ownPrivateKey = await StorageService.getData(getPrivateKeyStorageKeyword(user, forms));
+  let ownPrivateKey = await StorageService.getData(
+    getPrivateKeyStorageKeyword(user, forms)
+  );
   ownPrivateKey = JSON.parse(ownPrivateKey);
 
-  return getPseudoKey(otherUserPublicKey, ownPrivateKey.privateKey, forms.encryption.primes.P);
+  return getPseudoKey(
+    otherUserPublicKey,
+    ownPrivateKey.privateKey,
+    forms.encryption.primes.P
+  );
 }
