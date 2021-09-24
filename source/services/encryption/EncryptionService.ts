@@ -1,5 +1,9 @@
 import { NativeModules } from "react-native";
-import { AnsweredForm, EncryptedAnswersWrapper } from "../../types/Case";
+import {
+  Answer,
+  AnsweredForm,
+  EncryptedAnswersWrapper,
+} from "../../types/Case";
 import { EncryptionErrorStatus, EncryptionType } from "../../types/Encryption";
 
 import StorageService from "../StorageService";
@@ -8,10 +12,11 @@ import {
   UserInterface,
   getPseudoKey,
   EncryptionException,
-  getPublicKeyInForm,
-  storeSymmetricKey,
   createAndStorePrivateKey,
   generateSymmetricKey,
+  getPublicKeyInForm,
+  getStoredSymmetricKey,
+  storeSymmetricKey,
 } from "./EncryptionHelper";
 
 const { Aes } = NativeModules;
@@ -56,15 +61,39 @@ export async function encryptWithAesKey(
   );
 }
 
+export async function encryptWithSymmetricKey(
+  forms: AnsweredForm,
+  plaintextAnswers: string
+): Promise<string> {
+  const symmetricKey = await getStoredSymmetricKey(forms);
+  const encryptedAnswers = await Aes.encrypt(
+    plaintextAnswers,
+    symmetricKey.toString(16).padStart(64, "0"),
+    "003d8999f6a4bb9800ed24b5d1846523"
+  );
+  return encryptedAnswers;
+}
+
 export async function encryptFormAnswers(
   user: UserInterface,
   forms: AnsweredForm
 ): Promise<AnsweredForm> {
-  const encryptedAnswers = await encryptWithAesKey(
-    user,
-    JSON.stringify(forms.answers)
-  );
+  const plaintextAnswers = JSON.stringify(forms.answers);
 
+  const shouldUseSymmetricEncryption =
+    forms.encryption.symmetricKeyName?.length > 0;
+
+  if (shouldUseSymmetricEncryption) {
+    const encryptedAnswers = await encryptWithSymmetricKey(
+      forms,
+      plaintextAnswers
+    );
+    forms.answers = { encryptedAnswers };
+    forms.encryption.type = EncryptionType.SYMMETRIC_KEY;
+    return forms;
+  }
+
+  const encryptedAnswers = await encryptWithAesKey(user, plaintextAnswers);
   forms.answers = { encryptedAnswers };
   forms.encryption.type = EncryptionType.PRIVATE_AES_KEY;
 
@@ -92,6 +121,19 @@ export async function decryptWithAesKey(
   );
 }
 
+export async function decryptWithSymmetricKey(
+  forms: AnsweredForm,
+  encryptedAnswers: string
+): Promise<string> {
+  const symmetricKey = await getStoredSymmetricKey(forms);
+  const decryptedAnswersRaw = await Aes.decrypt(
+    encryptedAnswers,
+    symmetricKey.toString(16).padStart(64, "0"),
+    "003d8999f6a4bb9800ed24b5d1846523"
+  );
+  return decryptedAnswersRaw;
+}
+
 export async function decryptFormAnswers(
   user: UserInterface,
   forms: AnsweredForm
@@ -105,7 +147,18 @@ export async function decryptFormAnswers(
 
     return forms;
   }
-  return null;
+
+  if (forms.encryption.type === EncryptionType.SYMMETRIC_KEY) {
+    const { encryptedAnswers } = <EncryptedAnswersWrapper>forms.answers;
+    const decryptedAnswersRaw = await decryptWithSymmetricKey(
+      forms,
+      encryptedAnswers
+    );
+    forms.answers = JSON.parse(decryptedAnswersRaw);
+    forms.encryption.type = EncryptionType.DECRYPTED;
+  }
+
+  return forms;
 }
 
 export async function setupSymmetricKey(
