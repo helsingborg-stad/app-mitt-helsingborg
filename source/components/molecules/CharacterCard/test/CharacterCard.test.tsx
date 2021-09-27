@@ -14,7 +14,7 @@ jest.mock("../../../../helpers/Icons", () => ({
 const { ICON_CONTACT_PERSON_1 } = icons;
 
 const mockTitle = "mockTitle";
-const mockAppartment = "mockAppartment";
+const mockDepartment = "mockDepartment";
 const mockJobTitle = "mockJobTitle";
 
 it("displays the provided props", () => {
@@ -22,7 +22,7 @@ it("displays the provided props", () => {
     <CharacterCard
       icon={ICON_CONTACT_PERSON_1}
       title={mockTitle}
-      appartment={mockAppartment}
+      department={mockDepartment}
       jobTitle={mockJobTitle}
       onCardClick={jest.fn()}
       selected={false}
@@ -30,11 +30,11 @@ it("displays the provided props", () => {
   );
 
   const titleElement = getByText(mockTitle);
-  const appartmentElement = getByText(mockAppartment);
+  const departmentElement = getByText(mockDepartment);
   const jobTitleElement = getByText(mockJobTitle);
 
   expect(titleElement).toHaveTextContent(mockTitle);
-  expect(appartmentElement).toHaveTextContent(mockAppartment);
+  expect(departmentElement).toHaveTextContent(mockDepartment);
   expect(jobTitleElement).toHaveTextContent(mockJobTitle);
 });
 
@@ -45,7 +45,7 @@ it("calls the callback function on card click", () => {
     <CharacterCard
       icon={ICON_CONTACT_PERSON_1}
       title={mockTitle}
-      appartment={mockAppartment}
+      department={mockDepartment}
       jobTitle={mockJobTitle}
       onCardClick={mockCallback}
       selected={false}
@@ -63,7 +63,7 @@ it("changes color when selected", () => {
     <CharacterCard
       icon={ICON_CONTACT_PERSON_1}
       title={mockTitle}
-      appartment={mockAppartment}
+      department={mockDepartment}
       jobTitle={mockJobTitle}
       onCardClick={jest.fn()}
       selected

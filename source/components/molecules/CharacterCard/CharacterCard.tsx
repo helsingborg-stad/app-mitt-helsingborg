@@ -8,7 +8,7 @@ import { Card, Section, Image, CardTitle, CardSubtitle } from "./styled";
 type CharacterCardType = {
   icon: any;
   title: string;
-  appartment: string;
+  department: string;
   jobTitle: string;
   selected: boolean;
   onCardClick: () => void;
@@ -18,7 +18,7 @@ const CharacterCard = (props: CharacterCardType): JSX.Element => {
     icon,
     selected = false,
     title,
-    appartment,
+    department,
     jobTitle,
     onCardClick,
   } = props;
@@ -49,10 +49,8 @@ const CharacterCard = (props: CharacterCardType): JSX.Element => {
           justify="flex-start"
           flexDirection="column"
         >
-          <CardTitle type="h5" colorSchema="red">
-            {title}
-          </CardTitle>
-          <CardSubtitle colorSchema="neutral">{appartment}</CardSubtitle>
+          <CardTitle type="h5">{title}</CardTitle>
+          <CardSubtitle colorSchema="neutral">{department}</CardSubtitle>
           <CardSubtitle colorSchema="red">{jobTitle}</CardSubtitle>
         </Section>
 
