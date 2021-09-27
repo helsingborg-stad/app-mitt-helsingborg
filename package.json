@@ -41,7 +41,7 @@
     "babel-plugin-module-resolver": "^4.0.0",
     "jest-styled-components": "^7.0.3",
     "jwt-decode": "^3.1.2",
-    "metro-react-native-babel-preset": "^0.64.0",
+    "metro-react-native-babel-preset": "^0.66.2",
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
     "react": "16.13.1",
@@ -115,7 +115,10 @@
     ],
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native(-.*)?|@react-native(-community)?)/)"
-    ]
+    ],
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    }
   },
   "config": {
     "react-native-storybook-loader": {
@@ -123,7 +126,7 @@
         "./source",
         "./packages"
       ],
-      "pattern": "**/*.stories.*",
+      "pattern": "**/*.stories.[t|j]s*",
       "outputFile": "./storybook/storyLoader.js"
     }
   }
