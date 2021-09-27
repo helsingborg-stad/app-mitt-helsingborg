@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Calendar, LocaleConfig } from 'react-native-calendars';
-import moment from 'moment';
-import localeConfig from './localeConfig';
-import { dayStyles, calendarTheme } from './styles';
+import React, { useState } from "react";
+import { Calendar, LocaleConfig } from "react-native-calendars";
+import moment from "moment";
+import localeConfig from "./localeConfig";
+import { dayStyles, calendarTheme } from "./styles";
 
 LocaleConfig.locales.se = localeConfig;
-LocaleConfig.defaultLocale = 'se';
+LocaleConfig.defaultLocale = "se";
 
 type DayPickerProps = {
   availableDates: string[];
@@ -13,13 +13,17 @@ type DayPickerProps = {
   startDate?: Date;
 };
 
-const DayPicker: React.FC<DayPickerProps> = ({ availableDates, onDateSelected, startDate }) => {
+const DayPicker: React.FC<DayPickerProps> = ({
+  availableDates,
+  onDateSelected,
+  startDate,
+}) => {
   const [selectedDate, setSelectedDate] = useState();
 
   const minDate = startDate;
-  const maxDate = moment(minDate).add(3, 'M').toDate();
+  const maxDate = moment(minDate).add(3, "M").toDate(); // Placeholder value of 3 months forward, must be discussed further
   const markedDates = {};
-  const minDateString = moment(minDate).format('yyyy-MM-DD');
+  const minDateString = moment(minDate).format("yyyy-MM-DD");
   markedDates[minDateString] = {
     customStyles: dayStyles.todayStyle,
   };
@@ -27,7 +31,9 @@ const DayPicker: React.FC<DayPickerProps> = ({ availableDates, onDateSelected, s
     const isSelected = date === selectedDate;
     markedDates[date] = {
       selected: true,
-      customStyles: isSelected ? dayStyles.selectedStyle : dayStyles.availableStyle,
+      customStyles: isSelected
+        ? dayStyles.selectedStyle
+        : dayStyles.availableStyle,
     };
   });
 
@@ -56,6 +62,6 @@ const DayPicker: React.FC<DayPickerProps> = ({ availableDates, onDateSelected, s
 
 DayPicker.defaultProps = {
   startDate: new Date(),
-}
+};
 
 export default DayPicker;
