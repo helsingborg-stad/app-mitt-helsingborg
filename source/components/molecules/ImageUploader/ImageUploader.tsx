@@ -134,8 +134,6 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
         height: 800,
         includeBase64: false,
         compressImageQuality: 0.8,
-        compressImageMaxHeight: 1200,
-        compressImageMaxWidth: 1200,
         writeTempFile: true,
         cropping: false,
         includeExif: false,
@@ -156,8 +154,6 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
       const rawImage = await ImagePicker.openCamera({
         includeBase64: false,
         compressImageQuality: 0.8,
-        compressImageMaxHeight: 1200,
-        compressImageMaxWidth: 1200,
         cropping: false,
         includeExif: false,
       });
