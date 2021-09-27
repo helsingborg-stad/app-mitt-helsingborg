@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       # yarn / node modules
       - name: Get yarn cache directory path
@@ -35,6 +37,38 @@ jobs:
       # install yarn (will use cache if possible)
       - name: yarn install
         run: yarn install
+
+      - name: lint check
+        if: ${{ github.base_ref }}
+        env:
+          GIT_BASE_REF: ${{ github.base_ref }}
+        run: |
+          file_list=$(git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD | egrep -i '\.([jt]sx?)$')
+
+          if [[ -n $file_list ]]
+          then
+              yarn eslint $file_list
+          else
+              echo "no files to lint"
+          fi
+
+      - name: style check
+        if: ${{ github.base_ref }}
+        env:
+          GIT_BASE_REF: ${{ github.base_ref }}
+        run: |
+          file_list=$(
+            git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD \
+            | egrep -i '\.([jt]sx?|json|md|ya?ml|s?css)$' \
+            | egrep -v "^package.json$"
+          )
+
+          if [[ -n $file_list ]]
+          then
+              yarn prettier --check $file_list
+          else
+              echo "no files to style-check"
+          fi
 
       # run tests
       - name: run tests
