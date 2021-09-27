@@ -44,7 +44,6 @@ const Image = styled.Image`
 `;
 
 const CardTitle = styled(Heading)`
-  color: ${({ theme }) => theme.colors.neutrals[1]};
   width: 100%;
 `;
 
