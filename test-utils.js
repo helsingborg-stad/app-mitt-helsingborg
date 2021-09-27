@@ -1,18 +1,31 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { ThemeProvider } from 'styled-components/native';
 import { render } from '@testing-library/react-native';
+import '@testing-library/jest-native/extend-expect';
+
 import { AuthProvider } from 'app/store/AuthContext';
-import ScreenWrapper from 'app/components/molecules/ScreenWrapper';
+import { AppProvider } from './source/store/AppContext';
+
+import ScreenWrapper from './source/components/molecules/ScreenWrapper';
+
+import theme from './source/styles/theme';
 
 const RenderWrapper = ({ children }) => (
-  <AuthProvider>
-    <ScreenWrapper>{children}</ScreenWrapper>
-  </AuthProvider>
+  <AppProvider>
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <ScreenWrapper>{children}</ScreenWrapper>
+      </ThemeProvider>
+    </AuthProvider>
+  </AppProvider>
 );
 
-const customRender = ui => render(ui, { wrapper: RenderWrapper });
-
-// re-export everything
-export * from '@testing-library/react-native';
+const customRender = (ui) => render(ui, { wrapper: RenderWrapper });
 
 // override render method
 export { customRender as render };
+
+RenderWrapper.propTypes = {
+  children: PropTypes.node.isRequired,
+};
