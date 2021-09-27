@@ -45,8 +45,6 @@ jobs:
         run: |
           file_list=$(git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD | egrep -i '\.([jt]sx?)$')
 
-          echo "FOUND FILES: $file_list"
-
           if [[ -n $file_list ]]
           then
               yarn eslint $file_list
@@ -64,8 +62,6 @@ jobs:
             | egrep -i '\.([jt]sx?|json|md|ya?ml|s?css)$' \
             | egrep -v "^package.json$"
           )
-
-          echo "FOUND FILES IN STYLES: $file_list"
 
           if [[ -n $file_list ]]
           then
