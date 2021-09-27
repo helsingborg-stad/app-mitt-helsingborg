@@ -43,7 +43,9 @@ jobs:
         env:
           GIT_BASE_REF: ${{ github.base_ref }}
         run: |
-          file_list=$(git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD | egrep -i '\.([j|t]sx?)$')
+          file_list=$(git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD | egrep -i '\.([jt]sx?)$')
+
+          echo "FOUND FILES: $file_list"
 
           if [[ -n $file_list ]]
           then
@@ -63,6 +65,8 @@ jobs:
             | egrep -v "^package.json$"
           )
 
+          echo "FOUND FILES IN STYLES: $file_list"
+
           if [[ -n $file_list ]]
           then
               yarn prettier --check $file_list
@@ -72,4 +76,4 @@ jobs:
 
       # run tests
       - name: run tests
-        run: yarn test -- --coverage
+        run: yarn test --coverage
