@@ -1,25 +1,34 @@
-import React, { useContext } from 'react';
-import { ThemeContext } from 'styled-components/native';
-import Checkbox from '../../atoms/Checkbox';
-import { colorPalette } from '../../../styles/palette';
+import React, { useContext } from "react";
+import { ThemeContext } from "styled-components/native";
+import Checkbox from "../../atoms/Checkbox";
+import { colorPalette } from "../../../styles/palette";
 
-import { Card, Section, Image, CardTitle, CardSubtitle } from './styled';
+import { Card, Section, Image, CardTitle, CardSubtitle } from "./styled";
 
 type CharacterCardType = {
   icon: any;
   title: string;
   appartment: string;
   jobTitle: string;
-  selected?: boolean;
+  selected: boolean;
   onCardClick: () => void;
 };
-const CharacterCard = (props: CharacterCardType) => {
-  const { icon, selected = false, title, appartment, jobTitle, onCardClick } = props;
+const CharacterCard = (props: CharacterCardType): JSX.Element => {
+  const {
+    icon,
+    selected = false,
+    title,
+    appartment,
+    jobTitle,
+    onCardClick,
+  } = props;
   const { colors } = useContext<any>(ThemeContext);
 
-  const cardColorSchema = selected ? 'red' : 'neutral';
-  const cardColor = selected ? colors.complementary[cardColorSchema][3] : colors.neutrals[7];
-  const outlineColor = selected ? colors.primary.red[4] : 'transparent';
+  const cardColorSchema = selected ? "red" : "neutral";
+  const cardColor = selected
+    ? colors.complementary[cardColorSchema][3]
+    : colors.neutrals[7];
+  const outlineColor = selected ? colors.primary.red[4] : "transparent";
 
   return (
     <Card
@@ -34,7 +43,12 @@ const CharacterCard = (props: CharacterCardType) => {
           <Image source={icon} />
         </Section>
 
-        <Section marginLeft flex={4} justify="flex-start" flexDirection="column">
+        <Section
+          marginLeft
+          flex={4}
+          justify="flex-start"
+          flexDirection="column"
+        >
           <CardTitle type="h5" colorSchema="red">
             {title}
           </CardTitle>
@@ -43,7 +57,13 @@ const CharacterCard = (props: CharacterCardType) => {
         </Section>
 
         <Section flex={0.5} justify="flex-end">
-          <Checkbox invertColors colorSchema="red" checked={selected} disabled />
+          <Checkbox
+            invertColors
+            colorSchema="red"
+            checked={selected}
+            disabled
+            onChange={undefined}
+          />
         </Section>
       </>
     </Card>

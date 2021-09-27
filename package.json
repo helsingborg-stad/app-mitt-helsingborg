@@ -12,7 +12,8 @@
     "fix-all": "yarn lint; yarn style",
     "clear-cache": "(watchman watch-del-all & rm -rf $TMPDIR/metro-* & yarn cache clean & (cd ./ios && pod deintegrate) & rm -rf node_modules/) && yarn install && (cd ./ios && pod install)",
     "rebuild-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
-    "clean": "react-native-clean-project"
+    "clean": "react-native-clean-project",
+    "prestorybook": "rnstl"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.1",
@@ -115,5 +116,15 @@
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native(-.*)?|@react-native(-community)?)/)"
     ]
+  },
+  "config": {
+    "react-native-storybook-loader": {
+      "searchDir": [
+        "./source",
+        "./packages"
+      ],
+      "pattern": "**/*.stories.*",
+      "outputFile": "./storybook/storyLoader.js"
+    }
   }
 }

@@ -1,7 +1,7 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
-import Text from '../../atoms/Text';
-import Heading from '../../atoms/Heading';
+import Text from "../../atoms/Text";
+import Heading from "../../atoms/Heading";
 
 type BodyType = {
   outlineColor: string;
@@ -22,8 +22,8 @@ const Card = styled.TouchableHighlight<BodyType>`
 `;
 
 type SectionType = {
-  flexDirection?: 'column' | 'row';
-  justify?: 'flex-start' | 'flex-end';
+  flexDirection?: "column" | "row";
+  justify?: "flex-start" | "flex-end";
   flex?: number;
   marginLeft?: boolean;
 };
@@ -31,10 +31,10 @@ const Section = styled.View<SectionType>`
   min-height: 60px;
   display: flex;
   align-items: center;
-  flex-direction: ${({ flexDirection }) => flexDirection || 'row'};
-  justify-content: ${({ justify }) => justify || 'center'};
+  flex-direction: ${({ flexDirection }) => flexDirection || "row"};
+  justify-content: ${({ justify }) => justify || "center"};
   flex: ${({ flex }) => flex || 1};
-  margin-left: ${({ marginLeft }) => (marginLeft ? '24px' : '0px')};
+  margin-left: ${({ marginLeft }) => (marginLeft ? "24px" : "0px")};
 `;
 
 const Image = styled.Image`
@@ -53,7 +53,8 @@ type CardSubTitleType = {
 };
 const CardSubtitle = styled(Text)<CardSubTitleType>`
   width: 100%;
-  color: ${({ theme, colorSchema = 'neutral' }) => theme.colors.primary[colorSchema][1]};
+  color: ${({ theme, colorSchema = "neutral" }) =>
+    theme.colors.primary[colorSchema][1]};
   font-size: ${({ theme }) => theme.fontSizes[2]}px;
   font-weight: ${({ theme }) => theme.fontWeights[1]};
   margin: 0;

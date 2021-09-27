@@ -1,32 +1,31 @@
-import React from 'react';
-import { fireEvent } from '@testing-library/react-native';
-import { render } from '../../../../../test-utils';
+import React from "react";
+import { fireEvent } from "@testing-library/react-native";
+import { render } from "../../../../../test-utils";
 
-import { colorPalette } from '../../../../styles/palette';
-import icons from '../../../../helpers/Icons';
+import { colorPalette } from "../../../../styles/palette";
+import icons from "../../../../helpers/Icons";
 
-import CharacterCard from '..';
+import CharacterCard from "..";
 
-jest.mock('../../../../helpers/Icons', () => ({
-  default: 'mockTitle.png',
+jest.mock("../../../../helpers/Icons", () => ({
+  default: "mockTitle.png",
 }));
 
 const { ICON_CONTACT_PERSON_1 } = icons;
 
-const mockTitle = 'mockTitle';
-const mockAppartment = 'mockAppartment';
-const mockJobTitle = 'mockJobTitle';
+const mockTitle = "mockTitle";
+const mockAppartment = "mockAppartment";
+const mockJobTitle = "mockJobTitle";
 
-it('displays the provided props', () => {
-  const mockCallback = jest.fn();
-
+it("displays the provided props", () => {
   const { getByText } = render(
     <CharacterCard
       icon={ICON_CONTACT_PERSON_1}
       title={mockTitle}
       appartment={mockAppartment}
       jobTitle={mockJobTitle}
-      onCardClick={mockCallback}
+      onCardClick={jest.fn()}
+      selected={false}
     />
   );
 
@@ -39,7 +38,7 @@ it('displays the provided props', () => {
   expect(jobTitleElement).toHaveTextContent(mockJobTitle);
 });
 
-it('calls the callback function on card click', () => {
+it("calls the callback function on card click", () => {
   const mockCallback = jest.fn();
 
   const { getByText } = render(
@@ -49,6 +48,7 @@ it('calls the callback function on card click', () => {
       appartment={mockAppartment}
       jobTitle={mockJobTitle}
       onCardClick={mockCallback}
+      selected={false}
     />
   );
 
@@ -58,21 +58,19 @@ it('calls the callback function on card click', () => {
   expect(mockCallback).toHaveBeenCalled();
 });
 
-it('changes color when selected', () => {
-  const mockCallback = jest.fn();
-
+it("changes color when selected", () => {
   const { getByTestId } = render(
     <CharacterCard
       icon={ICON_CONTACT_PERSON_1}
       title={mockTitle}
       appartment={mockAppartment}
       jobTitle={mockJobTitle}
-      onCardClick={mockCallback}
+      onCardClick={jest.fn()}
       selected
     />
   );
 
-  const bodyElement = getByTestId('characterCard');
+  const bodyElement = getByTestId("characterCard");
 
   expect(bodyElement).toHaveStyle({
     backgroundColor: colorPalette.complementary.red[3],
