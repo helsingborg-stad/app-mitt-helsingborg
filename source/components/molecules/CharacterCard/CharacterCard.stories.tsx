@@ -18,16 +18,6 @@ const Title = styled(Text)`
   margin-bottom: 6px;
 `;
 
-storiesOf("Character card", module).add(
-  "Overview examples",
-  ({ style, kind, name, children }) => (
-    <StoryWrapper style={style} kind={kind} name={name}>
-      {children}
-      <OverviewExamples />
-    </StoryWrapper>
-  )
-);
-
 const OverviewExamples = () => (
   <FlexContainer>
     <Title>Normalt utförande</Title>
@@ -80,4 +70,14 @@ const OverviewExamples = () => (
       selected
     />
   </FlexContainer>
+);
+
+storiesOf("Character card", module).add(
+  "Overview examples",
+  ({ style, kind, name, children }) => (
+    <StoryWrapper style={style} kind={kind} name={name}>
+      {children}
+      <OverviewExamples />
+    </StoryWrapper>
+  )
 );

@@ -1,21 +1,26 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import styled, { ThemeContext } from 'styled-components/native';
-import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
-import Icon from '../Icon';
+import React, { useContext } from "react";
+import PropTypes from "prop-types";
+import styled, { ThemeContext } from "styled-components/native";
+import {
+  getValidColorSchema,
+  PrimaryColor,
+} from "../../../styles/themeHelpers";
+import Icon from "../Icon";
 
 interface BoxProps {
   checked: boolean;
   colorSchema: PrimaryColor;
   backgroundColor: string;
-  size: 'small' | 'medium' | 'large';
+  size: "small" | "medium" | "large";
 }
 const CheckboxBox = styled.TouchableHighlight<BoxProps>`
   border-style: solid;
   border-color: ${(props) =>
-    props.checked ? 'transparent' : props.theme.colors.complementary[props.colorSchema][0]};
+    props.checked
+      ? "transparent"
+      : props.theme.colors.complementary[props.colorSchema][0]};
   background-color: ${({ checked, backgroundColor }) =>
-    checked ? backgroundColor : 'transparent'};
+    checked ? backgroundColor : "transparent"};
   width: ${(props) => props.theme.checkbox[props.size].width}px;
   height: ${(props) => props.theme.checkbox[props.size].height}px;
   padding: ${(props) => props.theme.checkbox[props.size].padding}px;
@@ -38,7 +43,7 @@ interface Props {
   onChange: () => void;
   disabled?: boolean;
   invertColors?: boolean;
-  size?: 'small' | 'medium' | 'large';
+  size?: "small" | "medium" | "large";
   colorSchema: PrimaryColor;
 }
 
@@ -55,9 +60,15 @@ const Checkbox: React.FC<Props> = ({
 
   const canInvertColors = checked && invertColors;
 
-  const tickColor = canInvertColors ? colors.primary[colorSchema][3] : colors.neutrals[7];
-  const checkboxColor = canInvertColors ? 'transparent' : colors.primary[colorSchema][3];
-  const underlayColor = canInvertColors ? 'transparent' : colors.primary[validColorSchema][2];
+  const tickColor = canInvertColors
+    ? colors.primary[colorSchema][3]
+    : colors.neutrals[7];
+  const checkboxColor = canInvertColors
+    ? "transparent"
+    : colors.primary[colorSchema][3];
+  const underlayColor = canInvertColors
+    ? "transparent"
+    : colors.primary[validColorSchema][2];
 
   return (
     <CheckboxBox
@@ -70,10 +81,18 @@ const Checkbox: React.FC<Props> = ({
       checked={checked}
       colorSchema={validColorSchema}
       underlayColor={underlayColor}
-      size={size || 'small'}
+      size={size || "small"}
       backgroundColor={checkboxColor}
     >
-      {checked ? <CheckboxTick color={tickColor} size={checkbox[size].icon} name="done" /> : <></>}
+      {checked ? (
+        <CheckboxTick
+          color={tickColor}
+          size={checkbox[size].icon}
+          name="done"
+        />
+      ) : (
+        <></>
+      )}
     </CheckboxBox>
   );
 };
@@ -90,22 +109,27 @@ Checkbox.propTypes = {
   /**
    * sets the color theme.
    */
-  colorSchema: PropTypes.oneOf(['red', 'blue', 'green', 'purple', 'neutral']),
+  colorSchema: PropTypes.oneOf(["red", "blue", "green", "purple", "neutral"]),
   /**
    * One of small, medium, large
    */
-  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  size: PropTypes.oneOf(["small", "medium", "large"]),
   /**
    * Disables the checkbox if true.
    */
   disabled: PropTypes.bool,
+  /**
+   * Make only the tick icon visible when inverting colors.
+   */
+  invertColors: PropTypes.bool,
 };
 
 Checkbox.defaultProps = {
-  onChange: () => {},
-  colorSchema: 'blue',
-  size: 'small',
+  onChange: () => undefined,
+  colorSchema: "blue",
+  size: "small",
   disabled: false,
+  invertColors: false,
 };
 
 export default Checkbox;
