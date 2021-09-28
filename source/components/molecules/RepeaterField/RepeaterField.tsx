@@ -83,7 +83,6 @@ const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChan
     onChange(updatedAnswers);
     setLocalAnswers(updatedAnswers);
     if (onAddAnswer) {
-      console.log("updatedAnswers", updatedAnswers)
       onAddAnswer(updatedAnswers);
     }
   };

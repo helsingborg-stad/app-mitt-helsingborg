@@ -163,7 +163,6 @@ function useForm(initialState: FormReducerState) {
   };
   
   const handleAddAnswer = (answer: Record<string, any>, questionId: string) => {
-    console.log("Handle add answer", answer, questionId)
     dispatch({ type: 'DIRTY_FIELD', payload: { answer, id: questionId } });
     dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId, checkIfDirty: true } });
   }
