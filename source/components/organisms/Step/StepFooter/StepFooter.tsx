@@ -83,7 +83,15 @@ const StepFooter: React.FC<Props> = ({
         return onSubmit || null;
       }
       case 'backToMain': {
-        return formNavigation.goToMainForm;
+        return () => {
+          const errorCallback = () => {};
+  
+          const onValidCallback = async () => {
+            formNavigation.goToMainForm();
+          }
+  
+          validateStepAnswers(errorCallback, onValidCallback);
+        };
       }
       case 'backToMainAndNext': {
         return formNavigation.goToMainFormAndNext;
@@ -135,18 +143,21 @@ const StepFooter: React.FC<Props> = ({
     return !evaluateConditionalExpression(condition, answers, allQuestions);
   };
 
-  const buttons = actions.map((action, index) => (
-    <Flex key={`${index}-${action.label}`}>
-      <Button
-        onClick={actionMap(action)}
-        colorSchema={action.color}
-        disabled={isLoading || (action.hasCondition && checkCondition(action.conditionalOn))}
-        z={0}
-      >
-        <Text>{action.label}</Text>
-      </Button>
-    </Flex>
-  ));
+  const buttons = actions.map((action, index) => {
+    console.log("action", action)
+    return (
+        <Flex key={`${index}-${action.label}`}>
+          <Button
+            onClick={actionMap(action)}
+            colorSchema={action.color}
+            disabled={isLoading || (action.hasCondition && checkCondition(action.conditionalOn))}
+            z={0}
+          >
+            <Text>{action.label}</Text>
+          </Button>
+        </Flex>
+      );
+    });
 
   return (
     <ActionContainer>
