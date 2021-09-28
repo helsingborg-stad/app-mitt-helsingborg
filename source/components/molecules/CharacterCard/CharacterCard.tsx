@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { ImageSourcePropType } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import Checkbox from "../../atoms/Checkbox";
 import { colorPalette } from "../../../styles/palette";
@@ -6,7 +7,7 @@ import { colorPalette } from "../../../styles/palette";
 import { Card, Section, Image, CardTitle, CardSubtitle } from "./styled";
 
 interface CharacterCardProps {
-  icon: any;
+  icon: ImageSourcePropType;
   title: string;
   department: string;
   jobTitle: string;
