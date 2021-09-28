@@ -82,11 +82,13 @@ interface InputComponentProps {
   input: InputRow;
   colorSchema: PrimaryColor;
   value: string | number | boolean;
+  error?: {isValid: boolean, message: string};
+  showErrorMessage?: boolean;
   onChange: (value: string | number) => void;
   onBlur: () => void;
 }
 
-const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, onBlur }: InputComponentProps, ref) => {
+const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, onBlur, error = undefined, showErrorMessage = false }: InputComponentProps, ref) => {
   switch (input.type) {
     case 'text':
       return (
@@ -98,6 +100,8 @@ const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, o
           onBlur={onBlur}
           transparent
           inputType={input.inputSelectValue}
+          error={error}
+          showErrorMessage={showErrorMessage}
           ref={ref}
         />
       );
@@ -112,6 +116,8 @@ const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, o
           onBlur={onBlur}
           transparent
           inputType={input.inputSelectValue}
+          error={error}
+          showErrorMessage={showErrorMessage}
           ref={ref}
         />
       );
@@ -121,7 +127,7 @@ const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, o
           colorSchema={colorSchema}
           value={value as number}
           onSelect={onChange}
-          editable={true}
+          editable
           transparent
         />
       );
@@ -135,6 +141,8 @@ const InputComponent = React.forwardRef(({input, colorSchema, value, onChange, o
           onBlur={onBlur}
           transparent
           inputType={input.inputSelectValue}
+          error={error}
+          showErrorMessage={showErrorMessage}
           ref={ref}
         />
       );
@@ -167,6 +175,8 @@ const RepeaterFieldListItem: React.FC<Props> = ({
   const validColorSchema = getValidColorSchema(color);
   const inputRefs = useRef([]);
 
+  console.log("repeater field list item error", error)
+
   return (
     <Base>
       <ItemLabel colorSchema={validColorSchema} underline={false}>{heading || "Item"}</ItemLabel>
@@ -191,6 +201,8 @@ const RepeaterFieldListItem: React.FC<Props> = ({
             <InputComponent 
               input={input} 
               onChange={changeFromInput(input)} 
+              error={error && error[input.id] ? {isValid: error[input.id].isValid, message: error[input.id].validationMessage} : undefined}
+              showErrorMessage={error && error[input.id] && !error[input.id].isValid}
               onBlur={onBlur} 
               colorSchema={validColorSchema}
               value={(value[input.id]) || ''}
