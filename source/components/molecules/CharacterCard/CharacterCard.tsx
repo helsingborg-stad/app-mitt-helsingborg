@@ -22,13 +22,13 @@ const CharacterCard = (props: CharacterCardProps): JSX.Element => {
     jobTitle,
     onCardClick,
   } = props;
-  const { colors } = useContext<any>(ThemeContext);
+  const theme = useContext(ThemeContext);
 
   const cardColorSchema = selected ? "red" : "neutral";
   const cardColor = selected
-    ? colors.complementary[cardColorSchema][3]
-    : colors.neutrals[7];
-  const outlineColor = selected ? colors.primary.red[4] : "transparent";
+    ? theme.colors.complementary[cardColorSchema][3]
+    : theme.colors.neutrals[7];
+  const outlineColor = selected ? theme.colors.primary.red[4] : "transparent";
 
   return (
     <Card
