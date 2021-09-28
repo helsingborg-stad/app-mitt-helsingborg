@@ -201,7 +201,6 @@ const FormField = ({
 
   const onInputAddAnswer = (values, fieldId = id) => {
     const answerValues = {[fieldId]: values};
-    console.log("on add answer", answerValues, "fieldId", fieldId)
     if (onAddAnswer) onAddAnswer(answerValues, fieldId)
   }
 

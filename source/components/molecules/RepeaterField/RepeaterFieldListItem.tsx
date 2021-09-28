@@ -175,8 +175,6 @@ const RepeaterFieldListItem: React.FC<Props> = ({
   const validColorSchema = getValidColorSchema(color);
   const inputRefs = useRef([]);
 
-  console.log("repeater field list item error", error)
-
   return (
     <Base>
       <ItemLabel colorSchema={validColorSchema} underline={false}>{heading || "Item"}</ItemLabel>

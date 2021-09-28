@@ -143,9 +143,7 @@ const StepFooter: React.FC<Props> = ({
     return !evaluateConditionalExpression(condition, answers, allQuestions);
   };
 
-  const buttons = actions.map((action, index) => {
-    console.log("action", action)
-    return (
+  const buttons = actions.map((action, index) => (
         <Flex key={`${index}-${action.label}`}>
           <Button
             onClick={actionMap(action)}
@@ -156,8 +154,7 @@ const StepFooter: React.FC<Props> = ({
             <Text>{action.label}</Text>
           </Button>
         </Flex>
-      );
-    });
+      ));
 
   return (
     <ActionContainer>
