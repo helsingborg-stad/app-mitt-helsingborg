@@ -5,15 +5,15 @@ import { colorPalette } from "../../../styles/palette";
 
 import { Card, Section, Image, CardTitle, CardSubtitle } from "./styled";
 
-type CharacterCardType = {
+interface CharacterCardProps {
   icon: any;
   title: string;
   department: string;
   jobTitle: string;
   selected: boolean;
   onCardClick: () => void;
-};
-const CharacterCard = (props: CharacterCardType): JSX.Element => {
+}
+const CharacterCard = (props: CharacterCardProps): JSX.Element => {
   const {
     icon,
     selected = false,

@@ -29,10 +29,10 @@ const CheckboxBox = styled.TouchableHighlight<BoxProps>`
   border-radius: ${(props) => props.theme.checkbox[props.size].borderRadius}px;
 `;
 
-type CheckboxTickType = {
+interface CheckboxProps {
   color: string;
-};
-const CheckboxTick = styled(Icon)<CheckboxTickType>`
+}
+const CheckboxTick = styled(Icon)<CheckboxProps>`
   color: ${({ color }) => color};
   margin-left: -2px;
   margin-top: -3px;

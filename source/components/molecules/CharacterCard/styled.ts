@@ -3,11 +3,11 @@ import styled from "styled-components/native";
 import Text from "../../atoms/Text";
 import Heading from "../../atoms/Heading";
 
-type BodyType = {
+interface BodyProps {
   outlineColor: string;
   cardColor: string;
-};
-const Card = styled.TouchableHighlight<BodyType>`
+}
+const Card = styled.TouchableHighlight<BodyProps>`
   display: flex;
   flex-direction: row;
   border-radius: 10px;
@@ -21,13 +21,13 @@ const Card = styled.TouchableHighlight<BodyType>`
   background: ${({ cardColor }) => cardColor};
 `;
 
-type SectionType = {
+interface SectionProps {
   flexDirection?: "column" | "row";
   justify?: "flex-start" | "flex-end";
   flex?: number;
   marginLeft?: boolean;
-};
-const Section = styled.View<SectionType>`
+}
+const Section = styled.View<SectionProps>`
   min-height: 60px;
   display: flex;
   align-items: center;
@@ -47,10 +47,10 @@ const CardTitle = styled(Heading)`
   width: 100%;
 `;
 
-type CardSubTitleType = {
+interface CardSubTitleProps {
   colorSchema?: string;
-};
-const CardSubtitle = styled(Text)<CardSubTitleType>`
+}
+const CardSubtitle = styled(Text)<CardSubTitleProps>`
   width: 100%;
   color: ${({ theme, colorSchema = "neutral" }) =>
     theme.colors.primary[colorSchema][1]};
