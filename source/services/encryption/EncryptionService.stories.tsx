@@ -12,6 +12,7 @@ import Button from "../../components/atoms/Button";
 import StorageService from "../StorageService";
 import { getStoredSymmetricKey } from "./EncryptionHelper";
 import { AnsweredForm } from "../../types/Case";
+import { EncryptionType } from "../../types/Encryption";
 
 const Flex = styled.View`
   padding: 8px;
@@ -77,7 +78,7 @@ const testSymmetricKeySetup = async () => {
   const testForm: Partial<AnsweredForm> = {
     answers: { encryptedAnswers: "This string will be encrypted" },
     encryption: {
-      type: "decrypted",
+      type: EncryptionType.Decrypted,
       symmetricKeyName: "196912191118:198310011906",
       primes: {
         P: 43,

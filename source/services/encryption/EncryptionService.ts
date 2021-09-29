@@ -1,5 +1,6 @@
 import { NativeModules } from "react-native";
 import { AnsweredForm, EncryptedAnswersWrapper } from "../../types/Case";
+import { EncryptionType } from "../../types/Encryption";
 
 import StorageService from "../StorageService";
 
@@ -65,7 +66,7 @@ export async function encryptFormAnswers(
   );
 
   forms.answers = { encryptedAnswers };
-  forms.encryption.type = "privateAesKey";
+  forms.encryption.type = EncryptionType.PrivateAesKey;
 
   return forms;
 }
@@ -94,12 +95,12 @@ export async function decryptFormAnswers(
   user: UserInterface,
   forms: AnsweredForm
 ): Promise<AnsweredForm> {
-  if (forms.encryption.type === "privateAesKey") {
+  if (forms.encryption.type === EncryptionType.PrivateAesKey) {
     const { encryptedAnswers } = <EncryptedAnswersWrapper>forms.answers;
     const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
 
     forms.answers = JSON.parse(decryptedAnswers);
-    forms.encryption.type = "decrypted";
+    forms.encryption.type = EncryptionType.Decrypted;
 
     return forms;
   }
