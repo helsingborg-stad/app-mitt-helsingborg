@@ -13,19 +13,24 @@ export function EncryptionException(message: string) {
 export function getPublicKeyInForm(
   personalNumber: string,
   forms: AnsweredForm
-) {
+): number {
   return forms.encryption.publicKeys[personalNumber];
 }
 
-function getSymmetricKeyStorageKeyword(forms: AnsweredForm) {
+function getSymmetricKeyStorageKeyword(forms: AnsweredForm): string {
   return forms.encryption.symmetricKeyName;
 }
 
-function getPrivateKeyStorageKeyword(user: UserInterface, forms: AnsweredForm) {
+function getPrivateKeyStorageKeyword(
+  user: UserInterface,
+  forms: AnsweredForm
+): string {
   return `aesPrivateKey${user.personalNumber}${forms.encryption.symmetricKeyName}`;
 }
 
-export async function getStoredSymmetricKey(forms: AnsweredForm) {
+export async function getStoredSymmetricKey(
+  forms: AnsweredForm
+): Promise<number> {
   const storageKeyword = getSymmetricKeyStorageKeyword(forms);
   const symmetricKey = await StorageService.getData(storageKeyword);
   return Number(symmetricKey);
@@ -34,13 +39,13 @@ export async function getStoredSymmetricKey(forms: AnsweredForm) {
 export async function storeSymmetricKey(
   symmetricKey: number,
   forms: AnsweredForm
-) {
+): Promise<void> {
   const storageKeyword = getSymmetricKeyStorageKeyword(forms);
   await StorageService.saveData(storageKeyword, symmetricKey.toString());
 }
 
 // Proof of concept, will be replaced with Diffie-Hellman library.
-export function getPseudoKey(G: number, privateKey: number, P: number) {
+export function getPseudoKey(G: number, privateKey: number, P: number): number {
   if (privateKey === 1) {
     return G;
   }
@@ -49,7 +54,7 @@ export function getPseudoKey(G: number, privateKey: number, P: number) {
 }
 
 // Proof of concept, will be replaced by encryption library.
-export function getPseudoRandomInteger() {
+export function getPseudoRandomInteger(): number {
   const min = 1;
   const max = 10;
   return Math.floor(min + Math.random() * (max - min));
@@ -58,7 +63,7 @@ export function getPseudoRandomInteger() {
 export async function createAndStorePrivateKey(
   user: UserInterface,
   forms: AnsweredForm
-) {
+): Promise<number> {
   const privateKey = getPseudoRandomInteger();
 
   await StorageService.saveData(
@@ -73,7 +78,7 @@ export async function generateSymmetricKey(
   user: UserInterface,
   forms: AnsweredForm,
   otherUserPublicKey: number
-) {
+): Promise<number> {
   let ownPrivateKey = await StorageService.getData(
     getPrivateKeyStorageKeyword(user, forms)
   );
