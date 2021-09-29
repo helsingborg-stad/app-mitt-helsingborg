@@ -67,7 +67,6 @@ const DayPicker: React.FC<DayPickerProps> = ({
     },
   };
 
-  /* used as `theme` prop in <Calendar/> for styling internal components */
   const calendarTheme = {
     arrowColor: "black",
     textDayFontWeight: "600",
