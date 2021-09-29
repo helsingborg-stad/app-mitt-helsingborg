@@ -1,12 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { ActivityIndicator } from 'react-native';
-import styled from 'styled-components';
-import Form, { defaultInitialPosition, defaultInitialStatus } from '../containers/Form/Form';
-import { getFormQuestions, convertAnswerArrayToObject } from '../helpers/CaseDataConverter';
-import AuthContext from '../store/AuthContext';
-import FormContext from '../store/FormContext';
-import { CaseDispatch, CaseState } from '../store/CaseContext';
+import React, { useContext, useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { ActivityIndicator } from "react-native";
+import styled from "styled-components/native";
+import Form, {
+  defaultInitialPosition,
+  defaultInitialStatus,
+} from "../containers/Form/Form";
+import {
+  getFormQuestions,
+  convertAnswerArrayToObject,
+} from "../helpers/CaseDataConverter";
+import AuthContext from "../store/AuthContext";
+import FormContext from "../store/FormContext";
+import { CaseDispatch, CaseState } from "../store/CaseContext";
 
 const SpinnerContainer = styled.View`
   flex: 1;
@@ -18,15 +24,18 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
   const [form, setForm] = useState(undefined);
   const [formQuestions, setFormQuestions] = useState(undefined);
   const [initialCase, setInitialCase] = useState(undefined);
-  const { caseData, caseId, isSignMode } = route && route.params ? route.params : {};
+  const { caseData, caseId, isSignMode } =
+    route && route.params ? route.params : {};
   const { user } = useContext(AuthContext);
   const { getForm } = useContext(FormContext);
   const { getCase } = useContext(CaseState);
   const { updateCase } = useContext(CaseDispatch);
 
   const initialPosition =
-    initialCase?.forms?.[initialCase.currentFormId]?.currentPosition || defaultInitialPosition;
-  const initialAnswers = initialCase?.forms?.[initialCase.currentFormId]?.answers || {};
+    initialCase?.forms?.[initialCase.currentFormId]?.currentPosition ||
+    defaultInitialPosition;
+  const initialAnswers =
+    initialCase?.forms?.[initialCase.currentFormId]?.answers || {};
 
   useEffect(() => {
     if (caseData?.currentFormId) {
@@ -34,7 +43,8 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
         setForm(form);
         setFormQuestions(getFormQuestions(form));
       });
-      const answerArray = caseData?.forms?.[caseData.currentFormId]?.answers || [];
+      const answerArray =
+        caseData?.forms?.[caseData.currentFormId]?.answers || [];
       const answersObject = convertAnswerArrayToObject(answerArray);
       caseData.forms = {
         ...caseData.forms,
@@ -49,7 +59,8 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       // Beware, dragons! Since we pass by reference, it seems like the answers
       // can be converted to object form already, thus we do this check.
       if (Array.isArray(initCase?.forms?.[initCase.currentFormId]?.answers)) {
-        const answerArray = initCase?.forms?.[initCase.currentFormId]?.answers || [];
+        const answerArray =
+          initCase?.forms?.[initCase.currentFormId]?.answers || [];
         const answersObject = convertAnswerArrayToObject(answerArray);
         initCase.forms = {
           ...initCase.forms,
@@ -75,7 +86,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
 
   const updateCaseContext = (answerObject, signature, currentPosition) => {
     // If the case is submitted, we should not actually update its data...
-    if (!initialCase.status.type.includes('submitted')) {
+    if (!initialCase.status.type.includes("submitted")) {
       const caseData = {
         caseId: initialCase.id,
         formId: initialCase.currentFormId,
@@ -107,7 +118,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       });
 
       const callback = (putResponse) => {
-        if (putResponse?.status?.type?.includes('signature:completed')) {
+        if (putResponse?.status?.type?.includes("signature:completed")) {
           caseData.encryptAnswers = false;
           updateCase(caseData);
         }
