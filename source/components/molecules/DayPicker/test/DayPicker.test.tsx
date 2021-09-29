@@ -9,13 +9,6 @@ import DayPicker from "..";
 const mockStartDate = "2018-04-08";
 const mockAvailableDates = ["2018-04-13"];
 
-jest.mock(
-  "@react-navigation/stack/lib/commonjs/views/assets/back-icon.png",
-  () => ({
-    default: "mockTitle.png",
-  })
-);
-
 it("calls the callback function when available date is clicked", () => {
   const mockCallback = jest.fn();
 
