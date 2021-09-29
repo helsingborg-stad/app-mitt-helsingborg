@@ -1,30 +1,39 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import styled, { ThemeContext } from 'styled-components/native';
-import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
-import Icon from '../Icon';
+import React, { useContext } from "react";
+import PropTypes from "prop-types";
+import styled, { ThemeContext } from "styled-components/native";
+import {
+  getValidColorSchema,
+  PrimaryColor,
+} from "../../../styles/themeHelpers";
+import Icon from "../Icon";
 
 interface BoxProps {
   checked: boolean;
   colorSchema: PrimaryColor;
-  size: 'small' | 'medium' | 'large';
+  backgroundColor: string;
+  size: "small" | "medium" | "large";
 }
 const CheckboxBox = styled.TouchableHighlight<BoxProps>`
   border-style: solid;
-  border-color: ${props =>
-    props.checked ? 'transparent' : props.theme.colors.complementary[props.colorSchema][0]};
-  background-color: ${props =>
-    props.checked ? props.theme.colors.primary[props.colorSchema][3] : 'transparent'};
-  width: ${props => props.theme.checkbox[props.size].width}px;
-  height: ${props => props.theme.checkbox[props.size].height}px;
-  padding: ${props => props.theme.checkbox[props.size].padding}px;
-  margin: ${props => props.theme.checkbox[props.size].margin}px;
-  border-width: ${props => props.theme.checkbox[props.size].borderWidth}px;
-  border-radius: ${props => props.theme.checkbox[props.size].borderRadius}px;
+  border-color: ${(props) =>
+    props.checked
+      ? "transparent"
+      : props.theme.colors.complementary[props.colorSchema][0]};
+  background-color: ${({ checked, backgroundColor }) =>
+    checked ? backgroundColor : "transparent"};
+  width: ${(props) => props.theme.checkbox[props.size].width}px;
+  height: ${(props) => props.theme.checkbox[props.size].height}px;
+  padding: ${(props) => props.theme.checkbox[props.size].padding}px;
+  margin: ${(props) => props.theme.checkbox[props.size].margin}px;
+  border-width: ${(props) => props.theme.checkbox[props.size].borderWidth}px;
+  border-radius: ${(props) => props.theme.checkbox[props.size].borderRadius}px;
 `;
 
-const CheckboxTick = styled(Icon)`
-  color: ${props => props.theme.colors.neutrals[7]};
+interface CheckboxProps {
+  color: string;
+}
+const CheckboxTick = styled(Icon)<CheckboxProps>`
+  color: ${({ color }) => color};
   margin-left: -2px;
   margin-top: -3px;
 `;
@@ -33,16 +42,37 @@ interface Props {
   checked?: boolean;
   onChange: () => void;
   disabled?: boolean;
-  size?: 'small' | 'medium' | 'large';
+  invertColors?: boolean;
+  size?: "small" | "medium" | "large";
   colorSchema: PrimaryColor;
 }
 
-const Checkbox: React.FC<Props> = ({ checked, onChange, size, disabled, colorSchema }) => {
-  const theme = useContext(ThemeContext);
+const Checkbox: React.FC<Props> = ({
+  checked,
+  onChange,
+  size,
+  disabled,
+  colorSchema,
+  invertColors = false,
+}) => {
+  const { colors, checkbox } = useContext(ThemeContext);
   const validColorSchema = getValidColorSchema(colorSchema);
+
+  const canInvertColors = checked && invertColors;
+
+  const tickColor = canInvertColors
+    ? colors.primary[colorSchema][3]
+    : colors.neutrals[7];
+  const checkboxColor = canInvertColors
+    ? "transparent"
+    : colors.primary[colorSchema][3];
+  const underlayColor = canInvertColors
+    ? "transparent"
+    : colors.primary[validColorSchema][2];
 
   return (
     <CheckboxBox
+      disabled={disabled}
       onPress={() => {
         if (!disabled) {
           onChange();
@@ -50,10 +80,19 @@ const Checkbox: React.FC<Props> = ({ checked, onChange, size, disabled, colorSch
       }}
       checked={checked}
       colorSchema={validColorSchema}
-      underlayColor={theme.colors.primary[validColorSchema][2]}
-      size={size || 'small'}
+      underlayColor={underlayColor}
+      size={size || "small"}
+      backgroundColor={checkboxColor}
     >
-      {checked ? <CheckboxTick size={theme.checkbox[size].icon} name="done" /> : <></>}
+      {checked ? (
+        <CheckboxTick
+          color={tickColor}
+          size={checkbox[size].icon}
+          name="done"
+        />
+      ) : (
+        <></>
+      )}
     </CheckboxBox>
   );
 };
@@ -70,22 +109,27 @@ Checkbox.propTypes = {
   /**
    * sets the color theme.
    */
-  colorSchema: PropTypes.oneOf(['red', 'blue', 'green', 'purple', 'neutral']),
+  colorSchema: PropTypes.oneOf(["red", "blue", "green", "purple", "neutral"]),
   /**
    * One of small, medium, large
    */
-  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  size: PropTypes.oneOf(["small", "medium", "large"]),
   /**
    * Disables the checkbox if true.
    */
   disabled: PropTypes.bool,
+  /**
+   * Make only the tick icon visible when inverting colors.
+   */
+  invertColors: PropTypes.bool,
 };
 
 Checkbox.defaultProps = {
-  onChange: () => {},
-  colorSchema: 'blue',
-  size: 'small',
+  onChange: () => undefined,
+  colorSchema: "blue",
+  size: "small",
   disabled: false,
+  invertColors: false,
 };
 
 export default Checkbox;
