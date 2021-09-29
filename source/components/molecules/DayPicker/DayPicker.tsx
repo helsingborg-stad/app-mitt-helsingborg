@@ -10,7 +10,7 @@ LocaleConfig.defaultLocale = "se";
 type DayPickerProps = {
   availableDates: string[];
   onDateSelected: (dateString: string) => void;
-  startDate?: Date;
+  startDate?: string;
 };
 
 const DayPicker: React.FC<DayPickerProps> = ({
@@ -115,7 +115,7 @@ const DayPicker: React.FC<DayPickerProps> = ({
 };
 
 DayPicker.defaultProps = {
-  startDate: new Date(),
+  startDate: moment().format("yyyy-MM-DD"),
 };
 
 export default DayPicker;

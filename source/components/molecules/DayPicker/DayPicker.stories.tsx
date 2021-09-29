@@ -37,8 +37,14 @@ const StoryDayPicker = () => {
   );
 };
 
-storiesOf("Date picker", module).add("Default", () => (
+storiesOf("Date picker", module).add("Predetermined date", () => (
   <StoryWrapper>
     <StoryDayPicker />
+  </StoryWrapper>
+));
+
+storiesOf("Date picker", module).add("Today", () => (
+  <StoryWrapper>
+    <DayPicker availableDates={[]} onDateSelected={() => true} />
   </StoryWrapper>
 ));
