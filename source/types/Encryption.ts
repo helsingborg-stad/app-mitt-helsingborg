@@ -1,4 +1,8 @@
-export type EncryptionType = "decrypted" | "privateAesKey" | "symmetricKey";
+export enum EncryptionType {
+  Decrypted = "decrypted",
+  PrivateAesKey = "privateAesKey",
+  SymmetricKey = "symmetricKey",
+}
 
 interface AesModule {
   pbkdf2: (
