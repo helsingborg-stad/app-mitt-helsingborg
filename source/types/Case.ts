@@ -1,20 +1,21 @@
 import { EncryptionDetails } from "./Encryption";
 
-export type ApplicationStatusType =
-  | "active:ongoing"
-  | "active:processing"
-  | "active:signature:completed"
-  | "active:signature:pending"
-  | "active:submitted"
-  | "closed"
-  | "notStarted"
-  | "active:submitted:viva"
-  | "active:completionRequired:viva"
-  | "closed:approved:viva"
-  | "closed:completionRejected:viva"
-  | "closed:partiallyApproved:viva"
-  | "closed:rejected:viva"
-  | "notStarted:viva";
+export enum ApplicationStatusType {
+  ActiveOngoing = "active:ongoing",
+  ActiveProcessing = "active:processing",
+  ActiveSignatureCompleted = "active:signature:completed",
+  ActiveSignaturePending = "active:signature:pending",
+  ActiveSubmitted = "active:submitted",
+  Closed = "closed",
+  NotStarted = "notStarted",
+  ActiveSubmittedViva = "active:submitted:viva",
+  ActiveCompletionRequiredViva = "active:completionRequired:viva",
+  ClosedApprovedViva = "closed:approved:viva",
+  ClosedCompletionRejectedViva = "closed:completionRejected:viva",
+  ClosedPartiallyApprovedViva = "closed:partiallyApproved:viva",
+  ClosedRejectedViva = "closed:rejected:viva",
+  NotStartedViva = "notStarted:viva",
+}
 
 export type PersonRole = "applicant" | "coApplicant" | "children";
 
