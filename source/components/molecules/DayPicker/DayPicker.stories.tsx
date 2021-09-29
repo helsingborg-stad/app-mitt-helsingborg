@@ -37,7 +37,7 @@ const StoryDayPicker = () => {
   );
 };
 
-storiesOf("Day picker", module).add("Default", () => (
+storiesOf("Date picker", module).add("Default", () => (
   <StoryWrapper>
     <StoryDayPicker />
   </StoryWrapper>
