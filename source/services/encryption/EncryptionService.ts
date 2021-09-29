@@ -58,7 +58,7 @@ export async function encryptWithAesKey(
 export async function encryptFormAnswers(
   user: UserInterface,
   forms: AnsweredForm
-) {
+): Promise<AnsweredForm> {
   const encryptedAnswers = await encryptWithAesKey(
     user,
     JSON.stringify(forms.answers)
@@ -93,7 +93,7 @@ export async function decryptWithAesKey(
 export async function decryptFormAnswers(
   user: UserInterface,
   forms: AnsweredForm
-) {
+): Promise<AnsweredForm> {
   if (forms.encryption.type === "privateAesKey") {
     const { encryptedAnswers } = <EncryptedAnswersWrapper>forms.answers;
     const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
@@ -103,12 +103,13 @@ export async function decryptFormAnswers(
 
     return forms;
   }
+  return null;
 }
 
 export async function setupSymmetricKey(
   user: UserInterface,
   forms: AnsweredForm
-) {
+): Promise<AnsweredForm> {
   // Ugly deep copy of forms.
   const formsCopy = JSON.parse(JSON.stringify(forms));
 
