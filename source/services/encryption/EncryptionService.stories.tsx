@@ -61,11 +61,8 @@ const printPublicKeyResult = (user, form) => {
 };
 
 const printSymmetricKeyResult = async (user, form) => {
-  console.log(
-    `User ${user.personalNumber} symmetric key ${await getStoredSymmetricKey(
-      form
-    )}`
-  );
+  const key = await getStoredSymmetricKey(form);
+  console.log(`User ${user.personalNumber} symmetric key ${key}`);
 };
 
 const testSymmetricKeySetup = async () => {
