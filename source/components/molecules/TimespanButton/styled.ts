@@ -1,8 +1,9 @@
 import styled from "styled-components/native";
+import { ThemeType } from "../../../styles/themeHelpers";
 
 interface ButtonProps {
   selected: boolean;
-  theme: any;
+  theme: ThemeType;
 }
 const ButtonContainer = styled.TouchableHighlight<ButtonProps>`
   padding: 12px 20px;
@@ -11,7 +12,7 @@ const ButtonContainer = styled.TouchableHighlight<ButtonProps>`
   height: 48px;
   background: ${({ theme, selected }) =>
     selected ? theme.colors.primary.red[1] : theme.colors.neutrals[5]};
-  border-radius: 5px;
+  border-radius: 4.5px;
   display: flex;
   flex-direction: row;
   justify-content: ${({ selected }) => (selected ? "space-between" : "center")};
@@ -20,11 +21,13 @@ const ButtonContainer = styled.TouchableHighlight<ButtonProps>`
 
 interface TimeTextProps {
   selected: boolean;
+  theme: ThemeType;
 }
 const TimeText = styled.Text<TimeTextProps>`
-  color: ${({ selected }) => (selected ? "white" : "black")};
+  color: ${({ selected, theme }) =>
+    selected ? theme.colors.neutrals[7] : theme.colors.neutrals[0]};
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 24px;
   padding: 0;
   margin: 0;
