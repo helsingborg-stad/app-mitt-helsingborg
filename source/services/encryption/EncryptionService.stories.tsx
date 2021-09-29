@@ -28,24 +28,19 @@ const encryptionTestText =
 const reactNativeAesDemo = () => {
   console.log("Running AES demo");
 
-  try {
-    encryptWithAesKey(
-      { personalNumber: "199304132146" },
-      encryptionTestText
-    ).then((encryptedResult) => {
+  encryptWithAesKey({ personalNumber: "199304132146" }, encryptionTestText)
+    .then((encryptedResult) => {
       console.log("Encrypted result:", encryptedResult);
-
-      decryptWithAesKey({ personalNumber: "199304132146" }, encryptedResult)
-        .then((text) => {
-          console.log("Decrypted:", text);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      return decryptWithAesKey(
+        { personalNumber: "199304132146" },
+        encryptedResult
+      ).then((text) => {
+        console.log("Decrypted:", text);
+      });
+    })
+    .catch((error) => {
+      console.log(error);
     });
-  } catch (e) {
-    console.error(e);
-  }
 };
 
 const runTerminalDemo = () => {
