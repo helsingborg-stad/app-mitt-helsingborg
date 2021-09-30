@@ -1,7 +1,7 @@
 export enum EncryptionType {
-  Decrypted = "decrypted",
-  PrivateAesKey = "privateAesKey",
-  SymmetricKey = "symmetricKey",
+  DECRYPTED = "decrypted",
+  PRIVATE_AES_KEY = "privateAesKey",
+  SYMMETRIC_KEY = "symmetricKey",
 }
 
 interface AesModule {
