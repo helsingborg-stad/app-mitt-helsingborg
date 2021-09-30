@@ -1,6 +1,5 @@
-import React from "react";
-
-import { colorPalette } from "../../../styles/palette";
+import React, { useContext } from "react";
+import { ThemeContext } from "styled-components/native";
 
 import MIcon from "../../atoms/Icon";
 
@@ -14,13 +13,14 @@ interface Props {
 
 const TimeSpanButton = (props: Props): JSX.Element => {
   const { children, selected, onClick } = props;
+  const theme = useContext(ThemeContext);
 
   return (
     <ButtonContainer
       testID="timeSpanButton"
       onPress={onClick}
       selected={selected}
-      underlayColor={colorPalette.neutrals[4]}
+      underlayColor={theme.colors.neutrals[4]}
       disabled={selected}
     >
       <>
@@ -28,7 +28,7 @@ const TimeSpanButton = (props: Props): JSX.Element => {
           <MIcon
             testID="timespanbutton_checkmarkIcon"
             name="done"
-            color={colorPalette.neutrals[7]}
+            color={theme.colors.neutrals[7]}
             size={16}
           />
         )}
