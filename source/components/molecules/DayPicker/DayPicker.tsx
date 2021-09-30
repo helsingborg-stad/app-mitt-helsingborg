@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import moment from "moment";
 import { ThemeContext } from "styled-components/native";
 import localeConfig from "./localeConfig";
+import getTheme from "./getTheme";
 
 LocaleConfig.locales.se = localeConfig;
 LocaleConfig.defaultLocale = "se";
@@ -10,69 +11,19 @@ LocaleConfig.defaultLocale = "se";
 interface DayPickerProps {
   availableDates: string[];
   onDateSelected: (dateString: string) => void;
+  selectedDate: string;
   startDate?: string;
 }
 
 const DayPicker: React.FC<DayPickerProps> = ({
   availableDates,
   onDateSelected,
+  selectedDate,
   startDate,
 }) => {
-  const [selectedDate, setSelectedDate] = useState();
   const theme = useContext(ThemeContext);
 
-  const colors = {
-    selectedBackground: theme.colors.primary.red[0],
-    selectedText: theme.colors.neutrals[7],
-    availableBackground: theme.colors.complementary.red[2],
-    availableText: theme.colors.primary.red[0],
-    todayBorder: theme.colors.primary.red[3],
-    todayText: theme.colors.primary.green[0],
-    disabledText: theme.colors.neutrals[4],
-  };
-
-  const dayStyles = {
-    availableStyle: {
-      container: {
-        backgroundColor: colors.availableBackground,
-        borderRadius: 10,
-        width: "90%",
-      },
-      text: {
-        color: colors.availableText,
-      },
-    },
-    selectedStyle: {
-      container: {
-        backgroundColor: colors.selectedBackground,
-        borderRadius: 10,
-        width: "90%",
-      },
-      text: {
-        color: colors.selectedText,
-      },
-    },
-    todayStyle: {
-      container: {
-        width: "90%",
-        borderWidth: 2,
-        borderColor: colors.todayBorder,
-        borderRadius: 10,
-      },
-      text: {
-        color: colors.todayText,
-        left: -1,
-        top: -1,
-      },
-    },
-  };
-
-  const calendarTheme = {
-    arrowColor: "black",
-    textDayFontWeight: "600",
-    textDisabledColor: colors.disabledText,
-    textSectionTitleColor: colors.disabledText,
-  };
+  const { dayStyles, calendarTheme } = getTheme(theme);
 
   const minDate = startDate;
   const maxDate = moment(minDate).add(3, "M").toDate(); // Placeholder value of 3 months forward, must be discussed further
@@ -91,13 +42,12 @@ const DayPicker: React.FC<DayPickerProps> = ({
     };
   });
 
-  function selectDate(day) {
+  const selectDate = (day) => {
     const { dateString } = day;
     if (availableDates.includes(dateString)) {
-      setSelectedDate(dateString);
       onDateSelected(dateString);
     }
-  }
+  };
 
   return (
     <Calendar
@@ -108,7 +58,7 @@ const DayPicker: React.FC<DayPickerProps> = ({
       maxDate={maxDate}
       firstDay={1}
       markedDates={markedDates}
-      onDayPress={(day) => selectDate(day)}
+      onDayPress={selectDate}
       showWeekNumbers
     />
   );
