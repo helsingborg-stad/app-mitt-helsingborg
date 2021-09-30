@@ -66,7 +66,7 @@ export async function encryptFormAnswers(
   );
 
   forms.answers = { encryptedAnswers };
-  forms.encryption.type = EncryptionType.PrivateAesKey;
+  forms.encryption.type = EncryptionType.PRIVATE_AES_KEY;
 
   return forms;
 }
@@ -95,12 +95,12 @@ export async function decryptFormAnswers(
   user: UserInterface,
   forms: AnsweredForm
 ): Promise<AnsweredForm> {
-  if (forms.encryption.type === EncryptionType.PrivateAesKey) {
+  if (forms.encryption.type === EncryptionType.PRIVATE_AES_KEY) {
     const { encryptedAnswers } = <EncryptedAnswersWrapper>forms.answers;
     const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
 
     forms.answers = JSON.parse(decryptedAnswers);
-    forms.encryption.type = EncryptionType.Decrypted;
+    forms.encryption.type = EncryptionType.DECRYPTED;
 
     return forms;
   }

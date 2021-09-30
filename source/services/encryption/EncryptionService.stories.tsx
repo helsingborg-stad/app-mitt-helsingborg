@@ -70,7 +70,7 @@ const testSymmetricKeySetup = async () => {
   const testForm: Partial<AnsweredForm> = {
     answers: { encryptedAnswers: "This string will be encrypted" },
     encryption: {
-      type: EncryptionType.Decrypted,
+      type: EncryptionType.DECRYPTED,
       symmetricKeyName: "196912191118:198310011906",
       primes: {
         P: 43,
