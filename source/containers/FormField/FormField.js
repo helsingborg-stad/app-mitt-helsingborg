@@ -227,7 +227,7 @@ const FormField = ({
   if (input && input.helpInComponent) inputCompProps[input.helpProp || 'help'] = help;
   if (input && input.onMountEvent) inputCompProps[input.onMountEvent] = onInputMount;
 
-  if (input && inputType === 'repeaterField' && input.onAddAnswerEvent) inputCompProps[input.onAddAnswerEvent] = onInputAddAnswer;
+  if (inputType === 'repeaterField' && !!input?.onAddAnswerEvent) inputCompProps[input.onAddAnswerEvent] = onInputAddAnswer;
 
   const inputComponent =
     input && input.component ? (

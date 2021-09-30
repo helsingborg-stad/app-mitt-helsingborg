@@ -20,14 +20,16 @@ export interface InputRow {
   inputSelectValue: InputFieldType;
 }
 
+type Answers = Record<string, any> | string | number
+
 interface Props {
   heading: string;
   addButtonText?: string;
   inputs: InputRow[];
   value: string | Record<string, string | number>[];
-  onChange: (answers: Record<string, any> | string | number, fieldId?: string) => void;
-  onBlur?: (answers: Record<string, any> | string | number, fieldId?: string) => void;
-  onAddAnswer?: (answers: Record<string, any> | string | number, fieldId?: string) => void;
+  onChange: (answers: Answers, fieldId?: string) => void;
+  onBlur?: (answers: Answers, fieldId?: string) => void;
+  onAddAnswer?: (answers: Answers, fieldId?: string) => void;
   colorSchema: PrimaryColor;
   error?: Record<string, {isValid: boolean, validationMessage: string}>[];
   maxRows?: number;
