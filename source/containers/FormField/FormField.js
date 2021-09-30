@@ -130,7 +130,7 @@ const inputTypes = {
     focusEvent: 'onFocus',
     blurEvent: 'onBlur',
     changeEvent: 'onChange',
-    onAddAnswerEvent: 'onAddAnswer',
+    addAnswerEvent: 'onAddAnswer',
     props: {},
   },
   card: {
@@ -227,7 +227,7 @@ const FormField = ({
   if (input && input.helpInComponent) inputCompProps[input.helpProp || 'help'] = help;
   if (input && input.onMountEvent) inputCompProps[input.onMountEvent] = onInputMount;
 
-  if (inputType === 'repeaterField' && !!input?.onAddAnswerEvent) inputCompProps[input.onAddAnswerEvent] = onInputAddAnswer;
+  if (inputType === 'repeaterField' && !!input?.addAnswerEvent) inputCompProps[input.addAnswerEvent] = onInputAddAnswer;
 
   const inputComponent =
     input && input.component ? (
