@@ -215,6 +215,7 @@ const Form: React.FC<Props> = ({
           onFieldChange={handleInputChange}
           onFieldBlur={handleBlur}
           updateCaseInContext={updateCaseInContext}
+          onFieldMount={handleInputChange}
           currentPosition={formState.currentPosition}
           totalStepNumber={formState.numberOfMainSteps || 0}
           isBackBtnVisible={
