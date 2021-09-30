@@ -86,7 +86,7 @@ const StepFooter: React.FC<Props> = ({
         return () => {
           const errorCallback = () => {};
   
-          const onValidCallback = async () => {
+          const onValidCallback = () => {
             formNavigation.goToMainForm();
           }
   

@@ -178,7 +178,11 @@ const RepeaterFieldListItem: React.FC<Props> = ({
   return (
     <Base>
       <ItemLabel colorSchema={validColorSchema} underline={false}>{heading || "Item"}</ItemLabel>
-      {inputs.map((input, index) => (
+      {inputs.map((input, index) => {
+        const errorDetails = error?.[input.id] ? {isValid: error[input.id].isValid, message: error[input.id].validationMessage} : undefined
+        const showErrorMessage = !error?.[input.id]?.isValid
+
+        return (
         <RepeaterItem
           colorSchema={validColorSchema}
           key={`${input.title}.${index}`}
@@ -199,8 +203,8 @@ const RepeaterFieldListItem: React.FC<Props> = ({
             <InputComponent 
               input={input} 
               onChange={changeFromInput(input)} 
-              error={error && error[input.id] ? {isValid: error[input.id].isValid, message: error[input.id].validationMessage} : undefined}
-              showErrorMessage={error && error[input.id] && !error[input.id].isValid}
+              error={errorDetails}
+              showErrorMessage={showErrorMessage}
               onBlur={onBlur} 
               colorSchema={validColorSchema}
               value={(value[input.id]) || ''}
@@ -208,7 +212,8 @@ const RepeaterFieldListItem: React.FC<Props> = ({
               />
             </InputWrapper>
         </RepeaterItem>
-      ))}
+        );
+        })};
       <DeleteButton z={0} colorSchema="neutral" color={validColorSchema} block onClick={removeItem}>
         <DeleteButtonText color={validColorSchema}>Ta bort</DeleteButtonText>
       </DeleteButton>
