@@ -14,6 +14,7 @@ it("calls the callback function when an available date is clicked", () => {
     <DayPicker
       startDate={mockStartDate}
       availableDates={mockAvailableDates}
+      selectedDate={undefined}
       onDateSelected={mockCallback}
     />
   );
@@ -31,6 +32,7 @@ it("doesn't call the callback function when an unavailable date is clicked", () 
     <DayPicker
       startDate={mockStartDate}
       availableDates={mockAvailableDates}
+      selectedDate={undefined}
       onDateSelected={mockCallback}
     />
   );

@@ -1,14 +1,15 @@
 import { storiesOf } from "@storybook/react-native";
 import React, { useState } from "react";
 import { View } from "react-native";
-import { H1 } from "../../atoms/Heading/Heading";
+import Heading from "../../atoms/Heading";
 import DayPicker from "./DayPicker";
 import StoryWrapper from "../StoryWrapper";
 
-const StoryDayPicker = () => {
-  const [selectedDate, setSelectedDate] = useState("None");
+const storyStartDate = "2018-04-08";
 
-  const startDate = "2018-04-08";
+const StoryDayPicker: React.FC<{ startDate: string }> = ({ startDate }) => {
+  const [selectedDate, setSelectedDate] = useState("");
+
   const availableDates = [
     "2018-04-13",
     "2018-04-19",
@@ -20,17 +21,19 @@ const StoryDayPicker = () => {
     "2018-06-30",
     "2018-07-04",
   ];
+
   const callback = (dateString) => setSelectedDate(dateString);
 
   return (
     <View>
       <View style={{ padding: 20 }}>
-        <H1>Selected date: {selectedDate}</H1>
+        <Heading type="h1">Selected date: {selectedDate || "None"}</Heading>
       </View>
       <DayPicker
         startDate={startDate}
         availableDates={availableDates}
-        onDateSelected={(dateString) => callback(dateString)}
+        selectedDate={selectedDate}
+        onDateSelected={callback}
       />
     </View>
   );
@@ -38,12 +41,12 @@ const StoryDayPicker = () => {
 
 storiesOf("Date picker", module).add("Predetermined date", () => (
   <StoryWrapper>
-    <StoryDayPicker />
+    <StoryDayPicker startDate={storyStartDate} />
   </StoryWrapper>
 ));
 
 storiesOf("Date picker", module).add("Today", () => (
   <StoryWrapper>
-    <DayPicker availableDates={[]} onDateSelected={() => true} />
+    <StoryDayPicker startDate={undefined} />
   </StoryWrapper>
 ));
