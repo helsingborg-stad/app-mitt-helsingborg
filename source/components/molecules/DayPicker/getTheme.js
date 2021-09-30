@@ -1,5 +1,5 @@
 export default (theme) => {
-  const colors = {
+  const color = {
     selectedBackground: theme.colors.primary.red[0],
     selectedText: theme.colors.neutrals[7],
     availableBackground: theme.colors.complementary.red[2],
@@ -12,33 +12,33 @@ export default (theme) => {
   const dayStyles = {
     availableStyle: {
       container: {
-        backgroundColor: colors.availableBackground,
+        backgroundColor: color.availableBackground,
         borderRadius: 10,
         width: "90%",
       },
       text: {
-        color: colors.availableText,
+        color: color.availableText,
       },
     },
     selectedStyle: {
       container: {
-        backgroundColor: colors.selectedBackground,
+        backgroundColor: color.selectedBackground,
         borderRadius: 10,
         width: "90%",
       },
       text: {
-        color: colors.selectedText,
+        color: color.selectedText,
       },
     },
     todayStyle: {
       container: {
         width: "90%",
         borderWidth: 2,
-        borderColor: colors.todayBorder,
+        borderColor: color.todayBorder,
         borderRadius: 10,
       },
       text: {
-        color: colors.todayText,
+        color: color.todayText,
         left: -1,
         top: -1,
       },
@@ -48,8 +48,8 @@ export default (theme) => {
   const calendarTheme = {
     arrowColor: "black",
     textDayFontWeight: "600",
-    textDisabledColor: colors.disabledText,
-    textSectionTitleColor: colors.disabledText,
+    textDisabledColor: color.disabledText,
+    textSectionTitleColor: color.disabledText,
   };
 
   return { dayStyles, calendarTheme };
