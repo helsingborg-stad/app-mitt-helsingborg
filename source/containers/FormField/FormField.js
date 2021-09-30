@@ -28,6 +28,7 @@ import PdfViewer from '../../components/molecules/PdfViewer/PdfViewer';
  * blurEvent: if the component can be blurred, this is the name of the corresponding prop, typically 'onBlur'
  * helpInComponent: set to true if the component has a help button 'inside', where the help should go instead of in the label.
  * helpProp: the name of the prop where the help object should be sent, typically just 'help'.
+ * onMountEvent: The event that triggers when the input is mounted
  * props: additional props to send into the generated component
  */
 const inputTypes = {
@@ -57,6 +58,7 @@ const inputTypes = {
       showErrorMessage: false,
       hidden: true,
     },
+    onMountEvent: 'onMount'
   },
   date: {
     component: CalendarPicker,
@@ -164,6 +166,7 @@ const FormField = ({
   onChange,
   onBlur,
   onFocus,
+  onMount,
   value,
   answers,
   validationErrors,
@@ -183,6 +186,10 @@ const FormField = ({
   const onInputBlur = (value, fieldId = id) => {
     if (onBlur) onBlur({ [fieldId]: value }, fieldId);
   };
+
+  const onInputMount = (value, fieldId = id) => {
+    if (onMount) onMount({[fieldId]: value}, fieldId);
+  }
 
   const onInputFocus = (e, isSelect = false) => {
     if (onFocus) {
@@ -211,6 +218,7 @@ const FormField = ({
   if (input && input.blurEvent) inputCompProps[input.blurEvent] = onInputBlur;
   if (input && input.focusEvent) inputCompProps[input.focusEvent] = onInputFocus;
   if (input && input.helpInComponent) inputCompProps[input.helpProp || 'help'] = help;
+  if (input && input.onMountEvent) inputCompProps[input.onMountEvent] = onInputMount;
 
   const inputComponent =
     input && input.component ? (
@@ -272,6 +280,8 @@ FormField.propTypes = {
   /** What happens when an input field looses focus.  */
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,
+
+  onMount: PropTypes.func,
   /**
    * sets the value, since the input field component should be managed.
    */
