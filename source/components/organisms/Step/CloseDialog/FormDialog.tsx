@@ -24,7 +24,7 @@ const DIALOG_TEMPLATES: {
     ],
   },
   subStep: {
-    title: 'Vill du stänga ner utan att spara?',
+    title: 'Vill du stänga fönster utan att spara inmatad uppgift?',
     body: '',
     buttons: [
       {
