@@ -10,7 +10,7 @@ import {
 } from "./EncryptionService";
 import Button from "../../components/atoms/Button";
 import StorageService from "../StorageService";
-import { getStoredSymmetricKey } from "./EncryptionHelper";
+import { EncryptionException, getStoredSymmetricKey } from "./EncryptionHelper";
 import { AnsweredForm } from "../../types/Case";
 import { EncryptionType } from "../../types/Encryption";
 
@@ -45,6 +45,22 @@ const reactNativeAesDemo = () => {
 
 const runTerminalDemo = () => {
   reactNativeAesDemo();
+};
+
+const testEncryptionException = async () => {
+  await StorageService.clearData();
+
+  try {
+    await decryptWithAesKey({ personalNumber: "196912191118" }, "");
+  } catch (error) {
+    console.log("caught error:", error);
+    console.log(
+      "is EncryptionException?:",
+      error instanceof EncryptionException
+    );
+    console.log("message:", error.message);
+    console.log("serialized:", JSON.stringify(error));
+  }
 };
 
 const printPublicKeyResult = (user, form) => {
@@ -126,6 +142,16 @@ storiesOf("EncryptionService", module).add("Terminal demo", (props) => (
           onClick={testSymmetricKeySetup}
         >
           <Text>Run symmetric key demo</Text>
+        </Button>
+      </Flex>
+      <Flex>
+        <Button
+          block
+          variant="outlined"
+          colorSchema="blue"
+          onClick={testEncryptionException}
+        >
+          <Text>Run Exception test</Text>
         </Button>
       </Flex>
     </FlexContainer>
