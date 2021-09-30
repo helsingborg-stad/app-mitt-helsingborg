@@ -8,7 +8,6 @@ export enum ApplicationStatusType {
   ActiveSubmitted = "active:submitted",
   Closed = "closed",
   NotStarted = "notStarted",
-  ActiveSubmittedViva = "active:submitted:viva",
   ActiveCompletionRequiredViva = "active:completionRequired:viva",
   ClosedApprovedViva = "closed:approved:viva",
   ClosedCompletionRejectedViva = "closed:completionRejected:viva",
