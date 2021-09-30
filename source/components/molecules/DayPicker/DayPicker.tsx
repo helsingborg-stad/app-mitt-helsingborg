@@ -7,11 +7,11 @@ import localeConfig from "./localeConfig";
 LocaleConfig.locales.se = localeConfig;
 LocaleConfig.defaultLocale = "se";
 
-type DayPickerProps = {
+interface DayPickerProps {
   availableDates: string[];
   onDateSelected: (dateString: string) => void;
   startDate?: string;
-};
+}
 
 const DayPicker: React.FC<DayPickerProps> = ({
   availableDates,
