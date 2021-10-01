@@ -48,9 +48,8 @@ const runTerminalDemo = () => {
 };
 
 const testEncryptionException = async () => {
-  await StorageService.clearData();
-
   try {
+    await StorageService.clearData();
     await decryptWithAesKey({ personalNumber: "196912191118" }, "");
   } catch (error) {
     console.log("caught error:", error);
