@@ -44,8 +44,3 @@ export interface EncryptionDetails {
 export interface EncryptionExceptionInterface extends Error {
   status: EncryptionExceptionStatus;
 }
-
-export type EncryptionExceptionConstructor = new (
-  status: EncryptionExceptionStatus,
-  message: string
-) => EncryptionExceptionInterface;

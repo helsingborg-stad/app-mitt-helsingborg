@@ -1,6 +1,5 @@
 import { AnsweredForm } from "../../types/Case";
 import {
-  EncryptionExceptionConstructor,
   EncryptionExceptionInterface,
   EncryptionExceptionStatus,
 } from "../../types/Encryption";
@@ -10,9 +9,10 @@ export interface UserInterface {
   personalNumber: string;
 }
 
-export const EncryptionException: EncryptionExceptionConstructor = class EncryptionException
+export class EncryptionException
   extends Error
-  implements EncryptionExceptionInterface {
+  implements EncryptionExceptionInterface
+{
   status: EncryptionExceptionStatus = null;
 
   constructor(status: EncryptionExceptionStatus, message: string) {
@@ -24,7 +24,7 @@ export const EncryptionException: EncryptionExceptionConstructor = class Encrypt
     this.name = "EncryptionException";
     this.status = status;
   }
-};
+}
 
 export function getPublicKeyInForm(
   personalNumber: string,
