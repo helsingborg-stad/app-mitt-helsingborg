@@ -26,14 +26,14 @@ it("calls the callback function on button click", () => {
   const { getByText } = render(
     <CaseCard
       title={mockTitle}
-      onCardClick={mockCallback}
       showButton
+      onButtonClick={mockCallback}
       buttonText={mockButtonText}
     />
   );
 
-  const titleElement = getByText(mockButtonText);
-  fireEvent.press(titleElement);
+  const buttonElement = getByText(mockButtonText);
+  fireEvent.press(buttonElement);
 
   expect(mockCallback).toHaveBeenCalled();
 });
