@@ -15,6 +15,7 @@ import StorageService from "../StorageService";
 import { EncryptionException, getStoredSymmetricKey } from "./EncryptionHelper";
 import { AnsweredForm } from "../../types/Case";
 import { EncryptionType } from "../../types/Encryption";
+import deepCopyViaJson from "../../helpers/Objects";
 
 const Flex = styled.View`
   padding: 8px;
@@ -121,14 +122,14 @@ const testSymmetricKeySetup = async () => {
   await printSymmetricKeyResult(mainApplicantYlva, updatedForm);
 
   updatedForm = await encryptFormAnswers(mainApplicantYlva, updatedForm);
-  const encryptedFormCopy = JSON.parse(JSON.stringify(updatedForm));
+  const encryptedFormCopy = deepCopyViaJson(updatedForm);
 
   const { answers: decryptedAnswers1 } = await decryptFormAnswers(
     mainApplicantYlva,
     updatedForm
   );
 
-  const updatedFormCopy = JSON.parse(JSON.stringify(encryptedFormCopy));
+  const updatedFormCopy = deepCopyViaJson(encryptedFormCopy);
   const { answers: decryptedAnswers2 } = await decryptFormAnswers(
     coApplicantStina,
     updatedFormCopy
