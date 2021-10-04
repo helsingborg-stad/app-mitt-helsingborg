@@ -21,7 +21,7 @@ import {
 
 const { Aes } = NativeModules;
 
-async function generateAesKey(
+export async function generateAesKey(
   password: string,
   salt: string,
   cost: number,

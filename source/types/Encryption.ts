@@ -9,7 +9,7 @@ export enum EncryptionErrorStatus {
 }
 export type EncryptionExceptionStatus = EncryptionErrorStatus | null;
 
-interface AesModule {
+export interface AesModule {
   pbkdf2: (
     password: string,
     salt: string,
