@@ -1,10 +1,10 @@
-import React from 'react';
-import { storiesOf } from '@storybook/react-native';
-import styled from 'styled-components/native';
-import { Text } from '../../atoms';
-import StoryWrapper from '../StoryWrapper';
-import CaseCard from './CaseCard';
-import icons from '../../../helpers/Icons';
+import React from "react";
+import { storiesOf } from "@storybook/react-native";
+import styled from "styled-components/native";
+import { Text } from "../../atoms";
+import StoryWrapper from "../StoryWrapper";
+import CaseCard from "./CaseCard";
+import icons from "../../../helpers/Icons";
 
 const FlexContainer = styled.ScrollView`
   background-color: #fff;
@@ -18,23 +18,10 @@ const Title = styled(Text)`
   margin-bottom: 6px;
 `;
 
-storiesOf('Case Card', module)
-  .add('Overview examples', (props) => (
-    <StoryWrapper {...props}>
-      <OverviewExamples />
-    </StoryWrapper>
-  ))
-  .add('Summary examples', (props) => (
-    <StoryWrapper {...props}>
-      <SummaryExamples />
-    </StoryWrapper>
-  ));
-
 const OverviewExamples = () => (
   <FlexContainer>
     <Title>Öppet</Title>
     <CaseCard
-      onCardClick={() => {}}
       colorSchema="red"
       title="Ekonomiskt Bistånd"
       subtitle="Öppen"
@@ -46,7 +33,6 @@ const OverviewExamples = () => (
 
     <Title>Pågående</Title>
     <CaseCard
-      onCardClick={() => {}}
       colorSchema="red"
       title="Ekonomiskt Bistånd"
       subtitle="Pågående"
@@ -61,7 +47,6 @@ const OverviewExamples = () => (
 
     <Title>Inskickad</Title>
     <CaseCard
-      onCardClick={() => {}}
       colorSchema="red"
       title="Ekonomiskt Bistånd"
       subtitle="Inskickad"
@@ -72,7 +57,6 @@ const OverviewExamples = () => (
 
     <Title>Utbetald</Title>
     <CaseCard
-      onCardClick={() => {}}
       colorSchema="red"
       title="Ekonomiskt Bistånd"
       subtitle="Godkänd"
@@ -86,7 +70,6 @@ const OverviewExamples = () => (
 
     <Title>Delvis Godkänd</Title>
     <CaseCard
-      onCardClick={() => {}}
       colorSchema="red"
       title="Ekonomiskt Bistånd"
       subtitle="Delvis godkänd"
@@ -101,7 +84,6 @@ const OverviewExamples = () => (
 
     <Title>Avslagen</Title>
     <CaseCard
-      onCardClick={() => {}}
       colorSchema="red"
       title="Ekonomiskt Bistånd"
       subtitle="Avslagen"
@@ -118,7 +100,6 @@ const SummaryExamples = () => (
   <FlexContainer>
     <Title>Öppet</Title>
     <CaseCard
-      onCardClick={() => {}}
       colorSchema="red"
       title="Juni"
       subtitle="Öppen"
@@ -129,7 +110,6 @@ const SummaryExamples = () => (
 
     <Title>Öppet</Title>
     <CaseCard
-      onCardClick={() => {}}
       colorSchema="red"
       title="Juni"
       subtitle="Pågåenden"
@@ -143,7 +123,6 @@ const SummaryExamples = () => (
 
     <Title>Delvis Godkänd</Title>
     <CaseCard
-      onCardClick={() => {}}
       colorSchema="red"
       title="Juni"
       subtitle="Pågåenden"
@@ -158,3 +137,17 @@ const SummaryExamples = () => (
     />
   </FlexContainer>
 );
+
+storiesOf("Case Card", module)
+  .add("Overview examples", ({ style, kind, name, children }) => (
+    <StoryWrapper style={style} kind={kind} name={name}>
+      {children}
+      <OverviewExamples />
+    </StoryWrapper>
+  ))
+  .add("Summary examples", ({ style, kind, name, children }) => (
+    <StoryWrapper style={style} kind={kind} name={name}>
+      {children}
+      <SummaryExamples />
+    </StoryWrapper>
+  ));
