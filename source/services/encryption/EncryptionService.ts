@@ -68,7 +68,7 @@ export async function encryptWithSymmetricKey(
   const symmetricKey = await getStoredSymmetricKey(forms);
   const encryptedAnswers = await Aes.encrypt(
     plaintextAnswers,
-    symmetricKey.toString(16).padStart(64, "0"),
+    symmetricKey.toString(16).padStart(32, "0"),
     "003d8999f6a4bb9800ed24b5d1846523"
   );
   return encryptedAnswers;
@@ -128,7 +128,7 @@ export async function decryptWithSymmetricKey(
   const symmetricKey = await getStoredSymmetricKey(forms);
   const decryptedAnswersRaw = await Aes.decrypt(
     encryptedAnswers,
-    symmetricKey.toString(16).padStart(64, "0"),
+    symmetricKey.toString(16).padStart(32, "0"),
     "003d8999f6a4bb9800ed24b5d1846523"
   );
   return decryptedAnswersRaw;
