@@ -138,6 +138,21 @@ const SummaryExamples = () => (
   </FlexContainer>
 );
 
+const BookingExamples = () => (
+  <FlexContainer>
+    <Title>Bokning skapad</Title>
+    <CaseCard
+      colorSchema="red"
+      title={`Planerad insats: \nBoendestöd med Ditte`}
+      showBookingDate
+      bookingDate="Fredag 4 juni"
+      bookingTime="11:15 - 12:00"
+      showButton
+      buttonText="Boka om eller avboka"
+    />
+  </FlexContainer>
+);
+
 storiesOf("Case Card", module)
   .add("Overview examples", ({ style, kind, name, children }) => (
     <StoryWrapper style={style} kind={kind} name={name}>
@@ -149,5 +164,11 @@ storiesOf("Case Card", module)
     <StoryWrapper style={style} kind={kind} name={name}>
       {children}
       <SummaryExamples />
+    </StoryWrapper>
+  ))
+  .add("Booking examples", ({ style, kind, name, children }) => (
+    <StoryWrapper style={style} kind={kind} name={name}>
+      {children}
+      <BookingExamples />
     </StoryWrapper>
   ));
