@@ -10,7 +10,7 @@ interface Props {
   modalTitle?: string;
   visible: boolean;
   children: React.ReactChild | React.ReactChildren;
-  colorSchema?: "red" | "neutral" | undefined;
+  colorSchema?: "red" | "neutral";
   backButtonText?: string;
   onClose?: () => void;
   onBack?: () => void;

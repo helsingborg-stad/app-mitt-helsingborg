@@ -8,10 +8,10 @@ import { NavigatorContainer, IconContainer, ModalText } from "./styled";
 interface ModalNavigatorProps {
   color: string;
   textColor: string;
-  title: string | undefined;
-  backButtonText: string | undefined;
-  onBack: () => void | undefined;
-  onClose: () => void | undefined;
+  title?: string;
+  backButtonText?: string;
+  onBack?: () => void;
+  onClose?: () => void;
 }
 const ModalNavigator = (props: ModalNavigatorProps): JSX.Element => {
   const { color, textColor, title, backButtonText, onBack, onClose } = props;
@@ -53,6 +53,13 @@ const ModalNavigator = (props: ModalNavigatorProps): JSX.Element => {
       </IconContainer>
     </NavigatorContainer>
   );
+};
+
+ModalNavigator.defaultProps = {
+  title: undefined,
+  backButtonText: undefined,
+  onClose: undefined,
+  onBack: undefined,
 };
 
 export default ModalNavigator;
