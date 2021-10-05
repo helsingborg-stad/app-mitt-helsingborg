@@ -17,27 +17,34 @@ reactNative.NativeModules.Aes = {
     password: string,
     salt: string,
     cost: number,
-    length: number
+    lengthInBits: number
   ) => {
     const keyBuffer: Buffer = await new Promise((resolve, reject) => {
-      crypto.pbkdf2(password, salt, cost, length, "sha1", (err, buf) => {
-        if (err) reject(err);
-        else resolve(buf);
-      });
+      crypto.pbkdf2(
+        password,
+        salt,
+        cost,
+        lengthInBits / 8,
+        "sha1",
+        (err, buf) => {
+          if (err) reject(err);
+          else resolve(buf);
+        }
+      );
     });
     return keyBuffer.toString("hex");
   },
   encrypt: async (text: string, key: string, iv: string) => {
     const keyBuffer = Buffer.from(key, "hex");
     const ivBuffer = Buffer.from(iv, "hex");
-    const cipher = crypto.createCipheriv("aes-128-cbc", keyBuffer, ivBuffer);
+    const cipher = crypto.createCipheriv("aes-256-cbc", keyBuffer, ivBuffer);
     const encrypted = cipher.update(text, "utf-8", "hex") + cipher.final("hex");
     return encrypted;
   },
   decrypt: async (ciphertext: string, key: string, iv: string) => {
     const keyBuffer = Buffer.from(key, "hex");
     const ivBuffer = Buffer.from(iv, "hex");
-    const cipher = crypto.createDecipheriv("aes-128-cbc", keyBuffer, ivBuffer);
+    const cipher = crypto.createDecipheriv("aes-256-cbc", keyBuffer, ivBuffer);
     const encrypted =
       cipher.update(ciphertext, "hex", "utf-8") + cipher.final("utf-8");
     return encrypted;
@@ -47,9 +54,9 @@ reactNative.NativeModules.Aes = {
     hmac.update(ciphertext);
     return hmac.digest("hex");
   },
-  randomKey: async (length: number) => {
+  randomKey: async (lengthInBytes: number) => {
     const buffer: Buffer = await new Promise((resolve, reject) => {
-      crypto.randomBytes(length, (err, buf) => {
+      crypto.randomBytes(lengthInBytes, (err, buf) => {
         if (err) reject(err);
         else resolve(buf);
       });
