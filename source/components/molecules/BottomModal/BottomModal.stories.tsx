@@ -56,7 +56,7 @@ const OverviewExamples = () => {
         <Children />
       </BottomModal>
 
-      <Text type="h5">With buck button text</Text>
+      <Text type="h5">With back button text</Text>
       <Button onPress={() => handleOnCLick("3")} title="open modal" />
       <BottomModal
         visible={showModal["3"]}
