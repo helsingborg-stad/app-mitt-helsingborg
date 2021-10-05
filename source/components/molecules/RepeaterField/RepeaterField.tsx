@@ -27,6 +27,7 @@ interface Props {
   value: string | Record<string, string | number>[];
   onChange: (answers: Record<string, any> | string | number, fieldId?: string) => void;
   onBlur?: (answers: Record<string, any> | string | number, fieldId?: string) => void;
+  onAddAnswer?: (answers: Record<string, any> | string | number, fieldId?: string) => void;
   colorSchema: PrimaryColor;
   error?: Record<string, {isValid: boolean, validationMessage: string}>[];
   maxRows?: number;
@@ -40,7 +41,7 @@ function isRecordArray(value: string | Record<string,string|number>[]): value is
  * Repeater field component, for adding multiple copies of a particular kind of input.
  * The input-prop specifies the form of each input-group.
  */
-const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChange, onBlur, colorSchema, value, error, maxRows }) => {
+const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChange, onBlur, onAddAnswer, colorSchema, value, error, maxRows }) => {
   const [localAnswers, setLocalAnswers] = useState( isRecordArray(value) ? value : emptyInput);
 
   const changeFromInput = (index: number) => (input: InputRow) => (text: string) => {
@@ -81,6 +82,10 @@ const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChan
     const updatedAnswers = [...localAnswers, newAnswers];
     onChange(updatedAnswers);
     setLocalAnswers(updatedAnswers);
+    if (onAddAnswer) {
+      console.log("updatedAnswers", updatedAnswers)
+      onAddAnswer(updatedAnswers);
+    }
   };
 
   const validColorSchema = getValidColorSchema(colorSchema);
@@ -105,7 +110,7 @@ const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChan
   return (
     <Fieldset legend={heading} colorSchema={validColorSchema} empty={listItems.length === 0}>
        {listItems}
-      <AddButton onClick={addAnswer} colorSchema={"green"} block variant="outlined" disabled={maxRows && listItems.length >= maxRows}>
+      <AddButton onClick={addAnswer} colorSchema="green" block variant="outlined" disabled={maxRows && listItems.length >= maxRows}>
         <Icon name="add" color="green" />
         <Text>{addButtonText || 'Lägg till'}</Text>
       </AddButton>
