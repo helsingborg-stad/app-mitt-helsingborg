@@ -7,7 +7,7 @@ import CaseCard from "..";
 const mockTitle = "mockTitle";
 const mockButtonText = "mockButtonText";
 
-it("calls the callback function on card click", () => {
+it("calls the callback function on case card click", () => {
   const mockCallback = jest.fn();
 
   const { getByText } = render(
@@ -20,7 +20,7 @@ it("calls the callback function on card click", () => {
   expect(mockCallback).toHaveBeenCalled();
 });
 
-it("calls the callback function on button click", () => {
+it("calls the callback function on case card button click", () => {
   const mockCallback = jest.fn();
 
   const { getByText } = render(
