@@ -143,7 +143,8 @@ const BookingExamples = () => (
     <Title>Bokning skapad</Title>
     <CaseCard
       colorSchema="red"
-      title={`Planerad insats: \nBoendestöd med Ditte`}
+      title="Planerad insats:"
+      largeSubtitle="Boendestöd med Ditte"
       showBookingDate
       bookingDate="Fredag 4 juni"
       bookingTime="11:15 - 12:00"
