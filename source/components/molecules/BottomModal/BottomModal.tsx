@@ -6,6 +6,11 @@ import ModalNavigator from "./ModalNavigator";
 
 import { ModalContentContainer } from "./styled";
 
+const SWIPE_DIRECTION = {
+  DOWN: "down",
+  NONE: undefined,
+};
+
 interface Props {
   modalTitle?: string;
   visible: boolean;
@@ -28,7 +33,7 @@ const BottomModal = (props: Props): JSX.Element => {
 
   const theme = useContext(ThemeContext);
 
-  const swipeDirection = onClose ? "down" : undefined;
+  const swipeDirection = onClose ? SWIPE_DIRECTION.DOWN : SWIPE_DIRECTION.NONE;
 
   const navigatorColor =
     colorSchema === "neutral" ? "white" : theme.colors.primary.red[1];
