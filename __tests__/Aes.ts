@@ -78,7 +78,7 @@ describe("Aes", () => {
     expect(typeof newKey).toBe("string");
 
     const buff = Buffer.from(newKey, "hex");
-    expect(buff).toHaveLength(16);
+    expect(buff.byteLength).toBe(16);
   });
 
   it("produces a SHA1 hash", async () => {
@@ -124,6 +124,8 @@ describe("Aes", () => {
       testPBKDF2Rounds,
       testPBKDF2Length
     );
+    const buff = Buffer.from(derivedKey, "hex");
     expect(derivedKey).toBe(testPBKDF2Digest);
+    expect(buff.byteLength).toBe(testPBKDF2Length);
   });
 });
