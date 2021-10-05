@@ -87,6 +87,7 @@ const Form: React.FC<Props> = ({
     handleInputChange,
     handleSubmit,
     handleBlur,
+    handleAddAnswer,
     validateStepAnswers,
   } = useForm(initialState);
 
@@ -214,6 +215,7 @@ const Form: React.FC<Props> = ({
           onSubmit={() => handleSubmit(onSubmit)}
           onFieldChange={handleInputChange}
           onFieldBlur={handleBlur}
+          onAddAnswer={handleAddAnswer}
           updateCaseInContext={updateCaseInContext}
           onFieldMount={handleInputChange}
           currentPosition={formState.currentPosition}

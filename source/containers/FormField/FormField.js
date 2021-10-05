@@ -130,6 +130,7 @@ const inputTypes = {
     focusEvent: 'onFocus',
     blurEvent: 'onBlur',
     changeEvent: 'onChange',
+    onAddAnswerEvent: 'onAddAnswer',
     props: {},
   },
   card: {
@@ -167,6 +168,7 @@ const FormField = ({
   onBlur,
   onFocus,
   onMount,
+  onAddAnswer,
   value,
   answers,
   validationErrors,
@@ -197,6 +199,12 @@ const FormField = ({
     }
   };
 
+  const onInputAddAnswer = (values, fieldId = id) => {
+    const answerValues = {[fieldId]: values};
+    console.log("on add answer", answerValues, "fieldId", fieldId)
+    if (onAddAnswer) onAddAnswer(answerValues, fieldId)
+  }
+
   const inputProps = input && input.props ? input.props : {};
   const initialValue =
     value === '' && Object.prototype.hasOwnProperty.call(input, 'initialValue')
@@ -219,6 +227,8 @@ const FormField = ({
   if (input && input.focusEvent) inputCompProps[input.focusEvent] = onInputFocus;
   if (input && input.helpInComponent) inputCompProps[input.helpProp || 'help'] = help;
   if (input && input.onMountEvent) inputCompProps[input.onMountEvent] = onInputMount;
+
+  if (input && inputType === 'repeaterField' && input.onAddAnswerEvent) inputCompProps[input.onAddAnswerEvent] = onInputAddAnswer;
 
   const inputComponent =
     input && input.component ? (

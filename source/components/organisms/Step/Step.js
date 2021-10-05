@@ -55,6 +55,7 @@ function Step({
   onFieldChange,
   onFieldBlur,
   onFieldMount,
+  onAddAnswer,
   isBackBtnVisible,
   updateCaseInContext,
   currentPosition,
@@ -215,6 +216,7 @@ function Step({
                         }
                         handleFocus(e, isSelect);
                       }}
+                      onAddAnswer={onAddAnswer}
                       {...field}
                     />
                   ))}
@@ -299,6 +301,11 @@ Step.propTypes = {
   
   onFieldMount: PropTypes.func,
   
+
+  /** The function to handle when a repeater field gets an answer added */
+
+  onAddAnswer: PropTypes.func,
+
   /*
    * A object with form navigation actions
    */

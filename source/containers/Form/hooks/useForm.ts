@@ -161,6 +161,12 @@ function useForm(initialState: FormReducerState) {
     dispatch({ type: 'UPDATE_ANSWER', payload: answer });
     dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId, checkIfDirty: true } });
   };
+  
+  const handleAddAnswer = (answer: Record<string, any>, questionId: string) => {
+    console.log("Handle add answer", answer, questionId)
+    dispatch({ type: 'DIRTY_FIELD', payload: { answer, id: questionId } });
+    dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId, checkIfDirty: true } });
+  }
 
   const formNavigation = {
     next: goToNextStep,
@@ -183,6 +189,7 @@ function useForm(initialState: FormReducerState) {
     handleInputChange,
     handleBlur,
     handleSubmit,
+    handleAddAnswer,
     validateStepAnswers,
   };
 }
