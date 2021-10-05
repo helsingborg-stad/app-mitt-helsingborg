@@ -46,6 +46,7 @@ const BottomModal = (props: Props): JSX.Element => {
       style={{ margin: 0, justifyContent: "flex-end" }}
       swipeDirection={swipeDirection}
       onSwipeComplete={onClose}
+      backdropTransitionOutTiming={0}
     >
       <ModalContentContainer>
         <ModalNavigator
