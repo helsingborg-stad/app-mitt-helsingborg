@@ -26,7 +26,7 @@ const NavigatorContainer = styled.View<ModalTopContainerProps>`
 `;
 
 interface IconContainerProps {
-  flexDirection: "flex-end" | "flex-start";
+  flexDirection: string;
 }
 const IconContainer = styled.View<IconContainerProps>`
   width: 20%;
