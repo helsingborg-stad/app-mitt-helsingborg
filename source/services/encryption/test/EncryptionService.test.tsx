@@ -31,40 +31,9 @@ describe("EncryptionService", () => {
     "But that's what you want, isn't it? To destroy " +
     "yourself. But I won't give you that peace.";
 
-  const testPassword = "561b4c1fe4a11e72e73dff67e14de074";
-
-  const testEncryptedText =
-    "ca3cbbf71778df9851d9510f224703e8" +
-    "894fe27be61f390fb413f6a006d1f515" +
-    "d613c0bc39b2043e0c6179cb98adf601" +
-    "3dd3105041a99295b2b488b20e1d20ab" +
-    "afbd5082c04f8ff47445fd6f57d77bcc" +
-    "fd8639b8296e6859b5ed5fc92b6b73c9" +
-    "c2c8815098c53fbfab3762f785f47528" +
-    "90b77f6577e014a2ef1d73d9834d1c8e" +
-    "06034df07531818913e5db78a25926b6" +
-    "3680b51d5e7145bbd239ef2c82d96568" +
-    "3943fefaed512e88d8454e3c059e98a2" +
-    "039d729d16fb7c4d85a7f08e5f13d642" +
-    "e99b9e8331cfb5095d2702773aaa2c3e" +
-    "0647f3309bd58bc1841048331d83398c" +
-    "75d47f73f9c90e1b542352df63662a90" +
-    "27cf93ae5f043fd4152a043da306513f" +
-    "a01be5170d05dd5abc1b4442a054ae60" +
-    "52d9b6acb1b89e97c66a20c1d9500545" +
-    "8a7b425eb095f4418f64e4ed2c4e96dc" +
-    "3e57c99823f12f41ab2335164a4748aa" +
-    "c70c47c400c8d68fa4584dc0876958a7" +
-    "e2d2328cbafe30a1419076b8cedd488c" +
-    "6f8f8968d35c93c9a5d353eec4e613c5" +
-    "0d1405225f751c66e02fda9b5dcd0825" +
-    "97706edae83c5339448e35e0a642cf2f" +
-    "ef17d733d91f4e686d579dcc6d4a933f" +
-    "59d0a6200e912178b82e87881db2842b";
-
   const testUser: UserInterface = { personalNumber: "123456789000" };
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     try {
       await StorageService.clearData();
     } catch (e) {
