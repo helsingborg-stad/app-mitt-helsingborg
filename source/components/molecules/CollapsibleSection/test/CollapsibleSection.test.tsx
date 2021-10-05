@@ -29,7 +29,7 @@ it("renders the provided props (including children)", () => {
   expect(childTextElement).not.toBeNull();
 });
 
-it("calls the onPress when section is clicked", () => {
+it("calls the onPress callback when section is clicked", () => {
   const mockCallback = jest.fn();
 
   const { queryByText } = render(
