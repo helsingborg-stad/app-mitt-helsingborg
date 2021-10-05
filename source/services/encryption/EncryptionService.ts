@@ -21,6 +21,15 @@ import {
 
 const { Aes } = NativeModules;
 
+const Params = {
+  KEY_LENGTH: 16,
+  IV_LENGTH: 16,
+  SALT: "salt4D42bf960Sm1",
+  SYMMETRIC_IV: "003d8999f6a4bb9800ed24b5d1846523",
+  PBKDF2_ITERATIONS: 5000,
+  PBKDF2_LENGTH: 256,
+};
+
 export async function generateAesKey(
   password: string,
   salt: string,
@@ -39,16 +48,16 @@ export async function encryptWithAesKey(
   let aesEncryptor = await StorageService.getData(storageKeyword);
 
   if (!aesEncryptor) {
-    const password = await Aes.randomKey(16);
-    // Salt will be updated in future real.
+    const password = await Aes.randomKey(Params.KEY_LENGTH);
+
     const aesKey = await generateAesKey(
       password,
-      "salt4D42bf960Sm1",
-      5000,
-      256
+      Params.SALT,
+      Params.PBKDF2_ITERATIONS,
+      Params.PBKDF2_LENGTH
     );
 
-    const initializationVector = await Aes.randomKey(16);
+    const initializationVector = await Aes.randomKey(Params.IV_LENGTH);
 
     aesEncryptor = { aesKey, initializationVector };
     await StorageService.saveData(storageKeyword, aesEncryptor);
@@ -69,7 +78,7 @@ export async function encryptWithSymmetricKey(
   const encryptedAnswers = await Aes.encrypt(
     plaintextAnswers,
     symmetricKey.toString(16).padStart(32, "0"),
-    "003d8999f6a4bb9800ed24b5d1846523"
+    Params.SYMMETRIC_IV
   );
   return encryptedAnswers;
 }
@@ -129,7 +138,7 @@ export async function decryptWithSymmetricKey(
   const decryptedAnswersRaw = await Aes.decrypt(
     encryptedAnswers,
     symmetricKey.toString(16).padStart(32, "0"),
-    "003d8999f6a4bb9800ed24b5d1846523"
+    Params.SYMMETRIC_IV
   );
   return decryptedAnswersRaw;
 }
