@@ -130,8 +130,6 @@ const ImageUploader: React.FC<Props> = ({ buttonText, value: images, answers, on
       const rawImages = await ImagePicker.openPicker({
         multiple: true,
         mediaType: 'photo',
-        width: 800,
-        height: 800,
         includeBase64: false,
         compressImageQuality: 0.8,
         writeTempFile: true,
