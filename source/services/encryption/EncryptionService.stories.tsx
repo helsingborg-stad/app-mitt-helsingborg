@@ -140,8 +140,7 @@ const testSymmetricKeySetup = async () => {
   console.log("decrypted (applicant)", decryptedAnswers1);
   console.log("decrypted (co-applicant)", decryptedAnswers2);
 
-  console.log("Cleaning up...");
-  console.log("Removing any stored symmetric keys.");
+  console.log("Removing any stored symmetric keys");
   await StorageService.clearData();
   console.log("\nTEST END");
 };
