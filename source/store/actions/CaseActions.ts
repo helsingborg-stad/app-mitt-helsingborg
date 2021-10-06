@@ -1,13 +1,16 @@
-import { get, post, put } from '../../helpers/ApiRequest';
-import { convertAnswersToArray } from '../../helpers/CaseDataConverter';
-import { decryptFormAnswers, encryptFormAnswers } from '../../services/encryption';
+import { get, post, put } from "../../helpers/ApiRequest";
+import { convertAnswersToArray } from "../../helpers/CaseDataConverter";
+import {
+  decryptFormAnswers,
+  encryptFormAnswers,
+} from "../../services/encryption";
 
 export const actionTypes = {
-  updateCase: 'UPDATE_CASE',
-  createCase: 'CREATE_CASE',
-  deleteCase: 'DELETE_CASE',
-  fetchCases: 'FETCH_CASE',
-  apiError: 'API_ERROR',
+  updateCase: "UPDATE_CASE",
+  createCase: "CREATE_CASE",
+  deleteCase: "DELETE_CASE",
+  fetchCases: "FETCH_CASE",
+  apiError: "API_ERROR",
 };
 
 export async function updateCase(
@@ -27,11 +30,14 @@ export async function updateCase(
     answers: convertAnswersToArray(answerObject, formQuestions),
     currentPosition,
     currentFormId: formId,
-    encryption: { type: 'decrypted' },
+    encryption: { type: "decrypted" },
   };
 
   if (encryptAnswers) {
-    updateCaseRequestBody = await encryptFormAnswers(user, updateCaseRequestBody);
+    updateCaseRequestBody = await encryptFormAnswers(
+      user,
+      updateCaseRequestBody
+    );
   }
 
   if (signature?.success) {
@@ -39,7 +45,10 @@ export async function updateCase(
   }
 
   try {
-    const res = await put(`/cases/${caseId}`, JSON.stringify(updateCaseRequestBody));
+    const res = await put(
+      `/cases/${caseId}`,
+      JSON.stringify(updateCaseRequestBody)
+    );
     const { id, attributes } = res.data.data;
     const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
     if (callback) {
@@ -61,20 +70,25 @@ export async function updateCase(
 export async function createCase(form, callback) {
   const body = {
     provider: form.provider,
-    statusType: 'notStarted',
+    statusType: "notStarted",
     currentFormId: form.id,
     forms: {
       [form.id]: {
         answers: [],
-        currentPosition: { index: 0, level: 0, currentMainStep: 1, currentMainStepIndex: 0 },
-        encryption: { type: 'decrypted' },
+        currentPosition: {
+          index: 0,
+          level: 0,
+          currentMainStep: 1,
+          currentMainStepIndex: 0,
+        },
+        encryption: { type: "decrypted" },
       },
     },
     details: {},
   };
 
   try {
-    const response = await post('/cases', JSON.stringify(body));
+    const response = await post("/cases", JSON.stringify(body));
     const newCase = response.data.data;
     const flattenedNewCase = {
       id: newCase.id,
@@ -88,7 +102,7 @@ export async function createCase(form, callback) {
       payload: flattenedNewCase,
     };
   } catch (error) {
-    console.log('create case api error', error);
+    console.log("create case api error", error);
     return {
       type: actionTypes.apiError,
       payload: error,
@@ -105,18 +119,27 @@ export function deleteCase(caseId) {
 
 export async function fetchCases(user) {
   try {
-    const response = await get('/cases');
+    const response = await get("/cases");
     if (response?.data?.data?.attributes?.cases) {
       const cases = {};
 
       // eslint-disable-next-line no-restricted-syntax
       for await (const c of response.data.data.attributes.cases) {
-        if (c?.status.type === 'active:ongoing' || c?.status.type === 'active:signature:pending') {
+        if (
+          c?.status.type === "active:ongoing" ||
+          c?.status.type === "active:signature:pending"
+        ) {
           try {
-            c.forms[c.currentFormId] = await decryptFormAnswers(user, c.forms[c.currentFormId]);
+            c.forms[c.currentFormId] = await decryptFormAnswers(
+              user,
+              c.forms[c.currentFormId]
+            );
             cases[c.id] = c;
           } catch (e) {
-            console.log(`Failed to decrypt answers (Case ID: ${c?.id}), Error: `, e);
+            console.log(
+              `Failed to decrypt answers (Case ID: ${c?.id}), Error: `,
+              e
+            );
           }
         } else {
           cases[c.id] = c;
