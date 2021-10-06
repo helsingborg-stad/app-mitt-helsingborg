@@ -1,4 +1,3 @@
-import { NativeModules } from "react-native";
 import deepCopyViaJson from "../../../helpers/Objects";
 import { AnsweredForm } from "../../../types/Case";
 import {
