@@ -140,7 +140,7 @@ describe("EncryptionService", () => {
           mainApplicantYlva.personalNumber
         ];
 
-      expect(mainApplicantKey).toBeTruthy();
+      expect(typeof mainApplicantKey).toBe("number");
     }
 
     const coApplicantForm = await setupSymmetricKey(
@@ -154,8 +154,8 @@ describe("EncryptionService", () => {
       const coApplicantKey =
         coApplicantForm.encryption.publicKeys[coApplicantStina.personalNumber];
 
-      expect(mainApplicantKey).toBeTruthy();
-      expect(coApplicantKey).toBeTruthy();
+      expect(typeof mainApplicantKey).toBe("number");
+      expect(typeof coApplicantKey).toBe("number");
     }
 
     const mainApplicantSecondForm = await setupSymmetricKey(
@@ -171,8 +171,8 @@ describe("EncryptionService", () => {
       coApplicantForm
     );
 
-    expect(mainApplicantSymmetricKey).toBeTruthy();
-    expect(coApplicantSymmetricKey).toBeTruthy();
+    expect(typeof mainApplicantSymmetricKey).toBe("number");
+    expect(typeof coApplicantSymmetricKey).toBe("number");
     expect(mainApplicantSymmetricKey).toEqual(coApplicantSymmetricKey);
 
     const { answers: encryptedAnswers } = await encryptFormAnswers(
