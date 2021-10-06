@@ -213,7 +213,7 @@ const RepeaterFieldListItem: React.FC<Props> = ({
             </InputWrapper>
         </RepeaterItem>
         );
-        })};
+        })}
       <DeleteButton z={0} colorSchema="neutral" color={validColorSchema} block onClick={removeItem}>
         <DeleteButtonText color={validColorSchema}>Ta bort</DeleteButtonText>
       </DeleteButton>
