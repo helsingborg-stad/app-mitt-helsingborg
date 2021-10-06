@@ -89,7 +89,7 @@ describe("EncryptionService", () => {
     expect(decryptedForm.encryption.type).toBe(EncryptionType.DECRYPTED);
   });
 
-  it("sets up symmetric key encryption", async () => {
+  it("generates public/symmetric keys (multi-user encryption)", async () => {
     const mainApplicantYlva: UserInterface = {
       personalNumber: "196912191118",
     };
