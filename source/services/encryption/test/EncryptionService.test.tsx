@@ -1,5 +1,5 @@
 import deepCopyViaJson from "../../../helpers/Objects";
-import { AnsweredForm } from "../../../types/Case";
+import { AnsweredForm, EncryptedAnswersWrapper } from "../../../types/Case";
 import {
   EncryptionErrorStatus,
   EncryptionType,
@@ -17,6 +17,16 @@ import {
   encryptWithAesKey,
   setupSymmetricKey,
 } from "../EncryptionService";
+
+function assertIsEncryptedAnswers(answers: unknown): void {
+  expect(answers).toBeInstanceOf(Object);
+  expect(answers).toHaveProperty("encryptedAnswers");
+
+  const answersType = typeof (answers as EncryptedAnswersWrapper)
+    .encryptedAnswers;
+
+  expect(answersType).toBe("string");
+}
 
 describe("EncryptionService", () => {
   const testText =
@@ -77,7 +87,7 @@ describe("EncryptionService", () => {
       deepCopyViaJson(testForm) as AnsweredForm
     );
 
-    expect(encryptedForm.answers).toBeInstanceOf(Object);
+    assertIsEncryptedAnswers(encryptedForm.answers);
     expect(encryptedForm.encryption.type).toBe(EncryptionType.PRIVATE_AES_KEY);
 
     const decryptedForm = await decryptFormAnswers(
@@ -170,7 +180,7 @@ describe("EncryptionService", () => {
       mainApplicantSecondForm
     );
 
-    expect(encryptedAnswers).toBeInstanceOf(Object);
+    assertIsEncryptedAnswers(encryptedAnswers);
     expect(mainApplicantSecondForm.encryption.type).toBe(
       EncryptionType.SYMMETRIC_KEY
     );
