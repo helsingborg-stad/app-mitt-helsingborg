@@ -1,9 +1,12 @@
 import { get, post, put } from "../../helpers/ApiRequest";
 import { convertAnswersToArray } from "../../helpers/CaseDataConverter";
+import deepCopyViaJson from "../../helpers/Objects";
 import {
   decryptFormAnswers,
   encryptFormAnswers,
 } from "../../services/encryption";
+import { UserInterface } from "../../services/encryption/EncryptionHelper";
+import { ApplicationStatusType, Case } from "../../types/Case";
 
 export const actionTypes = {
   updateCase: "UPDATE_CASE",
@@ -117,34 +120,50 @@ export function deleteCase(caseId) {
   };
 }
 
-export async function fetchCases(user) {
+export async function fetchCases(user: UserInterface): Promise<any> {
   try {
     const response = await get("/cases");
-    if (response?.data?.data?.attributes?.cases) {
-      const cases = {};
+    const rawCases: Case[] = response?.data?.data?.attributes?.cases;
+    if (rawCases) {
+      const cases = await rawCases.reduce(
+        async (pendingProcessedCases, rawCase) => {
+          const processedCases = await pendingProcessedCases;
+          const {
+            currentFormId,
+            status: { type: statusType },
+          } = rawCase;
 
-      // eslint-disable-next-line no-restricted-syntax
-      for await (const c of response.data.data.attributes.cases) {
-        if (
-          c?.status.type === "active:ongoing" ||
-          c?.status.type === "active:signature:pending"
-        ) {
-          try {
-            c.forms[c.currentFormId] = await decryptFormAnswers(
-              user,
-              c.forms[c.currentFormId]
-            );
-            cases[c.id] = c;
-          } catch (e) {
-            console.log(
-              `Failed to decrypt answers (Case ID: ${c?.id}), Error: `,
-              e
-            );
+          if (
+            statusType === ApplicationStatusType.ACTIVE_ONGOING ||
+            statusType === ApplicationStatusType.ACTIVE_SIGNATURE_PENDING
+          ) {
+            try {
+              const currentForm = rawCase.forms[currentFormId];
+              const decryptedForm = await decryptFormAnswers(user, currentForm);
+              const decryptedCase = {
+                ...deepCopyViaJson(rawCase),
+                [currentFormId]: decryptedForm,
+              };
+
+              return {
+                ...processedCases,
+                [rawCase.id]: decryptedCase,
+              };
+            } catch (e) {
+              console.log(
+                `Failed to decrypt answers (Case ID: ${rawCase?.id}), Error: `,
+                e
+              );
+            }
           }
-        } else {
-          cases[c.id] = c;
-        }
-      }
+
+          return {
+            ...processedCases,
+            [rawCase.id]: rawCase,
+          };
+        },
+        Promise.resolve({})
+      );
 
       return {
         type: actionTypes.fetchCases,
