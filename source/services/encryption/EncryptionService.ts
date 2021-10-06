@@ -1,9 +1,5 @@
 import { NativeModules } from "react-native";
-import {
-  Answer,
-  AnsweredForm,
-  EncryptedAnswersWrapper,
-} from "../../types/Case";
+import { AnsweredForm, EncryptedAnswersWrapper } from "../../types/Case";
 import { EncryptionErrorStatus, EncryptionType } from "../../types/Encryption";
 
 import StorageService from "../StorageService";
