@@ -1,3 +1,4 @@
+import getException from "../../../../.jest/helpers";
 import deepCopyViaJson from "../../../helpers/Objects";
 import { AnsweredForm, EncryptedAnswersWrapper } from "../../../types/Case";
 import {
@@ -51,15 +52,15 @@ describe("EncryptionService", () => {
   });
 
   it("throws EncryptionException", async () => {
-    let error: EncryptionException = null;
-    try {
-      await decryptWithAesKey({ personalNumber: "123456789000" }, "");
-    } catch (e) {
-      error = e;
-    }
+    const func = () =>
+      decryptWithAesKey({ personalNumber: "123456789000" }, "");
+
+    const error = await getException(func);
 
     expect(error).toBeInstanceOf(EncryptionException);
-    expect(error.status).toEqual(EncryptionErrorStatus.MISSING_AES_KEY);
+    expect((error as EncryptionException).status).toEqual(
+      EncryptionErrorStatus.MISSING_AES_KEY
+    );
   });
 
   it("encrypts/decrypts with Aes", async () => {
