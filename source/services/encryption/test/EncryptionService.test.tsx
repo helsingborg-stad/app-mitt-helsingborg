@@ -56,6 +56,7 @@ describe("EncryptionService", () => {
   it("encrypts/decrypts with Aes", async () => {
     const encrypted = await encryptWithAesKey(testUser, testText);
     const decrypted = await decryptWithAesKey(testUser, encrypted);
+
     expect(decrypted).toBe(testText);
   });
 
@@ -76,6 +77,7 @@ describe("EncryptionService", () => {
       testUser,
       deepCopyViaJson(testForm) as AnsweredForm
     );
+
     expect(encryptedForm.answers).toBeInstanceOf(Object);
     expect(encryptedForm.encryption.type).toBe(EncryptionType.PRIVATE_AES_KEY);
 
@@ -83,6 +85,7 @@ describe("EncryptionService", () => {
       testUser,
       deepCopyViaJson(encryptedForm)
     );
+
     expect(decryptedForm.answers).toEqual(testForm.answers);
     expect(decryptedForm.encryption.type).toBe(EncryptionType.DECRYPTED);
   });
@@ -127,6 +130,7 @@ describe("EncryptionService", () => {
         mainApplicantFirstForm.encryption.publicKeys[
           mainApplicantYlva.personalNumber
         ];
+
       expect(mainApplicantKey).toBeTruthy();
     }
 

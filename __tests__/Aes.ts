@@ -68,39 +68,47 @@ describe("Aes", () => {
 
   it("generates random key", async () => {
     const newKey = await Aes.randomKey(32);
+
     expect(typeof newKey).toBe("string");
 
     const buff = Buffer.from(newKey, "hex");
+
     expect(buff.byteLength).toBe(32);
   });
 
   it("produces a SHA1 hash", async () => {
     const hash = await Aes.sha1(testText);
+
     expect(hash).toBe(testSHA1Digest);
   });
 
   it("produces a SHA256 hash", async () => {
     const hash = await Aes.sha256(testText);
+
     expect(hash).toBe(testSHA256Digest);
   });
 
   it("produces a SHA512 hash", async () => {
     const hash = await Aes.sha512(testText);
+
     expect(hash).toBe(testSHA512Digest);
   });
 
   it("produces a HMAC256 digest", async () => {
     const digest = await Aes.hmac256(testText, testKey);
+
     expect(digest).toBe(testHMACDigest);
   });
 
   it("encrypts", async () => {
     const encrypted = await Aes.encrypt(testText, testKey, testIV);
+
     expect(encrypted).toBe(testEncryptedText);
   });
 
   it("decrypts", async () => {
     const decrypted = await Aes.decrypt(testEncryptedText, testKey, testIV);
+
     expect(decrypted).toBe(testText);
   });
 
@@ -112,6 +120,7 @@ describe("Aes", () => {
       testPBKDF2Length
     );
     const buff = Buffer.from(derivedKey, "hex");
+
     expect(derivedKey).toBe(testPBKDF2Digest);
     expect(buff.byteLength).toBe(testPBKDF2Length / 8);
   });
