@@ -163,6 +163,7 @@ describe("EncryptionService", () => {
 
     expect(mainApplicantSymmetricKey).toBeTruthy();
     expect(coApplicantSymmetricKey).toBeTruthy();
+    expect(mainApplicantSymmetricKey).toEqual(coApplicantSymmetricKey);
 
     const { answers: encryptedAnswers } = await encryptFormAnswers(
       mainApplicantYlva,
