@@ -138,8 +138,8 @@ android {
         applicationId "com.mitthelsingborg"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 29
+        versionName "1.0.1"
     }
     splits {
         abi {
@@ -192,7 +192,7 @@ android {
 
         }
     }
-    
+
     packagingOptions {
         pickFirst 'lib/x86/libc++_shared.so'
         pickFirst 'lib/x86_64/libjsc.so'
