@@ -31,6 +31,7 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Deploy](#deploy)
+  - [Android](#android)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
@@ -54,7 +55,6 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
 - [Node.js and NPM](https://nodejs.org/en/download/package-manager/)
 - [React Native Development Environment](https://reactnative.dev/docs/environment-setup/)
 - [Eslint](https://helsingborg-stad.github.io/dev-guide/docs/development/linters/eslint.html)
@@ -89,8 +89,46 @@ react-native run-android
 
 ## Deploy
 
-Instructions for deploys.
+### Android
 
+#### Add upload key
+To be able to sign the app you need to add an upload key to the project.
+1. Open **1Password** app and enter vault: **Mitt Helsingborg**.
+2. Download `mitt-helsingborg-upload-key.keystore`.
+3. Place the `mitt-helsingborg-upload-key.keystore` file under the `android/app` directory in your project folder.
+4. Create a `keystore.properties` file:
+```sh
+cd android && cp example.keystore.properties keystore.properties
+```
+5. Add passwords to `keystore.properties`. The passwords are stored in `1Password ➡ Mitt Helsingborg ➡ mitt-helsingborg-upload-key.keystore` under *notes*.
+
+
+> **Important:** Make sure to never push mitt-helsingborg-upload-key.keystore or keystore.properties to Git.
+
+#### Generate AAB (Android App Bundle)
+
+Update gradle versions
+1. Open `android/app/build.gradle`
+2. Update **versionCode** by taking the latest published versionCode and increase it by 1. You can find previous uploaded versions at [Google Play Console](https://play.google.com/console).
+3. Update **versionName**. This is displayed publicly when downloading the app.
+4. Generate release AAB:
+```sh
+cd android
+./gradlew bundleRelease
+```
+
+The generated AAB can be found under `android/app/build/outputs/bundle/release/app.aab`.
+
+#### Test the release build
+Before uploading the release build to the Play Store, make sure you test it thoroughly. First uninstall any previous version of the app you already have installed.
+```sh
+npx react-native run-android --variant=release
+```
+
+#### Upload AAB to Google Play Console
+1. Go to [Google Play Console](https://play.google.com/console) and navigate to the project app.
+2. Click on **Production** in the menu.
+3. Click **Create New Release** button and follow the instructions.
 
 
 ## Roadmap
