@@ -11,9 +11,9 @@
   </a>
 </p>
 
-<h3>Mitt Helsingborg</h3>
-
 [![Mitt Helsingborg banner][product-screenshot]](https://example.com)
+
+<h3>Mitt Helsingborg</h3>
 
 <p>
    App for Helsingborg E-services.
@@ -107,7 +107,6 @@ cd android && cp example.keystore.properties keystore.properties
 
 #### Generate AAB (Android App Bundle)
 
-Update gradle versions
 1. Open `android/app/build.gradle`
 2. Update **versionCode** by taking the latest published versionCode and increase it by 1. You can find previous uploaded versions at [Google Play Console](https://play.google.com/console).
 3. Update **versionName**. This is displayed publicly when downloading the app.
@@ -167,4 +166,4 @@ Distributed under the [MIT License][license-url].
 [issues-url]: https://github.com/helsingborg-stad/app-mitt-helsingborg/issues
 [license-shield]: https://img.shields.io/github/license/helsingborg-stad/app-mitt-helsingborg.svg?style=flat-square
 [license-url]: https://raw.githubusercontent.com/helsingborg-stad/app-mitt-helsingborg/master/LICENSE
-[product-screenshot]: hbg-github-banner.png
+[product-screenshot]: hbg-github-banner.jpg
