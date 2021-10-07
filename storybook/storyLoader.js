@@ -27,6 +27,7 @@ function loadStories() {
   require("../source/components/molecules/DateTimePicker/DateTimePickerForm.stories");
   require("../source/components/molecules/DayPicker/DayPicker.stories");
   require("../source/components/molecules/EditableList/EditableList.stories");
+  require("../source/components/molecules/FloatingButton/FloatingButton.stories");
   require("../source/components/molecules/GroupedList/GroupedList.stories");
   require("../source/components/molecules/Header/Header.stories");
   require("../source/components/molecules/HelpButton/HelpButton.stories");
@@ -52,6 +53,7 @@ function loadStories() {
   require("../source/containers/FormField/FormField.stories");
   require("../source/helpers/error-handler/ErrorHandler.stories");
   require("../source/services/encryption/EncryptionService.stories");
+  require("../source/services/FormAbuseService.stories");
 }
 
 const stories = [
@@ -78,6 +80,7 @@ const stories = [
   "../source/components/molecules/DateTimePicker/DateTimePickerForm.stories",
   "../source/components/molecules/DayPicker/DayPicker.stories",
   "../source/components/molecules/EditableList/EditableList.stories",
+  "../source/components/molecules/FloatingButton/FloatingButton.stories",
   "../source/components/molecules/GroupedList/GroupedList.stories",
   "../source/components/molecules/Header/Header.stories",
   "../source/components/molecules/HelpButton/HelpButton.stories",
@@ -103,6 +106,7 @@ const stories = [
   "../source/containers/FormField/FormField.stories",
   "../source/helpers/error-handler/ErrorHandler.stories",
   "../source/services/encryption/EncryptionService.stories",
+  "../source/services/FormAbuseService.stories",
 ];
 
 module.exports = {
