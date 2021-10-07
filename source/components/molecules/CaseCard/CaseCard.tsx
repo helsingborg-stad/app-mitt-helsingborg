@@ -53,8 +53,8 @@ interface CaseCardProps {
   largeSubtitle?: string;
   description?: string;
   icon?: ImageSourcePropType;
-  onCardClick?: () => void;
   colorSchema?: string;
+  onCardClick?: () => void;
   showProgress?: boolean;
   currentStep?: number;
   totalSteps?: number;
@@ -72,25 +72,25 @@ interface CaseCardProps {
 }
 
 const CaseCard = ({
-  colorSchema,
-  icon,
   title,
-  largeSubtitle,
   subtitle,
+  largeSubtitle,
   description,
+  icon,
+  colorSchema = "red",
   onCardClick,
-  showProgress,
+  showProgress = false,
   currentStep,
   totalSteps,
-  showButton,
+  showButton = false,
   buttonText,
   buttonIconName,
   onButtonClick,
-  showPayments,
+  showPayments = false,
   approvedAmount,
   declinedAmount,
   givedate,
-  showBookingDate,
+  showBookingDate = false,
   bookingDate,
   bookingTime,
 }: CaseCardProps): JSX.Element => (
@@ -144,28 +144,5 @@ const CaseCard = ({
     </Card.Body>
   </Card>
 );
-
-CaseCard.defaultProps = {
-  icon: undefined,
-  subtitle: undefined,
-  largeSubtitle: undefined,
-  description: undefined,
-  colorSchema: "red",
-  onCardClick: undefined,
-  showProgress: false,
-  currentStep: undefined,
-  totalSteps: undefined,
-  showButton: false,
-  buttonText: undefined,
-  buttonIconName: undefined,
-  onButtonClick: undefined,
-  showPayments: false,
-  approvedAmount: undefined,
-  declinedAmount: undefined,
-  givedate: undefined,
-  showBookingDate: false,
-  bookingDate: undefined,
-  bookingTime: undefined,
-};
 
 export default CaseCard;
