@@ -100,7 +100,7 @@ To be able to sign the app you need to add an upload key to the project.
 ```sh
 cd android && cp example.keystore.properties keystore.properties
 ```
-5. Add passwords to `keystore.properties`. The passwords are stored in `1Password ➡ Mitt Helsingborg ➡ mitt-helsingborg-upload-key.keystore` under *notes*.
+5. Update `keystore.properties` with passwords.
 
 
 > **Important:** Make sure to never push mitt-helsingborg-upload-key.keystore or keystore.properties to Git.
