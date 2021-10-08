@@ -1,13 +1,10 @@
 import React from "react";
-import { Text, View } from "react-native";
 import { storiesOf } from "@storybook/react-native";
 import styled from "styled-components/native";
-import { ScrollView } from "react-native-gesture-handler";
 import StoryWrapper from "../StoryWrapper";
 import FloatingButton from "./FloatingButton";
 
 const dummyCallback = () => true;
-const buttonIconName = "add";
 
 const Container = styled.View`
   width: 100%;
@@ -40,19 +37,19 @@ storiesOf("FloatingButton", module)
         </Scroller>
       </Container>
       <FloatingButton
-        onClick={dummyCallback}
+        onPress={dummyCallback}
         type="icon"
         iconName="add"
         position="right"
       />
       <FloatingButton
-        onClick={dummyCallback}
+        onPress={dummyCallback}
         type="icon"
         iconName="clear"
         position="center"
       />
       <FloatingButton
-        onClick={dummyCallback}
+        onPress={dummyCallback}
         type="icon"
         iconName="refresh"
         position="left"
@@ -66,6 +63,6 @@ storiesOf("FloatingButton", module)
           <TextDisplay>{veryLongText}</TextDisplay>
         </Scroller>
       </Container>
-      <FloatingButton onClick={dummyCallback} type="text" text="Boka möte" />
+      <FloatingButton onPress={dummyCallback} type="text" text="Boka möte" />
     </StoryWrapper>
   ));
