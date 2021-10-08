@@ -7,7 +7,7 @@ import { ButtonContainer, ButtonText } from "./styled";
 
 interface FloatingButtonProps {
   type: "icon" | "text";
-  onClick: () => void;
+  onPress: () => void;
   colorSchema?: "red" | "neutral";
   text?: string;
   iconName?: string;
@@ -16,7 +16,7 @@ interface FloatingButtonProps {
 
 const FloatingButton = ({
   type,
-  onClick,
+  onPress,
   colorSchema = "red",
   text,
   iconName,
@@ -27,7 +27,7 @@ const FloatingButton = ({
   return (
     <ButtonContainer
       testID="floatingButton"
-      onPress={onClick}
+      onPress={onPress}
       underlayColor={theme.colors.neutrals[4]}
       colorSchema={colorSchema}
       position={position}

@@ -10,7 +10,7 @@ it("calls the callback function on floating button click", () => {
   const mockCallback = jest.fn();
 
   const { getByText } = render(
-    <FloatingButton onClick={mockCallback} type="text" text={mockButtonText} />
+    <FloatingButton onPress={mockCallback} type="text" text={mockButtonText} />
   );
 
   const buttonElement = getByText(mockButtonText);
