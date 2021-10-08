@@ -3,11 +3,13 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import { Animated, Easing, RefreshControl } from 'react-native';
 import styled from 'styled-components/native';
 import { useFocusEffect } from '@react-navigation/native';
-import { Modal } from 'app/components/molecules/Modal';
+import { Modal, useModal } from 'app/components/molecules/Modal';
 
 import Wrapper from 'app/components/molecules/Dialog/Wrapper';
+import Heading from 'app/components/atoms/Heading';
 import Body from 'app/components/molecules/Dialog/Body';
 import BackgroundBlur from 'app/components/molecules/Dialog/BackgroundBlur';
+import Button from 'app/components/atoms/Button';
 import icons from '../../helpers/Icons';
 import { Text } from '../../components/atoms';
 import { Card, CaseCard, Header, ScreenWrapper } from '../../components/molecules';
@@ -18,11 +20,34 @@ import { convertDataToArray, calculateSum } from '../../helpers/FormatVivaData';
 import AuthContext from '../../store/AuthContext';
 import { put } from '../../helpers/ApiRequest';
 
+const ButtonContainer = styled.View`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 25px;
+  width: 100%;
+`;
+
+const PopupButton = styled(Button)`
+  border: 0;
+  margin-bottom: 12px;
+`;
+
 const Container = styled.ScrollView`
   flex: 1;
   padding-left: 16px;
   padding-right: 16px;
 `;
+
+const DialogContainer = styled(Body)`
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+`;
+
+
 
 const ListHeading = styled(Text)`
   margin-left: 4px;
@@ -41,8 +66,10 @@ const colorSchema = 'red';
  * @param {obj} caseData
  * @param {obj} navigation
  * @param {obj} authContext
+ * @param {object?} extra Extra properties
+ * @param {function?} extra.toggleCoApplicantModal Function to run in order to toggle the co-applicant modal
  */
-const computeCaseCardComponent = (caseData, navigation, authContext) => {
+const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const currentStep =
     caseData?.forms?.[caseData.currentFormId]?.currentPosition?.currentMainStep || 0;
   const totalSteps = caseData.form?.stepStructure ? caseData.form.stepStructure.length : 0;
@@ -72,8 +99,6 @@ const computeCaseCardComponent = (caseData, navigation, authContext) => {
     (person) => person.personalNumber === authContext.user.personalNumber
   );
   
-  console.log("caseData", caseData)
-
   const statusType = caseData?.status?.type || '';
   const isNotStarted = statusType.includes('notStarted');
   const isOngoing = statusType.includes('ongoing');
@@ -85,10 +110,6 @@ const computeCaseCardComponent = (caseData, navigation, authContext) => {
   const isCoApplicant = casePersonData?.role === 'coApplicant';
 
   const isWaitingForCoApplicantSign = !!caseData?.forms[caseData.currentFormId].encryption.symmetricKeyName
-
-  console.log("isWaitingForCoApplicantSign", isWaitingForCoApplicantSign)
-
-  //  case.forms[case.currentFormId].encryption.symmetricKeyName
 
   const shouldShowCTAButton = isCoApplicant
     ? isWaitingForSign && !selfHasSigned
@@ -108,7 +129,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext) => {
 
     if (isWaitingForCoApplicantSign) {
       buttonProps.onClick = () => {
-        console.log("Waiting for sign");
+        if (extra && extra.toggleCoApplicantModal) extra.toggleCoApplicantModal()
       }
     }
   }
@@ -179,6 +200,8 @@ function CaseOverview(props) {
   const { cases, getCasesByFormIds, fetchCases } = useContext(CaseState);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
+
+  const [showCoSignModal, toggleShowCoSignModal] = useModal();
 
   const authContext = useContext(AuthContext);
 
@@ -293,17 +316,29 @@ function CaseOverview(props) {
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
       <Modal
-        visible
-        hide={() => {}}
+        visible={!showCoSignModal}
+        hide={() => toggleShowCoSignModal()}
         transparent
         presentationStyle="overFullScreen"
         animationType="fade"
         statusBarTranslucent
       >
       <Wrapper>
-        <Body>
-          <Text>Hello World</Text>
-        </Body>
+        <DialogContainer>
+          <Heading type='h4'>Bekräftelse behövs</Heading>
+          <Text align='center'>
+            För att starta ansökan måste [medsökandes namn] bekräfta att ni söker tillsammans.
+            [Medsökandes namn] bekräftar genom att logga in i appen Mitt Helsingborg.
+          </Text>
+          <ButtonContainer>
+          <PopupButton onClick={() => toggleShowCoSignModal()} block colorSchema="red">
+            <Text>Okej</Text>
+          </PopupButton>
+          <PopupButton onClick={() => toggleShowCoSignModal()} block colorSchema="neutral">
+            <Text>Avbryt</Text>
+          </PopupButton>
+          </ButtonContainer>
+        </DialogContainer>
         <BackgroundBlur blurType="light" blurAmount={15} reducedTransparencyFallbackColor="white" />
       </Wrapper>
     </Modal>
@@ -312,7 +347,7 @@ function CaseOverview(props) {
         {activeCases.length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             {activeCases.map((caseData) =>
-              computeCaseCardComponent(caseData, navigation, authContext)
+              computeCaseCardComponent(caseData, navigation, authContext, { toggleCoApplicantModal: toggleShowCoSignModal })
             )}
           </Animated.View>
         )}
