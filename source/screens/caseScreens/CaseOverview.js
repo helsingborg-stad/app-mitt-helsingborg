@@ -1,9 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Animated, Easing, RefreshControl } from 'react-native';
-import icons from 'source/helpers/Icons';
 import styled from 'styled-components/native';
 import { useFocusEffect } from '@react-navigation/native';
+import { Modal } from 'app/components/molecules/Modal';
+
+import Wrapper from 'app/components/molecules/Dialog/Wrapper';
+import Body from 'app/components/molecules/Dialog/Body';
+import BackgroundBlur from 'app/components/molecules/Dialog/BackgroundBlur';
+import icons from '../../helpers/Icons';
 import { Text } from '../../components/atoms';
 import { Card, CaseCard, Header, ScreenWrapper } from '../../components/molecules';
 import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
@@ -66,6 +71,8 @@ const computeCaseCardComponent = (caseData, navigation, authContext) => {
   const casePersonData = persons.find(
     (person) => person.personalNumber === authContext.user.personalNumber
   );
+  
+  console.log("caseData", caseData)
 
   const statusType = caseData?.status?.type || '';
   const isNotStarted = statusType.includes('notStarted');
@@ -76,6 +83,12 @@ const computeCaseCardComponent = (caseData, navigation, authContext) => {
   const isWaitingForSign = statusType.includes('active:signature:pending');
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === 'coApplicant';
+
+  const isWaitingForCoApplicantSign = !!caseData?.forms[caseData.currentFormId].encryption.symmetricKeyName
+
+  console.log("isWaitingForCoApplicantSign", isWaitingForCoApplicantSign)
+
+  //  case.forms[case.currentFormId].encryption.symmetricKeyName
 
   const shouldShowCTAButton = isCoApplicant
     ? isWaitingForSign && !selfHasSigned
@@ -92,6 +105,12 @@ const computeCaseCardComponent = (caseData, navigation, authContext) => {
 
   if (isNotStarted) {
     buttonProps.text = 'Starta ansökan';
+
+    if (isWaitingForCoApplicantSign) {
+      buttonProps.onClick = () => {
+        console.log("Waiting for sign");
+      }
+    }
   }
 
   if (isCompletionRequired) {
@@ -273,6 +292,21 @@ function CaseOverview(props) {
   return (
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
+      <Modal
+        visible
+        hide={() => {}}
+        transparent
+        presentationStyle="overFullScreen"
+        animationType="fade"
+        statusBarTranslucent
+      >
+      <Wrapper>
+        <Body>
+          <Text>Hello World</Text>
+        </Body>
+        <BackgroundBlur blurType="light" blurAmount={15} reducedTransparencyFallbackColor="white" />
+      </Wrapper>
+    </Modal>
       <Container refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <ListHeading type="h5">Aktiva</ListHeading>
         {activeCases.length > 0 && (
