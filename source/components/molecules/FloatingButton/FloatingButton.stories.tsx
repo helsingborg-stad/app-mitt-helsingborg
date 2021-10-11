@@ -45,12 +45,6 @@ storiesOf("FloatingButton", module)
       <FloatingButton
         onPress={dummyCallback}
         type="icon"
-        iconName="clear"
-        position="center"
-      />
-      <FloatingButton
-        onPress={dummyCallback}
-        type="icon"
         iconName="refresh"
         position="left"
       />
