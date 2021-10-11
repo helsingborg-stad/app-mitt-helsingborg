@@ -47,6 +47,9 @@ const DialogContainer = styled(Body)`
   padding: 32px;
 `;
 
+const StyledText = styled(Text)`
+  margin-bottom: 8px;
+`;
 
 
 const ListHeading = styled(Text)`
@@ -202,6 +205,7 @@ function CaseOverview(props) {
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
   const [showCoSignModal, toggleShowCoSignModal] = useModal();
+  const [showConfirmationThanksModal, toggleShowConfirmationThanksModal] = useModal();
 
   const authContext = useContext(AuthContext);
 
@@ -336,6 +340,32 @@ function CaseOverview(props) {
           </PopupButton>
           <PopupButton onClick={() => toggleShowCoSignModal()} block colorSchema="neutral">
             <Text>Avbryt</Text>
+          </PopupButton>
+          </ButtonContainer>
+        </DialogContainer>
+        <BackgroundBlur blurType="light" blurAmount={15} reducedTransparencyFallbackColor="white" />
+      </Wrapper>
+    </Modal>
+    <Modal
+        visible={!showConfirmationThanksModal}
+        hide={() => toggleShowConfirmationThanksModal()}
+        transparent
+        presentationStyle="overFullScreen"
+        animationType="fade"
+        statusBarTranslucent
+      >
+      <Wrapper>
+        <DialogContainer>
+          <Heading type='h4'>Tack, för din bekräftelse!</Heading>
+          <StyledText align='center'>
+            Genom att logga in har du bekräftat att du och [huvudsökandes namn] söker ekonomiskt bistånd tillsammans.
+          </StyledText>
+          <Text align='center'>
+            [Huvudsökandes namn] kan nu starta ansökan.
+          </Text>
+          <ButtonContainer>
+          <PopupButton onClick={() => toggleShowCoSignModal()} block colorSchema="red">
+            <Text>Okej</Text>
           </PopupButton>
           </ButtonContainer>
         </DialogContainer>
