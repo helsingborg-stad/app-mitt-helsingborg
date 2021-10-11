@@ -31,22 +31,24 @@ const ButtonContainer = styled.TouchableHighlight<ButtonProps>`
   elevation: 10;
   z-index: 10;
   ${({ position, type }) => {
-    if (type === "icon") {
-      if (position === "left") {
-        return `
+    // Text is always centered
+    if (type === "text") {
+      return `
+        margin-left: 5%;
+        margin-right: 5%;
+      `;
+    }
+    // Icons can be left or right-aligned
+    if (position === "left") {
+      return `
         left: 10px;
         right: auto;
       `;
-      }
-      return `
+    }
+    return `
         right: 10px;
         left: auto;
       `;
-    }
-    return `
-    margin-left: 5%;
-    margin-right: 5%;
-  `;
   }}
 `;
 
