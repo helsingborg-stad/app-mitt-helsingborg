@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 import { ThemeType } from "../../../styles/themeHelpers";
 
 interface ButtonProps {
-  position: "left" | "center" | "right" | "fill";
+  position: "left" | "right";
   theme: ThemeType;
   colorSchema: "red" | "neutral";
   type: "text" | "icon";
@@ -21,31 +21,32 @@ const ButtonContainer = styled.TouchableHighlight<ButtonProps>`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  position: relative;
-  margin-bottom: 10px;
-  margin-top: auto;
+  position: absolute;
+  bottom: 10px;
+  top: auto;
   shadow-offset: 0px 2px;
   shadow-color: black;
   shadow-opacity: 0.3;
   shadow-radius: 2px;
-  elevation: 1;
-  ${({ position }) => {
-    if (position === "left") {
-      return `
-        margin-left: 20px;
-        margin-right: auto;
+  elevation: 10;
+  z-index: 10;
+  ${({ position, type }) => {
+    if (type === "icon") {
+      if (position === "left") {
+        return `
+        left: 10px;
+        right: auto;
       `;
-    }
-    if (position === "right") {
+      }
       return `
-        margin-right: 20px;
-        margin-left: auto;
+        right: 10px;
+        left: auto;
       `;
     }
     return `
-      margin-left: auto;
-      margin-right: auto;      
-    `;
+    margin-left: 5%;
+    margin-right: 5%;
+  `;
   }}
 `;
 
