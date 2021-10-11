@@ -11,7 +11,7 @@ interface FloatingButtonProps {
   colorSchema?: "red" | "neutral";
   text?: string;
   iconName?: string;
-  position?: "left" | "center" | "right";
+  position?: "left" | "right";
 }
 
 const FloatingButton = ({
@@ -20,7 +20,7 @@ const FloatingButton = ({
   colorSchema = "red",
   text,
   iconName,
-  position = "center",
+  position = "right",
 }: FloatingButtonProps): JSX.Element => {
   const theme = useContext(ThemeContext);
 
