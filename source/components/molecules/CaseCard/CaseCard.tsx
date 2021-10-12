@@ -69,6 +69,7 @@ interface CaseCardProps {
   showBookingDate?: boolean;
   bookingDate?: string;
   bookingTime?: string;
+  buttonColorScheme?: string;
 }
 
 const CaseCard = ({
@@ -93,6 +94,7 @@ const CaseCard = ({
   showBookingDate = false,
   bookingDate,
   bookingTime,
+  buttonColorScheme = "red",
 }: CaseCardProps): JSX.Element => (
   <Card colorSchema={colorSchema}>
     <Card.Body shadow color="neutral" onPress={onCardClick}>
@@ -136,7 +138,7 @@ const CaseCard = ({
       )}
 
       {showButton && (
-        <Card.Button onClick={onButtonClick}>
+        <Card.Button onClick={onButtonClick} colorSchema={buttonColorScheme}>
           <Text>{buttonText}</Text>
           <Icon name={buttonIconName || "arrow-forward"} />
         </Card.Button>
