@@ -1,5 +1,5 @@
 import getException from "../../../../.jest/helpers";
-import deepCopyViaJson from "../../../helpers/Objects";
+import { deepCopyViaJson } from "../../../helpers/Objects";
 import { AnsweredForm, EncryptedAnswersWrapper } from "../../../types/Case";
 import {
   EncryptionErrorStatus,
