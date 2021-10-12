@@ -116,30 +116,13 @@ const computeCaseCardComponent = async (caseData, navigation, authContext, extra
   const currentForm = caseData?.forms[caseData.currentFormId];
 
   const hasCoApplicant = !!currentForm.encryption.symmetricKeyName;
-
-  
-
-  console.log("entries", currentForm.encryption.publicKeys)
-
   const isCoApplicantCaseOpen = await getStoredSymmetricKey(currentForm) !== 0; // @TODO: Change this to null instead of 0 later
-  const isWaitingForCoApplicantSign = currentForm.encryption.publicKeys && !Object.entries(currentForm.encryption.publicKeys).every(item => item[1] !== null);
   const selfNeedsToConfirm = isCoApplicant && currentForm.encryption.publicKeys[authContext.user.personalNumber] === null;
-  // const isWaitingForCoApplicantSign = true;
-
-  console.group("Form stuff");
-  console.table({
-    isCoApplicant,
-    hasCoApplicant,
-    isCoApplicantCaseOpen,
-    isWaitingForCoApplicantSign,
-    selfNeedsToConfirm,
-  })
-  console.log("form", caseData?.forms[caseData.currentFormId])
-  console.groupEnd();
+  const isWaitingForCoApplicantSign = currentForm.encryption.publicKeys && !Object.entries(currentForm.encryption.publicKeys).every(item => item[1] !== null);
 
 
   const shouldShowCTAButton = isCoApplicant
-    ? isWaitingForSign && !selfHasSigned
+    ? isWaitingForSign && !selfHasSigned || isWaitingForCoApplicantSign && selfNeedsToConfirm
     : isOngoing || isNotStarted || isCompletionRequired || isSigned;
 
   const buttonProps = {
@@ -165,9 +148,22 @@ const computeCaseCardComponent = async (caseData, navigation, authContext, extra
       cardProps.description = 'Din medsökande måste bekräfta...';
       buttonProps.colorSchema = 'neutral';
       buttonProps.onClick = () => {
-        if (extra && extra.toggleCoApplicantModal) extra.toggleCoApplicantModal()
+        if (extra && extra.toggleShowCoSignModal) extra.toggleShowCoSignModal()
+      }
+
+      if (selfNeedsToConfirm) {
+        cardProps.subtitle = 'Öppen';
+        cardProps.description = 'Din partner väntar på din bekräftelse';
+        buttonProps.colorSchema = 'red';
+        buttonProps.text = 'Bekräftar att jag söker ihop med någon';
+
+        buttonProps.onClick = () => {
+          if (extra && extra.toggleShowConfirmationThanksModal) extra.toggleShowConfirmationThanksModal()
+        }
       }
     }
+
+    
   }
 
   if (isCompletionRequired) {
@@ -358,7 +354,7 @@ function CaseOverview(props) {
     
     async function mapCards() {
       const activeCards = await Promise.all(activeCases.map((caseData) =>
-        computeCaseCardComponent(caseData, navigation, authContext, { toggleCoApplicantModal: toggleShowCoSignModal })
+        computeCaseCardComponent(caseData, navigation, authContext, { toggleShowCoSignModal, toggleShowConfirmationThanksModal })
       ));
       
       setActiveCaseCards(activeCards);
@@ -432,7 +428,7 @@ function CaseOverview(props) {
             [Huvudsökandes namn] kan nu starta ansökan.
           </Text>
           <ButtonContainer>
-          <PopupButton onClick={() => toggleShowCoSignModal()} block colorSchema="red">
+          <PopupButton onClick={() => toggleShowConfirmationThanksModal()} block colorSchema="red">
             <Text>Okej</Text>
           </PopupButton>
           </ButtonContainer>
