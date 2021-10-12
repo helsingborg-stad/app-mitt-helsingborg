@@ -15,7 +15,7 @@ import StorageService from "../StorageService";
 import { EncryptionException, getStoredSymmetricKey } from "./EncryptionHelper";
 import { AnsweredForm } from "../../types/Case";
 import { EncryptionType } from "../../types/Encryption";
-import deepCopyViaJson from "../../helpers/Objects";
+import { deepCopyViaJson } from "../../helpers/Objects";
 
 const Flex = styled.View`
   padding: 8px;
