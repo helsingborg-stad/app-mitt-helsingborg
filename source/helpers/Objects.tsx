@@ -18,3 +18,16 @@ export function filterAsync<T>(
     return newValues;
   }, Promise.resolve([] as T[]));
 }
+
+export async function deepCompareEquals(
+  first: unknown,
+  second: unknown
+): Promise<boolean> {
+  const firstJson = stringify(first);
+  const firstHash = await Aes.sha1(firstJson);
+
+  const secondJson = stringify(second);
+  const secondHash = await Aes.sha1(secondJson);
+
+  return firstHash === secondHash;
+}
