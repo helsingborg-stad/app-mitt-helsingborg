@@ -53,7 +53,6 @@ function loadStories() {
   require("../source/containers/FormField/FormField.stories");
   require("../source/helpers/error-handler/ErrorHandler.stories");
   require("../source/services/encryption/EncryptionService.stories");
-  require("../source/services/FormAbuseService.stories");
 }
 
 const stories = [
@@ -106,7 +105,6 @@ const stories = [
   "../source/containers/FormField/FormField.stories",
   "../source/helpers/error-handler/ErrorHandler.stories",
   "../source/services/encryption/EncryptionService.stories",
-  "../source/services/FormAbuseService.stories",
 ];
 
 module.exports = {
