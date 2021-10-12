@@ -10,6 +10,7 @@ import Heading from 'app/components/atoms/Heading';
 import Body from 'app/components/molecules/Dialog/Body';
 import BackgroundBlur from 'app/components/molecules/Dialog/BackgroundBlur';
 import Button from 'app/components/atoms/Button';
+import { getStoredSymmetricKey } from 'app/services/encryption/EncryptionHelper';
 import icons from '../../helpers/Icons';
 import { Text } from '../../components/atoms';
 import { Card, CaseCard, Header, ScreenWrapper } from '../../components/molecules';
@@ -72,7 +73,7 @@ const colorSchema = 'red';
  * @param {object?} extra Extra properties
  * @param {function?} extra.toggleCoApplicantModal Function to run in order to toggle the co-applicant modal
  */
-const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
+const computeCaseCardComponent = async (caseData, navigation, authContext, extra) => {
   const currentStep =
     caseData?.forms?.[caseData.currentFormId]?.currentPosition?.currentMainStep || 0;
   const totalSteps = caseData.form?.stepStructure ? caseData.form.stepStructure.length : 0;
@@ -112,7 +113,30 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === 'coApplicant';
 
-  const isWaitingForCoApplicantSign = !!caseData?.forms[caseData.currentFormId].encryption.symmetricKeyName
+  const currentForm = caseData?.forms[caseData.currentFormId];
+
+  const hasCoApplicant = !!currentForm.encryption.symmetricKeyName;
+
+  
+
+  console.log("entries", currentForm.encryption.publicKeys)
+
+  const isCoApplicantCaseOpen = await getStoredSymmetricKey(currentForm) !== 0; // @TODO: Change this to null instead of 0 later
+  const isWaitingForCoApplicantSign = currentForm.encryption.publicKeys && Object.entries(currentForm.encryption.publicKeys).every(item => item[1] !== null);
+  const selfNeedsToConfirm = isCoApplicant && currentForm.encryption.publicKeys[authContext.user.personalNumber] === null;
+  // const isWaitingForCoApplicantSign = true;
+
+  console.group("Form stuff");
+  console.table({
+    isCoApplicant,
+    hasCoApplicant,
+    isCoApplicantCaseOpen,
+    isWaitingForCoApplicantSign,
+    selfNeedsToConfirm,
+  })
+  console.log("form", caseData?.forms[caseData.currentFormId])
+  console.groupEnd();
+
 
   const shouldShowCTAButton = isCoApplicant
     ? isWaitingForSign && !selfHasSigned
@@ -157,6 +181,8 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
         true
       )}`
     : null;
+
+      console.log("return case card")
 
   return (
     <CaseCard
@@ -203,6 +229,9 @@ function CaseOverview(props) {
   const { cases, getCasesByFormIds, fetchCases } = useContext(CaseState);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
+
+  const [activeCaseCards, setActiveCaseCards] = useState([]);
+  const [closedCaseCards, setClosedCaseCards] = useState([]);
 
   const [showCoSignModal, toggleShowCoSignModal] = useModal();
   const [showConfirmationThanksModal, toggleShowConfirmationThanksModal] = useModal();
@@ -316,6 +345,39 @@ function CaseOverview(props) {
     }
   }, [pendingCaseSign, authContext.status, setPendingCaseSign, onRefresh, navigation]);
 
+  useEffect(() => {
+    console.log("mapping active cards!!!")
+    
+    async function mapCards() {
+      const activeCards = await Promise.all(activeCases.map((caseData) =>
+        computeCaseCardComponent(caseData, navigation, authContext, { toggleCoApplicantModal: toggleShowCoSignModal })
+      ));
+      
+      console.log("activeCards", activeCards);
+
+      setActiveCaseCards(activeCards);
+    }
+   
+    try {
+    mapCards();
+    } catch (e) {
+      console.log(e)
+    }
+  }, [onRefresh])
+
+  useEffect(() => {
+    async function mapCards() {
+      const closedCards = await Promise.all(closedCases.map((caseData) =>
+        computeCaseCardComponent(caseData, navigation, authContext)
+      ));
+
+
+      setClosedCaseCards(closedCards);
+    }
+   
+    mapCards();
+  }, [onRefresh])
+
   return (
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
@@ -376,9 +438,7 @@ function CaseOverview(props) {
         <ListHeading type="h5">Aktiva</ListHeading>
         {activeCases.length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
-            {activeCases.map((caseData) =>
-              computeCaseCardComponent(caseData, navigation, authContext, { toggleCoApplicantModal: toggleShowCoSignModal })
-            )}
+            {activeCaseCards}
           </Animated.View>
         )}
 
@@ -395,9 +455,7 @@ function CaseOverview(props) {
         {closedCases.length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             <ListHeading type="h5">Avslutade</ListHeading>
-            {closedCases.map((caseData) =>
-              computeCaseCardComponent(caseData, navigation, authContext)
-            )}
+            {closedCaseCards}
           </Animated.View>
         )}
       </Container>
