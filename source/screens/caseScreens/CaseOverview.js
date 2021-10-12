@@ -122,7 +122,7 @@ const computeCaseCardComponent = async (caseData, navigation, authContext, extra
   console.log("entries", currentForm.encryption.publicKeys)
 
   const isCoApplicantCaseOpen = await getStoredSymmetricKey(currentForm) !== 0; // @TODO: Change this to null instead of 0 later
-  const isWaitingForCoApplicantSign = currentForm.encryption.publicKeys && Object.entries(currentForm.encryption.publicKeys).every(item => item[1] !== null);
+  const isWaitingForCoApplicantSign = currentForm.encryption.publicKeys && !Object.entries(currentForm.encryption.publicKeys).every(item => item[1] !== null);
   const selfNeedsToConfirm = isCoApplicant && currentForm.encryption.publicKeys[authContext.user.personalNumber] === null;
   // const isWaitingForCoApplicantSign = true;
 
@@ -145,7 +145,13 @@ const computeCaseCardComponent = async (caseData, navigation, authContext, extra
   const buttonProps = {
     onClick: () => navigation.navigate('Form', { caseId: caseData.id }),
     text: '',
+    colorSchema: null,
   };
+
+  const cardProps = {
+    subtitle: caseData.status.name,
+    description: null,
+  }
 
   if (isOngoing) {
     buttonProps.text = 'Fortsätt';
@@ -155,6 +161,9 @@ const computeCaseCardComponent = async (caseData, navigation, authContext, extra
     buttonProps.text = 'Starta ansökan';
 
     if (isWaitingForCoApplicantSign) {
+      cardProps.subtitle = 'Väntar';
+      cardProps.description = 'Din medsökande måste bekräfta...';
+      buttonProps.colorSchema = 'neutral';
       buttonProps.onClick = () => {
         if (extra && extra.toggleCoApplicantModal) extra.toggleCoApplicantModal()
       }
@@ -182,16 +191,15 @@ const computeCaseCardComponent = async (caseData, navigation, authContext, extra
       )}`
     : null;
 
-      console.log("return case card")
-
   return (
     <CaseCard
       key={caseData.id}
       colorSchema={colorSchema}
       title={caseData.caseType.name}
-      subtitle={caseData.status.name}
+      subtitle={cardProps.subtitle}
       month={applicationPeriodMonth}
       largeSubtitle={applicationPeriodMonth}
+      description={cardProps.description}
       icon={icons[caseData.caseType.icon]}
       showButton={shouldShowCTAButton}
       buttonText={buttonProps.text}
@@ -212,6 +220,7 @@ const computeCaseCardComponent = async (caseData, navigation, authContext, extra
         });
       }}
       onButtonClick={buttonProps.onClick}
+      buttonColorScheme={buttonProps.colorSchema || colorSchema}
     />
   );
 };
@@ -346,15 +355,12 @@ function CaseOverview(props) {
   }, [pendingCaseSign, authContext.status, setPendingCaseSign, onRefresh, navigation]);
 
   useEffect(() => {
-    console.log("mapping active cards!!!")
     
     async function mapCards() {
       const activeCards = await Promise.all(activeCases.map((caseData) =>
         computeCaseCardComponent(caseData, navigation, authContext, { toggleCoApplicantModal: toggleShowCoSignModal })
       ));
       
-      console.log("activeCards", activeCards);
-
       setActiveCaseCards(activeCards);
     }
    
