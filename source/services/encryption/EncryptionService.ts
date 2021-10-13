@@ -205,10 +205,7 @@ export async function setupSymmetricKey(
     formsCopy.encryption.publicKeys[user.personalNumber] = ownPublicKey;
   }
 
-  if (
-    typeof ownPublicKey !== "undefined" &&
-    typeof otherUserPublicKey !== "undefined"
-  ) {
+  if (!!ownPublicKey && !!otherUserPublicKey) {
     const gotSymmetricKey = await generateSymmetricKey(
       user,
       formsCopy,
