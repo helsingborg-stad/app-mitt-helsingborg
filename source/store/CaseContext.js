@@ -1,13 +1,15 @@
-import React, { useContext, useReducer, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import AuthContext from './AuthContext';
-import CaseReducer, { initialState as defaultInitialState } from './reducers/CaseReducer';
+import React, { useContext, useReducer, useEffect, useCallback } from "react";
+import PropTypes from "prop-types";
+import AuthContext from "./AuthContext";
+import CaseReducer, {
+  initialState as defaultInitialState,
+} from "./reducers/CaseReducer";
 import {
   updateCase as update,
   createCase as create,
   deleteCase as remove,
   fetchCases as fetch,
-} from './actions/CaseActions';
+} from "./actions/CaseActions";
 
 const CaseState = React.createContext();
 const CaseDispatch = React.createContext();
@@ -18,10 +20,10 @@ const CaseDispatch = React.createContext();
  * */
 export const caseTypes = [
   {
-    name: 'Ekonomiskt Bistånd',
-    formTypes: ['EKB-recurring', 'EKB-completion', 'EKB-new'],
-    icon: 'ICON_EKB',
-    navigateTo: 'CaseSummary',
+    name: "Ekonomiskt Bistånd",
+    formTypes: ["EKB-recurring", "EKB-completion", "EKB-new"],
+    icon: "ICON_EKB",
+    navigateTo: "CaseSummary",
   },
 ];
 
@@ -99,7 +101,9 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   }, [user]);
 
   return (
-    <CaseState.Provider value={{ cases: state.cases, getCase, getCasesByFormIds, fetchCases }}>
+    <CaseState.Provider
+      value={{ cases: state.cases, getCase, getCasesByFormIds, fetchCases }}
+    >
       <CaseDispatch.Provider value={{ createCase, updateCase, deleteCase }}>
         {children}
       </CaseDispatch.Provider>
