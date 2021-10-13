@@ -26,6 +26,7 @@ export async function updateCase(
     currentPosition,
     formQuestions,
     encryptAnswers = true,
+    encryption,
   },
   callback
 ) {
@@ -33,7 +34,7 @@ export async function updateCase(
     answers: convertAnswersToArray(answerObject, formQuestions),
     currentPosition,
     currentFormId: formId,
-    encryption: { type: "decrypted" },
+    encryption,
   };
 
   if (encryptAnswers) {
