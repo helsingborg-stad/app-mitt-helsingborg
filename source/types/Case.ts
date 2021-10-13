@@ -17,6 +17,7 @@ export enum ApplicationStatusType {
 }
 
 export type PersonRole = "applicant" | "coApplicant" | "children";
+export type PossiblyEncryptedAnswers = Answer[] | EncryptedAnswersWrapper;
 
 export interface Administrator {
   email: string;
@@ -58,7 +59,7 @@ export interface FormPosition {
 }
 
 export interface AnsweredForm {
-  answers: Answer[] | EncryptedAnswersWrapper;
+  answers: PossiblyEncryptedAnswers;
   currentPosition: FormPosition;
   encryption: EncryptionDetails;
 }
