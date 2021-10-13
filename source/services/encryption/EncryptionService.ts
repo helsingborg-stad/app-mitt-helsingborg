@@ -37,6 +37,12 @@ const Params = {
   PBKDF2_LENGTH: 256,
 };
 
+export function answersAreEncrypted(
+  answers: PossiblyEncryptedAnswers
+): answers is EncryptedAnswersWrapper {
+  return !Array.isArray(answers);
+}
+
 export async function generateAesKey(
   password: string,
   salt: string,
@@ -94,23 +100,31 @@ export async function encryptFormAnswers(
   user: UserInterface,
   forms: AnsweredForm
 ): Promise<AnsweredForm> {
+  const canEncrypt = !answersAreEncrypted(forms.answers);
+
   const plaintextAnswers = JSON.stringify(forms.answers);
 
   const shouldUseSymmetricEncryption =
     forms.encryption.symmetricKeyName?.length > 0;
 
   if (shouldUseSymmetricEncryption) {
-    const encryptedAnswers = await encryptWithSymmetricKey(
-      forms,
-      plaintextAnswers
-    );
-    forms.answers = { encryptedAnswers };
+    if (canEncrypt) {
+      const encryptedAnswers = await encryptWithSymmetricKey(
+        forms,
+        plaintextAnswers
+      );
+      forms.answers = { encryptedAnswers };
+    }
+
     forms.encryption.type = EncryptionType.SYMMETRIC_KEY;
     return forms;
   }
 
-  const encryptedAnswers = await encryptWithAesKey(user, plaintextAnswers);
-  forms.answers = { encryptedAnswers };
+  if (canEncrypt) {
+    const encryptedAnswers = await encryptWithAesKey(user, plaintextAnswers);
+    forms.answers = { encryptedAnswers };
+  }
+
   forms.encryption.type = EncryptionType.PRIVATE_AES_KEY;
 
   return forms;
@@ -155,22 +169,27 @@ export async function decryptFormAnswers(
   forms: AnsweredForm
 ): Promise<AnsweredForm> {
   if (forms.encryption.type === EncryptionType.PRIVATE_AES_KEY) {
-    const { encryptedAnswers } = <EncryptedAnswersWrapper>forms.answers;
-    const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
+    if (answersAreEncrypted(forms.answers)) {
+      const { encryptedAnswers } = forms.answers;
+      const decryptedAnswers = await decryptWithAesKey(user, encryptedAnswers);
+      forms.answers = JSON.parse(decryptedAnswers);
+    }
 
-    forms.answers = JSON.parse(decryptedAnswers);
     forms.encryption.type = EncryptionType.DECRYPTED;
 
     return forms;
   }
 
   if (forms.encryption.type === EncryptionType.SYMMETRIC_KEY) {
-    const { encryptedAnswers } = <EncryptedAnswersWrapper>forms.answers;
-    const decryptedAnswersRaw = await decryptWithSymmetricKey(
-      forms,
-      encryptedAnswers
-    );
-    forms.answers = JSON.parse(decryptedAnswersRaw);
+    if (answersAreEncrypted(forms.answers)) {
+      const { encryptedAnswers } = <EncryptedAnswersWrapper>forms.answers;
+      const decryptedAnswersRaw = await decryptWithSymmetricKey(
+        forms,
+        encryptedAnswers
+      );
+
+      forms.answers = JSON.parse(decryptedAnswersRaw);
+    }
     forms.encryption.type = EncryptionType.DECRYPTED;
   }
 
