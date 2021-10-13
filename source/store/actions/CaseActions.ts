@@ -1,12 +1,24 @@
+import {
+  deserializeForm,
+  serializeForm,
+} from "../../services/encryption/EncryptionService";
 import { get, post, put } from "../../helpers/ApiRequest";
 import { convertAnswersToArray } from "../../helpers/CaseDataConverter";
-import deepCopyViaJson from "../../helpers/Objects";
+import {
+  deepCompareEquals,
+  deepCopyViaJson,
+  filterAsync,
+} from "../../helpers/Objects";
 import {
   decryptFormAnswers,
   encryptFormAnswers,
+  setupSymmetricKey,
 } from "../../services/encryption";
-import { UserInterface } from "../../services/encryption/EncryptionHelper";
-import { ApplicationStatusType, Case } from "../../types/Case";
+import {
+  getStoredSymmetricKey,
+  UserInterface,
+} from "../../services/encryption/EncryptionHelper";
+import { Case } from "../../types/Case";
 
 export const actionTypes = {
   updateCase: "UPDATE_CASE",
@@ -120,54 +132,166 @@ export function deleteCase(caseId) {
   };
 }
 
-export async function fetchCases(user: UserInterface): Promise<any> {
+async function checkSymmetricKeyExistsForCase(caseData: Case) {
+  const currentForm = caseData.forms[caseData.currentFormId];
+  const key = await getStoredSymmetricKey(currentForm);
+  return key !== null;
+}
+
+async function checkSymmetricKeyMissingForCase(caseData: Case) {
+  const exists = await checkSymmetricKeyExistsForCase(caseData);
+  return !exists;
+}
+
+function filterCasesWithoutSymmetricKey(cases: Case[]): Promise<Case[]> {
+  return filterAsync(cases, checkSymmetricKeyMissingForCase);
+}
+
+async function caseRequiresSync(caseData: Case): Promise<boolean> {
+  const currentForm = caseData.forms[caseData.currentFormId];
+  const usesSymmetricKey = currentForm.encryption.symmetricKeyName?.length > 0;
+
+  if (usesSymmetricKey) {
+    return checkSymmetricKeyMissingForCase(caseData);
+  }
+
+  return false;
+}
+
+async function updateCaseForSymmetricKey(
+  user: UserInterface,
+  caseData: Case
+): Promise<Case> {
+  const { currentFormId } = caseData;
+  const currentForm = caseData.forms[currentFormId];
+
+  const newForm = await setupSymmetricKey(user, currentForm);
+  const noChangesMade = await deepCompareEquals(currentForm, newForm);
+  const shouldUpdate = !noChangesMade;
+
+  if (shouldUpdate) {
+    const serializedForm = serializeForm(newForm);
+
+    const updateBody = {
+      currentFormId,
+      ...serializedForm,
+    };
+
+    const res = await put(`/cases/${caseData.id}`, JSON.stringify(updateBody));
+    const resCode = res.status;
+
+    if (resCode !== 200) {
+      const message = `${resCode}: ${res.data?.data?.message}`;
+      throw new Error(message);
+    }
+
+    return res.data.data.attributes;
+  }
+
+  return caseData;
+}
+
+function handleCasePollingError(error: Error) {
+  console.error("Error during case poll", error);
+}
+
+async function pollCasesForSymmetricSetup(
+  user: UserInterface,
+  cases: Case[]
+): Promise<void> {
+  const POLL_INTERVAL = 5000;
+
+  await Promise.all(
+    cases.map((caseData) => updateCaseForSymmetricKey(user, caseData))
+  );
+
+  await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL));
+
+  const response = await get("/cases");
+  const rawCases: Case[] = response?.data?.data?.attributes?.cases;
+
+  if (rawCases) {
+    const pollCasesIds = cases.map((caseData) => caseData.id);
+    const updatedPollingCases = rawCases.filter((caseData) =>
+      pollCasesIds.includes(caseData.id)
+    );
+
+    await Promise.all(
+      updatedPollingCases.map((caseData) =>
+        updateCaseForSymmetricKey(user, caseData)
+      )
+    );
+
+    const casesStillNeedingSync = await filterCasesWithoutSymmetricKey(
+      updatedPollingCases
+    );
+
+    if (casesStillNeedingSync.length > 0) {
+      pollCasesForSymmetricSetup(user, casesStillNeedingSync).catch(
+        handleCasePollingError
+      );
+    }
+  }
+}
+
+export async function fetchCases(user: UserInterface): Promise<unknown> {
   try {
     const response = await get("/cases");
     const rawCases: Case[] = response?.data?.data?.attributes?.cases;
     if (rawCases) {
-      const cases = await rawCases.reduce(
+      const readyCases = await rawCases.reduce(
         async (pendingProcessedCases, rawCase) => {
           const processedCases = await pendingProcessedCases;
-          const {
-            currentFormId,
-            status: { type: statusType },
-          } = rawCase;
+          const { currentFormId } = rawCase;
 
-          if (
-            statusType === ApplicationStatusType.ACTIVE_ONGOING ||
-            statusType === ApplicationStatusType.ACTIVE_SIGNATURE_PENDING
-          ) {
-            try {
-              const currentForm = rawCase.forms[currentFormId];
-              const decryptedForm = await decryptFormAnswers(user, currentForm);
-              const decryptedCase = {
-                ...deepCopyViaJson(rawCase),
+          try {
+            const currentForm = rawCase.forms[currentFormId];
+            const deserializedForm = deserializeForm(currentForm);
+            const decryptedForm = await decryptFormAnswers(
+              user,
+              deserializedForm
+            );
+
+            const rawCaseCopy = deepCopyViaJson(rawCase);
+            const decryptedCase = {
+              ...rawCaseCopy,
+              forms: {
+                ...rawCaseCopy.forms,
                 [currentFormId]: decryptedForm,
-              };
+              },
+            };
 
-              return {
-                ...processedCases,
-                [rawCase.id]: decryptedCase,
-              };
-            } catch (e) {
-              console.log(
-                `Failed to decrypt answers (Case ID: ${rawCase?.id}), Error: `,
-                e
-              );
-            }
+            return {
+              ...processedCases,
+              [rawCase.id]: decryptedCase,
+            };
+          } catch (e) {
+            console.log(
+              `Failed to decrypt answers (Case ID: ${rawCase?.id}), Error: `,
+              e
+            );
           }
 
-          return {
-            ...processedCases,
-            [rawCase.id]: rawCase,
-          };
+          return processedCases;
         },
         Promise.resolve({})
       );
 
+      const casesAwaitingSync = await filterAsync(rawCases, caseRequiresSync);
+
+      if (casesAwaitingSync.length > 0) {
+        pollCasesForSymmetricSetup(user, casesAwaitingSync).catch(
+          handleCasePollingError
+        );
+      }
+
+      casesAwaitingSync.forEach((unsyncedCase) => {
+        console.log("unsynced case", unsyncedCase.id, user.personalNumber);
+      });
+
       return {
         type: actionTypes.fetchCases,
-        payload: cases,
+        payload: readyCases,
       };
     }
   } catch (error) {
