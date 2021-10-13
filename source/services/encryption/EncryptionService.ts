@@ -232,6 +232,12 @@ export async function setupSymmetricKey(
     );
 
     await storeSymmetricKey(gotSymmetricKey, formsCopy);
+
+    console.log(
+      "generated symmetric key",
+      forms.encryption.symmetricKeyName,
+      user.personalNumber
+    );
   }
 
   return formsCopy;
