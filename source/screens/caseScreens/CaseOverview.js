@@ -384,7 +384,7 @@ function CaseOverview(props) {
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
       <Modal
-        visible={!showCoSignModal}
+        visible={showCoSignModal}
         hide={() => toggleShowCoSignModal()}
         transparent
         presentationStyle="overFullScreen"
@@ -411,7 +411,7 @@ function CaseOverview(props) {
       </Wrapper>
     </Modal>
     <Modal
-        visible={!showConfirmationThanksModal}
+        visible={showConfirmationThanksModal}
         hide={() => toggleShowConfirmationThanksModal()}
         transparent
         presentationStyle="overFullScreen"
