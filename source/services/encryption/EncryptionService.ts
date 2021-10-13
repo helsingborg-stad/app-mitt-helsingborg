@@ -1,6 +1,17 @@
+import { deepCopyViaJson } from "app/helpers/Objects";
 import { NativeModules } from "react-native";
-import { AnsweredForm, EncryptedAnswersWrapper } from "../../types/Case";
-import { EncryptionErrorStatus, EncryptionType } from "../../types/Encryption";
+import {
+  AnsweredForm,
+  EncryptedAnswersWrapper,
+  PossiblyEncryptedAnswers,
+} from "../../types/Case";
+import {
+  CryptoNumber,
+  EncryptionErrorStatus,
+  EncryptionType,
+  PossiblySerializedCryptoNumber,
+  SerializedCryptoNumber,
+} from "../../types/Encryption";
 
 import StorageService from "../StorageService";
 
@@ -208,4 +219,117 @@ export async function setupSymmetricKey(
   }
 
   return formsCopy;
+}
+
+function isCryptoNumber(
+  obj: PossiblySerializedCryptoNumber
+): obj is CryptoNumber {
+  return typeof obj === "number";
+}
+
+function isSerializedCryptoNumber(
+  obj: PossiblySerializedCryptoNumber
+): obj is SerializedCryptoNumber {
+  return typeof obj === "string";
+}
+
+export function serializeCryptoNumber(
+  number: CryptoNumber
+): SerializedCryptoNumber {
+  return number.toString();
+}
+
+export function deserializeCryptoNumber(
+  serializedNumber: SerializedCryptoNumber
+): CryptoNumber {
+  return Number(serializedNumber);
+}
+
+export function serializeCryptoNumberIfPossible(
+  number: PossiblySerializedCryptoNumber
+): SerializedCryptoNumber {
+  if (isCryptoNumber(number)) {
+    return serializeCryptoNumber(number);
+  }
+  return number;
+}
+
+export function deserializeCryptoNumberIfPossible(
+  number: PossiblySerializedCryptoNumber
+): CryptoNumber {
+  if (isSerializedCryptoNumber(number)) {
+    return deserializeCryptoNumber(number);
+  }
+  return number;
+}
+
+export function serializeForm(form: AnsweredForm): AnsweredForm {
+  const formCopy = deepCopyViaJson(form);
+  const { encryption } = formCopy;
+
+  if (encryption.primes !== undefined) {
+    encryption.primes.G = serializeCryptoNumberIfPossible(encryption.primes.G);
+    encryption.primes.P = serializeCryptoNumberIfPossible(encryption.primes.P);
+  }
+
+  if (encryption.publicKeys !== undefined) {
+    const existingKeys = encryption.publicKeys;
+    const objectKeys = Object.keys(encryption.publicKeys);
+    encryption.publicKeys = objectKeys.reduce((obj, key) => {
+      const existingValue = existingKeys[key];
+
+      if (existingValue !== null) {
+        const serializedValue = serializeCryptoNumberIfPossible(existingValue);
+        return {
+          ...obj,
+          [key]: serializedValue,
+        };
+      }
+
+      return {
+        ...obj,
+        [key]: null,
+      };
+    }, {} as typeof encryption.publicKeys);
+  }
+
+  return formCopy;
+}
+
+export function deserializeForm(form: AnsweredForm): AnsweredForm {
+  const formCopy = deepCopyViaJson(form);
+  const { encryption } = formCopy;
+
+  if (encryption.primes !== undefined) {
+    encryption.primes.G = deserializeCryptoNumberIfPossible(
+      encryption.primes.G
+    );
+    encryption.primes.P = deserializeCryptoNumberIfPossible(
+      encryption.primes.P
+    );
+  }
+
+  if (encryption.publicKeys !== undefined) {
+    const existingKeys = encryption.publicKeys;
+    const objectKeys = Object.keys(encryption.publicKeys);
+    encryption.publicKeys = objectKeys.reduce((obj, key) => {
+      const existingValue = existingKeys[key];
+
+      if (existingValue !== null) {
+        const serializedValue =
+          deserializeCryptoNumberIfPossible(existingValue);
+        return {
+          ...obj,
+          [key]: serializedValue,
+        };
+      }
+
+      return {
+        ...obj,
+        [key]: null,
+      };
+    }, {} as typeof encryption.publicKeys);
+  }
+
+  return formCopy;
 }
