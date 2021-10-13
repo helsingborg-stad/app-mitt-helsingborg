@@ -94,6 +94,7 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
         signature,
         currentPosition,
         formQuestions,
+        encryption: initialCase.forms[initialCase.currentFormId].encryption,
       };
 
       // We set the initial case to prevent desync issues with the above logic.

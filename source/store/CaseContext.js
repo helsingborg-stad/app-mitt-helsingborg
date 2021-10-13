@@ -33,7 +33,16 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
   }
 
   async function updateCase(
-    { caseId, formId, answerObject, signature, currentPosition, formQuestions, encryptAnswers },
+    {
+      caseId,
+      formId,
+      answerObject,
+      signature,
+      currentPosition,
+      formQuestions,
+      encryptAnswers,
+      encryption,
+    },
     callback
   ) {
     dispatch(
@@ -47,6 +56,7 @@ function CaseProvider({ children, initialState = defaultInitialState }) {
           currentPosition,
           formQuestions,
           encryptAnswers,
+          encryption,
         },
         callback
       )
