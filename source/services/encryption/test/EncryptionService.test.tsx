@@ -2,8 +2,11 @@ import getException from "../../../../.jest/helpers";
 import { deepCopyViaJson } from "../../../helpers/Objects";
 import { AnsweredForm, EncryptedAnswersWrapper } from "../../../types/Case";
 import {
+  CryptoNumber,
+  EncryptionDetails,
   EncryptionErrorStatus,
   EncryptionType,
+  SerializedCryptoNumber,
 } from "../../../types/Encryption";
 import StorageService from "../../StorageService";
 import {
@@ -14,8 +17,12 @@ import {
 import {
   decryptFormAnswers,
   decryptWithAesKey,
+  deserializeCryptoNumber,
+  deserializeForm,
   encryptFormAnswers,
   encryptWithAesKey,
+  serializeCryptoNumber,
+  serializeForm,
   setupSymmetricKey,
 } from "../EncryptionService";
 
@@ -205,5 +212,79 @@ describe("EncryptionService", () => {
     const coApplicantAnswersJson = JSON.stringify(coApplicantDecryptedAnswers);
 
     expect(mainApplicantAnswersJson).toEqual(coApplicantAnswersJson);
+  });
+
+  it("serializes crypto number", () => {
+    const cryptoNumber: CryptoNumber = 123456789;
+
+    const serialized = serializeCryptoNumber(cryptoNumber);
+
+    expect(typeof serialized).toBe("string");
+    expect(serialized).toEqual("123456789");
+  });
+
+  it("deserializes crypto number", () => {
+    const cryptoNumber: SerializedCryptoNumber = "123456789";
+
+    const deserialized = deserializeCryptoNumber(cryptoNumber);
+
+    expect(typeof deserialized).toBe("number");
+    expect(deserialized).toEqual(123456789);
+  });
+
+  it("serializes a form", () => {
+    const testForm: Partial<AnsweredForm> = {
+      encryption: {
+        type: EncryptionType.DECRYPTED,
+        primes: {
+          P: 43,
+          G: 10,
+        },
+        publicKeys: {
+          196912191118: 123456789,
+          198310011906: 987654321,
+          199901011234: null,
+        },
+      },
+    };
+
+    const serializedForm = serializeForm(testForm as AnsweredForm);
+    const { publicKeys } = serializedForm.encryption as Required<
+      Pick<EncryptionDetails, "publicKeys">
+    >;
+
+    expect(typeof serializedForm.encryption.primes?.P).toEqual("string");
+    expect(typeof serializedForm.encryption.primes?.G).toEqual("string");
+    expect(typeof publicKeys["196912191118"]).toEqual("string");
+    expect(typeof publicKeys["198310011906"]).toEqual("string");
+    expect(publicKeys["199901011234"]).toBeNull();
+  });
+
+  it("deserializes a form", () => {
+    const testForm: Partial<AnsweredForm> = {
+      encryption: {
+        type: EncryptionType.DECRYPTED,
+        primes: {
+          P: "43",
+          G: "10",
+        },
+        publicKeys: {
+          196912191118: "123456789",
+          198310011906: "987654321",
+          199901011234: null,
+        },
+      },
+    };
+
+    const deserializedForm = deserializeForm(testForm as AnsweredForm);
+    const { publicKeys } = deserializedForm.encryption as Required<
+      Pick<EncryptionDetails, "publicKeys">
+    >;
+
+    expect(typeof deserializedForm.encryption.primes?.P).toEqual("number");
+    expect(typeof deserializedForm.encryption.primes?.G).toEqual("number");
+    expect(typeof publicKeys["196912191118"]).toEqual("number");
+    expect(typeof publicKeys["198310011906"]).toEqual("number");
+    expect(publicKeys["199901011234"]).toBeNull();
   });
 });

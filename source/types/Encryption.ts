@@ -9,6 +9,12 @@ export enum EncryptionErrorStatus {
 }
 export type EncryptionExceptionStatus = EncryptionErrorStatus | null;
 
+export type CryptoNumber = number;
+export type SerializedCryptoNumber = string;
+export type PossiblySerializedCryptoNumber =
+  | CryptoNumber
+  | SerializedCryptoNumber;
+
 export interface AesModule {
   pbkdf2: (
     password: string,
@@ -35,10 +41,10 @@ export interface EncryptionDetails {
   type: EncryptionType;
   symmetricKeyName?: string;
   primes?: {
-    P: number;
-    G: number;
+    P: PossiblySerializedCryptoNumber;
+    G: PossiblySerializedCryptoNumber;
   };
-  publicKeys?: Record<string, number>;
+  publicKeys?: Record<string, PossiblySerializedCryptoNumber | null>;
 }
 
 export interface EncryptionExceptionInterface extends Error {

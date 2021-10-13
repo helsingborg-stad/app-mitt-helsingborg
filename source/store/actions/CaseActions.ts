@@ -48,11 +48,10 @@ export async function updateCase(
     updateCaseRequestBody.signature = signature;
   }
 
+  const serializedBody = serializeForm(updateCaseRequestBody);
+
   try {
-    const res = await put(
-      `/cases/${caseId}`,
-      JSON.stringify(updateCaseRequestBody)
-    );
+    const res = await put(`/cases/${caseId}`, JSON.stringify(serializedBody));
     const { id, attributes } = res.data.data;
     const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
     if (callback) {
