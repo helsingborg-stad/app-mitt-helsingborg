@@ -46,9 +46,12 @@ function getPrivateKeyStorageKeyword(
 
 export async function getStoredSymmetricKey(
   forms: AnsweredForm
-): Promise<number> {
+): Promise<number | null> {
   const storageKeyword = getSymmetricKeyStorageKeyword(forms);
   const symmetricKey = await StorageService.getData(storageKeyword);
+  if (symmetricKey === null) {
+    return null;
+  }
   return Number(symmetricKey);
 }
 
