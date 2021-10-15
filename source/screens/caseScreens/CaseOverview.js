@@ -73,7 +73,7 @@ const colorSchema = 'red';
  * @param {object?} extra Extra properties
  * @param {function?} extra.toggleCoApplicantModal Function to run in order to toggle the co-applicant modal
  */
-const computeCaseCardComponent = async (caseData, navigation, authContext, extra) => {
+const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const currentStep =
     caseData?.forms?.[caseData.currentFormId]?.currentPosition?.currentMainStep || 0;
   const totalSteps = caseData.form?.stepStructure ? caseData.form.stepStructure.length : 0;
@@ -114,9 +114,6 @@ const computeCaseCardComponent = async (caseData, navigation, authContext, extra
   const isCoApplicant = casePersonData?.role === 'coApplicant';
 
   const currentForm = caseData?.forms[caseData.currentFormId];
-
-  const hasCoApplicant = !!currentForm.encryption.symmetricKeyName;
-  const isCoApplicantCaseOpen = await getStoredSymmetricKey(currentForm) !== 0; // @TODO: Change this to null instead of 0 later
   const selfNeedsToConfirm = isCoApplicant && currentForm.encryption.publicKeys[authContext.user.personalNumber] === null;
   const isWaitingForCoApplicantSign = currentForm.encryption.publicKeys && !Object.entries(currentForm.encryption.publicKeys).every(item => item[1] !== null);
 
@@ -157,8 +154,13 @@ const computeCaseCardComponent = async (caseData, navigation, authContext, extra
         buttonProps.colorSchema = 'red';
         buttonProps.text = 'Bekräftar att jag söker ihop med någon';
 
+        if (extra && extra.setShowConfirmationThanksModal && !extra.hasToggledConfirmThanksModal) {
+          extra.setShowConfirmationThanksModal(true);
+          extra.setHasToggledConfirmThanksModal(true);
+        }
+
         buttonProps.onClick = () => {
-          if (extra && extra.toggleShowConfirmationThanksModal) extra.toggleShowConfirmationThanksModal()
+          if (extra && extra.setShowConfirmationThanksModal) extra.setShowConfirmationThanksModal(true)
         }
       }
     }
@@ -186,6 +188,7 @@ const computeCaseCardComponent = async (caseData, navigation, authContext, extra
         true
       )}`
     : null;
+
 
   return (
     <CaseCard
@@ -235,11 +238,9 @@ function CaseOverview(props) {
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
-  const [activeCaseCards, setActiveCaseCards] = useState([]);
-  const [closedCaseCards, setClosedCaseCards] = useState([]);
-
-  const [showCoSignModal, toggleShowCoSignModal] = useModal();
-  const [showConfirmationThanksModal, toggleShowConfirmationThanksModal] = useModal();
+  const [showCoSignModal, toggleShowCoSignModal] = useState(false);
+  const [showConfirmationThanksModal, setShowConfirmationThanksModal] = useState(false);
+  const [hasToggledConfirmThanksModal, setHasToggledConfirmThanksModal] = useState(false);
 
   const authContext = useContext(AuthContext);
 
@@ -350,35 +351,13 @@ function CaseOverview(props) {
     }
   }, [pendingCaseSign, authContext.status, setPendingCaseSign, onRefresh, navigation]);
 
-  useEffect(() => {
-    
-    async function mapCards() {
-      const activeCards = await Promise.all(activeCases.map((caseData) =>
-        computeCaseCardComponent(caseData, navigation, authContext, { toggleShowCoSignModal, toggleShowConfirmationThanksModal })
-      ));
-      
-      setActiveCaseCards(activeCards);
-    }
-   
-    try {
-    mapCards();
-    } catch (e) {
-      console.log(e)
-    }
-  }, [onRefresh])
+  const activeCaseCards = activeCases.map((caseData) =>
+      computeCaseCardComponent(caseData, navigation, authContext, { toggleShowCoSignModal, setShowConfirmationThanksModal, hasToggledConfirmThanksModal, setHasToggledConfirmThanksModal })
+  );
 
-  useEffect(() => {
-    async function mapCards() {
-      const closedCards = await Promise.all(closedCases.map((caseData) =>
-        computeCaseCardComponent(caseData, navigation, authContext)
-      ));
-
-
-      setClosedCaseCards(closedCards);
-    }
-   
-    mapCards();
-  }, [onRefresh])
+  const closedCaseCards = closedCases.map((caseData) =>
+    computeCaseCardComponent(caseData, navigation, authContext)
+  );
 
   return (
     <ScreenWrapper {...props}>
@@ -412,7 +391,7 @@ function CaseOverview(props) {
     </Modal>
     <Modal
         visible={showConfirmationThanksModal}
-        hide={() => toggleShowConfirmationThanksModal()}
+        hide={() => setShowConfirmationThanksModal(!showConfirmationThanksModal)}
         transparent
         presentationStyle="overFullScreen"
         animationType="fade"
@@ -428,7 +407,7 @@ function CaseOverview(props) {
             [Huvudsökandes namn] kan nu starta ansökan.
           </Text>
           <ButtonContainer>
-          <PopupButton onClick={() => toggleShowConfirmationThanksModal()} block colorSchema="red">
+          <PopupButton onClick={() => setShowConfirmationThanksModal(false)} block colorSchema="red">
             <Text>Okej</Text>
           </PopupButton>
           </ButtonContainer>
