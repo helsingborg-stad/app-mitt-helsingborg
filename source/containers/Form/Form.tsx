@@ -85,6 +85,7 @@ const Form: React.FC<Props> = ({
     formState,
     formNavigation,
     handleInputChange,
+    handleInputMount,
     handleSubmit,
     handleBlur,
     handleAddAnswer,
@@ -217,7 +218,7 @@ const Form: React.FC<Props> = ({
           onFieldBlur={handleBlur}
           onAddAnswer={handleAddAnswer}
           updateCaseInContext={updateCaseInContext}
-          onFieldMount={handleInputChange}
+          onFieldMount={handleInputMount}
           currentPosition={formState.currentPosition}
           totalStepNumber={formState.numberOfMainSteps || 0}
           isBackBtnVisible={
