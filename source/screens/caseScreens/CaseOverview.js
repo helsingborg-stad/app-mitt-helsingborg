@@ -1,25 +1,36 @@
-import PropTypes from 'prop-types';
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Animated, Easing, RefreshControl } from 'react-native';
-import styled from 'styled-components/native';
-import { useFocusEffect } from '@react-navigation/native';
-import { Modal, useModal } from 'app/components/molecules/Modal';
+import PropTypes from "prop-types";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { Animated, Easing, RefreshControl } from "react-native";
+import styled from "styled-components/native";
+import { useFocusEffect } from "@react-navigation/native";
+import { Modal, useModal } from "app/components/molecules/Modal";
 
-import Wrapper from 'app/components/molecules/Dialog/Wrapper';
-import Heading from 'app/components/atoms/Heading';
-import Body from 'app/components/molecules/Dialog/Body';
-import BackgroundBlur from 'app/components/molecules/Dialog/BackgroundBlur';
-import Button from 'app/components/atoms/Button';
-import { getStoredSymmetricKey } from 'app/services/encryption/EncryptionHelper';
-import icons from '../../helpers/Icons';
-import { Text } from '../../components/atoms';
-import { Card, CaseCard, Header, ScreenWrapper } from '../../components/molecules';
-import { getSwedishMonthNameByTimeStamp } from '../../helpers/DateHelpers';
-import { CaseState, caseTypes } from '../../store/CaseContext';
-import FormContext from '../../store/FormContext';
-import { convertDataToArray, calculateSum } from '../../helpers/FormatVivaData';
-import AuthContext from '../../store/AuthContext';
-import { put } from '../../helpers/ApiRequest';
+import Wrapper from "app/components/molecules/Dialog/Wrapper";
+import Heading from "app/components/atoms/Heading";
+import Body from "app/components/molecules/Dialog/Body";
+import BackgroundBlur from "app/components/molecules/Dialog/BackgroundBlur";
+import Button from "app/components/atoms/Button";
+import { getStoredSymmetricKey } from "app/services/encryption/EncryptionHelper";
+import icons from "../../helpers/Icons";
+import { Text } from "../../components/atoms";
+import {
+  Card,
+  CaseCard,
+  Header,
+  ScreenWrapper,
+} from "../../components/molecules";
+import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
+import { CaseState, caseTypes } from "../../store/CaseContext";
+import FormContext from "../../store/FormContext";
+import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
+import AuthContext from "../../store/AuthContext";
+import { put } from "../../helpers/ApiRequest";
 
 const ButtonContainer = styled.View`
   display: flex;
@@ -52,7 +63,6 @@ const StyledText = styled(Text)`
   margin-bottom: 8px;
 `;
 
-
 const ListHeading = styled(Text)`
   margin-left: 4px;
   margin-top: 24px;
@@ -63,7 +73,7 @@ Card.MessageBody = styled(Card.Body)`
   background-color: ${(props) => props.theme.colors.neutrals[5]};
 `;
 
-const colorSchema = 'red';
+const colorSchema = "red";
 
 /**
  * Returns a case card component depending on it's status
@@ -71,12 +81,15 @@ const colorSchema = 'red';
  * @param {obj} navigation
  * @param {obj} authContext
  * @param {object?} extra Extra properties
- * @param {function?} extra.toggleCoApplicantModal Function to run in order to toggle the co-applicant modal
+ * @param {function?} extra.dialogState
  */
 const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const currentStep =
-    caseData?.forms?.[caseData.currentFormId]?.currentPosition?.currentMainStep || 0;
-  const totalSteps = caseData.form?.stepStructure ? caseData.form.stepStructure.length : 0;
+    caseData?.forms?.[caseData.currentFormId]?.currentPosition
+      ?.currentMainStep || 0;
+  const totalSteps = caseData.form?.stepStructure
+    ? caseData.form.stepStructure.length
+    : 0;
   const {
     details: {
       period = {},
@@ -85,110 +98,122 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
     persons = [],
   } = caseData;
 
-  const applicationPeriodTimestamp = application?.periodenddate ?? period?.endDate;
+  const applicationPeriodTimestamp =
+    application?.periodenddate ?? period?.endDate;
   const applicationPeriodMonth = applicationPeriodTimestamp
     ? getSwedishMonthNameByTimeStamp(applicationPeriodTimestamp, true)
-    : '';
+    : "";
 
   const decisions = decision?.decisions?.decision
     ? convertDataToArray(decision.decisions.decision)
     : [];
 
-  const paymentsArray = decisions.filter((decision) => decision.typecode === '01');
+  const paymentsArray = decisions.filter(
+    (decision) => decision.typecode === "01"
+  );
   const partiallyApprovedDecisionsAndRejected = decisions.filter((decision) =>
-    ['03', '02'].includes(decision.typecode)
+    ["03", "02"].includes(decision.typecode)
   );
 
   const casePersonData = persons.find(
     (person) => person.personalNumber === authContext.user.personalNumber
   );
-  
-  const statusType = caseData?.status?.type || '';
-  const isNotStarted = statusType.includes('notStarted');
-  const isOngoing = statusType.includes('ongoing');
-  const isCompletionRequired = statusType.includes('completionRequired');
-  const isSigned = statusType.includes('signed');
-  const isClosed = statusType.includes('closed');
-  const isWaitingForSign = statusType.includes('active:signature:pending');
+
+  const statusType = caseData?.status?.type || "";
+  const isNotStarted = statusType.includes("notStarted");
+  const isOngoing = statusType.includes("ongoing");
+  const isCompletionRequired = statusType.includes("completionRequired");
+  const isSigned = statusType.includes("signed");
+  const isClosed = statusType.includes("closed");
+  const isWaitingForSign = statusType.includes("active:signature:pending");
   const selfHasSigned = casePersonData?.hasSigned;
-  const isCoApplicant = casePersonData?.role === 'coApplicant';
+  const isCoApplicant = casePersonData?.role === "coApplicant";
 
   const currentForm = caseData?.forms[caseData.currentFormId];
-  const selfNeedsToConfirm = isCoApplicant && currentForm.encryption.publicKeys[authContext.user.personalNumber] === null;
-  const isWaitingForCoApplicantSign = currentForm.encryption.publicKeys && !Object.entries(currentForm.encryption.publicKeys).every(item => item[1] !== null);
-
+  const selfNeedsToConfirm =
+    isCoApplicant &&
+    currentForm.encryption.publicKeys[authContext.user.personalNumber] === null;
+  const isWaitingForCoApplicantSign =
+    currentForm.encryption.publicKeys &&
+    !Object.entries(currentForm.encryption.publicKeys).every(
+      (item) => item[1] !== null
+    );
 
   const shouldShowCTAButton = isCoApplicant
-    ? isWaitingForSign && !selfHasSigned || isWaitingForCoApplicantSign && selfNeedsToConfirm
+    ? (isWaitingForSign && !selfHasSigned) ||
+      (isWaitingForCoApplicantSign && selfNeedsToConfirm)
     : isOngoing || isNotStarted || isCompletionRequired || isSigned;
 
   const buttonProps = {
-    onClick: () => navigation.navigate('Form', { caseId: caseData.id }),
-    text: '',
+    onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
+    text: "",
     colorSchema: null,
   };
 
   const cardProps = {
     subtitle: caseData.status.name,
     description: null,
-  }
+  };
 
   if (isOngoing) {
-    buttonProps.text = 'Fortsätt';
+    buttonProps.text = "Fortsätt";
   }
 
   if (isNotStarted) {
-    buttonProps.text = 'Starta ansökan';
+    buttonProps.text = "Starta ansökan";
 
     if (isWaitingForCoApplicantSign) {
-      cardProps.subtitle = 'Väntar';
-      cardProps.description = 'Din medsökande måste bekräfta...';
-      buttonProps.colorSchema = 'neutral';
+      cardProps.subtitle = "Väntar";
+      cardProps.description = "Din medsökande måste bekräfta...";
+      buttonProps.colorSchema = "neutral";
       buttonProps.onClick = () => {
-        if (extra && extra.toggleShowCoSignModal) extra.toggleShowCoSignModal()
-      }
+        if (extra && extra.setDialogState) {
+          extra.setDialogState({
+            ...extra.dialogState,
+            showCoSignModal: true,
+            caseData,
+          });
+        }
+      };
 
       if (selfNeedsToConfirm) {
-        cardProps.subtitle = 'Öppen';
-        cardProps.description = 'Din partner väntar på din bekräftelse';
-        buttonProps.colorSchema = 'red';
-        buttonProps.text = 'Bekräftar att jag söker ihop med någon';
-
-        if (extra && extra.setShowConfirmationThanksModal && !extra.hasToggledConfirmThanksModal) {
-          extra.setShowConfirmationThanksModal(true);
-          extra.setHasToggledConfirmThanksModal(true);
-        }
+        cardProps.subtitle = "Öppen";
+        cardProps.description = "Din partner väntar på din bekräftelse";
+        buttonProps.colorSchema = "red";
+        buttonProps.text = "Bekräftar att jag söker ihop med någon";
 
         buttonProps.onClick = () => {
-          if (extra && extra.setShowConfirmationThanksModal) extra.setShowConfirmationThanksModal(true)
-        }
+          if (extra && extra.setDialogState) {
+            extra.setDialogState({
+              ...extra.dialogState,
+              showConfirmationThanksModal: true,
+              caseData,
+            });
+          }
+        };
       }
     }
-
-    
   }
 
   if (isCompletionRequired) {
-    buttonProps.text = 'Starta stickprov';
+    buttonProps.text = "Starta stickprov";
   }
 
   if (isSigned) {
-    buttonProps.text = 'Ladda upp filer och dokument';
+    buttonProps.text = "Ladda upp filer och dokument";
   }
 
   if (isWaitingForSign && !selfHasSigned) {
     buttonProps.onClick = () =>
-      navigation.navigate('Form', { caseId: caseData.id, isSignMode: true });
-    buttonProps.text = 'Granska och signera';
+      navigation.navigate("Form", { caseId: caseData.id, isSignMode: true });
+    buttonProps.text = "Granska och signera";
   }
 
   const giveDate = payments?.payment?.givedate
-    ? `${payments.payment.givedate.split('-')[2]} ${getSwedishMonthNameByTimeStamp(
-        payments.payment.givedate,
-        true
-      )}`
+    ? `${
+        payments.payment.givedate.split("-")[2]
+      } ${getSwedishMonthNameByTimeStamp(payments.payment.givedate, true)}`
     : null;
-
 
   return (
     <CaseCard
@@ -210,7 +235,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
       declined={calculateSum(partiallyApprovedDecisionsAndRejected)}
       givedate={giveDate}
       onCardClick={() => {
-        navigation.navigate('UserEvents', {
+        navigation.navigate("UserEvents", {
           screen: caseData.caseType.navigateTo,
           params: {
             id: caseData.id,
@@ -238,25 +263,30 @@ function CaseOverview(props) {
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
-  const [showCoSignModal, toggleShowCoSignModal] = useState(false);
-  const [showConfirmationThanksModal, setShowConfirmationThanksModal] = useState(false);
-  const [hasToggledConfirmThanksModal, setHasToggledConfirmThanksModal] = useState(false);
+  const [dialogState, setDialogState] = useState({
+    showCoSignModal: false,
+    showConfirmationThanksModal: false,
+    hasShownConfirmationThanksModal: false,
+    case: null,
+  });
 
   const authContext = useContext(AuthContext);
 
-  const wait = (timeout) => new Promise((resolve) => setTimeout(resolve, timeout));
+  const wait = (timeout) =>
+    new Promise((resolve) => setTimeout(resolve, timeout));
 
   const getCasesByStatuses = (statuses) =>
     caseItems.filter((caseData) => {
       let matchesStatus = false;
       statuses.forEach((status) => {
-        matchesStatus = matchesStatus || caseData?.status?.type?.includes(status);
+        matchesStatus =
+          matchesStatus || caseData?.status?.type?.includes(status);
       });
       return matchesStatus;
     });
 
-  const activeCases = getCasesByStatuses(['notStarted', 'active']);
-  const closedCases = getCasesByStatuses(['closed']);
+  const activeCases = getCasesByStatuses(["notStarted", "active"]);
+  const closedCases = getCasesByStatuses(["closed"]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -315,9 +345,10 @@ function CaseOverview(props) {
   }, [cases]);
 
   useEffect(() => {
-    if (pendingCaseSign && authContext.status === 'signResolved') {
+    if (pendingCaseSign && authContext.status === "signResolved") {
       (async () => {
-        const currentForm = pendingCaseSign.forms[pendingCaseSign.currentFormId];
+        const currentForm =
+          pendingCaseSign.forms[pendingCaseSign.currentFormId];
 
         const updateCaseRequestBody = {
           currentFormId: pendingCaseSign.currentFormId,
@@ -341,7 +372,7 @@ function CaseOverview(props) {
           onRefresh();
 
           // Show last screen of form
-          navigation.navigate('Form', {
+          navigation.navigate("Form", {
             caseId: pendingCaseSign.id,
           });
         } catch (error) {
@@ -349,73 +380,175 @@ function CaseOverview(props) {
         }
       })();
     }
-  }, [pendingCaseSign, authContext.status, setPendingCaseSign, onRefresh, navigation]);
+  }, [
+    pendingCaseSign,
+    authContext.status,
+    setPendingCaseSign,
+    onRefresh,
+    navigation,
+  ]);
+
+  useEffect(() => {
+    const coApplicantItemsToSign = caseItems.filter((caseData) => {
+      const person = caseData.persons.find(
+        (person) => person.personalNumber === authContext.user.personalNumber
+      );
+      const isCoApplicant = person.role === "coApplicant";
+
+      if (!isCoApplicant) return false;
+
+      const currentForm = caseData.forms[caseData.currentFormId];
+
+      const isWaitingForCoApplicantSign =
+        currentForm.encryption.publicKeys &&
+        !Object.entries(currentForm.encryption.publicKeys).every(
+          (item) => item[1] !== null
+        );
+
+      return isWaitingForCoApplicantSign;
+    });
+
+    if (coApplicantItemsToSign.length > 0) {
+      if (dialogState.hasShownConfirmationThanksModal) return;
+      setDialogState({
+        ...dialogState,
+        showConfirmationThanksModal: true,
+        caseData: coApplicantItemsToSign[0],
+        hasShownConfirmationThanksModal: true,
+      });
+    }
+  }, [caseItems]);
 
   const activeCaseCards = activeCases.map((caseData) =>
-      computeCaseCardComponent(caseData, navigation, authContext, { toggleShowCoSignModal, setShowConfirmationThanksModal, hasToggledConfirmThanksModal, setHasToggledConfirmThanksModal })
+    computeCaseCardComponent(caseData, navigation, authContext, {
+      dialogState,
+      setDialogState,
+    })
   );
 
   const closedCaseCards = closedCases.map((caseData) =>
     computeCaseCardComponent(caseData, navigation, authContext)
   );
 
+  const mainApplicantData = dialogState.caseData?.persons?.find(
+    (person) => person.role === "applicant"
+  );
+  const coApplicantData = dialogState.caseData?.persons?.find(
+    (person) => person.role === "coApplicant"
+  );
+
+  console.log("coApplicantData", coApplicantData);
+  console.log("mainApplicantData", mainApplicantData);
+
   return (
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
       <Modal
-        visible={showCoSignModal}
-        hide={() => toggleShowCoSignModal()}
+        visible={dialogState.showCoSignModal}
+        hide={() =>
+          setDialogState({
+            ...dialogState,
+            showCoSignModal: false,
+          })
+        }
         transparent
         presentationStyle="overFullScreen"
         animationType="fade"
         statusBarTranslucent
       >
-      <Wrapper>
-        <DialogContainer>
-          <Heading type='h4'>Bekräftelse behövs</Heading>
-          <Text align='center'>
-            För att starta ansökan måste [medsökandes namn] bekräfta att ni söker tillsammans.
-            [Medsökandes namn] bekräftar genom att logga in i appen Mitt Helsingborg.
-          </Text>
-          <ButtonContainer>
-          <PopupButton onClick={() => toggleShowCoSignModal()} block colorSchema="red">
-            <Text>Okej</Text>
-          </PopupButton>
-          <PopupButton onClick={() => toggleShowCoSignModal()} block colorSchema="neutral">
-            <Text>Avbryt</Text>
-          </PopupButton>
-          </ButtonContainer>
-        </DialogContainer>
-        <BackgroundBlur blurType="light" blurAmount={15} reducedTransparencyFallbackColor="white" />
-      </Wrapper>
-    </Modal>
-    <Modal
-        visible={showConfirmationThanksModal}
-        hide={() => setShowConfirmationThanksModal(!showConfirmationThanksModal)}
+        <Wrapper>
+          <DialogContainer>
+            <Heading type="h4">Bekräftelse behövs</Heading>
+            <Text align="center">
+              För att starta ansökan måste {coApplicantData?.firstName} bekräfta
+              att ni söker tillsammans. {coApplicantData?.firstName} bekräftar
+              genom att logga in i appen Mitt Helsingborg.
+            </Text>
+            <ButtonContainer>
+              <PopupButton
+                onClick={() =>
+                  setDialogState({
+                    ...dialogState,
+                    showCoSignModal: false,
+                  })
+                }
+                block
+                colorSchema="red"
+              >
+                <Text>Okej</Text>
+              </PopupButton>
+              <PopupButton
+                onClick={() =>
+                  setDialogState({
+                    ...dialogState,
+                    showCoSignModal: false,
+                  })
+                }
+                block
+                colorSchema="neutral"
+              >
+                <Text>Avbryt</Text>
+              </PopupButton>
+            </ButtonContainer>
+          </DialogContainer>
+          <BackgroundBlur
+            blurType="light"
+            blurAmount={15}
+            reducedTransparencyFallbackColor="white"
+          />
+        </Wrapper>
+      </Modal>
+      <Modal
+        visible={dialogState.showConfirmationThanksModal}
+        hide={() =>
+          setDialogState({
+            ...dialogState,
+            showConfirmationThanksModal: false,
+          })
+        }
         transparent
         presentationStyle="overFullScreen"
         animationType="fade"
         statusBarTranslucent
       >
-      <Wrapper>
-        <DialogContainer>
-          <Heading type='h4'>Tack, för din bekräftelse!</Heading>
-          <StyledText align='center'>
-            Genom att logga in har du bekräftat att du och [huvudsökandes namn] söker ekonomiskt bistånd tillsammans.
-          </StyledText>
-          <Text align='center'>
-            [Huvudsökandes namn] kan nu starta ansökan.
-          </Text>
-          <ButtonContainer>
-          <PopupButton onClick={() => setShowConfirmationThanksModal(false)} block colorSchema="red">
-            <Text>Okej</Text>
-          </PopupButton>
-          </ButtonContainer>
-        </DialogContainer>
-        <BackgroundBlur blurType="light" blurAmount={15} reducedTransparencyFallbackColor="white" />
-      </Wrapper>
-    </Modal>
-      <Container refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        <Wrapper>
+          <DialogContainer>
+            <Heading type="h4">Tack, för din bekräftelse!</Heading>
+            <StyledText align="center">
+              Genom att logga in har du bekräftat att du och{" "}
+              {mainApplicantData?.firstName} söker ekonomiskt bistånd
+              tillsammans.
+            </StyledText>
+            <Text align="center">
+              {mainApplicantData?.firstName} kan nu starta ansökan.
+            </Text>
+            <ButtonContainer>
+              <PopupButton
+                onClick={() =>
+                  setDialogState({
+                    ...dialogState,
+                    showConfirmationThanksModal: false,
+                  })
+                }
+                block
+                colorSchema="red"
+              >
+                <Text>Okej</Text>
+              </PopupButton>
+            </ButtonContainer>
+          </DialogContainer>
+          <BackgroundBlur
+            blurType="light"
+            blurAmount={15}
+            reducedTransparencyFallbackColor="white"
+          />
+        </Wrapper>
+      </Modal>
+      <Container
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <ListHeading type="h5">Aktiva</ListHeading>
         {activeCases.length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
