@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import React from "react";
 import { StatusBar } from "react-native";
