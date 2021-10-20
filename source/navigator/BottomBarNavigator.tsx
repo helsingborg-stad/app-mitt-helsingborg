@@ -1,12 +1,11 @@
-/* eslint-disable global-require */
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import React from "react";
-import { StatusBar, Text } from "react-native";
+import { StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { Icon } from "../components/atoms";
 import TabNavigator from "../components/molecules/TabNavigator";
-import { AboutScreen, ProfileScreen, BookingScreen } from "../screens";
+import { AboutScreen, ProfileScreen } from "../screens";
 import theme from "../styles/theme";
 import CaseNavigator from "./CaseNavigator";
 
@@ -21,7 +20,7 @@ const SafeAreaViewContainer = styled(SafeAreaView)`
 `;
 
 const Tab = createMaterialTopTabNavigator();
-const BottomBarStack = () => (
+const BottomBarStack = (): JSX.Element => (
   <SafeAreaViewContainer edges={["right", "bottom", "left"]}>
     <StatusBar
       barStyle="dark-content"
