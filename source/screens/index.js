@@ -4,4 +4,3 @@ export { default as LoginScreen } from "./LoginScreen";
 export { default as ProfileScreen } from "./ProfileScreen";
 export { default as SplashScreen } from "./SplashScreen";
 export { default as AboutScreen } from "./AboutScreen";
-export { default as BookingScreen } from "./BookingScreen";
