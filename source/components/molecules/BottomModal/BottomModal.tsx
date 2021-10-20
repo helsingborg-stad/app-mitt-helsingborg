@@ -6,10 +6,7 @@ import ModalNavigator from "./ModalNavigator";
 
 import { ModalContentContainer } from "./styled";
 
-const SWIPE_DIRECTION = {
-  DOWN: "down",
-  NONE: undefined,
-};
+import { ThemeType } from "../../../styles/themeHelpers";
 
 interface Props {
   modalTitle?: string;
@@ -19,34 +16,39 @@ interface Props {
   backButtonText?: string;
   onClose?: () => void;
   onBack?: () => void;
+  onModalHide?: () => void;
 }
 const BottomModal = (props: Props): JSX.Element => {
   const {
-    modalTitle,
     visible,
-    onClose,
-    backButtonText,
-    onBack,
-    colorSchema = "neutral",
     children,
+    onModalHide,
+    modalTitle = undefined,
+    onClose = undefined,
+    backButtonText = undefined,
+    onBack = undefined,
+    colorSchema = "neutral",
   } = props;
 
-  const theme = useContext(ThemeContext);
-
-  const swipeDirection = onClose ? SWIPE_DIRECTION.DOWN : SWIPE_DIRECTION.NONE;
+  const { colors } = useContext<ThemeType>(ThemeContext);
 
   const navigatorColor =
-    colorSchema === "neutral" ? "white" : theme.colors.primary.red[1];
-  const textColor =
-    colorSchema === "neutral" ? theme.colors.neutrals[1] : "white";
+    colorSchema === "neutral" ? "white" : colors.primary.red[1];
+  const textColor = colorSchema === "neutral" ? colors.neutrals[1] : "white";
 
   return (
     <Modal
+      hideModalContentWhileAnimating
       isVisible={visible}
-      style={{ margin: 0, justifyContent: "flex-end" }}
-      swipeDirection={swipeDirection}
+      style={{
+        margin: 0,
+        justifyContent: "flex-end",
+        backgroundColor: "transparrent",
+      }}
+      swipeDirection="down"
       onSwipeComplete={onClose}
       backdropTransitionOutTiming={0}
+      onModalWillHide={onModalHide}
     >
       <ModalContentContainer>
         <ModalNavigator
@@ -61,14 +63,6 @@ const BottomModal = (props: Props): JSX.Element => {
       </ModalContentContainer>
     </Modal>
   );
-};
-
-BottomModal.defaultProps = {
-  modalTitle: undefined,
-  colorSchema: "neutral",
-  backButtonText: undefined,
-  onClose: undefined,
-  onBack: undefined,
 };
 
 export default BottomModal;
