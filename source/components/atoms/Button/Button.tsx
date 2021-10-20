@@ -82,6 +82,7 @@ Styles.link = css`
     if (lastChild && lastChild.type === RightButtonIcon) {
       return `justify-content: space-between;`;
     }
+    return `justify-content: flex-start;`;
   }}
   background-color: ${(props) =>
     props.colorSchema === "neutral"
@@ -197,7 +198,7 @@ const Button = (props) => {
   const children = React.Children.map(other.children, (child, index) => {
     /** Icon */
     if (child && child.type === Icon) {
-      iconComponentsTotal++;
+      iconComponentsTotal += 1;
 
       let ButtonComponent = ButtonIcon;
 
@@ -281,7 +282,7 @@ Button.propTypes = {
   /**
    * Override or extend the styles applied to the component.
    */
-  style: PropTypes.array,
+  style: PropTypes.arrayOf(PropTypes.object),
   /**
    * The text value to display in the button.
    */
@@ -290,7 +291,7 @@ Button.propTypes = {
    * If true, the button will be disabled.
    */
   disabled: PropTypes.bool,
-  z: PropTypes.oneOf(Object.keys(SHADOW).map((number) => parseInt(number))),
+  z: PropTypes.oneOf(Object.keys(SHADOW).map((number) => parseInt(number, 10))),
 
   /**
    * If true, the button will take maximum width within its container.
