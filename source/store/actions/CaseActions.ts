@@ -1,3 +1,5 @@
+import { Form } from "../../types/FormTypes";
+import { Action, CaseUpdate, UpdateCaseBody } from "../../types/CaseContext";
 import {
   deserializeForm,
   serializeForm,
@@ -39,10 +41,10 @@ export async function updateCase(
     formQuestions,
     encryptAnswers = true,
     encryption,
-  },
-  callback
-) {
-  let updateCaseRequestBody = {
+  }: CaseUpdate,
+  callback: (updatedCase: Case) => void
+): Promise<Action> {
+  let updateCaseRequestBody: UpdateCaseBody = {
     answers: convertAnswersToArray(answerObject, formQuestions),
     currentPosition,
     currentFormId: formId,
@@ -50,10 +52,11 @@ export async function updateCase(
   };
 
   if (encryptAnswers) {
-    updateCaseRequestBody = await encryptFormAnswers(
-      user,
-      updateCaseRequestBody
-    );
+    const encryptedForm = await encryptFormAnswers(user, updateCaseRequestBody);
+    updateCaseRequestBody = {
+      ...updateCaseRequestBody,
+      ...encryptedForm,
+    };
   }
 
   if (signature?.success) {
@@ -77,12 +80,15 @@ export async function updateCase(
     console.log(`Update current case error: ${error}`);
     return {
       type: actionTypes.apiError,
-      payload: error,
+      payload: error as Error,
     };
   }
 }
 
-export async function createCase(form, callback) {
+export async function createCase(
+  form: Form,
+  callback: (newCase: Case) => void
+): Promise<Action> {
   const body = {
     provider: form.provider,
     statusType: "notStarted",
@@ -120,12 +126,12 @@ export async function createCase(form, callback) {
     console.log("create case api error", error);
     return {
       type: actionTypes.apiError,
-      payload: error,
+      payload: error as Error,
     };
   }
 }
 
-export function deleteCase(caseId) {
+export function deleteCase(caseId: string): Action {
   return {
     type: actionTypes.deleteCase,
     payload: caseId,
@@ -149,7 +155,7 @@ function filterCasesWithoutSymmetricKey(cases: Case[]): Promise<Case[]> {
 
 async function caseRequiresSync(caseData: Case): Promise<boolean> {
   const currentForm = caseData.forms[caseData.currentFormId];
-  const usesSymmetricKey = currentForm.encryption.symmetricKeyName?.length > 0;
+  const usesSymmetricKey = !!currentForm.encryption.symmetricKeyName;
 
   if (usesSymmetricKey) {
     return checkSymmetricKeyMissingForCase(caseData);
@@ -234,7 +240,7 @@ async function pollCasesForSymmetricSetup(
   }
 }
 
-export async function fetchCases(user: UserInterface): Promise<unknown> {
+export async function fetchCases(user: UserInterface): Promise<Action> {
   try {
     const response = await get("/cases");
     const rawCases: Case[] = response?.data?.data?.attributes?.cases;
@@ -298,7 +304,7 @@ export async function fetchCases(user: UserInterface): Promise<unknown> {
     console.error(error);
     return {
       type: actionTypes.apiError,
-      payload: error,
+      payload: error as Error,
     };
   }
   return {
