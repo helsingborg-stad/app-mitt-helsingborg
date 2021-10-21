@@ -1,9 +1,12 @@
-import axios from 'axios';
-import env from 'react-native-config';
-import { Platform } from 'react-native';
-import StorageService, { ACCESS_TOKEN_KEY, APP_ENV_KEY } from '../services/StorageService';
-import { buildServiceUrl } from './UrlHelper';
-import { name, version } from '../../package.json';
+import axios from "axios";
+import env from "react-native-config";
+import { Platform } from "react-native";
+import StorageService, {
+  ACCESS_TOKEN_KEY,
+  APP_ENV_KEY,
+} from "../services/StorageService";
+import { buildServiceUrl } from "./UrlHelper";
+import { name, version } from "../../package.json";
 
 /**
  * Axios request
@@ -18,16 +21,18 @@ const request = async (endpoint, method, data, headers) => {
   const url = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
   const appEnv = await StorageService.getData(APP_ENV_KEY);
-  const devMode = appEnv === 'development';
-  const apiKey = devMode ? env.MITTHELSINGBORG_IO_DEV_APIKEY : env.MITTHELSINGBORG_IO_APIKEY;
+  const devMode = appEnv === "development";
+  const apiKey = devMode
+    ? env.MITTHELSINGBORG_IO_DEV_APIKEY
+    : env.MITTHELSINGBORG_IO_APIKEY;
   const userAgent = `${name}/${version}/${Platform.OS}/${Platform.Version}`;
 
   // Merge custom headers
   const newHeaders = {
-    Authorization: token || '',
-    'Content-Type': 'application/json',
-    'x-api-key': apiKey,
-    'User-Agent': userAgent,
+    Authorization: token || "",
+    "Content-Type": "application/json",
+    "x-api-key": apiKey,
+    "User-Agent": userAgent,
     ...headers,
   };
 
@@ -45,15 +50,16 @@ const request = async (endpoint, method, data, headers) => {
   }
 };
 
-const get = (endpoint = '', headers = undefined) => request(endpoint, 'get', undefined, headers);
+const get = (endpoint = "", headers) =>
+  request(endpoint, "get", undefined, headers);
 
-const post = (endpoint = '', body = undefined, headers = undefined) =>
-  request(endpoint, 'post', body, headers);
+const post = (endpoint = "", body, headers) =>
+  request(endpoint, "post", body, headers);
 
-const remove = (endpoint = '', body = undefined, headers = undefined) =>
-  request(endpoint, 'delete', body, headers);
+const remove = (endpoint = "", body, headers) =>
+  request(endpoint, "delete", body, headers);
 
-const put = (endpoint = '', body = undefined, headers = undefined) =>
-  request(endpoint, 'put', body, headers);
+const put = (endpoint = "", body, headers) =>
+  request(endpoint, "put", body, headers);
 
 export { get, post, remove, put };
