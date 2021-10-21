@@ -1,4 +1,4 @@
-import { actionTypes } from '../actions/CaseActions';
+import { actionTypes } from "../actions/CaseActions";
 
 export const initialState = {
   cases: {},
