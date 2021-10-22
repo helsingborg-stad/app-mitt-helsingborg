@@ -3,8 +3,16 @@ import { FormPosition, Case, AnsweredForm } from "./Case";
 import { EncryptionDetails } from "./Encryption";
 import { Form, Question } from "./FormTypes";
 
+export enum ActionTypes {
+  UPDATE_CASE = "UPDATE_CASE",
+  CREATE_CASE = "CREATE_CASE",
+  DELETE_CASE = "DELETE_CASE",
+  FETCH_CASES = "FETCH_CASES",
+  API_ERROR = "API_ERROR",
+}
+
 export interface Action {
-  type: string;
+  type: ActionTypes;
   payload: Case | Record<string, Case> | string | Error;
 }
 
