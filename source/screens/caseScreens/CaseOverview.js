@@ -423,7 +423,7 @@ function CaseOverview(props) {
         hasShownConfirmationThanksModal: true,
       });
     }
-  }, [authContext.user.personalNumber, caseItems, dialogState]);
+  }, [authContext.user?.personalNumber, caseItems, dialogState]);
 
   const activeCaseCards = activeCases.map((caseData) =>
     computeCaseCardComponent(caseData, navigation, authContext, {
