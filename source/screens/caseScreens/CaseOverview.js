@@ -153,6 +153,15 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const cardProps = {
     subtitle: caseData.status.name,
     description: null,
+    onClick: () => {
+      navigation.navigate("UserEvents", {
+        screen: caseData.caseType.navigateTo,
+        params: {
+          id: caseData.id,
+          name: caseData.caseType.name,
+        },
+      });
+    },
   };
 
   if (isOngoing) {
@@ -175,6 +184,8 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
           });
         }
       };
+
+      cardProps.onClick = () => {};
 
       if (selfNeedsToConfirm) {
         cardProps.subtitle = "Öppen";
@@ -234,15 +245,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
       payments={calculateSum(paymentsArray)}
       declined={calculateSum(partiallyApprovedDecisionsAndRejected)}
       givedate={giveDate}
-      onCardClick={() => {
-        navigation.navigate("UserEvents", {
-          screen: caseData.caseType.navigateTo,
-          params: {
-            id: caseData.id,
-            name: caseData.caseType.name,
-          },
-        });
-      }}
+      onCardClick={cardProps.onClick}
       onButtonClick={buttonProps.onClick}
       buttonColorScheme={buttonProps.colorSchema || colorSchema}
     />
@@ -390,10 +393,13 @@ function CaseOverview(props) {
 
   useEffect(() => {
     const coApplicantItemsToSign = caseItems.filter((caseData) => {
+      if (!caseData.persons) return false;
+
       const person = caseData.persons.find(
-        (person) => person.personalNumber === authContext.user.personalNumber
+        (personEntry) =>
+          personEntry.personalNumber === authContext.user.personalNumber
       );
-      const isCoApplicant = person.role === "coApplicant";
+      const isCoApplicant = person?.role === "coApplicant";
 
       if (!isCoApplicant) return false;
 
@@ -417,7 +423,7 @@ function CaseOverview(props) {
         hasShownConfirmationThanksModal: true,
       });
     }
-  }, [caseItems]);
+  }, [authContext.user.personalNumber, caseItems, dialogState]);
 
   const activeCaseCards = activeCases.map((caseData) =>
     computeCaseCardComponent(caseData, navigation, authContext, {
@@ -436,9 +442,6 @@ function CaseOverview(props) {
   const coApplicantData = dialogState.caseData?.persons?.find(
     (person) => person.role === "coApplicant"
   );
-
-  console.log("coApplicantData", coApplicantData);
-  console.log("mainApplicantData", mainApplicantData);
 
   return (
     <ScreenWrapper {...props}>
