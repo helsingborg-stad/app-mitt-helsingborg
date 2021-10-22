@@ -1,5 +1,10 @@
 import { Form } from "../../types/FormTypes";
-import { Action, CaseUpdate, UpdateCaseBody } from "../../types/CaseContext";
+import {
+  Action,
+  ActionTypes,
+  CaseUpdate,
+  UpdateCaseBody,
+} from "../../types/CaseContext";
 import {
   deserializeForm,
   serializeForm,
@@ -21,14 +26,6 @@ import {
   UserInterface,
 } from "../../services/encryption/EncryptionHelper";
 import { Case } from "../../types/Case";
-
-export const actionTypes = {
-  updateCase: "UPDATE_CASE",
-  createCase: "CREATE_CASE",
-  deleteCase: "DELETE_CASE",
-  fetchCases: "FETCH_CASE",
-  apiError: "API_ERROR",
-};
 
 export async function updateCase(
   {
@@ -73,13 +70,13 @@ export async function updateCase(
       callback(flatUpdatedCase);
     }
     return {
-      type: actionTypes.updateCase,
+      type: ActionTypes.UPDATE_CASE,
       payload: flatUpdatedCase,
     };
   } catch (error) {
     console.log(`Update current case error: ${error}`);
     return {
-      type: actionTypes.apiError,
+      type: ActionTypes.API_ERROR,
       payload: error as Error,
     };
   }
@@ -119,13 +116,13 @@ export async function createCase(
     callback(flattenedNewCase);
 
     return {
-      type: actionTypes.createCase,
+      type: ActionTypes.CREATE_CASE,
       payload: flattenedNewCase,
     };
   } catch (error) {
     console.log("create case api error", error);
     return {
-      type: actionTypes.apiError,
+      type: ActionTypes.API_ERROR,
       payload: error as Error,
     };
   }
@@ -133,7 +130,7 @@ export async function createCase(
 
 export function deleteCase(caseId: string): Action {
   return {
-    type: actionTypes.deleteCase,
+    type: ActionTypes.DELETE_CASE,
     payload: caseId,
   };
 }
@@ -296,19 +293,19 @@ export async function fetchCases(user: UserInterface): Promise<Action> {
       });
 
       return {
-        type: actionTypes.fetchCases,
+        type: ActionTypes.FETCH_CASES,
         payload: readyCases,
       };
     }
   } catch (error) {
     console.error(error);
     return {
-      type: actionTypes.apiError,
+      type: ActionTypes.API_ERROR,
       payload: error as Error,
     };
   }
   return {
-    type: actionTypes.fetchCases,
+    type: ActionTypes.FETCH_CASES,
     payload: {},
   };
 }

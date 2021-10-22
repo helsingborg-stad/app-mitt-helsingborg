@@ -1,6 +1,5 @@
 import { Case } from "../../types/Case";
-import { Action, State } from "../../types/CaseContext";
-import { actionTypes } from "../actions/CaseActions";
+import { Action, ActionTypes, State } from "../../types/CaseContext";
 
 export const initialState: State = {
   cases: {},
@@ -12,23 +11,23 @@ export default function CaseReducer(state: State, action: Action): State {
   // here be dragons.... deep copy is needed, for some reason.
   const newState = JSON.parse(JSON.stringify(state));
   switch (type) {
-    case actionTypes.updateCase:
+    case ActionTypes.UPDATE_CASE:
       newState.cases[(payload as Case).id] = payload;
       return newState;
 
-    case actionTypes.createCase:
+    case ActionTypes.CREATE_CASE:
       newState.cases[(payload as Case).id] = payload;
       return newState;
 
-    case actionTypes.deleteCase:
+    case ActionTypes.DELETE_CASE:
       newState.cases[(payload as Case).id] = undefined;
       return newState;
 
-    case actionTypes.fetchCases:
+    case ActionTypes.FETCH_CASES:
       newState.cases = payload;
       return newState;
 
-    case actionTypes.apiError:
+    case ActionTypes.API_ERROR:
       newState.error = payload;
       return newState;
 
