@@ -1,5 +1,7 @@
 import React, { useContext, useReducer, useEffect } from "react";
 import PropTypes from "prop-types";
+import { getStoredSymmetricKey } from "../services/encryption/EncryptionHelper";
+import { filterAsync } from "../helpers/Objects";
 import { Case } from "../types/Case";
 import { Form } from "../types/FormTypes";
 import {
@@ -7,6 +9,8 @@ import {
   Dispatch,
   ProvidedState,
   CaseUpdate,
+  PolledCaseResult,
+  ActionTypes,
 } from "../types/CaseContext";
 import AuthContext from "./AuthContext";
 import CaseReducer, {
@@ -17,9 +21,10 @@ import {
   createCase as create,
   deleteCase as remove,
   fetchCases as fetch,
+  pollCase,
 } from "./actions/CaseActions";
 
-const CaseState = React.createContext<ContextState>({ cases: {} });
+const CaseState = React.createContext<ContextState>(defaultInitialState);
 const CaseDispatch = React.createContext<Dispatch>({});
 
 /**
@@ -40,6 +45,27 @@ interface CaseProviderProps {
   children?: React.ReactNode;
 }
 
+async function checkSymmetricKeyExistsForCase(caseData: Case) {
+  const currentForm = caseData.forms[caseData.currentFormId];
+  const key = await getStoredSymmetricKey(currentForm);
+  return key !== null;
+}
+
+async function checkSymmetricKeyMissingForCase(caseData: Case) {
+  const exists = await checkSymmetricKeyExistsForCase(caseData);
+  return !exists;
+}
+
+async function caseRequiresSync(caseData: Case): Promise<boolean> {
+  const currentForm = caseData.forms[caseData.currentFormId];
+  const usesSymmetricKey = !!currentForm.encryption.symmetricKeyName;
+
+  if (usesSymmetricKey) {
+    return checkSymmetricKeyMissingForCase(caseData);
+  }
+
+  return false;
+}
 function CaseProvider({
   children,
   initialState = defaultInitialState,
@@ -86,9 +112,49 @@ function CaseProvider({
     dispatch(remove(caseId));
   }
 
+  async function pollLoop(cases: Case[]): Promise<void> {
+    const newCases = await cases.reduce(async (pollingCases, unsyncedCase) => {
+      const polledCases = await pollingCases;
+
+      const action = await pollCase(user, unsyncedCase);
+      dispatch(action);
+
+      const pollResult = action.payload as PolledCaseResult;
+      if (!pollResult.synced) {
+        return [...polledCases, pollResult.case];
+      }
+
+      return polledCases;
+    }, Promise.resolve([] as Case[]));
+
+    if (newCases.length > 0) {
+      await pollLoop(newCases);
+    }
+  }
+
   const fetchCases = async () => {
     const fetchData = await fetch(user);
     dispatch(fetchData);
+
+    const fetchPayload = fetchData.payload as Record<string, Case>;
+    const fetchPayloadArray = Object.values(fetchPayload);
+    const unsyncedCases = await filterAsync(
+      fetchPayloadArray,
+      caseRequiresSync
+    );
+
+    if (unsyncedCases.length > 0 && !state.isPolling) {
+      dispatch({
+        type: ActionTypes.SET_POLLING_CASES,
+        payload: unsyncedCases,
+      });
+
+      await pollLoop(unsyncedCases);
+
+      dispatch({
+        type: ActionTypes.SET_POLLING_DONE,
+      });
+    }
   };
 
   useEffect(() => {
@@ -99,7 +165,7 @@ function CaseProvider({
   }, [user]);
 
   const providedState: ProvidedState = {
-    cases: state.cases,
+    ...state,
     getCase,
     getCasesByFormIds,
     fetchCases,
