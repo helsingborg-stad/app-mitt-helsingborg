@@ -8,17 +8,17 @@ export enum ActionTypes {
   CREATE_CASE = "CREATE_CASE",
   DELETE_CASE = "DELETE_CASE",
   FETCH_CASES = "FETCH_CASES",
+  POLL_CASE = "POLL_CASE",
   API_ERROR = "API_ERROR",
-}
-
-export interface Action {
-  type: ActionTypes;
-  payload: Case | Record<string, Case> | string | Error;
+  SET_POLLING_CASES = "SET_POLLING_CASES",
+  SET_POLLING_DONE = "SET_POLLING_DONE",
 }
 
 export interface State {
   cases: Record<string, Case>;
   error?: unknown;
+  isPolling: boolean;
+  casesToPoll: Case[];
 }
 
 export interface Answer {
@@ -42,6 +42,11 @@ export interface CaseUpdate {
   encryption: EncryptionDetails;
 }
 
+export interface PolledCaseResult {
+  case: Case;
+  synced: boolean;
+}
+
 export interface UpdateCaseBody extends AnsweredForm {
   currentFormId: string;
   signature?: Signature;
@@ -60,4 +65,15 @@ export interface Dispatch {
     callback: (updatedCase: Case) => void
   ) => void;
   deleteCase?: (caseId: string) => void;
+}
+
+export interface Action {
+  type: ActionTypes;
+  payload?:
+    | Case
+    | Record<string, Case>
+    | Case[]
+    | PolledCaseResult
+    | string
+    | Error;
 }
