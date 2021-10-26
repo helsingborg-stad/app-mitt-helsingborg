@@ -1,3 +1,4 @@
+import wait from "../../helpers/Misc";
 import { Form } from "../../types/FormTypes";
 import {
   Action,
@@ -11,11 +12,7 @@ import {
 } from "../../services/encryption/EncryptionService";
 import { get, post, put } from "../../helpers/ApiRequest";
 import { convertAnswersToArray } from "../../helpers/CaseDataConverter";
-import {
-  deepCompareEquals,
-  deepCopyViaJson,
-  filterAsync,
-} from "../../helpers/Objects";
+import { deepCompareEquals, deepCopyViaJson } from "../../helpers/Objects";
 import {
   decryptFormAnswers,
   encryptFormAnswers,
@@ -141,26 +138,6 @@ async function checkSymmetricKeyExistsForCase(caseData: Case) {
   return key !== null;
 }
 
-async function checkSymmetricKeyMissingForCase(caseData: Case) {
-  const exists = await checkSymmetricKeyExistsForCase(caseData);
-  return !exists;
-}
-
-function filterCasesWithoutSymmetricKey(cases: Case[]): Promise<Case[]> {
-  return filterAsync(cases, checkSymmetricKeyMissingForCase);
-}
-
-async function caseRequiresSync(caseData: Case): Promise<boolean> {
-  const currentForm = caseData.forms[caseData.currentFormId];
-  const usesSymmetricKey = !!currentForm.encryption.symmetricKeyName;
-
-  if (usesSymmetricKey) {
-    return checkSymmetricKeyMissingForCase(caseData);
-  }
-
-  return false;
-}
-
 async function updateCaseForSymmetricKey(
   user: UserInterface,
   caseData: Case
@@ -192,49 +169,6 @@ async function updateCaseForSymmetricKey(
   }
 
   return caseData;
-}
-
-function handleCasePollingError(error: Error) {
-  console.error("Error during case poll", error);
-}
-
-async function pollCasesForSymmetricSetup(
-  user: UserInterface,
-  cases: Case[]
-): Promise<void> {
-  const POLL_INTERVAL = 5000;
-
-  await Promise.all(
-    cases.map((caseData) => updateCaseForSymmetricKey(user, caseData))
-  );
-
-  await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL));
-
-  const response = await get("/cases");
-  const rawCases: Case[] = response?.data?.data?.attributes?.cases;
-
-  if (rawCases) {
-    const pollCasesIds = cases.map((caseData) => caseData.id);
-    const updatedPollingCases = rawCases.filter((caseData) =>
-      pollCasesIds.includes(caseData.id)
-    );
-
-    await Promise.all(
-      updatedPollingCases.map((caseData) =>
-        updateCaseForSymmetricKey(user, caseData)
-      )
-    );
-
-    const casesStillNeedingSync = await filterCasesWithoutSymmetricKey(
-      updatedPollingCases
-    );
-
-    if (casesStillNeedingSync.length > 0) {
-      pollCasesForSymmetricSetup(user, casesStillNeedingSync).catch(
-        handleCasePollingError
-      );
-    }
-  }
 }
 
 export async function fetchCases(user: UserInterface): Promise<Action> {
@@ -280,18 +214,6 @@ export async function fetchCases(user: UserInterface): Promise<Action> {
         Promise.resolve({})
       );
 
-      const casesAwaitingSync = await filterAsync(rawCases, caseRequiresSync);
-
-      if (casesAwaitingSync.length > 0) {
-        pollCasesForSymmetricSetup(user, casesAwaitingSync).catch(
-          handleCasePollingError
-        );
-      }
-
-      casesAwaitingSync.forEach((unsyncedCase) => {
-        console.log("unsynced case", unsyncedCase.id, user.personalNumber);
-      });
-
       return {
         type: ActionTypes.FETCH_CASES,
         payload: readyCases,
@@ -307,5 +229,44 @@ export async function fetchCases(user: UserInterface): Promise<Action> {
   return {
     type: ActionTypes.FETCH_CASES,
     payload: {},
+  };
+}
+
+export async function pollCase(
+  user: UserInterface,
+  caseData: Case
+): Promise<Action> {
+  const POLL_INTERVAL = 5000;
+
+  await updateCaseForSymmetricKey(user, caseData);
+
+  await wait(POLL_INTERVAL);
+
+  const response = await get("/cases");
+  const rawCases: Case[] = response?.data?.data?.attributes?.cases;
+
+  if (rawCases) {
+    const relevantCase = rawCases.find((rawCase) => rawCase.id === caseData.id);
+
+    if (relevantCase) {
+      const possiblySyncedCase = await updateCaseForSymmetricKey(
+        user,
+        relevantCase
+      );
+      const isSynced = await checkSymmetricKeyExistsForCase(possiblySyncedCase);
+
+      return {
+        type: ActionTypes.POLL_CASE,
+        payload: { case: possiblySyncedCase, synced: isSynced },
+      };
+    }
+  }
+
+  return {
+    type: ActionTypes.POLL_CASE,
+    payload: {
+      case: caseData,
+      synced: false,
+    },
   };
 }
