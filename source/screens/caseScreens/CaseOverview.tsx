@@ -9,14 +9,13 @@ import React, {
 import { Animated, Easing, RefreshControl } from "react-native";
 import styled from "styled-components/native";
 import { useFocusEffect } from "@react-navigation/native";
-import { Modal, useModal } from "app/components/molecules/Modal";
+import { Modal } from "../../components/molecules/Modal";
 
-import Wrapper from "app/components/molecules/Dialog/Wrapper";
-import Heading from "app/components/atoms/Heading";
-import Body from "app/components/molecules/Dialog/Body";
-import BackgroundBlur from "app/components/molecules/Dialog/BackgroundBlur";
-import Button from "app/components/atoms/Button";
-import { getStoredSymmetricKey } from "app/services/encryption/EncryptionHelper";
+import Wrapper from "../../components/molecules/Dialog/Wrapper";
+import Heading from "../../components/atoms/Heading";
+import Body from "../../components/molecules/Dialog/Body";
+import BackgroundBlur from "../../components/molecules/Dialog/BackgroundBlur";
+import Button from "../../components/atoms/Button";
 import icons from "../../helpers/Icons";
 import { Text } from "../../components/atoms";
 import {
@@ -31,6 +30,9 @@ import FormContext from "../../store/FormContext";
 import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
 import { put } from "../../helpers/ApiRequest";
+import { State as CaseContextState } from "../../types/CaseContext";
+import wait from "../../helpers/Misc";
+import { Case } from "../../types/Case";
 
 const ButtonContainer = styled.View`
   display: flex;
@@ -69,7 +71,7 @@ const ListHeading = styled(Text)`
   margin-bottom: 8px;
 `;
 
-Card.MessageBody = styled(Card.Body)`
+const CardMessageBody = styled(Card.Body)`
   background-color: ${(props) => props.theme.colors.neutrals[5]};
 `;
 
@@ -252,33 +254,39 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   );
 };
 
+interface CoSignDialogState {
+  showCoSignModal: boolean;
+  showConfirmationThanksModal: boolean;
+  hasShownConfirmationThanksModal: boolean;
+  caseData: Case | null;
+}
+
 /**
  * Case overview screen
  * @param {obj} props
  */
-function CaseOverview(props) {
+function CaseOverview(props): JSX.Element {
   const { navigation } = props;
-  const [caseItems, setCaseItems] = useState([]);
+  const [caseItems, setCaseItems] = useState<Case[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [pendingCaseSign, setPendingCaseSign] = useState(null);
-  const { cases, getCasesByFormIds, fetchCases } = useContext(CaseState);
+  const [pendingCaseSign, setPendingCaseSign] = useState<Case | null>(null);
+  const { cases, getCasesByFormIds, fetchCases } = useContext(
+    CaseState
+  ) as Required<CaseContextState>;
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
-  const [dialogState, setDialogState] = useState({
+  const [dialogState, setDialogState] = useState<CoSignDialogState>({
     showCoSignModal: false,
     showConfirmationThanksModal: false,
     hasShownConfirmationThanksModal: false,
-    case: null,
+    caseData: null,
   });
 
   const authContext = useContext(AuthContext);
 
-  const wait = (timeout) =>
-    new Promise((resolve) => setTimeout(resolve, timeout));
-
-  const getCasesByStatuses = (statuses) =>
+  const getCasesByStatuses = (statuses: string[]) =>
     caseItems.filter((caseData) => {
       let matchesStatus = false;
       statuses.forEach((status) => {
@@ -562,9 +570,9 @@ function CaseOverview(props) {
         {!isLoading && activeCases.length === 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             <Card>
-              <Card.MessageBody>
+              <CardMessageBody>
                 <Card.Text>Du har inga aktiva ärenden.</Card.Text>
-              </Card.MessageBody>
+              </CardMessageBody>
             </Card>
           </Animated.View>
         )}
