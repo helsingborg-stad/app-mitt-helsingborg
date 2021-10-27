@@ -254,8 +254,8 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
       totalSteps={totalSteps}
       showPayments={isClosed}
       showProgress={isOngoing}
-      payments={calculateSum(paymentsArray)}
-      declined={calculateSum(partiallyApprovedDecisionsAndRejected)}
+      approvedAmount={calculateSum(paymentsArray)}
+      declinedAmount={calculateSum(partiallyApprovedDecisionsAndRejected)}
       givedate={giveDate}
       onCardClick={cardProps.onClick}
       onButtonClick={buttonProps.onClick}
