@@ -19,6 +19,9 @@ export interface State {
   error?: unknown;
   isPolling: boolean;
   casesToPoll: Case[];
+  getCase?: (caseId: string) => Case | undefined;
+  getCasesByFormIds?: (formIds: string[]) => Case[];
+  fetchCases?: () => Promise<void>;
 }
 
 export interface Answer {
@@ -50,12 +53,6 @@ export interface PolledCaseResult {
 export interface UpdateCaseBody extends AnsweredForm {
   currentFormId: string;
   signature?: Signature;
-}
-
-export interface ProvidedState extends State {
-  getCase: (caseId: string) => Case | undefined;
-  getCasesByFormIds: (formIds: string[]) => Case[];
-  fetchCases: () => Promise<void>;
 }
 
 export interface Dispatch {

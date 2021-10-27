@@ -7,7 +7,6 @@ import { Form } from "../types/FormTypes";
 import {
   State as ContextState,
   Dispatch,
-  ProvidedState,
   CaseUpdate,
   PolledCaseResult,
   ActionTypes,
@@ -164,7 +163,7 @@ function CaseProvider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  const providedState: ProvidedState = {
+  const providedState: ContextState = {
     ...state,
     getCase,
     getCasesByFormIds,
