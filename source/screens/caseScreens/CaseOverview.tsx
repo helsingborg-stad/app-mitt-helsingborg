@@ -176,7 +176,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
     if (isWaitingForCoApplicantSign) {
       cardProps.subtitle = "Väntar";
       cardProps.description = "Din medsökande måste bekräfta...";
-      buttonProps.colorSchema = "neutral";
+      buttonProps.colorSchema = "red";
       buttonProps.onClick = () => {
         if (extra && extra.setDialogState) {
           extra.setDialogState({
@@ -487,18 +487,6 @@ function CaseOverview(props): JSX.Element {
                 colorSchema="red"
               >
                 <Text>Okej</Text>
-              </PopupButton>
-              <PopupButton
-                onClick={() =>
-                  setDialogState({
-                    ...dialogState,
-                    showCoSignModal: false,
-                  })
-                }
-                block
-                colorSchema="neutral"
-              >
-                <Text>Avbryt</Text>
               </PopupButton>
             </ButtonContainer>
           </DialogContainer>
