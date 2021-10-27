@@ -1,26 +1,30 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { LayoutAnimation } from 'react-native';
-import { Button, Icon, Text } from '../../atoms';
-import RepeaterFieldListItem from './RepeaterFieldListItem';
-import Fieldset from '../../atoms/Fieldset/Fieldset';
-import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
-import { InputFieldType } from '../../../types/FormTypes';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { LayoutAnimation } from "react-native";
+import { Button, Icon, Text } from "../../atoms";
+import RepeaterFieldListItem from "./RepeaterFieldListItem";
+import Fieldset from "../../atoms/Fieldset/Fieldset";
+import {
+  getValidColorSchema,
+  PrimaryColor,
+} from "../../../styles/themeHelpers";
+import { InputFieldType } from "../../../types/FormTypes";
 
 const AddButton = styled(Button)`
   margin-top: 30px;
-  background: ${props => props.theme.colors.neutrals[7]};
+  background: ${(props) => props.theme.colors.neutrals[7]};
   border: 0;
-`
+`;
 export interface InputRow {
   id: string;
   title: string;
-  type: 'text' | 'date' | 'number';
+  type: "text" | "date" | "number" | "hidden";
   inputSelectValue: InputFieldType;
+  value?: string;
 }
 
-type Answers = Record<string, any> | string | number
+type Answers = Record<string, any> | string | number;
 
 interface Props {
   heading: string;
@@ -31,33 +35,51 @@ interface Props {
   onBlur?: (answers: Answers, fieldId?: string) => void;
   onAddAnswer?: (answers: Answers, fieldId?: string) => void;
   colorSchema: PrimaryColor;
-  error?: Record<string, {isValid: boolean, validationMessage: string}>[];
+  error?: Record<string, { isValid: boolean; validationMessage: string }>[];
   maxRows?: number;
 }
 const emptyInput: Record<string, string | number>[] = [];
 
-function isRecordArray(value: string | Record<string,string|number>[]): value is Record<string, string | number>[] {
-  return typeof value !== 'string';
+function isRecordArray(
+  value: string | Record<string, string | number>[]
+): value is Record<string, string | number>[] {
+  return typeof value !== "string";
 }
 /**
  * Repeater field component, for adding multiple copies of a particular kind of input.
  * The input-prop specifies the form of each input-group.
  */
-const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChange, onBlur, onAddAnswer, colorSchema, value, error, maxRows }) => {
-  const [localAnswers, setLocalAnswers] = useState( isRecordArray(value) ? value : emptyInput);
+const RepeaterField: React.FC<Props> = ({
+  heading,
+  addButtonText,
+  inputs,
+  onChange,
+  onBlur,
+  onAddAnswer,
+  colorSchema,
+  value,
+  error,
+  maxRows,
+}) => {
+  const [localAnswers, setLocalAnswers] = useState(
+    isRecordArray(value) ? value : emptyInput
+  );
 
-  const changeFromInput = (index: number) => (input: InputRow) => (text: string) => {
-    localAnswers[index][input.id] = text;
-    onChange(localAnswers);
-    setLocalAnswers([...localAnswers]);
-  };
+  const changeFromInput =
+    (index: number) => (input: InputRow) => (text: string) => {
+      console.log("change from input", index, input, text);
+      localAnswers[index][input.id] = text;
+      onChange(localAnswers);
+      setLocalAnswers([...localAnswers]);
+    };
 
   const onInputBlur = () => {
+    console.log("oninput blur", localAnswers);
     if (onBlur) onBlur(localAnswers);
   };
 
   const removeAnswer = (index: number) => () => {
-    setLocalAnswers(prev => {
+    setLocalAnswers((prev) => {
       prev.splice(index, 1);
       onChange(prev);
       if (onBlur) onBlur(prev);
@@ -76,11 +98,11 @@ const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChan
         type: LayoutAnimation.Types.easeInEaseOut,
       },
     });
-    // construct a new answer object from the inputs, where each answer is an empty string to start
+    // construct a new answer object from the inputs, where each answer is either the input value or an empty string to start
     const newAnswers = {};
-    inputs.forEach(input => {
-      newAnswers[input.id] = '';
-    })
+    inputs.forEach((input) => {
+      newAnswers[input.id] = input.value || "";
+    });
     const updatedAnswers = [...localAnswers, newAnswers];
     onChange(updatedAnswers);
     setLocalAnswers(updatedAnswers);
@@ -96,24 +118,34 @@ const RepeaterField: React.FC<Props> = ({ heading, addButtonText, inputs, onChan
     listItems.push(
       <RepeaterFieldListItem
         key={`${index}`}
-        heading={`${heading} ${index+1}`}
+        heading={`${heading} ${index + 1}`}
         inputs={inputs}
         value={answer}
         changeFromInput={changeFromInput(index)}
         onBlur={onInputBlur}
         color={validColorSchema}
         removeItem={removeAnswer(index)}
-        error={error && error[index] ? error[index]: undefined}
+        error={error && error[index] ? error[index] : undefined}
       />
     );
   });
 
   return (
-    <Fieldset legend={heading} colorSchema={validColorSchema} empty={listItems.length === 0}>
-       {listItems}
-      <AddButton onClick={addAnswer} colorSchema="green" block variant="outlined" disabled={maxRows && listItems.length >= maxRows}>
+    <Fieldset
+      legend={heading}
+      colorSchema={validColorSchema}
+      empty={listItems.length === 0}
+    >
+      {listItems}
+      <AddButton
+        onClick={addAnswer}
+        colorSchema="green"
+        block
+        variant="outlined"
+        disabled={maxRows && listItems.length >= maxRows}
+      >
         <Icon name="add" color="green" />
-        <Text>{addButtonText || 'Lägg till'}</Text>
+        <Text>{addButtonText || "Lägg till"}</Text>
       </AddButton>
     </Fieldset>
   );
@@ -144,7 +176,7 @@ RepeaterField.propTypes = {
 
 RepeaterField.defaultProps = {
   inputs: [],
-  color: 'red',
+  color: "red",
   onChange: () => {},
 };
 export default RepeaterField;
