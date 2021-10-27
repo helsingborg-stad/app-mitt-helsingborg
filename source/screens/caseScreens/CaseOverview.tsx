@@ -86,6 +86,18 @@ const colorSchema = "red";
  * @param {function?} extra.dialogState
  */
 const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
+  interface InternalCardProps {
+    subtitle: string;
+    description?: string;
+    onClick: () => void;
+  }
+
+  interface InternalButtonProps {
+    text: string;
+    colorSchema: string | null;
+    onClick: () => void;
+  }
+
   const currentStep =
     caseData?.forms?.[caseData.currentFormId]?.currentPosition
       ?.currentMainStep || 0;
@@ -146,15 +158,14 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
       (isWaitingForCoApplicantSign && selfNeedsToConfirm)
     : isOngoing || isNotStarted || isCompletionRequired || isSigned;
 
-  const buttonProps = {
+  const buttonProps: InternalButtonProps = {
     onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
     text: "",
     colorSchema: null,
   };
 
-  const cardProps = {
+  const cardProps: InternalCardProps = {
     subtitle: caseData.status.name,
-    description: null,
     onClick: () => {
       navigation.navigate("UserEvents", {
         screen: caseData.caseType.navigateTo,
@@ -187,7 +198,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
         }
       };
 
-      cardProps.onClick = () => {};
+      cardProps.onClick = () => undefined;
 
       if (selfNeedsToConfirm) {
         cardProps.subtitle = "Öppen";
@@ -226,7 +237,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
     ? `${
         payments.payment.givedate.split("-")[2]
       } ${getSwedishMonthNameByTimeStamp(payments.payment.givedate, true)}`
-    : null;
+    : undefined;
 
   return (
     <CaseCard
@@ -234,7 +245,6 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
       colorSchema={colorSchema}
       title={caseData.caseType.name}
       subtitle={cardProps.subtitle}
-      month={applicationPeriodMonth}
       largeSubtitle={applicationPeriodMonth}
       description={cardProps.description}
       icon={icons[caseData.caseType.icon]}
