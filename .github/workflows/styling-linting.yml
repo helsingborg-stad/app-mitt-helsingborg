@@ -94,7 +94,7 @@ jobs:
           echo $file_list
           if [[ -n $file_list ]]
           then
-              yarn eslint $file_list
+              yarn eslint --max-warnings 0 $file_list
           else
               echo "no files to lint"
           fi
