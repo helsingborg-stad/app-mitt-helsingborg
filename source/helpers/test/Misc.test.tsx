@@ -1,4 +1,4 @@
-import wait from "../Misc";
+import { wait } from "../Misc";
 
 describe("Misc helper functions", () => {
   afterEach(() => {
