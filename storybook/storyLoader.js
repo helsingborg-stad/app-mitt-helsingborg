@@ -41,6 +41,7 @@ function loadStories() {
   require("../source/components/molecules/RepeaterField/RepeaterField.stories");
   require("../source/components/molecules/TimespanButton/TimespanButton.stories");
   require("../source/components/molecules/ToastNotification/ToastNotifications.stories");
+  require("../source/components/organisms/ButtonList/ButtonList.stories");
   require("../source/components/organisms/FormList/FormList.stories");
   require("../source/components/organisms/Step/Step.stories");
   require("../source/components/organisms/Step/StepBanner/StepBanner.stories");
@@ -93,6 +94,7 @@ const stories = [
   "../source/components/molecules/RepeaterField/RepeaterField.stories",
   "../source/components/molecules/TimespanButton/TimespanButton.stories",
   "../source/components/molecules/ToastNotification/ToastNotifications.stories",
+  "../source/components/organisms/ButtonList/ButtonList.stories",
   "../source/components/organisms/FormList/FormList.stories",
   "../source/components/organisms/Step/Step.stories",
   "../source/components/organisms/Step/StepBanner/StepBanner.stories",
