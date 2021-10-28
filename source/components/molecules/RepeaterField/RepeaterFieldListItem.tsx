@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { Text, Input } from "../../atoms";
 import Button from "../../atoms/Button";
 import Label from "../../atoms/Label";
+import Select from "../../atoms/Select";
 import { InputRow } from "./RepeaterField";
 import CalendarPicker from "../CalendarPicker/CalendarPickerForm";
 import theme from "../../../styles/theme";
@@ -76,6 +77,16 @@ const ItemInput = styled(Input)`
   color: ${(props) => props.theme.repeater[props.colorSchema].inputText};
   padding: 5px;
 `;
+
+const SelectInput = styled(Select)`
+  text-align: right;
+  min-width: 80%;
+  font-weight: 500;
+  color: ${(props) => props.theme.repeater[props.colorSchema].inputText};
+  padding: 5px;
+  margin-bottom: 0px;
+`;
+
 const DeleteButton = styled(Button)<{ color: string }>`
   margin-top: 10px;
   margin-bottom: 10px;
@@ -167,6 +178,20 @@ const InputComponent = React.forwardRef(
             onSelect={onChange}
             editable
             transparent
+          />
+        );
+      case "select":
+        return (
+          <SelectInput
+            items={input.items}
+            colorSchema={colorSchema}
+            value={value.toString()}
+            onValueChange={onChange}
+            onBlur={onBlur}
+            transparent
+            error={error}
+            showErrorMessage={showErrorMessage}
+            ref={ref}
           />
         );
       default:

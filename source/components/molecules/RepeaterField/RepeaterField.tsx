@@ -19,7 +19,7 @@ const AddButton = styled(Button)`
 export interface InputRow {
   id: string;
   title: string;
-  type: "text" | "date" | "number" | "hidden";
+  type: "text" | "date" | "number" | "hidden" | 'select';
   inputSelectValue: InputFieldType;
   value?: string;
 }
