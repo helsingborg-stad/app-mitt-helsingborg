@@ -1,4 +1,4 @@
-import wait from "../../helpers/Misc";
+import { wait } from "../../helpers/Misc";
 import { Form } from "../../types/FormTypes";
 import {
   Action,

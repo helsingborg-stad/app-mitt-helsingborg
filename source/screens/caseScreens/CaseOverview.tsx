@@ -31,7 +31,7 @@ import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
 import { put } from "../../helpers/ApiRequest";
 import { State as CaseContextState } from "../../types/CaseContext";
-import wait from "../../helpers/Misc";
+import { wait } from "../../helpers/Misc";
 import { Case } from "../../types/Case";
 
 const ButtonContainer = styled.View`
