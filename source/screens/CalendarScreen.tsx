@@ -115,7 +115,7 @@ const divideBookingsByMonth = (activeBookings: BookingItem[]) => {
 };
 
 const getBookingData = (): Promise<BookingItem[]> =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve) => {
     setTimeout(() => resolve(mockBookingData), 1000);
   });
 
