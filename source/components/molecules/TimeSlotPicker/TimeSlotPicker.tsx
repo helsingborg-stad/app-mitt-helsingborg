@@ -7,7 +7,7 @@ import { DayPicker, TimeSpanButton } from "..";
 interface TimeSlotPickerProps {
   value: any;
   onChange: (newObject: any) => void;
-  availableTimes: any[];
+  availableTimes: any;
 }
 
 const TimeSlotPicker = ({
