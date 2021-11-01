@@ -97,8 +97,13 @@ export const convertAnswersToArray = (data, formQuestions) => {
               const dynamicTagRegex = new RegExp('.+:x');
               newTags = tags.map((tag) => {
                 if (dynamicTagRegex.test(tag)) {
-                  const strArray = tag.split(':');
-                  return `${strArray?.[0] || tag}:${childFieldId}`;
+                  const tagStringList = tag.split(':');
+                  const tagStringIndex = tagStringList.findIndex('x');
+                  if (tagStringIndex !== -1) {
+                    tagStringList.array.splice(tagStringIndex, 1);
+                    return [...tagStringList, childFieldId].join(':')
+                  }
+                  return [tag, childFieldId].join(':')
                 }
                 return tag;
               });
