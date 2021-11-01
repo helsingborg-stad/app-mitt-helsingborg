@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { ViewStyle } from "react-native";
 import styled from "styled-components/native";
 import {
@@ -8,9 +7,12 @@ import {
   TabRouter,
 } from "@react-navigation/native";
 import TabNavigatorItem from "./TabNavigatorItem";
-import { PrimaryColor } from "../../../styles/themeHelpers";
+import { ThemeType } from "../../../styles/themeHelpers";
 
-const BarWrapper = styled.View`
+interface BarWrapperProps {
+  theme: ThemeType;
+}
+const BarWrapper = styled.View<BarWrapperProps>`
   background-color: ${(props) => props.theme.colors.neutrals[5]};
   border-top-color: ${(props) => props.theme.border.default};
   border-top-width: 1px;
@@ -24,7 +26,7 @@ const FlexWrapper = styled.View`
   flex: 1;
 `;
 
-const colorsDictionary = {
+const colorsDictionary: Record<string, string> = {
   UserEvents: "red",
   Calendar: "red",
   Profile: "blue",
@@ -32,7 +34,6 @@ const colorsDictionary = {
 };
 
 interface Props {
-  swipeEnabled?: boolean;
   screenOptions?: {
     headerShown?: boolean;
     title?: string;
@@ -40,7 +41,6 @@ interface Props {
     tabBarIconInactive: () => React.ReactNode;
   };
   initialRouteName: string;
-  tabBarStyle: React.CSSProperties;
   contentStyle: ViewStyle;
   children: React.ReactNode;
 }
@@ -65,7 +65,7 @@ const TabNavigator: React.FC<Props> = ({
       <BarWrapper>
         {state.routes.map((route, index) => (
           <TabNavigatorItem
-            key={`${index}-${route}`}
+            key={`TabNavigatorItem-${route}`}
             route={route}
             navigation={navigation}
             descriptor={descriptors[route.key]}
@@ -77,13 +77,6 @@ const TabNavigator: React.FC<Props> = ({
       </BarWrapper>
     </NavigationHelpersContext.Provider>
   );
-};
-
-TabNavigator.propTypes = {
-  initialRouteName: PropTypes.string.isRequired,
-  children: PropTypes.array,
-  screenOptions: PropTypes.any,
-  contentStyle: PropTypes.object,
 };
 
 export default TabNavigator;
