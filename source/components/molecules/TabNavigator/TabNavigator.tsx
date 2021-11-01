@@ -1,14 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { ViewStyle } from 'react-native';
-import styled from 'styled-components/native';
+import React from "react";
+import PropTypes from "prop-types";
+import { ViewStyle } from "react-native";
+import styled from "styled-components/native";
 import {
   NavigationHelpersContext,
   useNavigationBuilder,
   TabRouter,
-} from '@react-navigation/native';
-import TabNavigatorItem from './TabNavigatorItem';
-import { PrimaryColor } from '../../../styles/themeHelpers';
+} from "@react-navigation/native";
+import TabNavigatorItem from "./TabNavigatorItem";
+import { PrimaryColor } from "../../../styles/themeHelpers";
 
 const BarWrapper = styled.View`
   background-color: ${(props) => props.theme.colors.neutrals[5]};
@@ -24,7 +24,12 @@ const FlexWrapper = styled.View`
   flex: 1;
 `;
 
-const colors: PrimaryColor[] = ['red', 'blue', 'green'];
+const colorsDictionary = {
+  UserEvents: "red",
+  Calendar: "red",
+  Profile: "blue",
+  About: "green",
+};
 
 interface Props {
   swipeEnabled?: boolean;
@@ -65,7 +70,7 @@ const TabNavigator: React.FC<Props> = ({
             navigation={navigation}
             descriptor={descriptors[route.key]}
             state={state}
-            color={colors[state.index]}
+            color={colorsDictionary[route.name]}
             active={index === state.index}
           />
         ))}
