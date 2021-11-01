@@ -4,7 +4,7 @@ import CalendarScreen from "../screens/CalendarScreen";
 
 const Stack = createStackNavigator();
 
-const CalendarNavigator = () => (
+const CalendarNavigator = (): JSX.Element => (
   <Stack.Navigator
     screenOptions={{ headerShown: true }}
     initialRouteName="CalendarScreen"
