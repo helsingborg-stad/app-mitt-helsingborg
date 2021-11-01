@@ -41,6 +41,7 @@ function loadStories() {
   require("../source/components/molecules/PersonField/PersonField.stories");
   require("../source/components/molecules/RadioGroup/RadioGroup.stories");
   require("../source/components/molecules/RepeaterField/RepeaterField.stories");
+  require("../source/components/molecules/TimeSlotPicker/TimeSlotPicker.stories");
   require("../source/components/molecules/TimeSpanButton/TimeSpanButton.stories");
   require("../source/components/molecules/ToastNotification/ToastNotifications.stories");
   require("../source/components/organisms/ButtonList/ButtonList.stories");
@@ -96,6 +97,7 @@ const stories = [
   "../source/components/molecules/PersonField/PersonField.stories",
   "../source/components/molecules/RadioGroup/RadioGroup.stories",
   "../source/components/molecules/RepeaterField/RepeaterField.stories",
+  "../source/components/molecules/TimeSlotPicker/TimeSlotPicker.stories",
   "../source/components/molecules/TimeSpanButton/TimeSpanButton.stories",
   "../source/components/molecules/ToastNotification/ToastNotifications.stories",
   "../source/components/organisms/ButtonList/ButtonList.stories",
