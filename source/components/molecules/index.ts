@@ -24,3 +24,4 @@ export { default as FloatingButton } from "./FloatingButton";
 export { default as TimeSpanButton } from "./TimeSpanButton";
 export { default as DateTimeCard } from "./DateTimeCard";
 export { default as AddressCard } from "./AddressCard";
+export { default as TimeSlotPicker } from "./TimeSlotPicker";
