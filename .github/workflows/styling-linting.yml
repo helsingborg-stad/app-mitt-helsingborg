@@ -41,7 +41,8 @@ jobs:
           file_list=$(
             git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD \
             | egrep -i '\.([jt]sx?|json|md|ya?ml|s?css)$' \
-            | egrep -v "^package.json$" || true
+            | egrep -v "^package.json$" \
+            | egrep -v "^storybook/storyLoader.js$" || true
           )
 
           if [[ -n $file_list ]]
@@ -88,7 +89,11 @@ jobs:
           echo "sometest"
           echo $sometest
 
-          file_list=$(git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD | egrep -i '\.([jt]sx?)$' || true)
+          file_list=$(
+            git diff --name-only --diff-filter=d origin/$GIT_BASE_REF HEAD \
+            | egrep -i '\.([jt]sx?)$' \
+            | egrep -v "^storybook/storyLoader.js$" || true
+          )
 
           echo "files"
           echo $file_list
