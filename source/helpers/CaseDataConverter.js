@@ -91,21 +91,12 @@ export const convertAnswersToArray = (data, formQuestions) => {
           Object.entries(childItems).forEach((childItem) => {
             const [repeaterItemId, repeaterItemValue] = childItem;
             const repeaterFieldItem = other.inputs.find((obj) => obj.id === repeaterItemId);
-            const { tags } = repeaterFieldItem;
+            const { tags: tagsInRepeaterField } = repeaterFieldItem;
             let newTags = [];
             if (Array.isArray(tags)) {
-              const dynamicTagRegex = new RegExp('.+:x');
-              newTags = tags.map((tag) => {
-                if (dynamicTagRegex.test(tag)) {
-                  const tagStringList = tag.split(':');
-                  const tagStringIndex = tagStringList.findIndex('x');
-                  if (tagStringIndex !== -1) {
-                    tagStringList.array.splice(tagStringIndex, 1);
-                    return [...tagStringList, childFieldId].join(':')
-                  }
-                  return [tag, childFieldId].join(':')
-                }
-                return tag;
+              newTags = tagsInRepeaterField.map((tag) => {
+                  const updatedTag = tag.replace(':x', `:${childFieldId}`)
+                  return updatedTag
               });
             }
 
