@@ -18,7 +18,7 @@ describe('replaceTagPart', () => {
       part: 'replace',
       value: 'success'
     }
-    const output = 'test:example:success'
+    const output = 'test:success:example:success'
     expect(replaceTagPart(input.tag, input.part, input.value)).toEqual(output)
   });
 
@@ -28,7 +28,7 @@ describe('replaceTagPart', () => {
       part: 'replace',
       value: 'success'
     }
-    const output = 'test:example:success'
+    const output = 'success'
     expect(replaceTagPart(input.tag, input.part, input.value)).toEqual(output)
   });
 
