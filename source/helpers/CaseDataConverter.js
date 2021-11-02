@@ -31,6 +31,18 @@ export const getFormQuestions = (form) => {
   return formQuestions;
 };
 
+export function replaceTagPart(tag, part, value){
+  const tagParts = tag.split(':')
+  const updatedTagParts = tagParts.map(tagPart => {
+    if(tagPart === part) {
+      return value
+    }
+    return tagPart
+  })
+
+  return updatedTagParts.join(':')
+}
+
 /**
  * Convert answers in context to an array that follows Case API data structure
  * @param {obj} data
@@ -95,7 +107,7 @@ export const convertAnswersToArray = (data, formQuestions) => {
             let newTags = [];
             if (Array.isArray(tags)) {
               newTags = tagsInRepeaterField.map((tag) => {
-                  const updatedTag = tag.replace(':x', `:${childFieldId}`)
+                  const updatedTag = replaceTagPart(tag, 'x', childFieldId)
                   return updatedTag
               });
             }
