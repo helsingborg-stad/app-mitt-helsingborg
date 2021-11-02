@@ -12,6 +12,16 @@ describe('replaceTagPart', () => {
     expect(replaceTagPart(input.tag, input.part, input.value)).toEqual(output)
   });
 
+  it('should replace part at beginning of tag', () => {
+    const input = {
+      tag: 'replace:example:test',
+      part: 'replace',
+      value: 'success'
+    }
+    const output = 'success:example:test'
+    expect(replaceTagPart(input.tag, input.part, input.value)).toEqual(output)
+  });
+
   it('should replace part in tag on multiple occurences', () => {
     const input = {
       tag: 'test:replace:example:replace',
