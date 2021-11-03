@@ -19,7 +19,7 @@ const AddButton = styled(Button)`
 export interface InputRow {
   id: string;
   title: string;
-  type: "text" | "date" | "number" | "hidden" | 'select';
+  type: "text" | "date" | "number" | "hidden" | "select";
   inputSelectValue: InputFieldType;
   value?: string;
 }
@@ -67,7 +67,6 @@ const RepeaterField: React.FC<Props> = ({
 
   const changeFromInput =
     (index: number) => (input: InputRow) => (text: string) => {
-      console.log("change from input", index, input, text);
       localAnswers[index][input.id] = text;
       onChange(localAnswers);
       setLocalAnswers([...localAnswers]);
