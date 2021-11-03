@@ -47,6 +47,7 @@ describe("replaceTagPart", () => {
     const output = "success";
 
     const result = replaceTagPart(input.tag, input.part, input.value);
+
     expect(result).toBe(output);
   });
 
