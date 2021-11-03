@@ -183,6 +183,16 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
 
   if (isSubmitted) {
     buttonProps.text = "Se beslut";
+
+    buttonProps.onClick = () => {
+      navigation.navigate("UserEvents", {
+        screen: caseData.caseType.navigateTo,
+        params: {
+          id: caseData.id,
+          name: caseData.caseType.name,
+        },
+      });
+    };
   }
 
   if (isOngoing) {
