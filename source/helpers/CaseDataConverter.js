@@ -16,7 +16,7 @@ const createAnswerObject = (data) => ({
  */
 export const getFormQuestions = (form) => {
   const formQuestions = [];
-  if (!form || typeof form !== 'object') {
+  if (!form || typeof form !== "object") {
     return formQuestions;
   }
 
@@ -31,16 +31,16 @@ export const getFormQuestions = (form) => {
   return formQuestions;
 };
 
-export function replaceTagPart(tag, part, value){
-  const tagParts = tag.split(':')
-  const updatedTagParts = tagParts.map(tagPart => {
-    if(tagPart === part) {
-      return value
+export function replaceTagPart(tag, part, value) {
+  const tagParts = tag.split(":");
+  const updatedTagParts = tagParts.map((tagPart) => {
+    if (tagPart === part) {
+      return value;
     }
-    return tagPart
-  })
+    return tagPart;
+  });
 
-  return updatedTagParts.join(':')
+  return updatedTagParts.join(":");
 }
 
 /**
@@ -51,22 +51,26 @@ export function replaceTagPart(tag, part, value){
 export const convertAnswersToArray = (data, formQuestions) => {
   const answers = [];
 
-  if (!data || typeof data !== 'object' || !formQuestions || typeof formQuestions !== 'object') {
+  if (
+    !data ||
+    typeof data !== "object" ||
+    !formQuestions ||
+    typeof formQuestions !== "object"
+  ) {
     return answers;
   }
 
   Object.entries(data).forEach((answer) => {
     const [fieldId, value] = answer;
-    const { id, type, tags, disableValueStorage, ...other } = formQuestions.find(
-      (element) => element.id === fieldId
-    );
+    const { id, type, tags, disableValueStorage, ...other } =
+      formQuestions.find((element) => element.id === fieldId);
 
     if (value === undefined || disableValueStorage) {
       return;
     }
 
     switch (type) {
-      case 'editableList':
+      case "editableList":
         Object.entries(value).forEach((valueObject) => {
           const [childFieldId, childValue] = valueObject;
           const listItem = other.inputs.find((obj) => obj.key === childFieldId);
@@ -83,7 +87,7 @@ export const convertAnswersToArray = (data, formQuestions) => {
         return;
 
       // TODO: AvatarList component is broken so this needs to be updated when it works
-      case 'avatarList':
+      case "avatarList":
         Object.entries(value).forEach((valueObject) => {
           const [childFieldId, childValue] = valueObject;
           answers.push(
@@ -96,19 +100,21 @@ export const convertAnswersToArray = (data, formQuestions) => {
         });
         return;
 
-      case 'repeaterField':
+      case "repeaterField":
         Object.entries(value).forEach((repeaterField) => {
           const [childFieldId, childItems] = repeaterField;
 
           Object.entries(childItems).forEach((childItem) => {
             const [repeaterItemId, repeaterItemValue] = childItem;
-            const repeaterFieldItem = other.inputs.find((obj) => obj.id === repeaterItemId);
+            const repeaterFieldItem = other.inputs.find(
+              (obj) => obj.id === repeaterItemId
+            );
             const { tags: tagsInRepeaterField } = repeaterFieldItem;
             let newTags = [];
             if (Array.isArray(tagsInRepeaterField)) {
               newTags = tagsInRepeaterField.map((tag) => {
-                  const updatedTag = replaceTagPart(tag, 'x', childFieldId)
-                  return updatedTag
+                const updatedTag = replaceTagPart(tag, "x", childFieldId);
+                return updatedTag;
               });
             }
 
@@ -143,7 +149,7 @@ export const convertAnswersToArray = (data, formQuestions) => {
  * @param {string} str
  */
 const isNumeric = (str) => {
-  if (typeof str !== 'string') return false; // we only process strings!
+  if (typeof str !== "string") return false; // we only process strings!
   // eslint-disable-next-line no-restricted-globals
   return !isNaN(str) && !isNaN(parseFloat(str));
 };
@@ -160,7 +166,7 @@ export const convertAnswerArrayToObject = (answerArray) => {
   }
 
   answerArray.forEach((answer) => {
-    const path = answer.field.id.split('.');
+    const path = answer.field.id.split(".");
     path.reduce((prev, pathPart, i) => {
       if (!prev) {
         return undefined;
