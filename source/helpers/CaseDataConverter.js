@@ -105,7 +105,7 @@ export const convertAnswersToArray = (data, formQuestions) => {
             const repeaterFieldItem = other.inputs.find((obj) => obj.id === repeaterItemId);
             const { tags: tagsInRepeaterField } = repeaterFieldItem;
             let newTags = [];
-            if (Array.isArray(tags)) {
+            if (Array.isArray(tagsInRepeaterField)) {
               newTags = tagsInRepeaterField.map((tag) => {
                   const updatedTag = replaceTagPart(tag, 'x', childFieldId)
                   return updatedTag
