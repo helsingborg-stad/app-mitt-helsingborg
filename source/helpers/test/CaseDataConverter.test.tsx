@@ -73,5 +73,4 @@ describe('replaceTagPart', () => {
 
     expect(result).toBe(output)
   });
-
 })
