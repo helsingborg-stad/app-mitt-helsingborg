@@ -1,5 +1,4 @@
 import React from "react";
-import { Linking } from "react-native";
 import { Card } from "..";
 import { Icon, Text } from "../../atoms";
 import { TitleText, AddressText, StyledButton, AddressWrapper } from "./styled";
@@ -9,14 +8,6 @@ interface DateTimeCardProps {
   addressLines: string[];
   geocode?: string;
 }
-
-const linkToMaps = (geocode: string) => {
-  Linking.canOpenURL(geocode).then((success) => {
-    if (success) {
-      Linking.openURL(geocode);
-    }
-  });
-};
 
 const DateTimeCard = ({
   addressLines,
@@ -38,7 +29,7 @@ const DateTimeCard = ({
           variant="link"
           colorSchema="red"
           fullWidth
-          onClick={() => linkToMaps(geocode)}
+          onClick={() => true}
         >
           <Text>Hitta hit</Text>
           <Icon name="room" />
