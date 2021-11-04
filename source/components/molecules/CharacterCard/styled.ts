@@ -2,6 +2,7 @@ import styled from "styled-components/native";
 
 import Text from "../../atoms/Text";
 import Heading from "../../atoms/Heading";
+import Button from "../../atoms/Button";
 
 interface BodyProps {
   outlineColor: string;
@@ -61,4 +62,8 @@ const CardSubtitle = styled(Text)<CardSubTitleProps>`
   line-height: 16px;
 `;
 
-export { Card, Section, Image, CardTitle, CardSubtitle };
+const DetailButton = styled(Button)`
+  margin-top: 12px;
+`;
+
+export { Card, Section, Image, CardTitle, CardSubtitle, DetailButton };
