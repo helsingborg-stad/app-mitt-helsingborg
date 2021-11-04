@@ -1,6 +1,7 @@
 import React from "react";
 import { storiesOf } from "@storybook/react-native";
 import styled from "styled-components/native";
+import { View } from "react-native";
 import { Text } from "../../atoms";
 import StoryWrapper from "../StoryWrapper";
 import CharacterCard from "./CharacterCard";
@@ -69,6 +70,32 @@ const OverviewExamples = () => (
       icon={icons.ICON_CONTACT_PERSON_1}
       selected
     />
+
+    <Title>Ingen checkbox</Title>
+    <CharacterCard
+      onCardClick={() => true}
+      title="Aquaman"
+      department="Socialförvaltningen"
+      jobTitle="Socialsekreterare"
+      icon={icons.ICON_CONTACT_PERSON_1}
+      selected={false}
+      showCheckbox={false}
+    />
+
+    <Title>Bokningsbekräftelse</Title>
+    <CharacterCard
+      onCardClick={() => true}
+      title="Lex Luthor"
+      department="Socialförvaltningen"
+      jobTitle="Socialsekreterare"
+      email="lex.luthor@helsingborg.se"
+      phone="042 - 86 09 01"
+      icon={icons.ICON_CONTACT_PERSON_1}
+      selected={false}
+      showCheckbox={false}
+    />
+
+    <Title> </Title>
   </FlexContainer>
 );
 
