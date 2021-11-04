@@ -2,7 +2,7 @@ import React from "react";
 import { ImageSourcePropType } from "react-native";
 import styled from "styled-components/native";
 import { Icon, Text } from "../../atoms";
-import { Card } from "..";
+import { Card, DateTimeCard } from "..";
 
 Card.LargeText = styled(Card.Text)`
   font-size: ${(props) => props.theme.fontSizes[4]}px;
@@ -13,38 +13,6 @@ Card.LargeText = styled(Card.Text)`
 Card.Meta = styled(Card.Text)`
   font-size: ${(props) => props.theme.fontSizes[3]}px;
   ${(props) => `color: ${props.theme.colors.neutrals[1]};`}
-`;
-
-Card.BookingContainer = styled.View`
-  margin-top: 10px;
-  border-width: 3px;
-  border-radius: 5px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  ${(props) => `background-color: ${props.theme.colors.complementary.red[3]};`}
-  ${(props) => `border-color: ${props.theme.colors.complementary.red[2]};`}
-`;
-
-Card.BookingTitle = styled.Text`
-  font-size: ${(props) => props.theme.fontSizes[2]}px;
-  font-weight: ${(props) => props.theme.fontWeights[1]};
-  ${(props) => `color: ${props.theme.colors.primary.red[0]};`}
-  padding: 5px;
-`;
-
-Card.BookingDate = styled.Text`
-  font-size: ${(props) => props.theme.fontSizes[6]}px;
-  font-weight: ${(props) => props.theme.fontWeights[1]};
-  padding: 5px;
-`;
-
-Card.BookingTime = styled.Text`
-  font-size: ${(props) => props.theme.fontSizes[4]}px;
-  font-weight: ${(props) => props.theme.fontWeights[0]};
-  padding: 5px;
 `;
 
 interface CaseCardProps {
@@ -107,11 +75,7 @@ const CaseCard = ({
       {description && <Card.Text>{description}</Card.Text>}
 
       {showBookingDate && (
-        <Card.BookingContainer>
-          <Card.BookingTitle>TID FÖR MÖTE</Card.BookingTitle>
-          <Card.BookingDate>{bookingDate}</Card.BookingDate>
-          <Card.BookingTime>{bookingTime}</Card.BookingTime>
-        </Card.BookingContainer>
+        <DateTimeCard date={bookingDate} time={bookingTime} />
       )}
 
       {showProgress && (
