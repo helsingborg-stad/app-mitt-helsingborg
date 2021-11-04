@@ -4,10 +4,19 @@ import { ScrollView } from "react-native-gesture-handler";
 import stringify from "json-stable-stringify";
 import { DayPicker, TimeSpanButton } from "..";
 
+interface TimeSpan {
+  startTime: string;
+  endTime: string;
+}
+interface ValueType {
+  date: string;
+  timeSpan: TimeSpan;
+}
+
 interface TimeSlotPickerProps {
-  value: any;
-  onChange: (newObject: any) => void;
-  availableTimes: any;
+  value: ValueType;
+  onChange: (newObject: Partial<ValueType>) => void;
+  availableTimes: Record<string, TimeSpan[]>;
 }
 
 const TimeSlotPicker = ({
@@ -17,17 +26,44 @@ const TimeSlotPicker = ({
 }: TimeSlotPickerProps): JSX.Element => {
   const dates = Object.keys(availableTimes);
 
-  const currentDate = value && value.date ? value.date : "";
-  const timeObject = value && value.times ? value.times : [];
-
-  const currentTimes = currentDate ? availableTimes[currentDate] : [];
+  const currentDate = value?.date || "";
+  const currentTimeSpan = value?.timeSpan || {};
+  const currentAvailableTimes = availableTimes[currentDate] || [];
 
   const updateDate = (date: string) => {
     onChange({ date });
   };
 
-  const updateTime = (times: any) => {
-    onChange({ ...value, times });
+  const updateTime = (timeSpan: TimeSpan) => {
+    onChange({ ...value, timeSpan });
+  };
+
+  const formatTimeSpanText = (timeSpan: TimeSpan) =>
+    `${timeSpan.startTime.substr(0, 5)}-${timeSpan.endTime.substr(0, 5)}`;
+
+  const timeSpanIsEqual = (t1: TimeSpan, t2: TimeSpan) =>
+    t1.startTime === t2.startTime && t1.endTime === t2.endTime;
+
+  const renderTimeSpanButton = (timeSpan: TimeSpan) => {
+    const selected = timeSpanIsEqual(timeSpan, currentTimeSpan);
+    const formattedText = formatTimeSpanText(timeSpan);
+    const textColor = selected ? "white" : "black";
+    const keyString = `TimeSpanButton-${currentDate}-${timeSpan.startTime}`;
+    return (
+      <TimeSpanButton
+        key={keyString}
+        onClick={() => updateTime(timeSpan)}
+        selected={selected}
+      >
+        <Text
+          style={{
+            color: textColor,
+          }}
+        >
+          {formattedText}
+        </Text>
+      </TimeSpanButton>
+    );
   };
 
   return (
@@ -44,27 +80,7 @@ const TimeSlotPicker = ({
           justifyContent: "space-evenly",
         }}
       >
-        {currentTimes.map((times: any) => {
-          const selected = stringify(times) === stringify(timeObject);
-          const formattedText =
-            `${times.startTime.substr(0, 5)}-` +
-            `${times.endTime.substr(0, 5)}`;
-          return (
-            <TimeSpanButton
-              key={`TimeSpanButton-${times.startTime}-${times.endTime}`}
-              onClick={() => updateTime(times)}
-              selected={selected}
-            >
-              <Text
-                style={{
-                  color: selected ? "white" : "black",
-                }}
-              >
-                {formattedText}
-              </Text>
-            </TimeSpanButton>
-          );
-        })}
+        {currentAvailableTimes.map(renderTimeSpanButton)}
       </ScrollView>
     </View>
   );
