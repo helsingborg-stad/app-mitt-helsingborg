@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import stringify from "json-stable-stringify";
 import { DayPicker, TimeSpanButton } from "..";
 
 interface TimeSpan {
