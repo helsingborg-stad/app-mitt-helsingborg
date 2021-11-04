@@ -4,15 +4,15 @@ import { Icon, Text } from "../../atoms";
 import { TitleText, AddressText, StyledButton, AddressWrapper } from "./styled";
 import { colorPalette } from "../../../styles/palette";
 
-interface DateTimeCardProps {
+interface AddressCardProps {
   addressLines: string[];
   geocode?: string;
 }
 
-const DateTimeCard = ({
+const AddressCard = ({
   addressLines,
   geocode,
-}: DateTimeCardProps): JSX.Element => (
+}: AddressCardProps): JSX.Element => (
   <Card
     underlayColor={colorPalette.neutrals[5]}
     cardColor={colorPalette.neutrals[7]}
@@ -39,4 +39,4 @@ const DateTimeCard = ({
   </Card>
 );
 
-export default DateTimeCard;
+export default AddressCard;
