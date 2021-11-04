@@ -22,3 +22,4 @@ export { default as InfoModal } from "./InfoModal";
 export { default as DayPicker } from "./DayPicker";
 export { default as FloatingButton } from "./FloatingButton";
 export { default as TimeSpanButton } from "./TimeSpanButton";
+export { default as DateTimeCard } from "./DateTimeCard";
