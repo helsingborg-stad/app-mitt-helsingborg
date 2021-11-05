@@ -142,6 +142,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const isWaitingForSign = statusType.includes("active:signature:pending");
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === "coApplicant";
+  const isSubmitted = statusType.includes("active:submitted");
 
   const currentForm = caseData?.forms[caseData.currentFormId];
   const selfNeedsToConfirm =
@@ -156,8 +157,11 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const shouldShowCTAButton = isCoApplicant
     ? (isWaitingForSign && !selfHasSigned) ||
       (isWaitingForCoApplicantSign && selfNeedsToConfirm)
-    : isOngoing || isNotStarted || isCompletionRequired || isSigned;
-
+    : isOngoing ||
+      isNotStarted ||
+      isCompletionRequired ||
+      isSigned ||
+      isSubmitted;
   const buttonProps: InternalButtonProps = {
     onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
     text: "",
@@ -176,6 +180,10 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
       });
     },
   };
+
+  if (isSubmitted) {
+    buttonProps.text = "Se beslut";
+  }
 
   if (isOngoing) {
     buttonProps.text = "Fortsätt";
