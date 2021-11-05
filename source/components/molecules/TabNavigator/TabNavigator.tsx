@@ -26,7 +26,9 @@ const FlexWrapper = styled.View`
   flex: 1;
 `;
 
-const colorsDictionary: Record<string, string> = {
+type Color = "green" | "red" | "blue" | "purple";
+
+const colorsDictionary: Record<string, Color> = {
   UserEvents: "red",
   Calendar: "red",
   Profile: "blue",
