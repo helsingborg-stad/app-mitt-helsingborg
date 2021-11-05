@@ -44,7 +44,7 @@ const TimeSlotPicker = ({
     t1: TimeSpan | Record<string, never>,
     t2: TimeSpan | Record<string, never>
   ) => {
-    if (!t1 || !t2) return false;
+    if (!t1 || !t2 || t1 === {} || t2 === {}) return false;
     return t1.startTime === t2.startTime && t1.endTime === t2.endTime;
   };
 
