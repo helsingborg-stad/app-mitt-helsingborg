@@ -6,13 +6,13 @@ const Stack = createStackNavigator();
 
 const CalendarNavigator = (): JSX.Element => (
   <Stack.Navigator
-    screenOptions={{ headerShown: true }}
+    screenOptions={{ headerShown: false }}
     initialRouteName="CalendarScreen"
   >
     <Stack.Screen
       name="CalendarScreen"
       component={CalendarScreen}
-      options={{ title: "Kalender", headerShown: false }}
+      options={{ title: "Kalender" }}
     />
   </Stack.Navigator>
 );
