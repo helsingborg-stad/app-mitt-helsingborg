@@ -7,6 +7,7 @@ interface TimeSpan {
   startTime: string;
   endTime: string;
 }
+
 interface ValueType {
   date: string;
   timeSpan: TimeSpan;
@@ -24,7 +25,6 @@ const TimeSlotPicker = ({
   availableTimes,
 }: TimeSlotPickerProps): JSX.Element => {
   const dates = Object.keys(availableTimes);
-
   const currentDate = value?.date || "";
   const currentTimeSpan = value?.timeSpan || {};
   const currentAvailableTimes = availableTimes[currentDate] || [];
