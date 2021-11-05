@@ -177,7 +177,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   };
 
   if (isClosed) {
-    buttonProps.text = "Se beslut";
+    buttonProps.text = "Öppna";
 
     buttonProps.onClick = () => {
       navigation.navigate("UserEvents", {
