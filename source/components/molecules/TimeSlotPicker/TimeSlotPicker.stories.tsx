@@ -57,8 +57,8 @@ const TimeSlotPickerStory = () => {
   );
 };
 
-storiesOf("Time Slot Picker", module).add("Default", (props) => (
-  <StoryWrapper {...props}>
+storiesOf("Time Slot Picker", module).add("Default", (storyContext) => (
+  <StoryWrapper kind={storyContext?.kind} name={storyContext?.name}>
     <TimeSlotPickerStory />
   </StoryWrapper>
 ));
