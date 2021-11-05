@@ -10,15 +10,9 @@ clearWatchman() {
     echo $(watchman watch-del-all)
 }
 
-install() {
-    echo $(yarn install)
-    echo $(cd ios;pod install --repo-update)
-}
-
 init() {
     removeFolders
     clearWatchman
-    #install
 }
 
 init
