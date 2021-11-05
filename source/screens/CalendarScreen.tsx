@@ -43,7 +43,7 @@ const renderCalendarCardComponent = (
   const { date, time, title } = bookingItem;
 
   const dateString = moment(date).locale("se").format("dddd D MMMM");
-  const timeString = `${time.start}-${time.end}`;
+  const timeString = `${time.startTime}-${time.endTime}`;
   const key = `${date}-${timeString}`;
 
   /**
