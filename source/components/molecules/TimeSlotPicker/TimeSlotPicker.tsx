@@ -14,7 +14,7 @@ interface ValueType {
 }
 
 interface TimeSlotPickerProps {
-  value: ValueType;
+  value: ValueType | undefined;
   onChange: (newObject: Partial<ValueType>) => void;
   availableTimes: Record<string, TimeSpan[]>;
 }
@@ -40,8 +40,13 @@ const TimeSlotPicker = ({
   const formatTimeSpanText = (timeSpan: TimeSpan) =>
     `${timeSpan.startTime.substr(0, 5)}-${timeSpan.endTime.substr(0, 5)}`;
 
-  const timeSpanIsEqual = (t1: TimeSpan, t2: TimeSpan) =>
-    t1.startTime === t2.startTime && t1.endTime === t2.endTime;
+  const timeSpanIsEqual = (
+    t1: TimeSpan | Record<string, never>,
+    t2: TimeSpan | Record<string, never>
+  ) => {
+    if (!t1 || !t2) return false;
+    return t1.startTime === t2.startTime && t1.endTime === t2.endTime;
+  };
 
   const renderTimeSpanButton = (timeSpan: TimeSpan) => {
     const selected = timeSpanIsEqual(timeSpan, currentTimeSpan);
