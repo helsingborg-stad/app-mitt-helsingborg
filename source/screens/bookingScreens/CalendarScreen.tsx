@@ -15,10 +15,10 @@ import {
   Header,
   ScreenWrapper,
   FloatingButton,
-} from "../components/molecules";
-import { Heading } from "../components/atoms";
-import { mockBookingData, BookingItem } from "../helpers/MockBookingData";
-import { ModalScreen } from "./featureModalScreens/types";
+} from "../../components/molecules";
+import { Heading } from "../../components/atoms";
+import { mockBookingData, BookingItem } from "../../helpers/MockBookingData";
+import { ModalScreen } from "../featureModalScreens/types";
 
 const Container = styled.ScrollView`
   flex: 1;
