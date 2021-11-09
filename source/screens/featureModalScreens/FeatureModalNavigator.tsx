@@ -9,9 +9,10 @@ import {
   ModalScreen,
   FeatureModalNavigationProp,
   FeatureModalScreenProp,
+  ModalScreenType,
 } from "./types";
 
-const Modal = {
+const Modal: Record<string, ModalScreenType> = {
   [ModalScreen.Features]: {
     component: Features,
     title: "Vad vill du göra?",
@@ -34,21 +35,31 @@ const FeatureModalNavigator = ({ navigation, route }: Props): JSX.Element => {
   const { startScreen = ModalScreen.Features } = route?.params || {};
 
   const [screenIndex, setScreenIndex] = useState<ModalScreen>(startScreen);
+  const [modalScreenParams, setModalScreenParams] = useState({});
   const [isVisible, setIsVisible] = useState(true);
   const [nextRoute, setNextRoute] = useState<string>("");
+  const [nextParams, setNextParams] = useState({});
 
-  const navigate = (newRoute: string) => {
+  const navigate = (
+    newRoute: string,
+    newParams: Record<string, unknown> = {}
+  ) => {
     setNextRoute(newRoute);
+    setNextParams(newParams);
     setIsVisible(false);
   };
 
-  const changeModalScreen = (screen: ModalScreen) => {
+  const changeModalScreen = (
+    screen: ModalScreen,
+    params: Record<string, unknown> = {}
+  ) => {
+    setModalScreenParams(params);
     setScreenIndex(screen);
   };
 
   const onModalHide = () => {
     if (nextRoute) {
-      navigation.navigate(nextRoute);
+      navigation.navigate(nextRoute, nextParams);
     } else {
       navigation.goBack();
     }
@@ -61,10 +72,11 @@ const FeatureModalNavigator = ({ navigation, route }: Props): JSX.Element => {
       ? () => setScreenIndex((currentIndex) => currentIndex - 1)
       : undefined;
 
-  const navigatorTitle = Modal[screenIndex].title;
+  const modalScreen = Modal[screenIndex];
+  const navigatorTitle = modalScreen.title;
   const ModalContent = useMemo(
-    () => Modal[screenIndex].component,
-    [screenIndex]
+    () => modalScreen.component,
+    [modalScreen.component]
   );
 
   return (
@@ -78,6 +90,7 @@ const FeatureModalNavigator = ({ navigation, route }: Props): JSX.Element => {
       <ModalContent
         onNavigate={navigate}
         onChangeModalScreen={changeModalScreen}
+        route={{ name: screenIndex, params: modalScreenParams }}
       />
     </BottomModal>
   );
