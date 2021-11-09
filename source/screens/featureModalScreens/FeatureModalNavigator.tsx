@@ -86,6 +86,8 @@ const FeatureModalNavigator = ({ navigation, route }: Props): JSX.Element => {
       onModalHide={onModalHide}
       modalTitle={navigatorTitle}
       onBack={goBack}
+      propagateSwipe={modalScreen.propagateSwipe}
+      colorSchema={modalScreen.colorSchema}
     >
       <ModalContent
         onNavigate={navigate}
