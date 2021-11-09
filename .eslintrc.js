@@ -41,6 +41,9 @@ const config = {
       files: ["*.ts", "*.tsx"],
       plugins: ["@typescript-eslint"],
       parser: "@typescript-eslint/parser",
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
       extends: ["plugin:@typescript-eslint/recommended", "prettier"],
       rules: {
         "no-use-before-define": "off",
@@ -48,6 +51,8 @@ const config = {
         "no-shadow": "off",
         "@typescript-eslint/no-shadow": ["error"],
         "react/require-default-props": "off",
+        "@typescript-eslint/no-floating-promises": ["error"],
+        "no-void": ["error", { allowAsStatement: true }],
       },
     },
   ],
