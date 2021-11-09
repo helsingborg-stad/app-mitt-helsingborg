@@ -4,7 +4,7 @@ import { SafeAreaView, ScrollView } from "react-native";
 import ButtonList from "../../components/organisms/ButtonList";
 
 interface Props {
-  onNavigate: (newRoute: string) => void;
+  onNavigate: (newRoute: string, params?: Record<string, unknown>) => void;
 }
 const ServiceSelection = ({ onNavigate }: Props): JSX.Element => {
   const buttons = useMemo(
