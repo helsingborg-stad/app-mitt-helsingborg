@@ -5,6 +5,7 @@ export enum ModalScreen {
   "Features",
   "ServiceSelections",
   "Help",
+  "Confirmation",
 }
 
 export type ModalScreenType = {
