@@ -7,6 +7,13 @@ export enum ModalScreen {
   "Help",
 }
 
+export type ModalScreenType = {
+  component: React.FC<any>;
+  title: string;
+  propagateSwipe?: boolean;
+  colorSchema?: string;
+};
+
 export type FeatureModalScreenProp = RouteProp<any, "FeatureModal">;
 export type FeatureModalNavigationProp = StackNavigationProp<
   any,
