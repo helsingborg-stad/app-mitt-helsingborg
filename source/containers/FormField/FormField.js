@@ -20,7 +20,6 @@ import ImageUploader from '../../components/molecules/ImageUploader/ImageUploade
 import ImageViewer from '../../components/molecules/ImageViewer/ImageViewer';
 import PdfUploader from '../../components/molecules/PdfUploader/PdfUploader';
 import PdfViewer from '../../components/molecules/PdfViewer/PdfViewer';
-import TimeSlotPicker from '../../components/molecules/TimeSlotPicker';
 /**
  * Explanation of the properties in this data structure:
  *
@@ -156,11 +155,6 @@ const inputTypes = {
     component: PdfViewer,
     changeEvent: 'onChange',
     props: { answers: true },
-  },
-  timeslot: {
-    component: TimeSlotPicker,
-    changeEvent: 'onChange',
-    props: {},
   },
 };
 
