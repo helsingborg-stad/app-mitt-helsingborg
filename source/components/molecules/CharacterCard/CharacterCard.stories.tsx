@@ -1,7 +1,6 @@
 import React from "react";
 import { storiesOf } from "@storybook/react-native";
 import styled from "styled-components/native";
-import { View } from "react-native";
 import { Text } from "../../atoms";
 import StoryWrapper from "../StoryWrapper";
 import CharacterCard from "./CharacterCard";
