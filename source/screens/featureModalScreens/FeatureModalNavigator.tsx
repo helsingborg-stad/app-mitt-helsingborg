@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 
 import BottomModal from "../../components/molecules/BottomModal";
+import BookingSummary from "../bookingScreens/BookingSummary";
 
 import Features from "./Features";
 import ServiceSelection from "./ServiceSelection";
@@ -24,6 +25,12 @@ const Modal: Record<string, ModalScreenType> = {
   [ModalScreen.Help]: {
     component: Features,
     title: "Vad vill du ha hjälp med?",
+  },
+  [ModalScreen.Confirmation]: {
+    component: BookingSummary,
+    title: "Möte bokat",
+    propagateSwipe: true,
+    colorSchema: "red",
   },
 };
 
