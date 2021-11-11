@@ -8,18 +8,13 @@ export type BookableItem = {
 };
 
 async function getBookables(): Promise<BookableItem[]> {
-  return new Promise((resolve, reject) => {
-    get("/bookables")
-      .then((response) => {
-        if (response.status !== 200) {
-          throw new Error(response.message);
-        }
-        const bookables = response?.data?.data as BookableItem[];
-        if (bookables) return resolve(bookables);
-        throw new Error("getBookables: Response does not contain data.data");
-      })
-      .catch((error) => reject(error));
-  });
+  const response = await get("/bookables");
+  if (response.status !== 200) {
+    throw new Error(response.message);
+  }
+  const bookables = response?.data?.data as BookableItem[];
+  if (bookables) return bookables;
+  throw new Error("getBookables: Response does not contain data.data");
 }
 
 export { getBookables };
