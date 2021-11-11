@@ -14,40 +14,32 @@ const TouchWrapper = styled.TouchableOpacity`
 
 const Stack = createStackNavigator();
 
-interface CalendarNavigatorProps {
-  navigation: any;
-}
-
-const CalendarNavigator = ({
-  navigation,
-}: CalendarNavigatorProps): JSX.Element => {
+const CalendarNavigator = (): JSX.Element => {
   const BackButton = () => (
-    <TouchWrapper
-      activeOpacity={0.2}
-      onPress={() => {
-        navigation.navigate("CaseOverview");
-      }}
-    >
+    <TouchWrapper activeOpacity={0.2}>
       <Icon name="arrow-back" />
     </TouchWrapper>
   );
 
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        headerShown: true,
+        headerBackTitleVisible: false,
+        headerBackImage: () => <BackButton />,
+      }}
       initialRouteName="CalendarScreen"
     >
       <Stack.Screen
         name="CalendarScreen"
         component={CalendarScreen}
-        options={{ title: "Kalender" }}
+        options={{ title: "Kalender", headerShown: false }}
       />
       <Stack.Screen
         name="BookingSummary"
         component={BookingSummary}
         options={{
           title: "Bokning",
-          headerLeft: () => <BackButton />,
         }}
       />
     </Stack.Navigator>
