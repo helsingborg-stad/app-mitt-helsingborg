@@ -57,7 +57,7 @@ const ServiceSelection = ({ onNavigate }: Props): JSX.Element => {
     return () => {
       canceled = true;
     };
-  }, []);
+  }, [onNavigate]);
 
   return (
     <ScrollView
