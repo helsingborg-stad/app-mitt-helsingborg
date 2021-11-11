@@ -126,15 +126,11 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
   const theme = useContext(ThemeContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
-  // get data on tab load
   useFocusEffect(() => {
     let canceled = false;
-    getBookingData()
-      .then((bookingData: BookingItem[]) => {
-        /**
-         * make sure we don't update state if the component is not mounted
-         * in order to prevent a memory leak.
-         */
+    const fetchData = async () => {
+      try {
+        const bookingData: BookingItem[] = await getBookingData();
         if (!canceled) {
           setData(bookingData);
           setLoading(false);
@@ -145,29 +141,36 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
             useNativeDriver: true,
           }).start();
         }
-      })
-      .catch((error) => console.log(error));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
     return () => {
       canceled = true;
     };
   });
 
-  // TODO: actual logic to check if refresh is required before refreshing
   const onRefresh = () => {
-    setRefreshing(true);
-    getBookingData()
-      .then((bookingItem: BookingItem[]) => {
-        setData(bookingItem);
+    const fetchData = async () => {
+      try {
+        const bookingData: BookingItem[] = await getBookingData();
+        setData(bookingData);
         setRefreshing(false);
-        fadeAnimation.setValue(0);
         Animated.timing(fadeAnimation, {
           toValue: 1,
           easing: Easing.ease,
           duration: 200,
           useNativeDriver: true,
         }).start();
-      })
-      .catch((error) => console.log(error));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    setRefreshing(true);
+    fetchData();
   };
 
   const bookingItem = data;
