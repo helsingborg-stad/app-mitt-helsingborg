@@ -1,4 +1,4 @@
-import { deepCopyViaJson } from "../../helpers/Objects";
+import { deepCopy } from "../../helpers/Objects";
 import { Case } from "../../types/Case";
 import {
   Action,
@@ -16,7 +16,7 @@ export const initialState: State = {
 
 export default function CaseReducer(state: State, action: Action): State {
   const { type, payload } = action;
-  const newState = deepCopyViaJson(state);
+  const newState = deepCopy(state);
   switch (type) {
     case ActionTypes.UPDATE_CASE: {
       const casePayload = payload as Case;

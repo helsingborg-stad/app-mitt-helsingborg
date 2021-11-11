@@ -12,7 +12,7 @@ import {
 } from "../../services/encryption/EncryptionService";
 import { get, post, put } from "../../helpers/ApiRequest";
 import { convertAnswersToArray } from "../../helpers/CaseDataConverter";
-import { deepCompareEquals, deepCopyViaJson } from "../../helpers/Objects";
+import { deepCompareEquals, deepCopy } from "../../helpers/Objects";
 import {
   decryptFormAnswers,
   encryptFormAnswers,
@@ -189,7 +189,7 @@ export async function fetchCases(user: UserInterface): Promise<Action> {
               deserializedForm
             );
 
-            const rawCaseCopy = deepCopyViaJson(rawCase);
+            const rawCaseCopy = deepCopy(rawCase);
             const decryptedCase = {
               ...rawCaseCopy,
               forms: {

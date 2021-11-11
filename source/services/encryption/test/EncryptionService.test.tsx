@@ -1,5 +1,5 @@
 import getException from "../../../../.jest/helpers";
-import { deepCopyViaJson } from "../../../helpers/Objects";
+import { deepCopy } from "../../../helpers/Objects";
 import { AnsweredForm, EncryptedAnswersWrapper } from "../../../types/Case";
 import {
   CryptoNumber,
@@ -92,7 +92,7 @@ describe("EncryptionService", () => {
 
     const encryptedForm = await encryptFormAnswers(
       testUser,
-      deepCopyViaJson(testForm) as AnsweredForm
+      deepCopy(testForm) as AnsweredForm
     );
 
     assertIsEncryptedAnswers(encryptedForm.answers);
@@ -100,7 +100,7 @@ describe("EncryptionService", () => {
 
     const decryptedForm = await decryptFormAnswers(
       testUser,
-      deepCopyViaJson(encryptedForm)
+      deepCopy(encryptedForm)
     );
 
     expect(decryptedForm.answers).toEqual(testForm.answers);
@@ -139,7 +139,7 @@ describe("EncryptionService", () => {
 
     const mainApplicantFirstForm = await setupSymmetricKey(
       mainApplicantYlva,
-      deepCopyViaJson(testForm) as AnsweredForm
+      deepCopy(testForm) as AnsweredForm
     );
 
     {
@@ -153,7 +153,7 @@ describe("EncryptionService", () => {
 
     const coApplicantForm = await setupSymmetricKey(
       coApplicantStina,
-      deepCopyViaJson(mainApplicantFirstForm)
+      deepCopy(mainApplicantFirstForm)
     );
 
     {
@@ -168,7 +168,7 @@ describe("EncryptionService", () => {
 
     const mainApplicantSecondForm = await setupSymmetricKey(
       mainApplicantYlva,
-      deepCopyViaJson(coApplicantForm)
+      deepCopy(coApplicantForm)
     );
 
     const mainApplicantSymmetricKey = await getStoredSymmetricKey(
