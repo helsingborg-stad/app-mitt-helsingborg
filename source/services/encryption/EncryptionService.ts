@@ -1,4 +1,4 @@
-import { deepCopyViaJson } from "app/helpers/Objects";
+import { deepCopy } from "app/helpers/Objects";
 import { NativeModules } from "react-native";
 import {
   AnsweredForm,
@@ -286,7 +286,7 @@ export function deserializeCryptoNumberIfPossible(
 }
 
 export function serializeForm(form: AnsweredForm): AnsweredForm {
-  const formCopy = deepCopyViaJson(form);
+  const formCopy = deepCopy(form);
   const { encryption } = formCopy;
 
   if (encryption.primes !== undefined) {
@@ -319,7 +319,7 @@ export function serializeForm(form: AnsweredForm): AnsweredForm {
 }
 
 export function deserializeForm(form: AnsweredForm): AnsweredForm {
-  const formCopy = deepCopyViaJson(form);
+  const formCopy = deepCopy(form);
   const { encryption } = formCopy;
 
   if (encryption.primes !== undefined) {

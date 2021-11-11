@@ -1,10 +1,23 @@
 import stringify from "json-stable-stringify";
 import { NativeModules } from "react-native";
 
+import clone from "just-clone";
+
 const { Aes } = NativeModules;
 
 export function deepCopyViaJson<T>(original: T): T {
   return JSON.parse(JSON.stringify(original)) as T;
+}
+
+/**
+ * Deep copies objects and arrays, doesn't clone functions
+ * This is just an alias of just-clone, so in the case we ever need to change this, we don't have to do it at 4 billion places.
+ * @see https://www.npmjs.com/package/just-clone
+ * @param original The object to copy
+ * @returns The copied object
+ */
+export function deepCopy<T extends Record<any, any>>(original: T): T {
+  return clone(original);
 }
 
 export function filterAsync<T>(
