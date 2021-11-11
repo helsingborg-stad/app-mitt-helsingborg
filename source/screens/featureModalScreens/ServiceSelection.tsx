@@ -21,7 +21,7 @@ interface Props {
   onNavigate: (newRoute: string) => void;
 }
 
-type ButtonType = {
+type ButtonItem = {
   buttonText: string;
   icon: string;
   onClick: () => void;
@@ -29,34 +29,36 @@ type ButtonType = {
 
 const ServiceSelection = ({ onNavigate }: Props): JSX.Element => {
   const [isLoading, setLoading] = useState(true);
-  const [buttons, setButtons] = useState<ButtonType[]>([]);
+  const [buttons, setButtons] = useState<ButtonItem[]>([]);
   const [error, setError] = useState<Error | undefined>(undefined);
 
-  useEffect(() => {
+  const fetchData = async () => {
     let canceled = false;
-    BookablesService.getBookables()
-      .then((bookables: BookableItem[]) => {
-        if (!canceled) {
-          setButtons(
-            bookables.map(
-              (bookable: BookableItem) =>
-                ({
-                  buttonText: bookable.name,
-                  icon: "photo-camera",
-                  onClick: () => true,
-                } as ButtonType)
-            )
-          );
-          setLoading(false);
-        }
-      })
-      .catch((serviceError) => {
-        setError(serviceError);
+    try {
+      const bookables: BookableItem[] = await BookablesService.getBookables();
+      if (!canceled) {
+        const buttonItems: ButtonItem[] = bookables.map(
+          (bookable: BookableItem) =>
+            ({
+              buttonText: bookable.name,
+              icon: "photo-camera",
+              onClick: () => true,
+            } as ButtonItem)
+        );
+        setButtons(buttonItems);
         setLoading(false);
-      });
+      }
+    } catch (serviceError) {
+      setError(serviceError as Error);
+      setLoading(false);
+    }
     return () => {
       canceled = true;
     };
+  };
+
+  useEffect(() => {
+    fetchData();
   }, [onNavigate]);
 
   return (
