@@ -7,7 +7,7 @@ import {
   TabRouter,
 } from "@react-navigation/native";
 import TabNavigatorItem from "./TabNavigatorItem";
-import { ThemeType } from "../../../styles/themeHelpers";
+import { ThemeType, PrimaryColor } from "../../../styles/themeHelpers";
 
 interface BarWrapperProps {
   theme: ThemeType;
@@ -26,9 +26,7 @@ const FlexWrapper = styled.View`
   flex: 1;
 `;
 
-type Color = "green" | "red" | "blue" | "purple";
-
-const colorsDictionary: Record<string, Color> = {
+const colorsDictionary: Record<string, PrimaryColor> = {
   UserEvents: "red",
   Calendar: "red",
   Profile: "blue",
