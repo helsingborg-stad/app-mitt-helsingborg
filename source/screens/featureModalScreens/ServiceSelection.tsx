@@ -7,7 +7,6 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import { Text } from "../../components/atoms";
-import { BookableItem } from "../../services/BookablesService";
 import { BookablesService } from "../../services";
 import theme from "../../styles/theme";
 
@@ -35,16 +34,13 @@ const ServiceSelection = ({ onNavigate }: Props): JSX.Element => {
   const fetchData = async () => {
     let canceled = false;
     try {
-      const bookables: BookableItem[] = await BookablesService.getBookables();
+      const bookables = await BookablesService.getBookables();
       if (!canceled) {
-        const buttonItems: ButtonItem[] = bookables.map(
-          (bookable: BookableItem) =>
-            ({
-              buttonText: bookable.name,
-              icon: "photo-camera",
-              onClick: () => true,
-            } as ButtonItem)
-        );
+        const buttonItems: ButtonItem[] = bookables.map((bookable) => ({
+          buttonText: bookable.name,
+          icon: "photo-camera",
+          onClick: () => true,
+        }));
         setButtons(buttonItems);
         setLoading(false);
       }
