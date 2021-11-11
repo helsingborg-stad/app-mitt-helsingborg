@@ -12,13 +12,11 @@ async function getBookables(): Promise<BookableItem[]> {
     get("/bookables")
       .then((response) => {
         if (response.status !== 200) {
-          reject(new Error(response.message));
+          throw new Error(response.message);
         }
         const bookables = response?.data?.data as BookableItem[];
         if (bookables) return resolve(bookables);
-        return reject(
-          new Error("getBookables: Response does not contain data.data")
-        );
+        throw new Error("getBookables: Response does not contain data.data");
       })
       .catch((error) => reject(error));
   });
