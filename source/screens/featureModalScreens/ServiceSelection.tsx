@@ -36,6 +36,9 @@ const ServiceSelection = ({ onNavigate }: Props): JSX.Element => {
     try {
       const bookables = await BookablesService.getBookables();
       if (!canceled) {
+        if (bookables.length === 0) {
+          throw new Error("Det finns inga tjänster tillgängliga just nu.");
+        }
         const buttonItems: ButtonItem[] = bookables.map((bookable) => ({
           buttonText: bookable.name,
           icon: "photo-camera",
