@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
+import { BookingItem } from "../../helpers/MockBookingData";
 import icons from "../../helpers/Icons";
 import { Text } from "../../components/atoms";
 import {
@@ -29,7 +30,7 @@ const BookingSummary = ({ route }: BookingSummaryProps): JSX.Element => {
   const routeName = route?.name;
   const isConfirmation = routeName === "Confirmation";
 
-  const { bookingItem } = route?.params;
+  const bookingItem = route?.params?.bookingItem as BookingItem;
   const { administrator } = bookingItem;
   const timeString =
     `${bookingItem.time.startTime.substring(0, 5)} - ` +
