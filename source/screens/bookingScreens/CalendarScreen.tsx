@@ -36,69 +36,6 @@ interface CalendarScreenProps {
   navigation: any;
 }
 
-const renderCalendarCardComponent = (
-  bookingItem: BookingItem,
-  isFirst: boolean
-) => {
-  const { date, time, title } = bookingItem;
-
-  const dateString = moment(date).locale("se").format("dddd D MMMM");
-  const timeString = `${time.startTime}-${time.endTime}`;
-  const key = `${date}-${timeString}`;
-
-  /**
-   * TODO: this callback should do something useful.
-   * We can for example pass navigation prop to this function
-   * and use it to navigate to a screen showing more details
-   * about a booking, or maybe open a modal
-   */
-  const buttonCallback = () => true;
-
-  if (isFirst) {
-    return (
-      <CaseCard
-        key={key}
-        colorSchema="red"
-        title={title}
-        showBookingDate
-        bookingDate={dateString}
-        bookingTime={timeString}
-        showButton
-        buttonText="Boka om eller avboka"
-        onButtonClick={buttonCallback}
-      />
-    );
-  }
-  return (
-    <CaseCard
-      key={key}
-      colorSchema="red"
-      title={title}
-      largeSubtitle={dateString}
-      subtitle={timeString}
-      showButton
-      buttonText="Boka om eller avboka"
-      onButtonClick={buttonCallback}
-    />
-  );
-};
-
-const renderMonth = (
-  monthList: BookingItem[],
-  monthName: string,
-  monthIndex: number
-) => (
-  <Animated.View key={monthName}>
-    <ListHeading type="h5">{monthName}</ListHeading>
-    {monthList.map((bookingItem: BookingItem, bookingIndex: number) =>
-      renderCalendarCardComponent(
-        bookingItem,
-        monthIndex === 0 && bookingIndex === 0
-      )
-    )}
-  </Animated.View>
-);
-
 const compareByDate = (a: BookingItem, b: BookingItem) =>
   moment(a.date).valueOf() - moment(b.date).valueOf();
 
@@ -125,6 +62,69 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
   const [data, setData] = useState<BookingItem[]>([]);
   const theme = useContext(ThemeContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
+
+  const navigateToSummary = (bookingItem: BookingItem) => {
+    navigation.navigate("BookingSummary", { bookingItem });
+  };
+
+  const renderCalendarCardComponent = (
+    bookingItem: BookingItem,
+    isFirst: boolean
+  ) => {
+    const { date, time, title } = bookingItem;
+
+    const dateString = moment(date).locale("se").format("dddd D MMMM");
+    const timeString = `${time.startTime}-${time.endTime}`;
+    const key = `${date}-${timeString}`;
+
+    const buttonCallback = () => true;
+
+    if (isFirst) {
+      return (
+        <CaseCard
+          key={key}
+          colorSchema="red"
+          title={title}
+          showBookingDate
+          bookingDate={dateString}
+          bookingTime={timeString}
+          showButton
+          buttonText="Boka om eller avboka"
+          onCardClick={() => navigateToSummary(bookingItem)}
+          onButtonClick={buttonCallback}
+        />
+      );
+    }
+    return (
+      <CaseCard
+        key={key}
+        colorSchema="red"
+        title={title}
+        largeSubtitle={dateString}
+        subtitle={timeString}
+        showButton
+        buttonText="Boka om eller avboka"
+        onCardClick={() => navigateToSummary(bookingItem)}
+        onButtonClick={buttonCallback}
+      />
+    );
+  };
+
+  const renderMonth = (
+    monthList: BookingItem[],
+    monthName: string,
+    monthIndex: number
+  ) => (
+    <Animated.View key={monthName}>
+      <ListHeading type="h5">{monthName}</ListHeading>
+      {monthList.map((bookingItem: BookingItem, bookingIndex: number) =>
+        renderCalendarCardComponent(
+          bookingItem,
+          monthIndex === 0 && bookingIndex === 0
+        )
+      )}
+    </Animated.View>
+  );
 
   useFocusEffect(() => {
     let canceled = false;
