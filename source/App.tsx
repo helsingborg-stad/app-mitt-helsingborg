@@ -31,7 +31,7 @@ const App = (): JSX.Element => {
   // turn on layout animation.
   if (Platform.OS === "android") {
     if (UIManager.setLayoutAnimationEnabledExperimental) {
-      UIManager.setLayoutAnimationEnabledExperimental(true);
+      UIManager.setLayoutAnimationEnabledExperimental(false);
     }
   }
 
