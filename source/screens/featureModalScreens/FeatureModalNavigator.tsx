@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from "react";
 
 import BottomModal from "../../components/molecules/BottomModal";
-import BookingSummary from "../bookingScreens/BookingSummary";
 
 import Features from "./Features";
 import ServiceSelection from "./ServiceSelection";
@@ -10,10 +9,9 @@ import {
   ModalScreen,
   FeatureModalNavigationProp,
   FeatureModalScreenProp,
-  ModalScreenType,
 } from "./types";
 
-const Modal: Record<string, ModalScreenType> = {
+const Modal = {
   [ModalScreen.Features]: {
     component: Features,
     title: "Vad vill du göra?",
@@ -26,12 +24,6 @@ const Modal: Record<string, ModalScreenType> = {
     component: Features,
     title: "Vad vill du ha hjälp med?",
   },
-  [ModalScreen.Confirmation]: {
-    component: BookingSummary,
-    title: "Möte bokat",
-    propagateSwipe: true,
-    colorSchema: "red",
-  },
 };
 
 interface Props {
@@ -42,31 +34,21 @@ const FeatureModalNavigator = ({ navigation, route }: Props): JSX.Element => {
   const { startScreen = ModalScreen.Features } = route?.params || {};
 
   const [screenIndex, setScreenIndex] = useState<ModalScreen>(startScreen);
-  const [modalScreenParams, setModalScreenParams] = useState({});
   const [isVisible, setIsVisible] = useState(true);
   const [nextRoute, setNextRoute] = useState<string>("");
-  const [nextParams, setNextParams] = useState({});
 
-  const navigate = (
-    newRoute: string,
-    newParams: Record<string, unknown> = {}
-  ) => {
+  const navigate = (newRoute: string) => {
     setNextRoute(newRoute);
-    setNextParams(newParams);
     setIsVisible(false);
   };
 
-  const changeModalScreen = (
-    screen: ModalScreen,
-    params: Record<string, unknown> = {}
-  ) => {
-    setModalScreenParams(params);
+  const changeModalScreen = (screen: ModalScreen) => {
     setScreenIndex(screen);
   };
 
   const onModalHide = () => {
     if (nextRoute) {
-      navigation.navigate(nextRoute, nextParams);
+      navigation.navigate(nextRoute);
     } else {
       navigation.goBack();
     }
@@ -79,11 +61,10 @@ const FeatureModalNavigator = ({ navigation, route }: Props): JSX.Element => {
       ? () => setScreenIndex((currentIndex) => currentIndex - 1)
       : undefined;
 
-  const modalScreen = Modal[screenIndex];
-  const navigatorTitle = modalScreen.title;
+  const navigatorTitle = Modal[screenIndex].title;
   const ModalContent = useMemo(
-    () => modalScreen.component,
-    [modalScreen.component]
+    () => Modal[screenIndex].component,
+    [screenIndex]
   );
 
   return (
@@ -93,13 +74,10 @@ const FeatureModalNavigator = ({ navigation, route }: Props): JSX.Element => {
       onModalHide={onModalHide}
       modalTitle={navigatorTitle}
       onBack={goBack}
-      propagateSwipe={modalScreen.propagateSwipe}
-      colorSchema={modalScreen.colorSchema}
     >
       <ModalContent
         onNavigate={navigate}
         onChangeModalScreen={changeModalScreen}
-        route={{ name: screenIndex, params: modalScreenParams }}
       />
     </BottomModal>
   );
