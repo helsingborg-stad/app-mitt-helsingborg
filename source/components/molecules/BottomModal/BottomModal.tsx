@@ -14,7 +14,6 @@ interface Props {
   children: React.ReactChild | React.ReactChildren;
   colorSchema?: "red" | "neutral";
   backButtonText?: string;
-  propagateSwipe?: boolean;
   onClose?: () => void;
   onBack?: () => void;
   onModalHide?: () => void;
@@ -29,7 +28,6 @@ const BottomModal = (props: Props): JSX.Element => {
     backButtonText = undefined,
     onBack = undefined,
     colorSchema = "neutral",
-    propagateSwipe = false,
   } = props;
 
   const { colors } = useContext<ThemeType>(ThemeContext);
@@ -51,7 +49,6 @@ const BottomModal = (props: Props): JSX.Element => {
       onSwipeComplete={onClose}
       backdropTransitionOutTiming={0}
       onModalWillHide={onModalHide}
-      propagateSwipe={propagateSwipe}
     >
       <ModalContentContainer>
         <ModalNavigator
