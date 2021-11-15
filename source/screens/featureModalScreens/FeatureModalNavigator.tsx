@@ -27,18 +27,18 @@ const Modal: Record<string, ModalScreenType> = {
     component: Features,
     title: "Vad vill du ha hjälp med?",
   },
-  [ModalScreen.Confirmation]: {
-    component: Features,
-    title: "Möte bokat",
-    propagateSwipe: true,
-    colorSchema: "red",
-  },
-  [ModalScreen.BookingForm]: {
-    component: Features,
-    title: "Boka möte",
-    propagateSwipe: true,
-    colorSchema: "red",
-  },
+  // [ModalScreen.Confirmation]: {
+  //   component: BookingSummary,
+  //   title: "Möte bokat",
+  //   propagateSwipe: true,
+  //   colorSchema: "red",
+  // },
+  // [ModalScreen.BookingForm]: {
+  //   component: BookingFormScreen,
+  //   title: "Boka möte",
+  //   propagateSwipe: true,
+  //   colorSchema: "red",
+  // },
 };
 
 interface Props {
