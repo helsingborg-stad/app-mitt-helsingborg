@@ -12,8 +12,19 @@ export enum ModalScreen {
 export type ModalScreenType = {
   component: React.FC<any>;
   title: string;
+  previousScreen: ModalScreen | undefined;
   propagateSwipe?: boolean;
   colorSchema?: string;
+};
+
+export type ModalScreenNavigationParams = {
+  screen: ModalScreen;
+  params: Record<string, unknown>;
+};
+
+export type RouteNavigationParams = {
+  route: string | undefined;
+  params: Record<string, unknown>;
 };
 
 export type FeatureModalScreenProp = RouteProp<any, "FeatureModal">;
