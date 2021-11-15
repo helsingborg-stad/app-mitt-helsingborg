@@ -11,13 +11,18 @@ import { BookablesService } from "../../services";
 import theme from "../../styles/theme";
 
 import ButtonList from "../../components/organisms/ButtonList";
+import { ModalScreen } from "./types";
 
 const ErrorText = styled(Text)`
   margin: 16px;
 `;
 
 interface Props {
-  onNavigate: (newRoute: string) => void;
+  onNavigate: (newRoute: string, params?: Record<string, unknown>) => void;
+  onChangeModalScreen: (
+    newRoute: ModalScreen,
+    params?: Record<string, unknown>
+  ) => void;
 }
 
 type ButtonItem = {
@@ -26,39 +31,43 @@ type ButtonItem = {
   onClick: () => void;
 };
 
-const ServiceSelection = ({ onNavigate }: Props): JSX.Element => {
+const ServiceSelection = ({
+  onNavigate,
+  onChangeModalScreen,
+}: Props): JSX.Element => {
   const [isLoading, setLoading] = useState(true);
   const [buttons, setButtons] = useState<ButtonItem[]>([]);
   const [error, setError] = useState<Error | undefined>(undefined);
 
-  const fetchData = async () => {
+  useEffect(() => {
     let canceled = false;
-    try {
-      const bookables = await BookablesService.getBookables();
-      if (!canceled) {
-        if (bookables.length === 0) {
-          throw new Error("Det finns inga tjänster tillgängliga just nu.");
+    const fetchData = async () => {
+      try {
+        const bookables = await BookablesService.getBookables();
+        if (!canceled) {
+          const buttonItems: ButtonItem[] = bookables.map((bookable) => ({
+            buttonText: bookable.name,
+            icon: "photo-camera",
+            onClick: () =>
+              onChangeModalScreen(ModalScreen.BookingForm, bookable),
+          }));
+          setButtons(buttonItems);
+          setLoading(false);
         }
-        const buttonItems: ButtonItem[] = bookables.map((bookable) => ({
-          buttonText: bookable.name,
-          icon: "photo-camera",
-          onClick: () => true,
-        }));
-        setButtons(buttonItems);
+      } catch (serviceError) {
+        setError(serviceError as Error);
         setLoading(false);
       }
-    } catch (serviceError) {
-      setError(serviceError as Error);
-      setLoading(false);
-    }
+      return () => {
+        canceled = true;
+      };
+    };
+
+    fetchData();
     return () => {
       canceled = true;
     };
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [onNavigate]);
+  }, [onChangeModalScreen]);
 
   return (
     <ScrollView
@@ -80,13 +89,19 @@ const ServiceSelection = ({ onNavigate }: Props): JSX.Element => {
             Ett fel har inträffat. Vänligen försök igen.
           </ErrorText>
         )}
-        {!error && !isLoading && (
-          <ButtonList
-            buttonList={buttons}
-            defaultColorSchema="red"
-            defaultVariant="link"
-          />
-        )}
+        {!error &&
+          !isLoading &&
+          (buttons.length === 0 ? (
+            <ErrorText type="h5">
+              Inga tjänster är tillgängliga just nu. Vänligen försök igen.
+            </ErrorText>
+          ) : (
+            <ButtonList
+              buttonList={buttons}
+              defaultColorSchema="red"
+              defaultVariant="link"
+            />
+          ))}
       </SafeAreaView>
     </ScrollView>
   );
