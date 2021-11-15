@@ -2,7 +2,7 @@
 // Do not edit.
 //
 // https://github.com/elderfo/react-native-storybook-loader.git
-
+// some change
 function loadStories() {
   require("../source/components/atoms/Box/Box.stories");
   require("../source/components/atoms/Button/Button.stories");
