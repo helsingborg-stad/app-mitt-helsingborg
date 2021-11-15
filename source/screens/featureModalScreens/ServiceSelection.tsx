@@ -38,21 +38,16 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
   useEffect(() => {
     let canceled = false;
     const fetchData = async () => {
-      try {
-        const bookables = await BookablesService.getBookables();
-        if (!canceled) {
-          const buttonItems: ButtonItem[] = bookables.map((bookable) => ({
-            buttonText: bookable.name,
-            icon: "photo-camera",
-            onClick: () =>
-              // onChangeModalScreen(ModalScreen.BookingForm, bookable),
-              true,
-          }));
-          setButtons(buttonItems);
-          setLoading(false);
-        }
-      } catch (serviceError) {
-        setError(serviceError as Error);
+      const bookables = await BookablesService.getBookables();
+      if (!canceled) {
+        const buttonItems: ButtonItem[] = bookables.map((bookable) => ({
+          buttonText: bookable.name,
+          icon: "photo-camera",
+          onClick: () =>
+            // onChangeModalScreen(ModalScreen.BookingForm, bookable),
+            true,
+        }));
+        setButtons(buttonItems);
         setLoading(false);
       }
       return () => {
@@ -60,7 +55,10 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
       };
     };
 
-    fetchData();
+    fetchData().catch((err) => {
+      setError(err);
+      setLoading(false);
+    });
     return () => {
       canceled = true;
     };
