@@ -27,8 +27,7 @@ interface BookingSummaryProps {
 }
 
 const BookingSummary = ({ route }: BookingSummaryProps): JSX.Element => {
-  const routeName = route?.name;
-  const isConfirmation = routeName === "Confirmation";
+  const isConfirmation = route?.name === "Confirmation";
 
   const bookingItem = route?.params?.bookingItem as BookingItem;
   const { administrator } = bookingItem;
