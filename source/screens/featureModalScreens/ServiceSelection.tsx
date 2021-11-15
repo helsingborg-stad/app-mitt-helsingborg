@@ -18,7 +18,6 @@ const ErrorText = styled(Text)`
 `;
 
 interface Props {
-  onNavigate: (newRoute: string, params?: Record<string, unknown>) => void;
   onChangeModalScreen: (
     newRoute: ModalScreen,
     params?: Record<string, unknown>
@@ -31,10 +30,7 @@ type ButtonItem = {
   onClick: () => void;
 };
 
-const ServiceSelection = ({
-  onNavigate,
-  onChangeModalScreen,
-}: Props): JSX.Element => {
+const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
   const [isLoading, setLoading] = useState(true);
   const [buttons, setButtons] = useState<ButtonItem[]>([]);
   const [error, setError] = useState<Error | undefined>(undefined);
