@@ -49,7 +49,8 @@ const ServiceSelection = ({
             buttonText: bookable.name,
             icon: "photo-camera",
             onClick: () =>
-              onChangeModalScreen(ModalScreen.BookingForm, bookable),
+              // onChangeModalScreen(ModalScreen.BookingForm, bookable),
+              true,
           }));
           setButtons(buttonItems);
           setLoading(false);
