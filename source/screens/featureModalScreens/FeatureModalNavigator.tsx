@@ -82,10 +82,12 @@ const FeatureModalNavigator = ({ navigation, route }: Props): JSX.Element => {
   };
 
   const changeModalScreen = (
-    screen: ModalScreen,
+    screen: ModalScreen | undefined,
     params: Record<string, unknown> = {}
   ) => {
-    setModalScreen({ screen, params });
+    if (screen) {
+      setModalScreen({ screen, params });
+    }
   };
 
   const onModalHide = () => {
