@@ -5,10 +5,9 @@ import { Icon } from "../components/atoms";
 import CalendarScreen from "../screens/bookingScreens/CalendarScreen";
 import BookingSummary from "../screens/bookingScreens/BookingSummary";
 
-const TouchWrapper = styled.TouchableOpacity`
+const TouchWrapper = styled.View`
   margin-left: 16px;
   margin-top: 3px;
-  border-radius: 17px;
   padding: 5px;
 `;
 
@@ -16,7 +15,7 @@ const Stack = createStackNavigator();
 
 const CalendarNavigator = (): JSX.Element => {
   const BackButton = () => (
-    <TouchWrapper activeOpacity={0.2}>
+    <TouchWrapper>
       <Icon name="arrow-back" />
     </TouchWrapper>
   );
