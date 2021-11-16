@@ -17,7 +17,6 @@ Styles.buttonbase = css`
   align-items: center;
   max-width: 100%;
   border-radius: 4.5px;
-  height: 48px;
   background-color: ${(props) =>
     props.colorSchema === "neutral"
       ? props.theme.colors.neutrals[1]
