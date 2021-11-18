@@ -146,7 +146,7 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
       }
     };
 
-    fetchData();
+    void fetchData();
     return () => {
       canceled = true;
     };
@@ -170,7 +170,7 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
     };
 
     setRefreshing(true);
-    fetchData();
+    void fetchData();
   };
 
   const bookingItem = data;
