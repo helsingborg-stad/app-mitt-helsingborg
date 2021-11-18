@@ -43,9 +43,7 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
         const buttonItems: ButtonItem[] = bookables.map((bookable) => ({
           buttonText: bookable.name,
           icon: "photo-camera",
-          onClick: () =>
-            // onChangeModalScreen(ModalScreen.BookingForm, bookable),
-            true,
+          onClick: () => true,
         }));
         setButtons(buttonItems);
         setLoading(false);
