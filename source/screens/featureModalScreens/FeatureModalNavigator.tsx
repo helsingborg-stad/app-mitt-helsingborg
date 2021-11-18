@@ -2,8 +2,6 @@ import React, { useState, useMemo } from "react";
 
 import BottomModal from "../../components/molecules/BottomModal";
 
-// import { BookingFormScreen, BookingSummary } from "..";
-
 import Features from "./Features";
 import ServiceSelection from "./ServiceSelection";
 
@@ -32,20 +30,6 @@ const Modal: Record<string, ModalScreenType> = {
     title: "Vad vill du ha hjälp med?",
     previousScreen: ModalScreen.Features,
   },
-  // [ModalScreen.Confirmation]: {
-  //   component: BookingSummary,
-  //   title: "Möte bokat",
-  //   propagateSwipe: true,
-  //   colorSchema: "red",
-  //   previousScreen: undefined,
-  // },
-  // [ModalScreen.BookingForm]: {
-  //   component: BookingFormScreen,
-  //   title: "Boka möte",
-  //   propagateSwipe: true,
-  //   colorSchema: "red",
-  //   previousScreen: ModalScreen.ServiceSelections,
-  // },
 };
 
 interface Props {
