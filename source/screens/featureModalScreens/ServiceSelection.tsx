@@ -38,25 +38,23 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
   useEffect(() => {
     let canceled = false;
     const fetchData = async () => {
-      const bookables = await BookablesService.getBookables();
-      if (!canceled) {
-        const buttonItems: ButtonItem[] = bookables.map((bookable) => ({
-          buttonText: bookable.name,
-          icon: "photo-camera",
-          onClick: () => true,
-        }));
-        setButtons(buttonItems);
+      try {
+        const bookables = await BookablesService.getBookables();
+        if (!canceled) {
+          const buttonItems: ButtonItem[] = bookables.map((bookable) => ({
+            buttonText: bookable.name,
+            icon: "photo-camera",
+            onClick: () => true,
+          }));
+          setButtons(buttonItems);
+          setLoading(false);
+        }
+      } catch (err) {
+        setError(err as Error);
         setLoading(false);
       }
-      return () => {
-        canceled = true;
-      };
     };
-
-    fetchData().catch((err) => {
-      setError(err);
-      setLoading(false);
-    });
+    void fetchData();
     return () => {
       canceled = true;
     };
