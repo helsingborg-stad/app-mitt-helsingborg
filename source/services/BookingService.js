@@ -74,6 +74,12 @@ const searchBookings = async (referenceCode, startTime, endTime) => {
     `/booking/search/${encodeURIComponent(referenceCode)}` +
       `?startTime=${startTime}&endTime=${endTime}`
   );
+  if (response.status !== 200) {
+    throw new Error(
+      response?.message || `searchBookings: Recieved error ${response.status}`
+    );
+  }
+
   const bookings = response?.data?.data?.attributes;
   if (bookings) return bookings;
   throw new Error(
