@@ -19,7 +19,7 @@ const createBooking = async (
   optionalAttendees: string[],
   startTime: string,
   endTime: string,
-  refCode: string,
+  referenceCode: string,
   address: string,
   message: string
 ): Promise<Record<string, unknown>> => {
@@ -29,7 +29,7 @@ const createBooking = async (
     startTime: moment(startTime).format(),
     endTime: moment(endTime).format(),
     subject: "Mitt Helsingborg bokning",
-    referenceCode: refCode,
+    referenceCode,
     body: `Du har fått en bokning ifrån Mitt Helsingborg. Klicka på Acceptera för att bekräfta bokningen.\n\n${message}`,
     location: address,
   };
@@ -65,7 +65,7 @@ const updateBooking = async (
   optionalAttendees: string[],
   startTime: string,
   endTime: string,
-  refCode: string,
+  referenceCode: string,
   address: string,
   message: string
 ): Promise<Record<string, unknown>> => {
@@ -75,7 +75,7 @@ const updateBooking = async (
     startTime: moment(startTime).format(),
     endTime: moment(endTime).format(),
     subject: "Mitt Helsingborg bokning",
-    referenceCode: refCode,
+    referenceCode,
     body: `Du har fått en bokning ifrån Mitt Helsingborg. Klicka på Acceptera för att bekräfta bokningen.\n\n${message}`,
     location: address,
   };
@@ -115,12 +115,12 @@ const searchBookings = async (
 };
 
 const getHistoricalAttendees = async (
-  refCode: string,
+  referenceCode: string,
   startTime: string,
   endTime: string
 ): Promise<string[]> => {
   const response = await get(
-    `/booking/getHistoricalAttendees/${encodeURIComponent(refCode)}` +
+    `/booking/getHistoricalAttendees/${encodeURIComponent(referenceCode)}` +
       `?startTime=${startTime}` +
       `&endTime=${endTime}`
   );
