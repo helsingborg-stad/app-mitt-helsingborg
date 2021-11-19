@@ -1,6 +1,19 @@
 import moment from "moment";
 import { get, patch, post, remove } from "../helpers/ApiRequest";
 
+const getBooking = async (id: string): Promise<Record<string, unknown>> => {
+  const response = await get(`/booking/${encodeURIComponent(id)}`);
+  if (response.status !== 200) {
+    throw new Error(
+      response?.message || `getBooking: Recieved error ${response.status}`
+    );
+  }
+
+  const success = response?.data?.data?.attributes;
+  if (success) return success;
+  throw new Error("getBooking: Response does not contain data.data.attributes");
+};
+
 const createBooking = async (
   requiredAttendees: string[],
   optionalAttendees: string[],
@@ -33,29 +46,6 @@ const createBooking = async (
   throw new Error("createBooking: Response does not contain data.data");
 };
 
-const getTimeSlots = async (
-  attendees: string[],
-  startTime: string,
-  endTime: string
-): Promise<Record<string, unknown>> => {
-  const response = await post(`/timeslots/getTimeSlots`, {
-    attendees,
-    startTime,
-    endTime,
-  });
-  if (response.status !== 200) {
-    throw new Error(
-      response?.message || `getTimeSlots: Recieved error ${response.status}`
-    );
-  }
-
-  const timeSlots = response?.data?.data?.attributes;
-  if (timeSlots) return timeSlots;
-  throw new Error(
-    "getTimeSlots: Response does not contain data.data.attributes"
-  );
-};
-
 const cancelBooking = async (id: string): Promise<Record<string, unknown>> => {
   const response = await remove(`/booking/${encodeURIComponent(id)}`);
   if (response.status !== 200) {
@@ -67,41 +57,6 @@ const cancelBooking = async (id: string): Promise<Record<string, unknown>> => {
   const success = response?.data?.data;
   if (success) return success;
   throw new Error("cancelBooking: Response does not contain data.data");
-};
-
-const searchBookings = async (
-  referenceCode: string,
-  startTime: string,
-  endTime: string
-): Promise<Record<string, unknown>[]> => {
-  const response = await get(
-    `/booking/search/${encodeURIComponent(referenceCode)}` +
-      `?startTime=${startTime}&endTime=${endTime}`
-  );
-  if (response.status !== 200) {
-    throw new Error(
-      response?.message || `searchBookings: Recieved error ${response.status}`
-    );
-  }
-
-  const bookings = response?.data?.data?.attributes;
-  if (bookings) return bookings;
-  throw new Error(
-    "searchBookings: Response does not contain data.data.attributes"
-  );
-};
-
-const getBooking = async (id: string): Promise<Record<string, unknown>> => {
-  const response = await get(`/booking/${encodeURIComponent(id)}`);
-  if (response.status !== 200) {
-    throw new Error(
-      response?.message || `getBooking: Recieved error ${response.status}`
-    );
-  }
-
-  const success = response?.data?.data?.attributes;
-  if (success) return success;
-  throw new Error("getBooking: Response does not contain data.data.attributes");
 };
 
 const updateBooking = async (
@@ -137,6 +92,28 @@ const updateBooking = async (
   throw new Error("updateBooking: Response does not contain data.data");
 };
 
+const searchBookings = async (
+  referenceCode: string,
+  startTime: string,
+  endTime: string
+): Promise<Record<string, unknown>[]> => {
+  const response = await get(
+    `/booking/search/${encodeURIComponent(referenceCode)}` +
+      `?startTime=${startTime}&endTime=${endTime}`
+  );
+  if (response.status !== 200) {
+    throw new Error(
+      response?.message || `searchBookings: Recieved error ${response.status}`
+    );
+  }
+
+  const bookings = response?.data?.data?.attributes;
+  if (bookings) return bookings;
+  throw new Error(
+    "searchBookings: Response does not contain data.data.attributes"
+  );
+};
+
 const getHistoricalAttendees = async (
   refCode: string,
   startTime: string,
@@ -161,12 +138,35 @@ const getHistoricalAttendees = async (
   );
 };
 
+const getTimeSlots = async (
+  attendees: string[],
+  startTime: string,
+  endTime: string
+): Promise<Record<string, unknown>> => {
+  const response = await post(`/timeslots/getTimeSlots`, {
+    attendees,
+    startTime,
+    endTime,
+  });
+  if (response.status !== 200) {
+    throw new Error(
+      response?.message || `getTimeSlots: Recieved error ${response.status}`
+    );
+  }
+
+  const timeSlots = response?.data?.data?.attributes;
+  if (timeSlots) return timeSlots;
+  throw new Error(
+    "getTimeSlots: Response does not contain data.data.attributes"
+  );
+};
+
 export {
-  createBooking,
-  getTimeSlots,
-  searchBookings,
-  cancelBooking,
   getBooking,
+  createBooking,
+  cancelBooking,
   updateBooking,
+  searchBookings,
   getHistoricalAttendees,
+  getTimeSlots,
 };
