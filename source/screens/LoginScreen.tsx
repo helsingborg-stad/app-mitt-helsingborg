@@ -1,28 +1,26 @@
-import { useFocusEffect } from '@react-navigation/native';
-import PropTypes from 'prop-types';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Alert, Linking, View, StatusBar } from 'react-native';
-import styled from 'styled-components/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { SLIDES } from '../assets/images';
-import Button from '../components/atoms/Button';
-import Heading from '../components/atoms/Heading';
-import Input from '../components/atoms/Input';
-import Text from '../components/atoms/Text';
-import AuthLoading from '../components/molecules/AuthLoading';
-import BackNavigation from '../components/molecules/BackNavigation';
-import { Modal, useModal } from '../components/molecules/Modal';
-import { ValidationHelper } from '../helpers';
-import AuthContext from '../store/AuthContext';
-import { useNotification } from '../store/NotificationContext';
-import MarkdownConstructor from '../helpers/MarkdownConstructor';
-import userAgreementText from '../assets/text/userAgreementText';
-import theme from '../styles/theme';
+import React, { useContext, useEffect, useState } from "react";
+import { Alert, Linking, View, StatusBar } from "react-native";
+import styled from "styled-components/native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { SLIDES } from "../assets/images";
+import Button from "../components/atoms/Button";
+import Heading from "../components/atoms/Heading";
+import Input from "../components/atoms/Input";
+import Text from "../components/atoms/Text";
+import AuthLoading from "../components/molecules/AuthLoading";
+import BackNavigation from "../components/molecules/BackNavigation";
+import { Modal, useModal } from "../components/molecules/Modal";
+import { ValidationHelper } from "../helpers";
+import AuthContext from "../store/AuthContext";
+import { useNotification } from "../store/NotificationContext";
+import MarkdownConstructor from "../helpers/MarkdownConstructor";
+import userAgreementText from "../assets/text/userAgreementText";
+import theme from "../styles/theme";
 
 const { sanitizePin, validatePin } = ValidationHelper;
 const UnifiedPadding = [24, 48]; // Vertical padding, Horizontal padding
-const backgroundImage = require('../assets/images/illustrations/onboarding_05_logga-in_2x.png');
+const backgroundImage = require("../assets/images/illustrations/onboarding_05_logga-in_2x.png");
 
 const SafeAreaViewTop = styled(SafeAreaView)`
   flex: 1;
@@ -150,9 +148,8 @@ const Label = styled(Text)`
   margin-bottom: 8px;
 `;
 
-function LoginScreen(props) {
+function LoginScreen(): JSX.Element {
   const {
-    isAuthenticated,
     handleAuth,
     handleCancelOrder,
     isLoading,
@@ -166,7 +163,7 @@ function LoginScreen(props) {
 
   const [loginModalVisible, toggleLoginModal] = useModal();
   const [agreementModalVisible, toggleAgreementModal] = useModal();
-  const [personalNumber, setPersonalNumber] = useState('');
+  const [personalNumber, setPersonalNumber] = useState("197402017870");
 
   /**
    * Setup for markdown formatter used to render user agreement text.
@@ -185,33 +182,11 @@ function LoginScreen(props) {
   };
 
   /**
-   * Function for navigating to a screen in the application.
-   */
-  const navigateToScreen = useCallback((screen) => {
-    props.navigation.navigate(screen);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  /**
-   * Effect for navigating to a set screen when authentication is completed/resolved
-   */
-  useFocusEffect(
-    useCallback(() => {
-      const handleNavigateToScreen = async () => {
-        if (isAuthenticated) {
-          navigateToScreen('Start');
-        }
-      };
-      handleNavigateToScreen();
-    }, [isAuthenticated, navigateToScreen])
-  );
-
-  /**
    * Effect for showing notification if an error occurs
    */
   useEffect(() => {
     if (isRejected && error?.message) {
-      showNotification('Ett fel inträffade', error.message, 'neutral', 5000);
+      showNotification("Ett fel inträffade", error.message, "neutral", 5000);
       handleSetError(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -235,7 +210,7 @@ function LoginScreen(props) {
       }
 
       if (!validatePin(personalNumber)) {
-        Alert.alert('Felaktigt personnummer. Ange format: ååååmmddxxxx.');
+        Alert.alert("Felaktigt personnummer. Ange format: ååååmmddxxxx.");
         return;
       }
 
@@ -248,15 +223,20 @@ function LoginScreen(props) {
 
   return (
     <FlexView>
-      <SafeAreaViewTop edges={['top', 'right', 'left']}>
+      <SafeAreaViewTop edges={["top", "right", "left"]}>
         <FlexImageBackground source={backgroundImage}>
-          <StatusBar barStyle="dark-content" backgroundColor={theme.colors.neutrals[6]} />
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor={theme.colors.neutrals[6]}
+          />
           <Header>
             <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />
             <Title>Mitt Helsingborg</Title>
             <Separator />
             <LoginHeading>Välkommen!</LoginHeading>
-            <ContentText>Till en enklare kontakt med Helsingborgs stad.</ContentText>
+            <ContentText>
+              Till en enklare kontakt med Helsingborgs stad.
+            </ContentText>
           </Header>
 
           {(isLoading || isResolved) && (
@@ -273,7 +253,13 @@ function LoginScreen(props) {
 
           {(isIdle || isRejected) && (
             <Form>
-              <Button z={0} size="large" block onClick={() => handleLogin()} colorSchema="red">
+              <Button
+                z={0}
+                size="large"
+                block
+                onClick={() => handleLogin()}
+                colorSchema="red"
+              >
                 <Text>Logga in med Mobilt BankID</Text>
               </Button>
               <Link onPress={toggleLoginModal}>Fler alternativ</Link>
@@ -282,13 +268,15 @@ function LoginScreen(props) {
 
           <Footer>
             <FooterText>
-              När du använder tjänsten Mitt Helsingborg godkänner du vårt{' '}
-              <ParagraphLink onPress={toggleAgreementModal}>användaravtal</ParagraphLink> och att du
-              har tagit del av hur vi hanterar dina{' '}
+              När du använder tjänsten Mitt Helsingborg godkänner du vårt{" "}
+              <ParagraphLink onPress={toggleAgreementModal}>
+                användaravtal
+              </ParagraphLink>{" "}
+              och att du har tagit del av hur vi hanterar dina{" "}
               <ParagraphLink
                 onPress={() =>
                   Linking.openURL(
-                    'https://helsingborg.se/toppmeny/om-webbplatsen/sa-har-behandlar-vi-dina-personuppgifter/'
+                    "https://helsingborg.se/toppmeny/om-webbplatsen/sa-har-behandlar-vi-dina-personuppgifter/"
                   )
                 }
               >
@@ -319,8 +307,8 @@ function LoginScreen(props) {
               <Separator />
               <ModalHeading>BankID på en annan enhet</ModalHeading>
               <ContentText>
-                Öppna Mobilt BankID eller BankID på din andra enhet innan du trycker på logga in här
-                nedanför.
+                Öppna Mobilt BankID eller BankID på din andra enhet innan du
+                trycker på logga in här nedanför.
               </ContentText>
             </Header>
 
@@ -356,7 +344,7 @@ function LoginScreen(props) {
                   size="large"
                   block
                   onClick={() => {
-                    handleLogin(true);
+                    void handleLogin(true);
                   }}
                   colorSchema="red"
                 >
@@ -365,7 +353,9 @@ function LoginScreen(props) {
 
                 <Link
                   onPress={() => {
-                    Linking.openURL('https://support.bankid.com/sv/bankid/mobilt-bankid');
+                    Linking.openURL(
+                      "https://support.bankid.com/sv/bankid/mobilt-bankid"
+                    );
                   }}
                 >
                   Läs mer om hur du skaffar Mobilt BankID
@@ -385,10 +375,18 @@ function LoginScreen(props) {
             colorSchema="red"
           />
           <UserAgreementForm>
-            <MarkdownConstructor rules={userAgreementMarkdownRules} rawText={userAgreementText} />
+            <MarkdownConstructor
+              rules={userAgreementMarkdownRules}
+              rawText={userAgreementText}
+            />
           </UserAgreementForm>
           <UserAgreementFooter>
-            <Button z={0} block onClick={toggleAgreementModal} colorSchema="red">
+            <Button
+              z={0}
+              block
+              onClick={toggleAgreementModal}
+              colorSchema="red"
+            >
               <Text>Återvänd till inloggning</Text>
             </Button>
           </UserAgreementFooter>
@@ -397,11 +395,5 @@ function LoginScreen(props) {
     </FlexView>
   );
 }
-
-LoginScreen.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-  }),
-};
 
 export default LoginScreen;

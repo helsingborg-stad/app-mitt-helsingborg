@@ -1,10 +1,12 @@
-import React, { useEffect, useReducer, useContext } from 'react';
-import PropTypes from 'prop-types';
-import env from 'react-native-config';
-import AppContext from './AppContext';
-import * as authService from '../services/AuthService';
+import React, { useEffect, useReducer, useContext, useCallback } from "react";
+import PropTypes from "prop-types";
+import env from "react-native-config";
+import AppContext from "./AppContext";
+import * as authService from "../services/AuthService";
 
-import AuthReducer, { initialState as defaultInitialState } from './reducers/AuthReducer';
+import AuthReducer, {
+  initialState as defaultInitialState,
+} from "./reducers/AuthReducer";
 import {
   startAuth,
   cancelOrder,
@@ -19,29 +21,32 @@ import {
   setStatus,
   setError,
   setAuthenticateOnExternalDevice,
-} from './actions/AuthActions';
+} from "./actions/AuthActions";
+
+import AUTH_STATE from "./types";
 
 const AuthContext = React.createContext();
 
 function AuthProvider({ children, initialState }) {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
-
   const { handleSetMode } = useContext(AppContext);
 
   /**
-   * Starts polling for an order response if status is pending and orderRef and autoStartToken is set in state.
+   * Starts polling for an order response if status is pending and orderRef is set in state.
    */
   useEffect(() => {
     const handleCheckOrderStatus = async () => {
-      if (state.status === 'pending' && state.orderRef && state.autoStartToken) {
+      if (state.status === "pending" && state.orderRef) {
         dispatch(
-          await checkOrderStatus(state.autoStartToken, state.orderRef, state.isAuthenticated)
+          await checkOrderStatus(
+            state.orderRef,
+            state.authState === AUTH_STATE.SIGNED_IN
+          )
         );
       }
     };
     handleCheckOrderStatus();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.status, state.orderRef, state.autoStartToken]);
+  }, [state.status, state.orderRef, state.authState]);
 
   /**
    * This function starts up the authorization process.
@@ -51,17 +56,19 @@ function AuthProvider({ children, initialState }) {
   async function handleAuth(personalNumber, authenticateOnExternalDevice) {
     // Dynamically sets app in dev mode
     if (personalNumber && env.TEST_PERSONAL_NUMBER === personalNumber) {
-      handleSetMode('development');
+      handleSetMode("development");
     }
 
     // Disable BankId authentication
-    if (env.USE_BANKID === 'false') {
+    if (env.USE_BANKID === "false") {
       dispatch(await mockedAuth());
+      await handleAddProfile();
+      // await handleLogin();
       return;
     }
 
     dispatch(setAuthenticateOnExternalDevice(authenticateOnExternalDevice));
-    dispatch(setStatus('pending'));
+    dispatch(setStatus("pending"));
     dispatch(await startAuth(personalNumber, authenticateOnExternalDevice));
   }
 
@@ -71,14 +78,24 @@ function AuthProvider({ children, initialState }) {
    * @param {string} userVisibleData Message to be shown when signing order
    * @param {bool} authenticateOnExternalDevice Will automatically launch BankID app if set to false
    */
-  async function handleSign(personalNumber, userVisibleData, authenticateOnExternalDevice) {
-    if (env.USE_BANKID === 'false') {
-      dispatch(setStatus('signResolved'));
+  async function handleSign(
+    personalNumber,
+    userVisibleData,
+    authenticateOnExternalDevice
+  ) {
+    if (env.USE_BANKID === "false") {
+      dispatch(setStatus("signResolved"));
       return;
     }
 
-    dispatch(setStatus('pending'));
-    dispatch(await startSign(personalNumber, userVisibleData, authenticateOnExternalDevice));
+    dispatch(setStatus("pending"));
+    dispatch(
+      await startSign(
+        personalNumber,
+        userVisibleData,
+        authenticateOnExternalDevice
+      )
+    );
   }
 
   /**
@@ -98,16 +115,22 @@ function AuthProvider({ children, initialState }) {
   /**
    * This function triggers an action to logout the user.
    */
-  async function handleLogout() {
+  // async function handleLogout() {
+  //   dispatch(await loginFailure());
+  //   await handleRemoveProfile();
+  // }
+
+  const handleLogout = useCallback(async () => {
     dispatch(await loginFailure());
-  }
+    await handleRemoveProfile();
+  }, []);
 
   /**
    * This function triggers an action to refresh the users session credentials.
    * Only trigger if the user is authenticated already.
    */
   async function handleRefreshSession() {
-    if (state.isAuthenticated) {
+    if (state.authState === AUTH_STATE.SIGNED_IN) {
       dispatch(await refreshSession());
     }
   }
@@ -143,16 +166,19 @@ function AuthProvider({ children, initialState }) {
   /**
    * This function checks if the current accessToken is valid.
    */
-  async function isAccessTokenValid() {
+  const isAccessTokenValid = useCallback(async () => {
     const decodedToken = await authService.getAccessTokenFromStorage();
 
     // Configure app in dev mode if personalnumber is defined as test account
-    if (decodedToken?.personalNumber && env.TEST_PERSONAL_NUMBER === decodedToken.personalNumber) {
-      handleSetMode('development');
+    if (
+      decodedToken?.personalNumber &&
+      env.TEST_PERSONAL_NUMBER === decodedToken.personalNumber
+    ) {
+      handleSetMode("development");
     }
 
     // TODO: Remove this condition when exp value is set on the jwt token in the api.
-    if (env.USE_BANKID === 'true' && decodedToken) {
+    if (env.USE_BANKID === "true" && decodedToken) {
       return true;
     }
 
@@ -162,7 +188,52 @@ function AuthProvider({ children, initialState }) {
       return new Date().getTime() < expiresAt;
     }
     return false;
-  }
+  }, [handleSetMode]);
+
+  // async function isAccessTokenValid() {
+  //   const decodedToken = await authService.getAccessTokenFromStorage();
+
+  //   // Configure app in dev mode if personalnumber is defined as test account
+  //   if (
+  //     decodedToken?.personalNumber &&
+  //     env.TEST_PERSONAL_NUMBER === decodedToken.personalNumber
+  //   ) {
+  //     handleSetMode("development");
+  //   }
+
+  //   // TODO: Remove this condition when exp value is set on the jwt token in the api.
+  //   if (env.USE_BANKID === "true" && decodedToken) {
+  //     return true;
+  //   }
+
+  //   if (decodedToken) {
+  //     // Checks if a token is present in the application and that the expire time of the token is valid
+  //     const expiresAt = decodedToken.exp * 1000;
+  //     return new Date().getTime() < expiresAt;
+  //   }
+  //   return false;
+  // }
+
+  useEffect(() => {
+    const tryLogin = async () => {
+      try {
+        dispatch(setStatus("pending"));
+        const isValidToken = await isAccessTokenValid();
+        if (isValidToken) {
+          await handleAddProfile();
+          await handleLogin();
+        } else {
+          await handleLogout();
+          await handleRemoveProfile();
+        }
+      } catch (error) {
+        await handleLogout();
+        await handleRemoveProfile();
+      }
+    };
+
+    tryLogin();
+  }, [isAccessTokenValid, handleLogout]);
 
   const contextValues = {
     handleLogin,
@@ -176,14 +247,19 @@ function AuthProvider({ children, initialState }) {
     isAccessTokenValid,
     handleSign,
     handleSetError,
-    isLoading: state.status === 'pending',
-    isIdle: state.status === 'idle',
-    isResolved: state.status === 'authResolved' || state.status === 'signResolved',
-    isRejected: state.status === 'rejected',
+    isLoading: state.status === "pending",
+    isIdle: state.status === "idle",
+    isResolved:
+      state.status === "authResolved" || state.status === "signResolved",
+    isRejected: state.status === "rejected",
     ...state,
   };
 
-  return <AuthContext.Provider value={contextValues}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={contextValues}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 AuthProvider.propTypes = {

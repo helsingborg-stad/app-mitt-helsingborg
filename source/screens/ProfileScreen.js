@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import { View } from 'react-native';
-import { Button, Text, Heading, Icon } from '../components/atoms';
-import { ScreenWrapper, Header } from '../components/molecules';
-import AuthContext from '../store/AuthContext';
-import AppContext from '../store/AppContext';
-import Label from '../components/atoms/Label/Label';
+import React, { useContext } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import { View } from "react-native";
+import { Button, Text, Heading, Icon } from "../components/atoms";
+import { ScreenWrapper, Header } from "../components/molecules";
+import AuthContext from "../store/AuthContext";
+import AppContext from "../store/AppContext";
+import Label from "../components/atoms/Label/Label";
 
 const ProfileScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
@@ -83,7 +83,7 @@ function ProfileScreen(props) {
             <ProfileLabel underline={false} small>
               NAMN
             </ProfileLabel>
-            {renderField(`${user?.firstName || ''} ${user?.lastName || ''}`)}
+            {renderField(`${user?.firstName || ""} ${user?.lastName || ""}`)}
             <ProfileLabel underline={false} small>
               PERSONNUMMER
             </ProfileLabel>
@@ -116,7 +116,8 @@ function ProfileScreen(props) {
             {renderField(user?.address?.city)}
           </ProfileInfoContainer>
           <ProfileInfoTextItalic>
-            Dessa uppgifter hämtade vi från Skatteverket när du identifierade dig med BankID
+            Dessa uppgifter hämtade vi från Skatteverket när du identifierade
+            dig med BankID
           </ProfileInfoTextItalic>
         </View>
         <BottomContainer>
@@ -125,7 +126,7 @@ function ProfileScreen(props) {
             colorSchema="blue"
             onClick={async () => {
               await authContext.handleLogout();
-              navigate('Start');
+              // navigate('Start');
             }}
           >
             <Text>Logga ut</Text>
@@ -136,7 +137,7 @@ function ProfileScreen(props) {
               block
               variant="outlined"
               colorSchema="neutral"
-              onClick={() => navigate('DevFeatures')}
+              onClick={() => navigate("DevFeatures")}
             >
               <Text>Utvecklarfunktioner</Text>
               <Icon name="construction" />

@@ -1,30 +1,29 @@
-import env from 'react-native-config';
-import bankid from '../../services/BankidService';
-import * as authService from '../../services/AuthService';
-import { UrlHelper } from '../../helpers';
-
-const { canOpenUrl } = UrlHelper;
+import env from "react-native-config";
+import bankid from "../../services/BankidService";
+import * as authService from "../../services/AuthService";
 
 export const actionTypes = {
-  loginSuccess: 'LOGIN_SUCCESS',
-  loginFailure: 'LOGIN_FAILURE',
-  refreshSession: 'REFRESH_CREDENTIALS',
-  addProfile: 'ADD_PROFILE',
-  removeProfile: 'REMOVE_PROFILE',
-  authStarted: 'AUTH_STARTED',
-  authError: 'AUTH_ERROR',
-  signFailure: 'SIGN_FAILURE',
-  cancelOrder: 'CANCEL_ORDER',
-  signStarted: 'SIGN_STARTED',
-  setStatus: 'SET_STATUS',
-  setError: 'SET_ERROR',
-  signSuccess: 'SIGN_SUCCESS',
-  setAuthenticateOnExternalDevice: 'SET_AUTH_ON_EXTERNAL_DEVICE',
+  loginSuccess: "LOGIN_SUCCESS",
+  loginFailure: "LOGIN_FAILURE",
+  refreshSession: "REFRESH_CREDENTIALS",
+  addProfile: "ADD_PROFILE",
+  removeProfile: "REMOVE_PROFILE",
+  authStarted: "AUTH_STARTED",
+  authError: "AUTH_ERROR",
+  signFailure: "SIGN_FAILURE",
+  cancelOrder: "CANCEL_ORDER",
+  signStarted: "SIGN_STARTED",
+  setStatus: "SET_STATUS",
+  setError: "SET_ERROR",
+  signSuccess: "SIGN_SUCCESS",
+  setAuthenticateOnExternalDevice: "SET_AUTH_ON_EXTERNAL_DEVICE",
 };
 
 export async function mockedAuth() {
   try {
-    const [, grantTokenError] = await authService.grantAccessToken(env.FAKE_TOKEN);
+    const [, grantTokenError] = await authService.grantAccessToken(
+      env.FAKE_TOKEN
+    );
     if (grantTokenError) {
       throw new Error(grantTokenError);
     }
@@ -74,8 +73,9 @@ export async function loginFailure() {
 export async function addProfile() {
   try {
     const decodedToken = await authService.getAccessTokenFromStorage();
-    const [userProfile, userError] = await authService.getUserProfile(decodedToken.accessToken);
-
+    const [userProfile, userError] = await authService.getUserProfile(
+      decodedToken.accessToken
+    );
     if (userError) {
       throw userError;
     }
@@ -145,7 +145,11 @@ export async function startAuth(personalNumber, authenticateOnExternalDevice) {
   }
 }
 
-export async function startSign(personalNumber, userVisibleData, authenticateOnExternalDevice) {
+export async function startSign(
+  personalNumber,
+  userVisibleData,
+  authenticateOnExternalDevice
+) {
   try {
     const response = await bankid.sign(personalNumber, userVisibleData);
 
@@ -177,7 +181,7 @@ export async function startSign(personalNumber, userVisibleData, authenticateOnE
   }
 }
 
-export async function checkOrderStatus(autoStartToken, orderRef, isUserAuthenticated) {
+export async function checkOrderStatus(orderRef, isUserAuthenticated) {
   try {
     // Try to collect a successfull collect response from bankid.
     const response = await bankid.collect(orderRef);
@@ -188,17 +192,31 @@ export async function checkOrderStatus(autoStartToken, orderRef, isUserAuthentic
 
     // Tries to grant a token from the authorization endpoint in the api.
     const { authorizationCode } = response.data.attributes;
-    const [, grantTokenError] = await authService.grantAccessToken(authorizationCode);
+    const [, grantTokenError] = await authService.grantAccessToken(
+      authorizationCode
+    );
     if (grantTokenError) {
       throw new Error(grantTokenError);
     }
 
+    let user;
+    if (!isUserAuthenticated) {
+      user = (await addProfile()).payload;
+    }
+
     return {
-      type: !isUserAuthenticated ? actionTypes.loginSuccess : actionTypes.signSuccess,
+      type: !isUserAuthenticated
+        ? actionTypes.loginSuccess
+        : actionTypes.signSuccess,
+      payload: {
+        ...(user && { user }),
+      },
     };
   } catch (error) {
     return {
-      type: !isUserAuthenticated ? actionTypes.loginFailure : actionTypes.signFailure,
+      type: !isUserAuthenticated
+        ? actionTypes.loginFailure
+        : actionTypes.signFailure,
       payload: {
         error,
       },

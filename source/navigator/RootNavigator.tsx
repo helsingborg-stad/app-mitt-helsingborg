@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { SplashScreen, FormCaseScreen, DevFeaturesScreen } from "../screens";
 import AuthStack from "./AuthStack";
@@ -6,6 +6,9 @@ import CustomStackNavigator from "./CustomStackNavigator";
 import BottomBarNavigator from "./BottomBarNavigator";
 
 import FeatureModal from "../screens/featureModalScreens/FeatureModalNavigator";
+
+import AuthContext from "../store/AuthContext";
+import AUTH_STATE from "../store/types";
 
 const MainStack = createStackNavigator();
 const RootStack = createStackNavigator();
@@ -17,22 +20,29 @@ const forFade = ({ current }) => ({
   },
 });
 
-const MainStackScreen = (): JSX.Element => (
-  <CustomStackNavigator
-    initialRouteName="Start"
-    screenOptions={{ headerShown: false }}
-  >
-    <>
-      <MainStack.Screen name="Start" component={SplashScreen} />
-      <MainStack.Screen
-        name="Auth"
-        component={AuthStack}
-        options={{ cardStyleInterpolator: forFade }}
-      />
+const MainStackScreen = (): JSX.Element => {
+  const { authState } = useContext(AuthContext);
+
+  if (authState === AUTH_STATE.PENDING) {
+    return <SplashScreen />;
+  }
+
+  if (authState === AUTH_STATE.SIGNED_OUT) {
+    return <AuthStack />;
+  }
+
+  return (
+    <CustomStackNavigator
+      initialRouteName="App"
+      screenOptions={{ headerShown: false }}
+    >
       <MainStack.Screen
         name="App"
         component={BottomBarNavigator}
-        options={{ cardStyleInterpolator: forFade, gestureEnabled: false }}
+        options={{
+          cardStyleInterpolator: forFade,
+          gestureEnabled: false,
+        }}
       />
       <MainStack.Screen
         name="Form"
@@ -48,12 +58,13 @@ const MainStackScreen = (): JSX.Element => (
           gestureEnabled: false,
         }}
       />
-    </>
-  </CustomStackNavigator>
-);
+    </CustomStackNavigator>
+  );
+};
 
 const RootStackScreen = (): JSX.Element => (
   <RootStack.Navigator
+    initialRouteName="Main"
     mode="modal"
     screenOptions={{
       cardStyle: { backgroundColor: "transparent" },
