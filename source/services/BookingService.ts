@@ -56,17 +56,17 @@ const getTimeSlots = async (
   );
 };
 
-const deleteBooking = async (id: string): Promise<Record<string, unknown>> => {
+const cancelBooking = async (id: string): Promise<Record<string, unknown>> => {
   const response = await remove(`/booking/${encodeURIComponent(id)}`);
   if (response.status !== 200) {
     throw new Error(
-      response?.message || `deleteBooking: Recieved error ${response.status}`
+      response?.message || `cancelBooking: Recieved error ${response.status}`
     );
   }
 
   const success = response?.data?.data;
   if (success) return success;
-  throw new Error("deleteBooking: Response does not contain data.data");
+  throw new Error("cancelBooking: Response does not contain data.data");
 };
 
 const searchBookings = async (
@@ -165,7 +165,7 @@ export {
   createBooking,
   getTimeSlots,
   searchBookings,
-  deleteBooking,
+  cancelBooking,
   getBooking,
   updateBooking,
   getHistoricalAttendees,
