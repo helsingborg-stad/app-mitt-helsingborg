@@ -18,22 +18,22 @@ const getBooking = async (
 
 const createBooking = async (
   requiredAttendees: string[],
-  optionalAttendees: string[],
   startTime: string,
   endTime: string,
-  referenceCode: string,
-  address: string,
-  message: string
+  optionalAttendees?: string[],
+  referenceCode?: string,
+  address?: string,
+  message?: string
 ): Promise<Record<string, unknown>> => {
   const body = {
     requiredAttendees,
-    optionalAttendees,
     startTime: moment(startTime).format(),
     endTime: moment(endTime).format(),
-    subject: "Mitt Helsingborg bokning",
+    optionalAttendees,
     referenceCode,
-    body: `Du har fått en bokning ifrån Mitt Helsingborg. Klicka på Acceptera för att bekräfta bokningen.\n\n${message}`,
     location: address,
+    body: `Du har fått en bokning ifrån Mitt Helsingborg. Klicka på Acceptera för att bekräfta bokningen.\n\n${message}`,
+    subject: "Mitt Helsingborg bokning",
   };
 
   const response = await post("/booking", body);
@@ -66,22 +66,22 @@ const cancelBooking = async (
 const updateBooking = async (
   bookingId: string,
   requiredAttendees: string[],
-  optionalAttendees: string[],
   startTime: string,
   endTime: string,
-  referenceCode: string,
-  address: string,
-  message: string
+  optionalAttendees?: string[],
+  referenceCode?: string,
+  address?: string,
+  message?: string
 ): Promise<Record<string, unknown>> => {
   const body = {
     requiredAttendees,
-    optionalAttendees,
     startTime: moment(startTime).format(),
     endTime: moment(endTime).format(),
-    subject: "Mitt Helsingborg bokning",
+    optionalAttendees,
     referenceCode,
-    body: `Du har fått en bokning ifrån Mitt Helsingborg. Klicka på Acceptera för att bekräfta bokningen.\n\n${message}`,
     location: address,
+    body: `Du har fått en bokning ifrån Mitt Helsingborg. Klicka på Acceptera för att bekräfta bokningen.\n\n${message}`,
+    subject: "Mitt Helsingborg bokning",
   };
 
   const response = await patch(
