@@ -95,4 +95,23 @@ const searchBookings = async (
   );
 };
 
-export { createBooking, getTimeSlots, searchBookings, deleteBooking };
+const getBooking = async (id: string): Promise<Record<string, unknown>> => {
+  const response = await get(`/booking/${encodeURIComponent(id)}`);
+  if (response.status !== 200) {
+    throw new Error(
+      response?.message || `getBooking: Recieved error ${response.status}`
+    );
+  }
+
+  const success = response?.data?.data?.attributes;
+  if (success) return success;
+  throw new Error("getBooking: Response does not contain data.data.attributes");
+};
+
+export {
+  createBooking,
+  getTimeSlots,
+  searchBookings,
+  deleteBooking,
+  getBooking,
+};
