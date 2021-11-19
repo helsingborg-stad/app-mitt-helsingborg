@@ -1,8 +1,10 @@
 import moment from "moment";
 import { get, patch, post, remove } from "../helpers/ApiRequest";
 
-const getBooking = async (id: string): Promise<Record<string, unknown>> => {
-  const response = await get(`/booking/${encodeURIComponent(id)}`);
+const getBooking = async (
+  bookingId: string
+): Promise<Record<string, unknown>> => {
+  const response = await get(`/booking/${encodeURIComponent(bookingId)}`);
   if (response.status !== 200) {
     throw new Error(
       response?.message || `getBooking: Recieved error ${response.status}`
@@ -46,8 +48,10 @@ const createBooking = async (
   throw new Error("createBooking: Response does not contain data.data");
 };
 
-const cancelBooking = async (id: string): Promise<Record<string, unknown>> => {
-  const response = await remove(`/booking/${encodeURIComponent(id)}`);
+const cancelBooking = async (
+  bookingId: string
+): Promise<Record<string, unknown>> => {
+  const response = await remove(`/booking/${encodeURIComponent(bookingId)}`);
   if (response.status !== 200) {
     throw new Error(
       response?.message || `cancelBooking: Recieved error ${response.status}`
@@ -60,7 +64,7 @@ const cancelBooking = async (id: string): Promise<Record<string, unknown>> => {
 };
 
 const updateBooking = async (
-  id: string,
+  bookingId: string,
   requiredAttendees: string[],
   optionalAttendees: string[],
   startTime: string,
@@ -80,7 +84,10 @@ const updateBooking = async (
     location: address,
   };
 
-  const response = await patch(`/booking/${encodeURIComponent(id)}`, body);
+  const response = await patch(
+    `/booking/${encodeURIComponent(bookingId)}`,
+    body
+  );
   if (response.status !== 200) {
     throw new Error(
       response?.message || `updateBooking: Recieved error ${response.status}`
