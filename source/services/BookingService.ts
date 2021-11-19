@@ -22,7 +22,7 @@ const createBooking = async (
   endTime: string,
   optionalAttendees?: string[],
   referenceCode?: string,
-  address?: string,
+  location?: string,
   message?: string
 ): Promise<Record<string, unknown>> => {
   const body = {
@@ -31,7 +31,7 @@ const createBooking = async (
     endTime: moment(endTime).format(),
     optionalAttendees,
     referenceCode,
-    location: address,
+    location,
     body: `Du har fått en bokning ifrån Mitt Helsingborg. Klicka på Acceptera för att bekräfta bokningen.\n\n${message}`,
     subject: "Mitt Helsingborg bokning",
   };
@@ -70,7 +70,7 @@ const updateBooking = async (
   endTime: string,
   optionalAttendees?: string[],
   referenceCode?: string,
-  address?: string,
+  location?: string,
   message?: string
 ): Promise<Record<string, unknown>> => {
   const body = {
@@ -79,7 +79,7 @@ const updateBooking = async (
     endTime: moment(endTime).format(),
     optionalAttendees,
     referenceCode,
-    location: address,
+    location,
     body: `Du har fått en bokning ifrån Mitt Helsingborg. Klicka på Acceptera för att bekräfta bokningen.\n\n${message}`,
     subject: "Mitt Helsingborg bokning",
   };
