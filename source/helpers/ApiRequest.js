@@ -62,4 +62,7 @@ const remove = (endpoint = "", body, headers) =>
 const put = (endpoint = "", body, headers) =>
   request(endpoint, "put", body, headers);
 
-export { get, post, remove, put };
+const patch = (endpoint = "", body, headers) =>
+  request(endpoint, "patch", body, headers);
+
+export { get, post, remove, put, patch };
