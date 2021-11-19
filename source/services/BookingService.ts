@@ -30,9 +30,7 @@ const createBooking = async (
 
   const booked = response?.data?.data;
   if (booked) return booked;
-  throw new Error(
-    "createBooking: Response does not contain data.data.attributes"
-  );
+  throw new Error("createBooking: Response does not contain data.data");
 };
 
 const getTimeSlots = async (
@@ -68,9 +66,7 @@ const deleteBooking = async (id: string): Promise<Record<string, unknown>> => {
 
   const success = response?.data?.data;
   if (success) return success;
-  throw new Error(
-    "deleteBooking: Response does not contain data.data.attributes"
-  );
+  throw new Error("deleteBooking: Response does not contain data.data");
 };
 
 const searchBookings = async (
