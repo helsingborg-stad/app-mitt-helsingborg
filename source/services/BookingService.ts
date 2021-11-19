@@ -2,14 +2,14 @@ import moment from "moment";
 import { get, post, remove } from "../helpers/ApiRequest";
 
 const createBooking = async (
-  requiredAttendees,
-  optionalAttendees,
-  startTime,
-  endTime,
-  refCode,
-  address,
-  message
-) => {
+  requiredAttendees: string[],
+  optionalAttendees: string[],
+  startTime: string,
+  endTime: string,
+  refCode: string,
+  address: string,
+  message: string
+): Promise<Record<string, unknown>> => {
   const body = {
     requiredAttendees,
     optionalAttendees,
@@ -28,14 +28,18 @@ const createBooking = async (
     );
   }
 
-  const booked = response?.data?.data?.attributes;
+  const booked = response?.data?.data;
   if (booked) return booked;
   throw new Error(
     "createBooking: Response does not contain data.data.attributes"
   );
 };
 
-const getTimeSlots = async (attendees, startTime, endTime) => {
+const getTimeSlots = async (
+  attendees: string[],
+  startTime: string,
+  endTime: string
+): Promise<Record<string, unknown>> => {
   const response = await post(`/timeslots/getTimeSlots`, {
     attendees,
     startTime,
@@ -54,7 +58,7 @@ const getTimeSlots = async (attendees, startTime, endTime) => {
   );
 };
 
-const deleteBooking = async (id) => {
+const deleteBooking = async (id: string): Promise<Record<string, unknown>> => {
   const response = await remove(`/booking/${encodeURIComponent(id)}`);
   if (response.status !== 200) {
     throw new Error(
@@ -62,14 +66,18 @@ const deleteBooking = async (id) => {
     );
   }
 
-  const success = response?.data?.data?.attributes;
+  const success = response?.data?.data;
   if (success) return success;
   throw new Error(
     "deleteBooking: Response does not contain data.data.attributes"
   );
 };
 
-const searchBookings = async (referenceCode, startTime, endTime) => {
+const searchBookings = async (
+  referenceCode: string,
+  startTime: string,
+  endTime: string
+): Promise<Record<string, unknown>[]> => {
   const response = await get(
     `/booking/search/${encodeURIComponent(referenceCode)}` +
       `?startTime=${startTime}&endTime=${endTime}`
