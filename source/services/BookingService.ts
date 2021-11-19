@@ -137,6 +137,30 @@ const updateBooking = async (
   throw new Error("updateBooking: Response does not contain data.data");
 };
 
+const getHistoricalAttendees = async (
+  refCode: string,
+  startTime: string,
+  endTime: string
+): Promise<string[]> => {
+  const response = await get(
+    `/booking/getHistoricalAttendees/${encodeURIComponent(refCode)}` +
+      `?startTime=${startTime}` +
+      `&endTime=${endTime}`
+  );
+  if (response.status !== 200) {
+    throw new Error(
+      response?.message ||
+        `getHistoricalAttendees: Recieved error ${response.status}`
+    );
+  }
+
+  const timeSlots = response?.data?.data?.attributes;
+  if (timeSlots) return timeSlots;
+  throw new Error(
+    "getHistoricalAttendees: Response does not contain data.data.attributes"
+  );
+};
+
 export {
   createBooking,
   getTimeSlots,
@@ -144,4 +168,5 @@ export {
   deleteBooking,
   getBooking,
   updateBooking,
+  getHistoricalAttendees,
 };
