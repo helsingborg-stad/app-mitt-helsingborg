@@ -1,5 +1,5 @@
 import moment from "moment";
-import { get, post, remove } from "../helpers/ApiRequest";
+import { get, patch, post, remove } from "../helpers/ApiRequest";
 
 const createBooking = async (
   requiredAttendees: string[],
@@ -104,10 +104,44 @@ const getBooking = async (id: string): Promise<Record<string, unknown>> => {
   throw new Error("getBooking: Response does not contain data.data.attributes");
 };
 
+const updateBooking = async (
+  id: string,
+  requiredAttendees: string[],
+  optionalAttendees: string[],
+  startTime: string,
+  endTime: string,
+  refCode: string,
+  address: string,
+  message: string
+): Promise<Record<string, unknown>> => {
+  const body = {
+    requiredAttendees,
+    optionalAttendees,
+    startTime: moment(startTime).format(),
+    endTime: moment(endTime).format(),
+    subject: "Mitt Helsingborg bokning",
+    referenceCode: refCode,
+    body: `Du har fått en bokning ifrån Mitt Helsingborg. Klicka på Acceptera för att bekräfta bokningen.\n\n${message}`,
+    location: address,
+  };
+
+  const response = await patch(`/booking/${encodeURIComponent(id)}`, body);
+  if (response.status !== 200) {
+    throw new Error(
+      response?.message || `updateBooking: Recieved error ${response.status}`
+    );
+  }
+
+  const booked = response?.data?.data;
+  if (booked) return booked;
+  throw new Error("updateBooking: Response does not contain data.data");
+};
+
 export {
   createBooking,
   getTimeSlots,
   searchBookings,
   deleteBooking,
   getBooking,
+  updateBooking,
 };
