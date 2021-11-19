@@ -104,10 +104,11 @@ const searchBookings = async (
   startTime: string,
   endTime: string
 ): Promise<Record<string, unknown>[]> => {
-  const response = await get(
-    `/booking/search/${encodeURIComponent(referenceCode)}` +
-      `?startTime=${startTime}&endTime=${endTime}`
-  );
+  const response = await post(`/booking/search`, {
+    referenceCode,
+    startTime,
+    endTime,
+  });
   if (response.status !== 200) {
     throw new Error(
       response?.message || `searchBookings: Recieved error ${response.status}`
@@ -128,8 +129,7 @@ const getHistoricalAttendees = async (
 ): Promise<string[]> => {
   const response = await get(
     `/booking/getHistoricalAttendees/${encodeURIComponent(referenceCode)}` +
-      `?startTime=${startTime}` +
-      `&endTime=${endTime}`
+      `?startTime=${startTime}&endTime=${endTime}`
   );
   if (response.status !== 200) {
     throw new Error(
