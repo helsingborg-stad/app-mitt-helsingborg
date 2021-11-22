@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   ActivityIndicator,
   Platform,
@@ -6,6 +6,10 @@ import {
   ScrollView,
 } from "react-native";
 import styled from "styled-components/native";
+import moment from "moment";
+import { getHistoricalAttendees } from "../../services/BookingService";
+import { getReferenceCodeForUser } from "../../helpers/ReferenceCode";
+import AuthContext from "../../store/AuthContext";
 import { Text } from "../../components/atoms";
 import { BookablesService } from "../../services";
 import theme from "../../styles/theme";
@@ -31,21 +35,47 @@ type ButtonItem = {
 };
 
 const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
+  const { user } = useContext(AuthContext);
+
   const [isLoading, setLoading] = useState(true);
   const [buttons, setButtons] = useState<ButtonItem[]>([]);
   const [error, setError] = useState<Error | undefined>(undefined);
 
   useEffect(() => {
     let canceled = false;
+
     const fetchData = async () => {
       try {
         const bookables = await BookablesService.getBookables();
+        const contactsList = await getHistoricalAttendees(
+          getReferenceCodeForUser(user),
+          moment().subtract(6, "months").format(),
+          moment().add(6, "months").format()
+        );
+        const contacts: ButtonItem[] =
+          contactsList.length > 0
+            ? [
+                {
+                  buttonText: "Mina kontakter",
+                  icon: "photo-camera",
+                  onClick: () =>
+                    onChangeModalScreen(ModalScreen.BookingForm, {
+                      isContactsMode: true,
+                      contactsList,
+                    }),
+                },
+              ]
+            : [];
+
         if (!canceled) {
-          const buttonItems: ButtonItem[] = bookables.map((bookable) => ({
-            buttonText: bookable.name,
-            icon: "photo-camera",
-            onClick: () => true,
-          }));
+          const buttonItems: ButtonItem[] = contacts.concat(
+            bookables.map((bookable) => ({
+              buttonText: bookable.name,
+              icon: "photo-camera",
+              onClick: () =>
+                onChangeModalScreen(ModalScreen.BookingForm, bookable),
+            }))
+          );
           setButtons(buttonItems);
           setLoading(false);
         }

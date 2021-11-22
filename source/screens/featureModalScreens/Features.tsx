@@ -4,8 +4,11 @@ import ButtonList from "../../components/organisms/ButtonList";
 import { ModalScreen } from "./types";
 
 interface Props {
-  onNavigate: (newRoute: string) => void;
-  onChangeModalScreen: (screen: ModalScreen) => void;
+  onNavigate: (newRoute: string, params?: Record<string, unknown>) => void;
+  onChangeModalScreen: (
+    screen: ModalScreen,
+    params?: Record<string, unknown>
+  ) => void;
 }
 const Features = ({ onNavigate, onChangeModalScreen }: Props): JSX.Element => {
   const buttons = useMemo(
