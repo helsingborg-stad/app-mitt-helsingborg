@@ -161,11 +161,9 @@ const getTimeSlots = async (
     );
   }
 
-  const timeSlots = response?.data?.data?.attributes;
+  const timeSlots = response?.data?.data;
   if (timeSlots) return timeSlots;
-  throw new Error(
-    "getTimeSlots: Response does not contain data.data.attributes"
-  );
+  throw new Error("getTimeSlots: Response does not contain data.data");
 };
 
 export {
