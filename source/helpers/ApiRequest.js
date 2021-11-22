@@ -17,7 +17,7 @@ import { name, version } from "../../package.json";
  * @param {obj} data
  * @param {obj} headers
  */
-const request = async (endpoint, method, data, headers) => {
+const request = async (endpoint, method, data, headers, params) => {
   const url = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
   const appEnv = await StorageService.getData(APP_ENV_KEY);
@@ -42,7 +42,8 @@ const request = async (endpoint, method, data, headers) => {
       url,
       method,
       headers: newHeaders,
-      data: data !== undefined ? data : undefined,
+      data,
+      params,
     });
     return req;
   } catch (error) {
@@ -50,8 +51,8 @@ const request = async (endpoint, method, data, headers) => {
   }
 };
 
-const get = (endpoint = "", headers) =>
-  request(endpoint, "get", undefined, headers);
+const get = (endpoint = "", headers, params) =>
+  request(endpoint, "get", undefined, headers, params);
 
 const post = (endpoint = "", body, headers) =>
   request(endpoint, "post", body, headers);
