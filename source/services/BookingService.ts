@@ -128,8 +128,9 @@ const getHistoricalAttendees = async (
   endTime: string
 ): Promise<string[]> => {
   const response = await get(
-    `/booking/getHistoricalAttendees/${encodeURIComponent(referenceCode)}` +
-      `?startTime=${startTime}&endTime=${endTime}`
+    `/booking/getHistoricalAttendees/${referenceCode}`,
+    undefined,
+    { startTime, endTime }
   );
   if (response.status !== 200) {
     throw new Error(
