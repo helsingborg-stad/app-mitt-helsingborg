@@ -7,7 +7,7 @@ interface ButtonProps {
 }
 const ButtonContainer = styled.TouchableHighlight<ButtonProps>`
   padding: 12px 20px;
-  margin: 0;
+  margin: 0 5px;
   width: ${({ selected }) => (selected ? "172px" : "150px")};
   height: 48px;
   background: ${({ theme, selected }) =>
