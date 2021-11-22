@@ -1,20 +1,12 @@
-import { BookingItem, mockAdministrator } from "app/helpers/MockBookingData";
-import {
-  mockAdministratorEmail,
-  mockTimeSlots,
-} from "app/helpers/MockTimeSlotData";
-import { getReferenceCodeForUser } from "app/helpers/ReferenceCode";
-import {
-  createBooking,
-  getHistoricalAttendees,
-  getTimeSlots,
-} from "app/services/BookingService";
-import AuthContext from "app/store/AuthContext";
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
-import { formDataToQuestions } from "app/helpers/BookingHelper";
+import AuthContext from "../store/AuthContext";
+import { createBooking, getTimeSlots } from "../services/BookingService";
+import { getReferenceCodeForUser } from "../helpers/ReferenceCode";
+import { formDataToQuestions } from "../helpers/BookingHelper";
+import { BookingItem } from "../helpers/MockBookingData";
 import { getAdministratorsBySharedMailbox } from "../services/BookablesService";
 import BookingForm from "../containers/Form/BookingForm";
 import FormContext from "../store/FormContext";
@@ -118,7 +110,6 @@ const BookingFormScreen = ({
 
     const status = "None";
     const administrator = {
-      ...mockAdministrator,
       email: selectedEmail,
     };
     const date = moment(startDate).format("yyyy-MM-DD");
