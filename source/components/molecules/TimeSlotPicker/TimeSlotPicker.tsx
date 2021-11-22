@@ -1,22 +1,20 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import moment from "moment";
 import { DayPicker, TimeSpanButton } from "..";
 
-interface TimeSpan {
+export interface TimeSlot {
   startTime: string;
   endTime: string;
-}
-
-interface ValueType {
+  emails: string[];
   date: string;
-  timeSpan: TimeSpan;
 }
 
 interface TimeSlotPickerProps {
-  value: ValueType | undefined;
-  onChange: (newObject: Partial<ValueType>) => void;
-  availableTimes: Record<string, TimeSpan[]>;
+  value: TimeSlot | undefined;
+  onChange: (newObject: Partial<TimeSlot>) => void;
+  availableTimes: Record<string, TimeSlot[]>;
 }
 
 const TimeSlotPicker = ({
@@ -26,30 +24,30 @@ const TimeSlotPicker = ({
 }: TimeSlotPickerProps): JSX.Element => {
   const dates = Object.keys(availableTimes);
   const currentDate = value?.date || "";
-  const currentTimeSpan = value?.timeSpan || {};
   const currentAvailableTimes = availableTimes[currentDate] || [];
 
   const updateDate = (date: string) => {
     onChange({ date });
   };
 
-  const updateTime = (timeSpan: TimeSpan) => {
-    onChange({ ...value, timeSpan });
+  const updateTime = (timeSpan: TimeSlot) => {
+    onChange(timeSpan);
   };
 
-  const formatTimeSpanText = (timeSpan: TimeSpan) =>
-    `${timeSpan.startTime.substr(0, 5)}-${timeSpan.endTime.substr(0, 5)}`;
+  const formatTimeSpanText = (timeSpan: TimeSlot) =>
+    `${moment(`${timeSpan.date} ${timeSpan.startTime}`).format("HH:mm")} - ` +
+    `${moment(`${timeSpan.date} ${timeSpan.endTime}`).format("HH:mm")}`;
 
   const timeSpanIsEqual = (
-    t1: TimeSpan | Record<string, never>,
-    t2: TimeSpan | Record<string, never>
+    t1: TimeSlot | Record<string, never> | undefined,
+    t2: TimeSlot | Record<string, never> | undefined
   ) => {
     if (!t1 || !t2 || t1 === {} || t2 === {}) return false;
     return t1.startTime === t2.startTime && t1.endTime === t2.endTime;
   };
 
-  const renderTimeSpanButton = (timeSpan: TimeSpan) => {
-    const selected = timeSpanIsEqual(timeSpan, currentTimeSpan);
+  const renderTimeSpanButton = (timeSpan: TimeSlot) => {
+    const selected = timeSpanIsEqual(timeSpan, value);
     const formattedText = formatTimeSpanText(timeSpan);
     const textColor = selected ? "white" : "black";
     const keyString = `TimeSpanButton-${currentDate}-${timeSpan.startTime}`;
