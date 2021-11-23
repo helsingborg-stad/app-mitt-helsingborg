@@ -6,6 +6,7 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 import AvatarListItem from '../ListItem/AvatarListItem';
 import { Text, Icon } from '../../atoms';
 import Button from '../../atoms/Button/Button';
+import { deepCopy } from 'app/helpers/Objects';
 
 const SectionHeader = styled(Text)`
   margin-left: 15px;
@@ -35,21 +36,21 @@ const GroupListWithAvatar = ({ heading, value, onChange, formId }) => {
   const [showModal, setShowModal] = React.useState(false);
 
   const updateValue = (index) => (newValue) => {
-    const vs = value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
+    const vs = value && value.length > 0 ? deepCopy(value) : [];
     vs[index] = newValue;
     onChange(vs);
   };
 
   const addItem = () => {
     setShowModal(true);
-    const vs = value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
+    const vs = value && value.length > 0 ? deepCopy(value) : [];
     vs.push({});
     onChange(vs);
   };
 
   const removeItem = (index) => () => {
     setShowModal(false);
-    const vs = value && value.length > 0 ? JSON.parse(JSON.stringify(value)) : [];
+    const vs = value && value.length > 0 ? deepCopy(value) : [];
     vs.splice(index, 1);
     onChange(vs);
   };

@@ -1,4 +1,9 @@
-import { deepCompareEquals, deepCopyViaJson, filterAsync } from "../Objects";
+import {
+  deepCompareEquals,
+  deepCopyViaJson,
+  filterAsync,
+  deepCopy,
+} from "../Objects";
 
 describe("Object helper functions", () => {
   test("deepCopyViaJson", () => {
@@ -46,5 +51,20 @@ describe("Object helper functions", () => {
     expect(firstThird).toEqual(true);
     expect(secondThird).toEqual(true);
     expect(firstFourth).toEqual(false);
+  });
+});
+
+describe("Deep copy", () => {
+  const data = { hello: "world" };
+
+  const copiedData = deepCopy(data);
+
+  it("Should clone without references", () => {
+    copiedData.hello = "not world!";
+    expect(copiedData.hello).toBe("not world!");
+  });
+
+  it("Should not modify the original object", () => {
+    expect(data.hello).toBe("world");
   });
 });

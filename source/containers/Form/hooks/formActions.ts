@@ -3,6 +3,7 @@ import { replaceMarkdownTextInSteps } from './textReplacement';
 import { FormReducerState } from './useForm';
 import { validateInput } from '../../../helpers/ValidationHelper';
 import { evaluateConditionalExpression } from '../../../helpers/conditionParser';
+import { deepCopy } from 'app/helpers/Objects';
 
 /**
  * Action for replacing title markdown in steps.
@@ -218,7 +219,7 @@ export function submitForm(
  */
 export function updateAnswer(state: FormReducerState, answer: Record<string, any>) {
   // make a deep copy of the formAnswers, and use that to update. Not sure if completely needed.
-  const updatedAnswers: Record<string, any> = JSON.parse(JSON.stringify(state.formAnswers));
+  const updatedAnswers: Record<string, any> = deepCopy(state.formAnswers);
   Object.keys(answer).forEach(key => (updatedAnswers[key] = answer[key]));
 
   return {
@@ -481,7 +482,7 @@ export function dirtyField(
 
 export const createSnapshot = (state: FormReducerState) => ({
   ...state,
-  formAnswerSnapshot: JSON.parse(JSON.stringify(state.formAnswers)),
+  formAnswerSnapshot: deepCopy(state.formAnswers),
 });
 
 export const restoreSnapshot = (state: FormReducerState) => {
@@ -495,7 +496,7 @@ export const restoreSnapshot = (state: FormReducerState) => {
 
   return {
     ...state,
-    formAnswers: JSON.parse(JSON.stringify(state.formAnswerSnapshot)),
+    formAnswers: deepCopy(state.formAnswerSnapshot),
     formAnswerSnapshot: {},
   };
 }

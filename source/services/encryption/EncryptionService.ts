@@ -201,7 +201,7 @@ export async function setupSymmetricKey(
   forms: AnsweredForm
 ): Promise<AnsweredForm> {
   // Ugly deep copy of forms.
-  const formsCopy = JSON.parse(JSON.stringify(forms));
+  const formsCopy = deepCopy(forms);
 
   const otherUserPersonalNumber = Object.keys(
     formsCopy.encryption.publicKeys
