@@ -327,12 +327,16 @@ function CaseOverview(props): JSX.Element {
   const activeCases = getCasesByStatuses(["notStarted", "active"]);
   const closedCases = getCasesByStatuses(["closed"]);
 
+  const onFailedToFetchCases = (e: Error) => {
+    console.error("failed to fetch cases", e);
+  };
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    fetchCases();
-    wait(500).then(() => {
-      setRefreshing(false);
-    });
+    void fetchCases()
+      .then(() => wait(500))
+      .catch(onFailedToFetchCases)
+      .then(() => setRefreshing(false));
   }, [fetchCases]);
 
   useFocusEffect(
@@ -341,11 +345,8 @@ function CaseOverview(props): JSX.Element {
       // Due to this we have to give the api some time before we try to fetch cases,
       // since we cannot react to changes as of now.
       const milliseconds = 4000;
-      wait(milliseconds).then(() => {
-        fetchCases();
-      });
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+      wait(milliseconds).then(fetchCases).catch(onFailedToFetchCases);
+    }, [fetchCases])
   );
 
   useFocusEffect(
@@ -379,13 +380,12 @@ function CaseOverview(props): JSX.Element {
       });
     };
 
-    updateItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cases]);
+    void updateItems();
+  }, [cases, getCasesByFormIds, getForm, getFormIdsByFormTypes]);
 
   useEffect(() => {
     if (pendingCaseSign && authContext.status === "signResolved") {
-      (async () => {
+      void (async () => {
         const currentForm =
           pendingCaseSign.forms[pendingCaseSign.currentFormId];
 
@@ -469,7 +469,7 @@ function CaseOverview(props): JSX.Element {
   );
 
   const closedCaseCards = closedCases.map((caseData) =>
-    computeCaseCardComponent(caseData, navigation, authContext)
+    computeCaseCardComponent(caseData, navigation, authContext, null)
   );
 
   const mainApplicantData = dialogState.caseData?.persons?.find(
