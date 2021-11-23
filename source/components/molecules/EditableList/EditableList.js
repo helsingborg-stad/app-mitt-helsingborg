@@ -1,3 +1,4 @@
+import { deepCopy } from 'app/helpers/Objects';
 import PropTypes from 'prop-types';
 import React, { useRef, useState } from 'react';
 import { LayoutAnimation, Platform } from 'react-native';
@@ -210,7 +211,7 @@ function EditableList({
   };
 
   const onChange = (key, text) => {
-    const updatedState = JSON.parse(JSON.stringify(state));
+    const updatedState = deepCopy(state);
     updatedState[key] = text;
     onInputChange(updatedState);
     setState(updatedState);
