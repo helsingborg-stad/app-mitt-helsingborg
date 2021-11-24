@@ -163,7 +163,7 @@ function LoginScreen(): JSX.Element {
 
   const [loginModalVisible, toggleLoginModal] = useModal();
   const [agreementModalVisible, toggleAgreementModal] = useModal();
-  const [personalNumber, setPersonalNumber] = useState("197402017870");
+  const [personalNumber, setPersonalNumber] = useState("");
 
   /**
    * Setup for markdown formatter used to render user agreement text.
