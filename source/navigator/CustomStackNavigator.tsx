@@ -73,9 +73,7 @@ const CustomStackNavigator = ({
     useContext(AuthContext);
 
   const handleEndUserSession = async () => {
-    if (authState === AUTH_STATE.SIGNED_IN) {
-      await handleLogout();
-    }
+    await handleLogout();
   };
 
   const touchParameters: UseTouchParameters = {
