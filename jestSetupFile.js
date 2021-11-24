@@ -1,6 +1,8 @@
 import { NativeModules } from "react-native";
 import "react-native-gesture-handler/jestSetup";
 
+jest.mock("react-native/Libraries/LogBox/LogBox");
+
 /**
  * Mock react-native-config (ENVS)
  */
