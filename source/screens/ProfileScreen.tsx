@@ -59,14 +59,12 @@ const ProfileLabel = styled(Label)`
   color: ${(props) => props.theme.text.blue[4]};
 `;
 
-function ProfileScreen(props) {
-  const {
-    navigation: { navigate },
-  } = props;
+function ProfileScreen({ navigation }: any): JSX.Element {
+  const { navigate } = navigation;
   const authContext = useContext(AuthContext);
   const { isDevMode } = useContext(AppContext);
   const { user } = authContext;
-  const renderField = (value) =>
+  const renderField = (value: string) =>
     value ? (
       <ProfileInfoText>{value}</ProfileInfoText>
     ) : (
