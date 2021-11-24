@@ -126,7 +126,6 @@ function ProfileScreen(props) {
             colorSchema="blue"
             onClick={async () => {
               await authContext.handleLogout();
-              // navigate('Start');
             }}
           >
             <Text>Logga ut</Text>
