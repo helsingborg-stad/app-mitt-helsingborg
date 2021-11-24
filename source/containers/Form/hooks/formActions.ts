@@ -3,7 +3,7 @@ import { replaceMarkdownTextInSteps } from './textReplacement';
 import { FormReducerState } from './useForm';
 import { validateInput } from '../../../helpers/ValidationHelper';
 import { evaluateConditionalExpression } from '../../../helpers/conditionParser';
-import { deepCopy } from 'app/helpers/Objects';
+import { deepCopy } from '../../../helpers/Objects';
 
 /**
  * Action for replacing title markdown in steps.

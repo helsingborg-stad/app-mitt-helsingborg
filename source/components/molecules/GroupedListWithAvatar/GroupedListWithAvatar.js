@@ -6,7 +6,7 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 import AvatarListItem from '../ListItem/AvatarListItem';
 import { Text, Icon } from '../../atoms';
 import Button from '../../atoms/Button/Button';
-import { deepCopy } from 'app/helpers/Objects';
+import { deepCopy } from '../../../helpers/Objects';
 
 const SectionHeader = styled(Text)`
   margin-left: 15px;
