@@ -21,7 +21,7 @@ const FieldWrapper = styled.View`
   margin-bottom: 8px;
 `;
 
-const DeveloperScreen = ({ navigation }: any) => {
+const DeveloperScreen = ({ navigation }: any): JSX.Element => {
   const { createCase } = useContext(CaseDispatch);
   const authContext = useContext(AuthContext);
 
