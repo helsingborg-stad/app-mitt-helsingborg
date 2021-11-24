@@ -79,7 +79,7 @@ const CustomStackNavigator = ({
   };
 
   const touchParameters: UseTouchParameters = {
-    inactivityTime: parseInt(env.INACTIVITY_TIME),
+    inactivityTime: parseInt(env.INACTIVITY_TIME, 10),
     intervalDelay: 5000,
     logoutDelay: 60000,
     logOut: handleEndUserSession,
