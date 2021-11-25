@@ -2,6 +2,7 @@ import moment from "moment";
 import {
   BookingItem,
   convertGraphDataToBookingItem,
+  TimeSlotDataType,
 } from "../helpers/BookingHelper";
 import { get, patch, post, remove } from "../helpers/ApiRequest";
 
@@ -160,7 +161,7 @@ const getTimeSlots = async (
   attendees: string[],
   startTime: string,
   endTime: string
-): Promise<Record<string, unknown>> => {
+): Promise<TimeSlotDataType> => {
   const response = await post(`/timeslots/getTimeSlots`, {
     attendees,
     startTime,
