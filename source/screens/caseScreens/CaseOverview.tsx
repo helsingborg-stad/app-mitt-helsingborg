@@ -17,7 +17,7 @@ import Body from "../../components/molecules/Dialog/Body";
 import BackgroundBlur from "../../components/molecules/Dialog/BackgroundBlur";
 import Button from "../../components/atoms/Button";
 import icons from "../../helpers/Icons";
-import { Text } from "../../components/atoms";
+import { Text, Icon } from "../../components/atoms";
 import {
   Card,
   CaseCard,
@@ -76,6 +76,14 @@ const CardMessageBody = styled(Card.Body)`
 `;
 
 const colorSchema = "red";
+
+const RefreshCardBody = styled(Card.Body)`
+  border: 1px solid
+    ${(props) => {
+      console.log("props", props);
+      return props.theme.colors.neutrals[5];
+    }};
+`;
 
 /**
  * Returns a case card component depending on it's status
@@ -571,6 +579,15 @@ function CaseOverview(props): JSX.Element {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
+        {/* <Card colorSchema="red">
+          <RefreshCardBody>
+            <Card.Text>Dra för att ladda om sidan</Card.Text>
+          </RefreshCardBody>
+        </Card> */}
+        <Card.Button colorSchema="red" disabled>
+          <Icon name={refreshing ? "refresh" : "arrow-upward"} />
+          <Text>Dra för att ladda om sidan</Text>
+        </Card.Button>
         <ListHeading type="h5">Aktiva</ListHeading>
         {activeCases.length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
