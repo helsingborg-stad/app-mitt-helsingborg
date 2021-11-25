@@ -102,8 +102,6 @@ const BookingForm = ({
     });
   }
 
-  console.log(currentAvailableTimes);
-
   return (
     <Container>
       <Scroller>
