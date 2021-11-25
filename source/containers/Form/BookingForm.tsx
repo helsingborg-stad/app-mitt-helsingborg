@@ -120,9 +120,7 @@ const BookingForm = ({
               <FormField
                 key={`${question.id}`}
                 onChange={(value: any) => updateAnswers(value)}
-                onBlur={(value: any) =>
-                  validateAnswer(question.id, question.validation)
-                }
+                onBlur={() => validateAnswer(question.id, question.validation)}
                 inputType={question.type}
                 value={answers[question.id]}
                 colorSchema="red"
