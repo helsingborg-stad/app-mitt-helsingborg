@@ -55,16 +55,30 @@ describe("Object helper functions", () => {
 });
 
 describe("Deep copy", () => {
-  const data = { hello: "world" };
+  const data = {
+    hello: "world",
+    deep: {
+      nested: {
+        things: true,
+        arr: ["1", "2", "3"],
+      },
+    },
+  };
 
   const copiedData = deepCopy(data);
 
   it("Should clone without references", () => {
     copiedData.hello = "not world!";
+    copiedData.deep.nested.things = false;
+    copiedData.deep.nested.arr.push("4");
     expect(copiedData.hello).toBe("not world!");
+    expect(copiedData.deep.nested.things).toBe(false);
+    expect(copiedData.deep.nested.arr).toContain("4");
   });
 
   it("Should not modify the original object", () => {
     expect(data.hello).toBe("world");
+    expect(data.deep.nested.things).toBe(true);
+    expect(data.deep.nested.arr).not.toContain("4");
   });
 });
