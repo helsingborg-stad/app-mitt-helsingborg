@@ -23,6 +23,21 @@ export type BookingItem = {
   addressLines: string[];
 };
 
+type GraphData = {
+  BookingId: string;
+  Subject: string;
+  Body: string;
+  Location: string;
+  ReferenceCode: string;
+  StartTime: string;
+  EndTime: string;
+  Attendees: {
+    Email: string;
+    Type: string;
+    Status: string;
+  }[];
+};
+
 const mockAdministrator: Administrator = {
   title: "Lex Luthor",
   department: "Socialförvaltningen",
@@ -96,7 +111,7 @@ function consolidateTimeSlots(
   return reformattedTimeSlots;
 }
 
-const convertGraphDataToBookingItem = (graphData: any): BookingItem => {
+const convertGraphDataToBookingItem = (graphData: GraphData): BookingItem => {
   const firstAttendee = graphData.Attendees[0];
   const administrator = { ...mockAdministrator, email: firstAttendee.Email };
   const status = firstAttendee.Status;
