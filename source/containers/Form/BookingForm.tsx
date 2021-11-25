@@ -4,11 +4,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import styled from "styled-components/native";
 import { Question } from "../../types/FormTypes";
 import { ValidationObject } from "../../types/Validation";
-import {
-  TimeSlot,
-  consolidateTimeSlots,
-  TimeSlotDataType,
-} from "../../helpers/BookingHelper";
+import { consolidateTimeSlots } from "../../helpers/BookingHelper";
+import { TimeSlot, TimeSlotDataType } from "../../types/BookingTypes";
 import icons from "../../helpers/Icons";
 import { CharacterCard, TimeSlotPicker } from "../../components/molecules";
 import { Button } from "../../components/atoms";

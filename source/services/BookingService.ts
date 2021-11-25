@@ -1,9 +1,6 @@
 import moment from "moment";
-import {
-  BookingItem,
-  convertGraphDataToBookingItem,
-  TimeSlotDataType,
-} from "../helpers/BookingHelper";
+import { BookingItem, TimeSlotDataType } from "../types/BookingTypes";
+import { convertGraphDataToBookingItem } from "../helpers/BookingHelper";
 import { get, patch, post, remove } from "../helpers/ApiRequest";
 
 const getBooking = async (

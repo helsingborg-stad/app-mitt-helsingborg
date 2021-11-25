@@ -1,51 +1,13 @@
 import moment from "moment";
+import {
+  Administrator,
+  BookingItem,
+  GraphData,
+  TimeSlot,
+  TimeSlotDataType,
+  TimeSpan,
+} from "../types/BookingTypes";
 import { Form, Question, Step } from "../types/FormTypes";
-
-type TimeSpan = {
-  startTime: string;
-  endTime: string;
-};
-
-export type TimeSlot = {
-  startTime?: string;
-  endTime?: string;
-  emails?: string[];
-  date: string;
-};
-
-export type Administrator = {
-  title: string;
-  department: string;
-  jobTitle: string;
-  email: string;
-  phone: string;
-};
-
-export type BookingItem = {
-  date: string;
-  time: { startTime: string; endTime: string };
-  title: string;
-  status: string;
-  administrator: Administrator;
-  addressLines: string[];
-};
-
-type GraphData = {
-  BookingId: string;
-  Subject: string;
-  Body: string;
-  Location: string;
-  ReferenceCode: string;
-  StartTime: string;
-  EndTime: string;
-  Attendees: {
-    Email: string;
-    Type: string;
-    Status: string;
-  }[];
-};
-
-export type TimeSlotDataType = Record<string, Record<string, TimeSpan[]>>;
 
 const mockAdministrator: Administrator = {
   title: "Lex Luthor",
@@ -101,7 +63,8 @@ function consolidateTimeSlots(
           const newObject: TimeSlot = { ...timeSpan, date, emails: [email] };
           joinedTimeSlots[date][timeString] = newObject;
         } else {
-          const oldEmails: string[] = joinedTimeSlots[date][timeString].emails;
+          const oldEmails: string[] =
+            joinedTimeSlots[date][timeString].emails || [];
           joinedTimeSlots[date][timeString].emails = [...oldEmails, email];
         }
       });
