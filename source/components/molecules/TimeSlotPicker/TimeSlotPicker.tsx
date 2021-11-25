@@ -5,15 +5,15 @@ import moment from "moment";
 import { DayPicker, TimeSpanButton } from "..";
 
 export interface TimeSlot {
-  startTime: string;
-  endTime: string;
-  emails: string[];
+  startTime?: string;
+  endTime?: string;
+  emails?: string[];
   date: string;
 }
 
 interface TimeSlotPickerProps {
   value: TimeSlot | undefined;
-  onChange: (newObject: Partial<TimeSlot>) => void;
+  onChange: (newObject: TimeSlot | undefined) => void;
   availableTimes: Record<string, TimeSlot[]>;
 }
 

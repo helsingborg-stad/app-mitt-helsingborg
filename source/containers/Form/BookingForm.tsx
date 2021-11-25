@@ -2,9 +2,14 @@ import React, { useCallback, useState } from "react";
 import { Text } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styled from "styled-components/native";
+import { Question } from "../../types/FormTypes";
+import { ValidationObject } from "../../types/Validation";
 import { TimeSlot } from "../../components/molecules/TimeSlotPicker/TimeSlotPicker";
 import icons from "../../helpers/Icons";
-import { consolidateTimeSlots } from "../../helpers/BookingHelper";
+import {
+  consolidateTimeSlots,
+  TimeSlotDataType,
+} from "../../helpers/BookingHelper";
 import { CharacterCard, TimeSlotPicker } from "../../components/molecules";
 import { Button } from "../../components/atoms";
 import FormField from "../FormField/FormField";
@@ -23,14 +28,19 @@ const ListWrapper = styled.View`
 `;
 
 interface BookingFormProps {
-  questions: Record<string, any>[];
-  availableTimes: Record<string, any>;
+  questions: Question[];
+  availableTimes: TimeSlotDataType;
   isContactsMode: boolean;
   onSubmit: (
     timeSlot: TimeSlot | undefined,
-    formAnswers: Record<string, any>
+    formAnswers: { label: string; answer: string }[]
   ) => void;
 }
+
+type ValidationError = {
+  isValid: boolean;
+  message: string;
+};
 
 const BookingForm = ({
   questions,
@@ -38,28 +48,31 @@ const BookingForm = ({
   isContactsMode,
   onSubmit,
 }: BookingFormProps): JSX.Element => {
-  const [answers, setAnswers] = useState<Record<string, any>>({});
-  const [validations, setValidations] = useState<Record<string, any>>({});
-  const [timeSlot, setTimeSlot] = useState<TimeSlot>();
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, ValidationError>
+  >({});
+  const [timeSlot, setTimeSlot] = useState<TimeSlot | undefined>();
   const [currentEmail, setCurrentEmail] = useState<string>("");
 
   const emails = Object.keys(availableTimes);
 
-  const validateAnswer = (questionId: string, validation: any) => {
+  const validateAnswer = (questionId: string, validation: ValidationObject) => {
     if (validation) {
       const [isValid, message] = validateInput(
-        answers[questionId],
+        answers[questionId] as string,
         validation.rules
       );
-      setValidations({
-        ...validations,
-        [questionId]: isValid ? undefined : { isValid, message },
+      setValidationErrors({
+        ...validationErrors,
+        [questionId]: { isValid, message },
       });
     }
   };
 
   const updateAnswers = useCallback(
-    (answer: any) => {
+    (answer: Record<string, string>) => {
+      console.log(answer);
       setAnswers({ ...answers, ...answer });
     },
     [answers]
@@ -71,10 +84,10 @@ const BookingForm = ({
 
   const submitForm = () => {
     const questionsWithAnswers = questions.map((question) => ({
-      ...question,
+      label: question.label,
       answer: answers[question.id],
     }));
-    onSubmit(timeSlot, questionsWithAnswers);
+    if (timeSlot !== undefined) onSubmit(timeSlot, questionsWithAnswers);
   };
 
   const renderCharacterCard = (email: string) => {
@@ -90,6 +103,11 @@ const BookingForm = ({
         selected={selected}
       />
     );
+  };
+
+  const canSubmit = () => {
+    if (timeSlot?.startTime !== undefined) return true;
+    return false;
   };
 
   let currentAvailableTimes = {};
@@ -109,7 +127,6 @@ const BookingForm = ({
           {isContactsMode && emails.map(renderCharacterCard)}
           <TimeSlotPicker
             availableTimes={currentAvailableTimes}
-            emails={emails}
             onChange={setTimeSlot}
             value={timeSlot}
           />
@@ -117,23 +134,44 @@ const BookingForm = ({
             questions.map((question) => (
               <FormField
                 key={`${question.id}`}
-                onChange={(value: any) => updateAnswers(value)}
-                onBlur={() => validateAnswer(question.id, question.validation)}
-                inputType={question.type}
-                value={answers[question.id]}
-                colorSchema="red"
                 label={question.label}
-                help={question.help}
+                labelLine={question.labelLine}
+                inputType={question.type}
+                colorSchema="red"
                 id={question.id}
-                validationErrors={validations}
-                {...question}
+                onChange={(newAnswer: Record<string, string>) =>
+                  updateAnswers(newAnswer)
+                }
+                onBlur={() => {
+                  if (question.validation !== undefined)
+                    validateAnswer(question.id, question.validation);
+                }}
+                onFocus={() => true}
+                onMount={() => true}
+                onAddAnswer={() => true}
+                value={answers[question.id]}
+                answers={answers}
+                validationErrors={validationErrors}
+                help={question.help}
+                inputSelectValue={question.type}
+                type={question.type}
+                description={question.description}
+                conditionalOn={question.conditionalOn}
+                placeholder={question.placeholder}
+                explainer={question.explainer}
+                loadPrevious={question.loadPrevious}
+                items={question.items}
+                inputs={question.inputs}
+                validation={question.validation}
+                choices={question.choices}
+                text={question.text}
               />
             ))
           ) : (
             <Text>contact mode :)</Text>
           )}
         </ListWrapper>
-        <Button colorSchema="red" onClick={submitForm}>
+        <Button colorSchema="red" onClick={submitForm} disabled={!canSubmit()}>
           <Text style={{ color: "white" }}>Skicka</Text>
         </Button>
       </Scroller>
