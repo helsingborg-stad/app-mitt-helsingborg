@@ -1,10 +1,16 @@
 import moment from "moment";
 import { Form, Question, Step } from "../types/FormTypes";
-import { TimeSlot } from "../components/molecules/TimeSlotPicker/TimeSlotPicker";
 
 type TimeSpan = {
   startTime: string;
   endTime: string;
+};
+
+export type TimeSlot = {
+  startTime?: string;
+  endTime?: string;
+  emails?: string[];
+  date: string;
 };
 
 export type Administrator = {
