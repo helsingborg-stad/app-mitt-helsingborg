@@ -1,3 +1,7 @@
+import {
+  BookingItem,
+  convertGraphDataToBookingItem,
+} from "app/helpers/BookingHelper";
 import moment from "moment";
 import { get, patch, post, remove } from "../helpers/ApiRequest";
 
@@ -103,7 +107,7 @@ const searchBookings = async (
   referenceCode: string,
   startTime: string,
   endTime: string
-): Promise<Record<string, unknown>[]> => {
+): Promise<BookingItem[]> => {
   const response = await post(`/booking/search`, {
     referenceCode,
     startTime,
@@ -116,10 +120,15 @@ const searchBookings = async (
   }
 
   const bookings = response?.data?.data?.attributes;
-  if (bookings) return bookings;
-  throw new Error(
-    "searchBookings: Response does not contain data.data.attributes"
-  );
+  if (!bookings) {
+    throw new Error(
+      "searchBookings: Response does not contain data.data.attributes"
+    );
+  }
+
+  return bookings
+    .map(convertGraphDataToBookingItem)
+    .filter((item: BookingItem) => item.status !== "Declined");
 };
 
 const getHistoricalAttendees = async (
