@@ -187,8 +187,8 @@ function AuthProvider({ children, initialState }: any): JSX.Element {
         dispatch(setStatus("pending"));
         const isValidToken = await isAccessTokenValid();
         if (isValidToken) {
-          await handleLogin();
           await handleAddProfile();
+          handleLogin();
         } else {
           await handleLogout();
         }
