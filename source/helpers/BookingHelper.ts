@@ -1,4 +1,5 @@
 import moment from "moment";
+import { Form, Question, Step } from "../types/FormTypes";
 import { TimeSlot } from "../components/molecules/TimeSlotPicker/TimeSlotPicker";
 
 type TimeSpan = {
@@ -38,6 +39,8 @@ type GraphData = {
   }[];
 };
 
+export type TimeSlotDataType = Record<string, Record<string, TimeSpan[]>>;
+
 const mockAdministrator: Administrator = {
   title: "Lex Luthor",
   department: "Socialförvaltningen",
@@ -46,10 +49,13 @@ const mockAdministrator: Administrator = {
   phone: "042 - 00 00 00",
 };
 
-function formDataToQuestions(formData: Record<string, any>): any[] {
-  return formData.steps.flatMap(
-    (step: Record<string, unknown>) => step.questions
-  );
+function formDataToQuestions(formData: Form): Question[] {
+  return formData.steps
+    .flatMap((step: Step) => step.questions)
+    .filter(
+      (question: Question | undefined): question is Question =>
+        question !== undefined
+    );
 }
 
 function timeSpanToString(timeSpan: TimeSpan | TimeSlot): string {
@@ -65,7 +71,7 @@ function compareTimeSlots(a: TimeSlot, b: TimeSlot) {
  * the higher levels to the innermost objects, while also joining the timetables of all admins
  */
 function consolidateTimeSlots(
-  timeSlots: Record<string, Record<string, TimeSpan[]>>
+  timeSlots: TimeSlotDataType
 ): Record<string, TimeSlot[]> {
   /**
    * First we do the joining, by using the timespan as a property.
