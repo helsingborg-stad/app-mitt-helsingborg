@@ -1,5 +1,5 @@
-import { PrimaryColor } from '../styles/themeHelpers';
-import { ValidationObject } from './Validation';
+import { PrimaryColor } from "../styles/themeHelpers";
+import { ValidationObject } from "./Validation";
 
 export interface Help {
   text?: string;
@@ -11,12 +11,19 @@ export interface SummaryItem {
   category: string;
   title: string;
   id: string;
-  type: 'text' | 'arrayText' | 'number' | 'arrayNumber' | 'date' | 'arrayDate' | 'checkbox';
+  type:
+    | "text"
+    | "arrayText"
+    | "number"
+    | "arrayNumber"
+    | "date"
+    | "arrayDate"
+    | "checkbox";
   loadPrevious?: string[];
   validation?: ValidationObject;
 }
 export interface ListInput {
-  type: 'text' | 'number' | 'date';
+  type: "text" | "number" | "date";
   key: string;
   id?: string;
   label: string;
@@ -26,25 +33,25 @@ export interface ListInput {
 
 /** Different types for the Input component, corresponding to different keyboard types */
 export type InputFieldType =
-  | 'text'
-  | 'email'
-  | 'postalCode'
-  | 'personalNumber'
-  | 'phone'
-  | 'number'
-  | 'hidden'
-  | 'date';
+  | "text"
+  | "email"
+  | "postalCode"
+  | "personalNumber"
+  | "phone"
+  | "number"
+  | "hidden"
+  | "date";
 
 export type FormInputType =
-  | 'text'
-  | 'number'
-  | 'hidden'
-  | 'date'
-  | 'editableList'
-  | 'checkbox'
-  | 'summaryList'
-  | 'repeaterField'
-  | 'imageUploader';
+  | "text"
+  | "number"
+  | "hidden"
+  | "date"
+  | "editableList"
+  | "checkbox"
+  | "summaryList"
+  | "repeaterField"
+  | "imageUploader";
 
 export interface Question {
   label: string;
@@ -59,16 +66,19 @@ export interface Question {
   inputs?: ListInput[];
   validation?: ValidationObject;
   help?: Help;
+  choices?: { value: string; displayText: string }[];
+  text?: string;
+  labelLine?: boolean;
 }
 
 export type ActionType =
-  | 'start'
-  | 'next'
-  | 'submit'
-  | 'sign'
-  | 'close'
-  | 'backToMain'
-  | 'backToMainAndNext';
+  | "start"
+  | "next"
+  | "submit"
+  | "sign"
+  | "close"
+  | "backToMain"
+  | "backToMainAndNext";
 export interface Action {
   type: ActionType;
   label: string;
@@ -84,7 +94,7 @@ export interface Banner {
   backgroundColor?: string;
 }
 
-export type StepperActions = 'next' | 'back' | 'up' | 'down' | 'none';
+export type StepperActions = "next" | "back" | "up" | "down" | "none";
 
 export interface Step {
   title: string;
@@ -94,7 +104,7 @@ export interface Step {
   questions?: Question[];
   actions?: Action[];
   banner?: Banner;
-  colorSchema: PrimaryColor | '';
+  colorSchema: PrimaryColor | "";
 }
 
 export interface Form {
