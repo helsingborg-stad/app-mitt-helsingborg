@@ -47,21 +47,16 @@ const BookingFormScreen = ({
         setTimeSlots(timeSlotData);
         setQuestions([]);
       } else {
-        console.log(`formId: ${formId}, sharedMailbox: ${sharedMailbox}`);
         const formData = await getForm(formId);
-        console.log("Got form data: ");
-        console.log(formData);
         const emailsResponse = await getAdministratorsBySharedMailbox(
           sharedMailbox
         );
-        console.log(emailsResponse);
 
         const timeSlotData = await getTimeSlots(
           emailsResponse,
           moment().format(),
           moment().add(6, "months").format()
         );
-        console.log(timeSlotData);
 
         setTimeSlots(timeSlotData);
         setQuestions(formDataToQuestions(formData));
@@ -78,8 +73,6 @@ const BookingFormScreen = ({
   };
 
   const selectEmailFromArray = (emailsArray: string[]): string => {
-    console.log("Available emails:");
-    console.log(emailsArray);
     if (emailsArray.length === 1) return emailsArray[0];
     const randomIndex = Math.floor(Math.random() * emailsArray.length);
     return emailsArray[randomIndex];
@@ -92,7 +85,6 @@ const BookingFormScreen = ({
       message += `Q: ${qna.label}\n`;
       message += `A: ${formatAnswer(qna.answer)}\n\n`;
     });
-    console.log(message);
     const startDate = moment(`${timeSlot.date} ${timeSlot.startTime}`);
     const endDate = moment(`${timeSlot.date} ${timeSlot.endTime}`);
     const refCode = getReferenceCodeForUser(user);
