@@ -11,7 +11,10 @@ import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import svLocale from "moment/locale/sv";
 import AuthContext from "../../store/AuthContext";
-import getReferenceCodeForUser from "../../helpers/ReferenceCode";
+import {
+  getReferenceCodeForUser,
+  BookingItem,
+} from "../../helpers/BookingHelper";
 import { searchBookings } from "../../services/BookingService";
 import {
   Card,
@@ -21,7 +24,6 @@ import {
   FloatingButton,
 } from "../../components/molecules";
 import { Heading } from "../../components/atoms";
-import { BookingItem } from "../../helpers/BookingHelper";
 import { ModalScreen } from "../featureModalScreens/types";
 
 moment.updateLocale("sv", svLocale);
