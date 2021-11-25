@@ -8,10 +8,10 @@ import {
   formDataToQuestions,
   BookingItem,
   TimeSlotDataType,
+  getReferenceCodeForUser,
 } from "../helpers/BookingHelper";
 import AuthContext from "../store/AuthContext";
 import { createBooking, getTimeSlots } from "../services/BookingService";
-import getReferenceCodeForUser from "../helpers/ReferenceCode";
 import { getAdministratorsBySharedMailbox } from "../services/BookablesService";
 import BookingForm from "../containers/Form/BookingForm";
 import FormContext from "../store/FormContext";
