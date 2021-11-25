@@ -71,27 +71,18 @@ export async function loginFailure() {
 }
 
 export async function addProfile() {
-  try {
-    const decodedToken = await authService.getAccessTokenFromStorage();
-    const [userProfile, userError] = await authService.getUserProfile(
-      decodedToken.accessToken
-    );
-    if (userError) {
-      throw userError;
-    }
-
-    return {
-      type: actionTypes.addProfile,
-      payload: userProfile,
-    };
-  } catch (error) {
-    return {
-      type: actionTypes.authError,
-      payload: {
-        error,
-      },
-    };
+  const decodedToken = await authService.getAccessTokenFromStorage();
+  const [userProfile, userError] = await authService.getUserProfile(
+    decodedToken.accessToken
+  );
+  if (userError) {
+    throw userError;
   }
+
+  return {
+    type: actionTypes.addProfile,
+    payload: userProfile,
+  };
 }
 
 export function removeProfile() {
