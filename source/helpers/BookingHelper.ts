@@ -122,8 +122,8 @@ const convertGraphDataToBookingItem = (graphData: GraphData): BookingItem => {
   const administrator = { ...mockAdministrator, email: firstAttendee.Email };
   const status = firstAttendee.Status;
   const date = moment(graphData.StartTime).format("YYYY-MM-DD");
-  const startTime = moment(graphData.StartTime).format("HH:mm:ss");
-  const endTime = moment(graphData.EndTime).format("HH:mm:ss");
+  const startTime = moment(graphData.StartTime).format("HH:mm");
+  const endTime = moment(graphData.EndTime).format("HH:mm");
   const title = graphData.Subject.substring(0, graphData.Subject.indexOf("#"));
   return {
     date,
