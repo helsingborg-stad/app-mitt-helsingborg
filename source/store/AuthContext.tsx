@@ -25,9 +25,9 @@ import {
 
 import AUTH_STATE from "./types";
 
-const AuthContext = React.createContext();
+const AuthContext = React.createContext(undefined);
 
-function AuthProvider({ children, initialState }) {
+function AuthProvider({ children, initialState }: any): JSX.Element {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
   const { handleSetMode } = useContext(AppContext);
 
@@ -45,15 +45,32 @@ function AuthProvider({ children, initialState }) {
         );
       }
     };
-    handleCheckOrderStatus();
+    void handleCheckOrderStatus();
   }, [state.status, state.orderRef, state.authState]);
+
+  /**
+   * Used to save user profile data to the state.
+   */
+  async function handleAddProfile() {
+    dispatch(await addProfile());
+  }
+
+  /**
+   * Dispatch action to set authentication state of the user true
+   */
+  function handleLogin() {
+    dispatch(loginSuccess());
+  }
 
   /**
    * This function starts up the authorization process.
    * @param {string} personalNumber Personal identity number
    * @param {bool} authenticateOnExternalDevice Will automatically launch BankID app if set to false
    */
-  async function handleAuth(personalNumber, authenticateOnExternalDevice) {
+  async function handleAuth(
+    personalNumber: string,
+    authenticateOnExternalDevice: boolean
+  ) {
     // Dynamically sets app in dev mode
     if (personalNumber && env.TEST_PERSONAL_NUMBER === personalNumber) {
       handleSetMode("development");
@@ -63,7 +80,7 @@ function AuthProvider({ children, initialState }) {
     if (env.USE_BANKID === "false") {
       dispatch(await mockedAuth());
       await handleAddProfile();
-      // await handleLogin();
+      handleLogin();
       return;
     }
 
@@ -79,9 +96,9 @@ function AuthProvider({ children, initialState }) {
    * @param {bool} authenticateOnExternalDevice Will automatically launch BankID app if set to false
    */
   async function handleSign(
-    personalNumber,
-    userVisibleData,
-    authenticateOnExternalDevice
+    personalNumber: string,
+    userVisibleData: string,
+    authenticateOnExternalDevice: boolean
   ) {
     if (env.USE_BANKID === "false") {
       dispatch(setStatus("signResolved"));
@@ -106,23 +123,11 @@ function AuthProvider({ children, initialState }) {
   }
 
   /**
-   * Dispatch action to set authentication state of the user true
+   * This function triggers an action to logout the user and removing the user object.
    */
-  function handleLogin() {
-    dispatch(loginSuccess());
-  }
-
-  /**
-   * This function triggers an action to logout the user.
-   */
-  // async function handleLogout() {
-  //   dispatch(await loginFailure());
-  //   await handleRemoveProfile();
-  // }
-
   const handleLogout = useCallback(async () => {
     dispatch(await loginFailure());
-    await handleRemoveProfile();
+    dispatch(removeProfile());
   }, []);
 
   /**
@@ -134,32 +139,18 @@ function AuthProvider({ children, initialState }) {
       dispatch(await refreshSession());
     }
   }
-  /**
-   * Used to save user profile data to the state.
-   * @param {object} profile a user profile object
-   */
-  async function handleAddProfile() {
-    dispatch(await addProfile());
-  }
-
-  /**
-   * Used to remove user profile data from the state.
-   */
-  function handleRemoveProfile() {
-    dispatch(removeProfile());
-  }
 
   /**
    * Set status.
    */
-  function handleSetStatus(status) {
+  function handleSetStatus(status: string) {
     dispatch(setStatus(status));
   }
 
   /**
    * Set error object
    */
-  function handleSetError(error) {
+  function handleSetError(error: Record<string, unknown>) {
     dispatch(setError(error));
   }
 
@@ -190,61 +181,32 @@ function AuthProvider({ children, initialState }) {
     return false;
   }, [handleSetMode]);
 
-  // async function isAccessTokenValid() {
-  //   const decodedToken = await authService.getAccessTokenFromStorage();
-
-  //   // Configure app in dev mode if personalnumber is defined as test account
-  //   if (
-  //     decodedToken?.personalNumber &&
-  //     env.TEST_PERSONAL_NUMBER === decodedToken.personalNumber
-  //   ) {
-  //     handleSetMode("development");
-  //   }
-
-  //   // TODO: Remove this condition when exp value is set on the jwt token in the api.
-  //   if (env.USE_BANKID === "true" && decodedToken) {
-  //     return true;
-  //   }
-
-  //   if (decodedToken) {
-  //     // Checks if a token is present in the application and that the expire time of the token is valid
-  //     const expiresAt = decodedToken.exp * 1000;
-  //     return new Date().getTime() < expiresAt;
-  //   }
-  //   return false;
-  // }
-
   useEffect(() => {
     const tryLogin = async () => {
       try {
         dispatch(setStatus("pending"));
         const isValidToken = await isAccessTokenValid();
         if (isValidToken) {
-          await handleAddProfile();
           await handleLogin();
+          await handleAddProfile();
         } else {
           await handleLogout();
-          await handleRemoveProfile();
         }
       } catch (error) {
         await handleLogout();
-        await handleRemoveProfile();
       }
     };
 
-    tryLogin();
+    void tryLogin();
   }, [isAccessTokenValid, handleLogout]);
 
   const contextValues = {
     handleLogin,
     handleLogout,
     handleRefreshSession,
-    handleAddProfile,
-    handleRemoveProfile,
     handleAuth,
     handleCancelOrder,
     handleSetStatus,
-    isAccessTokenValid,
     handleSign,
     handleSetError,
     isLoading: state.status === "pending",
