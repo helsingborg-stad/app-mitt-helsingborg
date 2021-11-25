@@ -1,8 +1,8 @@
+import moment from "moment";
 import {
   BookingItem,
   convertGraphDataToBookingItem,
-} from "app/helpers/BookingHelper";
-import moment from "moment";
+} from "../helpers/BookingHelper";
 import { get, patch, post, remove } from "../helpers/ApiRequest";
 
 const getBooking = async (
