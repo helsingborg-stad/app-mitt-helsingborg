@@ -4,12 +4,12 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import styled from "styled-components/native";
 import { Question } from "../../types/FormTypes";
 import { ValidationObject } from "../../types/Validation";
-import { TimeSlot } from "../../components/molecules/TimeSlotPicker/TimeSlotPicker";
-import icons from "../../helpers/Icons";
 import {
+  TimeSlot,
   consolidateTimeSlots,
   TimeSlotDataType,
 } from "../../helpers/BookingHelper";
+import icons from "../../helpers/Icons";
 import { CharacterCard, TimeSlotPicker } from "../../components/molecules";
 import { Button } from "../../components/atoms";
 import FormField from "../FormField/FormField";

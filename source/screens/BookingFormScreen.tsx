@@ -3,15 +3,15 @@ import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import { Question } from "../types/FormTypes";
-import { TimeSlot } from "../components/molecules/TimeSlotPicker/TimeSlotPicker";
-import AuthContext from "../store/AuthContext";
-import { createBooking, getTimeSlots } from "../services/BookingService";
-import getReferenceCodeForUser from "../helpers/ReferenceCode";
 import {
+  TimeSlot,
   formDataToQuestions,
   BookingItem,
   TimeSlotDataType,
 } from "../helpers/BookingHelper";
+import AuthContext from "../store/AuthContext";
+import { createBooking, getTimeSlots } from "../services/BookingService";
+import getReferenceCodeForUser from "../helpers/ReferenceCode";
 import { getAdministratorsBySharedMailbox } from "../services/BookablesService";
 import BookingForm from "../containers/Form/BookingForm";
 import FormContext from "../store/FormContext";
