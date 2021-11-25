@@ -31,7 +31,7 @@ const BookingFormScreen = ({
   const [questions, setQuestions] = useState(undefined);
   const [timeSlots, setTimeSlots] = useState(undefined);
   const { getForm } = useContext(FormContext);
-  const { formId, address, sharedMailbox, isContactsMode, contactsList } =
+  const { formId, address, sharedMailbox, isContactsMode, contactsList, name } =
     route && route.params ? route.params : {};
   const { user } = useContext(AuthContext);
 
@@ -103,6 +103,7 @@ const BookingFormScreen = ({
       endDate.format(),
       [],
       refCode,
+      name,
       address,
       message
     );
