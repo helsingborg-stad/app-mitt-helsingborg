@@ -4,7 +4,7 @@ import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import AuthContext from "../store/AuthContext";
 import { createBooking, getTimeSlots } from "../services/BookingService";
-import { getReferenceCodeForUser } from "../helpers/ReferenceCode";
+import getReferenceCodeForUser from "../helpers/ReferenceCode";
 import { formDataToQuestions, BookingItem } from "../helpers/BookingHelper";
 import { getAdministratorsBySharedMailbox } from "../services/BookablesService";
 import BookingForm from "../containers/Form/BookingForm";
