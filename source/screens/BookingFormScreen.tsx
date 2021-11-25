@@ -2,10 +2,16 @@ import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
+import { Question } from "../types/FormTypes";
+import { TimeSlot } from "../components/molecules/TimeSlotPicker/TimeSlotPicker";
 import AuthContext from "../store/AuthContext";
 import { createBooking, getTimeSlots } from "../services/BookingService";
 import getReferenceCodeForUser from "../helpers/ReferenceCode";
-import { formDataToQuestions, BookingItem } from "../helpers/BookingHelper";
+import {
+  formDataToQuestions,
+  BookingItem,
+  TimeSlotDataType,
+} from "../helpers/BookingHelper";
 import { getAdministratorsBySharedMailbox } from "../services/BookablesService";
 import BookingForm from "../containers/Form/BookingForm";
 import FormContext from "../store/FormContext";
@@ -22,17 +28,25 @@ const ScreenContainer = styled.View`
   padding: 0px 10px;
 `;
 
+interface BookingFormScreenProps {
+  route: any;
+  onChangeModalScreen: (
+    screen: ModalScreen,
+    params?: Record<string, unknown>
+  ) => void;
+}
+
 const BookingFormScreen = ({
   route,
-  navigation,
   onChangeModalScreen,
-  ...props
-}) => {
-  const [questions, setQuestions] = useState(undefined);
-  const [timeSlots, setTimeSlots] = useState(undefined);
+}: BookingFormScreenProps): JSX.Element => {
+  const [questions, setQuestions] = useState<Question[] | undefined>(undefined);
+  const [timeSlots, setTimeSlots] = useState<TimeSlotDataType | undefined>(
+    undefined
+  );
   const { getForm } = useContext(FormContext);
   const { formId, address, sharedMailbox, isContactsMode, contactsList, name } =
-    route && route.params ? route.params : {};
+    route?.params || {};
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -40,7 +54,7 @@ const BookingFormScreen = ({
       if (isContactsMode) {
         const timeSlotData = await getTimeSlots(
           contactsList,
-          moment().format(),
+          moment().startOf("day").format(),
           moment().add(6, "months").format()
         );
 
@@ -65,7 +79,7 @@ const BookingFormScreen = ({
     void fetchData();
   }, [sharedMailbox, formId, getForm, isContactsMode, user, contactsList]);
 
-  const formatAnswer = (answer) => {
+  const formatAnswer = (answer: string | boolean | undefined): string => {
     if (answer === undefined) return "Inget svar";
     if (answer === true) return "Ja";
     if (answer === false) return "Nej";
@@ -78,47 +92,53 @@ const BookingFormScreen = ({
     return emailsArray[randomIndex];
   };
 
-  const handleSubmitForm = async (timeSlot, questionsWithAnswers) => {
+  const handleSubmitForm = async (
+    timeSlot: TimeSlot | undefined,
+    questionsWithAnswers: { label: string; answer: string }[]
+  ) => {
+    if (timeSlot === undefined) return;
     let message = "";
-    questionsWithAnswers.forEach((qna) => {
+    questionsWithAnswers.forEach((qna: { label: string; answer: string }) => {
       message += `Q: ${qna.label}\n`;
       message += `A: ${formatAnswer(qna.answer)}\n\n`;
     });
     const startDate = moment(`${timeSlot.date} ${timeSlot.startTime}`);
     const endDate = moment(`${timeSlot.date} ${timeSlot.endTime}`);
     const refCode = getReferenceCodeForUser(user);
-    const selectedEmail = selectEmailFromArray(timeSlot.emails);
-    void createBooking(
-      [selectedEmail],
-      startDate.format(),
-      endDate.format(),
-      [],
-      refCode,
-      name,
-      address,
-      message
-    );
+    if (timeSlot?.emails !== undefined) {
+      const selectedEmail = selectEmailFromArray(timeSlot.emails);
+      void createBooking(
+        [selectedEmail],
+        startDate.format(),
+        endDate.format(),
+        [],
+        refCode,
+        name,
+        address,
+        message
+      );
 
-    const status = "None";
-    const administrator = {
-      email: selectedEmail,
-    };
-    const date = moment(startDate).format("yyyy-MM-DD");
-    const startTime = moment(startDate).format("HH:mm");
-    const endTime = moment(endDate).format("HH:mm");
-    const title = "Mitt Helsingborg bokning";
-    const bookingItem = {
-      date,
-      time: { startTime, endTime },
-      title,
-      status,
-      administrator,
-      addressLines: [address],
-    } as BookingItem;
+      const status = "None";
+      const administrator = {
+        email: selectedEmail,
+      };
+      const date = moment(startDate).format("yyyy-MM-DD");
+      const startTime = moment(startDate).format("HH:mm");
+      const endTime = moment(endDate).format("HH:mm");
+      const title = "Mitt Helsingborg bokning";
+      const bookingItem = {
+        date,
+        time: { startTime, endTime },
+        title,
+        status,
+        administrator,
+        addressLines: [address],
+      } as BookingItem;
 
-    onChangeModalScreen(ModalScreen.Confirmation, {
-      bookingItem,
-    });
+      onChangeModalScreen(ModalScreen.Confirmation, {
+        bookingItem,
+      });
+    }
   };
 
   if (
@@ -143,7 +163,6 @@ const BookingFormScreen = ({
         availableTimes={timeSlots}
         questions={questions}
         onSubmit={handleSubmitForm}
-        {...props}
       />
     </ScreenContainer>
   );
