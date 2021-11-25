@@ -81,7 +81,6 @@ const BookingFormScreen = ({
   const handleSubmitForm = async (timeSlot, questionsWithAnswers) => {
     let message = "";
     questionsWithAnswers.forEach((qna) => {
-      if (qna.id === "timeslot") return;
       message += `Q: ${qna.label}\n`;
       message += `A: ${formatAnswer(qna.answer)}\n\n`;
     });
