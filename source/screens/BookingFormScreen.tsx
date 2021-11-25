@@ -3,11 +3,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import { Question } from "../types/FormTypes";
+import { TimeSlot, BookingItem, TimeSlotDataType } from "../types/BookingTypes";
 import {
-  TimeSlot,
   formDataToQuestions,
-  BookingItem,
-  TimeSlotDataType,
   getReferenceCodeForUser,
 } from "../helpers/BookingHelper";
 import AuthContext from "../store/AuthContext";

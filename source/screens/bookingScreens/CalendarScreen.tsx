@@ -11,10 +11,8 @@ import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import svLocale from "moment/locale/sv";
 import AuthContext from "../../store/AuthContext";
-import {
-  getReferenceCodeForUser,
-  BookingItem,
-} from "../../helpers/BookingHelper";
+import { BookingItem } from "../../types/BookingTypes";
+import { getReferenceCodeForUser } from "../../helpers/BookingHelper";
 import { searchBookings } from "../../services/BookingService";
 import {
   Card,

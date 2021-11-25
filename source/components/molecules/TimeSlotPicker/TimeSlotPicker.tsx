@@ -3,7 +3,7 @@ import { View, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import moment from "moment";
 import { DayPicker, TimeSpanButton } from "..";
-import { TimeSlot } from "../../../helpers/BookingHelper";
+import { TimeSlot } from "../../../types/BookingTypes";
 
 interface TimeSlotPickerProps {
   value: TimeSlot | undefined;
