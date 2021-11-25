@@ -7,7 +7,7 @@ export const initialState = {
   authState: AUTH_STATE.PENDING,
   user: null,
   error: null,
-  status: "pending",
+  status: "idle",
   authenticateOnExternalDevice: false,
 };
 
