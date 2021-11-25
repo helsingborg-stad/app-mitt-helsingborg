@@ -118,10 +118,11 @@ const convertGraphDataToBookingItem = (graphData: GraphData): BookingItem => {
   const date = moment(graphData.StartTime).format("YYYY-MM-DD");
   const startTime = moment(graphData.StartTime).format("HH:mm:ss");
   const endTime = moment(graphData.EndTime).format("HH:mm:ss");
+  const title = graphData.Subject.substring(0, graphData.Subject.indexOf("#"));
   return {
     date,
     time: { startTime, endTime },
-    title: graphData.Subject,
+    title,
     status,
     administrator,
     addressLines: [graphData.Location],

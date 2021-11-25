@@ -26,6 +26,7 @@ const createBooking = async (
   endTime: string,
   optionalAttendees?: string[],
   referenceCode?: string,
+  subject?: string,
   location?: string,
   message?: string
 ): Promise<Record<string, unknown>> => {
@@ -37,7 +38,7 @@ const createBooking = async (
     referenceCode,
     location,
     body: `Du har fått en bokning ifrån Mitt Helsingborg. Klicka på Acceptera för att bekräfta bokningen.\n\n${message}`,
-    subject: "Mitt Helsingborg bokning",
+    subject: subject || "Mitt Helsingborg bokning",
   };
 
   const response = await post("/booking", body);
