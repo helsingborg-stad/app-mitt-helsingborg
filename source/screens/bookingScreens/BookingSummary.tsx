@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
-import { BookingItem } from "../../helpers/MockBookingData";
+import { BookingItem } from "../../helpers/BookingHelper";
 import icons from "../../helpers/Icons";
 import { Text } from "../../components/atoms";
 import {

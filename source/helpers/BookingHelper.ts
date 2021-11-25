@@ -1,8 +1,34 @@
+import moment from "moment";
 import { TimeSlot } from "../components/molecules/TimeSlotPicker/TimeSlotPicker";
 
 type TimeSpan = {
   startTime: string;
   endTime: string;
+};
+
+export type Administrator = {
+  title: string;
+  department: string;
+  jobTitle: string;
+  email: string;
+  phone: string;
+};
+
+export type BookingItem = {
+  date: string;
+  time: { startTime: string; endTime: string };
+  title: string;
+  status: string;
+  administrator: Administrator;
+  addressLines: string[];
+};
+
+const mockAdministrator: Administrator = {
+  title: "Lex Luthor",
+  department: "Socialförvaltningen",
+  jobTitle: "Socialsekreterare",
+  email: "kontaktcenter@helsingborg.se",
+  phone: "042 - 00 00 00",
 };
 
 function formDataToQuestions(formData: Record<string, any>): any[] {
@@ -70,4 +96,26 @@ function consolidateTimeSlots(
   return reformattedTimeSlots;
 }
 
-export { formDataToQuestions, consolidateTimeSlots };
+const convertGraphDataToBookingItem = (graphData: any): BookingItem => {
+  const firstAttendee = graphData.Attendees[0];
+  const administrator = { ...mockAdministrator, email: firstAttendee.Email };
+  const status = firstAttendee.Status;
+  const date = moment(graphData.StartTime).format("YYYY-MM-DD");
+  const startTime = moment(graphData.StartTime).format("HH:mm:ss");
+  const endTime = moment(graphData.EndTime).format("HH:mm:ss");
+  return {
+    date,
+    time: { startTime, endTime },
+    title: graphData.Subject,
+    status,
+    administrator,
+    addressLines: [graphData.Location],
+  };
+};
+
+export {
+  formDataToQuestions,
+  consolidateTimeSlots,
+  convertGraphDataToBookingItem,
+  mockAdministrator,
+};
