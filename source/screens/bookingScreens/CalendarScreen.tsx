@@ -9,6 +9,7 @@ import {
 import styled, { ThemeContext } from "styled-components/native";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
+import svLocale from "moment/locale/sv";
 import {
   Card,
   CaseCard,
@@ -19,6 +20,8 @@ import {
 import { Heading } from "../../components/atoms";
 import { mockBookingData, BookingItem } from "../../helpers/MockBookingData";
 import { ModalScreen } from "../featureModalScreens/types";
+
+moment.updateLocale("sv", svLocale);
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -73,7 +76,7 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
   ) => {
     const { date, time, title } = bookingItem;
 
-    const dateString = moment(date).locale("se").format("dddd D MMMM");
+    const dateString = moment(date).format("dddd D MMMM");
     const timeString = `${time.startTime}-${time.endTime}`;
     const key = `${date}-${timeString}`;
 
