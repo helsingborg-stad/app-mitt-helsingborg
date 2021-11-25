@@ -8,7 +8,7 @@ import {
 import styled from "styled-components/native";
 import moment from "moment";
 import { getHistoricalAttendees } from "../../services/BookingService";
-import { getReferenceCodeForUser } from "../../helpers/ReferenceCode";
+import getReferenceCodeForUser from "../../helpers/ReferenceCode";
 import AuthContext from "../../store/AuthContext";
 import { Text } from "../../components/atoms";
 import { BookablesService } from "../../services";
