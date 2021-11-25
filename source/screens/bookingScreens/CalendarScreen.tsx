@@ -10,6 +10,9 @@ import styled, { ThemeContext } from "styled-components/native";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import svLocale from "moment/locale/sv";
+import AuthContext from "../../store/AuthContext";
+import { getReferenceCodeForUser } from "../../helpers/ReferenceCode";
+import { searchBookings } from "../../services/BookingService";
 import {
   Card,
   CaseCard,
@@ -18,7 +21,7 @@ import {
   FloatingButton,
 } from "../../components/molecules";
 import { Heading } from "../../components/atoms";
-import { mockBookingData, BookingItem } from "../../helpers/MockBookingData";
+import { BookingItem } from "../../helpers/BookingHelper";
 import { ModalScreen } from "../featureModalScreens/types";
 
 moment.updateLocale("sv", svLocale);
@@ -54,16 +57,12 @@ const divideBookingsByMonth = (activeBookings: BookingItem[]) => {
   return bookingsByMonth;
 };
 
-const getBookingData = (): Promise<BookingItem[]> =>
-  new Promise((resolve) => {
-    setTimeout(() => resolve(mockBookingData), 1000);
-  });
-
 const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
   const [isLoading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [data, setData] = useState<BookingItem[]>([]);
   const theme = useContext(ThemeContext);
+  const { user } = useContext(AuthContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
   const navigateToSummary = (bookingItem: BookingItem) => {
@@ -131,9 +130,16 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
 
   useFocusEffect(() => {
     let canceled = false;
+    const refCode = getReferenceCodeForUser(user);
+    const startTime = moment().startOf("day").format();
+    const endTime = moment().add(6, "months").format();
     const fetchData = async () => {
       try {
-        const bookingData: BookingItem[] = await getBookingData();
+        const bookingData: BookingItem[] = (await searchBookings(
+          refCode,
+          startTime,
+          endTime
+        )) as BookingItem[];
         if (!canceled) {
           setData(bookingData);
           setLoading(false);
@@ -156,9 +162,16 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
   });
 
   const onRefresh = () => {
+    const refCode = getReferenceCodeForUser(user);
+    const startTime = moment().startOf("day").format();
+    const endTime = moment().add(6, "months").format();
     const fetchData = async () => {
       try {
-        const bookingData: BookingItem[] = await getBookingData();
+        const bookingData: BookingItem[] = (await searchBookings(
+          refCode,
+          startTime,
+          endTime
+        )) as BookingItem[];
         setData(bookingData);
         setRefreshing(false);
         Animated.timing(fadeAnimation, {
