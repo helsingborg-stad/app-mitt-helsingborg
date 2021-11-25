@@ -88,7 +88,7 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
     return () => {
       canceled = true;
     };
-  }, [onChangeModalScreen]);
+  }, [user, onChangeModalScreen]);
 
   return (
     <ScrollView
