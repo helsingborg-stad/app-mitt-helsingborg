@@ -87,7 +87,6 @@ const BookingForm = ({
 
   const updateAnswers = useCallback(
     (answer: Record<string, string>) => {
-      console.log(answer);
       setAnswers({ ...answers, ...answer });
     },
     [answers]
@@ -123,7 +122,6 @@ const BookingForm = ({
     );
   };
 
-  const canSubmit = timeSlot?.startTime !== undefined;
   let currentAvailableTimes = {};
   let questionsToMap = [];
 
@@ -138,6 +136,42 @@ const BookingForm = ({
       });
     }
   }
+
+  const complementaryValidationErrors: Record<string, ValidationError> = {};
+  questionsToMap.forEach((question) => {
+    const required = question.validation?.isRequired;
+    if (
+      required &&
+      (answers[question.id] === undefined || answers[question.id] === "") &&
+      (validationErrors[question.id] === undefined ||
+        validationErrors[question.id].isValid)
+    ) {
+      complementaryValidationErrors[question.id] = {
+        isValid: false,
+        message: "Du får inte lämna detta fält tomt",
+      };
+    }
+    if (
+      !required &&
+      (answers[question.id] === undefined || answers[question.id] === "")
+    ) {
+      complementaryValidationErrors[question.id] = {
+        isValid: true,
+        message: "",
+      };
+    }
+  });
+
+  const allValidationErrors = {
+    ...validationErrors,
+    ...complementaryValidationErrors,
+  };
+
+  const allValidationsPassed = Object.keys(allValidationErrors).every(
+    (id) => allValidationErrors[id].isValid
+  );
+
+  const canSubmit = timeSlot?.startTime !== undefined && allValidationsPassed;
 
   return (
     <Scroller>
@@ -165,7 +199,7 @@ const BookingForm = ({
             onAddAnswer={() => true}
             value={answers[question.id]}
             answers={answers}
-            validationErrors={validationErrors}
+            validationErrors={allValidationErrors}
             help={question.help}
             inputSelectValue={question.type}
             type={question.type}
