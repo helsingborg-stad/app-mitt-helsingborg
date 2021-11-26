@@ -56,6 +56,17 @@ const BookingForm = ({
   const [timeSlot, setTimeSlot] = useState<TimeSlot | undefined>();
   const [currentEmail, setCurrentEmail] = useState<string>("");
 
+  const contactQuestions: Question[] = [
+    {
+      label: "Kommentar",
+      type: "text",
+      id: "comment",
+      description: "Kommentar",
+      placeholder: "Kommentar till kontaktpersonen",
+      validation: { isRequired: false, rules: [] },
+    },
+  ];
+
   const emails = Object.keys(availableTimes);
 
   const validateAnswer = (questionId: string, validation: ValidationObject) => {
@@ -114,13 +125,18 @@ const BookingForm = ({
   };
 
   let currentAvailableTimes = {};
+  let questionsToMap = [];
 
   if (!isContactsMode) {
     currentAvailableTimes = consolidateTimeSlots(availableTimes);
-  } else if (currentEmail) {
-    currentAvailableTimes = consolidateTimeSlots({
-      [currentEmail]: availableTimes[currentEmail],
-    });
+    questionsToMap = questions;
+  } else {
+    questionsToMap = contactQuestions;
+    if (currentEmail) {
+      currentAvailableTimes = consolidateTimeSlots({
+        [currentEmail]: availableTimes[currentEmail],
+      });
+    }
   }
 
   return (
@@ -132,46 +148,42 @@ const BookingForm = ({
           onChange={setTimeSlot}
           value={timeSlot}
         />
-        {!isContactsMode ? (
-          questions.map((question) => (
-            <FormField
-              key={`${question.id}`}
-              label={question.label}
-              labelLine={question.labelLine}
-              inputType={question.type}
-              colorSchema="red"
-              id={question.id}
-              onChange={(newAnswer: Record<string, string>) =>
-                updateAnswers(newAnswer)
-              }
-              onBlur={() => {
-                if (question.validation !== undefined)
-                  validateAnswer(question.id, question.validation);
-              }}
-              onFocus={() => true}
-              onMount={() => true}
-              onAddAnswer={() => true}
-              value={answers[question.id]}
-              answers={answers}
-              validationErrors={validationErrors}
-              help={question.help}
-              inputSelectValue={question.type}
-              type={question.type}
-              description={question.description}
-              conditionalOn={question.conditionalOn}
-              placeholder={question.placeholder}
-              explainer={question.explainer}
-              loadPrevious={question.loadPrevious}
-              items={question.items}
-              inputs={question.inputs}
-              validation={question.validation}
-              choices={question.choices}
-              text={question.text}
-            />
-          ))
-        ) : (
-          <></>
-        )}
+        {questionsToMap.map((question) => (
+          <FormField
+            key={`${question.id}`}
+            label={question.label}
+            labelLine={question.labelLine}
+            inputType={question.type}
+            colorSchema="red"
+            id={question.id}
+            onChange={(newAnswer: Record<string, string>) =>
+              updateAnswers(newAnswer)
+            }
+            onBlur={() => {
+              if (question.validation !== undefined)
+                validateAnswer(question.id, question.validation);
+            }}
+            onFocus={() => true}
+            onMount={() => true}
+            onAddAnswer={() => true}
+            value={answers[question.id]}
+            answers={answers}
+            validationErrors={validationErrors}
+            help={question.help}
+            inputSelectValue={question.type}
+            type={question.type}
+            description={question.description}
+            conditionalOn={question.conditionalOn}
+            placeholder={question.placeholder}
+            explainer={question.explainer}
+            loadPrevious={question.loadPrevious}
+            items={question.items}
+            inputs={question.inputs}
+            validation={question.validation}
+            choices={question.choices}
+            text={question.text}
+          />
+        ))}
       </ListWrapper>
       <SubmitButton
         colorSchema="red"
