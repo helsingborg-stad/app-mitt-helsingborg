@@ -12,16 +12,20 @@ import { Button } from "../../components/atoms";
 import FormField from "../FormField/FormField";
 import { validateInput } from "../../helpers/ValidationHelper";
 
-const Container = styled.View`
-  flex: 1;
-`;
-
 const Scroller = styled(KeyboardAwareScrollView)`
   flex: 1;
 `;
 
 const ListWrapper = styled.View`
-  margin: 24px;
+  margin: 24px 15px;
+`;
+
+const CharacterCardWrapper = styled.View`
+  margin-bottom: 15px;
+`;
+
+const SubmitButton = styled(Button)`
+  margin-left: 15px;
 `;
 
 interface BookingFormProps {
@@ -90,15 +94,17 @@ const BookingForm = ({
   const renderCharacterCard = (email: string) => {
     const selected = email === currentEmail;
     return (
-      <CharacterCard
-        key={`CharacterCard-${email}`}
-        onCardClick={() => updateEmail(email)}
-        title={email}
-        department=""
-        jobTitle=""
-        icon={icons.ICON_CONTACT_PERSON_1}
-        selected={selected}
-      />
+      <CharacterCardWrapper>
+        <CharacterCard
+          key={`CharacterCard-${email}`}
+          onCardClick={() => updateEmail(email)}
+          title={email}
+          department=""
+          jobTitle=""
+          icon={icons.ICON_CONTACT_PERSON_1}
+          selected={selected}
+        />
+      </CharacterCardWrapper>
     );
   };
 
@@ -118,61 +124,63 @@ const BookingForm = ({
   }
 
   return (
-    <Container>
-      <Scroller>
-        <ListWrapper>
-          {isContactsMode && emails.map(renderCharacterCard)}
-          <TimeSlotPicker
-            availableTimes={currentAvailableTimes}
-            onChange={setTimeSlot}
-            value={timeSlot}
-          />
-          {!isContactsMode ? (
-            questions.map((question) => (
-              <FormField
-                key={`${question.id}`}
-                label={question.label}
-                labelLine={question.labelLine}
-                inputType={question.type}
-                colorSchema="red"
-                id={question.id}
-                onChange={(newAnswer: Record<string, string>) =>
-                  updateAnswers(newAnswer)
-                }
-                onBlur={() => {
-                  if (question.validation !== undefined)
-                    validateAnswer(question.id, question.validation);
-                }}
-                onFocus={() => true}
-                onMount={() => true}
-                onAddAnswer={() => true}
-                value={answers[question.id]}
-                answers={answers}
-                validationErrors={validationErrors}
-                help={question.help}
-                inputSelectValue={question.type}
-                type={question.type}
-                description={question.description}
-                conditionalOn={question.conditionalOn}
-                placeholder={question.placeholder}
-                explainer={question.explainer}
-                loadPrevious={question.loadPrevious}
-                items={question.items}
-                inputs={question.inputs}
-                validation={question.validation}
-                choices={question.choices}
-                text={question.text}
-              />
-            ))
-          ) : (
-            <Text>contact mode :)</Text>
-          )}
-        </ListWrapper>
-        <Button colorSchema="red" onClick={submitForm} disabled={!canSubmit()}>
-          <Text style={{ color: "white" }}>Skicka</Text>
-        </Button>
-      </Scroller>
-    </Container>
+    <Scroller>
+      <ListWrapper>
+        {isContactsMode && emails.map(renderCharacterCard)}
+        <TimeSlotPicker
+          availableTimes={currentAvailableTimes}
+          onChange={setTimeSlot}
+          value={timeSlot}
+        />
+        {!isContactsMode ? (
+          questions.map((question) => (
+            <FormField
+              key={`${question.id}`}
+              label={question.label}
+              labelLine={question.labelLine}
+              inputType={question.type}
+              colorSchema="red"
+              id={question.id}
+              onChange={(newAnswer: Record<string, string>) =>
+                updateAnswers(newAnswer)
+              }
+              onBlur={() => {
+                if (question.validation !== undefined)
+                  validateAnswer(question.id, question.validation);
+              }}
+              onFocus={() => true}
+              onMount={() => true}
+              onAddAnswer={() => true}
+              value={answers[question.id]}
+              answers={answers}
+              validationErrors={validationErrors}
+              help={question.help}
+              inputSelectValue={question.type}
+              type={question.type}
+              description={question.description}
+              conditionalOn={question.conditionalOn}
+              placeholder={question.placeholder}
+              explainer={question.explainer}
+              loadPrevious={question.loadPrevious}
+              items={question.items}
+              inputs={question.inputs}
+              validation={question.validation}
+              choices={question.choices}
+              text={question.text}
+            />
+          ))
+        ) : (
+          <></>
+        )}
+      </ListWrapper>
+      <SubmitButton
+        colorSchema="red"
+        onClick={submitForm}
+        disabled={!canSubmit()}
+      >
+        <Text style={{ color: canSubmit() ? "white" : "gray" }}>Skicka</Text>
+      </SubmitButton>
+    </Scroller>
   );
 };
 
