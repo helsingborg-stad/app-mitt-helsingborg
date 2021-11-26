@@ -17,6 +17,7 @@
     "postinstall": "node scripts/rn-fetch-blob_warning.js"
   },
   "dependencies": {
+    "@notifee/react-native": "^4.0.0",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/blur": "^3.6.0",
     "@react-native-community/datetimepicker": "^3.0.8",

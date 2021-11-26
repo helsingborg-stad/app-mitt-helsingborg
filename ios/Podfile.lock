@@ -367,6 +367,11 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController
+  - RNNotifee (4.0.0):
+    - React-Core
+    - RNNotifee/NotifeeCore (= 4.0.0)
+  - RNNotifee/NotifeeCore (4.0.0):
+    - React-Core
   - RNReanimated (1.13.3):
     - React-Core
   - RNScreens (2.18.1):
@@ -450,6 +455,7 @@ DEPENDENCIES:
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
+  - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -569,6 +575,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNImageCropPicker:
     :path: "../node_modules/react-native-image-crop-picker"
+  RNNotifee:
+    :path: "../node_modules/@notifee/react-native"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -585,7 +593,7 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 7b423f9e248eae65987838148c36eec1dbfe0b53
-  FBReactNativeSpec: e684313f7bad785e52bef46967b2161b87fa64d7
+  FBReactNativeSpec: 51246358c40fe0d0c678a8ed1ba40fbd60f8fae3
   Flipper: d3da1aa199aad94455ae725e9f3aa43f3ec17021
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
   Flipper-Folly: 755929a4f851b2fb2c347d533a23f191b008554c
@@ -640,6 +648,7 @@ SPEC CHECKSUMS:
   RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNImageCropPicker: 08ba3a2e2f4f8833d606f01906c371e382c4dea9
+  RNNotifee: 985579266661b4f678dd7d6994cee74a022aedec
   RNReanimated: 514a11da3a2bcc6c3dfd9de32b38e2b9bf101926
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
@@ -650,4 +659,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 47660d4d544cbf2e0e1da1d1089da4066473d1e6
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
