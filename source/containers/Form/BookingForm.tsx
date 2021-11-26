@@ -91,6 +91,7 @@ const BookingForm = ({
   );
 
   const updateEmail = (email: string) => {
+    setTimeSlot(undefined);
     setCurrentEmail(email);
   };
 
