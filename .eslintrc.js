@@ -69,6 +69,7 @@ const config = {
       },
     ],
     "react/jsx-filename-extension": [2, { extensions: [".jsx", ".tsx"] }],
+    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
   },
 };
 
