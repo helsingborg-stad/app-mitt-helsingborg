@@ -158,7 +158,7 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
     return () => {
       canceled = true;
     };
-  });
+  }, [user, fadeAnimation]);
 
   const onRefresh = () => {
     const refCode = getReferenceCodeForUser(user);
