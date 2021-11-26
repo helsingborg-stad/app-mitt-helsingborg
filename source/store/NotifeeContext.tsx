@@ -3,6 +3,7 @@ import notifee, {
   EventType,
   TimestampTrigger,
   TriggerType,
+  AndroidImportance,
 } from "@notifee/react-native";
 
 interface LocalNotificationType {
@@ -77,8 +78,9 @@ const NotifeeProvider = (props: NotifeeProviderInterface): JSX.Element => {
 
   const getChannelId = async () => {
     const channelId = await notifee.createChannel({
-      id: "MHdefault",
+      id: "MH_default",
       name: "MH default Channel",
+      importance: AndroidImportance.HIGH,
     });
 
     return channelId;
@@ -94,6 +96,7 @@ const NotifeeProvider = (props: NotifeeProviderInterface): JSX.Element => {
       data,
       android: {
         channelId,
+        importance: AndroidImportance.HIGH,
       },
     });
   };
@@ -119,6 +122,7 @@ const NotifeeProvider = (props: NotifeeProviderInterface): JSX.Element => {
             launchActivity: "default",
             id: "default",
           },
+          importance: AndroidImportance.HIGH,
         },
       },
       trigger
