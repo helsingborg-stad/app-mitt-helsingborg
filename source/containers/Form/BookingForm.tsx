@@ -69,7 +69,10 @@ const BookingForm = ({
 
   const emails = Object.keys(availableTimes);
 
-  const validateAnswer = (questionId: string, validation: ValidationObject) => {
+  const validateAnswer = (
+    questionId: string,
+    validation: ValidationObject | undefined
+  ) => {
     if (validation) {
       const [isValid, message] = validateInput(
         answers[questionId] as string,
@@ -160,10 +163,7 @@ const BookingForm = ({
             onChange={(newAnswer: Record<string, string>) =>
               updateAnswers(newAnswer)
             }
-            onBlur={() => {
-              if (question.validation !== undefined)
-                validateAnswer(question.id, question.validation);
-            }}
+            onBlur={() => validateAnswer(question.id, question.validation)}
             onFocus={() => true}
             onMount={() => true}
             onAddAnswer={() => true}
