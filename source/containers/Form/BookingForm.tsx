@@ -123,11 +123,7 @@ const BookingForm = ({
     );
   };
 
-  const canSubmit = () => {
-    if (timeSlot?.startTime !== undefined) return true;
-    return false;
-  };
-
+  const canSubmit = timeSlot?.startTime !== undefined;
   let currentAvailableTimes = {};
   let questionsToMap = [];
 
@@ -189,9 +185,9 @@ const BookingForm = ({
       <SubmitButton
         colorSchema="red"
         onClick={submitForm}
-        disabled={!canSubmit()}
+        disabled={!canSubmit}
       >
-        <Text style={{ color: canSubmit() ? "white" : "gray" }}>Skicka</Text>
+        <Text style={{ color: canSubmit ? "white" : "gray" }}>Skicka</Text>
       </SubmitButton>
     </Scroller>
   );
