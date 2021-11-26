@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import {
   RefreshControl,
   Animated,
@@ -7,7 +7,6 @@ import {
   Platform,
 } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
-import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import svLocale from "moment/locale/sv";
 import AuthContext from "../../store/AuthContext";
@@ -128,7 +127,7 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
     </Animated.View>
   );
 
-  useFocusEffect(() => {
+  useEffect(() => {
     let canceled = false;
     const refCode = getReferenceCodeForUser(user);
     const startTime = moment().startOf("day").format();
