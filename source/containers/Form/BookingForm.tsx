@@ -140,24 +140,13 @@ const BookingForm = ({
   const complementaryValidationErrors: Record<string, ValidationError> = {};
   questionsToMap.forEach((question) => {
     const required = question.validation?.isRequired;
-    if (
-      required &&
-      (answers[question.id] === undefined || answers[question.id] === "") &&
-      (validationErrors[question.id] === undefined ||
-        validationErrors[question.id].isValid)
-    ) {
+    const emptyAnswer =
+      answers[question.id] === undefined || answers[question.id] === "";
+    const message = required ? "Du får inte lämna detta fält tomt" : "";
+    if (emptyAnswer) {
       complementaryValidationErrors[question.id] = {
-        isValid: false,
-        message: "Du får inte lämna detta fält tomt",
-      };
-    }
-    if (
-      !required &&
-      (answers[question.id] === undefined || answers[question.id] === "")
-    ) {
-      complementaryValidationErrors[question.id] = {
-        isValid: true,
-        message: "",
+        isValid: !required,
+        message,
       };
     }
   });
