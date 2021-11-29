@@ -5,7 +5,6 @@ import {
   Easing,
   ActivityIndicator,
   Platform,
-  View,
 } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
 import moment from "moment";
@@ -38,7 +37,7 @@ const ListHeading = styled(Heading)`
   margin-bottom: 8px;
 `;
 
-const ScrollViewClearance = styled.View`
+const ScrollViewSpacer = styled.View`
   height: 60px;
 `;
 
@@ -229,7 +228,7 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
               (month: string, monthIndex: number) =>
                 renderMonth(bookingsByMonth[month], month, monthIndex)
             )}
-            <ScrollViewClearance />
+            <ScrollViewSpacer />
           </Animated.View>
         )}
         {!isLoading && bookingItem.length === 0 && (
