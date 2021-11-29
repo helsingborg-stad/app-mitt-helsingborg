@@ -78,18 +78,6 @@ const CardMessageBody = styled(Card.Body)`
 
 const colorSchema = "red";
 
-const RefreshCardBody = styled(Card.Body)`
-  border: 1px solid
-    ${(props) => {
-      console.log("props", props);
-      return props.theme.colors.neutrals[5];
-    }};
-`;
-
-const CenteredCardBody = styled(Card.Body)`
-  text-align: center;
-`;
-
 const StyledIcon = styled(Icon)`
   color: ${(props) => props.theme.colors.primary[colorSchema][0]};
 `;
