@@ -152,7 +152,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const selfNeedsToConfirm =
     isCoApplicant &&
     currentForm.encryption.publicKeys[authContext.user.personalNumber] === null;
-  const isWaitingForCoApplicantSign =
+  const isWaitingForCoApplicantConfirm =
     currentForm.encryption.publicKeys &&
     !Object.entries(currentForm.encryption.publicKeys).every(
       (item) => item[1] !== null
@@ -160,7 +160,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
 
   const shouldShowCTAButton = isCoApplicant
     ? (isWaitingForSign && !selfHasSigned) ||
-      (isWaitingForCoApplicantSign && selfNeedsToConfirm)
+      (isWaitingForCoApplicantConfirm && selfNeedsToConfirm)
     : isOngoing || isNotStarted || isCompletionRequired || isSigned || isClosed;
   const buttonProps: InternalButtonProps = {
     onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
@@ -202,7 +202,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   if (isNotStarted) {
     buttonProps.text = "Starta ansökan";
 
-    if (isWaitingForCoApplicantSign) {
+    if (isWaitingForCoApplicantConfirm) {
       cardProps.subtitle = "Väntar";
       cardProps.description = "Din medsökande måste bekräfta...";
       buttonProps.colorSchema = "red";
@@ -441,13 +441,13 @@ function CaseOverview(props): JSX.Element {
 
       const currentForm = caseData.forms[caseData.currentFormId];
 
-      const isWaitingForCoApplicantSign =
+      const isWaitingForCoApplicantConfirm =
         currentForm.encryption.publicKeys &&
         !Object.entries(currentForm.encryption.publicKeys).every(
           (item) => item[1] !== null
         );
 
-      return isWaitingForCoApplicantSign;
+      return isWaitingForCoApplicantConfirm;
     });
 
     if (coApplicantItemsToSign.length > 0) {
