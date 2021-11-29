@@ -1,14 +1,14 @@
-import FormList from 'app/components/organisms/FormList/FormList';
-import AuthContext from 'app/store/AuthContext';
-import { CaseDispatch } from 'app/store/CaseContext';
-import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
-import styled from 'styled-components/native';
-import env from 'react-native-config';
-import { Button, Text } from '../components/atoms';
-import Header from '../components/molecules/Header';
-import ScreenWrapper from '../components/molecules/ScreenWrapper';
-import StorageService from '../services/StorageService';
+import FormList from "app/components/organisms/FormList/FormList";
+import AuthContext from "app/store/AuthContext";
+import { CaseDispatch } from "app/store/CaseContext";
+import PropTypes from "prop-types";
+import React, { useContext } from "react";
+import styled from "styled-components/native";
+import env from "react-native-config";
+import { Button, Text } from "../components/atoms";
+import Header from "../components/molecules/Header";
+import ScreenWrapper from "../components/molecules/ScreenWrapper";
+import StorageService from "../services/StorageService";
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -21,12 +21,12 @@ const FieldWrapper = styled.View`
   margin-bottom: 8px;
 `;
 
-const DeveloperScreen = (props) => {
+const DeveloperScreen = (props: any): JSX.Element => {
   const { navigation } = props;
   const { createCase } = useContext(CaseDispatch);
   const authContext = useContext(AuthContext);
 
-  const colorSchema = 'neutral';
+  const colorSchema = "neutral";
 
   return (
     <ScreenWrapper>
@@ -39,7 +39,7 @@ const DeveloperScreen = (props) => {
             createCase(
               form,
               async (newCase) => {
-                navigation.navigate('Form', { caseData: newCase });
+                navigation.navigate("Form", { caseData: newCase });
               },
               true
             );
@@ -52,9 +52,8 @@ const DeveloperScreen = (props) => {
             variant="outlined"
             colorSchema={colorSchema}
             onClick={async () => {
-              StorageService.clearData();
+              void StorageService.clearData();
               await authContext.handleLogout();
-              navigation.navigate('Start');
             }}
           >
             <Text>Nollställ appdata</Text>
@@ -67,7 +66,7 @@ const DeveloperScreen = (props) => {
             variant="contained"
             colorSchema={colorSchema}
             onClick={async () => {
-              navigation.navigate('App');
+              navigation.navigate("App");
             }}
           >
             <Text>Tillbaka</Text>

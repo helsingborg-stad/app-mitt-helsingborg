@@ -1,20 +1,20 @@
-import AsyncStorage from '@react-native-community/async-storage';
-import React, { useRef, useState } from 'react';
-import { Dimensions, Platform, StatusBar, View } from 'react-native';
-import Animated, { divide } from 'react-native-reanimated';
-import { interpolateColor, useScrollHandler } from 'react-native-redash';
-import styled from 'styled-components/native';
-import { Button } from '../../components/atoms';
-import Text from '../../components/atoms/Text';
-import { SHOW_SPLASH_SCREEN } from '../../services/StorageService';
-import Dot from './Dot';
-import Slide from './Slide';
+import AsyncStorage from "@react-native-community/async-storage";
+import React, { useRef, useState } from "react";
+import { Dimensions, Platform, StatusBar, View } from "react-native";
+import Animated, { divide } from "react-native-reanimated";
+import { interpolateColor, useScrollHandler } from "react-native-redash";
+import styled from "styled-components/native";
+import { Button } from "../../components/atoms";
+import Text from "../../components/atoms/Text";
+import { ONBOARDING_DISABLED } from "../../services/StorageService";
+import Dot from "./Dot";
+import Slide from "./Slide";
 
-const SLIDE_BACKGROUND_ANSOKAN = require('../../assets/images/slides/onboarding_02_ansokan_in_3x.png');
-const SLIDE_BACKGROUND_ARENDEN = require('../../assets/images/slides/onboarding_03_arenden_in_3x.png');
-const SLIDE_BACKGROUND_KONTAKT = require('../../assets/images/slides/onboarding_04_kontakt_in_3x.png');
+const SLIDE_BACKGROUND_ANSOKAN = require("../../assets/images/slides/onboarding_02_ansokan_in_3x.png");
+const SLIDE_BACKGROUND_ARENDEN = require("../../assets/images/slides/onboarding_03_arenden_in_3x.png");
+const SLIDE_BACKGROUND_KONTAKT = require("../../assets/images/slides/onboarding_04_kontakt_in_3x.png");
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 const OnboardingContainer = styled.View`
   flex: 1;
@@ -79,40 +79,40 @@ const ContinueButtonText = styled(Text)`
 
 const slides = [
   {
-    headingColor: '#003359',
-    title: 'Gör ansökan för ekonomiskt bistånd',
-    content: '',
-    colorSchema: 'blue',
-    color: '#E4EBF0',
+    headingColor: "#003359",
+    title: "Gör ansökan för ekonomiskt bistånd",
+    content: "",
+    colorSchema: "blue",
+    color: "#E4EBF0",
     picture: SLIDE_BACKGROUND_ANSOKAN,
   },
   {
-    headingColor: '#770000',
-    title: 'Följ status för ansökan',
-    content: '',
-    colorSchema: 'red',
-    color: '#F5E4E3',
+    headingColor: "#770000",
+    title: "Följ status för ansökan",
+    content: "",
+    colorSchema: "red",
+    color: "#F5E4E3",
     picture: SLIDE_BACKGROUND_ARENDEN,
   },
   {
-    headingColor: '#4B0034',
-    title: 'Läs beslut och få kontaktuppgifter till handläggare',
-    content: '',
-    colorSchema: 'purple',
-    color: '#E8DAE4',
+    headingColor: "#4B0034",
+    title: "Läs beslut och få kontaktuppgifter till handläggare",
+    content: "",
+    colorSchema: "purple",
+    color: "#E8DAE4",
     picture: SLIDE_BACKGROUND_KONTAKT,
   },
 ];
 
 const disableOnboarding = async () => {
-  await AsyncStorage.setItem(SHOW_SPLASH_SCREEN, JSON.stringify(false));
+  await AsyncStorage.setItem(ONBOARDING_DISABLED, JSON.stringify(true));
 };
 
 const navigationResetToLoginScreen = (navigation) => {
   disableOnboarding().then(
     navigation.reset({
       index: 0,
-      routes: [{ name: 'Login' }],
+      routes: [{ name: "Login" }],
     })
   );
 };
@@ -172,7 +172,11 @@ const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
           <View>
             <FooterPagination>
               {slides.map((_, index) => (
-                <Dot key={index} currentIndex={divide(x, width)} {...{ index }} />
+                <Dot
+                  key={index}
+                  currentIndex={divide(x, width)}
+                  {...{ index }}
+                />
               ))}
             </FooterPagination>
           </View>
@@ -183,18 +187,22 @@ const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
                 colorSchema={slides[currentIndex].colorSchema}
                 onClick={() => {
                   if (scrollPos <= lastScrollPos) {
-                    if (Platform.OS === 'android') {
+                    if (Platform.OS === "android") {
                       // Fix for Android bug where onMomentumScrollEnd not called when setting scroll with scrollTo.
                       setScrollPos(scrollPos + width);
                     }
 
-                    scroll.current.getNode().scrollTo({ x: width + scrollPos, animated: true });
+                    scroll.current
+                      .getNode()
+                      .scrollTo({ x: width + scrollPos, animated: true });
                   } else {
                     navigationResetToLoginScreen(navigation);
                   }
                 }}
               >
-                <ContinueButtonText colorSchema={slides[currentIndex].colorSchema}>
+                <ContinueButtonText
+                  colorSchema={slides[currentIndex].colorSchema}
+                >
                   Fortsätt
                 </ContinueButtonText>
               </ContinueButton>
@@ -204,12 +212,14 @@ const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
                 colorSchema={slides[currentIndex].colorSchema}
                 onClick={() => {
                   if (scrollPos <= lastScrollPos) {
-                    if (Platform.OS === 'android') {
+                    if (Platform.OS === "android") {
                       // Fix for Android bug where onMomentumScrollEnd not called when setting scroll with scrollTo.
                       setScrollPos(scrollPos + width);
                     }
 
-                    scroll.current.getNode().scrollTo({ x: width + scrollPos, animated: true });
+                    scroll.current
+                      .getNode()
+                      .scrollTo({ x: width + scrollPos, animated: true });
                   } else {
                     navigationResetToLoginScreen(navigation);
                   }

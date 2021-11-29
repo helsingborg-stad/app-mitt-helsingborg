@@ -51,6 +51,11 @@ jest.mock("rn-fetch-blob", () => ({
   DocumentDir: () => true,
 }));
 
+/*
+ * Needed for Jest tests
+ */
+jest.mock("react-native/Libraries/LogBox/LogBox");
+
 /**
  * Mock react-native-fs
  */
