@@ -260,11 +260,18 @@ const BookingForm = ({
           </>
         </CollapsibleSection>
         <Spacer />
-        <Button colorSchema="red" onClick={submitForm} disabled={!canSubmit}>
+        <Button
+          colorSchema="red"
+          onClick={submitForm}
+          disabled={!canSubmit}
+          fullWidth
+        >
           {submitPending ? (
             <ActivityIndicator />
           ) : (
-            <Text style={{ color: canSubmit ? "white" : "gray" }}>Skicka</Text>
+            <Text style={{ color: canSubmit ? "white" : "gray" }}>
+              Skicka mötesbokning
+            </Text>
           )}
         </Button>
       </ListWrapper>
