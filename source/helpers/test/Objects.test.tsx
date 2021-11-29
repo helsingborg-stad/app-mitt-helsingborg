@@ -56,13 +56,13 @@ describe("Object helper functions", () => {
 
 describe("Deep copy", () => {
   interface DeepCopyTestObject {
-    hello: string,
+    hello: string;
     deep: {
       nested: {
-        things: boolean,
-        arr: string[]
-      }
-    }
+        things: boolean;
+        arr: string[];
+      };
+    };
   }
 
   let data: DeepCopyTestObject;
