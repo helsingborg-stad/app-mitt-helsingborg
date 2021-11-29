@@ -9,6 +9,7 @@ import React, {
 import { Animated, Easing, RefreshControl } from "react-native";
 import styled from "styled-components/native";
 import { useFocusEffect } from "@react-navigation/native";
+import { CardTitle } from "app/components/molecules/CharacterCard/styled";
 import { Modal } from "../../components/molecules/Modal";
 
 import Wrapper from "../../components/molecules/Dialog/Wrapper";
@@ -83,6 +84,14 @@ const RefreshCardBody = styled(Card.Body)`
       console.log("props", props);
       return props.theme.colors.neutrals[5];
     }};
+`;
+
+const CenteredCardBody = styled(Card.Body)`
+  text-align: center;
+`;
+
+const StyledIcon = styled(Icon)`
+  color: ${(props) => props.theme.colors.primary[colorSchema][0]};
 `;
 
 /**
@@ -579,15 +588,27 @@ function CaseOverview(props): JSX.Element {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {/* <Card colorSchema="red">
-          <RefreshCardBody>
-            <Card.Text>Dra för att ladda om sidan</Card.Text>
-          </RefreshCardBody>
-        </Card> */}
-        <Card.Button colorSchema="red" disabled>
-          <Icon name={refreshing ? "refresh" : "arrow-upward"} />
-          <Text>Dra för att ladda om sidan</Text>
-        </Card.Button>
+        {activeCases.length === 0 && closedCases.length === 0 ? (
+          <Card colorSchema="red">
+            <Card.Body colorSchema="red">
+              <Card.Text align="center">
+                <StyledIcon
+                  name={refreshing ? "refresh" : "arrow-downward"}
+                  size={32}
+                />
+              </Card.Text>
+              <Card.Title align="center">Här var det tomt!</Card.Title>
+              <Card.Text align="center" colorSchema="red">
+                Dra för att ladda om sidan om det borde finnas något här.
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        ) : (
+          <Card.Button colorSchema="red" disabled>
+            <Icon name={refreshing ? "refresh" : "arrow-upward"} />
+            <Text>Dra för att ladda om sidan</Text>
+          </Card.Button>
+        )}
         <ListHeading type="h5">Aktiva</ListHeading>
         {activeCases.length > 0 && (
           <Animated.View style={{ opacity: fadeAnimation }}>
