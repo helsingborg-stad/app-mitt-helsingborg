@@ -2,7 +2,8 @@ import styled from "styled-components/native";
 
 const ModalContentContainer = styled.View`
   width: 100%;
-  border-radius: 4.5px;
+  border-top-right-radius: 9px;
+  border-top-left-radius: 9px;
   min-height: 40%;
   background: white;
   display: flex;
@@ -23,6 +24,8 @@ const NavigatorContainer = styled.View<ModalTopContainerProps>`
   border-bottom-width: 1px;
   padding: 0 30px;
   margin-bottom: 16px;
+  border-top-right-radius: 9px;
+  border-top-left-radius: 9px;
 `;
 
 interface IconContainerProps {
