@@ -3,7 +3,13 @@ import { TouchableOpacity } from "react-native";
 
 import Icon from "../../atoms/Icon";
 
-import { NavigatorContainer, IconContainer, ModalText } from "./styled";
+import {
+  NavigatorContainer,
+  IconContainer,
+  ModalText,
+  InnerNavigatorContainer,
+  HandleBar,
+} from "./styled";
 
 const SIZE = {
   ICON: 24,
@@ -34,39 +40,42 @@ const ModalNavigator = (props: ModalNavigatorProps): JSX.Element => {
 
   return (
     <NavigatorContainer background={color}>
-      <IconContainer flexDirection={FLEX_DIRECTION.START}>
-        <TouchableOpacity onPress={onBack} disabled={!onBack}>
-          {onBack && backButtonText && (
-            <ModalText size={SIZE.BACK_BUTTON} color={textColor}>
-              {backButtonText}
-            </ModalText>
-          )}
+      {color === "white" && <HandleBar />}
+      <InnerNavigatorContainer background={color}>
+        <IconContainer flexDirection={FLEX_DIRECTION.START}>
+          <TouchableOpacity onPress={onBack} disabled={!onBack}>
+            {onBack && backButtonText && (
+              <ModalText size={SIZE.BACK_BUTTON} color={textColor}>
+                {backButtonText}
+              </ModalText>
+            )}
 
-          {onBack && !backButtonText && (
-            <Icon
-              testID="modal-navigator-back-button"
-              name={ICON_NAME.ARROW_BACK}
-              size={SIZE.ICON}
-              color={textColor}
-            />
-          )}
-        </TouchableOpacity>
-      </IconContainer>
-      <ModalText size={SIZE.TITLE} color={textColor}>
-        {title}
-      </ModalText>
-      <IconContainer flexDirection={FLEX_DIRECTION.END}>
-        <TouchableOpacity disabled={!onClose} onPress={onClose}>
-          {onClose && (
-            <Icon
-              testID="modal-navigator-close-button"
-              name={ICON_NAME.CLOSE}
-              size={SIZE.ICON}
-              color={textColor}
-            />
-          )}
-        </TouchableOpacity>
-      </IconContainer>
+            {onBack && !backButtonText && (
+              <Icon
+                testID="modal-navigator-back-button"
+                name={ICON_NAME.ARROW_BACK}
+                size={SIZE.ICON}
+                color={textColor}
+              />
+            )}
+          </TouchableOpacity>
+        </IconContainer>
+        <ModalText size={SIZE.TITLE} color={textColor}>
+          {title}
+        </ModalText>
+        <IconContainer flexDirection={FLEX_DIRECTION.END}>
+          <TouchableOpacity disabled={!onClose} onPress={onClose}>
+            {onClose && (
+              <Icon
+                testID="modal-navigator-close-button"
+                name={ICON_NAME.CLOSE}
+                size={SIZE.ICON}
+                color={textColor}
+              />
+            )}
+          </TouchableOpacity>
+        </IconContainer>
+      </InnerNavigatorContainer>
     </NavigatorContainer>
   );
 };
