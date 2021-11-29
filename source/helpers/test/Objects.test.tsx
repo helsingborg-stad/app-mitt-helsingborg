@@ -55,17 +55,32 @@ describe("Object helper functions", () => {
 });
 
 describe("Deep copy", () => {
-  const data = {
-    hello: "world",
+  interface DeepCopyTestObject {
+    hello: string,
     deep: {
       nested: {
-        things: true,
-        arr: ["1", "2", "3"],
-      },
-    },
-  };
+        things: boolean,
+        arr: string[]
+      }
+    }
+  }
 
-  const copiedData = deepCopy(data);
+  let data: DeepCopyTestObject;
+  let copiedData: DeepCopyTestObject;
+
+  beforeAll(() => {
+    data = {
+      hello: "world",
+      deep: {
+        nested: {
+          things: true,
+          arr: ["1", "2", "3"],
+        },
+      },
+    };
+
+    copiedData = deepCopy(data);
+  });
 
   it("Should clone without references", () => {
     copiedData.hello = "not world!";
