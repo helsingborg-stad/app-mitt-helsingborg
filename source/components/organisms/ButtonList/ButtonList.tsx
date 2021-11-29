@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
+import { View } from "react-native";
 
 import { Icon, Text } from "../../atoms";
 
@@ -46,9 +47,8 @@ const ButtonList = (props: ButtonListProps): JSX.Element => {
           const schema = colorSchema || defaultColorSchema;
           const buttonVariant = variant || defaultVariant;
           return (
-            <>
+            <View key={buttonText}>
               <StyledButton
-                key={buttonText}
                 colorSchema={schema}
                 fullWidth
                 variant={buttonVariant}
@@ -57,8 +57,8 @@ const ButtonList = (props: ButtonListProps): JSX.Element => {
                 <Icon name={icon} />
                 <Text>{buttonText}</Text>
               </StyledButton>
-              {underline && <Underline key={`${buttonText}_underline`} />}
-            </>
+              {underline && <Underline />}
+            </View>
           );
         }
       )}
