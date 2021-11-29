@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-const Container = styled.View<{ align: string; theme: any }>`
+const Container = styled.View<{ align: string }>`
   margin-top: 10px;
   border-width: 3px;
   border-radius: 5px;
@@ -13,7 +13,7 @@ const Container = styled.View<{ align: string; theme: any }>`
   ${(props) => `border-color: ${props.theme.colors.complementary.red[2]};`}
 `;
 
-const TitleText = styled.Text<{ size: string; theme: any }>`
+const TitleText = styled.Text<{ size: string }>`
   font-size: ${(props) =>
     props.size === "large"
       ? props.theme.fontSizes[2]
@@ -23,7 +23,7 @@ const TitleText = styled.Text<{ size: string; theme: any }>`
   padding: 5px;
 `;
 
-const DateText = styled.Text<{ size: string; theme: any }>`
+const DateText = styled.Text<{ size: string }>`
   font-size: ${(props) =>
     props.size === "large"
       ? props.theme.fontSizes[6]
@@ -32,7 +32,7 @@ const DateText = styled.Text<{ size: string; theme: any }>`
   padding: 5px;
 `;
 
-const TimeText = styled.Text<{ size: string; theme: any }>`
+const TimeText = styled.Text<{ size: string }>`
   font-size: ${(props) =>
     props.size === "large"
       ? props.theme.fontSizes[4]
