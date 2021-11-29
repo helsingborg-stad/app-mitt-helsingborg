@@ -20,7 +20,7 @@ import {
   ScreenWrapper,
   FloatingButton,
 } from "../../components/molecules";
-import { Heading } from "../../components/atoms";
+import { Heading, Text } from "../../components/atoms";
 import { ModalScreen } from "../featureModalScreens/types";
 
 moment.updateLocale("sv", svLocale);
@@ -39,6 +39,26 @@ const ListHeading = styled(Heading)`
 
 const ScrollViewSpacer = styled.View`
   height: 60px;
+`;
+
+const SmallCard = styled.View`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const SmallDate = styled.View`
+  flex: 1;
+  padding-right: 10px;
+  max-width: 50px;
+`;
+
+const CardContainer = styled.View`
+  flex: 7;
+`;
+
+const DateText = styled(Text)`
+  color: ${(props) => props.theme.colors.primary.red[1]};
 `;
 
 interface CalendarScreenProps {
@@ -60,6 +80,8 @@ const divideBookingsByMonth = (activeBookings: BookingItem[]) => {
   return bookingsByMonth;
 };
 
+const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+
 const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
   const [isLoading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -78,40 +100,45 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
   ) => {
     const { date, time, title } = bookingItem;
 
-    const dateString = moment(date).format("dddd D MMMM");
+    const dateString = capitalize(moment(date).format("dddd D MMMM"));
+    const day = moment(date).format("D");
+    const month = moment(date).format("MMM");
     const timeString = `${time.startTime}-${time.endTime}`;
     const key = `${date}-${timeString}`;
 
     const buttonCallback = () => true;
 
-    if (isFirst) {
-      return (
-        <CaseCard
-          key={key}
-          colorSchema="red"
-          title={title}
-          showBookingDate
-          bookingDate={dateString}
-          bookingTime={timeString}
-          showButton
-          buttonText="Boka om eller avboka"
-          onCardClick={() => navigateToSummary(bookingItem)}
-          onButtonClick={buttonCallback}
-        />
-      );
-    }
-    return (
+    const card = (
       <CaseCard
         key={key}
         colorSchema="red"
         title={title}
-        largeSubtitle={dateString}
-        subtitle={timeString}
+        showBookingDate
+        bookingDate={dateString}
+        bookingTime={timeString}
         showButton
         buttonText="Boka om eller avboka"
         onCardClick={() => navigateToSummary(bookingItem)}
         onButtonClick={buttonCallback}
+        smallDateTimeCard={!isFirst}
       />
+    );
+
+    if (isFirst) {
+      return card;
+    }
+    return (
+      <SmallCard>
+        <SmallDate>
+          <DateText type="text" colorSchema="red" strong align="center">
+            {day}
+          </DateText>
+          <DateText type="text" colorSchema="red" strong align="center">
+            {month}
+          </DateText>
+        </SmallDate>
+        <CardContainer>{card}</CardContainer>
+      </SmallCard>
     );
   };
 
