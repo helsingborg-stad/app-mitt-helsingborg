@@ -145,6 +145,7 @@ const BookingFormScreen = ({
 
         onChangeModalScreen(ModalScreen.Confirmation, {
           bookingItem,
+          isConfirmation: true,
         });
       }
     } catch (error) {

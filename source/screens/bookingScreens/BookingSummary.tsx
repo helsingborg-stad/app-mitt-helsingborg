@@ -17,8 +17,12 @@ const Container = styled.ScrollView`
   background-color: ${({ theme }) => theme.colors.neutrals[6]};
 `;
 
-const Title = styled(Text)`
+const TitleWrapper = styled.View`
   margin-top: 50px;
+  margin-bottom: 15px;
+`;
+
+const Title = styled(Text)`
   margin-bottom: 15px;
 `;
 
@@ -27,9 +31,8 @@ interface BookingSummaryProps {
 }
 
 const BookingSummary = ({ route }: BookingSummaryProps): JSX.Element => {
-  const isConfirmation = route?.name === "Confirmation";
-
   const bookingItem = route?.params?.bookingItem as BookingItem;
+  const isConfirmation = route?.params?.isConfirmation;
   const { administrator } = bookingItem;
   const timeString =
     `${bookingItem.time.startTime.substring(0, 5)} - ` +
@@ -37,7 +40,16 @@ const BookingSummary = ({ route }: BookingSummaryProps): JSX.Element => {
 
   return (
     <Container>
-      {isConfirmation && <Title type="h1">Din bokning har skickats</Title>}
+      {isConfirmation && (
+        <TitleWrapper>
+          <Title type="h1" strong>
+            Din bokning har skickats
+          </Title>
+          <Text type="h6">
+            Om några förändringar sker med mötet kommer du bli meddelad.
+          </Text>
+        </TitleWrapper>
+      )}
       <Title type="h2">Bokad tid</Title>
       <DateTimeCard date={bookingItem.date} time={timeString} />
       <Title type="h2">Du kommer träffa</Title>
