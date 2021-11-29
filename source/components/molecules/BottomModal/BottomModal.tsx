@@ -14,6 +14,7 @@ interface Props {
   children: React.ReactChild | React.ReactChildren;
   colorSchema?: "red" | "neutral";
   backButtonText?: string;
+  closeButtonText?: string;
   propagateSwipe?: boolean;
   onClose?: () => void;
   onBack?: () => void;
@@ -28,6 +29,7 @@ const BottomModal = (props: Props): JSX.Element => {
     onClose = undefined,
     backButtonText = undefined,
     onBack = undefined,
+    closeButtonText = undefined,
     colorSchema = "neutral",
     propagateSwipe = false,
   } = props;
@@ -61,6 +63,7 @@ const BottomModal = (props: Props): JSX.Element => {
           onBack={onBack}
           onClose={onClose}
           backButtonText={backButtonText}
+          closeButtonText={closeButtonText}
         />
         {children}
       </ModalContentContainer>

@@ -15,6 +15,8 @@ export type ModalScreenType = {
   previousScreen: ModalScreen | undefined;
   propagateSwipe?: boolean;
   colorSchema?: string;
+  useTextNavigationButtons?: boolean;
+  disableCloseButton?: boolean;
 };
 
 export type ModalScreenNavigationParams = {

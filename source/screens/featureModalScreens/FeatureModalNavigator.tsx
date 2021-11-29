@@ -38,6 +38,7 @@ const Modal: Record<string, ModalScreenType> = {
     propagateSwipe: true,
     colorSchema: "red",
     previousScreen: undefined,
+    useTextNavigationButtons: true,
   },
   [ModalScreen.BookingForm]: {
     component: BookingFormScreen,
@@ -45,6 +46,8 @@ const Modal: Record<string, ModalScreenType> = {
     propagateSwipe: true,
     colorSchema: "red",
     previousScreen: ModalScreen.ServiceSelections,
+    disableCloseButton: true,
+    useTextNavigationButtons: true,
   },
 };
 
@@ -107,12 +110,18 @@ const FeatureModalNavigator = ({ navigation, route }: Props): JSX.Element => {
   return (
     <BottomModal
       visible={isVisible}
-      onClose={onClose}
+      onClose={modalScreenObject.disableCloseButton ? undefined : onClose}
       onModalHide={onModalHide}
       modalTitle={navigatorTitle}
       onBack={goBack}
       propagateSwipe={modalScreenObject.propagateSwipe}
       colorSchema={modalScreenObject.colorSchema}
+      backButtonText={
+        modalScreenObject.useTextNavigationButtons ? "AVBRYT" : undefined
+      }
+      closeButtonText={
+        modalScreenObject.useTextNavigationButtons ? "KLAR" : undefined
+      }
     >
       <ModalContent
         onNavigate={navigate}
