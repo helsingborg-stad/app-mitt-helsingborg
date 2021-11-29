@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { ActivityIndicator, Text } from "react-native";
+import { ActivityIndicator } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styled from "styled-components/native";
 import CollapsibleSection from "../../components/molecules/CollapsibleSection";
@@ -9,7 +9,7 @@ import { consolidateTimeSlots } from "../../helpers/BookingHelper";
 import { TimeSlot, TimeSlotDataType } from "../../types/BookingTypes";
 import icons from "../../helpers/Icons";
 import { CharacterCard, TimeSlotPicker } from "../../components/molecules";
-import { Button } from "../../components/atoms";
+import { Button, Text } from "../../components/atoms";
 import FormField from "../FormField/FormField";
 import { validateInput } from "../../helpers/ValidationHelper";
 
@@ -29,8 +29,14 @@ const Spacer = styled.View`
   height: 15px;
 `;
 
+const SpacedView = styled.View`
+  margin-bottom: 15px;
+`;
+
 interface BookingFormProps {
   questions: Question[];
+  name: string;
+  description: string;
   availableTimes: TimeSlotDataType;
   isContactsMode: boolean;
   submitPending: boolean;
@@ -47,6 +53,8 @@ type ValidationError = {
 
 const BookingForm = ({
   questions,
+  name,
+  description,
   availableTimes,
   isContactsMode,
   submitPending,
@@ -131,9 +139,9 @@ const BookingForm = ({
     );
   };
 
-  const toggleIsCollapsed = (name: string) => {
-    const currentCollapsed = isCollapsed[name];
-    setIsCollapsed({ ...isCollapsed, [name]: !currentCollapsed });
+  const toggleIsCollapsed = (collapsibleName: string) => {
+    const currentCollapsed = isCollapsed[collapsibleName];
+    setIsCollapsed({ ...isCollapsed, [collapsibleName]: !currentCollapsed });
   };
 
   let currentAvailableTimes = {};
@@ -179,7 +187,7 @@ const BookingForm = ({
   return (
     <Scroller>
       <ListWrapper>
-        {isContactsMode && (
+        {isContactsMode ? (
           <>
             <CollapsibleSection
               title="Vem vill du träffa?"
@@ -190,6 +198,13 @@ const BookingForm = ({
             </CollapsibleSection>
             <Spacer />
           </>
+        ) : (
+          <SpacedView>
+            <SpacedView>
+              <Text type="h1">{name}</Text>
+            </SpacedView>
+            <Text type="h5">{description}</Text>
+          </SpacedView>
         )}
         <CollapsibleSection
           title="Önskad tid"
