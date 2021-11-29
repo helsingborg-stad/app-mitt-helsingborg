@@ -25,7 +25,7 @@ type ButtonListItem = {
 
 interface ButtonListProps {
   defaultColorSchema: string;
-  defaultVariant: string;
+  defaultVariant?: string;
   buttonList: ButtonListItem[];
 }
 
@@ -57,7 +57,7 @@ const ButtonList = (props: ButtonListProps): JSX.Element => {
                 <Icon name={icon} />
                 <Text>{buttonText}</Text>
               </StyledButton>
-              {underline && <Underline />}
+              {underline && <Underline key={`${buttonText}_underline`} />}
             </>
           );
         }
