@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Text } from "react-native";
+import { ActivityIndicator, Text } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styled from "styled-components/native";
 import { Question } from "../../types/FormTypes";
@@ -32,6 +32,7 @@ interface BookingFormProps {
   questions: Question[];
   availableTimes: TimeSlotDataType;
   isContactsMode: boolean;
+  submitPending: boolean;
   onSubmit: (
     timeSlot: TimeSlot | undefined,
     formAnswers: { label: string; answer: string }[]
@@ -47,6 +48,7 @@ const BookingForm = ({
   questions,
   availableTimes,
   isContactsMode,
+  submitPending,
   onSubmit,
 }: BookingFormProps): JSX.Element => {
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -98,6 +100,7 @@ const BookingForm = ({
   };
 
   const submitForm = () => {
+    if (submitPending) return;
     const questionsWithAnswers = questions.map((question) => ({
       label: question.label,
       answer: answers[question.id],
@@ -210,7 +213,11 @@ const BookingForm = ({
         onClick={submitForm}
         disabled={!canSubmit}
       >
-        <Text style={{ color: canSubmit ? "white" : "gray" }}>Skicka</Text>
+        {submitPending ? (
+          <ActivityIndicator />
+        ) : (
+          <Text style={{ color: canSubmit ? "white" : "gray" }}>Skicka</Text>
+        )}
       </SubmitButton>
     </Scroller>
   );

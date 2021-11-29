@@ -42,6 +42,7 @@ const BookingFormScreen = ({
   const [timeSlots, setTimeSlots] = useState<TimeSlotDataType | undefined>(
     undefined
   );
+  const [submitPending, setSubmitPending] = useState<boolean>(false);
   const { getForm } = useContext(FormContext);
   const { formId, address, sharedMailbox, isContactsMode, contactsList, name } =
     route?.params || {};
@@ -95,47 +96,52 @@ const BookingFormScreen = ({
     questionsWithAnswers: { label: string; answer: string }[]
   ) => {
     if (timeSlot === undefined) return;
-    let message = "";
-    questionsWithAnswers.forEach((qna: { label: string; answer: string }) => {
-      message += `Q: ${qna.label}\n`;
-      message += `A: ${formatAnswer(qna.answer)}\n\n`;
-    });
-    const startDate = moment(`${timeSlot.date} ${timeSlot.startTime}`);
-    const endDate = moment(`${timeSlot.date} ${timeSlot.endTime}`);
-    const refCode = getReferenceCodeForUser(user);
-    if (timeSlot?.emails !== undefined) {
-      const selectedEmail = selectEmailFromArray(timeSlot.emails);
-      void createBooking(
-        [selectedEmail],
-        startDate.format(),
-        endDate.format(),
-        [],
-        refCode,
-        name,
-        address,
-        message
-      );
-
-      const status = "None";
-      const administrator = {
-        email: selectedEmail,
-      };
-      const date = moment(startDate).format("yyyy-MM-DD");
-      const startTime = moment(startDate).format("HH:mm");
-      const endTime = moment(endDate).format("HH:mm");
-      const title = "Mitt Helsingborg bokning";
-      const bookingItem = {
-        date,
-        time: { startTime, endTime },
-        title,
-        status,
-        administrator,
-        addressLines: [address],
-      } as BookingItem;
-
-      onChangeModalScreen(ModalScreen.Confirmation, {
-        bookingItem,
+    setSubmitPending(true);
+    try {
+      let message = "";
+      questionsWithAnswers.forEach((qna: { label: string; answer: string }) => {
+        message += `Q: ${qna.label}\n`;
+        message += `A: ${formatAnswer(qna.answer)}\n\n`;
       });
+      const startDate = moment(`${timeSlot.date} ${timeSlot.startTime}`);
+      const endDate = moment(`${timeSlot.date} ${timeSlot.endTime}`);
+      const refCode = getReferenceCodeForUser(user);
+      if (timeSlot?.emails !== undefined) {
+        const selectedEmail = selectEmailFromArray(timeSlot.emails);
+        await createBooking(
+          [selectedEmail],
+          startDate.format(),
+          endDate.format(),
+          [],
+          refCode,
+          name,
+          address,
+          message
+        );
+        setSubmitPending(false);
+        const status = "None";
+        const administrator = {
+          email: selectedEmail,
+        };
+        const date = moment(startDate).format("yyyy-MM-DD");
+        const startTime = moment(startDate).format("HH:mm");
+        const endTime = moment(endDate).format("HH:mm");
+        const title = "Mitt Helsingborg bokning";
+        const bookingItem = {
+          date,
+          time: { startTime, endTime },
+          title,
+          status,
+          administrator,
+          addressLines: [address],
+        } as BookingItem;
+
+        onChangeModalScreen(ModalScreen.Confirmation, {
+          bookingItem,
+        });
+      }
+    } catch (error) {
+      setSubmitPending(false);
     }
   };
 
@@ -160,6 +166,7 @@ const BookingFormScreen = ({
         isContactsMode={isContactsMode}
         availableTimes={timeSlots}
         questions={questions}
+        submitPending={submitPending}
         onSubmit={handleSubmitForm}
       />
     </ScreenContainer>
