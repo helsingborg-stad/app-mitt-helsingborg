@@ -1,17 +1,21 @@
-import React, { useContext } from 'react';
-import env from 'react-native-config';
-import styled from 'styled-components/native';
+import React, { useContext } from "react";
+import env from "react-native-config";
+import styled from "styled-components/native";
 import {
   NavigationHelpersContext,
   useNavigationBuilder,
   StackRouter,
   DefaultRouterOptions,
-} from '@react-navigation/native';
-import { Modal } from 'react-native';
-import AuthContext from '../store/AuthContext';
-import Card from '../components/molecules/Card/Card';
-import Text from '../components/atoms/Text/Text';
-import useTouchActivity, { UseTouchParameters } from '../hooks/useTouchActivity';
+} from "@react-navigation/native";
+import { Modal } from "react-native";
+import AuthContext from "../store/AuthContext";
+import Card from "../components/molecules/Card/Card";
+import Text from "../components/atoms/Text/Text";
+import useTouchActivity, {
+  UseTouchParameters,
+} from "../hooks/useTouchActivity";
+
+import USER_AUTH_STATE from "../types/UserAuthTypes";
 
 const FlexWrapper = styled.View`
   flex: 1;
@@ -59,18 +63,18 @@ const CustomStackNavigator = ({
   children,
   screenOptions,
   contentStyle,
-}: Props) => {
+}: Props): JSX.Element => {
   const { state, navigation, descriptors } = useNavigationBuilder(StackRouter, {
     children,
     screenOptions,
     initialRouteName,
   });
-  const { handleLogout, isAuthenticated, handleRefreshSession } = useContext(AuthContext);
+  const { handleLogout, userAuthState, handleRefreshSession } =
+    useContext(AuthContext);
 
   const handleEndUserSession = async () => {
-    if (isAuthenticated) {
+    if (userAuthState === USER_AUTH_STATE.SIGNED_IN) {
       await handleLogout();
-      navigation.navigate('Start');
     }
   };
 
@@ -99,14 +103,18 @@ const CustomStackNavigator = ({
   };
 
   const NavigatorContextComponent = (
-    <NavigationHelpersContext.Provider key="navigationHelpersContext" value={navigation}>
+    <NavigationHelpersContext.Provider
+      key="navigationHelpersContext"
+      value={navigation}
+    >
       <FlexWrapper {...panResponder.panHandlers} style={[contentStyle]}>
         {descriptors[state.routes[state.index].key].render()}
       </FlexWrapper>
     </NavigationHelpersContext.Provider>
   );
 
-  const showInactivityModal = !isActive && isAuthenticated;
+  const showInactivityModal =
+    !isActive && userAuthState === USER_AUTH_STATE.SIGNED_IN;
 
   const InactivityDialogComponent = (
     <Modal
@@ -123,13 +131,16 @@ const CustomStackNavigator = ({
               <Card.Body>
                 <Card.Title>Är du fortfarande där?</Card.Title>
                 <Card.Text>
-                  Du har varit inaktiv under en längre tid, för att fortsätta använda appen behöver
-                  du göra ett aktivt val.
+                  Du har varit inaktiv under en längre tid, för att fortsätta
+                  använda appen behöver du göra ett aktivt val.
                 </Card.Text>
                 <Card.Button colorSchema="red" onClick={handleEndUserSession}>
                   <Text>Nej</Text>
                 </Card.Button>
-                <Card.Button colorSchema="green" onClick={handleContinueUserSession}>
+                <Card.Button
+                  colorSchema="green"
+                  onClick={handleContinueUserSession}
+                >
                   <Text>Ja</Text>
                 </Card.Button>
               </Card.Body>

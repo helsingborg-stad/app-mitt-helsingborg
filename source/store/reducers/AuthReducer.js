@@ -1,11 +1,13 @@
-import { actionTypes } from '../actions/AuthActions';
+import { actionTypes } from "../actions/AuthActions";
+
+import USER_AUTH_STATE from "../../types/UserAuthTypes";
 
 export const initialState = {
   isActive: true,
-  isAuthenticated: false,
+  userAuthState: USER_AUTH_STATE.PENDING,
   user: null,
   error: null,
-  status: 'idle',
+  status: "idle",
   authenticateOnExternalDevice: false,
 };
 
@@ -18,8 +20,8 @@ export default function AuthReducer(state, action) {
         ...state,
         ...payload,
         isActive: true,
-        isAuthenticated: true,
-        status: 'authResolved',
+        userAuthState: USER_AUTH_STATE.SIGNED_IN,
+        status: "authResolved",
         orderRef: undefined,
         autoStartToken: undefined,
       };
@@ -29,8 +31,8 @@ export default function AuthReducer(state, action) {
         ...state,
         ...payload,
         isActive: false,
-        isAuthenticated: false,
-        status: 'rejected',
+        userAuthState: USER_AUTH_STATE.SIGNED_OUT,
+        status: "rejected",
         orderRef: undefined,
         autoStartToken: undefined,
       };
@@ -38,7 +40,7 @@ export default function AuthReducer(state, action) {
     case actionTypes.refreshSession:
       return {
         ...state,
-        isAuthenticated: true,
+        userAuthState: USER_AUTH_STATE.SIGNED_IN,
       };
 
     case actionTypes.addProfile:
@@ -57,16 +59,16 @@ export default function AuthReducer(state, action) {
       return {
         ...state,
         ...payload,
-        isAuthenticated: false,
+        userAuthState: USER_AUTH_STATE.SIGNED_OUT,
       };
 
     case actionTypes.authError:
       return {
         ...state,
         ...payload,
-        isAuthenticated: false,
+        userAuthState: USER_AUTH_STATE.SIGNED_OUT,
         user: null,
-        status: 'rejected',
+        status: "rejected",
         orderRef: undefined,
         autoStartToken: undefined,
       };
@@ -75,7 +77,7 @@ export default function AuthReducer(state, action) {
       return {
         ...state,
         ...payload,
-        status: 'rejected',
+        status: "rejected",
         orderRef: undefined,
         autoStartToken: undefined,
       };
@@ -89,7 +91,7 @@ export default function AuthReducer(state, action) {
     case actionTypes.signSuccess:
       return {
         ...state,
-        status: 'signResolved',
+        status: "signResolved",
         orderRef: undefined,
         autoStartToken: undefined,
       };
@@ -98,7 +100,7 @@ export default function AuthReducer(state, action) {
       return {
         ...state,
         ...payload,
-        status: 'rejected',
+        status: "rejected",
         orderRef: undefined,
         autoStartToken: undefined,
       };
