@@ -17,7 +17,8 @@ const TitleBar = styled.TouchableHighlight`
   justify-content: space-between;
   width: 100%;
   align-items: center;
-  padding: 0px 30px 0px 24px;
+  padding: 0px;
+  margin-bottom: 5px;
 `;
 
 export { Section, TitleBar };
