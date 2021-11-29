@@ -29,6 +29,8 @@ interface Props {
 }
 
 type ButtonItem = {
+  variant?: string;
+  underline?: boolean;
   buttonText: string;
   icon: string;
   onClick: () => void;
@@ -56,8 +58,9 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
           contactsList.length > 0
             ? [
                 {
+                  underline: true,
                   buttonText: "Mina kontakter",
-                  icon: "photo-camera",
+                  icon: "person",
                   onClick: () =>
                     onChangeModalScreen(ModalScreen.BookingForm, {
                       isContactsMode: true,
@@ -70,6 +73,7 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
         if (!canceled) {
           const buttonItems: ButtonItem[] = contacts.concat(
             bookables.map((bookable) => ({
+              variant: "link",
               buttonText: bookable.name,
               icon: "photo-camera",
               onClick: () =>
@@ -120,7 +124,7 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
             <ButtonList
               buttonList={buttons}
               defaultColorSchema="red"
-              defaultVariant="link"
+              defaultVariant={undefined}
             />
           ))}
       </SafeAreaView>
