@@ -605,7 +605,7 @@ function CaseOverview(props): JSX.Element {
           </Card>
         ) : (
           <Card.Button colorSchema="red" disabled>
-            <Icon name={refreshing ? "refresh" : "arrow-upward"} />
+            <Icon name={refreshing ? "refresh" : "arrow-downward"} />
             <Text>Dra för att ladda om sidan</Text>
           </Card.Button>
         )}
