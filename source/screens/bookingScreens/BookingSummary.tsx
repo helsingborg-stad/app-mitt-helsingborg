@@ -12,18 +12,18 @@ import {
 const Container = styled.ScrollView`
   height: 80%;
   margin-top: 0px;
+  padding-top: 0px;
   padding-left: 16px;
   padding-right: 16px;
   background-color: ${({ theme }) => theme.colors.neutrals[6]};
 `;
 
 const TitleWrapper = styled.View`
-  margin-top: 50px;
   margin-bottom: 15px;
 `;
 
 const Title = styled(Text)`
-  margin-bottom: 15px;
+  margin: 15px 0px;
 `;
 
 interface BookingSummaryProps {
