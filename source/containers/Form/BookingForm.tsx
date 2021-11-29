@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { ActivityIndicator, Text } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styled from "styled-components/native";
+import CollapsibleSection from "../../components/molecules/CollapsibleSection";
 import { Question } from "../../types/FormTypes";
 import { ValidationObject } from "../../types/Validation";
 import { consolidateTimeSlots } from "../../helpers/BookingHelper";
@@ -24,8 +25,8 @@ const CharacterCardWrapper = styled.View`
   margin-bottom: 15px;
 `;
 
-const SubmitButton = styled(Button)`
-  margin-left: 15px;
+const Spacer = styled.View`
+  height: 15px;
 `;
 
 interface BookingFormProps {
@@ -57,6 +58,11 @@ const BookingForm = ({
   >({});
   const [timeSlot, setTimeSlot] = useState<TimeSlot | undefined>();
   const [currentEmail, setCurrentEmail] = useState<string>("");
+  const [isCollapsed, setIsCollapsed] = useState<Record<string, boolean>>({
+    emails: false,
+    timeSlot: false,
+    questions: false,
+  });
 
   const contactQuestions: Question[] = [
     {
@@ -125,6 +131,11 @@ const BookingForm = ({
     );
   };
 
+  const toggleIsCollapsed = (name: string) => {
+    const currentCollapsed = isCollapsed[name];
+    setIsCollapsed({ ...isCollapsed, [name]: !currentCollapsed });
+  };
+
   let currentAvailableTimes = {};
   let questionsToMap = [];
 
@@ -168,57 +179,80 @@ const BookingForm = ({
   return (
     <Scroller>
       <ListWrapper>
-        {isContactsMode && emails.map(renderCharacterCard)}
-        <TimeSlotPicker
-          availableTimes={currentAvailableTimes}
-          onChange={setTimeSlot}
-          value={timeSlot}
-        />
-        {questionsToMap.map((question) => (
-          <FormField
-            key={`${question.id}`}
-            label={question.label}
-            labelLine={question.labelLine}
-            inputType={question.type}
-            colorSchema="red"
-            id={question.id}
-            onChange={(newAnswer: Record<string, string>) =>
-              updateAnswers(newAnswer)
-            }
-            onBlur={() => validateAnswer(question.id, question.validation)}
-            onFocus={() => true}
-            onMount={() => true}
-            onAddAnswer={() => true}
-            value={answers[question.id]}
-            answers={answers}
-            validationErrors={allValidationErrors}
-            help={question.help}
-            inputSelectValue={question.type}
-            type={question.type}
-            description={question.description}
-            conditionalOn={question.conditionalOn}
-            placeholder={question.placeholder}
-            explainer={question.explainer}
-            loadPrevious={question.loadPrevious}
-            items={question.items}
-            inputs={question.inputs}
-            validation={question.validation}
-            choices={question.choices}
-            text={question.text}
-          />
-        ))}
-      </ListWrapper>
-      <SubmitButton
-        colorSchema="red"
-        onClick={submitForm}
-        disabled={!canSubmit}
-      >
-        {submitPending ? (
-          <ActivityIndicator />
-        ) : (
-          <Text style={{ color: canSubmit ? "white" : "gray" }}>Skicka</Text>
+        {isContactsMode && (
+          <>
+            <CollapsibleSection
+              title="Vem vill du träffa?"
+              collapsed={isCollapsed.emails}
+              onPress={() => toggleIsCollapsed("emails")}
+            >
+              <>{emails.map(renderCharacterCard)}</>
+            </CollapsibleSection>
+            <Spacer />
+          </>
         )}
-      </SubmitButton>
+        <CollapsibleSection
+          title="Önskad tid"
+          collapsed={isCollapsed.timeSlot}
+          onPress={() => toggleIsCollapsed("timeSlot")}
+        >
+          <TimeSlotPicker
+            availableTimes={currentAvailableTimes}
+            onChange={setTimeSlot}
+            value={timeSlot}
+          />
+        </CollapsibleSection>
+        <Spacer />
+        <CollapsibleSection
+          title="Övrigt"
+          collapsed={isCollapsed.questions}
+          onPress={() => toggleIsCollapsed("questions")}
+        >
+          <>
+            {questionsToMap.map((question) => (
+              <FormField
+                key={`${question.id}`}
+                label={question.label}
+                labelLine={question.labelLine}
+                inputType={question.type}
+                colorSchema="red"
+                id={question.id}
+                onChange={(newAnswer: Record<string, string>) =>
+                  updateAnswers(newAnswer)
+                }
+                onBlur={() => validateAnswer(question.id, question.validation)}
+                onFocus={() => true}
+                onMount={() => true}
+                onAddAnswer={() => true}
+                value={answers[question.id]}
+                answers={answers}
+                validationErrors={allValidationErrors}
+                help={question.help}
+                inputSelectValue={question.type}
+                type={question.type}
+                description={question.description}
+                conditionalOn={question.conditionalOn}
+                placeholder={question.placeholder}
+                explainer={question.explainer}
+                loadPrevious={question.loadPrevious}
+                items={question.items}
+                inputs={question.inputs}
+                validation={question.validation}
+                choices={question.choices}
+                text={question.text}
+              />
+            ))}
+          </>
+        </CollapsibleSection>
+        <Spacer />
+        <Button colorSchema="red" onClick={submitForm} disabled={!canSubmit}>
+          {submitPending ? (
+            <ActivityIndicator />
+          ) : (
+            <Text style={{ color: canSubmit ? "white" : "gray" }}>Skicka</Text>
+          )}
+        </Button>
+      </ListWrapper>
     </Scroller>
   );
 };
