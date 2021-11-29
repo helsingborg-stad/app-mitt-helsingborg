@@ -44,8 +44,15 @@ const BookingFormScreen = ({
   );
   const [submitPending, setSubmitPending] = useState<boolean>(false);
   const { getForm } = useContext(FormContext);
-  const { formId, address, sharedMailbox, isContactsMode, contactsList, name } =
-    route?.params || {};
+  const {
+    formId,
+    address,
+    sharedMailbox,
+    isContactsMode,
+    contactsList,
+    name,
+    description,
+  } = route?.params || {};
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -163,6 +170,8 @@ const BookingFormScreen = ({
   return (
     <ScreenContainer>
       <BookingForm
+        name={name}
+        description={description}
         isContactsMode={isContactsMode}
         availableTimes={timeSlots}
         questions={questions}
