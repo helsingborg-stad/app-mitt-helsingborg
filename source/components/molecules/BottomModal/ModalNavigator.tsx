@@ -14,6 +14,7 @@ import {
 const SIZE = {
   ICON: 24,
   BACK_BUTTON: 12,
+  CLOSE_BUTTON: 12,
   TITLE: 18,
 };
 
@@ -32,11 +33,20 @@ interface ModalNavigatorProps {
   textColor: string;
   title?: string;
   backButtonText?: string;
+  closeButtonText?: string;
   onBack?: () => void;
   onClose?: () => void;
 }
 const ModalNavigator = (props: ModalNavigatorProps): JSX.Element => {
-  const { color, textColor, title, backButtonText, onBack, onClose } = props;
+  const {
+    color,
+    textColor,
+    title,
+    backButtonText,
+    closeButtonText,
+    onBack,
+    onClose,
+  } = props;
 
   return (
     <NavigatorContainer background={color}>
@@ -65,7 +75,13 @@ const ModalNavigator = (props: ModalNavigatorProps): JSX.Element => {
         </ModalText>
         <IconContainer flexDirection={FLEX_DIRECTION.END}>
           <TouchableOpacity disabled={!onClose} onPress={onClose}>
-            {onClose && (
+            {onClose && closeButtonText && (
+              <ModalText size={SIZE.CLOSE_BUTTON} color={textColor}>
+                {closeButtonText}
+              </ModalText>
+            )}
+
+            {onClose && !closeButtonText && (
               <Icon
                 testID="modal-navigator-close-button"
                 name={ICON_NAME.CLOSE}
