@@ -9,7 +9,7 @@ import React, {
 import { Animated, Easing, RefreshControl } from "react-native";
 import styled from "styled-components/native";
 import { useFocusEffect } from "@react-navigation/native";
-import { CardTitle } from "app/components/molecules/CharacterCard/styled";
+import { hasGeneratedSymmetricKey } from "../../services/encryption/EncryptionService";
 import { Modal } from "../../components/molecules/Modal";
 
 import Wrapper from "../../components/molecules/Dialog/Wrapper";
@@ -34,6 +34,7 @@ import { put } from "../../helpers/ApiRequest";
 import { State as CaseContextState } from "../../types/CaseContext";
 import { wait } from "../../helpers/Misc";
 import { Case } from "../../types/Case";
+import { Form } from "../../types/FormTypes";
 
 const ButtonContainer = styled.View`
   display: flex;
@@ -151,9 +152,11 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const currentForm = caseData?.forms[caseData.currentFormId];
   const selfNeedsToConfirm =
     isCoApplicant &&
+    !caseData.hasSymmetricKey &&
     currentForm.encryption.publicKeys[authContext.user.personalNumber] === null;
   const isWaitingForCoApplicantConfirm =
     currentForm.encryption.publicKeys &&
+    !caseData.hasSymmetricKey &&
     !Object.entries(currentForm.encryption.publicKeys).every(
       (item) => item[1] !== null
     );
@@ -373,7 +376,15 @@ function CaseOverview(props): JSX.Element {
         const formCases = getCasesByFormIds(formIds);
         const updatedFormCaseObjects = formCases.map(async (caseData) => {
           const form = await getForm(caseData.currentFormId);
-          return { ...caseData, caseType, form };
+          const formFromCase = caseData.forms[caseData.currentFormId];
+          const hasSymmetricKey = await hasGeneratedSymmetricKey(formFromCase);
+          const newCase: CaseWithExtra = {
+            ...caseData,
+            caseType,
+            form,
+            hasSymmetricKey,
+          };
+          return newCase;
         });
         return Promise.all(updatedFormCaseObjects);
       });
@@ -449,6 +460,7 @@ function CaseOverview(props): JSX.Element {
 
       const isWaitingForCoApplicantConfirm =
         currentForm.encryption.publicKeys &&
+        !caseData.hasSymmetricKey &&
         !Object.entries(currentForm.encryption.publicKeys).every(
           (item) => item[1] !== null
         );
