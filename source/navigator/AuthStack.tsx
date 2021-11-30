@@ -15,8 +15,10 @@ const AuthStack = (): JSX.Element | null => {
 
   useEffect(() => {
     const trySetInitialRouteName = async () => {
-      const isDisabled = await StorageService.getData(ONBOARDING_DISABLED);
-      const route = isDisabled ? "Login" : "Onboarding";
+      const isOnboardingDisabled = await StorageService.getData(
+        ONBOARDING_DISABLED
+      );
+      const route = isOnboardingDisabled ? "Login" : "Onboarding";
 
       setInitialRouteName(route);
     };
@@ -24,7 +26,12 @@ const AuthStack = (): JSX.Element | null => {
     void trySetInitialRouteName();
   }, []);
 
-  if (initialRouteName === undefined) return null;
+  // Return null to avoid stack navigator to return
+  // first screen in the list when initialRouteName
+  // is undefined.
+  if (initialRouteName === undefined) {
+    return null;
+  }
 
   return (
     <Stack.Navigator
