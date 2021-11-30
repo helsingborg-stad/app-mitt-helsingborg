@@ -355,3 +355,10 @@ export function deserializeForm(form: AnsweredForm): AnsweredForm {
 
   return formCopy;
 }
+
+export async function hasGeneratedSymmetricKey(
+  form: AnsweredForm
+): Promise<boolean> {
+  const key = await getStoredSymmetricKey(form);
+  return key !== null;
+}
