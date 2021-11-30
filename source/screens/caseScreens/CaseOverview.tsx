@@ -289,13 +289,19 @@ interface CoSignDialogState {
   caseData: Case | null;
 }
 
+interface CaseWithExtra extends Case {
+  caseType: typeof caseTypes[0];
+  form: Form;
+  hasSymmetricKey: boolean;
+}
+
 /**
  * Case overview screen
  * @param {obj} props
  */
 function CaseOverview(props): JSX.Element {
   const { navigation } = props;
-  const [caseItems, setCaseItems] = useState<Case[]>([]);
+  const [caseItems, setCaseItems] = useState<CaseWithExtra[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [pendingCaseSign, setPendingCaseSign] = useState<Case | null>(null);
