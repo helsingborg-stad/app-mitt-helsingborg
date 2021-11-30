@@ -113,13 +113,13 @@ const CustomStackNavigator = ({
     </NavigationHelpersContext.Provider>
   );
 
-  const showInactivityModal =
+  const isUserInactiveAndSignedIn =
     !isActive && userAuthState === USER_AUTH_STATE.SIGNED_IN;
 
   const InactivityDialogComponent = (
     <Modal
       key="inactivityDialogComponent"
-      visible={showInactivityModal}
+      visible={isUserInactiveAndSignedIn}
       transparent
       presentationStyle="overFullScreen"
       animationType="fade"
