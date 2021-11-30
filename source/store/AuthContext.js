@@ -183,25 +183,33 @@ function AuthProvider({ children, initialState }) {
   }, [handleSetMode]);
 
   useEffect(() => {
-    const tryFetchUser = async () => {
-      if (await isAccessTokenValid()) {
-        await handleAddProfile();
-        handleLogin();
-      } else {
+    const trySignIn = async () => {
+      try {
+        if (await isAccessTokenValid()) {
+          await handleAddProfile();
+          handleLogin();
+        } else {
+          handleLogout();
+        }
+      } catch (error) {
         handleLogout();
       }
     };
 
-    tryFetchUser();
+    trySignIn();
   }, [isAccessTokenValid]);
 
   useEffect(() => {
     const tryFetchUser = async () => {
-      if (
-        state.userAuthState === USER_AUTH_STATE.SIGNED_IN &&
-        state.user === null
-      ) {
-        await handleAddProfile();
+      try {
+        if (
+          state.userAuthState === USER_AUTH_STATE.SIGNED_IN &&
+          state.user === null
+        ) {
+          await handleAddProfile();
+        }
+      } catch (error) {
+        handleLogout();
       }
     };
 
