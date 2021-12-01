@@ -39,23 +39,24 @@
     "add": "^2.0.6",
     "axios": "^0.21.0",
     "axios-mock-adapter": "^1.19.0",
-    "babel-plugin-module-resolver": "^4.0.0",
     "json-stable-stringify": "^1.0.1",
     "just-clone": "^5.0.0",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "jest-styled-components": "^7.0.3",
     "jwt-decode": "^3.1.2",
     "metro-react-native-babel-preset": "^0.66.2",
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
     "punycode": "^2.1.1",
     "react": "16.13.1",
-    "react-native": "0.64.1",
+    "react-native": "0.64.2",
     "react-native-aes-crypto": "^1.3.10",
     "react-native-asset": "^2.0.1",
     "react-native-background-timer": "^2.4.1",
     "react-native-calendar-picker": "^7.0.5",
     "react-native-calendars": "^1.1266.0",
     "react-native-collapsible": "^1.6.0",
-    "react-native-config": "1.4.0",
+    "react-native-config": "1.4.5",
     "react-native-document-picker": "^5.0.0",
     "react-native-elements": "^3.0.0-alpha.1",
     "react-native-exception-handler": "^2.10.10",
@@ -77,68 +78,48 @@
     "react-native-storybook-loader": "^2.0.4",
     "react-native-swiper": "^1.6.0",
     "react-native-tab-view": "^2.15.2",
-    "react-native-vector-icons": "^7.1.0",
+    "react-native-vector-icons": "^8.1.0",
     "react-native-web": "^0.14.10",
     "react-native-webview": "^11.0.2",
     "react-native-youtube-iframe": "^1.4.0",
+    "react-query": "^3.19.0",
     "rn-fetch-blob": "^0.12.0",
     "styled-components": "^5.2.1",
     "validator": "^13.7.0",
     "yarn": "^1.22.10"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9",
-    "@babel/runtime": "^7.12.5",
-    "@react-native-community/eslint-config": "^2.0.0",
     "@types/eslint": "^7.2.13",
     "@types/jest": "^27.0.2",
     "@types/json-stable-stringify": "^1.0.33",
+    "@babel/core": "^7.14.6",
+    "@babel/runtime": "^7.14.6",
+    "@react-native-community/eslint-config": "^3.0.0",
     "@types/react": "^16.13.1",
     "@types/react-native": "^0.63.37",
     "@types/react-test-renderer": "^16.9.4",
     "@types/styled-components": "^5.1.14",
-    "@types/styled-components-react-native": "^5.1.1",
-    "@typescript-eslint/eslint-plugin": "^4.27.0",
-    "@typescript-eslint/parser": "^4.27.0",
-    "babel-jest": "^25.1.0",
-    "eslint": "^7.32.0",
+    "babel-jest": "^27.0.6",
+    "eslint": "^7.31.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-babel-module": "^5.3.1",
     "eslint-plugin-import": "^2.24.2",
-    "eslint-plugin-jest": "^24.4.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.26.0",
-    "jest": "^27.2.3",
-    "prettier": "^2.4.1",
-    "react-native-clean-project": "^3.6.3",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "jest": "^25.1.0",
+    "prettier": "^2.3.2",
+    "react-native-clean-project": "^3.6.4",
     "react-test-renderer": "16.13.1",
-    "typescript": "^4.1.2",
-    "typescript-styled-plugin": "^0.18.1"
+    "typescript-styled-plugin": "^0.18.1",
+    "typescript": "^4.3.5"
   },
   "jest": {
     "preset": "react-native",
     "setupFiles": [
       "./jestSetupFile.js"
-    ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native(-.*)?|@react-native(-community)?|@react-native-picker|@react-navigation)/)"
-    ],
-    "transform": {
-      "^.+\\.[t|j]sx?$": "babel-jest"
-    }
-  },
-  "config": {
-    "react-native-storybook-loader": {
-      "searchDir": [
-        "./source",
-        "./packages"
-      ],
-      "pattern": "**/*.stories.[t|j]s*",
-      "outputFile": "./storybook/storyLoader.js"
-    }
-  },
-  "resolutions": {
-    "react-native/@jest/create-cache-key-function": "^27.2.3"
+    ]
   }
 }
