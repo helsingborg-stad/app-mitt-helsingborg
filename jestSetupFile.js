@@ -133,3 +133,10 @@ NativeModules.RNDateTimePickerManager.getDefaultDisplayValue = jest.fn(() =>
     determinedDisplayValue: "spinner",
   })
 );
+
+/**
+ * Mock @notifee/react-native native module
+ */
+NativeModules.NotifeeApiModule = {
+  addListener: jest.fn(),
+};
