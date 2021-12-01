@@ -1,15 +1,15 @@
-import PropTypes from 'prop-types';
-import React, { useState, useRef } from 'react';
-import { Dimensions, Platform } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import styled from 'styled-components/native';
-import FormField from '../../../containers/FormField';
-import Progressbar from '../../atoms/Progressbar/Progressbar';
-import BackNavigation from '../../molecules/BackNavigation/BackNavigation';
-import FormDialog from './CloseDialog/FormDialog';
-import Banner from './StepBanner/StepBanner';
-import StepDescription from './StepDescription/StepDescription';
-import StepFooter from './StepFooter/StepFooter';
+import PropTypes from "prop-types";
+import React, { useState, useRef } from "react";
+import { Dimensions, Platform } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import styled from "styled-components/native";
+import FormField from "../../../containers/FormField";
+import Progressbar from "../../atoms/Progressbar/Progressbar";
+import BackNavigation from "../../molecules/BackNavigation/BackNavigation";
+import FormDialog from "./CloseDialog/FormDialog";
+import Banner from "./StepBanner/StepBanner";
+import StepDescription from "./StepDescription/StepDescription";
+import StepFooter from "./StepFooter/StepFooter";
 
 const StepContainer = styled.View`
   flex: 1;
@@ -26,7 +26,7 @@ const StepContentContainer = styled.View`
 
 const StepLayout = styled.View`
   flex: 1;
-  min-height: ${Dimensions.get('window').height - 256}px;
+  min-height: ${Dimensions.get("window").height - 256}px;
   flex-direction: column;
 `;
 
@@ -66,10 +66,12 @@ function Step({
 }) {
   const isSubstep = currentPosition.level !== 0;
   const isLastMainStep =
-    currentPosition.level === 0 && currentPosition.currentMainStep === totalStepNumber;
-  const isDirtySubStep = JSON.stringify(answers) !== JSON.stringify(answerSnapshot) && isSubstep;
+    currentPosition.level === 0 &&
+    currentPosition.currentMainStep === totalStepNumber;
+  const isDirtySubStep =
+    JSON.stringify(answers) !== JSON.stringify(answerSnapshot) && isSubstep;
   const [dialogIsVisible, setDialogIsVisible] = useState(false);
-  const [dialogTemplate, setDialogTemplate] = useState('mainStep');
+  const [dialogTemplate, setDialogTemplate] = useState("mainStep");
 
   /** TODO: move out of this scope, this logic should be defined on the form component */
   const closeForm = () => {
@@ -90,12 +92,12 @@ function Step({
   const dialogButtonProps = {
     mainStep: [
       {
-        text: 'Nej',
-        color: 'neutral',
+        text: "Nej",
+        color: "neutral",
         clickHandler: () => setDialogIsVisible(false),
       },
       {
-        text: 'Ja',
+        text: "Ja",
         clickHandler: () => {
           setDialogIsVisible(false);
           closeForm();
@@ -104,12 +106,12 @@ function Step({
     ],
     subStep: [
       {
-        text: 'Nej',
-        color: 'neutral',
+        text: "Nej",
+        color: "neutral",
         clickHandler: () => setDialogIsVisible(false),
       },
       {
-        text: 'Ja',
+        text: "Ja",
         clickHandler: () => {
           formNavigation.restoreSnapshot();
           formNavigation.goToMainForm();
@@ -121,7 +123,7 @@ function Step({
   const backButtonBehavior = isSubstep
     ? () => {
         if (isDirtySubStep) {
-          if (dialogTemplate !== 'subStep') setDialogTemplate('subStep');
+          if (dialogTemplate !== "subStep") setDialogTemplate("subStep");
           setDialogIsVisible(true);
           return;
         }
@@ -130,7 +132,7 @@ function Step({
         formNavigation.goToMainForm();
       }
     : () => {
-        if (dialogTemplate !== 'mainStep') setDialogTemplate('mainStep');
+        if (dialogTemplate !== "mainStep") setDialogTemplate("mainStep");
         formNavigation.back();
       };
 
@@ -144,7 +146,8 @@ function Step({
       let keyboardHeight = 0;
 
       if (scrollResponder.keyboardWillOpenTo) {
-        keyboardHeight = scrollResponder.keyboardWillOpenTo.startCoordinates.height;
+        keyboardHeight =
+          scrollResponder.keyboardWillOpenTo.startCoordinates.height;
       }
 
       const newReturnScrollY = pageY + height;
@@ -164,7 +167,7 @@ function Step({
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{ flexGrow: 1 }}
-        resetScrollToCoords={{ x: 0, y: returnScrollY }}
+        resetScrollToCoords={{ x: 0, y: returnScrollY }} // THis is where  bug is
         innerRef={(r) => (scrollRef.current = r)}
         enableAutomaticScroll
       >
@@ -174,9 +177,11 @@ function Step({
           buttons={dialogButtonProps[dialogTemplate]}
         />
         <StepContentContainer>
-          {banner && banner.constructor === Object && Object.keys(banner).length > 0 && (
-            <Banner {...banner} colorSchema={colorSchema || 'blue'} />
-          )}
+          {banner &&
+            banner.constructor === Object &&
+            Object.keys(banner).length > 0 && (
+              <Banner {...banner} colorSchema={colorSchema || "blue"} />
+            )}
           {currentPosition.level === 0 && (
             <Progressbar
               currentStep={currentPosition.currentMainStep}
@@ -188,10 +193,12 @@ function Step({
               <StepDescription
                 theme={theme}
                 currentStep={
-                  currentPosition.level === 0 ? currentPosition.currentMainStep : undefined
+                  currentPosition.level === 0
+                    ? currentPosition.currentMainStep
+                    : undefined
                 }
                 totalStepNumber={totalStepNumber}
-                colorSchema={colorSchema || 'blue'}
+                colorSchema={colorSchema || "blue"}
                 {...description}
               />
               {questions && (
@@ -199,19 +206,27 @@ function Step({
                   {questions.map((field) => (
                     <FormField
                       key={`${field.id}`}
-                      onChange={!status.type.includes('submitted') ? onFieldChange : null}
+                      onChange={
+                        !status.type.includes("submitted")
+                          ? onFieldChange
+                          : null
+                      }
                       onBlur={onFieldBlur}
                       onMount={onFieldMount}
                       inputType={field.type}
-                      value={answers[field.id] || ''}
+                      value={answers[field.id] || ""}
                       answers={answers}
                       validationErrors={validation}
-                      colorSchema={field.color && field.color !== '' ? field.color : colorSchema}
+                      colorSchema={
+                        field.color && field.color !== ""
+                          ? field.color
+                          : colorSchema
+                      }
                       id={field.id}
                       formNavigation={formNavigation}
                       editable={!field.disabled && isFormEditable}
                       onFocus={(e, isSelect) => {
-                        if (Platform.OS === 'android') {
+                        if (Platform.OS === "android") {
                           return;
                         }
                         handleFocus(e, isSelect);
@@ -253,7 +268,7 @@ function Step({
             setDialogIsVisible(true);
           }
         }}
-        colorSchema={colorSchema || 'blue'}
+        colorSchema={colorSchema || "blue"}
       />
     </StepContainer>
   );
@@ -271,7 +286,7 @@ Step.propTypes = {
   answers: PropTypes.object,
   answerSnapshot: PropTypes.object,
   isDirtySubStep: PropTypes.bool,
-  colorSchema: PropTypes.oneOf(['blue', 'green', 'red', 'purple', 'neutral']),
+  colorSchema: PropTypes.oneOf(["blue", "green", "red", "purple", "neutral"]),
   /**
    * User input validation result.
    */
@@ -298,9 +313,8 @@ Step.propTypes = {
   onFieldChange: PropTypes.func,
   /** The function to handle fields losing focus */
   onFieldBlur: PropTypes.func,
-  
+
   onFieldMount: PropTypes.func,
-  
 
   /** The function to handle when a repeater field gets an answer added */
 
@@ -385,11 +399,11 @@ Step.propTypes = {
 Step.defaultProps = {
   theme: {
     step: {
-      bg: '#FFAA9B',
+      bg: "#FFAA9B",
       text: {
         colors: {
-          primary: '#00213F',
-          secondary: '#733232',
+          primary: "#00213F",
+          secondary: "#733232",
         },
       },
     },
@@ -398,6 +412,6 @@ Step.defaultProps = {
     imageSrc: undefined,
     icon: undefined,
   },
-  footerBg: '#00213F',
+  footerBg: "#00213F",
 };
 export default Step;

@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { View, LayoutAnimation } from 'react-native';
-import DynamicCardRenderer from '../DynamicCardRenderer/DynamicCardRenderer';
-import { Input, Label, Select, Text } from '../../components/atoms';
+import React from "react";
+import PropTypes from "prop-types";
+import { View, LayoutAnimation } from "react-native";
+import DynamicCardRenderer from "../DynamicCardRenderer/DynamicCardRenderer";
+import { Input, Label, Select, Text } from "../../components/atoms";
 import {
   CheckboxField,
   EditableList,
@@ -12,14 +12,14 @@ import {
   NavigationButtonGroup,
   RepeaterField,
   RadioGroup,
-} from '../../components/molecules';
-import theme from '../../styles/theme';
-import { getValidColorSchema } from '../../styles/themeHelpers';
-import SummaryList from '../../components/organisms/SummaryList/SummaryList';
-import ImageUploader from '../../components/molecules/ImageUploader/ImageUploader';
-import ImageViewer from '../../components/molecules/ImageViewer/ImageViewer';
-import PdfUploader from '../../components/molecules/PdfUploader/PdfUploader';
-import PdfViewer from '../../components/molecules/PdfViewer/PdfViewer';
+} from "../../components/molecules";
+import theme from "../../styles/theme";
+import { getValidColorSchema } from "../../styles/themeHelpers";
+import SummaryList from "../../components/organisms/SummaryList/SummaryList";
+import ImageUploader from "../../components/molecules/ImageUploader/ImageUploader";
+import ImageViewer from "../../components/molecules/ImageViewer/ImageViewer";
+import PdfUploader from "../../components/molecules/PdfUploader/PdfUploader";
+import PdfViewer from "../../components/molecules/PdfViewer/PdfViewer";
 /**
  * Explanation of the properties in this data structure:
  *
@@ -34,36 +34,36 @@ import PdfViewer from '../../components/molecules/PdfViewer/PdfViewer';
 const inputTypes = {
   text: {
     component: Input,
-    changeEvent: 'onChangeText',
-    blurEvent: 'onBlur',
-    focusEvent: 'onFocus',
+    changeEvent: "onChangeText",
+    blurEvent: "onBlur",
+    focusEvent: "onFocus",
     props: {
       showErrorMessage: true,
     },
   },
   number: {
     component: Input,
-    blurEvent: 'onBlur',
-    changeEvent: 'onChangeText',
-    focusEvent: 'onFocus',
+    blurEvent: "onBlur",
+    changeEvent: "onChangeText",
+    focusEvent: "onFocus",
     props: {
       showErrorMessage: true,
-      keyboardType: 'numeric',
+      keyboardType: "numeric",
     },
   },
   hidden: {
     component: Input,
-    blurEvent: 'onBlur',
+    blurEvent: "onBlur",
     props: {
       showErrorMessage: false,
       hidden: true,
     },
-    onMountEvent: 'onMount'
+    onMountEvent: "onMount",
   },
   date: {
     component: CalendarPicker,
-    changeEvent: 'onSelect',
-    focusEvent: 'onFocus',
+    changeEvent: "onSelect",
+    focusEvent: "onFocus",
     initialValue: undefined,
     props: {
       showErrorMessage: true,
@@ -72,21 +72,21 @@ const inputTypes = {
   list: {},
   checkbox: {
     component: CheckboxField,
-    changeEvent: 'onChange',
-    focusEvent: 'onFocus',
-    blurEvent: 'onBlur',
+    changeEvent: "onChange",
+    focusEvent: "onFocus",
+    blurEvent: "onBlur",
     helpInComponent: true,
-    helpProp: 'help',
+    helpProp: "help",
     props: {},
     initialValue: false,
   },
   editableList: {
     component: EditableList,
-    changeEvent: 'onInputChange',
-    focusEvent: 'onFocus',
-    blurEvent: 'onBlur',
+    changeEvent: "onInputChange",
+    focusEvent: "onFocus",
+    blurEvent: "onBlur",
     helpInComponent: true,
-    helpProp: 'help',
+    helpProp: "help",
     props: {},
     initialValue: {},
   },
@@ -100,37 +100,37 @@ const inputTypes = {
   },
   select: {
     component: Select,
-    changeEvent: 'onValueChange',
-    focusEvent: 'onFocus',
-    blurEvent: 'onBlur',
+    changeEvent: "onValueChange",
+    focusEvent: "onFocus",
+    blurEvent: "onBlur",
     props: {},
   },
   radioGroup: {
     component: RadioGroup,
-    changeEvent: 'onSelect',
+    changeEvent: "onSelect",
     props: {},
   },
   avatarList: {
     component: GroupListWithAvatar,
-    changeEvent: 'onChange',
+    changeEvent: "onChange",
     props: {},
     initialValue: [],
   },
   summaryList: {
     component: SummaryList,
-    changeEvent: 'onChange',
-    focusEvent: 'onFocus',
-    blurEvent: 'onBlur',
+    changeEvent: "onChange",
+    focusEvent: "onFocus",
+    blurEvent: "onBlur",
     helpInComponent: true,
-    helpProp: 'help',
+    helpProp: "help",
     props: { answers: true, validation: true },
   },
   repeaterField: {
     component: RepeaterField,
-    focusEvent: 'onFocus',
-    blurEvent: 'onBlur',
-    changeEvent: 'onChange',
-    addAnswerEvent: 'onAddAnswer',
+    focusEvent: "onFocus",
+    blurEvent: "onBlur",
+    changeEvent: "onChange",
+    addAnswerEvent: "onAddAnswer",
     props: {},
   },
   card: {
@@ -138,22 +138,22 @@ const inputTypes = {
   },
   imageUploader: {
     component: ImageUploader,
-    changeEvent: 'onChange',
+    changeEvent: "onChange",
     props: { answers: true },
   },
   imageViewer: {
     component: ImageViewer,
-    changeEvent: 'onChange',
+    changeEvent: "onChange",
     props: { answers: true },
   },
   pdfUploader: {
     component: PdfUploader,
-    changeEvent: 'onChange',
+    changeEvent: "onChange",
     props: { answers: true },
   },
   pdfViewer: {
     component: PdfViewer,
-    changeEvent: 'onChange',
+    changeEvent: "onChange",
     props: { answers: true },
   },
 };
@@ -190,8 +190,8 @@ const FormField = ({
   };
 
   const onInputMount = (value, fieldId = id) => {
-    if (onMount) onMount({[fieldId]: value}, fieldId);
-  }
+    if (onMount) onMount({ [fieldId]: value }, fieldId);
+  };
 
   const onInputFocus = (e, isSelect = false) => {
     if (onFocus) {
@@ -200,13 +200,13 @@ const FormField = ({
   };
 
   const onInputAddAnswer = (values, fieldId = id) => {
-    const answerValues = {[fieldId]: values};
-    if (onAddAnswer) onAddAnswer(answerValues, fieldId)
-  }
+    const answerValues = { [fieldId]: values };
+    if (onAddAnswer) onAddAnswer(answerValues, fieldId);
+  };
 
   const inputProps = input && input.props ? input.props : {};
   const initialValue =
-    value === '' && Object.prototype.hasOwnProperty.call(input, 'initialValue')
+    value === "" && Object.prototype.hasOwnProperty.call(input, "initialValue")
       ? input.initialValue
       : value;
   const inputCompProps = {
@@ -220,14 +220,19 @@ const FormField = ({
   };
 
   if (input?.props?.answers) inputCompProps.answers = answers;
-  if (input?.props?.validation) inputCompProps.validationErrors = validationErrors;
+  if (input?.props?.validation)
+    inputCompProps.validationErrors = validationErrors;
   if (input && input.changeEvent) inputCompProps[input.changeEvent] = saveInput;
   if (input && input.blurEvent) inputCompProps[input.blurEvent] = onInputBlur;
-  if (input && input.focusEvent) inputCompProps[input.focusEvent] = onInputFocus;
-  if (input && input.helpInComponent) inputCompProps[input.helpProp || 'help'] = help;
-  if (input && input.onMountEvent) inputCompProps[input.onMountEvent] = onInputMount;
+  if (input && input.focusEvent)
+    inputCompProps[input.focusEvent] = onInputFocus;
+  if (input && input.helpInComponent)
+    inputCompProps[input.helpProp || "help"] = help;
+  if (input && input.onMountEvent)
+    inputCompProps[input.onMountEvent] = onInputMount;
 
-  if (inputType === 'repeaterField' && !!input?.addAnswerEvent) inputCompProps[input.addAnswerEvent] = onInputAddAnswer;
+  if (inputType === "repeaterField" && !!input?.addAnswerEvent)
+    inputCompProps[input.addAnswerEvent] = onInputAddAnswer;
 
   const inputComponent =
     input && input.component ? (
@@ -253,7 +258,11 @@ const FormField = ({
         <Label
           colorSchema={validColorSchema}
           underline={labelLine}
-          help={!input.helpInComponent && help && Object.keys(help).length > 0 ? help : {}}
+          help={
+            !input.helpInComponent && help && Object.keys(help).length > 0
+              ? help
+              : {}
+          }
         >
           {label}
         </Label>
@@ -312,7 +321,7 @@ FormField.propTypes = {
   /**
    * sets the color theme.
    */
-  colorSchema: PropTypes.oneOf([...Object.keys(theme.colors.primary), '']),
+  colorSchema: PropTypes.oneOf([...Object.keys(theme.colors.primary), ""]),
   /*
    * The function triggers when the button is clicked.
    */
@@ -328,24 +337,24 @@ FormField.propTypes = {
     url: PropTypes.string,
   }),
   inputSelectValue: PropTypes.oneOf([
-    'text',
-    'number',
-    'hidden',
-    'date',
-    'email',
-    'postalCode',
-    'personalNumber',
-    'phone',
-    'card',
-    'editableList',
-    'checkbox',
-    'navigationButtonGroup',
-    'summaryList',
-    'repeaterField',
-    'imageUploader',
-    'imageViewer',
-    'pdfUploader',
-    'pdfViewer',
+    "text",
+    "number",
+    "hidden",
+    "date",
+    "email",
+    "postalCode",
+    "personalNumber",
+    "phone",
+    "card",
+    "editableList",
+    "checkbox",
+    "navigationButtonGroup",
+    "summaryList",
+    "repeaterField",
+    "imageUploader",
+    "imageViewer",
+    "pdfUploader",
+    "pdfViewer",
   ]),
 };
 
@@ -353,7 +362,7 @@ FormField.defaultProps = {
   onClick: () => {},
   onChange: () => {},
   labelLine: true,
-  inputType: 'text',
+  inputType: "text",
 };
 
 export default FormField;

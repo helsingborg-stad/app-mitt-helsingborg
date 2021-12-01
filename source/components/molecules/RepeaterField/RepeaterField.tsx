@@ -34,6 +34,7 @@ interface Props {
   onChange: (answers: Answers, fieldId?: string) => void;
   onBlur?: (answers: Answers, fieldId?: string) => void;
   onAddAnswer?: (answers: Answers, fieldId?: string) => void;
+  onFocus?: (e: FocusEvent) => void;
   colorSchema: PrimaryColor;
   error?: Record<string, { isValid: boolean; validationMessage: string }>[];
   maxRows?: number;
@@ -56,6 +57,7 @@ const RepeaterField: React.FC<Props> = ({
   onChange,
   onBlur,
   onAddAnswer,
+  onFocus,
   colorSchema,
   value,
   error,
@@ -73,8 +75,11 @@ const RepeaterField: React.FC<Props> = ({
     };
 
   const onInputBlur = () => {
-    console.log("oninput blur", localAnswers);
     if (onBlur) onBlur(localAnswers);
+  };
+
+  const onInputFocus = (e: FocusEvent) => {
+    if (onFocus) onFocus(e);
   };
 
   const removeAnswer = (index: number) => () => {
@@ -125,6 +130,7 @@ const RepeaterField: React.FC<Props> = ({
         color={validColorSchema}
         removeItem={removeAnswer(index)}
         error={error && error[index] ? error[index] : undefined}
+        onFocus={onInputFocus}
       />
     );
   });
