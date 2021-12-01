@@ -120,6 +120,25 @@
     "preset": "react-native",
     "setupFiles": [
       "./jestSetupFile.js"
-    ]
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native(-.*)?|@react-native(-community)?|@react-native-picker|@react-navigation)/)"
+    ],
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    }
+  },
+  "config": {
+    "react-native-storybook-loader": {
+      "searchDir": [
+        "./source",
+        "./packages"
+      ],
+      "pattern": "**/*.stories.[t|j]s*",
+      "outputFile": "./storybook/storyLoader.js"
+    }
+  },
+  "resolutions": {
+    "react-native/@jest/create-cache-key-function": "^27.2.3"
   }
 }
