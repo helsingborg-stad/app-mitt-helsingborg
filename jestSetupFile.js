@@ -52,7 +52,8 @@ jest.mock("rn-fetch-blob", () => ({
 }));
 
 /*
- * Needed for Jest tests
+ * Added to make jest run because of the following issue:
+ * https://github.com/callstack/react-native-testing-library/issues/658
  */
 jest.mock("react-native/Libraries/LogBox/LogBox");
 
