@@ -167,7 +167,7 @@ function Step({
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{ flexGrow: 1 }}
-        resetScrollToCoords={{ x: 0, y: returnScrollY }} // THis is where  bug is
+        resetScrollToCoords={{ x: 0, y: returnScrollY }}
         innerRef={(r) => (scrollRef.current = r)}
         enableAutomaticScroll
       >
