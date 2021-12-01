@@ -336,8 +336,8 @@ function CaseOverview(props): JSX.Element {
   const activeCases = getCasesByStatuses(["notStarted", "active"]);
   const closedCases = getCasesByStatuses(["closed"]);
 
-  const onFailedToFetchCases = (e: Error) => {
-    console.error("failed to fetch cases", e);
+  const onFailedToFetchCases = (error: Error) => {
+    console.error("failed to fetch cases", error);
   };
 
   const onRefresh = useCallback(() => {
