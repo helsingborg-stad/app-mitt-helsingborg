@@ -26,9 +26,6 @@ const AuthStack = (): JSX.Element | null => {
     void trySetInitialRouteName();
   }, []);
 
-  // Return null to avoid stack navigator to return
-  // first screen in the list when initialRouteName
-  // is undefined.
   if (initialRouteName === undefined) {
     return null;
   }
