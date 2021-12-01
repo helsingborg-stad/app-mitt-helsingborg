@@ -8,6 +8,7 @@ import BottomBarNavigator from "./BottomBarNavigator";
 import FeatureModal from "../screens/featureModalScreens/FeatureModalNavigator";
 
 import AuthContext from "../store/AuthContext";
+import { NotifeeProvider } from "../store/NotifeeContext";
 import USER_AUTH_STATE from "../types/UserAuthTypes";
 
 const MainStack = createStackNavigator();
@@ -20,52 +21,57 @@ const forFade = ({ current }) => ({
   },
 });
 
-const MainStackScreen = (): JSX.Element => {
+const MainStackScreen = ({ navigation }: any): JSX.Element => {
   const { userAuthState } = useContext(AuthContext);
 
   return (
-    <CustomStackNavigator screenOptions={{ headerShown: false }}>
-      <>
-        {userAuthState === USER_AUTH_STATE.PENDING && (
-          <MainStack.Screen name="Start" component={SplashScreen} />
-        )}
+    <NotifeeProvider
+      navigation={navigation}
+      isSignedIn={userAuthState === USER_AUTH_STATE.SIGNED_IN}
+    >
+      <CustomStackNavigator screenOptions={{ headerShown: false }}>
+        <>
+          {userAuthState === USER_AUTH_STATE.PENDING && (
+            <MainStack.Screen name="Start" component={SplashScreen} />
+          )}
 
-        {userAuthState === USER_AUTH_STATE.SIGNED_OUT && (
-          <MainStack.Screen
-            name="Auth"
-            component={AuthStack}
-            options={{ cardStyleInterpolator: forFade }}
-          />
-        )}
+          {userAuthState === USER_AUTH_STATE.SIGNED_OUT && (
+            <MainStack.Screen
+              name="Auth"
+              component={AuthStack}
+              options={{ cardStyleInterpolator: forFade }}
+            />
+          )}
 
-        {userAuthState === USER_AUTH_STATE.SIGNED_IN && (
-          <>
-            <MainStack.Screen
-              name="App"
-              component={BottomBarNavigator}
-              options={{
-                cardStyleInterpolator: forFade,
-                gestureEnabled: false,
-              }}
-            />
-            <MainStack.Screen
-              name="Form"
-              component={FormCaseScreen}
-              options={{
-                gestureEnabled: false,
-              }}
-            />
-            <MainStack.Screen
-              name="DevFeatures"
-              component={DevFeaturesScreen}
-              options={{
-                gestureEnabled: false,
-              }}
-            />
-          </>
-        )}
-      </>
-    </CustomStackNavigator>
+          {userAuthState === USER_AUTH_STATE.SIGNED_IN && (
+            <>
+              <MainStack.Screen
+                name="App"
+                component={BottomBarNavigator}
+                options={{
+                  cardStyleInterpolator: forFade,
+                  gestureEnabled: false,
+                }}
+              />
+              <MainStack.Screen
+                name="Form"
+                component={FormCaseScreen}
+                options={{
+                  gestureEnabled: false,
+                }}
+              />
+              <MainStack.Screen
+                name="DevFeatures"
+                component={DevFeaturesScreen}
+                options={{
+                  gestureEnabled: false,
+                }}
+              />
+            </>
+          )}
+        </>
+      </CustomStackNavigator>
+    </NotifeeProvider>
   );
 };
 
