@@ -341,9 +341,10 @@ function CaseOverview(props): JSX.Element {
   };
 
   const onRefresh = useCallback(() => {
+    const extraDelay = 500;
     setRefreshing(true);
     void fetchCases()
-      .then(() => wait(500))
+      .then(() => wait(extraDelay))
       .catch(onFailedToFetchCases)
       .then(() => setRefreshing(false));
   }, [fetchCases]);
