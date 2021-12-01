@@ -354,8 +354,8 @@ function CaseOverview(props): JSX.Element {
       // Sometimes new cases is not created in an instant.
       // Due to this we have to give the api some time before we try to fetch cases,
       // since we cannot react to changes as of now.
-      const milliseconds = 4000;
-      wait(milliseconds).then(fetchCases).catch(onFailedToFetchCases);
+      const delayBeforeFetch = 4000;
+      wait(delayBeforeFetch).then(fetchCases).catch(onFailedToFetchCases);
     }, [fetchCases])
   );
 
