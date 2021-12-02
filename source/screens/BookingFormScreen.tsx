@@ -56,7 +56,7 @@ const BookingFormScreen = ({
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchFormAndTimeSlots = async () => {
       if (isContactsMode) {
         const timeSlotData = await getTimeSlots(
           contactsList,
@@ -82,7 +82,7 @@ const BookingFormScreen = ({
         setQuestions(formDataToQuestions(formData));
       }
     };
-    void fetchData();
+    void fetchFormAndTimeSlots();
   }, [sharedMailbox, formId, getForm, isContactsMode, user, contactsList]);
 
   const formatAnswer = (answer: string | boolean | undefined): string => {
