@@ -137,6 +137,7 @@ const FeatureModalNavigator = ({ navigation, route }: Props): JSX.Element => {
       <ModalContent
         onNavigate={navigate}
         onChangeModalScreen={changeModalScreen}
+        closeModal={onClose}
         route={{ name: modalScreen.screen, params: modalScreen.params }}
       />
     </BottomModal>
