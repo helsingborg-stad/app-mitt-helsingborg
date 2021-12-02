@@ -2,18 +2,22 @@ import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
-import { Question } from "../types/FormTypes";
-import { TimeSlot, BookingItem, TimeSlotDataType } from "../types/BookingTypes";
+import { Question } from "../../types/FormTypes";
+import {
+  TimeSlot,
+  BookingItem,
+  TimeSlotDataType,
+} from "../../types/BookingTypes";
 import {
   formDataToQuestions,
   getReferenceCodeForUser,
-} from "../helpers/BookingHelper";
-import AuthContext from "../store/AuthContext";
-import { createBooking, getTimeSlots } from "../services/BookingService";
-import { getAdministratorsBySharedMailbox } from "../services/BookablesService";
-import BookingForm from "../containers/BookingForm/BookingForm";
-import FormContext from "../store/FormContext";
-import { ModalScreen } from "./featureModalScreens/types";
+} from "../../helpers/BookingHelper";
+import AuthContext from "../../store/AuthContext";
+import { createBooking, getTimeSlots } from "../../services/BookingService";
+import { getAdministratorsBySharedMailbox } from "../../services/BookablesService";
+import BookingForm from "../../containers/BookingForm/BookingForm";
+import FormContext from "../../store/FormContext";
+import { ModalScreen } from "../featureModalScreens/types";
 
 const SpinnerContainer = styled.View`
   flex: 1;
