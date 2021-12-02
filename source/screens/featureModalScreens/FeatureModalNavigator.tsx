@@ -15,6 +15,7 @@ import {
   ModalScreenNavigationParams,
   RouteNavigationParams,
 } from "./types";
+import RescheduleFormScreen from "../bookingScreens/RescheduleFormScreen";
 
 const Modal: Record<string, ModalScreenType> = {
   [ModalScreen.Features]: {
@@ -49,6 +50,15 @@ const Modal: Record<string, ModalScreenType> = {
     disableCloseButton: true,
     useTextNavigationButtons: true,
   },
+  [ModalScreen.RescheduleForm]: {
+    component: RescheduleFormScreen,
+    title: "Boka om",
+    propagateSwipe: true,
+    colorSchema: "red",
+    previousScreen: ModalScreen.ServiceSelections,
+    disableCloseButton: true,
+    useTextNavigationButtons: true,
+  },
 };
 
 interface Props {
@@ -57,11 +67,12 @@ interface Props {
 }
 
 const FeatureModalNavigator = ({ navigation, route }: Props): JSX.Element => {
-  const { startScreen = ModalScreen.Features } = route?.params || {};
+  const { startScreen = ModalScreen.Features, startParams = {} } =
+    route?.params || {};
 
   const [modalScreen, setModalScreen] = useState<ModalScreenNavigationParams>({
     screen: startScreen,
-    params: {},
+    params: startParams,
   });
   const [nextRoute, setNextRoute] = useState<RouteNavigationParams>({
     route: undefined,
