@@ -25,6 +25,9 @@ export type BookingItem = {
   status: string;
   administrator: Administrator;
   addressLines: string[];
+  referenceCode: string;
+  body: string;
+  id: string;
 };
 
 export type GraphData = {

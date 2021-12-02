@@ -121,7 +121,7 @@ const BookingFormScreen = ({
       const refCode = getReferenceCodeForUser(user);
       if (timeSlot?.emails !== undefined) {
         const selectedEmail = selectEmailFromArray(timeSlot.emails);
-        const { bookingId } = await createBooking(
+        const { BookingId: id } = await createBooking(
           [selectedEmail],
           startDate.format(),
           endDate.format(),
@@ -148,13 +148,16 @@ const BookingFormScreen = ({
           status,
           administrator,
           addressLines: [address],
+          id,
+          body: message,
+          referenceCode: refCode,
         } as BookingItem;
 
         await showScheduledNotification({
           title: "Påminnelse",
           body: `Du har möte imorgon ${startTime} - ${endTime} på ${address}`,
           timestamp: moment(startDate).subtract(1, "days").valueOf(),
-          id: bookingId as string,
+          id: id as string,
           data: {
             nextRoute: "Calendar",
             params: {
