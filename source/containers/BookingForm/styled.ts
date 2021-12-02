@@ -22,10 +22,28 @@ const SpacedView = styled.View`
   margin-bottom: 15px;
 `;
 
+const ButtonPanel = styled.View`
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  height: 96px;
+  background-color: ${(props) => props.theme.colors.neutrals[5]};
+  shadow-offset: 0px -1px;
+  shadow-color: ${(props) => props.theme.colors.neutrals[1]};
+  shadow-opacity: 0.3;
+  shadow-radius: 2px;
+  elevation: 2;
+  z-index: 1000;
+  justify-content: center;
+  align-content: center;
+`;
+
 const ButtonContainer = styled.View`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin: 24px 15px;
 `;
 
 const SubmitSection = styled.View`
@@ -52,4 +70,5 @@ export {
   DeleteSection,
   SubmitSection,
   ButtonText,
+  ButtonPanel,
 };

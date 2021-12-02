@@ -24,6 +24,7 @@ import {
   DeleteSection,
   SubmitSection,
   ButtonText,
+  ButtonPanel,
 } from "./styled";
 
 interface BookingFormProps {
@@ -198,105 +199,109 @@ const BookingForm = ({
   const showButtonPanel = onDelete || canSubmit;
 
   return (
-    <Scroller>
-      <ListWrapper>
-        {isContactsMode ? (
-          <>
-            <CollapsibleSection
-              title="Vem vill du träffa?"
-              collapsed={isCollapsed.emails}
-              onPress={() => toggleIsCollapsed("emails")}
-            >
-              <>{emails.map(renderCharacterCard)}</>
-            </CollapsibleSection>
-            <Spacer />
-          </>
-        ) : (
-          <SpacedView>
+    <>
+      <Scroller>
+        <ListWrapper>
+          {isContactsMode ? (
+            <>
+              <CollapsibleSection
+                title="Vem vill du träffa?"
+                collapsed={isCollapsed.emails}
+                onPress={() => toggleIsCollapsed("emails")}
+              >
+                <>{emails.map(renderCharacterCard)}</>
+              </CollapsibleSection>
+              <Spacer />
+            </>
+          ) : (
             <SpacedView>
-              <Text type="h1">{name}</Text>
+              <SpacedView>
+                <Text type="h1">{name}</Text>
+              </SpacedView>
+              <Text type="h5">{description}</Text>
             </SpacedView>
-            <Text type="h5">{description}</Text>
-          </SpacedView>
-        )}
-        {administrator && (
+          )}
+          {administrator && (
+            <CollapsibleSection
+              title="Möte med"
+              collapsed={isCollapsed.characterCard}
+              onPress={() => toggleIsCollapsed("characterCard")}
+            >
+              <CharacterCard
+                onCardClick={() => true}
+                title={administrator.title}
+                department={administrator.department}
+                jobTitle={administrator.jobTitle}
+                icon={icons.ICON_CONTACT_PERSON_1}
+                selected={false}
+                showCheckbox={false}
+              />
+            </CollapsibleSection>
+          )}
           <CollapsibleSection
-            title="Möte med"
-            collapsed={isCollapsed.characterCard}
-            onPress={() => toggleIsCollapsed("characterCard")}
+            title="Önskad tid"
+            collapsed={isCollapsed.timeSlot}
+            onPress={() => toggleIsCollapsed("timeSlot")}
           >
-            <CharacterCard
-              onCardClick={() => true}
-              title={administrator.title}
-              department={administrator.department}
-              jobTitle={administrator.jobTitle}
-              icon={icons.ICON_CONTACT_PERSON_1}
-              selected={false}
-              showCheckbox={false}
+            <TimeSlotPicker
+              availableTimes={currentAvailableTimes}
+              onChange={setTimeSlot}
+              value={timeSlot}
             />
           </CollapsibleSection>
-        )}
-        <CollapsibleSection
-          title="Önskad tid"
-          collapsed={isCollapsed.timeSlot}
-          onPress={() => toggleIsCollapsed("timeSlot")}
-        >
-          <TimeSlotPicker
-            availableTimes={currentAvailableTimes}
-            onChange={setTimeSlot}
-            value={timeSlot}
-          />
-        </CollapsibleSection>
-        <Spacer />
-        {questionsToMap && questionsToMap.length > 0 && (
-          <>
-            <CollapsibleSection
-              title="Övrigt"
-              collapsed={isCollapsed.questions}
-              onPress={() => toggleIsCollapsed("questions")}
-            >
-              <>
-                {questionsToMap.map((question) => (
-                  <FormField
-                    key={`${question.id}`}
-                    label={question.label}
-                    labelLine={question.labelLine}
-                    inputType={question.type}
-                    colorSchema="red"
-                    id={question.id}
-                    onChange={(newAnswer: Record<string, string>) =>
-                      updateAnswers(newAnswer)
-                    }
-                    onBlur={() =>
-                      validateAnswer(question.id, question.validation)
-                    }
-                    onFocus={() => true}
-                    onMount={() => true}
-                    onAddAnswer={() => true}
-                    value={answers[question.id]}
-                    answers={answers}
-                    validationErrors={allValidationErrors}
-                    help={question.help}
-                    inputSelectValue={question.type}
-                    type={question.type}
-                    description={question.description}
-                    conditionalOn={question.conditionalOn}
-                    placeholder={question.placeholder}
-                    explainer={question.explainer}
-                    loadPrevious={question.loadPrevious}
-                    items={question.items}
-                    inputs={question.inputs}
-                    validation={question.validation}
-                    choices={question.choices}
-                    text={question.text}
-                  />
-                ))}
-              </>
-            </CollapsibleSection>
-            <Spacer />
-          </>
-        )}
-        {showButtonPanel && (
+          <Spacer />
+          {questionsToMap && questionsToMap.length > 0 && (
+            <>
+              <CollapsibleSection
+                title="Övrigt"
+                collapsed={isCollapsed.questions}
+                onPress={() => toggleIsCollapsed("questions")}
+              >
+                <>
+                  {questionsToMap.map((question) => (
+                    <FormField
+                      key={`${question.id}`}
+                      label={question.label}
+                      labelLine={question.labelLine}
+                      inputType={question.type}
+                      colorSchema="red"
+                      id={question.id}
+                      onChange={(newAnswer: Record<string, string>) =>
+                        updateAnswers(newAnswer)
+                      }
+                      onBlur={() =>
+                        validateAnswer(question.id, question.validation)
+                      }
+                      onFocus={() => true}
+                      onMount={() => true}
+                      onAddAnswer={() => true}
+                      value={answers[question.id]}
+                      answers={answers}
+                      validationErrors={allValidationErrors}
+                      help={question.help}
+                      inputSelectValue={question.type}
+                      type={question.type}
+                      description={question.description}
+                      conditionalOn={question.conditionalOn}
+                      placeholder={question.placeholder}
+                      explainer={question.explainer}
+                      loadPrevious={question.loadPrevious}
+                      items={question.items}
+                      inputs={question.inputs}
+                      validation={question.validation}
+                      choices={question.choices}
+                      text={question.text}
+                    />
+                  ))}
+                </>
+              </CollapsibleSection>
+              <Spacer />
+            </>
+          )}
+        </ListWrapper>
+      </Scroller>
+      {showButtonPanel && (
+        <ButtonPanel>
           <ButtonContainer>
             {onDelete && (
               <DeleteSection withMargin={canSubmit}>
@@ -323,9 +328,9 @@ const BookingForm = ({
               </SubmitSection>
             )}
           </ButtonContainer>
-        )}
-      </ListWrapper>
-    </Scroller>
+        </ButtonPanel>
+      )}
+    </>
   );
 };
 
