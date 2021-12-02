@@ -199,6 +199,7 @@ const BookingFormScreen = ({
         isContactsMode={isContactsMode}
         availableTimes={timeSlots}
         questions={questions}
+        submitButtonText="Skicka mötesbokning"
         submitPending={submitPending}
         onSubmit={handleSubmitForm}
       />

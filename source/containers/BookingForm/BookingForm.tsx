@@ -16,6 +16,9 @@ import {
   CharacterCardWrapper,
   Spacer,
   SpacedView,
+  ButtonContainer,
+  DeleteSection,
+  SubmitSection,
 } from "./styled";
 
 interface BookingFormProps {
@@ -25,10 +28,14 @@ interface BookingFormProps {
   availableTimes: TimeSlotDataType;
   isContactsMode: boolean;
   submitPending: boolean;
+  submitButtonText: string;
   onSubmit: (
     timeSlot: TimeSlot | undefined,
     formAnswers: { label: string; answer: string }[]
   ) => void;
+  deletePending?: boolean;
+  deleteButtonText?: string;
+  onDelete?: () => void;
 }
 
 type ValidationError = {
@@ -43,7 +50,11 @@ const BookingForm = ({
   availableTimes,
   isContactsMode,
   submitPending,
+  submitButtonText,
   onSubmit,
+  deletePending,
+  deleteButtonText,
+  onDelete,
 }: BookingFormProps): JSX.Element => {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [validationErrors, setValidationErrors] = useState<
@@ -106,6 +117,12 @@ const BookingForm = ({
     }));
     if (timeSlot !== undefined) {
       onSubmit(timeSlot, questionsWithAnswers);
+    }
+  };
+
+  const deleteForm = () => {
+    if (onDelete) {
+      onDelete();
     }
   };
 
@@ -205,62 +222,83 @@ const BookingForm = ({
           />
         </CollapsibleSection>
         <Spacer />
-        <CollapsibleSection
-          title="Övrigt"
-          collapsed={isCollapsed.questions}
-          onPress={() => toggleIsCollapsed("questions")}
-        >
+        {questionsToMap && questionsToMap.length > 0 && (
           <>
-            {questionsToMap.map((question) => (
-              <FormField
-                key={`${question.id}`}
-                label={question.label}
-                labelLine={question.labelLine}
-                inputType={question.type}
-                colorSchema="red"
-                id={question.id}
-                onChange={(newAnswer: Record<string, string>) =>
-                  updateAnswers(newAnswer)
-                }
-                onBlur={() => validateAnswer(question.id, question.validation)}
-                onFocus={() => true}
-                onMount={() => true}
-                onAddAnswer={() => true}
-                value={answers[question.id]}
-                answers={answers}
-                validationErrors={allValidationErrors}
-                help={question.help}
-                inputSelectValue={question.type}
-                type={question.type}
-                description={question.description}
-                conditionalOn={question.conditionalOn}
-                placeholder={question.placeholder}
-                explainer={question.explainer}
-                loadPrevious={question.loadPrevious}
-                items={question.items}
-                inputs={question.inputs}
-                validation={question.validation}
-                choices={question.choices}
-                text={question.text}
-              />
-            ))}
+            <CollapsibleSection
+              title="Övrigt"
+              collapsed={isCollapsed.questions}
+              onPress={() => toggleIsCollapsed("questions")}
+            >
+              <>
+                {questionsToMap.map((question) => (
+                  <FormField
+                    key={`${question.id}`}
+                    label={question.label}
+                    labelLine={question.labelLine}
+                    inputType={question.type}
+                    colorSchema="red"
+                    id={question.id}
+                    onChange={(newAnswer: Record<string, string>) =>
+                      updateAnswers(newAnswer)
+                    }
+                    onBlur={() =>
+                      validateAnswer(question.id, question.validation)
+                    }
+                    onFocus={() => true}
+                    onMount={() => true}
+                    onAddAnswer={() => true}
+                    value={answers[question.id]}
+                    answers={answers}
+                    validationErrors={allValidationErrors}
+                    help={question.help}
+                    inputSelectValue={question.type}
+                    type={question.type}
+                    description={question.description}
+                    conditionalOn={question.conditionalOn}
+                    placeholder={question.placeholder}
+                    explainer={question.explainer}
+                    loadPrevious={question.loadPrevious}
+                    items={question.items}
+                    inputs={question.inputs}
+                    validation={question.validation}
+                    choices={question.choices}
+                    text={question.text}
+                  />
+                ))}
+              </>
+            </CollapsibleSection>
+            <Spacer />
           </>
-        </CollapsibleSection>
-        <Spacer />
-        <Button
-          colorSchema="red"
-          onClick={submitForm}
-          disabled={!canSubmit}
-          fullWidth
-        >
-          {submitPending ? (
-            <ActivityIndicator />
-          ) : (
-            <Text style={{ color: canSubmit ? "white" : "gray" }}>
-              Skicka mötesbokning
-            </Text>
+        )}
+        <ButtonContainer>
+          {onDelete && (
+            <DeleteSection>
+              <Button colorSchema="neutral" onClick={deleteForm} fullWidth>
+                {deletePending ? (
+                  <ActivityIndicator />
+                ) : (
+                  <Text>{deleteButtonText}</Text>
+                )}
+              </Button>
+            </DeleteSection>
           )}
-        </Button>
+          <SubmitSection>
+            <Button
+              colorSchema="red"
+              onClick={submitForm}
+              disabled={!canSubmit}
+              fullWidth
+            >
+              {submitPending ? (
+                <ActivityIndicator />
+              ) : (
+                <Text style={{ color: canSubmit ? "white" : "gray" }}>
+                  {submitButtonText}
+                </Text>
+              )}
+            </Button>
+          </SubmitSection>
+        </ButtonContainer>
       </ListWrapper>
     </Scroller>
   );
