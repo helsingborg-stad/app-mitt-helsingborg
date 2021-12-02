@@ -28,17 +28,19 @@ interface RescheduleFormScreenProps {
     screen: ModalScreen,
     params?: Record<string, unknown>
   ) => void;
+  closeModal: () => void;
 }
 
 const RescheduleFormScreen = ({
   route,
   onChangeModalScreen,
+  closeModal,
 }: RescheduleFormScreenProps): JSX.Element => {
   const [timeSlots, setTimeSlots] = useState<TimeSlotDataType | undefined>(
     undefined
   );
   const [submitPending, setSubmitPending] = useState<boolean>(false);
-  const [cancelPending, setCancelPending] = useState<boolean>(false);
+  const [deletePending, setDeletePending] = useState<boolean>(false);
 
   const { bookingItem } = route?.params || {};
 
@@ -92,8 +94,16 @@ const RescheduleFormScreen = ({
     }
   };
 
-  const handleCancel = async () => {
-    await cancelBooking(bookingItem.id);
+  const handleDelete = async () => {
+    setDeletePending(true);
+    try {
+      await cancelBooking(bookingItem.id);
+      closeModal();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setDeletePending(false);
+    }
   };
 
   if (timeSlots === undefined || timeSlots === {}) {
@@ -114,8 +124,12 @@ const RescheduleFormScreen = ({
         isContactsMode={false}
         availableTimes={timeSlots}
         questions={[]}
+        submitButtonText="Boka om"
         submitPending={submitPending}
         onSubmit={handleReschedule}
+        deleteButtonText="Avboka"
+        deletePending={deletePending}
+        onDelete={handleDelete}
       />
     </ScreenContainer>
   );
