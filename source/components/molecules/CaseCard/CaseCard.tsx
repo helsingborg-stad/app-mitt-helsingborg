@@ -37,7 +37,7 @@ interface CaseCardProps {
   showBookingDate?: boolean;
   bookingDate?: string;
   bookingTime?: string;
-  smallDateTimeCard?: boolean;
+  dateTimeCardSize?: "small" | "large";
   buttonColorScheme?: string;
 }
 
@@ -63,7 +63,7 @@ const CaseCard = ({
   showBookingDate = false,
   bookingDate,
   bookingTime,
-  smallDateTimeCard = false,
+  dateTimeCardSize = "large",
   buttonColorScheme = "red",
 }: CaseCardProps): JSX.Element => (
   <Card colorSchema={colorSchema}>
@@ -80,7 +80,7 @@ const CaseCard = ({
         <DateTimeCard
           date={bookingDate}
           time={bookingTime}
-          size={smallDateTimeCard ? "small" : "large"}
+          size={dateTimeCardSize}
         />
       )}
 

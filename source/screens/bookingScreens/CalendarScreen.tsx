@@ -120,7 +120,7 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
         buttonText="Boka om eller avboka"
         onCardClick={() => navigateToSummary(bookingItem)}
         onButtonClick={buttonCallback}
-        smallDateTimeCard={!isFirst}
+        dateTimeCardSize={isFirst ? "large" : "small"}
       />
     );
 
