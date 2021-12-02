@@ -14,7 +14,7 @@ const Container = styled.View<{ align: string; theme: ThemeType }>`
   ${({ theme }) => `border-color: ${theme.colors.complementary.red[2]};`}
 `;
 
-const TitleText = styled.Text<{ size: string; theme: ThemeType }>`
+const TitleText = styled.Text<{ size: "large" | "small"; theme: ThemeType }>`
   font-size: ${({ size, theme }) =>
     size === "large" ? theme.fontSizes[2] : theme.fontSizes[1]}px;
   font-weight: ${({ theme }) => theme.fontWeights[1]};
@@ -22,14 +22,14 @@ const TitleText = styled.Text<{ size: string; theme: ThemeType }>`
   padding: 5px;
 `;
 
-const DateText = styled.Text<{ size: string; theme: ThemeType }>`
+const DateText = styled.Text<{ size: "large" | "small"; theme: ThemeType }>`
   font-size: ${({ size, theme }) =>
     size === "large" ? theme.fontSizes[6] : theme.fontSizes[5]}px;
   font-weight: ${({ theme }) => theme.fontWeights[1]};
   padding: 5px;
 `;
 
-const TimeText = styled.Text<{ size: string; theme: ThemeType }>`
+const TimeText = styled.Text<{ size: "large" | "small"; theme: ThemeType }>`
   font-size: ${({ size, theme }) =>
     size === "large" ? theme.fontSizes[4] : theme.fontSizes[3]}px;
   font-weight: ${({ theme }) => theme.fontWeights[0]};
