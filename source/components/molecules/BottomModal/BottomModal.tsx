@@ -47,7 +47,7 @@ const BottomModal = (props: Props): JSX.Element => {
       style={{
         margin: 0,
         justifyContent: "flex-end",
-        backgroundColor: "transparrent",
+        backgroundColor: "transparent",
       }}
       swipeDirection="down"
       onSwipeComplete={onClose}
