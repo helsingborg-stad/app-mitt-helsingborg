@@ -87,7 +87,7 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
 
     const card = (
       <CaseCard
-        key={key}
+        key={isFirst ? key : undefined}
         colorSchema="red"
         title={title}
         showBookingDate
