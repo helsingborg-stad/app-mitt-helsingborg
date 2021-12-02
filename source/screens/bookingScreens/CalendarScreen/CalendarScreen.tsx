@@ -78,7 +78,12 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
     const timeString = `${time.startTime}-${time.endTime}`;
     const key = `${date}-${timeString}`;
 
-    const buttonCallback = () => true;
+    const buttonCallback = () => {
+      navigation.navigate("FeatureModal", {
+        startScreen: ModalScreen.RescheduleForm,
+        startParams: { bookingItem },
+      });
+    };
 
     const card = (
       <CaseCard
