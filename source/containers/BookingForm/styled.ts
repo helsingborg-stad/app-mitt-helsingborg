@@ -21,4 +21,28 @@ const SpacedView = styled.View`
   margin-bottom: 15px;
 `;
 
-export { Scroller, ListWrapper, CharacterCardWrapper, Spacer, SpacedView };
+const ButtonContainer = styled.View`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const SubmitSection = styled.View`
+  flex: 1;
+`;
+
+const DeleteSection = styled.View`
+  margin-right: 20px;
+  flex: 1;
+`;
+
+export {
+  Scroller,
+  ListWrapper,
+  CharacterCardWrapper,
+  Spacer,
+  SpacedView,
+  ButtonContainer,
+  DeleteSection,
+  SubmitSection,
+};
