@@ -119,7 +119,9 @@ const BookingForm = ({
       label: question.label,
       answer: answers[question.id],
     }));
-    if (timeSlot !== undefined) onSubmit(timeSlot, questionsWithAnswers);
+    if (timeSlot !== undefined) {
+      onSubmit(timeSlot, questionsWithAnswers);
+    }
   };
 
   const renderCharacterCard = (email: string) => {
