@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components/native";
-import { BookingItem } from "../../types/BookingTypes";
-import icons from "../../helpers/Icons";
-import { Text } from "../../components/atoms";
+import { BookingItem } from "../../../types/BookingTypes";
+import icons from "../../../helpers/Icons";
+import { Text } from "../../../components/atoms";
 import {
   DateTimeCard,
   AddressCard,
   CharacterCard,
-} from "../../components/molecules";
+} from "../../../components/molecules";
 
 const Container = styled.ScrollView`
   height: 80%;
