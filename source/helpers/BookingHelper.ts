@@ -89,18 +89,23 @@ function consolidateTimeSlots(
 const convertGraphDataToBookingItem = (graphData: GraphData): BookingItem => {
   const firstAttendee = graphData.Attendees[0];
   const administrator = { ...mockAdministrator, email: firstAttendee.Email };
-  const status = firstAttendee.Status;
+  const { Status: status } = firstAttendee;
   const date = moment(graphData.StartTime).format("YYYY-MM-DD");
   const startTime = moment(graphData.StartTime).format("HH:mm");
   const endTime = moment(graphData.EndTime).format("HH:mm");
   const title = graphData.Subject.substring(0, graphData.Subject.indexOf("#"));
+  const referenceCode = graphData.ReferenceCode;
+  const { BookingId: id, Body: body, Location: location } = graphData;
   return {
     date,
     time: { startTime, endTime },
     title,
     status,
     administrator,
-    addressLines: [graphData.Location],
+    addressLines: [location],
+    id,
+    body,
+    referenceCode,
   };
 };
 
