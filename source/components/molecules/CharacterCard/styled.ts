@@ -20,6 +20,9 @@ const Card = styled.TouchableHighlight<BodyProps>`
   padding: 16px;
   border: ${({ outlineColor }) => `1px solid ${outlineColor}`};
   background: ${({ cardColor }) => cardColor};
+  margin-bottom: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
 `;
 
 interface SectionProps {
