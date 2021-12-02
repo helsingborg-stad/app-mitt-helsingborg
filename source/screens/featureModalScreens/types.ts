@@ -18,6 +18,7 @@ export type ModalScreenType = {
   colorSchema?: string;
   useTextNavigationButtons?: boolean;
   disableCloseButton?: boolean;
+  disableBackButton?: boolean;
 };
 
 export type ModalScreenNavigationParams = {
