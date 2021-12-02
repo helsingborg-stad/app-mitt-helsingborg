@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from "react";
 import { ActivityIndicator } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import styled from "styled-components/native";
 import CollapsibleSection from "../../components/molecules/CollapsibleSection";
 import { Question } from "../../types/FormTypes";
 import { ValidationObject } from "../../types/Validation";
@@ -12,26 +10,13 @@ import { CharacterCard, TimeSlotPicker } from "../../components/molecules";
 import { Button, Text } from "../../components/atoms";
 import FormField from "../FormField/FormField";
 import { validateInput } from "../../helpers/ValidationHelper";
-
-const Scroller = styled(KeyboardAwareScrollView)`
-  flex: 1;
-`;
-
-const ListWrapper = styled.View`
-  margin: 24px 15px;
-`;
-
-const CharacterCardWrapper = styled.View`
-  margin-bottom: 15px;
-`;
-
-const Spacer = styled.View`
-  height: 15px;
-`;
-
-const SpacedView = styled.View`
-  margin-bottom: 15px;
-`;
+import {
+  Scroller,
+  ListWrapper,
+  CharacterCardWrapper,
+  Spacer,
+  SpacedView,
+} from "./styled";
 
 interface BookingFormProps {
   questions: Question[];
