@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   Platform,
 } from "react-native";
-import styled, { ThemeContext } from "styled-components/native";
+import { ThemeContext } from "styled-components/native";
 import moment from "moment";
 import svLocale from "moment/locale/sv";
 import AuthContext from "../../../store/AuthContext";
@@ -20,46 +20,18 @@ import {
   ScreenWrapper,
   FloatingButton,
 } from "../../../components/molecules";
-import { Heading, Text } from "../../../components/atoms";
 import { ModalScreen } from "../../featureModalScreens/types";
+import {
+  Container,
+  ListHeading,
+  ScrollViewSpacer,
+  SmallCard,
+  SmallDate,
+  CardContainer,
+  DateText,
+} from "./styled";
 
 moment.updateLocale("sv", svLocale);
-
-const Container = styled.ScrollView`
-  flex: 1;
-  padding-left: 16px;
-  padding-right: 16px;
-`;
-
-const ListHeading = styled(Heading)`
-  margin-left: 4px;
-  margin-top: 24px;
-  margin-bottom: 8px;
-`;
-
-const ScrollViewSpacer = styled.View`
-  height: 60px;
-`;
-
-const SmallCard = styled.View`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const SmallDate = styled.View`
-  flex: 1;
-  padding-right: 10px;
-  max-width: 50px;
-`;
-
-const CardContainer = styled.View`
-  flex: 7;
-`;
-
-const DateText = styled(Text)`
-  color: ${(props) => props.theme.colors.primary.red[1]};
-`;
 
 interface CalendarScreenProps {
   navigation: any;
