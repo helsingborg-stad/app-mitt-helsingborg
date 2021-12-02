@@ -40,10 +40,14 @@ interface CalendarScreenProps {
 const compareByDate = (a: BookingItem, b: BookingItem) =>
   moment(a.date).valueOf() - moment(b.date).valueOf();
 
+const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+
 const divideBookingsByMonth = (activeBookings: BookingItem[]) => {
   const bookingsByMonth: Record<string, BookingItem[]> = {};
   activeBookings.forEach((bookingItem: BookingItem) => {
-    const bookingMonth: string = moment(bookingItem.date).format("MMMM");
+    const bookingMonth: string = capitalize(
+      moment(bookingItem.date).format("MMMM")
+    );
     if (!bookingsByMonth[bookingMonth]) {
       bookingsByMonth[bookingMonth] = [];
     }
@@ -51,8 +55,6 @@ const divideBookingsByMonth = (activeBookings: BookingItem[]) => {
   });
   return bookingsByMonth;
 };
-
-const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
 const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
   const [isLoading, setLoading] = useState(true);
@@ -70,13 +72,13 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
     bookingItem: BookingItem,
     isFirst: boolean
   ) => {
-    const { date, time, title } = bookingItem;
+    const { date, time, title, id } = bookingItem;
 
     const dateString = capitalize(moment(date).format("dddd D MMMM"));
     const day = moment(date).format("D");
     const month = moment(date).format("MMM");
     const timeString = `${time.startTime}-${time.endTime}`;
-    const key = `${date}-${timeString}`;
+    const key = `${date}-${timeString}-${id}`;
 
     const buttonCallback = () => {
       navigation.navigate("FeatureModal", {
