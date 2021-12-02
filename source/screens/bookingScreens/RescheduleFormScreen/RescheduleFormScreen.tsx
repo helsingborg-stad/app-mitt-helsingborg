@@ -65,12 +65,26 @@ const RescheduleFormScreen = ({
         bookingItem.id,
         [bookingItem.administrator.email],
         startDate.format(),
-        endDate.format()
+        endDate.format(),
+        [],
+        bookingItem.referenceCode,
+        bookingItem.title,
+        bookingItem.address,
+        bookingItem.message
       );
       setSubmitPending(false);
 
+      const newBookingItem = {
+        ...bookingItem,
+        date: startDate.format("yyyy-MM-DD"),
+        time: {
+          startTime: startDate.format("HH:mm"),
+          endTime: endDate.format("HH:mm"),
+        },
+      };
+
       onChangeModalScreen(ModalScreen.Confirmation, {
-        bookingItem,
+        bookingItem: newBookingItem,
         isConfirmation: true,
       });
     } catch (error) {
