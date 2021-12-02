@@ -65,7 +65,7 @@ const BookingForm = ({
     Record<string, ValidationError>
   >({});
   const [timeSlot, setTimeSlot] = useState<TimeSlot | undefined>();
-  const [currentEmail, setCurrentEmail] = useState<string>("");
+  const [currentEmail, setCurrentEmail] = useState("");
   const [isCollapsed, setIsCollapsed] = useState<Record<string, boolean>>({
     emails: false,
     timeSlot: false,
