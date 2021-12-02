@@ -105,7 +105,7 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
       return card;
     }
     return (
-      <SmallCard>
+      <SmallCard key={key}>
         <SmallDate>
           <DateText type="text" colorSchema="red" strong align="center">
             {day}
