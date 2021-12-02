@@ -11,7 +11,7 @@ import {
 import AuthContext from "../store/AuthContext";
 import { createBooking, getTimeSlots } from "../services/BookingService";
 import { getAdministratorsBySharedMailbox } from "../services/BookablesService";
-import BookingForm from "../containers/Form/BookingForm";
+import BookingForm from "../containers/BookingForm/BookingForm";
 import FormContext from "../store/FormContext";
 import { ModalScreen } from "./featureModalScreens/types";
 
