@@ -34,7 +34,7 @@ const BookingSummary = ({ route }: BookingSummaryProps): JSX.Element => {
         </TitleWrapper>
       )}
       <Title type="h2">Bokad tid</Title>
-      <DateTimeCard date={bookingItem.date} time={timeString} />
+      <DateTimeCard date={bookingItem.date} time={timeString} size="large" />
       <Title type="h2">Du kommer träffa</Title>
       <CharacterCard
         onCardClick={() => true}

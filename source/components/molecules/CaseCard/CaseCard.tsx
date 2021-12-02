@@ -37,7 +37,7 @@ interface CaseCardProps {
   showBookingDate?: boolean;
   bookingDate?: string;
   bookingTime?: string;
-  dateTimeCardSize?: "small" | "large";
+  dateTimeCardSize?: "large" | "small";
   buttonColorScheme?: string;
 }
 
