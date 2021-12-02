@@ -9,19 +9,19 @@ import {
 import styled, { ThemeContext } from "styled-components/native";
 import moment from "moment";
 import svLocale from "moment/locale/sv";
-import AuthContext from "../../store/AuthContext";
-import { BookingItem } from "../../types/BookingTypes";
-import { getReferenceCodeForUser } from "../../helpers/BookingHelper";
-import { searchBookings } from "../../services/BookingService";
+import AuthContext from "../../../store/AuthContext";
+import { BookingItem } from "../../../types/BookingTypes";
+import { getReferenceCodeForUser } from "../../../helpers/BookingHelper";
+import { searchBookings } from "../../../services/BookingService";
 import {
   Card,
   CaseCard,
   Header,
   ScreenWrapper,
   FloatingButton,
-} from "../../components/molecules";
-import { Heading, Text } from "../../components/atoms";
-import { ModalScreen } from "../featureModalScreens/types";
+} from "../../../components/molecules";
+import { Heading, Text } from "../../../components/atoms";
+import { ModalScreen } from "../../featureModalScreens/types";
 
 moment.updateLocale("sv", svLocale);
 
