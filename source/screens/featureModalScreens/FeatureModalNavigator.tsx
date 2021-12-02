@@ -54,7 +54,7 @@ const Modal: Record<string, ModalScreenType> = {
   },
   [ModalScreen.RescheduleForm]: {
     component: RescheduleFormScreen,
-    title: "Boka om",
+    title: "Ändra mötesbokning",
     propagateSwipe: true,
     colorSchema: "red",
     previousScreen: undefined,

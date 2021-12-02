@@ -119,12 +119,13 @@ const RescheduleFormScreen = ({
   return (
     <ScreenContainer>
       <BookingForm
-        name="Boka om"
-        description="Boka om ett möte"
+        name={bookingItem.title}
+        description={bookingItem.body || "Boka om eller avboka bokning"}
+        administrator={bookingItem.administrator}
         isContactsMode={false}
         availableTimes={timeSlots}
         questions={[]}
-        submitButtonText="Boka om"
+        submitButtonText="Skicka ombokning"
         submitPending={submitPending}
         onSubmit={handleReschedule}
         deleteButtonText="Avboka"

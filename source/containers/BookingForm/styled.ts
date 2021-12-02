@@ -1,5 +1,6 @@
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styled from "styled-components/native";
+import { Text } from "../../components/atoms";
 
 const Scroller = styled(KeyboardAwareScrollView)`
   flex: 1;
@@ -31,9 +32,14 @@ const SubmitSection = styled.View`
   flex: 1;
 `;
 
-const DeleteSection = styled.View`
-  margin-right: 20px;
+const DeleteSection = styled.View<{ withMargin: boolean }>`
+  ${({ withMargin }) => withMargin && `margin-right: 20px;`}
   flex: 1;
+`;
+
+const ButtonText = styled(Text)<{ color: string }>`
+  font-size: ${({ theme }) => theme.fontSizes[1]}px;
+  color: ${({ color }) => color};
 `;
 
 export {
@@ -45,4 +51,5 @@ export {
   ButtonContainer,
   DeleteSection,
   SubmitSection,
+  ButtonText,
 };
