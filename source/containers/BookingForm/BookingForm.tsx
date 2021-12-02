@@ -4,7 +4,11 @@ import CollapsibleSection from "../../components/molecules/CollapsibleSection";
 import { Question } from "../../types/FormTypes";
 import { ValidationObject } from "../../types/Validation";
 import { consolidateTimeSlots } from "../../helpers/BookingHelper";
-import { TimeSlot, TimeSlotDataType } from "../../types/BookingTypes";
+import {
+  Administrator,
+  TimeSlot,
+  TimeSlotDataType,
+} from "../../types/BookingTypes";
 import icons from "../../helpers/Icons";
 import { CharacterCard, TimeSlotPicker } from "../../components/molecules";
 import { Button, Text } from "../../components/atoms";
@@ -19,6 +23,7 @@ import {
   ButtonContainer,
   DeleteSection,
   SubmitSection,
+  ButtonText,
 } from "./styled";
 
 interface BookingFormProps {
@@ -36,6 +41,7 @@ interface BookingFormProps {
   deletePending?: boolean;
   deleteButtonText?: string;
   onDelete?: () => void;
+  administrator?: Administrator;
 }
 
 type ValidationError = {
@@ -44,11 +50,12 @@ type ValidationError = {
 };
 
 const BookingForm = ({
-  questions,
   name,
   description,
-  availableTimes,
   isContactsMode,
+  administrator,
+  questions,
+  availableTimes,
   submitPending,
   submitButtonText,
   onSubmit,
@@ -66,6 +73,7 @@ const BookingForm = ({
     emails: false,
     timeSlot: false,
     questions: false,
+    characterCard: false,
   });
 
   const contactQuestions: Question[] = [
@@ -187,6 +195,7 @@ const BookingForm = ({
   );
 
   const canSubmit = timeSlot?.startTime !== undefined && allValidationsPassed;
+  const showButtonPanel = onDelete || canSubmit;
 
   return (
     <Scroller>
@@ -209,6 +218,23 @@ const BookingForm = ({
             </SpacedView>
             <Text type="h5">{description}</Text>
           </SpacedView>
+        )}
+        {administrator && (
+          <CollapsibleSection
+            title="Möte med"
+            collapsed={isCollapsed.characterCard}
+            onPress={() => toggleIsCollapsed("characterCard")}
+          >
+            <CharacterCard
+              onCardClick={() => true}
+              title={administrator.title}
+              department={administrator.department}
+              jobTitle={administrator.jobTitle}
+              icon={icons.ICON_CONTACT_PERSON_1}
+              selected={false}
+              showCheckbox={false}
+            />
+          </CollapsibleSection>
         )}
         <CollapsibleSection
           title="Önskad tid"
@@ -270,35 +296,34 @@ const BookingForm = ({
             <Spacer />
           </>
         )}
-        <ButtonContainer>
-          {onDelete && (
-            <DeleteSection>
-              <Button colorSchema="neutral" onClick={deleteForm} fullWidth>
-                {deletePending ? (
-                  <ActivityIndicator />
-                ) : (
-                  <Text>{deleteButtonText}</Text>
-                )}
-              </Button>
-            </DeleteSection>
-          )}
-          <SubmitSection>
-            <Button
-              colorSchema="red"
-              onClick={submitForm}
-              disabled={!canSubmit}
-              fullWidth
-            >
-              {submitPending ? (
-                <ActivityIndicator />
-              ) : (
-                <Text style={{ color: canSubmit ? "white" : "gray" }}>
-                  {submitButtonText}
-                </Text>
-              )}
-            </Button>
-          </SubmitSection>
-        </ButtonContainer>
+        {showButtonPanel && (
+          <ButtonContainer>
+            {onDelete && (
+              <DeleteSection withMargin={canSubmit}>
+                <Button colorSchema="neutral" onClick={deleteForm} fullWidth>
+                  {deletePending ? (
+                    <ActivityIndicator />
+                  ) : (
+                    <ButtonText color="white">{deleteButtonText}</ButtonText>
+                  )}
+                </Button>
+              </DeleteSection>
+            )}
+            {canSubmit && (
+              <SubmitSection>
+                <Button colorSchema="red" onClick={submitForm} fullWidth>
+                  {submitPending ? (
+                    <ActivityIndicator />
+                  ) : (
+                    <ButtonText color={canSubmit ? "white" : "gray"}>
+                      {submitButtonText}
+                    </ButtonText>
+                  )}
+                </Button>
+              </SubmitSection>
+            )}
+          </ButtonContainer>
+        )}
       </ListWrapper>
     </Scroller>
   );
