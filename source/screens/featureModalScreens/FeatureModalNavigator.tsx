@@ -22,6 +22,7 @@ const Modal: Record<string, ModalScreenType> = {
     component: Features,
     title: "Vad vill du göra?",
     previousScreen: undefined,
+    disableBackButton: true,
   },
   [ModalScreen.ServiceSelections]: {
     component: ServiceSelection,
@@ -39,6 +40,7 @@ const Modal: Record<string, ModalScreenType> = {
     propagateSwipe: true,
     colorSchema: "red",
     previousScreen: undefined,
+    disableBackButton: true,
     useTextNavigationButtons: true,
   },
   [ModalScreen.BookingForm]: {
@@ -55,7 +57,7 @@ const Modal: Record<string, ModalScreenType> = {
     title: "Boka om",
     propagateSwipe: true,
     colorSchema: "red",
-    previousScreen: ModalScreen.ServiceSelections,
+    previousScreen: undefined,
     disableCloseButton: true,
     useTextNavigationButtons: true,
   },
@@ -124,7 +126,9 @@ const FeatureModalNavigator = ({ navigation, route }: Props): JSX.Element => {
       onClose={modalScreenObject.disableCloseButton ? undefined : onClose}
       onModalHide={onModalHide}
       modalTitle={navigatorTitle}
-      onBack={goBack}
+      onBack={
+        modalScreenObject.disableBackButton ? undefined : goBack || onClose
+      }
       propagateSwipe={modalScreenObject.propagateSwipe}
       colorSchema={modalScreenObject.colorSchema}
       backButtonText={
