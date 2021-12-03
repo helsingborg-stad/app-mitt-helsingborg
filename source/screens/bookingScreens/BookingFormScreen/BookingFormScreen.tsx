@@ -13,10 +13,11 @@ import {
   getReferenceCodeForUser,
 } from "../../../helpers/BookingHelper";
 import AuthContext from "../../../store/AuthContext";
+import FormContext from "../../../store/FormContext";
+import NotifeeContext from "../../../store/NotifeeContext";
 import { createBooking, getTimeSlots } from "../../../services/BookingService";
 import { getAdministratorsBySharedMailbox } from "../../../services/BookablesService";
 import BookingForm from "../../../containers/BookingForm/BookingForm";
-import FormContext from "../../../store/FormContext";
 import { ModalScreen } from "../../featureModalScreens/types";
 
 const SpinnerContainer = styled.View`
@@ -48,6 +49,8 @@ const BookingFormScreen = ({
   );
   const [submitPending, setSubmitPending] = useState<boolean>(false);
   const { getForm } = useContext(FormContext);
+  const { showScheduledNotification, showLocalNotification } =
+    useContext(NotifeeContext);
   const {
     formId,
     address,
@@ -119,7 +122,7 @@ const BookingFormScreen = ({
       const refCode = getReferenceCodeForUser(user);
       if (timeSlot?.emails !== undefined) {
         const selectedEmail = selectEmailFromArray(timeSlot.emails);
-        await createBooking(
+        const { bookingId } = await createBooking(
           [selectedEmail],
           startDate.format(),
           endDate.format(),
@@ -129,6 +132,7 @@ const BookingFormScreen = ({
           address,
           message
         );
+
         setSubmitPending(false);
         const status = "None";
         const administrator = {
@@ -146,6 +150,19 @@ const BookingFormScreen = ({
           administrator,
           addressLines: [address],
         } as BookingItem;
+
+        await showScheduledNotification({
+          title: "Påminnelse",
+          body: `Du har möte imorgon ${startTime} - ${endTime} på ${address}`,
+          timestamp: moment(startDate).subtract(1, "days").valueOf(),
+          id: bookingId as string,
+          data: {
+            nextRoute: "Calendar",
+            params: {
+              initial: false,
+            },
+          },
+        });
 
         onChangeModalScreen(ModalScreen.Confirmation, {
           bookingItem,

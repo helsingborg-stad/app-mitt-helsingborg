@@ -1,83 +1,59 @@
 import React, { useContext } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { SplashScreen, FormCaseScreen, DevFeaturesScreen } from "../screens";
-import AuthStack from "./AuthStack";
-import CustomStackNavigator from "./CustomStackNavigator";
-import BottomBarNavigator from "./BottomBarNavigator";
+import { View } from "react-native";
+import {
+  NavigationHelpersContext,
+  useNavigationBuilder,
+  StackRouter,
+  createNavigatorFactory,
+} from "@react-navigation/native";
 
-import FeatureModal from "../screens/featureModalScreens/FeatureModalNavigator";
+import MainNavigator from "./MainNavigator";
+import FeatureModalNavigator from "../screens/featureModalScreens/FeatureModalNavigator";
 
 import AuthContext from "../store/AuthContext";
 import { NotifeeProvider } from "../store/NotifeeContext";
+
 import USER_AUTH_STATE from "../types/UserAuthTypes";
 
-const MainStack = createStackNavigator();
-const RootStack = createStackNavigator();
+interface CustomNavigatorInterface {
+  children: Element | Element[];
+  screenOptions: Record<string, unknown>;
+  initialRouteName: string;
+}
+const CustomNavigator = ({
+  children,
+  screenOptions,
+  initialRouteName,
+}: CustomNavigatorInterface) => {
+  const { state, navigation, descriptors } = useNavigationBuilder(StackRouter, {
+    children,
+    screenOptions,
+    initialRouteName,
+  });
 
-// transition animation that just fades in the screen
-const forFade = ({ current }) => ({
-  cardStyle: {
-    opacity: current.progress,
-  },
-});
-
-const MainStackScreen = ({ navigation }: any): JSX.Element => {
   const { userAuthState } = useContext(AuthContext);
+  const isSignedIn = userAuthState === USER_AUTH_STATE.SIGNED_IN;
 
   return (
-    <NotifeeProvider
-      navigation={navigation}
-      isSignedIn={userAuthState === USER_AUTH_STATE.SIGNED_IN}
-    >
-      <CustomStackNavigator screenOptions={{ headerShown: false }}>
-        <>
-          {userAuthState === USER_AUTH_STATE.PENDING && (
-            <MainStack.Screen name="Start" component={SplashScreen} />
-          )}
-
-          {userAuthState === USER_AUTH_STATE.SIGNED_OUT && (
-            <MainStack.Screen
-              name="Auth"
-              component={AuthStack}
-              options={{ cardStyleInterpolator: forFade }}
-            />
-          )}
-
-          {userAuthState === USER_AUTH_STATE.SIGNED_IN && (
-            <>
-              <MainStack.Screen
-                name="App"
-                component={BottomBarNavigator}
-                options={{
-                  cardStyleInterpolator: forFade,
-                  gestureEnabled: false,
-                }}
-              />
-              <MainStack.Screen
-                name="Form"
-                component={FormCaseScreen}
-                options={{
-                  gestureEnabled: false,
-                }}
-              />
-              <MainStack.Screen
-                name="DevFeatures"
-                component={DevFeaturesScreen}
-                options={{
-                  gestureEnabled: false,
-                }}
-              />
-            </>
-          )}
-        </>
-      </CustomStackNavigator>
+    <NotifeeProvider navigation={navigation} isSignedIn={isSignedIn}>
+      <NavigationHelpersContext.Provider value={navigation}>
+        <View style={{ flex: 1, backgroundColor: "transparent" }}>
+          {state.routes.map((route) => (
+            <React.Fragment key={route.key}>
+              {descriptors[route.key].render()}
+            </React.Fragment>
+          ))}
+        </View>
+      </NavigationHelpersContext.Provider>
     </NotifeeProvider>
   );
 };
 
-const RootStackScreen = (): JSX.Element => (
-  <RootStack.Navigator
-    mode="modal"
+const createRootCustomNavigator = createNavigatorFactory(CustomNavigator);
+const RootCustomNavigator = createRootCustomNavigator();
+
+const RootNavigator = (): JSX.Element => (
+  <RootCustomNavigator.Navigator
     screenOptions={{
       cardStyle: { backgroundColor: "transparent" },
       headerShown: false,
@@ -85,14 +61,16 @@ const RootStackScreen = (): JSX.Element => (
       cardShadowEnabled: true,
     }}
   >
-    <RootStack.Screen
+    <RootCustomNavigator.Screen
       name="Main"
-      component={MainStackScreen}
+      component={MainNavigator}
       options={{ headerShown: false }}
     />
-
-    <RootStack.Screen name="FeatureModal" component={FeatureModal} />
-  </RootStack.Navigator>
+    <RootCustomNavigator.Screen
+      name="FeatureModal"
+      component={FeatureModalNavigator}
+    />
+  </RootCustomNavigator.Navigator>
 );
 
-export default RootStackScreen;
+export default RootNavigator;
