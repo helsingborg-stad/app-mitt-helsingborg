@@ -6,6 +6,7 @@ import {
   useNavigationBuilder,
   StackRouter,
   DefaultRouterOptions,
+  createNavigatorFactory,
 } from "@react-navigation/native";
 import { Modal } from "react-native";
 import AuthContext from "../store/AuthContext";
@@ -15,7 +16,22 @@ import useTouchActivity, {
   UseTouchParameters,
 } from "../hooks/useTouchActivity";
 
+import AuthStack from "./AuthStack";
+import BottomBarNavigator from "./BottomBarNavigator";
+import { SplashScreen, FormCaseScreen, DevFeaturesScreen } from "../screens";
+
 import USER_AUTH_STATE from "../types/UserAuthTypes";
+
+interface ForFade {
+  current: {
+    progress: number;
+  };
+}
+const forFade = ({ current }: ForFade) => ({
+  cardStyle: {
+    opacity: current.progress,
+  },
+});
 
 const FlexWrapper = styled.View`
   flex: 1;
@@ -55,14 +71,12 @@ interface Props {
   initialRouteName: string;
   children: React.ReactNode;
   screenOptions: DefaultRouterOptions;
-  contentStyle: any;
 }
 
-const CustomStackNavigator = ({
+const CustomNavigator = ({
   initialRouteName,
   children,
   screenOptions,
-  contentStyle,
 }: Props): JSX.Element => {
   const { state, navigation, descriptors } = useNavigationBuilder(StackRouter, {
     children,
@@ -79,7 +93,7 @@ const CustomStackNavigator = ({
   };
 
   const touchParameters: UseTouchParameters = {
-    inactivityTime: parseInt(env.INACTIVITY_TIME),
+    inactivityTime: parseInt(env.INACTIVITY_TIME, 10),
     intervalDelay: 5000,
     logoutDelay: 60000,
     logOut: handleEndUserSession,
@@ -107,7 +121,7 @@ const CustomStackNavigator = ({
       key="navigationHelpersContext"
       value={navigation}
     >
-      <FlexWrapper {...panResponder.panHandlers} style={[contentStyle]}>
+      <FlexWrapper {...panResponder.panHandlers}>
         {descriptors[state.routes[state.index].key].render()}
       </FlexWrapper>
     </NavigationHelpersContext.Provider>
@@ -154,4 +168,56 @@ const CustomStackNavigator = ({
   return [NavigatorContextComponent, InactivityDialogComponent];
 };
 
-export default CustomStackNavigator;
+const createCustomNavigator = createNavigatorFactory(CustomNavigator);
+const MainCustomNavigator = createCustomNavigator();
+
+const MainNavigator = (): JSX.Element => {
+  const { userAuthState } = useContext(AuthContext);
+
+  return (
+    <MainCustomNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <>
+        {userAuthState === USER_AUTH_STATE.PENDING && (
+          <MainCustomNavigator.Screen name="Start" component={SplashScreen} />
+        )}
+
+        {userAuthState === USER_AUTH_STATE.SIGNED_OUT && (
+          <MainCustomNavigator.Screen
+            name="Auth"
+            component={AuthStack}
+            options={{ cardStyleInterpolator: forFade }}
+          />
+        )}
+
+        {userAuthState === USER_AUTH_STATE.SIGNED_IN && (
+          <>
+            <MainCustomNavigator.Screen
+              name="App"
+              component={BottomBarNavigator}
+              options={{
+                cardStyleInterpolator: forFade,
+                gestureEnabled: false,
+              }}
+            />
+            <MainCustomNavigator.Screen
+              name="Form"
+              component={FormCaseScreen}
+              options={{
+                gestureEnabled: false,
+              }}
+            />
+            <MainCustomNavigator.Screen
+              name="DevFeatures"
+              component={DevFeaturesScreen}
+              options={{
+                gestureEnabled: false,
+              }}
+            />
+          </>
+        )}
+      </>
+    </MainCustomNavigator.Navigator>
+  );
+};
+
+export default MainNavigator;
