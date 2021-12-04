@@ -49,8 +49,7 @@ const BookingFormScreen = ({
   );
   const [submitPending, setSubmitPending] = useState<boolean>(false);
   const { getForm } = useContext(FormContext);
-  const { showScheduledNotification, showLocalNotification } =
-    useContext(NotifeeContext);
+  const { showScheduledNotification } = useContext(NotifeeContext);
   const {
     formId,
     address,
