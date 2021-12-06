@@ -2,6 +2,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
+import { getScreenHeightProportion } from "../../../helpers/Misc";
 import { TimeSlot, TimeSlotDataType } from "../../../types/BookingTypes";
 import {
   cancelBooking,
@@ -18,8 +19,8 @@ const SpinnerContainer = styled.View`
 `;
 
 const ScreenContainer = styled.View`
-  height: 80%;
-  padding: 0px 10px;
+  height: ${getScreenHeightProportion(80)}px;
+  padding: 0px 10px 110px 10px;
 `;
 
 interface RescheduleFormScreenProps {

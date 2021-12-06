@@ -21,7 +21,7 @@ const NavigatorContainer = styled.View<ModalTopContainerProps>`
   background: ${({ background }) => background};
   border-bottom-color: #eee;
   border-bottom-width: 1px;
-  margin-bottom: 16px;
+  margin-bottom: 0px;
   border-top-right-radius: 9px;
   border-top-left-radius: 9px;
   padding: 0px;
