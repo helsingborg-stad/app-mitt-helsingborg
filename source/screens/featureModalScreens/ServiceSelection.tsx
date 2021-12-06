@@ -49,11 +49,16 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
     const fetchData = async () => {
       try {
         const bookables = await BookablesService.getBookables();
-        const contactsList = await getHistoricalAttendees(
-          getReferenceCodeForUser(user),
-          moment().subtract(6, "months").format(),
-          moment().add(6, "months").format()
-        );
+        let contactsList: string[] = [];
+        try {
+          contactsList = await getHistoricalAttendees(
+            getReferenceCodeForUser(user),
+            moment().subtract(6, "months").format(),
+            moment().add(6, "months").format()
+          );
+        } catch (err) {
+          console.log(err);
+        }
         const contacts: ButtonItem[] =
           contactsList.length > 0
             ? [
@@ -84,6 +89,7 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
           setLoading(false);
         }
       } catch (err) {
+        console.log(err);
         setError(err as Error);
         setLoading(false);
       }
