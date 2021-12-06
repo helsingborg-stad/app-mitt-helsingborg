@@ -1,19 +1,9 @@
 import React from "react";
-import styled from "styled-components/native";
 import { View } from "react-native";
 
 import { Icon, Text } from "../../atoms";
 
-import { ButtonListContainer, StyledButton } from "./styled";
-
-const Underline = styled.View`
-  margin-bottom: 15px;
-  margin-top: 3px;
-  margin-left: 5px;
-  margin-right: 5px;
-  height: 2px;
-  background-color: ${(props) => props.theme.colors.neutrals[5]};
-`;
+import { ButtonListContainer, StyledButton, Underline } from "./styled";
 
 type ButtonListItem = {
   buttonText: string;
