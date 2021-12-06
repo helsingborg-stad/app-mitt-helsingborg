@@ -27,7 +27,7 @@ const ButtonPanel = styled.View`
   bottom: 0px;
   left: 0px;
   right: 0px;
-  height: 96px;
+  height: 120px;
   background-color: ${(props) => props.theme.colors.neutrals[5]};
   shadow-offset: 0px -1px;
   shadow-color: ${(props) => props.theme.colors.neutrals[1]};
@@ -43,7 +43,7 @@ const ButtonContainer = styled.View`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 24px 15px;
+  margin: 20px 15px 48px 15px;
 `;
 
 const SubmitSection = styled.View`

@@ -28,7 +28,7 @@ const SpinnerContainer = styled.View`
 
 const ScreenContainer = styled.View`
   height: 80%;
-  padding: 0px 10px;
+  padding: 0px 10px 110px 10px;
 `;
 
 interface BookingFormScreenProps {
