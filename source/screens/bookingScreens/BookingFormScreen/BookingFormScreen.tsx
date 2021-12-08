@@ -19,6 +19,7 @@ import { createBooking, getTimeSlots } from "../../../services/BookingService";
 import { getAdministratorsBySharedMailbox } from "../../../services/BookablesService";
 import BookingForm from "../../../containers/BookingForm/BookingForm";
 import { ModalScreen } from "../../featureModalScreens/types";
+import { getScreenHeightProportion } from "../../../helpers/Misc";
 
 const SpinnerContainer = styled.View`
   flex: 1;
@@ -27,7 +28,7 @@ const SpinnerContainer = styled.View`
 `;
 
 const ScreenContainer = styled.View`
-  height: 80%;
+  height: ${getScreenHeightProportion(80)}px;
   padding: 0px 10px 110px 10px;
 `;
 

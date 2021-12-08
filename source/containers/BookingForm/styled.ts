@@ -1,6 +1,6 @@
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styled from "styled-components/native";
-import { Text } from "../../components/atoms";
+import { Text, Button } from "../../components/atoms";
 
 const Scroller = styled(KeyboardAwareScrollView)`
   flex: 1;
@@ -46,18 +46,33 @@ const ButtonContainer = styled.View`
   margin: 20px 15px 48px 15px;
 `;
 
-const SubmitSection = styled.View`
-  flex: 1;
-`;
-
-const DeleteSection = styled.View<{ withMargin: boolean }>`
-  ${({ withMargin }) => withMargin && `margin-right: 20px;`}
-  flex: 1;
+const ConfirmDialogButtonContainer = styled.View`
+  display: flex;
+  flex-direction: row;
+  padding: 20px 14px 0px 14px;
+  justify-content: space-evenly;
+  width: 100%;
 `;
 
 const ButtonText = styled(Text)<{ color: string }>`
   font-size: ${({ theme }) => theme.fontSizes[1]}px;
   color: ${({ color }) => color};
+`;
+
+const ModalTextContainer = styled.View`
+  padding: 0 24px;
+  text-align: center;
+`;
+
+interface StyledButtonType {
+  background?: string;
+}
+const StyledButton = styled(Button)<StyledButtonType>`
+  height: 40px;
+  width: 110px;
+  justify-content: center;
+  ${({ background }) =>
+    background ? `background-color: ${background};` : null}
 `;
 
 export {
@@ -67,8 +82,9 @@ export {
   Spacer,
   SpacedView,
   ButtonContainer,
-  DeleteSection,
-  SubmitSection,
   ButtonText,
   ButtonPanel,
+  ModalTextContainer,
+  StyledButton,
+  ConfirmDialogButtonContainer,
 };

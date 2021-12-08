@@ -11,20 +11,21 @@ import {
 } from "../../types/BookingTypes";
 import icons from "../../helpers/Icons";
 import { CharacterCard, TimeSlotPicker } from "../../components/molecules";
-import { Button, Text } from "../../components/atoms";
+import Dialog from "../../components/molecules/Dialog/Dialog";
+
+import { Text } from "../../components/atoms";
 import FormField from "../FormField/FormField";
 import { validateInput } from "../../helpers/ValidationHelper";
+
+import FormButtonPanel from "./FormButtonPanel";
+import ConfirmDialogContent from "./ConfirmDialogContent";
+
 import {
   Scroller,
   ListWrapper,
   CharacterCardWrapper,
   Spacer,
   SpacedView,
-  ButtonContainer,
-  DeleteSection,
-  SubmitSection,
-  ButtonText,
-  ButtonPanel,
 } from "./styled";
 
 interface BookingFormProps {
@@ -61,7 +62,7 @@ const BookingForm = ({
   submitButtonText,
   onSubmit,
   deletePending,
-  deleteButtonText,
+  deleteButtonText = "",
   onDelete,
 }: BookingFormProps): JSX.Element => {
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -76,6 +77,9 @@ const BookingForm = ({
     questions: false,
     characterCard: false,
   });
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
+  const hasPendingRequest = deletePending || submitPending;
 
   const contactQuestions: Question[] = [
     {
@@ -196,7 +200,7 @@ const BookingForm = ({
   );
 
   const canSubmit = timeSlot?.startTime !== undefined && allValidationsPassed;
-  const showButtonPanel = onDelete || canSubmit;
+  const showButtonPanel = onDelete !== undefined || canSubmit;
 
   return (
     <>
@@ -301,35 +305,34 @@ const BookingForm = ({
         </ListWrapper>
       </Scroller>
       {showButtonPanel && (
-        <ButtonPanel>
-          <ButtonContainer>
-            {onDelete && (
-              <DeleteSection withMargin={canSubmit}>
-                <Button colorSchema="neutral" onClick={deleteForm} fullWidth>
-                  {deletePending ? (
-                    <ActivityIndicator />
-                  ) : (
-                    <ButtonText color="white">{deleteButtonText}</ButtonText>
-                  )}
-                </Button>
-              </DeleteSection>
-            )}
-            {canSubmit && (
-              <SubmitSection>
-                <Button colorSchema="red" onClick={submitForm} fullWidth>
-                  {submitPending ? (
-                    <ActivityIndicator />
-                  ) : (
-                    <ButtonText color={canSubmit ? "white" : "gray"}>
-                      {submitButtonText}
-                    </ButtonText>
-                  )}
-                </Button>
-              </SubmitSection>
-            )}
-          </ButtonContainer>
-        </ButtonPanel>
+        <FormButtonPanel
+          deleteButtonText={deleteButtonText}
+          deleteForm={() => setShowConfirmationModal(true)}
+          submitButtonText={submitButtonText}
+          submitForm={submitForm}
+          submitDisabled={!canSubmit || hasPendingRequest}
+          deleteDisabled={hasPendingRequest}
+        />
       )}
+      <Dialog visible={showConfirmationModal}>
+        {!hasPendingRequest ? (
+          <ConfirmDialogContent
+            modalHeader="Avboka möte"
+            modalText="Vill du verkligen avboka ditt möte?"
+            cancelButtonText="Avbryt"
+            okButtonText="Ja"
+            onCancelButtonClick={() => setShowConfirmationModal(false)}
+            onOkButtonClick={deleteForm}
+          />
+        ) : (
+          <>
+            <Text type="h4" style={{ paddingBottom: 24 }}>
+              Avbokar möte...
+            </Text>
+            <ActivityIndicator size="large" />
+          </>
+        )}
+      </Dialog>
     </>
   );
 };
