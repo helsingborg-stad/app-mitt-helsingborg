@@ -137,29 +137,24 @@ function Step({
       };
 
   const [returnScrollY, setReturnScrollY] = useState(0);
+  const [scrollOffset, setScrollOffset] = useState(0);
   const scrollRef = useRef();
 
-  const handleFocus = (e, isSelect = false) => {
-    const scrollResponder = scrollRef.current.getScrollResponder();
+  const handleFocus = (e) => {
+    console.log(
+      "scrollRef.current.getScrollResponder()",
+      scrollRef.current.getScrollResponder()
+    );
+    console.log("target", e.target);
 
-    e.target.measure((x, y, width, height, pageX, pageY) => {
-      let keyboardHeight = 0;
+    // e.target.measureInWindow((x, y, w, h) => {
+    //   console.log("x, y, w, h", x, y, w, h);
+    //   scrollRef.current
+    //     .getScrollResponder()
+    //     .props.scrollToPosition(0, scrollOffset - h);
+    // });
 
-      if (scrollResponder.keyboardWillOpenTo) {
-        keyboardHeight =
-          scrollResponder.keyboardWillOpenTo.startCoordinates.height;
-      }
-
-      const newReturnScrollY = pageY + height;
-
-      setReturnScrollY(newReturnScrollY);
-
-      if (isSelect) {
-        const scrollToY = newReturnScrollY + keyboardHeight;
-
-        scrollResponder.props.scrollToPosition(0, scrollToY);
-      }
-    });
+    scrollRef.current.getScrollResponder().props.scrollIntoView(e.target);
   };
 
   return (
@@ -167,9 +162,18 @@ function Step({
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{ flexGrow: 1 }}
-        resetScrollToCoords={{ x: 0, y: returnScrollY }}
-        innerRef={(r) => (scrollRef.current = r)}
-        enableAutomaticScroll
+        // resetScrollToCoords={{ x: 0, y: returnScrollY }}
+        innerRef={(ref) => (scrollRef.current = ref)}
+        // enableAutomaticScroll={false}
+        scrollsToTop={false}
+        // extraScrollHeight={500}
+        // extraHeight={500}
+        // onScroll={(e) => {
+        //   console.log(e.nativeEvent);
+        //   setScrollOffset(e.nativeEvent.contentOffset.y);
+        //   console.log(e);
+        // }}
+        enableResetScrollToCoords={false}
       >
         <FormDialog
           visible={dialogIsVisible}
@@ -229,7 +233,7 @@ function Step({
                         if (Platform.OS === "android") {
                           return;
                         }
-                        handleFocus(e, isSelect);
+                        handleFocus(e);
                       }}
                       onAddAnswer={onAddAnswer}
                       {...field}

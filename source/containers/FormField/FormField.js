@@ -101,7 +101,7 @@ const inputTypes = {
   select: {
     component: Select,
     changeEvent: "onValueChange",
-    focusEvent: "onFocus",
+    focusEvent: "onOpen",
     blurEvent: "onBlur",
     props: {},
   },
@@ -218,6 +218,8 @@ const FormField = ({
     id,
     ...other,
   };
+
+  console.log("focusEvent", input.focusEvent);
 
   if (input?.props?.answers) inputCompProps.answers = answers;
   if (input?.props?.validation)

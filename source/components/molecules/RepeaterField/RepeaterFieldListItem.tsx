@@ -109,6 +109,7 @@ interface InputComponentProps {
   showErrorMessage?: boolean;
   onChange: (value: string | number) => void;
   onFocus?: (e: FocusEvent) => void;
+  onOpen?: (e: FocusEvent) => void;
   onBlur: () => void;
 }
 
@@ -120,6 +121,7 @@ const InputComponent = React.forwardRef(
       value,
       onChange,
       onBlur,
+      onOpen,
       onFocus,
       error = undefined,
       showErrorMessage = false,
@@ -193,7 +195,7 @@ const InputComponent = React.forwardRef(
             value={value.toString()}
             onValueChange={onChange}
             onBlur={onBlur}
-            onFocus={onFocus}
+            onOpen={onOpen}
             transparent
             error={error}
             showErrorMessage={showErrorMessage}
@@ -228,7 +230,7 @@ interface Props {
   error?: Record<string, { isValid: boolean; validationMessage: string }>;
   changeFromInput: (input: InputRow) => (text: string) => void;
   onBlur?: () => void;
-  onFocus?: (e: unknown) => void;
+  onFocus?: (e: unknown, isSelect: boolean) => void;
   removeItem: () => void;
   color: string;
 }
@@ -293,6 +295,12 @@ const RepeaterFieldListItem: React.FC<Props> = ({
                 showErrorMessage={showErrorMessage}
                 onBlur={onBlur}
                 onFocus={onFocus}
+                onOpen={(event) =>
+                  onFocus({
+                    ...event,
+                    target: inputRefs.current[index].inputRef,
+                  })
+                }
                 colorSchema={validColorSchema}
                 value={value[input.id] || ""}
                 ref={(el) => {
