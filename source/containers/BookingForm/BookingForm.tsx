@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-import { ActivityIndicator } from "react-native";
 import CollapsibleSection from "../../components/molecules/CollapsibleSection";
 import { Question } from "../../types/FormTypes";
 import { ValidationObject } from "../../types/Validation";
@@ -11,14 +10,12 @@ import {
 } from "../../types/BookingTypes";
 import icons from "../../helpers/Icons";
 import { CharacterCard, TimeSlotPicker } from "../../components/molecules";
-import Dialog from "../../components/molecules/Dialog/Dialog";
 
 import { Text } from "../../components/atoms";
 import FormField from "../FormField/FormField";
 import { validateInput } from "../../helpers/ValidationHelper";
 
 import FormButtonPanel from "./FormButtonPanel";
-import ConfirmDialogContent from "./ConfirmDialogContent";
 
 import {
   Scroller,
@@ -77,7 +74,6 @@ const BookingForm = ({
     questions: false,
     characterCard: false,
   });
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const hasPendingRequest = deletePending || submitPending;
 
@@ -200,7 +196,6 @@ const BookingForm = ({
   );
 
   const canSubmit = timeSlot?.startTime !== undefined && allValidationsPassed;
-  const showButtonPanel = onDelete !== undefined || canSubmit;
 
   return (
     <>
@@ -304,35 +299,14 @@ const BookingForm = ({
           )}
         </ListWrapper>
       </Scroller>
-      {showButtonPanel && (
-        <FormButtonPanel
-          deleteButtonText={deleteButtonText}
-          deleteForm={() => setShowConfirmationModal(true)}
-          submitButtonText={submitButtonText}
-          submitForm={submitForm}
-          submitDisabled={!canSubmit || hasPendingRequest}
-          deleteDisabled={hasPendingRequest}
-        />
-      )}
-      <Dialog visible={showConfirmationModal}>
-        {!hasPendingRequest ? (
-          <ConfirmDialogContent
-            modalHeader="Avboka möte"
-            modalText="Vill du verkligen avboka ditt möte?"
-            cancelButtonText="Avbryt"
-            okButtonText="Ja"
-            onCancelButtonClick={() => setShowConfirmationModal(false)}
-            onOkButtonClick={deleteForm}
-          />
-        ) : (
-          <>
-            <Text type="h4" style={{ paddingBottom: 24 }}>
-              Avbokar möte...
-            </Text>
-            <ActivityIndicator size="large" />
-          </>
-        )}
-      </Dialog>
+      <FormButtonPanel
+        deleteButtonText={deleteButtonText}
+        deleteForm={deleteForm}
+        submitButtonText={submitButtonText}
+        submitForm={submitForm}
+        submitDisabled={!canSubmit || hasPendingRequest}
+        deleteDisabled={hasPendingRequest}
+      />
     </>
   );
 };
