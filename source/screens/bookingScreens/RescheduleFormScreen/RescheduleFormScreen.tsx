@@ -1,8 +1,6 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
-// import styled from "styled-components/native";
-// import { getScreenHeightProportion } from "../../../helpers/Misc";
 import { TimeSlot, TimeSlotDataType } from "../../../types/BookingTypes";
 import {
   cancelBooking,
@@ -57,6 +55,7 @@ const RescheduleFormScreen = ({
 
   const handleReschedule = async (timeSlot: TimeSlot | undefined) => {
     if (timeSlot === undefined) return;
+    setShowConfirmDialog(true);
     setSubmitPending(true);
     try {
       const startDate = moment(`${timeSlot.date} ${timeSlot.startTime}`);
@@ -83,12 +82,14 @@ const RescheduleFormScreen = ({
         },
       };
 
+      setShowConfirmDialog(false);
       onChangeModalScreen(ModalScreen.Confirmation, {
         bookingItem: newBookingItem,
         isConfirmation: true,
       });
     } catch (error) {
       setSubmitPending(false);
+      setShowConfirmDialog(false);
     }
   };
 
@@ -114,6 +115,8 @@ const RescheduleFormScreen = ({
     );
   }
 
+  const pendingText = deletePending ? "Avbokar möte..." : "Ombokar möte...";
+
   return (
     <ScreenContainer>
       <BookingForm
@@ -131,14 +134,7 @@ const RescheduleFormScreen = ({
         onDelete={() => setShowConfirmDialog(true)}
       />
       <Dialog visible={showConfirmDialog}>
-        {deletePending ? (
-          <>
-            <Text type="h4" style={{ paddingBottom: 24 }}>
-              Avbokar möte...
-            </Text>
-            <ActivityIndicator size="large" />
-          </>
-        ) : (
+        {!deletePending && !submitPending ? (
           <ConfirmDialogContent
             modalHeader="Avboka möte"
             modalText="Vill du verkligen avboka ditt möte?"
@@ -147,6 +143,13 @@ const RescheduleFormScreen = ({
             onCancelButtonClick={() => setShowConfirmDialog(false)}
             onOkButtonClick={handleDelete}
           />
+        ) : (
+          <>
+            <Text type="h4" style={{ paddingBottom: 24 }}>
+              {pendingText}
+            </Text>
+            <ActivityIndicator size="large" />
+          </>
         )}
       </Dialog>
     </ScreenContainer>
