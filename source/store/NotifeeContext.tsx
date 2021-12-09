@@ -31,6 +31,7 @@ export interface NotifeeState {
   ScheduledNotificationType: (
     options: ScheduledNotificationType
   ) => Promise<void>;
+  removeScheduledNotification: (notificationId: string) => Promise<void>;
 }
 
 interface NotifeeProviderInterface {
@@ -43,6 +44,7 @@ const NotifeeContext = createContext({
   showLocalNotification: (_options: LocalNotificationType) => Promise.resolve(),
   showScheduledNotification: (_options: ScheduledNotificationType) =>
     Promise.resolve(),
+  removeScheduledNotification: (_notificationId: string) => Promise.resolve(),
 });
 
 const NotifeeProvider = (props: NotifeeProviderInterface): JSX.Element => {
@@ -176,7 +178,15 @@ const NotifeeProvider = (props: NotifeeProviderInterface): JSX.Element => {
     );
   };
 
-  const value = { showLocalNotification, showScheduledNotification };
+  const removeScheduledNotification = async (notificationId: string) => {
+    await notifee.cancelTriggerNotification(notificationId);
+  };
+
+  const value = {
+    showLocalNotification,
+    showScheduledNotification,
+    removeScheduledNotification,
+  };
   return (
     <NotifeeContext.Provider value={value}>{children}</NotifeeContext.Provider>
   );
