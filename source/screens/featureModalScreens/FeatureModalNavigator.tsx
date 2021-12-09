@@ -37,7 +37,7 @@ const Modal: Record<string, ModalScreenType> = {
   [ModalScreen.Confirmation]: {
     component: BookingSummary,
     title: "Möte bokat",
-    propagateSwipe: true,
+    disableSwipe: true,
     colorSchema: "red",
     previousScreen: undefined,
     disableBackButton: true,
@@ -46,7 +46,7 @@ const Modal: Record<string, ModalScreenType> = {
   [ModalScreen.BookingForm]: {
     component: BookingFormScreen,
     title: "Boka möte",
-    propagateSwipe: true,
+    disableSwipe: true,
     colorSchema: "red",
     previousScreen: ModalScreen.ServiceSelections,
     disableCloseButton: true,
@@ -55,7 +55,7 @@ const Modal: Record<string, ModalScreenType> = {
   [ModalScreen.RescheduleForm]: {
     component: RescheduleFormScreen,
     title: "Ändra mötesbokning",
-    propagateSwipe: true,
+    disableSwipe: true,
     colorSchema: "red",
     previousScreen: undefined,
     disableCloseButton: true,
@@ -129,7 +129,7 @@ const FeatureModalNavigator = ({ navigation, route }: Props): JSX.Element => {
       onBack={
         modalScreenObject.disableBackButton ? undefined : goBack || onClose
       }
-      propagateSwipe={modalScreenObject.propagateSwipe}
+      disableSwipe={modalScreenObject.disableSwipe}
       colorSchema={modalScreenObject.colorSchema}
       backButtonText={
         modalScreenObject.useTextNavigationButtons ? "AVBRYT" : undefined

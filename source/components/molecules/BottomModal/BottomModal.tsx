@@ -15,7 +15,7 @@ interface Props {
   colorSchema?: "red" | "neutral";
   backButtonText?: string;
   closeButtonText?: string;
-  propagateSwipe?: boolean;
+  disableSwipe?: boolean;
   onClose?: () => void;
   onBack?: () => void;
   onModalHide?: () => void;
@@ -31,7 +31,7 @@ const BottomModal = (props: Props): JSX.Element => {
     onBack = undefined,
     closeButtonText = undefined,
     colorSchema = "neutral",
-    propagateSwipe = false,
+    disableSwipe = false,
   } = props;
 
   const { colors } = useContext<ThemeType>(ThemeContext);
@@ -49,11 +49,11 @@ const BottomModal = (props: Props): JSX.Element => {
         justifyContent: "flex-end",
         backgroundColor: "transparent",
       }}
-      swipeDirection="down"
+      swipeDirection={disableSwipe ? undefined : "down"}
+      propagateSwipe={disableSwipe}
       onSwipeComplete={onClose}
       backdropTransitionOutTiming={0}
       onModalWillHide={onModalHide}
-      propagateSwipe={propagateSwipe}
     >
       <ModalContentContainer>
         <ModalNavigator
