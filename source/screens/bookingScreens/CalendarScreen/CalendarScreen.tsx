@@ -57,6 +57,7 @@ const divideBookingsByMonth = (activeBookings: BookingItem[]) => {
 const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
   const [isLoading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | undefined>(undefined);
   const [data, setData] = useState<BookingItem[]>([]);
   const { user } = useContext(AuthContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
@@ -148,6 +149,7 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
         )) as BookingItem[];
         if (!canceled) {
           setData(bookingData);
+          setError(undefined);
           setLoading(false);
           Animated.timing(fadeAnimation, {
             toValue: 1,
@@ -156,8 +158,17 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
             useNativeDriver: true,
           }).start();
         }
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        console.log(err);
+        setData([]);
+        setError("Ett fel har inträffat, vänligen försök igen.");
+        setLoading(false);
+        Animated.timing(fadeAnimation, {
+          toValue: 1,
+          easing: Easing.ease,
+          duration: 200,
+          useNativeDriver: true,
+        }).start();
       }
     };
 
@@ -179,6 +190,7 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
           endTime
         )) as BookingItem[];
         setData(bookingData);
+        setError(undefined);
         setRefreshing(false);
         Animated.timing(fadeAnimation, {
           toValue: 1,
@@ -186,11 +198,21 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
           duration: 200,
           useNativeDriver: true,
         }).start();
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        console.log(err);
+        setData([]);
+        setError("Ett fel har inträffat, vänligen försök igen.");
+        setRefreshing(false);
+        Animated.timing(fadeAnimation, {
+          toValue: 1,
+          easing: Easing.ease,
+          duration: 200,
+          useNativeDriver: true,
+        }).start();
       }
     };
 
+    setLoading(false);
     setRefreshing(true);
     void fetchData();
   };
@@ -223,7 +245,16 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
             style={{ marginTop: 30 }}
           />
         )}
-        {bookingItem.length > 0 && (
+        {!isLoading && error && (
+          <Animated.View style={{ opacity: fadeAnimation, marginTop: 10 }}>
+            <Card>
+              <Card.Body>
+                <Card.Text>{error}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Animated.View>
+        )}
+        {bookingItem.length > 0 && !error && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             {Object.keys(bookingsByMonth).map(
               (month: string, monthIndex: number) =>
@@ -232,7 +263,7 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
             <ScrollViewSpacer />
           </Animated.View>
         )}
-        {!isLoading && bookingItem.length === 0 && (
+        {!isLoading && bookingItem.length === 0 && !error && (
           <Animated.View style={{ opacity: fadeAnimation, marginTop: 10 }}>
             <Card>
               <Card.Body>
