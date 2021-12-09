@@ -14,7 +14,7 @@ export type ModalScreenType = {
   component: React.FC<any>;
   title: string;
   previousScreen: ModalScreen | undefined;
-  propagateSwipe?: boolean;
+  disableSwipe?: boolean;
   colorSchema?: string;
   useTextNavigationButtons?: boolean;
   disableCloseButton?: boolean;
