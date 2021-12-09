@@ -92,9 +92,9 @@ const RescheduleFormScreen = ({
         isConfirmation: true,
       });
 
-      await removeScheduledNotification(bookingItem.id);
+      void removeScheduledNotification(bookingItem.id);
 
-      await showScheduledNotification({
+      void showScheduledNotification({
         title: "Påminnelse",
         body: `Du har möte imorgon ${timeSlot.startTime} - ${timeSlot.endTime} på ${bookingItem.address}`,
         timestamp: startDate.subtract(1, "days").valueOf(),
