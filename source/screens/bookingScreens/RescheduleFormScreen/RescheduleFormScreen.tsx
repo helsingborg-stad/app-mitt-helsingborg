@@ -1,8 +1,8 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
-import styled from "styled-components/native";
-import { getScreenHeightProportion } from "../../../helpers/Misc";
+// import styled from "styled-components/native";
+// import { getScreenHeightProportion } from "../../../helpers/Misc";
 import { TimeSlot, TimeSlotDataType } from "../../../types/BookingTypes";
 import {
   cancelBooking,
@@ -10,18 +10,14 @@ import {
   updateBooking,
 } from "../../../services/BookingService";
 import BookingForm from "../../../containers/BookingForm/BookingForm";
+import Dialog from "../../../components/molecules/Dialog/Dialog";
+import { Text } from "../../../components/atoms";
+
 import { ModalScreen } from "../../featureModalScreens/types";
 
-const SpinnerContainer = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
+import ConfirmDialogContent from "./ConfirmDialogContent";
 
-const ScreenContainer = styled.View`
-  height: ${getScreenHeightProportion(80)}px;
-  padding: 0px 10px 110px 10px;
-`;
+import { ScreenContainer, SpinnerContainer } from "./styled";
 
 interface RescheduleFormScreenProps {
   route: any;
@@ -42,6 +38,7 @@ const RescheduleFormScreen = ({
   );
   const [submitPending, setSubmitPending] = useState<boolean>(false);
   const [deletePending, setDeletePending] = useState<boolean>(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const { bookingItem } = route?.params || {};
 
@@ -99,11 +96,11 @@ const RescheduleFormScreen = ({
     setDeletePending(true);
     try {
       await cancelBooking(bookingItem.id);
+      setShowConfirmDialog(false);
       closeModal();
     } catch (err) {
-      console.log(err);
-    } finally {
       setDeletePending(false);
+      console.log(err);
     }
   };
 
@@ -131,8 +128,27 @@ const RescheduleFormScreen = ({
         onSubmit={handleReschedule}
         deleteButtonText="Avboka"
         deletePending={deletePending}
-        onDelete={handleDelete}
+        onDelete={() => setShowConfirmDialog(true)}
       />
+      <Dialog visible={showConfirmDialog}>
+        {deletePending ? (
+          <>
+            <Text type="h4" style={{ paddingBottom: 24 }}>
+              Avbokar möte...
+            </Text>
+            <ActivityIndicator size="large" />
+          </>
+        ) : (
+          <ConfirmDialogContent
+            modalHeader="Avboka möte"
+            modalText="Vill du verkligen avboka ditt möte?"
+            cancelButtonText="Avbryt"
+            okButtonText="Ja"
+            onCancelButtonClick={() => setShowConfirmDialog(false)}
+            onOkButtonClick={handleDelete}
+          />
+        )}
+      </Dialog>
     </ScreenContainer>
   );
 };

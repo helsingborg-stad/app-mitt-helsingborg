@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "styled-components/native";
 
-import Text from "../../components/atoms/Text";
+import Text from "../../../components/atoms/Text";
 
-import { ThemeType } from "../../styles/themeHelpers";
+import { ThemeType } from "../../../styles/themeHelpers";
 
 import {
   ConfirmDialogButtonContainer,
