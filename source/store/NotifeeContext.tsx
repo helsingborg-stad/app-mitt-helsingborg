@@ -72,6 +72,14 @@ const NotifeeProvider = (props: NotifeeProviderInterface): JSX.Element => {
     return notificationData;
   };
 
+  useEffect(() => {
+    const tryRequestPermission = async () => {
+      await notifee.requestPermission();
+    };
+
+    void tryRequestPermission();
+  }, []);
+
   useEffect(
     () =>
       notifee.onForegroundEvent(({ type, detail }) => {
