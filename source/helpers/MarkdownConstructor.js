@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import Markdown from 'react-native-markdown-display';
-import Text from '../components/atoms/Text';
+import PropTypes from "prop-types";
+import React from "react";
+import Markdown from "react-native-markdown-display";
+import Text from "../components/atoms/Text";
 
 /**
  * Override markdown rules.
@@ -31,15 +31,14 @@ const markDownStyles = {
     marginLeft: 4,
     marginRight: 8,
     fontSize: 22,
-    fontWeight: '800',
-    color: '#707070',
-    fontFamily: 'Roboto',
+    fontWeight: "800",
+    color: "#707070",
   },
   paragraph: {
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    flexWrap: "wrap",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
   },
 };
 
