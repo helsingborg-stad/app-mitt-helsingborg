@@ -1,18 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { View, TouchableOpacity } from 'react-native';
-import CalendarPicker from 'react-native-calendar-picker';
-import styled from 'styled-components/native';
-import moment from 'moment';
-import 'moment/locale/sv';
-import Input from '../../atoms/Input';
-import { colorPalette } from '../../../styles/palette';
-import { PrimaryColor } from '../../../styles/themeHelpers';
-import Button from '../../atoms/Button';
-import Text from '../../atoms/Text';
-import { Modal, useModal } from '../Modal';
+import React from "react";
+import PropTypes from "prop-types";
+import { View, TouchableOpacity } from "react-native";
+import CalendarPicker from "react-native-calendar-picker";
+import styled from "styled-components/native";
+import moment from "moment";
+import "moment/locale/sv";
+import Input from "../../atoms/Input";
+import { colorPalette } from "../../../styles/palette";
+import { PrimaryColor } from "../../../styles/themeHelpers";
+import Button from "../../atoms/Button";
+import Text from "../../atoms/Text";
+import { Modal, useModal } from "../Modal";
 
-moment.locale('sv');
+moment.locale("sv");
 
 const CalendarContainer = styled.View`
   flex: 1;
@@ -33,7 +33,7 @@ const ButtonContainer = styled.View`
   justify-content: center;
 `;
 const DateInput = styled(Input)<{ transparent: boolean }>`
-  ${({ transparent }) => transparent && 'background: transparent;'}
+  ${({ transparent }) => transparent && "background: transparent;"}
   text-align: right;
   min-width: 80%;
   font-weight: 500;
@@ -72,9 +72,11 @@ const CalendarPickerForm: React.FC<PropInterface> = ({
       <TouchableOpacity disabled={!editable} onPress={toggleModal}>
         <DateInput
           placeholder="Välj datum"
-          value={value ? moment.utc(value).format('Y-MM-DD') : ''}
+          value={value ? moment.utc(value).format("Y-MM-DD") : ""}
           multiline /** Temporary fix to make field scrollable inside scrollview */
-          numberOfLines={1} /** Temporary fix to make field scrollable inside scrollview */
+          numberOfLines={
+            1
+          } /** Temporary fix to make field scrollable inside scrollview */
           editable={false}
           pointerEvents="none"
           transparent={transparent}
@@ -85,32 +87,35 @@ const CalendarPickerForm: React.FC<PropInterface> = ({
         />
       </TouchableOpacity>
 
-      <Modal visible={modalVisible} presentationStyle="overFullScreen" hide={toggleModal}>
+      <Modal
+        visible={modalVisible}
+        presentationStyle="overFullScreen"
+        hide={toggleModal}
+      >
         <CalendarContainer>
           <CalendarStyle>
             <CalendarPicker
               onDateChange={handleCalendarDateChange}
-              weekdays={['Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön']}
+              weekdays={["Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"]}
               months={[
-                'Januari',
-                'Februari',
-                'Mars',
-                'April',
-                'Maj',
-                'Juni',
-                'Juli',
-                'Augusti',
-                'September',
-                'Oktober',
-                'November',
-                'December',
+                "Januari",
+                "Februari",
+                "Mars",
+                "April",
+                "Maj",
+                "Juni",
+                "Juli",
+                "Augusti",
+                "September",
+                "Oktober",
+                "November",
+                "December",
               ]}
               startFromMonday
               selectedDayColor={colorPalette.primary.blue[1]}
               selectedDayTextColor={colorPalette.neutrals[7]}
               textStyle={{
-                fontFamily: 'Roboto',
-                fontWeight: '500',
+                fontWeight: "500",
               }}
               previousTitle="Tidigare"
               nextTitle="Nästa"
@@ -139,7 +144,7 @@ CalendarPickerForm.propTypes = {
   /** Turn the background of input field transparent */
   transparent: PropTypes.bool,
   style: PropTypes.object,
-  colorSchema: PropTypes.oneOf(['blue', 'green', 'red', 'purple', 'neutral']),
+  colorSchema: PropTypes.oneOf(["blue", "green", "red", "purple", "neutral"]),
   showErrorMessage: PropTypes.bool,
   error: PropTypes.shape({
     isValid: PropTypes.bool.isRequired,

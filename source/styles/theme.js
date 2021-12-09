@@ -1,5 +1,5 @@
 // theming for styled components goes in this file.
-import { colorPalette, deprecatedPalette } from './palette';
+import { colorPalette, deprecatedPalette } from "./palette";
 
 const calculateSizeScale = (size, scale) => scale * size;
 
@@ -7,21 +7,7 @@ const setTypography = () => {
   const defaultSize = 12;
 
   const fontSizes = [
-    0.75,
-    0.87,
-    1,
-    1.25,
-    1.5,
-    1.75,
-    2,
-    2.25,
-    2.5,
-    2.75,
-    3,
-    3.25,
-    3.5,
-    3.75,
-    4,
+    0.75, 0.87, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4,
   ].map((scale) => calculateSizeScale(defaultSize, scale));
 
   const lineHeights = [1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3].map((scale) =>
@@ -30,7 +16,6 @@ const setTypography = () => {
 
   const fontWeights = [500, 700];
   return {
-    fontFamily: '"Roboto", "Arial", sans-serif"',
     fontSizes,
     lineHeights,
     fontWeights,
@@ -86,19 +71,27 @@ const setLayout = () => {
   };
 };
 
-const transitions = ['all 200ms cubic-bezier(0.4, 0, 0.2, 1)'];
+const transitions = ["all 200ms cubic-bezier(0.4, 0, 0.2, 1)"];
 
 const borders = {
-  radii: [0, '0.5rem', '1rem'],
-  borders: [0, '1px solid', '2px solid', '4px solid', '8px solid', '16px solid', '32px solid'],
+  radii: [0, "0.5rem", "1rem"],
+  borders: [
+    0,
+    "1px solid",
+    "2px solid",
+    "4px solid",
+    "8px solid",
+    "16px solid",
+    "32px solid",
+  ],
 };
 
 const shadows = [
-  '0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.24)',
-  '0px 3px 6px rgba(0, 0, 0, 0.15), 0px 2px 4px rgba(0, 0, 0, 0.12)',
-  '0px 10px 20px rgba(0, 0, 0, 0.15), 0px 3px 6px rgba(0, 0, 0, 0.10)',
-  '0px 15px 25px rgba(0, 0, 0, 0.15), 0px 5px 10px rgba(0, 0, 0, 0.05)',
-  '0px 20px 40px rgba(0, 0, 0, 0.2)',
+  "0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.24)",
+  "0px 3px 6px rgba(0, 0, 0, 0.15), 0px 2px 4px rgba(0, 0, 0, 0.12)",
+  "0px 10px 20px rgba(0, 0, 0, 0.15), 0px 3px 6px rgba(0, 0, 0, 0.10)",
+  "0px 15px 25px rgba(0, 0, 0, 0.15), 0px 5px 10px rgba(0, 0, 0, 0.05)",
+  "0px 20px 40px rgba(0, 0, 0, 0.2)",
 ];
 
 const colors = { ...colorPalette };
@@ -208,42 +201,42 @@ const theme = {
       text: deprecatedPalette.mono.darker,
       icon: deprecatedPalette.purple[1],
       iconRight: deprecatedPalette.mono.light,
-      shadow: 'rgba(255, 255, 255, 0.0)',
+      shadow: "rgba(255, 255, 255, 0.0)",
     },
     light: {
       background: deprecatedPalette.mono.lightest,
       text: deprecatedPalette.mono.darker,
       icon: deprecatedPalette.purple[1],
       iconRight: deprecatedPalette.mono.light,
-      shadow: 'rgba(255, 255, 255, 0.0)',
+      shadow: "rgba(255, 255, 255, 0.0)",
     },
     neutral: {
       background: deprecatedPalette.mono.lightest,
       text: deprecatedPalette.mono.darker,
       icon: deprecatedPalette.purple[1],
       iconRight: deprecatedPalette.mono.light,
-      shadow: 'rgba(255, 255, 255, 0.0)',
+      shadow: "rgba(255, 255, 255, 0.0)",
     },
     gray: {
       background: deprecatedPalette.mono.lighter,
       text: deprecatedPalette.mono.darker,
       icon: deprecatedPalette.mono.light,
       iconRight: deprecatedPalette.mono.light,
-      shadow: 'rgba(255, 255, 255, 0.0)',
+      shadow: "rgba(255, 255, 255, 0.0)",
     },
     dark: {
       background: deprecatedPalette.mono.darkest,
       text: deprecatedPalette.mono.lightest,
       icon: deprecatedPalette.mono.light,
       iconRight: deprecatedPalette.mono.light,
-      shadow: 'rgba(255, 255, 255, 0.0)',
+      shadow: "rgba(255, 255, 255, 0.0)",
     },
     swipe: {
-      background: '#F5F5F5',
+      background: "#F5F5F5",
       text: deprecatedPalette.mono.darker,
       icon: deprecatedPalette.purple[1],
       iconRight: deprecatedPalette.purple[1],
-      shadow: 'rgba(255, 255, 255, 0.0)',
+      shadow: "rgba(255, 255, 255, 0.0)",
     },
     red: {
       background: deprecatedPalette.red[2],
@@ -281,11 +274,11 @@ const theme = {
       shadow: deprecatedPalette.green[7],
     },
     floral: {
-      background: '#FBF7F0',
+      background: "#FBF7F0",
       text: deprecatedPalette.blue[6],
       icon: deprecatedPalette.red[9],
       iconRight: deprecatedPalette.red[9],
-      shadow: '#FBF7F0',
+      shadow: "#FBF7F0",
     },
   },
   checkbox: {
@@ -378,26 +371,26 @@ const theme = {
   },
   radiobuttonGroup: {
     small: {
-      textType: 'text',
+      textType: "text",
       textMargin: 4,
     },
     medium: {
-      textType: 'h6',
+      textType: "h6",
       textMargin: 15,
     },
     large: {
-      textType: 'h5',
+      textType: "h5",
       textMargin: 30,
     },
   },
   list: {
     onLightBackground: {
       listWithAvatar: {
-        headerColor: 'rgba(0, 0, 0, 0.64)',
-        headerSeparatorBackground: 'rgba(0, 0, 0, 0.48)',
+        headerColor: "rgba(0, 0, 0, 0.64)",
+        headerSeparatorBackground: "rgba(0, 0, 0, 0.48)",
         text: deprecatedPalette.mono.blue,
-        bodyTextColor: '#855851',
-        headerBorderHeight: '2px',
+        bodyTextColor: "#855851",
+        headerBorderHeight: "2px",
       },
     },
   },
@@ -493,7 +486,7 @@ const theme = {
       },
       white: {
         text: colorPalette.neutrals[2],
-        underline: 'rgba(255, 255, 255, 0.0)',
+        underline: "rgba(255, 255, 255, 0.0)",
       },
       neutral: {
         text: colorPalette.neutrals[2],
@@ -513,7 +506,7 @@ const theme = {
       },
       swipe: {
         text: deprecatedPalette.mono.darker,
-        underline: 'rgba(255, 255, 255, 0.0)',
+        underline: "rgba(255, 255, 255, 0.0)",
       },
       red: {
         text: colorPalette.neutrals[2],
@@ -641,50 +634,50 @@ const theme = {
     },
     darkBlue: {
       legend: colorPalette.neutrals[7],
-      legendBorder: 'rgba(0, 33, 63, 0.24)',
-      background: 'rgba(0, 33, 63, 0.72)',
-      backgroundEmpty: 'rgba(0, 33, 63, 0.24)',
+      legendBorder: "rgba(0, 33, 63, 0.24)",
+      background: "rgba(0, 33, 63, 0.72)",
+      backgroundEmpty: "rgba(0, 33, 63, 0.24)",
     },
   },
   repeater: {
     blue: {
       inputBackground: colorPalette.complementary.blue[2],
       deleteButton: colorPalette.complementary.blue[1],
-      deleteButtonText: '#D73640',
+      deleteButtonText: "#D73640",
       inputText: colorPalette.neutrals[1],
     },
     green: {
       inputBackground: colorPalette.complementary.green[2],
       deleteButton: colorPalette.complementary.green[1],
-      deleteButtonText: '#D73640',
+      deleteButtonText: "#D73640",
       inputText: colorPalette.neutrals[1],
     },
     red: {
       inputBackground: colorPalette.complementary.red[2],
       deleteButton: colorPalette.complementary.red[1],
-      deleteButtonText: '#D73640',
+      deleteButtonText: "#D73640",
       inputText: colorPalette.neutrals[1],
     },
     purple: {
       inputBackground: colorPalette.complementary.purple[2],
       deleteButton: colorPalette.complementary.purple[1],
-      deleteButtonText: '#D73640',
+      deleteButtonText: "#D73640",
       inputText: colorPalette.neutrals[1],
     },
     neutral: {
       inputBackground: colorPalette.complementary.neutral[2],
       deleteButton: colorPalette.complementary.neutral[1],
-      deleteButtonText: '#D73640',
+      deleteButtonText: "#D73640",
       inputText: colorPalette.neutrals[1],
     },
     darkBlue: {
-      inputBackground: '#28435B',
-      deleteButton: '#DD6161',
-      inputText: '#FFFFFF',
+      inputBackground: "#28435B",
+      deleteButton: "#DD6161",
+      inputText: "#FFFFFF",
     },
   },
   textInput: {
-    errorTextColor: '#DD6161',
+    errorTextColor: "#DD6161",
   },
 };
 
@@ -694,7 +687,9 @@ const theme = {
  * @param {string} colorSchema The schema to check
  * @param {string} variant The type of colors we want to check (complementary, primary, etc)
  */
-export const getValidColorSchema = (colorSchema, variant = 'primary') =>
-  Object.keys(theme.colors[variant]).includes(colorSchema) ? colorSchema : 'blue';
+export const getValidColorSchema = (colorSchema, variant = "primary") =>
+  Object.keys(theme.colors[variant]).includes(colorSchema)
+    ? colorSchema
+    : "blue";
 
 export default theme;

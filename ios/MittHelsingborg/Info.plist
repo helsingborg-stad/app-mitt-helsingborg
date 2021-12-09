@@ -62,7 +62,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Denna appen har tillgång till kamera för att ta bilder.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Denna appen har tillgång till dina bilder.</string>
 	<key>UIAppFonts</key>
