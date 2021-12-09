@@ -5,7 +5,6 @@ import {
   Easing,
   ActivityIndicator,
 } from "react-native";
-import { ThemeContext } from "styled-components/native";
 import moment from "moment";
 import svLocale from "moment/locale/sv";
 import AuthContext from "../../../store/AuthContext";
@@ -59,7 +58,6 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
   const [isLoading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [data, setData] = useState<BookingItem[]>([]);
-  const theme = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 

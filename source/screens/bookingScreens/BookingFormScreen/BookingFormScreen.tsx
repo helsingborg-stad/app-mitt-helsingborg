@@ -1,7 +1,7 @@
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
-import styled, { ThemeContext } from "styled-components/native";
+import styled from "styled-components/native";
 import { Question } from "../../../types/FormTypes";
 import {
   TimeSlot,
@@ -52,7 +52,6 @@ const BookingFormScreen = ({
   );
   const [submitPending, setSubmitPending] = useState<boolean>(false);
   const { getForm } = useContext(FormContext);
-  const theme = useContext(ThemeContext);
   const { showScheduledNotification } = useContext(NotifeeContext);
   const {
     formId,

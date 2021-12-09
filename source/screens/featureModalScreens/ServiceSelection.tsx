@@ -1,10 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import {
-  ActivityIndicator,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-} from "react-native";
+import { ActivityIndicator, SafeAreaView, ScrollView } from "react-native";
 import styled from "styled-components/native";
 import moment from "moment";
 import { getHistoricalAttendees } from "../../services/BookingService";
@@ -12,7 +7,6 @@ import { getReferenceCodeForUser } from "../../helpers/BookingHelper";
 import AuthContext from "../../store/AuthContext";
 import { Text } from "../../components/atoms";
 import { BookablesService } from "../../services";
-import theme from "../../styles/theme";
 
 import ButtonList from "../../components/organisms/ButtonList";
 import { ModalScreen } from "./types";
