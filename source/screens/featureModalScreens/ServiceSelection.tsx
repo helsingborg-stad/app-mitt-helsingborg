@@ -109,9 +109,7 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
         {isLoading && (
           <ActivityIndicator
             size="large"
-            color={
-              Platform.OS === "ios" ? undefined : theme.colors.primary.red[0]
-            }
+            color="slategray"
             style={{ marginTop: 30 }}
           />
         )}

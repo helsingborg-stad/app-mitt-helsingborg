@@ -4,7 +4,6 @@ import {
   Animated,
   Easing,
   ActivityIndicator,
-  Platform,
 } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import moment from "moment";
@@ -222,9 +221,7 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
         {isLoading && (
           <ActivityIndicator
             size="large"
-            color={
-              Platform.OS === "ios" ? undefined : theme.colors.primary.red[0]
-            }
+            color="slategray"
             style={{ marginTop: 30 }}
           />
         )}
