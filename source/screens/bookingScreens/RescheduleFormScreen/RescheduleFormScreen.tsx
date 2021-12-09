@@ -76,21 +76,6 @@ const RescheduleFormScreen = ({
         bookingItem.message
       );
 
-      await removeScheduledNotification(bookingItem.id);
-
-      await showScheduledNotification({
-        title: "Påminnelse",
-        body: `Du har möte imorgon ${timeSlot.startTime} - ${timeSlot.endTime} på ${bookingItem.address}`,
-        timestamp: startDate.subtract(1, "days").valueOf(),
-        id: bookingId as string,
-        data: {
-          nextRoute: "Calendar",
-          params: {
-            initial: false,
-          },
-        },
-      });
-
       const newBookingItem = {
         ...bookingItem,
         date: startDate.format("yyyy-MM-DD"),
@@ -105,6 +90,21 @@ const RescheduleFormScreen = ({
       onChangeModalScreen(ModalScreen.Confirmation, {
         bookingItem: newBookingItem,
         isConfirmation: true,
+      });
+
+      await removeScheduledNotification(bookingItem.id);
+
+      await showScheduledNotification({
+        title: "Påminnelse",
+        body: `Du har möte imorgon ${timeSlot.startTime} - ${timeSlot.endTime} på ${bookingItem.address}`,
+        timestamp: startDate.subtract(1, "days").valueOf(),
+        id: bookingId as string,
+        data: {
+          nextRoute: "Calendar",
+          params: {
+            initial: false,
+          },
+        },
       });
     } catch (error) {
       setSubmitPending(false);
