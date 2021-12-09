@@ -20,6 +20,8 @@ import { getAdministratorsBySharedMailbox } from "../../../services/BookablesSer
 import BookingForm from "../../../containers/BookingForm/BookingForm";
 import { ModalScreen } from "../../featureModalScreens/types";
 import { getScreenHeightProportion } from "../../../helpers/Misc";
+import Dialog from "../../../components/molecules/Dialog/Dialog";
+import { Text } from "../../../components/atoms";
 
 const SpinnerContainer = styled.View`
   flex: 1;
@@ -204,6 +206,14 @@ const BookingFormScreen = ({
         submitPending={submitPending}
         onSubmit={handleSubmitForm}
       />
+      <Dialog visible={submitPending}>
+        <>
+          <Text type="h4" style={{ paddingBottom: 24 }}>
+            Bokar möte...
+          </Text>
+          <ActivityIndicator size="large" />
+        </>
+      </Dialog>
     </ScreenContainer>
   );
 };
