@@ -168,7 +168,7 @@ const RescheduleFormScreen = ({
             <Text type="h4" style={{ paddingBottom: 24 }}>
               {pendingText}
             </Text>
-            <ActivityIndicator size="large" />
+            <ActivityIndicator size="large" color="slategray" />
           </>
         )}
       </Dialog>
