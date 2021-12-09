@@ -1,6 +1,7 @@
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
+import NotifeeContext from "../../../store/NotifeeContext";
 import { TimeSlot, TimeSlotDataType } from "../../../types/BookingTypes";
 import {
   cancelBooking,
@@ -31,6 +32,9 @@ const RescheduleFormScreen = ({
   onChangeModalScreen,
   closeModal,
 }: RescheduleFormScreenProps): JSX.Element => {
+  const { showScheduledNotification, removeScheduledNotification } =
+    useContext(NotifeeContext);
+
   const [timeSlots, setTimeSlots] = useState<TimeSlotDataType | undefined>(
     undefined
   );
@@ -60,7 +64,7 @@ const RescheduleFormScreen = ({
     try {
       const startDate = moment(`${timeSlot.date} ${timeSlot.startTime}`);
       const endDate = moment(`${timeSlot.date} ${timeSlot.endTime}`);
-      await updateBooking(
+      const { bookingId } = await updateBooking(
         bookingItem.id,
         [bookingItem.administrator.email],
         startDate.format(),
@@ -71,7 +75,21 @@ const RescheduleFormScreen = ({
         bookingItem.address,
         bookingItem.message
       );
-      setSubmitPending(false);
+
+      await removeScheduledNotification(bookingItem.id);
+
+      await showScheduledNotification({
+        title: "Påminnelse",
+        body: `Du har möte imorgon ${timeSlot.startTime} - ${timeSlot.endTime} på ${bookingItem.address}`,
+        timestamp: startDate.subtract(1, "days").valueOf(),
+        id: bookingId as string,
+        data: {
+          nextRoute: "Calendar",
+          params: {
+            initial: false,
+          },
+        },
+      });
 
       const newBookingItem = {
         ...bookingItem,
@@ -82,6 +100,7 @@ const RescheduleFormScreen = ({
         },
       };
 
+      setSubmitPending(false);
       setShowConfirmDialog(false);
       onChangeModalScreen(ModalScreen.Confirmation, {
         bookingItem: newBookingItem,
@@ -97,6 +116,7 @@ const RescheduleFormScreen = ({
     setDeletePending(true);
     try {
       await cancelBooking(bookingItem.id);
+      await removeScheduledNotification(bookingItem.id);
       setShowConfirmDialog(false);
       closeModal();
     } catch (err) {
