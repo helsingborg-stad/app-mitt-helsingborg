@@ -265,9 +265,7 @@ const BookingForm = ({
                       inputType={question.type}
                       colorSchema="red"
                       id={question.id}
-                      onChange={(newAnswer: Record<string, string>) =>
-                        updateAnswers(newAnswer)
-                      }
+                      onChange={updateAnswers}
                       onBlur={() =>
                         validateAnswer(question.id, question.validation)
                       }
