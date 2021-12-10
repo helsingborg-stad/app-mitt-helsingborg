@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { ThemeContext } from "styled-components/native";
 import { Button } from "../../components/atoms";
 
 import { ButtonPanel, ButtonContainer, ButtonText } from "./styled";
@@ -22,6 +23,8 @@ const FormButtonPanel = (props: ForButtonPanelProps): JSX.Element => {
     deleteForm,
   } = props;
 
+  const theme = useContext(ThemeContext);
+
   const showDeleteButton = !!deleteButtonText && deleteForm !== undefined;
   const showSubmitButton = !!submitButtonText && submitForm !== undefined;
 
@@ -34,12 +37,15 @@ const FormButtonPanel = (props: ForButtonPanelProps): JSX.Element => {
           <Button
             size="large"
             disabled={deleteDisabled}
-            colorSchema="neutral"
+            colorSchema="red"
+            variant="outlined"
             onClick={deleteForm}
             style={{ ...(!showInFullWidth && { width: 175 }) }}
             fullWidth={showInFullWidth}
           >
-            <ButtonText color="white">{deleteButtonText}</ButtonText>
+            <ButtonText color={theme.colors.primary.red[1]}>
+              {deleteButtonText}
+            </ButtonText>
           </Button>
         )}
 
@@ -52,7 +58,9 @@ const FormButtonPanel = (props: ForButtonPanelProps): JSX.Element => {
             style={{ ...(!showInFullWidth && { width: 175 }) }}
             fullWidth={showInFullWidth}
           >
-            <ButtonText color="white">{submitButtonText}</ButtonText>
+            <ButtonText color={theme.colors.neutrals[7]}>
+              {submitButtonText}
+            </ButtonText>
           </Button>
         )}
       </ButtonContainer>
