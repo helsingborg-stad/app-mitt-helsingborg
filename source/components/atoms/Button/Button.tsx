@@ -110,7 +110,7 @@ Styles.fullWidth = css`
 
 /* Styles for a disabled button */
 Styles.disabled = css`
-  background-color: ${(props) => props.theme.colors.neutrals[5]};
+  background-color: ${(props) => props.theme.colors.neutrals[4]};
 `;
 
 const ButtonBase = styled.View`
@@ -126,7 +126,7 @@ const ButtonBase = styled.View`
   ${(props) => Styles.elevation[props.elevation]}
 
     shadow-color: ${(props) =>
-    props.colorSchema === "neutral"
+    props.colorSchema === "neutral" || props.disabled
       ? props.theme.button.gray.shadow
       : props.theme.button[props.colorSchema].shadow};
 
