@@ -669,21 +669,6 @@ const CaseSummary = (props) => {
                             {formatAmount(calculation.calculationsum)}
                           </Card.Text>
                         </Card.CalculationRow>
-
-                        <Card.DetailsTitle type="h5">
-                          Dokumentation
-                        </Card.DetailsTitle>
-
-                        {journals?.journal?.notes?.note?.length > 0 ? (
-                          <>
-                            {journals.journal.notes?.note.map((note, index) => (
-                              <Card key={`journal-${index}`}>
-                                <Text type="h3">{note.label}</Text>
-                                <Card.Text>{note.text}</Card.Text>
-                              </Card>
-                            ))}
-                          </>
-                        ) : null}
                       </>
                     )}
                   </Card.Body>
@@ -691,15 +676,15 @@ const CaseSummary = (props) => {
               );
             })}
 
-            {journals.journal && journals.journal.notes.note.length > 0 && (
+            {journals?.journal.notes?.note?.length > 0 && (
               <Card>
                 <Card.Body color="neutral">
                   <Card.Title colorSchema="neutral">Anteckningar</Card.Title>
                   {journals.journal.notes.note.map((note) => (
-                    <>
-                      <Card.Text strong>{note.label}</Card.Text>
+                    <View key={`journal-${note.label}`}>
+                      <Text type="h3">{note.label}</Text>
                       <Card.Text>{note.text}</Card.Text>
-                    </>
+                    </View>
                   ))}
                 </Card.Body>
               </Card>
