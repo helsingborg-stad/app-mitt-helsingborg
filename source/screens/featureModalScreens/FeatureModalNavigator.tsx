@@ -27,7 +27,8 @@ const Modal: Record<string, ModalScreenType> = {
   [ModalScreen.ServiceSelections]: {
     component: ServiceSelection,
     title: "Vem vill du träffa?",
-    previousScreen: ModalScreen.Features,
+    previousScreen: undefined,
+    disableBackButton: true,
   },
   [ModalScreen.Help]: {
     component: Features,
