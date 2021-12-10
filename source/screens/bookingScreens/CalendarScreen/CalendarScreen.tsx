@@ -141,16 +141,29 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
     const startTime = moment().startOf("day").format();
     const endTime = moment().add(6, "months").format();
     const fetchData = async () => {
-      try {
-        const bookingData: BookingItem[] = (await searchBookings(
-          refCode,
-          startTime,
-          endTime
-        )) as BookingItem[];
-        if (!canceled) {
-          setData(bookingData);
+      if (!canceled) {
+        try {
           setError(undefined);
-          setLoading(false);
+          setLoading(true);
+          const bookingData = await searchBookings(refCode, startTime, endTime);
+          if (!canceled) {
+            setData(bookingData);
+            setError(undefined);
+            setLoading(false);
+          }
+          Animated.timing(fadeAnimation, {
+            toValue: 1,
+            easing: Easing.ease,
+            duration: 200,
+            useNativeDriver: true,
+          }).start();
+        } catch (err) {
+          console.log(err);
+          if (!canceled) {
+            setData([]);
+            setError("Ett fel har inträffat, vänligen försök igen.");
+            setLoading(false);
+          }
           Animated.timing(fadeAnimation, {
             toValue: 1,
             easing: Easing.ease,
@@ -158,23 +171,10 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
             useNativeDriver: true,
           }).start();
         }
-      } catch (err) {
-        console.log(err);
-        setData([]);
-        setError("Ett fel har inträffat, vänligen försök igen.");
-        setLoading(false);
-        Animated.timing(fadeAnimation, {
-          toValue: 1,
-          easing: Easing.ease,
-          duration: 200,
-          useNativeDriver: true,
-        }).start();
       }
     };
 
-    navigation.addListener("focus", () => {
-      void fetchData();
-    });
+    navigation.addListener("focus", fetchData);
 
     return () => {
       canceled = true;
