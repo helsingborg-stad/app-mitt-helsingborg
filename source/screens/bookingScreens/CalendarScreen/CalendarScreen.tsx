@@ -172,11 +172,14 @@ const CalendarScreen = ({ navigation }: CalendarScreenProps): JSX.Element => {
       }
     };
 
-    void fetchData();
+    navigation.addListener("focus", () => {
+      void fetchData();
+    });
+
     return () => {
       canceled = true;
     };
-  }, [user, fadeAnimation]);
+  }, [user, fadeAnimation, navigation]);
 
   const onRefresh = () => {
     const refCode = getReferenceCodeForUser(user);
