@@ -5,8 +5,8 @@ import moment from "moment";
 import { getHistoricalAttendees } from "../../services/BookingService";
 import { getReferenceCodeForUser } from "../../helpers/BookingHelper";
 import AuthContext from "../../store/AuthContext";
+import BookablesContext from "../../store/BookablesContext";
 import { Text } from "../../components/atoms";
-import { BookablesService } from "../../services";
 
 import ButtonList from "../../components/organisms/ButtonList";
 import { ModalScreen } from "./types";
@@ -32,6 +32,8 @@ type ButtonItem = {
 
 const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
   const { user } = useContext(AuthContext);
+  const { bookables, isFetchingBookables, bookablesError } =
+    useContext(BookablesContext);
 
   const [isLoading, setLoading] = useState(true);
   const [buttons, setButtons] = useState<ButtonItem[]>([]);
@@ -42,7 +44,6 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
 
     const fetchData = async () => {
       try {
-        const bookables = await BookablesService.getBookables();
         let contactsList: string[] = [];
         try {
           contactsList = await getHistoricalAttendees(
@@ -53,25 +54,25 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
         } catch (err) {
           console.log(err);
         }
-        const contacts: ButtonItem[] =
-          contactsList.length > 0
-            ? [
-                {
-                  underline: true,
-                  buttonText: "Mina kontakter",
-                  icon: "person",
-                  onClick: () =>
-                    onChangeModalScreen(ModalScreen.BookingForm, {
-                      isContactsMode: true,
-                      contactsList,
-                    }),
-                },
-              ]
-            : [];
+
+        const contacts = [];
+        if (contactsList.length > 0) {
+          contacts.push({
+            underline: true,
+            buttonText: "Mina kontakter",
+            icon: "person",
+            onClick: () =>
+              onChangeModalScreen(ModalScreen.BookingForm, {
+                isContactsMode: true,
+                contactsList,
+              }),
+          });
+        }
 
         if (!canceled) {
           const buttonItems: ButtonItem[] = contacts.concat(
             bookables.map((bookable) => ({
+              underline: false,
               variant: "link",
               buttonText: bookable.name,
               icon: "photo-camera",
@@ -92,7 +93,10 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
     return () => {
       canceled = true;
     };
-  }, [user, onChangeModalScreen]);
+  }, [user, onChangeModalScreen, bookables]);
+
+  const hasError = error || bookablesError;
+  const isLoadingData = isLoading || isFetchingBookables;
 
   return (
     <ScrollView
@@ -100,20 +104,20 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
       style={{ backgroundColor: "white" }}
     >
       <SafeAreaView style={{ backgroundColor: "white" }}>
-        {isLoading && (
+        {isLoadingData && (
           <ActivityIndicator
             size="large"
             color="slategray"
             style={{ marginTop: 30 }}
           />
         )}
-        {error && (
+        {hasError && (
           <ErrorText type="h5">
             Ett fel har inträffat. Vänligen försök igen.
           </ErrorText>
         )}
-        {!error &&
-          !isLoading &&
+        {!hasError &&
+          !isLoadingData &&
           (buttons.length === 0 ? (
             <ErrorText type="h5">
               Inga tjänster är tillgängliga just nu. Vänligen försök igen.
