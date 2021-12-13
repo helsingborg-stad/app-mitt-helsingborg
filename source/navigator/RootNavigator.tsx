@@ -11,7 +11,9 @@ import MainNavigator from "./MainNavigator";
 import FeatureModalNavigator from "../screens/featureModalScreens/FeatureModalNavigator";
 
 import AuthContext from "../store/AuthContext";
+import AppContext from "../store/AppContext";
 import { NotifeeProvider } from "../store/NotifeeContext";
+import { BookablesProvider } from "../store/BookablesContext";
 
 import USER_AUTH_STATE from "../types/UserAuthTypes";
 
@@ -31,20 +33,23 @@ const CustomNavigator = ({
     initialRouteName,
   });
 
+  const { isDevMode } = useContext(AppContext);
   const { userAuthState } = useContext(AuthContext);
   const isSignedIn = userAuthState === USER_AUTH_STATE.SIGNED_IN;
 
   return (
     <NotifeeProvider navigation={navigation} isSignedIn={isSignedIn}>
-      <NavigationHelpersContext.Provider value={navigation}>
-        <View style={{ flex: 1, backgroundColor: "transparent" }}>
-          {state.routes.map((route) => (
-            <React.Fragment key={route.key}>
-              {descriptors[route.key].render()}
-            </React.Fragment>
-          ))}
-        </View>
-      </NavigationHelpersContext.Provider>
+      <BookablesProvider isSignedIn={isSignedIn} isDevMode={isDevMode}>
+        <NavigationHelpersContext.Provider value={navigation}>
+          <View style={{ flex: 1, backgroundColor: "transparent" }}>
+            {state.routes.map((route) => (
+              <React.Fragment key={route.key}>
+                {descriptors[route.key].render()}
+              </React.Fragment>
+            ))}
+          </View>
+        </NavigationHelpersContext.Provider>
+      </BookablesProvider>
     </NotifeeProvider>
   );
 };
