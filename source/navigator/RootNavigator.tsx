@@ -52,25 +52,31 @@ const CustomNavigator = ({
 const createRootCustomNavigator = createNavigatorFactory(CustomNavigator);
 const RootCustomNavigator = createRootCustomNavigator();
 
-const RootNavigator = (): JSX.Element => (
-  <RootCustomNavigator.Navigator
-    screenOptions={{
-      cardStyle: { backgroundColor: "transparent" },
-      headerShown: false,
-      cardOverlayEnabled: true,
-      cardShadowEnabled: true,
-    }}
-  >
-    <RootCustomNavigator.Screen
-      name="Main"
-      component={MainNavigator}
-      options={{ headerShown: false }}
-    />
-    <RootCustomNavigator.Screen
-      name="FeatureModal"
-      component={FeatureModalNavigator}
-    />
-  </RootCustomNavigator.Navigator>
-);
+const RootNavigator = (): JSX.Element => {
+  const { userAuthState } = useContext(AuthContext);
+
+  return (
+    <RootCustomNavigator.Navigator
+      screenOptions={{
+        cardStyle: { backgroundColor: "transparent" },
+        headerShown: false,
+        cardOverlayEnabled: true,
+        cardShadowEnabled: true,
+      }}
+    >
+      <RootCustomNavigator.Screen
+        name="Main"
+        component={MainNavigator}
+        options={{ headerShown: false }}
+      />
+      {userAuthState === USER_AUTH_STATE.SIGNED_IN && (
+        <RootCustomNavigator.Screen
+          name="FeatureModal"
+          component={FeatureModalNavigator}
+        />
+      )}
+    </RootCustomNavigator.Navigator>
+  );
+};
 
 export default RootNavigator;
