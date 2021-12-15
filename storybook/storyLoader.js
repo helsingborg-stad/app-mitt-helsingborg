@@ -51,6 +51,7 @@ function loadStories() {
   require("../source/components/organisms/Step/StepDescription/StepDescription.stories");
   require("../source/components/organisms/Step/StepFooter/StepFooter.stories");
   require("../source/components/organisms/SummaryList/SummaryList.stories");
+  require("../source/components/organisms/TaskCompletionList/TaskCompletionList.stories");
   require("../source/components/organisms/YoutubePopup/YoutubePopup.stories");
   require("../source/containers/DynamicCardRenderer/DynamicCardRenderer.stories");
   require("../source/containers/Form/Form.stories");
@@ -107,6 +108,7 @@ const stories = [
   "../source/components/organisms/Step/StepDescription/StepDescription.stories",
   "../source/components/organisms/Step/StepFooter/StepFooter.stories",
   "../source/components/organisms/SummaryList/SummaryList.stories",
+  "../source/components/organisms/TaskCompletionList/TaskCompletionList.stories",
   "../source/components/organisms/YoutubePopup/YoutubePopup.stories",
   "../source/containers/DynamicCardRenderer/DynamicCardRenderer.stories",
   "../source/containers/Form/Form.stories",
