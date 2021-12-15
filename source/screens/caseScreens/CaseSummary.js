@@ -676,7 +676,7 @@ const CaseSummary = (props) => {
               );
             })}
 
-            {journals?.journal.notes?.note?.length > 0 && (
+            {journals?.journal?.notes?.note?.length > 0 && (
               <Card>
                 <Card.Body color="neutral">
                   <Card.Title colorSchema="neutral">Anteckningar</Card.Title>
