@@ -1,6 +1,8 @@
 import { NativeModules } from "react-native";
 import "react-native-gesture-handler/jestSetup";
 
+import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-info-mock";
+
 /**
  * Mock react-native-config (ENVS)
  */
@@ -140,3 +142,5 @@ NativeModules.RNDateTimePickerManager.getDefaultDisplayValue = jest.fn(() =>
 NativeModules.NotifeeApiModule = {
   addListener: jest.fn(),
 };
+
+jest.mock("react-native-device-info", () => mockRNDeviceInfo);
