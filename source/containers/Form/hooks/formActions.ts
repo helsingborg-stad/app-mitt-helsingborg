@@ -1,18 +1,28 @@
-import { Question, StepperActions } from '../../../types/FormTypes';
-import { replaceMarkdownTextInSteps } from './textReplacement';
-import { FormReducerState } from './useForm';
-import { validateInput } from '../../../helpers/ValidationHelper';
-import { evaluateConditionalExpression } from '../../../helpers/conditionParser';
-import { deepCopy } from '../../../helpers/Objects';
+import { Question, StepperActions } from "../../../types/FormTypes";
+import { replaceMarkdownTextInSteps } from "./textReplacement";
+import { FormReducerState } from "./useForm";
+import { validateInput } from "../../../helpers/ValidationHelper";
+import { evaluateConditionalExpression } from "../../../helpers/conditionParser";
+import { deepCopy } from "../../../helpers/Objects";
 
 /**
  * Action for replacing title markdown in steps.
  * @param {FormReducerState} state the current state of the form
  */
 export function replaceMarkdownText(state: FormReducerState) {
-  const { steps, user, period } = state;
+  const {
+    steps,
+    user,
+    period,
+    formAnswers: { partnerInfo },
+  } = state;
 
-  const updatedSteps = replaceMarkdownTextInSteps(steps, user, period);
+  const updatedSteps = replaceMarkdownTextInSteps(
+    steps,
+    user,
+    period,
+    partnerInfo
+  );
   return {
     ...state,
     steps: updatedSteps,
@@ -23,29 +33,29 @@ const getConnectionIndex = (
   matrix: StepperActions[][],
   currentIndex: number,
   conn: StepperActions
-) => matrix[currentIndex].findIndex(val => val === conn);
+) => matrix[currentIndex].findIndex((val) => val === conn);
 
 function getIndex(state: FormReducerState, stepId: string) {
-  return state.steps.findIndex(s => s.id === stepId);
+  return state.steps.findIndex((s) => s.id === stepId);
 }
 function getNextIndex(
   matrix: StepperActions[][],
   currentPosition: { index: number; level: number }
 ) {
-  return getConnectionIndex(matrix, currentPosition.index, 'next');
+  return getConnectionIndex(matrix, currentPosition.index, "next");
 }
 function getBackIndex(
   matrix: StepperActions[][],
   currentPosition: { index: number; level: number }
 ) {
-  return getConnectionIndex(matrix, currentPosition.index, 'back');
+  return getConnectionIndex(matrix, currentPosition.index, "back");
 }
 function getNestedSteps(
   matrix: StepperActions[][],
   currentPosition: { index: number; level: number }
 ): number[] {
   return matrix[currentPosition.index].reduce((prev, curr, currIndex) => {
-    if (curr === 'down') return [currIndex, ...prev];
+    if (curr === "down") return [currIndex, ...prev];
     return prev;
   }, []);
 }
@@ -54,17 +64,23 @@ function getParentSteps(
   currentPosition: { index: number; level: number }
 ): number[] {
   return matrix[currentPosition.index].reduce((prev, curr, currIndex) => {
-    if (curr === 'up') return [currIndex, ...prev];
+    if (curr === "up") return [currIndex, ...prev];
     return prev;
   }, []);
 }
 /** computes and sets the number of main steps in the form. Sets it to -1 if it encounters an infinite loop */
 export function computeNumberMainSteps(state: FormReducerState) {
   const { connectivityMatrix } = state;
-  const countNext = (m: StepperActions[][], currentRow: number, history: number[]) => {
-    const nextIndex = m[currentRow].findIndex(a => a === 'next');
+  const countNext = (
+    m: StepperActions[][],
+    currentRow: number,
+    history: number[]
+  ) => {
+    const nextIndex = m[currentRow].findIndex((a) => a === "next");
     if (history.includes(nextIndex)) return 1;
-    return nextIndex >= 0 ? 2 + countNext(m, nextIndex, [...history, nextIndex]) : 2;
+    return nextIndex >= 0
+      ? 2 + countNext(m, nextIndex, [...history, nextIndex])
+      : 2;
   };
   const count = countNext(connectivityMatrix, 0, []);
   return {
@@ -84,17 +100,29 @@ export function goNext(state: FormReducerState) {
         index: nextIndex,
         level: currentPosition.level,
         currentMainStep:
-          state.currentPosition.currentMainStep + (currentPosition.level === 0 ? 1 : 0),
-        currentMainStepIndex: currentPosition.level === 0 ? nextIndex : currentPosition.currentMainStepIndex,
+          state.currentPosition.currentMainStep +
+          (currentPosition.level === 0 ? 1 : 0),
+        currentMainStepIndex:
+          currentPosition.level === 0
+            ? nextIndex
+            : currentPosition.currentMainStepIndex,
       },
     };
   }
   // if we have no next, then look for an up and if that exists, go there instead.
-  const upIndex = getConnectionIndex(connectivityMatrix, currentPosition.index, 'up');
+  const upIndex = getConnectionIndex(
+    connectivityMatrix,
+    currentPosition.index,
+    "up"
+  );
   if (upIndex >= 0) {
     return {
       ...state,
-      currentPosition: { ...currentPosition, index: upIndex, level: currentPosition.level - 1 },
+      currentPosition: {
+        ...currentPosition,
+        index: upIndex,
+        level: currentPosition.level - 1,
+      },
     };
   }
   return { ...state };
@@ -110,17 +138,29 @@ export function goBack(state: FormReducerState) {
         ...currentPosition,
         index: backIndex,
         currentMainStep:
-          state.currentPosition.currentMainStep - (currentPosition.level === 0 ? 1 : 0),
-        currentMainStepIndex: currentPosition.level === 0 ? backIndex : currentPosition.currentMainStepIndex,
+          state.currentPosition.currentMainStep -
+          (currentPosition.level === 0 ? 1 : 0),
+        currentMainStepIndex:
+          currentPosition.level === 0
+            ? backIndex
+            : currentPosition.currentMainStepIndex,
       },
     };
   }
   // if we have no back, then look for an up and if that exists, go there instead.
-  const upIndex = getConnectionIndex(connectivityMatrix, currentPosition.index, 'up');
+  const upIndex = getConnectionIndex(
+    connectivityMatrix,
+    currentPosition.index,
+    "up"
+  );
   if (upIndex >= 0) {
     return {
       ...state,
-      currentPosition: { ...currentPosition, index: upIndex, level: currentPosition.level - 1 },
+      currentPosition: {
+        ...currentPosition,
+        index: upIndex,
+        level: currentPosition.level - 1,
+      },
     };
   }
   return { ...state };
@@ -133,12 +173,17 @@ export function goBack(state: FormReducerState) {
  */
 export function goDown(state: FormReducerState, targetStep: number | string) {
   const { connectivityMatrix, currentPosition } = state;
-  const index = typeof targetStep === 'number' ? targetStep : getIndex(state, targetStep);
+  const index =
+    typeof targetStep === "number" ? targetStep : getIndex(state, targetStep);
 
   if (getNestedSteps(connectivityMatrix, currentPosition).includes(index)) {
     return {
       ...state,
-      currentPosition: { ...currentPosition, index, level: currentPosition.level + 1 },
+      currentPosition: {
+        ...currentPosition,
+        index,
+        level: currentPosition.level + 1,
+      },
     };
   }
 }
@@ -149,12 +194,17 @@ export function goDown(state: FormReducerState, targetStep: number | string) {
  */
 export function goUp(state: FormReducerState, targetStep: number | string) {
   const { connectivityMatrix, currentPosition } = state;
-  const index = typeof targetStep === 'number' ? targetStep : getIndex(state, targetStep);
+  const index =
+    typeof targetStep === "number" ? targetStep : getIndex(state, targetStep);
 
   if (getParentSteps(connectivityMatrix, currentPosition).includes(index)) {
     return {
       ...state,
-      currentPosition: { ...currentPosition, index, level: currentPosition.level - 1 },
+      currentPosition: {
+        ...currentPosition,
+        index,
+        level: currentPosition.level - 1,
+      },
     };
   }
 }
@@ -166,14 +216,22 @@ export function goBackToMainForm(state: FormReducerState) {
   const { currentPosition } = state;
   return {
     ...state,
-    currentPosition: {...currentPosition, index: currentPosition.currentMainStepIndex, level: 0 }
-  }
+    currentPosition: {
+      ...currentPosition,
+      index: currentPosition.currentMainStepIndex,
+      level: 0,
+    },
+  };
 }
 
 export function goBackToMainFormAndNext(state: FormReducerState) {
   const { connectivityMatrix, currentPosition } = state;
 
-  const newPosition = {...currentPosition, index: currentPosition.currentMainStepIndex, level: 0};
+  const newPosition = {
+    ...currentPosition,
+    index: currentPosition.currentMainStepIndex,
+    level: 0,
+  };
   const nextIndex = getNextIndex(connectivityMatrix, newPosition);
   if (nextIndex >= 0) {
     return {
@@ -181,8 +239,7 @@ export function goBackToMainFormAndNext(state: FormReducerState) {
       currentPosition: {
         index: nextIndex,
         level: 0,
-        currentMainStep:
-          state.currentPosition.currentMainStep + 1,
+        currentMainStep: state.currentPosition.currentMainStep + 1,
         currentMainStepIndex: nextIndex,
       },
     };
@@ -192,7 +249,10 @@ export function goBackToMainFormAndNext(state: FormReducerState) {
  * Action to run when starting a form.
  * @param {object} state the current state of the form
  */
-export function startForm(state: FormReducerState, payload: { callback: () => void }) {
+export function startForm(
+  state: FormReducerState,
+  payload: { callback: () => void }
+) {
   // TODO: Pass user input values.
   payload.callback();
   return {
@@ -217,10 +277,13 @@ export function submitForm(
  * @param {FormReducerState} state The current state of the form
  * @param {Record<string, any>} answer The new answer(s): an object with key:value pairs, to be inserted into the states formAnswers
  */
-export function updateAnswer(state: FormReducerState, answer: Record<string, any>) {
+export function updateAnswer(
+  state: FormReducerState,
+  answer: Record<string, any>
+) {
   // make a deep copy of the formAnswers, and use that to update. Not sure if completely needed.
   const updatedAnswers: Record<string, any> = deepCopy(state.formAnswers);
-  Object.keys(answer).forEach(key => (updatedAnswers[key] = answer[key]));
+  Object.keys(answer).forEach((key) => (updatedAnswers[key] = answer[key]));
 
   return {
     ...state,
@@ -231,11 +294,13 @@ export function updateAnswer(state: FormReducerState, answer: Record<string, any
 /** Action for updating the list of all questions in the form state. */
 export function getAllQuestions(state: FormReducerState) {
   const allQuestions: Question[] = [];
-  state.steps.forEach(step => { if (step.questions) allQuestions.push(...step.questions)})
+  state.steps.forEach((step) => {
+    if (step.questions) allQuestions.push(...step.questions);
+  });
   return {
     ...state,
     allQuestions,
-  }
+  };
 }
 
 /**
@@ -253,20 +318,28 @@ export function validateAnswer(
   state: FormReducerState,
   answer: Record<string, any>,
   questionId: string,
-  checkIfDirty: boolean = false,
+  checkIfDirty = false
 ) {
   const { allQuestions } = state;
 
   // Return if question or question ID is undefined.
   if (!allQuestions || !questionId) return state;
 
-  const question = allQuestions.find(q => q.id === questionId);
+  const question = allQuestions.find((q) => q.id === questionId);
   if (!question) return state;
 
-  if (['text', 'number', 'date', 'checkbox', 'select'].includes(question.type)) {
+  if (
+    ["text", "number", "date", "checkbox", "select"].includes(question.type)
+  ) {
     const { validation } = question;
-    if (validation && ((checkIfDirty && state.dirtyFields?.[questionId]) || !checkIfDirty)) {
-      const [isValid, validationMessage] = validateInput(answer[questionId], validation.rules);
+    if (
+      validation &&
+      ((checkIfDirty && state.dirtyFields?.[questionId]) || !checkIfDirty)
+    ) {
+      const [isValid, validationMessage] = validateInput(
+        answer[questionId],
+        validation.rules
+      );
       return {
         ...state,
         validations: {
@@ -276,10 +349,17 @@ export function validateAnswer(
       };
     }
   }
-  if (question.type === 'editableList') {
-    const validationResults: Record<string, {isValid:boolean, validationMessage: string}> = {};
-    question.inputs.forEach(input => {
-      if (input.validation && ((checkIfDirty && state.dirtyFields?.[questionId]?.[input.key]) || !checkIfDirty)) {
+  if (question.type === "editableList") {
+    const validationResults: Record<
+      string,
+      { isValid: boolean; validationMessage: string }
+    > = {};
+    question.inputs.forEach((input) => {
+      if (
+        input.validation &&
+        ((checkIfDirty && state.dirtyFields?.[questionId]?.[input.key]) ||
+          !checkIfDirty)
+      ) {
         const [isValid, validationMessage] = validateInput(
           answer?.[questionId]?.[input?.key],
           input.validation.rules
@@ -295,15 +375,27 @@ export function validateAnswer(
       },
     };
   }
-  if (question.type === 'repeaterField') {
-    const validationResults: Record<string, {isValid:boolean, validationMessage: string}>[] = [];
-    if (answer[questionId]?.length > 0){
-      (answer[questionId] as Record<string, string>[]).forEach((a,index) => {
+  if (question.type === "repeaterField") {
+    const validationResults: Record<
+      string,
+      { isValid: boolean; validationMessage: string }
+    >[] = [];
+    if (answer[questionId]?.length > 0) {
+      (answer[questionId] as Record<string, string>[]).forEach((a, index) => {
         const localValidationResults = {};
-        question.inputs.forEach(input => {
-          if(input.validation && a[input.id] !== undefined && ((checkIfDirty && state.dirtyFields?.[questionId]?.[index]?.[input.id]) || !checkIfDirty)){
-            const [isValid, validationMessage] = validateInput(a[input.id], input.validation.rules);
-            localValidationResults[input.id] = { isValid, validationMessage};
+        question.inputs.forEach((input) => {
+          if (
+            input.validation &&
+            a[input.id] !== undefined &&
+            ((checkIfDirty &&
+              state.dirtyFields?.[questionId]?.[index]?.[input.id]) ||
+              !checkIfDirty)
+          ) {
+            const [isValid, validationMessage] = validateInput(
+              a[input.id],
+              input.validation.rules
+            );
+            localValidationResults[input.id] = { isValid, validationMessage };
           }
         });
         validationResults.push(localValidationResults);
@@ -321,9 +413,13 @@ export function validateAnswer(
 }
 
 function shouldValidateAnswer(validationItem, formAnswers, allQuestions) {
-  if(validationItem) {
-    if(validationItem.hasCondition && validationItem.conditionalOn) {
-      return evaluateConditionalExpression(validationItem.conditionalOn, formAnswers, allQuestions)
+  if (validationItem) {
+    if (validationItem.hasCondition && validationItem.conditionalOn) {
+      return evaluateConditionalExpression(
+        validationItem.conditionalOn,
+        formAnswers,
+        allQuestions
+      );
     }
 
     return true;
@@ -332,17 +428,25 @@ function shouldValidateAnswer(validationItem, formAnswers, allQuestions) {
   return false;
 }
 
-const recursiveValidationReducer = (isValidAccumulator: boolean, item: any) : boolean => {
+const recursiveValidationReducer = (
+  isValidAccumulator: boolean,
+  item: any
+): boolean => {
   if (!isValidAccumulator) return false;
   const { isValid } = item;
-  
+
   if (isValid === undefined) {
-    const nestedValidationArray = Array.isArray(item) ? item : Object.values(item);
-    return nestedValidationArray.reduce(recursiveValidationReducer, isValidAccumulator);
+    const nestedValidationArray = Array.isArray(item)
+      ? item
+      : Object.values(item);
+    return nestedValidationArray.reduce(
+      recursiveValidationReducer,
+      isValidAccumulator
+    );
   }
 
   return isValid;
-}
+};
 
 /**
  * Shall validate all inputs in a step that have validation rules.
@@ -356,7 +460,11 @@ const recursiveValidationReducer = (isValidAccumulator: boolean, item: any) : bo
  * @param onErrorCallback   Called when validation failed for an input field.
  * @param onValidCallback   Called when all field validated successfully.
  */
-export function validateAllStepAnswers( state: FormReducerState, onErrorCallback: () => void, onValidCallback: () => void ) {
+export function validateAllStepAnswers(
+  state: FormReducerState,
+  onErrorCallback: () => void,
+  onValidCallback: () => void
+) {
   // Collect all questions.
   const currentStepIndex = state.currentPosition.index;
   const currentStepQuestions = state.steps[currentStepIndex].questions;
@@ -364,53 +472,64 @@ export function validateAllStepAnswers( state: FormReducerState, onErrorCallback
 
   if (!currentStepQuestions || currentStepQuestions.length === 0) {
     onValidCallback();
-    return state
+    return state;
   }
 
   // Set dirtyFields for handling input onFocus.
-  let dirtyFields = {}
-  
+  const dirtyFields = {};
+
   // Validate all question inputs.
   state.validations = {};
   currentStepQuestions.forEach((question: any) => {
     const { type, items } = question;
     let itemsToValidate = [question];
 
-    if (type === 'summaryList') {
+    if (type === "summaryList") {
       itemsToValidate = items?.length > 0 ? items : [];
     }
 
     if (itemsToValidate.length > 0) {
-      itemsToValidate.forEach(validationItem => {
-        const answer = state.formAnswers[validationItem.id] || '';
+      itemsToValidate.forEach((validationItem) => {
+        const answer = state.formAnswers[validationItem.id] || "";
         dirtyFields[validationItem.id] = true;
 
-        if(shouldValidateAnswer(validationItem, state.formAnswers, state.allQuestions)) {
-          state = validateAnswer(state, { [validationItem.id]: answer }, validationItem.id);
+        if (
+          shouldValidateAnswer(
+            validationItem,
+            state.formAnswers,
+            state.allQuestions
+          )
+        ) {
+          state = validateAnswer(
+            state,
+            { [validationItem.id]: answer },
+            validationItem.id
+          );
         }
-      }) 
+      });
     }
   });
 
   const validationArray = Object.values(state.validations);
   if (validationArray.length > 0) {
-    allInputsValid = validationArray.reduce(recursiveValidationReducer, allInputsValid);
+    allInputsValid = validationArray.reduce(
+      recursiveValidationReducer,
+      allInputsValid
+    );
   }
 
   // Handle callbacks.
   if (allInputsValid) {
     if (onValidCallback) onValidCallback();
-  } else {
-    if (onErrorCallback) onErrorCallback();
-  }
+  } else if (onErrorCallback) onErrorCallback();
 
   return {
     ...state,
     dirtyFields: {
-      ...state.dirtyFields = dirtyFields
+      ...(state.dirtyFields = dirtyFields),
     },
-    allInputsValid
-  }
+    allInputsValid,
+  };
 }
 
 /**
@@ -429,10 +548,12 @@ export function dirtyField(
   // Return if question or question ID is undefined.
   if (!allQuestions || !questionId) return state;
 
-  const question = allQuestions.find(q => q.id === questionId);
+  const question = allQuestions.find((q) => q.id === questionId);
   if (!question) return state;
 
-  if (['text', 'number', 'date', 'checkbox', 'select'].includes(question.type)) {
+  if (
+    ["text", "number", "date", "checkbox", "select"].includes(question.type)
+  ) {
     return {
       ...state,
       dirtyFields: {
@@ -441,9 +562,9 @@ export function dirtyField(
       },
     };
   }
-  if (question.type === 'editableList') {
+  if (question.type === "editableList") {
     const inputs: Record<string, boolean> = {};
-    question.inputs.forEach(input => {
+    question.inputs.forEach((input) => {
       if (input.validation && answer[questionId][input.key] !== undefined) {
         inputs[input.key] = true;
       }
@@ -456,13 +577,13 @@ export function dirtyField(
       },
     };
   }
-  if (question.type === 'repeaterField') {
+  if (question.type === "repeaterField") {
     const inputs: Record<string, boolean>[] = [];
-    if (answer[questionId]?.length > 0){
-      (answer[questionId] as Record<string, string>[]).forEach(a => {
+    if (answer[questionId]?.length > 0) {
+      (answer[questionId] as Record<string, string>[]).forEach((a) => {
         const localDirtyFields: Record<string, boolean> = {};
-        question.inputs.forEach(input => {
-          if(input.validation && a[input.id] !== undefined){
+        question.inputs.forEach((input) => {
+          if (input.validation && a[input.id] !== undefined) {
             localDirtyFields[input.id] = true;
           }
         });
@@ -490,7 +611,10 @@ export const restoreSnapshot = (state: FormReducerState) => {
     return state;
   }
 
-  if (JSON.stringify(state.formAnswers) === JSON.stringify(state.formAnswerSnapshot)) {
+  if (
+    JSON.stringify(state.formAnswers) ===
+    JSON.stringify(state.formAnswerSnapshot)
+  ) {
     return state;
   }
 
@@ -499,7 +623,7 @@ export const restoreSnapshot = (state: FormReducerState) => {
     formAnswers: deepCopy(state.formAnswerSnapshot),
     formAnswerSnapshot: {},
   };
-}
+};
 
 export const deleteSnapshot = (state: FormReducerState) => ({
   ...state,
