@@ -11,3 +11,9 @@ export interface User {
   civilStatus: string; // might not actually be a string...
   address: Address;
 }
+
+export interface PartnerInfo {
+  partnerLastname: string;
+  partnerName: string;
+  partnerPersonalid: string;
+}

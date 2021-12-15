@@ -1,6 +1,6 @@
-import { Step } from '../../../types/FormTypes';
-import { User } from '../../../types/UserTypes';
-import { FormPeriod } from './useForm';
+import { Step } from "../../../types/FormTypes";
+import { PartnerInfo, User } from "../../../types/UserTypes";
+import { FormPeriod } from "./useForm";
 
 /**
  * The first argument is the string that should be replaced,
@@ -9,103 +9,126 @@ import { FormPeriod } from './useForm';
  * or perhaps computing some dates based on the current time.
  */
 const replacementRules = [
-  ['#firstName', 'user.firstName'],
-  ['#lastName', 'user.lastName'],
-  ['#date-1', 'date.nextMonth.first'],
-  ['#date-2', 'date.nextMonth.last'],
-  ['#month-1', 'date.previousMonth.currentMonth-1'],
-  ['#month-2', 'date.previousMonth.currentMonth-2'],
-  ['#month+1', 'date.previousMonth.currentMonth+1'],
-  ['#month+2', 'date.previousMonth.currentMonth+2'],
-  ['#month', 'date.previousMonth.currentMonth'],
-  ['#year', 'date.currentYear'], // this is the current year of next month
-  ['#today', 'date.currentDate'], // this is the current year of next month
+  ["#firstName", "user.firstName"],
+  ["#lastName", "user.lastName"],
+  ["#date-1", "date.nextMonth.first"],
+  ["#date-2", "date.nextMonth.last"],
+  ["#month-1", "date.previousMonth.currentMonth-1"],
+  ["#month-2", "date.previousMonth.currentMonth-2"],
+  ["#month+1", "date.previousMonth.currentMonth+1"],
+  ["#month+2", "date.previousMonth.currentMonth+2"],
+  ["#month", "date.previousMonth.currentMonth"],
+  ["#year", "date.currentYear"], // this is the current year of next month
+  ["#today", "date.currentDate"], // this is the current year of next month
+  ["#PARTNERNAME", "partner.partnerName"],
 ];
 
 const swedishMonthTable = [
-  'januari',
-  'februari',
-  'mars',
-  'april',
-  'maj',
-  'juni',
-  'juli',
-  'augusti',
-  'september',
-  'oktober',
-  'november',
-  'december',
+  "januari",
+  "februari",
+  "mars",
+  "april",
+  "maj",
+  "juni",
+  "juli",
+  "augusti",
+  "september",
+  "oktober",
+  "november",
+  "december",
 ];
 
 const replaceDates = (descriptor: string[], period?: FormPeriod): string => {
   const activeDate = period ? new Date(period.endDate) : new Date();
 
-  if (descriptor[1] === 'nextMonth') {
+  if (descriptor[1] === "nextMonth") {
     const month = activeDate.getMonth() + 2;
-    if (descriptor[2] === 'first') {
+    if (descriptor[2] === "first") {
       return `1/${month}`;
     }
-    if (descriptor[2] === 'last') {
+    if (descriptor[2] === "last") {
       const days = new Date(activeDate.getFullYear(), month, 0).getDate();
       return `${days}/${month}`;
     }
   }
 
-  if (descriptor[1] === 'currentYear') {
-    const year = new Date(activeDate.getFullYear(), activeDate.getMonth() + 1, 1).getFullYear();
+  if (descriptor[1] === "currentYear") {
+    const year = new Date(
+      activeDate.getFullYear(),
+      activeDate.getMonth() + 1,
+      1
+    ).getFullYear();
     return `${year}`;
   }
 
-  if (descriptor[1] === 'currentDate') {
+  if (descriptor[1] === "currentDate") {
     return `${activeDate.getDate()}`;
   }
 
-  if (descriptor[1] === 'previousMonth') {
+  if (descriptor[1] === "previousMonth") {
     const currentMonth = activeDate.getMonth();
 
     switch (descriptor[2]) {
-      case 'currentMonth':
+      case "currentMonth":
         return `${swedishMonthTable[currentMonth]}`;
-      case 'currentMonth-1':
+      case "currentMonth-1":
         return `${swedishMonthTable[currentMonth - 1]}`;
-      case 'currentMonth-2':
+      case "currentMonth-2":
         return `${swedishMonthTable[currentMonth - 2]}`;
-      case 'currentMonth+1':
+      case "currentMonth+1":
         return `${swedishMonthTable[currentMonth + 1]}`;
-      case 'currentMonth+2':
+      case "currentMonth+2":
         return `${swedishMonthTable[currentMonth + 2]}`;
       default:
         return `${swedishMonthTable[currentMonth]}`;
     }
   }
-  return '';
+  return "";
 };
 
-const replaceUserInfo = (descriptor: string[], user: User): string => {
+const replaceUserInfo = (
+  descriptor: string[],
+  user: User | PartnerInfo
+): string => {
   const res = descriptor.slice(1).reduce((prev, current) => {
+    console.log("prev", prev, "current", current);
     if (prev && prev[current]) return prev[current];
     return undefined;
   }, user);
-  return res || '';
+
+  return res || "";
 };
 
-const computeText = (descriptor: string, user: User, period?: FormPeriod): string => {
-  const strArr = descriptor.split('.');
-  if (strArr[0] === 'user') {
+const computeText = (
+  descriptor: string,
+  user: User,
+  period?: FormPeriod,
+  partner?: PartnerInfo
+): string => {
+  const strArr = descriptor.split(".");
+  if (strArr[0] === "user") {
     return replaceUserInfo(strArr, user);
   }
-  if (strArr[0] === 'date') {
+  if (strArr[0] === "partner" && partner) {
+    return replaceUserInfo(strArr, partner);
+  }
+  if (strArr[0] === "date") {
     return replaceDates(strArr, period);
   }
-  return '';
+  return "";
 };
 
-export const replaceText = (text: string, user: User, period?: FormPeriod) => {
+export const replaceText = (
+  text: string,
+  user: User,
+  period?: FormPeriod,
+  partner?: PartnerInfo
+) => {
   // This way of doing it might be a bit overkill, but the idea is that this in principle
   // allows for nesting replacement rules and then applying them in order one after the other.
   let res = text;
   replacementRules.forEach(([template, descriptor]) => {
-    res = res.replace(template, computeText(descriptor, user, period));
+    res = res.replace(template, computeText(descriptor, user, period, partner));
   });
   return res;
 };
@@ -119,20 +142,24 @@ export const replaceText = (text: string, user: User, period?: FormPeriod) => {
 export const replaceMarkdownTextInSteps = (
   steps: Step[],
   user: User,
-  period?: FormPeriod
+  period?: FormPeriod,
+  partner?: PartnerInfo
 ): Step[] => {
+  console.log("partner markdown", partner);
   const newSteps = steps.map((step) => {
     if (step.questions) {
       step.questions = step.questions.map((qs) => {
-        if (qs.label && qs.label !== '') {
-          qs.label = replaceText(qs.label, user, period);
+        if (qs.label && qs.label !== "") {
+          qs.label = replaceText(qs.label, user, period, partner);
         }
         return qs;
       });
     }
-    if (step.title) step.title = replaceText(step.title, user, period);
-    if (step.description) step.description = replaceText(step.description, user, period);
+    if (step.title) step.title = replaceText(step.title, user, period, partner);
+    if (step.description)
+      step.description = replaceText(step.description, user, period, partner);
     return step;
   });
+
   return newSteps;
 };
