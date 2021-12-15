@@ -3,9 +3,9 @@
   "version": "1.1.2",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
+    "android": "./scripts/add-commit-hash-to-env.sh && react-native run-android",
+    "ios": "./scripts/add-commit-hash-to-env.sh && react-native run-ios",
+    "start": "./scripts/add-commit-hash-to-env.sh && react-native start",
     "test": "jest",
     "lint": "eslint --fix .",
     "style": "prettier --write .",
@@ -14,7 +14,7 @@
     "rebuild-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
     "clean": "react-native-clean-project",
     "prestorybook": "rnstl",
-    "postinstall": "node scripts/rn-fetch-blob_warning.js"
+    "postinstall": "node scripts/rn-fetch-blob_warning.js; ./scripts/add-commit-hash-to-env.sh"
   },
   "dependencies": {
     "@notifee/react-native": "^4.0.0",
