@@ -67,10 +67,13 @@ const doTest = (
             type: "repeaterField",
             description: placeholder,
             heading: placeholder,
+            text: placeholder,
+            title: placeholder,
             inputs: [
               {
                 id: "amount",
                 label: placeholder,
+                title: placeholder,
               },
             ],
           },
@@ -90,9 +93,10 @@ const doTest = (
 
   expect(res[0]?.questions?.[1].items?.[0].title).toBe(expected);
   expect(res[0]?.questions?.[2].inputs?.[0].label).toBe(expected);
-  //   expect(res[0]?.questions?.[2].heading).toBe(expected);
-
-  // expect(res[0].questions?[0].label).toBe(expected);
+  expect(res[0]?.questions?.[2].inputs?.[0].title).toBe(expected);
+  expect(res[0]?.questions?.[2].text).toBe(expected);
+  expect(res[0]?.questions?.[2].heading).toBe(expected);
+  expect(res[0]?.questions?.[2].title).toBe(expected);
 };
 
 describe("replaceMarkdownTextInSteps", () => {
