@@ -30,14 +30,14 @@ describe("getAPIEnvironmentIdentifierFromUrl", () => {
     const devLetter = getAPIEnvironmentIdentifierFromUrl(devUrl);
     const releaseLetter = getAPIEnvironmentIdentifierFromUrl(releaseUrl);
 
-    expect(devLetter).toEqual("d");
-    expect(releaseLetter).toEqual("r");
+    expect(devLetter).toBe("d");
+    expect(releaseLetter).toBe("r");
   });
 
   it("returns production letter for production environment", () => {
     const prodLetter = getAPIEnvironmentIdentifierFromUrl(prodUrl);
 
-    expect(prodLetter).toEqual("p");
+    expect(prodLetter).toBe("p");
   });
 
   it("returns null on unexpected urls", () => {
