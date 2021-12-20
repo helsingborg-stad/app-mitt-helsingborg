@@ -41,19 +41,62 @@ const doTest = (
   partner: PartnerInfo | undefined = undefined
 ): void => {
   const res = replaceMarkdownTextInSteps(
-    [{ ...baseStep, title: placeholder, description: placeholder }],
+    [
+      {
+        ...baseStep,
+        title: placeholder,
+        description: placeholder,
+        questions: [
+          { ...baseQuestion, label: placeholder },
+          {
+            ...baseQuestion,
+            type: "summaryList",
+            items: [
+              {
+                inputId: "amount",
+                id: "unemploymentAllowance",
+                category: "benefits",
+                title: placeholder,
+                type: "checkbox",
+                inputSelectValue: "checkbox",
+              },
+            ],
+          },
+          {
+            ...baseQuestion,
+            type: "repeaterField",
+            description: placeholder,
+            heading: placeholder,
+            inputs: [
+              {
+                id: "amount",
+                label: placeholder,
+              },
+            ],
+          },
+        ],
+      },
+    ],
     mockedUserData,
-    undefined,
+    {
+      endDate: new Date("2021-01-01").getTime(),
+      startDate: new Date("2020-12-01").getTime(),
+    },
     partner
   );
   expect(res[0].title).toBe(expected);
   expect(res[0].description).toBe(expected);
+  expect(res[0].questions?.[0].label).toBe(expected);
+
+  expect(res[0]?.questions?.[1].items?.[0].title).toBe(expected);
+  expect(res[0]?.questions?.[2].inputs?.[0].label).toBe(expected);
+  //   expect(res[0]?.questions?.[2].heading).toBe(expected);
+
+  // expect(res[0].questions?[0].label).toBe(expected);
 };
 
 describe("replaceMarkdownTextInSteps", () => {
   describe("#month", () => {
-    jest.useFakeTimers().setSystemTime(new Date("2021-01-01").getTime());
-
     it.each([
       ["#month", "januari"],
       ["#month-1", "december"],
@@ -65,8 +108,6 @@ describe("replaceMarkdownTextInSteps", () => {
   });
 
   describe("#date", () => {
-    jest.useFakeTimers().setSystemTime(new Date("2021-01-01").getTime());
-
     it.each([
       ["#date-1", "1/2"],
       ["#date-2", "28/2"],
@@ -74,8 +115,6 @@ describe("replaceMarkdownTextInSteps", () => {
   });
 
   describe("Miscellaneous date stuff", () => {
-    jest.useFakeTimers().setSystemTime(new Date("2021-01-01").getTime());
-
     it.each([
       ["#year", "2021"],
       ["#today", "1"],
