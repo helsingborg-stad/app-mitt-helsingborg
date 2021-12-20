@@ -20,7 +20,7 @@ const replacementRules = [
   ["#month", "date.previousMonth.currentMonth"],
   ["#year", "date.currentYear"], // this is the current year of next month
   ["#today", "date.currentDate"], // this is the current year of next month
-  ["#PARTNERNAME", "partner.partnerName"],
+  ["#partnerName", "partner.partnerName"],
 ];
 
 const swedishMonthTable = [
