@@ -72,13 +72,13 @@ const replaceDates = (descriptor: string[], period?: FormPeriod): string => {
       case "currentMonth":
         return `${swedishMonthTable[currentMonth]}`;
       case "currentMonth-1":
-        return `${swedishMonthTable[currentMonth - 1]}`;
+        return `${swedishMonthTable[(currentMonth + 11) % 12]}`;
       case "currentMonth-2":
-        return `${swedishMonthTable[currentMonth - 2]}`;
+        return `${swedishMonthTable[(currentMonth + 10) % 12]}`;
       case "currentMonth+1":
-        return `${swedishMonthTable[currentMonth + 1]}`;
+        return `${swedishMonthTable[(currentMonth + 1) % 12]}`;
       case "currentMonth+2":
-        return `${swedishMonthTable[currentMonth + 2]}`;
+        return `${swedishMonthTable[(currentMonth + 2) % 12]}`;
       default:
         return `${swedishMonthTable[currentMonth]}`;
     }
