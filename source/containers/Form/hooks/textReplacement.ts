@@ -126,8 +126,6 @@ export const replaceText = (
   // This way of doing it might be a bit overkill, but the idea is that this in principle
   // allows for nesting replacement rules and then applying them in order one after the other.
   let res = text;
-  // console.log("text", text);
-
   replacementRules.forEach(([template, descriptor]) => {
     res = res.replace(template, computeText(descriptor, user, period, partner));
   });
@@ -149,12 +147,20 @@ export const replaceMarkdownTextInSteps = (
   const newSteps = steps.map((step) => {
     if (step.questions) {
       step.questions = step.questions.map((qs) => {
+        if (qs.text && qs.text !== "") {
+          qs.text = replaceText(qs.text, user, period, partner);
+        }
+
         if (qs.label && qs.label !== "") {
           qs.label = replaceText(qs.label, user, period, partner);
         }
 
         if (qs.title && qs.title !== "") {
           qs.title = replaceText(qs.title, user, period, partner);
+        }
+
+        if (qs.heading && qs.heading !== "") {
+          qs.heading = replaceText(qs.heading, user, period, partner);
         }
 
         if (qs.items) {
