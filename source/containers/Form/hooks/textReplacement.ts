@@ -11,7 +11,7 @@ import { FormPeriod } from "./useForm";
 const replacementRules = [
   ["#firstName", "user.firstName"],
   ["#lastName", "user.lastName"],
-  ["#date-1", "date.nextMonth.first"],
+  ["#date-1", "date.nextMonth.first"], // Who named this???? pls fixs
   ["#date-2", "date.nextMonth.last"],
   ["#month-1", "date.previousMonth.currentMonth-1"],
   ["#month-2", "date.previousMonth.currentMonth-2"],
@@ -126,6 +126,8 @@ export const replaceText = (
   // This way of doing it might be a bit overkill, but the idea is that this in principle
   // allows for nesting replacement rules and then applying them in order one after the other.
   let res = text;
+  // console.log("text", text);
+
   replacementRules.forEach(([template, descriptor]) => {
     res = res.replace(template, computeText(descriptor, user, period, partner));
   });
@@ -150,6 +152,28 @@ export const replaceMarkdownTextInSteps = (
         if (qs.label && qs.label !== "") {
           qs.label = replaceText(qs.label, user, period, partner);
         }
+
+        if (qs.title && qs.title !== "") {
+          qs.title = replaceText(qs.title, user, period, partner);
+        }
+
+        if (qs.items) {
+          qs.items = qs.items.map((item) => ({
+            ...item,
+            title: replaceText(item.title, user, period, partner),
+          }));
+        }
+
+        if (qs.inputs) {
+          qs.inputs = qs.inputs.map((input) => ({
+            ...input,
+            label:
+              input.label && replaceText(input.label, user, period, partner),
+            title:
+              input.title && replaceText(input.title, user, period, partner),
+          }));
+        }
+
         return qs;
       });
     }
