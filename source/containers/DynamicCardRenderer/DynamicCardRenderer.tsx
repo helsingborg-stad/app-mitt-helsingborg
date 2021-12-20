@@ -205,9 +205,7 @@ const DynamicCardRenderer: React.FC<Props> = ({
 }) => {
   let navigation: any = {};
 
-  const { user, ...rest } = useContext(AuthContext);
-
-  console.log("rest", rest);
+  const { user } = useContext(AuthContext);
 
   try {
     navigation = useNavigation();
