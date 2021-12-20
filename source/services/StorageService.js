@@ -16,7 +16,7 @@ export const USER_KEY = "@app:user";
 export const ORDER_KEY = "@app:orderRef";
 export const COMPLETED_FORMS_KEY = "@app:completedForms";
 export const APP_ENV_KEY = "@app:appEnv";
-
+export const API_ENDPOINT = "@app:apiEndpoint";
 export default class StorageService extends Component {
   /**
    * Get data from storage
