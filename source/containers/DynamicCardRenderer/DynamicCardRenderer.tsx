@@ -220,7 +220,7 @@ const DynamicCardRenderer: React.FC<Props> = ({
         outlined={outlined}
       >
         {components.map((component, index) =>
-          renderCardComponent(component, navigation, index, user, partner)
+          renderCardComponent(component, navigation, index, user)
         )}
       </Card.Body>
     </Card>
