@@ -4,6 +4,9 @@ import styled from "styled-components/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RenderRules } from "react-native-markdown-display";
+import RNPickerSelect from "react-native-picker-select";
+import StorageService, { API_ENDPOINT } from "../services/StorageService";
+import AppContext from "../store/AppContext";
 import { SLIDES } from "../assets/images";
 import Button from "../components/atoms/Button";
 import Heading from "../components/atoms/Heading";
@@ -162,6 +165,22 @@ const VersionLabel = styled(Text)`
   align-self: flex-start;
 `;
 
+const pickerSelectStyles = {
+  inputIOS: {
+    fontSize: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 4,
+    color: "black",
+    paddingRight: 30,
+  },
+  inputAndroid: {
+    color: "black",
+  },
+};
+
 function LoginScreen(): JSX.Element {
   const {
     handleAuth,
@@ -179,6 +198,8 @@ function LoginScreen(): JSX.Element {
   const [agreementModalVisible, toggleAgreementModal] = useModal();
   const [personalNumber, setPersonalNumber] = useState("");
 
+  const { targets, selected, isDevMode } = useContext(AppContext);
+  const [selectedIndex, setSelectedIndex] = useState(selected);
   /**
    * Setup for markdown formatter used to render user agreement text.
    */
@@ -281,6 +302,20 @@ function LoginScreen(): JSX.Element {
               </Button>
               <Link onPress={toggleLoginModal}>Fler alternativ</Link>
             </Form>
+          )}
+          {isDevMode && (
+            <View>
+              <RNPickerSelect
+                onValueChange={(value, index) => {
+                  setSelectedIndex(index);
+                  StorageService.saveData(API_ENDPOINT, value);
+                }}
+                placeholder={{}}
+                items={targets}
+                itemKey={selectedIndex}
+                style={pickerSelectStyles}
+              />
+            </View>
           )}
 
           <Footer>

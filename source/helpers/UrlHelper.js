@@ -1,6 +1,6 @@
-import env from 'react-native-config';
-import { Linking, Platform } from 'react-native';
-import StorageService, { APP_ENV_KEY } from '../services/StorageService';
+import env from "react-native-config";
+import { Linking, Platform } from "react-native";
+import StorageService, { API_ENDPOINT } from "../services/StorageService";
 
 /**
  * Open requested URL
@@ -25,7 +25,7 @@ export const canOpenUrl = (url) =>
       return false;
     })
     .catch((err) => {
-      console.error('An error occurred', err);
+      console.error("An error occurred", err);
       return false;
     });
 
@@ -40,7 +40,7 @@ const encodeQueryData = (queryParams) => {
     data.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
   });
 
-  return data.join('&');
+  return data.join("&");
 };
 
 /**
@@ -48,17 +48,15 @@ const encodeQueryData = (queryParams) => {
  * @param {string} endpoint
  * @param {obj} params
  */
-export const buildServiceUrl = async (endpoint = '', params = {}) => {
-  const appEnv = await StorageService.getData(APP_ENV_KEY);
-  const devMode = appEnv === 'development';
-  const apiUrl = devMode ? env.MITTHELSINGBORG_IO_DEV : env.MITTHELSINGBORG_IO;
+export const buildServiceUrl = async (endpoint = "", params = {}) => {
+  const { baseUrl } = await StorageService.getData(API_ENDPOINT);
 
   // Build query url
   const queryString = encodeQueryData(params);
   // Trim slashes
-  const sanitizedEndpoint = endpoint.replace(/^\/|\/$/g, '');
+  const sanitizedEndpoint = endpoint.replace(/^\/|\/$/g, "");
   // Build url
-  const completeUrl = `${apiUrl}/${sanitizedEndpoint}?${queryString}`;
+  const completeUrl = `${baseUrl}/${sanitizedEndpoint}?${queryString}`;
 
   return completeUrl;
 };
@@ -68,11 +66,11 @@ export const buildServiceUrl = async (endpoint = '', params = {}) => {
  * @param {string} autoStartToken
  */
 export const buildBankIdClientUrl = (autoStartToken) => {
-  let url = 'bankid:///';
+  let url = "bankid:///";
   let queryString = `?autostarttoken=${autoStartToken}&redirect=null`;
 
-  if (Platform.OS === 'ios') {
-    url = 'https://app.bankid.com/';
+  if (Platform.OS === "ios") {
+    url = "https://app.bankid.com/";
     queryString = `?autostarttoken=${autoStartToken}&redirect=${env.APP_SCHEME}://`;
   }
 
