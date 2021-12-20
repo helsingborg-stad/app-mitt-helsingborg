@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-if [ -f ".env" ]
+if command -v git &> /dev/null
 then
     GIT_COMMIT_HASH=$(git rev-parse HEAD)
 
-    if grep -q "^GIT_COMMIT_HASH=" .env
+    if [ -f ".env" ] && grep -q "^GIT_COMMIT_HASH=" .env
     then
         echo "updating git hash to .env: $GIT_COMMIT_HASH"
         cat .env | sed "s/^GIT_COMMIT_HASH=.*/GIT_COMMIT_HASH=$GIT_COMMIT_HASH/" > .env.temp
@@ -13,9 +13,8 @@ then
     else
 
         echo "adding git hash to .env: $GIT_COMMIT_HASH"
-        echo "GIT_COMMIT_HASH=$GIT_COMMIT_HASH" >> .env
+        echo -e "\nGIT_COMMIT_HASH=$GIT_COMMIT_HASH" >> .env
     fi
 else
-    echo ".env not found! pwd is $(pwd)"
-    exit 1
+    echo "git not found - skipping commit hash update"
 fi
