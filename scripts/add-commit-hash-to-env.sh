@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 if [ -f ".env" ]
 then
     GIT_COMMIT_HASH=$(git rev-parse HEAD)
