@@ -1,3 +1,4 @@
+import { Period } from "app/types/Case";
 import { Question } from "app/types/FormTypes";
 import { PartnerInfo, User } from "app/types/UserTypes";
 import { Step } from "../../../../types/Form";
@@ -23,6 +24,11 @@ const baseStep: Step = {
   group: "",
 };
 
+const basePeriod: Period = {
+  endDate: new Date("2021-01-01").getTime(),
+  startDate: new Date("2020-12-01").getTime(),
+};
+
 const baseQuestion: Question = {
   id: "question-1",
   label: "Label",
@@ -38,7 +44,8 @@ const fakedPartnerInfo: PartnerInfo = {
 const doTest = (
   placeholder: string,
   expected: string,
-  partner: PartnerInfo | undefined = undefined
+  partner: PartnerInfo | undefined = undefined,
+  period: Period = basePeriod
 ): void => {
   const res = replaceMarkdownTextInSteps(
     [
@@ -81,10 +88,7 @@ const doTest = (
       },
     ],
     mockedUserData,
-    {
-      endDate: new Date("2021-01-01").getTime(),
-      startDate: new Date("2020-12-01").getTime(),
-    },
+    period,
     partner
   );
   expect(res[0].title).toBe(expected);
@@ -109,6 +113,22 @@ describe("replaceMarkdownTextInSteps", () => {
       ["#month+2", "mars"],
       ["#month, #month+1 & #month+2", "januari, februari & mars"],
     ])("Replaces %s with %s", doTest);
+  });
+
+  describe("#month in december", () => {
+    it.each([
+      ["#month", "december"],
+      ["#month-1", "november"],
+      ["#month-2", "oktober"],
+      ["#month+1", "januari"],
+      ["#month+2", "februari"],
+      ["#month, #month+1 & #month+2", "december, januari & februari"],
+    ])("Replaces %s with %s", (placeholder, expected) =>
+      doTest(placeholder, expected, undefined, {
+        endDate: new Date("2021-12-01").getTime(),
+        startDate: new Date("2021-12-31").getTime(),
+      })
+    );
   });
 
   describe("#date", () => {
