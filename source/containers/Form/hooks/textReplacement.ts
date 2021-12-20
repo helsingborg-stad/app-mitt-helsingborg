@@ -91,7 +91,6 @@ const replaceUserInfo = (
   user: User | PartnerInfo
 ): string => {
   const res = descriptor.slice(1).reduce((prev, current) => {
-    console.log("prev", prev, "current", current);
     if (prev && prev[current]) return prev[current];
     return undefined;
   }, user);
@@ -145,7 +144,6 @@ export const replaceMarkdownTextInSteps = (
   period?: FormPeriod,
   partner?: PartnerInfo
 ): Step[] => {
-  console.log("partner markdown", partner);
   const newSteps = steps.map((step) => {
     if (step.questions) {
       step.questions = step.questions.map((qs) => {
