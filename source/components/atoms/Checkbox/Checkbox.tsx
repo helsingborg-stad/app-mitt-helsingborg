@@ -40,7 +40,7 @@ const CheckboxTick = styled(Icon)<CheckboxProps>`
 
 interface Props {
   checked?: boolean;
-  onChange?: () => void;
+  onChange: () => void;
   disabled?: boolean;
   invertColors?: boolean;
   size?: "small" | "medium" | "large";
@@ -74,7 +74,7 @@ const Checkbox: React.FC<Props> = ({
     <CheckboxBox
       disabled={disabled}
       onPress={() => {
-        if (!disabled && onChange !== undefined) {
+        if (!disabled) {
           onChange();
         }
       }}
