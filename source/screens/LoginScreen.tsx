@@ -3,6 +3,7 @@ import { Alert, Linking, View, StatusBar } from "react-native";
 import styled from "styled-components/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { RenderRules } from "react-native-markdown-display";
 import { SLIDES } from "../assets/images";
 import Button from "../components/atoms/Button";
 import Heading from "../components/atoms/Heading";
@@ -16,11 +17,11 @@ import AuthContext from "../store/AuthContext";
 import { useNotification } from "../store/NotificationContext";
 import MarkdownConstructor from "../helpers/MarkdownConstructor";
 import userAgreementText from "../assets/text/userAgreementText";
-import theme from "../styles/theme";
+import theme from "../styles/theme"; // Vertical padding, Horizontal padding
+import backgroundImage from "../assets/images/illustrations/onboarding_05_logga-in_2x.png";
 
 const { sanitizePin, validatePin } = ValidationHelper;
-const UnifiedPadding = [24, 48]; // Vertical padding, Horizontal padding
-const backgroundImage = require("../assets/images/illustrations/onboarding_05_logga-in_2x.png");
+const UnifiedPadding = [24, 48];
 
 const SafeAreaViewTop = styled(SafeAreaView)`
   flex: 1;
@@ -148,7 +149,7 @@ const Label = styled(Text)`
   margin-bottom: 8px;
 `;
 
-function LoginScreen(props) {
+function LoginScreen(): JSX.Element {
   const {
     handleAuth,
     handleCancelOrder,
@@ -168,13 +169,13 @@ function LoginScreen(props) {
   /**
    * Setup for markdown formatter used to render user agreement text.
    */
-  const userAgreementMarkdownRules = {
-    text: (node, _children, _parent, _styles) => (
+  const userAgreementMarkdownRules: RenderRules = {
+    text: (node) => (
       <Text style={{ fontSize: 16 }} key={node.key}>
         {node.content}
       </Text>
     ),
-    bullet_list: (node, children, parent, styles) => (
+    bullet_list: (node, children, _parent, styles) => (
       <View key={node.key} style={[styles.list, styles.listUnordered]}>
         {children}
       </View>
@@ -186,7 +187,7 @@ function LoginScreen(props) {
    */
   useEffect(() => {
     if (isRejected && error?.message) {
-      showNotification("Ett fel inträffade", error.message, "neutral", 5000);
+      showNotification("Ett fel inträffade", error.message, "info", 5000);
       handleSetError(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -195,7 +196,7 @@ function LoginScreen(props) {
   /**
    * Handles the personal number input field changes and updates state.
    */
-  const handlePersonalNumber = (value) => {
+  const handlePersonalNumber = (value: string) => {
     setPersonalNumber(sanitizePin(value));
   };
 
@@ -300,6 +301,8 @@ function LoginScreen(props) {
             primary={false}
             showBackButton={false}
             colorSchema="red"
+            isSubstep={false}
+            onBack={undefined}
           />
           <FlexView>
             <Header>
@@ -329,7 +332,7 @@ function LoginScreen(props) {
                 <Label strong>PERSONNUMMER</Label>
                 <LoginInput
                   colorSchema="neutral"
-                  returnKeyType={null}
+                  returnKeyType={undefined}
                   placeholder="ååååmmddxxxx"
                   value={personalNumber}
                   onChangeText={handlePersonalNumber}
@@ -337,6 +340,8 @@ function LoginScreen(props) {
                   maxLength={12}
                   onSubmitEditing={() => handleLogin(true)}
                   center
+                  onBlur={() => ({})}
+                  onMount={() => ({})}
                 />
                 <Button
                   z={0}
@@ -344,7 +349,7 @@ function LoginScreen(props) {
                   size="large"
                   block
                   onClick={() => {
-                    handleLogin(true);
+                    void handleLogin(true);
                   }}
                   colorSchema="red"
                 >
@@ -373,6 +378,8 @@ function LoginScreen(props) {
             primary={false}
             showBackButton={false}
             colorSchema="red"
+            isSubstep={false}
+            onBack={undefined}
           />
           <UserAgreementForm>
             <MarkdownConstructor
