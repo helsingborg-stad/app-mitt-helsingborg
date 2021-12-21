@@ -19,6 +19,7 @@ import MarkdownConstructor from "../helpers/MarkdownConstructor";
 import userAgreementText from "../assets/text/userAgreementText";
 import theme from "../styles/theme"; // Vertical padding, Horizontal padding
 import backgroundImage from "../assets/images/illustrations/onboarding_05_logga-in_2x.png";
+import { getUserFriendlyAppVersion } from "../helpers/Misc";
 
 const { sanitizePin, validatePin } = ValidationHelper;
 const UnifiedPadding = [24, 48];
@@ -149,6 +150,18 @@ const Label = styled(Text)`
   margin-bottom: 8px;
 `;
 
+const VersionLabelContainer = styled(View)`
+  position: relative;
+  top: 10px;
+  left: 10px;
+`;
+
+const VersionLabel = styled(Text)`
+  padding: 2px 5px;
+  background-color: ${(props) => props.theme.colors.neutrals[6]};
+  align-self: flex-start;
+`;
+
 function LoginScreen(): JSX.Element {
   const {
     handleAuth,
@@ -226,6 +239,9 @@ function LoginScreen(): JSX.Element {
     <FlexView>
       <SafeAreaViewTop edges={["top", "right", "left"]}>
         <FlexImageBackground source={backgroundImage}>
+          <VersionLabelContainer>
+            <VersionLabel>{getUserFriendlyAppVersion()}</VersionLabel>
+          </VersionLabelContainer>
           <StatusBar
             barStyle="dark-content"
             backgroundColor={theme.colors.neutrals[6]}
