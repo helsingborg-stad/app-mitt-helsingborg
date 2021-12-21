@@ -44,6 +44,7 @@ function loadStories() {
   require("../source/components/molecules/TimeSlotPicker/TimeSlotPicker.stories");
   require("../source/components/molecules/TimeSpanButton/TimeSpanButton.stories");
   require("../source/components/molecules/ToastNotification/ToastNotifications.stories");
+  require("../source/components/organisms/BulletList/BulletList.stories");
   require("../source/components/organisms/ButtonList/ButtonList.stories");
   require("../source/components/organisms/FormList/FormList.stories");
   require("../source/components/organisms/Step/Step.stories");
@@ -51,7 +52,6 @@ function loadStories() {
   require("../source/components/organisms/Step/StepDescription/StepDescription.stories");
   require("../source/components/organisms/Step/StepFooter/StepFooter.stories");
   require("../source/components/organisms/SummaryList/SummaryList.stories");
-  require("../source/components/organisms/TaskCompletionList/TaskCompletionList.stories");
   require("../source/components/organisms/YoutubePopup/YoutubePopup.stories");
   require("../source/containers/DynamicCardRenderer/DynamicCardRenderer.stories");
   require("../source/containers/Form/Form.stories");
@@ -101,6 +101,7 @@ const stories = [
   "../source/components/molecules/TimeSlotPicker/TimeSlotPicker.stories",
   "../source/components/molecules/TimeSpanButton/TimeSpanButton.stories",
   "../source/components/molecules/ToastNotification/ToastNotifications.stories",
+  "../source/components/organisms/BulletList/BulletList.stories",
   "../source/components/organisms/ButtonList/ButtonList.stories",
   "../source/components/organisms/FormList/FormList.stories",
   "../source/components/organisms/Step/Step.stories",
@@ -108,7 +109,6 @@ const stories = [
   "../source/components/organisms/Step/StepDescription/StepDescription.stories",
   "../source/components/organisms/Step/StepFooter/StepFooter.stories",
   "../source/components/organisms/SummaryList/SummaryList.stories",
-  "../source/components/organisms/TaskCompletionList/TaskCompletionList.stories",
   "../source/components/organisms/YoutubePopup/YoutubePopup.stories",
   "../source/containers/DynamicCardRenderer/DynamicCardRenderer.stories",
   "../source/containers/Form/Form.stories",
