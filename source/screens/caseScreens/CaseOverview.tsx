@@ -356,7 +356,7 @@ function CaseOverview(props): JSX.Element {
       // since we cannot react to changes as of now.
       const delayBeforeFetch = 4000;
       wait(delayBeforeFetch).then(fetchCases).catch(onFailedToFetchCases);
-    }, [fetchCases])
+    }, [])
   );
 
   useFocusEffect(
