@@ -2,62 +2,66 @@ import ConfigurationService from "../ConfigurationService";
 
 describe("Test parsing of environment variables", () => {
   it("Extract the API key and URL from environment variables", () => {
-    const cfg = new ConfigurationService({
+    const cfg = new ConfigurationService(["PRODUCTION"], {
       PRODUCTION_MITTHELSINGBORG_IO: "https://production",
       PRODUCTION_MITTHELSINGBORG_IO_APIKEY: "1234",
     });
 
-    expect(cfg.getNamedEndpoint("PRODUCTION")).toStrictEqual({
+    expect(cfg.activeEndpoint).toStrictEqual({
+      name: "PRODUCTION",
       baseUrl: "https://production",
       apiKey: "1234",
     });
   });
-  it("THROW when API key corresponding to the name is missing", () => {
-    const cfg = new ConfigurationService({
+  it("Return undefined when API KEY is missing", () => {
+    const cfg = new ConfigurationService(["PRODUCTION"], {
       PRODUCTION_MITTHELSINGBORG_IO: "https://production",
     });
 
-    expect(() => {
-      cfg.getNamedEndpoint("PRODUCTION");
-    }).toThrow();
+    expect(cfg.activeEndpoint).toBeUndefined();
   });
 
-  it("THROW when the URL key corresponding the name is missing", () => {
-    const cfg = new ConfigurationService({
+  it("Return undefined when URL KEY is missing", () => {
+    const cfg = new ConfigurationService(["PRODUCTION"], {
       PRODUCTION_MITTHELSINGBORG_IO_APIKEY: "1234",
     });
 
-    expect(() => {
-      cfg.getNamedEndpoint("PRODUCTION");
-    }).toThrow();
+    expect(cfg.activeEndpoint).toBeUndefined();
   });
 
-  it("Choose default endpoint when the API_ENVS key exists", () => {
-    const cfg = new ConfigurationService({
-      API_ENVS: "DEVELOP,PRODUCTION",
+  it("Choose first as default endpoint when multiple environments exists", () => {
+    const cfg = new ConfigurationService(["DEVELOP", "PRODUCTION"], {
       PRODUCTION_MITTHELSINGBORG_IO: "https://production",
       PRODUCTION_MITTHELSINGBORG_IO_APIKEY: "1234",
       DEVELOP_MITTHELSINGBORG_IO: "https://develop",
       DEVELOP_MITTHELSINGBORG_IO_APIKEY: "5678",
     });
 
-    expect(cfg.defaultEndpoint).toStrictEqual({
+    expect(cfg.activeEndpoint).toStrictEqual({
+      name: "DEVELOP",
       baseUrl: "https://develop",
       apiKey: "5678",
     });
   });
 
-  it("Choose default endpoint as DEVELOP when the API_ENVS key is missing", () => {
-    const cfg = new ConfigurationService({
+  it("Set active endpoint to arbitraty values", () => {
+    const cfg = new ConfigurationService(["DEVELOP", "PRODUCTION"], {
       PRODUCTION_MITTHELSINGBORG_IO: "https://production",
       PRODUCTION_MITTHELSINGBORG_IO_APIKEY: "1234",
       DEVELOP_MITTHELSINGBORG_IO: "https://develop",
       DEVELOP_MITTHELSINGBORG_IO_APIKEY: "5678",
     });
 
-    expect(cfg.defaultEndpoint).toStrictEqual({
-      baseUrl: "https://develop",
-      apiKey: "5678",
+    cfg.activeEndpoint = {
+      name: "TEST",
+      baseUrl: "https://test",
+      apiKey: "1234",
+    };
+
+    expect(cfg.activeEndpoint).toStrictEqual({
+      name: "TEST",
+      baseUrl: "https://test",
+      apiKey: "1234",
     });
   });
 });
