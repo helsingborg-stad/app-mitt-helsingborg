@@ -34,16 +34,10 @@ export default class ConfigurationService {
     [this.endpoint] = this.endpoints;
   }
 
-  /**
-   * Returns the environments specified in the API_ENVS variable as an array
-   */
   get environments(): string[] {
     return this.endpoints.map(({ name }) => name);
   }
 
-  /**
-   * Returns the endpoint first environment specified in the API_ENVS variable
-   */
   get activeEndpoint(): Endpoint {
     return this.endpoint;
   }
@@ -52,9 +46,6 @@ export default class ConfigurationService {
     this.endpoint = endpoint;
   }
 
-  /**
-   * Returns the complete set of environment options in a format that could be consumed by a picker
-   */
   get environmentOptions(): EnvironmentOption[] {
     return this.endpoints.map((endpoint) => ({
       label: endpoint.name,
