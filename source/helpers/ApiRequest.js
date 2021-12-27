@@ -1,11 +1,9 @@
 import axios from "axios";
 import { Platform } from "react-native";
-import StorageService, {
-  ACCESS_TOKEN_KEY,
-  API_ENDPOINT,
-} from "../services/StorageService";
+import StorageService, { ACCESS_TOKEN_KEY } from "../services/StorageService";
 import { buildServiceUrl } from "./UrlHelper";
 import { name, version } from "../../package.json";
+import { Configuration } from "../store/AppContext";
 
 /**
  * Axios request
@@ -19,7 +17,7 @@ import { name, version } from "../../package.json";
 const request = async (endpoint, method, data, headers, params) => {
   const url = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
-  const { apiKey } = await StorageService.getData(API_ENDPOINT);
+  const { apiKey } = Configuration.activeEndpoint;
   const userAgent = `${name}/${version}/${Platform.OS}/${Platform.Version}`;
 
   // Merge custom headers

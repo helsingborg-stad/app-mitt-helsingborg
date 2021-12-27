@@ -1,10 +1,8 @@
 import axios from "axios";
 import RNFetchBlob from "rn-fetch-blob";
-import StorageService, {
-  ACCESS_TOKEN_KEY,
-  API_ENDPOINT,
-} from "../services/StorageService";
+import StorageService, { ACCESS_TOKEN_KEY } from "../services/StorageService";
 import { buildServiceUrl } from "./UrlHelper";
+import { Configuration } from "../store/AppContext";
 
 export const getBlob = async (fileUri: string) => {
   const response = await fetch(fileUri);
@@ -40,7 +38,7 @@ export const uploadFile = async ({
 }: FileUploadParams) => {
   const requestUrl = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
-  const { apiKey } = await StorageService.getData(API_ENDPOINT);
+  const { apiKey } = Configuration.activeEndpoint;
 
   const bearer = token || "";
 

@@ -2,16 +2,22 @@ import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
 import env from "react-native-config";
 import ConfigurationService from "../services/ConfigurationService";
-import StorageService, {
-  API_ENDPOINT,
-  APP_ENV_KEY,
-} from "../services/StorageService";
+import StorageService, { APP_ENV_KEY } from "../services/StorageService";
 
 const AppContext = React.createContext({});
+
+export const Configuration = new ConfigurationService(
+  (env.API_ENVS ?? "")
+    .split(",")
+    .map((v) => v.trim())
+    .filter((v) => v),
+  env
+);
 
 interface Provider {
   mode: string;
   handleSetMode(newMode: string): void;
+  configuration: ConfigurationService;
   isDevMode: boolean;
 }
 
@@ -37,18 +43,12 @@ function AppProvider({ children }: AppProviderProps): JSX.Element {
     mode,
     handleSetMode: (newMode: string) => handleSetMode(newMode),
     isDevMode: mode === "development",
+    configuration: Configuration,
   };
 
   useEffect(() => {
     void StorageService.saveData(APP_ENV_KEY, mode);
   }, [mode]);
-
-  useEffect(() => {
-    void StorageService.saveData(
-      API_ENDPOINT,
-      new ConfigurationService().defaultEndpoint
-    );
-  }, []);
 
   return <AppContext.Provider value={provider}>{children}</AppContext.Provider>;
 }

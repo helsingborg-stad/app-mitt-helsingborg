@@ -1,7 +1,6 @@
 import env from "react-native-config";
 import { Linking, Platform } from "react-native";
-import StorageService, { API_ENDPOINT } from "../services/StorageService";
-
+import { Configuration } from "../store/AppContext";
 /**
  * Open requested URL
  *
@@ -49,8 +48,7 @@ const encodeQueryData = (queryParams) => {
  * @param {obj} params
  */
 export const buildServiceUrl = async (endpoint = "", params = {}) => {
-  const { baseUrl } = await StorageService.getData(API_ENDPOINT);
-
+  const { baseUrl } = Configuration.activeEndpoint;
   // Build query url
   const queryString = encodeQueryData(params);
   // Trim slashes

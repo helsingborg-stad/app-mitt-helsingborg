@@ -12,7 +12,7 @@ interface Endpoint {
 interface EnvironmentOption {
   label: string;
   value: Endpoint;
-  key: number;
+  key: string;
 }
 
 export default class ConfigurationService {
@@ -56,10 +56,10 @@ export default class ConfigurationService {
    * Returns the complete set of environment options in a format that could be consumed by a picker
    */
   get environmentOptions(): EnvironmentOption[] {
-    return this.endpoints.map((endpoint, key) => ({
+    return this.endpoints.map((endpoint) => ({
       label: endpoint.name,
       value: endpoint,
-      key,
+      key: endpoint.name,
     }));
   }
 }
