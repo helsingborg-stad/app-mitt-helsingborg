@@ -5,7 +5,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RenderRules } from "react-native-markdown-display";
 import RNPickerSelect from "react-native-picker-select";
-import StorageService, { API_ENDPOINT } from "../services/StorageService";
 import AppContext from "../store/AppContext";
 import { SLIDES } from "../assets/images";
 import Button from "../components/atoms/Button";
@@ -23,7 +22,6 @@ import userAgreementText from "../assets/text/userAgreementText";
 import backgroundImage from "../assets/images/illustrations/onboarding_05_logga-in_2x.png";
 import { getUserFriendlyAppVersion } from "../helpers/Misc";
 import theme from "../styles/theme";
-import ConfigurationService from "../services/ConfigurationService";
 
 const { sanitizePin, validatePin } = ValidationHelper;
 const UnifiedPadding = [24, 48];
@@ -198,9 +196,8 @@ function LoginScreen(): JSX.Element {
   const [loginModalVisible, toggleLoginModal] = useModal();
   const [agreementModalVisible, toggleAgreementModal] = useModal();
   const [personalNumber, setPersonalNumber] = useState("");
-  const [selectedEnvironment, setSelectedEnvironment] = useState(0);
 
-  const { isDevMode } = useContext(AppContext);
+  const { isDevMode, configuration } = useContext(AppContext);
   /**
    * Setup for markdown formatter used to render user agreement text.
    */
@@ -236,8 +233,7 @@ function LoginScreen(): JSX.Element {
   };
 
   const onEnvironmentSelectionChange = (value, index) => {
-    setSelectedEnvironment(index);
-    StorageService.saveData(API_ENDPOINT, value);
+    configuration.activeEndpoint = value;
   };
 
   /**
@@ -314,8 +310,8 @@ function LoginScreen(): JSX.Element {
               <RNPickerSelect
                 onValueChange={onEnvironmentSelectionChange}
                 placeholder={{}}
-                items={new ConfigurationService().environmentOptions}
-                itemKey={selectedEnvironment}
+                items={configuration.environmentOptions}
+                itemKey={configuration.activeEndpoint.key}
                 style={pickerSelectStyles}
               />
             </View>
