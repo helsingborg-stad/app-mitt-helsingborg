@@ -38,7 +38,7 @@ export default class StorageService extends Component {
    * Save key value pair to storage.
    *
    * @param {String} key   The AsyncStorage key
-   * @param {String} value The AsyncStorage value
+   * @param {Object} value The AsyncStorage value
    * @returns {Promise}
    */
   static saveData = (key, value) =>

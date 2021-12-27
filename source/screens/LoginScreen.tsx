@@ -20,9 +20,10 @@ import AuthContext from "../store/AuthContext";
 import { useNotification } from "../store/NotificationContext";
 import MarkdownConstructor from "../helpers/MarkdownConstructor";
 import userAgreementText from "../assets/text/userAgreementText";
-import theme from "../styles/theme"; // Vertical padding, Horizontal padding
 import backgroundImage from "../assets/images/illustrations/onboarding_05_logga-in_2x.png";
 import { getUserFriendlyAppVersion } from "../helpers/Misc";
+import theme from "../styles/theme";
+import ConfigurationService from "../services/ConfigurationService";
 
 const { sanitizePin, validatePin } = ValidationHelper;
 const UnifiedPadding = [24, 48];
@@ -197,9 +198,9 @@ function LoginScreen(): JSX.Element {
   const [loginModalVisible, toggleLoginModal] = useModal();
   const [agreementModalVisible, toggleAgreementModal] = useModal();
   const [personalNumber, setPersonalNumber] = useState("");
+  const [selectedEnvironment, setSelectedEnvironment] = useState(0);
 
-  const { targets, selected, isDevMode } = useContext(AppContext);
-  const [selectedIndex, setSelectedIndex] = useState(selected);
+  const { isDevMode } = useContext(AppContext);
   /**
    * Setup for markdown formatter used to render user agreement text.
    */
@@ -232,6 +233,11 @@ function LoginScreen(): JSX.Element {
    */
   const handlePersonalNumber = (value: string) => {
     setPersonalNumber(sanitizePin(value));
+  };
+
+  const onEnvironmentSelectionChange = (value, index) => {
+    setSelectedEnvironment(index);
+    StorageService.saveData(API_ENDPOINT, value);
   };
 
   /**
@@ -306,13 +312,10 @@ function LoginScreen(): JSX.Element {
           {isDevMode && (
             <View>
               <RNPickerSelect
-                onValueChange={(value, index) => {
-                  setSelectedIndex(index);
-                  StorageService.saveData(API_ENDPOINT, value);
-                }}
+                onValueChange={onEnvironmentSelectionChange}
                 placeholder={{}}
-                items={targets}
-                itemKey={selectedIndex}
+                items={new ConfigurationService().environmentOptions}
+                itemKey={selectedEnvironment}
                 style={pickerSelectStyles}
               />
             </View>
