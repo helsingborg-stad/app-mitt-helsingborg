@@ -4,7 +4,7 @@ import StorageService, { ACCESS_TOKEN_KEY } from "../services/StorageService";
 import { buildServiceUrl } from "./UrlHelper";
 import { Configuration } from "../store/AppContext";
 
-export const getBlob = async (fileUri: string) => {
+export const getBlob = async (fileUri: string): Promise<Blob> => {
   const response = await fetch(fileUri);
   const fileBlob = await response.blob();
   return fileBlob;
@@ -35,7 +35,7 @@ export const uploadFile = async ({
   fileType,
   data,
   headers,
-}: FileUploadParams) => {
+}: FileUploadParams): Promise<unknown> => {
   const requestUrl = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
   const { apiKey } = Configuration.activeEndpoint;
@@ -101,7 +101,7 @@ interface FileDownloadParams {
 export const downloadFile = async ({
   endpoint,
   filename,
-}: FileDownloadParams) => {
+}: FileDownloadParams): Promise<unknown> => {
   const fileEnding = filename.split(".").pop();
   const mime = MimeTypes[fileEnding];
   const requestUrl = await buildServiceUrl(`${endpoint}/${filename}`);
