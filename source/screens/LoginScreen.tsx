@@ -405,7 +405,7 @@ function LoginScreen(): JSX.Element {
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <Link
                   onPress={() => {
-                    Linking.openURL(
+                    void Linking.openURL(
                       "https://support.bankid.com/sv/bankid/mobilt-bankid"
                     );
                   }}
