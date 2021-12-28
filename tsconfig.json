@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "skipLibCheck": true,
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -37,11 +38,5 @@
       }
     ]
   },
-  "exclude": [
-    "node_modules",
-    "babel.config.js",
-    "metro.config.js",
-    "react-native.config.js",
-    "jest.config.js"
-  ]
+  "include": ["./source/**/*"]
 }

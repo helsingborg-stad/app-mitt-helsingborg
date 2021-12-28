@@ -41,7 +41,7 @@ function AppProvider({ children }: AppProviderProps): JSX.Element {
 
   const provider: Provider = {
     mode,
-    handleSetMode: (newMode: string) => handleSetMode(newMode),
+    handleSetMode,
     isDevMode: mode === "development",
     configuration: Configuration,
   };

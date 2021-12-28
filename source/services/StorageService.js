@@ -38,10 +38,10 @@ export default class StorageService extends Component {
    *
    * @param {String} key   The AsyncStorage key
    * @param {Object} value The AsyncStorage value
-   * @returns {Promise}
    */
-  static saveData = (key, value) =>
+  static saveData(key, value) {
     AsyncStorage.setItem(key, JSON.stringify(value));
+  }
 
   /**
    * Save multiple values with key pair to storage.
