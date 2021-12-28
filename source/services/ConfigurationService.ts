@@ -1,4 +1,4 @@
-import env, { NativeConfig } from "react-native-config";
+import { NativeConfig } from "react-native-config";
 
 const URL_SUFFIX = "_MITTHELSINGBORG_IO";
 const API_SUFFIX = "_MITTHELSINGBORG_IO_APIKEY";
