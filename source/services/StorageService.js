@@ -38,9 +38,10 @@ export default class StorageService extends Component {
    *
    * @param {String} key   The AsyncStorage key
    * @param {Object} value The AsyncStorage value
+   * @returns {Promise}
    */
   static saveData(key, value) {
-    AsyncStorage.setItem(key, JSON.stringify(value));
+    return AsyncStorage.setItem(key, JSON.stringify(value));
   }
 
   /**
@@ -50,7 +51,9 @@ export default class StorageService extends Component {
    * @param {String} value The AsyncStorage value
    * @returns {Promise}
    */
-  static multiSaveData = (key, value) => AsyncStorage.multiSet(key, value);
+  static multiSaveData(key, value) {
+    return AsyncStorage.multiSet(key, value);
+  }
 
   /**
    * Remove data from storage
@@ -58,14 +61,18 @@ export default class StorageService extends Component {
    * @param {String} key The AsyncStorage key
    * @returns {Promise}
    */
-  static removeData = (key) => AsyncStorage.removeItem(key);
+  static removeData(key) {
+    return AsyncStorage.removeItem(key);
+  }
 
   /**
    * Remove all data from storage
    *
    * @returns {Promise}
    */
-  static clearData = () => AsyncStorage.clear();
+  static clearData() {
+    return AsyncStorage.clear();
+  }
 
   /**
    * Add an item to array in local storage
@@ -74,7 +81,7 @@ export default class StorageService extends Component {
    * @param {String} value The AsyncStorage value
    * @returns {Promise}
    */
-  static addDataToArray = async (key, value) => {
+  static async addDataToArray(key, value) {
     // Get the existing data
     const prevValue = await this.getData(key);
     // If no previous data exists, create an empty array
@@ -83,7 +90,7 @@ export default class StorageService extends Component {
     newValue.push(value);
     // Save back to localStorage
     return this.saveData(key, newValue);
-  };
+  }
 
   /**
    * Add an item to object in local storage
@@ -93,7 +100,7 @@ export default class StorageService extends Component {
    * @param {String} value      The AsyncStorage value
    * @returns {Promise}
    */
-  static addDataToObject = async (key, objectKey, value) => {
+  static async addDataToObject(key, objectKey, value) {
     // Get the existing data
     const prevValue = await this.getData(key);
     // If no previous data exists, create an empty object
@@ -103,5 +110,5 @@ export default class StorageService extends Component {
     newValue[objectKey] = value;
     // Save back to localStorage
     return this.saveData(key, newValue);
-  };
+  }
 }
