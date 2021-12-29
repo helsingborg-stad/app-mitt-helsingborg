@@ -144,7 +144,9 @@ const computeCaseCardComponent = (
   const isNotStarted = status?.type?.includes("notStarted");
   const isOngoing = status?.type?.includes("ongoing");
   const isClosed = status?.type?.includes("closed");
-  const isCompletionRequired = status?.type?.includes("completionRequired");
+  const isCompletionRequired =
+    status?.type?.includes("completionRequired") ||
+    status?.type?.includes("active:completion:required");
   const isSigned = status?.type?.includes("signed");
   const isWaitingForSign = status?.type?.includes("active:signature:pending");
   const selfHasSigned = casePersonData?.hasSigned;
@@ -179,7 +181,7 @@ const computeCaseCardComponent = (
   }
 
   if (isCompletionRequired) {
-    buttonProps.text = "Starta stickprov";
+    buttonProps.text = "Komplettera ansökan";
   }
 
   if (isSigned) {

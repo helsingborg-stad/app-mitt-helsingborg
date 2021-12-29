@@ -142,7 +142,9 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const statusType = caseData?.status?.type || "";
   const isNotStarted = statusType.includes("notStarted");
   const isOngoing = statusType.includes("ongoing");
-  const isCompletionRequired = statusType.includes("completionRequired");
+  const isCompletionRequired =
+    statusType.includes("completionRequired") ||
+    statusType.includes("active:completion:required");
   const isSigned = statusType.includes("signed");
   const isClosed = statusType.includes("closed");
   const isWaitingForSign = statusType.includes("active:signature:pending");
@@ -241,7 +243,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   }
 
   if (isCompletionRequired) {
-    buttonProps.text = "Starta stickprov";
+    buttonProps.text = "Komplettera ansökan";
   }
 
   if (isSigned) {
