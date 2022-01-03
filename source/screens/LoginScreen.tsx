@@ -307,15 +307,13 @@ function LoginScreen(): JSX.Element {
             </Form>
           )}
           {isDevMode && (
-            <View>
-              <RNPickerSelect
-                onValueChange={onEnvironmentSelectionChange}
-                placeholder={{}}
-                items={Configuration.environmentOptions}
-                itemKey={Configuration.activeEndpoint.name}
-                style={pickerSelectStyles}
-              />
-            </View>
+            <RNPickerSelect
+              onValueChange={onEnvironmentSelectionChange}
+              placeholder={{}}
+              items={Configuration.environmentOptions}
+              itemKey={Configuration.activeEndpoint.name}
+              style={pickerSelectStyles}
+            />
           )}
 
           <Footer>
