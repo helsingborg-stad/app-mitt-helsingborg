@@ -1,8 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import { Button, Text, Heading, Progressbar } from '../../atoms';
-import { colorPalette } from '../../../styles/palette';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import { Button, Text, Heading, Progressbar } from "../../atoms";
+import BulletList from "../../organisms/BulletList";
+import { colorPalette } from "../../../styles/palette";
 
 const Container = styled.View`
   display: flex;
@@ -15,17 +16,19 @@ const Container = styled.View`
 
 const Body = styled.TouchableHighlight`
   background-color: ${(props) =>
-    props.colorSchema === 'neutral'
+    props.colorSchema === "neutral"
       ? props.theme.colors.neutrals[7]
       : props.theme.colors.complementary[props.colorSchema][3]};
   ${(props) => {
     // Overrides colorSchema without affecting it's children
     if (props.color) {
       switch (props.color) {
-        case 'neutral':
+        case "neutral":
           return `background-color: ${props.theme.colors.neutrals[7]};`;
         default:
-          return `background-color: ${props.theme.colors.complementary[props.color][3]};`;
+          return `background-color: ${
+            props.theme.colors.complementary[props.color][3]
+          };`;
       }
     }
   }}
@@ -44,10 +47,12 @@ const Body = styled.TouchableHighlight`
   ${(props) => {
     if (props.outlined) {
       switch (props.colorSchema) {
-        case 'neutral':
+        case "neutral":
           return `border: 2px solid ${props.theme.colors.neutrals[0]};`;
         default:
-          return `border: 2px solid ${props.theme.colors.primary[props.colorSchema][0]};`;
+          return `border: 2px solid ${
+            props.theme.colors.primary[props.colorSchema][0]
+          };`;
       }
     }
   }}
@@ -72,7 +77,7 @@ const BodyContainer = styled.View`
 
 const CardTitle = styled(Heading)`
   color: ${(props) =>
-    props.colorSchema === 'neutral'
+    props.colorSchema === "neutral"
       ? props.theme.colors.neutrals[1]
       : props.theme.colors.primary[props.colorSchema][0]};
   margin-bottom: 0;
@@ -80,7 +85,7 @@ const CardTitle = styled(Heading)`
 
 const CardSubTitle = styled(Text)`
   color: ${(props) =>
-    props.colorSchema === 'neutral'
+    props.colorSchema === "neutral"
       ? props.theme.colors.neutrals[0]
       : props.theme.colors.primary[props.colorSchema][1]};
   font-size: ${(props) => props.theme.fontSizes[2]}px;
@@ -102,15 +107,15 @@ const CardButton = styled(Button)`
 const Outset = styled.View`
   padding-top: 8px;
   padding-bottom: 8px;
-  ${({ firstChild }) => firstChild && 'padding-top: 0px;'}
-  ${({ lastChild }) => lastChild && 'padding-bottom: 0px;'}
+  ${({ firstChild }) => firstChild && "padding-top: 0px;"}
+  ${({ lastChild }) => lastChild && "padding-bottom: 0px;"}
 `;
 
 const CardImage = styled.Image`
   width: 80px;
   height: 80px;
   resize-mode: contain;
-  ${({ circle }) => circle && 'border-radius: 50px;'}
+  ${({ circle }) => circle && "border-radius: 50px;"}
 `;
 
 const CardProgressbar = styled(Progressbar)`
@@ -123,18 +128,21 @@ const CardProgressbar = styled(Progressbar)`
  */
 const Card = ({ children, colorSchema, ...props }) => {
   // First filter out falsy child components. Then clone each child and add additional props
-  const childrenWithProps = React.Children.toArray(children).reduce((filtered, child, index) => {
-    if (child) {
-      const childWithProps = React.cloneElement(child, {
-        key: index,
-        colorSchema,
-        firstChild: index === 0,
-        lastChild: index === React.Children.count(children) - 1,
-      });
-      filtered.push(childWithProps);
-    }
-    return filtered;
-  }, []);
+  const childrenWithProps = React.Children.toArray(children).reduce(
+    (filtered, child, index) => {
+      if (child) {
+        const childWithProps = React.cloneElement(child, {
+          key: index,
+          colorSchema,
+          firstChild: index === 0,
+          lastChild: index === React.Children.count(children) - 1,
+        });
+        filtered.push(childWithProps);
+      }
+      return filtered;
+    },
+    []
+  );
 
   return <Container {...props}>{childrenWithProps}</Container>;
 };
@@ -148,12 +156,14 @@ Card.Body = ({ children, colorSchema, color, ...props }) => {
   const filteredChildren = React.Children.toArray(children).filter(Boolean);
 
   let underlayColor =
-    colorSchema === 'neutral'
+    colorSchema === "neutral"
       ? colorPalette.neutrals[5]
       : colorPalette.complementary[colorSchema][2];
   if (color) {
     underlayColor =
-      color === 'neutral' ? colorPalette.neutrals[5] : colorPalette.complementary[color][2];
+      color === "neutral"
+        ? colorPalette.neutrals[5]
+        : colorPalette.complementary[color][2];
   }
 
   const imageWithProps = [];
@@ -188,7 +198,9 @@ Card.Body = ({ children, colorSchema, color, ...props }) => {
       {...props}
     >
       <BodyWrapper>
-        {imageWithProps.length > 0 && <BodyImageContainer>{imageWithProps}</BodyImageContainer>}
+        {imageWithProps.length > 0 && (
+          <BodyImageContainer>{imageWithProps}</BodyImageContainer>
+        )}
         <BodyContainer>{childrenWithProps}</BodyContainer>
       </BodyWrapper>
     </Body>
@@ -247,7 +259,14 @@ Card.Text = ({ children, lastChild, firstChild, ...props }) => (
  * Renders a button
  * @param {props} props
  */
-Card.Button = ({ children, colorSchema, firstChild, lastChild, mt, ...props }) => (
+Card.Button = ({
+  children,
+  colorSchema,
+  firstChild,
+  lastChild,
+  mt,
+  ...props
+}) => (
   <Outset lastChild={lastChild} firstChild={firstChild}>
     <CardButton variant="link" z={0} colorSchema={colorSchema} block {...props}>
       {children}
@@ -269,49 +288,80 @@ Card.Image = ({ firstChild, lastChild, ...props }) => (
  * Renders a progress bar
  * @param {props} props
  */
-Card.Progressbar = ({ children, firstChild, lastChild, colorSchema, ...props }) => (
+Card.Progressbar = ({
+  children,
+  firstChild,
+  lastChild,
+  colorSchema,
+  ...props
+}) => (
   <Outset lastChild={lastChild} firstChild={firstChild}>
     <CardProgressbar rounded colorSchema={colorSchema} {...props} />
   </Outset>
 );
 
+/**
+ * Renders a bullet list
+ * @param {props} props
+ */
+Card.BulletList = ({ firstChild, lastChild, values }) => (
+  <Outset lastChild={lastChild} firstChild={firstChild}>
+    <BulletList values={values} />
+  </Outset>
+);
+
 Card.propTypes = {
   /** List of every immediate child */
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   /** Sets a color schema for the component */
-  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
 };
 
 Card.defaultProps = {
-  colorSchema: 'neutral',
+  colorSchema: "neutral",
 };
 
 Card.Body.propTypes = {
   /** List of every immediate child */
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   /** Sets a color schema for the component */
-  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
   /** Sets a color for the body that does not overrides colorSchema  */
-  color: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+  color: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
 };
 
 Card.Title.propTypes = {
   /** List of every immediate child */
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   /** Sets a color schema for the component */
-  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
 };
 
 Card.SubTitle.propTypes = {
   /** List of every immediate child */
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   /** Sets a color schema for the component */
-  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
 };
 
 Card.Text.propTypes = {
   /** List of every immediate child */
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   /** Equals true if child is first in children array */
   firstChild: PropTypes.bool,
   /** Equals true if child is last in children array */
@@ -320,7 +370,10 @@ Card.Text.propTypes = {
 
 Card.Image.propTypes = {
   /** List of every immediate child */
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   /** Equals true if child is first in children array */
   firstChild: PropTypes.bool,
   /** Equals true if child is last in children array */
@@ -329,20 +382,26 @@ Card.Image.propTypes = {
 
 Card.Progressbar.propTypes = {
   /** List of every immediate child */
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   /** Equals true if child is first in children array */
   firstChild: PropTypes.bool,
   /** Equals true if child is last in children array */
   lastChild: PropTypes.bool,
   /** Sets a color schema for the component */
-  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
 };
 
 Card.Button.propTypes = {
   /** List of every immediate child */
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   /** Sets a color schema for the component */
-  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
   /** Equals true if child is first in children array */
   firstChild: PropTypes.bool,
   /** Equals true if child is last in children array */
