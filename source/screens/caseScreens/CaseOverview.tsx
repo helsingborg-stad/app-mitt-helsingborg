@@ -269,7 +269,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   }
 
   if (isVivaCompletionRequired) {
-    buttonProps.text = "Komplettera ansölan";
+    buttonProps.text = "Komplettera ansökan";
   }
 
   const giveDate = payments?.payment?.givedate
