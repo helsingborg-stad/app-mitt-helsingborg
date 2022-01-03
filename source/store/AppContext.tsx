@@ -17,7 +17,6 @@ export const Configuration = new ConfigurationService(
 interface Provider {
   mode: string;
   handleSetMode(newMode: string): void;
-  configuration: ConfigurationService;
   isDevMode: boolean;
 }
 
@@ -43,7 +42,6 @@ function AppProvider({ children }: AppProviderProps): JSX.Element {
     mode,
     handleSetMode,
     isDevMode: mode === "development",
-    configuration: Configuration,
   };
 
   useEffect(() => {

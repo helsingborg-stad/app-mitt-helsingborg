@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RenderRules } from "react-native-markdown-display";
 import RNPickerSelect from "react-native-picker-select";
-import AppContext from "../store/AppContext";
+import AppContext, { Configuration } from "../store/AppContext";
 import { SLIDES } from "../assets/images";
 import Button from "../components/atoms/Button";
 import Heading from "../components/atoms/Heading";
@@ -197,7 +197,7 @@ function LoginScreen(): JSX.Element {
   const [agreementModalVisible, toggleAgreementModal] = useModal();
   const [personalNumber, setPersonalNumber] = useState("");
 
-  const { isDevMode, configuration } = useContext(AppContext);
+  const { isDevMode } = useContext(AppContext);
   /**
    * Setup for markdown formatter used to render user agreement text.
    */
@@ -233,7 +233,7 @@ function LoginScreen(): JSX.Element {
   };
 
   const onEnvironmentSelectionChange = (value) => {
-    configuration.activeEndpoint = value;
+    Configuration.activeEndpoint = value;
   };
 
   /**
@@ -311,8 +311,8 @@ function LoginScreen(): JSX.Element {
               <RNPickerSelect
                 onValueChange={onEnvironmentSelectionChange}
                 placeholder={{}}
-                items={configuration.environmentOptions}
-                itemKey={configuration.activeEndpoint.key}
+                items={Configuration.environmentOptions}
+                itemKey={Configuration.activeEndpoint.name}
                 style={pickerSelectStyles}
               />
             </View>
