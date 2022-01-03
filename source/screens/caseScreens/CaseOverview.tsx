@@ -18,6 +18,7 @@ import Body from "../../components/molecules/Dialog/Body";
 import BackgroundBlur from "../../components/molecules/Dialog/BackgroundBlur";
 import Button from "../../components/atoms/Button";
 import icons from "../../helpers/Icons";
+import getUnApprovedCompletionsDescriptions from "../../helpers/FormatCompletions";
 import { Text, Icon } from "../../components/atoms";
 import {
   Card,
@@ -33,7 +34,7 @@ import AuthContext from "../../store/AuthContext";
 import { put } from "../../helpers/ApiRequest";
 import { State as CaseContextState } from "../../types/CaseContext";
 import { wait } from "../../helpers/Misc";
-import { Case } from "../../types/Case";
+import { Case, ApplicationStatusType } from "../../types/Case";
 import { Form } from "../../types/FormTypes";
 
 const ButtonContainer = styled.View`
@@ -140,12 +141,20 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   );
 
   const statusType = caseData?.status?.type || "";
-  const isNotStarted = statusType.includes("notStarted");
-  const isOngoing = statusType.includes("ongoing");
-  const isCompletionRequired = statusType.includes("completionRequired");
-  const isSigned = statusType.includes("signed");
-  const isClosed = statusType.includes("closed");
-  const isWaitingForSign = statusType.includes("active:signature:pending");
+  const isNotStarted = statusType.includes(ApplicationStatusType.NOT_STARTED);
+  const isOngoing = statusType.includes(ApplicationStatusType.ONGOING);
+  const isRandomCheckRequired = statusType.includes(
+    ApplicationStatusType.ACTIVE_COMPLETION_RANDOM_CHECK_REQUIRED_VIVA
+  );
+  const isVivaCompletionRequired = statusType.includes(
+    ApplicationStatusType.ACTIVE_COMPLETION_REQUIRED_VIVA
+  );
+  const isSigned = statusType.includes(ApplicationStatusType.SIGNED);
+  const isClosed = statusType.includes(ApplicationStatusType.CLOSED);
+  const isWaitingForSign = statusType.includes(
+    ApplicationStatusType.ACTIVE_SIGNATURE_PENDING
+  );
+
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === "coApplicant";
 
@@ -164,7 +173,12 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const shouldShowCTAButton = isCoApplicant
     ? (isWaitingForSign && !selfHasSigned) ||
       (isWaitingForCoApplicantConfirm && selfNeedsToConfirm)
-    : isOngoing || isNotStarted || isCompletionRequired || isSigned || isClosed;
+    : isOngoing ||
+      isNotStarted ||
+      isRandomCheckRequired ||
+      isSigned ||
+      isClosed ||
+      isVivaCompletionRequired;
   const buttonProps: InternalButtonProps = {
     onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
     text: "",
@@ -240,7 +254,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
     }
   }
 
-  if (isCompletionRequired) {
+  if (isRandomCheckRequired) {
     buttonProps.text = "Starta stickprov";
   }
 
@@ -254,11 +268,24 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
     buttonProps.text = "Granska och signera";
   }
 
+  if (isVivaCompletionRequired) {
+    buttonProps.text = "Komplettera ansölan";
+  }
+
   const giveDate = payments?.payment?.givedate
     ? `${
         payments.payment.givedate.split("-")[2]
       } ${getSwedishMonthNameByTimeStamp(payments.payment.givedate, true)}`
     : undefined;
+
+  const unApprovedCompletionsDescriptions: string[] =
+    caseData?.status?.type ===
+      ApplicationStatusType.ACTIVE_COMPLETION_REQUIRED_VIVA &&
+    caseData?.details?.completions?.requested?.length > 0
+      ? getUnApprovedCompletionsDescriptions(
+          caseData.details.completions.requested
+        )
+      : [];
 
   return (
     <CaseCard
@@ -281,6 +308,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
       onCardClick={cardProps.onClick}
       onButtonClick={buttonProps.onClick}
       buttonColorScheme={buttonProps.colorSchema || colorSchema}
+      completions={unApprovedCompletionsDescriptions}
     />
   );
 };
@@ -333,8 +361,12 @@ function CaseOverview(props): JSX.Element {
       return matchesStatus;
     });
 
-  const activeCases = getCasesByStatuses(["notStarted", "active"]);
-  const closedCases = getCasesByStatuses(["closed"]);
+  const activeCases = getCasesByStatuses([
+    ApplicationStatusType.NOT_STARTED,
+    ApplicationStatusType.ACTIVE,
+    ApplicationStatusType.ACTIVE_COMPLETION_REQUIRED_VIVA,
+  ]);
+  const closedCases = getCasesByStatuses([ApplicationStatusType.CLOSED]);
 
   const onFailedToFetchCases = (error: Error) => {
     console.error("failed to fetch cases", error);

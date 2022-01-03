@@ -39,6 +39,7 @@ interface CaseCardProps {
   bookingTime?: string;
   dateTimeCardSize?: "large" | "small";
   buttonColorScheme?: string;
+  completions?: string[];
 }
 
 const CaseCard = ({
@@ -65,6 +66,7 @@ const CaseCard = ({
   bookingTime,
   dateTimeCardSize = "large",
   buttonColorScheme = "red",
+  completions = [],
 }: CaseCardProps): JSX.Element => (
   <Card colorSchema={colorSchema}>
     <Card.Body shadow color="neutral" onPress={onCardClick}>
@@ -106,6 +108,8 @@ const CaseCard = ({
           Avslaget: {declinedAmount}
         </Card.Text>
       )}
+
+      {completions.length > 0 && <Card.BulletList values={completions} />}
 
       {showButton && (
         <Card.Button onClick={onButtonClick} colorSchema={buttonColorScheme}>
