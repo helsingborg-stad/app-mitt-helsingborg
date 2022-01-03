@@ -1,23 +1,23 @@
-import React from 'react';
-import { ViewStyle, StyleSheet } from 'react-native';
-import styled from 'styled-components/native';
-import PropTypes from 'prop-types';
-import RNPickerSelect from 'react-native-picker-select';
-import theme from '../../../styles/theme';
-import Text from '../Text';
+import React from "react";
+import { ViewStyle, StyleSheet } from "react-native";
+import styled from "styled-components/native";
+import PropTypes from "prop-types";
+import RNPickerSelect from "react-native-picker-select";
+import theme from "../../../styles/theme";
+import Text from "../Text";
 
 // This library requires styling to follow the pattern here,
 // thus we have to use this rather than styled components
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     paddingHorizontal: 10,
-    textAlign: 'right',
+    textAlign: "right",
     color: theme.colors.neutrals[1],
     paddingRight: 10,
   },
   inputAndroid: {
     paddingHorizontal: 10,
-    textAlign: 'right',
+    textAlign: "right",
     color: theme.colors.neutrals[1],
     paddingRight: 10,
   },
@@ -43,59 +43,74 @@ interface Props {
   style?: ViewStyle;
   onBlur: (value: string) => void;
   onOpen: (event: undefined, isSelect: true) => void;
+  onClose: (event: undefined, isSelect: true) => void;
   showErrorMessage?: boolean;
   error?: { isValid: boolean; message: string };
 }
 
-const Select: React.FC<Props> = React.forwardRef(({
-  items,
-  onValueChange,
-  onBlur,
-  onOpen,
-  placeholder,
-  value,
-  editable = true,
-  showErrorMessage = true,
-  error,
-  style,
-}, ref) => {
+const Select: React.FC<Props> = React.forwardRef(
+  (
+    {
+      items,
+      onValueChange,
+      onBlur,
+      onOpen,
+      onClose,
+      placeholder,
+      value,
+      editable = true,
+      showErrorMessage = true,
+      error,
+      style,
+    },
+    ref
+  ) => {
+    const currentItem = items.find((item) => item.value === value);
+    const handleValueChange = (itemValue: string | number | boolean) => {
+      if (onValueChange && typeof onValueChange === "function") {
+        onValueChange(itemValue ? itemValue.toString() : null);
+      }
 
-  const currentItem = items.find(item => item.value === value);
-  const handleValueChange = (itemValue: string | number | boolean) => {
-    if (onValueChange && typeof onValueChange === 'function') {
-      onValueChange(itemValue ? itemValue.toString() : null);
-    }
+      if (itemValue == currentItem?.value) {
+        return;
+      }
 
-    if (itemValue == currentItem?.value) {
-      return;
-    }
+      if (onBlur) {
+        onBlur(currentItem?.value);
+      }
+    };
 
-    if (onBlur) {
-      onBlur(currentItem?.value);
-    }
+    const handleOpen = () => {
+      if (onOpen) onOpen(undefined, true);
+    };
+
+    const handleClose = () => {
+      if (onClose) onClose(undefined, true);
+    };
+
+    return (
+      <Wrapper style={style}>
+        <RNPickerSelect
+          style={pickerSelectStyles}
+          placeholder={{ label: placeholder, value: null }}
+          disabled={!editable}
+          value={currentItem?.value || null}
+          onValueChange={handleValueChange}
+          items={items}
+          ref={ref as React.LegacyRef<RNPickerSelect>}
+          doneText="Klar"
+          onOpen={handleOpen}
+          onClose={handleClose}
+        />
+        {showErrorMessage && error ? (
+          <StyledErrorText>{error?.message}</StyledErrorText>
+        ) : (
+          <></>
+        )}
+      </Wrapper>
+    );
   }
-
-  const handleOpen = () => {
-    if (onOpen) onOpen(undefined, true)
-  }
-
-  return (
-    <Wrapper style={style}>
-      <RNPickerSelect
-        style={pickerSelectStyles}
-        placeholder={{ label: placeholder, value: null }}
-        disabled={!editable}
-        value={currentItem?.value || null}
-        onValueChange={handleValueChange}
-        items={items}
-        ref={ref as React.LegacyRef<RNPickerSelect>}
-        doneText="Klar"
-        onOpen={handleOpen}
-      />
-      {showErrorMessage && error ? <StyledErrorText>{error?.message}</StyledErrorText> : <></>}
-    </Wrapper>
-  );
-});
+);
 
 Select.propTypes = {
   /** The list of choices */
@@ -123,7 +138,7 @@ Select.propTypes = {
 };
 
 Select.defaultProps = {
-  placeholder: 'Välj...',
+  placeholder: "Välj...",
 };
 
 export default Select;
