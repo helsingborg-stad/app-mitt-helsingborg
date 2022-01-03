@@ -1,13 +1,17 @@
 import { EncryptionDetails } from "./Encryption";
 
 export enum ApplicationStatusType {
+  ONGOING = "ongoing",
   ACTIVE_ONGOING = "active:ongoing",
   ACTIVE_PROCESSING = "active:processing",
   ACTIVE_SIGNATURE_COMPLETED = "active:signature:completed",
   ACTIVE_SIGNATURE_PENDING = "active:signature:pending",
   ACTIVE_SUBMITTED = "active:submitted",
   CLOSED = "closed",
+  SIGNED = "signed",
+  ACTIVE = "active",
   NOT_STARTED = "notStarted",
+  ACTIVE_COMPLETION_RANDOM_CHECK_REQUIRED_VIVA = "active:completionRandomCheckRequired:viva",
   ACTIVE_COMPLETION_REQUIRED_VIVA = "active:completionRequired:viva",
   CLOSED_APPROVED_VIVA = "closed:approved:viva",
   CLOSED_COMPLETION_REJECTED_VIVA = "closed:completionRejected:viva",
