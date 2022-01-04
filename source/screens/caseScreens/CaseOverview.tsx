@@ -18,7 +18,7 @@ import Body from "../../components/molecules/Dialog/Body";
 import BackgroundBlur from "../../components/molecules/Dialog/BackgroundBlur";
 import Button from "../../components/atoms/Button";
 import icons from "../../helpers/Icons";
-import getUnApprovedCompletionsDescriptions from "../../helpers/FormatCompletions";
+import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
 import { Text, Icon } from "../../components/atoms";
 import {
   Card,
@@ -157,9 +157,9 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
     ApplicationStatusType.ACTIVE_SIGNATURE_PENDING
   );
 
-  const unApprovedCompletionsDescriptions: string[] =
+  const unApprovedCompletionDescriptions: string[] =
     statusType === ApplicationStatusType.ACTIVE_COMPLETION_REQUIRED_VIVA
-      ? getUnApprovedCompletionsDescriptions(completions)
+      ? getUnapprovedCompletionDescriptions(completions)
       : [];
 
   const selfHasSigned = casePersonData?.hasSigned;
@@ -306,7 +306,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
       onCardClick={cardProps.onClick}
       onButtonClick={buttonProps.onClick}
       buttonColorScheme={buttonProps.colorSchema || colorSchema}
-      completions={unApprovedCompletionsDescriptions}
+      completions={unApprovedCompletionDescriptions}
     />
   );
 };
