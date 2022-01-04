@@ -2,20 +2,22 @@ interface CompletionsType {
   approved: boolean;
   description: string;
 }
-const getUnApprovedCompletionsDescriptions = (
+const getUnapprovedCompletionDescriptions = (
   completions: CompletionsType[]
 ): string[] => {
-  const completionsList = completions.reduce(
+  const completionDescriptions = completions.reduce(
     (previous: string[], current: CompletionsType) => {
-      if (!current?.approved) {
+      const unapprovedCompletion = !current?.approved;
+
+      if (unapprovedCompletion) {
         return [...previous, current.description];
       }
-      return [...previous];
+      return previous;
     },
     []
   );
 
-  return completionsList;
+  return completionDescriptions;
 };
 
-export default getUnApprovedCompletionsDescriptions;
+export default getUnapprovedCompletionDescriptions;

@@ -1,4 +1,4 @@
-import getUnApprovedCompletionsDescriptions from "../FormatCompletions";
+import getUnapprovedCompletionDescriptions from "../FormatCompletions";
 
 const mockCompletions = [
   {
@@ -13,7 +13,7 @@ const mockCompletions = [
 
 describe("FormatCompletions", () => {
   it("returns unapproved completions and its descriptions", () => {
-    const result = getUnApprovedCompletionsDescriptions(mockCompletions);
+    const result = getUnapprovedCompletionDescriptions(mockCompletions);
 
     expect(result).toHaveLength(1);
     expect(result).toEqual(["mock description one"]);
