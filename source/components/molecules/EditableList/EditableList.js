@@ -250,6 +250,8 @@ function EditableList({
       onFocus(e || { target }, isSelect);
     }
   };
+  const onInputScrollTo = (e, index, isSelect = false) =>
+    onInputFocus(e, index, isSelect);
 
   const handleListItemPress = (index) => {
     if (editable && inputRefs.current?.[index]?.focus)
@@ -305,13 +307,7 @@ function EditableList({
                   inputRefs.current[index] = el;
                 }}
                 onInputFocus={(e, isSelect) => onInputFocus(e, index, isSelect)}
-                onClose={(e, isSelect) => {
-                  onInputFocus(e, index, isSelect);
-                  // const target = inputRefs.current[index];
-                  // console.log(target);
-                  // target.scrollIntoView({ behavior: "smooth" });
-                  // console.log("onClose:", index);
-                }}
+                onClose={(e, isSelect) => onInputScrollTo(e, index, isSelect)}
               />
             </EditableListItemInputWrapper>
           </EditableListItem>,
