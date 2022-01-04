@@ -140,6 +140,8 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
     (person) => person.personalNumber === authContext.user.personalNumber
   );
 
+  const completions = caseData?.details?.completions?.requested || [];
+
   const statusType = caseData?.status?.type || "";
   const isNotStarted = statusType.includes(ApplicationStatusType.NOT_STARTED);
   const isOngoing = statusType.includes(ApplicationStatusType.ONGOING);
@@ -154,6 +156,11 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const isWaitingForSign = statusType.includes(
     ApplicationStatusType.ACTIVE_SIGNATURE_PENDING
   );
+
+  const unApprovedCompletionsDescriptions: string[] =
+    statusType === ApplicationStatusType.ACTIVE_COMPLETION_REQUIRED_VIVA
+      ? getUnApprovedCompletionsDescriptions(completions)
+      : [];
 
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === "coApplicant";
@@ -277,15 +284,6 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
         payments.payment.givedate.split("-")[2]
       } ${getSwedishMonthNameByTimeStamp(payments.payment.givedate, true)}`
     : undefined;
-
-  const unApprovedCompletionsDescriptions: string[] =
-    caseData?.status?.type ===
-      ApplicationStatusType.ACTIVE_COMPLETION_REQUIRED_VIVA &&
-    caseData?.details?.completions?.requested?.length > 0
-      ? getUnApprovedCompletionsDescriptions(
-          caseData.details.completions.requested
-        )
-      : [];
 
   return (
     <CaseCard
