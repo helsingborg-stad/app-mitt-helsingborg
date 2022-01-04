@@ -1,8 +1,7 @@
-type CompletionsType = {
+interface CompletionsType {
   approved: boolean;
   description: string;
-};
-
+}
 const getUnApprovedCompletionsDescriptions = (
   completions: CompletionsType[]
 ): string[] => {
