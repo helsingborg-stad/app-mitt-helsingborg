@@ -37,6 +37,17 @@ import { wait } from "../../helpers/Misc";
 import { Case, ApplicationStatusType } from "../../types/Case";
 import { Form } from "../../types/FormTypes";
 
+const {
+  ACTIVE_COMPLETION_RANDOM_CHECK_REQUIRED_VIVA,
+  ACTIVE_COMPLETION_REQUIRED_VIVA,
+  ACTIVE_SIGNATURE_PENDING,
+  NOT_STARTED,
+  ONGOING,
+  SIGNED,
+  CLOSED,
+  ACTIVE,
+} = ApplicationStatusType;
+
 const ButtonContainer = styled.View`
   display: flex;
   flex-direction: column;
@@ -143,24 +154,21 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const completions = caseData?.details?.completions?.requested || [];
 
   const statusType = caseData?.status?.type || "";
-  const isNotStarted = statusType.includes(ApplicationStatusType.NOT_STARTED);
-  const isOngoing = statusType.includes(ApplicationStatusType.ONGOING);
+  const isNotStarted = statusType.includes(NOT_STARTED);
+  const isOngoing = statusType.includes(ONGOING);
   const isRandomCheckRequired = statusType.includes(
-    ApplicationStatusType.ACTIVE_COMPLETION_RANDOM_CHECK_REQUIRED_VIVA
+    ACTIVE_COMPLETION_RANDOM_CHECK_REQUIRED_VIVA
   );
   const isVivaCompletionRequired = statusType.includes(
-    ApplicationStatusType.ACTIVE_COMPLETION_REQUIRED_VIVA
+    ACTIVE_COMPLETION_REQUIRED_VIVA
   );
-  const isSigned = statusType.includes(ApplicationStatusType.SIGNED);
-  const isClosed = statusType.includes(ApplicationStatusType.CLOSED);
-  const isWaitingForSign = statusType.includes(
-    ApplicationStatusType.ACTIVE_SIGNATURE_PENDING
-  );
+  const isSigned = statusType.includes(SIGNED);
+  const isClosed = statusType.includes(CLOSED);
+  const isWaitingForSign = statusType.includes(ACTIVE_SIGNATURE_PENDING);
 
-  const unApprovedCompletionDescriptions: string[] =
-    statusType === ApplicationStatusType.ACTIVE_COMPLETION_REQUIRED_VIVA
-      ? getUnapprovedCompletionDescriptions(completions)
-      : [];
+  const unApprovedCompletionDescriptions: string[] = isVivaCompletionRequired
+    ? getUnapprovedCompletionDescriptions(completions)
+    : [];
 
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === "coApplicant";
@@ -360,11 +368,11 @@ function CaseOverview(props): JSX.Element {
     });
 
   const activeCases = getCasesByStatuses([
-    ApplicationStatusType.NOT_STARTED,
-    ApplicationStatusType.ACTIVE,
-    ApplicationStatusType.ACTIVE_COMPLETION_REQUIRED_VIVA,
+    NOT_STARTED,
+    ACTIVE,
+    ACTIVE_COMPLETION_REQUIRED_VIVA,
   ]);
-  const closedCases = getCasesByStatuses([ApplicationStatusType.CLOSED]);
+  const closedCases = getCasesByStatuses([CLOSED]);
 
   const onFailedToFetchCases = (error: Error) => {
     console.error("failed to fetch cases", error);
