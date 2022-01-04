@@ -367,11 +367,7 @@ function CaseOverview(props): JSX.Element {
       return matchesStatus;
     });
 
-  const activeCases = getCasesByStatuses([
-    NOT_STARTED,
-    ACTIVE,
-    ACTIVE_COMPLETION_REQUIRED_VIVA,
-  ]);
+  const activeCases = getCasesByStatuses([NOT_STARTED, ACTIVE]);
   const closedCases = getCasesByStatuses([CLOSED]);
 
   const onFailedToFetchCases = (error: Error) => {
