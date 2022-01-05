@@ -1,6 +1,51 @@
+import _get from "lodash.get";
+import _set from "lodash.set";
+import moment from "moment";
+
 import { Step } from "../../../types/FormTypes";
 import { PartnerInfo, User } from "../../../types/UserTypes";
+import { Case } from "../../../types/Case";
+
 import { FormPeriod } from "./useForm";
+
+type CaseItemReplacementRuleType = {
+  key: string;
+  from: string;
+  to: string;
+  timeFormat?: string;
+};
+const caseItemReplacementRules: CaseItemReplacementRuleType[] = [
+  {
+    key: "#MONTH_NAME",
+    from: "details.workflow.application.periodstartdate",
+    to: "status.description",
+    timeFormat: "MMMM",
+  },
+  {
+    key: "#COMPLETION_DUEDATE",
+    from: "details.workflow.application.completionduedate",
+    to: "status.description",
+  },
+];
+
+export const replaceCaseItemText = (caseItem: Case): void => {
+  caseItemReplacementRules.forEach(
+    ({ key, from, to, timeFormat = "YYYY-MM-DD" }) => {
+      let newPropertValue = _get(caseItem, from, "");
+
+      const oldValue = _get(caseItem, to, "");
+
+      const isDate = moment(newPropertValue).isValid();
+      if (isDate) {
+        newPropertValue = moment(newPropertValue).format(timeFormat);
+      }
+
+      const newValue = oldValue.replace(key, newPropertValue);
+
+      _set(caseItem, to, newValue);
+    }
+  );
+};
 
 /**
  * The first argument is the string that should be replaced,
@@ -11,7 +56,7 @@ import { FormPeriod } from "./useForm";
 const replacementRules = [
   ["#firstName", "user.firstName"],
   ["#lastName", "user.lastName"],
-  ["#date-1", "date.nextMonth.first"], // Who named this???? pls fixs
+  ["#date-1", "date.nextMonth.first"],
   ["#date-2", "date.nextMonth.last"],
   ["#month-1", "date.previousMonth.currentMonth-1"],
   ["#month-2", "date.previousMonth.currentMonth-2"],
@@ -94,7 +139,6 @@ const replaceUserInfo = (
     if (prev && prev[current]) return prev[current];
     return undefined;
   }, user);
-
   return res || "";
 };
 

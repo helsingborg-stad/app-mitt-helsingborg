@@ -23,6 +23,8 @@ import {
   pollCase,
 } from "./actions/CaseActions";
 
+import { replaceCaseItemText } from "../containers/Form/hooks/textReplacement";
+
 const CaseState = React.createContext<ContextState>(defaultInitialState);
 const CaseDispatch = React.createContext<Dispatch>({});
 
@@ -139,6 +141,11 @@ function CaseProvider({
 
   const fetchCases = useCallback(async () => {
     const fetchData = await fetch(user);
+
+    if (fetchData.payload !== undefined) {
+      Object.values(fetchData.payload).map(replaceCaseItemText);
+    }
+
     dispatch(fetchData);
 
     const fetchPayload = fetchData.payload as Record<string, Case>;

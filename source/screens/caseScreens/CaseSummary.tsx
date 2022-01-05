@@ -31,6 +31,17 @@ import {
 } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
 import { put } from "../../helpers/ApiRequest";
+import { ApplicationStatusType } from "../../types/Case";
+
+const {
+  NOT_STARTED,
+  ONGOING,
+  CLOSED,
+  SIGNED,
+  ACTIVE_SIGNATURE_PENDING,
+  ACTIVE_COMPLETION_REQUIRED_VIVA,
+  ACTIVE_COMPLETION_RANDOM_CHECK_REQUIRED_VIVA,
+} = ApplicationStatusType;
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -141,12 +152,19 @@ const computeCaseCardComponent = (
     (person) => person.personalNumber === authContext.user.personalNumber
   );
 
-  const isNotStarted = status?.type?.includes("notStarted");
-  const isOngoing = status?.type?.includes("ongoing");
-  const isClosed = status?.type?.includes("closed");
-  const isCompletionRequired = status?.type?.includes("completionRequired");
-  const isSigned = status?.type?.includes("signed");
-  const isWaitingForSign = status?.type?.includes("active:signature:pending");
+  const statusType = status?.type;
+
+  const isNotStarted = statusType.includes(NOT_STARTED);
+  const isOngoing = statusType.includes(ONGOING);
+  const isClosed = statusType.includes(CLOSED);
+  const isRandomCheckRequired = statusType.includes(
+    ACTIVE_COMPLETION_RANDOM_CHECK_REQUIRED_VIVA
+  );
+  const isVivaCompletionRequired = statusType.includes(
+    ACTIVE_COMPLETION_REQUIRED_VIVA
+  );
+  const isSigned = statusType.includes(SIGNED);
+  const isWaitingForSign = statusType.includes(ACTIVE_SIGNATURE_PENDING);
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === "coApplicant";
 
@@ -163,7 +181,11 @@ const computeCaseCardComponent = (
 
   const shouldShowCTAButton = isCoApplicant
     ? isWaitingForSign && !selfHasSigned
-    : isOngoing || isNotStarted || isCompletionRequired || isSigned;
+    : isOngoing ||
+      isNotStarted ||
+      isRandomCheckRequired ||
+      isSigned ||
+      isVivaCompletionRequired;
 
   const buttonProps = {
     onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
@@ -178,8 +200,12 @@ const computeCaseCardComponent = (
     buttonProps.text = "Starta ansökan";
   }
 
-  if (isCompletionRequired) {
+  if (isRandomCheckRequired) {
     buttonProps.text = "Starta stickprov";
+  }
+
+  if (isVivaCompletionRequired) {
+    buttonProps.text = "Komplettera ansökan";
   }
 
   if (isSigned) {
@@ -202,6 +228,11 @@ const computeCaseCardComponent = (
       } ${getSwedishMonthNameByTimeStamp(payments.payment.givedate, true)}`
     : null;
 
+  const completions = [
+    "Dina barns räkningar",
+    "Dokument på angående din arbetssituation",
+  ];
+
   return (
     <CaseCard
       colorSchema={colorSchema}
@@ -222,6 +253,7 @@ const computeCaseCardComponent = (
       buttonText={buttonProps.text}
       onButtonClick={isClosed ? toggleModal : buttonProps.onClick}
       buttonIconName={isClosed ? "remove-red-eye" : "arrow-forward"}
+      completions={completions}
     />
   );
 };
