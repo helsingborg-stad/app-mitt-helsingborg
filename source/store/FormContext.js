@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { get } from '../helpers/ApiRequest';
-import FormTypes from '../assets/formTypes';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { get } from "../helpers/ApiRequest";
+import FormTypes from "../assets/formTypes";
 
 const FormContext = React.createContext();
 
@@ -16,7 +16,7 @@ export function FormProvider({ children }) {
       return formSummaries;
     }
     try {
-      const response = await get('/forms');
+      const response = await get("/forms");
       if (response.data.data.forms) {
         setFormSummaries(response.data.data.forms);
         return response.data.data.forms;
@@ -38,7 +38,7 @@ export function FormProvider({ children }) {
             setForms({ ...forms, [res.data.data.id]: res.data.data });
             return res;
           }
-          console.log('Form data not found');
+          console.log("Form data not found");
         })
         .catch((error) => console.log(error.message));
       return response.data.data;
@@ -47,7 +47,7 @@ export function FormProvider({ children }) {
     }
   };
 
-  const findFormByType = async (formType) => {
+  const findFormsByType = async (formType) => {
     const summaries = await getFormSummaries();
     if (!FormTypes.includes(formType)) {
       return {
@@ -57,26 +57,32 @@ export function FormProvider({ children }) {
       };
     }
     summaries.sort((f1, f2) => f2.updatedAt - f1.updatedAt);
-    const form = summaries.find((f) => !f.subform && f.formType === formType);
-    return form;
+    const formsWithSameType = summaries.filter(
+      (f) => !f.subform && f.formType === formType
+    );
+
+    return formsWithSameType;
   };
 
   const getFormIdsByFormTypes = async (formTypes) => {
     const promises = formTypes.map(async (type) => {
-      const formSummary = await findFormByType(type);
-      return formSummary?.id;
+      const formSummary = await findFormsByType(type);
+
+      const formIds = formSummary.map(({ id }) => id);
+
+      return formIds;
     });
 
-    const ids = await Promise.all(promises);
-    const idList = ids.filter((id) => id);
-    return idList;
+    const ids = (await Promise.all(promises)).flat();
+
+    return ids;
   };
 
   return (
     <FormContext.Provider
       value={{
         getFormIdsByFormTypes,
-        findFormByType,
+        findFormsByType,
         getForm,
         getFormSummaries,
       }}
