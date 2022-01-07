@@ -318,7 +318,6 @@ function LoginScreen(): JSX.Element {
             showBackButton={false}
             colorSchema="red"
             isSubstep={false}
-            onBack={undefined}
           />
           <FlexView>
             <Header>
@@ -348,7 +347,6 @@ function LoginScreen(): JSX.Element {
                 <Label strong>PERSONNUMMER</Label>
                 <LoginInput
                   colorSchema="neutral"
-                  returnKeyType={undefined}
                   placeholder="ååååmmddxxxx"
                   value={personalNumber}
                   onChangeText={handlePersonalNumber}
@@ -356,8 +354,6 @@ function LoginScreen(): JSX.Element {
                   maxLength={12}
                   onSubmitEditing={() => handleLogin(true)}
                   center
-                  onBlur={() => ({})}
-                  onMount={() => ({})}
                 />
                 <Button
                   z={0}
@@ -371,7 +367,6 @@ function LoginScreen(): JSX.Element {
                 >
                   <Text>Logga in</Text>
                 </Button>
-
                 <Link
                   onPress={() => {
                     Linking.openURL(
@@ -395,7 +390,6 @@ function LoginScreen(): JSX.Element {
             showBackButton={false}
             colorSchema="red"
             isSubstep={false}
-            onBack={undefined}
           />
           <UserAgreementForm>
             <MarkdownConstructor
