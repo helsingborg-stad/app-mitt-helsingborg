@@ -113,6 +113,8 @@ export interface Form {
   steps: Step[];
   connectivityMatrix: StepperActions[][];
   id: string;
+  updatedAt: number;
   formType?: string;
   provider?: string;
+  subform?: boolean;
 }

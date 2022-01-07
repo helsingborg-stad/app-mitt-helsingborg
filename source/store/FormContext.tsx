@@ -1,17 +1,39 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import PropTypes from "prop-types";
+import { Form } from "../types/FormTypes";
 import { get } from "../helpers/ApiRequest";
 import FormTypes from "../assets/formTypes";
 
-const FormContext = React.createContext();
+interface FindFormError {
+  error: boolean;
+  message: string;
+  status: number;
+}
+
+interface FormContextValue {
+  getFormIdsByFormTypes?: (formTypes: string[]) => Promise<string[]>;
+  findFormsByType?: (formType: string) => Promise<Form[] | FindFormError>;
+  getForm?: (id: string) => Promise<Form | null>;
+  getFormSummaries?: () => Promise<Form[]>;
+}
+
+interface FormProviderProps {
+  children?: ReactNode | ReactNode[];
+}
+
+interface FormMap {
+  [id: string]: Form;
+}
+
+const FormContext = React.createContext<FormContextValue>({});
 
 export const FormConsumer = FormContext.Consumer;
 
-export function FormProvider({ children }) {
-  const [forms, setForms] = useState({});
+export function FormProvider({ children }: FormProviderProps): JSX.Element {
+  const [forms, setForms] = useState<FormMap>({});
   const [formSummaries, setFormSummaries] = useState([]);
 
-  const getFormSummaries = async () => {
+  const getFormSummaries = async (): Promise<Form[]> => {
     if (formSummaries.length > 0) {
       return formSummaries;
     }
@@ -22,39 +44,41 @@ export function FormProvider({ children }) {
         return response.data.data.forms;
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error);
     }
     return [];
   };
 
-  const getForm = async (id) => {
+  const getForm = async (id: string): Promise<Form | null> => {
     if (Object.keys(forms).includes(id)) {
       return forms[id];
     }
+
     try {
-      const response = await get(`/forms/${id}`)
-        .then((res) => {
-          if (res && res.data) {
-            setForms({ ...forms, [res.data.data.id]: res.data.data });
-            return res;
-          }
-          console.log("Form data not found");
-        })
-        .catch((error) => console.log(error.message));
-      return response.data.data;
+      const res = await get(`/forms/${id}`);
+      if (res && res.data) {
+        const newForm = res.data.data;
+        setForms((oldForms) => ({ ...oldForms, [newForm.id]: newForm }));
+        return newForm;
+      }
+      console.log("Form data not found");
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
     }
+
+    return null;
   };
 
-  const findFormsByType = async (formType) => {
+  const findFormsByType = async (
+    formType: string
+  ): Promise<Form[] | FindFormError> => {
     const summaries = await getFormSummaries();
     if (!FormTypes.includes(formType)) {
       return {
         error: true,
         message: `This form type is not currently supported. We support the following form types: ${FormTypes}.`,
         status: 404,
-      };
+      } as FindFormError;
     }
     summaries.sort((f1, f2) => f2.updatedAt - f1.updatedAt);
     const formsWithSameType = summaries.filter(
@@ -64,13 +88,23 @@ export function FormProvider({ children }) {
     return formsWithSameType;
   };
 
-  const getFormIdsByFormTypes = async (formTypes) => {
+  const getFormIdsByFormTypes = async (
+    formTypes: string[]
+  ): Promise<string[]> => {
     const promises = formTypes.map(async (type) => {
       const formSummary = await findFormsByType(type);
 
-      const formIds = formSummary.map(({ id }) => id);
+      const asError = formSummary as FindFormError;
 
-      return formIds;
+      if (asError.error) {
+        console.error(asError.message);
+      } else {
+        const foundForms = formSummary as Form[];
+        const formIds = foundForms.map(({ id }) => id);
+        return formIds;
+      }
+
+      return [];
     });
 
     const ids = (await Promise.all(promises)).flat();
