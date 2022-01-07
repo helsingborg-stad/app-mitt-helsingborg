@@ -1,4 +1,8 @@
-import { getAPIEnvironmentIdentifierFromUrl, wait } from "../Misc";
+import {
+  getAPIEnvironmentIdentifierFromUrl,
+  getUserFriendlyAppVersion,
+  wait,
+} from "../Misc";
 
 describe("Misc helper functions", () => {
   afterEach(() => {
@@ -68,5 +72,16 @@ describe("getAPIEnvironmentIdentifierFromUrl", () => {
     expect(constructorValue).toBeNull();
     expect(hasOwnPropertyValue).toBeNull();
     expect(protoValue).toBeNull();
+  });
+});
+
+describe("getUserFriendlyAppVersion", () => {
+  it("returns an string containing the version and build number", () => {
+    const value = getUserFriendlyAppVersion();
+
+    expect(typeof value).toEqual("string");
+    expect(value.length).toBeGreaterThan(0);
+    expect(value).toContain("1.2.3");
+    expect(value).toContain("1337");
   });
 });

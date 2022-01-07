@@ -143,4 +143,8 @@ NativeModules.NotifeeApiModule = {
   addListener: jest.fn(),
 };
 
-jest.mock("react-native-device-info", () => mockRNDeviceInfo);
+jest.mock("react-native-device-info", () => ({
+  ...mockRNDeviceInfo,
+  getVersion: () => "1.2.3",
+  getBuildNumber: () => "1337",
+}));
