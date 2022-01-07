@@ -26,9 +26,9 @@ describe("Misc helper functions", () => {
 });
 
 describe("getAPIEnvironmentIdentifierFromUrl", () => {
-  const devUrl = "https://dev.api.helsingborg.io";
-  const releaseUrl = "https://release.api.helsingborg.io";
-  const prodUrl = "https://api.helsingborg.io";
+  const devUrl = "https://dev.api.example.com";
+  const releaseUrl = "https://release.api.example.com";
+  const prodUrl = "https://api.example.com";
 
   it("returns the correct letter for a supported environment", () => {
     const devLetter = getAPIEnvironmentIdentifierFromUrl(devUrl);
@@ -47,10 +47,10 @@ describe("getAPIEnvironmentIdentifierFromUrl", () => {
   it("returns null on unexpected urls", () => {
     const invalidUrl = getAPIEnvironmentIdentifierFromUrl("not a valid url");
     const unexpectedPrefix = getAPIEnvironmentIdentifierFromUrl(
-      "https://thisdoesnotexist123.api.helsingborg.io"
+      "https://thisdoesnotexist123.example.com"
     );
     const malformedUrl = getAPIEnvironmentIdentifierFromUrl(
-      "https://.api.helsingborg.io"
+      "https://.example.com"
     );
 
     expect(invalidUrl).toBeNull();
@@ -60,13 +60,13 @@ describe("getAPIEnvironmentIdentifierFromUrl", () => {
 
   it("returns null for unexpected reserved keywords", () => {
     const constructorValue = getAPIEnvironmentIdentifierFromUrl(
-      "https://constructor.api.helsingborg.io"
+      "https://constructor.example.com"
     );
     const hasOwnPropertyValue = getAPIEnvironmentIdentifierFromUrl(
-      "https://hasOwnProperty.api.helsingborg.io"
+      "https://hasOwnProperty.example.com"
     );
     const protoValue = getAPIEnvironmentIdentifierFromUrl(
-      "https://__proto__.api.helsingborg.io"
+      "https://__proto__.example.com"
     );
 
     expect(constructorValue).toBeNull();

@@ -18,26 +18,23 @@ export function getAPIEnvironmentIdentifierFromUrl(
     release: "r",
     staging: "s",
     test: "t",
+    api: "p",
   };
 
-  const prefixRegex = /^https:\/\/(?:(.*)\.)?api\.helsingborg.io/i;
+  const prefixRegex = /^(?:[a-z]+:\/\/)?([a-zA-Z0-9-]+?)\..*/i;
 
   const apiUrlLowercase = apiUrl.toLowerCase();
   const match = apiUrlLowercase.match(prefixRegex);
 
   if (match) {
     const apiPrefix = match[1];
-
-    if (apiPrefix === undefined) {
-      return "p";
-    }
-
     const acceptablePrefixLetter = apiUrlPrefixEnvironmentMapping[apiPrefix];
 
     if (typeof acceptablePrefixLetter === "string") {
       return acceptablePrefixLetter;
     }
   }
+
   return null;
 }
 
