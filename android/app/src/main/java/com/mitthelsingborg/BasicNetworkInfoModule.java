@@ -43,11 +43,11 @@ public class BasicNetworkInfoModule extends ReactContextBaseJavaModule implement
     }
 
     private class CustomNetworkCallback extends NetworkCallback {
-        private final int INITIAL_NETWORKS_CAPACITY = 5;
+        private static final int INITIAL_NETWORKS_CAPACITY = 5;
         public ConcurrentHashMap<Network, NetworkAggregatedInfo> networks;
 
         CustomNetworkCallback() {
-            networks = new ConcurrentHashMap<Network, NetworkAggregatedInfo>(INITIAL_NETWORKS_CAPACITY);
+            networks = new ConcurrentHashMap<>(INITIAL_NETWORKS_CAPACITY);
         }
 
         @Override
