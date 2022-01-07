@@ -110,7 +110,7 @@ Styles.fullWidth = css`
 
 /* Styles for a disabled button */
 Styles.disabled = css`
-  background-color: ${(props) => props.theme.colors.neutrals[4]};
+  background-color: ${(props) => props.theme.colors.neutrals[5]};
 `;
 
 const ButtonBase = styled.View`
