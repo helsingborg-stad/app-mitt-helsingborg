@@ -14,6 +14,7 @@ import { useIsFocused } from "@react-navigation/native";
 import icons from "../../helpers/Icons";
 import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
+import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
 import { Icon, Text } from "../../components/atoms";
 import {
   Card,
@@ -142,6 +143,8 @@ const computeCaseCardComponent = (
 
   const totalSteps = form?.stepStructure?.length || 0;
 
+  const completions = caseData?.details?.completions?.requested || [];
+
   const applicationPeriodTimestamp =
     application?.periodenddate ?? period?.endDate;
   const applicationPeriodMonth = applicationPeriodTimestamp
@@ -228,10 +231,9 @@ const computeCaseCardComponent = (
       } ${getSwedishMonthNameByTimeStamp(payments.payment.givedate, true)}`
     : null;
 
-  const completions = [
-    "Dina barns räkningar",
-    "Dokument på angående din arbetssituation",
-  ];
+  const unApprovedCompletionDescriptions: string[] = isVivaCompletionRequired
+    ? getUnapprovedCompletionDescriptions(completions)
+    : [];
 
   return (
     <CaseCard
@@ -253,7 +255,7 @@ const computeCaseCardComponent = (
       buttonText={buttonProps.text}
       onButtonClick={isClosed ? toggleModal : buttonProps.onClick}
       buttonIconName={isClosed ? "remove-red-eye" : "arrow-forward"}
-      completions={completions}
+      completions={unApprovedCompletionDescriptions}
     />
   );
 };
