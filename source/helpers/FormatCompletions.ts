@@ -1,9 +1,7 @@
-interface CompletionsType {
-  approved: boolean;
-  description: string;
-}
+import { RequestedCompletions } from "../types/Case";
+
 const getUnapprovedCompletionDescriptions = (
-  completions: CompletionsType[]
+  completions: RequestedCompletions[]
 ): string[] => {
   const unapprovedCompletions = completions.filter(
     ({ approved = false }) => !approved
