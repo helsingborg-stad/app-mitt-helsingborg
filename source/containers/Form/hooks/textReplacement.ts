@@ -31,16 +31,16 @@ const caseItemReplacementRules: CaseItemReplacementRuleType[] = [
 export const replaceCaseItemText = (caseItem: Case): void => {
   caseItemReplacementRules.forEach(
     ({ key, from, to, timeFormat = "YYYY-MM-DD" }) => {
-      let newPropertValue = _get(caseItem, from, "");
+      let newPropertyValue = _get(caseItem, from, "");
 
       const oldValue = _get(caseItem, to, "");
 
-      const isDate = moment(newPropertValue).isValid();
+      const isDate = moment(newPropertyValue).isValid();
       if (isDate) {
-        newPropertValue = moment(newPropertValue).format(timeFormat);
+        newPropertyValue = moment(newPropertyValue).format(timeFormat);
       }
 
-      const newValue = oldValue.replace(key, newPropertValue);
+      const newValue = oldValue.replace(key, newPropertyValue);
 
       _set(caseItem, to, newValue);
     }
