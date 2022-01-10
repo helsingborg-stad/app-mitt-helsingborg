@@ -3,11 +3,11 @@ import { RequestedCompletions } from "../types/Case";
 const getUnapprovedCompletionDescriptions = (
   completions: RequestedCompletions[]
 ): string[] => {
-  const completionDescriptions = completions
+  const unapprovedCompletionDescriptions = completions
     .filter(({ approved = false }) => !approved)
     .map(({ description }) => description);
 
-  return completionDescriptions;
+  return unapprovedCompletionDescriptions;
 };
 
 export default getUnapprovedCompletionDescriptions;
