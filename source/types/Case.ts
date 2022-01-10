@@ -38,6 +38,7 @@ export interface RequestedCompletions {
 export interface Completions {
   requested: RequestedCompletions[];
   randomCheck: boolean;
+  completed: boolean;
 }
 
 export interface Period {
