@@ -5,16 +5,12 @@ interface CompletionsType {
 const getUnapprovedCompletionDescriptions = (
   completions: CompletionsType[]
 ): string[] => {
-  const completionDescriptions = completions.reduce(
-    (previous: string[], current: CompletionsType) => {
-      const unapprovedCompletion = !current?.approved;
+  const unApprovedCompletions = completions.filter(
+    ({ approved = false }) => !approved
+  );
 
-      if (unapprovedCompletion) {
-        return [...previous, current.description];
-      }
-      return previous;
-    },
-    []
+  const completionDescriptions = unApprovedCompletions.map(
+    ({ description }) => description
   );
 
   return completionDescriptions;
