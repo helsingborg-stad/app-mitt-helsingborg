@@ -30,6 +30,16 @@ export interface Administrator {
   title: string;
 }
 
+export interface RequestedCompletions {
+  description: string;
+  approved: boolean;
+}
+
+export interface Completions {
+  requested: RequestedCompletions[];
+  randomCheck: boolean;
+}
+
 export interface Period {
   endDate: number;
   startDate: number;
@@ -37,6 +47,7 @@ export interface Period {
 
 export interface VIVACaseDetails {
   administrators: Administrator[];
+  completions: Completions;
   period: Period;
   workflowId: string;
 }
