@@ -13,7 +13,7 @@ interface FindFormError {
 interface FormContextValue {
   getFormIdsByFormTypes?: (formTypes: string[]) => Promise<string[]>;
   findFormsByType?: (formType: string) => Promise<Form[] | FindFormError>;
-  getForm?: (id: string) => Promise<Form | null>;
+  getForm: (id: string) => Promise<Form | null>;
   getFormSummaries?: () => Promise<Form[]>;
 }
 

@@ -19,7 +19,7 @@ export interface State {
   error?: unknown;
   isPolling: boolean;
   casesToPoll: Case[];
-  getCase?: (caseId: string) => Case | undefined;
+  getCase: (caseId: string) => Case | undefined;
   getCasesByFormIds?: (formIds: string[]) => Case[];
   fetchCases?: () => Promise<void>;
 }
@@ -57,7 +57,7 @@ export interface UpdateCaseBody extends AnsweredForm {
 
 export interface Dispatch {
   createCase?: (form: Form, callback: (newCase: Case) => void) => void;
-  updateCase?: (
+  updateCase: (
     updateData: CaseUpdate,
     callback: (updatedCase: Case) => void
   ) => void;

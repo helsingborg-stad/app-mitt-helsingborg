@@ -51,7 +51,8 @@ export type FormInputType =
   | "checkbox"
   | "summaryList"
   | "repeaterField"
-  | "imageUploader";
+  | "imageUploader"
+  | "bulletList";
 
 export interface Question {
   label: string;

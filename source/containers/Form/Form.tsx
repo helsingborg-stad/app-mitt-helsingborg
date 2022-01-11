@@ -1,20 +1,24 @@
-import PropTypes from 'prop-types';
-import React, { useEffect, useState, useContext } from 'react';
-import { InteractionManager, StatusBar } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { Modal, useModal } from '../../components/molecules/Modal';
-import ScreenWrapper from '../../components/molecules/ScreenWrapper';
-import Step from '../../components/organisms/Step/Step';
-import { evaluateConditionalExpression } from '../../helpers/conditionParser';
-import { CaseStatus } from '../../types/CaseType';
-import { Step as StepType, StepperActions } from '../../types/FormTypes';
-import { User } from '../../types/UserTypes';
-import useForm, { FormPeriod, FormPosition, FormReducerState } from './hooks/useForm';
-import AuthContext from '../../store/AuthContext';
-import { useNotification } from '../../store/NotificationContext';
-import FormUploader from './FormUploader';
-import { AuthLoading } from '../../components/molecules';
-import { Image } from '../../components/molecules/ImageDisplay/ImageDisplay';
+import PropTypes from "prop-types";
+import React, { useEffect, useState, useContext } from "react";
+import { InteractionManager, StatusBar } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { Modal, useModal } from "../../components/molecules/Modal";
+import ScreenWrapper from "../../components/molecules/ScreenWrapper";
+import Step from "../../components/organisms/Step/Step";
+import { evaluateConditionalExpression } from "../../helpers/conditionParser";
+import { CaseStatus } from "../../types/CaseType";
+import { Step as StepType, StepperActions } from "../../types/FormTypes";
+import { User } from "../../types/UserTypes";
+import useForm, {
+  FormPeriod,
+  FormPosition,
+  FormReducerState,
+} from "./hooks/useForm";
+import AuthContext from "../../store/AuthContext";
+import { useNotification } from "../../store/NotificationContext";
+import FormUploader from "./FormUploader";
+import { AuthLoading } from "../../components/molecules";
+import { Image } from "../../components/molecules/ImageDisplay/ImageDisplay";
 
 interface Props {
   initialPosition?: FormPosition;
@@ -33,6 +37,7 @@ interface Props {
   ) => void;
   period?: FormPeriod;
   editable: boolean;
+  completions: any;
 }
 
 export const defaultInitialPosition: FormPosition = {
@@ -43,9 +48,9 @@ export const defaultInitialPosition: FormPosition = {
 };
 
 export const defaultInitialStatus = {
-  type: 'notStarted',
-  name: 'Ej påbörjad',
-  description: 'Ansökan är ej påbörjad.',
+  type: "notStarted",
+  name: "Ej påbörjad",
+  description: "Ansökan är ej påbörjad.",
 };
 
 /**
@@ -64,7 +69,8 @@ const Form: React.FC<Props> = ({
   initialAnswers,
   status,
   updateCaseInContext,
-  editable
+  editable,
+  completions,
 }) => {
   const initialState: FormReducerState = {
     submitted: false,
@@ -78,7 +84,7 @@ const Form: React.FC<Props> = ({
     connectivityMatrix,
     allQuestions: [],
     period,
-    editable
+    editable,
   };
 
   const {
@@ -100,7 +106,7 @@ const Form: React.FC<Props> = ({
     handleCancelOrder,
     handleSetStatus,
     handleSetError,
-    authenticateOnExternalDevice
+    authenticateOnExternalDevice,
   } = useContext(AuthContext);
 
   const answers: Record<string, Image | any> = formState.formAnswers;
@@ -108,15 +114,19 @@ const Form: React.FC<Props> = ({
   const attachments: Image[] = Object.values(answers)
     .filter((item) => Array.isArray(item) && item.length > 0 && item[0]?.path)
     .map((attachmentsArr) =>
-      attachmentsArr.map((attachmentAnswer, index) => ({ ...attachmentAnswer, index }))
+      attachmentsArr.map((attachmentAnswer, index) => ({
+        ...attachmentAnswer,
+        index,
+      }))
     )
     .flat();
 
-  const [hasSigned, setHasSigned] = useState(status.type.includes('signed'));
+  const [hasSigned, setHasSigned] = useState(status.type.includes("signed"));
 
   const [hasUploaded, setHasUploaded] = useState(
     attachments?.length &&
-    attachments.filter(({ uploadedFileName }) => uploadedFileName).length == attachments.length
+      attachments.filter(({ uploadedFileName }) => uploadedFileName).length ==
+        attachments.length
   );
 
   const showNotification = useNotification();
@@ -132,12 +142,12 @@ const Form: React.FC<Props> = ({
    * If the case has attachments, signing is handled after they are uploaded.
    */
   useEffect(() => {
-    if (authStatus === 'signResolved') {
+    if (authStatus === "signResolved") {
       if (attachments.length === 0) {
         signCase();
       }
 
-      handleSetStatus('idle');
+      handleSetStatus("idle");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authStatus]);
@@ -146,8 +156,8 @@ const Form: React.FC<Props> = ({
    * Set auth context status to idle when navigating
    */
   useEffect(() => {
-    if (authStatus !== 'idle') {
-      handleSetStatus('idle');
+    if (authStatus !== "idle") {
+      handleSetStatus("idle");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formState.currentPosition]);
@@ -157,14 +167,14 @@ const Form: React.FC<Props> = ({
    */
   useEffect(() => {
     if (isRejected && error?.message) {
-      showNotification(error.message, '', 'neutral');
+      showNotification(error.message, "", "neutral");
       handleSetError(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   useEffect(() => {
-    if (!hasSigned && authStatus === 'signResolved') {
+    if (!hasSigned && authStatus === "signResolved") {
       setHasSigned(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -174,22 +184,28 @@ const Form: React.FC<Props> = ({
     onClose();
   };
 
-
-
   const stepComponents = formState.steps.map(
-    ({ id, banner, title, group, description, questions, actions, colorSchema }) => {
+    ({
+      id,
+      banner,
+      title,
+      group,
+      description,
+      questions,
+      actions,
+      colorSchema,
+    }) => {
       const questionsToShow = questions
         ? questions.filter((question) => {
-          const condition = question.conditionalOn;
-          if (!condition || condition.trim() === '') return true;
-          return evaluateConditionalExpression(
-            condition,
-            formState.formAnswers,
-            formState.allQuestions
-          );
-        })
+            const condition = question.conditionalOn;
+            if (!condition || condition.trim() === "") return true;
+            return evaluateConditionalExpression(
+              condition,
+              formState.formAnswers,
+              formState.allQuestions
+            );
+          })
         : [];
-
 
       return (
         <Step
@@ -203,6 +219,7 @@ const Form: React.FC<Props> = ({
             tagline: group,
             text: description,
           }}
+          completions={completions}
           answers={formState.formAnswers}
           answerSnapshot={formState.formAnswerSnapshot}
           validation={formState.validations}
@@ -222,7 +239,8 @@ const Form: React.FC<Props> = ({
           totalStepNumber={formState.numberOfMainSteps || 0}
           isBackBtnVisible={
             formState.currentPosition.currentMainStep > 1 &&
-            formState.currentPosition.currentMainStep < formState.numberOfMainSteps
+            formState.currentPosition.currentMainStep <
+              formState.numberOfMainSteps
           }
           attachments={attachments}
           isFormEditable={editable}
@@ -247,7 +265,7 @@ const Form: React.FC<Props> = ({
     <>
       <ScreenWrapper
         innerRef={(ref) => {
-          setRef((ref as unknown) as ScrollView);
+          setRef(ref as unknown as ScrollView);
         }}
       >
         <StatusBar hidden />
