@@ -2,6 +2,8 @@ import _get from "lodash.get";
 import _set from "lodash.set";
 import moment from "moment";
 
+import { deepCopy } from "../../../helpers/Objects";
+
 import { Step } from "../../../types/FormTypes";
 import { PartnerInfo, User } from "../../../types/UserTypes";
 import { Case } from "../../../types/Case";
@@ -28,12 +30,14 @@ const caseItemReplacementRules: CaseItemReplacementRuleType[] = [
   },
 ];
 
-export const replaceCaseItemText = (caseItem: Case): void => {
+export const replaceCaseItemText = (caseItem: Case): Case => {
+  const caseItemCopy = deepCopy(caseItem);
+
   caseItemReplacementRules.forEach(
     ({ key, from, to, timeFormat = "YYYY-MM-DD" }) => {
-      let newPropertyValue = _get(caseItem, from, "");
+      let newPropertyValue = _get(caseItemCopy, from, "");
 
-      const oldValue = _get(caseItem, to, "");
+      const oldValue = _get(caseItemCopy, to, "");
 
       const isDate = moment(newPropertyValue).isValid();
       if (isDate) {
@@ -42,9 +46,11 @@ export const replaceCaseItemText = (caseItem: Case): void => {
 
       const newValue = oldValue.replace(key, newPropertyValue);
 
-      _set(caseItem, to, newValue);
+      _set(caseItemCopy, to, newValue);
     }
   );
+
+  return caseItemCopy;
 };
 
 /**

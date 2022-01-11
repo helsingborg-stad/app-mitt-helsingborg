@@ -142,13 +142,15 @@ function CaseProvider({
   const fetchCases = useCallback(async () => {
     const fetchData = await fetch(user);
 
-    if (fetchData.payload !== undefined) {
-      Object.values(fetchData.payload).map(replaceCaseItemText);
-    }
+    const fetchPayload = fetchData.payload as Record<string, Case>;
 
+    Object.keys(fetchPayload).forEach((key) => {
+      fetchPayload[key] = replaceCaseItemText(fetchPayload[key]);
+    });
+
+    fetchData.payload = fetchPayload;
     dispatch(fetchData);
 
-    const fetchPayload = fetchData.payload as Record<string, Case>;
     const fetchPayloadArray = Object.values(fetchPayload);
     const unsyncedCases = await filterAsync(
       fetchPayloadArray,
