@@ -63,7 +63,8 @@ function Step({
   answerSnapshot,
   attachments,
   isFormEditable,
-}) {
+  completions,
+}): JSX.Element {
   const isSubstep = currentPosition.level !== 0;
   const isLastMainStep =
     currentPosition.level === 0 &&
@@ -232,6 +233,7 @@ function Step({
                         handleFocus(e, isSelect);
                       }}
                       onAddAnswer={onAddAnswer}
+                      completions={completions}
                       {...field}
                     />
                   ))}

@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import Form, {
@@ -13,6 +12,9 @@ import {
 import AuthContext from "../store/AuthContext";
 import FormContext from "../store/FormContext";
 import { CaseDispatch, CaseState } from "../store/CaseContext";
+import { Case, FormPosition, ApplicationStatusType } from "../types/Case";
+import { Form as FormType, Question } from "../types/FormTypes";
+import { CaseUpdate, Answer, Signature } from "../types/CaseContext";
 
 const SpinnerContainer = styled.View`
   flex: 1;
@@ -20,12 +22,21 @@ const SpinnerContainer = styled.View`
   align-items: center;
 `;
 
-const FormCaseScreen = ({ route, navigation, ...props }) => {
-  const [form, setForm] = useState(undefined);
-  const [formQuestions, setFormQuestions] = useState(undefined);
-  const [initialCase, setInitialCase] = useState(undefined);
-  const { caseData, caseId, isSignMode } =
-    route && route.params ? route.params : {};
+interface FormCaseScreenProps {
+  route: { params: { caseData: Case; caseId: string; isSignMode: boolean } };
+  navigation: any;
+}
+const FormCaseScreen = ({
+  route,
+  navigation,
+  ...props
+}: FormCaseScreenProps): JSX.Element => {
+  const [form, setForm] = useState<FormType | undefined | null>(undefined);
+  const [formQuestions, setFormQuestions] = useState<Question[] | undefined>(
+    undefined
+  );
+  const [initialCase, setInitialCase] = useState<Case | undefined>(undefined);
+  const { caseData, caseId, isSignMode } = route?.params || {};
   const { user } = useContext(AuthContext);
   const { getForm } = useContext(FormContext);
   const { getCase } = useContext(CaseState);
@@ -39,9 +50,9 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
 
   useEffect(() => {
     if (caseData?.currentFormId) {
-      getForm(caseData.currentFormId).then((form) => {
-        setForm(form);
-        setFormQuestions(getFormQuestions(form));
+      void getForm(caseData.currentFormId).then((fetchedForm) => {
+        setForm(fetchedForm);
+        setFormQuestions(getFormQuestions(fetchedForm));
       });
       const answerArray =
         caseData?.forms?.[caseData.currentFormId]?.answers || [];
@@ -69,11 +80,12 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
             answers: answersObject,
           },
         };
+
         setInitialCase(initCase);
 
-        getForm(initCase.currentFormId).then(async (form) => {
-          setForm(form);
-          setFormQuestions(getFormQuestions(form));
+        void getForm(initCase.currentFormId).then(async (fetchedForm) => {
+          setForm(fetchedForm);
+          setFormQuestions(getFormQuestions(fetchedForm));
         });
       }
     }
@@ -84,17 +96,26 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
     navigation.popToTop();
   };
 
-  const updateCaseContext = (answerObject, signature, currentPosition) => {
+  const updateCaseContext = (
+    answerObject: Record<string, Answer>,
+    signature: Signature,
+    currentPosition: FormPosition
+  ) => {
     // If the case is submitted, we should not actually update its data...
-    if (!initialCase.status.type.includes("submitted")) {
-      const caseData = {
+    if (
+      initialCase !== undefined &&
+      !initialCase.status.type.includes("submitted")
+    ) {
+      const updatedCase: CaseUpdate = {
+        user,
         caseId: initialCase.id,
         formId: initialCase.currentFormId,
         answerObject,
         signature,
         currentPosition,
-        formQuestions,
+        formQuestions: formQuestions || [],
         encryption: initialCase.forms[initialCase.currentFormId].encryption,
+        encryptAnswers: false,
       };
 
       // We set the initial case to prevent desync issues with the above logic.
@@ -118,14 +139,18 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
         },
       });
 
-      const callback = (putResponse) => {
-        if (putResponse?.status?.type?.includes("signature:completed")) {
-          caseData.encryptAnswers = false;
-          updateCase(caseData);
+      const callback = (putResponse: Case) => {
+        if (
+          putResponse?.status?.type?.includes(
+            ApplicationStatusType.ACTIVE_SIGNATURE_COMPLETED
+          )
+        ) {
+          updatedCase.encryptAnswers = false;
+          updateCase(updatedCase, () => true);
         }
       };
 
-      updateCase(caseData, callback);
+      updateCase(updatedCase, callback);
     }
   };
 
@@ -160,16 +185,12 @@ const FormCaseScreen = ({ route, navigation, ...props }) => {
       initialAnswers={initialAnswers}
       status={initialCase.status || defaultInitialStatus}
       period={initialCase.details.period}
+      completions={initialCase?.details?.completions?.requested || []}
       updateCaseInContext={updateCaseContext}
       editable={!isSignMode}
       {...props}
     />
   );
-};
-
-FormCaseScreen.propTypes = {
-  route: PropTypes.object,
-  navigation: PropTypes.object,
 };
 
 export default FormCaseScreen;

@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { View, LayoutAnimation } from "react-native";
 import DynamicCardRenderer from "../DynamicCardRenderer/DynamicCardRenderer";
 import { Input, Label, Select, Text } from "../../components/atoms";
@@ -13,13 +12,17 @@ import {
   RepeaterField,
   RadioGroup,
 } from "../../components/molecules";
-import theme from "../../styles/theme";
 import { getValidColorSchema } from "../../styles/themeHelpers";
 import SummaryList from "../../components/organisms/SummaryList/SummaryList";
 import ImageUploader from "../../components/molecules/ImageUploader/ImageUploader";
 import ImageViewer from "../../components/molecules/ImageViewer/ImageViewer";
 import PdfUploader from "../../components/molecules/PdfUploader/PdfUploader";
 import PdfViewer from "../../components/molecules/PdfViewer/PdfViewer";
+import BulletList from "../../components/organisms/BulletList";
+
+import getUnApprovedCompletionsDescriptions from "../../helpers/FormatCompletions";
+import { FormInputType } from "../../types/FormTypes";
+
 /**
  * Explanation of the properties in this data structure:
  *
@@ -156,26 +159,33 @@ const inputTypes = {
     changeEvent: "onChange",
     props: { answers: true },
   },
+  bulletList: {
+    component: BulletList,
+  },
 };
 
-const FormField = ({
-  label,
-  labelLine,
-  inputType,
-  colorSchema,
-  id,
-  onChange,
-  onBlur,
-  onFocus,
-  onMount,
-  onAddAnswer,
-  value,
-  answers,
-  validationErrors,
-  help,
-  inputSelectValue,
-  ...other
-}) => {
+const FormField = (props) => {
+  const {
+    label,
+    labelLine,
+    inputType,
+    colorSchema,
+    id,
+    onChange,
+    onBlur,
+    onFocus,
+    onMount,
+    onAddAnswer,
+    value,
+    answers,
+    validationErrors,
+    help,
+    inputSelectValue,
+    completions,
+    description,
+    ...other
+  } = props;
+
   const validColorSchema = getValidColorSchema(colorSchema);
   const input = inputTypes[inputType];
   if (input === undefined) {
@@ -234,6 +244,12 @@ const FormField = ({
   if (inputType === "repeaterField" && !!input?.addAnswerEvent)
     inputCompProps[input.addAnswerEvent] = onInputAddAnswer;
 
+  if (inputType === "bulletList") {
+    inputCompProps.values = answers.includes("#COMPLETIONS_LIST")
+      ? getUnApprovedCompletionsDescriptions(completions)
+      : answers;
+  }
+
   const inputComponent =
     input && input.component ? (
       React.createElement(input.component, inputCompProps)
@@ -270,92 +286,6 @@ const FormField = ({
       {inputComponent}
     </View>
   );
-};
-
-FormField.propTypes = {
-  /**
-   * The label for the input field.
-   */
-  label: PropTypes.string,
-  /**
-   * String that determines the input type of the field.
-   */
-  labelLine: PropTypes.bool,
-  /**
-   * Unique id for the input field. Used
-   */
-  id: PropTypes.string,
-  /**
-   * String that determines the input type of the field.
-   */
-  inputType: PropTypes.oneOf(Object.keys(inputTypes)),
-  /**
-   * What happens when the input is changed.
-   * Should be used to store inputs to state.
-   * Should handle objects on the form { id : value }, where value is the new value and id is the uuid for the input-field.
-   */
-  onChange: PropTypes.func,
-  /** What happens when an input field looses focus.  */
-  onBlur: PropTypes.func,
-  onFocus: PropTypes.func,
-
-  onMount: PropTypes.func,
-  /**
-   * sets the value, since the input field component should be managed.
-   */
-  value: PropTypes.any,
-  /**
-   * All the form state answers. Needed because of conditional checks.
-   */
-  answers: PropTypes.object,
-  validationErrors: PropTypes.object,
-  formNavigation: PropTypes.shape({
-    next: PropTypes.func,
-    back: PropTypes.func,
-    up: PropTypes.func,
-    down: PropTypes.func,
-    close: PropTypes.func,
-    start: PropTypes.func,
-    isLastStep: PropTypes.func,
-  }),
-  /**
-   * sets the color theme.
-   */
-  colorSchema: PropTypes.oneOf([...Object.keys(theme.colors.primary), ""]),
-  /*
-   * The function triggers when the button is clicked.
-   */
-  onClick: PropTypes.func,
-  /**
-   * Show a help button
-   */
-  help: PropTypes.shape({
-    text: PropTypes.string,
-    size: PropTypes.number,
-    heading: PropTypes.string,
-    tagline: PropTypes.string,
-    url: PropTypes.string,
-  }),
-  inputSelectValue: PropTypes.oneOf([
-    "text",
-    "number",
-    "hidden",
-    "date",
-    "email",
-    "postalCode",
-    "personalNumber",
-    "phone",
-    "card",
-    "editableList",
-    "checkbox",
-    "navigationButtonGroup",
-    "summaryList",
-    "repeaterField",
-    "imageUploader",
-    "imageViewer",
-    "pdfUploader",
-    "pdfViewer",
-  ]),
 };
 
 FormField.defaultProps = {
