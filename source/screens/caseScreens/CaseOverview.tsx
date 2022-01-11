@@ -351,12 +351,14 @@ function CaseOverview(props): JSX.Element {
 
   useFocusEffect(
     useCallback(() => {
-      // Sometimes new cases is not created in an instant.
-      // Due to this we have to give the api some time before we try to fetch cases,
-      // since we cannot react to changes as of now.
-      const delayBeforeFetch = 4000;
-      wait(delayBeforeFetch).then(fetchCases).catch(onFailedToFetchCases);
-    }, [])
+      if (authContext.user) {
+        // Sometimes new cases is not created in an instant.
+        // Due to this we have to give the api some time before we try to fetch cases,
+        // since we cannot react to changes as of now.
+        const delayBeforeFetch = 4000;
+        wait(delayBeforeFetch).then(fetchCases).catch(onFailedToFetchCases);
+      }
+    }, [authContext.user, fetchCases])
   );
 
   useFocusEffect(

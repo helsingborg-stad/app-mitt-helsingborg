@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useEffect } from "react";
+import React, { useContext, useReducer, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { getStoredSymmetricKey } from "../services/encryption/EncryptionHelper";
 import { filterAsync } from "../helpers/Objects";
@@ -111,27 +111,33 @@ function CaseProvider({
     dispatch(remove(caseId));
   }
 
-  async function pollLoop(cases: Case[]): Promise<void> {
-    const newCases = await cases.reduce(async (pollingCases, unsyncedCase) => {
-      const polledCases = await pollingCases;
+  const pollLoop = useCallback(
+    async (cases: Case[]): Promise<void> => {
+      const newCases = await cases.reduce(
+        async (pollingCases, unsyncedCase) => {
+          const polledCases = await pollingCases;
 
-      const action = await pollCase(user, unsyncedCase);
-      dispatch(action);
+          const action = await pollCase(user, unsyncedCase);
+          dispatch(action);
 
-      const pollResult = action.payload as PolledCaseResult;
-      if (!pollResult.synced) {
-        return [...polledCases, pollResult.case];
+          const pollResult = action.payload as PolledCaseResult;
+          if (!pollResult.synced) {
+            return [...polledCases, pollResult.case];
+          }
+
+          return polledCases;
+        },
+        Promise.resolve([] as Case[])
+      );
+
+      if (newCases.length > 0) {
+        await pollLoop(newCases);
       }
+    },
+    [user]
+  );
 
-      return polledCases;
-    }, Promise.resolve([] as Case[]));
-
-    if (newCases.length > 0) {
-      await pollLoop(newCases);
-    }
-  }
-
-  const fetchCases = async () => {
+  const fetchCases = useCallback(async () => {
     const fetchData = await fetch(user);
     dispatch(fetchData);
 
@@ -154,11 +160,11 @@ function CaseProvider({
         type: ActionTypes.SET_POLLING_DONE,
       });
     }
-  };
+  }, [pollLoop, state.isPolling, user]);
 
   useEffect(() => {
     if (user) {
-      fetchCases();
+      void fetchCases();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
