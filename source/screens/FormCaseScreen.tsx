@@ -104,7 +104,7 @@ const FormCaseScreen = ({
     // If the case is submitted, we should not actually update its data...
     if (
       initialCase !== undefined &&
-      !initialCase.status.type.includes("submitted")
+      !initialCase.status.type.includes(ApplicationStatusType.ACTIVE_SUBMITTED)
     ) {
       const updatedCase: CaseUpdate = {
         user,
@@ -154,12 +154,6 @@ const FormCaseScreen = ({
     }
   };
 
-  /*
-   * Function for handling behavior when a form starts
-   * TO BE IMPLEMENTED
-   * */
-  const handleStartForm = () => null;
-
   // TODO: Update case on form submit.
   const handleSubmitForm = () => {
     navigation.popToTop();
@@ -180,7 +174,6 @@ const FormCaseScreen = ({
       initialPosition={initialPosition}
       user={user}
       onClose={handleCloseForm}
-      onStart={handleStartForm}
       onSubmit={handleSubmitForm}
       initialAnswers={initialAnswers}
       status={initialCase.status || defaultInitialStatus}
