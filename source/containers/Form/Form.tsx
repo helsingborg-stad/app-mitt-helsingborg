@@ -29,12 +29,12 @@ interface Props {
   steps: StepType[];
   connectivityMatrix: StepperActions[][];
   user: User;
-  initialAnswers: Record<string, any>;
+  initialAnswers: Record<string, unknown>;
   status: CaseStatus;
   onClose: () => void;
   onSubmit: () => void;
   updateCaseInContext: (
-    data: Record<string, any>,
+    data: Record<string, unknown>,
     signature: { success: boolean },
     currentPosition: FormPosition
   ) => void;
