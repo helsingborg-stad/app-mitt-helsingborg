@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { useEffect, useState, useContext } from "react";
 import { InteractionManager, StatusBar } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -7,8 +6,13 @@ import ScreenWrapper from "../../components/molecules/ScreenWrapper";
 import Step from "../../components/organisms/Step/Step";
 import { evaluateConditionalExpression } from "../../helpers/conditionParser";
 import { CaseStatus } from "../../types/CaseType";
-import { Step as StepType, StepperActions } from "../../types/FormTypes";
+import {
+  Step as StepType,
+  StepperActions,
+  Question,
+} from "../../types/FormTypes";
 import { User } from "../../types/UserTypes";
+import { RequestedCompletions } from "../../types/Case";
 import useForm, {
   FormPeriod,
   FormPosition,
@@ -26,10 +30,9 @@ interface Props {
   connectivityMatrix: StepperActions[][];
   user: User;
   initialAnswers: Record<string, any>;
-  status?: CaseStatus;
+  status: CaseStatus;
   onClose: () => void;
   onSubmit: () => void;
-  onStart: () => any;
   updateCaseInContext: (
     data: Record<string, any>,
     signature: { success: boolean },
@@ -37,7 +40,7 @@ interface Props {
   ) => void;
   period?: FormPeriod;
   editable: boolean;
-  completions: any;
+  completions: RequestedCompletions[];
 }
 
 export const defaultInitialPosition: FormPosition = {
@@ -66,7 +69,7 @@ const Form: React.FC<Props> = ({
   period,
   onClose,
   onSubmit,
-  initialAnswers,
+  initialAnswers = {},
   status,
   updateCaseInContext,
   editable,
@@ -194,9 +197,9 @@ const Form: React.FC<Props> = ({
       questions,
       actions,
       colorSchema,
-    }) => {
-      const questionsToShow = questions
-        ? questions.filter((question) => {
+    }: StepType) => {
+      const questionsToShow: Question[] = questions
+        ? questions.filter((question: Question) => {
             const condition = question.conditionalOn;
             if (!condition || condition.trim() === "") return true;
             return evaluateConditionalExpression(
@@ -250,12 +253,12 @@ const Form: React.FC<Props> = ({
   );
 
   const mainStep = formState.currentPosition.currentMainStepIndex;
-  const [visible, toggleModal] = useModal();
+  const [, toggleModal] = useModal();
   const [scrollViewRef, setRef] = useState<ScrollView>(null);
 
   useEffect(() => {
     if (scrollViewRef && scrollViewRef?.scrollTo) {
-      InteractionManager.runAfterInteractions(() => {
+      void InteractionManager.runAfterInteractions(() => {
         scrollViewRef.scrollTo({ x: 0, y: 0, animated: false });
       });
     }
@@ -299,59 +302,6 @@ const Form: React.FC<Props> = ({
       )}
     </>
   );
-};
-
-Form.propTypes = {
-  /**
-   * FormPosition object that determines where to start the form.
-   */
-  initialPosition: PropTypes.shape({
-    index: PropTypes.number,
-    level: PropTypes.number,
-    currentMainStep: PropTypes.number,
-    currentMainStepIndex: PropTypes.number,
-  }),
-  /**
-   * Function to handle a close action in the form.
-   */
-  onClose: PropTypes.func.isRequired,
-  /**
-   * Function to handle when a form should start.
-   */
-  onStart: PropTypes.func.isRequired,
-  /**
-   * Function to handle when a form is submitting.
-   */
-  onSubmit: PropTypes.func.isRequired,
-  /**
-   * Array of steps that the Form should render.
-   */
-  steps: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  connectivityMatrix: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.any)),
-  /**
-   * The user info.
-   */
-  user: PropTypes.object.isRequired,
-  /**
-   * Initial answer for each question.
-   */
-  initialAnswers: PropTypes.object,
-  /**
-   * Status
-   */
-  status: PropTypes.shape({
-    type: PropTypes.string,
-    name: PropTypes.string,
-    description: PropTypes.string,
-  }),
-  /**
-   * function for updating case in caseContext
-   */
-  updateCaseInContext: PropTypes.func,
-};
-
-Form.defaultProps = {
-  initialAnswers: {},
 };
 
 export default Form;
