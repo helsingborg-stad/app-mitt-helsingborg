@@ -40,7 +40,17 @@ export type InputFieldType =
   | "phone"
   | "number"
   | "hidden"
-  | "date";
+  | "date"
+  | "card"
+  | "editableList"
+  | "checkbox"
+  | "navigationButtonGroup"
+  | "summaryList"
+  | "repeaterField"
+  | "imageUploader"
+  | "imageViewer"
+  | "pdfUploader"
+  | "pdfViewer";
 
 export type FormInputType =
   | "text"
