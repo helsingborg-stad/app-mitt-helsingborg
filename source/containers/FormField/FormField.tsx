@@ -12,7 +12,7 @@ import {
   RepeaterField,
   RadioGroup,
 } from "../../components/molecules";
-import { getValidColorSchema } from "../../styles/themeHelpers";
+import { getValidColorSchema, PrimaryColor } from "../../styles/themeHelpers";
 import SummaryList from "../../components/organisms/SummaryList/SummaryList";
 import ImageUploader from "../../components/molecules/ImageUploader/ImageUploader";
 import ImageViewer from "../../components/molecules/ImageViewer/ImageViewer";
@@ -21,7 +21,8 @@ import PdfViewer from "../../components/molecules/PdfViewer/PdfViewer";
 import BulletList from "../../components/organisms/BulletList";
 
 import getUnApprovedCompletionsDescriptions from "../../helpers/FormatCompletions";
-import { FormInputType } from "../../types/FormTypes";
+import { FormInputType, InputFieldType } from "../../types/FormTypes";
+import { Answer, RequestedCompletions } from "../../types/Case";
 
 /**
  * Explanation of the properties in this data structure:
@@ -34,7 +35,21 @@ import { FormInputType } from "../../types/FormTypes";
  * onMountEvent: The event that triggers when the input is mounted
  * props: additional props to send into the generated component
  */
-const inputTypes = {
+interface InputTypeProperties {
+  component: React.ReactNode;
+  changeEvent?: string;
+  blurEvent?: string;
+  focusEvent?: string;
+  onMountEvent?: string;
+  initialValue?: undefined | boolean | [] | Record<string, unknown>;
+  helpInComponent?: boolean;
+  helpProp?: string;
+  addAnswerEvent?: string;
+  props?: Record<string, unknown>;
+}
+type inputKeyType = FormInputType | InputFieldType;
+
+const inputTypes: Record<inputKeyType, InputTypeProperties> = {
   text: {
     component: Input,
     changeEvent: "onChangeText",
@@ -164,14 +179,45 @@ const inputTypes = {
   },
 };
 
-const FormField = (props) => {
+interface FormFieldProps {
+  label: string;
+  labelLine?: boolean;
+  id: string;
+  inputType?: FormInputType | InputFieldType;
+  value:
+    | undefined
+    | number
+    | string
+    | Record<string, unknown>
+    | Record<string, unknown>[];
+  answers: Answer;
+  validationErrors: Record<string, { isValid: boolean; message: string }>;
+  colorSchema: PrimaryColor;
+  help: {
+    text: string;
+    size: number;
+    heading: string;
+    tagline: string;
+    url: string;
+  };
+  completions: RequestedCompletions[];
+  inputSelectValue: InputFieldType;
+  onAddAnswer: (_, fieldId: string) => void;
+  onClick: () => void;
+  onMount: () => void;
+  onFocus: () => void;
+  onBlur: () => void;
+  onChange?: () => void;
+}
+
+const FormField = (props: FormFieldProps): JSX.Element => {
   const {
     label,
-    labelLine,
-    inputType,
+    labelLine = true,
+    inputType = "text",
     colorSchema,
     id,
-    onChange,
+    onChange = () => true,
     onBlur,
     onFocus,
     onMount,
@@ -182,7 +228,6 @@ const FormField = (props) => {
     help,
     inputSelectValue,
     completions,
-    description,
     ...other
   } = props;
 
@@ -286,13 +331,6 @@ const FormField = (props) => {
       {inputComponent}
     </View>
   );
-};
-
-FormField.defaultProps = {
-  onClick: () => {},
-  onChange: () => {},
-  labelLine: true,
-  inputType: "text",
 };
 
 export default FormField;
