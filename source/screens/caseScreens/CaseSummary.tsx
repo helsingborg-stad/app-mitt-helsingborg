@@ -7,10 +7,10 @@ import React, {
 } from "react";
 import { View, Animated, Easing, ScrollView } from "react-native";
 import PropTypes from "prop-types";
-import { CaseState } from "app/store/CaseContext";
-import FormContext from "app/store/FormContext";
 import styled from "styled-components/native";
 import { useIsFocused } from "@react-navigation/native";
+import { CaseState } from "../../store/CaseContext";
+import FormContext from "../../store/FormContext";
 import icons from "../../helpers/Icons";
 import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
