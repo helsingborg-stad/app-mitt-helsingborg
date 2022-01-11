@@ -1,8 +1,10 @@
-import { Period } from "app/types/Case";
-import { Question } from "app/types/FormTypes";
-import { PartnerInfo, User } from "app/types/UserTypes";
-import { Step } from "../../../../types/Form";
-import { replaceMarkdownTextInSteps } from "../textReplacement";
+import { PartnerInfo, User } from "../../../../types/UserTypes";
+import { Question, Step } from "../../../../types/FormTypes";
+import { Period, Case, ApplicationStatusType } from "../../../../types/Case";
+import {
+  replaceMarkdownTextInSteps,
+  replaceCaseItemText,
+} from "../textReplacement";
 
 const mockedUserData: User = {
   address: {
@@ -164,5 +166,65 @@ describe("replaceMarkdownTextInSteps", () => {
     describe("Doesn't have a partner", () => {
       it.each([["#partnerName", ""]])("Replaces %s with %s", doTest);
     });
+  });
+});
+
+let mockCase: Case;
+beforeEach(() => {
+  mockCase = {
+    PK: "",
+    SK: "",
+    status: {
+      type: ApplicationStatusType.ACTIVE_COMPLETION_REQUIRED_VIVA,
+      name: "Ansökan behöver kompletteras",
+      description: "#MONTH_NAME",
+    },
+    details: {
+      completions: {
+        requested: [],
+        completed: true,
+        randomCheck: false,
+      },
+      administrators: [],
+      workflowId: "123",
+      workflow: {
+        application: {
+          periodstartdate: "2021-01-04",
+          completionduedate: "2021-01-05",
+        },
+      },
+      period: {
+        endDate: 123,
+        startDate: 456,
+      },
+    },
+    id: "mockId",
+    createdAt: 0,
+    currentFormId: "",
+    expirationTime: 0,
+    forms: {},
+    persons: [],
+    provider: "",
+    updatedAt: 0,
+  };
+});
+
+describe("replaceCaseItemText", () => {
+  it("replaces key with a value specified in 'caseItemReplacementRules' rule", () => {
+    const expectedResult = "January";
+
+    replaceCaseItemText(mockCase);
+
+    expect(mockCase.status.description).toBe(expectedResult);
+  });
+
+  it("does not replace a key that does not exist in 'caseItemReplacementRules' rule", () => {
+    const expectedResult = "#MyFakeTag";
+
+    mockCase.status.description = expectedResult;
+
+    replaceCaseItemText(mockCase);
+
+    expect(mockCase.status.description).toBe(expectedResult);
   });
 });

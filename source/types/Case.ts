@@ -46,11 +46,21 @@ export interface Period {
   startDate: number;
 }
 
+export interface Application {
+  periodstartdate: string;
+  completionduedate: string;
+}
+
+export interface Workflow {
+  application: Application;
+}
+
 export interface VIVACaseDetails {
   administrators: Administrator[];
   completions: Completions;
   period: Period;
   workflowId: string;
+  workflow: Workflow;
 }
 
 export interface AnswerField {
