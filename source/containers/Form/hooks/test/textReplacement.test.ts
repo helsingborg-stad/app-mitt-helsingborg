@@ -213,18 +213,18 @@ describe("replaceCaseItemText", () => {
   it("replaces key with a value specified in 'caseItemReplacementRules' rule", () => {
     const expectedResult = "January";
 
-    replaceCaseItemText(mockCase);
+    const result = replaceCaseItemText(mockCase);
 
-    expect(mockCase.status.description).toBe(expectedResult);
+    expect(result.status.description).toBe(expectedResult);
   });
 
   it("does not replace a key that does not exist in 'caseItemReplacementRules' rule", () => {
-    const expectedResult = "#MyFakeTag";
+    const expectedResult = "#MyFakeKey";
 
     mockCase.status.description = expectedResult;
 
-    replaceCaseItemText(mockCase);
+    const result = replaceCaseItemText(mockCase);
 
-    expect(mockCase.status.description).toBe(expectedResult);
+    expect(result.status.description).toBe(expectedResult);
   });
 });
