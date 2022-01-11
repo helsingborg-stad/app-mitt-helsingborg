@@ -36,7 +36,7 @@ import { Answer, RequestedCompletions } from "../../types/Case";
  * props: additional props to send into the generated component
  */
 interface InputTypeProperties {
-  component: React.ReactNode;
+  component: React.FunctionComponent<any>;
   changeEvent?: string;
   blurEvent?: string;
   focusEvent?: string;
@@ -202,7 +202,7 @@ interface FormFieldProps {
   };
   completions: RequestedCompletions[];
   inputSelectValue: InputFieldType;
-  onAddAnswer: (_, fieldId: string) => void;
+  onAddAnswer: (answer: unknown, fieldId: string) => void;
   onClick: () => void;
   onMount: () => void;
   onFocus: () => void;
