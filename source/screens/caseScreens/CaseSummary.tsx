@@ -41,7 +41,7 @@ const {
   SIGNED,
   ACTIVE_SIGNATURE_PENDING,
   ACTIVE_COMPLETION_REQUIRED_VIVA,
-  ACTIVE_COMPLETION_RANDOM_CHECK_REQUIRED_VIVA,
+  ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
 } = ApplicationStatusType;
 
 const Container = styled.ScrollView`
@@ -161,7 +161,7 @@ const computeCaseCardComponent = (
   const isOngoing = statusType.includes(ONGOING);
   const isClosed = statusType.includes(CLOSED);
   const isRandomCheckRequired = statusType.includes(
-    ACTIVE_COMPLETION_RANDOM_CHECK_REQUIRED_VIVA
+    ACTIVE_RANDOM_CHECK_REQUIRED_VIVA
   );
   const isVivaCompletionRequired = statusType.includes(
     ACTIVE_COMPLETION_REQUIRED_VIVA
