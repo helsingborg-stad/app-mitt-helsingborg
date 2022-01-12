@@ -10,7 +10,7 @@ const config = {
       jsx: true,
     },
   },
-  plugins: ["jest"],
+  plugins: ["unused-imports", "jest"],
   env: {
     es2021: true,
     browser: true,
@@ -53,6 +53,7 @@ const config = {
         "react/require-default-props": "off",
         "@typescript-eslint/no-floating-promises": ["error"],
         "no-void": ["error", { allowAsStatement: true }],
+        "@typescript-eslint/no-unused-vars": "off",
       },
     },
   ],
@@ -70,6 +71,17 @@ const config = {
     ],
     "react/jsx-filename-extension": [2, { extensions: [".jsx", ".tsx"] }],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        vars: "all",
+        varsIgnorePattern: "^_",
+        args: "after-used",
+        argsIgnorePattern: "^_",
+      },
+    ],
   },
 };
 
