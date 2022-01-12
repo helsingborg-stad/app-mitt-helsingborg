@@ -4,21 +4,10 @@ import { ThemeProvider } from "styled-components/native";
 import { render } from "@testing-library/react-native";
 import "@testing-library/jest-native/extend-expect";
 
-import { AuthProvider } from "./source/store/AuthContext";
-import { AppProvider } from "./source/store/AppContext";
-
-import ScreenWrapper from "./source/components/molecules/ScreenWrapper";
-
 import theme from "./source/styles/theme";
 
 const RenderWrapper = ({ children }) => (
-  <AppProvider>
-    <AuthProvider>
-      <ThemeProvider theme={theme}>
-        <ScreenWrapper>{children}</ScreenWrapper>
-      </ThemeProvider>
-    </AuthProvider>
-  </AppProvider>
+  <ThemeProvider theme={theme}>{children}</ThemeProvider>
 );
 
 const customRender = (ui) => render(ui, { wrapper: RenderWrapper });
