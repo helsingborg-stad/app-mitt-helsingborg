@@ -1,8 +1,8 @@
-import ConfigurationService from "../ConfigurationService";
+import EnvironmentConfigurationService from "../EnvironmentConfigurationService";
 
 describe("Test parsing of environment variables", () => {
   it("Extract the API key and URL from environment variables", () => {
-    const cfg = new ConfigurationService(["PRODUCTION"], {
+    const cfg = new EnvironmentConfigurationService(["PRODUCTION"], {
       PRODUCTION_MITTHELSINGBORG_IO: "https://production",
       PRODUCTION_MITTHELSINGBORG_IO_APIKEY: "1234",
     });
@@ -14,7 +14,7 @@ describe("Test parsing of environment variables", () => {
     });
   });
   it("Return undefined when API KEY is missing", () => {
-    const cfg = new ConfigurationService(["PRODUCTION"], {
+    const cfg = new EnvironmentConfigurationService(["PRODUCTION"], {
       PRODUCTION_MITTHELSINGBORG_IO: "https://production",
     });
 
@@ -22,7 +22,7 @@ describe("Test parsing of environment variables", () => {
   });
 
   it("Return undefined when URL KEY is missing", () => {
-    const cfg = new ConfigurationService(["PRODUCTION"], {
+    const cfg = new EnvironmentConfigurationService(["PRODUCTION"], {
       PRODUCTION_MITTHELSINGBORG_IO_APIKEY: "1234",
     });
 
@@ -30,7 +30,7 @@ describe("Test parsing of environment variables", () => {
   });
 
   it("Choose first as default endpoint when multiple environments exists", () => {
-    const cfg = new ConfigurationService(["DEVELOP", "PRODUCTION"], {
+    const cfg = new EnvironmentConfigurationService(["DEVELOP", "PRODUCTION"], {
       PRODUCTION_MITTHELSINGBORG_IO: "https://production",
       PRODUCTION_MITTHELSINGBORG_IO_APIKEY: "1234",
       DEVELOP_MITTHELSINGBORG_IO: "https://develop",
@@ -45,7 +45,7 @@ describe("Test parsing of environment variables", () => {
   });
 
   it("Set active endpoint to arbitraty values", () => {
-    const cfg = new ConfigurationService(["DEVELOP", "PRODUCTION"], {
+    const cfg = new EnvironmentConfigurationService(["DEVELOP", "PRODUCTION"], {
       PRODUCTION_MITTHELSINGBORG_IO: "https://production",
       PRODUCTION_MITTHELSINGBORG_IO_APIKEY: "1234",
       DEVELOP_MITTHELSINGBORG_IO: "https://develop",

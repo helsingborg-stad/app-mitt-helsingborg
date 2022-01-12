@@ -1,4 +1,4 @@
-import { NativeConfig } from "react-native-config";
+import env, { NativeConfig } from "react-native-config";
 
 const URL_SUFFIX = "_MITTHELSINGBORG_IO";
 const API_SUFFIX = "_MITTHELSINGBORG_IO_APIKEY";
@@ -15,7 +15,8 @@ interface EnvironmentOption {
   key: string;
 }
 
-export default class ConfigurationService {
+let configurationInstance: EnvironmentConfigurationService;
+export default class EnvironmentConfigurationService {
   private endpoints: Endpoint[];
 
   private endpoint: Endpoint;
@@ -52,5 +53,18 @@ export default class ConfigurationService {
       value: endpoint,
       key: endpoint.name,
     }));
+  }
+
+  static getInstance(): EnvironmentConfigurationService {
+    if (configurationInstance === undefined) {
+      configurationInstance = new EnvironmentConfigurationService(
+        (env.API_ENVS ?? "")
+          .split(",")
+          .map((v) => v.trim())
+          .filter((v) => v),
+        env
+      );
+    }
+    return configurationInstance;
   }
 }

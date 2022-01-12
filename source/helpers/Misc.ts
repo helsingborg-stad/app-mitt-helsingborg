@@ -1,6 +1,7 @@
 import { Dimensions } from "react-native";
 import Config from "react-native-config";
 import DeviceInfo from "react-native-device-info";
+import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
 
 export function wait(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -39,13 +40,9 @@ export function getAPIEnvironmentIdentifierFromUrl(
 }
 
 export function getAPIEnvironmentIdentifier(): string | null {
-  const isDev = Config.APP_ENV === "development";
-
-  const apiUrl = isDev
-    ? Config.MITTHELSINGBORG_IO_DEV
-    : Config.MITTHELSINGBORG_IO;
-
-  return getAPIEnvironmentIdentifierFromUrl(apiUrl);
+  const { baseUrl } =
+    EnvironmentConfigurationService.getInstance().activeEndpoint;
+  return getAPIEnvironmentIdentifierFromUrl(baseUrl);
 }
 
 export function getUserFriendlyAppVersion(): string {
