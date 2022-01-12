@@ -38,7 +38,7 @@ import { Case, ApplicationStatusType } from "../../types/Case";
 import { Form } from "../../types/FormTypes";
 
 const {
-  ACTIVE_COMPLETION_RANDOM_CHECK_REQUIRED_VIVA,
+  ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
   ACTIVE_COMPLETION_REQUIRED_VIVA,
   ACTIVE_SIGNATURE_PENDING,
   NOT_STARTED,
@@ -157,7 +157,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const isNotStarted = statusType.includes(NOT_STARTED);
   const isOngoing = statusType.includes(ONGOING);
   const isRandomCheckRequired = statusType.includes(
-    ACTIVE_COMPLETION_RANDOM_CHECK_REQUIRED_VIVA
+    ACTIVE_RANDOM_CHECK_REQUIRED_VIVA
   );
   const isVivaCompletionRequired = statusType.includes(
     ACTIVE_COMPLETION_REQUIRED_VIVA
