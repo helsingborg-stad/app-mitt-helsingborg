@@ -1,6 +1,6 @@
 import env from "react-native-config";
 import { Linking, Platform } from "react-native";
-import { Configuration } from "../store/AppContext";
+import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
 /**
  * Open requested URL
  *
@@ -48,7 +48,8 @@ const encodeQueryData = (queryParams) => {
  * @param {obj} params
  */
 export const buildServiceUrl = async (endpoint = "", params = {}) => {
-  const { baseUrl } = Configuration.activeEndpoint;
+  const { baseUrl } =
+    EnvironmentConfigurationService.getInstance().activeEndpoint;
   // Build query url
   const queryString = encodeQueryData(params);
   // Trim slashes

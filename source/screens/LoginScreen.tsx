@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RenderRules } from "react-native-markdown-display";
 import RNPickerSelect from "react-native-picker-select";
-import AppContext, { Configuration } from "../store/AppContext";
+import AppContext from "../store/AppContext";
 import { SLIDES } from "../assets/images";
 import Button from "../components/atoms/Button";
 import Heading from "../components/atoms/Heading";
@@ -22,6 +22,7 @@ import userAgreementText from "../assets/text/userAgreementText";
 import backgroundImage from "../assets/images/illustrations/onboarding_05_logga-in_2x.png";
 import { getUserFriendlyAppVersion } from "../helpers/Misc";
 import theme from "../styles/theme";
+import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
 
 const { sanitizePin, validatePin } = ValidationHelper;
 const UnifiedPadding = [24, 48];
@@ -233,7 +234,7 @@ function LoginScreen(): JSX.Element {
   };
 
   const onEnvironmentSelectionChange = (value) => {
-    Configuration.activeEndpoint = value;
+    EnvironmentConfigurationService.getInstance().activeEndpoint = value;
   };
 
   /**
@@ -310,8 +311,13 @@ function LoginScreen(): JSX.Element {
             <RNPickerSelect
               onValueChange={onEnvironmentSelectionChange}
               placeholder={{}}
-              items={Configuration.environmentOptions}
-              itemKey={Configuration.activeEndpoint.name}
+              items={
+                EnvironmentConfigurationService.getInstance().environmentOptions
+              }
+              itemKey={
+                EnvironmentConfigurationService.getInstance().activeEndpoint
+                  .name
+              }
               style={pickerSelectStyles}
             />
           )}
