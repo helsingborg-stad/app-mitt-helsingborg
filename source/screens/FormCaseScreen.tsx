@@ -115,7 +115,7 @@ const FormCaseScreen = ({
         currentPosition,
         formQuestions: formQuestions || [],
         encryption: initialCase.forms[initialCase.currentFormId].encryption,
-        encryptAnswers: false,
+        encryptAnswers: true,
       };
 
       // We set the initial case to prevent desync issues with the above logic.
