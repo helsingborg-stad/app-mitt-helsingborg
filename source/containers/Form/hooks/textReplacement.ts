@@ -220,6 +220,18 @@ export const replaceMarkdownTextInSteps = (
           }));
         }
 
+        if (qs.categories) {
+          qs.categories = qs.categories.map((category) => ({
+            ...category,
+            description: replaceText(
+              category.description,
+              user,
+              period,
+              partner
+            ),
+          }));
+        }
+
         if (qs.inputs) {
           qs.inputs = qs.inputs.map((input) => ({
             ...input,

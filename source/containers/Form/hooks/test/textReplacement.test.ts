@@ -60,6 +60,16 @@ const doTest = (
           {
             ...baseQuestion,
             type: "summaryList",
+            categories: [
+              {
+                category: "income",
+                description: placeholder,
+              },
+              {
+                category: "partnerIncome",
+                description: placeholder,
+              },
+            ],
             items: [
               {
                 inputId: "amount",
@@ -96,6 +106,9 @@ const doTest = (
   expect(res[0].title).toBe(expected);
   expect(res[0].description).toBe(expected);
   expect(res[0].questions?.[0].label).toBe(expected);
+
+  expect(res[0]?.questions?.[1].categories?.[0].description).toBe(expected);
+  expect(res[0]?.questions?.[1].categories?.[1].description).toBe(expected);
 
   expect(res[0]?.questions?.[1].items?.[0].title).toBe(expected);
   expect(res[0]?.questions?.[2].inputs?.[0].label).toBe(expected);
