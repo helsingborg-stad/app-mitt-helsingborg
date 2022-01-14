@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react-native';
 
 import { Text } from '../../components/atoms';
 import StoryWrapper from '../../components/molecules/StoryWrapper';
-import DynamicCardRenderer from './';
+import DynamicCardRenderer from ".";
 
 const userAgreementText = `
 För att kunna handlägga din ansökan om ekonomiskt bistånd måste vi behandla följande personuppgifter om dig/er:  

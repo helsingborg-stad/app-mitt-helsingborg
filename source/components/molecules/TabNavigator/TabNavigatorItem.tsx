@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { Descriptor, EventArg, TabActions, TabNavigationState } from '@react-navigation/native';
-import { TouchableOpacity, LayoutAnimation } from 'react-native';
+import { LayoutAnimation } from 'react-native';
 import PropTypes from 'prop-types';
 import Text from '../../atoms/Text';
 import { PrimaryColor } from '../../../styles/themeHelpers';

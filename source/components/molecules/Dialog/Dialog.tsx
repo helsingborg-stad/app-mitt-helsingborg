@@ -1,6 +1,4 @@
 import React from 'react';
-import styled from 'styled-components/native';
-import { BlurView } from '@react-native-community/blur';
 import { Modal } from '../Modal';
 import Body from './Body';
 import Wrapper from './Wrapper';

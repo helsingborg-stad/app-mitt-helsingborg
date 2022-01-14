@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components/native';
 import { BlurView } from '@react-native-community/blur';
 

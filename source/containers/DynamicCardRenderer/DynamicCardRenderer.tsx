@@ -2,7 +2,7 @@
 import React, { useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Linking } from "react-native";
-import PropTypes, { string } from "prop-types";
+import PropTypes from "prop-types";
 import Card from "../../components/molecules/Card/Card";
 import TextComponent from "../../components/atoms/Text";
 import Icon from "../../components/atoms/Icon";

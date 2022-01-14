@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
-import ImagePicker, { Options, ImageOrVideo } from 'react-native-image-crop-picker';
+import ImagePicker, { ImageOrVideo } from 'react-native-image-crop-picker';
 import styled from 'styled-components/native';
 import { Text, Button, Icon, Label } from '../../atoms';
 import { Modal, useModal } from '../Modal';

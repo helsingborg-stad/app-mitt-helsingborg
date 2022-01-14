@@ -36,16 +36,16 @@ export const evaluateAnswer = (
     if (answers[questionId]) return answers[questionId];
       return false;
   } 
-  else if (['text','number','date','hidden'].includes(question.type))
+  if (['text','number','date','hidden'].includes(question.type))
     return (answers[questionId] && answers[questionId] !== '');
-  else if (question.type === 'editableList')
+  if (question.type === 'editableList')
     return (
       answers[questionId] &&
       Object.keys(answers[questionId]).filter(
         (key) => answers[questionId][key] && answers[questionId][key] !== ''
       ).length > 0
     );
-  else if (question.type === 'summaryList') 
+  if (question.type === 'summaryList') 
     return evaluateSummaryList(answers, question.items || []);
 
   return false;
@@ -110,8 +110,7 @@ export const evaluateConditionalExpression = (
     const evaluatedAnswers: EvaluatedValue[] = conditionAsArray.map(valueOrOperator => {
       if (!conditionalOperators.includes(valueOrOperator))
         return evaluateAnswer(valueOrOperator, answers, questions);
-      else 
-        return (valueOrOperator as '!' | '&&' | '||');
+      return (valueOrOperator as '!' | '&&' | '||');
     });
     const [evaluated] = evaluateOr(evaluateAnd(evaluateNot(evaluatedAnswers)));
     return evaluated;

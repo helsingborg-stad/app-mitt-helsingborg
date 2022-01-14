@@ -1,4 +1,3 @@
-import env from 'react-native-config';
 import JwtDecode from 'jwt-decode';
 import StorageService, { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from './StorageService';
 import { post, get } from '../helpers/ApiRequest';
@@ -129,7 +128,7 @@ export async function getUserProfile(accessToken) {
       let timesRun = 0;
 
       const response = await poll(
-        function () {
+        () => {
           timesRun += 1;
           return get(`/users/me`, {
             Authorization: accessToken,

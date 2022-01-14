@@ -1,7 +1,6 @@
 import { Alert } from 'react-native';
 import Config from 'react-native-config';
 import RNRestart from 'react-native-restart';
-import { string } from 'prop-types';
 
 /**
  * Handler for boundary errors.

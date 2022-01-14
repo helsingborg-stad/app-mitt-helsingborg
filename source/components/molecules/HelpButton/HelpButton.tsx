@@ -1,10 +1,9 @@
 import React from 'react';
-import { TouchableHighlight, ScrollView, Image, Linking } from 'react-native';
+import { TouchableHighlight, Linking } from 'react-native';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import Icon from '../../atoms/Icon';
 import Button from '../../atoms/Button';
-import icons from '../../../helpers/Icons';
 import Text from '../../atoms/Text';
 import BackNavigation from '../BackNavigation/BackNavigation';
 import { Modal, useModal } from '../Modal';
