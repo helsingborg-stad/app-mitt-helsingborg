@@ -80,6 +80,7 @@ export interface Question {
   choices?: { value: string; displayText: string }[];
   text?: string;
   labelLine?: boolean;
+  categories?: { category: string; description: string }[];
 }
 
 export type ActionType =
