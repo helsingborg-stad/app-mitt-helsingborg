@@ -1,10 +1,10 @@
-import { storiesOf } from '@storybook/react-native';
-import React, { useState } from 'react';
-import DateTimePickerForm from './DateTimePickerForm';
-import StoryWrapper from '../StoryWrapper';
+import { storiesOf } from "@storybook/react-native";
+import React, { useState } from "react";
+import DateTimePickerForm from "./DateTimePickerForm";
+import StoryWrapper from "../StoryWrapper";
 
 const DateTimePicker = () => {
-  const [value, setvalue] = useState('');
+  const [value, setvalue] = useState("");
 
   return (
     <DateTimePickerForm
@@ -14,7 +14,7 @@ const DateTimePicker = () => {
       placeholder="Date time"
       selectorProps={{
         minuteInterval: 30,
-        locale: 'sv',
+        locale: "sv",
         minimumDate: new Date(),
       }}
     />
@@ -22,7 +22,7 @@ const DateTimePicker = () => {
 };
 
 const DatePicker = () => {
-  const [value, setvalue] = useState('');
+  const [value, setvalue] = useState("");
 
   return (
     <DateTimePickerForm
@@ -32,14 +32,14 @@ const DatePicker = () => {
       color="dark"
       mode="date"
       selectorProps={{
-        locale: 'sv',
+        locale: "sv",
       }}
     />
   );
 };
 
 const TimePicker = () => {
-  const [value, setvalue] = useState('');
+  const [value, setvalue] = useState("");
 
   return (
     <DateTimePickerForm
@@ -48,14 +48,14 @@ const TimePicker = () => {
       mode="time"
       placeholder="Time"
       selectorProps={{
-        locale: 'sv',
+        locale: "sv",
         minuteInterval: 30,
       }}
     />
   );
 };
 
-storiesOf('Date time picker', module).add('Date time picker', () => (
+storiesOf("Date time picker", module).add("Date time picker", () => (
   <StoryWrapper>
     <DateTimePicker />
     <DatePicker />

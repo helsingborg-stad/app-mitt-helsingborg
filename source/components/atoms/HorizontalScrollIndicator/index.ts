@@ -1,1 +1,1 @@
-export { default } from './HorizontalScrollIndicator';
+export { default } from "./HorizontalScrollIndicator";

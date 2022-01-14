@@ -2,12 +2,12 @@ const ekbQuestion = (args) => {
   const { key, question, group, title } = args;
 
   const dependency = {
-    relation: 'AND',
+    relation: "AND",
     conditions: [
       {
         key,
-        value: 'Ja',
-        compare: '=',
+        value: "Ja",
+        compare: "=",
       },
     ],
   };
@@ -16,31 +16,31 @@ const ekbQuestion = (args) => {
     {
       id: key,
       name: question,
-      type: 'radio',
+      type: "radio",
       options: [
         {
-          value: 'Ja',
-          icon: 'check',
+          value: "Ja",
+          icon: "check",
         },
         {
-          value: 'Nej',
-          icon: 'close',
+          value: "Nej",
+          icon: "close",
         },
       ],
     },
     {
       id: `${key}Value`,
-      name: 'Hur mycket?',
-      type: 'number',
+      name: "Hur mycket?",
+      type: "number",
       dependency,
-      placeholder: 'Ange summa',
+      placeholder: "Ange summa",
     },
     {
       id: `${key}Date`,
-      name: 'När?',
-      type: 'date',
+      name: "När?",
+      type: "date",
       dependency,
-      placeholder: 'Ange datum',
+      placeholder: "Ange datum",
     },
   ];
 
@@ -71,22 +71,22 @@ const lottery = () => Math.floor(Math.random() * 9999) + 0;
 const getPaymentDate = () => {
   const d = new Date();
   d.setDate(d.getDate() + ((7 - d.getDay()) % 7) + 1);
-  return d.toLocaleDateString('sv-SE');
+  return d.toLocaleDateString("sv-SE");
 };
 
 const EKB_FORM = {
   id: 2,
-  name: 'Ekonomiskt Bistånd',
-  icon: 'attach-money',
-  trigger: 'Vill ansöka om ekonomiskt bistånd',
+  name: "Ekonomiskt Bistånd",
+  icon: "attach-money",
+  trigger: "Vill ansöka om ekonomiskt bistånd",
   groups: [
     {
-      name: 'income',
-      title: 'Inkomster',
+      name: "income",
+      title: "Inkomster",
     },
     {
-      name: 'expense',
-      title: 'Utgifter',
+      name: "expense",
+      title: "Utgifter",
     },
   ],
   questions: [
@@ -94,116 +94,116 @@ const EKB_FORM = {
       Income
     */
     ...ekbQuestion({
-      title: 'incomeSalary',
-      group: 'income',
-      key: 'incomeSalary',
+      title: "incomeSalary",
+      group: "income",
+      key: "incomeSalary",
       question: [
-        'För att vi ska kunna hjälpa dig räkna ut om du kan få ekonomiskt bistånd behöver vi veta vilka pengar du får in de närmsta 30 dagarna.',
-        'Får du lön idag från ett arbete eller annan inkomstkälla?',
+        "För att vi ska kunna hjälpa dig räkna ut om du kan få ekonomiskt bistånd behöver vi veta vilka pengar du får in de närmsta 30 dagarna.",
+        "Får du lön idag från ett arbete eller annan inkomstkälla?",
       ],
     }),
     ...ekbQuestion({
-      title: 'incomeRent',
-      group: 'income',
-      key: 'incomeRent',
-      question: 'Inkomst Hyra?',
+      title: "incomeRent",
+      group: "income",
+      key: "incomeRent",
+      question: "Inkomst Hyra?",
     }),
     ...ekbQuestion({
-      title: 'incomeElectricity',
-      group: 'income',
-      key: 'incomeElectricity',
-      question: 'Inkomst El?',
+      title: "incomeElectricity",
+      group: "income",
+      key: "incomeElectricity",
+      question: "Inkomst El?",
     }),
     ...ekbQuestion({
-      title: 'incomePension',
-      group: 'income',
-      key: 'incomePension',
-      question: 'Utländsk Pension?',
+      title: "incomePension",
+      group: "income",
+      key: "incomePension",
+      question: "Utländsk Pension?",
     }),
     ...ekbQuestion({
-      title: 'incomeLoan',
-      group: 'income',
-      key: 'incomeLoan',
-      question: 'Lånade pengar?',
+      title: "incomeLoan",
+      group: "income",
+      key: "incomeLoan",
+      question: "Lånade pengar?",
     }),
     ...ekbQuestion({
-      title: 'incomeOther',
-      group: 'income',
-      key: 'incomeOther',
-      question: 'Övrig inkomst?',
+      title: "incomeOther",
+      group: "income",
+      key: "incomeOther",
+      question: "Övrig inkomst?",
     }),
     /*
       Expenses
     */
     ...ekbQuestion({
-      title: 'expenseRent',
-      group: 'expense',
-      key: 'expenseRent',
-      question: 'Utgifter Hyra?',
+      title: "expenseRent",
+      group: "expense",
+      key: "expenseRent",
+      question: "Utgifter Hyra?",
     }),
     ...ekbQuestion({
-      title: 'expenseHomeInsurance',
-      group: 'expense',
-      key: 'expenseHomeInsurance',
-      question: 'Utgifter Försäkring?',
+      title: "expenseHomeInsurance",
+      group: "expense",
+      key: "expenseHomeInsurance",
+      question: "Utgifter Försäkring?",
     }),
     ...ekbQuestion({
-      title: 'expenseInternet',
-      group: 'expense',
-      key: 'expenseInternet',
-      question: 'Utgifter Internet?',
+      title: "expenseInternet",
+      group: "expense",
+      key: "expenseInternet",
+      question: "Utgifter Internet?",
     }),
     ...ekbQuestion({
-      title: 'expenseKidSupport',
-      group: 'expense',
-      key: 'expenseKidSupport',
-      question: 'Utgifter Barn underhåll?',
+      title: "expenseKidSupport",
+      group: "expense",
+      key: "expenseKidSupport",
+      question: "Utgifter Barn underhåll?",
     }),
     ...ekbQuestion({
-      title: 'expenseTeeth',
-      group: 'expense',
-      key: 'expenseTeeth',
-      question: 'Utgifter tandvård?',
+      title: "expenseTeeth",
+      group: "expense",
+      key: "expenseTeeth",
+      question: "Utgifter tandvård?",
     }),
     ...ekbQuestion({
-      title: 'expenseMedical',
-      group: 'expense',
-      key: 'expenseMedical',
-      question: 'Ugifter medicin?',
+      title: "expenseMedical",
+      group: "expense",
+      key: "expenseMedical",
+      question: "Ugifter medicin?",
     }),
     ...ekbQuestion({
-      title: 'expenseLoan',
-      group: 'expense',
-      key: 'expenseLoan',
-      question: 'Ugifter lån?',
+      title: "expenseLoan",
+      group: "expense",
+      key: "expenseLoan",
+      question: "Ugifter lån?",
     }),
     ...ekbQuestion({
-      title: 'expenseTravel',
-      group: 'expense',
-      key: 'expenseTravel',
-      question: 'Ugifter resor?',
+      title: "expenseTravel",
+      group: "expense",
+      key: "expenseTravel",
+      question: "Ugifter resor?",
     }),
     ...ekbQuestion({
-      title: 'expenseUnionFee',
-      group: 'expense',
-      key: 'expenseUnionFee',
-      question: 'Ugifter A-kassa?',
+      title: "expenseUnionFee",
+      group: "expense",
+      key: "expenseUnionFee",
+      question: "Ugifter A-kassa?",
     }),
     ...ekbQuestion({
-      title: 'expenseOther',
-      group: 'expense',
-      key: 'expenseOther',
-      question: 'Utgifter övrigt?',
+      title: "expenseOther",
+      group: "expense",
+      key: "expenseOther",
+      question: "Utgifter övrigt?",
     }),
     /**
      * Preiliminary calculation
      */
     {
-      id: 'preliminaryCalculation',
+      id: "preliminaryCalculation",
       name: [
         `Enligt vår preliminära uträkning kommer du att få ut ${lottery()} kr och kommer utbetalas ${getPaymentDate()}.`,
       ],
-      type: 'message',
+      type: "message",
     },
     /**
      * Confirm
@@ -213,48 +213,47 @@ const EKB_FORM = {
         const { answers } = data;
         return JSON.stringify(answers);
       },
-      id: 'confirmBooking',
-      type: 'radio',
+      id: "confirmBooking",
+      type: "radio",
       options: [
         {
-          value: 'Skicka in ansökan',
-          icon: 'check',
+          value: "Skicka in ansökan",
+          icon: "check",
         },
         {
-          value: 'Nej, jag vill spara och fortsätta senare',
-          icon: 'close',
+          value: "Nej, jag vill spara och fortsätta senare",
+          icon: "close",
         },
       ],
     },
     {
-      id: 'confirmBookingYes',
+      id: "confirmBookingYes",
       name: [
-        'Då har jag tagit emot er bokning. Du kan när som helst se din bokning under fliken Mitt HBG.',
+        "Då har jag tagit emot er bokning. Du kan när som helst se din bokning under fliken Mitt HBG.",
       ],
-      type: 'message',
+      type: "message",
       dependency: {
-        relation: 'AND',
+        relation: "AND",
         conditions: [
           {
-            key: 'confirmBooking',
-            value: 'Skicka in ansökan',
-            compare: '=',
+            key: "confirmBooking",
+            value: "Skicka in ansökan",
+            compare: "=",
           },
         ],
       },
     },
     {
-      id: 'confirmBookingNo',
-      name:
-        'Okej, då sparar jag ditt ärende. Du kan när som helst komma tillbaka och göra klart det.',
-      type: 'message',
+      id: "confirmBookingNo",
+      name: "Okej, då sparar jag ditt ärende. Du kan när som helst komma tillbaka och göra klart det.",
+      type: "message",
       dependency: {
-        relation: 'AND',
+        relation: "AND",
         conditions: [
           {
-            key: 'confirmBooking',
-            value: 'Nej, jag vill spara och fortsätta senare',
-            compare: '=',
+            key: "confirmBooking",
+            value: "Nej, jag vill spara och fortsätta senare",
+            compare: "=",
           },
         ],
       },

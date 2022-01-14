@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
-import styled from 'styled-components/native';
-import PropTypes from 'prop-types';
-import AuthContext from '../../../../store/AuthContext';
-import { Button, Text } from '../../../atoms';
-import { Action, Question } from '../../../../types/FormTypes';
-import { CaseStatus } from '../../../../types/CaseType';
-import { FormPosition } from '../../../../containers/Form/hooks/useForm';
-import { useNotification } from '../../../../store/NotificationContext';
-import { evaluateConditionalExpression } from '../../../../helpers/conditionParser';
+import React, { useContext } from "react";
+import styled from "styled-components/native";
+import PropTypes from "prop-types";
+import AuthContext from "../../../../store/AuthContext";
+import { Button, Text } from "../../../atoms";
+import { Action, Question } from "../../../../types/FormTypes";
+import { CaseStatus } from "../../../../types/CaseType";
+import { FormPosition } from "../../../../containers/Form/hooks/useForm";
+import { useNotification } from "../../../../store/NotificationContext";
+import { evaluateConditionalExpression } from "../../../../helpers/conditionParser";
 
 const ActionContainer = styled.View`
   width: 100%;
@@ -49,7 +49,10 @@ interface Props {
     currentPosition: FormPosition
   ) => void;
   currentPosition: FormPosition;
-  validateStepAnswers: (errorCallback: () => void, onValidCallback: () => void) => void;
+  validateStepAnswers: (
+    errorCallback: () => void,
+    onValidCallback: () => void
+  ) => void;
 }
 
 const StepFooter: React.FC<Props> = ({
@@ -65,53 +68,55 @@ const StepFooter: React.FC<Props> = ({
   children,
   validateStepAnswers,
 }) => {
-  const { user, handleSign, isLoading, authenticateOnExternalDevice } = useContext(AuthContext);
+  const { user, handleSign, isLoading, authenticateOnExternalDevice } =
+    useContext(AuthContext);
   const showNotification = useNotification();
 
   const actionMap = (action: Action) => {
     switch (action.type) {
-      case 'start': {
+      case "start": {
         return formNavigation.start || null;
       }
-      case 'close': {
+      case "close": {
         return () => {
-          if (onUpdate && caseStatus.type.includes('ongoing')) onUpdate(answers);
+          if (onUpdate && caseStatus.type.includes("ongoing"))
+            onUpdate(answers);
           if (formNavigation.close) formNavigation.close();
         };
       }
-      case 'submit': {
+      case "submit": {
         return onSubmit || null;
       }
-      case 'backToMain': {
+      case "backToMain": {
         return () => {
           const errorCallback = () => {};
-  
+
           const onValidCallback = () => {
             formNavigation.goToMainForm();
-          }
-  
+          };
+
           validateStepAnswers(errorCallback, onValidCallback);
         };
       }
-      case 'backToMainAndNext': {
+      case "backToMainAndNext": {
         return formNavigation.goToMainFormAndNext;
       }
       default: {
         return () => {
           const errorCallback = () => {
             showNotification(
-              'Oj, fel inmatning!',
-              'Vänligen rätta fel innan ni går vidare',
-              'error',
+              "Oj, fel inmatning!",
+              "Vänligen rätta fel innan ni går vidare",
+              "error",
               8000
             );
           };
 
           const onValidCallback = async () => {
-            if (action.type === 'sign') {
+            if (action.type === "sign") {
               await handleSign(
                 user.personalNumber,
-                action?.signMessage || 'Signering Mitt Helsingborg.',
+                action?.signMessage || "Signering Mitt Helsingborg.",
                 authenticateOnExternalDevice
               );
 
@@ -123,12 +128,14 @@ const StepFooter: React.FC<Props> = ({
 
           if (
             onUpdate &&
-            (caseStatus.type.includes('ongoing') || caseStatus.type.includes('notStarted'))
+            (caseStatus.type.includes("ongoing") ||
+              caseStatus.type.includes("notStarted"))
           )
             onUpdate(answers);
           if (
             updateCaseInContext &&
-            (caseStatus.type.includes('ongoing') || caseStatus.type.includes('notStarted'))
+            (caseStatus.type.includes("ongoing") ||
+              caseStatus.type.includes("notStarted"))
           )
             updateCaseInContext(answers, undefined, currentPosition);
 
@@ -139,22 +146,25 @@ const StepFooter: React.FC<Props> = ({
   };
 
   const checkCondition = (condition?: string) => {
-    if (!condition || condition === '') return false;
+    if (!condition || condition === "") return false;
     return !evaluateConditionalExpression(condition, answers, allQuestions);
   };
 
   const buttons = actions.map((action, index) => (
-        <Flex key={`${index}-${action.label}`}>
-          <Button
-            onClick={actionMap(action)}
-            colorSchema={action.color}
-            disabled={isLoading || (action.hasCondition && checkCondition(action.conditionalOn))}
-            z={0}
-          >
-            <Text>{action.label}</Text>
-          </Button>
-        </Flex>
-      ));
+    <Flex key={`${index}-${action.label}`}>
+      <Button
+        onClick={actionMap(action)}
+        colorSchema={action.color}
+        disabled={
+          isLoading ||
+          (action.hasCondition && checkCondition(action.conditionalOn))
+        }
+        z={0}
+      >
+        <Text>{action.label}</Text>
+      </Button>
+    </Flex>
+  ));
 
   return (
     <ActionContainer>
@@ -167,7 +177,10 @@ const StepFooter: React.FC<Props> = ({
 };
 
 StepFooter.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   /**
    * Properties for actions in the footer of the step.
    */

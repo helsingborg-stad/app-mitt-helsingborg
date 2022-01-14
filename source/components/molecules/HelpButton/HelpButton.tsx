@@ -1,12 +1,12 @@
-import React from 'react';
-import { TouchableHighlight, Linking } from 'react-native';
-import styled from 'styled-components/native';
-import PropTypes from 'prop-types';
-import Icon from '../../atoms/Icon';
-import Button from '../../atoms/Button';
-import Text from '../../atoms/Text';
-import BackNavigation from '../BackNavigation/BackNavigation';
-import { Modal, useModal } from '../Modal';
+import React from "react";
+import { TouchableHighlight, Linking } from "react-native";
+import styled from "styled-components/native";
+import PropTypes from "prop-types";
+import Icon from "../../atoms/Icon";
+import Button from "../../atoms/Button";
+import Text from "../../atoms/Text";
+import BackNavigation from "../BackNavigation/BackNavigation";
+import { Modal, useModal } from "../Modal";
 
 const ModalContainer = styled.View({
   flexGrow: 1,
@@ -59,7 +59,11 @@ const HelpButton = (props) => {
     Linking.openURL(url);
   };
 
-  if ((!heading || heading.length === 0) && (!text || text?.length === 0) && url.length) {
+  if (
+    (!heading || heading.length === 0) &&
+    (!text || text?.length === 0) &&
+    url.length
+  ) {
     return (
       <>
         <TouchableHighlight onPress={link} underlayColor="transparent">
@@ -78,7 +82,7 @@ const HelpButton = (props) => {
             <StyledScrollView>
               <Tagline>{tagline}</Tagline>
               <Heading>{heading}</Heading>
-              <HelpText>{text?.length ? text : 'Text not available'}</HelpText>
+              <HelpText>{text?.length ? text : "Text not available"}</HelpText>
               {url.length > 0 ? (
                 <LinkButton onClick={link} color="floral" block>
                   <Text>Läs mer</Text>
@@ -106,12 +110,12 @@ HelpButton.propTypes = {
 };
 
 HelpButton.defaultProps = {
-  text: '',
-  tagline: 'hjälp',
+  text: "",
+  tagline: "hjälp",
   size: 24,
-  heading: '',
-  url: '',
-  icon: 'help-outline',
+  heading: "",
+  url: "",
+  icon: "help-outline",
 };
 
 export default HelpButton;

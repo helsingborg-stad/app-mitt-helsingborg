@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
-import React, { useRef, useState } from 'react';
-import { LayoutAnimation, Platform } from 'react-native';
-import styled from 'styled-components/native';
-import { deepCopy } from '../../../helpers/Objects';
-import { Button, Fieldset, Input, Text } from '../../atoms';
-import Select from '../../atoms/Select';
-import CalendarPicker from '../CalendarPicker/CalendarPickerForm';
+import PropTypes from "prop-types";
+import React, { useRef, useState } from "react";
+import { LayoutAnimation, Platform } from "react-native";
+import styled from "styled-components/native";
+import { deepCopy } from "../../../helpers/Objects";
+import { Button, Fieldset, Input, Text } from "../../atoms";
+import Select from "../../atoms/Select";
+import CalendarPicker from "../CalendarPicker/CalendarPickerForm";
 
 const EditableListBody = styled.View`
   padding-top: 33px;
@@ -20,16 +20,19 @@ const EditableListItem = styled.TouchableOpacity`
   border-radius: 4.5px;
   margin-bottom: 14px;
   ${({ theme, error }) =>
-    !(error?.isValid || !error) && `border: solid 1px ${theme.colors.primary.red[0]}`}
+    !(error?.isValid || !error) &&
+    `border: solid 1px ${theme.colors.primary.red[0]}`}
   ${(props) =>
     props.editable &&
-    `background-color: ${props.theme.colors.complementary[props.colorSchema][2]};`};
-  ${({ editable }) => editable && Platform.OS === 'ios' && `padding: 16px;`};
+    `background-color: ${
+      props.theme.colors.complementary[props.colorSchema][2]
+    };`};
+  ${({ editable }) => editable && Platform.OS === "ios" && `padding: 16px;`};
 `;
 
 const EditableListItemLabelWrapper = styled.View`
   flex: 4;
-  justify-content: ${(props) => (props.alignAtStart ? 'flex-start' : 'center')};
+  justify-content: ${(props) => (props.alignAtStart ? "flex-start" : "center")};
 `;
 
 const EditableListItemLabel = styled.Text`
@@ -37,7 +40,7 @@ const EditableListItemLabel = styled.Text`
   color: ${(props) => props.theme.colors.neutrals[1]};
   ${(props) =>
     props.editable &&
-    Platform.OS === 'android' &&
+    Platform.OS === "android" &&
     `
     margin: 16px;
     margin-right: 0;
@@ -60,7 +63,7 @@ const EditableListItemInput = styled(Input)`
   color: ${(props) => props.theme.colors.neutrals[1]};
   ${(props) =>
     props.editable &&
-    Platform.OS === 'android' &&
+    Platform.OS === "android" &&
     `
     margin: 16px;
     margin-left: 0;
@@ -73,7 +76,7 @@ const EditableListItemSelect = styled(Select)`
   margin-bottom: 0px;
   ${(props) =>
     props.editable &&
-    Platform.OS === 'android' &&
+    Platform.OS === "android" &&
     `
     margin: 16px;
     margin-left: 0;
@@ -85,10 +88,16 @@ const FieldsetButton = styled(Button)`
 `;
 
 const getInitialState = (inputs, value) => {
-  if (value && typeof value === 'object') {
-    return inputs.reduce((prev, current) => ({ ...prev, [current.key]: value[current.key] }), {});
+  if (value && typeof value === "object") {
+    return inputs.reduce(
+      (prev, current) => ({ ...prev, [current.key]: value[current.key] }),
+      {}
+    );
   }
-  return inputs.reduce((prev, current) => ({ ...prev, [current.key]: current.value }), {});
+  return inputs.reduce(
+    (prev, current) => ({ ...prev, [current.key]: current.value }),
+    {}
+  );
 };
 
 const StyledErrorText = styled(Text)`
@@ -98,9 +107,21 @@ const StyledErrorText = styled(Text)`
 
 /** Switch between different input types */
 const InputComponent = React.forwardRef(
-  ({ input, colorSchema, editable, onChange, onInputBlur, onInputFocus, value, state }, ref) => {
+  (
+    {
+      input,
+      colorSchema,
+      editable,
+      onChange,
+      onInputBlur,
+      onInputFocus,
+      value,
+      state,
+    },
+    ref
+  ) => {
     switch (input.type) {
-      case 'number':
+      case "number":
         return (
           <EditableListItemInput
             colorSchema={colorSchema}
@@ -108,17 +129,17 @@ const InputComponent = React.forwardRef(
             onChangeText={(text) => onChange(input.key, text)}
             onBlur={onInputBlur}
             onFocus={onInputFocus}
-            value={value && value !== '' ? value[input.key] : state[input.key]}
+            value={value && value !== "" ? value[input.key] : state[input.key]}
             keyboardType="numeric"
             transparent
             inputType={input.inputSelectValue}
             ref={ref}
           />
         );
-      case 'date':
+      case "date":
         return (
           <CalendarPicker
-            value={value && value !== '' ? value[input.key] : state[input.key]}
+            value={value && value !== "" ? value[input.key] : state[input.key]}
             onSelect={(date) => onChange(input.key, date)}
             onBlur={onInputBlur}
             onFocus={onInputFocus}
@@ -126,13 +147,13 @@ const InputComponent = React.forwardRef(
             transparent
           />
         );
-      case 'select':
+      case "select":
         return (
           <EditableListItemSelect
             onBlur={onInputBlur}
             onOpen={onInputFocus}
             onValueChange={(value) => onChange(input.key, value)}
-            value={value && value !== '' ? value[input.key] : state[input.key]}
+            value={value && value !== "" ? value[input.key] : state[input.key]}
             editable={editable}
             items={input?.items || []}
             ref={ref}
@@ -146,7 +167,7 @@ const InputComponent = React.forwardRef(
             onChangeText={(text) => onChange(input.key, text)}
             onBlur={onInputBlur}
             onFocus={onInputFocus}
-            value={value && value !== '' ? value[input.key] : state[input.key]}
+            value={value && value !== "" ? value[input.key] : state[input.key]}
             transparent
             inputType={input.inputSelectValue}
             ref={ref}
@@ -164,7 +185,7 @@ InputComponent.propTypes = {
     inputSelectValue: PropTypes.string,
     disabled: PropTypes.bool,
   }),
-  colorSchema: PropTypes.oneOf(['red', 'blue', 'green', 'purple', 'neutral']),
+  colorSchema: PropTypes.oneOf(["red", "blue", "green", "purple", "neutral"]),
   editable: PropTypes.bool,
   onChange: PropTypes.func,
   onInputBlur: PropTypes.func,
@@ -228,7 +249,8 @@ function EditableList({
   };
 
   const handleListItemPress = (index) => {
-    if (editable && inputRefs.current?.[index]?.focus) inputRefs.current[index].focus();
+    if (editable && inputRefs.current?.[index]?.focus)
+      inputRefs.current[index].focus();
     else if (editable && inputRefs.current?.[index]?.togglePicker)
       inputRefs.current[index].togglePicker();
   };
@@ -238,13 +260,18 @@ function EditableList({
   return (
     <Fieldset
       colorSchema={colorSchema}
-      legend={title || ''}
+      legend={title || ""}
       help={help}
       renderHeaderActions={() => (
         <>
           {inputIsEditable && (
-            <FieldsetButton colorSchema={colorSchema} z={0} size="small" onClick={changeEditable}>
-              <Text>{editable ? 'Stäng' : 'Ändra'}</Text>
+            <FieldsetButton
+              colorSchema={colorSchema}
+              z={0}
+              size="small"
+              onClick={changeEditable}
+            >
+              <Text>{editable ? "Stäng" : "Ändra"}</Text>
             </FieldsetButton>
           )}
         </>
@@ -260,8 +287,12 @@ function EditableList({
             activeOpacity={1.0}
             onPress={() => handleListItemPress(index)}
           >
-            <EditableListItemLabelWrapper alignAtStart={input.type === 'select'}>
-              <EditableListItemLabel editable={editable}>{input.label}</EditableListItemLabel>
+            <EditableListItemLabelWrapper
+              alignAtStart={input.type === "select"}
+            >
+              <EditableListItemLabel editable={editable}>
+                {input.label}
+              </EditableListItemLabel>
             </EditableListItemLabelWrapper>
             <EditableListItemInputWrapper>
               <InputComponent
@@ -275,7 +306,9 @@ function EditableList({
             </EditableListItemInputWrapper>
           </EditableListItem>,
           isInputValid(input) && (
-            <StyledErrorText>{error[input.key].validationMessage}</StyledErrorText>
+            <StyledErrorText>
+              {error[input.key].validationMessage}
+            </StyledErrorText>
           ),
         ])}
       </EditableListBody>
@@ -312,7 +345,7 @@ EditableList.propTypes = {
   /**
    * The color schema/theme of the component, default is blue.
    */
-  colorSchema: PropTypes.oneOf(['blue', 'green', 'red', 'purple']),
+  colorSchema: PropTypes.oneOf(["blue", "green", "red", "purple"]),
   onFocus: PropTypes.func,
 };
 
@@ -320,7 +353,7 @@ EditableList.defaultProps = {
   inputIsEditable: true,
   startEditable: false,
   inputs: [],
-  colorSchema: 'blue',
+  colorSchema: "blue",
 };
 
 export default EditableList;

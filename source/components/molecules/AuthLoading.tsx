@@ -1,13 +1,13 @@
-import { BlurView } from '@react-native-community/blur';
-import PropTypes from 'prop-types';
-import React, { useEffect, useRef } from 'react';
-import { Animated, Easing, View } from 'react-native';
-import styled from 'styled-components/native';
-import theme from '../../styles/theme';
-import Button from '../atoms/Button/Button';
-import Icon from '../atoms/Icon';
-import Text from '../atoms/Text';
-import { Modal } from './Modal';
+import { BlurView } from "@react-native-community/blur";
+import PropTypes from "prop-types";
+import React, { useEffect, useRef } from "react";
+import { Animated, Easing, View } from "react-native";
+import styled from "styled-components/native";
+import theme from "../../styles/theme";
+import Button from "../atoms/Button/Button";
+import Icon from "../atoms/Icon";
+import Text from "../atoms/Text";
+import { Modal } from "./Modal";
 
 const Container = styled(View)`
   flex: 1;
@@ -66,7 +66,13 @@ const SuccessIcon = styled(Icon)`
 `;
 
 const AuthLoading = (props) => {
-  const { authenticateOnExternalDevice, cancelSignIn, colorSchema, isLoading, isResolved } = props;
+  const {
+    authenticateOnExternalDevice,
+    cancelSignIn,
+    colorSchema,
+    isLoading,
+    isResolved,
+  } = props;
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -82,7 +88,11 @@ const AuthLoading = (props) => {
     <>
       {isResolved && (
         <Container as={Animated.View} style={{ opacity: fadeAnimation }}>
-          <SuccessIcon size={48} name="check-circle" colorSchema={colorSchema} />
+          <SuccessIcon
+            size={48}
+            name="check-circle"
+            colorSchema={colorSchema}
+          />
         </Container>
       )}
 
@@ -95,13 +105,24 @@ const AuthLoading = (props) => {
       >
         <Container>
           <Box>
-            <AuthActivityIndicator size="large" color={theme.colors.primary[colorSchema][1]} />
+            <AuthActivityIndicator
+              size="large"
+              color={theme.colors.primary[colorSchema][1]}
+            />
             {authenticateOnExternalDevice ? (
-              <InfoText>Väntar på att BankID ska startas på en annan enhet</InfoText>
+              <InfoText>
+                Väntar på att BankID ska startas på en annan enhet
+              </InfoText>
             ) : (
               <InfoText>Väntar på mobilt BankID</InfoText>
             )}
-            <AbortButton z={0} colorSchema="neutral" size="large" onClick={cancelSignIn} block>
+            <AbortButton
+              z={0}
+              colorSchema="neutral"
+              size="large"
+              onClick={cancelSignIn}
+              block
+            >
               <ButtonText>Avbryt</ButtonText>
             </AbortButton>
           </Box>
@@ -124,11 +145,11 @@ AuthLoading.propTypes = {
   /**
    * The color schema of the component. colors is defined in the application theme.
    */
-  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
 };
 
 AuthLoading.defaultProps = {
-  colorSchema: 'neutral',
+  colorSchema: "neutral",
   isResolved: false,
   isLoading: false,
 };

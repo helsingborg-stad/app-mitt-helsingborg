@@ -1,11 +1,11 @@
 /* eslint-disable no-shadow */
-import { storiesOf } from '@storybook/react-native';
-import React from 'react';
-import { View } from 'react-native';
-import MarkdownConstructor from '../../helpers/MarkdownConstructor';
-import StoryWrapper from './StoryWrapper';
-import Text from '../atoms/Text';
-import Heading from '../atoms/Heading';
+import { storiesOf } from "@storybook/react-native";
+import React from "react";
+import { View } from "react-native";
+import MarkdownConstructor from "../../helpers/MarkdownConstructor";
+import StoryWrapper from "./StoryWrapper";
+import Text from "../atoms/Text";
+import Heading from "../atoms/Heading";
 
 const rules = {
   text: (node, _children, _parent, _styles) => (
@@ -23,12 +23,12 @@ const rules = {
 const styles = {
   heading: {
     borderBottomWidth: 1,
-    borderColor: '#000000',
+    borderColor: "#000000",
   },
   heading1: {
     fontSize: 32,
-    backgroundColor: '#000000',
-    color: '#FFFFFF',
+    backgroundColor: "#000000",
+    color: "#FFFFFF",
   },
   heading2: {
     fontSize: 24,
@@ -52,10 +52,10 @@ const styles = {
     fontSize: 20,
   },
   paragraph: {
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    flexWrap: "wrap",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
   },
 };
 
@@ -82,7 +82,7 @@ This is normal text
 
 const url = `[Helsingborg.se](https://www.helsingborg.se)`;
 
-storiesOf('Text', module).add('Markdown', () => (
+storiesOf("Text", module).add("Markdown", () => (
   <StoryWrapper>
     <Heading type="h3">Mixed</Heading>
     <MarkdownConstructor style={styles} rules={rules} rawText={mixed} />

@@ -1,60 +1,66 @@
-import React, { useState } from 'react';
-import { storiesOf } from '@storybook/react-native';
-import GroupListWithAvatar from '../GroupedListWithAvatar';
-import StoryWrapper from '../StoryWrapper';
-import ListItem from './index';
+import React, { useState } from "react";
+import { storiesOf } from "@storybook/react-native";
+import GroupListWithAvatar from "../GroupedListWithAvatar";
+import StoryWrapper from "../StoryWrapper";
+import ListItem from "./index";
 
 const HighlightedData = [
   {
-    id: 'bd7a2be9',
-    title: 'Default',
-    text: 'Default',
-    iconName: 'wc',
+    id: "bd7a2be9",
+    title: "Default",
+    text: "Default",
+    iconName: "wc",
   },
   {
-    id: 'bd7acbea',
-    title: 'Blue',
-    text: 'Lorem ipsum',
-    iconName: 'wc',
-    color: 'blue',
+    id: "bd7acbea",
+    title: "Blue",
+    text: "Lorem ipsum",
+    iconName: "wc",
+    color: "blue",
   },
   {
-    id: 'bd7acbe3',
-    title: 'Green',
-    text: 'Lorem ipsum',
-    iconName: 'wc',
-    color: 'green',
+    id: "bd7acbe3",
+    title: "Green",
+    text: "Lorem ipsum",
+    iconName: "wc",
+    color: "green",
   },
   {
-    id: 'bd7acbe5',
-    title: 'Purple',
-    text: 'Lorem ipsum',
-    iconName: 'wc',
-    color: 'purple',
+    id: "bd7acbe5",
+    title: "Purple",
+    text: "Lorem ipsum",
+    iconName: "wc",
+    color: "purple",
   },
   {
-    id: 'bd7a6be2',
-    title: 'Red',
-    text: 'Lorem ipsum',
-    iconName: 'wc',
-    color: 'red',
+    id: "bd7a6be2",
+    title: "Red",
+    text: "Lorem ipsum",
+    iconName: "wc",
+    color: "red",
   },
 ];
 
 const AvatarListStory = (props) => {
   const [answers, setAnswers] = useState([
-    { firstName: 'Eva', lastName: 'Erikson', email: 'test@test.dev' },
+    { firstName: "Eva", lastName: "Erikson", email: "test@test.dev" },
   ]);
   const change = (value) => {
     setAnswers(value);
   };
-  const [answersKids, setAnswersKids] = useState([{ firstName: 'Lotta', lastName: 'Erikson' }]);
+  const [answersKids, setAnswersKids] = useState([
+    { firstName: "Lotta", lastName: "Erikson" },
+  ]);
   const changeKids = (value) => {
     setAnswersKids(value);
   };
   return (
-    <StoryWrapper {...props} style={{ backgroundColor: '#FFAA9B' }}>
-      <GroupListWithAvatar heading="VUXNA JAG DELAR BOENDE MED" value={answers} onChange={change} />
+    <StoryWrapper {...props} style={{ backgroundColor: "#FFAA9B" }}>
+      <GroupListWithAvatar
+        heading="VUXNA JAG DELAR BOENDE MED"
+        value={answers}
+        onChange={change}
+      />
       <GroupListWithAvatar
         heading="BARN JAG DELAR BOENDE MED"
         value={answersKids}
@@ -65,12 +71,12 @@ const AvatarListStory = (props) => {
   );
 };
 
-storiesOf('Lists', module)
-  .add('Highlight colors', (props) => (
+storiesOf("Lists", module)
+  .add("Highlight colors", (props) => (
     <StoryWrapper {...props}>
       {HighlightedData.map((item) => (
         <ListItem highlighted key={item.id} {...item} />
       ))}
     </StoryWrapper>
   ))
-  .add('Grouped list with avatars', () => <AvatarListStory />);
+  .add("Grouped list with avatars", () => <AvatarListStory />);

@@ -3,14 +3,17 @@ import PropTypes from "prop-types";
 import React, { useRef } from "react";
 import { Platform } from "react-native";
 import styled from "styled-components/native";
-import { colorPalette } from '../../../styles/palette';
-import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
+import { colorPalette } from "../../../styles/palette";
+import {
+  getValidColorSchema,
+  PrimaryColor,
+} from "../../../styles/themeHelpers";
 import { Icon, Input, Text } from "../../atoms";
-import CalendarPicker from '../../molecules/CalendarPicker/CalendarPickerForm';
+import CalendarPicker from "../../molecules/CalendarPicker/CalendarPickerForm";
 import { SummaryListItem as SummaryListItemType } from "./SummaryList";
 
 interface ItemWrapperProps {
-  error?: { isValid: boolean; message: string; };
+  error?: { isValid: boolean; message: string };
   colorSchema: string;
   editable: boolean;
 }
@@ -25,20 +28,24 @@ const Row = styled.View`
   align-items: center;
 `;
 
-const ItemWrapper = styled.TouchableOpacity <ItemWrapperProps>`
+const ItemWrapper = styled.TouchableOpacity<ItemWrapperProps>`
   flex: 10;
-  font-size: ${props => props.theme.fontSizes[4]}px;
+  font-size: ${(props) => props.theme.fontSizes[4]}px;
   flex-direction: row;
   height: auto;
   border-radius: 4.5px;
   ${({ theme, error }) =>
-    !(error?.isValid || !error) && `border: solid 1px ${theme.colors.primary.red[0]};`}
-  ${(props) => props.editable && `
-    background-color: ${props.theme.colors.complementary[props.colorSchema][2]};`
-  }
+    !(error?.isValid || !error) &&
+    `border: solid 1px ${theme.colors.primary.red[0]};`}
+  ${(props) =>
+    props.editable &&
+    `
+    background-color: ${
+      props.theme.colors.complementary[props.colorSchema][2]
+    };`}
   ${({ editable }) =>
     editable &&
-    Platform.OS === 'ios' &&
+    Platform.OS === "ios" &&
     `
     padding: 16px;
   `}
@@ -54,11 +61,11 @@ const InputWrapper = styled.View`
 const SmallInput = styled(Input)`
   min-width: 80%;
   font-weight: 500;
-  color: ${props => props.theme.colors.neutrals[1]};
+  color: ${(props) => props.theme.colors.neutrals[1]};
   padding: 0px;
   ${({ editable }) =>
     editable &&
-    Platform.OS === 'android' &&
+    Platform.OS === "android" &&
     `
     margin: 16px;
     margin-left: 0px;
@@ -73,8 +80,8 @@ const LabelWrapper = styled.View`
 const SmallText = styled(Text)`
   width: 80%;
   padding: 4px;
-  font-weight: ${props => props.theme.fontWeights[1]};
-  color: ${props => props.theme.colors.neutrals[2]};
+  font-weight: ${(props) => props.theme.fontWeights[1]};
+  color: ${(props) => props.theme.colors.neutrals[2]};
   ${(props) =>
     props.editable &&
     `
@@ -82,7 +89,7 @@ const SmallText = styled(Text)`
   `}
   ${({ editable }) =>
     editable &&
-    Platform.OS === 'android' &&
+    Platform.OS === "android" &&
     `
     margin: 16px;
     margin-right: 0px;
@@ -93,7 +100,7 @@ const DeleteButton = styled(Icon)`
   padding-left: 5px;
   margin-bottom: 8px;
   margin-top: 8px;
-  color: ${props => props.theme.colors.neutrals[4]};
+  color: ${(props) => props.theme.colors.neutrals[4]};
 `;
 
 const DeleteButtonHighligth = styled.TouchableHighlight`
@@ -117,66 +124,78 @@ interface InputComponentProps {
   colorSchema: PrimaryColor;
 }
 
-const InputComponent = React.forwardRef(({ input, editable, value, onInputBlur, changeFromInput, colorSchema }: InputComponentProps, ref) => {
-  switch (input.type) {
-    case 'text':
-    case 'arrayText':
-      return (
-        <SmallInput
-          value={value as string}
-          onChangeText={changeFromInput}
-          onBlur={onInputBlur}
-          editable={editable}
-          transparent
-          textAlign="right"
-          inputType={input.inputSelectValue}
-          ref={ref}
-        />
-      );
-    case 'number':
-    case 'arrayNumber':
-      return (
-        <SmallInput
-          keyboardType="numeric"
-          value={value as string}
-          onBlur={onInputBlur}
-          onChangeText={changeFromInput}
-          editable={editable}
-          transparent
-          textAlign="right"
-          inputType={input.inputSelectValue}
-          ref={ref}
-        />
-      );
-    case 'date':
-    case 'arrayDate':
-      return (
-        <CalendarPicker
-          colorSchema={colorSchema}
-          value={value as number}
-          onSelect={changeFromInput}
-          editable={editable}
-          transparent
-          style={{ paddingRight: 10, paddingTop: 5, paddingBottom: 5 }}
-        />
-      );
-    case 'checkbox':
-      return null;
-    default:
-      return (
-        <SmallInput
-          value={value as string}
-          onBlur={onInputBlur}
-          onChangeText={changeFromInput}
-          transparent
-          editable={editable}
-          textAlign="right"
-          inputType={input.inputSelectValue}
-          ref={ref}
-        />
-      );
+const InputComponent = React.forwardRef(
+  (
+    {
+      input,
+      editable,
+      value,
+      onInputBlur,
+      changeFromInput,
+      colorSchema,
+    }: InputComponentProps,
+    ref
+  ) => {
+    switch (input.type) {
+      case "text":
+      case "arrayText":
+        return (
+          <SmallInput
+            value={value as string}
+            onChangeText={changeFromInput}
+            onBlur={onInputBlur}
+            editable={editable}
+            transparent
+            textAlign="right"
+            inputType={input.inputSelectValue}
+            ref={ref}
+          />
+        );
+      case "number":
+      case "arrayNumber":
+        return (
+          <SmallInput
+            keyboardType="numeric"
+            value={value as string}
+            onBlur={onInputBlur}
+            onChangeText={changeFromInput}
+            editable={editable}
+            transparent
+            textAlign="right"
+            inputType={input.inputSelectValue}
+            ref={ref}
+          />
+        );
+      case "date":
+      case "arrayDate":
+        return (
+          <CalendarPicker
+            colorSchema={colorSchema}
+            value={value as number}
+            onSelect={changeFromInput}
+            editable={editable}
+            transparent
+            style={{ paddingRight: 10, paddingTop: 5, paddingBottom: 5 }}
+          />
+        );
+      case "checkbox":
+        return null;
+      default:
+        return (
+          <SmallInput
+            value={value as string}
+            onBlur={onInputBlur}
+            onChangeText={changeFromInput}
+            transparent
+            editable={editable}
+            textAlign="right"
+            inputType={input.inputSelectValue}
+            ref={ref}
+          />
+        );
+    }
   }
-});
+);
 interface Props {
   item: SummaryListItemType;
   value: string | number | boolean;
@@ -206,16 +225,19 @@ const SummaryListItem: React.FC<Props> = ({
 
   const onInputBlur = () => {
     if (onBlur) onBlur(value);
-  }
+  };
   const validColorSchema = getValidColorSchema(colorSchema);
 
   return (
     <Container>
       <Row>
-        <ItemWrapper key={`${item.title}`} colorSchema={validColorSchema} editable={editable} error={validationError}
+        <ItemWrapper
+          key={`${item.title}`}
+          colorSchema={validColorSchema}
+          editable={editable}
+          error={validationError}
           onPress={() => {
-            if (editable && inputRef.current?.focus)
-              inputRef.current.focus();
+            if (editable && inputRef.current?.focus) inputRef.current.focus();
             else if (editable && inputRef.current?.togglePicker)
               inputRef.current.togglePicker();
           }}
@@ -227,21 +249,36 @@ const SummaryListItem: React.FC<Props> = ({
             </SmallText>
           </LabelWrapper>
           <InputWrapper editable={editable}>
-            <InputComponent {...{ input: item, editable, value, onInputBlur, changeFromInput, colorSchema: validColorSchema }}
-              ref={(el) => { inputRef.current = el; }} />
+            <InputComponent
+              {...{
+                input: item,
+                editable,
+                value,
+                onInputBlur,
+                changeFromInput,
+                colorSchema: validColorSchema,
+              }}
+              ref={(el) => {
+                inputRef.current = el;
+              }}
+            />
           </InputWrapper>
         </ItemWrapper>
-        {editable &&
-          (<DeleteButtonHighligth
+        {editable && (
+          <DeleteButtonHighligth
             activeOpacity={0.6}
             underlayColor={colorPalette.complementary[validColorSchema][1]}
-            onPress={removeItem}>
+            onPress={removeItem}
+          >
             <DeleteButton name="clear" />
-          </DeleteButtonHighligth>)}
+          </DeleteButtonHighligth>
+        )}
       </Row>
-      {validationError?.isValid === false &&
-        <ValidationErrorMessage>{validationError?.message}</ValidationErrorMessage>
-      }
+      {validationError?.isValid === false && (
+        <ValidationErrorMessage>
+          {validationError?.message}
+        </ValidationErrorMessage>
+      )}
     </Container>
   );
 };
@@ -265,6 +302,6 @@ SummaryListItem.propTypes = {
   validationError: PropTypes.object,
 };
 SummaryListItem.defaultProps = {
-  colorSchema: 'blue',
+  colorSchema: "blue",
 };
 export default SummaryListItem;

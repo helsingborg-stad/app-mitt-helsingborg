@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import { FieldLabel, Text } from '../../atoms';
-import theme from '../../../styles/theme';
-import HelpButton from '../HelpButton/HelpButton';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import { FieldLabel, Text } from "../../atoms";
+import theme from "../../../styles/theme";
+import HelpButton from "../HelpButton/HelpButton";
 
 const ListWrapper = styled.View`
   display: flex;
@@ -110,6 +110,6 @@ List.propTypes = {
 
 List.defaultProps = {
   items: [],
-  color: 'light',
+  color: "light",
 };
 export default List;

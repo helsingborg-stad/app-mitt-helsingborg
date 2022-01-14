@@ -1,4 +1,4 @@
-import { Linking, Platform } from 'react-native';
+import { Linking, Platform } from "react-native";
 
 /**
  * Triggers the native phone app
@@ -6,7 +6,7 @@ import { Linking, Platform } from 'react-native';
  */
 export const launchPhone = (phone) => {
   let phoneNumber = phone;
-  if (Platform.OS !== 'android') {
+  if (Platform.OS !== "android") {
     phoneNumber = `telprompt:${phone}`;
   } else {
     phoneNumber = `tel:${phone}`;
@@ -14,7 +14,7 @@ export const launchPhone = (phone) => {
   Linking.canOpenURL(phoneNumber)
     .then((supported) => {
       if (!supported) {
-        console.log('Error: Failed to launch phone app');
+        console.log("Error: Failed to launch phone app");
       } else {
         return Linking.openURL(phoneNumber);
       }
@@ -31,7 +31,7 @@ export const launchEmail = (email) => {
   Linking.canOpenURL(mailto)
     .then((supported) => {
       if (!supported) {
-        console.log('Error: Failed to launch email app');
+        console.log("Error: Failed to launch email app");
       } else {
         return Linking.openURL(mailto);
       }

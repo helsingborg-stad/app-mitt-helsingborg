@@ -1,8 +1,8 @@
-import React from 'react';
-import { Modal } from '../Modal';
-import Body from './Body';
-import Wrapper from './Wrapper';
-import BackgroundBlur from './BackgroundBlur';
+import React from "react";
+import { Modal } from "../Modal";
+import Body from "./Body";
+import Wrapper from "./Wrapper";
+import BackgroundBlur from "./BackgroundBlur";
 
 export interface Props {
   children?: any;
@@ -21,7 +21,11 @@ const Dialog: React.FC<Props> = ({ visible, children }) => (
   >
     <Wrapper>
       <Body>{children}</Body>
-      <BackgroundBlur blurType="dark" blurAmount={15} reducedTransparencyFallbackColor="white" />
+      <BackgroundBlur
+        blurType="dark"
+        blurAmount={15}
+        reducedTransparencyFallbackColor="white"
+      />
     </Wrapper>
   </Modal>
 );

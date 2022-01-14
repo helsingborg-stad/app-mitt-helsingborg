@@ -1,40 +1,40 @@
-import React from 'react';
+import React from "react";
 
-import CloseDialog, { Props as CloseDialogProps } from './CloseDialog';
+import CloseDialog, { Props as CloseDialogProps } from "./CloseDialog";
 
-type TemplateKeys = 'mainStep' | 'subStep';
+type TemplateKeys = "mainStep" | "subStep";
 
 const DIALOG_TEMPLATES: {
   [TemplateKeys: string]: CloseDialogProps;
 } = {
   mainStep: {
-    title: 'Vill du avbryta ansökan',
-    body: 'Ansökan sparas i 3 dagar. Efter det raderas den och du får starta en ny.',
+    title: "Vill du avbryta ansökan",
+    body: "Ansökan sparas i 3 dagar. Efter det raderas den och du får starta en ny.",
     buttons: [
       {
-        text: 'Nej',
-        color: 'neutral',
+        text: "Nej",
+        color: "neutral",
         clickHandler: () => {},
       },
       {
-        text: 'Ja',
-        color: 'blue',
+        text: "Ja",
+        color: "blue",
         clickHandler: () => {},
       },
     ],
   },
   subStep: {
-    title: 'Vill du stänga fönster utan att spara inmatad uppgift?',
-    body: '',
+    title: "Vill du stänga fönster utan att spara inmatad uppgift?",
+    body: "",
     buttons: [
       {
-        text: 'Nej',
-        color: 'neutral',
+        text: "Nej",
+        color: "neutral",
         clickHandler: () => {},
       },
       {
-        text: 'Ja',
-        color: 'blue',
+        text: "Ja",
+        color: "blue",
         clickHandler: () => {},
       },
     ],

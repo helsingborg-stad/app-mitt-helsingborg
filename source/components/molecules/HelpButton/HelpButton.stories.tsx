@@ -1,7 +1,7 @@
-import { storiesOf } from '@storybook/react-native';
-import React from 'react';
-import StoryWrapper from '../ScreenWrapper';
-import HelpButton from './HelpButton';
+import { storiesOf } from "@storybook/react-native";
+import React from "react";
+import StoryWrapper from "../ScreenWrapper";
+import HelpButton from "./HelpButton";
 
 const text = `Du som har ekonomiska problem och 
 inte kan försörja dig själv eller din familj kan ansöka om ekonomiskt bistånd. 
@@ -28,17 +28,17 @@ för boende, uppehållstillstånd och kontoöversikt.
 ekonomiskt bistånd är sista alternativet när alla andra alternativ är uttömda.
 `;
 
-const tagline = 'Hjälp';
-const heading = 'Så här fungerar ekonomiskt bistånd';
-const url = 'https://helsingborg.se/';
+const tagline = "Hjälp";
+const heading = "Så här fungerar ekonomiskt bistånd";
+const url = "https://helsingborg.se/";
 
-storiesOf('HelpButton', module)
-  .add('With Text', (props) => (
+storiesOf("HelpButton", module)
+  .add("With Text", (props) => (
     <StoryWrapper {...props}>
       <HelpButton text={text} heading={heading} tagline={tagline} url={url} />
     </StoryWrapper>
   ))
-  .add('With Link', (props) => (
+  .add("With Link", (props) => (
     <StoryWrapper {...props}>
       <HelpButton url={url} />
     </StoryWrapper>

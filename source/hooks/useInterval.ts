@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import BackgroundTimer from 'react-native-background-timer';
+import { useEffect, useRef } from "react";
+import BackgroundTimer from "react-native-background-timer";
 
 export default function useInterval(callback: () => void, delay: number) {
   const savedCallback = useRef<() => void>();

@@ -1,1 +1,1 @@
-export { default } from './StepFooter';
+export { default } from "./StepFooter";

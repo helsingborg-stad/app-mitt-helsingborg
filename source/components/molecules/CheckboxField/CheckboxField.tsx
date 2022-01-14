@@ -1,12 +1,15 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import styled, { ThemeContext } from 'styled-components/native';
-import { TouchableHighlight } from 'react-native';
-import HelpButton from '../HelpButton/HelpButton';
-import Text from '../../atoms/Text/Text';
-import Checkbox from '../../atoms/Checkbox/Checkbox';
-import theme from '../../../styles/theme';
-import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
+import React, { useContext } from "react";
+import PropTypes from "prop-types";
+import styled, { ThemeContext } from "styled-components/native";
+import { TouchableHighlight } from "react-native";
+import HelpButton from "../HelpButton/HelpButton";
+import Text from "../../atoms/Text/Text";
+import Checkbox from "../../atoms/Checkbox/Checkbox";
+import theme from "../../../styles/theme";
+import {
+  getValidColorSchema,
+  PrimaryColor,
+} from "../../../styles/themeHelpers";
 
 // TODO: MOVE TO THEME.
 const sizes = {
@@ -48,7 +51,7 @@ const TouchableWrapper = styled(TouchableHighlight)`
   padding-right: 24px;
   margin-top: 24px;
 `;
-const CheckboxFieldText = styled(Text)<{ size: 'small' | 'medium' | 'large' }>`
+const CheckboxFieldText = styled(Text)<{ size: "small" | "medium" | "large" }>`
   margin-left: ${(props) => props.theme.sizes[1]}px;
   margin-right: ${(props) => props.theme.sizes[1]}px;
   font-size: ${(props) => sizes[props.size].fontSize}px;
@@ -69,11 +72,17 @@ const StyledErrorText = styled(Text)`
 interface CheckBoxProps {
   text?: string;
   colorSchema?: PrimaryColor;
-  size?: 'small' | 'medium' | 'large';
+  size?: "small" | "medium" | "large";
   value: boolean | string;
   onChange?: (value: boolean) => void;
   onBlur?: (value: boolean) => void;
-  help?: { text: string; size?: number; heading?: string; tagline?: string; url?: string };
+  help?: {
+    text: string;
+    size?: number;
+    heading?: string;
+    tagline?: string;
+    url?: string;
+  };
   error?: { isValid: boolean; message: string };
 }
 
@@ -91,17 +100,17 @@ const CheckboxField: React.FC<CheckBoxProps> = ({
 }) => {
   const theme = useContext(ThemeContext);
   let boolValue: boolean;
-  if (typeof value === 'boolean') {
+  if (typeof value === "boolean") {
     boolValue = value;
   } else {
-    boolValue = value === 'true';
+    boolValue = value === "true";
   }
-  const update = () => { 
+  const update = () => {
     onChange(!boolValue);
     if (onBlur) {
       onBlur(!boolValue);
     }
-  }
+  };
   const validColorSchema = getValidColorSchema(colorSchema);
   return (
     <>
@@ -173,8 +182,8 @@ CheckboxField.propTypes = {
 
 CheckboxField.defaultProps = {
   onChange: () => {},
-  colorSchema: 'blue',
-  size: 'small',
+  colorSchema: "blue",
+  size: "small",
   disabled: false,
   help: {},
 };

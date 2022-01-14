@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import { Text, Heading } from '../../../atoms';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import { Text, Heading } from "../../../atoms";
 
 const StepDescriptionWrapper = styled.View`
   padding-left: 24px;
@@ -42,7 +42,11 @@ function StepDescription({
           <StepDescriptionTagline colorSchema={colorSchema}>
             {tagline}
 
-            {tagline && currentStep && totalStepNumber && currentStep !== totalStepNumber && ' • '}
+            {tagline &&
+              currentStep &&
+              totalStepNumber &&
+              currentStep !== totalStepNumber &&
+              " • "}
             {currentStep &&
               totalStepNumber &&
               currentStep !== totalStepNumber &&
@@ -68,13 +72,13 @@ StepDescription.propTypes = {
   /**
    * The color schema for the description,
    */
-  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green', 'neutral']),
+  colorSchema: PropTypes.oneOf(["blue", "red", "purple", "green", "neutral"]),
 };
 
 StepDescription.defaultProps = {
-  tagline: '',
-  text: '',
-  colorSchema: 'blue',
+  tagline: "",
+  text: "",
+  colorSchema: "blue",
   style: {},
 };
 

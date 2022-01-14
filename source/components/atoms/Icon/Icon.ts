@@ -1,7 +1,7 @@
 /* eslint-disable import/no-named-default */
-import PropTypes from 'prop-types';
-import { default as MIcon } from 'react-native-vector-icons/MaterialIcons';
-import styled from 'styled-components/native';
+import PropTypes from "prop-types";
+import { default as MIcon } from "react-native-vector-icons/MaterialIcons";
+import styled from "styled-components/native";
 
 const Icon = styled(MIcon)`
   color: ${(props) => props.color};
@@ -19,8 +19,8 @@ Icon.propTypes = {
 
 Icon.defaultProps = {
   size: 24,
-  name: '3d-rotation',
-  color: ' #000000',
+  name: "3d-rotation",
+  color: " #000000",
 };
 
 export default Icon;

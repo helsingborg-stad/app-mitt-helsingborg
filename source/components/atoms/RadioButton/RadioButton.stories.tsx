@@ -1,9 +1,9 @@
-import { storiesOf } from '@storybook/react-native';
-import React, { useState } from 'react';
-import styled from 'styled-components/native';
-import StoryWrapper from '../../molecules/StoryWrapper';
-import Text from '../Text';
-import RadioButton from './RadioButton';
+import { storiesOf } from "@storybook/react-native";
+import React, { useState } from "react";
+import styled from "styled-components/native";
+import StoryWrapper from "../../molecules/StoryWrapper";
+import Text from "../Text";
+import RadioButton from "./RadioButton";
 
 const FlexContainer = styled.View`
   flex: 1;
@@ -31,13 +31,17 @@ const RadioButtons = () => {
   return (
     <FlexContainer>
       <FlexRow>
-        <RadioButton selected={buttonValues.box1} onSelect={handleChange('box1')} size="small" />
+        <RadioButton
+          selected={buttonValues.box1}
+          onSelect={handleChange("box1")}
+          size="small"
+        />
         <Text style={{ margin: 10 }}>Small, blue color scheme</Text>
       </FlexRow>
       <FlexRow>
         <RadioButton
           selected={buttonValues.box2}
-          onSelect={handleChange('box2')}
+          onSelect={handleChange("box2")}
           size="small"
           colorSchema="red"
         />
@@ -46,7 +50,7 @@ const RadioButtons = () => {
       <FlexRow>
         <RadioButton
           selected={buttonValues.box3}
-          onSelect={handleChange('box3')}
+          onSelect={handleChange("box3")}
           colorSchema="purple"
           size="medium"
         />
@@ -55,7 +59,7 @@ const RadioButtons = () => {
       <FlexRow>
         <RadioButton
           selected={buttonValues.box4}
-          onSelect={handleChange('box4')}
+          onSelect={handleChange("box4")}
           colorSchema="green"
           size="large"
         />
@@ -65,7 +69,7 @@ const RadioButtons = () => {
   );
 };
 
-storiesOf('RadioButtons', module).add('Default', (props) => (
+storiesOf("RadioButtons", module).add("Default", (props) => (
   <StoryWrapper {...props}>
     <RadioButtons />
   </StoryWrapper>

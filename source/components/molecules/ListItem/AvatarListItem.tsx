@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import styled, { withTheme } from 'styled-components/native';
-import { Avatar } from 'react-native-elements';
-import { TouchableHighlight } from 'react-native-gesture-handler';
-import Text from '../../atoms/Text';
-import Button from '../../atoms/Button/Button';
-import Icon from '../../atoms/Icon';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import styled, { withTheme } from "styled-components/native";
+import { Avatar } from "react-native-elements";
+import { TouchableHighlight } from "react-native-gesture-handler";
+import Text from "../../atoms/Text";
+import Button from "../../atoms/Button/Button";
+import Icon from "../../atoms/Icon";
 
 const HighlightedItem = styled(Button)`
   padding: 0px;
@@ -26,7 +26,8 @@ const Title = styled(Text)`
 `;
 
 const Body = styled(Text)`
-  color: ${(props) => props.theme.list.onLightBackground.listWithAvatar.bodyTextColor};
+  color: ${(props) =>
+    props.theme.list.onLightBackground.listWithAvatar.bodyTextColor};
 `;
 
 const IconContainer = styled.View`
@@ -64,17 +65,19 @@ const AvatarListItem = ({
   showModal,
 }) => {
   const [showForm, setShowForm] = useState(showModal);
-  const familyFormId = formId || 'dc069a10-c68d-11ea-9984-cbb2e8b06538'; // hardcoded for now, using dev db
+  const familyFormId = formId || "dc069a10-c68d-11ea-9984-cbb2e8b06538"; // hardcoded for now, using dev db
 
   const showFormModal = () => {
     if (isDisable) setShowForm(true);
   };
 
-  const title = `${value.firstName || 'Förnamn'} ${value.lastName || 'Efternamn'}`;
+  const title = `${value.firstName || "Förnamn"} ${
+    value.lastName || "Efternamn"
+  }`;
   const nameAcronym = title
     .split(/\s/)
     // eslint-disable-next-line no-param-reassign
-    .reduce((response, word) => (response += word.slice(0, 1)), '');
+    .reduce((response, word) => (response += word.slice(0, 1)), "");
 
   const renderContent = () => (
     <Flex>
@@ -84,7 +87,7 @@ const AvatarListItem = ({
             <Avatar
               rounded
               size="medium"
-              titleStyle={{ fontSize: 20, fontWeight: 'bold' }}
+              titleStyle={{ fontSize: 20, fontWeight: "bold" }}
               title={nameAcronym}
             />
           </IconFlex>

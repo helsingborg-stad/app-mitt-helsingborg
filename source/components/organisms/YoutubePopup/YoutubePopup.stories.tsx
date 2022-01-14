@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { storiesOf } from '@storybook/react-native';
-import styled from 'styled-components/native';
-import StoryWrapper from '../../molecules/StoryWrapper';
-import YoutubePopup from './YoutubePopup';
-import { Button, Text } from '../../atoms';
+import React, { useState } from "react";
+import { storiesOf } from "@storybook/react-native";
+import styled from "styled-components/native";
+import StoryWrapper from "../../molecules/StoryWrapper";
+import YoutubePopup from "./YoutubePopup";
+import { Button, Text } from "../../atoms";
 
 const Wrapper = styled.View`
   flex-direction: row;
@@ -30,7 +30,7 @@ const YoutubeStory = () => {
   );
 };
 
-storiesOf('Youtube Popup', module).add('Default', () => (
+storiesOf("Youtube Popup", module).add("Default", () => (
   <StoryWrapper>
     <YoutubeStory />
   </StoryWrapper>

@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import { ActivityIndicator } from 'react-native';
-import styled, { withTheme } from 'styled-components';
-import Config from 'react-native-config';
-import { Button, Heading, Icon, Text } from '../../components/atoms';
-import { Image } from '../../components/molecules/ImageDisplay/ImageDisplay';
-import { uploadImage } from '../../components/molecules/ImageUploader/ImageUploader';
-import useQueue, { Options } from '../../hooks/useQueue';
-import Dialog from '../../components/molecules/Dialog/Dialog';
+import React, { useEffect } from "react";
+import { ActivityIndicator } from "react-native";
+import styled, { withTheme } from "styled-components";
+import Config from "react-native-config";
+import { Button, Heading, Icon, Text } from "../../components/atoms";
+import { Image } from "../../components/molecules/ImageDisplay/ImageDisplay";
+import { uploadImage } from "../../components/molecules/ImageUploader/ImageUploader";
+import useQueue, { Options } from "../../hooks/useQueue";
+import Dialog from "../../components/molecules/Dialog/Dialog";
 
 export interface Props {
   caseStatus: any;
@@ -42,7 +42,10 @@ const FormUploader: React.FunctionComponent<Props> = ({
   const attachments: Image[] = Object.values(answers)
     .filter((item) => Array.isArray(item) && item.length > 0 && item[0]?.path)
     .map((attachmentsArr) =>
-      attachmentsArr.map((attachmentAnswer, index) => ({ ...attachmentAnswer, index }))
+      attachmentsArr.map((attachmentAnswer, index) => ({
+        ...attachmentAnswer,
+        index,
+      }))
     )
     .flat();
 
@@ -60,8 +63,8 @@ const FormUploader: React.FunctionComponent<Props> = ({
 
       return uploadedImage;
     } catch (e) {
-      if (Config?.APP_ENV === 'development')
-        console.error('FormUploader: Failed to upload image. Error: ', e);
+      if (Config?.APP_ENV === "development")
+        console.error("FormUploader: Failed to upload image. Error: ", e);
       image.errorMessage = e;
 
       // useQueue requires throws to include image as parameter, can probably be improved
@@ -97,7 +100,7 @@ const FormUploader: React.FunctionComponent<Props> = ({
         <>
           <DialogActivityIndicator
             size="large"
-            color={theme?.colors?.primary?.blue[1] ?? '#003359'}
+            color={theme?.colors?.primary?.blue[1] ?? "#003359"}
           />
           <Heading align="center" type="h2">
             Laddar upp filer
@@ -116,8 +119,8 @@ const FormUploader: React.FunctionComponent<Props> = ({
             Någonting gick fel
           </Heading>
           <Text align="center">
-            Säkerställ att du har internet uppkoppling och försök igen. Om problemet kvarstår,
-            kontakta din handläggare.
+            Säkerställ att du har internet uppkoppling och försök igen. Om
+            problemet kvarstår, kontakta din handläggare.
           </Text>
           <DialogButton block value="Försök igen" onClick={retry} />
         </>

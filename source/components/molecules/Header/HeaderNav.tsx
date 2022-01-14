@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import Text from '../../atoms/Text';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import Text from "../../atoms/Text";
 
 const HeaderNav = ({ themeColor, navItems }) => (
   <Nav>
@@ -46,7 +46,7 @@ const ActiveItemBar = styled.View`
   height: 2px;
   width: 25px;
   background-color: ${(props) =>
-    props.active ? props.theme.heading[props.color][2] : 'transparent'};
+    props.active ? props.theme.heading[props.color][2] : "transparent"};
 `;
 
 HeaderNav.propTypes = {
@@ -55,5 +55,5 @@ HeaderNav.propTypes = {
 };
 
 HeaderNav.defaultProps = {
-  themeColor: 'purple',
+  themeColor: "purple",
 };

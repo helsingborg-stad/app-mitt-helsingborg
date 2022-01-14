@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
-import styled from 'styled-components/native';
-import { DocumentPickerResponse } from 'react-native-document-picker';
-import HorizontalScrollIndicator from '../../atoms/HorizontalScrollIndicator';
-import PdfItem from './PdfItem';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
+import styled from "styled-components/native";
+import { DocumentPickerResponse } from "react-native-document-picker";
+import HorizontalScrollIndicator from "../../atoms/HorizontalScrollIndicator";
+import PdfItem from "./PdfItem";
 
 const Wrapper = styled.View`
   padding-left: 0;
@@ -31,10 +31,15 @@ interface Props {
 }
 
 const PdfDisplay: React.FC<Props> = ({ pdfs, answers, onChange }) => {
-  const [horizontalScrollPercentage, setHorizontalScrollPercentage] = useState(0);
+  const [horizontalScrollPercentage, setHorizontalScrollPercentage] =
+    useState(0);
 
   const deletePdfFromCloudStorage = async (pdf: Pdf) => {
-    console.log('Placeholder: not implemented yet in API, want to delete pdf ', pdf.name, pdf.uri);
+    console.log(
+      "Placeholder: not implemented yet in API, want to delete pdf ",
+      pdf.name,
+      pdf.uri
+    );
   };
   const removePdf = (pdf: Pdf) => {
     const answer: Pdf[] = answers[pdf.questionId];
@@ -48,13 +53,18 @@ const PdfDisplay: React.FC<Props> = ({ pdfs, answers, onChange }) => {
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     setHorizontalScrollPercentage(
       event.nativeEvent.contentOffset.x /
-        (event.nativeEvent.contentSize.width - event.nativeEvent.layoutMeasurement.width)
+        (event.nativeEvent.contentSize.width -
+          event.nativeEvent.layoutMeasurement.width)
     );
   };
 
   return (
     <Wrapper>
-      <Container horizontal onScroll={handleScroll} showsHorizontalScrollIndicator={false}>
+      <Container
+        horizontal
+        onScroll={handleScroll}
+        showsHorizontalScrollIndicator={false}
+      >
         {pdfs.length > 0 &&
           pdfs.map((pdf, index) => (
             <PdfItem
@@ -66,7 +76,9 @@ const PdfDisplay: React.FC<Props> = ({ pdfs, answers, onChange }) => {
             />
           ))}
       </Container>
-      {pdfs.length > 2 && <HorizontalScrollIndicator percentage={horizontalScrollPercentage} />}
+      {pdfs.length > 2 && (
+        <HorizontalScrollIndicator percentage={horizontalScrollPercentage} />
+      )}
     </Wrapper>
   );
 };

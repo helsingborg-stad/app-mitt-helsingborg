@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components/native';
-import PropTypes from 'prop-types';
-import { Modal } from 'react-native';
-import YoutubePlayer from 'react-native-youtube-iframe';
-import Button from '../../atoms/Button';
-import Text from '../../atoms/Text';
+import React from "react";
+import styled from "styled-components/native";
+import PropTypes from "prop-types";
+import { Modal } from "react-native";
+import YoutubePlayer from "react-native-youtube-iframe";
+import Button from "../../atoms/Button";
+import Text from "../../atoms/Text";
 
 const BackgroundBlur = styled.View`
   position: absolute;
@@ -47,8 +47,17 @@ interface Props {
   closePopup: () => void;
   youtubeVideoId: string;
 }
-const YoutubePopup: React.FC<Props> = ({ visible, closePopup, youtubeVideoId }) => (
-  <Modal visible={visible} transparent presentationStyle="overFullScreen" animationType="fade">
+const YoutubePopup: React.FC<Props> = ({
+  visible,
+  closePopup,
+  youtubeVideoId,
+}) => (
+  <Modal
+    visible={visible}
+    transparent
+    presentationStyle="overFullScreen"
+    animationType="fade"
+  >
     <BackgroundBlur>
       <PopupContainer>
         <ContentContainer>

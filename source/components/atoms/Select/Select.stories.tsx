@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { storiesOf } from '@storybook/react-native';
-import { View } from 'react-native';
-import StoryWrapper from '../../molecules/StoryWrapper';
-import Button from '../Button';
-import Text from '../Text';
-import Select from './Select';
+import React, { useState } from "react";
+import { storiesOf } from "@storybook/react-native";
+import { View } from "react-native";
+import StoryWrapper from "../../molecules/StoryWrapper";
+import Button from "../Button";
+import Text from "../Text";
+import Select from "./Select";
 
 const SelectStory = () => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   return (
     <>
       <Select
@@ -16,11 +16,11 @@ const SelectStory = () => {
         }}
         placeholder="Select a developer"
         items={[
-          { label: 'Nikolas', value: 'nikolas' },
-          { label: 'Ehsan', value: 'ehsan' },
-          { label: 'Jonatan', value: 'jonatan' },
-          { label: 'Dan', value: 'dan' },
-          { label: 'Teddy', value: 'teddy' },
+          { label: "Nikolas", value: "nikolas" },
+          { label: "Ehsan", value: "ehsan" },
+          { label: "Jonatan", value: "jonatan" },
+          { label: "Dan", value: "dan" },
+          { label: "Teddy", value: "teddy" },
         ]}
         value={value}
       />
@@ -28,11 +28,17 @@ const SelectStory = () => {
   );
 };
 const SelectStoryDisabled = () => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const [editable, setEditable] = useState(false);
   return (
     <>
-      <View style={{ padding: 10, flexDirection: 'row', justifyContent: 'space-around' }}>
+      <View
+        style={{
+          padding: 10,
+          flexDirection: "row",
+          justifyContent: "space-around",
+        }}
+      >
         <Button onClick={() => setEditable((e) => !e)}>
           <Text>Toggle Editable</Text>
         </Button>
@@ -45,10 +51,10 @@ const SelectStoryDisabled = () => {
         editable={editable}
         placeholder="Select the best nordic country"
         items={[
-          { label: 'Sverige', value: 'swe' },
-          { label: 'Danmark', value: 'den' },
-          { label: 'Finland', value: 'fin' },
-          { label: 'Norway', value: 'nor' },
+          { label: "Sverige", value: "swe" },
+          { label: "Danmark", value: "den" },
+          { label: "Finland", value: "fin" },
+          { label: "Norway", value: "nor" },
         ]}
         value={value}
       />
@@ -56,7 +62,7 @@ const SelectStoryDisabled = () => {
   );
 };
 
-storiesOf('Select', module).add('default', () => (
+storiesOf("Select", module).add("default", () => (
   <StoryWrapper>
     <SelectStory />
     <SelectStoryDisabled />

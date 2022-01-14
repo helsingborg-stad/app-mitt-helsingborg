@@ -1,28 +1,31 @@
-import React from 'react';
-import { View } from 'react-native';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import { TouchableHighlight } from 'react-native-gesture-handler';
-import AvatarListItem from '../ListItem/AvatarListItem';
-import { Text, Icon } from '../../atoms';
-import Button from '../../atoms/Button/Button';
-import { deepCopy } from '../../../helpers/Objects';
+import React from "react";
+import { View } from "react-native";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import { TouchableHighlight } from "react-native-gesture-handler";
+import AvatarListItem from "../ListItem/AvatarListItem";
+import { Text, Icon } from "../../atoms";
+import Button from "../../atoms/Button/Button";
+import { deepCopy } from "../../../helpers/Objects";
 
 const SectionHeader = styled(Text)`
   margin-left: 15px;
   margin-bottom: 15px;
-  color: ${(props) => props.theme.list.onLightBackground.listWithAvatar.headerColor};
+  color: ${(props) =>
+    props.theme.list.onLightBackground.listWithAvatar.headerColor};
 `;
 
 // TODO: Dynamically set separator width.
 const Separator = styled(View)`
   width: 75%;
-  height: ${(props) => props.theme.list.onLightBackground.listWithAvatar.headerBorderHeight};
+  height: ${(props) =>
+    props.theme.list.onLightBackground.listWithAvatar.headerBorderHeight};
   margin-right: 15px;
   margin-left: 15px;
   margin-bottom: 15px;
   background-color: ${(props) =>
-    props.theme.list.onLightBackground.listWithAvatar.headerSeparatorBackground};
+    props.theme.list.onLightBackground.listWithAvatar
+      .headerSeparatorBackground};
 `;
 
 const HeadingWrapper = styled(View)`
@@ -84,7 +87,14 @@ const GroupListWithAvatar = ({ heading, value, onChange, formId }) => {
             />
           ))
         : null}
-      {isDisable ? <Button text="Lägg till" iconName="add" onClick={addItem} color="blue" /> : null}
+      {isDisable ? (
+        <Button
+          text="Lägg till"
+          iconName="add"
+          onClick={addItem}
+          color="blue"
+        />
+      ) : null}
     </>
   );
 };

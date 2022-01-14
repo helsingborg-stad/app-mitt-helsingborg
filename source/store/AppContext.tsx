@@ -1,14 +1,16 @@
-import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
-import env from 'react-native-config';
-import StorageService, { APP_ENV_KEY } from '../services/StorageService';
+import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
+import env from "react-native-config";
+import StorageService, { APP_ENV_KEY } from "../services/StorageService";
 
 const AppContext = React.createContext();
 
 function AppProvider({ children }) {
-  const acceptedModes = ['development', 'production'];
+  const acceptedModes = ["development", "production"];
   const defaultMode =
-    env.APP_ENV && acceptedModes.includes(env.APP_ENV) ? env.APP_ENV : acceptedModes[0];
+    env.APP_ENV && acceptedModes.includes(env.APP_ENV)
+      ? env.APP_ENV
+      : acceptedModes[0];
   const [mode, setMode] = useState(defaultMode);
 
   const handleSetMode = (newMode) => {
@@ -20,7 +22,7 @@ function AppProvider({ children }) {
   const provider = {
     mode,
     handleSetMode: (newMode) => handleSetMode(newMode),
-    isDevMode: mode === 'development',
+    isDevMode: mode === "development",
   };
 
   useEffect(() => {
@@ -31,7 +33,10 @@ function AppProvider({ children }) {
 }
 
 AppProvider.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
 };
 
 export { AppProvider };

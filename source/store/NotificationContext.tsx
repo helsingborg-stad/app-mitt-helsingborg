@@ -1,7 +1,7 @@
-import React, { useReducer, useContext, useCallback } from 'react';
-import NotificationView from '../components/molecules/ToastNotification/ToastNotifications';
+import React, { useReducer, useContext, useCallback } from "react";
+import NotificationView from "../components/molecules/ToastNotification/ToastNotifications";
 
-type Severity = 'success' | 'info' | 'warning' | 'error' | undefined;
+type Severity = "success" | "info" | "warning" | "error" | undefined;
 export interface Notification {
   id: number;
   autoHideDuration: number;
@@ -11,16 +11,16 @@ export interface Notification {
 }
 const initialState: Notification[] = [];
 type ReducerAction =
-  | { type: 'ADD'; payload: Omit<Notification, 'id'> }
-  | { type: 'REMOVE'; payload: { id: number } }
-  | { type: 'REMOVE_ALL' };
+  | { type: "ADD"; payload: Omit<Notification, "id"> }
+  | { type: "REMOVE"; payload: { id: number } }
+  | { type: "REMOVE_ALL" };
 
 export const notificationReducer = (
   state: Notification[],
   action: ReducerAction
 ): Notification[] => {
   switch (action.type) {
-    case 'ADD':
+    case "ADD":
       return [
         ...state,
         {
@@ -28,9 +28,9 @@ export const notificationReducer = (
           ...action.payload,
         },
       ];
-    case 'REMOVE':
-      return state.filter(t => t.id !== action.payload.id);
-    case 'REMOVE_ALL':
+    case "REMOVE":
+      return state.filter((t) => t.id !== action.payload.id);
+    case "REMOVE_ALL":
       return initialState;
     default:
       return state;
@@ -57,7 +57,8 @@ const defaultVal = {
   clearAll: () => {},
 };
 
-const NotificationContext = React.createContext<NotificationContextType>(defaultVal);
+const NotificationContext =
+  React.createContext<NotificationContextType>(defaultVal);
 
 /** Custom hook that just gives access to the showNotification method, for ease of use.  */
 export const useNotification = () => {
@@ -66,7 +67,10 @@ export const useNotification = () => {
 };
 
 export const NotificationProvider: React.FC<Props> = ({ children }: Props) => {
-  const [notifications, dispatch] = useReducer(notificationReducer, initialState);
+  const [notifications, dispatch] = useReducer(
+    notificationReducer,
+    initialState
+  );
 
   const showNotification = (
     mainText: string,
@@ -75,20 +79,25 @@ export const NotificationProvider: React.FC<Props> = ({ children }: Props) => {
     autoHideDuration = 6000
   ) => {
     dispatch({
-      type: 'ADD',
+      type: "ADD",
       payload: { autoHideDuration, mainText, secondaryText, severity },
     });
   };
 
   const removeNotification = (id: number) => {
-    dispatch({ type: 'REMOVE', payload: { id } });
+    dispatch({ type: "REMOVE", payload: { id } });
   };
   const clearAll = () => {
-    dispatch({ type: 'REMOVE_ALL' });
+    dispatch({ type: "REMOVE_ALL" });
   };
   return (
-    <NotificationContext.Provider value={{ showNotification, removeNotification, clearAll }}>
-      <NotificationView notifications={notifications} removeNotification={removeNotification} />
+    <NotificationContext.Provider
+      value={{ showNotification, removeNotification, clearAll }}
+    >
+      <NotificationView
+        notifications={notifications}
+        removeNotification={removeNotification}
+      />
       {children}
     </NotificationContext.Provider>
   );

@@ -1,16 +1,16 @@
 export type ValidatorMethod =
-  | 'isEmpty'
-  | 'isEmail'
-  | 'isUrl'
-  | 'isPostalCode'
-  | 'isNumeric'
-  | 'isAfter'
-  | 'isBefore'
-  | 'isBoolean'
-  | 'isMobilePhone'
-  | 'isPhone'
-  | 'isLength'
-  | 'isInt';
+  | "isEmpty"
+  | "isEmail"
+  | "isUrl"
+  | "isPostalCode"
+  | "isNumeric"
+  | "isAfter"
+  | "isBefore"
+  | "isBoolean"
+  | "isMobilePhone"
+  | "isPhone"
+  | "isLength"
+  | "isInt";
 
 export interface ValidationRule {
   method: ValidatorMethod;

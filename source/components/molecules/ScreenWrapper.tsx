@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import { StyleProp, ViewStyle } from 'react-native';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import { StyleProp, ViewStyle } from "react-native";
 
 const Container = styled.View`
   flex: 1;

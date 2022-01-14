@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components/native';
-import { storiesOf } from '@storybook/react-native';
+import React from "react";
+import styled from "styled-components/native";
+import { storiesOf } from "@storybook/react-native";
 
-import { Text } from '../../components/atoms';
-import StoryWrapper from '../../components/molecules/StoryWrapper';
+import { Text } from "../../components/atoms";
+import StoryWrapper from "../../components/molecules/StoryWrapper";
 import DynamicCardRenderer from ".";
 
 const userAgreementText = `
@@ -45,32 +45,32 @@ const Title = styled(Text)`
 `;
 
 const cardData = {
-  colorSchema: 'blue',
-  backgroundColor: 'blue',
+  colorSchema: "blue",
+  backgroundColor: "blue",
   components: [
-    { type: 'image', image: 'ICON_EXPENSES' },
-    { type: 'title', text: 'Flat Card' },
-    { type: 'subtitle', text: 'Subtitle' },
-    { type: 'text', text: 'Some card text here' },
+    { type: "image", image: "ICON_EXPENSES" },
+    { type: "title", text: "Flat Card" },
+    { type: "subtitle", text: "Subtitle" },
+    { type: "text", text: "Some card text here" },
   ],
 };
 
 const cardData2 = {
   shadow: true,
-  colorSchema: 'green',
-  backgroundColor: 'neutral',
+  colorSchema: "green",
+  backgroundColor: "neutral",
   components: [
-    { type: 'image', image: 'ICON_CONTACT_PERSON', circle: true },
-    { type: 'title', text: 'Contact us' },
-    { type: 'subtitle', text: 'Subtitle' },
-    { type: 'text', text: 'Some card text here' },
+    { type: "image", image: "ICON_CONTACT_PERSON", circle: true },
+    { type: "title", text: "Contact us" },
+    { type: "subtitle", text: "Subtitle" },
+    { type: "text", text: "Some card text here" },
     {
-      type: 'button',
-      text: 'Do it!',
-      action: 'email',
-      email: 'test@test.com',
-      icon: 'email',
-      iconPosition: 'left',
+      type: "button",
+      text: "Do it!",
+      action: "email",
+      email: "test@test.com",
+      icon: "email",
+      iconPosition: "left",
     },
   ],
 };
@@ -78,18 +78,18 @@ const cardData2 = {
 const cardData3 = {
   shadow: true,
   outlined: true,
-  backgroundColor: 'red',
-  colorSchema: 'red',
+  backgroundColor: "red",
+  colorSchema: "red",
   components: [
-    { type: 'title', text: 'Navigate somewhere' },
-    { type: 'subtitle', text: 'Subtitle' },
-    { type: 'text', text: 'Some card text here' },
+    { type: "title", text: "Navigate somewhere" },
+    { type: "subtitle", text: "Subtitle" },
+    { type: "text", text: "Some card text here" },
     {
-      type: 'button',
-      text: 'Do it!',
-      action: 'navigate',
-      screen: 'UserEvents',
-      icon: 'arrow-forward',
+      type: "button",
+      text: "Do it!",
+      action: "navigate",
+      screen: "UserEvents",
+      icon: "arrow-forward",
     },
   ],
 };
@@ -97,31 +97,31 @@ const cardData3 = {
 const cardData4 = {
   shadow: false,
   outlined: true,
-  backgroundColor: 'purple',
-  colorSchema: 'purple',
+  backgroundColor: "purple",
+  colorSchema: "purple",
   components: [
-    { type: 'image', image: 'ICON_CONTACT_PERSON', circle: true },
-    { type: 'subtitle', text: 'Subtitle' },
-    { type: 'title', text: 'Purple theme' },
-    { type: 'text', text: 'Some italic text here', italic: true },
+    { type: "image", image: "ICON_CONTACT_PERSON", circle: true },
+    { type: "subtitle", text: "Subtitle" },
+    { type: "title", text: "Purple theme" },
+    { type: "text", text: "Some italic text here", italic: true },
   ],
 };
 
 const cardData5 = {
   shadow: true,
   outlined: false,
-  backgroundColor: 'green',
-  colorSchema: 'green',
+  backgroundColor: "green",
+  colorSchema: "green",
   components: [
-    { type: 'image', image: 'ICON_TELL' },
-    { type: 'subtitle', text: 'Subtitle' },
-    { type: 'title', text: 'Green theme' },
+    { type: "image", image: "ICON_TELL" },
+    { type: "subtitle", text: "Subtitle" },
+    { type: "title", text: "Green theme" },
     {
-      type: 'button',
-      text: 'Helsingborg.se',
-      action: 'url',
-      url: 'https://www.helsingborg.se',
-      icon: 'arrow-forward',
+      type: "button",
+      text: "Helsingborg.se",
+      action: "url",
+      url: "https://www.helsingborg.se",
+      icon: "arrow-forward",
     },
   ],
 };
@@ -129,25 +129,26 @@ const cardData5 = {
 const cardData6 = {
   shadow: true,
   outlined: false,
-  backgroundColor: 'blue',
-  colorSchema: 'blue',
+  backgroundColor: "blue",
+  colorSchema: "blue",
   components: [
-    { type: 'image', image: 'ICON_TELL' },
-    { type: 'subtitle', text: 'Subtitle' },
-    { type: 'title', text: 'Informationsmodal' },
+    { type: "image", image: "ICON_TELL" },
+    { type: "subtitle", text: "Subtitle" },
+    { type: "title", text: "Informationsmodal" },
     {
-      type: 'button',
-      text: 'Se Info',
-      icon: 'help',
-      action: 'infoModal',
-      closeButtonText: 'Tillbaka',
+      type: "button",
+      text: "Se Info",
+      icon: "help",
+      action: "infoModal",
+      closeButtonText: "Tillbaka",
       markdownText: userAgreementText,
-      heading: 'Behandling av personuppgifter i e-tjänsten Ansök om Ekonomiskt bistånd',
+      heading:
+        "Behandling av personuppgifter i e-tjänsten Ansök om Ekonomiskt bistånd",
     },
   ],
 };
 
-storiesOf('Dynamic Card Renderer', module).add('default', (props) => (
+storiesOf("Dynamic Card Renderer", module).add("default", (props) => (
   <StoryWrapper {...props}>
     <FlexContainer>
       <Title>Some different card variants</Title>

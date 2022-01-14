@@ -1,6 +1,6 @@
-import React from 'react';
-import { Text } from 'react-native';
-import Animated, { Extrapolate, interpolate } from 'react-native-reanimated';
+import React from "react";
+import { Text } from "react-native";
+import Animated, { Extrapolate, interpolate } from "react-native-reanimated";
 
 interface DotProps {
   index: number;
@@ -24,7 +24,7 @@ const Dot = ({ index, currentIndex }: DotProps) => {
     <Animated.View
       style={{
         opacity,
-        backgroundColor: '#2CB9B9',
+        backgroundColor: "#2CB9B9",
         width: 8,
         height: 8,
         borderRadius: 4,

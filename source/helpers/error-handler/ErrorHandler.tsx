@@ -1,6 +1,6 @@
-import { Alert } from 'react-native';
-import Config from 'react-native-config';
-import RNRestart from 'react-native-restart';
+import { Alert } from "react-native";
+import Config from "react-native-config";
+import RNRestart from "react-native-restart";
 
 /**
  * Handler for boundary errors.
@@ -14,23 +14,33 @@ import RNRestart from 'react-native-restart';
  * @param error Error object or error message string
  * @param isFatal True if error is deemed fatal and cannot be recovered from
  */
-const boundaryErrorHandler = (error: undefined | string | Error, isFatal: boolean) => {
-  const errorMessage = typeof error === 'string' ? error : error?.message || 'unknown error';
+const boundaryErrorHandler = (
+  error: undefined | string | Error,
+  isFatal: boolean
+) => {
+  const errorMessage =
+    typeof error === "string" ? error : error?.message || "unknown error";
 
   if (error && isFatal) {
-    console.log('boundary error', typeof error, error);
+    console.log("boundary error", typeof error, error);
 
-    if (Config.IS_STORYBOOK === 'true') {
-      Alert.alert('Something went wrong in storybook', `${errorMessage}`, [{ text: 'OK' }]);
-    } else {
-      Alert.alert('Something went wrong in Mitt Helsingborg', `${errorMessage}`, [
-        {
-          text: 'Restart',
-          onPress: () => {
-            RNRestart.Restart();
-          },
-        },
+    if (Config.IS_STORYBOOK === "true") {
+      Alert.alert("Something went wrong in storybook", `${errorMessage}`, [
+        { text: "OK" },
       ]);
+    } else {
+      Alert.alert(
+        "Something went wrong in Mitt Helsingborg",
+        `${errorMessage}`,
+        [
+          {
+            text: "Restart",
+            onPress: () => {
+              RNRestart.Restart();
+            },
+          },
+        ]
+      );
     }
   } else {
     // non-fatal errors go here

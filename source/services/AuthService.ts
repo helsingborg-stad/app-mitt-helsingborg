@@ -1,7 +1,10 @@
-import JwtDecode from 'jwt-decode';
-import StorageService, { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from './StorageService';
-import { post, get } from '../helpers/ApiRequest';
-import { getMessage } from '../helpers/MessageHelper';
+import JwtDecode from "jwt-decode";
+import StorageService, {
+  ACCESS_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+} from "./StorageService";
+import { post, get } from "../helpers/ApiRequest";
+import { getMessage } from "../helpers/MessageHelper";
 
 /**
  * This function retrives the accessToken from AsyncStorage and decodes it.
@@ -35,8 +38,10 @@ export async function saveTokensToStorage(accessToken, refreshToken) {
     }
     // TODO: Add real expired at time from token.
     const decodedAccessToken = JwtDecode(accessToken);
-    const expiresAt = JSON.stringify(decodedAccessToken.exp * 10000 + new Date().getTime());
-    await StorageService.saveData('expiresAt', expiresAt);
+    const expiresAt = JSON.stringify(
+      decodedAccessToken.exp * 10000 + new Date().getTime()
+    );
+    await StorageService.saveData("expiresAt", expiresAt);
     return {
       accessToken,
       ...decodedAccessToken,
@@ -60,8 +65,8 @@ export async function removeAccessTokenFromStorage() {
  */
 export async function grantAccessToken(authorizationCode) {
   try {
-    const response = await post('/auth/token', {
-      grant_type: 'authorization_code',
+    const response = await post("/auth/token", {
+      grant_type: "authorization_code",
       code: authorizationCode,
     });
 
@@ -69,7 +74,10 @@ export async function grantAccessToken(authorizationCode) {
       throw new Error(response?.data?.data?.message);
     }
     const { accessToken, refreshToken } = response.data.data.attributes;
-    const decodedAccessToken = await saveTokensToStorage(accessToken, refreshToken);
+    const decodedAccessToken = await saveTokensToStorage(
+      accessToken,
+      refreshToken
+    );
     return [decodedAccessToken, null];
   } catch (error) {
     console.error(error);
@@ -80,8 +88,8 @@ export async function grantAccessToken(authorizationCode) {
 export async function refreshTokens() {
   try {
     const oldRefreshToken = await StorageService.getData(REFRESH_TOKEN_KEY);
-    const response = await post('/auth/token', {
-      grant_type: 'refresh_token',
+    const response = await post("/auth/token", {
+      grant_type: "refresh_token",
       refresh_token: oldRefreshToken,
     });
 
@@ -89,7 +97,10 @@ export async function refreshTokens() {
       throw new Error(response?.data?.data?.message);
     }
     const { accessToken, refreshToken } = response.data.data.attributes;
-    const decodedAccessToken = await saveTokensToStorage(accessToken, refreshToken);
+    const decodedAccessToken = await saveTokensToStorage(
+      accessToken,
+      refreshToken
+    );
     return [decodedAccessToken, null];
   } catch (error) {
     console.error(error);
@@ -121,7 +132,7 @@ export async function getUserProfile(accessToken) {
   try {
     const decodedToken = JwtDecode(accessToken);
     if (!decodedToken || !decodedToken.personalNumber) {
-      throw new Error('Invalid JWT token');
+      throw new Error("Invalid JWT token");
     }
 
     if (decodedToken && decodedToken.personalNumber) {
@@ -143,10 +154,10 @@ export async function getUserProfile(accessToken) {
       }
 
       if (response.status === 404) {
-        throw new Error(getMessage('userNotFound'));
+        throw new Error(getMessage("userNotFound"));
       }
 
-      throw new Error(getMessage('unkownError'));
+      throw new Error(getMessage("unkownError"));
     }
   } catch (error) {
     return [null, error];

@@ -3,26 +3,26 @@
  *
  */
 
-import axios from 'axios';
-import env from 'react-native-config';
-import { post } from '../helpers/ApiRequest';
-import StorageService, { TOKEN_KEY } from './StorageService';
+import axios from "axios";
+import env from "react-native-config";
+import { post } from "../helpers/ApiRequest";
+import StorageService, { TOKEN_KEY } from "./StorageService";
 
 const getService = async (endpoint) => {
   const token = await StorageService.getData(TOKEN_KEY);
 
   return axios({
-    method: 'GET',
+    method: "GET",
     url: `${env.MITTHELSINGBORG_IO}/${endpoint}`,
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      Accept: "application/json",
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   })
     .then((result) => Promise.resolve(result.data))
     .catch((err) => {
-      console.log('Error in request call', err.request);
+      console.log("Error in request call", err.request);
       return Promise.reject(err);
     });
 };
@@ -44,7 +44,7 @@ export const getFormTemplate = (formId) => {
 };
 
 export const getAllFormTemplates = () => {
-  const endpoint = 'form/forms';
+  const endpoint = "form/forms";
 
   return constructGetFormTemplate(endpoint);
 };
@@ -57,7 +57,7 @@ export const sendChatMsg = async (
   intents = undefined,
   entities = undefined
 ) => {
-  const endpoint = 'chatbot/message';
+  const endpoint = "chatbot/message";
 
   const data = {
     assistantId,

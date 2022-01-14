@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
-import { FilterFn } from '../types/ArrayTypes';
+import { useEffect, useState } from "react";
+import { FilterFn } from "../types/ArrayTypes";
 
 export type Options<T> = {
   filters?: {
@@ -29,8 +29,12 @@ function useQueue<T>(
   const { filters } = options;
 
   const initialQueue = filters?.queue ? items.filter(filters.queue) : items;
-  const initialRejected = filters?.rejected ? items.filter(filters.rejected) : [];
-  const initialResolved = filters?.resolved ? items.filter(filters.resolved) : [];
+  const initialRejected = filters?.rejected
+    ? items.filter(filters.rejected)
+    : [];
+  const initialResolved = filters?.resolved
+    ? items.filter(filters.resolved)
+    : [];
 
   const [queue, setQueue] = useState(initialQueue);
   const [rejected, setRejected] = useState(initialRejected);

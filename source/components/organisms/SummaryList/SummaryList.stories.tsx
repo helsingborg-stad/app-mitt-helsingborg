@@ -1,31 +1,32 @@
-import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
-import { storiesOf } from '@storybook/react-native';
-import StoryWrapper from '../../molecules/StoryWrapper';
-import SummaryList from './SummaryList';
-import { Input, Label, Text } from '../../atoms';
-import CheckboxField from '../../molecules/CheckboxField/CheckboxField';
-import Form from '../../../containers/Form/Form';
+import React, { useState } from "react";
+import { ScrollView } from "react-native";
+import { storiesOf } from "@storybook/react-native";
+import StoryWrapper from "../../molecules/StoryWrapper";
+import SummaryList from "./SummaryList";
+import { Input, Label, Text } from "../../atoms";
+import CheckboxField from "../../molecules/CheckboxField/CheckboxField";
+import Form from "../../../containers/Form/Form";
 
-const stories = storiesOf('Summary List', module);
+const stories = storiesOf("Summary List", module);
 
 const status = {
-  type: 'active:ongoing',
-  name: 'Pågående',
-  description: 'Du har påbörjat en ansökan. Du kan öppna din ansökan och fortsätta där du slutade.',
+  type: "active:ongoing",
+  name: "Pågående",
+  description:
+    "Du har påbörjat en ansökan. Du kan öppna din ansökan och fortsätta där du slutade.",
 };
 
 const items = [
-  { id: 'f1', type: 'text', title: 'favoritfrukt', category: 'fruit' },
-  { id: 'f2', type: 'text', title: 'grönsak', category: 'vegetable' },
-  { id: 'pris1', type: 'number', title: 'pris1', category: 'fruit' },
-  { id: 'pris2', type: 'number', title: 'pris2', category: 'vegetable' },
-  { id: 'box1', type: 'checkbox', title: 'Checkbox', category: 'vegetable' },
+  { id: "f1", type: "text", title: "favoritfrukt", category: "fruit" },
+  { id: "f2", type: "text", title: "grönsak", category: "vegetable" },
+  { id: "pris1", type: "number", title: "pris1", category: "fruit" },
+  { id: "pris2", type: "number", title: "pris2", category: "vegetable" },
+  { id: "box1", type: "checkbox", title: "Checkbox", category: "vegetable" },
 ];
 
 const categories = [
-  { category: 'fruit', description: 'Frukt' },
-  { category: 'vegetable', description: 'Grönsak' },
+  { category: "fruit", description: "Frukt" },
+  { category: "vegetable", description: "Grönsak" },
 ];
 
 const SummaryStory = () => {
@@ -92,7 +93,7 @@ const SummaryStory = () => {
             return { ...oldState };
           });
         }}
-        help={{ text: 'some other helper text' }}
+        help={{ text: "some other helper text" }}
       />
       <SummaryList
         heading="Sammanfattning"
@@ -110,7 +111,10 @@ const SummaryStory = () => {
       />
       <SummaryList
         heading="Blå, ingen summa, med hjälp"
-        help={{ text: 'hello from the help text', heading: 'Do not fear, help is here' }}
+        help={{
+          text: "hello from the help text",
+          heading: "Do not fear, help is here",
+        }}
         items={items}
         categories={categories}
         color="blue"
@@ -128,7 +132,7 @@ const SummaryStory = () => {
   );
 };
 
-stories.add('default', () => (
+stories.add("default", () => (
   <StoryWrapper>
     <SummaryStory />
   </StoryWrapper>
@@ -136,101 +140,101 @@ stories.add('default', () => (
 
 const validationTestForm = {
   updatedAt: 1603718388688,
-  connectivityMatrix: [['none']],
+  connectivityMatrix: [["none"]],
   createdAt: 1603718388688,
   steps: [
     {
       questions: [
         {
-          labelHelp: 'text',
-          loadPrevious: ['text_1'],
-          inputSelectValue: 'email',
-          description: 'email',
-          label: 'Email',
-          id: 'text_1',
-          type: 'text',
+          labelHelp: "text",
+          loadPrevious: ["text_1"],
+          inputSelectValue: "email",
+          description: "email",
+          label: "Email",
+          id: "text_1",
+          type: "text",
           validation: {
             isRequired: true,
             rules: [
               {
-                method: 'isEmail',
-                message: 'Epostadressen ser inte ut att vara korrekt',
+                method: "isEmail",
+                message: "Epostadressen ser inte ut att vara korrekt",
                 validWhen: true,
               },
               {
-                method: 'isEmpty',
-                message: 'Du får inte lämna detta fält tomt',
+                method: "isEmpty",
+                message: "Du får inte lämna detta fält tomt",
                 validWhen: false,
               },
             ],
           },
-          tags: ['tagsHere', 'moreTags'],
+          tags: ["tagsHere", "moreTags"],
         },
         {
-          loadPrevious: ['number_1'],
-          inputSelectValue: 'phone',
-          description: 'Number222',
-          label: 'Phone number',
-          id: 'number_1',
-          type: 'number',
+          loadPrevious: ["number_1"],
+          inputSelectValue: "phone",
+          description: "Number222",
+          label: "Phone number",
+          id: "number_1",
+          type: "number",
           validation: {
             isRequired: true,
             rules: [
               {
                 args: {
-                  locale: 'sv-SE',
+                  locale: "sv-SE",
                 },
                 validWhen: true,
-                method: 'isMobilePhone',
-                message: 'Numret du angav är inte ett giltigt telefonnummer',
+                method: "isMobilePhone",
+                message: "Numret du angav är inte ett giltigt telefonnummer",
               },
               {
-                method: 'isEmpty',
-                message: 'Du får inte lämna detta fält tomt',
+                method: "isEmpty",
+                message: "Du får inte lämna detta fält tomt",
                 validWhen: false,
               },
             ],
           },
         },
         {
-          description: 'date',
-          label: 'Date',
-          id: 'date_1',
-          type: 'date',
-          labelHelp: 'date',
+          description: "date",
+          label: "Date",
+          id: "date_1",
+          type: "date",
+          labelHelp: "date",
         },
         {
-          heading: 'Summary list',
-          inputSelectValue: 'summaryList',
+          heading: "Summary list",
+          inputSelectValue: "summaryList",
           showSum: true,
-          description: 'Summary list',
-          label: 'Summary list',
-          id: 'summary_list_1',
+          description: "Summary list",
+          label: "Summary list",
+          id: "summary_list_1",
           categories: [
             {
-              category: 'cat_1',
-              description: 'User info',
+              category: "cat_1",
+              description: "User info",
             },
           ],
-          type: 'summaryList',
+          type: "summaryList",
           items: [
             {
-              id: 'text_1',
-              title: 'email',
-              category: 'cat_1',
-              type: 'text',
-              inputSelectValue: 'text',
+              id: "text_1",
+              title: "email",
+              category: "cat_1",
+              type: "text",
+              inputSelectValue: "text",
               validation: {
                 isRequired: false,
                 rules: [],
               },
             },
             {
-              id: 'number_1',
-              title: 'phone',
-              category: 'cat_1',
-              type: 'number',
-              inputSelectValue: 'number',
+              id: "number_1",
+              title: "phone",
+              category: "cat_1",
+              type: "number",
+              inputSelectValue: "number",
               validation: {
                 isRequired: false,
                 rules: [
@@ -241,19 +245,19 @@ const validationTestForm = {
                       },
                     },
                     validWhen: true,
-                    method: 'isNumeric',
-                    message: 'Du måste ange en siffra',
+                    method: "isNumeric",
+                    message: "Du måste ange en siffra",
                   },
                 ],
               },
             },
             {
-              inputId: 'amount',
-              inputSelectValue: 'arrayNumber',
-              id: 'repeater_1',
-              title: 'Repeater',
-              category: 'cat_1',
-              type: 'arrayNumber',
+              inputId: "amount",
+              inputSelectValue: "arrayNumber",
+              id: "repeater_1",
+              title: "Repeater",
+              category: "cat_1",
+              type: "arrayNumber",
               validation: {
                 isRequired: false,
                 rules: [
@@ -264,42 +268,42 @@ const validationTestForm = {
                       },
                     },
                     validWhen: true,
-                    method: 'isNumeric',
-                    message: 'Du måste ange en siffra',
+                    method: "isNumeric",
+                    message: "Du måste ange en siffra",
                   },
                 ],
               },
             },
             {
-              inputId: 'date',
-              id: 'repeater_1',
-              title: 'Repeater date',
-              type: 'arrayDate',
-              category: 'cat_1',
-              inputSelectValue: 'arrayDate',
+              inputId: "date",
+              id: "repeater_1",
+              title: "Repeater date",
+              type: "arrayDate",
+              category: "cat_1",
+              inputSelectValue: "arrayDate",
             },
           ],
         },
         {
-          addButtonText: 'Add',
-          heading: 'Repeater',
+          addButtonText: "Add",
+          heading: "Repeater",
           inputs: [
             {
-              id: 'text',
-              type: 'text',
-              title: 'Text',
-              inputSelectValue: 'text',
+              id: "text",
+              type: "text",
+              title: "Text",
+              inputSelectValue: "text",
               validation: {
                 isRequired: false,
                 rules: [],
               },
-              tags: ['repeaterTag', 'moreTags'],
+              tags: ["repeaterTag", "moreTags"],
             },
             {
-              id: 'amount',
-              title: 'Amount',
-              type: 'number',
-              inputSelectValue: 'number',
+              id: "amount",
+              title: "Amount",
+              type: "number",
+              inputSelectValue: "number",
               validation: {
                 isRequired: false,
                 rules: [
@@ -310,24 +314,24 @@ const validationTestForm = {
                       },
                     },
                     validWhen: true,
-                    method: 'isNumeric',
-                    message: 'Du måste ange en siffra',
+                    method: "isNumeric",
+                    message: "Du måste ange en siffra",
                   },
                 ],
               },
-              tags: ['amount'],
+              tags: ["amount"],
             },
             {
-              id: 'pnum',
-              type: 'number',
-              title: 'personnummer',
-              inputSelectValue: 'personalNumber',
+              id: "pnum",
+              type: "number",
+              title: "personnummer",
+              inputSelectValue: "personalNumber",
               validation: {
                 isRequired: true,
                 rules: [
                   {
-                    method: 'isNumeric',
-                    message: 'Enbart siffror i ett personnummer',
+                    method: "isNumeric",
+                    message: "Enbart siffror i ett personnummer",
                     validWhen: true,
                   },
                   {
@@ -338,76 +342,76 @@ const validationTestForm = {
                       },
                     },
                     validWhen: true,
-                    method: 'isLength',
-                    message: 'Ange personnummer med 12 siffror',
+                    method: "isLength",
+                    message: "Ange personnummer med 12 siffror",
                   },
                   {
-                    method: 'isEmpty',
-                    message: 'Du får inte lämna detta fält tomt',
+                    method: "isEmpty",
+                    message: "Du får inte lämna detta fält tomt",
                     validWhen: false,
                   },
                 ],
               },
-              tags: ['repeaterTags', 'pnum'],
+              tags: ["repeaterTags", "pnum"],
             },
             {
-              id: 'date',
-              title: 'Date',
-              type: 'date',
-              inputSelectValue: 'date',
+              id: "date",
+              title: "Date",
+              type: "date",
+              inputSelectValue: "date",
             },
           ],
-          description: 'repeater',
-          label: 'Repeater',
-          id: 'repeater_1',
-          type: 'repeaterField',
+          description: "repeater",
+          label: "Repeater",
+          id: "repeater_1",
+          type: "repeaterField",
         },
         {
-          labelHelp: 'Check me!',
-          loadPrevious: ['checkbox_1'],
-          inputSelectValue: 'checkbox_1',
-          description: 'checkbox',
-          label: 'Check box',
-          text: 'Check me!',
-          id: 'checkbox_1',
-          type: 'checkbox',
+          labelHelp: "Check me!",
+          loadPrevious: ["checkbox_1"],
+          inputSelectValue: "checkbox_1",
+          description: "checkbox",
+          label: "Check box",
+          text: "Check me!",
+          id: "checkbox_1",
+          type: "checkbox",
           validation: {
             isRequired: true,
             rules: [
               {
-                arg: 'true',
-                method: 'equals',
-                message: 'Måste checkas i för att gå vidare',
+                arg: "true",
+                method: "equals",
+                message: "Måste checkas i för att gå vidare",
                 validWhen: true,
               },
             ],
           },
         },
       ],
-      description: 'step 1',
+      description: "step 1",
       banner: {
-        iconSrc: '',
-        imageSrc: '',
-        backgroundColor: '',
+        iconSrc: "",
+        imageSrc: "",
+        backgroundColor: "",
       },
-      id: '597e353e-d790-4e9d-8b1e-436bf43b834f',
-      title: 'Step 1',
+      id: "597e353e-d790-4e9d-8b1e-436bf43b834f",
+      title: "Step 1",
       actions: [
         {
-          type: 'next',
-          label: 'Submit',
+          type: "next",
+          label: "Submit",
         },
       ],
-      group: 'step 1',
+      group: "step 1",
     },
   ],
-  provider: 'VIVA',
+  provider: "VIVA",
   subform: false,
-  PK: 'FORM#ec47ad00-178d-11eb-b1b1-f33b2604caa4',
-  description: 'Test form',
-  id: 'ec47ad00-178d-11eb-b1b1-f33b2604caa4',
-  name: 'Test form',
-  formType: 'EKB-recurring',
+  PK: "FORM#ec47ad00-178d-11eb-b1b1-f33b2604caa4",
+  description: "Test form",
+  id: "ec47ad00-178d-11eb-b1b1-f33b2604caa4",
+  name: "Test form",
+  formType: "EKB-recurring",
 };
 
 const SummaryValidationStory = () => (
@@ -420,7 +424,7 @@ const SummaryValidationStory = () => (
   />
 );
 
-stories.add('Validation', () => (
+stories.add("Validation", () => (
   <StoryWrapper>
     <SummaryValidationStory />
   </StoryWrapper>

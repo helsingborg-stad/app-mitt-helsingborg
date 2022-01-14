@@ -1,10 +1,15 @@
-import React from 'react';
-import styled from 'styled-components/native';
-import { TouchableOpacity, GestureResponderEvent, Dimensions, Pressable } from 'react-native';
-import PdfView from 'react-native-pdf';
-import { Icon, Button, Text } from '../../atoms';
-import { Modal, useModal } from '../Modal';
-import { Pdf } from './PdfDisplay';
+import React from "react";
+import styled from "styled-components/native";
+import {
+  TouchableOpacity,
+  GestureResponderEvent,
+  Dimensions,
+  Pressable,
+} from "react-native";
+import PdfView from "react-native-pdf";
+import { Icon, Button, Text } from "../../atoms";
+import { Modal, useModal } from "../Modal";
+import { Pdf } from "./PdfDisplay";
 
 const Flex = styled.View`
   flex-direction: column;
@@ -39,11 +44,11 @@ const Container = styled.View`
   shadow-radius: 5px;
   border: 1px solid transparent;
 `;
-const PdfInModal = styled(PdfView)<{width: number; height: number}>`
+const PdfInModal = styled(PdfView)<{ width: number; height: number }>`
   background-color: white;
   flex: 1;
-  width: ${({width}) => width}px;
-  height: ${({height}) => height}px;
+  width: ${({ width }) => width}px;
+  height: ${({ height }) => height}px;
 `;
 const ButtonWrapper = styled.View`
   padding: 5px;
@@ -76,7 +81,12 @@ const PdfItem: React.FC<Props> = ({ pdf, onRemove }) => {
           <Pressable onPress={toggleModal}>
             <PdfView
               source={{ uri: pdf.uri }}
-              style={{ flex: 1, width: 120, height: 170, backgroundColor: 'white' }}
+              style={{
+                flex: 1,
+                width: 120,
+                height: 170,
+                backgroundColor: "white",
+              }}
               singlePage
             />
           </Pressable>
@@ -85,8 +95,8 @@ const PdfItem: React.FC<Props> = ({ pdf, onRemove }) => {
       <Modal visible={modalVisible} hide={toggleModal}>
         <PdfInModal
           source={{ uri: pdf.uri }}
-          width={Dimensions.get('window').width}
-          height={Dimensions.get('window').height * 0.89}
+          width={Dimensions.get("window").width}
+          height={Dimensions.get("window").height * 0.89}
         />
         <ButtonWrapper>
           <Button colorSchema="red" onClick={toggleModal}>

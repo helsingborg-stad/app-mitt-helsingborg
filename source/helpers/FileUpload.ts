@@ -1,8 +1,11 @@
-import axios from 'axios';
-import RNFetchBlob from 'rn-fetch-blob';
-import env from 'react-native-config';
-import StorageService, { ACCESS_TOKEN_KEY, APP_ENV_KEY } from '../services/StorageService';
-import { buildServiceUrl } from './UrlHelper';
+import axios from "axios";
+import RNFetchBlob from "rn-fetch-blob";
+import env from "react-native-config";
+import StorageService, {
+  ACCESS_TOKEN_KEY,
+  APP_ENV_KEY,
+} from "../services/StorageService";
+import { buildServiceUrl } from "./UrlHelper";
 
 export const getBlob = async (fileUri: string) => {
   const response = await fetch(fileUri);
@@ -10,12 +13,12 @@ export const getBlob = async (fileUri: string) => {
   return fileBlob;
 };
 
-type AllowedFileTypes = 'jpg' | 'jpeg' | 'png' | 'pdf';
+type AllowedFileTypes = "jpg" | "jpeg" | "png" | "pdf";
 const MIMEs: Record<AllowedFileTypes, string> = {
-  jpg: 'image/jpg',
-  jpeg: 'image/jpg',
-  png: 'image/png',
-  pdf: 'application/pdf',
+  jpg: "image/jpg",
+  jpeg: "image/jpg",
+  png: "image/png",
+  pdf: "application/pdf",
 };
 
 interface FileUploadParams {
@@ -39,23 +42,25 @@ export const uploadFile = async ({
   const requestUrl = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
   const appEnv = await StorageService.getData(APP_ENV_KEY);
-  const devMode = appEnv === 'development';
-  const apiKey = devMode ? env.MITTHELSINGBORG_IO_DEV_APIKEY : env.MITTHELSINGBORG_IO_APIKEY;
+  const devMode = appEnv === "development";
+  const apiKey = devMode
+    ? env.MITTHELSINGBORG_IO_DEV_APIKEY
+    : env.MITTHELSINGBORG_IO_APIKEY;
 
-  const bearer = token || '';
+  const bearer = token || "";
 
   // Merge custom headers
   const newHeaders = {
     Authorization: bearer,
-    'Content-Type': 'application/json',
-    'x-api-key': apiKey,
+    "Content-Type": "application/json",
+    "x-api-key": apiKey,
     ...headers,
   };
 
   try {
     const signedUrlResponse = await axios({
       url: requestUrl,
-      method: 'post',
+      method: "post",
       headers: newHeaders,
       data: { fileName, mime: MIMEs[fileType] },
     });
@@ -64,13 +69,13 @@ export const uploadFile = async ({
     const { uploadUrl } = fileUploadAttributes;
 
     const putResponse = await fetch(uploadUrl, {
-      method: 'PUT',
+      method: "PUT",
       body: data,
       headers: {
-        'Content-Type': MIMEs[fileType],
-        'Content-Encoding': 'base64',
-        'x-amz-acl': 'public-read',
-        'x-api-key': apiKey,
+        "Content-Type": MIMEs[fileType],
+        "Content-Encoding": "base64",
+        "x-amz-acl": "public-read",
+        "x-api-key": apiKey,
       },
     });
 
@@ -79,17 +84,20 @@ export const uploadFile = async ({
     }
 
     // return the url and filename on server to the uploaded file.
-    return { url: putResponse.url, uploadedFileName: fileUploadAttributes.fileName };
+    return {
+      url: putResponse.url,
+      uploadedFileName: fileUploadAttributes.fileName,
+    };
   } catch (error) {
-    console.error('Error while uploading file:', error);
+    console.error("Error while uploading file:", error);
     return { error: true, message: error.message, ...error.response };
   }
 };
 
 const MimeTypes = {
-  jpg: 'image/jpeg',
-  png: 'image/png',
-  pdf: 'application/pdf',
+  jpg: "image/jpeg",
+  png: "image/png",
+  pdf: "application/pdf",
 };
 
 interface FileDownloadParams {
@@ -97,24 +105,27 @@ interface FileDownloadParams {
   filename: string;
 }
 
-export const downloadFile = async ({ endpoint, filename }: FileDownloadParams) => {
-  const fileEnding = filename.split('.').pop();
+export const downloadFile = async ({
+  endpoint,
+  filename,
+}: FileDownloadParams) => {
+  const fileEnding = filename.split(".").pop();
   const mime = MimeTypes[fileEnding];
   const requestUrl = await buildServiceUrl(`${endpoint}/${filename}`);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
-  const bearer = token || '';
+  const bearer = token || "";
 
   const { dirs } = RNFetchBlob.fs;
   try {
     const downloadResult = await RNFetchBlob.config({
       path: `${dirs.CacheDir}/${filename}`,
-    }).fetch('GET', requestUrl, {
+    }).fetch("GET", requestUrl, {
       Authorization: bearer,
       Accept: mime,
     });
     return `file://${downloadResult.path()}`;
   } catch (error) {
-    console.log('axios download error: ', error);
+    console.log("axios download error: ", error);
     return { error: true, message: error.message, ...error.response };
   }
 };

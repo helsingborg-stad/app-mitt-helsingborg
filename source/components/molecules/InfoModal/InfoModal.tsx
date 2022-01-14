@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import { View, Dimensions } from 'react-native';
-import { PrimaryColor, getValidColorSchema } from '../../../styles/themeHelpers';
-import { Modal } from '../Modal';
-import { Button, Text, Heading } from '../../atoms';
-import MarkdownConstructor from '../../../helpers/MarkdownConstructor';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import { View, Dimensions } from "react-native";
+import {
+  PrimaryColor,
+  getValidColorSchema,
+} from "../../../styles/themeHelpers";
+import { Modal } from "../Modal";
+import { Button, Text, Heading } from "../../atoms";
+import MarkdownConstructor from "../../../helpers/MarkdownConstructor";
 
 const UnifiedPadding = [12, 24]; // Vertical padding, Horizontal padding
 
@@ -41,7 +44,8 @@ const Wrapper = styled.View`
 const Header = styled.View`
   padding: ${UnifiedPadding[0]}px ${UnifiedPadding[1]}px ${UnifiedPadding[0]}px
     ${UnifiedPadding[1]}px;
-  border-bottom-color: ${(props) => props.theme.colors.complementary.neutral[1]};
+  border-bottom-color: ${(props) =>
+    props.theme.colors.complementary.neutral[1]};
   border-bottom-width: 1px;
   margin: 10px;
   margin-bottom: 0px;
@@ -53,7 +57,8 @@ const Form = styled.ScrollView`
     ${UnifiedPadding[1]}px;
   max-height: 90%;
   min-height: 30%;
-  border-bottom-color: ${(props) => props.theme.colors.complementary.neutral[1]};
+  border-bottom-color: ${(props) =>
+    props.theme.colors.complementary.neutral[1]};
   border-bottom-width: 1px;
   margin: 10px;
   margin-top: 0px;
@@ -101,7 +106,7 @@ const InfoModal: React.FC<Props> = ({
   ...other
 }) => {
   const validColorSchema = getValidColorSchema(colorSchema);
-  const windowHeight = Dimensions.get('window').height;
+  const windowHeight = Dimensions.get("window").height;
   const [height, setHeight] = useState(800);
 
   return (
@@ -126,11 +131,19 @@ const InfoModal: React.FC<Props> = ({
               </Header>
             )}
             <Form>
-              <MarkdownConstructor rules={markdownRules} rawText={markdownText} />
+              <MarkdownConstructor
+                rules={markdownRules}
+                rawText={markdownText}
+              />
             </Form>
             <Footer>
-              <Button z={0} block onClick={toggleModal} colorSchema={validColorSchema}>
-                <Text>{buttonText || 'Stäng'}</Text>
+              <Button
+                z={0}
+                block
+                onClick={toggleModal}
+                colorSchema={validColorSchema}
+              >
+                <Text>{buttonText || "Stäng"}</Text>
               </Button>
             </Footer>
           </Wrapper>
@@ -146,7 +159,7 @@ InfoModal.propTypes = {
   heading: PropTypes.string,
   markdownText: PropTypes.string,
   buttonText: PropTypes.string,
-  colorSchema: PropTypes.oneOf(['green', 'blue', 'red', 'neutral', 'purple']),
+  colorSchema: PropTypes.oneOf(["green", "blue", "red", "neutral", "purple"]),
 };
 
 export default InfoModal;

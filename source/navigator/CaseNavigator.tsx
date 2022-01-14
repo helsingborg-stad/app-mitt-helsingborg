@@ -1,10 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { createStackNavigator } from '@react-navigation/stack';
-import styled from 'styled-components/native';
-import CaseOverview from '../screens/caseScreens/CaseOverview';
-import CaseSummary from '../screens/caseScreens/CaseSummary';
-import { Icon } from '../components/atoms';
+import React from "react";
+import PropTypes from "prop-types";
+import { createStackNavigator } from "@react-navigation/stack";
+import styled from "styled-components/native";
+import CaseOverview from "../screens/caseScreens/CaseOverview";
+import CaseSummary from "../screens/caseScreens/CaseSummary";
+import { Icon } from "../components/atoms";
 
 const Stack = createStackNavigator();
 
@@ -20,7 +20,7 @@ const CaseNavigator = ({ navigation }) => {
     <TouchWrapper
       activeOpacity={0.2}
       onPress={() => {
-        navigation.navigate('CaseOverview');
+        navigation.navigate("CaseOverview");
       }}
     >
       <Icon name="arrow-back" />
@@ -28,17 +28,20 @@ const CaseNavigator = ({ navigation }) => {
   );
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName="CaseOverview">
+    <Stack.Navigator
+      screenOptions={{ headerShown: true }}
+      initialRouteName="CaseOverview"
+    >
       <Stack.Screen
         name="CaseOverview"
         component={CaseOverview}
-        options={{ title: 'Ärenden', headerShown: false }}
+        options={{ title: "Ärenden", headerShown: false }}
       />
       <Stack.Screen
         name="CaseSummary"
         component={CaseSummary}
         options={({ route }) => ({
-          title: route.params.name || 'Ärenden',
+          title: route.params.name || "Ärenden",
           headerLeft: () => <BackButton />,
         })}
       />

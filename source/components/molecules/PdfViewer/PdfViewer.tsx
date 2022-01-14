@@ -1,5 +1,5 @@
-import React from 'react';
-import PdfDisplay, { Pdf } from '../PdfDisplay/PdfDisplay';
+import React from "react";
+import PdfDisplay, { Pdf } from "../PdfDisplay/PdfDisplay";
 
 interface Props {
   questionIds: string[];

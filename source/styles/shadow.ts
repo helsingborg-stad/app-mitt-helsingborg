@@ -1,4 +1,4 @@
-import { css } from 'styled-components/native';
+import { css } from "styled-components/native";
 
 const SHADOW = {};
 

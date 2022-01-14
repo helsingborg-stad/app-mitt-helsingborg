@@ -1,5 +1,5 @@
-import styled from 'styled-components/native';
-import { BlurView } from '@react-native-community/blur';
+import styled from "styled-components/native";
+import { BlurView } from "@react-native-community/blur";
 
 export const BackgroundBlur = styled(BlurView)`
   position: absolute;

@@ -1,7 +1,7 @@
-import { useReducer, useEffect } from 'react';
-import formReducer from './formReducer';
-import { Question, Step, StepperActions } from '../../../types/FormTypes';
-import { User } from '../../../types/UserTypes';
+import { useReducer, useEffect } from "react";
+import formReducer from "./formReducer";
+import { Question, Step, StepperActions } from "../../../types/FormTypes";
+import { User } from "../../../types/UserTypes";
 
 export interface FormPosition {
   index: number;
@@ -35,44 +35,47 @@ function useForm(initialState: FormReducerState) {
 
   useEffect(() => {
     dispatch({
-      type: 'REPLACE_MARKDOWN_TEXT',
+      type: "REPLACE_MARKDOWN_TEXT",
     });
     dispatch({
-      type: 'COUNT_MAIN_STEPS',
+      type: "COUNT_MAIN_STEPS",
     });
   }, [formState.connectivityMatrix]);
 
   useEffect(() => {
     dispatch({
-      type: 'GET_ALL_QUESTIONS',
+      type: "GET_ALL_QUESTIONS",
     });
   }, [formState.steps]);
 
-  const validateStepAnswers = (onErrorCallback: () => void, onValidCallback: () => void) => {
+  const validateStepAnswers = (
+    onErrorCallback: () => void,
+    onValidCallback: () => void
+  ) => {
     dispatch({
-      type: 'VALIDATE_ALL_STEP_ANSWERS',
+      type: "VALIDATE_ALL_STEP_ANSWERS",
       payload: { onErrorCallback, onValidCallback },
     });
   };
 
   const createSnapshot = () =>
     dispatch({
-      type: 'CREATE_SNAPSHOT',
+      type: "CREATE_SNAPSHOT",
     });
 
   const deleteSnapshot = () =>
     dispatch({
-      type: 'DELETE_SNAPSHOT',
+      type: "DELETE_SNAPSHOT",
     });
 
   const restoreSnapshot = () =>
     dispatch({
-      type: 'RESTORE_SNAPSHOT',
+      type: "RESTORE_SNAPSHOT",
     });
 
   const goToNextStep = () =>
     dispatch({
-      type: 'GO_NEXT',
+      type: "GO_NEXT",
     });
 
   /**
@@ -80,7 +83,7 @@ function useForm(initialState: FormReducerState) {
    */
   const goToPreviousStep = () =>
     dispatch({
-      type: 'GO_BACK',
+      type: "GO_BACK",
     });
 
   /**
@@ -88,7 +91,7 @@ function useForm(initialState: FormReducerState) {
    */
   const goIntoStep = (targetStep: number | string) =>
     dispatch({
-      type: 'GO_DOWN',
+      type: "GO_DOWN",
       payload: { targetStep },
     });
 
@@ -97,17 +100,17 @@ function useForm(initialState: FormReducerState) {
    */
   const goOutToStep = (targetStep: number | string) =>
     dispatch({
-      type: 'GO_UP',
+      type: "GO_UP",
       payload: { targetStep },
     });
 
   /** Goes back to the main form. 'Closes' the substep modal. */
   const goToMainForm = () => {
-    dispatch({ type: 'GO_TO_MAIN_FORM' });
+    dispatch({ type: "GO_TO_MAIN_FORM" });
   };
 
   const goToMainFormAndNext = () => {
-    dispatch({ type: 'GO_TO_MAIN_FORM_AND_NEXT' });
+    dispatch({ type: "GO_TO_MAIN_FORM_AND_NEXT" });
   };
   const isLastStep = () => false; // Need to think and fix this. //formState.steps.length === formState.counter;
 
@@ -118,7 +121,7 @@ function useForm(initialState: FormReducerState) {
    */
   const startForm = (callback: () => void) => {
     dispatch({
-      type: 'START_FORM',
+      type: "START_FORM",
       payload: { callback },
     });
   };
@@ -127,9 +130,11 @@ function useForm(initialState: FormReducerState) {
    * Function for handling a on submit action in the form.
    * @param {func} callback callback function to be called on form submit.
    */
-  const handleSubmit = (callback: (formAnswers: Record<string, any>) => void) => {
+  const handleSubmit = (
+    callback: (formAnswers: Record<string, any>) => void
+  ) => {
     dispatch({
-      type: 'SUBMIT_FORM',
+      type: "SUBMIT_FORM",
       payload: { callback },
     });
   };
@@ -151,21 +156,33 @@ function useForm(initialState: FormReducerState) {
    * Function to trigger when a form field looses focus.
    */
   const handleBlur = (answer: Record<string, any>, questionId: string) => {
-    dispatch({ type: 'DIRTY_FIELD', payload: { answer, id: questionId } });
-    dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId, checkIfDirty: true } });
+    dispatch({ type: "DIRTY_FIELD", payload: { answer, id: questionId } });
+    dispatch({
+      type: "VALIDATE_ANSWER",
+      payload: { answer, id: questionId, checkIfDirty: true },
+    });
   };
   /**
    * Function for updating answer.
    */
-  const handleInputChange = (answer: Record<string, any>, questionId: string) => {
-    dispatch({ type: 'UPDATE_ANSWER', payload: answer });
-    dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId, checkIfDirty: true } });
+  const handleInputChange = (
+    answer: Record<string, any>,
+    questionId: string
+  ) => {
+    dispatch({ type: "UPDATE_ANSWER", payload: answer });
+    dispatch({
+      type: "VALIDATE_ANSWER",
+      payload: { answer, id: questionId, checkIfDirty: true },
+    });
   };
-  
+
   const handleAddAnswer = (answer: Record<string, any>, questionId: string) => {
-    dispatch({ type: 'DIRTY_FIELD', payload: { answer, id: questionId } });
-    dispatch({ type: 'VALIDATE_ANSWER', payload: { answer, id: questionId, checkIfDirty: true } });
-  }
+    dispatch({ type: "DIRTY_FIELD", payload: { answer, id: questionId } });
+    dispatch({
+      type: "VALIDATE_ANSWER",
+      payload: { answer, id: questionId, checkIfDirty: true },
+    });
+  };
 
   const formNavigation = {
     next: goToNextStep,

@@ -1,4 +1,4 @@
-import { FormPosition } from '../containers/Form/hooks/useForm';
+import { FormPosition } from "../containers/Form/hooks/useForm";
 
 export type CaseStatus = {
   type: string;

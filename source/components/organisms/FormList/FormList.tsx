@@ -1,9 +1,9 @@
-import React, { useContext, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import { Heading, Text } from '../../atoms';
-import { ListItem } from '../../molecules';
-import FormContext from '../../../store/FormContext';
+import React, { useContext, useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import { Heading, Text } from "../../atoms";
+import { ListItem } from "../../molecules";
+import FormContext from "../../../store/FormContext";
 
 const List = styled.ScrollView`
   margin-top: 24px;
@@ -21,7 +21,9 @@ const FormList = ({ onClickCallback, heading, showSubforms }) => {
   useEffect(() => {
     async function fetchForms() {
       const formSummaries = await getFormSummaries();
-      setFormSummaries(formSummaries.filter((f) => (showSubforms ? f.subform : !f.subform)));
+      setFormSummaries(
+        formSummaries.filter((f) => (showSubforms ? f.subform : !f.subform))
+      );
     }
     fetchForms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -59,7 +61,7 @@ FormList.propTypes = {
 };
 
 FormList.defaultProps = {
-  heading: 'Formulär',
+  heading: "Formulär",
   showSubforms: false,
 };
 

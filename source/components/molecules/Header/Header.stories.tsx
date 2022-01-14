@@ -1,11 +1,11 @@
-import React from 'react';
-import { action } from '@storybook/addon-actions';
-import Header from './Header';
-import StoryWrapper from '../StoryWrapper';
+import React from "react";
+import { action } from "@storybook/addon-actions";
+import Header from "./Header";
+import StoryWrapper from "../StoryWrapper";
 
 export default {
   component: Header,
-  title: 'Header',
+  title: "Header",
 };
 
 export const plainHeader = () => (
@@ -29,7 +29,7 @@ export const headerWithBackButton = () => (
     <Header
       message="Header Message"
       title="Cool"
-      backButton={{ text: 'Go back', onClick: action('clicked back button') }}
+      backButton={{ text: "Go back", onClick: action("clicked back button") }}
     />
   </StoryWrapper>
 );
@@ -44,12 +44,12 @@ const navItems = [
   {
     id: 1,
     active: false,
-    title: 'Navigation',
+    title: "Navigation",
   },
   {
     id: 2,
     active: true,
-    title: 'Navigation',
+    title: "Navigation",
   },
 ];
 

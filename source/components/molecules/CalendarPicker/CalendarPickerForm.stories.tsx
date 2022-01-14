@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { storiesOf } from '@storybook/react-native';
-import CalendarPickerForm from './CalendarPickerForm';
-import { StoryWrapper } from '../index';
+import React, { useState } from "react";
+import { storiesOf } from "@storybook/react-native";
+import CalendarPickerForm from "./CalendarPickerForm";
+import { StoryWrapper } from "../index";
 
 const CalendarPicker = () => {
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState("");
 
   return (
     <CalendarPickerForm
@@ -17,7 +17,7 @@ const CalendarPicker = () => {
   );
 };
 
-storiesOf('Calendar picker', module).add('Default', () => (
+storiesOf("Calendar picker", module).add("Default", () => (
   <StoryWrapper>
     <CalendarPicker />
   </StoryWrapper>

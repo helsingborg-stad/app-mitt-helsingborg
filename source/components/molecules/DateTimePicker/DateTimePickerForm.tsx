@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { View, TouchableOpacity, Platform } from 'react-native';
-import Input from '../../atoms/Input';
-import Button from '../../atoms/Button';
-import Text from '../../atoms/Text';
-import Modal from '../Modal/Modal';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { View, TouchableOpacity, Platform } from "react-native";
+import Input from "../../atoms/Input";
+import Button from "../../atoms/Button";
+import Text from "../../atoms/Text";
+import Modal from "../Modal/Modal";
 // top: ${props => (props.top ? `${props.top}px` : '40px')};
 
 const ContentContainer = styled.View`
@@ -27,7 +27,7 @@ const ButtonContainer = styled.View`
 interface Props {
   onSelect: (date: Date) => void;
   value: string | number;
-  mode: 'datetime' | 'time' | 'date';
+  mode: "datetime" | "time" | "date";
   color: string;
   selectorProps: Record<string, any>;
 }
@@ -47,24 +47,18 @@ const DateTimePickerForm: React.FC<Props> = ({
 
   const dateString = `${date.getFullYear()}-${(date.getMonth() + 1)
     .toString()
-    .padStart(2, '0')}-${date
-    .getDate()
-    .toString()
-    .padStart(2, '0')}`;
-  const timeString = `${date
-    .getHours()
-    .toString()
-    .padStart(2, '0')}:${date
+    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+  const timeString = `${date.getHours().toString().padStart(2, "0")}:${date
     .getMinutes()
     .toString()
-    .padStart(2, '0')}`;
+    .padStart(2, "0")}`;
   if (value) {
     switch (mode) {
-      case 'datetime':
+      case "datetime":
         dateTimeString = `${dateString} ${timeString}`;
         break;
 
-      case 'time':
+      case "time":
         dateTimeString = timeString;
         break;
 
@@ -74,7 +68,7 @@ const DateTimePickerForm: React.FC<Props> = ({
   }
 
   const onChange = (date: Date) => {
-    setIsVisible(Platform.OS === 'ios');
+    setIsVisible(Platform.OS === "ios");
     onSelect(date);
   };
 
@@ -140,7 +134,7 @@ DateTimePickerForm.propTypes = {
 };
 
 DateTimePickerForm.defaultProps = {
-  value: '',
+  value: "",
 };
 
 export default DateTimePickerForm;
