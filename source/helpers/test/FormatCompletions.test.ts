@@ -2,11 +2,11 @@ import getUnapprovedCompletionDescriptions from "../FormatCompletions";
 
 const mockCompletions = [
   {
-    approved: false,
+    received: false,
     description: "mock description one",
   },
   {
-    approved: true,
+    received: true,
     description: "mock description two",
   },
 ];
