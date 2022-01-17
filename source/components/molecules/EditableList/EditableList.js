@@ -54,7 +54,6 @@ const EditableListItemInputWrapper = styled.View`
   flex: 5;
 `;
 
-// eslint-disable-next-line prettier/prettier
 const EditableListItemInput = styled(Input)`
   text-align: right;
   min-width: 80%;
@@ -153,8 +152,7 @@ const InputComponent = React.forwardRef(
           <EditableListItemSelect
             onBlur={onInputBlur}
             onOpen={onInputFocus}
-            // onClose={() => console.log("select::onClose", ref)}*/
-            onClose={onClose ? (e) => onClose(e, true) : null}
+            onClose={onClose ? (event) => onClose(event, true) : null}
             onValueChange={(value) => onChange(input.key, value)}
             value={value && value !== "" ? value[input.key] : state[input.key]}
             editable={editable}
@@ -244,14 +242,14 @@ function EditableList({
     if (onBlur) onBlur(state);
   };
 
-  const onInputFocus = (e, index, isSelect = false) => {
+  const onInputFocus = (event, index, isSelect = false) => {
     if (onFocus) {
       const target = inputRefs.current[index].inputRef;
-      onFocus(e || { target }, isSelect);
+      onFocus(event || { target }, isSelect);
     }
   };
-  const onInputScrollTo = (e, index, isSelect = false) =>
-    onInputFocus(e, index, isSelect);
+  const onInputScrollTo = (event, index, isSelect = false) =>
+    onInputFocus(event, index, isSelect);
 
   const handleListItemPress = (index) => {
     if (editable && inputRefs.current?.[index]?.focus)
@@ -303,11 +301,15 @@ function EditableList({
               <InputComponent
                 {...{ input, colorSchema, onChange, onInputBlur, value, state }}
                 editable={editable && !input.disabled}
-                ref={(el) => {
-                  inputRefs.current[index] = el;
+                ref={(element) => {
+                  inputRefs.current[index] = element;
                 }}
-                onInputFocus={(e, isSelect) => onInputFocus(e, index, isSelect)}
-                onClose={(e, isSelect) => onInputScrollTo(e, index, isSelect)}
+                onInputFocus={(event, isSelect) =>
+                  onInputFocus(event, index, isSelect)
+                }
+                onClose={(event, isSelect) =>
+                  onInputScrollTo(event, index, isSelect)
+                }
               />
             </EditableListItemInputWrapper>
           </EditableListItem>,
