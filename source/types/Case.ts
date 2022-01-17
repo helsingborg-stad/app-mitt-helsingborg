@@ -32,7 +32,7 @@ export interface Administrator {
 
 export interface RequestedCompletions {
   description: string;
-  approved: boolean;
+  received: boolean;
 }
 
 export interface Completions {

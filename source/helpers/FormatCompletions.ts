@@ -4,7 +4,7 @@ const getUnapprovedCompletionDescriptions = (
   completions: RequestedCompletions[]
 ): string[] => {
   const unapprovedCompletionDescriptions = completions
-    .filter(({ approved = false }) => !approved)
+    .filter(({ received = false }) => !received)
     .map(({ description }) => description);
 
   return unapprovedCompletionDescriptions;
