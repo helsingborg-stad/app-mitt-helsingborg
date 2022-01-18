@@ -90,17 +90,6 @@ function ProfileScreen(props) {
             {renderField(user?.personalNumber)}
           </ProfileInfoContainer>
           <ProfileInfoContainer>
-            <ProfileInfoHeading type="h5">Kontaktuppgifter</ProfileInfoHeading>
-            <ProfileLabel underline={false} small>
-              TELEFONNUMMER
-            </ProfileLabel>
-            {renderField(user?.mobilePhone)}
-            <ProfileLabel underline={false} small>
-              E-POSTADRESS
-            </ProfileLabel>
-            {renderField(user?.email)}
-          </ProfileInfoContainer>
-          <ProfileInfoContainer>
             <ProfileInfoHeading type="h5">Adress</ProfileInfoHeading>
             <ProfileLabel underline={false} small>
               GATUADRESS
