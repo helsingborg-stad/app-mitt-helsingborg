@@ -11,6 +11,7 @@ import Button from "../components/atoms/Button";
 import Heading from "../components/atoms/Heading";
 import Input from "../components/atoms/Input";
 import Text from "../components/atoms/Text";
+import Icon from "../components/atoms/Icon";
 import AuthLoading from "../components/molecules/AuthLoading";
 import BackNavigation from "../components/molecules/BackNavigation";
 import { Modal, useModal } from "../components/molecules/Modal";
@@ -22,6 +23,7 @@ import userAgreementText from "../assets/text/userAgreementText";
 import backgroundImage from "../assets/images/illustrations/onboarding_05_logga-in_2x.png";
 import { getUserFriendlyAppVersion } from "../helpers/Misc";
 import theme from "../styles/theme";
+import { ThemeType } from "../styles/themeHelpers";
 import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
 
 const { sanitizePin, validatePin } = ValidationHelper;
@@ -43,18 +45,16 @@ const FlexImageBackground = styled.ImageBackground`
 `;
 
 const Header = styled.View`
-  flex: 3;
-  justify-content: center;
-  padding: 0px 48px 0px 48px;
+  flex: 4;
+  padding: ${UnifiedPadding[1]}px ${UnifiedPadding[1]}px 0px
+    ${UnifiedPadding[1]}px;
 `;
 
 const Form = styled.View`
-  flex: 1;
-  padding: ${UnifiedPadding[0]}px ${UnifiedPadding[1]}px ${UnifiedPadding[0]}px
+  padding: 0px ${UnifiedPadding[1]}px ${UnifiedPadding[0]}px
     ${UnifiedPadding[1]}px;
   justify-content: center;
   align-items: center;
-  height: 250px;
 `;
 
 const UserAgreementForm = styled.View`
@@ -166,6 +166,26 @@ const VersionLabel = styled(Text)`
   align-self: flex-start;
 `;
 
+interface ApiStatusMessageContainerProps {
+  theme: ThemeType;
+}
+const ApiStatusMessageContainer = styled.View<ApiStatusMessageContainerProps>`
+  position: relative;
+  top: -160px;
+  min-height: 220px;
+  align-self: center;
+  justify-content: space-evenly;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: ${({ theme: themeProp }) =>
+    themeProp.colors.complementary.red[3]};
+  border: ${({ theme: themeProp }) =>
+    `2px solid ${themeProp.colors.complementary.red[0]}`}
+  padding: 0px 24px 0px 24px;
+`;
+
 const pickerSelectStyles = {
   inputIOS: {
     fontSize: 12,
@@ -192,6 +212,7 @@ function LoginScreen(): JSX.Element {
     isResolved,
     error,
     handleSetError,
+    apiStatusMessage,
   } = useContext(AuthContext);
   const showNotification = useNotification();
 
@@ -281,6 +302,32 @@ function LoginScreen(): JSX.Element {
             </ContentText>
           </Header>
 
+          {!!apiStatusMessage && (
+            <ApiStatusMessageContainer>
+              <Icon
+                name="error-outline"
+                size={48}
+                color={theme.colors.primary.red[2]}
+              />
+              <Text
+                strong
+                type="h5"
+                style={{ color: theme.colors.primary.red[0] }}
+              >
+                Oh no!
+              </Text>
+              <Text
+                strong
+                style={{
+                  color: theme.colors.primary.red[0],
+                  textAlign: "center",
+                }}
+              >
+                {apiStatusMessage}
+              </Text>
+            </ApiStatusMessageContainer>
+          )}
+
           {(isLoading || isResolved) && (
             <Form>
               <AuthLoading
@@ -293,7 +340,7 @@ function LoginScreen(): JSX.Element {
             </Form>
           )}
 
-          {(isIdle || isRejected) && (
+          {(isIdle || isRejected) && !apiStatusMessage && (
             <Form>
               <Button
                 z={0}
@@ -308,7 +355,7 @@ function LoginScreen(): JSX.Element {
               <Link onPress={toggleLoginModal}>Fler alternativ</Link>
             </Form>
           )}
-          {isDevMode && (
+          {isDevMode && !apiStatusMessage && (
             <RNPickerSelect
               onValueChange={onEnvironmentSelectionChange}
               placeholder={{}}
@@ -323,16 +370,18 @@ function LoginScreen(): JSX.Element {
             />
           )}
 
-          <Footer>
-            <FooterText>
-              När du använder appen Mitt Helsingborg behandlar Helsingborgs stad
-              dina{" "}
-              <ParagraphLink onPress={toggleAgreementModal}>
-                personuppgifter
-              </ParagraphLink>
-              .
-            </FooterText>
-          </Footer>
+          {!apiStatusMessage && (
+            <Footer>
+              <FooterText>
+                När du använder appen Mitt Helsingborg behandlar Helsingborgs
+                stad dina{" "}
+                <ParagraphLink onPress={toggleAgreementModal}>
+                  personuppgifter
+                </ParagraphLink>
+                .
+              </FooterText>
+            </Footer>
+          )}
         </FlexImageBackground>
       </SafeAreaViewTop>
 

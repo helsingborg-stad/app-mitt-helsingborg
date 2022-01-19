@@ -123,6 +123,12 @@ export default function AuthReducer(state, action) {
         authenticateOnExternalDevice: action.authenticateOnExternalDevice,
       };
 
+    case actionTypes.apiStatusMessage:
+      return {
+        ...state,
+        apiStatusMessage: action.apiStatusMessage,
+      };
+
     default:
       return state;
   }

@@ -20,6 +20,7 @@ export const actionTypes = {
   setError: "SET_ERROR",
   signSuccess: "SIGN_SUCCESS",
   setAuthenticateOnExternalDevice: "SET_AUTH_ON_EXTERNAL_DEVICE",
+  apiStatusMessage: "API_STATUS_MESSAGE",
 };
 
 export async function mockedAuth() {
@@ -57,6 +58,12 @@ export function setStatus(status) {
   };
 }
 
+export function removeProfile() {
+  return {
+    type: actionTypes.removeProfile,
+  };
+}
+
 export function setError(error) {
   return {
     type: actionTypes.setError,
@@ -86,12 +93,6 @@ export async function addProfile() {
   return {
     type: actionTypes.addProfile,
     payload: userProfile,
-  };
-}
-
-export function removeProfile() {
-  return {
-    type: actionTypes.removeProfile,
   };
 }
 
@@ -237,5 +238,12 @@ export function setAuthenticateOnExternalDevice(value) {
   return {
     type: actionTypes.setAuthenticateOnExternalDevice,
     authenticateOnExternalDevice: value,
+  };
+}
+
+export function setApiStatusMessage(apiStatusMessage) {
+  return {
+    type: actionTypes.apiStatusMessage,
+    apiStatusMessage,
   };
 }
