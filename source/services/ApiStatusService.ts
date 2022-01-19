@@ -7,7 +7,7 @@ const getApiStatus = async (): Promise<string> => {
     return "Tjänsten är för närvarande otillgänglig. Försök igen senare.";
   }
 
-  return response?.data?.data?.attributes?.message || "";
+  return response?.data?.data?.message || "";
 };
 
 export default getApiStatus;
