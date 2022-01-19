@@ -4,6 +4,7 @@ import env from "react-native-config";
 import USER_AUTH_STATE from "../types/UserAuthTypes";
 import AppContext from "./AppContext";
 import * as authService from "../services/AuthService";
+import getApiStatus from "../services/ApiStatusService";
 
 import AuthReducer, {
   initialState as defaultInitialState,
@@ -22,6 +23,7 @@ import {
   setStatus,
   setError,
   setAuthenticateOnExternalDevice,
+  setApiStatusMessage,
 } from "./actions/AuthActions";
 
 const AuthContext = React.createContext();
@@ -142,6 +144,13 @@ function AuthProvider({ children, initialState }) {
   }
 
   /**
+   * Sets any API status message in state.
+   */
+  function handleSetApiStatusMessage(message) {
+    dispatch(setApiStatusMessage(message));
+  }
+
+  /**
    * Set status.
    */
   function handleSetStatus(status) {
@@ -185,7 +194,15 @@ function AuthProvider({ children, initialState }) {
   useEffect(() => {
     const trySignIn = async () => {
       try {
-        if (await isAccessTokenValid()) {
+        const apiStatusMessage = await getApiStatus();
+
+        if (apiStatusMessage) {
+          handleSetApiStatusMessage(apiStatusMessage);
+        } else if (!apiStatusMessage) {
+          handleSetApiStatusMessage("");
+        }
+
+        if ((await isAccessTokenValid()) && !apiStatusMessage) {
           await handleAddProfile();
           handleLogin();
         } else {
