@@ -58,21 +58,12 @@ jobs:
           echo $DOTENV_CONTENTS_BASE64 | base64 -d > .env
           echo "CI_MATCHED_ENV=production" >> $GITHUB_ENV
 
-      - name: Set env vars (release)
-        if: ${{ github.event.inputs.forcedEnvironment == 'release' || (github.event.inputs.forcedEnvironment == null && contains(github.ref, '/release/')) }}
-        env:
-          DOTENV_CONTENTS_BASE64: ${{ secrets.RELEASE_DOTENV_CONTENTS_BASE64 }}
-        run: |
-          echo "using release environment"
-          echo $DOTENV_CONTENTS_BASE64 | base64 -d > .env
-          echo "CI_MATCHED_ENV=release" >> $GITHUB_ENV
-
-      - name: Set env vars (develop)
+      - name: Set env vars (development)
         env:
           DOTENV_CONTENTS_BASE64: ${{ secrets.DEVELOP_DOTENV_CONTENTS_BASE64 }}
         run: |
           if [[ ! -f ".env" ]]; then
-            echo "fallback to develop environment"
+            echo "fallback to development environment"
             echo $DOTENV_CONTENTS_BASE64 | base64 -d > .env
             echo "CI_MATCHED_ENV=develop" >> $GITHUB_ENV
           fi
