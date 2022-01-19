@@ -31,7 +31,7 @@ const AuthContext = React.createContext();
 function AuthProvider({ children, initialState }) {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
-  const { handleSetMode } = useContext(AppContext);
+  const { handleSetMode, isDevMode } = useContext(AppContext);
 
   /**
    * Starts polling for an order response if status is pending and orderRef and autoStartToken is set in state.
@@ -194,13 +194,13 @@ function AuthProvider({ children, initialState }) {
   useEffect(() => {
     const trySignIn = async () => {
       try {
-        const apiStatusMessage = await getApiStatus();
+        let apiStatusMessage = "";
 
-        if (apiStatusMessage) {
-          handleSetApiStatusMessage(apiStatusMessage);
-        } else if (!apiStatusMessage) {
-          handleSetApiStatusMessage("");
+        if (!isDevMode) {
+          apiStatusMessage = await getApiStatus();
         }
+
+        handleSetApiStatusMessage(apiStatusMessage);
 
         const canLogin = (await isAccessTokenValid()) && !apiStatusMessage;
         if (canLogin) {
@@ -215,7 +215,7 @@ function AuthProvider({ children, initialState }) {
     };
 
     trySignIn();
-  }, [isAccessTokenValid]);
+  }, [isAccessTokenValid, isDevMode]);
 
   useEffect(() => {
     const tryFetchUser = async () => {
