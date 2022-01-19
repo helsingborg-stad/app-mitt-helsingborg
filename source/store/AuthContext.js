@@ -202,7 +202,8 @@ function AuthProvider({ children, initialState }) {
           handleSetApiStatusMessage("");
         }
 
-        if ((await isAccessTokenValid()) && !apiStatusMessage) {
+        const canLogin = (await isAccessTokenValid()) && !apiStatusMessage;
+        if (canLogin) {
           await handleAddProfile();
           handleLogin();
         } else {
