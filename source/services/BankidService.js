@@ -7,6 +7,11 @@ import {
 import { post } from "../helpers/ApiRequest";
 import getIPv4Address from "../helpers/NetworkInfo";
 
+async function getIPForBankID() {
+  const ip = await getIPv4Address();
+  return ip ?? "0.0.0.0";
+}
+
 /**
  * Function for polling the status in a BankID authentication process.
  * @param {string} orderRef A valid BankID order reference
@@ -52,7 +57,8 @@ async function collect(orderRef) {
  * @param {string} ssn A Swedish Social Security Number.
  */
 async function auth(ssn) {
-  const endUserIp = await getIPv4Address();
+  const endUserIp = await getIPForBankID();
+  console.log("ip", endUserIp);
   try {
     const response = await post("auth/bankid/auth", {
       personalNumber: ssn,
@@ -82,7 +88,7 @@ async function cancel(orderRef) {
 }
 
 async function sign(personalNumber, userVisibleData) {
-  const endUserIp = await getIPv4Address();
+  const endUserIp = await getIPForBankID();
 
   const requestBody = {
     personalNumber,
