@@ -12,12 +12,21 @@ interface BookablesProviderInterface {
   user: Record<string, string>;
 }
 
-const BookablesContext = createContext({
+interface BookablesContextInterface {
+  isFetchingBookables: boolean;
+  bookables: BookableItem[];
+  bookablesError: Error | null;
+  isFetchingContacts: boolean;
+  contacts: string[];
+  contactsError: Error | null;
+}
+
+const BookablesContext = createContext<BookablesContextInterface>({
   isFetchingBookables: false,
-  bookables: [] as BookableItem[],
+  bookables: [],
   bookablesError: null,
   isFetchingContacts: false,
-  contacts: [] as string[],
+  contacts: [],
   contactsError: null,
 });
 
@@ -26,11 +35,11 @@ const BookablesProvider = (props: BookablesProviderInterface): JSX.Element => {
 
   const [bookables, setBookables] = useState<BookableItem[]>([]);
   const [isFetchingBookables, setIsFetchingBookables] = useState(false);
-  const [bookablesError, setBookablesError] = useState<null | any>(null);
+  const [bookablesError, setBookablesError] = useState<null | Error>(null);
 
   const [contacts, setContacts] = useState<string[]>([]);
   const [isFetchingContacts, setIsFetchingContacts] = useState(false);
-  const [contactsError, setContactsError] = useState<null | any>(null);
+  const [contactsError, setContactsError] = useState<null | Error>(null);
 
   useEffect(() => {
     const tryFetchBookables = async () => {
@@ -43,7 +52,7 @@ const BookablesProvider = (props: BookablesProviderInterface): JSX.Element => {
           setBookables(fetchedBookables as BookableItem[]);
         }
       } catch (error) {
-        setBookablesError(error);
+        setBookablesError(error as Error);
         console.log("Error fetching bookables: ", error);
       }
 
@@ -64,7 +73,7 @@ const BookablesProvider = (props: BookablesProviderInterface): JSX.Element => {
           setContacts(fetchedContacts);
         }
       } catch (error) {
-        setContactsError(error);
+        setContactsError(error as Error);
         console.log("Error fetching contacts: ", error);
       }
 
