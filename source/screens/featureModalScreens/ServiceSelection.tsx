@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { ActivityIndicator, SafeAreaView, ScrollView } from "react-native";
 import styled from "styled-components/native";
 import BookablesContext from "../../store/BookablesContext";
@@ -36,25 +36,36 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
     contactsError,
   } = useContext(BookablesContext);
 
-  const buttons: ButtonItem[] = bookables.map((bookable) => ({
-    underline: false,
-    variant: "link",
-    buttonText: bookable.name,
-    icon: "photo-camera",
-    onClick: () => onChangeModalScreen(ModalScreen.BookingForm, bookable),
-  }));
+  const buttons = useMemo(() => {
+    const buttonList: ButtonItem[] = bookables.map((bookable) => ({
+      underline: false,
+      variant: "link",
+      buttonText: bookable.name,
+      icon: "photo-camera",
+      onClick: () => onChangeModalScreen(ModalScreen.BookingForm, bookable),
+    }));
 
-  if (!isFetchingContacts && !contactsError && contacts.length > 0) {
-    buttons.unshift({
-      underline: true,
-      buttonText: "Mina kontakter",
-      icon: "person",
-      onClick: () =>
-        onChangeModalScreen(ModalScreen.BookingForm, {
-          isContactsMode: true,
-          contacts,
-        }),
-    });
+    if (contacts.length > 0) {
+      buttonList.unshift({
+        underline: true,
+        buttonText: "Mina kontakter",
+        icon: "person",
+        onClick: () =>
+          onChangeModalScreen(ModalScreen.BookingForm, {
+            isContactsMode: true,
+            contacts,
+          }),
+      });
+    }
+
+    return buttonList;
+  }, [bookables, contacts, onChangeModalScreen]);
+
+  let errorText = undefined;
+  if (bookablesError) {
+    errorText = "Ett fel har inträffat. Vänligen försök igen.";
+  } else if (buttons.length === 0) {
+    errorText = "Inga tjänster är tillgängliga just nu. Vänligen försök igen.";
   }
 
   return (
@@ -70,24 +81,15 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
             style={{ marginTop: 30 }}
           />
         )}
-        {bookablesError && (
-          <ErrorText type="h5">
-            Ett fel har inträffat. Vänligen försök igen.
-          </ErrorText>
+        {errorText ? (
+          <ErrorText type="h5">{errorText}</ErrorText>
+        ) : (
+          <ButtonList
+            buttonList={buttons}
+            defaultColorSchema="red"
+            defaultVariant={undefined}
+          />
         )}
-        {!bookablesError &&
-          !isFetchingBookables &&
-          (buttons.length === 0 ? (
-            <ErrorText type="h5">
-              Inga tjänster är tillgängliga just nu. Vänligen försök igen.
-            </ErrorText>
-          ) : (
-            <ButtonList
-              buttonList={buttons}
-              defaultColorSchema="red"
-              defaultVariant={undefined}
-            />
-          ))}
       </SafeAreaView>
     </ScrollView>
   );
