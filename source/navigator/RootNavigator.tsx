@@ -34,12 +34,16 @@ const CustomNavigator = ({
   });
 
   const { isDevMode } = useContext(AppContext);
-  const { userAuthState } = useContext(AuthContext);
+  const { userAuthState, user } = useContext(AuthContext);
   const isSignedIn = userAuthState === USER_AUTH_STATE.SIGNED_IN;
 
   return (
     <NotifeeProvider navigation={navigation} isSignedIn={isSignedIn}>
-      <BookablesProvider isSignedIn={isSignedIn} isDevMode={isDevMode}>
+      <BookablesProvider
+        isSignedIn={isSignedIn}
+        isDevMode={isDevMode}
+        user={user}
+      >
         <NavigationHelpersContext.Provider value={navigation}>
           <View style={{ flex: 1, backgroundColor: "transparent" }}>
             {state.routes.map((route) => (
