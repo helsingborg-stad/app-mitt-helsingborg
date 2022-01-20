@@ -144,7 +144,7 @@ function AuthProvider({ children, initialState }) {
   }
 
   /**
-   * Sets any API status message in state.
+   * Sets API status message in state.
    */
   function handleSetApiStatusMessage(message) {
     dispatch(setApiStatusMessage(message));
