@@ -27,14 +27,8 @@ type ButtonItem = {
 };
 
 const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
-  const {
-    bookables,
-    isFetchingBookables,
-    bookablesError,
-    contacts,
-    isFetchingContacts,
-    contactsError,
-  } = useContext(BookablesContext);
+  const { bookables, isFetchingBookables, bookablesError, contacts } =
+    useContext(BookablesContext);
 
   const buttons = useMemo(() => {
     const buttonList: ButtonItem[] = bookables.map((bookable) => ({
@@ -61,7 +55,7 @@ const ServiceSelection = ({ onChangeModalScreen }: Props): JSX.Element => {
     return buttonList;
   }, [bookables, contacts, onChangeModalScreen]);
 
-  let errorText = undefined;
+  let errorText;
   if (bookablesError) {
     errorText = "Ett fel har inträffat. Vänligen försök igen.";
   } else if (buttons.length === 0) {
