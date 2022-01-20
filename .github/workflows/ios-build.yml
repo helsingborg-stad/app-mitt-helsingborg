@@ -7,11 +7,6 @@ on:
     branches:
       # any commit to a release branch will trigger a new build
       - release/**
-  pull_request:
-    branches:
-      - master
-    types:
-      - closed
 
   workflow_dispatch:
     inputs:
@@ -50,7 +45,7 @@ jobs:
       # use "cat .env | base64 | pbcopy" to get pasteable content for GitHub secrets
       ######################
       - name: Set env vars (production)
-        if: ${{ github.event.inputs.forcedEnvironment == 'production' || (github.event.inputs.forcedEnvironment == null && github.base_ref == 'master') }}
+        if: ${{ github.event.inputs.forcedEnvironment == 'production' || (github.event.inputs.forcedEnvironment == null && github.ref == 'master') }}
         env:
           DOTENV_CONTENTS_BASE64: ${{ secrets.PRODUCTION_DOTENV_CONTENTS_BASE64 }}
         run: |
