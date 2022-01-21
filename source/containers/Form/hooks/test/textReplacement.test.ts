@@ -103,6 +103,7 @@ const doTest = (
     period,
     partner
   );
+
   expect(res[0].title).toBe(expected);
   expect(res[0].description).toBe(expected);
   expect(res[0].questions?.[0].label).toBe(expected);
@@ -117,6 +118,8 @@ const doTest = (
   expect(res[0]?.questions?.[2].heading).toBe(expected);
   expect(res[0]?.questions?.[2].title).toBe(expected);
 };
+
+jest.useFakeTimers().setSystemTime(new Date("2021-01-01").getTime());
 
 describe("replaceMarkdownTextInSteps", () => {
   describe("#month", () => {
