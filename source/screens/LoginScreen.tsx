@@ -328,8 +328,9 @@ function LoginScreen(): JSX.Element {
               När du använder appen Mitt Helsingborg behandlar Helsingborgs stad
               dina{" "}
               <ParagraphLink onPress={toggleAgreementModal}>
-                personuppgifter.
+                personuppgifter
               </ParagraphLink>
+              .
             </FooterText>
           </Footer>
         </FlexImageBackground>
