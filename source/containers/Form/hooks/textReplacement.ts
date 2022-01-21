@@ -105,12 +105,7 @@ const replaceDates = (descriptor: string[], period?: FormPeriod): string => {
   }
 
   if (descriptor[1] === "currentYear") {
-    const year = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth() + 1,
-      1
-    ).getFullYear();
-    return `${year}`;
+    return currentDate.getFullYear().toString();
   }
 
   if (descriptor[1] === "currentDate") {
