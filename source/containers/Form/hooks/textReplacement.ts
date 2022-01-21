@@ -90,7 +90,8 @@ const swedishMonthTable = [
 ];
 
 const replaceDates = (descriptor: string[], period?: FormPeriod): string => {
-  const activeDate = period ? new Date(period.endDate) : new Date();
+  const currentDate = new Date();
+  const activeDate = period ? new Date(period.endDate) : currentDate;
 
   if (descriptor[1] === "nextMonth") {
     const month = activeDate.getMonth() + 2;
@@ -105,15 +106,15 @@ const replaceDates = (descriptor: string[], period?: FormPeriod): string => {
 
   if (descriptor[1] === "currentYear") {
     const year = new Date(
-      activeDate.getFullYear(),
-      activeDate.getMonth() + 1,
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
       1
     ).getFullYear();
     return `${year}`;
   }
 
   if (descriptor[1] === "currentDate") {
-    return `${activeDate.getDate()}`;
+    return `${currentDate.getDate()}`;
   }
 
   if (descriptor[1] === "previousMonth") {
