@@ -127,6 +127,7 @@ const CloseModalButton = styled(BackNavigation)`
 const FooterText = styled(Text)`
   font-style: italic;
   color: ${(props) => props.theme.colors.neutrals[2]};
+  text-align: center;
 `;
 
 const Link = styled(Text)`
@@ -324,21 +325,11 @@ function LoginScreen(): JSX.Element {
 
           <Footer>
             <FooterText>
-              När du använder tjänsten Mitt Helsingborg godkänner du vårt{" "}
+              När du använder appen Mitt Helsingborg behandlar Helsingborgs stad
+              dina{" "}
               <ParagraphLink onPress={toggleAgreementModal}>
-                användaravtal
-              </ParagraphLink>{" "}
-              och att du har tagit del av hur vi hanterar dina{" "}
-              <ParagraphLink
-                onPress={() =>
-                  Linking.openURL(
-                    "https://helsingborg.se/toppmeny/om-webbplatsen/sa-har-behandlar-vi-dina-personuppgifter/"
-                  )
-                }
-              >
-                personuppgifter
+                personuppgifter.
               </ParagraphLink>
-              .
             </FooterText>
           </Footer>
         </FlexImageBackground>
