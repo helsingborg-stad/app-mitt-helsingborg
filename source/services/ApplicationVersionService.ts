@@ -1,9 +1,22 @@
 import { get } from "../helpers/ApiRequest";
 
-const getApplicationVersionStatus = async (): Promise<string> => {
+import VERSION_STATUS from "../types/VersionStatusTypes";
+
+const getApplicationVersionStatus = async (): Promise<
+  | {
+      status: VERSION_STATUS;
+      updateUrl: string;
+    }
+  | Record<string, unknown>
+> => {
   const response = await get("/version");
 
-  return response?.data?.data?.versionStatus || "";
+  console.log("VERSION RESPONSE: ", response);
+  if (response.status !== 200) {
+    return {};
+  }
+
+  return response?.data?.data || {};
 };
 
 export default getApplicationVersionStatus;
