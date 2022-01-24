@@ -86,20 +86,20 @@ react-native run-android
 
 ### Backend selector
 
-Using the file .env in the root of the project, various parameters could be used to
+Using the file `.env` in the root of the project, various parameters could be used to
 change the behaviour of the app. One of these options is the possibility of building the
 app with an interactive backend picker. This feature offers a dropdown available on the
 login screen that allows the user to choose amongst a number of predefined backends in
 order to troubleshoot or test.
 
 To configure this feature, first put the app build into development mode by adding
-the API_ENV variable to the settings file. Like so:
+the `APP_ENV` variable to the settings file. Like so:
 
 ```
 APP_ENV=development
 ```
 
-Next you need to specify the displayname of each backend with the API_ENVS parameter.
+Next you need to specify the displayname of each backend with the `API_ENVS` parameter.
 The below list offers four different targets that will be listed in the app in order of
 appearance:
 
@@ -107,8 +107,8 @@ appearance:
 API_ENVS=SANDBOX,DEVELOP,RELEASE,PRODUCTION
 ```
 
-NOTE that if the APP_ENV variable is set to production, only the first environment in
-the API_ENVS list will be used and no picker will be available in the app.
+NOTE that if the `APP_ENV` variable is set to production, only the first environment in
+the `API_ENVS` list will be used and no picker will be available in the app.
 
 For each backend, add two additional keys representing the URL and the APIkey of each:
 
