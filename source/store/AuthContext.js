@@ -1,10 +1,13 @@
 import React, { useEffect, useReducer, useContext, useCallback } from "react";
+import { Alert, Linking } from "react-native";
 import PropTypes from "prop-types";
 import env from "react-native-config";
 import USER_AUTH_STATE from "../types/UserAuthTypes";
+import VERSION_STATUS from "../types/VersionStatusTypes";
 import AppContext from "./AppContext";
 import * as authService from "../services/AuthService";
 import getApiStatus from "../services/ApiStatusService";
+import getApplicationVersionStatus from "../services/ApplicationVersionService";
 
 import AuthReducer, {
   initialState as defaultInitialState,
@@ -164,6 +167,19 @@ function AuthProvider({ children, initialState }) {
     dispatch(setError(error));
   }
 
+  function showUpdateRequiredAlert(updateUrl) {
+    Alert.alert(
+      "Mitt Helsingborg måste uppdateras",
+      "Versionen du använder av Mitt Helsingborg är för gammal",
+      [
+        {
+          text: "Hämta uppdatering",
+          onPress: () => Linking.openURL(updateUrl),
+        },
+      ]
+    );
+  }
+
   /**
    * This function checks if the current accessToken is valid.
    */
@@ -195,19 +211,33 @@ function AuthProvider({ children, initialState }) {
     const trySignIn = async () => {
       try {
         let apiStatusMessage = "";
+        let versionStatus;
 
         if (!isDevMode) {
           apiStatusMessage = await getApiStatus();
+          versionStatus = await getApplicationVersionStatus();
         }
 
         handleSetApiStatusMessage(apiStatusMessage);
+        const isValidJWTToken = await isAccessTokenValid();
 
-        const canLogin = (await isAccessTokenValid()) && !apiStatusMessage;
+        const canLogin =
+          isValidJWTToken &&
+          !apiStatusMessage &&
+          versionStatus?.status !== VERSION_STATUS.UPDATE_REQUIRED;
+
         if (canLogin) {
           await handleAddProfile();
           handleLogin();
         } else {
           handleLogout();
+        }
+
+        if (versionStatus?.status === VERSION_STATUS.UPDATE_REQUIRED) {
+          showUpdateRequiredAlert(versionStatus.updateUrl);
+          handleSetApiStatusMessage(
+            "Du har en för gammal version av appen. För att kunna ta del av Mitt Helsingborg och dess funktioner måste appen uppdateras. Besök din butik för appar för att göra detta."
+          );
         }
       } catch (error) {
         handleLogout();
