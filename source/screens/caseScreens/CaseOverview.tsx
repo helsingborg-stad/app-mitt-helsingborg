@@ -40,6 +40,7 @@ import { Form } from "../../types/FormTypes";
 const {
   ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
   ACTIVE_COMPLETION_REQUIRED_VIVA,
+  ACTIVE_COMPLETION_SUBMITTED,
   ACTIVE_SIGNATURE_PENDING,
   NOT_STARTED,
   ONGOING,
@@ -162,6 +163,9 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const isVivaCompletionRequired = statusType.includes(
     ACTIVE_COMPLETION_REQUIRED_VIVA
   );
+  const isVivaCompletionSubmitted = statusType.includes(
+    ACTIVE_COMPLETION_SUBMITTED
+  );
   const isSigned = statusType.includes(SIGNED);
   const isClosed = statusType.includes(CLOSED);
   const isWaitingForSign = statusType.includes(ACTIVE_SIGNATURE_PENDING);
@@ -193,7 +197,8 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
       isRandomCheckRequired ||
       isSigned ||
       isClosed ||
-      isVivaCompletionRequired;
+      isVivaCompletionRequired ||
+      isVivaCompletionSubmitted;
   const buttonProps: InternalButtonProps = {
     onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
     text: "",
@@ -285,6 +290,12 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
 
   if (isVivaCompletionRequired) {
     buttonProps.text = "Komplettera ansökan";
+    cardProps.subtitle = "Ansökan behöver kompletteras";
+  }
+
+  if (isVivaCompletionSubmitted) {
+    buttonProps.text = "Komplettera ansökan";
+    cardProps.subtitle = "Komplettering inskickad";
   }
 
   const giveDate = payments?.payment?.givedate
