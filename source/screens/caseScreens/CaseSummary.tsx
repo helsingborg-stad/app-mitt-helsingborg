@@ -42,6 +42,7 @@ const {
   ACTIVE_SIGNATURE_PENDING,
   ACTIVE_COMPLETION_REQUIRED_VIVA,
   ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
+  ACTIVE_COMPLETION_SUBMITTED,
 } = ApplicationStatusType;
 
 const Container = styled.ScrollView`
@@ -166,6 +167,9 @@ const computeCaseCardComponent = (
   const isVivaCompletionRequired = statusType.includes(
     ACTIVE_COMPLETION_REQUIRED_VIVA
   );
+  const isCompletionSubmitted = statusType.includes(
+    ACTIVE_COMPLETION_SUBMITTED
+  );
   const isSigned = statusType.includes(SIGNED);
   const isWaitingForSign = statusType.includes(ACTIVE_SIGNATURE_PENDING);
   const selfHasSigned = casePersonData?.hasSigned;
@@ -188,7 +192,8 @@ const computeCaseCardComponent = (
       isNotStarted ||
       isRandomCheckRequired ||
       isSigned ||
-      isVivaCompletionRequired;
+      isVivaCompletionRequired ||
+      isCompletionSubmitted;
 
   const buttonProps = {
     onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
@@ -208,6 +213,10 @@ const computeCaseCardComponent = (
   }
 
   if (isVivaCompletionRequired) {
+    buttonProps.text = "Komplettera ansökan";
+  }
+
+  if (isCompletionSubmitted) {
     buttonProps.text = "Komplettera ansökan";
   }
 
@@ -231,9 +240,10 @@ const computeCaseCardComponent = (
       } ${getSwedishMonthNameByTimeStamp(payments.payment.givedate, true)}`
     : null;
 
-  const unApprovedCompletionDescriptions: string[] = isVivaCompletionRequired
-    ? getUnapprovedCompletionDescriptions(completions)
-    : [];
+  const unApprovedCompletionDescriptions: string[] =
+    isVivaCompletionRequired || isCompletionSubmitted
+      ? getUnapprovedCompletionDescriptions(completions)
+      : [];
 
   return (
     <CaseCard
