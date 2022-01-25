@@ -212,11 +212,7 @@ const computeCaseCardComponent = (
     buttonProps.text = "Starta stickprov";
   }
 
-  if (isVivaCompletionRequired) {
-    buttonProps.text = "Komplettera ansökan";
-  }
-
-  if (isCompletionSubmitted) {
+  if (isVivaCompletionRequired || isCompletionSubmitted) {
     buttonProps.text = "Komplettera ansökan";
   }
 
