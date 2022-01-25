@@ -11,7 +11,6 @@ const getApplicationVersionStatus = async (): Promise<
 > => {
   const response = await get("/version");
 
-  console.log("VERSION RESPONSE: ", response);
   if (response.status !== 200) {
     return {};
   }
