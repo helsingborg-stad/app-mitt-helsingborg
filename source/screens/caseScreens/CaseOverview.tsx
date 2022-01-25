@@ -288,14 +288,8 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
     buttonProps.text = "Granska och signera";
   }
 
-  if (isVivaCompletionRequired) {
+  if (isVivaCompletionRequired || isCompletionSubmitted) {
     buttonProps.text = "Komplettera ansökan";
-    cardProps.subtitle = "Ansökan behöver kompletteras";
-  }
-
-  if (isCompletionSubmitted) {
-    buttonProps.text = "Komplettera ansökan";
-    cardProps.subtitle = "Komplettering inskickad";
   }
 
   const giveDate = payments?.payment?.givedate
