@@ -32,6 +32,8 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+- [Setup environment variables](#setup-environment-variables)
+  - [Backend selector](#backend-selector)
 - [Deploy](#deploy)
   - [Android](#android)
 - [Roadmap](#roadmap)
