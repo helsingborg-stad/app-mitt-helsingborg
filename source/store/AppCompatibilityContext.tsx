@@ -8,6 +8,7 @@ import {
 import VERSION_STATUS from "app/types/VersionStatusTypes";
 import React, { useEffect, useState } from "react";
 import { setStatus } from "./actions/AuthActions";
+import AppContext from "./AppContext";
 
 interface AppCompatibilityGuardProps {
   children: React.ReactNode | React.ReactNode[];
@@ -32,6 +33,7 @@ const createAppCompatibilityContextValue = (
 
 // Hook for requesting application version status
 const useCompatibilityHook = () => {
+  let { isDevMode } = useState(AppContext);
   let [state, setState] = useState<ApplicationCompatibilityState>({
     status: APPLICATION_COMPATIBILITY_STATUS.PENDING,
     updateUrl: "",
@@ -44,14 +46,14 @@ const useCompatibilityHook = () => {
       return;
     }
     setVersionPromise(async () => {
-      let { status, updateUrl } = await getApplicationVersionStatus();
-      setState({
-        updateUrl: String(updateUrl || ""),
-        status:
-          status === VERSION_STATUS.UPDATE_REQUIRED
-            ? APPLICATION_COMPATIBILITY_STATUS.INCOMPATIBLE
-            : APPLICATION_COMPATIBILITY_STATUS.COMPATIBLE,
-      });
+      if (isDevMode) {
+        // in dev mode we defer the whole update logoc to mimic
+        // production behaviour
+        return setState({
+          updateUrl: "",
+          status: APPLICATION_COMPATIBILITY_STATUS.COMPATIBLE,
+        });
+      }
     });
   }, [versionPromise]);
   return createAppCompatibilityContextValue(state);
@@ -76,4 +78,4 @@ const AppCompatibitityProvider: React.FC<AppCompatibilityGuardProps> = ({
 };
 
 export default AppCompatibilityContext;
-export { AppCompatibitityProvider };
+export { AppCompatibitityProvider, createAppCompatibilityContextValue };
