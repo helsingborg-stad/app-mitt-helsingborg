@@ -163,7 +163,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const isVivaCompletionRequired = statusType.includes(
     ACTIVE_COMPLETION_REQUIRED_VIVA
   );
-  const isVivaCompletionSubmitted = statusType.includes(
+  const isCompletionSubmitted = statusType.includes(
     ACTIVE_COMPLETION_SUBMITTED
   );
   const isSigned = statusType.includes(SIGNED);
@@ -198,7 +198,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
       isSigned ||
       isClosed ||
       isVivaCompletionRequired ||
-      isVivaCompletionSubmitted;
+      isCompletionSubmitted;
   const buttonProps: InternalButtonProps = {
     onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
     text: "",
@@ -293,7 +293,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
     cardProps.subtitle = "Ansökan behöver kompletteras";
   }
 
-  if (isVivaCompletionSubmitted) {
+  if (isCompletionSubmitted) {
     buttonProps.text = "Komplettera ansökan";
     cardProps.subtitle = "Komplettering inskickad";
   }
