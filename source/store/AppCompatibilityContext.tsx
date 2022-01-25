@@ -6,7 +6,7 @@ import {
   APPLICATION_COMPATIBILITY_STATUS,
 } from "app/types/AppCompatibilityTypes";
 import VERSION_STATUS from "app/types/VersionStatusTypes";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { setStatus } from "./actions/AuthActions";
 import AppContext from "./AppContext";
 
@@ -33,7 +33,7 @@ const createAppCompatibilityContextValue = (
 
 // Hook for requesting application version status
 const useCompatibilityHook = () => {
-  let { isDevMode } = useState(AppContext);
+  let { isDevMode } = useContext(AppContext);
   let [state, setState] = useState<ApplicationCompatibilityState>({
     status: APPLICATION_COMPATIBILITY_STATUS.PENDING,
     updateUrl: "",
