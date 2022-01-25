@@ -2,12 +2,12 @@ import { get } from "../helpers/ApiRequest";
 
 import VERSION_STATUS from "../types/VersionStatusTypes";
 
+interface GetApplicationVersionStatus {
+  status: VERSION_STATUS;
+  updateUrl: string;
+}
 const getApplicationVersionStatus = async (): Promise<
-  | {
-      status: VERSION_STATUS;
-      updateUrl: string;
-    }
-  | Record<string, unknown>
+  GetApplicationVersionStatus | Record<string, unknown>
 > => {
   const response = await get("/version");
 
