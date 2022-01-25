@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import env from "react-native-config";
 import styled from "styled-components/native";
 import {
@@ -8,7 +8,7 @@ import {
   DefaultRouterOptions,
   createNavigatorFactory,
 } from "@react-navigation/native";
-import { Modal } from "react-native";
+import { Alert, Linking, Modal } from "react-native";
 import AuthContext from "../store/AuthContext";
 import Card from "../components/molecules/Card/Card";
 import Text from "../components/atoms/Text/Text";
@@ -21,6 +21,8 @@ import BottomBarNavigator from "./BottomBarNavigator";
 import { SplashScreen, FormCaseScreen, DevFeaturesScreen } from "../screens";
 
 import USER_AUTH_STATE from "../types/UserAuthTypes";
+import AppCompatibilityContext from "app/store/AppCompatibilityContext";
+import { APPLICATION_COMPATIBILITY_STATUS } from "app/types/AppCompatibilityTypes";
 
 interface ForFade {
   current: {
@@ -171,51 +173,83 @@ const CustomNavigator = ({
 const createCustomNavigator = createNavigatorFactory(CustomNavigator);
 const MainCustomNavigator = createCustomNavigator();
 
-const MainNavigator = (): JSX.Element => {
+const MainNavigator = (): JSX.Element | null => {
+  const { visit: compatibilityVisit } = useContext(AppCompatibilityContext);
   const { userAuthState } = useContext(AuthContext);
+
+  const useIncompatibilityWarningEffect = () =>
+    // tell the compatibility to call us with current status
+    useEffect(
+      () =>
+        compatibilityVisit({
+          incompatible: ({ updateUrl }) =>
+            Alert.alert(
+              "Mitt Helsingborg måste uppdateras",
+              "Versionen du använder av Mitt Helsingborg är för gammal",
+              [
+                {
+                  text: "Hämta uppdatering",
+                  onPress: () =>
+                    Linking.openURL("http://www.example.com" /*updateUrl*/),
+                },
+              ]
+            ),
+        }),
+      [compatibilityVisit]
+    );
+
+  // fetch screens based on authentication
+  const getScreen = () => {
+    // let pending = userAuthState === USER_AUTH_STATE.PENDING
+    let signedOut = userAuthState === USER_AUTH_STATE.SIGNED_OUT;
+    let signedIn = userAuthState === USER_AUTH_STATE.SIGNED_IN;
+
+    if (signedOut) {
+      return (
+        <MainCustomNavigator.Screen
+          name="Auth"
+          component={AuthStack}
+          options={{ cardStyleInterpolator: forFade }}
+        />
+      );
+    }
+    if (signedIn) {
+      return (
+        <>
+          <MainCustomNavigator.Screen
+            name="App"
+            component={BottomBarNavigator}
+            options={{
+              cardStyleInterpolator: forFade,
+              gestureEnabled: false,
+            }}
+          />
+          <MainCustomNavigator.Screen
+            name="Form"
+            component={FormCaseScreen}
+            options={{
+              gestureEnabled: false,
+            }}
+          />
+          <MainCustomNavigator.Screen
+            name="DevFeatures"
+            component={DevFeaturesScreen}
+            options={{
+              gestureEnabled: false,
+            }}
+          />
+        </>
+      );
+    }
+    // default is pending or no action taken
+    return <MainCustomNavigator.Screen name="Start" component={SplashScreen} />;
+  };
+
+  useIncompatibilityWarningEffect();
 
   return (
     <MainCustomNavigator.Navigator screenOptions={{ headerShown: false }}>
-      <>
-        {userAuthState === USER_AUTH_STATE.PENDING && (
-          <MainCustomNavigator.Screen name="Start" component={SplashScreen} />
-        )}
-
-        {userAuthState === USER_AUTH_STATE.SIGNED_OUT && (
-          <MainCustomNavigator.Screen
-            name="Auth"
-            component={AuthStack}
-            options={{ cardStyleInterpolator: forFade }}
-          />
-        )}
-
-        {userAuthState === USER_AUTH_STATE.SIGNED_IN && (
-          <>
-            <MainCustomNavigator.Screen
-              name="App"
-              component={BottomBarNavigator}
-              options={{
-                cardStyleInterpolator: forFade,
-                gestureEnabled: false,
-              }}
-            />
-            <MainCustomNavigator.Screen
-              name="Form"
-              component={FormCaseScreen}
-              options={{
-                gestureEnabled: false,
-              }}
-            />
-            <MainCustomNavigator.Screen
-              name="DevFeatures"
-              component={DevFeaturesScreen}
-              options={{
-                gestureEnabled: false,
-              }}
-            />
-          </>
-        )}
-      </>
+      <>{getScreen()}</>
     </MainCustomNavigator.Navigator>
   );
 };

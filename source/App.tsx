@@ -13,6 +13,7 @@ import { CaseProvider } from "./store/CaseContext";
 import { FormProvider } from "./store/FormContext";
 import { NotificationProvider } from "./store/NotificationContext";
 import theme from "./styles/theme";
+import { AppCompatibitityProvider } from "./store/AppCompatibilityContext";
 
 /**
  * Any setup and init for application goes here:
@@ -41,17 +42,19 @@ const App = (): JSX.Element => {
   return (
     <SafeAreaProvider>
       <AppProvider>
-        <AuthProvider>
-          <CaseProvider>
-            <FormProvider>
-              <ThemeProvider theme={theme}>
-                <NotificationProvider>
-                  <RootComponent />
-                </NotificationProvider>
-              </ThemeProvider>
-            </FormProvider>
-          </CaseProvider>
-        </AuthProvider>
+        <AppCompatibitityProvider>
+          <AuthProvider>
+            <CaseProvider>
+              <FormProvider>
+                <ThemeProvider theme={theme}>
+                  <NotificationProvider>
+                    <RootComponent />
+                  </NotificationProvider>
+                </ThemeProvider>
+              </FormProvider>
+            </CaseProvider>
+          </AuthProvider>
+        </AppCompatibitityProvider>
       </AppProvider>
     </SafeAreaProvider>
   );
