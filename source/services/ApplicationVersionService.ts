@@ -19,7 +19,7 @@ const getApplicationVersionStatus = async (): Promise<
     };
   }
 
-  return response?.data?.data || {};
+  return response?.data?.data.attributes || {};
 };
 
 export default getApplicationVersionStatus;
