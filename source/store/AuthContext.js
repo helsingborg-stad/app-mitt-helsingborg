@@ -122,7 +122,7 @@ function AuthProvider({ children, initialState }) {
    * This function triggers an action to logout the user.
    */
   async function handleLogout() {
-    removeProfile();
+    dispatch(removeProfile());
     dispatch(await loginFailure());
   }
 
