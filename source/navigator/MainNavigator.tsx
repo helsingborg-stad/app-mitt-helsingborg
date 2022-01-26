@@ -201,8 +201,8 @@ const MainNavigator = (): JSX.Element | null => {
   // fetch screens based on authentication
   const getScreen = () => {
     // let pending = userAuthState === USER_AUTH_STATE.PENDING
-    let signedOut = userAuthState === USER_AUTH_STATE.SIGNED_OUT;
-    let signedIn = userAuthState === USER_AUTH_STATE.SIGNED_IN;
+    const signedOut = userAuthState === USER_AUTH_STATE.SIGNED_OUT;
+    const signedIn = userAuthState === USER_AUTH_STATE.SIGNED_IN;
 
     if (signedOut) {
       return (

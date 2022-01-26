@@ -7,7 +7,6 @@ import {
 } from "app/types/AppCompatibilityTypes";
 import VERSION_STATUS from "app/types/VersionStatusTypes";
 import React, { useContext, useEffect, useState } from "react";
-import { setStatus } from "./actions/AuthActions";
 import AppContext from "./AppContext";
 
 interface AppCompatibilityGuardProps {
@@ -15,7 +14,7 @@ interface AppCompatibilityGuardProps {
 }
 
 // Create value of context with status and a full
-// visitor implememnation
+// visitor implementation
 const createAppCompatibilityContextValue = (
   state: ApplicationCompatibilityState
 ) => ({
@@ -27,14 +26,16 @@ const createAppCompatibilityContextValue = (
         return visitor?.pending?.();
       case APPLICATION_COMPATIBILITY_STATUS.INCOMPATIBLE:
         return visitor?.incompatible?.(state);
+      default:
+        return undefined;
     }
   },
 });
 
 // Hook for requesting application version status
 const useCompatibilityHook = () => {
-  let { isDevMode } = useContext(AppContext);
-  let [state, setState] = useState<ApplicationCompatibilityState>({
+  const { isDevMode } = useContext(AppContext);
+  const [state, setState] = useState<ApplicationCompatibilityState>({
     status: APPLICATION_COMPATIBILITY_STATUS.PENDING,
     updateUrl: "",
   });
@@ -47,12 +48,39 @@ const useCompatibilityHook = () => {
     }
     setVersionPromise(async () => {
       if (isDevMode) {
-        // in dev mode we defer the whole update logoc to mimic
+        // in dev mode we defer the whole update logic to mimic
         // production behaviour
         return setState({
           updateUrl: "",
           status: APPLICATION_COMPATIBILITY_STATUS.COMPATIBLE,
         });
+      }
+
+      const { status, updateUrl } = await getApplicationVersionStatus();
+      const url = String(updateUrl || "");
+      switch (status) {
+        /*
+        case VERSION_STATUS.OK:
+          return setState({
+            updateUrl: '',
+            status: APPLICATION_COMPATIBILITY_STATUS.COMPATIBLE
+          })
+          case VERSION_STATUS.UPDATE_OPTIONAL:
+            return setState({
+              updateUrl: '',
+              status: APPLICATION_COMPATIBILITY_STATUS.COMPATIBLE
+            })
+          */
+        case VERSION_STATUS.UPDATE_REQUIRED:
+          return setState({
+            updateUrl: url,
+            status: APPLICATION_COMPATIBILITY_STATUS.INCOMPATIBLE,
+          });
+        default:
+          return setState({
+            updateUrl: url,
+            status: APPLICATION_COMPATIBILITY_STATUS.COMPATIBLE,
+          });
       }
     });
   }, [versionPromise]);

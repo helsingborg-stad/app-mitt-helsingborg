@@ -1,4 +1,10 @@
-import React, { useEffect, useReducer, useContext, useCallback } from "react";
+import React, {
+  useEffect,
+  useReducer,
+  useContext,
+  useCallback,
+  useState,
+} from "react";
 import PropTypes from "prop-types";
 import env from "react-native-config";
 import USER_AUTH_STATE from "../types/UserAuthTypes";
@@ -25,13 +31,15 @@ import {
   setAuthenticateOnExternalDevice,
   setApiStatusMessage,
 } from "./actions/AuthActions";
+import AppCompatibilityContext from "./AppCompatibilityContext";
 
 const AuthContext = React.createContext();
 
 function AuthProvider({ children, initialState }) {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
-
   const { handleSetMode, isDevMode } = useContext(AppContext);
+  // manage knowledge abou application comptibility
+  const [isCompatible, setIsCompatible] = useState(false);
 
   /**
    * Starts polling for an order response if status is pending and orderRef and autoStartToken is set in state.
@@ -203,7 +211,7 @@ function AuthProvider({ children, initialState }) {
         handleSetApiStatusMessage(apiStatusMessage);
         const isValidJWTToken = await isAccessTokenValid();
 
-        const canLogin = isValidJWTToken && !apiStatusMessage;
+        const canLogin = isValidJWTToken && !apiStatusMessage && isCompatible;
 
         if (canLogin) {
           await handleAddProfile();
@@ -235,6 +243,23 @@ function AuthProvider({ children, initialState }) {
 
     tryFetchUser();
   }, [state.userAuthState, state.user]);
+
+  // Consider and take actions based on application compatibility
+  const { visit: acVisit } = useContext(AppCompatibilityContext);
+  useEffect(() =>
+    acVisit({
+      compatible: () => setIsCompatible(true),
+      pending: () => setIsCompatible(false),
+      incompatible: () => {
+        if (isCompatible) {
+          setIsCompatible(false);
+          // we are cautios calling handleLogout() since it updates state everytime which
+          // trigger a never ending update loop
+          handleLogout();
+        }
+      },
+    })
+  );
 
   const contextValues = {
     handleLogin,
