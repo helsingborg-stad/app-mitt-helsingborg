@@ -6,7 +6,7 @@ import { deepCopy } from "../../../helpers/Objects";
 
 import { Step } from "../../../types/FormTypes";
 import { PartnerInfo, User } from "../../../types/UserTypes";
-import { Case } from "../../../types/Case";
+import { Case, Person } from "../../../types/Case";
 
 import { FormPeriod } from "./useForm";
 

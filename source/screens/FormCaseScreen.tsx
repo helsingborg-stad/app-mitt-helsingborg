@@ -176,6 +176,7 @@ const FormCaseScreen = ({
       onClose={handleCloseForm}
       onSubmit={handleSubmitForm}
       initialAnswers={initialAnswers}
+      persons={initialCase?.persons}
       status={initialCase.status || defaultInitialStatus}
       period={initialCase.details.period}
       completions={initialCase?.details?.completions?.requested || []}
