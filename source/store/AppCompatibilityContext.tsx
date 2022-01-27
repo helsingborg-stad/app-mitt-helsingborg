@@ -39,7 +39,9 @@ const useCompatibilityHook = () => {
     status: APPLICATION_COMPATIBILITY_STATUS.PENDING,
     updateUrl: "",
   });
-  let [versionPromise, setVersionPromise] = useState<Promise<any> | null>(null);
+  const [versionPromise, setVersionPromise] = useState<Promise<any> | null>(
+    null
+  );
 
   useEffect(() => {
     // we have at most one outstanding call to fetching application version status
@@ -51,7 +53,7 @@ const useCompatibilityHook = () => {
         // in dev mode we defer the whole update logic to mimic
         // production behaviour
         return setState({
-          updateUrl: "",
+          updateUrl: "https://www.example.com/placeholder",
           status: APPLICATION_COMPATIBILITY_STATUS.COMPATIBLE,
         });
       }
@@ -59,18 +61,6 @@ const useCompatibilityHook = () => {
       const { status, updateUrl } = await getApplicationVersionStatus();
       const url = String(updateUrl || "");
       switch (status) {
-        /*
-        case VERSION_STATUS.OK:
-          return setState({
-            updateUrl: '',
-            status: APPLICATION_COMPATIBILITY_STATUS.COMPATIBLE
-          })
-          case VERSION_STATUS.UPDATE_OPTIONAL:
-            return setState({
-              updateUrl: '',
-              status: APPLICATION_COMPATIBILITY_STATUS.COMPATIBLE
-            })
-          */
         case VERSION_STATUS.UPDATE_REQUIRED:
           return setState({
             updateUrl: url,
@@ -83,7 +73,7 @@ const useCompatibilityHook = () => {
           });
       }
     });
-  }, [versionPromise]);
+  }, [isDevMode, versionPromise]);
   return createAppCompatibilityContextValue(state);
 };
 const AppCompatibilityContext =
@@ -97,7 +87,7 @@ const AppCompatibilityContext =
 const AppCompatibitityProvider: React.FC<AppCompatibilityGuardProps> = ({
   children,
 }: AppCompatibilityGuardProps): JSX.Element => {
-  let provider = useCompatibilityHook();
+  const provider = useCompatibilityHook();
   return (
     <AppCompatibilityContext.Provider value={provider}>
       {children}
