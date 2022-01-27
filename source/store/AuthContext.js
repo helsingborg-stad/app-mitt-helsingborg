@@ -225,7 +225,7 @@ function AuthProvider({ children, initialState }) {
     };
 
     trySignIn();
-  }, [isAccessTokenValid, isDevMode]);
+  }, [isAccessTokenValid, isCompatible, isDevMode]);
 
   useEffect(() => {
     const tryFetchUser = async () => {
@@ -246,19 +246,17 @@ function AuthProvider({ children, initialState }) {
 
   // Consider and take actions based on application compatibility
   const { visit: acVisit } = useContext(AppCompatibilityContext);
-  useEffect(() =>
-    acVisit({
-      compatible: () => setIsCompatible(true),
-      pending: () => setIsCompatible(false),
-      incompatible: () => {
-        if (isCompatible) {
+  useEffect(
+    () =>
+      acVisit({
+        compatible: () => setIsCompatible(true),
+        pending: () => setIsCompatible(false),
+        incompatible: () => {
           setIsCompatible(false);
-          // we are cautios calling handleLogout() since it updates state everytime which
-          // trigger a never ending update loop
           handleLogout();
-        }
-      },
-    })
+        },
+      }),
+    [acVisit, isCompatible]
   );
 
   const contextValues = {
