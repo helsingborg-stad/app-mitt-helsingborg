@@ -9,6 +9,7 @@ import {
   createNavigatorFactory,
 } from "@react-navigation/native";
 import { Alert, Linking, Modal } from "react-native";
+import AppCompatibilityContext from "app/store/AppCompatibilityContext";
 import AuthContext from "../store/AuthContext";
 import Card from "../components/molecules/Card/Card";
 import Text from "../components/atoms/Text/Text";
@@ -21,8 +22,6 @@ import BottomBarNavigator from "./BottomBarNavigator";
 import { SplashScreen, FormCaseScreen, DevFeaturesScreen } from "../screens";
 
 import USER_AUTH_STATE from "../types/UserAuthTypes";
-import AppCompatibilityContext from "app/store/AppCompatibilityContext";
-import { APPLICATION_COMPATIBILITY_STATUS } from "app/types/AppCompatibilityTypes";
 
 interface ForFade {
   current: {
@@ -179,23 +178,20 @@ const MainNavigator = (): JSX.Element | null => {
 
   const useIncompatibilityWarningEffect = () =>
     // tell the compatibility to call us with current status
-    useEffect(
-      () =>
-        compatibilityVisit({
-          incompatible: ({ updateUrl }) =>
-            Alert.alert(
-              "Mitt Helsingborg måste uppdateras",
-              "Versionen du använder av Mitt Helsingborg är för gammal",
-              [
-                {
-                  text: "Hämta uppdatering",
-                  onPress: () =>
-                    Linking.openURL("http://www.example.com" /*updateUrl*/),
-                },
-              ]
-            ),
-        }),
-      [compatibilityVisit]
+    useEffect(() =>
+      compatibilityVisit({
+        incompatible: ({ updateUrl }) =>
+          Alert.alert(
+            "Mitt Helsingborg måste uppdateras",
+            "Versionen du använder av Mitt Helsingborg är för gammal",
+            [
+              {
+                text: "Hämta uppdatering",
+                onPress: () => Linking.openURL(updateUrl),
+              },
+            ]
+          ),
+      })
     );
 
   // fetch screens based on authentication
