@@ -12,7 +12,7 @@ import {
   Question,
 } from "../../types/FormTypes";
 import { User } from "../../types/UserTypes";
-import { RequestedCompletions } from "../../types/Case";
+import { Person, RequestedCompletions } from "../../types/Case";
 import useForm, {
   FormPeriod,
   FormPosition,
@@ -41,6 +41,7 @@ interface Props {
   period?: FormPeriod;
   editable: boolean;
   completions: RequestedCompletions[];
+  persons: Person[];
 }
 
 export const defaultInitialPosition: FormPosition = {
@@ -74,6 +75,7 @@ const Form: React.FC<Props> = ({
   updateCaseInContext,
   editable,
   completions,
+  persons,
 }) => {
   const initialState: FormReducerState = {
     submitted: false,
@@ -88,6 +90,7 @@ const Form: React.FC<Props> = ({
     allQuestions: [],
     period,
     editable,
+    persons,
   };
 
   const {

@@ -4,24 +4,58 @@ import { FormReducerState } from "./useForm";
 import { validateInput } from "../../../helpers/ValidationHelper";
 import { evaluateConditionalExpression } from "../../../helpers/conditionParser";
 import { deepCopy } from "../../../helpers/Objects";
+import { PartnerInfo, User } from "app/types/UserTypes";
+import { Person } from "app/types/Case";
+
+function computePartnerPersonInfo(person: Person): PartnerInfo {
+  return {
+    partnerLastname: person.lastName,
+    partnerName: person.firstName,
+    partnerPersonalid: person.personalNumber,
+  };
+}
+
+function computePersonUserInfo(person: Person): User {
+  return {
+    firstName: person?.firstName,
+    lastName: person?.lastName,
+  };
+}
 
 /**
  * Action for replacing title markdown in steps.
  * @param {FormReducerState} state the current state of the form
  */
 export function replaceMarkdownText(state: FormReducerState) {
+  console.log("replace markdown state", state);
+
   const {
     steps,
     user,
     period,
     formAnswers: { partnerInfo },
+    persons,
   } = state;
+
+  const partnerPerson = persons.find((person) => person.role === "coApplicant");
+  const applicantPerson = persons.find((person) => person.role === "applicant");
+
+  let computedPartnerInfo: PartnerInfo = partnerPerson
+    ? computePartnerPersonInfo(partnerPerson)
+    : partnerInfo;
+
+  let computedApplicant: User = applicantPerson
+    ? {
+        ...user,
+        ...computePersonUserInfo(applicantPerson),
+      }
+    : user;
 
   const updatedSteps = replaceMarkdownTextInSteps(
     steps,
-    user,
+    computedApplicant,
     period,
-    partnerInfo
+    computedPartnerInfo
   );
   return {
     ...state,
