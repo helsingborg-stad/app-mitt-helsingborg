@@ -1,10 +1,15 @@
-import React from 'react';
-import styled from 'styled-components/native';
-import DocumentPicker, { DocumentPickerOptions } from 'react-native-document-picker';
-import { Text, Button, Icon } from '../../atoms';
-import { getBlob, uploadFile } from '../../../helpers/FileUpload';
-import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
-import PdfDisplay, { Pdf } from '../PdfDisplay/PdfDisplay';
+import React from "react";
+import styled from "styled-components/native";
+import DocumentPicker, {
+  DocumentPickerOptions,
+} from "react-native-document-picker";
+import { Text, Button, Icon } from "../../atoms";
+import { getBlob, uploadFile } from "../../../helpers/FileUpload";
+import {
+  getValidColorSchema,
+  PrimaryColor,
+} from "../../../styles/themeHelpers";
+import PdfDisplay, { Pdf } from "../PdfDisplay/PdfDisplay";
 
 const Wrapper = styled.View`
   padding-left: 0;
@@ -23,7 +28,7 @@ const ButtonContainer = styled.View`
 
 interface Props {
   buttonText: string;
-  value: Pdf[] | '';
+  value: Pdf[] | "";
   answers: Record<string, any>;
   onChange: (value: Record<string, any>[], id?: string) => void;
   colorSchema?: PrimaryColor;
@@ -41,7 +46,7 @@ const PdfUploader: React.FC<Props> = ({
   id,
 }) => {
   const addPdf = (newPdf: Pdf) => {
-    const updatedPdfs = pdfs === '' ? [newPdf] : [...pdfs, newPdf];
+    const updatedPdfs = pdfs === "" ? [newPdf] : [...pdfs, newPdf];
     onChange(updatedPdfs);
     return updatedPdfs;
   };
@@ -49,9 +54,9 @@ const PdfUploader: React.FC<Props> = ({
   const uploadPdf = async (pdf: Pdf, index: number, updatedPdfs: Pdf[]) => {
     const data: Blob = await getBlob(pdf.uri);
     const uploadResponse = await uploadFile({
-      endpoint: 'users/me/attachments',
+      endpoint: "users/me/attachments",
       fileName: pdf.name,
-      fileType: 'pdf',
+      fileType: "pdf",
       data,
     });
 
@@ -65,7 +70,7 @@ const PdfUploader: React.FC<Props> = ({
   };
 
   const addPdfFromLibrary = async () => {
-    const pickerOptions: DocumentPickerOptions<'android' | 'ios'> = {
+    const pickerOptions: DocumentPickerOptions<"android" | "ios"> = {
       /* @ts-ignore */
       type: DocumentPicker.types.pdf,
     };
@@ -79,14 +84,16 @@ const PdfUploader: React.FC<Props> = ({
       uploadPdf(pdf, originalLength, updatedPdfs);
     } catch (error) {
       if (!DocumentPicker.isCancel(error))
-        console.error('Error while adding pdf from library:', error);
+        console.error("Error while adding pdf from library:", error);
     }
   };
 
   const validColorSchema = getValidColorSchema(colorSchema);
   return (
     <Wrapper>
-      {pdfs !== '' && <PdfDisplay pdfs={pdfs} onChange={onChange} answers={answers} />}
+      {pdfs !== "" && (
+        <PdfDisplay pdfs={pdfs} onChange={onChange} answers={answers} />
+      )}
       <ButtonContainer>
         <Button
           colorSchema={validColorSchema}
@@ -94,7 +101,10 @@ const PdfUploader: React.FC<Props> = ({
           disabled={maxDocuments && pdfs.length >= maxDocuments}
         >
           <Icon name="add" />
-          <Text> {buttonText && buttonText !== '' ? buttonText : 'Ladda upp PDF'}</Text>
+          <Text>
+            {" "}
+            {buttonText && buttonText !== "" ? buttonText : "Ladda upp PDF"}
+          </Text>
         </Button>
       </ButtonContainer>
     </Wrapper>
