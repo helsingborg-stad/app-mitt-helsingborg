@@ -27,8 +27,6 @@ function computePersonUserInfo(person: Person): User {
  * @param {FormReducerState} state the current state of the form
  */
 export function replaceMarkdownText(state: FormReducerState) {
-  console.log("replace markdown state", state);
-
   const {
     steps,
     user,
