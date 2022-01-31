@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 import styled from "styled-components/native";
 import { DocumentPickerResponse } from "react-native-document-picker";
@@ -24,30 +23,40 @@ export interface Pdf extends DocumentPickerResponse {
   questionId: string;
 }
 
+export interface UploadedPdf extends Pdf {
+  uploadedFileName: string;
+  url: string;
+}
+
 interface Props {
-  pdfs: Pdf[];
-  answers: Record<string, any>;
-  onChange: (value: Record<string, any>[], id?: string) => void;
+  pdfs: UploadedPdf[];
+  answers: Record<string, unknown>;
+  onChange: (value: UploadedPdf[], id?: string) => void;
 }
 
 const PdfDisplay: React.FC<Props> = ({ pdfs, answers, onChange }) => {
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] =
     useState(0);
 
-  const deletePdfFromCloudStorage = async (pdf: Pdf) => {
+  const deletePdfFromCloudStorage = async (pdf: UploadedPdf) => {
     console.log(
       "Placeholder: not implemented yet in API, want to delete pdf ",
       pdf.name,
       pdf.uri
     );
   };
-  const removePdf = (pdf: Pdf) => {
-    const answer: Pdf[] = answers[pdf.questionId];
+
+  const removePdf = (pdf: UploadedPdf) => {
+    const answer = answers[pdf.questionId] as UploadedPdf[];
+
     if (answer && Array.isArray(answer)) {
-      const answerWithPdfRemoved = answer.filter((p) => pdf.uri !== p.uri);
+      const answerWithPdfRemoved = answer.filter(
+        (p) => pdf.uploadedFileName !== p.uploadedFileName
+      );
       onChange(answerWithPdfRemoved, pdf.questionId);
     }
-    deletePdfFromCloudStorage(pdf);
+
+    void deletePdfFromCloudStorage(pdf);
   };
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -66,9 +75,9 @@ const PdfDisplay: React.FC<Props> = ({ pdfs, answers, onChange }) => {
         showsHorizontalScrollIndicator={false}
       >
         {pdfs.length > 0 &&
-          pdfs.map((pdf, index) => (
+          pdfs.map((pdf) => (
             <PdfItem
-              key={`${pdf.uri}-${index}`}
+              key={pdf.uploadedFileName}
               pdf={pdf}
               onRemove={() => {
                 removePdf(pdf);
@@ -81,12 +90,6 @@ const PdfDisplay: React.FC<Props> = ({ pdfs, answers, onChange }) => {
       )}
     </Wrapper>
   );
-};
-
-PdfDisplay.propTypes = {
-  pdfs: PropTypes.arrayOf(PropTypes.object),
-  answers: PropTypes.object,
-  onChange: PropTypes.func,
 };
 
 export default PdfDisplay;

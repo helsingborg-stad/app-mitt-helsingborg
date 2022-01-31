@@ -26,6 +26,12 @@ interface FileUploadParams {
   headers?: Record<string, string>;
 }
 
+interface UploadFileResponse {
+  url: string;
+  uploadedFileName: string;
+  message?: string;
+}
+
 /**
  * Helper for uploading a file to S3
  */
@@ -35,7 +41,7 @@ export const uploadFile = async ({
   fileType,
   data,
   headers,
-}: FileUploadParams): Promise<unknown> => {
+}: FileUploadParams): Promise<UploadFileResponse> => {
   const requestUrl = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
   const { apiKey } =
