@@ -152,6 +152,10 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
     (person) => person.personalNumber === authContext.user.personalNumber
   );
 
+  const caseCoApplicantData = persons.find(
+    (person) => person?.role === "coApplicant"
+  );
+
   const completions = caseData?.details?.completions?.requested || [];
 
   const statusType = caseData?.status?.type || "";
@@ -240,8 +244,8 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
     buttonProps.text = "Starta ansökan";
 
     if (isWaitingForCoApplicantConfirm) {
-      cardProps.subtitle = "Väntar";
-      cardProps.description = "Din medsökande måste bekräfta...";
+      cardProps.subtitle = "Väntar på bekräftelse";
+      cardProps.description = `${caseCoApplicantData?.firstName} bekräftar att ni söker tillsammans genom att ladda hem Mitt Helsingborg till sin telefon och logga in`;
       buttonProps.colorSchema = "red";
       buttonProps.onClick = () => {
         if (extra && extra.setDialogState) {
@@ -561,7 +565,9 @@ function CaseOverview(props): JSX.Element {
             <Text align="center">
               För att starta ansökan måste {coApplicantData?.firstName} bekräfta
               att ni söker tillsammans. {coApplicantData?.firstName} bekräftar
-              genom att logga in i appen Mitt Helsingborg.
+              genom att ladda hem Mitt Helsingborg till sin telefon och logga
+              in. När ni är inloggade samtidigt på var sin telefon kommer
+              perioden öppnas.
             </Text>
             <ButtonContainer>
               <PopupButton
