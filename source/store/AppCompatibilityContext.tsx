@@ -1,12 +1,12 @@
-import getApplicationVersionStatus from "app/services/ApplicationVersionService";
+import React, { useContext, useEffect, useState } from "react";
+import getApplicationVersionStatus from "../services/ApplicationVersionService";
+import VERSION_STATUS from "../types/VersionStatusTypes";
 import {
   AppCompatibilityContextType,
   AppCompatibilityVisitor,
   ApplicationCompatibilityState,
   APPLICATION_COMPATIBILITY_STATUS,
-} from "app/types/AppCompatibilityTypes";
-import VERSION_STATUS from "app/types/VersionStatusTypes";
-import React, { useContext, useEffect, useState } from "react";
+} from "../types/AppCompatibilityTypes";
 import AppContext from "./AppContext";
 
 interface AppCompatibilityGuardProps {
@@ -17,7 +17,7 @@ interface AppCompatibilityGuardProps {
 // visitor implementation
 const createAppCompatibilityContextValue = (
   state: ApplicationCompatibilityState
-) => ({
+): AppCompatibilityContextType => ({
   visit<T>(visitor: Partial<AppCompatibilityVisitor<T>>): T | undefined {
     switch (state.status) {
       case APPLICATION_COMPATIBILITY_STATUS.COMPATIBLE:
@@ -39,7 +39,7 @@ const useCompatibilityHook = () => {
     status: APPLICATION_COMPATIBILITY_STATUS.PENDING,
     updateUrl: "",
   });
-  const [versionPromise, setVersionPromise] = useState<Promise<any> | null>(
+  const [versionPromise, setVersionPromise] = useState<Promise<unknown> | null>(
     null
   );
 
@@ -60,18 +60,13 @@ const useCompatibilityHook = () => {
 
       const { status, updateUrl } = await getApplicationVersionStatus();
       const url = String(updateUrl || "");
-      switch (status) {
-        case VERSION_STATUS.UPDATE_REQUIRED:
-          return setState({
-            updateUrl: url,
-            status: APPLICATION_COMPATIBILITY_STATUS.INCOMPATIBLE,
-          });
-        default:
-          return setState({
-            updateUrl: url,
-            status: APPLICATION_COMPATIBILITY_STATUS.COMPATIBLE,
-          });
-      }
+      return setState({
+        updateUrl: url,
+        status:
+          status === VERSION_STATUS.UPDATE_REQUIRED
+            ? APPLICATION_COMPATIBILITY_STATUS.INCOMPATIBLE
+            : APPLICATION_COMPATIBILITY_STATUS.COMPATIBLE,
+      });
     });
   }, [isDevMode, versionPromise]);
   return createAppCompatibilityContextValue(state);

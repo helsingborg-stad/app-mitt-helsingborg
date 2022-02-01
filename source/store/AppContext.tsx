@@ -11,7 +11,7 @@ interface Provider {
 
 const AppContext = React.createContext<Provider>({
   mode: "",
-  handleSetMode(newMode) {},
+  handleSetMode: () => undefined,
   isDevMode: false,
 });
 

@@ -13,7 +13,6 @@ const getApplicationVersionStatus = async (): Promise<
 
   if (response.status !== 200) {
     return {
-      // NOTE: we assume things are kind of great when AWS doesnt respond nice...
       status: VERSION_STATUS.UPDATE_OPTIONAL,
       updateUrl: "",
     };

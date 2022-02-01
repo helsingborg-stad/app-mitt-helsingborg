@@ -38,7 +38,7 @@ const AuthContext = React.createContext();
 function AuthProvider({ children, initialState }) {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
   const { handleSetMode, isDevMode } = useContext(AppContext);
-  // manage knowledge abou application comptibility
+  const { visit: acVisit } = useContext(AppCompatibilityContext);
   const [isCompatible, setIsCompatible] = useState(false);
 
   /**
@@ -244,8 +244,6 @@ function AuthProvider({ children, initialState }) {
     tryFetchUser();
   }, [state.userAuthState, state.user]);
 
-  // Consider and take actions based on application compatibility
-  const { visit: acVisit } = useContext(AppCompatibilityContext);
   useEffect(
     () =>
       acVisit({
