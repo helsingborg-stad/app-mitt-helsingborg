@@ -5,7 +5,7 @@ import { validateInput } from "../../../helpers/ValidationHelper";
 import { evaluateConditionalExpression } from "../../../helpers/conditionParser";
 import { deepCopy } from "../../../helpers/Objects";
 import { PartnerInfo, User } from "app/types/UserTypes";
-import { Person } from "app/types/Case";
+import { Person, PersonRole } from "app/types/Case";
 
 function computePartnerPersonInfo(person: Person): PartnerInfo {
   return {
@@ -15,11 +15,8 @@ function computePartnerPersonInfo(person: Person): PartnerInfo {
   };
 }
 
-function computePersonUserInfo(person: Person): User {
-  return {
-    firstName: person?.firstName,
-    lastName: person?.lastName,
-  };
+function findPersonByRole(persons: Person[], role: PersonRole) {
+  return persons.find((person) => person.role === role);
 }
 
 /**
@@ -35,17 +32,17 @@ export function replaceMarkdownText(state: FormReducerState) {
     persons,
   } = state;
 
-  const partnerPerson = persons.find((person) => person.role === "coApplicant");
-  const applicantPerson = persons.find((person) => person.role === "applicant");
+  const partnerPerson = findPersonByRole(persons, "coApplicant");
+  const applicantPerson = findPersonByRole(persons, "applicant");
 
-  let computedPartnerInfo: PartnerInfo = partnerPerson
+  const computedPartnerInfo: PartnerInfo = partnerPerson
     ? computePartnerPersonInfo(partnerPerson)
     : partnerInfo;
 
-  let computedApplicant: User = applicantPerson
+  const computedApplicant: User = applicantPerson
     ? {
         ...user,
-        ...computePersonUserInfo(applicantPerson),
+        ...applicantPerson,
       }
     : user;
 
