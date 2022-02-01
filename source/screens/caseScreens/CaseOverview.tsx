@@ -566,7 +566,7 @@ function CaseOverview(props): JSX.Element {
               {"\n"}För att kunna starta ansökan måste{" "}
               {coApplicantData?.firstName} bekräfta att ni söker tillsammans.
               {"\n\n"}Bekräfta så här:{"\n\n"}
-              1. {coApplicantData?.firstName} installerar Mitt Helsinbgorg på
+              1. {coApplicantData?.firstName} installerar Mitt Helsingborg på
               sin telefon.{"\n"}
               2. {coApplicantData?.firstName} loggar in med sitt BankID i appen.
               {"\n"}
