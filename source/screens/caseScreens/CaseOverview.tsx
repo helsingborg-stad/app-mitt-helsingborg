@@ -245,7 +245,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
 
     if (isWaitingForCoApplicantConfirm) {
       cardProps.subtitle = "Väntar på bekräftelse";
-      cardProps.description = `${caseCoApplicantData?.firstName} bekräftar att ni söker tillsammans genom att ladda hem Mitt Helsingborg till sin telefon och logga in`;
+      cardProps.description = `För att kunna starta ansökan behöver ${caseCoApplicantData?.firstName} installera Mitt Helsingborg på sin telefon.\n\nNär ${caseCoApplicantData?.firstName} har loggat in med BankID är bekräftelse gjord.\n`;
       buttonProps.colorSchema = "red";
       buttonProps.onClick = () => {
         if (extra && extra.setDialogState) {
@@ -563,11 +563,15 @@ function CaseOverview(props): JSX.Element {
           <DialogContainer>
             <Heading type="h4">Bekräftelse behövs</Heading>
             <Text align="center">
-              För att starta ansökan måste {coApplicantData?.firstName} bekräfta
-              att ni söker tillsammans. {coApplicantData?.firstName} bekräftar
-              genom att ladda hem Mitt Helsingborg till sin telefon och logga
-              in. När ni är inloggade samtidigt på var sin telefon kommer
-              perioden öppnas.
+              {"\n"}För att kunna starta ansökan måste{" "}
+              {coApplicantData?.firstName} bekräfta att ni söker tillsammans.
+              {"\n\n"}Bekräfta så här:{"\n\n"}
+              1. {coApplicantData?.firstName} installerar Mitt Helsinbgorg på
+              sin telefon.{"\n"}
+              2. {coApplicantData?.firstName} loggar in med sitt BankID i appen.
+              {"\n"}
+              3. När {coApplicantData?.firstName} har loggat in är bekräftelse
+              gjord och det går att starta ansökan.{"\n"}
             </Text>
             <ButtonContainer>
               <PopupButton
