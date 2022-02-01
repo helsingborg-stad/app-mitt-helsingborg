@@ -153,7 +153,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   );
 
   const caseCoApplicantData = persons.find(
-    (person) => person?.role === "coApplicant"
+    ({ role }) => role === "coApplicant"
   );
 
   const completions = caseData?.details?.completions?.requested || [];
