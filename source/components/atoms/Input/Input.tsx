@@ -77,7 +77,7 @@ const StyledAccessoryViewChild = styled(View)`
   paddingHorizontal: 8px;
 `;
 
-const _replaceSpace = str => (str?.replace ? str.replace(/\u00A0/g, '\u0020') : str);
+const _replaceSpace = (str?: string) => (str?.replace(/\u00A0/g, '\u0020'));
 
 const Input: React.FC<InputProps> = React.forwardRef(
   ({ onBlur, onMount, showErrorMessage, value, error, inputType, keyboardType, ...props }, ref) => {
