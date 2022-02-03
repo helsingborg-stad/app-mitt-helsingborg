@@ -342,6 +342,128 @@ function Step({
   );
 }
 
+Step.propTypes = {
+  /**
+   * The array of fields that are going to be displayed in the Step
+   */
+  questions: PropTypes.arrayOf(PropTypes.object),
+  allQuestions: PropTypes.array,
+  /**
+   * The answers of a form.
+   */
+  answers: PropTypes.object,
+  answerSnapshot: PropTypes.object,
+  isDirtySubStep: PropTypes.bool,
+  colorSchema: PropTypes.oneOf(["blue", "green", "red", "purple", "neutral"]),
+  /**
+   * User input validation result.
+   */
+  validation: PropTypes.object,
+  /**
+   * Function that runs validation for all inputs in a step.
+   */
+  validateStepAnswers: PropTypes.func,
+  /**
+   * The answers of a form.
+   */
+  status: PropTypes.object,
+  /**
+   * Property for hiding the back button in the step
+   */
+  isBackBtnVisible: PropTypes.bool,
+  /**
+   * The function to handle a press on the submit button
+   */
+  onSubmit: PropTypes.func,
+  /**
+   * The function to handle field input changes
+   */
+  onFieldChange: PropTypes.func,
+  /** The function to handle fields losing focus */
+  onFieldBlur: PropTypes.func,
+
+  onFieldMount: PropTypes.func,
+
+  /** The function to handle when a repeater field gets an answer added */
+
+  onAddAnswer: PropTypes.func,
+
+  /*
+   * A object with form navigation actions
+   */
+  formNavigation: PropTypes.shape({
+    next: PropTypes.func,
+    back: PropTypes.func,
+    up: PropTypes.func,
+    down: PropTypes.func,
+    close: PropTypes.func,
+    goToMainForm: PropTypes.func,
+    start: PropTypes.func,
+    isLastStep: PropTypes.func,
+    restoreSnapshot: PropTypes.func,
+    deleteSnapshot: PropTypes.func,
+  }),
+  /**
+   * The function to update values in context (and thus the backend)
+   */
+  updateCaseInContext: PropTypes.func,
+  /**
+   * Properties to adjust the banner at the top of a step
+   */
+  banner: PropTypes.shape({
+    height: PropTypes.string,
+    imageSrc: PropTypes.string,
+    imageStyle: PropTypes.object,
+    backgroundColor: PropTypes.string,
+  }),
+  /**
+   * Values for the description section of the step, including (tagline, heading and text)
+   */
+  description: PropTypes.shape({
+    tagline: PropTypes.string,
+    heading: PropTypes.string,
+    text: PropTypes.string,
+  }),
+
+  /**
+   * Properties for actions in the footer of the step.
+   */
+  actions: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.string,
+      label: PropTypes.string,
+      color: PropTypes.string,
+      conditionalOn: PropTypes.string,
+    })
+  ),
+  /** Background color for the footer */
+  footerBg: PropTypes.string,
+  /**
+   * The theming of the component
+   */
+  theme: PropTypes.shape({
+    step: PropTypes.shape({
+      bg: PropTypes.string,
+      text: PropTypes.shape({
+        colors: PropTypes.shape({
+          primary: PropTypes.string,
+          secondary: PropTypes.string,
+        }),
+      }),
+    }),
+  }),
+  /** The current position in the form */
+  currentPosition: PropTypes.shape({
+    index: PropTypes.number,
+    level: PropTypes.number,
+    currentMainStep: PropTypes.number,
+  }),
+  /** Total number of steps in the form */
+  totalStepNumber: PropTypes.number,
+  attachments: PropTypes.array,
+  isFormEditable: PropTypes.bool,
+};
+
 Step.defaultProps = {
   theme: {
     step: {
