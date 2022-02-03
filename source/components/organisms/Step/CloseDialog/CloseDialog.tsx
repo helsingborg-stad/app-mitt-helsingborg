@@ -1,11 +1,11 @@
-import React from 'react';
-import styled from 'styled-components/native';
-import { BlurView } from '@react-native-community/blur';
-import { Modal } from 'react-native';
-import Button from '../../../atoms/Button';
-import Heading from '../../../atoms/Heading';
-import Text from '../../../atoms/Text';
-import { PrimaryColor } from '../../../../styles/themeHelpers';
+import React from "react";
+import styled from "styled-components/native";
+import { BlurView } from "@react-native-community/blur";
+import { Modal } from "react-native";
+import Button from "../../../atoms/Button";
+import Heading from "../../../atoms/Heading";
+import Text from "../../../atoms/Text";
+import { PrimaryColor } from "../../../../styles/themeHelpers";
 
 const BackgroundBlur = styled(BlurView)`
   position: absolute;
@@ -55,7 +55,7 @@ const DialogText = styled(Text)`
 `;
 
 const DialogButton = styled(Button)`
-  ${({ colorSchema }) => colorSchema === 'neutral' && `background: #e5e5e5; `}
+  ${({ colorSchema }) => colorSchema === "neutral" && `background: #e5e5e5; `}
 `;
 
 const ButtonRow = styled.View`
@@ -75,7 +75,8 @@ const ButtonWrapper = styled.View`
   flex: 1;
   padding: 4px;
 `;
-export interface Props {
+
+interface CloseDialogProps {
   visible?: boolean;
   title: string;
   body: string;
@@ -85,9 +86,13 @@ export interface Props {
     clickHandler: () => void;
   }>;
 }
-
 /** Simple popup dialog asking the user if they really want to exit the form. Partially asks the background. */
-const CloseDialog: React.FC<Props> = ({ visible, title, body, buttons }) => (
+const CloseDialog: React.FC<CloseDialogProps> = ({
+  visible,
+  title,
+  body,
+  buttons,
+}) => (
   <Modal
     visible={visible ?? false}
     transparent
@@ -108,16 +113,24 @@ const CloseDialog: React.FC<Props> = ({ visible, title, body, buttons }) => (
               <DialogButton
                 block
                 z={0}
-                colorSchema={color && color.length > 0 ? color : 'blue'}
+                colorSchema={color && color.length > 0 ? color : "blue"}
                 onClick={clickHandler}
               >
-                {color === 'neutral' ? <ButtonText>{text}</ButtonText> : <Text>{text}</Text>}
+                {color === "neutral" ? (
+                  <ButtonText>{text}</ButtonText>
+                ) : (
+                  <Text>{text}</Text>
+                )}
               </DialogButton>
             </ButtonWrapper>
           ))}
         </ButtonRow>
       </Dialog>
-      <BackgroundBlur blurType="dark" blurAmount={15} reducedTransparencyFallbackColor="white" />
+      <BackgroundBlur
+        blurType="dark"
+        blurAmount={15}
+        reducedTransparencyFallbackColor="white"
+      />
     </PopupContainer>
   </Modal>
 );

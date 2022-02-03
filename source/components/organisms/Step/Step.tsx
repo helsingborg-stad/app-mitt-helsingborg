@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { useState, useRef } from "react";
 import { Dimensions, Platform } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -6,10 +5,40 @@ import styled from "styled-components/native";
 import FormField from "../../../containers/FormField";
 import Progressbar from "../../atoms/Progressbar/Progressbar";
 import BackNavigation from "../../molecules/BackNavigation/BackNavigation";
-import FormDialog from "./CloseDialog/FormDialog";
+import CloseDialog from "./CloseDialog/CloseDialog";
 import Banner from "./StepBanner/StepBanner";
 import StepDescription from "./StepDescription/StepDescription";
 import StepFooter from "./StepFooter/StepFooter";
+
+import { ApplicationStatusType } from "../../../types/Case";
+
+const {
+  ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
+  ACTIVE_ONGOING_RANDOM_CHECK,
+  ACTIVE_COMPLETION_REQUIRED_VIVA,
+  ACTIVE_ONGOING_COMPLETION,
+} = ApplicationStatusType;
+
+enum DIALOG_TEMPLATE {
+  MAIN_STEP = "mainStep",
+  MAIN_STEP_COMPLETIONS = "mainStep-completions",
+  SUB_STEP = "subStep",
+}
+
+const dialogText = {
+  [DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS]: {
+    title: "Vill du stänga formuläret?",
+    body: "Formuläret sparas och du kan fortsätta fylla i det fram till sista dagen för inlämning.",
+  },
+  [DIALOG_TEMPLATE.MAIN_STEP]: {
+    title: "Vill du avbryta ansökan",
+    body: "Ansökan sparas i 3 dagar. Efter det raderas den och du får starta en ny.",
+  },
+  [DIALOG_TEMPLATE.SUB_STEP]: {
+    title: "Vill du stänga fönster utan att spara inmatad uppgift?",
+    body: "",
+  },
+};
 
 const StepContainer = styled.View`
   flex: 1;
@@ -51,7 +80,6 @@ function Step({
   validateStepAnswers,
   status,
   formNavigation,
-  onSubmit,
   onFieldChange,
   onFieldBlur,
   onFieldMount,
@@ -71,8 +99,20 @@ function Step({
     currentPosition.currentMainStep === totalStepNumber;
   const isDirtySubStep =
     JSON.stringify(answers) !== JSON.stringify(answerSnapshot) && isSubstep;
+
+  const isCompletion = [
+    ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
+    ACTIVE_ONGOING_RANDOM_CHECK,
+    ACTIVE_COMPLETION_REQUIRED_VIVA,
+    ACTIVE_ONGOING_COMPLETION,
+  ].includes(status.type);
+
+  const initialDialogTemplate = isCompletion
+    ? DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS
+    : DIALOG_TEMPLATE.MAIN_STEP;
+
   const [dialogIsVisible, setDialogIsVisible] = useState(false);
-  const [dialogTemplate, setDialogTemplate] = useState("mainStep");
+  const [dialogTemplate, setDialogTemplate] = useState(initialDialogTemplate);
 
   /** TODO: move out of this scope, this logic should be defined on the form component */
   const closeForm = () => {
@@ -90,41 +130,61 @@ function Step({
     }
   };
 
-  const dialogButtonProps = {
-    mainStep: [
-      {
-        text: "Nej",
-        color: "neutral",
-        clickHandler: () => setDialogIsVisible(false),
-      },
-      {
-        text: "Ja",
-        clickHandler: () => {
-          setDialogIsVisible(false);
-          closeForm();
-        },
-      },
-    ],
-    subStep: [
-      {
-        text: "Nej",
-        color: "neutral",
-        clickHandler: () => setDialogIsVisible(false),
-      },
-      {
-        text: "Ja",
-        clickHandler: () => {
-          formNavigation.restoreSnapshot();
-          formNavigation.goToMainForm();
-        },
-      },
-    ],
+  const closeDialogAndForm = () => {
+    setDialogIsVisible(false);
+    closeForm();
   };
+
+  const navigateToMainForm = () => {
+    formNavigation.restoreSnapshot();
+    formNavigation.goToMainForm();
+  };
+
+  const closeDialog = () => {
+    setDialogIsVisible(false);
+  };
+
+  const dialogButtons = {
+    [DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS]: [
+      {
+        text: "Nej",
+        color: "neutral",
+        clickHandler: closeDialog,
+      },
+      {
+        text: "Ja",
+        clickHandler: closeDialogAndForm,
+      },
+    ],
+    [DIALOG_TEMPLATE.MAIN_STEP]: [
+      {
+        text: "Nej",
+        color: "neutral",
+        clickHandler: closeDialog,
+      },
+      {
+        text: "Ja",
+        clickHandler: closeDialogAndForm,
+      },
+    ],
+    [DIALOG_TEMPLATE.SUB_STEP]: [
+      {
+        text: "Nej",
+        color: "neutral",
+        clickHandler: closeDialog,
+      },
+      {
+        text: "Ja",
+        clickHandler: navigateToMainForm,
+      },
+    ],
+  }[dialogTemplate];
 
   const backButtonBehavior = isSubstep
     ? () => {
         if (isDirtySubStep) {
-          if (dialogTemplate !== "subStep") setDialogTemplate("subStep");
+          if (dialogTemplate !== DIALOG_TEMPLATE.SUB_STEP)
+            setDialogTemplate(DIALOG_TEMPLATE.SUB_STEP);
           setDialogIsVisible(true);
           return;
         }
@@ -133,7 +193,12 @@ function Step({
         formNavigation.goToMainForm();
       }
     : () => {
-        if (dialogTemplate !== "mainStep") setDialogTemplate("mainStep");
+        const template = isCompletion
+          ? DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS
+          : DIALOG_TEMPLATE.MAIN_STEP;
+
+        if (dialogTemplate === DIALOG_TEMPLATE.SUB_STEP)
+          setDialogTemplate(template);
         formNavigation.back();
       };
 
@@ -172,10 +237,11 @@ function Step({
         innerRef={(r) => (scrollRef.current = r)}
         enableAutomaticScroll
       >
-        <FormDialog
+        <CloseDialog
           visible={dialogIsVisible}
-          template={dialogTemplate}
-          buttons={dialogButtonProps[dialogTemplate]}
+          title={dialogText[dialogTemplate].title}
+          body={dialogText[dialogTemplate].body}
+          buttons={dialogButtons}
         />
         <StepContentContainer>
           {banner &&
@@ -275,128 +341,6 @@ function Step({
     </StepContainer>
   );
 }
-
-Step.propTypes = {
-  /**
-   * The array of fields that are going to be displayed in the Step
-   */
-  questions: PropTypes.arrayOf(PropTypes.object),
-  allQuestions: PropTypes.array,
-  /**
-   * The answers of a form.
-   */
-  answers: PropTypes.object,
-  answerSnapshot: PropTypes.object,
-  isDirtySubStep: PropTypes.bool,
-  colorSchema: PropTypes.oneOf(["blue", "green", "red", "purple", "neutral"]),
-  /**
-   * User input validation result.
-   */
-  validation: PropTypes.object,
-  /**
-   * Function that runs validation for all inputs in a step.
-   */
-  validateStepAnswers: PropTypes.func,
-  /**
-   * The answers of a form.
-   */
-  status: PropTypes.object,
-  /**
-   * Property for hiding the back button in the step
-   */
-  isBackBtnVisible: PropTypes.bool,
-  /**
-   * The function to handle a press on the submit button
-   */
-  onSubmit: PropTypes.func,
-  /**
-   * The function to handle field input changes
-   */
-  onFieldChange: PropTypes.func,
-  /** The function to handle fields losing focus */
-  onFieldBlur: PropTypes.func,
-
-  onFieldMount: PropTypes.func,
-
-  /** The function to handle when a repeater field gets an answer added */
-
-  onAddAnswer: PropTypes.func,
-
-  /*
-   * A object with form navigation actions
-   */
-  formNavigation: PropTypes.shape({
-    next: PropTypes.func,
-    back: PropTypes.func,
-    up: PropTypes.func,
-    down: PropTypes.func,
-    close: PropTypes.func,
-    goToMainForm: PropTypes.func,
-    start: PropTypes.func,
-    isLastStep: PropTypes.func,
-    restoreSnapshot: PropTypes.func,
-    deleteSnapshot: PropTypes.func,
-  }),
-  /**
-   * The function to update values in context (and thus the backend)
-   */
-  updateCaseInContext: PropTypes.func,
-  /**
-   * Properties to adjust the banner at the top of a step
-   */
-  banner: PropTypes.shape({
-    height: PropTypes.string,
-    imageSrc: PropTypes.string,
-    imageStyle: PropTypes.object,
-    backgroundColor: PropTypes.string,
-  }),
-  /**
-   * Values for the description section of the step, including (tagline, heading and text)
-   */
-  description: PropTypes.shape({
-    tagline: PropTypes.string,
-    heading: PropTypes.string,
-    text: PropTypes.string,
-  }),
-
-  /**
-   * Properties for actions in the footer of the step.
-   */
-  actions: PropTypes.arrayOf(
-    PropTypes.shape({
-      type: PropTypes.string,
-      label: PropTypes.string,
-      color: PropTypes.string,
-      conditionalOn: PropTypes.string,
-    })
-  ),
-  /** Background color for the footer */
-  footerBg: PropTypes.string,
-  /**
-   * The theming of the component
-   */
-  theme: PropTypes.shape({
-    step: PropTypes.shape({
-      bg: PropTypes.string,
-      text: PropTypes.shape({
-        colors: PropTypes.shape({
-          primary: PropTypes.string,
-          secondary: PropTypes.string,
-        }),
-      }),
-    }),
-  }),
-  /** The current position in the form */
-  currentPosition: PropTypes.shape({
-    index: PropTypes.number,
-    level: PropTypes.number,
-    currentMainStep: PropTypes.number,
-  }),
-  /** Total number of steps in the form */
-  totalStepNumber: PropTypes.number,
-  attachments: PropTypes.array,
-  isFormEditable: PropTypes.bool,
-};
 
 Step.defaultProps = {
   theme: {
