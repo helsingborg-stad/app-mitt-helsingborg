@@ -12,6 +12,7 @@ import StepDescription from "./StepDescription/StepDescription";
 import StepFooter from "./StepFooter/StepFooter";
 
 import { ApplicationStatusType } from "../../../types/Case";
+import { PrimaryColor } from "../../../styles/themeHelpers";
 
 const {
   ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
@@ -22,11 +23,21 @@ const {
 
 enum DIALOG_TEMPLATE {
   MAIN_STEP = "mainStep",
-  MAIN_STEP_COMPLETIONS = "mainStep-completions",
+  MAIN_STEP_COMPLETIONS = "mainStep:completions",
   SUB_STEP = "subStep",
 }
 
-const dialogText = {
+interface DialogButtons {
+  text: string;
+  color?: PrimaryColor;
+  clickHandler: () => void;
+}
+
+interface DialogText {
+  title: string;
+  body: string;
+}
+const dialogText: Record<DIALOG_TEMPLATE, DialogText> = {
   [DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS]: {
     title: "Vill du stänga formuläret?",
     body: "Formuläret sparas och du kan fortsätta fylla i det fram till sista dagen för inlämning.",
@@ -145,11 +156,11 @@ function Step({
     setDialogIsVisible(false);
   };
 
-  const dialogButtons = {
+  const dialogButtons: DialogButtons[] = {
     [DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS]: [
       {
         text: "Nej",
-        color: "neutral",
+        color: "neutral" as PrimaryColor,
         clickHandler: closeDialog,
       },
       {
@@ -160,7 +171,7 @@ function Step({
     [DIALOG_TEMPLATE.MAIN_STEP]: [
       {
         text: "Nej",
-        color: "neutral",
+        color: "neutral" as PrimaryColor,
         clickHandler: closeDialog,
       },
       {
@@ -171,7 +182,7 @@ function Step({
     [DIALOG_TEMPLATE.SUB_STEP]: [
       {
         text: "Nej",
-        color: "neutral",
+        color: "neutral" as PrimaryColor,
         clickHandler: closeDialog,
       },
       {
