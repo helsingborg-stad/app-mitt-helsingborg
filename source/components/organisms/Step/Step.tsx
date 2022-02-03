@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Dimensions, Platform } from "react-native";
+import PropTypes from "prop-types";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styled from "styled-components/native";
 import FormField from "../../../containers/FormField";
