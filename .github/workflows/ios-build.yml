@@ -77,6 +77,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - name: update hash
+        run: ./scripts/add-commit-hash-to-env.sh
+
       - name: cache cocoapods
         uses: actions/cache@v2
         with:
