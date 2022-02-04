@@ -149,7 +149,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   );
 
   const casePersonData = persons.find(
-    (person) => person.personalNumber === authContext.user.personalNumber
+    (person) => person.personalNumber === authContext?.user?.personalNumber
   );
 
   const caseCoApplicantData = persons.find(
@@ -185,7 +185,8 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const selfNeedsToConfirm =
     isCoApplicant &&
     !caseData.hasSymmetricKey &&
-    currentForm.encryption.publicKeys[authContext.user.personalNumber] === null;
+    currentForm.encryption.publicKeys[authContext?.user?.personalNumber] ===
+      null;
   const isWaitingForCoApplicantConfirm =
     currentForm.encryption.publicKeys &&
     !caseData.hasSymmetricKey &&
@@ -496,7 +497,7 @@ function CaseOverview(props): JSX.Element {
 
       const person = caseData.persons.find(
         (personEntry) =>
-          personEntry.personalNumber === authContext.user.personalNumber
+          personEntry.personalNumber === authContext?.user?.personalNumber
       );
       const isCoApplicant = person?.role === "coApplicant";
 
@@ -523,7 +524,7 @@ function CaseOverview(props): JSX.Element {
         hasShownConfirmationThanksModal: true,
       });
     }
-  }, [authContext.user?.personalNumber, caseItems, dialogState]);
+  }, [authContext?.user?.personalNumber, caseItems, dialogState]);
 
   const activeCaseCards = activeCases.map((caseData) =>
     computeCaseCardComponent(caseData, navigation, authContext, {
