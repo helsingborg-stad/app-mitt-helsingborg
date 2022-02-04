@@ -1,32 +1,31 @@
-import React, { useContext, useReducer, useEffect, useCallback } from "react";
+import React, {
+  useContext,
+  useReducer,
+  useEffect,
+  useCallback,
+  useState,
+} from "react";
 import PropTypes from "prop-types";
-import { getStoredSymmetricKey } from "../services/encryption/EncryptionHelper";
-import { filterAsync } from "../helpers/Objects";
-import { Case } from "../types/Case";
-import { Form } from "../types/FormTypes";
 import {
   State as ContextState,
   Dispatch,
-  CaseUpdate,
-  PolledCaseResult,
   ActionTypes,
 } from "../types/CaseContext";
 import AuthContext from "./AuthContext";
 import CaseReducer, {
   initialState as defaultInitialState,
 } from "./reducers/CaseReducer";
-import {
-  updateCase as update,
-  createCase as create,
-  deleteCase as remove,
-  fetchCases as fetch,
-  pollCase,
-} from "./actions/CaseActions";
 
-import { replaceCaseItemText } from "../containers/Form/hooks/textReplacement";
+import USER_AUTH_STATE from "app/types/UserAuthTypes";
+import useCaseState from "./CaseContext/CaseContextHooks";
+import { CurrentRenderContext } from "@react-navigation/native";
 
 const CaseState = React.createContext<ContextState>(defaultInitialState);
-const CaseDispatch = React.createContext<Dispatch>({});
+const CaseDispatch = React.createContext<Dispatch>({
+  createCase: () => undefined,
+  updateCase: () => undefined,
+  deleteCase: () => undefined,
+});
 
 /**
  * An array that defines the different types of cases there is in the application.
@@ -46,154 +45,38 @@ interface CaseProviderProps {
   children?: React.ReactNode;
 }
 
-async function checkSymmetricKeyExistsForCase(caseData: Case) {
-  const currentForm = caseData.forms[caseData.currentFormId];
-  const key = await getStoredSymmetricKey(currentForm);
-  return key !== null;
-}
-
-async function checkSymmetricKeyMissingForCase(caseData: Case) {
-  const exists = await checkSymmetricKeyExistsForCase(caseData);
-  return !exists;
-}
-
-async function caseRequiresSync(caseData: Case): Promise<boolean> {
-  const currentForm = caseData.forms[caseData.currentFormId];
-  const usesSymmetricKey = !!currentForm.encryption.symmetricKeyName;
-
-  if (usesSymmetricKey) {
-    return checkSymmetricKeyMissingForCase(caseData);
-  }
-
-  return false;
-}
 function CaseProvider({
   children,
   initialState = defaultInitialState,
 }: CaseProviderProps): JSX.Element {
   const [state, dispatch] = useReducer(CaseReducer, initialState);
-  const { user } = useContext(AuthContext);
-  async function createCase(form: Form, callback: (newCase: Case) => void) {
-    dispatch(await create(form, callback));
-  }
+  const { user, userAuthState } = useContext(AuthContext);
+  const isSignedIn = userAuthState === USER_AUTH_STATE.SIGNED_IN;
 
-  async function updateCase(
-    updateData: Omit<CaseUpdate, "user">,
-    callback: (updatedCase: Case) => void
-  ) {
-    const fullUpdateData: CaseUpdate = {
-      ...updateData,
-      user,
-    };
-    const updateResult = await update(fullUpdateData, callback);
-    dispatch(updateResult);
-  }
+  const {
+    createContextState,
+    createDispatch,
+    createNullContextState,
+    createNullDispatch,
+  } = useCaseState(state, user, dispatch);
 
-  function getCase(caseId: string): Case | undefined {
-    return state?.cases[caseId];
-  }
+  const reset = () =>
+    dispatch({ type: ActionTypes.RESET, payload: initialState });
 
-  /**
-   * This functions retrives cases based on formIds
-   * @param {array} formIds an array of form ids.
-   * @returns {array}
-   */
-  function getCasesByFormIds(formIds: string[]): Case[] {
-    const formCases: Case[] = [];
-    Object.values(state.cases).forEach((c) => {
-      if (formIds.includes(c.currentFormId)) {
-        formCases.push(c);
-      }
-    });
-
-    return formCases;
-  }
-
-  async function deleteCase(caseId: string) {
-    dispatch(remove(caseId));
-  }
-
-  const pollLoop = useCallback(
-    async (cases: Case[]): Promise<void> => {
-      const newCases = await cases.reduce(
-        async (pollingCases, unsyncedCase) => {
-          const polledCases = await pollingCases;
-
-          const action = await pollCase(user, unsyncedCase);
-          dispatch(action);
-
-          const pollResult = action.payload as PolledCaseResult;
-          if (!pollResult.synced) {
-            return [...polledCases, pollResult.case];
-          }
-
-          return polledCases;
-        },
-        Promise.resolve([] as Case[])
-      );
-
-      if (newCases.length > 0) {
-        await pollLoop(newCases);
-      }
-    },
-    [user]
-  );
-
-  const fetchCases = useCallback(async () => {
-    const fetchData = await fetch(user);
-
-    const rawPayload = fetchData.payload as Record<string, Case>;
-
-    const textReplacedPayload: Record<string, Case> = Object.entries(
-      rawPayload
-    ).reduce(
-      (previous, [key, value]) => ({
-        ...previous,
-        [key]: replaceCaseItemText(value),
-      }),
-      {}
-    );
-
-    dispatch({
-      ...fetchData,
-      payload: textReplacedPayload,
-    });
-
-    const fetchPayloadArray = Object.values(textReplacedPayload);
-    const unsyncedCases = await filterAsync(
-      fetchPayloadArray,
-      caseRequiresSync
-    );
-
-    if (unsyncedCases.length > 0 && !state.isPolling) {
-      dispatch({
-        type: ActionTypes.SET_POLLING_CASES,
-        payload: unsyncedCases,
-      });
-
-      await pollLoop(unsyncedCases);
-
-      dispatch({
-        type: ActionTypes.SET_POLLING_DONE,
-      });
-    }
-  }, [pollLoop, state.isPolling, user]);
+  const lockDown = !isSignedIn;
+  const providedState = lockDown
+    ? createNullContextState()
+    : createContextState();
+  const providedDispatch = lockDown ? createNullDispatch() : createDispatch();
 
   useEffect(() => {
     if (user) {
-      void fetchCases();
+      void providedState.fetchCases?.();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  const providedState: ContextState = {
-    ...state,
-    getCase,
-    getCasesByFormIds,
-    fetchCases,
-  };
-
-  const providedDispatch: Dispatch = { createCase, updateCase, deleteCase };
+    if (lockDown) {
+      reset();
+    }
+  }, [user, lockDown]);
 
   return (
     <CaseState.Provider value={providedState}>
