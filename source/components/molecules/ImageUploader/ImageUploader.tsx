@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { TouchableOpacity } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker";
 import styled from "styled-components/native";
 import { Text, Button, Icon, Label } from "../../atoms";
@@ -108,6 +108,8 @@ interface Props {
   id: string;
 }
 
+const MAX_IMAGE_SIZE_BYTES = 7 * 1000 * 1000;
+
 const ImageUploader: React.FC<Props> = ({
   buttonText,
   value: images,
@@ -153,7 +155,20 @@ const ImageUploader: React.FC<Props> = ({
       });
 
       if (rawImages && rawImages.length > 0) {
-        addImagesToState(rawImages.map(transformRawImage));
+        const filteredImages = rawImages.filter(
+          (image) => image.size <= MAX_IMAGE_SIZE_BYTES
+        );
+
+        if (filteredImages.length !== rawImages.length) {
+          Alert.alert(
+            "Ogiltiga bilder",
+            "Några av de angivna bilder är för stora. Varje bild får max vara 7 Mb."
+          );
+        }
+
+        if (filteredImages.length > 0) {
+          addImagesToState(filteredImages.map(transformRawImage));
+        }
       }
     } catch (error) {
       if (error?.code !== "E_PICKER_CANCELLED") console.error(error);
@@ -170,7 +185,14 @@ const ImageUploader: React.FC<Props> = ({
       });
 
       if (rawImage) {
-        addImagesToState([rawImage].map(transformRawImage));
+        if (rawImage.size > MAX_IMAGE_SIZE_BYTES) {
+          Alert.alert(
+            "Ogiltig bild",
+            "Bilden som angivits är för stor. Den får max vara 7 Mb."
+          );
+        } else {
+          addImagesToState([rawImage].map(transformRawImage));
+        }
       }
     } catch (error) {
       if (error?.code !== "E_PICKER_CANCELLED") console.error(error);
