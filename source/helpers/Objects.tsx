@@ -20,6 +20,10 @@ export function deepCopy<T extends Record<any, any>>(original: T): T {
   return clone(original);
 }
 
+export function areSame(a: unknown, b: unknown): boolean {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
 export function filterAsync<T>(
   data: T[],
   predicate: (value: T, index: number, array: T[]) => Promise<boolean>

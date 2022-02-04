@@ -3,7 +3,37 @@ import {
   deepCopyViaJson,
   filterAsync,
   deepCopy,
+  areSame,
 } from "../Objects";
+
+describe("areSame", () => {
+  const obj = {
+    a: { hello: "world" },
+    a2: { hello: "world" },
+    b: { goodbye: "cruel world" },
+  };
+  const arr = {
+    a: [1, "two", 3],
+    a2: [1, "two", 3],
+    b: [3, "four"],
+  };
+  const testCases = [
+    [obj.a, obj.a, true],
+    [obj.a, obj.b, false],
+    [obj.a, obj.a2, true],
+    [arr.a, arr.a, true],
+    [arr.a, arr.b, false],
+    [arr.a, arr.a2, true],
+    [123, 123, true],
+    [123, "123", false],
+    [obj.a, arr.a, false],
+  ];
+  test.each(testCases)(
+    "areSame ($1, $2)",
+    (a: unknown, b: unknown, expected: boolean) =>
+      expect(areSame(a, b)).toBe(expected)
+  );
+});
 
 describe("Object helper functions", () => {
   test("deepCopyViaJson", () => {
