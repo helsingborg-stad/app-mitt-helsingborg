@@ -1,4 +1,4 @@
-import { deepCopy } from "../../helpers/Objects";
+import { areSame, deepCopy } from "../../helpers/Objects";
 import { Case } from "../../types/Case";
 import {
   Action,
@@ -63,8 +63,7 @@ export default function CaseReducer(state: State, action: Action): State {
       return newState;
 
     case ActionTypes.RESET:
-      console.log("RESET");
-      return deepCopy(payload as State);
+      return areSame(payload, state) ? state : deepCopy(payload as State);
 
     default:
       return state;
