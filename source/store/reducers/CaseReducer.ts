@@ -62,6 +62,10 @@ export default function CaseReducer(state: State, action: Action): State {
       newState.error = payload;
       return newState;
 
+    case ActionTypes.RESET:
+      console.log("RESET");
+      return deepCopy(payload as State);
+
     default:
       return state;
   }
