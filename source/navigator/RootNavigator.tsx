@@ -11,7 +11,6 @@ import MainNavigator from "./MainNavigator";
 import FeatureModalNavigator from "../screens/featureModalScreens/FeatureModalNavigator";
 
 import AuthContext from "../store/AuthContext";
-import AppContext from "../store/AppContext";
 import { NotifeeProvider } from "../store/NotifeeContext";
 
 import USER_AUTH_STATE from "../types/UserAuthTypes";
@@ -32,8 +31,7 @@ const CustomNavigator = ({
     initialRouteName,
   });
 
-  const { isDevMode } = useContext(AppContext);
-  const { userAuthState, user } = useContext(AuthContext);
+  const { userAuthState } = useContext(AuthContext);
   const isSignedIn = userAuthState === USER_AUTH_STATE.SIGNED_IN;
 
   return (
