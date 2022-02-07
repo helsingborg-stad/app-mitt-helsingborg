@@ -2,7 +2,7 @@ import axios from "axios";
 import { Platform } from "react-native";
 import StorageService, { ACCESS_TOKEN_KEY } from "../services/StorageService";
 import { buildServiceUrl } from "./UrlHelper";
-import { name, version } from "../../package.json";
+import { name } from "../../package.json";
 import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
 import { getUserFriendlyAppVersion } from "./Misc";
 
