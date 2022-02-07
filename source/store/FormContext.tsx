@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { Form } from "../types/FormTypes";
 import { get } from "../helpers/ApiRequest";
@@ -11,10 +11,11 @@ interface FindFormError {
 }
 
 interface FormContextValue {
+  forms: Record<string, Form>;
   getFormIdsByFormTypes?: (formTypes: string[]) => Promise<string[]>;
   findFormsByType?: (formType: string) => Promise<Form[] | FindFormError>;
   getForm: (id: string) => Promise<Form | null>;
-  getFormSummaries?: () => Promise<Form[]>;
+  getFormSummaries: () => Promise<Form[]>;
 }
 
 interface FormProviderProps {
@@ -33,7 +34,7 @@ export function FormProvider({ children }: FormProviderProps): JSX.Element {
   const [forms, setForms] = useState<FormMap>({});
   const [formSummaries, setFormSummaries] = useState([]);
 
-  const getFormSummaries = async (): Promise<Form[]> => {
+  const getFormSummaries = useCallback(async (): Promise<Form[]> => {
     if (formSummaries.length > 0) {
       return formSummaries;
     }
@@ -47,27 +48,30 @@ export function FormProvider({ children }: FormProviderProps): JSX.Element {
       console.error(error);
     }
     return [];
-  };
+  }, [formSummaries]);
 
-  const getForm = async (id: string): Promise<Form | null> => {
-    if (Object.keys(forms).includes(id)) {
-      return forms[id];
-    }
-
-    try {
-      const res = await get(`/forms/${id}`);
-      if (res && res.data) {
-        const newForm = res.data.data;
-        setForms((oldForms) => ({ ...oldForms, [newForm.id]: newForm }));
-        return newForm;
+  const getForm = useCallback(
+    async (id: string): Promise<Form | null> => {
+      if (Object.keys(forms).includes(id)) {
+        return forms[id];
       }
-      console.log("Form data not found");
-    } catch (error) {
-      console.error(error);
-    }
 
-    return null;
-  };
+      try {
+        const res = await get(`/forms/${id}`);
+        if (res && res.data) {
+          const newForm = res.data.data;
+          setForms((oldForms) => ({ ...oldForms, [newForm.id]: newForm }));
+          return newForm;
+        }
+        console.log("Form data not found");
+      } catch (error) {
+        console.error(error);
+      }
+
+      return null;
+    },
+    [forms]
+  );
 
   const findFormsByType = async (
     formType: string
@@ -119,6 +123,7 @@ export function FormProvider({ children }: FormProviderProps): JSX.Element {
         findFormsByType,
         getForm,
         getFormSummaries,
+        forms,
       }}
     >
       {children}

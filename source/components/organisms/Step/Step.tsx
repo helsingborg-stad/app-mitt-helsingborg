@@ -129,10 +129,12 @@ function Step({
   /** TODO: move out of this scope, this logic should be defined on the form component */
   const closeForm = () => {
     if (!isLastMainStep && isFormEditable) {
-      if (onFieldChange) {
+      const hasAnswers = Object.keys(answers).length > 0;
+
+      if (onFieldChange && hasAnswers) {
         onFieldChange(answers);
       }
-      if (updateCaseInContext) {
+      if (updateCaseInContext && hasAnswers) {
         updateCaseInContext(answers, undefined, currentPosition);
       }
     }
