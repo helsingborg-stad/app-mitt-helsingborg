@@ -36,13 +36,11 @@ const DeveloperScreen = (props: any): JSX.Element => {
         <FormList
           heading="Ansökningsformulär"
           onClickCallback={async (form) => {
-            createCase(
-              form,
-              async (newCase) => {
-                navigation.navigate("Form", { caseData: newCase });
-              },
-              true
-            );
+            if (createCase !== undefined) {
+              createCase(form, async ({ id }) => {
+                navigation.navigate("Form", { caseId: id });
+              });
+            }
           }}
         />
 

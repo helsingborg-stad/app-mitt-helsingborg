@@ -66,6 +66,12 @@ export async function updateCase(
     if (callback) {
       callback(flatUpdatedCase);
     }
+
+    flatUpdatedCase.forms[formId] = await decryptFormAnswers(
+      user,
+      flatUpdatedCase.forms[formId]
+    );
+
     return {
       type: ActionTypes.UPDATE_CASE,
       payload: flatUpdatedCase,

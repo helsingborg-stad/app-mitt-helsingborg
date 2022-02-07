@@ -183,8 +183,7 @@ function CaseProvider({
     if (user) {
       void fetchCases();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, fetchCases]);
 
   const providedState: ContextState = {
     ...state,
