@@ -4,6 +4,7 @@ import StorageService, { ACCESS_TOKEN_KEY } from "../services/StorageService";
 import { buildServiceUrl } from "./UrlHelper";
 import { name, version } from "../../package.json";
 import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
+import { getUserFriendlyAppVersion } from "./Misc";
 
 /**
  * Axios request
@@ -19,7 +20,10 @@ const request = async (endpoint, method, data, headers, params) => {
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
   const { apiKey } =
     EnvironmentConfigurationService.getInstance().activeEndpoint;
-  const userAgent = `${name}/${version}/${Platform.OS}/${Platform.Version}`;
+
+  const friendlyVersion = getUserFriendlyAppVersion();
+
+  const userAgent = `${name}/${friendlyVersion}/${Platform.OS}/${Platform.Version}`;
 
   // Merge custom headers
   const newHeaders = {
