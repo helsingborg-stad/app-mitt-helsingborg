@@ -87,6 +87,7 @@ function CaseProvider({
     };
     const updateResult = await update(fullUpdateData, callback);
     dispatch(updateResult);
+    return updateResult;
   }
 
   function getCase(caseId: string): Case | undefined {

@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components/native";
 import { BlurView } from "@react-native-community/blur";
 import { Modal } from "react-native";
-import Button from "../../../atoms/Button";
-import Heading from "../../../atoms/Heading";
-import Text from "../../../atoms/Text";
-import { PrimaryColor } from "../../../../styles/themeHelpers";
+import Button from "../../atoms/Button";
+import Heading from "../../atoms/Heading";
+import Text from "../../atoms/Text";
+import { PrimaryColor } from "../../../styles/themeHelpers";
 
 const BackgroundBlur = styled(BlurView)`
   position: absolute;
@@ -23,18 +23,20 @@ const PopupContainer = styled.View`
 
 const Dialog = styled.View`
   width: 80%;
-  height: auto;
+  /* height: auto; */
   z-index: 1000;
-  align-items: center;
-  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  /* justify-content: center; */
   border-radius: 10px;
   background: ${(props) => props.theme.colors.neutrals[5]};
   padding: 12px;
-  elevation: 2;
+  /* elevation: 2;
   shadow-offset: 0px 2px;
-  shadow-color: black;
+  shadow-color: red;
   shadow-opacity: 0.3;
-  shadow-radius: 2px;
+  shadow-radius: 2px; */
 `;
 
 const Content = styled.View`
@@ -59,6 +61,7 @@ const DialogButton = styled(Button)`
 `;
 
 const ButtonRow = styled.View`
+  display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   margin: 0px;
@@ -107,9 +110,8 @@ const CloseDialog: React.FC<CloseDialogProps> = ({
           {body && body.length > 0 ? <DialogText>{body}</DialogText> : null}
         </Content>
         <ButtonRow>
-          {buttons.map(({ text, color, clickHandler }, index) => (
-            /* @ts-ignore */
-            <ButtonWrapper key={index}>
+          {buttons.map(({ text, color, clickHandler }) => (
+            <ButtonWrapper key={text}>
               <DialogButton
                 block
                 z={0}

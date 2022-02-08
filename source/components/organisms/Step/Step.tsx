@@ -6,7 +6,7 @@ import styled from "styled-components/native";
 import FormField from "../../../containers/FormField";
 import Progressbar from "../../atoms/Progressbar/Progressbar";
 import BackNavigation from "../../molecules/BackNavigation/BackNavigation";
-import CloseDialog from "./CloseDialog/CloseDialog";
+import CloseDialog from "../../molecules/CloseDialog/CloseDialog";
 import Banner from "./StepBanner/StepBanner";
 import StepDescription from "./StepDescription/StepDescription";
 import StepFooter from "./StepFooter/StepFooter";
@@ -97,13 +97,14 @@ function Step({
   onFieldMount,
   onAddAnswer,
   isBackBtnVisible,
-  updateCaseInContext,
+  onUpdateCase,
   currentPosition,
   totalStepNumber,
   answerSnapshot,
   attachments,
   isFormEditable,
   completions,
+  onCloseForm,
 }): JSX.Element {
   const isSubstep = currentPosition.level !== 0;
   const isLastMainStep =
@@ -126,27 +127,9 @@ function Step({
   const [dialogIsVisible, setDialogIsVisible] = useState(false);
   const [dialogTemplate, setDialogTemplate] = useState(initialDialogTemplate);
 
-  /** TODO: move out of this scope, this logic should be defined on the form component */
-  const closeForm = () => {
-    if (!isLastMainStep && isFormEditable) {
-      const hasAnswers = Object.keys(answers).length > 0;
-
-      if (onFieldChange && hasAnswers) {
-        onFieldChange(answers);
-      }
-      if (updateCaseInContext && hasAnswers) {
-        updateCaseInContext(answers, undefined, currentPosition);
-      }
-    }
-
-    if (formNavigation?.close) {
-      formNavigation.close(() => {});
-    }
-  };
-
   const closeDialogAndForm = () => {
     setDialogIsVisible(false);
-    closeForm();
+    void onCloseForm();
   };
 
   const navigateToMainForm = () => {
@@ -329,7 +312,7 @@ function Step({
                 formNavigation={formNavigation}
                 currentPosition={currentPosition}
                 onUpdate={onFieldChange}
-                updateCaseInContext={updateCaseInContext}
+                onUpdateCase={onUpdateCase}
                 validateStepAnswers={validateStepAnswers}
                 attachments={attachments}
               />
@@ -345,7 +328,7 @@ function Step({
         onBack={backButtonBehavior}
         onClose={() => {
           if (isLastMainStep) {
-            closeForm();
+            void onCloseForm();
           } else {
             setDialogIsVisible(true);
           }
@@ -420,7 +403,7 @@ Step.propTypes = {
   /**
    * The function to update values in context (and thus the backend)
    */
-  updateCaseInContext: PropTypes.func,
+  onUpdateCase: PropTypes.func,
   /**
    * Properties to adjust the banner at the top of a step
    */

@@ -59,7 +59,7 @@ export interface Dispatch {
   createCase?: (form: Form, callback: (newCase: Case) => void) => void;
   updateCase: (
     updateData: CaseUpdate,
-    callback: (updatedCase: Case) => void
+    callback: (updatedCase: Case) => Promise<void>
   ) => void;
   deleteCase?: (caseId: string) => void;
 }

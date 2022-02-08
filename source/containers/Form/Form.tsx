@@ -6,6 +6,7 @@ import ScreenWrapper from "../../components/molecules/ScreenWrapper";
 import Step from "../../components/organisms/Step/Step";
 import { evaluateConditionalExpression } from "../../helpers/conditionParser";
 import { CaseStatus } from "../../types/CaseType";
+import { ActionTypes } from "../../types/CaseContext";
 import {
   Step as StepType,
   StepperActions,
@@ -23,6 +24,33 @@ import { useNotification } from "../../store/NotificationContext";
 import FormUploader from "./FormUploader";
 import { AuthLoading } from "../../components/molecules";
 import { Image } from "../../components/molecules/ImageDisplay/ImageDisplay";
+import CloseDialog from "../../components/molecules/CloseDialog";
+import { PrimaryColor } from "../../styles/themeHelpers";
+
+enum UPDATE_CASE_STATE {
+  PENDING = "pending",
+  UPDATING = "updating",
+  ERROR = "error",
+}
+interface DialogText {
+  title: string;
+  body: string;
+}
+
+const dialogText: Record<UPDATE_CASE_STATE, DialogText> = {
+  [UPDATE_CASE_STATE.UPDATING]: {
+    title: "Vänligen vänta",
+    body: "Uppdatering pågår ...",
+  },
+  [UPDATE_CASE_STATE.ERROR]: {
+    title: "Ett fel har uppstått!",
+    body: "Vill du försöka igen?",
+  },
+  [UPDATE_CASE_STATE.PENDING]: {
+    title: "",
+    body: "",
+  },
+};
 
 interface Props {
   initialPosition?: FormPosition;
@@ -33,11 +61,11 @@ interface Props {
   status: CaseStatus;
   onClose: () => void;
   onSubmit: () => void;
-  updateCaseInContext: (
+  onUpdateCase: (
     data: Record<string, unknown>,
-    signature: { success: boolean },
+    signature: { success: boolean } | undefined,
     currentPosition: FormPosition
-  ) => void;
+  ) => Promise<void>;
   period?: FormPeriod;
   editable: boolean;
   completions: RequestedCompletions[];
@@ -57,6 +85,8 @@ export const defaultInitialStatus = {
   description: "Ansökan är ej påbörjad.",
 };
 
+const CLOSE_FORM_DELAY = 1000;
+
 /**
  * The Container Component Form allows you to create, process and reuse forms. The Form component
  * is a tool to help you solve the problem of allowing end-users to interact with the
@@ -72,7 +102,7 @@ const Form: React.FC<Props> = ({
   onSubmit,
   initialAnswers = {},
   status,
-  updateCaseInContext,
+  onUpdateCase,
   editable,
   completions,
   persons,
@@ -115,6 +145,11 @@ const Form: React.FC<Props> = ({
     authenticateOnExternalDevice,
   } = useContext(AuthContext);
 
+  const [canCloseForm, setCanCloseForm] = useState(false);
+  const [updateCaseState, setUpdateCaseState] = useState(
+    UPDATE_CASE_STATE.PENDING
+  );
+
   const answers: Record<string, Image | any> = formState.formAnswers;
 
   const attachments: Image[] = Object.values(answers)
@@ -131,16 +166,16 @@ const Form: React.FC<Props> = ({
 
   const [hasUploaded, setHasUploaded] = useState(
     attachments?.length &&
-      attachments.filter(({ uploadedFileName }) => uploadedFileName).length ==
+      attachments.filter(({ uploadedFileName }) => uploadedFileName).length ===
         attachments.length
   );
 
   const showNotification = useNotification();
 
-  const signCase = () => {
+  const signCase = async () => {
     const signature = { success: true };
     formNavigation.next();
-    updateCaseInContext(answers, signature, formState.currentPosition);
+    await onUpdateCase(answers, signature, formState.currentPosition);
   };
 
   /**
@@ -150,7 +185,7 @@ const Form: React.FC<Props> = ({
   useEffect(() => {
     if (authStatus === "signResolved") {
       if (attachments.length === 0) {
-        signCase();
+        void signCase();
       }
 
       handleSetStatus("idle");
@@ -190,6 +225,71 @@ const Form: React.FC<Props> = ({
     onClose();
   };
 
+  const mainStep = formState.currentPosition.currentMainStepIndex;
+  const [, toggleModal] = useModal();
+  const [scrollViewRef, setRef] = useState<ScrollView>(null);
+
+  useEffect(() => {
+    if (scrollViewRef && scrollViewRef?.scrollTo) {
+      void InteractionManager.runAfterInteractions(() => {
+        scrollViewRef.scrollTo({ x: 0, y: 0, animated: false });
+      });
+    }
+  }, [mainStep, scrollViewRef]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (canCloseForm) {
+        setUpdateCaseState(UPDATE_CASE_STATE.PENDING);
+        formNavigation.close();
+      }
+    }, CLOSE_FORM_DELAY);
+
+    return () => clearTimeout(timer);
+  }, [canCloseForm, formNavigation]);
+
+  const handleCloseForm = async () => {
+    setUpdateCaseState(UPDATE_CASE_STATE.UPDATING);
+
+    const isLastMainStep =
+      formState.currentPosition.level === 0 &&
+      formState.currentPosition.currentMainStep === formState.totalStepNumber;
+
+    if (!isLastMainStep && editable) {
+      const { type } = await onUpdateCase(
+        answers,
+        undefined,
+        formState.currentPosition
+      );
+
+      if (type === ActionTypes.API_ERROR) {
+        setUpdateCaseState(UPDATE_CASE_STATE.ERROR);
+      } else {
+        setCanCloseForm(true);
+      }
+    } else {
+      formNavigation.close();
+    }
+  };
+
+  const showDialog = updateCaseState !== UPDATE_CASE_STATE.PENDING;
+  const dialogTitle = dialogText[updateCaseState].title;
+  const dialogBody = dialogText[updateCaseState].body;
+  const dialogButtons =
+    updateCaseState === UPDATE_CASE_STATE.ERROR
+      ? [
+          {
+            text: "Nej",
+            color: "neutral" as PrimaryColor,
+            clickHandler: () => formNavigation.close(),
+          },
+          {
+            text: "Ja",
+            clickHandler: handleCloseForm,
+          },
+        ]
+      : [];
+
   const stepComponents = formState.steps.map(
     ({
       id,
@@ -216,9 +316,7 @@ const Form: React.FC<Props> = ({
       return (
         <Step
           key={`${id}`}
-          banner={{
-            ...banner,
-          }}
+          banner={banner}
           colorSchema={colorSchema}
           description={{
             heading: title,
@@ -239,7 +337,7 @@ const Form: React.FC<Props> = ({
           onFieldChange={handleInputChange}
           onFieldBlur={handleBlur}
           onAddAnswer={handleAddAnswer}
-          updateCaseInContext={updateCaseInContext}
+          onUpdateCase={onUpdateCase}
           onFieldMount={handleInputChange}
           currentPosition={formState.currentPosition}
           totalStepNumber={formState.numberOfMainSteps || 0}
@@ -250,22 +348,11 @@ const Form: React.FC<Props> = ({
           }
           attachments={attachments}
           isFormEditable={editable}
+          onCloseForm={handleCloseForm}
         />
       );
     }
   );
-
-  const mainStep = formState.currentPosition.currentMainStepIndex;
-  const [, toggleModal] = useModal();
-  const [scrollViewRef, setRef] = useState<ScrollView>(null);
-
-  useEffect(() => {
-    if (scrollViewRef && scrollViewRef?.scrollTo) {
-      void InteractionManager.runAfterInteractions(() => {
-        scrollViewRef.scrollTo({ x: 0, y: 0, animated: false });
-      });
-    }
-  }, [mainStep, scrollViewRef]);
 
   return (
     <>
@@ -280,7 +367,6 @@ const Form: React.FC<Props> = ({
       <Modal visible={formState.currentPosition.level > 0} hide={toggleModal}>
         {stepComponents[formState.currentPosition.index]}
       </Modal>
-
       {hasSigned && !hasUploaded && attachments.length > 0 && (
         <FormUploader
           allQuestions={formState.allQuestions}
@@ -289,11 +375,10 @@ const Form: React.FC<Props> = ({
           onChange={handleInputChange}
           onResolved={() => {
             setHasUploaded(true);
-            signCase();
+            void signCase();
           }}
         />
       )}
-
       {(isLoading || isResolved) && (
         <AuthLoading
           colorSchema="neutral"
@@ -303,6 +388,12 @@ const Form: React.FC<Props> = ({
           authenticateOnExternalDevice={authenticateOnExternalDevice}
         />
       )}
+      <CloseDialog
+        visible={showDialog}
+        title={dialogTitle}
+        body={dialogBody}
+        buttons={dialogButtons}
+      />
     </>
   );
 };
