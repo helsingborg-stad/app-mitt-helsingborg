@@ -83,15 +83,16 @@ const FormCaseScreen = ({
     navigation.popToTop();
   };
 
-  const updateCaseContext = (
+  const handleUpdateCase = async (
     answerObject: Record<string, Answer>,
-    signature: Signature,
+    signature: Signature | undefined,
     currentPosition: FormPosition
   ) => {
     // If the case is submitted, we should not actually update its data...
     if (
-      initialCase !== undefined &&
-      !initialCase.status.type.includes(ApplicationStatusType.ACTIVE_SUBMITTED)
+      !initialCase?.status?.type?.includes(
+        ApplicationStatusType.ACTIVE_SUBMITTED
+      )
     ) {
       const updatedCase: CaseUpdate = {
         user,
@@ -105,19 +106,20 @@ const FormCaseScreen = ({
         encryptAnswers: true,
       };
 
-      const callback = (putResponse: Case) => {
+      const callback = async (putResponse: Case) => {
         if (
           putResponse?.status?.type?.includes(
             ApplicationStatusType.ACTIVE_SIGNATURE_COMPLETED
           )
         ) {
           updatedCase.encryptAnswers = false;
-          updateCase(updatedCase, () => true);
+          await updateCase(updatedCase, () => Promise.resolve());
         }
       };
 
-      updateCase(updatedCase, callback);
+      return updateCase(updatedCase, callback);
     }
+    return Promise.resolve();
   };
 
   // TODO: Update case on form submit.
@@ -146,7 +148,7 @@ const FormCaseScreen = ({
       status={initialCase?.status || defaultInitialStatus}
       period={initialCase?.details?.period}
       completions={initialCase?.details?.completions?.requested || []}
-      updateCaseInContext={updateCaseContext}
+      onUpdateCase={handleUpdateCase}
       editable={!isSignMode}
       {...props}
     />
