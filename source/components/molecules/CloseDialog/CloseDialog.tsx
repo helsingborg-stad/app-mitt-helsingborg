@@ -23,20 +23,12 @@ const PopupContainer = styled.View`
 
 const Dialog = styled.View`
   width: 80%;
-  /* height: auto; */
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
-  /* justify-content: center; */
   border-radius: 10px;
   background: ${(props) => props.theme.colors.neutrals[5]};
   padding: 12px;
-  /* elevation: 2;
-  shadow-offset: 0px 2px;
-  shadow-color: red;
-  shadow-opacity: 0.3;
-  shadow-radius: 2px; */
 `;
 
 const Content = styled.View`
