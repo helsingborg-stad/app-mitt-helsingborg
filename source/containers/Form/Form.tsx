@@ -32,11 +32,11 @@ enum UPDATE_CASE_STATE {
   UPDATING = "updating",
   ERROR = "error",
 }
+
 interface DialogText {
   title: string;
   body: string;
 }
-
 const dialogText: Record<UPDATE_CASE_STATE, DialogText> = {
   [UPDATE_CASE_STATE.UPDATING]: {
     title: "Vänligen vänta",
