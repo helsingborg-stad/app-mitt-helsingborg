@@ -36,7 +36,7 @@ export async function updateCase(
     encryptAnswers = true,
     encryption,
   }: CaseUpdate,
-  callback: (updatedCase: Case) => void
+  callback: (updatedCase: Case) => Promise<Action>
 ): Promise<Action> {
   let updateCaseRequestBody: UpdateCaseBody = {
     answers: convertAnswersToArray(answerObject, formQuestions),
