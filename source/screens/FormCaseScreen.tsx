@@ -13,7 +13,7 @@ import AuthContext from "../store/AuthContext";
 import FormContext from "../store/FormContext";
 import { CaseDispatch, CaseState } from "../store/CaseContext";
 import { Case, FormPosition, ApplicationStatusType } from "../types/Case";
-import { CaseUpdate, Answer, Signature } from "../types/CaseContext";
+import { CaseUpdate, Answer, Signature, Action } from "../types/CaseContext";
 
 const SpinnerContainer = styled.View`
   flex: 1;
@@ -87,7 +87,7 @@ const FormCaseScreen = ({
     answerObject: Record<string, Answer>,
     signature: Signature | undefined,
     currentPosition: FormPosition
-  ) => {
+  ): Promise<Action | void> => {
     // If the case is submitted, we should not actually update its data...
     if (
       !initialCase?.status?.type?.includes(

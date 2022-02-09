@@ -60,7 +60,7 @@ export interface Dispatch {
   updateCase: (
     updateData: CaseUpdate,
     callback: (updatedCase: Case) => Promise<void>
-  ) => void;
+  ) => Promise<Action>;
   deleteCase?: (caseId: string) => void;
 }
 

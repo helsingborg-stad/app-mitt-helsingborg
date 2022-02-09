@@ -6,7 +6,7 @@ import ScreenWrapper from "../../components/molecules/ScreenWrapper";
 import Step from "../../components/organisms/Step/Step";
 import { evaluateConditionalExpression } from "../../helpers/conditionParser";
 import { CaseStatus } from "../../types/CaseType";
-import { ActionTypes } from "../../types/CaseContext";
+import { ActionTypes, Action } from "../../types/CaseContext";
 import {
   Step as StepType,
   StepperActions,
@@ -65,7 +65,7 @@ interface Props {
     data: Record<string, unknown>,
     signature: { success: boolean } | undefined,
     currentPosition: FormPosition
-  ) => Promise<void>;
+  ) => Promise<Action>;
   period?: FormPeriod;
   editable: boolean;
   completions: RequestedCompletions[];

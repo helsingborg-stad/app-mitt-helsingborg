@@ -10,6 +10,7 @@ import {
   CaseUpdate,
   PolledCaseResult,
   ActionTypes,
+  Action,
 } from "../types/CaseContext";
 import AuthContext from "./AuthContext";
 import CaseReducer, {
@@ -79,8 +80,8 @@ function CaseProvider({
 
   async function updateCase(
     updateData: Omit<CaseUpdate, "user">,
-    callback: (updatedCase: Case) => void
-  ) {
+    callback: (updatedCase: Case) => Promise<Action>
+  ): Promise<Action> {
     const fullUpdateData: CaseUpdate = {
       ...updateData,
       user,
