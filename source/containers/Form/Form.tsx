@@ -6,7 +6,7 @@ import ScreenWrapper from "../../components/molecules/ScreenWrapper";
 import Step from "../../components/organisms/Step/Step";
 import { evaluateConditionalExpression } from "../../helpers/conditionParser";
 import { CaseStatus } from "../../types/CaseType";
-import { ActionTypes, Action } from "../../types/CaseContext";
+import { ActionTypes, Action, Answer } from "../../types/CaseContext";
 import {
   Step as StepType,
   StepperActions,
@@ -27,16 +27,8 @@ import { Image } from "../../components/molecules/ImageDisplay/ImageDisplay";
 import CloseDialog from "../../components/molecules/CloseDialog";
 import { PrimaryColor } from "../../styles/themeHelpers";
 
-enum UPDATE_CASE_STATE {
-  PENDING = "pending",
-  UPDATING = "updating",
-  ERROR = "error",
-}
+import { UPDATE_CASE_STATE, DialogText } from "./types";
 
-interface DialogText {
-  title: string;
-  body: string;
-}
 const dialogText: Record<UPDATE_CASE_STATE, DialogText> = {
   [UPDATE_CASE_STATE.UPDATING]: {
     title: "Vänligen vänta",
@@ -62,10 +54,10 @@ interface Props {
   onClose: () => void;
   onSubmit: () => void;
   onUpdateCase: (
-    data: Record<string, unknown>,
+    data: Record<string, Answer>,
     signature: { success: boolean } | undefined,
     currentPosition: FormPosition
-  ) => Promise<Action>;
+  ) => Promise<Action | void>;
   period?: FormPeriod;
   editable: boolean;
   completions: RequestedCompletions[];
@@ -256,13 +248,13 @@ const Form: React.FC<Props> = ({
       formState.currentPosition.currentMainStep === formState.totalStepNumber;
 
     if (!isLastMainStep && editable) {
-      const { type } = await onUpdateCase(
+      const result = await onUpdateCase(
         answers,
         undefined,
         formState.currentPosition
       );
 
-      if (type === ActionTypes.API_ERROR) {
+      if (result?.type === ActionTypes.API_ERROR) {
         setUpdateCaseState(UPDATE_CASE_STATE.ERROR);
       } else {
         setCanCloseForm(true);
