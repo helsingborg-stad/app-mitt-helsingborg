@@ -16,6 +16,7 @@ import Wrapper from "../../components/molecules/Dialog/Wrapper";
 import Heading from "../../components/atoms/Heading";
 import Body from "../../components/molecules/Dialog/Body";
 import BackgroundBlur from "../../components/molecules/Dialog/BackgroundBlur";
+import FloatingButton from "../../components/molecules/FloatingButton";
 import Button from "../../components/atoms/Button";
 import icons from "../../helpers/Icons";
 import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
@@ -42,6 +43,7 @@ const {
   ACTIVE_COMPLETION_REQUIRED_VIVA,
   ACTIVE_COMPLETION_SUBMITTED,
   ACTIVE_SIGNATURE_PENDING,
+  NOT_STARTED_NEW_APPLICATION_VIVA,
   NOT_STARTED,
   ONGOING,
   SIGNED,
@@ -380,6 +382,17 @@ function CaseOverview(props): JSX.Element {
   const activeCases = getCasesByStatuses([NOT_STARTED, ACTIVE]);
   const closedCases = getCasesByStatuses([CLOSED]);
 
+  const newApplicationCaseIndex = activeCases.findIndex(
+    ({ status }) => status?.type === NOT_STARTED_NEW_APPLICATION_VIVA
+  );
+  const newApplicationCase =
+    newApplicationCaseIndex >= 0
+      ? activeCases.splice(newApplicationCaseIndex, 1)[0]
+      : undefined;
+
+  const showActiveCases = activeCases.length > 0 && !newApplicationCase;
+  const showClosedCases = closedCases.length > 0 && !newApplicationCase;
+
   const onFailedToFetchCases = (error: Error) => {
     console.error("failed to fetch cases", error);
   };
@@ -440,8 +453,9 @@ function CaseOverview(props): JSX.Element {
         const flattenedList = updatedItems.flat();
         flattenedList.sort((caseA, caseB) => caseB.updatedAt - caseA.updatedAt);
         setCaseItems(flattenedList);
-        setIsLoading(false);
       });
+
+      setIsLoading(false);
     };
 
     void updateItems();
@@ -669,7 +683,7 @@ function CaseOverview(props): JSX.Element {
           </Card.Button>
         )}
         <ListHeading type="h5">Aktiva</ListHeading>
-        {activeCases.length > 0 && (
+        {showActiveCases && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             {activeCaseCards}
           </Animated.View>
@@ -685,13 +699,24 @@ function CaseOverview(props): JSX.Element {
           </Animated.View>
         )}
 
-        {closedCases.length > 0 && (
+        {showClosedCases && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             <ListHeading type="h5">Avslutade</ListHeading>
             {closedCaseCards}
           </Animated.View>
         )}
       </Container>
+
+      {newApplicationCase && (
+        <FloatingButton
+          onPress={() =>
+            navigation.navigate("Form", { caseId: newApplicationCase.id })
+          }
+          type="text-icon"
+          text="Ansök om ekonomiskt bistånd"
+          iconName="account-balance-wallet"
+        />
+      )}
     </ScreenWrapper>
   );
 }
