@@ -5,7 +5,7 @@ interface ButtonProps {
   position: "left" | "right";
   theme: ThemeType;
   colorSchema: "red" | "neutral";
-  type: "text" | "icon";
+  type: "text" | "icon" | "text-icon";
 }
 
 const ButtonContainer = styled.TouchableHighlight<ButtonProps>`
@@ -16,7 +16,8 @@ const ButtonContainer = styled.TouchableHighlight<ButtonProps>`
     colorSchema === "red"
       ? theme.colors.primary.red[0]
       : theme.colors.neutrals[5]};
-  border-radius: ${({ type }) => (type === "text" ? "16px" : "27px")};
+  border-radius: ${({ type }) =>
+    type === "text" || type === "text-icon" ? "16px" : "27px"};
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -32,13 +33,13 @@ const ButtonContainer = styled.TouchableHighlight<ButtonProps>`
   z-index: 10;
   ${({ position, type }) => {
     // Text is always centered
-    if (type === "text") {
+    if (type === "text" || type === "text-icon") {
       return `
         margin-left: 5%;
         margin-right: 5%;
       `;
     }
-    // Icons can be left or right-aligned
+
     if (position === "left") {
       return `
         left: 10px;
@@ -46,9 +47,9 @@ const ButtonContainer = styled.TouchableHighlight<ButtonProps>`
       `;
     }
     return `
-        right: 10px;
-        left: auto;
-      `;
+      right: 10px;
+      left: auto;
+    `;
   }}
 `;
 
