@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useReducer,
-  useEffect,
-  useCallback,
-  useState,
-} from "react";
+import React, { useContext, useReducer, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import {
   State as ContextState,
@@ -16,9 +10,8 @@ import CaseReducer, {
   initialState as defaultInitialState,
 } from "./reducers/CaseReducer";
 
-import USER_AUTH_STATE from "app/types/UserAuthTypes";
+import USER_AUTH_STATE from "../types/UserAuthTypes";
 import useCaseState from "./CaseContext/CaseContextHooks";
-import { CurrentRenderContext } from "@react-navigation/native";
 
 const CaseState = React.createContext<ContextState>(defaultInitialState);
 const CaseDispatch = React.createContext<Dispatch>({
@@ -60,8 +53,10 @@ function CaseProvider({
     createNullDispatch,
   } = useCaseState(state, user, dispatch);
 
-  const reset = () =>
-    dispatch({ type: ActionTypes.RESET, payload: initialState });
+  const reset = useCallback(
+    () => dispatch({ type: ActionTypes.RESET, payload: initialState }),
+    [initialState]
+  );
 
   const lockDown = !isSignedIn;
   const providedState = lockDown
@@ -76,7 +71,7 @@ function CaseProvider({
     if (lockDown) {
       reset();
     }
-  }, [user, lockDown]);
+  }, [user, lockDown, providedState, reset]);
 
   return (
     <CaseState.Provider value={providedState}>
