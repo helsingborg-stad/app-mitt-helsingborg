@@ -137,7 +137,6 @@ const Form: React.FC<Props> = ({
     authenticateOnExternalDevice,
   } = useContext(AuthContext);
 
-  const [canCloseForm, setCanCloseForm] = useState(false);
   const [updateCaseState, setUpdateCaseState] = useState(
     UPDATE_CASE_STATE.IDLE
   );
@@ -229,17 +228,6 @@ const Form: React.FC<Props> = ({
     }
   }, [mainStep, scrollViewRef]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (canCloseForm) {
-        setUpdateCaseState(UPDATE_CASE_STATE.IDLE);
-        formNavigation.close();
-      }
-    }, CLOSE_FORM_DELAY);
-
-    return () => clearTimeout(timer);
-  }, [canCloseForm, formNavigation]);
-
   const handleCloseForm = async () => {
     setUpdateCaseState(UPDATE_CASE_STATE.UPDATING);
 
@@ -257,10 +245,13 @@ const Form: React.FC<Props> = ({
       if (result?.type === ActionTypes.API_ERROR) {
         setUpdateCaseState(UPDATE_CASE_STATE.ERROR);
       } else {
-        setCanCloseForm(true);
+        setTimeout(() => {
+          setUpdateCaseState(UPDATE_CASE_STATE.IDLE);
+          onClose();
+        }, CLOSE_FORM_DELAY);
       }
     } else {
-      formNavigation.close();
+      onClose();
     }
   };
 
@@ -273,7 +264,7 @@ const Form: React.FC<Props> = ({
           {
             text: "Nej",
             color: "neutral" as PrimaryColor,
-            clickHandler: () => formNavigation.close(),
+            clickHandler: onClose,
           },
           {
             text: "Ja",
