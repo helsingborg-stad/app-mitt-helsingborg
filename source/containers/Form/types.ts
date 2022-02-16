@@ -1,5 +1,5 @@
 export const enum UPDATE_CASE_STATE {
-  PENDING = "pending",
+  IDLE = "idle",
   UPDATING = "updating",
   ERROR = "error",
 }

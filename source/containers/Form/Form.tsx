@@ -38,7 +38,7 @@ const dialogText: Record<UPDATE_CASE_STATE, DialogText> = {
     title: "Ett fel har uppstått!",
     body: "Vill du försöka igen?",
   },
-  [UPDATE_CASE_STATE.PENDING]: {
+  [UPDATE_CASE_STATE.IDLE]: {
     title: "",
     body: "",
   },
@@ -139,7 +139,7 @@ const Form: React.FC<Props> = ({
 
   const [canCloseForm, setCanCloseForm] = useState(false);
   const [updateCaseState, setUpdateCaseState] = useState(
-    UPDATE_CASE_STATE.PENDING
+    UPDATE_CASE_STATE.IDLE
   );
 
   const answers: Record<string, Image | any> = formState.formAnswers;
@@ -232,7 +232,7 @@ const Form: React.FC<Props> = ({
   useEffect(() => {
     const timer = setTimeout(() => {
       if (canCloseForm) {
-        setUpdateCaseState(UPDATE_CASE_STATE.PENDING);
+        setUpdateCaseState(UPDATE_CASE_STATE.IDLE);
         formNavigation.close();
       }
     }, CLOSE_FORM_DELAY);
@@ -264,7 +264,7 @@ const Form: React.FC<Props> = ({
     }
   };
 
-  const showDialog = updateCaseState !== UPDATE_CASE_STATE.PENDING;
+  const showDialog = updateCaseState !== UPDATE_CASE_STATE.IDLE;
   const dialogTitle = dialogText[updateCaseState].title;
   const dialogBody = dialogText[updateCaseState].body;
   const dialogButtons =
