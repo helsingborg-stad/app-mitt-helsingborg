@@ -712,9 +712,10 @@ function CaseOverview(props): JSX.Element {
           onPress={() =>
             navigation.navigate("Form", { caseId: newApplicationCase.id })
           }
-          type="text-icon"
           text="Ansök om ekonomiskt bistånd"
           iconName="account-balance-wallet"
+          position="center"
+          buttonWidth="90%"
         />
       )}
     </ScreenWrapper>

@@ -1,26 +1,20 @@
 import styled from "styled-components/native";
 import { ThemeType } from "../../../styles/themeHelpers";
 
-interface ButtonProps {
-  position: "left" | "right";
-  theme: ThemeType;
-  colorSchema: "red" | "neutral";
-  type: "text" | "icon" | "text-icon";
-}
+import { StyledProps } from "./types";
 
-const ButtonContainer = styled.TouchableHighlight<ButtonProps>`
+const ButtonContainer = styled.TouchableHighlight<StyledProps>`
   padding: 12px 20px;
-  width: ${({ type }) => (type === "icon" ? "54px" : "90%")};
+  width: ${({ buttonWidth }) => buttonWidth};
   height: 54px;
   background: ${({ theme, colorSchema }) =>
     colorSchema === "red"
       ? theme.colors.primary.red[0]
       : theme.colors.neutrals[5]};
-  border-radius: ${({ type }) =>
-    type === "text" || type === "text-icon" ? "16px" : "27px"};
+  border-radius: ${({ borderRadius }) => `${borderRadius}px`};
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: ${({ justifyContent }) => justifyContent};
   align-items: center;
   position: absolute;
   bottom: 10px;
@@ -31,15 +25,13 @@ const ButtonContainer = styled.TouchableHighlight<ButtonProps>`
   shadow-radius: 2px;
   elevation: 10;
   z-index: 10;
-  ${({ position, type }) => {
-    // Text is always centered
-    if (type === "text" || type === "text-icon") {
+  ${({ position }) => {
+    if (position === "center") {
       return `
         margin-left: 5%;
         margin-right: 5%;
       `;
     }
-
     if (position === "left") {
       return `
         left: 10px;
