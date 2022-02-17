@@ -662,34 +662,47 @@ function CaseOverview(props): JSX.Element {
         }
       >
         {activeCases.length === 0 && closedCases.length === 0 ? (
-          <Card colorSchema="red">
-            <Card.Body colorSchema="red">
-              <Card.Text align="center">
-                <StyledIcon
-                  name={refreshing ? "refresh" : "arrow-downward"}
-                  size={32}
-                />
-              </Card.Text>
-              <Card.Title align="center">Här var det tomt!</Card.Title>
-              <Card.Text align="center" colorSchema="red">
-                Dra för att ladda om sidan om det borde finnas något här.
-              </Card.Text>
-            </Card.Body>
-          </Card>
+          <>
+            <Card colorSchema="red">
+              <Card.Body colorSchema="red">
+                <Card.Text align="center">
+                  <StyledIcon
+                    name={refreshing ? "refresh" : "arrow-downward"}
+                    size={32}
+                  />
+                </Card.Text>
+                <Card.Title align="center">Här var det tomt!</Card.Title>
+                <Card.Text align="center" colorSchema="red">
+                  Dra för att ladda om sidan om det borde finnas något här.
+                </Card.Text>
+              </Card.Body>
+            </Card>
+            {newApplicationCase && (
+              <Card colorSchema="red">
+                <Card.Body colorSchema="red">
+                  <Card.Text align="center" colorSchema="red">
+                    ... eller tryck på knappen för att ansöka för första gången.
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            )}
+          </>
         ) : (
           <Card.Button colorSchema="red" disabled>
             <Icon name={refreshing ? "refresh" : "arrow-downward"} />
             <Text>Dra för att ladda om sidan</Text>
           </Card.Button>
         )}
-        <ListHeading type="h5">Aktiva</ListHeading>
-        {showActiveCases && (
-          <Animated.View style={{ opacity: fadeAnimation }}>
-            {activeCaseCards}
-          </Animated.View>
+        {activeCases.length >= 0 && !newApplicationCase && (
+          <>
+            <ListHeading type="h5">Aktiva</ListHeading>
+            <Animated.View style={{ opacity: fadeAnimation }}>
+              {activeCaseCards}
+            </Animated.View>
+          </>
         )}
 
-        {!isLoading && activeCases.length === 0 && (
+        {!isLoading && activeCases.length === 0 && !newApplicationCase && (
           <Animated.View style={{ opacity: fadeAnimation }}>
             <Card>
               <CardMessageBody>
