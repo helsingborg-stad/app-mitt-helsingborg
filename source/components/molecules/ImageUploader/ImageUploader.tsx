@@ -106,6 +106,7 @@ interface Props {
   colorSchema?: PrimaryColor;
   maxImages?: number;
   id: string;
+  imageNamePrefix?: string;
 }
 
 const MAX_IMAGE_SIZE_BYTES = 7 * 1000 * 1000;
@@ -118,12 +119,24 @@ const ImageUploader: React.FC<Props> = ({
   colorSchema,
   maxImages,
   id,
+  imageNamePrefix,
+  ...rest
 }) => {
   const [choiceModalVisible, toggleModal] = useModal();
 
+  const renameImagesWithPrefix = (images: Image[], prefix: string) =>
+    images.map((image, idx) => ({
+      ...image,
+      filename: `${prefix}_${idx}`,
+    }));
+
   const addImagesToState = (newImages: Image[]) => {
-    const updatedImages =
+    let updatedImages =
       images === "" ? [...newImages] : [...images, ...newImages];
+
+    if (imageNamePrefix) {
+      updatedImages = renameImagesWithPrefix(updatedImages, imageNamePrefix);
+    }
 
     if (updatedImages.length > 0 && updatedImages[0].questionId) {
       onChange(updatedImages, updatedImages[0].questionId);

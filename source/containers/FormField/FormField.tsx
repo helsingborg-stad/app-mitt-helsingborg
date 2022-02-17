@@ -271,6 +271,7 @@ const FormField = (props: FormFieldProps): JSX.Element => {
     error: validationErrors[id],
     inputType: inputSelectValue, // rename this so that we get a better name in the app
     id,
+    label,
     ...other,
   };
 
@@ -288,6 +289,10 @@ const FormField = (props: FormFieldProps): JSX.Element => {
 
   if (inputType === "repeaterField" && !!input?.addAnswerEvent)
     inputCompProps[input.addAnswerEvent] = onInputAddAnswer;
+
+  if (inputType === "imageUploader") {
+    inputCompProps.imageNamePrefix = label;
+  }
 
   if (inputType === "bulletList") {
     inputCompProps.values = answers.includes("#COMPLETIONS_LIST")
