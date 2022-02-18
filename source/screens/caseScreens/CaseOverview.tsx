@@ -43,7 +43,7 @@ const {
   ACTIVE_COMPLETION_REQUIRED_VIVA,
   ACTIVE_COMPLETION_SUBMITTED,
   ACTIVE_SIGNATURE_PENDING,
-  NOT_STARTED_NEW_APPLICATION_VIVA,
+  NEW_APPLICATION_VIVA,
   NOT_STARTED,
   ONGOING,
   SIGNED,
@@ -381,17 +381,10 @@ function CaseOverview(props): JSX.Element {
 
   const activeCases = getCasesByStatuses([NOT_STARTED, ACTIVE]);
   const closedCases = getCasesByStatuses([CLOSED]);
+  const newCase = getCasesByStatuses([NEW_APPLICATION_VIVA])[0];
 
-  const newApplicationCaseIndex = activeCases.findIndex(
-    ({ status }) => status?.type === NOT_STARTED_NEW_APPLICATION_VIVA
-  );
-  const newApplicationCase =
-    newApplicationCaseIndex >= 0
-      ? activeCases.splice(newApplicationCaseIndex, 1)[0]
-      : undefined;
-
-  const showActiveCases = activeCases.length > 0 && !newApplicationCase;
-  const showClosedCases = closedCases.length > 0 && !newApplicationCase;
+  const showActiveCases = activeCases.length > 0;
+  const showClosedCases = closedCases.length > 0;
 
   const onFailedToFetchCases = (error: Error) => {
     console.error("failed to fetch cases", error);
@@ -661,7 +654,14 @@ function CaseOverview(props): JSX.Element {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {activeCases.length === 0 && closedCases.length === 0 ? (
+        {(showActiveCases || showClosedCases) && !isLoading && (
+          <Card.Button colorSchema="red" disabled>
+            <Icon name={refreshing ? "refresh" : "arrow-downward"} />
+            <Text>Dra för att ladda om sidan</Text>
+          </Card.Button>
+        )}
+
+        {!isLoading && activeCases.length === 0 && closedCases.length === 0 && (
           <>
             <Card colorSchema="red">
               <Card.Body colorSchema="red">
@@ -677,7 +677,8 @@ function CaseOverview(props): JSX.Element {
                 </Card.Text>
               </Card.Body>
             </Card>
-            {newApplicationCase && (
+
+            {newCase && (
               <Card colorSchema="red">
                 <Card.Body colorSchema="red">
                   <Card.Text align="center" colorSchema="red">
@@ -687,29 +688,15 @@ function CaseOverview(props): JSX.Element {
               </Card>
             )}
           </>
-        ) : (
-          <Card.Button colorSchema="red" disabled>
-            <Icon name={refreshing ? "refresh" : "arrow-downward"} />
-            <Text>Dra för att ladda om sidan</Text>
-          </Card.Button>
         )}
-        {activeCases.length >= 0 && !newApplicationCase && (
+
+        {showActiveCases && (
           <>
             <ListHeading type="h5">Aktiva</ListHeading>
             <Animated.View style={{ opacity: fadeAnimation }}>
               {activeCaseCards}
             </Animated.View>
           </>
-        )}
-
-        {!isLoading && activeCases.length === 0 && !newApplicationCase && (
-          <Animated.View style={{ opacity: fadeAnimation }}>
-            <Card>
-              <CardMessageBody>
-                <Card.Text>Du har inga aktiva ärenden.</Card.Text>
-              </CardMessageBody>
-            </Card>
-          </Animated.View>
         )}
 
         {showClosedCases && (
@@ -720,11 +707,9 @@ function CaseOverview(props): JSX.Element {
         )}
       </Container>
 
-      {newApplicationCase && (
+      {newCase && (
         <FloatingButton
-          onPress={() =>
-            navigation.navigate("Form", { caseId: newApplicationCase.id })
-          }
+          onPress={() => navigation.navigate("Form", { caseId: newCase.id })}
           text="Ansök om ekonomiskt bistånd"
           iconName="account-balance-wallet"
           position="center"
