@@ -124,18 +124,23 @@ const ImageUploader: React.FC<Props> = ({
 }) => {
   const [choiceModalVisible, toggleModal] = useModal();
 
-  const renameImagesWithPrefix = (images: Image[], prefix: string) =>
-    images.map((image, idx) => ({
-      ...image,
-      filename: `${prefix}_${idx}`,
-    }));
+  const renameImageWithAffix = (
+    image: Image,
+    prefix: string,
+    suffix: string
+  ) => ({
+    ...image,
+    filename: `${prefix}_${suffix}`,
+  });
 
   const addImagesToState = (newImages: Image[]) => {
     let updatedImages =
       images === "" ? [...newImages] : [...images, ...newImages];
 
     if (imageNamePrefix) {
-      updatedImages = renameImagesWithPrefix(updatedImages, imageNamePrefix);
+      updatedImages = updatedImages.map((image, idx) =>
+        renameImageWithAffix(image, imageNamePrefix, idx.toString())
+      );
     }
 
     if (updatedImages.length > 0 && updatedImages[0].questionId) {
