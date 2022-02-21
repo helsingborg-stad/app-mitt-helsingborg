@@ -43,7 +43,7 @@ const {
   ACTIVE_COMPLETION_REQUIRED_VIVA,
   ACTIVE_COMPLETION_SUBMITTED,
   ACTIVE_SIGNATURE_PENDING,
-  NEW_APPLICATION_VIVA,
+  NEW_APPLICATION,
   NOT_STARTED,
   ONGOING,
   SIGNED,
@@ -381,7 +381,7 @@ function CaseOverview(props): JSX.Element {
 
   const activeCases = getCasesByStatuses([NOT_STARTED, ACTIVE]);
   const closedCases = getCasesByStatuses([CLOSED]);
-  const newCase = getCasesByStatuses([NEW_APPLICATION_VIVA])[0];
+  const newCase = getCasesByStatuses([NEW_APPLICATION])[0];
 
   const showActiveCases = activeCases.length > 0;
   const showClosedCases = closedCases.length > 0;
