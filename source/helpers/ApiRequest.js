@@ -1,8 +1,10 @@
 import axios from "axios";
 import { Platform } from "react-native";
+import DeviceInfo from "react-native-device-info";
+
 import StorageService, { ACCESS_TOKEN_KEY } from "../services/StorageService";
 import { buildServiceUrl } from "./UrlHelper";
-import { name, version } from "../../package.json";
+import { name } from "../../package.json";
 import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
 import { getUserFriendlyAppVersion } from "./Misc";
 
@@ -22,8 +24,9 @@ const request = async (endpoint, method, data, headers, params) => {
     EnvironmentConfigurationService.getInstance().activeEndpoint;
 
   const friendlyVersion = getUserFriendlyAppVersion();
+  const applicationVersion = DeviceInfo.getVersion();
 
-  const userAgent = `${name}/${version}/${Platform.OS}/${Platform.Version}/${friendlyVersion}`;
+  const userAgent = `${name}/${applicationVersion}/${Platform.OS}/${Platform.Version}/${friendlyVersion}`;
 
   // Merge custom headers
   const newHeaders = {
