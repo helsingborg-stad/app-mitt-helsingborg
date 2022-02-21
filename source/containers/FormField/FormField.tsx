@@ -291,7 +291,7 @@ const FormField = (props: FormFieldProps): JSX.Element => {
     inputCompProps[input.addAnswerEvent] = onInputAddAnswer;
 
   if (inputType === "imageUploader") {
-    inputCompProps.imageNamePrefix = label;
+    inputCompProps.preferredImageName = label;
   }
 
   if (inputType === "bulletList") {
