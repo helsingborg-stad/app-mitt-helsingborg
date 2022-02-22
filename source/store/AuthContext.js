@@ -212,7 +212,7 @@ function AuthProvider({ children, initialState }) {
       try {
         let apiStatusMessage = "";
 
-        if (isDevMode) {
+        if (!isDevMode) {
           apiStatusMessage = await getApiStatus();
         }
 
