@@ -216,15 +216,12 @@ function AuthProvider({ children, initialState }) {
           apiStatusMessage = await getApiStatus();
         }
 
-        const isCompatibleState = await getIsCompatible();
+        const { isCompatible, updateUrl } = await getIsCompatible();
 
         handleSetApiStatusMessage(apiStatusMessage);
         const isValidJWTToken = await isAccessTokenValid();
 
-        const canLogin =
-          isValidJWTToken &&
-          !apiStatusMessage &&
-          isCompatibleState.isCompatible;
+        const canLogin = isValidJWTToken && !apiStatusMessage && isCompatible;
 
         if (canLogin) {
           await handleAddProfile();
@@ -233,8 +230,8 @@ function AuthProvider({ children, initialState }) {
           handleLogout();
         }
 
-        if (!isCompatibleState.isCompatible) {
-          showUpdateRequiredAlert(isCompatibleState.updateUrl);
+        if (!isCompatible) {
+          showUpdateRequiredAlert(updateUrl);
           handleSetApiStatusMessage(
             "Du har en för gammal version av appen. För att kunna ta del av Mitt Helsingborg och dess funktioner måste appen uppdateras. Besök din butik för appar för att göra detta."
           );
