@@ -3,11 +3,10 @@ import { Alert, Linking } from "react-native";
 import PropTypes from "prop-types";
 import env from "react-native-config";
 import USER_AUTH_STATE from "../types/UserAuthTypes";
-import VERSION_STATUS from "../types/VersionStatusTypes";
 import AppContext from "./AppContext";
+import AppCompabilityContext from "./AppCompabilityContext";
 import * as authService from "../services/AuthService";
 import getApiStatus from "../services/ApiStatusService";
-import getApplicationVersionStatus from "../services/ApplicationVersionService";
 
 import AuthReducer, {
   initialState as defaultInitialState,
@@ -35,6 +34,7 @@ function AuthProvider({ children, initialState }) {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
   const { handleSetMode, isDevMode } = useContext(AppContext);
+  const { getIsCompatible } = useContext(AppCompabilityContext);
 
   /**
    * Starts polling for an order response if status is pending and orderRef and autoStartToken is set in state.
@@ -211,12 +211,12 @@ function AuthProvider({ children, initialState }) {
     const trySignIn = async () => {
       try {
         let apiStatusMessage = "";
-        let versionStatus;
 
-        if (!isDevMode) {
+        if (isDevMode) {
           apiStatusMessage = await getApiStatus();
-          versionStatus = await getApplicationVersionStatus();
         }
+
+        const isCompatibleState = await getIsCompatible();
 
         handleSetApiStatusMessage(apiStatusMessage);
         const isValidJWTToken = await isAccessTokenValid();
@@ -224,7 +224,7 @@ function AuthProvider({ children, initialState }) {
         const canLogin =
           isValidJWTToken &&
           !apiStatusMessage &&
-          versionStatus?.status !== VERSION_STATUS.UPDATE_REQUIRED;
+          isCompatibleState.isCompatible;
 
         if (canLogin) {
           await handleAddProfile();
@@ -233,8 +233,8 @@ function AuthProvider({ children, initialState }) {
           handleLogout();
         }
 
-        if (versionStatus?.status === VERSION_STATUS.UPDATE_REQUIRED) {
-          showUpdateRequiredAlert(versionStatus.updateUrl);
+        if (!isCompatibleState.isCompatible) {
+          showUpdateRequiredAlert(isCompatibleState.updateUrl);
           handleSetApiStatusMessage(
             "Du har en för gammal version av appen. För att kunna ta del av Mitt Helsingborg och dess funktioner måste appen uppdateras. Besök din butik för appar för att göra detta."
           );
@@ -245,7 +245,7 @@ function AuthProvider({ children, initialState }) {
     };
 
     trySignIn();
-  }, [isAccessTokenValid, isDevMode]);
+  }, [isAccessTokenValid, isDevMode, getIsCompatible]);
 
   useEffect(() => {
     const tryFetchUser = async () => {
