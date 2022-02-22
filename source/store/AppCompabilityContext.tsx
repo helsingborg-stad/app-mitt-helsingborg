@@ -32,7 +32,7 @@ const AppCompabilityProvider = ({ children }: Props): JSX.Element => {
   };
 
   const getIsCompatible = async () => {
-    if (!isDevMode) {
+    if (isDevMode) {
       return { isCompatible: true, updateUrl: "" };
     }
 
