@@ -195,7 +195,7 @@ function CaseProvider({
   }, [pollLoop, state.isPolling, user]);
 
   useEffect(() => {
-    if (isSignedIn && user) {
+    if (isSignedIn && user !== null) {
       void fetchCases();
     }
 
