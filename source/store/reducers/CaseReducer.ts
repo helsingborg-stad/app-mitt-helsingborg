@@ -62,6 +62,9 @@ export default function CaseReducer(state: State, action: Action): State {
       newState.error = payload;
       return newState;
 
+    case ActionTypes.RESET:
+      return { ...initialState };
+
     default:
       return state;
   }

@@ -1,9 +1,16 @@
-import React, { useContext, useReducer, useEffect, useCallback } from "react";
+import React, {
+  useContext,
+  useReducer,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import PropTypes from "prop-types";
 import { getStoredSymmetricKey } from "../services/encryption/EncryptionHelper";
 import { filterAsync } from "../helpers/Objects";
 import { Case } from "../types/Case";
 import { Form } from "../types/FormTypes";
+import USER_AUTH_STATE from "../types/UserAuthTypes";
 import {
   State as ContextState,
   Dispatch,
@@ -73,7 +80,13 @@ function CaseProvider({
   initialState = defaultInitialState,
 }: CaseProviderProps): JSX.Element {
   const [state, dispatch] = useReducer(CaseReducer, initialState);
-  const { user } = useContext(AuthContext);
+  const { user, userAuthState } = useContext(AuthContext);
+
+  const isSignedIn = useMemo(
+    () => userAuthState === USER_AUTH_STATE.SIGNED_IN,
+    [userAuthState]
+  );
+
   async function createCase(form: Form, callback: (newCase: Case) => void) {
     dispatch(await create(form, callback));
   }
@@ -182,10 +195,16 @@ function CaseProvider({
   }, [pollLoop, state.isPolling, user]);
 
   useEffect(() => {
-    if (user) {
+    if (isSignedIn && user) {
       void fetchCases();
     }
-  }, [user, fetchCases]);
+
+    if (!isSignedIn) {
+      dispatch({
+        type: ActionTypes.RESET,
+      });
+    }
+  }, [isSignedIn, user, fetchCases]);
 
   const providedState: ContextState = {
     ...state,
