@@ -13,10 +13,9 @@ const AppCompabilityContext = createContext({
     }),
 });
 
-interface Props {
-  children: Element | Element[];
-}
-const AppCompabilityProvider = ({ children }: Props): JSX.Element => {
+export const useAppCompabilityHook = (): {
+  getIsCompatible: () => Promise<{ isCompatible: boolean; updateUrl: string }>;
+} => {
   const { isDevMode } = useContext(AppContext);
 
   const isCompatibleRef =
@@ -44,8 +43,18 @@ const AppCompabilityProvider = ({ children }: Props): JSX.Element => {
     return isCompatibleRef.current;
   };
 
+  return { getIsCompatible };
+};
+
+const AppCompabilityProvider = ({
+  children,
+}: {
+  children: JSX.Element | JSX.Element[];
+}): JSX.Element => {
+  const value = useAppCompabilityHook();
+
   return (
-    <AppCompabilityContext.Provider value={{ getIsCompatible }}>
+    <AppCompabilityContext.Provider value={value}>
       {children}
     </AppCompabilityContext.Provider>
   );
