@@ -12,6 +12,7 @@ export enum ActionTypes {
   API_ERROR = "API_ERROR",
   SET_POLLING_CASES = "SET_POLLING_CASES",
   SET_POLLING_DONE = "SET_POLLING_DONE",
+  RESET = "RESET",
 }
 
 export interface State {
