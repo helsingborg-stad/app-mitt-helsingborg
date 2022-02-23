@@ -13,7 +13,12 @@ const AppCompabilityContext = createContext({
     }),
 });
 
-export const useAppCompabilityHook = (): {
+export const useAppCompabilityHook = (
+  fetchVersionStatus: () => Promise<{
+    status: VERSION_STATUS;
+    updateUrl: string;
+  }>
+): {
   getIsCompatible: () => Promise<{ isCompatible: boolean; updateUrl: string }>;
 } => {
   const { isDevMode } = useContext(AppContext);
@@ -22,7 +27,7 @@ export const useAppCompabilityHook = (): {
     useRef<{ isCompatible: boolean; updateUrl: string }>();
 
   const getIsCompatibleValues = async () => {
-    const { status, updateUrl } = await getApplicationVersionStatus();
+    const { status, updateUrl } = await fetchVersionStatus();
 
     return {
       isCompatible: status !== VERSION_STATUS.UPDATE_REQUIRED,
@@ -51,7 +56,7 @@ const AppCompabilityProvider = ({
 }: {
   children: JSX.Element | JSX.Element[];
 }): JSX.Element => {
-  const value = useAppCompabilityHook();
+  const value = useAppCompabilityHook(getApplicationVersionStatus);
 
   return (
     <AppCompabilityContext.Provider value={value}>

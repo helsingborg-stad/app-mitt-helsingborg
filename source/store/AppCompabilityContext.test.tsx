@@ -6,78 +6,59 @@ import env from "react-native-config";
 import { useAppCompabilityHook } from "./AppCompabilityContext";
 import { AppProvider } from "./AppContext";
 
-import * as getApplicationVersionStatus from "../services/ApplicationVersionService";
 import VERSION_STATUS from "../types/VersionStatusTypes";
-
-jest.mock("../services/ApplicationVersionService");
 
 const wrapper = ({ children }: { children: JSX.Element }) => (
   <AppProvider>{children}</AppProvider>
 );
-
-const getApplicationVersionSpy = (status: VERSION_STATUS, updateUrl = "") =>
-  jest.spyOn(getApplicationVersionStatus, "default").mockResolvedValueOnce({
-    status,
-    updateUrl,
-  });
-
-beforeEach(() => {
-  jest.resetAllMocks();
-});
 
 describe("useAppCompabilityHook", () => {
   it("returns default value in `devmode`", async () => {
     expect.assertions(3);
 
     env.APP_ENV = "development";
+    const fetchMock = jest.fn();
 
-    const applicationVersionSpy = getApplicationVersionSpy(VERSION_STATUS.OK);
-
-    const { result } = renderHook(() => useAppCompabilityHook(), {
+    const { result } = renderHook(() => useAppCompabilityHook(fetchMock), {
       wrapper,
     });
     const { isCompatible, updateUrl } = await result.current.getIsCompatible();
 
     expect(isCompatible).toBe(true);
     expect(updateUrl).toBe("");
-    expect(applicationVersionSpy).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("calls the api for fetching application version status in `production`", async () => {
     expect.assertions(1);
 
     env.APP_ENV = "production";
+    const fetchMock = jest.fn().mockResolvedValueOnce("");
 
-    const applicationVersionSpy = getApplicationVersionSpy(
-      VERSION_STATUS.UPDATE_REQUIRED
-    );
-
-    const { result } = renderHook(() => useAppCompabilityHook(), {
+    const { result } = renderHook(() => useAppCompabilityHook(fetchMock), {
       wrapper,
     });
     await result.current.getIsCompatible();
 
-    expect(applicationVersionSpy).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
   it("returns stored value once fetched in `production`", async () => {
     expect.assertions(1);
 
     env.APP_ENV = "production";
+    const fetchMock = jest.fn().mockResolvedValueOnce("");
 
-    const applicationVersionSpy = getApplicationVersionSpy(
-      VERSION_STATUS.UPDATE_REQUIRED
+    const { result, rerender } = renderHook(
+      () => useAppCompabilityHook(fetchMock),
+      { wrapper }
     );
-
-    const { result, rerender } = renderHook(() => useAppCompabilityHook(), {
-      wrapper,
-    });
     await result.current.getIsCompatible();
 
     rerender();
     await result.current.getIsCompatible();
 
-    expect(applicationVersionSpy).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
   test.each([
@@ -90,16 +71,17 @@ describe("useAppCompabilityHook", () => {
       expect.assertions(2);
 
       env.APP_ENV = "production";
+      const fetchMock = jest
+        .fn()
+        .mockResolvedValueOnce({ status, updateUrl: "" });
 
-      const applicationVersionSpy = getApplicationVersionSpy(status);
-
-      const { result } = renderHook(() => useAppCompabilityHook(), {
+      const { result } = renderHook(() => useAppCompabilityHook(fetchMock), {
         wrapper,
       });
       const { isCompatible } = await result.current.getIsCompatible();
 
       expect(isCompatible).toBe(expectedResult);
-      expect(applicationVersionSpy).toHaveBeenCalledTimes(1);
+      expect(fetchMock).toHaveBeenCalledTimes(1);
     }
   );
 });
