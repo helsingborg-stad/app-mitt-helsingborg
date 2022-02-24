@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import GroupedList from "../../molecules/GroupedList/GroupedList";
 import Text from "../../atoms/Text/Text";
@@ -367,6 +368,66 @@ const SummaryList: React.FC<Props> = ({
       </>
     )
   );
+};
+
+SummaryList.propTypes = {
+  /**
+   * The header text of the list.
+   */
+  heading: PropTypes.string,
+  /**
+   * List of all items, corresponding to all subforms
+   */
+  items: PropTypes.array,
+  /**
+   * The categories of the grouping
+   */
+  categories: PropTypes.array,
+  /**
+   * What should happen to update the values
+   */
+  onChange: PropTypes.func,
+  /**
+   * What should happen when a field loses focus.
+   */
+  onBlur: PropTypes.func,
+  /**
+   * Sets the color scheme of the list. default is red.
+   */
+  color: PropTypes.string,
+  /**
+   * The form state answers
+   */
+  answers: PropTypes.object,
+  /**
+   * Object containing all validation errors for the entire form
+   */
+  validationErrors: PropTypes.object,
+  /**
+   * Whether or not to show a sum of all numeric values at the bottom. Defaults to true.
+   */
+  showSum: PropTypes.bool,
+  /**
+   * Whether to start in editable mode or not.
+   */
+  startEditable: PropTypes.bool,
+  /**
+   * Show a help button
+   */
+  help: PropTypes.shape({
+    text: PropTypes.string,
+    size: PropTypes.number,
+    heading: PropTypes.string,
+    tagline: PropTypes.string,
+    url: PropTypes.string,
+  }),
+};
+
+SummaryList.defaultProps = {
+  items: [],
+  color: "blue",
+  showSum: true,
+  onChange: () => {},
 };
 
 export default SummaryList;
