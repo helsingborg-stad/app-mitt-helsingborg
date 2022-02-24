@@ -9,9 +9,9 @@ import {
   State as ContextState,
   Dispatch,
   CaseUpdate,
-  PolledCaseResult,
   ActionTypes,
   Action,
+  PolledCaseResult,
 } from "../types/CaseContext";
 import AuthContext from "./AuthContext";
 import CaseReducer, {
@@ -119,31 +119,43 @@ function CaseProvider({
     dispatch(remove(caseId));
   }
 
-  const pollLoop = useCallback(
-    async (cases: Case[]): Promise<void> => {
-      const newCases = await cases.reduce(
-        async (pollingCases, unsyncedCase) => {
-          const polledCases = await pollingCases;
+  useEffect(() => {
+    const { casesToPoll } = state;
+    if (casesToPoll.length > 0 && isSignedIn && !state.isPolling && user) {
+      dispatch({
+        type: ActionTypes.SET_IS_POLLING,
+        payload: true,
+      });
+      void (async () => {
+        const newCases = await casesToPoll.reduce(
+          async (pollingCases, unsyncedCase) => {
+            const polledCases = await pollingCases;
 
-          const action = await pollCase(user, unsyncedCase);
-          dispatch(action);
+            const action = await pollCase(user, unsyncedCase);
+            dispatch(action);
 
-          const pollResult = action.payload as PolledCaseResult;
-          if (!pollResult.synced) {
-            return [...polledCases, pollResult.case];
-          }
+            const pollResult = action.payload as PolledCaseResult;
+            if (!pollResult.synced) {
+              return [...polledCases, pollResult.case];
+            }
 
-          return polledCases;
-        },
-        Promise.resolve([] as Case[])
-      );
+            return polledCases;
+          },
+          Promise.resolve([] as Case[])
+        );
 
-      if (newCases.length > 0) {
-        await pollLoop(newCases);
-      }
-    },
-    [user]
-  );
+        dispatch({
+          type: ActionTypes.SET_POLLING_CASES,
+          payload: newCases,
+        });
+
+        dispatch({
+          type: ActionTypes.SET_IS_POLLING,
+          payload: false,
+        });
+      })();
+    }
+  }, [isSignedIn, state, user]);
 
   const fetchCases = useCallback(async () => {
     const fetchData = await fetch(user);
@@ -171,19 +183,13 @@ function CaseProvider({
       caseRequiresSync
     );
 
-    if (unsyncedCases.length > 0 && !state.isPolling) {
+    if (unsyncedCases.length > 0) {
       dispatch({
         type: ActionTypes.SET_POLLING_CASES,
         payload: unsyncedCases,
       });
-
-      await pollLoop(unsyncedCases);
-
-      dispatch({
-        type: ActionTypes.SET_POLLING_DONE,
-      });
     }
-  }, [pollLoop, state.isPolling, user]);
+  }, [user]);
 
   useEffect(() => {
     if (isSignedIn && user !== null) {
