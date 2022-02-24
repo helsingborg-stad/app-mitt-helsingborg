@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useReducer,
-  useEffect,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useContext, useReducer, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { getStoredSymmetricKey } from "../services/encryption/EncryptionHelper";
 import { filterAsync } from "../helpers/Objects";
@@ -82,10 +76,7 @@ function CaseProvider({
   const [state, dispatch] = useReducer(CaseReducer, initialState);
   const { user, userAuthState } = useContext(AuthContext);
 
-  const isSignedIn = useMemo(
-    () => userAuthState === USER_AUTH_STATE.SIGNED_IN,
-    [userAuthState]
-  );
+  const isSignedIn = userAuthState === USER_AUTH_STATE.SIGNED_IN;
 
   async function createCase(form: Form, callback: (newCase: Case) => void) {
     dispatch(await create(form, callback));
