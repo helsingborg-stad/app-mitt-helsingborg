@@ -1,7 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import env from "react-native-config";
 import GroupedList from "../../molecules/GroupedList/GroupedList";
 import Text from "../../atoms/Text/Text";
 import Heading from "../../atoms/Heading";
@@ -210,89 +208,121 @@ const SummaryList: React.FC<Props> = ({
     }
   });
 
-  itemsWithAnswers.forEach((item) => {
-    if (["arrayNumber", "arrayText", "arrayDate"].includes(item.type)) {
-      const values: Record<string, string | number>[] = answers[item.id];
-      if (!Array.isArray(values) && values !== undefined) {
-        const diagnosticMessage = `Possible type error in the form; SummaryList ${heading}, at item {id:${item.id}, inputId: ${item?.inputId}, title: ${item.title}} expected to get values as array, but got something else. Check the form configuration.`;
-        console.log(diagnosticMessage);
-        // Showing a notification to alert the user, if we are in development
-        if (env.APP_ENV === "development") {
-          showNotification(
-            "Summary list error",
-            diagnosticMessage,
-            "error",
-            -1
-          );
-        }
-      } else if (values && values?.length > 0) {
-        // in this case we have some answers from a repeater field, and need to loop over and show each one
-        values.forEach((v, index) => {
-          const validationError = validationErrors?.[item.id]?.[index]
-            ? validationErrors[item.id][index][item?.inputId]
-            : undefined;
-          listItems.push(
-            <SummaryListItemComponent
-              item={item}
-              index={index ? index + 1 : undefined}
-              userDescriptionLabel={
-                v.text || v.description || v.otherassetDescription
-              }
-              key={`${item.id}-${index}`}
-              value={v[item?.inputId]}
-              changeFromInput={changeFromInput(item, index)}
-              onBlur={onItemBlur(item, index)}
-              removeItem={removeListItem(item, index)}
-              colorSchema={colorSchema}
-              validationError={validationError}
-              category={item.category}
-            />
-          );
-          if (item.type === "arrayNumber") {
-            const numericValue: string | number = v[item?.inputId || item.id];
-            addToSum(numericValue);
-          }
-        });
-      }
+  /**
+   * Divide answers into their respective group
+   */
+  const map = new Map();
+  itemsWithAnswers.forEach((item: SummaryListItem) => {
+    if (!map.has(item.id)) {
+      map.set(item.id, answers[item.id]);
     }
-    if (
-      ["editableListText", "editableListNumber", "editableListDate"].includes(
-        item.type
-      ) &&
-      item.inputId &&
-      answers?.[item.id]?.[item.inputId]
-    ) {
+  });
+
+  /**
+   * Work backwards, given the answers, Map the answer
+   * towards its component
+   */
+  interface Item {
+    item: SummaryListItem;
+    value?: string | number | boolean;
+    index: number;
+    text?: string;
+    description?: string;
+    otherassetDescription?: string;
+  }
+  type Value = {
+    text?: string;
+    description?: string;
+    otherassetDescription?: string;
+  } & Record<string, unknown>;
+
+  const reorganizedList: Item[] = [];
+  map.forEach((value) => {
+    value.forEach((row: Value, index: number) => {
+      Object.keys(row).forEach((key) => {
+        const item = itemsWithAnswers.find((entry) => entry.inputId === key);
+
+        if (item) {
+          reorganizedList.push({
+            item,
+            value: row[key] as string | number | boolean | undefined,
+            index,
+            text: row.text,
+            description: row.description,
+            otherassetDescription: row.otherassetDescription,
+          });
+        }
+      });
+    });
+  });
+
+  reorganizedList.forEach((x) => {
+    if (["arrayNumber", "arrayText", "arrayDate"].includes(x.item.type)) {
+      // in this case we have some answers from a repeater field, and need to loop over and show each one
+      const validationError = validationErrors?.[x.item.id]?.[x.index]
+        ? validationErrors[x.item.id][x.index][x.item?.inputId]
+        : undefined;
       listItems.push(
         <SummaryListItemComponent
-          item={item}
-          key={`${item.id}`}
-          value={answers[item.id][item.inputId]}
-          changeFromInput={changeFromInput(item)}
-          onBlur={onItemBlur(item)}
-          removeItem={removeListItem(item)}
-          colorSchema={colorSchema}
-          validationError={
-            validationErrors?.[item.id]?.[item.inputId]
-              ? validationErrors?.[item.id]?.[item.inputId]
-              : undefined
+          item={x.item}
+          index={x.index ? x.index + 1 : undefined}
+          userDescriptionLabel={
+            x.text || x.description || x.otherassetDescription
           }
-          category={item.category}
+          key={`${x.item.id}-${x.index}`}
+          value={x.value ?? ""}
+          changeFromInput={changeFromInput(x.item, x.index)}
+          onBlur={onItemBlur(x.item, x.index)}
+          removeItem={removeListItem(x.item, x.index)}
+          colorSchema={colorSchema}
+          validationError={validationError}
+          category={x.item.category}
         />
       );
-      if (item.type === "editableListNumber") {
-        const numericValue: number = answers[item.id][item.inputId];
+      if (x.item.type === "arrayNumber") {
+        const numericValue: string | number = Number(x.value);
         addToSum(numericValue);
       }
     }
-    if (["text", "number", "date", "checkbox"].includes(item.type)) {
+
+    if (
+      ["editableListText", "editableListNumber", "editableListDate"].includes(
+        x.item.type
+      ) &&
+      x.item.inputId &&
+      answers?.[x.item.id]?.[x.item.inputId]
+    ) {
       listItems.push(
         <SummaryListItemComponent
-          item={item}
-          key={`${item.id}`}
-          value={answers[item.id]}
-          changeFromInput={changeFromInput(item)}
-          onBlur={onItemBlur(item)}
-          removeItem={removeListItem(item)}
+          item={x.item}
+          key={`${x.item.id}`}
+          value={answers[x.item.id][x.item.inputId]}
+          changeFromInput={changeFromInput(x.item)}
+          onBlur={onItemBlur(x.item)}
+          removeItem={removeListItem(x.item)}
+          colorSchema={colorSchema}
+          validationError={
+            validationErrors?.[x.item.id]?.[x.item.inputId]
+              ? validationErrors?.[x.item.id]?.[x.item.inputId]
+              : undefined
+          }
+          category={x.item.category}
+        />
+      );
+      if (x.item.type === "editableListNumber") {
+        const numericValue: number = answers[x.item.id][x.item.inputId];
+        addToSum(numericValue);
+      }
+    }
+    if (["text", "number", "date", "checkbox"].includes(x.item.type)) {
+      listItems.push(
+        <SummaryListItemComponent
+          item={x.item}
+          key={`${x.item.id}`}
+          value={answers[x.item.id]}
+          changeFromInput={changeFromInput(x.item)}
+          onBlur={onItemBlur(x.item)}
+          removeItem={removeListItem(x.item)}
           colorSchema={colorSchema}
           validationError={
             validationErrors
@@ -301,14 +331,14 @@ const SummaryList: React.FC<Props> = ({
                     string,
                     { isValid: boolean; message: string }
                   >
-                )[item.id]
+                )[x.item.id]
               : undefined
           }
-          category={item.category}
+          category={x.item.category}
         />
       );
-      if (item.type === "number") {
-        const numericValue: number = answers[item.id];
+      if (x.item.type === "number") {
+        const numericValue: number = answers[x.item.id];
         addToSum(numericValue);
       }
     }
@@ -339,63 +369,4 @@ const SummaryList: React.FC<Props> = ({
   );
 };
 
-SummaryList.propTypes = {
-  /**
-   * The header text of the list.
-   */
-  heading: PropTypes.string,
-  /**
-   * List of all items, corresponding to all subforms
-   */
-  items: PropTypes.array,
-  /**
-   * The categories of the grouping
-   */
-  categories: PropTypes.array,
-  /**
-   * What should happen to update the values
-   */
-  onChange: PropTypes.func,
-  /**
-   * What should happen when a field loses focus.
-   */
-  onBlur: PropTypes.func,
-  /**
-   * Sets the color scheme of the list. default is red.
-   */
-  color: PropTypes.string,
-  /**
-   * The form state answers
-   */
-  answers: PropTypes.object,
-  /**
-   * Object containing all validation errors for the entire form
-   */
-  validationErrors: PropTypes.object,
-  /**
-   * Whether or not to show a sum of all numeric values at the bottom. Defaults to true.
-   */
-  showSum: PropTypes.bool,
-  /**
-   * Whether to start in editable mode or not.
-   */
-  startEditable: PropTypes.bool,
-  /**
-   * Show a help button
-   */
-  help: PropTypes.shape({
-    text: PropTypes.string,
-    size: PropTypes.number,
-    heading: PropTypes.string,
-    tagline: PropTypes.string,
-    url: PropTypes.string,
-  }),
-};
-
-SummaryList.defaultProps = {
-  items: [],
-  color: "blue",
-  showSum: true,
-  onChange: () => {},
-};
 export default SummaryList;
