@@ -43,18 +43,19 @@ export default function CaseReducer(state: State, action: Action): State {
     case ActionTypes.POLL_CASE: {
       const polledPayload = payload as PolledCaseResult;
       const updatedCase = polledPayload.case;
-      newState.cases[updatedCase.id] = updatedCase;
+      if (newState.cases[updatedCase.id] !== undefined) {
+        newState.cases[updatedCase.id] = updatedCase;
+      }
       return newState;
     }
 
     case ActionTypes.SET_POLLING_CASES: {
-      newState.isPolling = true;
       newState.casesToPoll = payload as Case[];
       return newState;
     }
 
-    case ActionTypes.SET_POLLING_DONE: {
-      newState.isPolling = false;
+    case ActionTypes.SET_IS_POLLING: {
+      newState.isPolling = payload as boolean;
       return newState;
     }
 

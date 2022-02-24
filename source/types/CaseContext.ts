@@ -11,7 +11,7 @@ export enum ActionTypes {
   POLL_CASE = "POLL_CASE",
   API_ERROR = "API_ERROR",
   SET_POLLING_CASES = "SET_POLLING_CASES",
-  SET_POLLING_DONE = "SET_POLLING_DONE",
+  SET_IS_POLLING = "SET_POLLING_DONE",
   RESET = "RESET",
 }
 
@@ -73,5 +73,6 @@ export interface Action {
     | Case[]
     | PolledCaseResult
     | string
+    | boolean
     | Error;
 }
