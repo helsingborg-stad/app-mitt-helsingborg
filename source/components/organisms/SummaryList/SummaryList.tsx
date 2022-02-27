@@ -209,13 +209,36 @@ const SummaryList: React.FC<Props> = ({
     }
   });
 
-  /**
-   * Divide answers into their respective group
-   */
+  /*
+  Divide answers into their respective group
+  Items belonging to the same group shares the same id.
+  [
+    {
+        "inputId": "childrenFirstname",
+        "id": "childrenInfo",
+        "category": "categoryId",
+        "type": "arrayText",
+        "inputSelectValue": "arrayText",
+        ...
+    },
+    {
+        "inputId": "childrenPersonalID",
+        "id": "childrenInfo",
+        "category": "categoryId",
+        "type": "arrayNumber",
+        "inputSelectValue": "arrayNumber",
+        ...
+  ]
+*/
   const map = new Map();
   itemsWithAnswers.forEach((item: SummaryListItem) => {
     if (!map.has(item.id)) {
-      map.set(item.id, answers[item.id]);
+      map.set(item.id, {
+        items: [item],
+        answers: answers[item.id],
+      });
+    } else {
+      map.get(item.id).items.push(item);
     }
   });
 
@@ -223,38 +246,38 @@ const SummaryList: React.FC<Props> = ({
    * Work backwards, given the answers, Map the answer
    * towards its component
    */
-  interface Item {
+  type Item = {
     item: SummaryListItem;
     value?: string | number | boolean;
     index: number;
+    otherassetDescription?: string;
     text?: string;
     description?: string;
-    otherassetDescription?: string;
-  }
-  type Value = {
-    text?: string;
-    description?: string;
-    otherassetDescription?: string;
   } & Record<string, unknown>;
 
   const reorganizedList: Item[] = [];
-  map.forEach((value) => {
-    value.forEach((row: Value, index: number) => {
-      Object.keys(row).forEach((key) => {
-        const item = itemsWithAnswers.find((entry) => entry.inputId === key);
 
-        if (item) {
+  map.forEach((value) => {
+    if (Array.isArray(value.answers)) {
+      value.answers.forEach((answer, index) => {
+        value.items.forEach((item) => {
           reorganizedList.push({
             item,
-            value: row[key] as string | number | boolean | undefined,
+            value: answer[item.inputId],
             index,
-            text: row.text,
-            description: row.description,
-            otherassetDescription: row.otherassetDescription,
+            text: answer.text,
+            description: answer.description,
+            otherassetDescription: answer.otherassetDescription,
           });
-        }
+        });
       });
-    });
+    } else {
+      reorganizedList.push({
+        item: value.items[0],
+        value: value.answers,
+        index: 0,
+      });
+    }
   });
 
   reorganizedList.forEach((x) => {
@@ -263,14 +286,15 @@ const SummaryList: React.FC<Props> = ({
       const validationError = validationErrors?.[x.item.id]?.[x.index]
         ? validationErrors[x.item.id][x.index][x.item?.inputId]
         : undefined;
+
       listItems.push(
         <SummaryListItemComponent
           item={x.item}
-          index={x.index ? x.index + 1 : undefined}
+          index={x.index !== undefined ? x.index + 1 : undefined}
           userDescriptionLabel={
-            x.text || x.description || x.otherassetDescription
+            x.text || x.description || x.otherassetDescription || ""
           }
-          key={`${x.item.id}-${x.index}`}
+          key={`${x.item.inputId}-${x.index}`}
           value={x.value ?? ""}
           changeFromInput={changeFromInput(x.item, x.index)}
           onBlur={onItemBlur(x.item, x.index)}
@@ -422,7 +446,6 @@ SummaryList.propTypes = {
     url: PropTypes.string,
   }),
 };
-
 SummaryList.defaultProps = {
   items: [],
   color: "blue",
