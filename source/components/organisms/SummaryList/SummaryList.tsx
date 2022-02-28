@@ -88,6 +88,7 @@ interface Props {
   help?: Help;
   editable?: boolean;
 }
+
 /**
  * Summary list, that is linked and summarizes values from other input components.
  * The things to summarize is specified in the items prop.
@@ -229,13 +230,24 @@ const SummaryList: React.FC<Props> = ({
         "inputSelectValue": "arrayNumber",
         ...
   ]
-*/
-  const map = new Map();
+  */
+  type Answer = {
+    otherassetDescription?: string;
+    text?: string;
+    description?: string;
+  } & Record<string, string | boolean | number>;
+
+  interface List {
+    items: SummaryListItem[];
+    answers: Answer[] | string | number | boolean;
+  }
+
+  const map: Map<string, List> = new Map();
   itemsWithAnswers.forEach((item: SummaryListItem) => {
     if (!map.has(item.id)) {
       map.set(item.id, {
         items: [item],
-        answers: answers[item.id],
+        answers: answers[item.id] ?? "",
       });
     } else {
       map.get(item.id).items.push(item);
@@ -243,12 +255,11 @@ const SummaryList: React.FC<Props> = ({
   });
 
   /**
-   * Work backwards, given the answers, Map the answer
-   * towards its component
+   * Join answer with its component
    */
   type Item = {
     item: SummaryListItem;
-    value?: string | number | boolean;
+    value?: string | boolean | number;
     index: number;
     otherassetDescription?: string;
     text?: string;
@@ -263,7 +274,7 @@ const SummaryList: React.FC<Props> = ({
         value.items.forEach((item) => {
           reorganizedList.push({
             item,
-            value: answer[item.inputId],
+            value: answer[item.inputId ?? ""],
             index,
             text: answer.text,
             description: answer.description,
@@ -280,10 +291,15 @@ const SummaryList: React.FC<Props> = ({
     }
   });
 
+  const isValid = (itemId: string, itemIndex: number) => {
+    if (validationErrors?.hasOwnProperty(itemId)) {
+      return validationErrors[itemId][itemIndex];
+    }
+  };
   reorganizedList.forEach((x) => {
     if (["arrayNumber", "arrayText", "arrayDate"].includes(x.item.type)) {
       // in this case we have some answers from a repeater field, and need to loop over and show each one
-      const validationError = validationErrors?.[x.item.id]?.[x.index]
+      const validationError = validationErrors?.[x.item.id]?.[x.index ?? 0]
         ? validationErrors[x.item.id][x.index][x.item?.inputId]
         : undefined;
 
@@ -292,7 +308,7 @@ const SummaryList: React.FC<Props> = ({
           item={x.item}
           index={x.index !== undefined ? x.index + 1 : undefined}
           userDescriptionLabel={
-            x.text || x.description || x.otherassetDescription || ""
+            x.text || x.description || x.otherassetDescription
           }
           key={`${x.item.inputId}-${x.index}`}
           value={x.value ?? ""}
