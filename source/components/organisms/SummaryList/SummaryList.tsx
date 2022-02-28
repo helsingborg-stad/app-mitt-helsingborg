@@ -291,11 +291,6 @@ const SummaryList: React.FC<Props> = ({
     }
   });
 
-  const isValid = (itemId: string, itemIndex: number) => {
-    if (validationErrors?.hasOwnProperty(itemId)) {
-      return validationErrors[itemId][itemIndex];
-    }
-  };
   reorganizedList.forEach((x) => {
     if (["arrayNumber", "arrayText", "arrayDate"].includes(x.item.type)) {
       // in this case we have some answers from a repeater field, and need to loop over and show each one
