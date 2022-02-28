@@ -250,7 +250,7 @@ const SummaryList: React.FC<Props> = ({
         answers: answers[item.id] ?? "",
       });
     } else {
-      map.get(item.id).items.push(item);
+      map.get(item.id)?.items.push(item);
     }
   });
 
