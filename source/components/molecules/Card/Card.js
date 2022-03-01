@@ -95,7 +95,7 @@ const CardSubTitle = styled(Text)`
 
 const CardText = styled(Text)`
   padding: 0;
-  font-size: ${(props) => props.theme.fontSizes[3]}px;
+  font-size: ${(props) => props.fontSize ?? props.theme.fontSizes[3]}px;
   ${(props) => props.italic && `color: ${props.theme.colors.neutrals[3]};`}
   ${(props) => props.mt && `margin-top: ${8 * props.mt}px;`}
 `;

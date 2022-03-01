@@ -241,6 +241,9 @@ const computeCaseCardComponent = (
       ? getUnapprovedCompletionDescriptions(completions)
       : [];
 
+  const completionDuedate =
+    caseData?.details?.workflow?.application?.completionduedate || "";
+
   return (
     <CaseCard
       colorSchema={colorSchema}
@@ -262,6 +265,7 @@ const computeCaseCardComponent = (
       onButtonClick={isClosed ? toggleModal : buttonProps.onClick}
       buttonIconName={isClosed ? "remove-red-eye" : "arrow-forward"}
       completions={unApprovedCompletionDescriptions}
+      completionDuedate={completionDuedate}
     />
   );
 };
