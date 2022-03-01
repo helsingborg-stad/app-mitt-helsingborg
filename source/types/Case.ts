@@ -22,6 +22,7 @@ export enum ApplicationStatusType {
   CLOSED_REJECTED_VIVA = "closed:rejected:viva",
   NOT_STARTED_VIVA = "notStarted:viva",
   NEW_APPLICATION = "new:application",
+  NEW_APPLICATION_ONGOING = "new:application:ongoing",
 }
 
 export type PersonRole = "applicant" | "coApplicant" | "children";

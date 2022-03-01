@@ -19,12 +19,15 @@ const {
   ACTIVE_ONGOING_RANDOM_CHECK,
   ACTIVE_COMPLETION_REQUIRED_VIVA,
   ACTIVE_ONGOING_COMPLETION,
+  NEW_APPLICATION,
+  NEW_APPLICATION_ONGOING,
 } = ApplicationStatusType;
 
 enum DIALOG_TEMPLATE {
   MAIN_STEP = "mainStep",
   MAIN_STEP_COMPLETIONS = "mainStep:completions",
   SUB_STEP = "subStep",
+  NEW_APPLICATION_STEP = "new:application",
 }
 
 interface DialogButtons {
@@ -49,6 +52,10 @@ const dialogText: Record<DIALOG_TEMPLATE, DialogText> = {
   [DIALOG_TEMPLATE.SUB_STEP]: {
     title: "Vill du stänga fönster utan att spara inmatad uppgift?",
     body: "",
+  },
+  [DIALOG_TEMPLATE.NEW_APPLICATION_STEP]: {
+    title: "Vill du stänga formuläret?",
+    body: "Formuläret sparas och du kan fortsätta vid ett senare tillfälle.",
   },
 };
 
@@ -113,6 +120,8 @@ function Step({
   const isDirtySubStep =
     JSON.stringify(answers) !== JSON.stringify(answerSnapshot) && isSubstep;
 
+  console.log("Status", status);
+
   const isCompletion = [
     ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
     ACTIVE_ONGOING_RANDOM_CHECK,
@@ -120,9 +129,17 @@ function Step({
     ACTIVE_ONGOING_COMPLETION,
   ].includes(status.type);
 
-  const initialDialogTemplate = isCompletion
-    ? DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS
-    : DIALOG_TEMPLATE.MAIN_STEP;
+  const isNew = [NEW_APPLICATION, NEW_APPLICATION_ONGOING].includes(
+    status.type
+  );
+
+  let initialDialogTemplate = DIALOG_TEMPLATE.MAIN_STEP;
+
+  if (isCompletion) {
+    initialDialogTemplate = DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS;
+  } else if (isNew) {
+    initialDialogTemplate = DIALOG_TEMPLATE.NEW_APPLICATION_STEP;
+  }
 
   const [dialogIsVisible, setDialogIsVisible] = useState(false);
   const [dialogTemplate, setDialogTemplate] = useState(initialDialogTemplate);
@@ -173,6 +190,17 @@ function Step({
       {
         text: "Ja",
         clickHandler: navigateToMainForm,
+      },
+    ],
+    [DIALOG_TEMPLATE.NEW_APPLICATION_STEP]: [
+      {
+        text: "Nej",
+        color: "neutral" as PrimaryColor,
+        clickHandler: closeDialog,
+      },
+      {
+        text: "Ja",
+        clickHandler: closeDialogAndForm,
       },
     ],
   }[dialogTemplate];
