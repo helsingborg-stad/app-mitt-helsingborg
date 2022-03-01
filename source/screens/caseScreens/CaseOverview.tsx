@@ -159,6 +159,8 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   );
 
   const completions = caseData?.details?.completions?.requested || [];
+  const completionDuedate =
+    caseData?.details?.workflow?.application?.completionduedate || "";
 
   const statusType = caseData?.status?.type || "";
   const isNotStarted = statusType.includes(NOT_STARTED);
@@ -327,6 +329,7 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
       onButtonClick={buttonProps.onClick}
       buttonColorScheme={buttonProps.colorSchema || colorSchema}
       completions={unApprovedCompletionDescriptions}
+      completionDuedate={completionDuedate}
     />
   );
 };
