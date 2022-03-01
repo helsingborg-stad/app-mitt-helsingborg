@@ -52,7 +52,6 @@ export interface Period {
 
 export interface Application {
   periodstartdate: string;
-  completionduedate: string;
 }
 
 export interface Workflow {
