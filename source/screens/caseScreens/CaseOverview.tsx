@@ -9,6 +9,7 @@ import React, {
 import { Animated, Easing, RefreshControl } from "react-native";
 import styled from "styled-components/native";
 import { useFocusEffect } from "@react-navigation/native";
+import moment from "moment";
 import { hasGeneratedSymmetricKey } from "../../services/encryption/EncryptionService";
 import { Modal } from "../../components/molecules/Modal";
 
@@ -159,8 +160,9 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   );
 
   const completions = caseData?.details?.completions?.requested || [];
-  const completionDuedate =
-    caseData?.details?.workflow?.application?.completionduedate || "";
+  const completionDuedate = caseData?.details?.completions?.dueDate
+    ? moment(caseData?.details?.completions?.dueDate).format("YYYY-MM-DD")
+    : "";
 
   const statusType = caseData?.status?.type || "";
   const isNotStarted = statusType.includes(NOT_STARTED);

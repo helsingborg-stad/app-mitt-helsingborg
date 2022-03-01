@@ -9,6 +9,7 @@ import { View, Animated, Easing, ScrollView } from "react-native";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import { useIsFocused } from "@react-navigation/native";
+import moment from "moment";
 import { CaseState } from "../../store/CaseContext";
 import FormContext from "../../store/FormContext";
 import icons from "../../helpers/Icons";
@@ -241,8 +242,9 @@ const computeCaseCardComponent = (
       ? getUnapprovedCompletionDescriptions(completions)
       : [];
 
-  const completionDuedate =
-    caseData?.details?.workflow?.application?.completionduedate || "";
+  const completionDuedate = caseData?.details?.completions?.dueDate
+    ? moment(caseData?.details?.completions?.dueDate).format("YYYY-MM-DD")
+    : "";
 
   return (
     <CaseCard
