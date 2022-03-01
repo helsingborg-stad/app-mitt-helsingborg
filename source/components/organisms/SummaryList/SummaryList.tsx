@@ -89,6 +89,26 @@ interface Props {
   editable?: boolean;
 }
 
+type Answer = {
+  otherassetDescription?: string;
+  text?: string;
+  description?: string;
+} & Record<string, string | boolean | number>;
+
+interface List {
+  items: SummaryListItem[];
+  answers: Answer[] | string | number | boolean;
+}
+
+type Item = {
+  item: SummaryListItem;
+  value?: string | boolean | number;
+  index: number;
+  otherassetDescription?: string;
+  text?: string;
+  description?: string;
+} & Record<string, unknown>;
+
 /**
  * Summary list, that is linked and summarizes values from other input components.
  * The things to summarize is specified in the items prop.
@@ -231,17 +251,6 @@ const SummaryList: React.FC<Props> = ({
         ...
   ]
   */
-  type Answer = {
-    otherassetDescription?: string;
-    text?: string;
-    description?: string;
-  } & Record<string, string | boolean | number>;
-
-  interface List {
-    items: SummaryListItem[];
-    answers: Answer[] | string | number | boolean;
-  }
-
   const map: Map<string, List> = new Map();
   itemsWithAnswers.forEach((item: SummaryListItem) => {
     if (!map.has(item.id)) {
@@ -257,15 +266,6 @@ const SummaryList: React.FC<Props> = ({
   /**
    * Join answer with its component
    */
-  type Item = {
-    item: SummaryListItem;
-    value?: string | boolean | number;
-    index: number;
-    otherassetDescription?: string;
-    text?: string;
-    description?: string;
-  } & Record<string, unknown>;
-
   const reorganizedList: Item[] = [];
 
   map.forEach((value) => {
@@ -291,74 +291,85 @@ const SummaryList: React.FC<Props> = ({
     }
   });
 
-  reorganizedList.forEach((x) => {
-    if (["arrayNumber", "arrayText", "arrayDate"].includes(x.item.type)) {
+  reorganizedList.forEach((listEntry) => {
+    if (
+      ["arrayNumber", "arrayText", "arrayDate"].includes(listEntry.item.type)
+    ) {
       // in this case we have some answers from a repeater field, and need to loop over and show each one
-      const validationError = validationErrors?.[x.item.id]?.[x.index ?? 0]
-        ? validationErrors[x.item.id][x.index][x.item?.inputId]
+      const validationError = validationErrors?.[listEntry.item.id]?.[
+        listEntry.index ?? 0
+      ]
+        ? validationErrors[listEntry.item.id][listEntry.index][
+            listEntry.item?.inputId
+          ]
         : undefined;
 
       listItems.push(
         <SummaryListItemComponent
-          item={x.item}
-          index={x.index !== undefined ? x.index + 1 : undefined}
-          userDescriptionLabel={
-            x.text || x.description || x.otherassetDescription
+          item={listEntry.item}
+          index={
+            listEntry.index !== undefined ? listEntry.index + 1 : undefined
           }
-          key={`${x.item.inputId}-${x.index}`}
-          value={x.value ?? ""}
-          changeFromInput={changeFromInput(x.item, x.index)}
-          onBlur={onItemBlur(x.item, x.index)}
-          removeItem={removeListItem(x.item, x.index)}
+          userDescriptionLabel={
+            listEntry.text ||
+            listEntry.description ||
+            listEntry.otherassetDescription
+          }
+          key={`${listEntry.item.inputId}-${listEntry.index}`}
+          value={listEntry.value ?? ""}
+          changeFromInput={changeFromInput(listEntry.item, listEntry.index)}
+          onBlur={onItemBlur(listEntry.item, listEntry.index)}
+          removeItem={removeListItem(listEntry.item, listEntry.index)}
           colorSchema={colorSchema}
           validationError={validationError}
-          category={x.item.category}
+          category={listEntry.item.category}
         />
       );
-      if (x.item.type === "arrayNumber") {
-        const numericValue: string | number = Number(x.value);
+      if (listEntry.item.type === "arrayNumber") {
+        const numericValue: string | number = Number(listEntry.value);
         addToSum(numericValue);
       }
     }
 
     if (
       ["editableListText", "editableListNumber", "editableListDate"].includes(
-        x.item.type
+        listEntry.item.type
       ) &&
-      x.item.inputId &&
-      answers?.[x.item.id]?.[x.item.inputId]
+      listEntry.item.inputId &&
+      answers?.[listEntry.item.id]?.[listEntry.item.inputId]
     ) {
       listItems.push(
         <SummaryListItemComponent
-          item={x.item}
-          key={`${x.item.id}`}
-          value={answers[x.item.id][x.item.inputId]}
-          changeFromInput={changeFromInput(x.item)}
-          onBlur={onItemBlur(x.item)}
-          removeItem={removeListItem(x.item)}
+          item={listEntry.item}
+          key={`${listEntry.item.id}`}
+          value={answers[listEntry.item.id][listEntry.item.inputId]}
+          changeFromInput={changeFromInput(listEntry.item)}
+          onBlur={onItemBlur(listEntry.item)}
+          removeItem={removeListItem(listEntry.item)}
           colorSchema={colorSchema}
           validationError={
-            validationErrors?.[x.item.id]?.[x.item.inputId]
-              ? validationErrors?.[x.item.id]?.[x.item.inputId]
+            validationErrors?.[listEntry.item.id]?.[listEntry.item.inputId]
+              ? validationErrors?.[listEntry.item.id]?.[listEntry.item.inputId]
               : undefined
           }
-          category={x.item.category}
+          category={listEntry.item.category}
         />
       );
-      if (x.item.type === "editableListNumber") {
-        const numericValue: number = answers[x.item.id][x.item.inputId];
+      if (listEntry.item.type === "editableListNumber") {
+        const numericValue: number =
+          answers[listEntry.item.id][listEntry.item.inputId];
         addToSum(numericValue);
       }
     }
-    if (["text", "number", "date", "checkbox"].includes(x.item.type)) {
+    if (["text", "number", "date", "checkbox"].includes(listEntry.item.type)) {
       listItems.push(
         <SummaryListItemComponent
-          item={x.item}
-          key={`${x.item.id}`}
-          value={answers[x.item.id]}
-          changeFromInput={changeFromInput(x.item)}
-          onBlur={onItemBlur(x.item)}
-          removeItem={removeListItem(x.item)}
+          item={listEntry.item}
+          key={`${listEntry.item.id}`}
+          value={answers[listEntry.item.id]}
+          changeFromInput={changeFromInput(listEntry.item)}
+          onBlur={onItemBlur(listEntry.item)}
+          removeItem={removeListItem(listEntry.item)}
           colorSchema={colorSchema}
           validationError={
             validationErrors
@@ -367,14 +378,14 @@ const SummaryList: React.FC<Props> = ({
                     string,
                     { isValid: boolean; message: string }
                   >
-                )[x.item.id]
+                )[listEntry.item.id]
               : undefined
           }
-          category={x.item.category}
+          category={listEntry.item.category}
         />
       );
-      if (x.item.type === "number") {
-        const numericValue: number = answers[x.item.id];
+      if (listEntry.item.type === "number") {
+        const numericValue: number = answers[listEntry.item.id];
         addToSum(numericValue);
       }
     }
