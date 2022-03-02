@@ -120,8 +120,6 @@ function Step({
   const isDirtySubStep =
     JSON.stringify(answers) !== JSON.stringify(answerSnapshot) && isSubstep;
 
-  console.log("Status", status);
-
   const isCompletion = [
     ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
     ACTIVE_ONGOING_RANDOM_CHECK,
