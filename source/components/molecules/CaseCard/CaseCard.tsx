@@ -115,7 +115,7 @@ const CaseCard = ({
       {completions.length > 0 && <Card.BulletList values={completions} />}
 
       {completionDuedate && (
-        <Card.Text mt={1.5} colorSchema="neutral" fontSize={12}>
+        <Card.Text mt={1} colorSchema="neutral" fontSize={12}>
           Skicka in senast: <Text type="a">{completionDuedate}</Text>
         </Card.Text>
       )}
