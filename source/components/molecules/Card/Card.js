@@ -122,6 +122,10 @@ const CardProgressbar = styled(Progressbar)`
   height: 7px;
 `;
 
+const ProgressBarContainer = styled.View`
+  ${(props) => props.mt && `margin-top: ${8 * props.mt}px;`}
+`;
+
 /**
  * Card component
  * @param {props} props
@@ -300,11 +304,14 @@ Card.Progressbar = ({
   firstChild,
   lastChild,
   colorSchema,
+  mt = 0,
   ...props
 }) => (
-  <Outset lastChild={lastChild} firstChild={firstChild}>
-    <CardProgressbar rounded colorSchema={colorSchema} {...props} />
-  </Outset>
+  <ProgressBarContainer mt={mt}>
+    <Outset lastChild={lastChild} firstChild={firstChild}>
+      <CardProgressbar rounded colorSchema={colorSchema} {...props} />
+    </Outset>
+  </ProgressBarContainer>
 );
 
 /**
