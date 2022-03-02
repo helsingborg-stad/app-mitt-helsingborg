@@ -225,6 +225,10 @@ function Step({
     });
   };
 
+  const showCloseFormButton = !actions.some(
+    ({ type = "" }) => type === "close"
+  );
+
   return (
     <StepContainer>
       <KeyboardAwareScrollView
@@ -323,6 +327,7 @@ function Step({
 
       <StepBackNavigation
         showBackButton={isBackBtnVisible && isFormEditable}
+        showCloseButton={showCloseFormButton}
         primary={!isSubstep}
         isSubstep={isSubstep}
         onBack={backButtonBehavior}
