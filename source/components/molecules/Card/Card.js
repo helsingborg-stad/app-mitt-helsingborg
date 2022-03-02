@@ -268,7 +268,14 @@ Card.Button = ({
   ...props
 }) => (
   <Outset lastChild={lastChild} firstChild={firstChild}>
-    <CardButton variant="link" z={0} colorSchema={colorSchema} block {...props}>
+    <CardButton
+      mt={mt}
+      variant="link"
+      z={0}
+      colorSchema={colorSchema}
+      block
+      {...props}
+    >
       {children}
     </CardButton>
   </Outset>

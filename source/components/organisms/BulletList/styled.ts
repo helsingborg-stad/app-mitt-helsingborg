@@ -11,7 +11,6 @@ const Background = styled.View<BackgroundProps>`
   width: 100%;
   background: ${({ color }) => color};
   border-radius: 10px;
-  margin-bottom: 24px;
 `;
 
 interface BulletsContainerProps {

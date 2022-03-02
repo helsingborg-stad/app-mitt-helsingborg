@@ -111,16 +111,20 @@ const CaseCard = ({
         </Card.Text>
       )}
 
+      {completions.length > 0 && <Card.BulletList values={completions} />}
+
       {completionDuedate && (
         <Card.Text mt={1.5} colorSchema="neutral" fontSize={12}>
           Skicka in senast: <Text type="a">{completionDuedate}</Text>
         </Card.Text>
       )}
 
-      {completions.length > 0 && <Card.BulletList values={completions} />}
-
       {showButton && (
-        <Card.Button onClick={onButtonClick} colorSchema={buttonColorScheme}>
+        <Card.Button
+          mt={1}
+          onClick={onButtonClick}
+          colorSchema={buttonColorScheme}
+        >
           <Text>{buttonText}</Text>
           <Icon name={buttonIconName || "arrow-forward"} />
         </Card.Button>
