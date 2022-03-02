@@ -92,6 +92,7 @@ const CaseCard = ({
         <Card.Progressbar
           currentStep={currentStep}
           totalStepNumber={totalSteps}
+          mt={1}
         />
       )}
 
