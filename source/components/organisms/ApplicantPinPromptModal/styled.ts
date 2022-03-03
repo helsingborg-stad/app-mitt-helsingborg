@@ -22,8 +22,8 @@ interface DialogTextProps {
   fontWeight?: string;
 }
 const DialogText = styled.Text<DialogTextProps>`
-  font-size: ${({ fontSize }) => fontSize ?? 16};
-  font-weight: ${({ fontWeight }) => fontWeight ?? "normal"};
+  font-size: ${({ fontSize = 16 }) => `${fontSize}px`};
+  font-weight: ${({ fontWeight = "normal" }) => fontWeight};
   text-align: center;
   padding-bottom: 12px;
 `;
