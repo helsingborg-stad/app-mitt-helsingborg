@@ -11,14 +11,8 @@ import styled from "styled-components/native";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import { hasGeneratedSymmetricKey } from "../../services/encryption/EncryptionService";
-import { Modal } from "../../components/molecules/Modal";
 
-import Wrapper from "../../components/molecules/Dialog/Wrapper";
-import Heading from "../../components/atoms/Heading";
-import Body from "../../components/molecules/Dialog/Body";
-import BackgroundBlur from "../../components/molecules/Dialog/BackgroundBlur";
 import FloatingButton from "../../components/molecules/FloatingButton";
-import Button from "../../components/atoms/Button";
 import icons from "../../helpers/Icons";
 import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
 import { Text, Icon } from "../../components/atoms";
@@ -39,6 +33,9 @@ import { wait } from "../../helpers/Misc";
 import { Case, ApplicationStatusType } from "../../types/Case";
 import { Form } from "../../types/FormTypes";
 
+import CoSignModal from "./modals/CoSignModal";
+import ConfirmationThanksModal from "./modals/ConfirmationThanksModal";
+
 const {
   ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
   ACTIVE_COMPLETION_REQUIRED_VIVA,
@@ -52,45 +49,16 @@ const {
   ACTIVE,
 } = ApplicationStatusType;
 
-const ButtonContainer = styled.View`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  margin-top: 25px;
-  width: 100%;
-`;
-
-const PopupButton = styled(Button)`
-  border: 0;
-  margin-bottom: 12px;
-`;
-
 const Container = styled.ScrollView`
   flex: 1;
   padding-left: 16px;
   padding-right: 16px;
 `;
 
-const DialogContainer = styled(Body)`
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  padding: 32px;
-`;
-
-const StyledText = styled(Text)`
-  margin-bottom: 8px;
-`;
-
 const ListHeading = styled(Text)`
   margin-left: 4px;
   margin-top: 24px;
   margin-bottom: 8px;
-`;
-
-const CardMessageBody = styled(Card.Body)`
-  background-color: ${(props) => props.theme.colors.neutrals[5]};
 `;
 
 const colorSchema = "red";
@@ -549,111 +517,30 @@ function CaseOverview(props): JSX.Element {
     computeCaseCardComponent(caseData, navigation, authContext, null)
   );
 
-  const mainApplicantData = dialogState.caseData?.persons?.find(
-    (person) => person.role === "applicant"
-  );
   const coApplicantData = dialogState.caseData?.persons?.find(
     (person) => person.role === "coApplicant"
   );
 
+  const closeModal = (modal: string) => {
+    setDialogState((oldState) => ({
+      ...oldState,
+      [modal]: false,
+    }));
+  };
+
   return (
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
-      <Modal
+      <CoSignModal
         visible={dialogState.showCoSignModal}
-        hide={() =>
-          setDialogState({
-            ...dialogState,
-            showCoSignModal: false,
-          })
-        }
-        transparent
-        presentationStyle="overFullScreen"
-        animationType="fade"
-        statusBarTranslucent
-      >
-        <Wrapper>
-          <DialogContainer>
-            <Heading type="h4">Bekräftelse behövs</Heading>
-            <Text align="center">
-              {"\n"}För att kunna starta ansökan måste{" "}
-              {coApplicantData?.firstName} bekräfta att ni söker tillsammans.
-              {"\n\n"}Bekräfta så här:{"\n\n"}
-              1. {coApplicantData?.firstName} installerar Mitt Helsingborg på
-              sin telefon.{"\n"}
-              2. {coApplicantData?.firstName} loggar in med sitt BankID i appen.
-              {"\n"}
-              3. När {coApplicantData?.firstName} har loggat in är bekräftelse
-              gjord och det går att starta ansökan.{"\n"}
-            </Text>
-            <ButtonContainer>
-              <PopupButton
-                onClick={() =>
-                  setDialogState({
-                    ...dialogState,
-                    showCoSignModal: false,
-                  })
-                }
-                block
-                colorSchema="red"
-              >
-                <Text>Okej</Text>
-              </PopupButton>
-            </ButtonContainer>
-          </DialogContainer>
-          <BackgroundBlur
-            blurType="light"
-            blurAmount={15}
-            reducedTransparencyFallbackColor="white"
-          />
-        </Wrapper>
-      </Modal>
-      <Modal
+        firstName={coApplicantData?.firstName ?? ""}
+        onCloseModal={() => closeModal("showCoSignModal")}
+      />
+      <ConfirmationThanksModal
         visible={dialogState.showConfirmationThanksModal}
-        hide={() =>
-          setDialogState({
-            ...dialogState,
-            showConfirmationThanksModal: false,
-          })
-        }
-        transparent
-        presentationStyle="overFullScreen"
-        animationType="fade"
-        statusBarTranslucent
-      >
-        <Wrapper>
-          <DialogContainer>
-            <Heading type="h4">Tack, för din bekräftelse!</Heading>
-            <StyledText align="center">
-              Genom att logga in har du bekräftat att du och{" "}
-              {mainApplicantData?.firstName} söker ekonomiskt bistånd
-              tillsammans.
-            </StyledText>
-            <Text align="center">
-              {mainApplicantData?.firstName} kan nu starta ansökan.
-            </Text>
-            <ButtonContainer>
-              <PopupButton
-                onClick={() =>
-                  setDialogState({
-                    ...dialogState,
-                    showConfirmationThanksModal: false,
-                  })
-                }
-                block
-                colorSchema="red"
-              >
-                <Text>Okej</Text>
-              </PopupButton>
-            </ButtonContainer>
-          </DialogContainer>
-          <BackgroundBlur
-            blurType="light"
-            blurAmount={15}
-            reducedTransparencyFallbackColor="white"
-          />
-        </Wrapper>
-      </Modal>
+        firstName={coApplicantData?.firstName ?? ""}
+        onCloseModal={() => closeModal("showConfirmationThanksModal")}
+      />
       <Container
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
