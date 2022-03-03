@@ -20,7 +20,7 @@ const {
   ACTIVE_COMPLETION_REQUIRED_VIVA,
   ACTIVE_ONGOING_COMPLETION,
   NEW_APPLICATION,
-  NEW_APPLICATION_ONGOING,
+  ACTIVE_ONGOING_NEW_APPLICATION,
 } = ApplicationStatusType;
 
 enum DIALOG_TEMPLATE {
@@ -127,7 +127,7 @@ function Step({
     ACTIVE_ONGOING_COMPLETION,
   ].includes(status.type);
 
-  const isNew = [NEW_APPLICATION, NEW_APPLICATION_ONGOING].includes(
+  const isNew = [NEW_APPLICATION, ACTIVE_ONGOING_NEW_APPLICATION].includes(
     status.type
   );
 
