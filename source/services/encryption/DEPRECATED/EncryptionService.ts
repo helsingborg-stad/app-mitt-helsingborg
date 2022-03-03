@@ -139,7 +139,7 @@ export async function decryptWithAesKey(
 
   if (!aesEncryptor) {
     throw new EncryptionException(
-      EncryptionErrorStatus.MISSING_AES_KEY,
+      EncryptionErrorStatus.DEPRECATED_MISSING_AES_KEY,
       "Did not find AES key in storage: The key was either lost or encrypt not called before trying decrypt."
     );
   }

@@ -56,3 +56,14 @@ export function getUserFriendlyAppVersion(): string {
 
   return `v${semver}-${build}${envLetter}-${shortHash}`;
 }
+
+export async function to(
+  promise: Promise<unknown>
+): Promise<[Error?, unknown?]> {
+  try {
+    const value = await promise;
+    return [undefined, value];
+  } catch (error) {
+    return [error as Error, undefined];
+  }
+}
