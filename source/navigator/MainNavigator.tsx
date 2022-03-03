@@ -12,6 +12,7 @@ import { Modal } from "react-native";
 import AuthContext from "../store/AuthContext";
 import Card from "../components/molecules/Card/Card";
 import Text from "../components/atoms/Text/Text";
+import { BackgroundBlurWrapper } from "../components/atoms/BackgroundBlur";
 import useTouchActivity, {
   UseTouchParameters,
 } from "../hooks/useTouchActivity";
@@ -35,17 +36,6 @@ const forFade = ({ current }: ForFade) => ({
 
 const FlexWrapper = styled.View`
   flex: 1;
-`;
-const BackgroundBlur = styled.View`
-  position: absolute;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 0px;
-  background-color: rgba(0, 0, 0, 0.35);
-  margin: 0;
 `;
 
 const PopupContainer = styled.View`
@@ -138,7 +128,7 @@ const CustomNavigator = ({
       presentationStyle="overFullScreen"
       animationType="fade"
     >
-      <BackgroundBlur>
+      <BackgroundBlurWrapper>
         <PopupContainer>
           <ContentContainer>
             <Card colorSchema="neutral">
@@ -161,7 +151,7 @@ const CustomNavigator = ({
             </Card>
           </ContentContainer>
         </PopupContainer>
-      </BackgroundBlur>
+      </BackgroundBlurWrapper>
     </Modal>
   );
 

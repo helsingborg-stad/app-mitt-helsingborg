@@ -4,6 +4,7 @@ import { Alert, TouchableOpacity } from "react-native";
 import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker";
 import styled from "styled-components/native";
 import { Text, Button, Icon, Label } from "../../atoms";
+import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import { Modal, useModal } from "../Modal";
 import { getBlob, uploadFile } from "../../../helpers/FileUpload";
 import {
@@ -25,16 +26,6 @@ const ButtonContainer = styled.View`
   align-items: center;
   margin-top: 25px;
   width: 100%;
-`;
-const BackgroundBlur = styled.View`
-  position: absolute;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 0px;
-  background-color: rgba(0, 0, 0, 0.25);
 `;
 
 const PopupContainer = styled.View<{ colorSchema: PrimaryColor }>`
@@ -246,7 +237,7 @@ const ImageUploader: React.FC<Props> = ({
         transparent
         animationType="fade"
       >
-        <BackgroundBlur>
+        <BackgroundBlurWrapper>
           <PopupContainer colorSchema={validColorSchema}>
             <Row>
               <PopupLabel colorSchema={validColorSchema}>
@@ -285,7 +276,7 @@ const ImageUploader: React.FC<Props> = ({
               <Text>Bildbibliotek</Text>
             </PopupButton>
           </PopupContainer>
-        </BackgroundBlur>
+        </BackgroundBlurWrapper>
       </Modal>
     </>
   );
