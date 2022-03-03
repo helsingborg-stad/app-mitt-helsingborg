@@ -15,8 +15,8 @@ import { Modal } from "../../components/molecules/Modal";
 
 import Wrapper from "../../components/molecules/Dialog/Wrapper";
 import Heading from "../../components/atoms/Heading";
+import { BackgroundBlur } from "../../components/atoms/BackgroundBlur";
 import Body from "../../components/molecules/Dialog/Body";
-import BackgroundBlur from "../../components/molecules/Dialog/BackgroundBlur";
 import FloatingButton from "../../components/molecules/FloatingButton";
 import Button from "../../components/atoms/Button";
 import icons from "../../helpers/Icons";
