@@ -4578,11 +4578,6 @@ eventemitter3@^4.0.0:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
 
-events@^3.2.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
-  integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
-
 exec-sh@^0.3.2:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/exec-sh/-/exec-sh-0.3.6.tgz#ff264f9e325519a60cb5e273692943483cca63bc"
@@ -8450,13 +8445,6 @@ react-native-webview@^11.0.2:
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
-
-react-native-youtube-iframe@^1.4.0:
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/react-native-youtube-iframe/-/react-native-youtube-iframe-1.4.2.tgz#0ce775958ae0dd615f5fcc6b5eb47ab5037bf0ff"
-  integrity sha512-QsXn1WRXi9JHb5yCyPMpZXw87GA0iovGyKqbFc1ElwM7UrIIFZiE4GEMF+/E0Fs1Ol89n0PT37KiL8TTm9xVbA==
-  dependencies:
-    events "^3.2.0"
 
 react-native@0.64.1:
   version "0.64.1"
