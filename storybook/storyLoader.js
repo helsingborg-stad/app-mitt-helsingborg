@@ -58,7 +58,6 @@ function loadStories() {
   require("../source/containers/Form/Form.stories");
   require("../source/containers/FormField/FormField.stories");
   require("../source/helpers/error-handler/ErrorHandler.stories");
-  require("../source/services/encryption/EncryptionService.stories");
 }
 
 const stories = [

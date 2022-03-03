@@ -10,7 +10,7 @@ import { Animated, Easing, RefreshControl } from "react-native";
 import styled from "styled-components/native";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
-import { hasGeneratedSymmetricKey } from "../../services/encryption/EncryptionService";
+import { hasGeneratedSymmetricKey } from "../../services/encryption/DEPRECATED/EncryptionService";
 import { Modal } from "../../components/molecules/Modal";
 
 import Wrapper from "../../components/molecules/Dialog/Wrapper";

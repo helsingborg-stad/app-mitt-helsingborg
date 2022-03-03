@@ -4,16 +4,16 @@ import {
   AnsweredForm,
   EncryptedAnswersWrapper,
   PossiblyEncryptedAnswers,
-} from "../../types/Case";
+} from "../../../types/Case";
 import {
   CryptoNumber,
   EncryptionErrorStatus,
   EncryptionType,
   PossiblySerializedCryptoNumber,
   SerializedCryptoNumber,
-} from "../../types/Encryption";
+} from "../../../types/Encryption";
 
-import StorageService from "../StorageService";
+import StorageService from "../../StorageService";
 
 import {
   UserInterface,

@@ -1,6 +1,6 @@
 import React, { useContext, useReducer, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
-import { getStoredSymmetricKey } from "../services/encryption/EncryptionHelper";
+import { getStoredSymmetricKey } from "../services/encryption/DEPRECATED/EncryptionHelper";
 import { filterAsync } from "../helpers/Objects";
 import { Case } from "../types/Case";
 import { Form } from "../types/FormTypes";

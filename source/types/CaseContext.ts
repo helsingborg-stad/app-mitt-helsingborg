@@ -1,4 +1,4 @@
-import { UserInterface } from "../services/encryption/EncryptionHelper";
+import { UserInterface } from "../services/encryption/DEPRECATED/EncryptionHelper";
 import { FormPosition, Case, AnsweredForm } from "./Case";
 import { EncryptionDetails } from "./Encryption";
 import { Form, Question } from "./FormTypes";
