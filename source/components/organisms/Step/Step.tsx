@@ -40,23 +40,31 @@ interface DialogText {
   title: string;
   body: string;
 }
-const dialogText: Record<DIALOG_TEMPLATE, DialogText> = {
-  [DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS]: {
-    title: "Vill du stänga formuläret?",
-    body: "Formuläret sparas och du kan fortsätta fylla i det fram till sista dagen för inlämning.",
-  },
-  [DIALOG_TEMPLATE.MAIN_STEP]: {
-    title: "Vill du avbryta ansökan",
-    body: "Ansökan sparas i 3 dagar. Efter det raderas den och du får starta en ny.",
-  },
-  [DIALOG_TEMPLATE.SUB_STEP]: {
-    title: "Vill du stänga fönster utan att spara inmatad uppgift?",
-    body: "",
-  },
-  [DIALOG_TEMPLATE.NEW_APPLICATION_STEP]: {
-    title: "Vill du stänga formuläret?",
-    body: "Formuläret sparas och du kan fortsätta vid ett senare tillfälle.",
-  },
+
+const getDialogText = (template: DIALOG_TEMPLATE): DialogText => {
+  switch (template) {
+    case DIALOG_TEMPLATE.MAIN_STEP:
+    case DIALOG_TEMPLATE.NEW_APPLICATION_STEP:
+      return {
+        title: "Vill du avbryta ansökan",
+        body: "Ansökan sparas i 3 dagar. Efter det raderas den och du får starta en ny.",
+      };
+    case DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS:
+      return {
+        title: "Vill du stänga formuläret?",
+        body: "Formuläret sparas och du kan fortsätta fylla i det fram till sista dagen för inlämning.",
+      };
+    case DIALOG_TEMPLATE.SUB_STEP:
+      return {
+        title: "Vill du stänga fönster utan att spara inmatad uppgift?",
+        body: "",
+      };
+    default:
+      return {
+        title: "",
+        body: "",
+      };
+  }
 };
 
 const StepContainer = styled.View`
@@ -254,6 +262,7 @@ function Step({
   const showCloseFormButton = !actions.some(
     ({ type = "" }) => type === "close"
   );
+  const dialogText = getDialogText(dialogTemplate);
 
   return (
     <StepContainer>
@@ -266,8 +275,8 @@ function Step({
       >
         <CloseDialog
           visible={dialogIsVisible}
-          title={dialogText[dialogTemplate].title}
-          body={dialogText[dialogTemplate].body}
+          title={dialogText.title}
+          body={dialogText.body}
           buttons={dialogButtons}
         />
         <StepContentContainer>
