@@ -12,18 +12,18 @@ import {
   DialogText,
 } from "./styled";
 
-interface ApplicantPinPromptModalProps {
+interface PinInfoModalProps {
   name: string;
   pin: string;
   visible: boolean;
   onClose: () => void;
 }
-const ApplicantPinPromptModal = ({
+const PinInfoModal = ({
   name,
   pin,
   visible,
   onClose,
-}: ApplicantPinPromptModalProps): JSX.Element => (
+}: PinInfoModalProps): JSX.Element => (
   <Modal
     visible={visible}
     hide={onClose}
@@ -63,4 +63,4 @@ const ApplicantPinPromptModal = ({
   </Modal>
 );
 
-export default ApplicantPinPromptModal;
+export default PinInfoModal;
