@@ -1,12 +1,17 @@
 import styled from "styled-components/native";
 
+import { ThemeType } from "../../../styles/themeHelpers";
+
 const ModalContainer = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
 `;
 
-const DialogContent = styled.View`
+interface DialogContentProps {
+  theme: ThemeType;
+}
+const DialogContent = styled.View<DialogContentProps>`
   width: 80%;
   z-index: 1000;
   display: flex;
