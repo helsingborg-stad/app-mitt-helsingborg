@@ -22,7 +22,6 @@
     "@react-native-community/blur": "^3.6.0",
     "@react-native-community/datetimepicker": "^3.0.8",
     "@react-native-community/masked-view": "^0.1.10",
-    "@react-native-community/progress-view": "^1.2.4",
     "@react-native-community/toolbar-android": "^0.1.0-rc.2",
     "@react-native-picker/picker": "^1.9.4",
     "@react-navigation/bottom-tabs": "^5.11.2",
