@@ -67,6 +67,21 @@ const getDialogText = (template: DIALOG_TEMPLATE): DialogText => {
   }
 };
 
+const getDialogTemplate = (status: string): DIALOG_TEMPLATE => {
+  switch (status) {
+    case ACTIVE_RANDOM_CHECK_REQUIRED_VIVA:
+    case ACTIVE_ONGOING_RANDOM_CHECK:
+    case ACTIVE_COMPLETION_REQUIRED_VIVA:
+    case ACTIVE_ONGOING_COMPLETION:
+      return DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS;
+    case NEW_APPLICATION:
+    case ACTIVE_ONGOING_NEW_APPLICATION:
+      return DIALOG_TEMPLATE.NEW_APPLICATION_STEP;
+    default:
+      return DIALOG_TEMPLATE.MAIN_STEP;
+  }
+};
+
 const StepContainer = styled.View`
   flex: 1;
   background: ${(props) => props.theme.colors.neutrals[7]};
@@ -135,17 +150,7 @@ function Step({
     ACTIVE_ONGOING_COMPLETION,
   ].includes(status.type);
 
-  const isNew = [NEW_APPLICATION, ACTIVE_ONGOING_NEW_APPLICATION].includes(
-    status.type
-  );
-
-  let initialDialogTemplate = DIALOG_TEMPLATE.MAIN_STEP;
-
-  if (isCompletion) {
-    initialDialogTemplate = DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS;
-  } else if (isNew) {
-    initialDialogTemplate = DIALOG_TEMPLATE.NEW_APPLICATION_STEP;
-  }
+  const initialDialogTemplate = getDialogTemplate(status.type);
 
   const [dialogIsVisible, setDialogIsVisible] = useState(false);
   const [dialogTemplate, setDialogTemplate] = useState(initialDialogTemplate);
