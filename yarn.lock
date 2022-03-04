@@ -7849,10 +7849,15 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^2.0.2, prettier@^2.0.5, prettier@^2.4.1:
+prettier@^2.0.2, prettier@^2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.4.1.tgz#671e11c89c14a4cfc876ce564106c4a6726c9f5c"
   integrity sha512-9fbDAXSBcc6Bs1mZrDYb3XKzDLm4EXXL9sC1LqKP5rZkT6KRr/rf9amVUcODVXgguK/isJz0d0hP72WeaKWsvA==
+
+prettier@^2.0.5:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.5.1.tgz#fff75fa9d519c54cf0fce328c1017d94546bc56a"
+  integrity sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg==
 
 pretty-format@^24.9.0:
   version "24.9.0"
@@ -8302,12 +8307,11 @@ react-native-size-matters@^0.3.1:
   resolved "https://registry.yarnpkg.com/react-native-size-matters/-/react-native-size-matters-0.3.1.tgz#24d0cfc335a2c730f6d58bd7b43ea5a41be4b49f"
   integrity sha512-mKOfBLIBFBcs9br1rlZDvxD5+mAl8Gfr5CounwJtxI6Z82rGrMO+Kgl9EIg3RMVf3G855a85YVqHJL2f5EDRlw==
 
-react-native-storybook-loader@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/react-native-storybook-loader/-/react-native-storybook-loader-2.0.4.tgz#37bf37193e69b42a0b2aa0daeed4de8dbfeeae28"
-  integrity sha512-MmBdO7ugBkHEZa4F1qXFgjB7ejURmKGTZ/3o6zXPgUpaoMdh8tT5LLliJH9uOFzh7oY13TfTMZ9HyCa3E/dqLg==
+react-native-storybook-loader@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-storybook-loader/-/react-native-storybook-loader-2.0.5.tgz#9c446a4235ac4f0d45b4f6419f2da9a9c4355255"
+  integrity sha512-9zO0kMv5DYLXJQ1vcjRrxGxsXucA9qiJV/IYtSXnb7gW39qYF93ZXgQRPQ7TKCwSlXMWsju/LXI2GpDtLx4b/Q==
   dependencies:
-    colors "^1.1.2"
     find-up "^4.1.0"
     glob "^7.1.1"
     prettier "^2.0.5"
