@@ -80,7 +80,7 @@ export const uploadImage = async (image: Image) => {
   }
 
   const data: Blob = await getBlob(image.path);
-  const filename = (image.path as string).split("/").pop();
+  const filename = image.filename ?? (image.path as string).split("/").pop();
   const uploadResponse = await uploadFile({
     endpoint: "users/me/attachments",
     fileName: filename,
