@@ -85,7 +85,7 @@ const config = {
     "import/no-extraneous-dependencies": [
       "error",
       {
-        devDependencies: ["**/*.test.tsx", "**/*.test.ts"],
+        devDependencies: ["**/*.test.tsx", "**/*.test.ts", "./storybook/*.js"],
       },
     ],
   },
