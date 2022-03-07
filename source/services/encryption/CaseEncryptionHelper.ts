@@ -177,6 +177,14 @@ export function makeFormWithDecryptedData(
   decryptedData: string
 ): AnsweredForm {
   const newAnswers: Answer[] = JSON.parse(decryptedData);
+
+  if (!Array.isArray(newAnswers)) {
+    throw new EncryptionException(
+      EncryptionErrorStatus.INVALID_INPUT,
+      `provided decryptedData is not an array (${typeof decryptedData})`
+    );
+  }
+
   return makeFormWithNewAnswers(form, newAnswers, {
     type: EncryptionType.DECRYPTED,
   });

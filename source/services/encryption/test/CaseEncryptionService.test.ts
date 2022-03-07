@@ -321,6 +321,23 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
     expect(answers).toEqual(mockAnswers);
   });
 
+  test("makeFormWithDecryptedData throws", () => {
+    const form = getCurrentForm(CASE_DECRYPTED_SOLO);
+    const invalidAnswers = "not valid";
+    const mockDecryptedData = JSON.stringify(invalidAnswers);
+
+    const func = () => {
+      makeFormWithDecryptedData(form, mockDecryptedData);
+    };
+
+    expect(func).toThrow(EncryptionException);
+    expect(func).toThrow(
+      expect.objectContaining(<Partial<EncryptionException>>{
+        status: EncryptionErrorStatus.INVALID_INPUT,
+      })
+    );
+  });
+
   test("makeCaseWithNewForm", () => {
     const mockForm: AnsweredForm = (<Partial<AnsweredForm>>{
       encryption: { type: EncryptionType.PASSWORD, symmetricKeyName: "hello" },
