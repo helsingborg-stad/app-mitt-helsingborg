@@ -107,7 +107,7 @@ export const CaseEncryptionService: ICaseEncryptionServiceStatic = class CaseEnc
         );
       }
       throw new EncryptionException(
-        EncryptionErrorStatus.INVALID_CASE,
+        EncryptionErrorStatus.INVALID_INPUT,
         `unable to encrypt form of type ${form.encryption.type}`
       );
     }

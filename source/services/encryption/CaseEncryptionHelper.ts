@@ -127,7 +127,7 @@ export function getEncryptionStrategyFromForm(
 export function getDataToEncryptFromForm(form: AnsweredForm): string {
   if (answersAreEncrypted(form.answers)) {
     throw new EncryptionException(
-      EncryptionErrorStatus.INVALID_CASE,
+      EncryptionErrorStatus.INVALID_INPUT,
       `form provided for encryption is already encrypted`
     );
   }
@@ -138,7 +138,7 @@ export function getDataToEncryptFromForm(form: AnsweredForm): string {
 export function getDataToDecryptFromForm(form: AnsweredForm): string {
   if (!answersAreEncrypted(form.answers)) {
     throw new EncryptionException(
-      EncryptionErrorStatus.INVALID_CASE,
+      EncryptionErrorStatus.INVALID_INPUT,
       `form provided for decryption is already decrypted`
     );
   }

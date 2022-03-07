@@ -88,7 +88,7 @@ export const PasswordStrategy: IPasswordStrategy = {
 
     if (!paramsID) {
       throw new EncryptionException(
-        EncryptionErrorStatus.INVALID_CASE,
+        EncryptionErrorStatus.INVALID_INPUT,
         "unable to get params ID"
       );
     }
@@ -149,7 +149,7 @@ export const PasswordStrategy: IPasswordStrategy = {
 
     if (existingParams) {
       throw new EncryptionException(
-        EncryptionErrorStatus.INVALID_CASE,
+        EncryptionErrorStatus.INVALID_INPUT,
         `Password already exists for id ${paramsId}`
       );
     }

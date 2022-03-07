@@ -9,6 +9,7 @@ export enum EncryptionErrorStatus {
   DEPRECATED_MISSING_AES_KEY = "missingAesKey",
   INVALID_ENCRYPTION_TYPE = "invalidEncryptionType",
   INVALID_CASE = "invalidCase",
+  INVALID_INPUT = "invalidInput",
   INVALID_STORAGE = "invalidStorage",
   REQUIRES_PARAMS = "requiresParams",
 }

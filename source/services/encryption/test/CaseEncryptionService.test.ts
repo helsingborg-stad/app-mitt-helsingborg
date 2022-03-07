@@ -267,7 +267,7 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
     expect(func).toThrow(EncryptionException);
     expect(func).toThrow(
       expect.objectContaining(<Partial<EncryptionException>>{
-        status: EncryptionErrorStatus.INVALID_CASE,
+        status: EncryptionErrorStatus.INVALID_INPUT,
       })
     );
   });
@@ -289,7 +289,7 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
     expect(func).toThrow(EncryptionException);
     expect(func).toThrow(
       expect.objectContaining(<Partial<EncryptionException>>{
-        status: EncryptionErrorStatus.INVALID_CASE,
+        status: EncryptionErrorStatus.INVALID_INPUT,
       })
     );
   });
