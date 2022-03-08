@@ -311,7 +311,7 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
     const expectedData = (answers as EncryptedAnswersWrapper).encryptedAnswers;
 
     expect(answersAreEncrypted(answers)).toBe(true);
-    expect(expectedData).toEqual(mockEncryptedData);
+    expect(expectedData).toBe(mockEncryptedData);
   });
 
   test("makeFormWithDecryptedData", () => {
@@ -394,7 +394,7 @@ describe("CaseEncryptionService", () => {
       const newCase = await encryptionService.encrypt(caseData);
       const newEncryption = getEncryptionFromCase(newCase);
 
-      expect(newEncryption?.type).toEqual(expectedType);
+      expect(newEncryption?.type).toBe(expectedType);
     }
   );
 
@@ -633,7 +633,7 @@ describe("CaseEncryptionService (Password specific)", () => {
       { storage: mockStorage }
     );
 
-    expect(typeof password).toEqual("string");
+    expect(typeof password).toBe("string");
     expect(password.length).toBeGreaterThan(0);
     expect(saveFunc).toHaveBeenCalledWith(
       CASE_PARAMS_KEY_PARTNER,
@@ -655,7 +655,7 @@ describe("CaseEncryptionService (Password specific)", () => {
     const { answers, encryption } = getCurrentForm(newCase);
 
     expect(answersAreEncrypted(answers)).toBe(true);
-    expect(encryption.type).toEqual(EncryptionType.PASSWORD);
+    expect(encryption.type).toBe(EncryptionType.PASSWORD);
   });
 
   it("can retrieve existing password", async () => {
@@ -702,8 +702,8 @@ describe("CaseEncryptionService (Password specific)", () => {
       dependencies
     );
 
-    expect(firstCheck).toEqual(false);
-    expect(secondCheck).toEqual(true);
+    expect(firstCheck).toBe(false);
+    expect(secondCheck).toBe(true);
   });
 
   it("can provide a password to use", async () => {
@@ -717,7 +717,7 @@ describe("CaseEncryptionService (Password specific)", () => {
     await PasswordStrategy.providePassword(testPassword, context, dependencies);
     const password = await PasswordStrategy.getPassword(context, dependencies);
 
-    expect(password).toEqual(testPassword);
+    expect(password).toBe(testPassword);
   });
 });
 
@@ -750,7 +750,7 @@ describe("CaseEncryptionService (simulated scenarios)", () => {
     expect(firstDecrypt).toEqual(secondDecrypt);
     expect(decryptError).toBeDefined();
     expect(decryptError).toBeInstanceOf(EncryptionException);
-    expect((decryptError as EncryptionException).status).toEqual(
+    expect((decryptError as EncryptionException).status).toBe(
       EncryptionErrorStatus.REQUIRES_PARAMS
     );
   });
