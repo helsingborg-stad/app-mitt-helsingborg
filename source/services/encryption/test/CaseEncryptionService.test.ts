@@ -46,7 +46,7 @@ import {
   EncryptionDependencies,
 } from "../EncryptionStrategy";
 
-function MakeMockCase(
+function makeMockCase(
   answers: PossiblyEncryptedAnswers,
   encryption: EncryptionDetails
 ): Case {
@@ -68,12 +68,12 @@ function MakeMockCase(
   return partial as Case;
 }
 
-const CASE_DECRYPTED_SOLO = MakeMockCase(
+const CASE_DECRYPTED_SOLO = makeMockCase(
   [{ field: { id: "test" }, value: "hello" }],
   { type: EncryptionType.DECRYPTED }
 );
 
-const CASE_ENCRYPTED_SOLO = MakeMockCase(
+const CASE_ENCRYPTED_SOLO = makeMockCase(
   {
     encryptedAnswers:
       "4a9d9fa7f96c39f7777aace0c487131fcd25abfd836f108f5e1539bb6cf6927e57c8022e70cb8c3b43ade413f90b1eb2",
@@ -94,12 +94,12 @@ const CASE_PARAMS_PARTNER: PasswordParams = {
   password: "hello12345",
 };
 
-const CASE_DECRYPTED_PARTNER = MakeMockCase(
+const CASE_DECRYPTED_PARTNER = makeMockCase(
   [{ field: { id: "test" }, value: "hello" }],
   { type: EncryptionType.DECRYPTED, symmetricKeyName: CASE_PARAMS_KEY_PARTNER }
 );
 
-const CASE_ENCRYPTED_PARTNER = MakeMockCase(
+const CASE_ENCRYPTED_PARTNER = makeMockCase(
   {
     encryptedAnswers:
       "c4588599049e72caa7d87ad66bc180403fe39956eb5b50eb5e2f6fbf57663906bdeb54ddb5598d325d31ee946a0ef403",
