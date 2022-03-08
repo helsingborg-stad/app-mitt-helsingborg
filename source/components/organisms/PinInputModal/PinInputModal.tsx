@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+
 import Button from "../../atoms/Button";
 import { Heading, Input, Text } from "../../atoms";
 import Wrapper from "../../molecules/Dialog/Wrapper";
 import { Modal } from "../../molecules/Modal";
 import { BackgroundBlur } from "../../atoms/BackgroundBlur";
+
 import { ButtonContainer, DialogContainer } from "./styled";
 
 export interface PinInputModalProps {
