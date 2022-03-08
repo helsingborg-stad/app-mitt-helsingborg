@@ -29,6 +29,11 @@ export default function PinInputModal({
     onPinEntered(pin);
   };
 
+  const handleClosePressed = () => {
+    setPin("");
+    onClose();
+  };
+
   return (
     <Modal
       visible={visible}
@@ -56,7 +61,7 @@ export default function PinInputModal({
             </Text>
           )}
           <ButtonContainer>
-            <Button onClick={onClose} colorSchema="neutral">
+            <Button onClick={handleClosePressed} colorSchema="neutral">
               <Text>Avbryt</Text>
             </Button>
             <Button onClick={handleUnlockPressed} colorSchema="red">

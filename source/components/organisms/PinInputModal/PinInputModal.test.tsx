@@ -80,4 +80,27 @@ describe("PinInputModal", () => {
     expect(mockOnPinEnteredCallback).toHaveBeenCalledTimes(1);
     expect(mockOnPinEnteredCallback).toHaveBeenCalledWith(mockPin);
   });
+
+  it("clears pin on close", () => {
+    const mockOnPinEnteredCallback = jest.fn();
+
+    const { getByText, getByTestId } = render(
+      <PinInputModal
+        visible
+        name={mockName}
+        onClose={jest.fn}
+        onPinEntered={mockOnPinEnteredCallback}
+      />
+    );
+    const inputElement = getByTestId("pin-input");
+    const closeButton = getByText("Avbryt");
+    const unlockButton = getByText("Lås upp");
+
+    fireEvent.changeText(inputElement, mockPin);
+    fireEvent.press(closeButton);
+    fireEvent.press(unlockButton);
+
+    expect(mockOnPinEnteredCallback).toHaveBeenCalledTimes(1);
+    expect(mockOnPinEnteredCallback).toHaveBeenCalledWith("");
+  });
 });
