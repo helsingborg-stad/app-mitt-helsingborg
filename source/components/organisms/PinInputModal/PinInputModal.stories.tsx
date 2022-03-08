@@ -39,7 +39,7 @@ function usePinInputModal({
   const element = (
     <PinInputModal
       visible={showModal}
-      mainApplicantName="Karlos"
+      name="Karlos"
       onClose={toggleShowModal}
       onPinEntered={onPinEntered}
       error={internalError ?? error}

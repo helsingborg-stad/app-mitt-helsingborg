@@ -8,7 +8,7 @@ import { ButtonContainer, DialogContainer } from "./styled";
 
 export interface PinInputModalProps {
   visible: boolean;
-  mainApplicantName: string;
+  name: string;
   onClose(): void;
   onPinEntered(pin: string): void;
   error?: string;
@@ -16,7 +16,7 @@ export interface PinInputModalProps {
 
 export default function PinInputModal({
   visible,
-  mainApplicantName,
+  name: mainApplicantName,
   onClose,
   onPinEntered,
   error,

@@ -13,7 +13,7 @@ describe("PinInputModal", () => {
     const { findByText } = render(
       <PinInputModal
         visible
-        mainApplicantName={mockName}
+        name={mockName}
         onClose={jest.fn}
         onPinEntered={jest.fn}
       />
@@ -28,7 +28,7 @@ describe("PinInputModal", () => {
     const { findByText } = render(
       <PinInputModal
         visible
-        mainApplicantName={mockName}
+        name={mockName}
         error={mockError}
         onClose={jest.fn}
         onPinEntered={jest.fn}
@@ -47,7 +47,7 @@ describe("PinInputModal", () => {
     const { findByText } = render(
       <PinInputModal
         visible
-        mainApplicantName={mockName}
+        name={mockName}
         onClose={mockOnCloseCallback}
         onPinEntered={jest.fn}
       />
@@ -66,7 +66,7 @@ describe("PinInputModal", () => {
     const { getByText, getByTestId } = render(
       <PinInputModal
         visible
-        mainApplicantName={mockName}
+        name={mockName}
         onClose={jest.fn}
         onPinEntered={mockOnPinEnteredCallback}
       />
