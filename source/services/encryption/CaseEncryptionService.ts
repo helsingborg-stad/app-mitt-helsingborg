@@ -99,13 +99,14 @@ export const CaseEncryptionService: ICaseEncryptionServiceStatic = class CaseEnc
       }
     );
 
+    if (encryptionPossibility === EncryptionPossibility.REQUIRES_PARAMS) {
+      throw new EncryptionException(
+        EncryptionErrorStatus.REQUIRES_PARAMS,
+        `encrypting form of type ${form.encryption.type} requires additional params`
+      );
+    }
+
     if (encryptionPossibility !== EncryptionPossibility.CAN_ENCRYPT) {
-      if (encryptionPossibility === EncryptionPossibility.REQUIRES_PARAMS) {
-        throw new EncryptionException(
-          EncryptionErrorStatus.REQUIRES_PARAMS,
-          `encrypting form of type ${form.encryption.type} requires additional params`
-        );
-      }
       throw new EncryptionException(
         EncryptionErrorStatus.INVALID_INPUT,
         `unable to encrypt form of type ${form.encryption.type}`
