@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
-import { View, LayoutAnimation } from 'react-native';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import { Help } from '../../../types/FormTypes';
-import Text from '../../atoms/Text';
-import Fieldset, { FieldsetButton } from '../../atoms/Fieldset/Fieldset';
-import theme from '../../../styles/theme';
-import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
-import { Heading } from '../../atoms';
+import React, { useState } from "react";
+import { View, LayoutAnimation } from "react-native";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import { SummaryListItem } from "../../organisms/SummaryList/SummaryList";
+import { Help } from "../../../types/FormTypes";
+import Text from "../../atoms/Text";
+import Fieldset, { FieldsetButton } from "../../atoms/Fieldset/Fieldset";
+import theme from "../../../styles/theme";
+import {
+  getValidColorSchema,
+  PrimaryColor,
+} from "../../../styles/themeHelpers";
+import { Heading } from "../../atoms";
 
 const ListBody = styled.View`
   padding-top: 12px;
@@ -30,7 +34,12 @@ interface Props {
   showEditButton?: boolean;
   startEditable?: boolean;
   help?: Help;
-  children: React.ReactElement<{ category: string; editable?: boolean }>[];
+  children: React.ReactElement<{
+    category: string;
+    editable?: boolean;
+    item: SummaryListItem;
+  }>[];
+  sortCallback?: (items: SummaryListItem[]) => void;
 }
 
 /**
@@ -45,12 +54,17 @@ const GroupedList: React.FC<Props> = ({
   startEditable = false,
   help,
   children,
+  sortCallback,
 }) => {
   const [editable, setEditable] = useState(startEditable);
 
   const groupedItems: Record<
     string,
-    React.ReactElement<{ category: string; editable?: boolean }>[]
+    React.ReactElement<{
+      category: string;
+      editable?: boolean;
+      item: SummaryListItem;
+    }>[]
   > = {};
   const changeEditable = () => {
     LayoutAnimation.configureNext({
@@ -66,11 +80,18 @@ const GroupedList: React.FC<Props> = ({
         property: LayoutAnimation.Properties.opacity,
       },
     });
+    // Sort whenever the summarylist is closed for editing
+    // i.e the 'Close' button is tapped
+    if (editable && sortCallback) {
+      sortCallback(children.map((element) => element.props.item));
+    }
     setEditable(!editable);
   };
 
   categories.forEach((cat) => {
-    const catItems = children.filter((item) => item.props.category === cat.category);
+    const catItems = children.filter(
+      (item) => item.props.category === cat.category
+    );
     if (catItems.length > 0) {
       groupedItems[cat.category] = catItems;
     }
@@ -80,7 +101,7 @@ const GroupedList: React.FC<Props> = ({
   return (
     <Fieldset
       colorSchema={validColorSchema}
-      legend={heading || ''}
+      legend={heading || ""}
       help={help}
       renderHeaderActions={() => (
         <>
@@ -91,7 +112,7 @@ const GroupedList: React.FC<Props> = ({
               size="small"
               onClick={changeEditable}
             >
-              <Text>{editable ? 'Stäng' : 'Ändra'}</Text>
+              <Text>{editable ? "Stäng" : "Ändra"}</Text>
             </FieldsetButton>
           )}
         </>
@@ -103,7 +124,9 @@ const GroupedList: React.FC<Props> = ({
             <ListBodyFieldLabel colorSchema={validColorSchema}>
               {categories.find((c) => c.category === key).description}
             </ListBodyFieldLabel>
-            {groupedItems[key].map((item) => React.cloneElement(item, { editable }))}
+            {groupedItems[key].map((item) =>
+              React.cloneElement(item, { editable })
+            )}
           </View>
         ))}
       </ListBody>
@@ -133,6 +156,7 @@ GroupedList.propTypes = {
    */
   startEditable: PropTypes.bool,
   children: PropTypes.array,
+  sortCallback: PropTypes.func,
   /**
    * Show a help button
    */
@@ -148,6 +172,6 @@ GroupedList.propTypes = {
 GroupedList.defaultProps = {
   items: [],
   categories: [],
-  colorSchema: 'blue',
+  colorSchema: "blue",
 };
 export default GroupedList;
