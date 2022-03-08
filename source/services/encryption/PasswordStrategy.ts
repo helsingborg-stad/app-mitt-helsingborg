@@ -11,6 +11,11 @@ import {
 
 const { Aes } = NativeModules;
 
+const ALGO_SALT = "salt4D42bf960Sm1";
+const ALGO_ROUNDS = 5000;
+const ALGO_LENGTH = 256;
+const ALGO_IV = "003d8999f6a4bb9800ed24b5d1846523";
+
 export interface PasswordParams {
   password: string;
 }
@@ -18,8 +23,8 @@ export interface PasswordParams {
 async function generateAESParamsFromPassword(
   password: string
 ): Promise<DeviceLocalAESParams> {
-  const key = await Aes.pbkdf2(password, "salt4D42bf960Sm1", 5000, 256);
-  const iv = "003d8999f6a4bb9800ed24b5d1846523";
+  const key = await Aes.pbkdf2(password, ALGO_SALT, ALGO_ROUNDS, ALGO_LENGTH);
+  const iv = ALGO_IV;
 
   return { key, iv };
 }

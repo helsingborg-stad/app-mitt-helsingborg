@@ -8,6 +8,10 @@ import {
 
 const { Aes } = NativeModules;
 
+const ALGO_SALT = "salt4D42bf960Sm1";
+const ALGO_ROUNDS = 5000;
+const ALGO_LENGTH = 256;
+
 export interface DeviceLocalAESParams {
   key: string;
   iv: string;
@@ -16,7 +20,12 @@ export interface DeviceLocalAESParams {
 async function createAesParams(): Promise<DeviceLocalAESParams> {
   const randomBytes = await Aes.randomKey(16);
 
-  const key = await Aes.pbkdf2(randomBytes, "salt4D42bf960Sm1", 5000, 256);
+  const key = await Aes.pbkdf2(
+    randomBytes,
+    ALGO_SALT,
+    ALGO_ROUNDS,
+    ALGO_LENGTH
+  );
 
   const iv = await Aes.randomKey(16);
 
