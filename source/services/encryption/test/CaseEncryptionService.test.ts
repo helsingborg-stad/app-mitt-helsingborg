@@ -137,6 +137,7 @@ function makeEncryptionService(storage: IStorage): ICaseEncryptionService {
 describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
   test("getCurrentForm", () => {
     const form = getCurrentForm(CASE_DECRYPTED_SOLO);
+
     expect(form).toEqual(
       CASE_DECRYPTED_SOLO.forms[CASE_DECRYPTED_SOLO.currentFormId]
     );
@@ -160,6 +161,7 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
 
   test("getEncryptionFromCase", () => {
     const encryption = getEncryptionFromCase(CASE_ENCRYPTED_SOLO);
+
     expect(encryption).toEqual(getCurrentForm(CASE_ENCRYPTED_SOLO).encryption);
   });
 
@@ -200,6 +202,7 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
       ...currentEncryption,
       type: expectedType,
     };
+
     expect(encryption).toEqual(expectedEncryption);
   });
 
@@ -257,6 +260,7 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
 
     const expectedData =
       CASE_DECRYPTED_SOLO.forms[CASE_DECRYPTED_SOLO.currentFormId].answers;
+
     expect(parsed).toEqual(expectedData);
   });
 
@@ -279,6 +283,7 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
     const { answers } =
       CASE_ENCRYPTED_SOLO.forms[CASE_ENCRYPTED_SOLO.currentFormId];
     const expectedData = (answers as EncryptedAnswersWrapper).encryptedAnswers;
+
     expect(dataToDecrypt).toEqual(expectedData);
   });
 
@@ -304,6 +309,7 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
 
     const { answers } = newForm;
     const expectedData = (answers as EncryptedAnswersWrapper).encryptedAnswers;
+
     expect(answersAreEncrypted(answers)).toBe(true);
     expect(expectedData).toEqual(mockEncryptedData);
   });
@@ -317,6 +323,7 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
     const newForm = makeFormWithDecryptedData(form, mockDecryptedData);
 
     const { answers } = newForm;
+
     expect(answersAreEncrypted(answers)).toBe(false);
     expect(answers).toEqual(mockAnswers);
   });
@@ -385,8 +392,8 @@ describe("CaseEncryptionService", () => {
       const encryptionService = makeEncryptionService(mockStorage);
 
       const newCase = await encryptionService.encrypt(caseData);
-
       const newEncryption = getEncryptionFromCase(newCase);
+
       expect(newEncryption?.type).toEqual(expectedType);
     }
   );
