@@ -25,6 +25,10 @@ export default function PinInputModal({
 }: PinInputModalProps): JSX.Element {
   const [pin, setPin] = useState("");
 
+  const handleUnlockPressed = () => {
+    onPinEntered(pin);
+  };
+
   return (
     <Modal
       visible={visible}
@@ -55,7 +59,7 @@ export default function PinInputModal({
             <Button onClick={onClose} colorSchema="neutral">
               <Text>Avbryt</Text>
             </Button>
-            <Button onClick={() => onPinEntered(pin)} colorSchema="red">
+            <Button onClick={handleUnlockPressed} colorSchema="red">
               <Text>Lås upp</Text>
             </Button>
           </ButtonContainer>
