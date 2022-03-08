@@ -9,7 +9,7 @@ import {
 import {
   deserializeForm,
   serializeForm,
-} from "../../services/encryption/EncryptionService";
+} from "../../services/encryption/DEPRECATED/EncryptionService";
 import { get, post, put } from "../../helpers/ApiRequest";
 import { convertAnswersToArray } from "../../helpers/CaseDataConverter";
 import { deepCompareEquals, deepCopy } from "../../helpers/Objects";
@@ -21,7 +21,7 @@ import {
 import {
   getStoredSymmetricKey,
   UserInterface,
-} from "../../services/encryption/EncryptionHelper";
+} from "../../services/encryption/DEPRECATED/EncryptionHelper";
 import { Case } from "../../types/Case";
 
 export async function updateCase(

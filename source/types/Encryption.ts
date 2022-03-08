@@ -2,10 +2,16 @@ export enum EncryptionType {
   DECRYPTED = "decrypted",
   PRIVATE_AES_KEY = "privateAesKey",
   SYMMETRIC_KEY = "symmetricKey",
+  PASSWORD = "password",
 }
 
 export enum EncryptionErrorStatus {
-  MISSING_AES_KEY = "missingAesKey",
+  DEPRECATED_MISSING_AES_KEY = "missingAesKey",
+  INVALID_ENCRYPTION_TYPE = "invalidEncryptionType",
+  INVALID_CASE = "invalidCase",
+  INVALID_INPUT = "invalidInput",
+  INVALID_STORAGE = "invalidStorage",
+  REQUIRES_PARAMS = "requiresParams",
 }
 export type EncryptionExceptionStatus = EncryptionErrorStatus | null;
 

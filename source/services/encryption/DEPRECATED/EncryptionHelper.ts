@@ -1,9 +1,9 @@
-import { AnsweredForm } from "../../types/Case";
+import { AnsweredForm } from "../../../types/Case";
 import {
   EncryptionExceptionInterface,
   EncryptionExceptionStatus,
-} from "../../types/Encryption";
-import StorageService from "../StorageService";
+} from "../../../types/Encryption";
+import StorageService from "../../StorageService";
 
 export interface UserInterface {
   personalNumber: string;
