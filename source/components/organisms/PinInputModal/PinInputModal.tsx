@@ -9,9 +9,9 @@ import { ButtonContainer, DialogContainer } from "./styled";
 export interface PinInputModalProps {
   visible: boolean;
   name: string;
+  error?: string;
   onClose(): void;
   onPinEntered(pin: string): void;
-  error?: string;
 }
 
 export default function PinInputModal({
