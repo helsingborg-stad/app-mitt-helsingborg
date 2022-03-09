@@ -164,6 +164,7 @@ const Form: React.FC<Props> = ({
   const showNotification = useNotification();
 
   const signCase = async () => {
+    console.log("SIGNING CASE", { persons, period });
     const signature = { success: true };
     formNavigation.next();
     await onUpdateCase(answers, signature, formState.currentPosition);
@@ -255,10 +256,10 @@ const Form: React.FC<Props> = ({
     }
   };
 
-  const showDialog = updateCaseState !== UPDATE_CASE_STATE.IDLE;
-  const dialogTitle = dialogText[updateCaseState].title;
-  const dialogBody = dialogText[updateCaseState].body;
-  const dialogButtons =
+  const showCloseDialog = updateCaseState !== UPDATE_CASE_STATE.IDLE;
+  const closeDialogTitle = dialogText[updateCaseState].title;
+  const closeDialogBody = dialogText[updateCaseState].body;
+  const closeDialogButtons =
     updateCaseState === UPDATE_CASE_STATE.ERROR
       ? [
           {
@@ -372,10 +373,10 @@ const Form: React.FC<Props> = ({
         />
       )}
       <CloseDialog
-        visible={showDialog}
-        title={dialogTitle}
-        body={dialogBody}
-        buttons={dialogButtons}
+        visible={showCloseDialog}
+        title={closeDialogTitle}
+        body={closeDialogBody}
+        buttons={closeDialogButtons}
       />
     </>
   );
