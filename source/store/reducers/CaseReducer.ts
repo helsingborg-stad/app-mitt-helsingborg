@@ -1,17 +1,10 @@
 import { deepCopy } from "../../helpers/Objects";
 import { Case } from "../../types/Case";
-import {
-  Action,
-  ActionTypes,
-  PolledCaseResult,
-  State,
-} from "../../types/CaseContext";
+import { Action, ActionTypes, State } from "../../types/CaseContext";
 
 export const initialState: State = {
   cases: {},
   error: undefined,
-  isPolling: false,
-  casesToPoll: [],
 };
 
 export default function CaseReducer(state: State, action: Action): State {
@@ -40,24 +33,8 @@ export default function CaseReducer(state: State, action: Action): State {
       newState.cases = payload as Record<string, Case>;
       return newState;
 
-    case ActionTypes.POLL_CASE: {
-      const polledPayload = payload as PolledCaseResult;
-      const updatedCase = polledPayload.case;
-      if (newState.cases[updatedCase.id] !== undefined) {
-        newState.cases[updatedCase.id] = updatedCase;
-      }
-      return newState;
-    }
 
-    case ActionTypes.SET_POLLING_CASES: {
-      newState.casesToPoll = payload as Case[];
-      return newState;
-    }
 
-    case ActionTypes.SET_IS_POLLING: {
-      newState.isPolling = payload as boolean;
-      return newState;
-    }
 
     case ActionTypes.API_ERROR:
       newState.error = payload;

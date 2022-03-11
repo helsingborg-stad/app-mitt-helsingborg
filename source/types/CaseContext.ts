@@ -1,4 +1,4 @@
-import { UserInterface } from "../services/encryption/DEPRECATED/EncryptionHelper";
+import { UserInterface } from "../services/encryption/CaseEncryptionHelper";
 import { FormPosition, Case, AnsweredForm } from "./Case";
 import { EncryptionDetails } from "./Encryption";
 import { Form, Question } from "./FormTypes";
@@ -8,18 +8,13 @@ export enum ActionTypes {
   CREATE_CASE = "CREATE_CASE",
   DELETE_CASE = "DELETE_CASE",
   FETCH_CASES = "FETCH_CASES",
-  POLL_CASE = "POLL_CASE",
   API_ERROR = "API_ERROR",
-  SET_POLLING_CASES = "SET_POLLING_CASES",
-  SET_IS_POLLING = "SET_POLLING_DONE",
   RESET = "RESET",
 }
 
 export interface State {
   cases: Record<string, Case>;
   error?: unknown;
-  isPolling: boolean;
-  casesToPoll: Case[];
   getCase: (caseId: string) => Case | undefined;
   getCasesByFormIds?: (formIds: string[]) => Case[];
   fetchCases?: () => Promise<void>;
@@ -46,10 +41,6 @@ export interface CaseUpdate {
   encryption: EncryptionDetails;
 }
 
-export interface PolledCaseResult {
-  case: Case;
-  synced: boolean;
-}
 
 export interface UpdateCaseBody extends AnsweredForm {
   currentFormId: string;
@@ -63,16 +54,10 @@ export interface Dispatch {
     callback: (updatedCase: Case) => Promise<void>
   ) => Promise<Action>;
   deleteCase?: (caseId: string) => void;
+  providePinForCase: (caseData: Case, pin: string) => Promise<void>;
 }
 
 export interface Action {
   type: ActionTypes;
-  payload?:
-    | Case
-    | Record<string, Case>
-    | Case[]
-    | PolledCaseResult
-    | string
-    | boolean
-    | Error;
+  payload?: Case | Record<string, Case> | Case[] | string | boolean | Error;
 }

@@ -10,7 +10,6 @@ import { Animated, Easing, RefreshControl } from "react-native";
 import styled from "styled-components/native";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
-import { hasGeneratedSymmetricKey } from "../../services/encryption/DEPRECATED/EncryptionService";
 import { Modal } from "../../components/molecules/Modal";
 
 import Wrapper from "../../components/molecules/Dialog/Wrapper";
@@ -29,15 +28,23 @@ import {
   ScreenWrapper,
 } from "../../components/molecules";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
-import { CaseState, caseTypes } from "../../store/CaseContext";
+import { CaseState, caseTypes, CaseDispatch } from "../../store/CaseContext";
 import FormContext from "../../store/FormContext";
 import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
 import { put } from "../../helpers/ApiRequest";
-import { State as CaseContextState } from "../../types/CaseContext";
-import { wait } from "../../helpers/Misc";
-import { Case, ApplicationStatusType } from "../../types/Case";
+import {
+  State as CaseContextState,
+  Dispatch as CaseContextDispatch,
+} from "../../types/CaseContext";
+import { to, wait } from "../../helpers/Misc";
+import { Case, ApplicationStatusType, AnsweredForm } from "../../types/Case";
 import { Form } from "../../types/FormTypes";
+import {
+  answersAreEncrypted,
+  getPasswordForForm,
+} from "../../services/encryption/CaseEncryptionHelper";
+import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
 
 const {
   ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
@@ -107,7 +114,13 @@ const StyledIcon = styled(Icon)`
  * @param {object?} extra Extra properties
  * @param {function?} extra.dialogState
  */
-const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
+const computeCaseCardComponent = (
+  caseData,
+  navigation,
+  authContext,
+  extra,
+  onShowPinInput
+) => {
   interface InternalCardProps {
     subtitle: string;
     description?: string;
@@ -187,29 +200,25 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === "coApplicant";
 
-  const currentForm = caseData?.forms[caseData.currentFormId];
-  const selfNeedsToConfirm =
-    isCoApplicant &&
-    !caseData.hasSymmetricKey &&
-    currentForm.encryption.publicKeys[authContext?.user?.personalNumber] ===
-      null;
-  const isWaitingForCoApplicantConfirm =
-    currentForm.encryption.publicKeys &&
-    !caseData.hasSymmetricKey &&
-    !Object.entries(currentForm.encryption.publicKeys).every(
-      (item) => item[1] !== null
-    );
+  const currentForm: AnsweredForm = caseData?.forms[caseData.currentFormId];
+  const selfNeedsToConfirm = false;
+  const isWaitingForCoApplicantConfirm = false;
 
-  const shouldShowCTAButton = isCoApplicant
-    ? (isWaitingForSign && !selfHasSigned) ||
-      (isWaitingForCoApplicantConfirm && selfNeedsToConfirm)
-    : isOngoing ||
-      isNotStarted ||
-      isRandomCheckRequired ||
-      isSigned ||
-      isClosed ||
-      isVivaCompletionRequired ||
-      isCompletionSubmitted;
+  const isEncrypted = answersAreEncrypted(currentForm.answers);
+  const shouldEnterPin = isEncrypted && isCoApplicant && isWaitingForSign;
+
+  const shouldShowCTAButton =
+    (!isEncrypted || shouldEnterPin) &&
+    (isCoApplicant
+      ? (isWaitingForSign && !selfHasSigned) ||
+        (isWaitingForCoApplicantConfirm && selfNeedsToConfirm)
+      : isOngoing ||
+        isNotStarted ||
+        isRandomCheckRequired ||
+        isSigned ||
+        isClosed ||
+        isVivaCompletionRequired ||
+        isCompletionSubmitted);
   const buttonProps: InternalButtonProps = {
     onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
     text: "",
@@ -309,6 +318,16 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
       } ${getSwedishMonthNameByTimeStamp(payments.payment.givedate, true)}`
     : undefined;
 
+  if (caseData.password) {
+    cardProps.description = `${cardProps.description ?? ""}pinkod: ${
+      caseData.password
+    }`;
+  }
+  if (shouldEnterPin) {
+    buttonProps.onClick = onShowPinInput;
+    buttonProps.text = "Ange pinkod";
+    cardProps.onClick = undefined;
+  }
   return (
     <CaseCard
       key={caseData.id}
@@ -347,6 +366,7 @@ interface CaseWithExtra extends Case {
   caseType: typeof caseTypes[0];
   form: Form;
   hasSymmetricKey: boolean;
+  password: string;
 }
 
 /**
@@ -359,9 +379,13 @@ function CaseOverview(props): JSX.Element {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [pendingCaseSign, setPendingCaseSign] = useState<Case | null>(null);
+  const [pinModalCase, setPinModalCase] = useState<Case | null>(null);
+  const [pinModalError, setPinModalError] = useState<string | null>(null);
+  const [pinModalName, setPinModalName] = useState<string | null>(null);
   const { cases, getCasesByFormIds, fetchCases } = useContext(
     CaseState
   ) as Required<CaseContextState>;
+  const { providePinForCase } = useContext<CaseContextDispatch>(CaseDispatch);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
@@ -435,12 +459,16 @@ function CaseOverview(props): JSX.Element {
         const updatedFormCaseObjects = formCases.map(async (caseData) => {
           const form = await getForm(caseData.currentFormId);
           const formFromCase = caseData.forms[caseData.currentFormId];
-          const hasSymmetricKey = await hasGeneratedSymmetricKey(formFromCase);
+          const hasSymmetricKey = !!formFromCase.encryption.symmetricKeyName;
+          const password = hasSymmetricKey
+            ? await getPasswordForForm(formFromCase, authContext.user)
+            : null;
           const newCase: CaseWithExtra = {
             ...caseData,
             caseType,
             form,
             hasSymmetricKey,
+            password,
           };
           return newCase;
         });
@@ -504,28 +532,7 @@ function CaseOverview(props): JSX.Element {
   ]);
 
   useEffect(() => {
-    const coApplicantItemsToSign = caseItems.filter((caseData) => {
-      if (!caseData.persons) return false;
-
-      const person = caseData.persons.find(
-        (personEntry) =>
-          personEntry.personalNumber === authContext?.user?.personalNumber
-      );
-      const isCoApplicant = person?.role === "coApplicant";
-
-      if (!isCoApplicant) return false;
-
-      const currentForm = caseData.forms[caseData.currentFormId];
-
-      const isWaitingForCoApplicantConfirm =
-        currentForm.encryption.publicKeys &&
-        !caseData.hasSymmetricKey &&
-        !Object.entries(currentForm.encryption.publicKeys).every(
-          (item) => item[1] !== null
-        );
-
-      return isWaitingForCoApplicantConfirm;
-    });
+    const coApplicantItemsToSign: CaseWithExtra[] = [];
 
     if (coApplicantItemsToSign.length > 0) {
       if (dialogState.hasShownConfirmationThanksModal) return;
@@ -538,15 +545,49 @@ function CaseOverview(props): JSX.Element {
     }
   }, [authContext?.user?.personalNumber, caseItems, dialogState]);
 
+  const showPinInput = (caseData: Case) => {
+    const mainPerson = caseData.persons?.find(
+      (person) => person.role === "applicant"
+    );
+    setPinModalName(mainPerson?.firstName ?? null);
+    setPinModalCase(caseData);
+  };
+
+  const onClosePinModal = () => {
+    setPinModalError(null);
+    setPinModalCase(null);
+  };
+
+  const onEnteredPinForCase = async (pin: string) => {
+    if (pinModalCase) {
+      const [provideError] = await to(providePinForCase(pinModalCase, pin));
+      if (provideError) {
+        console.warn("provide pin error:", provideError);
+        setPinModalError("Nåt blev fel");
+      } else {
+        setPinModalError(null);
+        setPinModalCase(null);
+        onRefresh();
+      }
+    }
+  };
   const activeCaseCards = activeCases.map((caseData) =>
-    computeCaseCardComponent(caseData, navigation, authContext, {
-      dialogState,
-      setDialogState,
-    })
+    computeCaseCardComponent(
+      caseData,
+      navigation,
+      authContext,
+      {
+        dialogState,
+        setDialogState,
+      },
+      () => showPinInput(caseData)
+    )
   );
 
   const closedCaseCards = closedCases.map((caseData) =>
-    computeCaseCardComponent(caseData, navigation, authContext, null)
+    computeCaseCardComponent(caseData, navigation, authContext, null, () =>
+      showPinInput(caseData)
+    )
   );
 
   const mainApplicantData = dialogState.caseData?.persons?.find(
@@ -559,6 +600,13 @@ function CaseOverview(props): JSX.Element {
   return (
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
+      <PinInputModal
+        name={pinModalName}
+        visible={pinModalCase !== null}
+        onClose={onClosePinModal}
+        onPinEntered={onEnteredPinForCase}
+        error={pinModalError}
+      />
       <Modal
         visible={dialogState.showCoSignModal}
         hide={() =>
