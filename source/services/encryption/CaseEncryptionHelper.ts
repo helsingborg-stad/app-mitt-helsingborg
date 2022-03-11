@@ -1,3 +1,4 @@
+import { IStorage } from "./CaseEncryptionService";
 import {
   Answer,
   AnsweredForm,
@@ -12,6 +13,7 @@ import {
   EncryptionExceptionStatus,
   EncryptionType,
 } from "../../types/Encryption";
+import { wrappedDefaultStorage } from "../StorageService";
 import { DeviceLocalAESStrategy } from "./DeviceLocalAESStrategy";
 import { IEncryptionStrategy } from "./EncryptionStrategy";
 import { PasswordStrategy } from "./PasswordStrategy";
@@ -198,4 +200,18 @@ export function makeCaseWithNewForm(caseData: Case, form: AnsweredForm): Case {
       [caseData.currentFormId]: form,
     },
   };
+}
+
+export function getPasswordForForm(
+  form: AnsweredForm,
+  user: UserInterface,
+  storage: IStorage = wrappedDefaultStorage
+): Promise<string | null> {
+  return PasswordStrategy.getPassword(
+    {
+      encryptionDetails: form.encryption,
+      user,
+    },
+    { storage }
+  );
 }
