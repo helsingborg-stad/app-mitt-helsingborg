@@ -33,9 +33,6 @@ export default function CaseReducer(state: State, action: Action): State {
       newState.cases = payload as Record<string, Case>;
       return newState;
 
-
-
-
     case ActionTypes.API_ERROR:
       newState.error = payload;
       return newState;

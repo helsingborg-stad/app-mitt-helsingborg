@@ -41,7 +41,6 @@ export interface CaseUpdate {
   encryption: EncryptionDetails;
 }
 
-
 export interface UpdateCaseBody extends AnsweredForm {
   currentFormId: string;
   signature?: Signature;
