@@ -16,6 +16,6 @@ export const ButtonContainer = styled.View`
 
 export const ErrorText = styled(Text)`
   text-align: center;
-  margin-top: 10;
+  margin-top: 10px;
   color: #e14751;
 `;
