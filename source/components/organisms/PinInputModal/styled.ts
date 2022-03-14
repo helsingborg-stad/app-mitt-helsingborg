@@ -18,8 +18,5 @@ export const ButtonContainer = styled.View`
 export const ErrorText = styled(Text)`
   text-align: center;
   margin-top: 10px;
-  color: ${({ theme }: { theme: ThemeType }) => {
-    console.log("theme is ", theme);
-    return theme.colors.primary.red[1];
-  }};
+  color: ${({ theme }: { theme: ThemeType }) => theme.colors.primary.red[1]};
 `;
