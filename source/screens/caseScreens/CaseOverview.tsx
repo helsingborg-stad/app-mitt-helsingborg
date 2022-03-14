@@ -279,9 +279,8 @@ const computeCaseCardComponent = (
 
 interface CaseWithExtra extends Case {
   caseType: typeof caseTypes[0];
-  form: Form;
-  hasSymmetricKey: boolean;
-  password: string;
+  form?: Form;
+  password?: string;
 }
 
 /**
@@ -297,7 +296,7 @@ function CaseOverview(props): JSX.Element {
   const [pinModalCase, setPinModalCase] = useState<Case | null>(null);
   const [pinModalError, setPinModalError] = useState<string | null>(null);
   const [pinModalName, setPinModalName] = useState<string | null>(null);
-  const { cases, getCasesByFormIds, fetchCases } = useContext(
+  const { getCasesByFormIds, fetchCases } = useContext(
     CaseState
   ) as Required<CaseContextState>;
   const { providePinForCase } = useContext<CaseContextDispatch>(CaseDispatch);
@@ -371,14 +370,13 @@ function CaseOverview(props): JSX.Element {
           const password = hasSymmetricKey
             ? await getPasswordForForm(formFromCase, authContext.user)
             : null;
-          const newCase: CaseWithExtra = {
+          const newCaseData: CaseWithExtra = {
             ...caseData,
             caseType,
-            form,
-            hasSymmetricKey,
-            password,
+            form: form ?? undefined,
+            password: password ?? undefined,
           };
-          return newCase;
+          return newCaseData;
         });
         return Promise.all(updatedFormCaseObjects);
       });
@@ -393,7 +391,7 @@ function CaseOverview(props): JSX.Element {
     };
 
     void updateItems();
-  }, [cases, getCasesByFormIds, getForm, getFormIdsByFormTypes]);
+  }, [authContext.user, getCasesByFormIds, getForm, getFormIdsByFormTypes]);
 
   useEffect(() => {
     if (pendingCaseSign && authContext.status === "signResolved") {
