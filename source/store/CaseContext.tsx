@@ -1,7 +1,5 @@
 import React, { useContext, useReducer, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
-import { getStoredSymmetricKey } from "../services/encryption/DEPRECATED/EncryptionHelper";
-import { filterAsync } from "../helpers/Objects";
 import { Case } from "../types/Case";
 import { Form } from "../types/FormTypes";
 import USER_AUTH_STATE from "../types/UserAuthTypes";
@@ -11,7 +9,6 @@ import {
   CaseUpdate,
   ActionTypes,
   Action,
-  PolledCaseResult,
 } from "../types/CaseContext";
 import AuthContext from "./AuthContext";
 import CaseReducer, {
@@ -22,10 +19,16 @@ import {
   createCase as create,
   deleteCase as remove,
   fetchCases as fetch,
-  pollCase,
 } from "./actions/CaseActions";
 
 import { replaceCaseItemText } from "../containers/Form/hooks/textReplacement";
+import { PasswordStrategy } from "../services/encryption/PasswordStrategy";
+import {
+  getCurrentForm,
+  getDataToDecryptFromForm,
+  getEncryptionFromCase,
+} from "../services/encryption/CaseEncryptionHelper";
+import { wrappedDefaultStorage } from "../services/StorageService";
 
 const CaseState = React.createContext<ContextState>(defaultInitialState);
 const CaseDispatch = React.createContext<Dispatch>({});
@@ -48,27 +51,6 @@ interface CaseProviderProps {
   children?: React.ReactNode;
 }
 
-async function checkSymmetricKeyExistsForCase(caseData: Case) {
-  const currentForm = caseData.forms[caseData.currentFormId];
-  const key = await getStoredSymmetricKey(currentForm);
-  return key !== null;
-}
-
-async function checkSymmetricKeyMissingForCase(caseData: Case) {
-  const exists = await checkSymmetricKeyExistsForCase(caseData);
-  return !exists;
-}
-
-async function caseRequiresSync(caseData: Case): Promise<boolean> {
-  const currentForm = caseData.forms[caseData.currentFormId];
-  const usesSymmetricKey = !!currentForm.encryption.symmetricKeyName;
-
-  if (usesSymmetricKey) {
-    return checkSymmetricKeyMissingForCase(caseData);
-  }
-
-  return false;
-}
 function CaseProvider({
   children,
   initialState = defaultInitialState,
@@ -119,43 +101,31 @@ function CaseProvider({
     dispatch(remove(caseId));
   }
 
-  useEffect(() => {
-    const { casesToPoll } = state;
-    if (casesToPoll.length > 0 && isSignedIn && !state.isPolling && user) {
-      dispatch({
-        type: ActionTypes.SET_IS_POLLING,
-        payload: true,
-      });
-      void (async () => {
-        const newCases = await casesToPoll.reduce(
-          async (pollingCases, unsyncedCase) => {
-            const polledCases = await pollingCases;
+  async function providePinForCase(caseData: Case, pin: string) {
+    console.log("providing pin", caseData.id, pin);
 
-            const action = await pollCase(user, unsyncedCase);
-            dispatch(action);
+    const currentForm = getCurrentForm(caseData);
+    const dataToDecrypt = getDataToDecryptFromForm(currentForm);
 
-            const pollResult = action.payload as PolledCaseResult;
-            if (!pollResult.synced) {
-              return [...polledCases, pollResult.case];
-            }
+    const decrypted = await PasswordStrategy.decrypt(
+      {
+        password: pin,
+      },
+      dataToDecrypt
+    );
 
-            return polledCases;
-          },
-          Promise.resolve([] as Case[])
-        );
-
-        dispatch({
-          type: ActionTypes.SET_POLLING_CASES,
-          payload: newCases,
-        });
-
-        dispatch({
-          type: ActionTypes.SET_IS_POLLING,
-          payload: false,
-        });
-      })();
+    if (decrypted) {
+      console.log(`decrypt success ${caseData.id} ${pin}`);
+      await PasswordStrategy.providePassword(
+        pin,
+        {
+          encryptionDetails: getEncryptionFromCase(caseData),
+          user,
+        },
+        { storage: wrappedDefaultStorage }
+      );
     }
-  }, [isSignedIn, state, user]);
+  }
 
   const fetchCases = useCallback(async () => {
     const fetchData = await fetch(user);
@@ -176,19 +146,6 @@ function CaseProvider({
       ...fetchData,
       payload: textReplacedPayload,
     });
-
-    const fetchPayloadArray = Object.values(textReplacedPayload);
-    const unsyncedCases = await filterAsync(
-      fetchPayloadArray,
-      caseRequiresSync
-    );
-
-    if (unsyncedCases.length > 0) {
-      dispatch({
-        type: ActionTypes.SET_POLLING_CASES,
-        payload: unsyncedCases,
-      });
-    }
   }, [user]);
 
   useEffect(() => {
@@ -210,7 +167,12 @@ function CaseProvider({
     fetchCases,
   };
 
-  const providedDispatch: Dispatch = { createCase, updateCase, deleteCase };
+  const providedDispatch: Dispatch = {
+    createCase,
+    updateCase,
+    deleteCase,
+    providePinForCase,
+  };
 
   return (
     <CaseState.Provider value={providedState}>

@@ -6,6 +6,7 @@
 
 import { Component } from "react";
 import AsyncStorage from "@react-native-community/async-storage";
+import { IStorage } from "./encryption";
 
 // Storage key definitions
 export const ONBOARDING_DISABLED = "@app:onboarding_disabled";
@@ -112,3 +113,16 @@ export default class StorageService extends Component {
     return this.saveData(key, newValue);
   }
 }
+
+export const wrappedDefaultStorage: IStorage = {
+  async getData(key) {
+    const data = await StorageService.getData(key);
+    if (data) {
+      return typeof data === "string" ? data : JSON.stringify(data);
+    }
+    return data;
+  },
+  async saveData(key, payload) {
+    return StorageService.saveData(key, payload);
+  },
+};

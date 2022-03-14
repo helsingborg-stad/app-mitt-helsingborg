@@ -10,15 +10,8 @@ import { Animated, Easing, RefreshControl } from "react-native";
 import styled from "styled-components/native";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
-import { hasGeneratedSymmetricKey } from "../../services/encryption/DEPRECATED/EncryptionService";
-import { Modal } from "../../components/molecules/Modal";
 
-import Wrapper from "../../components/molecules/Dialog/Wrapper";
-import Heading from "../../components/atoms/Heading";
-import { BackgroundBlur } from "../../components/atoms/BackgroundBlur";
-import Body from "../../components/molecules/Dialog/Body";
 import FloatingButton from "../../components/molecules/FloatingButton";
-import Button from "../../components/atoms/Button";
 import icons from "../../helpers/Icons";
 import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
 import { Text, Icon } from "../../components/atoms";
@@ -29,15 +22,23 @@ import {
   ScreenWrapper,
 } from "../../components/molecules";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
-import { CaseState, caseTypes } from "../../store/CaseContext";
+import { CaseState, caseTypes, CaseDispatch } from "../../store/CaseContext";
 import FormContext from "../../store/FormContext";
 import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
 import { put } from "../../helpers/ApiRequest";
-import { State as CaseContextState } from "../../types/CaseContext";
-import { wait } from "../../helpers/Misc";
-import { Case, ApplicationStatusType } from "../../types/Case";
+import {
+  State as CaseContextState,
+  Dispatch as CaseContextDispatch,
+} from "../../types/CaseContext";
+import { to, wait } from "../../helpers/Misc";
+import { Case, ApplicationStatusType, AnsweredForm } from "../../types/Case";
 import { Form } from "../../types/FormTypes";
+import {
+  answersAreEncrypted,
+  getPasswordForForm,
+} from "../../services/encryption/CaseEncryptionHelper";
+import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
 
 const {
   ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
@@ -52,45 +53,16 @@ const {
   ACTIVE,
 } = ApplicationStatusType;
 
-const ButtonContainer = styled.View`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  margin-top: 25px;
-  width: 100%;
-`;
-
-const PopupButton = styled(Button)`
-  border: 0;
-  margin-bottom: 12px;
-`;
-
 const Container = styled.ScrollView`
   flex: 1;
   padding-left: 16px;
   padding-right: 16px;
 `;
 
-const DialogContainer = styled(Body)`
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  padding: 32px;
-`;
-
-const StyledText = styled(Text)`
-  margin-bottom: 8px;
-`;
-
 const ListHeading = styled(Text)`
   margin-left: 4px;
   margin-top: 24px;
   margin-bottom: 8px;
-`;
-
-const CardMessageBody = styled(Card.Body)`
-  background-color: ${(props) => props.theme.colors.neutrals[5]};
 `;
 
 const colorSchema = "red";
@@ -104,14 +76,18 @@ const StyledIcon = styled(Icon)`
  * @param {obj} caseData
  * @param {obj} navigation
  * @param {obj} authContext
- * @param {object?} extra Extra properties
  * @param {function?} extra.dialogState
  */
-const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
+const computeCaseCardComponent = (
+  caseData,
+  navigation,
+  authContext,
+  onShowPinInput
+) => {
   interface InternalCardProps {
     subtitle: string;
     description?: string;
-    onClick: () => void;
+    onClick?: () => void;
   }
 
   interface InternalButtonProps {
@@ -155,10 +131,6 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
     (person) => person.personalNumber === authContext?.user?.personalNumber
   );
 
-  const caseCoApplicantData = persons.find(
-    ({ role }) => role === "coApplicant"
-  );
-
   const completions = caseData?.details?.completions?.requested || [];
   const completionDuedate = caseData?.details?.completions?.dueDate
     ? moment(caseData?.details?.completions?.dueDate).format("YYYY-MM-DD")
@@ -187,29 +159,22 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === "coApplicant";
 
-  const currentForm = caseData?.forms[caseData.currentFormId];
-  const selfNeedsToConfirm =
-    isCoApplicant &&
-    !caseData.hasSymmetricKey &&
-    currentForm.encryption.publicKeys[authContext?.user?.personalNumber] ===
-      null;
-  const isWaitingForCoApplicantConfirm =
-    currentForm.encryption.publicKeys &&
-    !caseData.hasSymmetricKey &&
-    !Object.entries(currentForm.encryption.publicKeys).every(
-      (item) => item[1] !== null
-    );
+  const currentForm: AnsweredForm = caseData?.forms[caseData.currentFormId];
 
-  const shouldShowCTAButton = isCoApplicant
-    ? (isWaitingForSign && !selfHasSigned) ||
-      (isWaitingForCoApplicantConfirm && selfNeedsToConfirm)
-    : isOngoing ||
-      isNotStarted ||
-      isRandomCheckRequired ||
-      isSigned ||
-      isClosed ||
-      isVivaCompletionRequired ||
-      isCompletionSubmitted;
+  const isEncrypted = answersAreEncrypted(currentForm.answers);
+  const shouldEnterPin = isEncrypted && isCoApplicant && isWaitingForSign;
+
+  const shouldShowCTAButton =
+    (!isEncrypted || shouldEnterPin) &&
+    (isCoApplicant
+      ? isWaitingForSign && !selfHasSigned
+      : isOngoing ||
+        isNotStarted ||
+        isRandomCheckRequired ||
+        isSigned ||
+        isClosed ||
+        isVivaCompletionRequired ||
+        isCompletionSubmitted);
   const buttonProps: InternalButtonProps = {
     onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
     text: "",
@@ -249,40 +214,6 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
 
   if (isNotStarted) {
     buttonProps.text = "Starta ansökan";
-
-    if (isWaitingForCoApplicantConfirm) {
-      cardProps.subtitle = "Väntar på bekräftelse";
-      cardProps.description = `För att kunna starta ansökan behöver ${caseCoApplicantData?.firstName} installera Mitt Helsingborg på sin telefon.\n\nNär ${caseCoApplicantData?.firstName} har loggat in med BankID är bekräftelse gjord.\n`;
-      buttonProps.colorSchema = "red";
-      buttonProps.onClick = () => {
-        if (extra && extra.setDialogState) {
-          extra.setDialogState({
-            ...extra.dialogState,
-            showCoSignModal: true,
-            caseData,
-          });
-        }
-      };
-
-      cardProps.onClick = () => undefined;
-
-      if (selfNeedsToConfirm) {
-        cardProps.subtitle = "Öppen";
-        cardProps.description = "Din partner väntar på din bekräftelse";
-        buttonProps.colorSchema = "red";
-        buttonProps.text = "Bekräftar att jag söker ihop med någon";
-
-        buttonProps.onClick = () => {
-          if (extra && extra.setDialogState) {
-            extra.setDialogState({
-              ...extra.dialogState,
-              showConfirmationThanksModal: true,
-              caseData,
-            });
-          }
-        };
-      }
-    }
   }
 
   if (isRandomCheckRequired) {
@@ -309,6 +240,16 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
       } ${getSwedishMonthNameByTimeStamp(payments.payment.givedate, true)}`
     : undefined;
 
+  if (caseData.password) {
+    cardProps.description = `${cardProps.description ?? ""}pinkod: ${
+      caseData.password
+    }`;
+  }
+  if (shouldEnterPin) {
+    buttonProps.onClick = onShowPinInput;
+    buttonProps.text = "Ange pinkod";
+    cardProps.onClick = undefined;
+  }
   return (
     <CaseCard
       key={caseData.id}
@@ -336,17 +277,10 @@ const computeCaseCardComponent = (caseData, navigation, authContext, extra) => {
   );
 };
 
-interface CoSignDialogState {
-  showCoSignModal: boolean;
-  showConfirmationThanksModal: boolean;
-  hasShownConfirmationThanksModal: boolean;
-  caseData: Case | null;
-}
-
 interface CaseWithExtra extends Case {
   caseType: typeof caseTypes[0];
-  form: Form;
-  hasSymmetricKey: boolean;
+  form?: Form;
+  password?: string;
 }
 
 /**
@@ -359,18 +293,15 @@ function CaseOverview(props): JSX.Element {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [pendingCaseSign, setPendingCaseSign] = useState<Case | null>(null);
-  const { cases, getCasesByFormIds, fetchCases } = useContext(
+  const [pinModalCase, setPinModalCase] = useState<Case | null>(null);
+  const [pinModalError, setPinModalError] = useState<string | null>(null);
+  const [pinModalName, setPinModalName] = useState<string | null>(null);
+  const { getCasesByFormIds, fetchCases } = useContext(
     CaseState
   ) as Required<CaseContextState>;
+  const { providePinForCase } = useContext<CaseContextDispatch>(CaseDispatch);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
-
-  const [dialogState, setDialogState] = useState<CoSignDialogState>({
-    showCoSignModal: false,
-    showConfirmationThanksModal: false,
-    hasShownConfirmationThanksModal: false,
-    caseData: null,
-  });
 
   const authContext = useContext(AuthContext);
 
@@ -435,14 +366,17 @@ function CaseOverview(props): JSX.Element {
         const updatedFormCaseObjects = formCases.map(async (caseData) => {
           const form = await getForm(caseData.currentFormId);
           const formFromCase = caseData.forms[caseData.currentFormId];
-          const hasSymmetricKey = await hasGeneratedSymmetricKey(formFromCase);
-          const newCase: CaseWithExtra = {
+          const hasSymmetricKey = !!formFromCase.encryption.symmetricKeyName;
+          const password = hasSymmetricKey
+            ? await getPasswordForForm(formFromCase, authContext.user)
+            : null;
+          const newCaseData: CaseWithExtra = {
             ...caseData,
             caseType,
-            form,
-            hasSymmetricKey,
+            form: form ?? undefined,
+            password: password ?? undefined,
           };
-          return newCase;
+          return newCaseData;
         });
         return Promise.all(updatedFormCaseObjects);
       });
@@ -457,7 +391,7 @@ function CaseOverview(props): JSX.Element {
     };
 
     void updateItems();
-  }, [cases, getCasesByFormIds, getForm, getFormIdsByFormTypes]);
+  }, [authContext.user, getCasesByFormIds, getForm, getFormIdsByFormTypes]);
 
   useEffect(() => {
     if (pendingCaseSign && authContext.status === "signResolved") {
@@ -503,157 +437,54 @@ function CaseOverview(props): JSX.Element {
     navigation,
   ]);
 
-  useEffect(() => {
-    const coApplicantItemsToSign = caseItems.filter((caseData) => {
-      if (!caseData.persons) return false;
+  const showPinInput = (caseData: Case) => {
+    const mainPerson = caseData.persons?.find(
+      (person) => person.role === "applicant"
+    );
+    setPinModalName(mainPerson?.firstName ?? null);
+    setPinModalCase(caseData);
+  };
 
-      const person = caseData.persons.find(
-        (personEntry) =>
-          personEntry.personalNumber === authContext?.user?.personalNumber
-      );
-      const isCoApplicant = person?.role === "coApplicant";
+  const onClosePinModal = () => {
+    setPinModalError(null);
+    setPinModalCase(null);
+  };
 
-      if (!isCoApplicant) return false;
-
-      const currentForm = caseData.forms[caseData.currentFormId];
-
-      const isWaitingForCoApplicantConfirm =
-        currentForm.encryption.publicKeys &&
-        !caseData.hasSymmetricKey &&
-        !Object.entries(currentForm.encryption.publicKeys).every(
-          (item) => item[1] !== null
-        );
-
-      return isWaitingForCoApplicantConfirm;
-    });
-
-    if (coApplicantItemsToSign.length > 0) {
-      if (dialogState.hasShownConfirmationThanksModal) return;
-      setDialogState({
-        ...dialogState,
-        showConfirmationThanksModal: true,
-        caseData: coApplicantItemsToSign[0],
-        hasShownConfirmationThanksModal: true,
-      });
+  const onEnteredPinForCase = async (pin: string) => {
+    if (pinModalCase) {
+      const [provideError] = await to(providePinForCase(pinModalCase, pin));
+      if (provideError) {
+        console.warn("provide pin error:", provideError);
+        setPinModalError("Något blev fel");
+      } else {
+        setPinModalError(null);
+        setPinModalCase(null);
+        onRefresh();
+      }
     }
-  }, [authContext?.user?.personalNumber, caseItems, dialogState]);
-
+  };
   const activeCaseCards = activeCases.map((caseData) =>
-    computeCaseCardComponent(caseData, navigation, authContext, {
-      dialogState,
-      setDialogState,
-    })
+    computeCaseCardComponent(caseData, navigation, authContext, () =>
+      showPinInput(caseData)
+    )
   );
 
   const closedCaseCards = closedCases.map((caseData) =>
-    computeCaseCardComponent(caseData, navigation, authContext, null)
-  );
-
-  const mainApplicantData = dialogState.caseData?.persons?.find(
-    (person) => person.role === "applicant"
-  );
-  const coApplicantData = dialogState.caseData?.persons?.find(
-    (person) => person.role === "coApplicant"
+    computeCaseCardComponent(caseData, navigation, authContext, () =>
+      showPinInput(caseData)
+    )
   );
 
   return (
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
-      <Modal
-        visible={dialogState.showCoSignModal}
-        hide={() =>
-          setDialogState({
-            ...dialogState,
-            showCoSignModal: false,
-          })
-        }
-        transparent
-        presentationStyle="overFullScreen"
-        animationType="fade"
-        statusBarTranslucent
-      >
-        <Wrapper>
-          <DialogContainer>
-            <Heading type="h4">Bekräftelse behövs</Heading>
-            <Text align="center">
-              {"\n"}För att kunna starta ansökan måste{" "}
-              {coApplicantData?.firstName} bekräfta att ni söker tillsammans.
-              {"\n\n"}Bekräfta så här:{"\n\n"}
-              1. {coApplicantData?.firstName} installerar Mitt Helsingborg på
-              sin telefon.{"\n"}
-              2. {coApplicantData?.firstName} loggar in med sitt BankID i appen.
-              {"\n"}
-              3. När {coApplicantData?.firstName} har loggat in är bekräftelse
-              gjord och det går att starta ansökan.{"\n"}
-            </Text>
-            <ButtonContainer>
-              <PopupButton
-                onClick={() =>
-                  setDialogState({
-                    ...dialogState,
-                    showCoSignModal: false,
-                  })
-                }
-                block
-                colorSchema="red"
-              >
-                <Text>Okej</Text>
-              </PopupButton>
-            </ButtonContainer>
-          </DialogContainer>
-          <BackgroundBlur
-            blurType="light"
-            blurAmount={15}
-            reducedTransparencyFallbackColor="white"
-          />
-        </Wrapper>
-      </Modal>
-      <Modal
-        visible={dialogState.showConfirmationThanksModal}
-        hide={() =>
-          setDialogState({
-            ...dialogState,
-            showConfirmationThanksModal: false,
-          })
-        }
-        transparent
-        presentationStyle="overFullScreen"
-        animationType="fade"
-        statusBarTranslucent
-      >
-        <Wrapper>
-          <DialogContainer>
-            <Heading type="h4">Tack, för din bekräftelse!</Heading>
-            <StyledText align="center">
-              Genom att logga in har du bekräftat att du och{" "}
-              {mainApplicantData?.firstName} söker ekonomiskt bistånd
-              tillsammans.
-            </StyledText>
-            <Text align="center">
-              {mainApplicantData?.firstName} kan nu starta ansökan.
-            </Text>
-            <ButtonContainer>
-              <PopupButton
-                onClick={() =>
-                  setDialogState({
-                    ...dialogState,
-                    showConfirmationThanksModal: false,
-                  })
-                }
-                block
-                colorSchema="red"
-              >
-                <Text>Okej</Text>
-              </PopupButton>
-            </ButtonContainer>
-          </DialogContainer>
-          <BackgroundBlur
-            blurType="light"
-            blurAmount={15}
-            reducedTransparencyFallbackColor="white"
-          />
-        </Wrapper>
-      </Modal>
+      <PinInputModal
+        name={pinModalName ?? ""}
+        visible={pinModalCase !== null}
+        onClose={onClosePinModal}
+        onPinEntered={onEnteredPinForCase}
+        error={pinModalError ?? undefined}
+      />
       <Container
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

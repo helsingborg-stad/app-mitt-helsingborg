@@ -6,7 +6,7 @@ import Wrapper from "../../molecules/Dialog/Wrapper";
 import { Modal } from "../../molecules/Modal";
 import { BackgroundBlur } from "../../atoms/BackgroundBlur";
 
-import { ButtonContainer, DialogContainer } from "./styled";
+import { ButtonContainer, DialogContainer, ErrorText } from "./styled";
 
 export interface PinInputModalProps {
   visible: boolean;
@@ -18,7 +18,7 @@ export interface PinInputModalProps {
 
 export default function PinInputModal({
   visible,
-  name: mainApplicantName,
+  name,
   onClose,
   onPinEntered,
   error,
@@ -47,7 +47,7 @@ export default function PinInputModal({
         <DialogContainer>
           <Heading type="h4">Ange kod</Heading>
           <Text align="center" style={{ marginBottom: 10 }}>
-            Ange koden som {mainApplicantName} har fått vid signering
+            Ange koden som {name} har fått vid signering
           </Text>
           <Input
             testID="pin-input"
@@ -55,11 +55,7 @@ export default function PinInputModal({
             onBlur={() => undefined}
             onMount={() => undefined}
           />
-          {error && (
-            <Text align="center" style={{ marginTop: 10 }}>
-              {error}
-            </Text>
-          )}
+          {error && <ErrorText>{error}</ErrorText>}
           <ButtonContainer>
             <Button onClick={handleClosePressed} colorSchema="neutral">
               <Text>Avbryt</Text>

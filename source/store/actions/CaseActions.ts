@@ -1,4 +1,3 @@
-import { wait } from "../../helpers/Misc";
 import { Form } from "../../types/FormTypes";
 import {
   Action,
@@ -6,23 +5,18 @@ import {
   CaseUpdate,
   UpdateCaseBody,
 } from "../../types/CaseContext";
-import {
-  deserializeForm,
-  serializeForm,
-} from "../../services/encryption/DEPRECATED/EncryptionService";
 import { get, post, put } from "../../helpers/ApiRequest";
 import { convertAnswersToArray } from "../../helpers/CaseDataConverter";
-import { deepCompareEquals, deepCopy } from "../../helpers/Objects";
-import {
-  decryptFormAnswers,
-  encryptFormAnswers,
-  setupSymmetricKey,
-} from "../../services/encryption";
-import {
-  getStoredSymmetricKey,
-  UserInterface,
-} from "../../services/encryption/DEPRECATED/EncryptionHelper";
 import { Case } from "../../types/Case";
+import {
+  getCurrentForm,
+  UserInterface,
+} from "../../services/encryption/CaseEncryptionHelper";
+import { CaseEncryptionService } from "../../services/encryption";
+import { wrappedDefaultStorage } from "../../services/StorageService";
+import { to } from "../../helpers/Misc";
+import { PasswordStrategy } from "../../services/encryption/PasswordStrategy";
+import { filterAsync } from "../../helpers/Objects";
 
 export async function updateCase(
   {
@@ -38,6 +32,10 @@ export async function updateCase(
   }: CaseUpdate,
   callback: (updatedCase: Case) => Promise<Action>
 ): Promise<Action> {
+  const encryptionService = new CaseEncryptionService(
+    wrappedDefaultStorage,
+    async () => user
+  );
   let updateCaseRequestBody: UpdateCaseBody = {
     answers: convertAnswersToArray(answerObject, formQuestions),
     currentPosition,
@@ -46,7 +44,9 @@ export async function updateCase(
   };
 
   if (encryptAnswers) {
-    const encryptedForm = await encryptFormAnswers(user, updateCaseRequestBody);
+    const encryptedForm = await encryptionService.encryptForm(
+      updateCaseRequestBody
+    );
     updateCaseRequestBody = {
       ...updateCaseRequestBody,
       ...encryptedForm,
@@ -57,18 +57,18 @@ export async function updateCase(
     updateCaseRequestBody.signature = signature;
   }
 
-  const serializedBody = serializeForm(updateCaseRequestBody);
-
   try {
-    const res = await put(`/cases/${caseId}`, JSON.stringify(serializedBody));
+    const res = await put(
+      `/cases/${caseId}`,
+      JSON.stringify(updateCaseRequestBody)
+    );
     const { id, attributes } = res.data.data;
     const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
     if (callback) {
-      callback(flatUpdatedCase);
+      await callback(flatUpdatedCase);
     }
 
-    flatUpdatedCase.forms[formId] = await decryptFormAnswers(
-      user,
+    flatUpdatedCase.forms[formId] = await encryptionService.decryptForm(
       flatUpdatedCase.forms[formId]
     );
 
@@ -138,91 +138,103 @@ export function deleteCase(caseId: string): Action {
   };
 }
 
-async function checkSymmetricKeyExistsForCase(caseData: Case) {
-  const currentForm = caseData.forms[caseData.currentFormId];
-  const key = await getStoredSymmetricKey(currentForm);
-  return key !== null;
+async function getCasesThatShouldGeneratePin(
+  user: UserInterface,
+  cases: Case[]
+): Promise<Case[]> {
+  const notStartedCases = cases.filter((caseData) =>
+    caseData.status.type.includes("notStarted")
+  );
+  const freshCasesWithCoapplicant = notStartedCases.filter((caseData) => {
+    const currentForm = getCurrentForm(caseData);
+    return !!currentForm.encryption.symmetricKeyName;
+  });
+
+  const casesWhereUserIsMainApplicant = freshCasesWithCoapplicant.filter(
+    (caseData) => {
+      const selfPerson = caseData.persons.find(
+        (person) => person.personalNumber === user.personalNumber
+      );
+      return selfPerson?.role === "applicant";
+    }
+  );
+
+  const casesWithoutGeneratedPin = await filterAsync(
+    casesWhereUserIsMainApplicant,
+    async (caseData) => {
+      const currentForm = getCurrentForm(caseData);
+      const hasPassword = await PasswordStrategy.hasPassword(
+        {
+          user,
+          encryptionDetails: currentForm.encryption,
+        },
+        { storage: wrappedDefaultStorage }
+      );
+
+      return !hasPassword;
+    }
+  );
+
+  return casesWithoutGeneratedPin;
 }
 
-async function updateCaseForSymmetricKey(
-  user: UserInterface,
-  caseData: Case
-): Promise<Case> {
-  const { currentFormId } = caseData;
-  const currentForm = caseData.forms[currentFormId];
-
-  const newForm = await setupSymmetricKey(user, currentForm);
-  const noChangesMade = await deepCompareEquals(currentForm, newForm);
-  const shouldUpdate = !noChangesMade;
-
-  if (shouldUpdate) {
-    const serializedForm = serializeForm(newForm);
-
-    const updateBody = {
-      currentFormId,
-      ...serializedForm,
-    };
-
-    const res = await put(`/cases/${caseData.id}`, JSON.stringify(updateBody));
-    const resCode = res.status;
-
-    if (resCode !== 200) {
-      const message = `${resCode}: ${res.data?.data?.message}`;
-      throw new Error(message);
-    }
-
-    return res.data.data.attributes;
-  }
-
-  return caseData;
+async function setupPinForCases(user: UserInterface, cases: Case[]) {
+  return cases.map(async (caseData) => {
+    const currentForm = getCurrentForm(caseData);
+    const pin = await PasswordStrategy.generateAndSaveBasicPinPassword(
+      {
+        encryptionDetails: currentForm.encryption,
+        user,
+      },
+      {
+        storage: wrappedDefaultStorage,
+      }
+    );
+    console.log(`generated pin ${pin} for case ${caseData.id}`);
+  });
 }
 
 export async function fetchCases(user: UserInterface): Promise<Action> {
   try {
     const response = await get("/cases");
     const rawCases: Case[] = response?.data?.data?.attributes?.cases;
+
     if (rawCases) {
-      const readyCases = await rawCases.reduce(
-        async (pendingProcessedCases, rawCase) => {
-          const processedCases = await pendingProcessedCases;
-          const { currentFormId } = rawCase;
-
-          try {
-            const currentForm = rawCase.forms[currentFormId];
-            const deserializedForm = deserializeForm(currentForm);
-            const decryptedForm = await decryptFormAnswers(
-              user,
-              deserializedForm
-            );
-
-            const rawCaseCopy = deepCopy(rawCase);
-            const decryptedCase = {
-              ...rawCaseCopy,
-              forms: {
-                ...rawCaseCopy.forms,
-                [currentFormId]: decryptedForm,
-              },
-            };
-
-            return {
-              ...processedCases,
-              [rawCase.id]: decryptedCase,
-            };
-          } catch (e) {
-            console.log(
-              `Failed to decrypt answers (Case ID: ${rawCase?.id}), Error: `,
-              e
+      const encryptionService = new CaseEncryptionService(
+        wrappedDefaultStorage,
+        async () => user
+      );
+      const readyCases: Case[] = await Promise.all(
+        rawCases.map(async (caseData: Case) => {
+          const [decryptError, decryptedCase] = await to(
+            encryptionService.decrypt(caseData)
+          );
+          if (decryptError) {
+            console.warn(
+              `unable to decrypt case with id ${caseData.id}`,
+              decryptError
             );
           }
 
-          return processedCases;
-        },
-        Promise.resolve({})
+          return (decryptedCase ?? caseData) as Case;
+        })
+      );
+      const casesToGeneratePinFor = await getCasesThatShouldGeneratePin(
+        user,
+        readyCases
+      );
+      await setupPinForCases(user, casesToGeneratePinFor);
+      const casesMappedById = readyCases.reduce<Record<string, Case>>(
+        (mappedCases, caseData) => ({
+          ...mappedCases,
+          [caseData.id]: caseData,
+        }),
+        {}
       );
 
       return {
         type: ActionTypes.FETCH_CASES,
-        payload: readyCases,
+        payload: casesMappedById,
       };
     }
   } catch (error) {
@@ -235,44 +247,5 @@ export async function fetchCases(user: UserInterface): Promise<Action> {
   return {
     type: ActionTypes.FETCH_CASES,
     payload: {},
-  };
-}
-
-export async function pollCase(
-  user: UserInterface,
-  caseData: Case
-): Promise<Action> {
-  const POLL_INTERVAL = 5000;
-
-  await updateCaseForSymmetricKey(user, caseData);
-
-  await wait(POLL_INTERVAL);
-
-  const response = await get("/cases");
-  const rawCases: Case[] = response?.data?.data?.attributes?.cases;
-
-  if (rawCases) {
-    const relevantCase = rawCases.find((rawCase) => rawCase.id === caseData.id);
-
-    if (relevantCase) {
-      const possiblySyncedCase = await updateCaseForSymmetricKey(
-        user,
-        relevantCase
-      );
-      const isSynced = await checkSymmetricKeyExistsForCase(possiblySyncedCase);
-
-      return {
-        type: ActionTypes.POLL_CASE,
-        payload: { case: possiblySyncedCase, synced: isSynced },
-      };
-    }
-  }
-
-  return {
-    type: ActionTypes.POLL_CASE,
-    payload: {
-      case: caseData,
-      synced: false,
-    },
   };
 }

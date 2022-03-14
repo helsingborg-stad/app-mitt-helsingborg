@@ -25,6 +25,7 @@ import {
   makeFormWithEncryptedData,
   makeFormWithDecryptedData,
   makeCaseWithNewForm,
+  getPasswordForForm,
 } from "../CaseEncryptionHelper";
 import {
   DeviceLocalAESParams,
@@ -354,6 +355,38 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
     const newCase = makeCaseWithNewForm(CASE_DECRYPTED_SOLO, mockForm);
 
     expect(getCurrentForm(newCase)).toEqual(mockForm);
+  });
+
+  test("getPasswordForForm", async () => {
+    const formPartner = getCurrentForm(CASE_DECRYPTED_PARTNER);
+    const user = await MOCK_GET_USER();
+    const storage = new MockStorage();
+
+    const firstTry = await getPasswordForForm(formPartner, user, storage);
+    const generatedPassword =
+      await PasswordStrategy.generateAndSaveBasicPinPassword(
+        { encryptionDetails: formPartner.encryption, user },
+        { storage }
+      );
+    const secondTry = await getPasswordForForm(formPartner, user, storage);
+
+    expect(firstTry).toBeNull();
+    expect(secondTry).toBe(generatedPassword);
+  });
+
+  test("getPasswordForForm throws", async () => {
+    const formSolo = getCurrentForm(CASE_DECRYPTED_SOLO);
+    const user = await MOCK_GET_USER();
+    const storage = new MockStorage();
+
+    const func = () => getPasswordForForm(formSolo, user, storage);
+
+    await expect(func).rejects.toThrow(EncryptionException);
+    await expect(func).rejects.toThrow(
+      expect.objectContaining(<Partial<EncryptionException>>{
+        status: EncryptionErrorStatus.INVALID_INPUT,
+      })
+    );
   });
 });
 
