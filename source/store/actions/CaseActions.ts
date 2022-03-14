@@ -155,7 +155,7 @@ async function getCasesThatShouldGeneratePin(
       const selfPerson = caseData.persons.find(
         (person) => person.personalNumber === user.personalNumber
       );
-      return selfPerson && selfPerson.role === "applicant";
+      return selfPerson?.role === "applicant";
     }
   );
 
