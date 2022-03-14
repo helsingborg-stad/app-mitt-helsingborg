@@ -10,14 +10,8 @@ import { Animated, Easing, RefreshControl } from "react-native";
 import styled from "styled-components/native";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
-import { Modal } from "../../components/molecules/Modal";
 
-import Wrapper from "../../components/molecules/Dialog/Wrapper";
-import Heading from "../../components/atoms/Heading";
-import { BackgroundBlur } from "../../components/atoms/BackgroundBlur";
-import Body from "../../components/molecules/Dialog/Body";
 import FloatingButton from "../../components/molecules/FloatingButton";
-import Button from "../../components/atoms/Button";
 import icons from "../../helpers/Icons";
 import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
 import { Text, Icon } from "../../components/atoms";
@@ -59,45 +53,16 @@ const {
   ACTIVE,
 } = ApplicationStatusType;
 
-const ButtonContainer = styled.View`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  margin-top: 25px;
-  width: 100%;
-`;
-
-const PopupButton = styled(Button)`
-  border: 0;
-  margin-bottom: 12px;
-`;
-
 const Container = styled.ScrollView`
   flex: 1;
   padding-left: 16px;
   padding-right: 16px;
 `;
 
-const DialogContainer = styled(Body)`
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  padding: 32px;
-`;
-
-const StyledText = styled(Text)`
-  margin-bottom: 8px;
-`;
-
 const ListHeading = styled(Text)`
   margin-left: 4px;
   margin-top: 24px;
   margin-bottom: 8px;
-`;
-
-const CardMessageBody = styled(Card.Body)`
-  background-color: ${(props) => props.theme.colors.neutrals[5]};
 `;
 
 const colorSchema = "red";
@@ -111,20 +76,18 @@ const StyledIcon = styled(Icon)`
  * @param {obj} caseData
  * @param {obj} navigation
  * @param {obj} authContext
- * @param {object?} extra Extra properties
  * @param {function?} extra.dialogState
  */
 const computeCaseCardComponent = (
   caseData,
   navigation,
   authContext,
-  extra,
   onShowPinInput
 ) => {
   interface InternalCardProps {
     subtitle: string;
     description?: string;
-    onClick: () => void;
+    onClick?: () => void;
   }
 
   interface InternalButtonProps {
@@ -168,10 +131,6 @@ const computeCaseCardComponent = (
     (person) => person.personalNumber === authContext?.user?.personalNumber
   );
 
-  const caseCoApplicantData = persons.find(
-    ({ role }) => role === "coApplicant"
-  );
-
   const completions = caseData?.details?.completions?.requested || [];
   const completionDuedate = caseData?.details?.completions?.dueDate
     ? moment(caseData?.details?.completions?.dueDate).format("YYYY-MM-DD")
@@ -201,8 +160,6 @@ const computeCaseCardComponent = (
   const isCoApplicant = casePersonData?.role === "coApplicant";
 
   const currentForm: AnsweredForm = caseData?.forms[caseData.currentFormId];
-  const selfNeedsToConfirm = false;
-  const isWaitingForCoApplicantConfirm = false;
 
   const isEncrypted = answersAreEncrypted(currentForm.answers);
   const shouldEnterPin = isEncrypted && isCoApplicant && isWaitingForSign;
@@ -210,8 +167,7 @@ const computeCaseCardComponent = (
   const shouldShowCTAButton =
     (!isEncrypted || shouldEnterPin) &&
     (isCoApplicant
-      ? (isWaitingForSign && !selfHasSigned) ||
-        (isWaitingForCoApplicantConfirm && selfNeedsToConfirm)
+      ? isWaitingForSign && !selfHasSigned
       : isOngoing ||
         isNotStarted ||
         isRandomCheckRequired ||
@@ -258,40 +214,6 @@ const computeCaseCardComponent = (
 
   if (isNotStarted) {
     buttonProps.text = "Starta ansökan";
-
-    if (isWaitingForCoApplicantConfirm) {
-      cardProps.subtitle = "Väntar på bekräftelse";
-      cardProps.description = `För att kunna starta ansökan behöver ${caseCoApplicantData?.firstName} installera Mitt Helsingborg på sin telefon.\n\nNär ${caseCoApplicantData?.firstName} har loggat in med BankID är bekräftelse gjord.\n`;
-      buttonProps.colorSchema = "red";
-      buttonProps.onClick = () => {
-        if (extra && extra.setDialogState) {
-          extra.setDialogState({
-            ...extra.dialogState,
-            showCoSignModal: true,
-            caseData,
-          });
-        }
-      };
-
-      cardProps.onClick = () => undefined;
-
-      if (selfNeedsToConfirm) {
-        cardProps.subtitle = "Öppen";
-        cardProps.description = "Din partner väntar på din bekräftelse";
-        buttonProps.colorSchema = "red";
-        buttonProps.text = "Bekräftar att jag söker ihop med någon";
-
-        buttonProps.onClick = () => {
-          if (extra && extra.setDialogState) {
-            extra.setDialogState({
-              ...extra.dialogState,
-              showConfirmationThanksModal: true,
-              caseData,
-            });
-          }
-        };
-      }
-    }
   }
 
   if (isRandomCheckRequired) {
@@ -355,13 +277,6 @@ const computeCaseCardComponent = (
   );
 };
 
-interface CoSignDialogState {
-  showCoSignModal: boolean;
-  showConfirmationThanksModal: boolean;
-  hasShownConfirmationThanksModal: boolean;
-  caseData: Case | null;
-}
-
 interface CaseWithExtra extends Case {
   caseType: typeof caseTypes[0];
   form: Form;
@@ -388,13 +303,6 @@ function CaseOverview(props): JSX.Element {
   const { providePinForCase } = useContext<CaseContextDispatch>(CaseDispatch);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
-
-  const [dialogState, setDialogState] = useState<CoSignDialogState>({
-    showCoSignModal: false,
-    showConfirmationThanksModal: false,
-    hasShownConfirmationThanksModal: false,
-    caseData: null,
-  });
 
   const authContext = useContext(AuthContext);
 
@@ -531,20 +439,6 @@ function CaseOverview(props): JSX.Element {
     navigation,
   ]);
 
-  useEffect(() => {
-    const coApplicantItemsToSign: CaseWithExtra[] = [];
-
-    if (coApplicantItemsToSign.length > 0) {
-      if (dialogState.hasShownConfirmationThanksModal) return;
-      setDialogState({
-        ...dialogState,
-        showConfirmationThanksModal: true,
-        caseData: coApplicantItemsToSign[0],
-        hasShownConfirmationThanksModal: true,
-      });
-    }
-  }, [authContext?.user?.personalNumber, caseItems, dialogState]);
-
   const showPinInput = (caseData: Case) => {
     const mainPerson = caseData.persons?.find(
       (person) => person.role === "applicant"
@@ -572,136 +466,27 @@ function CaseOverview(props): JSX.Element {
     }
   };
   const activeCaseCards = activeCases.map((caseData) =>
-    computeCaseCardComponent(
-      caseData,
-      navigation,
-      authContext,
-      {
-        dialogState,
-        setDialogState,
-      },
-      () => showPinInput(caseData)
-    )
-  );
-
-  const closedCaseCards = closedCases.map((caseData) =>
-    computeCaseCardComponent(caseData, navigation, authContext, null, () =>
+    computeCaseCardComponent(caseData, navigation, authContext, () =>
       showPinInput(caseData)
     )
   );
 
-  const mainApplicantData = dialogState.caseData?.persons?.find(
-    (person) => person.role === "applicant"
-  );
-  const coApplicantData = dialogState.caseData?.persons?.find(
-    (person) => person.role === "coApplicant"
+  const closedCaseCards = closedCases.map((caseData) =>
+    computeCaseCardComponent(caseData, navigation, authContext, () =>
+      showPinInput(caseData)
+    )
   );
 
   return (
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
       <PinInputModal
-        name={pinModalName}
+        name={pinModalName ?? ""}
         visible={pinModalCase !== null}
         onClose={onClosePinModal}
         onPinEntered={onEnteredPinForCase}
-        error={pinModalError}
+        error={pinModalError ?? undefined}
       />
-      <Modal
-        visible={dialogState.showCoSignModal}
-        hide={() =>
-          setDialogState({
-            ...dialogState,
-            showCoSignModal: false,
-          })
-        }
-        transparent
-        presentationStyle="overFullScreen"
-        animationType="fade"
-        statusBarTranslucent
-      >
-        <Wrapper>
-          <DialogContainer>
-            <Heading type="h4">Bekräftelse behövs</Heading>
-            <Text align="center">
-              {"\n"}För att kunna starta ansökan måste{" "}
-              {coApplicantData?.firstName} bekräfta att ni söker tillsammans.
-              {"\n\n"}Bekräfta så här:{"\n\n"}
-              1. {coApplicantData?.firstName} installerar Mitt Helsingborg på
-              sin telefon.{"\n"}
-              2. {coApplicantData?.firstName} loggar in med sitt BankID i appen.
-              {"\n"}
-              3. När {coApplicantData?.firstName} har loggat in är bekräftelse
-              gjord och det går att starta ansökan.{"\n"}
-            </Text>
-            <ButtonContainer>
-              <PopupButton
-                onClick={() =>
-                  setDialogState({
-                    ...dialogState,
-                    showCoSignModal: false,
-                  })
-                }
-                block
-                colorSchema="red"
-              >
-                <Text>Okej</Text>
-              </PopupButton>
-            </ButtonContainer>
-          </DialogContainer>
-          <BackgroundBlur
-            blurType="light"
-            blurAmount={15}
-            reducedTransparencyFallbackColor="white"
-          />
-        </Wrapper>
-      </Modal>
-      <Modal
-        visible={dialogState.showConfirmationThanksModal}
-        hide={() =>
-          setDialogState({
-            ...dialogState,
-            showConfirmationThanksModal: false,
-          })
-        }
-        transparent
-        presentationStyle="overFullScreen"
-        animationType="fade"
-        statusBarTranslucent
-      >
-        <Wrapper>
-          <DialogContainer>
-            <Heading type="h4">Tack, för din bekräftelse!</Heading>
-            <StyledText align="center">
-              Genom att logga in har du bekräftat att du och{" "}
-              {mainApplicantData?.firstName} söker ekonomiskt bistånd
-              tillsammans.
-            </StyledText>
-            <Text align="center">
-              {mainApplicantData?.firstName} kan nu starta ansökan.
-            </Text>
-            <ButtonContainer>
-              <PopupButton
-                onClick={() =>
-                  setDialogState({
-                    ...dialogState,
-                    showConfirmationThanksModal: false,
-                  })
-                }
-                block
-                colorSchema="red"
-              >
-                <Text>Okej</Text>
-              </PopupButton>
-            </ButtonContainer>
-          </DialogContainer>
-          <BackgroundBlur
-            blurType="light"
-            blurAmount={15}
-            reducedTransparencyFallbackColor="white"
-          />
-        </Wrapper>
-      </Modal>
       <Container
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
