@@ -65,7 +65,7 @@ export async function updateCase(
     const { id, attributes } = res.data.data;
     const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
     if (callback) {
-      callback(flatUpdatedCase);
+      await callback(flatUpdatedCase);
     }
 
     flatUpdatedCase.forms[formId] = await encryptionService.decryptForm(
