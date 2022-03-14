@@ -563,7 +563,7 @@ function CaseOverview(props): JSX.Element {
       const [provideError] = await to(providePinForCase(pinModalCase, pin));
       if (provideError) {
         console.warn("provide pin error:", provideError);
-        setPinModalError("Nåt blev fel");
+        setPinModalError("Något blev fel");
       } else {
         setPinModalError(null);
         setPinModalCase(null);
