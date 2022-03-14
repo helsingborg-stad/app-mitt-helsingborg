@@ -142,10 +142,10 @@ async function getCasesThatShouldGeneratePin(
   user: UserInterface,
   cases: Case[]
 ): Promise<Case[]> {
-  const freshCases = cases.filter((caseData) =>
+  const notStartedCases = cases.filter((caseData) =>
     caseData.status.type.includes("notStarted")
   );
-  const freshCasesWithCoapplicant = freshCases.filter((caseData) => {
+  const freshCasesWithCoapplicant = notStartedCases.filter((caseData) => {
     const currentForm = getCurrentForm(caseData);
     return !!currentForm.encryption.symmetricKeyName;
   });
