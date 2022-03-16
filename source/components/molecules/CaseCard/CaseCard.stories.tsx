@@ -93,6 +93,18 @@ const OverviewExamples = () => (
       showPayments
       declinedAmount="1234 kr"
     />
+
+    <Title>Pin</Title>
+    <CaseCard
+      colorSchema="red"
+      title="Ekonomiskt Bistånd"
+      subtitle="Väntar på signering"
+      largeSubtitle="Juni"
+      icon={icons.ICON_EKB}
+      showButton={false}
+      description="Din pinkod är:"
+      pin="1234"
+    />
   </FlexContainer>
 );
 
