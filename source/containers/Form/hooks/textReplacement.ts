@@ -238,6 +238,13 @@ export const replaceMarkdownTextInSteps = (
           }));
         }
 
+        if (qs.components) {
+          qs.components = qs.components.map((input) => ({
+            ...input,
+            text: replaceText(input.text, user, period, partner),
+          }));
+        }
+
         return qs;
       });
     }
