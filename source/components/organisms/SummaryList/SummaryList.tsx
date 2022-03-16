@@ -110,6 +110,11 @@ type Item = {
 } & Record<string, unknown>;
 
 const ArrayType = ["arrayNumber", "arrayText", "arrayDate"];
+
+const doSort = (answers: Answer[], sortField: string): Answer[] =>
+  [...answers].sort(
+    (a: Answer, b: Answer) => Number(a[sortField]) - Number(b[sortField])
+  );
 /**
  * Summary list, that is linked and summarizes values from other input components.
  * The things to summarize is specified in the items prop.
@@ -139,15 +144,8 @@ const SummaryList: React.FC<Props> = ({
         );
         const sortField = category?.sortField;
         if (sortField && Array.isArray(answers[item.id])) {
-          const answerCopy = [...answers[item.id]].sort(
-            (valueA: Answer, valueB: Answer) => {
-              const a = Number(valueA[sortField]);
-              const b = Number(valueB[sortField]);
-              return a - b;
-            }
-          );
-          answers[item.id].splice(0);
-          answers[item.id].push(...answerCopy);
+          // eslint-disable-next-line no-param-reassign
+          answers[item.id] = doSort(answers[item.id], sortField);
         }
       }
     });

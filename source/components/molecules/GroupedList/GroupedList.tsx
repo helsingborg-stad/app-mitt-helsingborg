@@ -80,20 +80,18 @@ const GroupedList: React.FC<Props> = ({
         property: LayoutAnimation.Properties.opacity,
       },
     });
-    // Sort whenever the summarylist is closed for editing
-    // i.e the 'Close' button is tapped
     if (editable && sortCallback) {
       sortCallback(children.map((element) => element.props.item));
     }
     setEditable(!editable);
   };
 
-  categories.forEach((cat) => {
-    const catItems = children.filter(
-      (item) => item.props.category === cat.category
+  categories.forEach((category) => {
+    const catagoryItems = children.filter(
+      (item) => item.props.category === category.category
     );
-    if (catItems.length > 0) {
-      groupedItems[cat.category] = catItems;
+    if (catagoryItems.length > 0) {
+      groupedItems[category.category] = catagoryItems;
     }
   });
   const validColorSchema = getValidColorSchema(colorSchema);
