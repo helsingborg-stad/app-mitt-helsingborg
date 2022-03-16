@@ -148,8 +148,8 @@ const SummaryList: React.FC<Props> = ({
           answers[item.id] = doSort(answers[item.id], sortField);
         }
       }
+      setModified(!isModified);
     });
-    setModified(!isModified);
   };
   /**
    * Given an item, and possibly an index in the case of repeater fields, this generates a function that
