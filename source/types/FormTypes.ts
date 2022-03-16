@@ -81,6 +81,7 @@ export interface Question {
   text?: string;
   labelLine?: boolean;
   categories?: { category: string; description: string }[];
+  components?: Components[];
 }
 
 export type ActionType =
@@ -98,6 +99,15 @@ export interface Action {
   hasCondition?: boolean;
   conditionalOn?: string;
   signMessage?: string;
+}
+
+export interface Components {
+  type: string;
+  text: string;
+  italic?: boolean;
+  closeButtonText?: string;
+  heading: string;
+  markdownText?: string;
 }
 
 export interface Banner {
