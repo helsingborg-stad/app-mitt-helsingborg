@@ -245,11 +245,19 @@ const computeCaseCardComponent = (
       caseData.password
     }`;
   }
+
   if (shouldEnterPin) {
     buttonProps.onClick = onShowPinInput;
     buttonProps.text = "Ange pinkod";
     cardProps.onClick = undefined;
   }
+
+  if (isWaitingForSign && !isCoApplicant) {
+    const partner = persons.find((person) => person.role === "coApplicant");
+    const partnerName = partner?.firstName;
+    cardProps.description = `${partnerName} loggar in i appen med BankID och anger koden för att granska och signera er ansökan.\n\nKod till ${partnerName}:`;
+  }
+
   return (
     <CaseCard
       key={caseData.id}
@@ -273,6 +281,7 @@ const computeCaseCardComponent = (
       buttonColorScheme={buttonProps.colorSchema || colorSchema}
       completions={unApprovedCompletionDescriptions}
       completionDuedate={completionDuedate}
+      pin={caseData.password}
     />
   );
 };
