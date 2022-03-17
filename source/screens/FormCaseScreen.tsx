@@ -1,18 +1,28 @@
 import React, { useContext, useEffect, useState, useMemo } from "react";
 import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
+
 import Form, {
   defaultInitialPosition,
   defaultInitialStatus,
 } from "../containers/Form/Form";
+
+import AuthContext from "../store/AuthContext";
+import FormContext from "../store/FormContext";
+import { CaseDispatch, CaseState } from "../store/CaseContext";
+
 import {
   getFormQuestions,
   convertAnswerArrayToObject,
 } from "../helpers/CaseDataConverter";
-import AuthContext from "../store/AuthContext";
-import FormContext from "../store/FormContext";
-import { CaseDispatch, CaseState } from "../store/CaseContext";
-import { Case, FormPosition, ApplicationStatusType } from "../types/Case";
+import { getPasswordForForm } from "../services/encryption/CaseEncryptionHelper";
+
+import {
+  Case,
+  FormPosition,
+  ApplicationStatusType,
+  AnsweredForm,
+} from "../types/Case";
 import { CaseUpdate, Answer, Signature, Action } from "../types/CaseContext";
 
 const SpinnerContainer = styled.View`
@@ -31,6 +41,7 @@ const FormCaseScreen = ({
   ...props
 }: FormCaseScreenProps): JSX.Element => {
   const [currentFormId, setCurrentFormId] = useState("");
+  const [encryptionPin, setEncryptionPin] = useState("");
   const { caseId, isSignMode } = route?.params || {};
   const { user } = useContext(AuthContext);
   const { getForm, forms } = useContext(FormContext);
@@ -54,30 +65,46 @@ const FormCaseScreen = ({
     initialCase?.forms?.[initialCase.currentFormId]?.answers || {};
 
   useEffect(() => {
-    if (caseId) {
-      const initCase = cases[caseId];
+    const setInitialCase = async () => {
+      if (caseId) {
+        const initCase = cases[caseId];
 
-      if (initCase !== undefined) {
-        // Beware, dragons! Since we pass by reference, it seems like the answers
-        // can be converted to object form already, thus we do this check.
-        if (Array.isArray(initCase?.forms?.[initCase.currentFormId]?.answers)) {
-          const answerArray =
-            initCase?.forms?.[initCase.currentFormId]?.answers || [];
-          const answersObject = convertAnswerArrayToObject(answerArray);
-          initCase.forms = {
-            ...initCase.forms,
-            [initCase.currentFormId]: {
-              ...initCase.forms[initCase.currentFormId],
-              answers: answersObject,
-            },
-          };
+        if (initCase !== undefined) {
+          // Beware, dragons! Since we pass by reference, it seems like the answers
+          // can be converted to object form already, thus we do this check.
+          if (
+            Array.isArray(initCase?.forms?.[initCase.currentFormId]?.answers)
+          ) {
+            const answerArray =
+              initCase?.forms?.[initCase.currentFormId]?.answers || [];
+            const answersObject = convertAnswerArrayToObject(answerArray);
+            initCase.forms = {
+              ...initCase.forms,
+              [initCase.currentFormId]: {
+                ...initCase.forms[initCase.currentFormId],
+                answers: answersObject,
+              },
+            };
+          }
+
+          const encryption =
+            initCase?.forms?.[initCase.currentFormId].encryption ?? {};
+
+          const pinCode =
+            ((await getPasswordForForm(
+              { encryption } as AnsweredForm,
+              user
+            )) as string) ?? "";
+
+          setEncryptionPin(pinCode);
+          void getForm(initCase.currentFormId);
+          setCurrentFormId(initCase.currentFormId);
         }
-
-        void getForm(initCase.currentFormId);
-        setCurrentFormId(initCase.currentFormId);
       }
-    }
-  }, [getForm, caseId, cases]);
+    };
+
+    void setInitialCase();
+  }, [getForm, caseId, cases, user]);
 
   const handleCloseForm = () => {
     navigation.popToTop();
@@ -150,6 +177,7 @@ const FormCaseScreen = ({
       completions={initialCase?.details?.completions?.requested || []}
       onUpdateCase={handleUpdateCase}
       editable={!isSignMode}
+      encryptionPin={encryptionPin}
       {...props}
     />
   );

@@ -72,6 +72,7 @@ const replacementRules = [
   ["#year", "date.currentYear"], // this is the current year of next month
   ["#today", "date.currentDate"], // this is the current year of next month
   ["#partnerName", "partner.partnerName"],
+  ["#encryptionPin", "encryptionPin"],
 ];
 
 const swedishMonthTable = [
@@ -148,7 +149,8 @@ const computeText = (
   descriptor: string,
   user: User,
   period?: FormPeriod,
-  partner?: PartnerInfo
+  partner?: PartnerInfo,
+  encryptionPin?: string
 ): string => {
   const strArr = descriptor.split(".");
   if (strArr[0] === "user") {
@@ -160,6 +162,9 @@ const computeText = (
   if (strArr[0] === "date") {
     return replaceDates(strArr, period);
   }
+  if (strArr[0] === "encryptionPin" && encryptionPin) {
+    return encryptionPin;
+  }
   return "";
 };
 
@@ -167,13 +172,17 @@ export const replaceText = (
   text: string,
   user: User,
   period?: FormPeriod,
-  partner?: PartnerInfo
+  partner?: PartnerInfo,
+  encryptionPin?: string
 ) => {
   // This way of doing it might be a bit overkill, but the idea is that this in principle
   // allows for nesting replacement rules and then applying them in order one after the other.
   let res = text;
   replacementRules.forEach(([template, descriptor]) => {
-    res = res.replace(template, computeText(descriptor, user, period, partner));
+    res = res.replace(
+      template,
+      computeText(descriptor, user, period, partner, encryptionPin)
+    );
   });
   return res;
 };
@@ -188,31 +197,56 @@ export const replaceMarkdownTextInSteps = (
   steps: Step[],
   user: User,
   period?: FormPeriod,
-  partner?: PartnerInfo
+  partner?: PartnerInfo,
+  encryptionPin?: string
 ): Step[] => {
   const newSteps = steps.map((step) => {
     if (step.questions) {
       step.questions = step.questions.map((qs) => {
         if (qs.text && qs.text !== "") {
-          qs.text = replaceText(qs.text, user, period, partner);
+          qs.text = replaceText(qs.text, user, period, partner, encryptionPin);
         }
 
         if (qs.label && qs.label !== "") {
-          qs.label = replaceText(qs.label, user, period, partner);
+          qs.label = replaceText(
+            qs.label,
+            user,
+            period,
+            partner,
+            encryptionPin
+          );
         }
 
         if (qs.title && qs.title !== "") {
-          qs.title = replaceText(qs.title, user, period, partner);
+          qs.title = replaceText(
+            qs.title,
+            user,
+            period,
+            partner,
+            encryptionPin
+          );
         }
 
         if (qs.heading && qs.heading !== "") {
-          qs.heading = replaceText(qs.heading, user, period, partner);
+          qs.heading = replaceText(
+            qs.heading,
+            user,
+            period,
+            partner,
+            encryptionPin
+          );
         }
 
         if (qs.items) {
           qs.items = qs.items.map((item) => ({
             ...item,
-            title: replaceText(item.title, user, period, partner),
+            title: replaceText(
+              item.title,
+              user,
+              period,
+              partner,
+              encryptionPin
+            ),
           }));
         }
 
@@ -223,7 +257,8 @@ export const replaceMarkdownTextInSteps = (
               category.description,
               user,
               period,
-              partner
+              partner,
+              encryptionPin
             ),
           }));
         }
@@ -232,25 +267,40 @@ export const replaceMarkdownTextInSteps = (
           qs.inputs = qs.inputs.map((input) => ({
             ...input,
             label:
-              input.label && replaceText(input.label, user, period, partner),
+              input.label &&
+              replaceText(input.label, user, period, partner, encryptionPin),
             title:
-              input.title && replaceText(input.title, user, period, partner),
+              input.title &&
+              replaceText(input.title, user, period, partner, encryptionPin),
           }));
         }
 
         if (qs.components) {
           qs.components = qs.components.map((input) => ({
             ...input,
-            text: replaceText(input.text, user, period, partner),
+            text: replaceText(input.text, user, period, partner, encryptionPin),
           }));
         }
 
         return qs;
       });
     }
-    if (step.title) step.title = replaceText(step.title, user, period, partner);
+    if (step.title)
+      step.title = replaceText(
+        step.title,
+        user,
+        period,
+        partner,
+        encryptionPin
+      );
     if (step.description)
-      step.description = replaceText(step.description, user, period, partner);
+      step.description = replaceText(
+        step.description,
+        user,
+        period,
+        partner,
+        encryptionPin
+      );
     return step;
   });
 

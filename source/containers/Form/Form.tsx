@@ -62,6 +62,7 @@ interface Props {
   editable: boolean;
   completions: RequestedCompletions[];
   persons: Person[];
+  encryptionPin: string;
 }
 
 export const defaultInitialPosition: FormPosition = {
@@ -98,6 +99,7 @@ const Form: React.FC<Props> = ({
   editable,
   completions,
   persons,
+  encryptionPin,
 }) => {
   const initialState: FormReducerState = {
     submitted: false,
@@ -113,6 +115,7 @@ const Form: React.FC<Props> = ({
     period,
     editable,
     persons,
+    encryptionPin,
   };
 
   const {
