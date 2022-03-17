@@ -16,6 +16,7 @@ import {
   convertAnswerArrayToObject,
 } from "../helpers/CaseDataConverter";
 import { getPasswordForForm } from "../services/encryption/CaseEncryptionHelper";
+import { to } from "../helpers/Misc";
 
 import {
   Case,
@@ -90,13 +91,13 @@ const FormCaseScreen = ({
           const encryption =
             initCase?.forms?.[initCase.currentFormId].encryption ?? {};
 
-          const pinCode =
-            ((await getPasswordForForm(
-              { encryption } as AnsweredForm,
-              user
-            )) as string) ?? "";
+          const [, pinCode] = await to(
+            getPasswordForForm({ encryption } as AnsweredForm, user)
+          );
 
-          setEncryptionPin(pinCode);
+          const pinCodeToUse = (pinCode ?? "") as string;
+
+          setEncryptionPin(pinCodeToUse);
           void getForm(initCase.currentFormId);
           setCurrentFormId(initCase.currentFormId);
         }
