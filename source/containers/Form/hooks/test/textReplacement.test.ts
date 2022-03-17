@@ -47,7 +47,8 @@ const doTest = (
   placeholder: string,
   expected: string,
   partner: PartnerInfo | undefined = undefined,
-  period: Period = basePeriod
+  period: Period = basePeriod,
+  encryptionPin = "1234"
 ): void => {
   const res = replaceMarkdownTextInSteps(
     [
@@ -103,12 +104,14 @@ const doTest = (
               },
             ],
           },
+          { ...baseQuestion, label: placeholder },
         ],
       },
     ],
     mockedUserData,
     period,
-    partner
+    partner,
+    encryptionPin
   );
 
   expect(res[0].title).toBe(expected);
@@ -125,6 +128,8 @@ const doTest = (
   expect(res[0]?.questions?.[2].text).toBe(expected);
   expect(res[0]?.questions?.[2].heading).toBe(expected);
   expect(res[0]?.questions?.[2].title).toBe(expected);
+
+  expect(res[0]?.questions?.[3].label).toBe(expected);
 };
 
 jest.useFakeTimers().setSystemTime(new Date("2021-01-01").getTime());
@@ -190,6 +195,13 @@ describe("replaceMarkdownTextInSteps", () => {
     describe("Doesn't have a partner", () => {
       it.each([["#partnerName", ""]])("Replaces %s with %s", doTest);
     });
+  });
+  describe("Encryption pin", () => {
+    it.each([["#encryptionPin", "1111"]])(
+      "Replaces %s with %s",
+      (placeholder, expected) =>
+        doTest(placeholder, expected, undefined, undefined, expected)
+    );
   });
 });
 

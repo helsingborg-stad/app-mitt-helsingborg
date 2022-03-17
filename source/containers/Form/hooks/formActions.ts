@@ -1,11 +1,11 @@
+import { PartnerInfo, User } from "app/types/UserTypes";
+import { Person, PersonRole } from "app/types/Case";
 import { Question, StepperActions } from "../../../types/FormTypes";
 import { replaceMarkdownTextInSteps } from "./textReplacement";
 import { FormReducerState } from "./useForm";
 import { validateInput } from "../../../helpers/ValidationHelper";
 import { evaluateConditionalExpression } from "../../../helpers/conditionParser";
 import { deepCopy } from "../../../helpers/Objects";
-import { PartnerInfo, User } from "app/types/UserTypes";
-import { Person, PersonRole } from "app/types/Case";
 
 function computePartnerPersonInfo(person: Person): PartnerInfo {
   return {
@@ -30,6 +30,7 @@ export function replaceMarkdownText(state: FormReducerState) {
     period,
     formAnswers: { partnerInfo },
     persons,
+    encryptionPin,
   } = state;
 
   const partnerPerson = findPersonByRole(persons, "coApplicant");
@@ -50,7 +51,8 @@ export function replaceMarkdownText(state: FormReducerState) {
     steps,
     computedApplicant,
     period,
-    computedPartnerInfo
+    computedPartnerInfo,
+    encryptionPin
   );
   return {
     ...state,

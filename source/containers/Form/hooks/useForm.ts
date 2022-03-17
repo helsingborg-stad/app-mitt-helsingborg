@@ -30,6 +30,7 @@ export interface FormReducerState {
   period?: FormPeriod;
   editable?: boolean;
   persons: Person[];
+  encryptionPin: string;
 }
 
 function useForm(initialState: FormReducerState) {
