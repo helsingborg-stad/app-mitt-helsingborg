@@ -15,6 +15,13 @@ Card.Meta = styled(Card.Text)`
   ${(props) => `color: ${props.theme.colors.neutrals[1]};`}
 `;
 
+Card.PinText = styled(Card.Text)`
+  font-size: ${(props) => props.theme.fontSizes[9]}px;
+  font-weight: ${(props) => props.theme.fontWeights[1]};
+  line-height: 0px;
+  margin-top: 12px;
+`;
+
 interface CaseCardProps {
   title: string;
   subtitle?: string;
@@ -41,6 +48,7 @@ interface CaseCardProps {
   buttonColorScheme?: string;
   completions?: string[];
   completionDuedate: string;
+  pin?: string;
 }
 
 const CaseCard = ({
@@ -69,6 +77,7 @@ const CaseCard = ({
   buttonColorScheme = "red",
   completions = [],
   completionDuedate,
+  pin,
 }: CaseCardProps): JSX.Element => (
   <Card colorSchema={colorSchema}>
     <Card.Body shadow color="neutral" onPress={onCardClick}>
@@ -79,6 +88,7 @@ const CaseCard = ({
       )}
       {subtitle && <Card.SubTitle>{subtitle}</Card.SubTitle>}
       {description && <Card.Text>{description}</Card.Text>}
+      {pin && <Card.PinText>{pin}</Card.PinText>}
 
       {showBookingDate && (
         <DateTimeCard
