@@ -37,9 +37,8 @@ interface Props {
   children: React.ReactElement<{
     category: string;
     editable?: boolean;
-    item: SummaryListItem;
   }>[];
-  sortCallback?: (items: SummaryListItem[]) => void;
+  onCloseCallback?: () => void;
 }
 
 /**
@@ -54,7 +53,7 @@ const GroupedList: React.FC<Props> = ({
   startEditable = false,
   help,
   children,
-  sortCallback,
+  onCloseCallback,
 }) => {
   const [editable, setEditable] = useState(startEditable);
 
@@ -80,8 +79,8 @@ const GroupedList: React.FC<Props> = ({
         property: LayoutAnimation.Properties.opacity,
       },
     });
-    if (editable && sortCallback) {
-      sortCallback(children.map((element) => element.props.item));
+    if (editable && onCloseCallback) {
+      onCloseCallback();
     }
     setEditable(!editable);
   };
@@ -154,7 +153,7 @@ GroupedList.propTypes = {
    */
   startEditable: PropTypes.bool,
   children: PropTypes.array,
-  sortCallback: PropTypes.func,
+  onCloseCallback: PropTypes.func,
   /**
    * Show a help button
    */

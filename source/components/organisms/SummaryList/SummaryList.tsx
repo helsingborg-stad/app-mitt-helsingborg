@@ -136,8 +136,8 @@ const SummaryList: React.FC<Props> = ({
 }) => {
   const [isModified, setModified] = useState(false);
 
-  const sortAnswers = (listItems: SummaryListItem[]) => {
-    listItems.forEach((item) => {
+  const sortAnswers = (itemsToSort: SummaryListItem[]) => {
+    itemsToSort.forEach((item) => {
       if (ArrayType.includes(item.type)) {
         const category = categories?.find(
           (categoryItem) => item.category === categoryItem.category
@@ -239,7 +239,10 @@ const SummaryList: React.FC<Props> = ({
     }
   };
 
-  const listItems: React.ReactElement<{ category: string }>[] = [];
+  const listItems: React.ReactElement<{
+    category: string;
+    item: SummaryListItem;
+  }>[] = [];
 
   const itemsWithAnswers = items.filter((item) => {
     const answer = answers[item.id];
@@ -249,28 +252,6 @@ const SummaryList: React.FC<Props> = ({
       return true;
     }
   });
-
-  /*
-  Divide answers into their respective group
-  Items belonging to the same group shares the same id.
-  [
-    {
-        "inputId": "childrenFirstname",
-        "id": "childrenInfo",
-        "category": "categoryId",
-        "type": "arrayText",
-        "inputSelectValue": "arrayText",
-        ...
-    },
-    {
-        "inputId": "childrenPersonalID",
-        "id": "childrenInfo",
-        "category": "categoryId",
-        "type": "arrayNumber",
-        "inputSelectValue": "arrayNumber",
-        ...
-  ]
-  */
 
   const itemIdmap: Map<string, List> = new Map();
   itemsWithAnswers.forEach((item: SummaryListItem) => {
@@ -427,7 +408,9 @@ const SummaryList: React.FC<Props> = ({
           showEditButton={editable}
           startEditable={startEditable && editable}
           help={help}
-          sortCallback={sortAnswers}
+          onCloseCallback={() => {
+            sortAnswers(listItems.map((element) => element.props.item));
+          }}
         >
           {listItems}
         </GroupedList>
