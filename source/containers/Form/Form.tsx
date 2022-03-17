@@ -164,7 +164,6 @@ const Form: React.FC<Props> = ({
   const showNotification = useNotification();
 
   const signCase = async () => {
-    console.log("SIGNING CASE", { persons, period });
     const signature = { success: true };
     formNavigation.next();
     await onUpdateCase(answers, signature, formState.currentPosition);
