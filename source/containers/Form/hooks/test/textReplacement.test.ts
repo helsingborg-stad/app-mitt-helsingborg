@@ -196,6 +196,7 @@ describe("replaceMarkdownTextInSteps", () => {
       it.each([["#partnerName", ""]])("Replaces %s with %s", doTest);
     });
   });
+
   describe("Encryption pin", () => {
     it.each([["#encryptionPin", "1111"]])(
       "Replaces %s with %s",
