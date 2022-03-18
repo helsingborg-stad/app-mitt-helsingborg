@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import GroupedList from "../../molecules/GroupedList/GroupedList";
@@ -10,7 +10,6 @@ import {
   PrimaryColor,
 } from "../../../styles/themeHelpers";
 import { Help } from "../../../types/FormTypes";
-import { useNotification } from "../../../store/NotificationContext";
 import { InputType } from "../../atoms/Input/Input";
 
 const SumLabel = styled(Heading)<{ colorSchema: string }>`
@@ -62,6 +61,7 @@ export interface SummaryListItem {
 interface SummaryListCategory {
   category: string;
   description: string;
+  sortField?: string;
 }
 
 interface Props {
@@ -109,6 +109,12 @@ type Item = {
   description?: string;
 } & Record<string, unknown>;
 
+const ArrayType = ["arrayNumber", "arrayText", "arrayDate"];
+
+const doSort = (answers: Answer[], sortField: string): Answer[] =>
+  [...answers].sort(
+    (a: Answer, b: Answer) => Number(a[sortField]) - Number(b[sortField])
+  );
 /**
  * Summary list, that is linked and summarizes values from other input components.
  * The things to summarize is specified in the items prop.
@@ -128,9 +134,23 @@ const SummaryList: React.FC<Props> = ({
   help,
   editable,
 }) => {
-  // For development: show an error popup when something is configured wrong.
-  const showNotification = useNotification();
+  const [isModified, setModified] = useState(false);
 
+  const sortAnswers = (itemsToSort: SummaryListItem[]) => {
+    itemsToSort.forEach((item) => {
+      if (ArrayType.includes(item.type)) {
+        const category = categories?.find(
+          (categoryItem) => item.category === categoryItem.category
+        );
+        const sortField = category?.sortField;
+        if (sortField && Array.isArray(answers[item.id])) {
+          // eslint-disable-next-line no-param-reassign
+          answers[item.id] = doSort(answers[item.id], sortField);
+        }
+      }
+    });
+    setModified(!isModified);
+  };
   /**
    * Given an item, and possibly an index in the case of repeater fields, this generates a function that
    * updates the form data from the input.
@@ -141,7 +161,7 @@ const SummaryList: React.FC<Props> = ({
     (item: SummaryListItem, index?: number) =>
     (value: string | number | boolean) => {
       if (
-        ["arrayNumber", "arrayText", "arrayDate"].includes(item.type) &&
+        ArrayType.includes(item.type) &&
         typeof index !== "undefined" &&
         item.inputId
       ) {
@@ -219,7 +239,10 @@ const SummaryList: React.FC<Props> = ({
     }
   };
 
-  const listItems: React.ReactElement<{ category: string }>[] = [];
+  const listItems: React.ReactElement<{
+    category: string;
+    item: SummaryListItem;
+  }>[] = [];
 
   const itemsWithAnswers = items.filter((item) => {
     const answer = answers[item.id];
@@ -230,45 +253,30 @@ const SummaryList: React.FC<Props> = ({
     }
   });
 
-  /*
-  Divide answers into their respective group
-  Items belonging to the same group shares the same id.
-  [
-    {
-        "inputId": "childrenFirstname",
-        "id": "childrenInfo",
-        "category": "categoryId",
-        "type": "arrayText",
-        "inputSelectValue": "arrayText",
-        ...
-    },
-    {
-        "inputId": "childrenPersonalID",
-        "id": "childrenInfo",
-        "category": "categoryId",
-        "type": "arrayNumber",
-        "inputSelectValue": "arrayNumber",
-        ...
-  ]
-  */
-  const map: Map<string, List> = new Map();
+  const itemIdmap: Map<string, List> = new Map();
   itemsWithAnswers.forEach((item: SummaryListItem) => {
-    if (!map.has(item.id)) {
-      map.set(item.id, {
+    // Group answers by item
+    if (!itemIdmap.has(item.id)) {
+      itemIdmap.set(item.id, {
         items: [item],
         answers: answers[item.id] ?? "",
       });
     } else {
-      map.get(item.id)?.items.push(item);
+      itemIdmap.get(item.id)?.items.push(item);
     }
   });
+
+  useEffect(() => {
+    sortAnswers(itemsWithAnswers);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * Join answer with its component
    */
   const reorganizedList: Item[] = [];
 
-  map.forEach((value) => {
+  itemIdmap.forEach((value) => {
     if (Array.isArray(value.answers)) {
       value.answers.forEach((answer, index) => {
         value.items.forEach((item) => {
@@ -292,9 +300,7 @@ const SummaryList: React.FC<Props> = ({
   });
 
   reorganizedList.forEach((listEntry) => {
-    if (
-      ["arrayNumber", "arrayText", "arrayDate"].includes(listEntry.item.type)
-    ) {
+    if (ArrayType.includes(listEntry.item.type)) {
       // in this case we have some answers from a repeater field, and need to loop over and show each one
       const validationError = validationErrors?.[listEntry.item.id]?.[
         listEntry.index ?? 0
@@ -402,6 +408,9 @@ const SummaryList: React.FC<Props> = ({
           showEditButton={editable}
           startEditable={startEditable && editable}
           help={help}
+          onCloseCallback={() => {
+            sortAnswers(listItems.map((element) => element.props.item));
+          }}
         >
           {listItems}
         </GroupedList>
