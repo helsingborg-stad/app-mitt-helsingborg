@@ -8,7 +8,6 @@ import {
 } from "@react-navigation/native";
 
 import MainNavigator from "./MainNavigator";
-import FeatureModalNavigator from "../screens/featureModalScreens/FeatureModalNavigator";
 
 import AuthContext from "../store/AuthContext";
 import { NotifeeProvider } from "../store/NotifeeContext";
@@ -52,31 +51,21 @@ const CustomNavigator = ({
 const createRootCustomNavigator = createNavigatorFactory(CustomNavigator);
 const RootCustomNavigator = createRootCustomNavigator();
 
-const RootNavigator = (): JSX.Element => {
-  const { userAuthState } = useContext(AuthContext);
-
-  return (
-    <RootCustomNavigator.Navigator
-      screenOptions={{
-        cardStyle: { backgroundColor: "transparent" },
-        headerShown: false,
-        cardOverlayEnabled: true,
-        cardShadowEnabled: true,
-      }}
-    >
-      <RootCustomNavigator.Screen
-        name="Main"
-        component={MainNavigator}
-        options={{ headerShown: false }}
-      />
-      {userAuthState === USER_AUTH_STATE.SIGNED_IN && (
-        <RootCustomNavigator.Screen
-          name="FeatureModal"
-          component={FeatureModalNavigator}
-        />
-      )}
-    </RootCustomNavigator.Navigator>
-  );
-};
+const RootNavigator = (): JSX.Element => (
+  <RootCustomNavigator.Navigator
+    screenOptions={{
+      cardStyle: { backgroundColor: "transparent" },
+      headerShown: false,
+      cardOverlayEnabled: true,
+      cardShadowEnabled: true,
+    }}
+  >
+    <RootCustomNavigator.Screen
+      name="Main"
+      component={MainNavigator}
+      options={{ headerShown: false }}
+    />
+  </RootCustomNavigator.Navigator>
+);
 
 export default RootNavigator;
