@@ -27,7 +27,7 @@ enum DIALOG_TEMPLATE {
   MAIN_STEP = "mainStep",
   MAIN_STEP_COMPLETIONS = "mainStep:completions",
   SUB_STEP = "subStep",
-  NEW_APPLICATION_STEP = "new:application",
+  NEW_APPLICATION_STEP = "newApplication",
 }
 
 interface DialogButtons {
@@ -41,46 +41,42 @@ interface DialogText {
   body: string;
 }
 
-const getDialogText = (template: DIALOG_TEMPLATE): DialogText => {
-  switch (template) {
-    case DIALOG_TEMPLATE.MAIN_STEP:
-    case DIALOG_TEMPLATE.NEW_APPLICATION_STEP:
-      return {
-        title: "Vill du avbryta ansökan",
-        body: "Ansökan sparas i 3 dagar. Efter det raderas den och du får starta en ny.",
-      };
-    case DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS:
-      return {
-        title: "Vill du stänga formuläret?",
-        body: "Formuläret sparas och du kan fortsätta fylla i det fram till sista dagen för inlämning.",
-      };
-    case DIALOG_TEMPLATE.SUB_STEP:
-      return {
-        title: "Vill du stänga fönster utan att spara inmatad uppgift?",
-        body: "",
-      };
-    default:
-      return {
-        title: "",
-        body: "",
-      };
-  }
+const dialogTextCloseInThreeDays: DialogText = {
+  title: "Vill du avbryta ansökan",
+  body: "Ansökan sparas i 3 dagar. Efter det raderas den och du får starta en ny.",
 };
 
-const getDialogTemplate = (status: string): DIALOG_TEMPLATE => {
-  switch (status) {
-    case ACTIVE_RANDOM_CHECK_REQUIRED_VIVA:
-    case ACTIVE_ONGOING_RANDOM_CHECK:
-    case ACTIVE_COMPLETION_REQUIRED_VIVA:
-    case ACTIVE_ONGOING_COMPLETION:
-      return DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS;
-    case NEW_APPLICATION:
-    case ACTIVE_ONGOING_NEW_APPLICATION:
-      return DIALOG_TEMPLATE.NEW_APPLICATION_STEP;
-    default:
-      return DIALOG_TEMPLATE.MAIN_STEP;
-  }
+const dialogTextSaveForm: DialogText = {
+  title: "Vill du stänga formuläret?",
+  body: "Formuläret sparas och du kan fortsätta fylla i det fram till sista dagen för inlämning.",
 };
+
+const dialogCloseWithoutSaving: DialogText = {
+  title: "Vill du stänga fönster utan att spara inmatad uppgift?",
+  body: "",
+};
+
+const dialogTexts: Record<DIALOG_TEMPLATE, DialogText> = {
+  [DIALOG_TEMPLATE.MAIN_STEP]: dialogTextCloseInThreeDays,
+  [DIALOG_TEMPLATE.NEW_APPLICATION_STEP]: dialogTextCloseInThreeDays,
+  [DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS]: dialogTextSaveForm,
+  [DIALOG_TEMPLATE.SUB_STEP]: dialogCloseWithoutSaving,
+};
+
+const getDialogText = (template: DIALOG_TEMPLATE): DialogText =>
+  dialogTexts[template] ?? { title: "", body: "" };
+
+const statusTemplateMap: Record<string, DIALOG_TEMPLATE> = {
+  [ACTIVE_RANDOM_CHECK_REQUIRED_VIVA]: DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS,
+  [ACTIVE_ONGOING_RANDOM_CHECK]: DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS,
+  [ACTIVE_COMPLETION_REQUIRED_VIVA]: DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS,
+  [ACTIVE_ONGOING_COMPLETION]: DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS,
+  [NEW_APPLICATION]: DIALOG_TEMPLATE.NEW_APPLICATION_STEP,
+  [ACTIVE_ONGOING_NEW_APPLICATION]: DIALOG_TEMPLATE.NEW_APPLICATION_STEP,
+};
+
+const getDialogTemplate = (status: string): DIALOG_TEMPLATE =>
+  statusTemplateMap[status] ?? DIALOG_TEMPLATE.MAIN_STEP;
 
 const StepContainer = styled.View`
   flex: 1;
@@ -169,29 +165,21 @@ function Step({
     setDialogIsVisible(false);
   };
 
+  const defaultButtons: DialogButtons[] = [
+    {
+      text: "Nej",
+      color: "neutral" as PrimaryColor,
+      clickHandler: closeDialog,
+    },
+    {
+      text: "Ja",
+      clickHandler: closeDialogAndForm,
+    },
+  ];
+
   const dialogButtons: DialogButtons[] = {
-    [DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS]: [
-      {
-        text: "Nej",
-        color: "neutral" as PrimaryColor,
-        clickHandler: closeDialog,
-      },
-      {
-        text: "Ja",
-        clickHandler: closeDialogAndForm,
-      },
-    ],
-    [DIALOG_TEMPLATE.MAIN_STEP]: [
-      {
-        text: "Nej",
-        color: "neutral" as PrimaryColor,
-        clickHandler: closeDialog,
-      },
-      {
-        text: "Ja",
-        clickHandler: closeDialogAndForm,
-      },
-    ],
+    [DIALOG_TEMPLATE.MAIN_STEP_COMPLETIONS]: defaultButtons,
+    [DIALOG_TEMPLATE.MAIN_STEP]: defaultButtons,
     [DIALOG_TEMPLATE.SUB_STEP]: [
       {
         text: "Nej",
@@ -203,17 +191,7 @@ function Step({
         clickHandler: navigateToMainForm,
       },
     ],
-    [DIALOG_TEMPLATE.NEW_APPLICATION_STEP]: [
-      {
-        text: "Nej",
-        color: "neutral" as PrimaryColor,
-        clickHandler: closeDialog,
-      },
-      {
-        text: "Ja",
-        clickHandler: closeDialogAndForm,
-      },
-    ],
+    [DIALOG_TEMPLATE.NEW_APPLICATION_STEP]: defaultButtons,
   }[dialogTemplate];
 
   const backButtonBehavior = isSubstep
