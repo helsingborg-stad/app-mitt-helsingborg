@@ -18,7 +18,7 @@ Card.Meta = styled(Card.Text)`
 Card.PinText = styled(Card.Text)`
   font-size: ${(props) => props.theme.fontSizes[9]}px;
   font-weight: ${(props) => props.theme.fontWeights[1]};
-  line-height: 0px;
+  line-height: ${(props) => props.theme.lineHeights[8]};
   margin-top: 12px;
 `;
 
