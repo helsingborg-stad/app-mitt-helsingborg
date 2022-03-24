@@ -10,7 +10,7 @@ export const getBlob = async (fileUri: string): Promise<Blob> => {
   return fileBlob;
 };
 
-type AllowedFileTypes = "jpg" | "jpeg" | "png" | "pdf";
+export type AllowedFileTypes = "jpg" | "jpeg" | "png" | "pdf";
 const MIMEs: Record<AllowedFileTypes, string> = {
   jpg: "image/jpg",
   jpeg: "image/jpg",
