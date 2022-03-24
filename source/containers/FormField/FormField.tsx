@@ -290,7 +290,7 @@ const FormField = (props: FormFieldProps): JSX.Element => {
   if (inputType === "repeaterField" && !!input?.addAnswerEvent)
     inputCompProps[input.addAnswerEvent] = onInputAddAnswer;
 
-  if (inputType === "imageUploader") {
+  if (["pdfUploader", "imageUploader"].includes(inputType)) {
     inputCompProps.preferredImageName = label;
   }
 
