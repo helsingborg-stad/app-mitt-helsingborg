@@ -31,7 +31,7 @@ interface Props {
   colorSchema?: PrimaryColor;
   maxDocuments?: number;
   id: string;
-  preferredImageName?: string;
+  preferredFileName?: string;
   onChange: (value: Pdf[], id?: string) => void;
 }
 
@@ -47,7 +47,7 @@ const PdfUploader: React.FC<Props> = ({
   colorSchema,
   maxDocuments,
   id,
-  preferredImageName: preferredFileName,
+  preferredFileName,
   onChange,
 }) => {
   const addPdfFromLibrary = async () => {
