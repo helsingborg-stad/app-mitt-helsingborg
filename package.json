@@ -146,5 +146,10 @@
   },
   "resolutions": {
     "react-native/@jest/create-cache-key-function": "^27.2.3"
+  },
+  "engines": {
+    "node": "^16.13.1",
+    "yarn": "^1.22.17",
+    "npm": "^8.1.2"
   }
 }
