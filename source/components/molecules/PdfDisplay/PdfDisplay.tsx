@@ -4,6 +4,7 @@ import styled from "styled-components/native";
 import { DocumentPickerResponse } from "react-native-document-picker";
 import HorizontalScrollIndicator from "../../atoms/HorizontalScrollIndicator";
 import PdfItem from "./PdfItem";
+import { AllowedFileTypes } from "../../../helpers/FileUpload";
 
 const Wrapper = styled.View`
   padding-left: 0;
@@ -21,6 +22,13 @@ export interface Pdf extends DocumentPickerResponse {
   uploadedFileName?: string;
   url?: string;
   questionId: string;
+  fileCopyUri: string;
+  name: string;
+  size: number;
+  type: string;
+  fileType: AllowedFileTypes;
+  path: string;
+  filename?: string;
 }
 
 export interface UploadedPdf extends Pdf {
