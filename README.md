@@ -60,13 +60,13 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-- [Node.js and NPM](https://nodejs.org/en/download/package-manager/)
+- [Node.js](https://nodejs.org/en/download/package-manager/)
 - [React Native Development Environment](https://reactnative.dev/docs/environment-setup/)
 - [Eslint](https://helsingborg-stad.github.io/dev-guide/docs/development/linters/eslint.html)
 
 ### Dependency versions
 
-Version of system tools and development dependencies such as Ruby and CocoaPods should be matched with the same versions as used by the CI-system.
+Version of system tools and development dependencies such as Yarn, Ruby, and CocoaPods should be matched with the same versions as used by the CI-system.
 
 For the full list of versions that are supported, see [MacOS 11 for iOS](https://github.com/actions/virtual-environments/blob/main/images/macos/macos-11-Readme.md) and [Ubuntu 20.04 for Android](https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-Readme.md).
 
@@ -80,22 +80,24 @@ Versions locked/enforced by the repo are generally those used for iOS. If you en
 git clone https://github.com/helsingborg-stad/app-mitt-helsingborg.git
 ```
 
-2. Install NPM packages
+2. Install packages
 
 ```sh
-npm install
+yarn install
 ```
 
-3. Run app on iOS simulator
+3. Copy `.example.env` to `.env` and fill in the required variables.
+
+4. Run app on iOS simulator
 
 ```sh
-react-native run-ios
+yarn ios
 ```
 
 4. Run app on Android emulator
 
 ```sh
-react-native run-android
+yarn android
 ```
 
 ## Setup environment variables
@@ -142,10 +144,9 @@ SANDBOX_MITTHELSINGBORG_IO_APIKEY=***
 
 #### Component library (Storybook)
 
-1. Set env variabel IS_STORYBOOK to true in .env
-2. Launch storybook server by running command "npm run storybook" or "yarn storybook"
-3. Launch application in simulator by running command "react-native run-ios".
-4. Now you should se storybook running in the simulator.
+1. Set env variabel IS_STORYBOOK to true in `.env`
+2. Launch application in simulator by running command "yarn ios".
+3. Now you should see storybook running in the simulator.
 
 ## Deploy
 
