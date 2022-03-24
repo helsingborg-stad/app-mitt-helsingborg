@@ -6,12 +6,12 @@ import styled from "styled-components/native";
 import { Text, Button, Icon, Label } from "../../atoms";
 import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import { Modal, useModal } from "../Modal";
-import { getBlob, uploadFile } from "../../../helpers/FileUpload";
 import {
   getValidColorSchema,
   PrimaryColor,
 } from "../../../styles/themeHelpers";
 import ImageDisplay, { Image } from "../ImageDisplay/ImageDisplay";
+import { AllowedFileTypes } from "../../../helpers/FileUpload";
 
 const Wrapper = styled.View`
   padding-left: 0;
@@ -60,34 +60,6 @@ const PopupButton = styled(Button)`
 `;
 
 export type ImageStatus = "loading" | "uploaded" | "error";
-
-export const uploadImage = async (image: Image) => {
-  const imageFileType = (image.path as string).split(".").pop();
-
-  if (!["jpg", "jpeg", "png"].includes(imageFileType)) {
-    console.error(
-      `Trying to upload a forbidden type of image, ${imageFileType}, allowed file types are [jpg, jpeg, png].`
-    );
-  }
-
-  const data: Blob = await getBlob(image.path);
-  const filename = image.filename ?? (image.path as string).split("/").pop();
-  const uploadResponse = await uploadFile({
-    endpoint: "users/me/attachments",
-    fileName: filename,
-    fileType: imageFileType as "jpg" | "jpeg" | "png",
-    data,
-  });
-
-  if (uploadResponse.error) {
-    throw uploadResponse?.message;
-  }
-
-  image.uploadedFileName = uploadResponse.uploadedFileName;
-  image.url = uploadResponse.url;
-
-  return image;
-};
 
 interface Props {
   buttonText: string;
@@ -147,8 +119,10 @@ const ImageUploader: React.FC<Props> = ({
     width: rawImage.width,
     height: rawImage.height,
     size: rawImage.size,
+    fileType: (rawImage.path as string).split(".").pop() as AllowedFileTypes,
     mime:
-      rawImage?.filename?.split(".")?.pop() ?? rawImage.path?.split(".")?.pop(),
+      rawImage?.filename?.split(".")?.pop() ??
+      (rawImage.path?.split(".")?.pop() as string),
   });
 
   const addImagesFromLibrary = async () => {

@@ -7,7 +7,7 @@ import {
   PrimaryColor,
 } from "../../../styles/themeHelpers";
 import PdfDisplay, { Pdf, UploadedPdf } from "../PdfDisplay/PdfDisplay";
-import { getBlob, uploadFile } from "../../../helpers/FileUpload";
+import { AllowedFileTypes } from "../../../helpers/FileUpload";
 
 const Wrapper = styled.View`
   padding-left: 0;
@@ -28,75 +28,49 @@ interface Props {
   buttonText: string;
   value: UploadedPdf[] | "";
   answers: Record<string, unknown>;
-  onChange: (value: UploadedPdf[], id?: string) => void;
   colorSchema?: PrimaryColor;
   maxDocuments?: number;
   id: string;
+  preferredImageName?: string;
+  onChange: (value: Pdf[], id?: string) => void;
 }
 
-async function uploadPdf(pdf: Pdf): Promise<UploadedPdf> {
-  const data: Blob = await getBlob(pdf.uri);
-  const uploadResponse = await uploadFile({
-    endpoint: "users/me/attachments",
-    fileName: pdf.name,
-    fileType: "pdf",
-    data,
-  });
-
-  if (uploadResponse.message) {
-    throw new Error(uploadResponse.message);
-  }
-
-  return {
-    ...pdf,
-    uploadedFileName: uploadResponse.uploadedFileName,
-    url: uploadResponse.url,
-  };
-}
-
-function handlePdfFailedUpload(pdf: Pdf, error: Error) {
-  console.error("failed to upload pdf", pdf.name, error);
-}
-
-async function handleUploadPdfs(pdfs: Pdf[]): Promise<UploadedPdf[]> {
-  const uploadedPdfs = await Promise.all(
-    pdfs.map(async (pdf) => {
-      try {
-        return await uploadPdf(pdf);
-      } catch (error) {
-        handlePdfFailedUpload(pdf, error as Error);
-        return null;
-      }
-    })
-  );
-
-  return uploadedPdfs.filter((pdf) => pdf) as UploadedPdf[];
-}
+const renameImageWithSuffix = (pdf: Pdf, baseName: string, suffix: string) => ({
+  ...pdf,
+  filename: `${baseName}_${suffix}`,
+});
 
 const PdfUploader: React.FC<Props> = ({
   buttonText,
   value: pdfs,
   answers,
-  onChange,
   colorSchema,
   maxDocuments,
   id,
+  preferredImageName: preferredFileName,
+  onChange,
 }) => {
   const addPdfFromLibrary = async () => {
     try {
-      const files = await DocumentPicker.pick({
+      let files = await DocumentPicker.pick({
         type: DocumentPicker.types.pdf,
       });
 
-      const filesWithQuestionId: Pdf[] = files.map((file) => ({
-        ...file,
+      if (preferredFileName) {
+        files = files.map((pdf, index) =>
+          renameImageWithSuffix(pdf as Pdf, preferredFileName, index.toString())
+        );
+      }
+
+      const filesWithQuestionId = files.map((pdf) => ({
+        ...pdf,
         questionId: id,
+        filename: pdf?.filename ?? "",
+        fileType: "pdf" as AllowedFileTypes,
+        path: pdf.uri,
       }));
 
-      const uploadedPdfs = await handleUploadPdfs(filesWithQuestionId);
-
-      const newPdfs = [...(pdfs === "" ? [] : pdfs), ...uploadedPdfs];
-      onChange(newPdfs);
+      onChange(filesWithQuestionId);
     } catch (error) {
       if (!DocumentPicker.isCancel(error as Error)) {
         console.error("Error while adding pdf from library:", error);
