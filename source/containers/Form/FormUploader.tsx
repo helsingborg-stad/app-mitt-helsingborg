@@ -1,21 +1,17 @@
-import React, { useEffect } from 'react';
-import { ActivityIndicator } from 'react-native';
-import styled, { withTheme } from 'styled-components';
-import Config from 'react-native-config';
-import { Button, Heading, Icon, Text } from '../../components/atoms';
-import { Image } from '../../components/molecules/ImageDisplay/ImageDisplay';
-import { uploadImage } from '../../components/molecules/ImageUploader/ImageUploader';
-import useQueue, { Options } from '../../hooks/useQueue';
-import Dialog from '../../components/molecules/Dialog/Dialog';
-
-export interface Props {
-  caseStatus: any;
-  answers: Record<string, Image | any>;
-  allQuestions: Record<string, any>;
-  onChange: (value: Record<string, any>, id?: string) => void;
-  onResolved?: () => void;
-  theme?: any;
-}
+import React, { useEffect } from "react";
+import { ActivityIndicator } from "react-native";
+import styled, { withTheme } from "styled-components";
+import Config from "react-native-config";
+import { Button, Heading, Icon, Text } from "../../components/atoms";
+import { Image } from "../../components/molecules/ImageDisplay/ImageDisplay";
+import { Pdf } from "../../components/molecules/PdfDisplay/PdfDisplay";
+import useQueue, { Options } from "../../hooks/useQueue";
+import Dialog from "../../components/molecules/Dialog/Dialog";
+import {
+  getBlob,
+  uploadFile,
+  AllowedFileTypes,
+} from "../../helpers/FileUpload";
 
 const DialogActivityIndicator = styled(ActivityIndicator)`
   margin-bottom: 16px;
@@ -32,40 +28,90 @@ const DialogIcon = styled(Icon)`
   color: ${(props) => props.theme.colors.primary.blue[1]};
 `;
 
+function byFileTypes(file: Image | Pdf, fileTypes: AllowedFileTypes[]) {
+  return fileTypes.includes(file.fileType);
+}
+
+function isArrayCondition(item: unknown): boolean {
+  return Array.isArray(item) && item.length > 0;
+}
+
+function makeArrayByCondition<TOutType>(
+  answers: Record<string, Image[] | Pdf[] | any>,
+  fileTypes: AllowedFileTypes[]
+): TOutType[] {
+  const answerArray = Object.values(answers);
+  const answerArrayValues = answerArray.filter(isArrayCondition).flat();
+
+  return answerArrayValues
+    .filter((file) => byFileTypes(file, fileTypes))
+    .map((arrayItem: TOutType, index: number) => ({
+      ...arrayItem,
+      index,
+    }));
+}
+
+export interface Props {
+  caseStatus: any;
+  answers: Record<string, Image[] | Pdf[] | any>;
+  onChange: (value: Record<string, any>, id?: string) => void;
+  onResolved?: () => void;
+  theme?: any;
+}
 const FormUploader: React.FunctionComponent<Props> = ({
   answers,
-  allQuestions,
   onChange,
   onResolved,
   theme,
 }) => {
-  const attachments: Image[] = Object.values(answers)
-    .filter((item) => Array.isArray(item) && item.length > 0 && item[0]?.path)
-    .map((attachmentsArr) =>
-      attachmentsArr.map((attachmentAnswer, index) => ({ ...attachmentAnswer, index }))
-    )
-    .flat();
+  const attachments = makeArrayByCondition<Image>(answers, [
+    "jpg",
+    "jpeg",
+    "png",
+  ]);
+  const pdfs = makeArrayByCondition<Pdf>(answers, ["pdf"]);
 
-  const handleUpload = async (image: Image) => {
+  const upload = async (file: Image | Pdf) => {
+    const data: Blob = await getBlob(file.path);
+    const filename =
+      file.filename ?? ((file.path as string).split("/").pop() as string);
+    const uploadResponse = await uploadFile({
+      endpoint: "users/me/attachments",
+      fileName: filename,
+      fileType: file.fileType,
+      data,
+    });
+
+    if (uploadResponse.error) {
+      throw uploadResponse?.message;
+    }
+
+    file.uploadedFileName = uploadResponse.uploadedFileName;
+    file.url = uploadResponse.url;
+
+    return file;
+  };
+
+  const handleUploadFile = async (file: Image | Pdf) => {
     try {
-      const uploadedImage = await uploadImage(image);
-      const updatedQuestion: Image[] = [...answers[image.questionId]];
-      updatedQuestion[image.index] = uploadedImage;
+      const uploadedImage = await upload(file);
+      const updatedQuestion = [...answers[file.questionId]];
+      updatedQuestion[file.index] = uploadedImage;
 
-      const updateAnswer: Record<string, any> = {
+      const updateAnswer = {
         [updatedQuestion[0].questionId]: updatedQuestion,
       };
 
       onChange(updateAnswer, updatedQuestion[0].questionId);
 
       return uploadedImage;
-    } catch (e) {
-      if (Config?.APP_ENV === 'development')
-        console.error('FormUploader: Failed to upload image. Error: ', e);
-      image.errorMessage = e;
+    } catch (error) {
+      if (Config?.APP_ENV === "development")
+        console.error("FormUploader: Failed to upload image. Error: ", e);
+      file.errorMessage = error;
 
       // useQueue requires throws to include image as parameter, can probably be improved
-      throw image;
+      throw file;
     }
   };
 
@@ -77,19 +123,19 @@ const FormUploader: React.FunctionComponent<Props> = ({
   };
 
   const [{ resolved, rejected, isPending, count }, { retry }] = useQueue(
-    handleUpload,
-    attachments,
+    handleUploadFile,
+    [...attachments, ...pdfs],
     options
   );
 
-  const handleResolved = () => {
+  const handleResolvedImage = () => {
     if (!isPending && resolved.length === count && onResolved) {
       onResolved();
     }
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(handleResolved, [resolved, rejected, isPending, count]);
+  useEffect(handleResolvedImage, [resolved, rejected, isPending, count]);
 
   return (
     <Dialog visible>
@@ -97,10 +143,10 @@ const FormUploader: React.FunctionComponent<Props> = ({
         <>
           <DialogActivityIndicator
             size="large"
-            color={theme?.colors?.primary?.blue[1] ?? '#003359'}
+            color={theme?.colors?.primary?.blue[1] ?? "#003359"}
           />
           <Heading align="center" type="h2">
-            Laddar upp filer
+            Laddar upp filer...
           </Heading>
           <Text align="center">
             ({resolved.length} av {count})
@@ -116,8 +162,8 @@ const FormUploader: React.FunctionComponent<Props> = ({
             Någonting gick fel
           </Heading>
           <Text align="center">
-            Säkerställ att du har internet uppkoppling och försök igen. Om problemet kvarstår,
-            kontakta din handläggare.
+            Säkerställ att du har internet uppkoppling och försök igen. Om
+            problemet kvarstår, kontakta din handläggare.
           </Text>
           <DialogButton block value="Försök igen" onClick={retry} />
         </>
