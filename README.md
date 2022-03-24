@@ -31,11 +31,17 @@
   - [Built With](#built-with)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
+  - [Dependency versions](#dependency-versions)
   - [Installation](#installation)
 - [Setup environment variables](#setup-environment-variables)
   - [Backend selector](#backend-selector)
+    - [Component library (Storybook)](#component-library-storybook)
 - [Deploy](#deploy)
   - [Android](#android)
+    - [Add upload key](#add-upload-key)
+    - [Generate AAB (Android App Bundle)](#generate-aab-android-app-bundle)
+    - [Test the release build](#test-the-release-build)
+    - [Upload AAB to Google Play Console](#upload-aab-to-google-play-console)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
@@ -57,6 +63,14 @@ To get a local copy up and running follow these simple steps.
 - [Node.js and NPM](https://nodejs.org/en/download/package-manager/)
 - [React Native Development Environment](https://reactnative.dev/docs/environment-setup/)
 - [Eslint](https://helsingborg-stad.github.io/dev-guide/docs/development/linters/eslint.html)
+
+### Dependency versions
+
+Version of system tools and development dependencies such as Ruby and CocoaPods should be matched with the same versions as used by the CI-system.
+
+For the full list of versions that are supported, see [MacOS 11 for iOS](https://github.com/actions/virtual-environments/blob/main/images/macos/macos-11-Readme.md) and [Ubuntu 20.04 for Android](https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-Readme.md).
+
+Versions locked/enforced by the repo are generally those used for iOS. If you encounter issues with deploying Android try using the versions listed in the link for Android instead.
 
 ### Installation
 
