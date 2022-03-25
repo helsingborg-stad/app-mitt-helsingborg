@@ -21,7 +21,6 @@ function loadStories() {
   require("../source/components/molecules/CalendarPicker/CalendarPickerForm.stories");
   require("../source/components/molecules/Card/Card.stories");
   require("../source/components/molecules/CaseCard/CaseCard.stories");
-  require("../source/components/molecules/CharacterCard/CharacterCard.stories");
   require("../source/components/molecules/CheckboxField/CheckboxField.stories");
   require("../source/components/molecules/DateTimeCard/DateTimeCard.stories");
   require("../source/components/molecules/DateTimePicker/DateTimePickerForm.stories");
@@ -71,7 +70,6 @@ const stories = [
   "../source/components/molecules/CalendarPicker/CalendarPickerForm.stories",
   "../source/components/molecules/Card/Card.stories",
   "../source/components/molecules/CaseCard/CaseCard.stories",
-  "../source/components/molecules/CharacterCard/CharacterCard.stories",
   "../source/components/molecules/CheckboxField/CheckboxField.stories",
   "../source/components/molecules/DateTimeCard/DateTimeCard.stories",
   "../source/components/molecules/DateTimePicker/DateTimePickerForm.stories",

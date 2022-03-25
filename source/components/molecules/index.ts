@@ -22,4 +22,3 @@ export { default as InfoModal } from "./InfoModal";
 export { default as FloatingButton } from "./FloatingButton";
 export { default as DateTimeCard } from "./DateTimeCard";
 export { default as AddressCard } from "./AddressCard";
-export { default as CharacterCard } from "./CharacterCard";
