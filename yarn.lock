@@ -5211,7 +5211,7 @@ highlight.js@^10.1.1, highlight.js@~10.7.0:
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-10.7.3.tgz#697272e3991356e40c3cac566a74eef681756531"
   integrity sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==
 
-hoist-non-react-statics@^3.0.0, hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.1, hoist-non-react-statics@^3.3.2:
+hoist-non-react-statics@^3.0.0, hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
   integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
@@ -5301,11 +5301,6 @@ image-size@^0.6.0:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/image-size/-/image-size-0.6.3.tgz#e7e5c65bb534bd7cdcedd6cb5166272a85f75fb2"
   integrity sha512-47xSUiQioGaB96nqtp5/q55m0aBQSQdyIloMOc/x+QVTDZLNmXE892IIDrJ0hM1A5vcNUDD5tDffkSP5lCaIIA==
-
-immutable@^4.0.0-rc.12:
-  version "4.0.0-rc.15"
-  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.0.0-rc.15.tgz#c30056f05eaaf5650fd15230586688fdd15c54bc"
-  integrity sha512-v8+A3sNyaieoP9dHegl3tEYnIZa7vqNiSv0U6D7YddiZi34VjKy4GsIxrRHj2d8+CS3MeiVja5QyNe4JO/aEXA==
 
 import-fresh@^2.0.0:
   version "2.0.0"
@@ -6838,11 +6833,6 @@ mdurl@^1.0.1:
   resolved "https://registry.yarnpkg.com/mdurl/-/mdurl-1.0.1.tgz#fe85b2ec75a59037f2adfec100fd6c601761152e"
   integrity sha1-/oWy7HWlkDfyrf7BAP1sYBdhFS4=
 
-memoize-one@^5.2.1:
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-5.2.1.tgz#8337aa3c4335581839ec01c3d594090cebe8f00e"
-  integrity sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==
-
 memoizerific@^1.11.3:
   version "1.11.3"
   resolved "https://registry.yarnpkg.com/memoizerific/-/memoizerific-1.11.3.tgz#7c87a4646444c32d75438570905f2dbd1b1a805a"
@@ -7266,7 +7256,7 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "^1.2.5"
 
-moment@^2.24.0, moment@^2.29.1:
+moment@^2.29.1:
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
@@ -8146,13 +8136,6 @@ react-native-aes-crypto@^1.3.10:
   resolved "https://registry.yarnpkg.com/react-native-aes-crypto/-/react-native-aes-crypto-1.3.10.tgz#8e7d536a19481dd087e8c40083008a843f961495"
   integrity sha512-aQsbXCmsQEaXqjpKo8S0ot5CnK6KGN/Jx0qN1B3I8Au8Egl66BKryxD9wmorHYdjx+omctdug/mNWHKDRmDlow==
 
-react-native-animatable@1.3.3:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.3.3.tgz#a13a4af8258e3bb14d0a9d839917e9bb9274ec8a"
-  integrity sha512-2ckIxZQAsvWn25Ho+DK3d1mXIgj7tITkrS4pYDvx96WyOttSvzzFeQnM2od0+FUMzILbdHDsDEqZvnz1DYNQ1w==
-  dependencies:
-    prop-types "^15.7.2"
-
 react-native-asset@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/react-native-asset/-/react-native-asset-2.0.1.tgz#902526212b9da9ab4340b1e9a29fbf1d632ffb87"
@@ -8178,21 +8161,6 @@ react-native-calendar-picker@^7.0.5:
     prop-types "^15.6.0"
     recyclerlistview "^3.0.0"
 
-react-native-calendars@^1.1266.0:
-  version "1.1266.0"
-  resolved "https://registry.yarnpkg.com/react-native-calendars/-/react-native-calendars-1.1266.0.tgz#f6426baf9774fb41ce296ace1c446b51148fc02b"
-  integrity sha512-FABZJsam2RsKpD2gTt8OGwSmHEFFbCntMWB7B8Joh6gz8U/rZZ4TCpo2ofH4tUFkF/bpqtbWMygtJzDl/paADw==
-  dependencies:
-    hoist-non-react-statics "^3.3.1"
-    immutable "^4.0.0-rc.12"
-    lodash "^4.17.15"
-    memoize-one "^5.2.1"
-    prop-types "^15.5.10"
-    react-native-swipe-gestures "^1.0.5"
-    xdate "^0.8.0"
-  optionalDependencies:
-    moment "^2.24.0"
-
 react-native-clean-project@^3.6.3:
   version "3.6.7"
   resolved "https://registry.yarnpkg.com/react-native-clean-project/-/react-native-clean-project-3.6.7.tgz#6d22ad22fe3a1e6efdb040eb66f9bdfb2273ac2e"
@@ -8206,11 +8174,6 @@ react-native-codegen@^0.0.6:
     flow-parser "^0.121.0"
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
-
-react-native-collapsible@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/react-native-collapsible/-/react-native-collapsible-1.6.0.tgz#ca261ffff16914f872059bb0972e3a78c4b37f9c"
-  integrity sha512-beZjdgbT9Y/Pg591Xy5XkKG20HffJiVad4n9bfcUF/f783A+tvOVXnqvbS58Lkaym93mi4jcDPMuW9Vc1t6rqg==
 
 react-native-config@1.4.0:
   version "1.4.0"
@@ -8307,14 +8270,6 @@ react-native-markdown-display@^7.0.0-alpha.2:
     prop-types "^15.7.2"
     react-native-fit-image "^1.5.5"
 
-react-native-modal@^12.1.0:
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-12.1.0.tgz#5949c9c7d4de4e99df83cc777ad26b84ad7002a0"
-  integrity sha512-9myTNZ75gz6MPg1Cngm01x59JbaVkTeWoZvmChmW//PbSAdfbP/dFPnzbidL9IDrRh6Ftuuq8WSuM0aoS5m2lg==
-  dependencies:
-    prop-types "^15.6.2"
-    react-native-animatable "1.3.3"
-
 react-native-network-info@^5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/react-native-network-info/-/react-native-network-info-5.2.1.tgz#b701f10d4ed1aeadcfe77b197328d1ae846f6d3a"
@@ -8392,7 +8347,7 @@ react-native-storybook-loader@^2.0.4:
     prettier "^2.0.5"
     yargs "^15.4.1"
 
-react-native-swipe-gestures@^1.0.4, react-native-swipe-gestures@^1.0.5:
+react-native-swipe-gestures@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.5.tgz#a172cb0f3e7478ccd681fd36b8bfbcdd098bde7c"
   integrity sha512-Ns7Bn9H/Tyw278+5SQx9oAblDZ7JixyzeOczcBK8dipQk2pD7Djkcfnf1nB/8RErAmMLL9iXgW0QHqiII8AhKw==
@@ -10196,11 +10151,6 @@ xcode@^2.0.0:
   dependencies:
     simple-plist "^1.0.0"
     uuid "^3.3.2"
-
-xdate@^0.8.0:
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/xdate/-/xdate-0.8.2.tgz#d7b033c00485d02695baf0044f4eacda3fc961a3"
-  integrity sha1-17AzwASF0CaVuvAET06s2j/JYaM=
 
 xml-name-validator@^3.0.0:
   version "3.0.0"
