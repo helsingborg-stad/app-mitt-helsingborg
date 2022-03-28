@@ -94,7 +94,7 @@ const ImageUploader: React.FC<Props> = ({
     suffix: string
   ) => ({
     ...image,
-    filename: `${baseName}_${suffix}.${ext}`,
+    filename: `${baseName}_${suffix}${ext}`,
   });
 
   const addImagesToState = (newImages: Image[]) => {
