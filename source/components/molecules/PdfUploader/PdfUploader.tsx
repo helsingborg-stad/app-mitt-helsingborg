@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components/native";
 import DocumentPicker from "react-native-document-picker";
+import uuid from "react-native-uuid";
+
 import { Text, Button, Icon } from "../../atoms";
 import {
   getValidColorSchema,
@@ -42,7 +44,7 @@ const renamePdfWithSuffix = (
   suffix: string
 ) => ({
   ...pdf,
-  filename: `${baseName}_${suffix}.${ext}`,
+  filename: `${baseName}_${suffix}${ext}`,
 });
 
 const PdfUploader: React.FC<Props> = ({
@@ -55,12 +57,19 @@ const PdfUploader: React.FC<Props> = ({
   preferredFileName,
   onChange,
 }) => {
-  const addPdfFromLibrary = async () => {
+  const addUniqueId = (pdfFile: Pdf) => ({ ...pdfFile, id: uuid.v4() });
+
+  const addPdfFromLibrary = useCallback(async () => {
     try {
-      let files = await DocumentPicker.pick({
+      let newFiles = await DocumentPicker.pick({
         type: DocumentPicker.types.pdf,
         allowMultiSelection: true,
       });
+
+      newFiles = newFiles.map((pdf) => addUniqueId(pdf as Pdf));
+
+      const oldFiles = answers[id] || [];
+      let files = [...(oldFiles as Pdf[]), ...newFiles];
 
       if (preferredFileName) {
         files = files.map((pdf, index) =>
@@ -90,7 +99,7 @@ const PdfUploader: React.FC<Props> = ({
         console.error("Error while adding pdf from library:", error);
       }
     }
-  };
+  }, [id, onChange, preferredFileName, answers]);
 
   const validColorSchema = getValidColorSchema(colorSchema ?? "Blue");
   return (

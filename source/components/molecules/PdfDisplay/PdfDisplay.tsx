@@ -29,6 +29,7 @@ export interface Pdf extends DocumentPickerResponse {
   fileType: AllowedFileTypes;
   path: string;
   filename?: string;
+  id: string;
 }
 
 export interface UploadedPdf extends Pdf {
@@ -58,7 +59,7 @@ const PdfDisplay: React.FC<Props> = ({ pdfs, answers, onChange }) => {
     const answer = answers[pdf.questionId] as UploadedPdf[];
 
     if (answer && Array.isArray(answer)) {
-      const answerWithPdfRemoved = answer.filter((p) => pdf.path !== p.path);
+      const answerWithPdfRemoved = answer.filter((p) => pdf.id !== p.id);
       onChange(answerWithPdfRemoved, pdf.questionId);
     }
 
@@ -83,7 +84,7 @@ const PdfDisplay: React.FC<Props> = ({ pdfs, answers, onChange }) => {
         {pdfs.length > 0 &&
           pdfs.map((pdf) => (
             <PdfItem
-              key={pdf.path}
+              key={pdf.id}
               pdf={pdf}
               onRemove={() => {
                 removePdf(pdf);
