@@ -58,9 +58,7 @@ const PdfDisplay: React.FC<Props> = ({ pdfs, answers, onChange }) => {
     const answer = answers[pdf.questionId] as UploadedPdf[];
 
     if (answer && Array.isArray(answer)) {
-      const answerWithPdfRemoved = answer.filter(
-        (p) => pdf.uploadedFileName !== p.uploadedFileName
-      );
+      const answerWithPdfRemoved = answer.filter((p) => pdf.path !== p.path);
       onChange(answerWithPdfRemoved, pdf.questionId);
     }
 
