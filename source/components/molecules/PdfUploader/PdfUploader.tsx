@@ -59,6 +59,7 @@ const PdfUploader: React.FC<Props> = ({
     try {
       let files = await DocumentPicker.pick({
         type: DocumentPicker.types.pdf,
+        allowMultiSelection: true,
       });
 
       if (preferredFileName) {
