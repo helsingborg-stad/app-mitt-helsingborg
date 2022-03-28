@@ -85,7 +85,7 @@ const PdfDisplay: React.FC<Props> = ({ pdfs, answers, onChange }) => {
         {pdfs.length > 0 &&
           pdfs.map((pdf) => (
             <PdfItem
-              key={pdf.uploadedFileName}
+              key={pdf.path}
               pdf={pdf}
               onRemove={() => {
                 removePdf(pdf);

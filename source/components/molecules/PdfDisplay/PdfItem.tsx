@@ -70,7 +70,7 @@ const PdfItem: React.FC<Props> = ({ pdf, onRemove }) => {
   };
 
   return (
-    <>
+    <React.Fragment key={pdf.path}>
       <Flex>
         <DeleteBackground>
           <TouchableOpacity onPress={handleRemove} activeOpacity={0.1}>
@@ -104,7 +104,7 @@ const PdfItem: React.FC<Props> = ({ pdf, onRemove }) => {
           </Button>
         </ButtonWrapper>
       </Modal>
-    </>
+    </React.Fragment>
   );
 };
 
