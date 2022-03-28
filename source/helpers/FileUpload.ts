@@ -129,3 +129,21 @@ export const downloadFile = async ({
     return { error: true, message: error.message, ...error.response };
   }
 };
+
+export function splitFilePath(inPath: string | undefined | null): {
+  dir: string;
+  name: string;
+  ext: string;
+} {
+  if (!inPath) return { dir: "", name: "", ext: "" };
+
+  const lastSlash = inPath.lastIndexOf("/");
+
+  const dir = lastSlash >= 0 ? inPath.substring(0, lastSlash) : "";
+  const basename = lastSlash >= 0 ? inPath.substring(lastSlash + 1) : inPath;
+  const firstDot = basename.indexOf(".");
+  const name = firstDot >= 0 ? basename.substring(0, firstDot) : basename;
+  const ext = firstDot >= 0 ? basename.substring(firstDot) : "";
+
+  return { dir, name, ext };
+}

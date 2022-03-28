@@ -7,7 +7,7 @@ import {
   PrimaryColor,
 } from "../../../styles/themeHelpers";
 import PdfDisplay, { Pdf, UploadedPdf } from "../PdfDisplay/PdfDisplay";
-import { AllowedFileTypes } from "../../../helpers/FileUpload";
+import { AllowedFileTypes, splitFilePath } from "../../../helpers/FileUpload";
 
 const Wrapper = styled.View`
   padding-left: 0;
@@ -35,9 +35,14 @@ interface Props {
   onChange: (value: Pdf[], id?: string) => void;
 }
 
-const renameImageWithSuffix = (pdf: Pdf, baseName: string, suffix: string) => ({
+const renamePdfWithSuffix = (
+  pdf: Pdf,
+  baseName: string,
+  ext: string,
+  suffix: string
+) => ({
   ...pdf,
-  filename: `${baseName}_${suffix}`,
+  filename: `${baseName}_${suffix}.${ext}`,
 });
 
 const PdfUploader: React.FC<Props> = ({
@@ -58,17 +63,25 @@ const PdfUploader: React.FC<Props> = ({
 
       if (preferredFileName) {
         files = files.map((pdf, index) =>
-          renameImageWithSuffix(pdf as Pdf, preferredFileName, index.toString())
+          renamePdfWithSuffix(
+            pdf as Pdf,
+            preferredFileName,
+            splitFilePath(pdf?.name).ext,
+            index.toString()
+          )
         );
       }
 
-      const filesWithQuestionId = files.map((pdf) => ({
-        ...pdf,
-        questionId: id,
-        filename: pdf?.filename ?? "",
-        fileType: "pdf" as AllowedFileTypes,
-        path: pdf.uri,
-      }));
+      const filesWithQuestionId = files.map((pdf) => {
+        const split = splitFilePath(pdf?.name);
+        return {
+          ...pdf,
+          questionId: id,
+          filename: pdf?.filename ?? `${split.name}${split.ext}`,
+          fileType: "pdf" as AllowedFileTypes,
+          path: pdf.uri,
+        };
+      });
 
       onChange(filesWithQuestionId);
     } catch (error) {

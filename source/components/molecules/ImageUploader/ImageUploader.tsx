@@ -11,7 +11,7 @@ import {
   PrimaryColor,
 } from "../../../styles/themeHelpers";
 import ImageDisplay, { Image } from "../ImageDisplay/ImageDisplay";
-import { AllowedFileTypes } from "../../../helpers/FileUpload";
+import { AllowedFileTypes, splitFilePath } from "../../../helpers/FileUpload";
 
 const Wrapper = styled.View`
   padding-left: 0;
@@ -90,10 +90,11 @@ const ImageUploader: React.FC<Props> = ({
   const renameImageWithSuffix = (
     image: Image,
     baseName: string,
+    ext: string,
     suffix: string
   ) => ({
     ...image,
-    filename: `${baseName}_${suffix}`,
+    filename: `${baseName}_${suffix}.${ext}`,
   });
 
   const addImagesToState = (newImages: Image[]) => {
@@ -102,7 +103,12 @@ const ImageUploader: React.FC<Props> = ({
 
     if (preferredFileName) {
       updatedImages = updatedImages.map((image, index) =>
-        renameImageWithSuffix(image, preferredFileName, index.toString())
+        renameImageWithSuffix(
+          image,
+          preferredFileName,
+          splitFilePath(image.filename).ext,
+          index.toString()
+        )
       );
     }
 
