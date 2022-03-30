@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Alert, TouchableOpacity } from "react-native";
 import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker";
+import uuid from "react-native-uuid";
 import styled from "styled-components/native";
 import { Text, Button, Icon, Label } from "../../atoms";
 import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
@@ -126,6 +127,7 @@ const ImageUploader: React.FC<Props> = ({
     height: rawImage.height,
     size: rawImage.size,
     fileType: (rawImage.path as string).split(".").pop() as AllowedFileTypes,
+    id: uuid.v4(),
     mime:
       rawImage?.filename?.split(".")?.pop() ??
       (rawImage.path?.split(".")?.pop() as string),

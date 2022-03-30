@@ -26,6 +26,7 @@ export interface Image extends CropPickerImage {
   index?: number;
   questionId: string;
   fileType: AllowedFileTypes;
+  id: string;
 }
 
 interface Props {
@@ -76,9 +77,9 @@ const ImageDisplay: React.FC<Props> = ({ images, answers, onChange }) => {
         showsHorizontalScrollIndicator={false}
       >
         {images.length > 0 &&
-          images.map((image, index) => (
+          images.map((image) => (
             <ImageItem
-              key={`${image.path}-${index}`}
+              key={image.id}
               image={image}
               onRemove={() => {
                 removeImage(image);
