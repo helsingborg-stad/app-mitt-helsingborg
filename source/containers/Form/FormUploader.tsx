@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { ActivityIndicator } from "react-native";
 import styled, { withTheme } from "styled-components";
 import Config from "react-native-config";
@@ -92,28 +92,38 @@ const FormUploader: React.FunctionComponent<Props> = ({
     return file;
   };
 
-  const handleUploadFile = async (file: Image | Pdf) => {
-    try {
-      const uploadedImage = await upload(file);
-      const updatedQuestion = [...answers[file.questionId]];
-      updatedQuestion[file.index] = uploadedImage;
+  const handleUploadFile = useCallback(
+    async (file: Image | Pdf) => {
+      try {
+        const uploadedFile = await upload(file);
+        const updatedQuestion = [...answers[file.questionId]];
 
-      const updateAnswer = {
-        [updatedQuestion[0].questionId]: updatedQuestion,
-      };
+        const questionIndex = updatedQuestion.findIndex(
+          ({ id }) => id === file.id
+        );
 
-      onChange(updateAnswer, updatedQuestion[0].questionId);
+        if (questionIndex >= 0) {
+          updatedQuestion[questionIndex] = uploadedFile;
 
-      return uploadedImage;
-    } catch (error) {
-      if (Config?.APP_ENV === "development")
-        console.error("FormUploader: Failed to upload image. Error: ", e);
-      file.errorMessage = error;
+          const updateAnswer = {
+            [updatedQuestion[0].questionId]: updatedQuestion,
+          };
 
-      // useQueue requires throws to include image as parameter, can probably be improved
-      throw file;
-    }
-  };
+          onChange(updateAnswer, updatedQuestion[0].questionId);
+        }
+
+        return uploadedFile;
+      } catch (error) {
+        if (Config?.APP_ENV === "development")
+          console.error("FormUploader: Failed to upload image. Error: ", error);
+        file.errorMessage = error;
+
+        // useQueue requires throws to include image as parameter, can probably be improved
+        throw file;
+      }
+    },
+    [answers, onChange]
+  );
 
   const options: Options<Image> = {
     filters: {
