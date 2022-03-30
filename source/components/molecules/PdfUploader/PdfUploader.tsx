@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import styled from "styled-components/native";
 import DocumentPicker from "react-native-document-picker";
 import uuid from "react-native-uuid";
@@ -59,7 +59,7 @@ const PdfUploader: React.FC<Props> = ({
 }) => {
   const addUniqueId = (pdfFile: Pdf) => ({ ...pdfFile, id: uuid.v4() });
 
-  const addPdfFromLibrary = useCallback(async () => {
+  const addPdfFromLibrary = async () => {
     try {
       let newFiles = await DocumentPicker.pick({
         type: DocumentPicker.types.pdf,
@@ -99,7 +99,7 @@ const PdfUploader: React.FC<Props> = ({
         console.error("Error while adding pdf from library:", error);
       }
     }
-  }, [id, onChange, preferredFileName, answers]);
+  };
 
   const validColorSchema = getValidColorSchema(colorSchema ?? "Blue");
   return (
