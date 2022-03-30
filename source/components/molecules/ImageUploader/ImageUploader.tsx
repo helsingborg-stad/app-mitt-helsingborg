@@ -2,16 +2,17 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Alert, TouchableOpacity } from "react-native";
 import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker";
+import uuid from "react-native-uuid";
 import styled from "styled-components/native";
 import { Text, Button, Icon, Label } from "../../atoms";
 import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import { Modal, useModal } from "../Modal";
-import { getBlob, uploadFile } from "../../../helpers/FileUpload";
 import {
   getValidColorSchema,
   PrimaryColor,
 } from "../../../styles/themeHelpers";
 import ImageDisplay, { Image } from "../ImageDisplay/ImageDisplay";
+import { AllowedFileTypes, splitFilePath } from "../../../helpers/FileUpload";
 
 const Wrapper = styled.View`
   padding-left: 0;
@@ -61,34 +62,6 @@ const PopupButton = styled(Button)`
 
 export type ImageStatus = "loading" | "uploaded" | "error";
 
-export const uploadImage = async (image: Image) => {
-  const imageFileType = (image.path as string).split(".").pop();
-
-  if (!["jpg", "jpeg", "png"].includes(imageFileType)) {
-    console.error(
-      `Trying to upload a forbidden type of image, ${imageFileType}, allowed file types are [jpg, jpeg, png].`
-    );
-  }
-
-  const data: Blob = await getBlob(image.path);
-  const filename = image.filename ?? (image.path as string).split("/").pop();
-  const uploadResponse = await uploadFile({
-    endpoint: "users/me/attachments",
-    fileName: filename,
-    fileType: imageFileType as "jpg" | "jpeg" | "png",
-    data,
-  });
-
-  if (uploadResponse.error) {
-    throw uploadResponse?.message;
-  }
-
-  image.uploadedFileName = uploadResponse.uploadedFileName;
-  image.url = uploadResponse.url;
-
-  return image;
-};
-
 interface Props {
   buttonText: string;
   value: Image[] | "";
@@ -97,7 +70,7 @@ interface Props {
   colorSchema?: PrimaryColor;
   maxImages?: number;
   id: string;
-  preferredImageName?: string;
+  preferredFileName?: string;
 }
 
 const MAX_IMAGE_SIZE_BYTES = 7 * 1000 * 1000;
@@ -110,7 +83,7 @@ const ImageUploader: React.FC<Props> = ({
   colorSchema,
   maxImages,
   id,
-  preferredImageName,
+  preferredFileName,
   ...rest
 }) => {
   const [choiceModalVisible, toggleModal] = useModal();
@@ -118,19 +91,25 @@ const ImageUploader: React.FC<Props> = ({
   const renameImageWithSuffix = (
     image: Image,
     baseName: string,
+    ext: string,
     suffix: string
   ) => ({
     ...image,
-    filename: `${baseName}_${suffix}`,
+    filename: `${baseName}_${suffix}${ext}`,
   });
 
   const addImagesToState = (newImages: Image[]) => {
     let updatedImages =
       images === "" ? [...newImages] : [...images, ...newImages];
 
-    if (preferredImageName) {
+    if (preferredFileName) {
       updatedImages = updatedImages.map((image, index) =>
-        renameImageWithSuffix(image, preferredImageName, index.toString())
+        renameImageWithSuffix(
+          image,
+          preferredFileName,
+          splitFilePath(image.filename).ext,
+          index.toString()
+        )
       );
     }
 
@@ -147,8 +126,11 @@ const ImageUploader: React.FC<Props> = ({
     width: rawImage.width,
     height: rawImage.height,
     size: rawImage.size,
+    fileType: (rawImage.path as string).split(".").pop() as AllowedFileTypes,
+    id: uuid.v4(),
     mime:
-      rawImage?.filename?.split(".")?.pop() ?? rawImage.path?.split(".")?.pop(),
+      rawImage?.filename?.split(".")?.pop() ??
+      (rawImage.path?.split(".")?.pop() as string),
   });
 
   const addImagesFromLibrary = async () => {

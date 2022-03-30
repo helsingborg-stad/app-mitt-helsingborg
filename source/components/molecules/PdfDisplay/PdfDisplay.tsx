@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
-import styled from 'styled-components/native';
-import { DocumentPickerResponse } from 'react-native-document-picker';
-import HorizontalScrollIndicator from '../../atoms/HorizontalScrollIndicator';
-import PdfItem from './PdfItem';
+import React, { useState } from "react";
+import { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
+import styled from "styled-components/native";
+import { DocumentPickerResponse } from "react-native-document-picker";
+import HorizontalScrollIndicator from "../../atoms/HorizontalScrollIndicator";
+import PdfItem from "./PdfItem";
+import { AllowedFileTypes } from "../../../helpers/FileUpload";
 
 const Wrapper = styled.View`
   padding-left: 0;
@@ -22,43 +22,69 @@ export interface Pdf extends DocumentPickerResponse {
   uploadedFileName?: string;
   url?: string;
   questionId: string;
+  fileCopyUri: string;
+  name: string;
+  size: number;
+  type: string;
+  fileType: AllowedFileTypes;
+  path: string;
+  filename?: string;
+  id: string;
+}
+
+export interface UploadedPdf extends Pdf {
+  uploadedFileName: string;
+  url: string;
 }
 
 interface Props {
-  pdfs: Pdf[];
-  answers: Record<string, any>;
-  onChange: (value: Record<string, any>[], id?: string) => void;
+  pdfs: UploadedPdf[];
+  answers: Record<string, unknown>;
+  onChange: (value: UploadedPdf[], id?: string) => void;
 }
 
 const PdfDisplay: React.FC<Props> = ({ pdfs, answers, onChange }) => {
-  const [horizontalScrollPercentage, setHorizontalScrollPercentage] = useState(0);
+  const [horizontalScrollPercentage, setHorizontalScrollPercentage] =
+    useState(0);
 
-  const deletePdfFromCloudStorage = async (pdf: Pdf) => {
-    console.log('Placeholder: not implemented yet in API, want to delete pdf ', pdf.name, pdf.uri);
+  const deletePdfFromCloudStorage = async (pdf: UploadedPdf) => {
+    console.log(
+      "Placeholder: not implemented yet in API, want to delete pdf ",
+      pdf.name,
+      pdf.uri
+    );
   };
-  const removePdf = (pdf: Pdf) => {
-    const answer: Pdf[] = answers[pdf.questionId];
+
+  const removePdf = (pdf: UploadedPdf) => {
+    const answer = answers[pdf.questionId] as UploadedPdf[];
+
     if (answer && Array.isArray(answer)) {
-      const answerWithPdfRemoved = answer.filter((p) => pdf.uri !== p.uri);
+      const answerWithPdfRemoved = answer.filter((p) => pdf.id !== p.id);
       onChange(answerWithPdfRemoved, pdf.questionId);
     }
-    deletePdfFromCloudStorage(pdf);
+
+    void deletePdfFromCloudStorage(pdf);
   };
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     setHorizontalScrollPercentage(
       event.nativeEvent.contentOffset.x /
-        (event.nativeEvent.contentSize.width - event.nativeEvent.layoutMeasurement.width)
+        (event.nativeEvent.contentSize.width -
+          event.nativeEvent.layoutMeasurement.width)
     );
   };
 
   return (
     <Wrapper>
-      <Container horizontal onScroll={handleScroll} showsHorizontalScrollIndicator={false}>
+      <Container
+        horizontal
+        onScroll={handleScroll}
+        showsHorizontalScrollIndicator={false}
+      >
         {pdfs.length > 0 &&
-          pdfs.map((pdf, index) => (
+          pdfs.map((pdf) => (
             <PdfItem
-              key={`${pdf.uri}-${index}`}
+              key={pdf.id}
               pdf={pdf}
               onRemove={() => {
                 removePdf(pdf);
@@ -66,15 +92,11 @@ const PdfDisplay: React.FC<Props> = ({ pdfs, answers, onChange }) => {
             />
           ))}
       </Container>
-      {pdfs.length > 2 && <HorizontalScrollIndicator percentage={horizontalScrollPercentage} />}
+      {pdfs.length > 2 && (
+        <HorizontalScrollIndicator percentage={horizontalScrollPercentage} />
+      )}
     </Wrapper>
   );
-};
-
-PdfDisplay.propTypes = {
-  pdfs: PropTypes.arrayOf(PropTypes.object),
-  answers: PropTypes.object,
-  onChange: PropTypes.func,
 };
 
 export default PdfDisplay;

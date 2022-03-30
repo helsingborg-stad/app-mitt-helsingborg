@@ -355,7 +355,6 @@ const Form: React.FC<Props> = ({
       </Modal>
       {hasSigned && !hasUploaded && attachments.length > 0 && (
         <FormUploader
-          allQuestions={formState.allQuestions}
           caseStatus={status}
           answers={formState.formAnswers}
           onChange={handleInputChange}

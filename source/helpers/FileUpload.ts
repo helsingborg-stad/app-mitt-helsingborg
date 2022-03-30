@@ -10,7 +10,7 @@ export const getBlob = async (fileUri: string): Promise<Blob> => {
   return fileBlob;
 };
 
-type AllowedFileTypes = "jpg" | "jpeg" | "png" | "pdf";
+export type AllowedFileTypes = "jpg" | "jpeg" | "png" | "pdf";
 const MIMEs: Record<AllowedFileTypes, string> = {
   jpg: "image/jpg",
   jpeg: "image/jpg",
@@ -26,6 +26,12 @@ interface FileUploadParams {
   headers?: Record<string, string>;
 }
 
+interface UploadFileResponse {
+  url: string;
+  uploadedFileName: string;
+  message?: string;
+}
+
 /**
  * Helper for uploading a file to S3
  */
@@ -35,7 +41,7 @@ export const uploadFile = async ({
   fileType,
   data,
   headers,
-}: FileUploadParams): Promise<unknown> => {
+}: FileUploadParams): Promise<UploadFileResponse> => {
   const requestUrl = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
   const { apiKey } =
@@ -123,3 +129,21 @@ export const downloadFile = async ({
     return { error: true, message: error.message, ...error.response };
   }
 };
+
+export function splitFilePath(inPath: string | undefined | null): {
+  dir: string;
+  name: string;
+  ext: string;
+} {
+  if (!inPath) return { dir: "", name: "", ext: "" };
+
+  const lastSlash = inPath.lastIndexOf("/");
+
+  const dir = lastSlash >= 0 ? inPath.substring(0, lastSlash) : "";
+  const basename = lastSlash >= 0 ? inPath.substring(lastSlash + 1) : inPath;
+  const firstDot = basename.indexOf(".");
+  const name = firstDot >= 0 ? basename.substring(0, firstDot) : basename;
+  const ext = firstDot >= 0 ? basename.substring(firstDot) : "";
+
+  return { dir, name, ext };
+}

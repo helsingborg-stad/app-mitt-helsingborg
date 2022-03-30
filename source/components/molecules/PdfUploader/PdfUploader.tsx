@@ -1,10 +1,15 @@
-import React from 'react';
-import styled from 'styled-components/native';
-import DocumentPicker, { DocumentPickerOptions } from 'react-native-document-picker';
-import { Text, Button, Icon } from '../../atoms';
-import { getBlob, uploadFile } from '../../../helpers/FileUpload';
-import { getValidColorSchema, PrimaryColor } from '../../../styles/themeHelpers';
-import PdfDisplay, { Pdf } from '../PdfDisplay/PdfDisplay';
+import React from "react";
+import styled from "styled-components/native";
+import DocumentPicker from "react-native-document-picker";
+import uuid from "react-native-uuid";
+
+import { Text, Button, Icon } from "../../atoms";
+import {
+  getValidColorSchema,
+  PrimaryColor,
+} from "../../../styles/themeHelpers";
+import PdfDisplay, { Pdf, UploadedPdf } from "../PdfDisplay/PdfDisplay";
+import { AllowedFileTypes, splitFilePath } from "../../../helpers/FileUpload";
 
 const Wrapper = styled.View`
   padding-left: 0;
@@ -23,78 +28,96 @@ const ButtonContainer = styled.View`
 
 interface Props {
   buttonText: string;
-  value: Pdf[] | '';
-  answers: Record<string, any>;
-  onChange: (value: Record<string, any>[], id?: string) => void;
+  value: UploadedPdf[] | "";
+  answers: Record<string, unknown>;
   colorSchema?: PrimaryColor;
   maxDocuments?: number;
   id: string;
+  preferredFileName?: string;
+  onChange: (value: Pdf[], id?: string) => void;
 }
+
+const renamePdfWithSuffix = (
+  pdf: Pdf,
+  baseName: string,
+  ext: string,
+  suffix: string
+) => ({
+  ...pdf,
+  filename: `${baseName}_${suffix}${ext}`,
+});
 
 const PdfUploader: React.FC<Props> = ({
   buttonText,
   value: pdfs,
   answers,
-  onChange,
   colorSchema,
   maxDocuments,
   id,
+  preferredFileName,
+  onChange,
 }) => {
-  const addPdf = (newPdf: Pdf) => {
-    const updatedPdfs = pdfs === '' ? [newPdf] : [...pdfs, newPdf];
-    onChange(updatedPdfs);
-    return updatedPdfs;
-  };
-
-  const uploadPdf = async (pdf: Pdf, index: number, updatedPdfs: Pdf[]) => {
-    const data: Blob = await getBlob(pdf.uri);
-    const uploadResponse = await uploadFile({
-      endpoint: 'users/me/attachments',
-      fileName: pdf.name,
-      fileType: 'pdf',
-      data,
-    });
-
-    if (uploadResponse.error) {
-      updatedPdfs[index].errorMessage = uploadResponse.message;
-    } else {
-      updatedPdfs[index].uploadedFileName = uploadResponse.uploadedFilename;
-      updatedPdfs[index].url = uploadResponse.url;
-    }
-    onChange(updatedPdfs);
-  };
+  const addUniqueId = (pdfFile: Pdf) => ({ ...pdfFile, id: uuid.v4() });
 
   const addPdfFromLibrary = async () => {
-    const pickerOptions: DocumentPickerOptions<'android' | 'ios'> = {
-      /* @ts-ignore */
-      type: DocumentPicker.types.pdf,
-    };
-
     try {
-      const fileInfo = await DocumentPicker.pick(pickerOptions);
+      let newFiles = await DocumentPicker.pick({
+        type: DocumentPicker.types.pdf,
+        allowMultiSelection: true,
+      });
 
-      const pdf: Pdf = { questionId: id, ...fileInfo };
-      const originalLength = pdfs.length;
-      const updatedPdfs = addPdf(pdf);
-      uploadPdf(pdf, originalLength, updatedPdfs);
+      newFiles = newFiles.map((pdf) => addUniqueId(pdf as Pdf));
+
+      const oldFiles = answers[id] || [];
+      let files = [...(oldFiles as Pdf[]), ...newFiles];
+
+      if (preferredFileName) {
+        files = files.map((pdf, index) =>
+          renamePdfWithSuffix(
+            pdf as Pdf,
+            preferredFileName,
+            splitFilePath(pdf?.name).ext,
+            index.toString()
+          )
+        );
+      }
+
+      const filesWithQuestionId = files.map((pdf) => {
+        const split = splitFilePath(pdf?.name);
+        return {
+          ...pdf,
+          questionId: id,
+          filename: pdf?.filename ?? `${split.name}${split.ext}`,
+          fileType: "pdf" as AllowedFileTypes,
+          path: pdf.uri,
+        };
+      });
+
+      onChange(filesWithQuestionId);
     } catch (error) {
-      if (!DocumentPicker.isCancel(error))
-        console.error('Error while adding pdf from library:', error);
+      if (!DocumentPicker.isCancel(error as Error)) {
+        console.error("Error while adding pdf from library:", error);
+      }
     }
   };
 
-  const validColorSchema = getValidColorSchema(colorSchema);
+  const validColorSchema = getValidColorSchema(colorSchema ?? "Blue");
   return (
     <Wrapper>
-      {pdfs !== '' && <PdfDisplay pdfs={pdfs} onChange={onChange} answers={answers} />}
+      {pdfs !== "" && (
+        <PdfDisplay pdfs={pdfs} onChange={onChange} answers={answers} />
+      )}
       <ButtonContainer>
         <Button
           colorSchema={validColorSchema}
           onClick={addPdfFromLibrary}
-          disabled={maxDocuments && pdfs.length >= maxDocuments}
+          disabled={!!maxDocuments && pdfs.length >= maxDocuments}
         >
           <Icon name="add" />
-          <Text> {buttonText && buttonText !== '' ? buttonText : 'Ladda upp PDF'}</Text>
+          <Text>
+            {" "}
+            {buttonText && buttonText !== "" ? buttonText : "Ladda upp PDF"}
+          </Text>
         </Button>
       </ButtonContainer>
     </Wrapper>

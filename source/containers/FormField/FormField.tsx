@@ -290,8 +290,8 @@ const FormField = (props: FormFieldProps): JSX.Element => {
   if (inputType === "repeaterField" && !!input?.addAnswerEvent)
     inputCompProps[input.addAnswerEvent] = onInputAddAnswer;
 
-  if (inputType === "imageUploader") {
-    inputCompProps.preferredImageName = label;
+  if (["pdfUploader", "imageUploader"].includes(inputType)) {
+    inputCompProps.preferredFileName = label;
   }
 
   if (inputType === "bulletList") {
