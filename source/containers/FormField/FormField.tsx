@@ -1,5 +1,6 @@
 import React from "react";
 import { View, LayoutAnimation } from "react-native";
+import CheckboxList from "../../components/organisms/CheckboxList";
 import DynamicCardRenderer from "../DynamicCardRenderer/DynamicCardRenderer";
 import { Input, Label, Select, Text } from "../../components/atoms";
 import {
@@ -176,6 +177,10 @@ const inputTypes: Record<inputKeyType, InputTypeProperties> = {
   },
   bulletList: {
     component: BulletList,
+  },
+  checkboxList: {
+    component: CheckboxList,
+    changeEvent: "onChange",
   },
 };
 
