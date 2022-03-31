@@ -18,16 +18,12 @@ function loadStories() {
   require("../source/components/atoms/Text/Text.stories");
   require("../source/components/molecules/AddressCard/AddressCard.stories");
   require("../source/components/molecules/BackNavigation/BackNavigation.stories");
-  require("../source/components/molecules/BottomModal/BottomModal.stories");
   require("../source/components/molecules/CalendarPicker/CalendarPickerForm.stories");
   require("../source/components/molecules/Card/Card.stories");
   require("../source/components/molecules/CaseCard/CaseCard.stories");
-  require("../source/components/molecules/CharacterCard/CharacterCard.stories");
   require("../source/components/molecules/CheckboxField/CheckboxField.stories");
-  require("../source/components/molecules/CollapsibleSection/CollapsibleSection.stories");
   require("../source/components/molecules/DateTimeCard/DateTimeCard.stories");
   require("../source/components/molecules/DateTimePicker/DateTimePickerForm.stories");
-  require("../source/components/molecules/DayPicker/DayPicker.stories");
   require("../source/components/molecules/EditableList/EditableList.stories");
   require("../source/components/molecules/FloatingButton/FloatingButton.stories");
   require("../source/components/molecules/GroupedList/GroupedList.stories");
@@ -41,11 +37,8 @@ function loadStories() {
   require("../source/components/molecules/PersonField/PersonField.stories");
   require("../source/components/molecules/RadioGroup/RadioGroup.stories");
   require("../source/components/molecules/RepeaterField/RepeaterField.stories");
-  require("../source/components/molecules/TimeSlotPicker/TimeSlotPicker.stories");
-  require("../source/components/molecules/TimeSpanButton/TimeSpanButton.stories");
   require("../source/components/molecules/ToastNotification/ToastNotifications.stories");
   require("../source/components/organisms/BulletList/BulletList.stories");
-  require("../source/components/organisms/ButtonList/ButtonList.stories");
   require("../source/components/organisms/FormList/FormList.stories");
   require("../source/components/organisms/PinInputModal/PinInputModal.stories");
   require("../source/components/organisms/Step/Step.stories");
@@ -74,16 +67,12 @@ const stories = [
   "../source/components/atoms/Text/Text.stories",
   "../source/components/molecules/AddressCard/AddressCard.stories",
   "../source/components/molecules/BackNavigation/BackNavigation.stories",
-  "../source/components/molecules/BottomModal/BottomModal.stories",
   "../source/components/molecules/CalendarPicker/CalendarPickerForm.stories",
   "../source/components/molecules/Card/Card.stories",
   "../source/components/molecules/CaseCard/CaseCard.stories",
-  "../source/components/molecules/CharacterCard/CharacterCard.stories",
   "../source/components/molecules/CheckboxField/CheckboxField.stories",
-  "../source/components/molecules/CollapsibleSection/CollapsibleSection.stories",
   "../source/components/molecules/DateTimeCard/DateTimeCard.stories",
   "../source/components/molecules/DateTimePicker/DateTimePickerForm.stories",
-  "../source/components/molecules/DayPicker/DayPicker.stories",
   "../source/components/molecules/EditableList/EditableList.stories",
   "../source/components/molecules/FloatingButton/FloatingButton.stories",
   "../source/components/molecules/GroupedList/GroupedList.stories",
@@ -97,11 +86,8 @@ const stories = [
   "../source/components/molecules/PersonField/PersonField.stories",
   "../source/components/molecules/RadioGroup/RadioGroup.stories",
   "../source/components/molecules/RepeaterField/RepeaterField.stories",
-  "../source/components/molecules/TimeSlotPicker/TimeSlotPicker.stories",
-  "../source/components/molecules/TimeSpanButton/TimeSpanButton.stories",
   "../source/components/molecules/ToastNotification/ToastNotifications.stories",
   "../source/components/organisms/BulletList/BulletList.stories",
-  "../source/components/organisms/ButtonList/ButtonList.stories",
   "../source/components/organisms/FormList/FormList.stories",
   "../source/components/organisms/PinInputModal/PinInputModal.stories",
   "../source/components/organisms/Step/Step.stories",
