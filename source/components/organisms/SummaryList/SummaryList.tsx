@@ -56,6 +56,7 @@ export interface SummaryListItem {
   category?: string;
   inputId?: string;
   inputSelectValue?: InputType;
+  fieldStyle?: string;
 }
 
 interface SummaryListCategory {
@@ -329,6 +330,7 @@ const SummaryList: React.FC<Props> = ({
           colorSchema={colorSchema}
           validationError={validationError}
           category={listEntry.item.category}
+          fieldStyle={listEntry.item.fieldStyle}
         />
       );
       if (listEntry.item.type === "arrayNumber") {
@@ -359,6 +361,7 @@ const SummaryList: React.FC<Props> = ({
               : undefined
           }
           category={listEntry.item.category}
+          fieldStyle={listEntry.item.fieldStyle}
         />
       );
       if (listEntry.item.type === "editableListNumber") {
@@ -388,6 +391,7 @@ const SummaryList: React.FC<Props> = ({
               : undefined
           }
           category={listEntry.item.category}
+          fieldStyle={listEntry.item.fieldStyle}
         />
       );
       if (listEntry.item.type === "number") {
