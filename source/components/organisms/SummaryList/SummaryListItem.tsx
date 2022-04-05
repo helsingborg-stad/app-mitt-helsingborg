@@ -252,6 +252,12 @@ const SummaryListItem: React.FC<Props> = ({
     if (onBlur) onBlur(value);
   };
 
+  /*
+    A custom style can be set in the form builder
+    on fields that are displayed in a summarylist. 
+    The number of styles are limitid to those presented
+    in the FieldStyle object defined in this file.
+  */
   const customStyle = FieldStyle[fieldStyle ?? ""] ?? {};
 
   const validColorSchema = getValidColorSchema(colorSchema);
