@@ -119,9 +119,11 @@ const FieldStyle: Record<string, unknown> = StyleSheet.create({
   Grey: {
     color: "#707070",
     paddingRight: 0,
+    paddingBottom: 0,
   },
   Bold: {
     fontWeight: "bold",
+    paddingBottom: 5,
   },
 });
 
@@ -162,7 +164,7 @@ const InputComponent = React.forwardRef(
             textAlign="right"
             inputType={input.inputSelectValue}
             ref={ref}
-            style={style}
+            style={fieldStyle}
           />
         );
       case "number":
@@ -250,15 +252,8 @@ const SummaryListItem: React.FC<Props> = ({
     if (onBlur) onBlur(value);
   };
 
-  const customStyle = (() => {
-    if (
-      fieldStyle &&
-      Object.prototype.hasOwnProperty.call(FieldStyle, fieldStyle)
-    ) {
-      return (FieldStyle[fieldStyle] as Record<string, unknown>) ?? {};
-    }
-    return {};
-  })();
+  const customStyle = FieldStyle[fieldStyle ?? ""] ?? {};
+
   const validColorSchema = getValidColorSchema(colorSchema);
 
   return (
