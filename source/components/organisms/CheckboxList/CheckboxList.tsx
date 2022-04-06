@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
+import styled from "styled-components/native";
 
 import { Checkbox, Text } from "app/components/atoms";
-import styled from "styled-components/native";
+import { ComplementaryColor } from "../../../styles/themeHelpers";
 
 interface CheckboxListProps {
   choices: { displayText: string; tags?: string[]; id: string }[];
   onChange?: (values: Record<string, boolean>) => void;
   onBlur?: (values: Record<string, boolean>) => void;
   value?: Record<string, boolean>;
+  colorSchema?: ComplementaryColor;
 }
 
 const BoxTextWrapper = styled.View`
@@ -42,7 +44,13 @@ const CheckboxFieldText = styled(Text)<{ size: "small" | "medium" | "large" }>`
 `;
 
 const CheckboxList = (props: CheckboxListProps): JSX.Element => {
-  const { choices = [], onChange, onBlur, value: answerValues } = props;
+  const {
+    choices = [],
+    onChange,
+    onBlur,
+    value: answerValues,
+    colorSchema = "red",
+  } = props;
 
   const [values, setValues] = useState<Record<string, boolean>>({});
 
@@ -74,13 +82,13 @@ const CheckboxList = (props: CheckboxListProps): JSX.Element => {
       {choices.map((choice) => (
         <BoxTextWrapper key={choice.id}>
           <Checkbox
-            colorSchema="red"
+            colorSchema={colorSchema}
             size="small"
             onChange={() => update(choice.id)}
             checked={values[choice.id]}
             // {...other}
           />
-          <CheckboxFieldText color="red" size="small">
+          <CheckboxFieldText color={colorSchema} size="small">
             {choice.displayText}
           </CheckboxFieldText>
         </BoxTextWrapper>
