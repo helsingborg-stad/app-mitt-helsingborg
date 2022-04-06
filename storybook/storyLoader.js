@@ -39,6 +39,8 @@ function loadStories() {
   require("../source/components/molecules/RepeaterField/RepeaterField.stories");
   require("../source/components/molecules/ToastNotification/ToastNotifications.stories");
   require("../source/components/organisms/BulletList/BulletList.stories");
+  require("../source/components/organisms/CheckboxList/CheckboxList.stories");
+  require("../source/components/organisms/ButtonList/ButtonList.stories");
   require("../source/components/organisms/FormList/FormList.stories");
   require("../source/components/organisms/PinInputModal/PinInputModal.stories");
   require("../source/components/organisms/Step/Step.stories");
@@ -88,6 +90,8 @@ const stories = [
   "../source/components/molecules/RepeaterField/RepeaterField.stories",
   "../source/components/molecules/ToastNotification/ToastNotifications.stories",
   "../source/components/organisms/BulletList/BulletList.stories",
+  "../source/components/organisms/CheckboxList/CheckboxList.stories",
+  "../source/components/organisms/ButtonList/ButtonList.stories",
   "../source/components/organisms/FormList/FormList.stories",
   "../source/components/organisms/PinInputModal/PinInputModal.stories",
   "../source/components/organisms/Step/Step.stories",
