@@ -132,7 +132,10 @@ const computeCaseCardComponent = (
   );
 
   const completions = caseData?.details?.completions?.requested || [];
-  const completionDuedate = caseData?.details?.completions?.dueDate
+  const canShowCompletionDueDate =
+    caseData?.details?.completions?.dueDate &&
+    !caseData?.details?.completions?.isDueDateExpired;
+  const completionDuedate = canShowCompletionDueDate
     ? moment(caseData?.details?.completions?.dueDate).format("YYYY-MM-DD")
     : "";
 
