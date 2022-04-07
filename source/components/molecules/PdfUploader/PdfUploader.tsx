@@ -64,6 +64,7 @@ const PdfUploader: React.FC<Props> = ({
       let newFiles = await DocumentPicker.pick({
         type: DocumentPicker.types.pdf,
         allowMultiSelection: true,
+        copyTo: "cachesDirectory",
       });
 
       newFiles = newFiles.map((pdf) => addUniqueId(pdf as Pdf));
