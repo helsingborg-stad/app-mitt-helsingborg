@@ -4,7 +4,7 @@ import Button from "../../atoms/Button";
 import { Heading, Input, Text } from "../../atoms";
 import Wrapper from "../../molecules/Dialog/Wrapper";
 import { Modal } from "../../molecules/Modal";
-import { BackgroundBlur } from "../../atoms/BackgroundBlur";
+import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 
 import { ButtonContainer, DialogContainer, ErrorText } from "./styled";
 
@@ -43,34 +43,31 @@ export default function PinInputModal({
       animationType="fade"
       statusBarTranslucent
     >
-      <Wrapper>
-        <DialogContainer>
-          <Heading type="h4">Ange kod</Heading>
-          <Text align="center" style={{ marginBottom: 10 }}>
-            Ange koden som {name} har fått vid signering
-          </Text>
-          <Input
-            testID="pin-input"
-            onChangeText={setPin}
-            onBlur={() => undefined}
-            onMount={() => undefined}
-          />
-          {error && <ErrorText>{error}</ErrorText>}
-          <ButtonContainer>
-            <Button onClick={handleClosePressed} colorSchema="neutral">
-              <Text>Avbryt</Text>
-            </Button>
-            <Button onClick={handleUnlockPressed} colorSchema="red">
-              <Text>Lås upp</Text>
-            </Button>
-          </ButtonContainer>
-        </DialogContainer>
-        <BackgroundBlur
-          blurType="light"
-          blurAmount={15}
-          reducedTransparencyFallbackColor="white"
-        />
-      </Wrapper>
+      <BackgroundBlurWrapper>
+        <Wrapper>
+          <DialogContainer>
+            <Heading type="h4">Ange kod</Heading>
+            <Text align="center" style={{ marginBottom: 10 }}>
+              Ange koden som {name} har fått vid signering
+            </Text>
+            <Input
+              testID="pin-input"
+              onChangeText={setPin}
+              onBlur={() => undefined}
+              onMount={() => undefined}
+            />
+            {error && <ErrorText>{error}</ErrorText>}
+            <ButtonContainer>
+              <Button onClick={handleClosePressed} colorSchema="neutral">
+                <Text>Avbryt</Text>
+              </Button>
+              <Button onClick={handleUnlockPressed} colorSchema="red">
+                <Text>Lås upp</Text>
+              </Button>
+            </ButtonContainer>
+          </DialogContainer>
+        </Wrapper>
+      </BackgroundBlurWrapper>
     </Modal>
   );
 }

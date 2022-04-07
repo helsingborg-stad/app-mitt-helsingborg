@@ -1,13 +1,13 @@
-import { BlurView } from '@react-native-community/blur';
-import PropTypes from 'prop-types';
-import React, { useEffect, useRef } from 'react';
-import { Animated, Easing, View } from 'react-native';
-import styled from 'styled-components/native';
-import theme from '../../styles/theme';
-import Button from '../atoms/Button/Button';
-import Icon from '../atoms/Icon';
-import Text from '../atoms/Text';
-import { Modal } from './Modal';
+import PropTypes from "prop-types";
+import React, { useEffect, useRef } from "react";
+import { Animated, Easing, View } from "react-native";
+import styled from "styled-components/native";
+import { BackgroundBlurWrapper } from "../atoms/BackgroundBlur";
+import theme from "../../styles/theme";
+import Button from "../atoms/Button/Button";
+import Icon from "../atoms/Icon";
+import Text from "../atoms/Text";
+import { Modal } from "./Modal";
 
 const Container = styled(View)`
   flex: 1;
@@ -53,20 +53,18 @@ const ButtonText = styled(Text)`
   font-weight: ${(props) => props.theme.fontWeights[1]};
 `;
 
-const BlurredBackground = styled(BlurView)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-`;
-
 const SuccessIcon = styled(Icon)`
   color: ${(props) => props.theme.colors.primary[props.colorSchema][0]};
 `;
 
 const AuthLoading = (props) => {
-  const { authenticateOnExternalDevice, cancelSignIn, colorSchema, isLoading, isResolved } = props;
+  const {
+    authenticateOnExternalDevice,
+    cancelSignIn,
+    colorSchema,
+    isLoading,
+    isResolved,
+  } = props;
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -82,7 +80,11 @@ const AuthLoading = (props) => {
     <>
       {isResolved && (
         <Container as={Animated.View} style={{ opacity: fadeAnimation }}>
-          <SuccessIcon size={48} name="check-circle" colorSchema={colorSchema} />
+          <SuccessIcon
+            size={48}
+            name="check-circle"
+            colorSchema={colorSchema}
+          />
         </Container>
       )}
 
@@ -93,24 +95,32 @@ const AuthLoading = (props) => {
         presentationStyle="overFullScreen"
         visible={isLoading}
       >
-        <Container>
-          <Box>
-            <AuthActivityIndicator size="large" color={theme.colors.primary[colorSchema][1]} />
-            {authenticateOnExternalDevice ? (
-              <InfoText>Väntar på att BankID ska startas på en annan enhet</InfoText>
-            ) : (
-              <InfoText>Väntar på mobilt BankID</InfoText>
-            )}
-            <AbortButton z={0} colorSchema="neutral" size="large" onClick={cancelSignIn} block>
-              <ButtonText>Avbryt</ButtonText>
-            </AbortButton>
-          </Box>
-          <BlurredBackground
-            blurType="light"
-            blurAmount={15}
-            reducedTransparencyFallbackColor="white"
-          />
-        </Container>
+        <BackgroundBlurWrapper>
+          <Container>
+            <Box>
+              <AuthActivityIndicator
+                size="large"
+                color={theme.colors.primary[colorSchema][1]}
+              />
+              {authenticateOnExternalDevice ? (
+                <InfoText>
+                  Väntar på att BankID ska startas på en annan enhet
+                </InfoText>
+              ) : (
+                <InfoText>Väntar på mobilt BankID</InfoText>
+              )}
+              <AbortButton
+                z={0}
+                colorSchema="neutral"
+                size="large"
+                onClick={cancelSignIn}
+                block
+              >
+                <ButtonText>Avbryt</ButtonText>
+              </AbortButton>
+            </Box>
+          </Container>
+        </BackgroundBlurWrapper>
       </Modal>
     </>
   );
@@ -124,11 +134,11 @@ AuthLoading.propTypes = {
   /**
    * The color schema of the component. colors is defined in the application theme.
    */
-  colorSchema: PropTypes.oneOf(['neutral', 'blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
 };
 
 AuthLoading.defaultProps = {
-  colorSchema: 'neutral',
+  colorSchema: "neutral",
   isResolved: false,
   isLoading: false,
 };
