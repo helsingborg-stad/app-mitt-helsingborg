@@ -51,6 +51,7 @@ function loadStories() {
   require("../source/containers/Form/Form.stories");
   require("../source/containers/FormField/FormField.stories");
   require("../source/helpers/error-handler/ErrorHandler.stories");
+  require("../source/helpers/filePicker.stories");
 }
 
 const stories = [
@@ -101,6 +102,7 @@ const stories = [
   "../source/containers/Form/Form.stories",
   "../source/containers/FormField/FormField.stories",
   "../source/helpers/error-handler/ErrorHandler.stories",
+  "../source/helpers/filePicker.stories",
 ];
 
 module.exports = {
