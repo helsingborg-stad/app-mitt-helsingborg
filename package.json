@@ -46,7 +46,7 @@
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
     "metro-react-native-babel-preset": "^0.66.2",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "prop-types": "^15.7.2",
     "punycode": "^2.1.1",
     "react": "16.13.1",
