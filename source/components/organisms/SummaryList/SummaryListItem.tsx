@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import PropTypes from "prop-types";
 import React, { useRef } from "react";
-import { Platform, StyleSheet } from "react-native";
+import { Platform } from "react-native";
 import styled from "styled-components/native";
 import { colorPalette } from "../../../styles/palette";
 import {
@@ -115,17 +115,33 @@ const ValidationErrorMessage = styled(Text)`
   margin-top: 8px;
 `;
 
-const FieldStyle: Record<string, unknown> = StyleSheet.create({
+interface CustomStyle {
+  style: Record<string, unknown>;
+  behaviour: {
+    hideLabel: boolean;
+  };
+}
+const FieldStyle: Record<string, CustomStyle> = {
   Grey: {
-    color: "#707070",
-    paddingRight: 0,
-    paddingBottom: 0,
+    style: {
+      color: "#707070",
+      paddingRight: 0,
+      paddingBottom: 0,
+    },
+    behaviour: {
+      hideLabel: false,
+    },
   },
   Bold: {
-    fontWeight: "bold",
-    paddingBottom: 5,
+    style: {
+      fontWeight: "bold",
+      paddingBottom: 5,
+    },
+    behaviour: {
+      hideLabel: true,
+    },
   },
-});
+};
 
 interface InputComponentProps {
   input: SummaryListItemType;
@@ -258,7 +274,14 @@ const SummaryListItem: React.FC<Props> = ({
     The number of styles are limitid to those presented
     in the FieldStyle object defined in this file.
   */
-  const customStyle = FieldStyle[fieldStyle ?? ""] ?? {};
+  let customStyle = {};
+  let labelTitle = userDescriptionLabel || item.title;
+  if (fieldStyle) {
+    customStyle = FieldStyle[fieldStyle].style;
+    if (FieldStyle[fieldStyle].behaviour.hideLabel) {
+      labelTitle = "";
+    }
+  }
 
   const validColorSchema = getValidColorSchema(colorSchema);
 
@@ -278,9 +301,7 @@ const SummaryListItem: React.FC<Props> = ({
           activeOpacity={1.0}
         >
           <LabelWrapper>
-            <SmallText editable={editable}>
-              {userDescriptionLabel || item.title}
-            </SmallText>
+            <SmallText editable={editable}>{labelTitle}</SmallText>
           </LabelWrapper>
           <InputWrapper editable={editable}>
             <InputComponent
