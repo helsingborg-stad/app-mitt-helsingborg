@@ -15,6 +15,7 @@ export interface Props {
 const Dialog: React.FC<Props> = ({ visible, children }) => (
   <Modal
     visible={visible ?? true}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     hide={() => {}}
     transparent
     presentationStyle="overFullScreen"
