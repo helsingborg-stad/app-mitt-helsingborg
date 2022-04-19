@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import GroupedList from "../../molecules/GroupedList/GroupedList";
@@ -135,23 +135,6 @@ const SummaryList: React.FC<Props> = ({
   help,
   editable,
 }) => {
-  const [isModified, setModified] = useState(false);
-
-  const sortAnswers = (itemsToSort: SummaryListItem[]) => {
-    itemsToSort.forEach((item) => {
-      if (ArrayType.includes(item.type)) {
-        const category = categories?.find(
-          (categoryItem) => item.category === categoryItem.category
-        );
-        const sortField = category?.sortField;
-        if (sortField && Array.isArray(answers[item.id])) {
-          // eslint-disable-next-line no-param-reassign
-          answers[item.id] = doSort(answers[item.id], sortField);
-        }
-      }
-    });
-    setModified(!isModified);
-  };
   /**
    * Given an item, and possibly an index in the case of repeater fields, this generates a function that
    * updates the form data from the input.
@@ -268,9 +251,19 @@ const SummaryList: React.FC<Props> = ({
   });
 
   useEffect(() => {
-    sortAnswers(itemsWithAnswers);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    items.forEach((item) => {
+      if (ArrayType.includes(item.type)) {
+        const category = categories?.find(
+          (categoryItem) => item.category === categoryItem.category
+        );
+        const sortField = category?.sortField;
+        if (sortField && Array.isArray(answers[item.id])) {
+          // eslint-disable-next-line no-param-reassign
+          answers[item.id] = doSort(answers[item.id], sortField);
+        }
+      }
+    });
+  }, [items, answers, categories]);
 
   /**
    * Join answer with its component
@@ -412,9 +405,6 @@ const SummaryList: React.FC<Props> = ({
           showEditButton={editable}
           startEditable={startEditable && editable}
           help={help}
-          onCloseCallback={() => {
-            sortAnswers(listItems.map((element) => element.props.item));
-          }}
         >
           {listItems}
         </GroupedList>
@@ -489,3 +479,6 @@ SummaryList.defaultProps = {
 };
 
 export default SummaryList;
+function useCallback(arg0: (itemsToSort: SummaryListItem[]) => void) {
+  throw new Error("Function not implemented.");
+}
