@@ -479,6 +479,3 @@ SummaryList.defaultProps = {
 };
 
 export default SummaryList;
-function useCallback(arg0: (itemsToSort: SummaryListItem[]) => void) {
-  throw new Error("Function not implemented.");
-}
