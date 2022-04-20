@@ -64,35 +64,35 @@ jobs:
       # END Set .env file vars (development/production)
       ######################
 
-      # - name: Get yarn cache directory path
-      #   id: yarn-cache-dir-path
-      #   run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      # - name: cache yarn
-      #   uses: actions/cache@v2
-      #   id: yarn-cache
-      #   with:
-      #     path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-yarn-
+      - name: cache yarn
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
-      # - name: update hash
-      #   run: ./scripts/add-commit-hash-to-env.sh
+      - name: update hash
+        run: ./scripts/add-commit-hash-to-env.sh
 
-      # - name: cache cocoapods
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: ios/Pods
-      #     key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-pods-
+      - name: cache cocoapods
+        uses: actions/cache@v2
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
 
-      # - name: cache cocoapods DD
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: ios/.local_derived_data
-      #     key: ${{ runner.os }}-pods-derived-data-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/Podfile.lock') }}-${{ hashFiles('.env') }}
+      - name: cache cocoapods DD
+        uses: actions/cache@v2
+        with:
+          path: ios/.local_derived_data
+          key: ${{ runner.os }}-pods-derived-data-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/Podfile.lock') }}-${{ hashFiles('.env') }}
 
       - name: yarn install
         run: yarn install
