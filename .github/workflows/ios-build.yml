@@ -73,7 +73,7 @@ jobs:
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-yarn-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
 
@@ -84,7 +84,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock', '**/yarn.lock') }}
+          key: ${{ runner.os }}-pods-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/Podfile.lock', '**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-pods-
 
