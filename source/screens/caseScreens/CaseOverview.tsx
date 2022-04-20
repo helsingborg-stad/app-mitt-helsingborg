@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Animated, Easing, RefreshControl } from "react-native";
+import { Animated, Easing, Linking, RefreshControl } from "react-native";
 import styled from "styled-components/native";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
@@ -41,6 +41,8 @@ import {
 import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
 
 const {
+  CLOSED_PARTIALLY_APPROVED_VIVA,
+  CLOSED_REJECTED_VIVA,
   ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
   ACTIVE_COMPLETION_REQUIRED_VIVA,
   ACTIVE_COMPLETION_SUBMITTED,
@@ -155,6 +157,10 @@ const computeCaseCardComponent = (
   const isClosed = statusType.includes(CLOSED);
   const isWaitingForSign = statusType.includes(ACTIVE_SIGNATURE_PENDING);
 
+  const shouldShowAppealButton =
+    statusType.includes(CLOSED_PARTIALLY_APPROVED_VIVA) ||
+    statusType.includes(CLOSED_REJECTED_VIVA);
+
   const unApprovedCompletionDescriptions: string[] = isVivaCompletionRequired
     ? getUnapprovedCompletionDescriptions(completions)
     : [];
@@ -259,6 +265,16 @@ const computeCaseCardComponent = (
 
   const pinToShow = shouldShowPin ? caseData.password : null;
 
+  const openAppealLink = async () => {
+    const url =
+      "https://helsingborg.se/omsorg-och-stod/socialt-och-ekonomiskt-stod/ekonomiskt-bistand/overklaga/";
+    const supported = await Linking.canOpenURL(url);
+
+    if (!supported) return;
+
+    await Linking.openURL(url);
+  };
+
   return (
     <CaseCard
       key={caseData.id}
@@ -269,6 +285,7 @@ const computeCaseCardComponent = (
       description={cardProps.description}
       icon={icons[caseData.caseType.icon]}
       showButton={shouldShowCTAButton}
+      showAppealButton={shouldShowAppealButton}
       buttonText={buttonProps.text}
       currentStep={currentStep}
       totalSteps={totalSteps}
@@ -278,6 +295,7 @@ const computeCaseCardComponent = (
       declinedAmount={calculateSum(partiallyApprovedDecisionsAndRejected)}
       givedate={giveDate}
       onCardClick={cardProps.onClick}
+      onAppealButtonClick={openAppealLink}
       onButtonClick={buttonProps.onClick}
       buttonColorScheme={buttonProps.colorSchema || colorSchema}
       completions={unApprovedCompletionDescriptions}

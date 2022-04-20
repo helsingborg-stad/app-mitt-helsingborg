@@ -34,9 +34,11 @@ interface CaseCardProps {
   currentStep?: number;
   totalSteps?: number;
   showButton?: boolean;
+  showAppealButton?: boolean;
   buttonText?: string;
   buttonIconName?: string;
   onButtonClick?: () => void;
+  onAppealButtonClick?: () => void;
   showPayments?: boolean;
   approvedAmount?: string | number;
   declinedAmount?: string | number;
@@ -63,9 +65,11 @@ const CaseCard = ({
   currentStep,
   totalSteps,
   showButton = false,
+  showAppealButton = false,
   buttonText,
   buttonIconName,
   onButtonClick,
+  onAppealButtonClick,
   showPayments = false,
   approvedAmount,
   declinedAmount,
@@ -128,6 +132,13 @@ const CaseCard = ({
         <Card.Text mt={1} colorSchema="neutral" fontSize={12}>
           Skicka in senast: <Text type="a">{completionDuedate}</Text>
         </Card.Text>
+      )}
+
+      {showAppealButton && (
+        <Card.Button mt={1} onClick={onAppealButtonClick} colorSchema="neutral">
+          <Text>Så här gör du om du vill överklaga beslutet</Text>
+          <Icon name={buttonIconName || "arrow-forward"} />
+        </Card.Button>
       )}
 
       {showButton && (
