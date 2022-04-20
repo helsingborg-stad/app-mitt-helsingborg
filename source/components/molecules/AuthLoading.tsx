@@ -94,8 +94,7 @@ const AuthLoading = (props) => {
         transparent
         presentationStyle="overFullScreen"
         visible={isLoading}
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        hide={() => {}}
+        hide={() => undefined}
       >
         <BackgroundBlurWrapper>
           <Container>
