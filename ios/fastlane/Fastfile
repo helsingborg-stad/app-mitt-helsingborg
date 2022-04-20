@@ -153,7 +153,7 @@ platform :ios do
     )
     
     # install pods
-    cocoapods
+    cocoapods(try_repo_update_on_error: true)
 
     # check for pod cache (derived data)
     scheme = ENV["GYM_SCHEME"]
