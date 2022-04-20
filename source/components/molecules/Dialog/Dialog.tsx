@@ -1,6 +1,6 @@
 import React from "react";
 
-import { BackgroundBlur } from "../../atoms/BackgroundBlur";
+import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 
 import { Modal } from "../Modal";
 import Body from "./Body";
@@ -15,20 +15,17 @@ export interface Props {
 const Dialog: React.FC<Props> = ({ visible, children }) => (
   <Modal
     visible={visible ?? true}
-    hide={() => {}}
+    hide={() => undefined}
     transparent
     presentationStyle="overFullScreen"
     animationType="fade"
     statusBarTranslucent
   >
-    <Wrapper>
-      <Body>{children}</Body>
-      <BackgroundBlur
-        blurType="dark"
-        blurAmount={15}
-        reducedTransparencyFallbackColor="white"
-      />
-    </Wrapper>
+    <BackgroundBlurWrapper>
+      <Wrapper>
+        <Body>{children}</Body>
+      </Wrapper>
+    </BackgroundBlurWrapper>
   </Modal>
 );
 

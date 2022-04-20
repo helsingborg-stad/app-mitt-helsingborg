@@ -4,7 +4,7 @@ import { Modal } from "react-native";
 import Button from "../../atoms/Button";
 import Heading from "../../atoms/Heading";
 import Text from "../../atoms/Text";
-import { BackgroundBlur } from "../../atoms/BackgroundBlur";
+import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import { PrimaryColor } from "../../../styles/themeHelpers";
 
 const PopupContainer = styled.View`
@@ -87,37 +87,34 @@ const CloseDialog: React.FC<CloseDialogProps> = ({
     animationType="fade"
     statusBarTranslucent
   >
-    <PopupContainer>
-      <Dialog>
-        <Content>
-          <Title>{title}</Title>
-          {body && body.length > 0 ? <DialogText>{body}</DialogText> : null}
-        </Content>
-        <ButtonRow>
-          {buttons.map(({ text, color, clickHandler }) => (
-            <ButtonWrapper key={text}>
-              <DialogButton
-                block
-                z={0}
-                colorSchema={color && color.length > 0 ? color : "blue"}
-                onClick={clickHandler}
-              >
-                {color === "neutral" ? (
-                  <ButtonText>{text}</ButtonText>
-                ) : (
-                  <Text>{text}</Text>
-                )}
-              </DialogButton>
-            </ButtonWrapper>
-          ))}
-        </ButtonRow>
-      </Dialog>
-      <BackgroundBlur
-        blurType="dark"
-        blurAmount={15}
-        reducedTransparencyFallbackColor="white"
-      />
-    </PopupContainer>
+    <BackgroundBlurWrapper>
+      <PopupContainer>
+        <Dialog>
+          <Content>
+            <Title>{title}</Title>
+            {body && body.length > 0 ? <DialogText>{body}</DialogText> : null}
+          </Content>
+          <ButtonRow>
+            {buttons.map(({ text, color, clickHandler }) => (
+              <ButtonWrapper key={text}>
+                <DialogButton
+                  block
+                  z={0}
+                  colorSchema={color && color.length > 0 ? color : "blue"}
+                  onClick={clickHandler}
+                >
+                  {color === "neutral" ? (
+                    <ButtonText>{text}</ButtonText>
+                  ) : (
+                    <Text>{text}</Text>
+                  )}
+                </DialogButton>
+              </ButtonWrapper>
+            ))}
+          </ButtonRow>
+        </Dialog>
+      </PopupContainer>
+    </BackgroundBlurWrapper>
   </Modal>
 );
 

@@ -1,5 +1,5 @@
+/* eslint-disable import/prefer-default-export */
 import styled, { css } from "styled-components/native";
-import { BlurView } from "@react-native-community/blur";
 
 const backgroundBlurDefault = css`
   position: absolute;
@@ -9,13 +9,9 @@ const backgroundBlurDefault = css`
   right: 0;
 `;
 
-export const BackgroundBlur = styled(BlurView)`
-  ${backgroundBlurDefault}
-`;
-
 export const BackgroundBlurWrapper = styled.View`
   ${backgroundBlurDefault}
   z-index: 1000;
   padding: 0px;
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.75);
 `;
