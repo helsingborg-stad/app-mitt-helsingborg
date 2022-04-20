@@ -13,7 +13,8 @@
     "clear-cache": "(watchman watch-del-all & rm -rf $TMPDIR/metro-* & yarn cache clean & (cd ./ios && pod deintegrate) & rm -rf node_modules/) && yarn install && (cd ./ios && pod install)",
     "rebuild-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
     "clean": "react-native-clean-project",
-    "prestorybook": "rnstl"
+    "prestorybook": "rnstl",
+    "postinstall": "node scripts/rn-fetch-blob_warning.js; ./scripts/add-commit-hash-to-env.sh"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
