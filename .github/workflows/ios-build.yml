@@ -84,7 +84,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock', '**/Pods/Local Podspecs/*.podspec.json') }}
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock', '**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-pods-
 
@@ -92,7 +92,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ios/.local_derived_data
-          key: ${{ runner.os }}-pods-derived-data-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/Podfile.lock', '**/Pods/Local Podspecs/*.podspec.json') }}-${{ hashFiles('.env') }}
+          key: ${{ runner.os }}-pods-derived-data-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/Podfile.lock', '**/yarn.lock') }}-${{ hashFiles('.env') }}
 
       - name: yarn install
         run: yarn install
