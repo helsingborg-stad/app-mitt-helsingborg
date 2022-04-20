@@ -73,7 +73,7 @@ jobs:
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-yarn-${{ secrets.CACHE_KEY_PREFIX }}-${{ hashFiles('**/yarn.lock') }}
 
       - name: update hash
         run: ./scripts/add-commit-hash-to-env.sh
@@ -82,13 +82,13 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ios/Pods
-          key: ${{ runner.os }}-pods-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/Podfile.lock', '**/yarn.lock') }}
+          key: ${{ runner.os }}-pods-${{ secrets.CACHE_KEY_PREFIX }}-${{ hashFiles('**/Podfile.lock', '**/yarn.lock') }}
 
       - name: cache cocoapods DD
         uses: actions/cache@v2
         with:
           path: ios/.local_derived_data
-          key: ${{ runner.os }}-pods-derived-data-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/Podfile.lock', '**/yarn.lock') }}-${{ hashFiles('.env') }}
+          key: ${{ runner.os }}-pods-derived-data-${{ secrets.CACHE_KEY_PREFIX }}-${{ hashFiles('**/Podfile.lock', '**/yarn.lock') }}-${{ hashFiles('.env') }}
 
       - name: yarn install
         run: yarn install
