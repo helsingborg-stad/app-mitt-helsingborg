@@ -74,8 +74,6 @@ jobs:
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
 
       - name: update hash
         run: ./scripts/add-commit-hash-to-env.sh
@@ -85,8 +83,6 @@ jobs:
         with:
           path: ios/Pods
           key: ${{ runner.os }}-pods-${{ secrets.PODS_DD_PREFIX }}-${{ hashFiles('**/Podfile.lock', '**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
 
       - name: cache cocoapods DD
         uses: actions/cache@v2
