@@ -9,7 +9,6 @@ import React, {
 import { View, Animated, Easing, ScrollView } from "react-native";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import { useIsFocused } from "@react-navigation/native";
 import moment from "moment";
 import { CaseState } from "../../store/CaseContext";
 import FormContext from "../../store/FormContext";
@@ -307,7 +306,6 @@ const CaseSummary = (props) => {
     journals = {} as Journal,
   } = workflow as Workflow;
 
-  const isFocused = useIsFocused();
   const [isModalVisible, toggleModal] = useModal();
   const [isCalculationDetailsVisible, setCalculationDetailsVisibility] =
     useState(false);
@@ -323,7 +321,7 @@ const CaseSummary = (props) => {
     if (caseData?.currentFormId) {
       void getFormObject(caseData?.currentFormId);
     }
-  }, [isFocused, cases, caseData, getForm]);
+  }, [cases, caseData, getForm]);
 
   const updateCaseSignature = useCallback(
     async (caseItem, signatureSuccessful) => {
