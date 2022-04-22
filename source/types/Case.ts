@@ -56,8 +56,39 @@ export interface Application {
   periodstartdate: string;
 }
 
+export interface Calculation {
+  periodstartdate: string;
+  periodenddate: string;
+  incomesum: string;
+  costsum: string;
+  normsubtotal: string;
+  reductionsum: string;
+  calculationsum: string;
+}
+
+export interface Note {
+  label: string;
+  text: string;
+}
+export interface Journal {
+  journal: {
+    notes: {
+      note: Note[];
+    };
+  };
+}
+
+export interface Decision {
+  decisions: {
+    decision: Record<string, string>;
+  };
+}
+
 export interface Workflow {
   application: Application;
+  calculations: Record<string, Calculation>;
+  journals: Journal;
+  decision: Decision;
 }
 
 export interface VIVACaseDetails {

@@ -4,11 +4,11 @@ import React, {
   useState,
   useRef,
   useCallback,
+  useMemo,
 } from "react";
 import { View, Animated, Easing, ScrollView } from "react-native";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import { useIsFocused } from "@react-navigation/native";
 import moment from "moment";
 import { CaseState } from "../../store/CaseContext";
 import FormContext from "../../store/FormContext";
@@ -33,7 +33,14 @@ import {
 } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
 import { put } from "../../helpers/ApiRequest";
-import { ApplicationStatusType } from "../../types/Case";
+import {
+  ApplicationStatusType,
+  Case,
+  VIVACaseDetails,
+  Workflow,
+  Journal,
+  Decision,
+} from "../../types/Case";
 
 const {
   NOT_STARTED,
@@ -128,20 +135,13 @@ const computeCaseCardComponent = (
 ) => {
   const {
     currentPosition: { currentMainStep: currentStep },
-  } = caseData.forms[caseData.currentFormId];
-  const {
-    status,
-    details: {
-      period = {},
-      workflow: {
-        decision = {},
-        payments = {},
-        application = {},
-        journals = {},
-      } = {},
-    } = {},
-    persons = [],
-  } = caseData;
+  } = caseData?.forms[caseData?.currentFormId];
+
+  const status = caseData?.status;
+  const persons = caseData.persons ?? [];
+  const details = caseData?.details ?? {};
+  const { workflow = {}, period = {} } = details;
+  const { decision = {}, payments = {}, application = {} } = workflow;
 
   const totalSteps = form?.stepStructure?.length || 0;
 
@@ -181,10 +181,10 @@ const computeCaseCardComponent = (
     : [];
 
   const paymentsArray = decisions.filter(
-    (decision) => decision.typecode === "01"
+    (caseDecision) => caseDecision.typecode === "01"
   );
-  const partiallyApprovedDecisionsAndRejected = decisions.filter((decision) =>
-    ["03", "02"].includes(decision.typecode)
+  const partiallyApprovedDecisionsAndRejected = decisions.filter(
+    (caseDecision) => ["03", "02"].includes(caseDecision.typecode)
   );
 
   const shouldShowCTAButton = isCoApplicant
@@ -282,9 +282,7 @@ const computeCaseCardComponent = (
 const CaseSummary = (props) => {
   const authContext = useContext(AuthContext);
   const { cases, getCase } = useContext(CaseState);
-  const { getForm } = useContext(FormContext);
-  const [caseData, setCaseData] = useState({});
-  const [form, setForm] = useState({});
+  const { getForm, forms } = useContext(FormContext);
 
   const {
     colorSchema,
@@ -294,14 +292,20 @@ const CaseSummary = (props) => {
     },
   } = props;
 
-  const {
-    details: {
-      administrators,
-      workflow: { decision = {}, calculations = {}, journals = {} } = {},
-    } = {},
-  } = caseData;
+  const caseData: Case = useMemo(() => cases[caseId] ?? {}, [cases, caseId]);
+  const form = useMemo(
+    () => forms[caseData?.currentFormId] ?? {},
+    [caseData?.currentFormId, forms]
+  );
 
-  const isFocused = useIsFocused();
+  const details = caseData?.details ?? ({} as VIVACaseDetails);
+  const { workflow = {}, administrators } = details;
+  const {
+    decision = {} as Decision,
+    calculations = {},
+    journals = {} as Journal,
+  } = workflow as Workflow;
+
   const [isModalVisible, toggleModal] = useModal();
   const [isCalculationDetailsVisible, setCalculationDetailsVisibility] =
     useState(false);
@@ -310,16 +314,14 @@ const CaseSummary = (props) => {
     : [];
 
   useEffect(() => {
-    const caseData = getCase(caseId);
-    setCaseData(caseData);
-
-    const getFormObject = async (id) => {
-      setForm(await getForm(id));
+    const getFormObject = async (id: string) => {
+      await getForm(id);
     };
 
-    getFormObject(caseData.currentFormId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFocused, cases]);
+    if (caseData?.currentFormId) {
+      void getFormObject(caseData?.currentFormId);
+    }
+  }, [cases, caseData, getForm]);
 
   const updateCaseSignature = useCallback(
     async (caseItem, signatureSuccessful) => {

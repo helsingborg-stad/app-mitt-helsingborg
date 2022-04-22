@@ -71,6 +71,18 @@ const StyledIcon = styled(Icon)`
   color: ${(props) => props.theme.colors.primary[colorSchema][0]};
 `;
 
+interface InternalCardProps {
+  subtitle: string;
+  description?: string;
+  onClick?: () => void;
+}
+
+interface InternalButtonProps {
+  text: string;
+  colorSchema: string | null;
+  onClick: () => void;
+}
+
 /**
  * Returns a case card component depending on it's status
  * @param {obj} caseData
@@ -84,31 +96,18 @@ const computeCaseCardComponent = (
   authContext,
   onShowPinInput
 ) => {
-  interface InternalCardProps {
-    subtitle: string;
-    description?: string;
-    onClick?: () => void;
-  }
-
-  interface InternalButtonProps {
-    text: string;
-    colorSchema: string | null;
-    onClick: () => void;
-  }
-
   const currentStep =
     caseData?.forms?.[caseData.currentFormId]?.currentPosition
       ?.currentMainStep || 0;
   const totalSteps = caseData.form?.stepStructure
     ? caseData.form.stepStructure.length
     : 0;
-  const {
-    details: {
-      period = {},
-      workflow: { decision = {}, payments = {}, application = {} } = {},
-    } = {},
-    persons = [],
-  } = caseData;
+
+  const persons = caseData?.persons ?? [];
+
+  const details = caseData?.details ?? {};
+  const { workflow = {}, period = {} } = details;
+  const { decision = {}, payments = {}, application = {} } = workflow;
 
   const applicationPeriodTimestamp =
     application?.periodenddate ?? period?.endDate;
@@ -121,10 +120,10 @@ const computeCaseCardComponent = (
     : [];
 
   const paymentsArray = decisions.filter(
-    (decision) => decision.typecode === "01"
+    (caseDecision) => caseDecision?.typecode === "01"
   );
-  const partiallyApprovedDecisionsAndRejected = decisions.filter((decision) =>
-    ["03", "02"].includes(decision.typecode)
+  const partiallyApprovedDecisionsAndRejected = decisions.filter(
+    (caseDecision) => ["03", "02"].includes(caseDecision.typecode)
   );
 
   const casePersonData = persons.find(
