@@ -323,7 +323,6 @@ const Form: React.FC<Props> = ({
           onFieldChange={handleInputChange}
           onFieldBlur={handleBlur}
           onAddAnswer={handleAddAnswer}
-          onUpdateCase={onUpdateCase}
           onFieldMount={handleInputChange}
           currentPosition={formState.currentPosition}
           totalStepNumber={formState.numberOfMainSteps || 0}

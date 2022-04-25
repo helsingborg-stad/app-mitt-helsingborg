@@ -123,7 +123,6 @@ function Step({
   onFieldMount,
   onAddAnswer,
   isBackBtnVisible,
-  onUpdateCase,
   currentPosition,
   totalStepNumber,
   answerSnapshot,
@@ -334,7 +333,6 @@ function Step({
                 formNavigation={formNavigation}
                 currentPosition={currentPosition}
                 onUpdate={onFieldChange}
-                onUpdateCase={onUpdateCase}
                 validateStepAnswers={validateStepAnswers}
                 attachments={attachments}
               />
@@ -423,10 +421,6 @@ Step.propTypes = {
     restoreSnapshot: PropTypes.func,
     deleteSnapshot: PropTypes.func,
   }),
-  /**
-   * The function to update values in context (and thus the backend)
-   */
-  onUpdateCase: PropTypes.func,
   /**
    * Properties to adjust the banner at the top of a step
    */
