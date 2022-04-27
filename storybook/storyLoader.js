@@ -30,10 +30,8 @@ function loadStories() {
   require("../source/components/molecules/HelpButton/HelpButton.stories");
   require("../source/components/molecules/ImageUploader/ImageUploader.stories");
   require("../source/components/molecules/InfoModal/InfoModal.stories");
-  require("../source/components/molecules/ListItem/Lists.stories");
   require("../source/components/molecules/Markdown.stories");
   require("../source/components/molecules/Modal/Modal.stories");
-  require("../source/components/molecules/PersonField/PersonField.stories");
   require("../source/components/molecules/RadioGroup/RadioGroup.stories");
   require("../source/components/molecules/RepeaterField/RepeaterField.stories");
   require("../source/components/molecules/ToastNotification/ToastNotifications.stories");
@@ -80,10 +78,8 @@ const stories = [
   "../source/components/molecules/HelpButton/HelpButton.stories",
   "../source/components/molecules/ImageUploader/ImageUploader.stories",
   "../source/components/molecules/InfoModal/InfoModal.stories",
-  "../source/components/molecules/ListItem/Lists.stories",
   "../source/components/molecules/Markdown.stories",
   "../source/components/molecules/Modal/Modal.stories",
-  "../source/components/molecules/PersonField/PersonField.stories",
   "../source/components/molecules/RadioGroup/RadioGroup.stories",
   "../source/components/molecules/RepeaterField/RepeaterField.stories",
   "../source/components/molecules/ToastNotification/ToastNotifications.stories",

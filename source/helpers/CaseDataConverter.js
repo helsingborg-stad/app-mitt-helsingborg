@@ -86,20 +86,6 @@ export const convertAnswersToArray = (data, formQuestions) => {
         });
         return;
 
-      // TODO: AvatarList component is broken so this needs to be updated when it works
-      case "avatarList":
-        Object.entries(value).forEach((valueObject) => {
-          const [childFieldId, childValue] = valueObject;
-          answers.push(
-            createAnswerObject({
-              fieldId: `${id}.${childFieldId}`,
-              value: childValue,
-              tags,
-            })
-          );
-        });
-        return;
-
       case "repeaterField":
         Object.entries(value).forEach((repeaterField) => {
           const [childFieldId, childItems] = repeaterField;
