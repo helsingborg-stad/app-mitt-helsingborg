@@ -6263,10 +6263,10 @@ jsonify@~0.0.0:
     array-includes "^3.1.4"
     object.assign "^4.1.2"
 
-just-clone@5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/just-clone/-/just-clone-5.0.0.tgz#da36de8355fe6c0cae2cbeee413b479f49bb11e5"
-  integrity sha512-XZ/N6GYZvmFQ+qnXFLaRNAOsnGF5EYXDJ8M9Xu8XaKMlvRe4lVrVv1GBbYXR3jT7KW3ywcrQSbk/70grC8MYbw==
+just-clone@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/just-clone/-/just-clone-5.0.1.tgz#e2978fe886046267cad1df7c6aabcf3aa2a1b6a9"
+  integrity sha512-y6hFQ8X4fhJTZzdNvrE9mnCQX33uN4xV0hZ+5WNgs6yCcrRzs9ieFXuYRKznWqQ/gOSZpJu0yQ6hRHLCU6ezyw==
 
 jwt-decode@3.1:
   version "3.1.2"
