@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
-    "@notifee/react-native": "^5.1.0",
+    "@notifee/react-native": "^5.2.1",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/datetimepicker": "^3.0.8",
     "@react-native-community/progress-bar-android": "^1.0.4",
