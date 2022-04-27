@@ -34,7 +34,7 @@
     "babel-plugin-module-resolver": "^4.1.0",
     "json-stable-stringify": "1.0.1",
     "just-clone": "^5.0.1",
-    "jwt-decode": "3.1",
+    "jwt-decode": "^3.1.2",
     "lodash.get": "4.4",
     "lodash.set": "4.3",
     "moment": "2.29",
