@@ -294,9 +294,9 @@ PODS:
     - React-Core
   - react-native-background-timer (2.4.1):
     - React-Core
-  - react-native-config (1.4.0):
-    - react-native-config/App (= 1.4.0)
-  - react-native-config/App (1.4.0):
+  - react-native-config (1.4.5):
+    - react-native-config/App (= 1.4.5)
+  - react-native-config/App (1.4.5):
     - React-Core
   - react-native-document-picker (8.1.0):
     - React-Core
@@ -664,7 +664,7 @@ SPEC CHECKSUMS:
   React-logger: a1f028f6d8639a3f364ef80419e5e862e1115250
   react-native-aes: c6e4e3ffcff410535e31e161fca95d50e608d4ee
   react-native-background-timer: 17ea5e06803401a379ebf1f20505b793ac44d0fe
-  react-native-config: f309b9ac19456dea12325699af51e0fa0217ce6a
+  react-native-config: 6502b1879f97ed5ac570a029961fc35ea606cd14
   react-native-document-picker: 5663fe4bcdb646200683a41790464d2793307ac8
   react-native-network-info: d1290ffc0bd0709e11436f5b8d7f605dcc5c4530
   react-native-pdf: ef641e79a6d550cfabe5d7ec1916799726514c43
