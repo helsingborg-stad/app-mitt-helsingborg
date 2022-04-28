@@ -43,11 +43,6 @@ interface Props {
   };
   onUpdate: (answers: Record<string, any>) => void;
   onSubmit: () => void;
-  onUpdateCase: (
-    answers: Record<string, any>,
-    signature: { success: boolean },
-    currentPosition: FormPosition
-  ) => void;
   currentPosition: FormPosition;
   validateStepAnswers: (
     errorCallback: () => void,
@@ -63,7 +58,6 @@ const StepFooter: React.FC<Props> = ({
   formNavigation,
   onUpdate,
   onSubmit,
-  onUpdateCase,
   currentPosition,
   children,
   validateStepAnswers,
@@ -79,9 +73,13 @@ const StepFooter: React.FC<Props> = ({
       }
       case "close": {
         return () => {
-          if (onUpdate && caseStatus.type.includes("ongoing"))
+          if (onUpdate && caseStatus.type.includes("ongoing")) {
             onUpdate(answers);
-          if (formNavigation.close) formNavigation.close();
+          }
+
+          if (formNavigation.close) {
+            formNavigation.close();
+          }
         };
       }
       case "submit": {
@@ -132,12 +130,6 @@ const StepFooter: React.FC<Props> = ({
               caseStatus.type.includes("notStarted"))
           )
             onUpdate(answers);
-          if (
-            onUpdateCase &&
-            (caseStatus.type.includes("ongoing") ||
-              caseStatus.type.includes("notStarted"))
-          )
-            onUpdateCase(answers, undefined, currentPosition);
 
           validateStepAnswers(errorCallback, onValidCallback);
         };
@@ -221,7 +213,6 @@ StepFooter.propTypes = {
   onUpdate: PropTypes.func,
   onSubmit: PropTypes.func,
   /** Behaviour for updating case in context and backend */
-  onUpdateCase: PropTypes.func,
   currentPosition: PropTypes.shape({
     index: PropTypes.number,
     level: PropTypes.number,
