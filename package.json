@@ -14,7 +14,7 @@
     "rebuild-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
     "clean": "react-native-clean-project",
     "prestorybook": "rnstl",
-    "postinstall": "node scripts/rn-fetch-blob_warning.js; ./scripts/add-commit-hash-to-env.sh"
+    "postinstall": "node scripts/react-native-blob-util_warning.js; ./scripts/add-commit-hash-to-env.sh"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
@@ -43,6 +43,7 @@
     "react-native": "0.67.4",
     "react-native-aes-crypto": "^1.3.10",
     "react-native-background-timer": "^2.4.1",
+    "react-native-blob-util": "^0.16.0",
     "react-native-calendar-picker": "^7.1.2",
     "react-native-config": "^1.4.5",
     "react-native-device-info": "^8.7.0",
@@ -55,7 +56,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.3",
     "react-native-markdown-display": "^7.0.0-alpha.2",
     "react-native-network-info": "^5.2.1",
-    "react-native-pdf": "6.3.0",
+    "react-native-pdf": "^6.5.0",
     "react-native-picker-select": "^8.0.4",
     "react-native-reanimated": "^1.13.4",
     "react-native-redash": "^14.2.4",
@@ -69,7 +70,6 @@
     "react-native-vector-icons": "^7.1.0",
     "react-native-web": "^0.14.10",
     "react-native-webview": "^11.0.2",
-    "rn-fetch-blob": "^0.12.0",
     "styled-components": "^5.2.1",
     "validator": "^13.7.0",
     "yarn": "^1.22.18"

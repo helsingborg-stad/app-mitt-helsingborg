@@ -1,5 +1,6 @@
 import axios from "axios";
-import RNFetchBlob from "rn-fetch-blob";
+import ReactNativeBlobUtil from "react-native-blob-util";
+
 import StorageService, { ACCESS_TOKEN_KEY } from "../services/StorageService";
 import { buildServiceUrl } from "./UrlHelper";
 import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
@@ -115,9 +116,9 @@ export const downloadFile = async ({
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
   const bearer = token || "";
 
-  const { dirs } = RNFetchBlob.fs;
+  const { dirs } = ReactNativeBlobUtil.fs;
   try {
-    const downloadResult = await RNFetchBlob.config({
+    const downloadResult = await ReactNativeBlobUtil.config({
       path: `${dirs.CacheDir}/${filename}`,
     }).fetch("GET", requestUrl, {
       Authorization: bearer,

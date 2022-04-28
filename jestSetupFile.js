@@ -59,7 +59,7 @@ jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper");
 /**
  * Mock rn-fetch-blob
  */
-jest.mock("rn-fetch-blob", () => ({
+jest.mock("react-native-blob-util", () => ({
   DocumentDir: () => true,
 }));
 
