@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { InteractionManager, StatusBar } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { InteractionManager, StatusBar, ScrollView } from "react-native";
 import { Modal, useModal } from "../../components/molecules/Modal";
 import ScreenWrapper from "../../components/molecules/ScreenWrapper";
 import Step from "../../components/organisms/Step/Step";

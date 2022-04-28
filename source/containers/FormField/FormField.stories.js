@@ -1,33 +1,7 @@
 import React, { useState } from "react";
-import { storiesOf } from "@storybook/react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { storiesOf, ScrollView } from "@storybook/react-native";
 import StoryWrapper from "../../components/molecules/StoryWrapper";
 import FormField from "./FormField";
-
-const heading = "Green things";
-
-const categories = [
-  { category: "fruit", description: "Frukter" },
-  { category: "vegetable", description: "Grönsaker" },
-];
-
-const items = [
-  {
-    category: "fruit",
-    title: "Banana",
-    formId: "e366f250-c5a2-11ea-9e21-b7b32d0793c5",
-  },
-  {
-    category: "fruit",
-    title: "Pear",
-    formId: "e366f250-c5a2-11ea-9e21-b7b32d0793c5",
-  },
-  {
-    category: "vegetable",
-    title: "Carrot",
-    formId: "e366f250-c5a2-11ea-9e21-b7b32d0793c5",
-  },
-];
 
 const radioChoices = [
   { displayText: "Choice 1", value: "1" },
