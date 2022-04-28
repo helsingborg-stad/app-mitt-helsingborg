@@ -397,12 +397,12 @@ PODS:
     - React-Core
   - RNGestureHandler (2.4.1):
     - React-Core
-  - RNImageCropPicker (0.35.3):
+  - RNImageCropPicker (0.37.3):
     - React-Core
     - React-RCTImage
-    - RNImageCropPicker/QBImagePickerController (= 0.35.3)
+    - RNImageCropPicker/QBImagePickerController (= 0.37.3)
     - TOCropViewController
-  - RNImageCropPicker/QBImagePickerController (0.35.3):
+  - RNImageCropPicker/QBImagePickerController (0.37.3):
     - React-Core
     - React-RCTImage
     - TOCropViewController
@@ -697,7 +697,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 36286df381fcaf1933ff9d2d3c34ba2abeb2d8d8
   RNFS: fc610f78fdf8bfc89a9e5cc2f898519f4dba1002
   RNGestureHandler: 4f4986408310a43f1606c391f38f76e0d6e790d5
-  RNImageCropPicker: 08ba3a2e2f4f8833d606f01906c371e382c4dea9
+  RNImageCropPicker: 44e2807bc410741f35d4c45b6586aedfe3da39d2
   RNNotifee: aa2db7658fd17b5c44ea96b7062bcade3787a10e
   RNReanimated: c1b56d030d1616239861534d9adb531f8cffab68
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
