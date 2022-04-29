@@ -69,8 +69,7 @@
     "react-native-uuid": "^2.0.1",
     "react-native-vector-icons": "^8.1.0",
     "styled-components": "^5.3.3",
-    "validator": "^13.7.0",
-    "yarn": "^1.22.18"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
