@@ -277,8 +277,11 @@ const SummaryListItem: React.FC<Props> = ({
   let customStyle = {};
   let labelTitle = userDescriptionLabel || item.title;
   if (fieldStyle) {
-    customStyle = FieldStyle[fieldStyle].style;
-    if (FieldStyle[fieldStyle].behaviour.hideLabel) {
+    customStyle = FieldStyle[fieldStyle]?.style;
+    if (!customStyle) {
+      console.log("bad custom style:", fieldStyle, FieldStyle[fieldStyle]);
+    }
+    if (FieldStyle[fieldStyle]?.behaviour?.hideLabel) {
       labelTitle = "";
     }
   }
