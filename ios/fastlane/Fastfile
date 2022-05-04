@@ -235,6 +235,16 @@ platform :ios do
     end
   end
 
+  def parse_latest_testflight_build_number(version_string)
+    latest_build_number = latest_testflight_build_number(version: version_string, initial_build_number: 0)
+    begin
+      return Integer(latest_build_number)
+    rescue
+      UI.important "unable to parse latest testflight build number (#{latest_build_number}) - defaulting to 0"
+      return 0
+    end
+  end
+
   # Update app version number and build number based on branch name following semantic versioning (falls back to highest of latest testflight vs xcode project version)
   def update_app_version_numbers()
     
@@ -270,7 +280,7 @@ platform :ios do
       build_number = forced_build_number
       increment_build_number(build_number: build_number)
     else
-      current_build_number = latest_testflight_build_number(version: version_string, initial_build_number: 0)
+      current_build_number = parse_latest_testflight_build_number(version_string)
 
       if current_build_number == 0
         if m = version_string.match($semver_regex)
