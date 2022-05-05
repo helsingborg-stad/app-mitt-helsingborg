@@ -25,7 +25,7 @@ jobs:
   build:
     name: Build and upload to TestFlight
     environment: production
-    runs-on: macos-10.15
+    runs-on: macos-11
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.merged == true }}
 
     env:
