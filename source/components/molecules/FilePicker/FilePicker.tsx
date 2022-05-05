@@ -23,7 +23,6 @@ import {
   Row,
 } from "./styled";
 
-export type ImageStatus = "loading" | "uploaded" | "error";
 type File = Image | Pdf;
 
 interface Props {
