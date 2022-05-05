@@ -15,7 +15,7 @@ function isComplementaryColor(color: string): color is PrimaryColor {
  * Otherwise defaults to the blue colorSchema.
  */
 export const getValidColorSchema = (
-  colorSchema: string,
+  colorSchema: PrimaryColor | ComplementaryColor,
   variant: "primary" | "complementary" = "primary"
 ): PrimaryColor | ComplementaryColor => {
   if (variant === "primary" && isPrimaryColor(colorSchema)) return colorSchema;
