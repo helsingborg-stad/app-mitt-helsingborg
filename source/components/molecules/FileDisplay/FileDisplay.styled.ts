@@ -1,10 +1,7 @@
 import styled from "styled-components/native";
 
 const Wrapper = styled.View`
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 15px;
-  padding-bottom: 0;
+  padding: 15px 0px 0px 0px;
 `;
 const Container = styled.ScrollView`
   padding-left: 0px;
