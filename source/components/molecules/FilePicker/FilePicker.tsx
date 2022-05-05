@@ -28,7 +28,7 @@ export type File = Image | Pdf;
 interface Props {
   buttonText: string;
   value: File[] | "";
-  answers: Record<string, unknown>;
+  answers: Record<string, File[]>;
   colorSchema: PrimaryColor;
   maxImages?: number;
   id: string;
