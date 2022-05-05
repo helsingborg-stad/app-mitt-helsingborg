@@ -9,8 +9,8 @@ const Component = () => {
   const [answers, setAnswers] = useState({});
 
   const setAnswersAndValues = (files: any[], questionId: string) => {
-    setAnswers((answers) => ({
-      ...answers,
+    setAnswers((oldAnswers) => ({
+      ...oldAnswers,
       [questionId]: files,
     }));
 
