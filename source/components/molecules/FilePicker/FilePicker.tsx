@@ -24,16 +24,17 @@ import {
 } from "./styled";
 
 export type ImageStatus = "loading" | "uploaded" | "error";
+type File = Image | Pdf;
 
 interface Props {
   buttonText: string;
-  value: (Image | Pdf)[] | "";
+  value: File[] | "";
   answers: Record<string, unknown>;
   colorSchema: PrimaryColor;
   maxImages?: number;
   id: string;
   preferredFileName?: string;
-  onChange: (value: (Image | Pdf)[], id?: string) => void;
+  onChange: (value: File[], id?: string) => void;
 }
 
 const FilePicker: React.FC<Props> = ({
@@ -52,7 +53,7 @@ const FilePicker: React.FC<Props> = ({
   const { addPdfFromLibrary } = usePdfUpload();
 
   const renameFileWithSuffix = (
-    file: Image | Pdf,
+    file: File,
     baseName: string,
     ext: string,
     suffix: string
@@ -61,7 +62,7 @@ const FilePicker: React.FC<Props> = ({
     filename: `${baseName}_${suffix}${ext}`,
   });
 
-  const addFilesToState = (newFiles: (Image | Pdf)[]) => {
+  const addFilesToState = (newFiles: File[]) => {
     let updatedFiles = files === "" ? [...newFiles] : [...files, ...newFiles];
 
     if (preferredFileName) {
@@ -81,9 +82,7 @@ const FilePicker: React.FC<Props> = ({
     return updatedFiles;
   };
 
-  const uploadFile = async (
-    callback: (id: string) => Promise<(Image | Pdf)[]>
-  ) => {
+  const uploadFile = async (callback: (id: string) => Promise<File[]>) => {
     const selectedFiles = await callback(id);
 
     if (selectedFiles.length > 0) {
