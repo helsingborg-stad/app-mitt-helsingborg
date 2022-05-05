@@ -1,40 +1,31 @@
 import React, { useState } from "react";
 import { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
-import { Image as CropPickerImage } from "react-native-image-crop-picker";
 import HorizontalScrollIndicator from "../../atoms/HorizontalScrollIndicator";
 import ImageItem from "../ImageDisplay/ImageItem";
 import PdfItem from "../PdfDisplay/PdfItem";
 import { remove } from "../../../helpers/ApiRequest";
-import { AllowedFileTypes } from "../../../helpers/FileUpload";
 
 import { Wrapper, Container } from "./FileDisplay.styled";
 import { Pdf } from "../PdfDisplay/PdfDisplay";
+import { Image } from "../ImageDisplay/ImageDisplay";
 
-export interface Image extends CropPickerImage {
-  errorMessage?: string;
-  uploadedFileName?: string;
-  url?: string;
-  index?: number;
-  questionId: string;
-  fileType: AllowedFileTypes;
-  id: string;
-}
+import { File } from "../FilePicker/FilePicker";
 
 interface Props {
-  files: (Image | Pdf)[];
-  answers: Record<string, (Image | Pdf)[]>;
-  onChange: (value: (Image | Pdf)[], id: string) => void;
+  files: File[];
+  answers: Record<string, File[]>;
+  onChange: (value: File[], id: string) => void;
 }
 
 const FileDisplay: React.FC<Props> = ({ files, answers, onChange }) => {
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] =
     useState(0);
 
-  const deleteImageFromCloudStorage = async (file: Image | Pdf) => {
+  const deleteImageFromCloudStorage = async (file: File) => {
     void remove(`users/me/attachments/${file.uploadedFileName}`);
   };
 
-  const removeFile = (file: Image | Pdf) => {
+  const removeFile = (file: File) => {
     const answer = answers[file.questionId];
     if (answer && Array.isArray(answer)) {
       const newFiles = answer.filter(({ id }) => id !== file.id);
@@ -43,7 +34,7 @@ const FileDisplay: React.FC<Props> = ({ files, answers, onChange }) => {
     void deleteImageFromCloudStorage(file);
   };
 
-  const updateImage = (file: Image | Pdf) => {
+  const updateImage = (file: File) => {
     const answer = answers[file.questionId];
     const index = answer.findIndex(
       ({ uploadedFileName }) => uploadedFileName === file.uploadedFileName
