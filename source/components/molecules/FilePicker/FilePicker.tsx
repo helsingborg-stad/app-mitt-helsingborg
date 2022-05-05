@@ -138,7 +138,7 @@ const FilePicker: React.FC<Props> = ({
               variant="outlined"
               onClick={handleUploadPdf}
             >
-              <Icon name="add-photo-alternate" />
+              <Icon name="upload-file" />
               <Text>Filer</Text>
             </PopupButton>
             <Row>
