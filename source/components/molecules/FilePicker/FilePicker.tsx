@@ -81,27 +81,20 @@ const FilePicker: React.FC<Props> = ({
     return updatedFiles;
   };
 
-  const handleUploadImageFromLibrary = async () => {
-    const selectedLibraryImages = await addImagesFromLibrary(id);
-    addFilesToState(selectedLibraryImages);
+  const uploadFile = async (
+    callback: (id: string) => Promise<(Image | Pdf)[]>
+  ) => {
+    const selectedFiles = await callback(id);
+
+    if (selectedFiles.length > 0) {
+      toggleChoiceModal();
+      addFilesToState(selectedFiles);
+    }
   };
 
-  const handleUploadImageFromCamera = async () => {
-    const SelectedCameraImages = await addImageFromCamera(id);
-    addFilesToState(SelectedCameraImages);
-  };
-
-  const handleUploadPdf = async () => {
-    const selectedFiles = await addPdfFromLibrary(id);
-    addFilesToState(selectedFiles);
-  };
-
-  const showChoiceModal = (callback: () => void) => {
-    toggleChoiceModal();
-    /** There's an issue on iOS with triggering the library before the modal has closed,
-     * so as a simple fix, we add a timeout (since toggleModal is async) */
-    setTimeout(callback, 700);
-  };
+  const handleUploadPdf = () => uploadFile(addPdfFromLibrary);
+  const handleUploadImageFromCamera = () => uploadFile(addImageFromCamera);
+  const handleUploadImageFromLibrary = () => uploadFile(addImagesFromLibrary);
 
   const validColorSchema = getValidColorSchema(colorSchema);
   return (
@@ -144,7 +137,7 @@ const FilePicker: React.FC<Props> = ({
               colorSchema={validColorSchema}
               block
               variant="outlined"
-              onClick={() => showChoiceModal(handleUploadPdf)}
+              onClick={handleUploadPdf}
             >
               <Icon name="add-photo-alternate" />
               <Text>Filer</Text>
@@ -158,7 +151,7 @@ const FilePicker: React.FC<Props> = ({
               colorSchema={validColorSchema}
               block
               variant="outlined"
-              onClick={() => showChoiceModal(handleUploadImageFromCamera)}
+              onClick={handleUploadImageFromCamera}
             >
               <Icon name="camera-alt" />
               <Text>Kamera</Text>
@@ -167,7 +160,7 @@ const FilePicker: React.FC<Props> = ({
               colorSchema={validColorSchema}
               block
               variant="outlined"
-              onClick={() => showChoiceModal(handleUploadImageFromLibrary)}
+              onClick={handleUploadImageFromLibrary}
             >
               <Icon name="add-photo-alternate" />
               <Text>Bildbibliotek</Text>
