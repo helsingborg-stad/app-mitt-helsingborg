@@ -21,7 +21,7 @@ import {
   PopupButton,
   PopupLabel,
   Row,
-} from "./styled";
+} from "./FilePicker.styled";
 
 type File = Image | Pdf;
 
