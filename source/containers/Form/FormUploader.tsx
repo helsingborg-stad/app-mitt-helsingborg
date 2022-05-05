@@ -75,6 +75,7 @@ const FormUploader: React.FunctionComponent<Props> = ({
     const data: Blob = await getBlob(file.path);
     const filename =
       file.filename ?? ((file.path as string).split("/").pop() as string);
+
     const uploadResponse = await uploadFile({
       endpoint: "users/me/attachments",
       fileName: filename,
@@ -167,7 +168,7 @@ const FormUploader: React.FunctionComponent<Props> = ({
 
       {!isPending && rejected.length > 0 && (
         <>
-          <DialogIcon size="48" name="close" />
+          <DialogIcon size={48} name="close" />
           <Heading align="center" type="h2">
             Någonting gick fel
           </Heading>
