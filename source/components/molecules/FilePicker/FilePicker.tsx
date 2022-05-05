@@ -12,7 +12,7 @@ import { splitFilePath } from "../../../helpers/FileUpload";
 import { Pdf } from "../PdfDisplay/PdfDisplay";
 
 import { addImagesFromLibrary, addImageFromCamera } from "./imageUpload";
-import usePdfUpload from "./usePdfUpload";
+import { addPdfFromLibrary } from "./pdfUpload";
 
 import {
   Wrapper,
@@ -47,8 +47,6 @@ const FilePicker: React.FC<Props> = ({
   preferredFileName,
 }) => {
   const [choiceModalVisible, toggleChoiceModal] = useModal();
-
-  const { addPdfFromLibrary } = usePdfUpload();
 
   const renameFileWithSuffix = (
     file: File,
