@@ -7,9 +7,10 @@ import {
   getValidColorSchema,
   PrimaryColor,
 } from "../../../styles/themeHelpers";
-import FileDisplay, { Image } from "../FileDisplay/FileDisplay";
+import FileDisplay from "../FileDisplay/FileDisplay";
 import { splitFilePath } from "../../../helpers/FileUpload";
 import { Pdf } from "../PdfDisplay/PdfDisplay";
+import { Image } from "../ImageDisplay/ImageDisplay";
 
 import { addImagesFromLibrary, addImageFromCamera } from "./imageUpload";
 import { addPdfFromLibrary } from "./pdfUpload";
