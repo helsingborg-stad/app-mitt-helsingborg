@@ -23,7 +23,7 @@ import {
   Row,
 } from "./FilePicker.styled";
 
-type File = Image | Pdf;
+export type File = Image | Pdf;
 
 interface Props {
   buttonText: string;
@@ -33,7 +33,7 @@ interface Props {
   maxImages?: number;
   id: string;
   preferredFileName?: string;
-  onChange: (value: File[], id?: string) => void;
+  onChange: (value: File[], id: string) => void;
 }
 
 const FilePicker: React.FC<Props> = ({

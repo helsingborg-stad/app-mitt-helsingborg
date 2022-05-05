@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { storiesOf } from "@storybook/react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import StoryWrapper from "../StoryWrapper";
-import FilePicker from "./FilePicker";
+import FilePicker, { File } from "./FilePicker";
 
 const Component = () => {
-  const [values, setValues] = useState([]);
+  const [values, setValues] = useState<File[]>([]);
   const [answers, setAnswers] = useState({});
 
-  const setAnswersAndValues = (files: any[], questionId: string) => {
+  const setAnswersAndValues = (files: File[], questionId: string) => {
     setAnswers((oldAnswers) => ({
       ...oldAnswers,
       [questionId]: files,
