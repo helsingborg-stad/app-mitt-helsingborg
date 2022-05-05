@@ -7,7 +7,7 @@ import PdfItem from "../PdfDisplay/PdfItem";
 import { remove } from "../../../helpers/ApiRequest";
 import { AllowedFileTypes } from "../../../helpers/FileUpload";
 
-import { Wrapper, Container } from "./FileDisplayed.styled";
+import { Wrapper, Container } from "./FileDisplay.styled";
 import { Pdf } from "../PdfDisplay/PdfDisplay";
 
 export interface Image extends CropPickerImage {
