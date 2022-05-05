@@ -21,7 +21,7 @@ const FileDisplay: React.FC<Props> = ({ files, answers, onChange }) => {
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] =
     useState(0);
 
-  const deleteImageFromCloudStorage = async (file: File) => {
+  const deleteFileFromCloudStorage = async (file: File) => {
     void remove(`users/me/attachments/${file.uploadedFileName}`);
   };
 
@@ -31,7 +31,7 @@ const FileDisplay: React.FC<Props> = ({ files, answers, onChange }) => {
       const newFiles = answer.filter(({ id }) => id !== file.id);
       onChange(newFiles, file.questionId);
     }
-    void deleteImageFromCloudStorage(file);
+    void deleteFileFromCloudStorage(file);
   };
 
   const updateImage = (file: File) => {
