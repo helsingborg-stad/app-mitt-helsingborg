@@ -1,5 +1,6 @@
 import React from "react";
 import { View, LayoutAnimation } from "react-native";
+import styled from "styled-components/native";
 import CheckboxList from "../../components/organisms/CheckboxList";
 import DynamicCardRenderer from "../DynamicCardRenderer/DynamicCardRenderer";
 import { Input, Label, Select, Text } from "../../components/atoms";
@@ -177,6 +178,10 @@ const inputTypes: Record<inputKeyType, InputTypeProperties> = {
   },
 };
 
+const Spacer = styled.Text`
+  padding: 8px;
+`;
+
 interface FormFieldProps {
   label: string;
   labelLine?: boolean;
@@ -326,17 +331,20 @@ const FormField = (props: FormFieldProps): JSX.Element => {
   return (
     <View>
       {label ? (
-        <Label
-          colorSchema={validColorSchema}
-          underline={labelLine}
-          help={
-            !input.helpInComponent && help && Object.keys(help).length > 0
-              ? help
-              : {}
-          }
-        >
-          {label}
-        </Label>
+        <>
+          <Label
+            colorSchema={validColorSchema}
+            underline={labelLine}
+            help={
+              !input.helpInComponent && help && Object.keys(help).length > 0
+                ? help
+                : {}
+            }
+          >
+            {label}
+          </Label>
+          <Spacer />
+        </>
       ) : null}
       {inputComponent}
     </View>
