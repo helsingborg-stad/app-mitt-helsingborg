@@ -11,6 +11,10 @@ import {
 import PdfDisplay, { Pdf, UploadedPdf } from "../PdfDisplay/PdfDisplay";
 import { AllowedFileTypes, splitFilePath } from "../../../helpers/FileUpload";
 
+const uriScheme = {
+  file: "file://",
+};
+
 const Wrapper = styled.View`
   padding-left: 0;
   padding-right: 0;
@@ -59,6 +63,9 @@ const PdfUploader: React.FC<Props> = ({
 }) => {
   const addUniqueId = (pdfFile: Pdf) => ({ ...pdfFile, id: uuid.v4() });
 
+  const removeUriScheme = (path: string): string =>
+    path.startsWith(uriScheme.file) ? path.replace(uriScheme.file, "") : path;
+
   const addPdfFromLibrary = async () => {
     try {
       let newFiles = await DocumentPicker.pick({
@@ -85,12 +92,14 @@ const PdfUploader: React.FC<Props> = ({
 
       const filesWithQuestionId = files.map((pdf) => {
         const split = splitFilePath(pdf?.name);
+        const filePath = removeUriScheme(pdf.fileCopyUri ?? pdf.uri);
+
         return {
           ...pdf,
           questionId: id,
           filename: pdf?.filename ?? `${split.name}${split.ext}`,
           fileType: "pdf" as AllowedFileTypes,
-          path: pdf.uri,
+          path: filePath,
         };
       });
 
