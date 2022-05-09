@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { storiesOf } from "@storybook/react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import StoryWrapper from "../StoryWrapper";
-import FilePicker, { File } from "./FilePicker";
+import FilePicker, { File, FileType } from "./FilePicker";
 
 const Component = () => {
   const [values, setValues] = useState<File[]>([]);
@@ -26,6 +26,7 @@ const Component = () => {
       colorSchema="red"
       value={values}
       onChange={setAnswersAndValues}
+      fileType={FileType.ALL}
     />
   );
 };

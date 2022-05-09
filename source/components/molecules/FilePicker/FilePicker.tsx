@@ -1,5 +1,4 @@
 import React from "react";
-import { TouchableOpacity } from "react-native";
 import { Text, Icon, Button } from "../../atoms";
 import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import { Modal, useModal } from "../Modal";
@@ -14,15 +13,24 @@ import { Image } from "../ImageDisplay/ImageDisplay";
 
 import { addImagesFromLibrary, addImageFromCamera } from "./imageUpload";
 import { addPdfFromLibrary } from "./pdfUpload";
+import PopupButton from "./PopupButton";
+import PopupLabel from "./PopupLabel";
 
-import {
-  Wrapper,
-  ButtonContainer,
-  PopupContainer,
-  PopupButton,
-  PopupLabel,
-  Row,
-} from "./FilePicker.styled";
+import { Wrapper, ButtonContainer, PopupContainer } from "./FilePicker.styled";
+
+const maxNumberOfFilesDefault = 100;
+
+export enum FileType {
+  ALL = "all",
+  PDF = "pdf",
+  IMAGES = "images",
+}
+
+const fileTypeMap: Record<FileType, (FileType.PDF | FileType.IMAGES)[]> = {
+  [FileType.ALL]: [FileType.PDF, FileType.IMAGES],
+  [FileType.PDF]: [FileType.PDF],
+  [FileType.IMAGES]: [FileType.IMAGES],
+};
 
 export type File = Image | Pdf;
 
@@ -31,9 +39,10 @@ interface Props {
   value: File[] | "";
   answers: Record<string, File[]>;
   colorSchema: PrimaryColor;
-  maxImages?: number;
+  maxFiles?: number;
   id: string;
   preferredFileName?: string;
+  fileType: FileType;
   onChange: (value: File[], id: string) => void;
 }
 
@@ -43,11 +52,14 @@ const FilePicker: React.FC<Props> = ({
   answers,
   onChange,
   colorSchema,
-  maxImages: maxFiles,
+  maxFiles = maxNumberOfFilesDefault,
   id,
   preferredFileName,
+  fileType,
 }) => {
   const [choiceModalVisible, toggleChoiceModal] = useModal();
+
+  const fileTypes = fileTypeMap[fileType] ?? fileTypeMap[FileType.ALL];
 
   const renameFileWithSuffix = (
     file: File,
@@ -92,6 +104,34 @@ const FilePicker: React.FC<Props> = ({
   const handleUploadImageFromCamera = () => uploadFile(addImageFromCamera);
   const handleUploadImageFromLibrary = () => uploadFile(addImagesFromLibrary);
 
+  const modalMenuItems = {
+    [FileType.PDF]: {
+      label: "Lägg till fil",
+      buttons: [
+        {
+          icon: "upload-file",
+          buttonText: "Filer",
+          callback: handleUploadPdf,
+        },
+      ],
+    },
+    [FileType.IMAGES]: {
+      label: "Lägg till bild",
+      buttons: [
+        {
+          icon: "camera-alt",
+          buttonText: "Kamera",
+          callback: handleUploadImageFromCamera,
+        },
+        {
+          icon: "add-photo-alternate",
+          buttonText: "Bildbibliotek",
+          callback: handleUploadImageFromLibrary,
+        },
+      ],
+    },
+  };
+
   const validColorSchema = getValidColorSchema(colorSchema);
   return (
     <>
@@ -120,47 +160,26 @@ const FilePicker: React.FC<Props> = ({
       >
         <BackgroundBlurWrapper>
           <PopupContainer colorSchema={validColorSchema}>
-            <Row>
-              <PopupLabel colorSchema={validColorSchema}>
-                Lägg till fil
-              </PopupLabel>
-              <TouchableOpacity onPress={toggleChoiceModal} activeOpacity={1}>
-                <Icon name="clear" />
-              </TouchableOpacity>
-            </Row>
+            {fileTypes.map((type, index) => (
+              <React.Fragment key={type}>
+                <PopupLabel
+                  labelText={modalMenuItems[type].label}
+                  showCloseButton={index === 0}
+                  colorSchema={validColorSchema}
+                  onClick={toggleChoiceModal}
+                />
 
-            <PopupButton
-              colorSchema={validColorSchema}
-              block
-              variant="outlined"
-              onClick={handleUploadPdf}
-            >
-              <Icon name="upload-file" />
-              <Text>Filer</Text>
-            </PopupButton>
-            <Row>
-              <PopupLabel colorSchema={validColorSchema}>
-                Lägg till bild
-              </PopupLabel>
-            </Row>
-            <PopupButton
-              colorSchema={validColorSchema}
-              block
-              variant="outlined"
-              onClick={handleUploadImageFromCamera}
-            >
-              <Icon name="camera-alt" />
-              <Text>Kamera</Text>
-            </PopupButton>
-            <PopupButton
-              colorSchema={validColorSchema}
-              block
-              variant="outlined"
-              onClick={handleUploadImageFromLibrary}
-            >
-              <Icon name="add-photo-alternate" />
-              <Text>Bildbibliotek</Text>
-            </PopupButton>
+                {modalMenuItems[type].buttons.map((button) => (
+                  <PopupButton
+                    key={button.buttonText}
+                    colorSchema={validColorSchema}
+                    icon={button.icon}
+                    buttonText={button.buttonText}
+                    onClick={button.callback}
+                  />
+                ))}
+              </React.Fragment>
+            ))}
           </PopupContainer>
         </BackgroundBlurWrapper>
       </Modal>
