@@ -21,16 +21,12 @@ const FileDisplay: React.FC<Props> = ({ files, answers, onChange }) => {
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] =
     useState(0);
 
-  console.log("PROPS FILE DISPLAY: ", files, answers);
-
   const deleteFileFromCloudStorage = async (file: File) => {
     void remove(`users/me/attachments/${file.uploadedFileName}`);
   };
 
   const removeFile = (file: File) => {
-    console.log("REMOVE FILE: ", removeFile);
     const answer = answers[file.questionId];
-    console.log("ANSWER: ", answer);
     if (answer && Array.isArray(answer)) {
       const newFiles = answer.filter(({ id }) => id !== file.id);
       onChange(newFiles, file.questionId);
