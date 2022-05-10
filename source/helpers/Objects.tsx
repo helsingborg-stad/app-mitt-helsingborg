@@ -44,3 +44,10 @@ export async function deepCompareEquals(
 
   return firstHash === secondHash;
 }
+
+/**
+ * Checks if a variable is an object
+ * @param i any variable
+ */
+export const isObject = (i: any): i is Record<any, any> =>
+  !!i && i.constructor === Object;

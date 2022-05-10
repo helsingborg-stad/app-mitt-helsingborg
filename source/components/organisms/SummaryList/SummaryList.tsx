@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
+import { isObject } from "../../../helpers/Objects";
 import GroupedList from "../../molecules/GroupedList/GroupedList";
 import Text from "../../atoms/Text/Text";
 import Heading from "../../atoms/Heading";
@@ -283,6 +284,18 @@ const SummaryList: React.FC<Props> = ({
             otherassetDescription: answer.otherassetDescription,
           });
         });
+      });
+    } else if (isObject(value.answers)) {
+      Object.entries(value.answers).forEach(([key, answer], index) => {
+        const item = value.items.find((valueItem) => valueItem.inputId === key);
+
+        if (item) {
+          reorganizedList.push({
+            item,
+            value: answer,
+            index,
+          });
+        }
       });
     } else {
       reorganizedList.push({
