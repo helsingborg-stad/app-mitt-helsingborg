@@ -5,7 +5,7 @@ import { File } from "../FilePicker/FilePicker";
 export interface FileUploaderProps {
   id: string;
   colorSchema: PrimaryColor;
-  list: string[];
+  values: string[];
   answers: Answers;
   onChange: (value: unknown, id: string) => void;
 }

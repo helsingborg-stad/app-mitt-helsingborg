@@ -10,7 +10,7 @@ describe("FileUploaderList", () => {
           id="test"
           colorSchema="blue"
           answers={{}}
-          list={[]}
+          values={[]}
           onChange={() => undefined}
         />
       );
@@ -25,7 +25,7 @@ describe("FileUploaderList", () => {
         id="test"
         colorSchema="blue"
         answers={{}}
-        list={labels}
+        values={labels}
         onChange={() => undefined}
       />
     );

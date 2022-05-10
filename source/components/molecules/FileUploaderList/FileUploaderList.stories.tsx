@@ -34,7 +34,7 @@ const FileUploaderListStory = () => {
       <FileUploaderList
         colorSchema="neutral"
         id="testUploaderList"
-        list={[
+        values={[
           "Test item",
           "Another test item",
           '"Hej! jag, vill veta/kunna åäö."',

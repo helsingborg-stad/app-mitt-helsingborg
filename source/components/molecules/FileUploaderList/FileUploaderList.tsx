@@ -35,11 +35,11 @@ function makeInternalItemsFromList(
 export default function FileUploaderList({
   id,
   colorSchema,
-  list,
+  values,
   answers,
   onChange,
 }: FileUploaderProps): JSX.Element {
-  const items = makeInternalItemsFromList(list, id, answers);
+  const items = makeInternalItemsFromList(values, id, answers);
 
   return (
     <>
