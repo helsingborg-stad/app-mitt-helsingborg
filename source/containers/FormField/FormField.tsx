@@ -23,7 +23,7 @@ import BulletList from "../../components/organisms/BulletList";
 
 import getUnApprovedCompletionsDescriptions from "../../helpers/FormatCompletions";
 import { FormInputType, InputFieldType } from "../../types/FormTypes";
-import { Answer, RequestedCompletions } from "../../types/Case";
+import { Answer, VIVACaseDetails } from "../../types/Case";
 
 /**
  * Explanation of the properties in this data structure:
@@ -205,7 +205,7 @@ interface FormFieldProps {
     tagline: string;
     url: string;
   };
-  completions: RequestedCompletions[];
+  details: VIVACaseDetails;
   inputSelectValue: InputFieldType;
   onAddAnswer: (answer: unknown, fieldId: string) => void;
   onClick: () => void;
@@ -232,7 +232,7 @@ const FormField = (props: FormFieldProps): JSX.Element => {
     validationErrors,
     help,
     inputSelectValue,
-    completions,
+    details,
     ...other
   } = props;
 
@@ -300,9 +300,16 @@ const FormField = (props: FormFieldProps): JSX.Element => {
   }
 
   if (inputType === "bulletList") {
-    inputCompProps.values = answers.includes("#COMPLETIONS_LIST")
-      ? getUnApprovedCompletionsDescriptions(completions)
-      : answers;
+    inputCompProps.values = answers;
+
+    if (answers.includes("#COMPLETIONS_LIST")) {
+      inputCompProps.values = getUnApprovedCompletionsDescriptions(
+        details?.completions?.requested ?? []
+      );
+    }
+    if (answers.includes("#completionsUploaded")) {
+      inputCompProps.values = details?.completions?.attachmentUploaded ?? [];
+    }
   }
 
   const inputComponent =

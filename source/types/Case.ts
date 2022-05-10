@@ -42,6 +42,7 @@ export interface RequestedCompletions {
 
 export interface Completions {
   requested: RequestedCompletions[];
+  attachmentUploaded: string[];
   randomCheck: boolean;
   completed: boolean;
   dueDate: number;
