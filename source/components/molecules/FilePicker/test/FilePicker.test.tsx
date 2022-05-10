@@ -21,11 +21,11 @@ interface Props {
   fileType?: FileType;
   onChange?: () => Promise<void>;
 }
-const renderComponent = (props: Props) => {
+const renderComponent = (props = {}) => {
   const {
     onChange = jest.fn().mockResolvedValueOnce(undefined),
     fileType = FileType.ALL,
-  } = props;
+  }: Props = props;
 
   return render(
     <FilePicker
@@ -41,7 +41,7 @@ const renderComponent = (props: Props) => {
 };
 
 it("renders the component", () => {
-  const { getByText, queryByText } = renderComponent({});
+  const { getByText, queryByText } = renderComponent();
 
   expect(getByText(componentButtonText)).toHaveTextContent(componentButtonText);
   expect(queryByText(addFileButtonText)).toBeNull();
@@ -50,7 +50,7 @@ it("renders the component", () => {
 });
 
 it("opens the bottom modal on component button click", () => {
-  const { getByText } = renderComponent({});
+  const { getByText } = renderComponent();
 
   const componentButton = getByText(componentButtonText);
   fireEvent.press(componentButton);
@@ -116,7 +116,7 @@ test.each([
 ])(
   "it calls the $callback callback when $buttonText button is pressed",
   ({ buttonText, callback }) => {
-    const { getByText } = renderComponent({});
+    const { getByText } = renderComponent();
 
     const componentButton = getByText(componentButtonText);
     fireEvent.press(componentButton);
