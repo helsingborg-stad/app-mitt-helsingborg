@@ -13,7 +13,7 @@ export const UploaderLabel = styled.Text<{
   font-weight: 500;
   margin: 0;
   color: black;
-  font-size: 24px;
+  font-size: 16px;
   color: ${({ theme, colorSchema }) =>
     theme.colors.primary[getValidColorSchema(colorSchema) as PrimaryColor][1]};
 `;
