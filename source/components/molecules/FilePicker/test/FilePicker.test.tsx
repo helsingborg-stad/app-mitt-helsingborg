@@ -22,10 +22,7 @@ interface Props {
   onChange?: () => Promise<void>;
 }
 const renderComponent = (props = {}) => {
-  const {
-    onChange = jest.fn().mockResolvedValueOnce(undefined),
-    fileType = FileType.ALL,
-  }: Props = props;
+  const { onChange = jest.fn(), fileType = FileType.ALL }: Props = props;
 
   return render(
     <FilePicker
