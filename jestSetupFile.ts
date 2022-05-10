@@ -1,5 +1,6 @@
 import { NativeModules } from "react-native";
 import "react-native-gesture-handler/jestSetup";
+import "@testing-library/jest-dom";
 
 import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-info-mock";
 
