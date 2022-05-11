@@ -7,7 +7,7 @@ import Box from "../../atoms/Box/Box";
 const ButtonFieldWrapper = styled(Box).attrs({
   m: "2px",
 })`
-  flex: 1;
+  flex: 0;
 `;
 
 export type NavigationActionType =

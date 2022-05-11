@@ -102,7 +102,6 @@ Styles.medium = css`
   font-size: 16px;
   padding: 10px 32px;
   min-width: 10px;
-  min-height: 48px;
 `;
 
 Styles.fullWidth = css`
@@ -231,6 +230,8 @@ const Button = (props) => {
 
     return child;
   });
+
+  console.log("childre", children);
 
   return (
     <ButtonWrapper>
