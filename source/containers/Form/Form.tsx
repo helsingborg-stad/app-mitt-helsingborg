@@ -13,7 +13,7 @@ import {
   Question,
 } from "../../types/FormTypes";
 import { User } from "../../types/UserTypes";
-import { Person, RequestedCompletions } from "../../types/Case";
+import { Person, VIVACaseDetails } from "../../types/Case";
 import useForm, {
   FormPeriod,
   FormPosition,
@@ -60,7 +60,7 @@ interface Props {
   ) => Promise<Action | void>;
   period?: FormPeriod;
   editable: boolean;
-  completions: RequestedCompletions[];
+  details: VIVACaseDetails;
   persons: Person[];
   encryptionPin: string;
 }
@@ -97,7 +97,7 @@ const Form: React.FC<Props> = ({
   status,
   onUpdateCase,
   editable,
-  completions,
+  details,
   persons,
   encryptionPin,
 }) => {
@@ -309,7 +309,7 @@ const Form: React.FC<Props> = ({
             tagline: group,
             text: description,
           }}
-          completions={completions}
+          details={details}
           answers={formState.formAnswers}
           answerSnapshot={formState.formAnswerSnapshot}
           validation={formState.validations}
