@@ -1,20 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import { Button, Icon, Text } from '../../atoms';
-import Box from '../../atoms/Box/Box';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import { Button, Icon, Text } from "../../atoms";
+import Box from "../../atoms/Box/Box";
 
 const ButtonFieldWrapper = styled(Box).attrs({
-  m: '2px',
+  m: "2px",
 })`
   flex: 1;
 `;
 
 export type NavigationActionType =
-  | { type: 'navigateDown'; stepId: string }
-  | { type: 'navigateUp' }
-  | { type: 'navigateNext' }
-  | { type: 'navigateBack' };
+  | { type: "navigateDown"; stepId: string }
+  | { type: "navigateUp" }
+  | { type: "navigateNext" }
+  | { type: "navigateBack" };
 
 export interface Props {
   iconName?: string;
@@ -43,17 +43,17 @@ const NavigationButtonField: React.FC<Props> = ({
   const onClick = () => {
     // This logic could be broken out and placed elsewhere.
     switch (navigationType.type) {
-      case 'navigateDown':
+      case "navigateDown":
         formNavigation.createSnapshot();
         formNavigation.down(navigationType.stepId);
         break;
-      case 'navigateUp':
+      case "navigateUp":
         formNavigation.up();
         break;
-      case 'navigateNext':
+      case "navigateNext":
         formNavigation.next();
         break;
-      case 'navigateBack':
+      case "navigateBack":
         formNavigation.back();
         break;
 
@@ -66,7 +66,7 @@ const NavigationButtonField: React.FC<Props> = ({
     <ButtonFieldWrapper>
       <Button variant="outlined" onClick={onClick} colorSchema={colorSchema}>
         {iconName.length ? <Icon name={iconName} /> : null}
-        {text && <Text>{text}</Text>}
+        {text ? <Text>{text}</Text> : null}
       </Button>
     </ButtonFieldWrapper>
   );
@@ -88,7 +88,7 @@ NavigationButtonField.propTypes = {
   /**
    * Color schema of the button
    */
-  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green']),
+  colorSchema: PropTypes.oneOf(["blue", "red", "purple", "green"]),
   /**
    * Object with navigation event for a form.
    */
@@ -96,9 +96,9 @@ NavigationButtonField.propTypes = {
 };
 
 NavigationButtonField.defaultProps = {
-  iconName: 'add',
-  text: '',
-  colorSchema: 'blue',
+  iconName: "add",
+  text: "",
+  colorSchema: "blue",
 };
 
 export default NavigationButtonField;
