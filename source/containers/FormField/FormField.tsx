@@ -6,7 +6,6 @@ import { Input, Label, Select, Text } from "../../components/atoms";
 import {
   CheckboxField,
   EditableList,
-  GroupListWithAvatar,
   CalendarPicker,
   NavigationButtonField,
   NavigationButtonGroup,
@@ -128,12 +127,6 @@ const inputTypes: Record<inputKeyType, InputTypeProperties> = {
     component: RadioGroup,
     changeEvent: "onSelect",
     props: {},
-  },
-  avatarList: {
-    component: GroupListWithAvatar,
-    changeEvent: "onChange",
-    props: {},
-    initialValue: [],
   },
   summaryList: {
     component: SummaryList,

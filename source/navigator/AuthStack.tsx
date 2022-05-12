@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Onboarding from "../screens/onboarding";
 import LoginScreen from "../screens/LoginScreen";
 import StorageService, {
   ONBOARDING_DISABLED,
 } from "../services/StorageService";
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const AuthStack = (): JSX.Element | null => {
   const [initialRouteName, setInitialRouteName] = useState<string | undefined>(
