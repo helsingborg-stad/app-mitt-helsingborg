@@ -1,5 +1,4 @@
 import styled from "styled-components/native";
-import { getValidColorSchema } from "../../../styles/theme";
 import { ThemeType, PrimaryColor } from "../../../styles/themeHelpers";
 
 export const Container = styled.View<{ theme: ThemeType }>`
@@ -8,12 +7,10 @@ export const Container = styled.View<{ theme: ThemeType }>`
 
 export const UploaderLabel = styled.Text<{
   theme: ThemeType;
-  colorSchema: string;
+  colorSchema: PrimaryColor;
 }>`
   font-weight: 500;
   margin: 0;
-  color: black;
   font-size: 16px;
-  color: ${({ theme, colorSchema }) =>
-    theme.colors.primary[getValidColorSchema(colorSchema) as PrimaryColor][1]};
+  color: ${({ theme, colorSchema }) => theme.colors.primary[colorSchema][1]};
 `;
