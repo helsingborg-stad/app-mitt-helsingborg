@@ -108,7 +108,10 @@ const FormCaseScreen = ({
   }, [getForm, caseId, cases, user]);
 
   const handleCloseForm = () => {
-    navigation.popToTop();
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "App" }],
+    });
   };
 
   const handleUpdateCase = async (
@@ -152,7 +155,7 @@ const FormCaseScreen = ({
 
   // TODO: Update case on form submit.
   const handleSubmitForm = () => {
-    navigation.popToTop();
+    handleCloseForm();
   };
 
   if (!form?.steps) {
