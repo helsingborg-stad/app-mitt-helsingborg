@@ -185,8 +185,9 @@ const inputTypes: Record<inputKeyType, InputTypeProperties> = {
   },
 };
 
-const Spacer = styled.Text`
-  padding: 8px;
+const LabelContainer = styled.View`
+  width: 100%;
+  padding-bottom: 16px;
 `;
 
 interface FormFieldProps {
@@ -330,8 +331,8 @@ const FormField = (props: FormFieldProps): JSX.Element => {
 
   return (
     <View>
-      {label ? (
-        <>
+      <LabelContainer>
+        {label ? (
           <Label
             colorSchema={validColorSchema}
             underline={labelLine}
@@ -343,10 +344,9 @@ const FormField = (props: FormFieldProps): JSX.Element => {
           >
             {label}
           </Label>
-          <Spacer />
-        </>
-      ) : null}
-      {inputComponent}
+        ) : null}
+        {inputComponent}
+      </LabelContainer>
     </View>
   );
 };
