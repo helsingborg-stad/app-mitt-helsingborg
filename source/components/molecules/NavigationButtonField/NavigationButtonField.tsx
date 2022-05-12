@@ -6,9 +6,7 @@ import Box from "../../atoms/Box/Box";
 
 const ButtonFieldWrapper = styled(Box).attrs({
   m: "2px",
-})`
-  flex: 0;
-`;
+})``;
 
 export type NavigationActionType =
   | { type: "navigateDown"; stepId: string }
@@ -66,7 +64,7 @@ const NavigationButtonField: React.FC<Props> = ({
     <ButtonFieldWrapper>
       <Button variant="outlined" onClick={onClick} colorSchema={colorSchema}>
         {iconName.length ? <Icon name={iconName} /> : null}
-        {text ? <Text>{text}</Text> : null}
+        {text && <Text>{text}</Text>}
       </Button>
     </ButtonFieldWrapper>
   );
