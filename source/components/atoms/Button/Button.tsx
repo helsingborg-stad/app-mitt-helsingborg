@@ -231,8 +231,6 @@ const Button = (props) => {
     return child;
   });
 
-  console.log("childre", children);
-
   return (
     <ButtonWrapper>
       <ButtonTouchable
