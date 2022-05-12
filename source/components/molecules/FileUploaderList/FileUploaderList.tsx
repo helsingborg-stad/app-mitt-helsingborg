@@ -45,7 +45,7 @@ export default function FileUploaderList({
     <>
       {items.map((entry) => (
         <Container key={entry.id}>
-          <UploaderLabel colorSchema={colorSchema} testID={entry.text}>
+          <UploaderLabel colorSchema={colorSchema}>
             • {entry.text}
           </UploaderLabel>
           <FilePicker
