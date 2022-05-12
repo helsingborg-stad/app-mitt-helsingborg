@@ -5,7 +5,7 @@ import FilePicker, { File } from "../FilePicker/FilePicker";
 import {
   FileUploaderInternalItem,
   FileUploaderProps,
-} from "./FileUploaderList.typed";
+} from "./FileUploaderList.types";
 import { Container, UploaderLabel } from "./FileUploaderList.styled";
 
 function makeInternalItem(
