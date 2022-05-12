@@ -7,7 +7,7 @@ export interface FileUploaderProps {
   colorSchema: PrimaryColor;
   values: string[];
   answers: Answers;
-  onChange: (value: unknown, id: string) => void;
+  onChange: (value: File[], id: string) => void;
 }
 
 export interface FileUploaderInternalItem {

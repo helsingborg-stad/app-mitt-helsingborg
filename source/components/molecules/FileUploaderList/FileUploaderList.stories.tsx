@@ -19,9 +19,9 @@ const Title = styled(Text)`
 `;
 
 const FileUploaderListStory = () => {
-  const [answers, setAnswers] = useState<Record<string, unknown>>({});
+  const [answers, setAnswers] = useState<Record<string, File[]>>({});
 
-  const onChange = (value: unknown, id: string) => {
+  const onChange = (value: File[], id: string) => {
     setAnswers((oldAnswers) => ({
       ...oldAnswers,
       [id]: value,
