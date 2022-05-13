@@ -22,6 +22,7 @@ import PdfUploader from "../../components/molecules/PdfUploader/PdfUploader";
 import PdfViewer from "../../components/molecules/PdfViewer/PdfViewer";
 import BulletList from "../../components/organisms/BulletList";
 import FilePicker from "../../components/molecules/FilePicker/FilePicker";
+import FileViewer from "../../components/molecules/FileViewer/FileViewer";
 
 import getUnApprovedCompletionsDescriptions from "../../helpers/FormatCompletions";
 import { FormInputType, InputFieldType } from "../../types/FormTypes";
@@ -187,6 +188,11 @@ const inputTypes: Record<inputKeyType, InputTypeProperties> = {
   checkboxList: {
     component: CheckboxList,
     changeEvent: "onChange",
+  },
+  fileViewer: {
+    component: FileViewer,
+    changeEvent: "onChange",
+    props: { answers: true },
   },
 };
 
