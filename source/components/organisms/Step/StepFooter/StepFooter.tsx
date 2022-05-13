@@ -4,10 +4,13 @@ import PropTypes from "prop-types";
 import AuthContext from "../../../../store/AuthContext";
 import { Button, Text } from "../../../atoms";
 import { Action, Question } from "../../../../types/FormTypes";
+import { ApplicationStatusType } from "../../../../types/Case";
 import { CaseStatus } from "../../../../types/CaseType";
 import { FormPosition } from "../../../../containers/Form/hooks/useForm";
 import { useNotification } from "../../../../store/NotificationContext";
 import { evaluateConditionalExpression } from "../../../../helpers/conditionParser";
+
+const { ACTIVE_ONGOING, NOT_STARTED } = ApplicationStatusType;
 
 const ActionContainer = styled.View`
   width: 100%;
@@ -73,7 +76,7 @@ const StepFooter: React.FC<Props> = ({
       }
       case "close": {
         return () => {
-          if (onUpdate && caseStatus.type.includes("ongoing")) {
+          if (onUpdate && caseStatus.type.includes(ACTIVE_ONGOING)) {
             onUpdate(answers);
           }
 
@@ -126,8 +129,8 @@ const StepFooter: React.FC<Props> = ({
 
           if (
             onUpdate &&
-            (caseStatus.type.includes("ongoing") ||
-              caseStatus.type.includes("notStarted"))
+            (caseStatus.type.includes(ACTIVE_ONGOING) ||
+              caseStatus.type.includes(NOT_STARTED))
           )
             onUpdate(answers);
 

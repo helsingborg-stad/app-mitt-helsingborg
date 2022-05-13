@@ -12,7 +12,11 @@ import {
   Question,
 } from "../../types/FormTypes";
 import { User } from "../../types/UserTypes";
-import { Person, VIVACaseDetails } from "../../types/Case";
+import {
+  Person,
+  VIVACaseDetails,
+  ApplicationStatusType,
+} from "../../types/Case";
 import useForm, {
   FormPeriod,
   FormPosition,
@@ -27,6 +31,8 @@ import CloseDialog from "../../components/molecules/CloseDialog";
 import { PrimaryColor } from "../../styles/themeHelpers";
 
 import { UPDATE_CASE_STATE, DialogText } from "./types";
+
+const { SIGNED, NOT_STARTED } = ApplicationStatusType;
 
 const dialogText: Record<UPDATE_CASE_STATE, DialogText> = {
   [UPDATE_CASE_STATE.UPDATING]: {
@@ -72,7 +78,7 @@ export const defaultInitialPosition: FormPosition = {
 };
 
 export const defaultInitialStatus = {
-  type: "notStarted",
+  type: NOT_STARTED,
   name: "Ej påbörjad",
   description: "Ansökan är ej påbörjad.",
 };
@@ -155,7 +161,7 @@ const Form: React.FC<Props> = ({
     )
     .flat();
 
-  const [hasSigned, setHasSigned] = useState(status.type.includes("signed"));
+  const [hasSigned, setHasSigned] = useState(status.type.includes(SIGNED));
 
   const [hasUploaded, setHasUploaded] = useState(
     attachments?.length &&
