@@ -13,20 +13,27 @@ import { FormPeriod } from "./useForm";
 type CaseItemReplacementRuleType = {
   key: string;
   from: string;
-  to: string;
+  to: string[];
   timeFormat?: string;
+  customTransformer?: (value: unknown) => unknown;
 };
 const caseItemReplacementRules: CaseItemReplacementRuleType[] = [
   {
     key: "#MONTH_NAME",
     from: "details.workflow.application.periodstartdate",
-    to: "status.description",
+    to: ["status.description", "status.detailedDescription"],
     timeFormat: "MMMM",
   },
   {
     key: "#COMPLETION_DUEDATE",
-    from: "details.workflow.application.completionduedate",
-    to: "status.description",
+    from: "details.completions.dueDate",
+    to: ["status.description", "status.detailedDescription"],
+  },
+  {
+    key: "#ATTACHMENT_UPLOADED_COUNT",
+    from: "details.completions.attachmentUploaded",
+    to: ["status.description", "status.detailedDescription"],
+    customTransformer: (value) => (Array.isArray(value) ? value.length : value),
   },
 ];
 
@@ -34,19 +41,25 @@ export const replaceCaseItemText = (caseItem: Case): Case => {
   const caseItemCopy = deepCopy(caseItem);
 
   caseItemReplacementRules.forEach(
-    ({ key, from, to, timeFormat = "YYYY-MM-DD" }) => {
-      let newPropertyValue = _get(caseItemCopy, from, "");
+    ({ key, from, to, timeFormat = "YYYY-MM-DD", customTransformer }) => {
+      to.forEach((toPath) => {
+        let newPropertyValue = _get(caseItemCopy, from, "");
 
-      const oldValue = _get(caseItemCopy, to, "");
+        const oldValue = _get(caseItemCopy, toPath, "");
 
-      const isDate = moment(newPropertyValue).isValid();
-      if (isDate) {
-        newPropertyValue = moment(newPropertyValue).format(timeFormat);
-      }
+        const isDate = moment(newPropertyValue).isValid();
+        if (isDate) {
+          newPropertyValue = moment(newPropertyValue).format(timeFormat);
+        }
 
-      const newValue = oldValue.replace(key, newPropertyValue);
+        if (customTransformer) {
+          newPropertyValue = customTransformer(newPropertyValue);
+        }
 
-      _set(caseItemCopy, to, newValue);
+        const newValue = oldValue.replace(key, newPropertyValue);
+
+        _set(caseItemCopy, toPath, newValue);
+      });
     }
   );
 
