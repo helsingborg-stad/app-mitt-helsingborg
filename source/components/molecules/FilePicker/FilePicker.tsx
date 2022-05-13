@@ -18,8 +18,6 @@ import PopupLabel from "./PopupLabel";
 
 import { Wrapper, ButtonContainer, PopupContainer } from "./FilePicker.styled";
 
-const maxNumberOfFilesDefault = 100;
-
 export enum FileType {
   ALL = "all",
   PDF = "pdf",
@@ -39,7 +37,6 @@ interface Props {
   value: File[] | "";
   answers: Record<string, File[]>;
   colorSchema: PrimaryColor;
-  maxFiles?: number;
   id: string;
   preferredFileName?: string;
   fileType: FileType;
@@ -52,7 +49,6 @@ const FilePicker: React.FC<Props> = ({
   answers,
   onChange,
   colorSchema,
-  maxFiles = maxNumberOfFilesDefault,
   id,
   preferredFileName,
   fileType,
@@ -140,11 +136,7 @@ const FilePicker: React.FC<Props> = ({
           <FileDisplay files={files} onChange={onChange} answers={answers} />
         )}
         <ButtonContainer>
-          <Button
-            colorSchema={validColorSchema}
-            onClick={toggleChoiceModal}
-            disabled={!!maxFiles && files.length >= maxFiles}
-          >
+          <Button colorSchema={validColorSchema} onClick={toggleChoiceModal}>
             <Icon name="add" />
             <Text>{buttonText || "Ladda upp fil"}</Text>
           </Button>
