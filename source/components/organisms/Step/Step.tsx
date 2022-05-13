@@ -300,7 +300,6 @@ function Step({
                       onMount={onFieldMount}
                       inputType={field.type}
                       value={answers[field.id] || ""}
-                      answers={answers}
                       validationErrors={validation}
                       colorSchema={
                         field.color && field.color !== ""
@@ -319,6 +318,7 @@ function Step({
                       onAddAnswer={onAddAnswer}
                       details={details}
                       {...field}
+                      answers={answers}
                     />
                   ))}
                 </StepFieldListWrapper>

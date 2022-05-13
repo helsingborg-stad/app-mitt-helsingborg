@@ -25,6 +25,7 @@ function loadStories() {
   require("../source/components/molecules/DateTimeCard/DateTimeCard.stories");
   require("../source/components/molecules/EditableList/EditableList.stories");
   require("../source/components/molecules/FilePicker/FilePicker.stories");
+  require("../source/components/molecules/FileUploaderList/FileUploaderList.stories");
   require("../source/components/molecules/FloatingButton/FloatingButton.stories");
   require("../source/components/molecules/GroupedList/GroupedList.stories");
   require("../source/components/molecules/Header/Header.stories");
@@ -74,6 +75,7 @@ const stories = [
   "../source/components/molecules/DateTimeCard/DateTimeCard.stories",
   "../source/components/molecules/EditableList/EditableList.stories",
   "../source/components/molecules/FilePicker/FilePicker.stories",
+  "../source/components/molecules/FileUploaderList/FileUploaderList.stories",
   "../source/components/molecules/FloatingButton/FloatingButton.stories",
   "../source/components/molecules/GroupedList/GroupedList.stories",
   "../source/components/molecules/Header/Header.stories",

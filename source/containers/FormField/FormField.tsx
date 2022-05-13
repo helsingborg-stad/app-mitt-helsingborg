@@ -16,6 +16,7 @@ import {
 import { getValidColorSchema, PrimaryColor } from "../../styles/themeHelpers";
 import SummaryList from "../../components/organisms/SummaryList/SummaryList";
 import ImageUploader from "../../components/molecules/ImageUploader/ImageUploader";
+import FileUploaderList from "../../components/molecules/FileUploaderList/FileUploaderList";
 import ImageViewer from "../../components/molecules/ImageViewer/ImageViewer";
 import PdfUploader from "../../components/molecules/PdfUploader/PdfUploader";
 import PdfViewer from "../../components/molecules/PdfViewer/PdfViewer";
@@ -108,6 +109,11 @@ const inputTypes: Record<inputKeyType, InputTypeProperties> = {
     helpProp: "help",
     props: {},
     initialValue: {},
+  },
+  fileUploaderList: {
+    component: FileUploaderList,
+    changeEvent: "onChange",
+    props: { answers: true },
   },
   navigationButton: {
     component: NavigationButtonField,
@@ -206,6 +212,7 @@ interface FormFieldProps {
   };
   details: VIVACaseDetails;
   inputSelectValue: InputFieldType;
+  initialValues: string[];
   onAddAnswer: (answer: unknown, fieldId: string) => void;
   onClick: () => void;
   onMount: () => void;
@@ -232,6 +239,7 @@ const FormField = (props: FormFieldProps): JSX.Element => {
     help,
     inputSelectValue,
     details,
+    initialValues,
     ...other
   } = props;
 
@@ -298,15 +306,15 @@ const FormField = (props: FormFieldProps): JSX.Element => {
     inputCompProps.preferredFileName = label;
   }
 
-  if (inputType === "bulletList") {
-    inputCompProps.values = answers;
+  if (inputType === "bulletList" || inputType === "fileUploaderList") {
+    inputCompProps.values = initialValues;
 
-    if (answers.includes("#COMPLETIONS_LIST")) {
+    if (initialValues.includes("#COMPLETIONS_LIST")) {
       inputCompProps.values = getUnApprovedCompletionsDescriptions(
         details?.completions?.requested ?? []
       );
     }
-    if (answers.includes("#completionsUploaded")) {
+    if (initialValues.includes("#completionsUploaded")) {
       inputCompProps.values = details?.completions?.attachmentUploaded ?? [];
     }
   }

@@ -43,6 +43,12 @@ export function replaceTagPart(tag, part, value) {
   return updatedTagParts.join(":");
 }
 
+function findRootQuestion(childQuestionId, formQuestions) {
+  const split = childQuestionId.split("_");
+  const match = formQuestions.find((element) => element.id === split[0]);
+  return match;
+}
+
 /**
  * Convert answers in context to an array that follows Case API data structure
  * @param {obj} data
@@ -62,8 +68,10 @@ export const convertAnswersToArray = (data, formQuestions) => {
 
   Object.entries(data).forEach((answer) => {
     const [fieldId, value] = answer;
-    const { id, type, tags, disableValueStorage, ...other } =
-      formQuestions.find((element) => element.id === fieldId);
+    const match = formQuestions.find((element) => element.id === fieldId);
+
+    const { type, tags, disableValueStorage, ...other } =
+      match ?? findRootQuestion(fieldId, formQuestions) ?? {};
 
     if (value === undefined || disableValueStorage) {
       return;
@@ -78,7 +86,7 @@ export const convertAnswersToArray = (data, formQuestions) => {
 
           answers.push(
             createAnswerObject({
-              fieldId: `${id}.${childFieldId}`,
+              fieldId: `${fieldId}.${childFieldId}`,
               value: childValue,
               tags: listItemTags ?? [],
             })
@@ -106,7 +114,7 @@ export const convertAnswersToArray = (data, formQuestions) => {
 
             answers.push(
               createAnswerObject({
-                fieldId: `${id}.${childFieldId}.${repeaterItemId}`,
+                fieldId: `${fieldId}.${childFieldId}.${repeaterItemId}`,
                 value: repeaterItemValue,
                 tags: newTags,
               })
@@ -119,7 +127,7 @@ export const convertAnswersToArray = (data, formQuestions) => {
       default:
         answers.push(
           createAnswerObject({
-            fieldId: id,
+            fieldId,
             value,
             tags,
           })
