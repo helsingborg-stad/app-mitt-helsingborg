@@ -119,7 +119,6 @@ const FormCaseScreen = ({
     signature: Signature | undefined,
     currentPosition: FormPosition
   ): Promise<Action | void> => {
-    // If the case is submitted, we should not actually update its data...
     const updatedCase: CaseUpdate = {
       user,
       caseId: initialCase.id,
