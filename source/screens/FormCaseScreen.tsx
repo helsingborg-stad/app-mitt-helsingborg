@@ -119,38 +119,30 @@ const FormCaseScreen = ({
     signature: Signature | undefined,
     currentPosition: FormPosition
   ): Promise<Action | void> => {
-    // If the case is submitted, we should not actually update its data...
-    if (
-      !initialCase?.status?.type?.includes(
-        ApplicationStatusType.ACTIVE_SUBMITTED
-      )
-    ) {
-      const updatedCase: CaseUpdate = {
-        user,
-        caseId: initialCase.id,
-        formId: initialCase.currentFormId,
-        answerObject,
-        signature,
-        currentPosition,
-        formQuestions: formQuestions || [],
-        encryption: initialCase.forms[initialCase.currentFormId].encryption,
-        encryptAnswers: true,
-      };
+    const updatedCase: CaseUpdate = {
+      user,
+      caseId: initialCase.id,
+      formId: initialCase.currentFormId,
+      answerObject,
+      signature,
+      currentPosition,
+      formQuestions: formQuestions || [],
+      encryption: initialCase.forms[initialCase.currentFormId].encryption,
+      encryptAnswers: true,
+    };
 
-      const callback = async (putResponse: Case) => {
-        if (
-          putResponse?.status?.type?.includes(
-            ApplicationStatusType.ACTIVE_SIGNATURE_COMPLETED
-          )
-        ) {
-          updatedCase.encryptAnswers = false;
-          await updateCase(updatedCase, () => Promise.resolve());
-        }
-      };
+    const callback = async (putResponse: Case) => {
+      if (
+        putResponse?.status?.type?.includes(
+          ApplicationStatusType.ACTIVE_SIGNATURE_COMPLETED
+        )
+      ) {
+        updatedCase.encryptAnswers = false;
+        await updateCase(updatedCase, () => Promise.resolve());
+      }
+    };
 
-      return updateCase(updatedCase, callback);
-    }
-    return Promise.resolve();
+    return updateCase(updatedCase, callback);
   };
 
   // TODO: Update case on form submit.

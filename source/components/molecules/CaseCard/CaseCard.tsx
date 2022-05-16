@@ -49,7 +49,6 @@ interface CaseCardProps {
   dateTimeCardSize?: "large" | "small";
   buttonColorScheme?: string;
   completions?: string[];
-  completionDuedate: string;
   pin?: string;
 }
 
@@ -80,7 +79,6 @@ const CaseCard = ({
   dateTimeCardSize = "large",
   buttonColorScheme = "red",
   completions = [],
-  completionDuedate,
   pin,
 }: CaseCardProps): JSX.Element => (
   <Card colorSchema={colorSchema}>
@@ -127,12 +125,6 @@ const CaseCard = ({
       )}
 
       {completions.length > 0 && <Card.BulletList values={completions} />}
-
-      {completionDuedate && (
-        <Card.Text mt={1} colorSchema="neutral" fontSize={12}>
-          Skicka in senast: <Text type="a">{completionDuedate}</Text>
-        </Card.Text>
-      )}
 
       {showAppealButton && (
         <Card.Button mt={1} onClick={onAppealButtonClick} colorSchema="neutral">

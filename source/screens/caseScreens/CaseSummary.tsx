@@ -9,7 +9,6 @@ import React, {
 import { View, Animated, Easing, ScrollView } from "react-native";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import moment from "moment";
 import { CaseState } from "../../store/CaseContext";
 import FormContext from "../../store/FormContext";
 import icons from "../../helpers/Icons";
@@ -33,25 +32,17 @@ import {
 } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
 import { put } from "../../helpers/ApiRequest";
+import { answersAreEncrypted } from "../../services/encryption/CaseEncryptionHelper";
 import {
-  ApplicationStatusType,
   Case,
   VIVACaseDetails,
   Workflow,
   Journal,
   Decision,
+  AnsweredForm,
 } from "../../types/Case";
 
-const {
-  NOT_STARTED,
-  ONGOING,
-  CLOSED,
-  SIGNED,
-  ACTIVE_SIGNATURE_PENDING,
-  ACTIVE_COMPLETION_REQUIRED_VIVA,
-  ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
-  ACTIVE_COMPLETION_SUBMITTED,
-} = ApplicationStatusType;
+import statusTypeConstantMapper from "./statusTypeConstantMapper";
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -157,22 +148,20 @@ const computeCaseCardComponent = (
     (person) => person.personalNumber === authContext.user.personalNumber
   );
 
-  const statusType = status?.type;
+  const statusType = status?.type ?? "";
+  const {
+    isNotStarted,
+    isOngoing,
+    isRandomCheckRequired,
+    isVivaCompletionRequired,
+    isCompletionSubmitted,
+    isSigned,
+    isClosed,
+    isWaitingForSign,
+    isActiveSubmittedRandomCheck,
+    activeSubmittedCompletion,
+  } = statusTypeConstantMapper(statusType);
 
-  const isNotStarted = statusType.includes(NOT_STARTED);
-  const isOngoing = statusType.includes(ONGOING);
-  const isClosed = statusType.includes(CLOSED);
-  const isRandomCheckRequired = statusType.includes(
-    ACTIVE_RANDOM_CHECK_REQUIRED_VIVA
-  );
-  const isVivaCompletionRequired = statusType.includes(
-    ACTIVE_COMPLETION_REQUIRED_VIVA
-  );
-  const isCompletionSubmitted = statusType.includes(
-    ACTIVE_COMPLETION_SUBMITTED
-  );
-  const isSigned = statusType.includes(SIGNED);
-  const isWaitingForSign = statusType.includes(ACTIVE_SIGNATURE_PENDING);
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === "coApplicant";
 
@@ -187,14 +176,24 @@ const computeCaseCardComponent = (
     (caseDecision) => ["03", "02"].includes(caseDecision.typecode)
   );
 
-  const shouldShowCTAButton = isCoApplicant
-    ? isWaitingForSign && !selfHasSigned
-    : isOngoing ||
-      isNotStarted ||
-      isRandomCheckRequired ||
-      isSigned ||
-      isVivaCompletionRequired ||
-      isCompletionSubmitted;
+  const currentForm: AnsweredForm = caseData?.forms[caseData.currentFormId];
+
+  const isEncrypted = answersAreEncrypted(currentForm.answers);
+  const shouldEnterPin = isEncrypted && isCoApplicant && isWaitingForSign;
+
+  const shouldShowCTAButton =
+    (!isEncrypted || shouldEnterPin) &&
+    (isCoApplicant
+      ? isWaitingForSign && !selfHasSigned
+      : isOngoing ||
+        isNotStarted ||
+        isRandomCheckRequired ||
+        isSigned ||
+        isClosed ||
+        isVivaCompletionRequired ||
+        isCompletionSubmitted ||
+        isActiveSubmittedRandomCheck ||
+        activeSubmittedCompletion);
 
   const buttonProps = {
     onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
@@ -231,6 +230,10 @@ const computeCaseCardComponent = (
     buttonProps.text = "Granska och signera";
   }
 
+  if (isActiveSubmittedRandomCheck || activeSubmittedCompletion) {
+    buttonProps.text = "Skicka in fler bilder";
+  }
+
   const giveDate = payments?.payment?.givedate
     ? `${
         payments.payment.givedate.split("-")[2]
@@ -238,16 +241,9 @@ const computeCaseCardComponent = (
     : null;
 
   const unApprovedCompletionDescriptions: string[] =
-    isVivaCompletionRequired || isCompletionSubmitted
+    statusType.includes("completion") || statusType.includes("randomCheck")
       ? getUnapprovedCompletionDescriptions(completions)
       : [];
-
-  const canShowCompletionDueDate =
-    caseData?.details?.completions?.dueDate &&
-    !caseData?.details?.completions?.isDueDateExpired;
-  const completionDuedate = canShowCompletionDueDate
-    ? moment(caseData?.details?.completions?.dueDate).format("YYYY-MM-DD")
-    : "";
 
   return (
     <CaseCard
@@ -257,7 +253,7 @@ const computeCaseCardComponent = (
       showProgress={isOngoing}
       currentStep={currentStep}
       totalSteps={totalSteps}
-      description={status.description}
+      description={status.detailedDescription || status.description || ""}
       showPayments={isClosed && !!payments?.payment?.givedate}
       approvedAmount={calculateSum(paymentsArray, "kronor")}
       givedate={giveDate}
@@ -270,7 +266,6 @@ const computeCaseCardComponent = (
       onButtonClick={isClosed ? toggleModal : buttonProps.onClick}
       buttonIconName={isClosed ? "remove-red-eye" : "arrow-forward"}
       completions={unApprovedCompletionDescriptions}
-      completionDuedate={completionDuedate}
     />
   );
 };

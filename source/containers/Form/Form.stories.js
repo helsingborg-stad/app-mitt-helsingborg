@@ -1,135 +1,141 @@
-import React from 'react';
-import { storiesOf } from '@storybook/react-native';
-import StoryWrapper from '../../components/molecules/StoryWrapper';
-import Form from './Form';
+import React from "react";
+import { storiesOf } from "@storybook/react-native";
+import StoryWrapper from "../../components/molecules/StoryWrapper";
+import Form from "./Form";
 
-const formStories = storiesOf('Form', module);
+import { ApplicationStatusType } from "../../types/Case";
+
+const { ACTIVE_ONGOING } = ApplicationStatusType;
+
+const formStories = storiesOf("Form", module);
 
 const status = {
-  type: 'active:ongoing',
-  name: 'Pågående',
-  description: 'Du har påbörjat en ansökan. Du kan öppna din ansökan och fortsätta där du slutade.',
+  type: ACTIVE_ONGOING,
+  name: "Pågående",
+  description:
+    "Du har påbörjat en ansökan. Du kan öppna din ansökan och fortsätta där du slutade.",
 };
 
 const DefaultStoryData = {
   connectivityMatrix: [
-    ['none', 'next', 'none'],
-    ['back', 'none', 'next'],
-    ['none', 'back', 'none'],
+    ["none", "next", "none"],
+    ["back", "none", "next"],
+    ["none", "back", "none"],
   ],
-  title: 'Validation test form',
-  description: 'Test formulär för validering av fält',
-  formType: 'EKB-recurring',
-  name: 'Test av valideringsregler',
-  provider: 'VIVA',
+  title: "Validation test form",
+  description: "Test formulär för validering av fält",
+  formType: "EKB-recurring",
+  name: "Test av valideringsregler",
+  provider: "VIVA",
   steps: [
     {
       id: 1,
-      name: 'Start steg',
-      title: 'Test av validering för fält',
-      group: 'test',
-      description: 'Detta formulär är ett test för att se så att validering av olika fält fungerar',
+      name: "Start steg",
+      title: "Test av validering för fält",
+      group: "test",
+      description:
+        "Detta formulär är ett test för att se så att validering av olika fält fungerar",
       banner: {},
       actions: [
         {
-          label: 'Nästa steg',
-          type: 'next',
+          label: "Nästa steg",
+          type: "next",
         },
       ],
     },
     {
       id: 2,
-      name: 'Validering av steg',
-      title: 'Test av validering för fält',
-      group: 'test',
+      name: "Validering av steg",
+      title: "Test av validering för fält",
+      group: "test",
       description:
-        'Detta är ett formulär är ett test för att se så att validering av olika fält fungerar',
+        "Detta är ett formulär är ett test för att se så att validering av olika fält fungerar",
       actions: [
         {
-          label: 'Nästa steg',
-          type: 'next',
+          label: "Nästa steg",
+          type: "next",
         },
       ],
       banner: {},
       questions: [
         {
           id: 1,
-          description: 'Beskrivning av ett nummer fält',
-          label: 'Ett nummer fält',
-          placeholder: 'Skriv ett nummer',
-          type: 'number',
+          description: "Beskrivning av ett nummer fält",
+          label: "Ett nummer fält",
+          placeholder: "Skriv ett nummer",
+          type: "number",
           validation: {
             isRequired: true,
             rules: [
               {
-                method: 'isEmpty',
+                method: "isEmpty",
                 validWhen: false,
               },
               {
-                method: 'isNumeric',
+                method: "isNumeric",
                 args: {
                   options: {
                     no_symbols: true,
                   },
                 },
                 validWhen: true,
-                message: 'Du har angett en siffra som är mindre än 1',
+                message: "Du har angett en siffra som är mindre än 1",
               },
             ],
           },
         },
         {
           id: 2,
-          description: 'Beskrivning av ett postnummer fält',
-          label: 'Ett fält för postnummer',
-          placeholder: 'Ange ditt postnummer',
-          type: 'number',
+          description: "Beskrivning av ett postnummer fält",
+          label: "Ett fält för postnummer",
+          placeholder: "Ange ditt postnummer",
+          type: "number",
           validation: {
             isRequired: true,
             rules: [
               {
-                method: 'isEmpty',
+                method: "isEmpty",
                 validWhen: false,
               },
               {
-                method: 'isNumeric',
+                method: "isNumeric",
                 args: {
                   options: {
                     no_symbols: true,
                   },
                 },
                 validWhen: true,
-                message: 'Du har angett en siffra som är mindre än 1',
+                message: "Du har angett en siffra som är mindre än 1",
               },
               {
-                method: 'isPostalCode',
+                method: "isPostalCode",
                 args: {
-                  locale: 'SE',
+                  locale: "SE",
                 },
                 validWhen: true,
-                message: 'Postnummret du angav är inte giltligt',
+                message: "Postnummret du angav är inte giltligt",
               },
             ],
           },
         },
         {
           id: 3,
-          description: 'Beskrivning för ett mobilnummer fält',
-          label: 'Ett mobilnummer fält',
-          type: 'number',
-          placeholder: '+46',
+          description: "Beskrivning för ett mobilnummer fält",
+          label: "Ett mobilnummer fält",
+          type: "number",
+          placeholder: "+46",
           validation: {
             isRequired: true,
             rules: [
               {
-                method: 'isEmpty',
+                method: "isEmpty",
                 validWhen: false,
-                message: 'Du får inte lämna detta fält tomt',
+                message: "Du får inte lämna detta fält tomt",
               },
               {
-                method: 'isMobilePhone',
+                method: "isMobilePhone",
                 args: {
-                  locale: 'sv-SE',
+                  locale: "sv-SE",
                 },
                 validWhen: true,
               },
@@ -138,69 +144,69 @@ const DefaultStoryData = {
         },
         {
           id: 4,
-          description: 'Beskrivning för ett text fält',
-          label: 'Ett text fält',
-          placeholder: 'Skriv något',
-          type: 'text',
+          description: "Beskrivning för ett text fält",
+          label: "Ett text fält",
+          placeholder: "Skriv något",
+          type: "text",
         },
         {
           id: 5,
-          description: 'Beskrivning för ett URL fält',
-          label: 'Ett URL fält',
-          placeholder: 'https://cool.kid.com',
-          type: 'text',
+          description: "Beskrivning för ett URL fält",
+          label: "Ett URL fält",
+          placeholder: "https://cool.kid.com",
+          type: "text",
           validation: {
             isRequired: true,
             rules: [
               {
-                method: 'isEmpty',
+                method: "isEmpty",
                 validWhen: false,
-                message: 'Du får inte lämna detta fält tomt',
+                message: "Du får inte lämna detta fält tomt",
               },
               {
-                method: 'isURL',
+                method: "isURL",
                 args: {
-                  protocols: ['https'],
+                  protocols: ["https"],
                 },
                 validWhen: true,
-                message: 'Din url är inte säker använd https framför',
+                message: "Din url är inte säker använd https framför",
               },
             ],
           },
         },
         {
           id: 6,
-          description: 'Beskrivning för ett email fält',
-          placeholder: 'example@email.com',
-          label: 'Ett email fält',
-          type: 'text',
+          description: "Beskrivning för ett email fält",
+          placeholder: "example@email.com",
+          label: "Ett email fält",
+          type: "text",
           validation: {
             isRequired: true,
             rules: [
               {
-                method: 'isEmpty',
+                method: "isEmpty",
                 validWhen: false,
-                message: 'Du får inte lämna detta fält tomt',
+                message: "Du får inte lämna detta fält tomt",
               },
               {
-                method: 'isEmail',
+                method: "isEmail",
                 validWhen: true,
-                message: 'Du måste ange en giltlig email adress',
+                message: "Du måste ange en giltlig email adress",
               },
             ],
           },
         },
         {
           id: 7,
-          description: 'Beskrivning av ett checkbox fält',
-          label: 'Ett checkbox fält',
-          text: 'Du kan välja mig',
-          type: 'checkbox',
+          description: "Beskrivning av ett checkbox fält",
+          label: "Ett checkbox fält",
+          text: "Du kan välja mig",
+          type: "checkbox",
           validation: {
             isRequired: true,
             rules: [
               {
-                method: 'isEmpty',
+                method: "isEmpty",
                 validWhen: true,
               },
             ],
@@ -210,17 +216,17 @@ const DefaultStoryData = {
     },
     {
       id: 3,
-      name: 'Sista steget',
-      title: 'Slut på testet',
-      group: 'test',
-      description: 'Tack för att du tog dig tiden att testa, vi uppskattar det',
+      name: "Sista steget",
+      title: "Slut på testet",
+      group: "test",
+      description: "Tack för att du tog dig tiden att testa, vi uppskattar det",
       actions: [],
       banner: {},
     },
   ],
 };
 
-formStories.add('Default', () => (
+formStories.add("Default", () => (
   <StoryWrapper>
     <Form
       steps={DefaultStoryData.steps}
@@ -235,66 +241,67 @@ formStories.add('Default', () => (
 
 const ThemedFormStoryData = {
   connectivityMatrix: [
-    ['none', 'next', 'none'],
-    ['back', 'none', 'next'],
-    ['none', 'back', 'none'],
+    ["none", "next", "none"],
+    ["back", "none", "next"],
+    ["none", "back", "none"],
   ],
-  title: 'Validation test form',
-  description: 'Test formulär för validering av fält',
-  formType: 'EKB-recurring',
-  name: 'Test av valideringsregler',
-  provider: 'VIVA',
+  title: "Validation test form",
+  description: "Test formulär för validering av fält",
+  formType: "EKB-recurring",
+  name: "Test av valideringsregler",
+  provider: "VIVA",
   steps: [
     {
       id: 1,
-      name: 'step one',
-      title: 'Vill du ansöka om ekonomiskt bistånd  för perioden #datum! - #datum2?',
-      group: 'Ekonomiskt Bistånd',
-      description: '',
+      name: "step one",
+      title:
+        "Vill du ansöka om ekonomiskt bistånd  för perioden #datum! - #datum2?",
+      group: "Ekonomiskt Bistånd",
+      description: "",
       banner: {},
       actions: [
         {
-          label: 'Nästa steg',
-          type: 'next',
+          label: "Nästa steg",
+          type: "next",
         },
       ],
     },
     {
       id: 2,
-      name: 'step two',
-      title: 'Hej Tomas! Stämmer de här uppgifterna om dig?',
-      group: 'Ekonmiskt Bistånd',
-      description: '',
+      name: "step two",
+      title: "Hej Tomas! Stämmer de här uppgifterna om dig?",
+      group: "Ekonmiskt Bistånd",
+      description: "",
       actions: [
         {
-          label: 'Nästa steg',
-          type: 'next',
+          label: "Nästa steg",
+          type: "next",
         },
       ],
       banner: {},
       questions: [
         {
           id: 1,
-          description: 'Beskrivning av ett nummer fält',
-          label: 'Ett nummer fält',
-          placeholder: 'Skriv ett nummer',
-          type: 'number',
+          description: "Beskrivning av ett nummer fält",
+          label: "Ett nummer fält",
+          placeholder: "Skriv ett nummer",
+          type: "number",
           validation: {
             isRequired: true,
             rules: [
               {
-                method: 'isEmpty',
+                method: "isEmpty",
                 validWhen: false,
               },
               {
-                method: 'isNumeric',
+                method: "isNumeric",
                 args: {
                   options: {
                     no_symbols: true,
                   },
                 },
                 validWhen: true,
-                message: 'Du har angett en siffra som är mindre än 1',
+                message: "Du har angett en siffra som är mindre än 1",
               },
             ],
           },
@@ -303,16 +310,17 @@ const ThemedFormStoryData = {
     },
     {
       id: 3,
-      name: 'step three',
-      title: 'Tack för din ansökan!',
-      group: 'Ekonomiskt Bistånd',
-      description: 'Din ansökan är nu inskickad och du kommer få besked inom 10 dagar.',
+      name: "step three",
+      title: "Tack för din ansökan!",
+      group: "Ekonomiskt Bistånd",
+      description:
+        "Din ansökan är nu inskickad och du kommer få besked inom 10 dagar.",
       actions: [],
       banner: {},
     },
   ],
 };
-formStories.add('Themed Form', () => (
+formStories.add("Themed Form", () => (
   <StoryWrapper>
     <Form
       steps={ThemedFormStoryData.steps}
@@ -328,199 +336,200 @@ formStories.add('Themed Form', () => (
 const SubstepsDemoStoryData = {
   updatedAt: 1605794610210,
   connectivityMatrix: [
-    ['none', 'next', 'none', 'down', 'none', 'down', 'none'],
-    ['back', 'none', 'next', 'none', 'none', 'none', 'none'],
-    ['none', 'back', 'none', 'none', 'none', 'none', 'none'],
-    ['up', 'none', 'none', 'none', 'next', 'none', 'none'],
-    ['up', 'none', 'none', 'back', 'none', 'none', 'none'],
-    ['up', 'none', 'none', 'none', 'none', 'none', 'down'],
-    ['none', 'none', 'none', 'none', 'none', 'up', 'none'],
+    ["none", "next", "none", "down", "none", "down", "none"],
+    ["back", "none", "next", "none", "none", "none", "none"],
+    ["none", "back", "none", "none", "none", "none", "none"],
+    ["up", "none", "none", "none", "next", "none", "none"],
+    ["up", "none", "none", "back", "none", "none", "none"],
+    ["up", "none", "none", "none", "none", "none", "down"],
+    ["none", "none", "none", "none", "none", "up", "none"],
   ],
   createdAt: 1605794610210,
   steps: [
     {
       questions: [
         {
-          description: '',
-          label: '',
-          id: 'navGroup1',
+          description: "",
+          label: "",
+          id: "navGroup1",
           buttons: [
             {
               navigationType: {
-                type: 'navigateDown',
-                stepId: '13a860d7-3971-40fa-9ee7-33680f4393a0',
+                type: "navigateDown",
+                stepId: "13a860d7-3971-40fa-9ee7-33680f4393a0",
               },
-              color: 'red',
-              text: 'Sub 1',
+              color: "red",
+              text: "Sub 1",
             },
             {
               navigationType: {
-                type: 'navigateDown',
-                stepId: '9958e6df-00eb-4226-b1ce-3dfbe6cee4b3',
+                type: "navigateDown",
+                stepId: "9958e6df-00eb-4226-b1ce-3dfbe6cee4b3",
               },
-              text: 'Other sub',
+              text: "Other sub",
             },
           ],
-          type: 'navigationButtonGroup',
-          inputSelectValue: 'navigationButtonGroup',
+          type: "navigationButtonGroup",
+          inputSelectValue: "navigationButtonGroup",
         },
       ],
-      description: '',
+      description: "",
       banner: {
-        iconSrc: '',
-        imageSrc: '',
-        backgroundColor: '',
+        iconSrc: "",
+        imageSrc: "",
+        backgroundColor: "",
       },
-      id: 'f3ea3110-2fb9-47f5-827e-b94888565224',
-      title: 'Main 1',
+      id: "f3ea3110-2fb9-47f5-827e-b94888565224",
+      title: "Main 1",
       actions: [
         {
-          type: 'next',
-          color: 'blue',
-          label: 'Next',
+          type: "next",
+          color: "blue",
+          label: "Next",
         },
       ],
-      group: '',
+      group: "",
     },
     {
-      description: '',
+      description: "",
       banner: {
-        iconSrc: '',
-        imageSrc: '',
-        backgroundColor: '',
+        iconSrc: "",
+        imageSrc: "",
+        backgroundColor: "",
       },
-      id: '02b3e565-92ce-44b9-8d6a-e41e7d18a5bc',
-      title: 'Main 2',
+      id: "02b3e565-92ce-44b9-8d6a-e41e7d18a5bc",
+      title: "Main 2",
       actions: [
         {
-          type: 'next',
-          color: 'green',
-          label: 'Next',
+          type: "next",
+          color: "green",
+          label: "Next",
         },
       ],
-      group: '',
+      group: "",
     },
     {
-      description: '',
+      description: "",
       banner: {
-        iconSrc: '',
-        imageSrc: '',
-        backgroundColor: '',
+        iconSrc: "",
+        imageSrc: "",
+        backgroundColor: "",
       },
-      id: '6651824f-58da-410a-bd0f-02343da14d7f',
-      title: 'Main 3',
+      id: "6651824f-58da-410a-bd0f-02343da14d7f",
+      title: "Main 3",
       actions: [
         {
-          type: 'close',
-          color: 'red',
-          label: 'Close',
+          type: "close",
+          color: "red",
+          label: "Close",
         },
       ],
-      group: '',
+      group: "",
     },
     {
-      description: 'Test \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Test ',
+      description:
+        "Test \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Test ",
       banner: {
-        iconSrc: '',
-        imageSrc: '',
-        backgroundColor: '',
+        iconSrc: "",
+        imageSrc: "",
+        backgroundColor: "",
       },
-      id: '13a860d7-3971-40fa-9ee7-33680f4393a0',
-      title: 'Sub 1 1',
+      id: "13a860d7-3971-40fa-9ee7-33680f4393a0",
+      title: "Sub 1 1",
       actions: [
         {
-          type: 'next',
-          label: 'Next',
+          type: "next",
+          label: "Next",
         },
       ],
-      group: '',
+      group: "",
     },
     {
-      description: '',
+      description: "",
       banner: {
-        iconSrc: '',
-        imageSrc: '',
-        backgroundColor: '',
+        iconSrc: "",
+        imageSrc: "",
+        backgroundColor: "",
       },
-      id: '30741077-4a26-4a49-b81f-85f55bc2d3fc',
-      title: 'Sub 1 2',
+      id: "30741077-4a26-4a49-b81f-85f55bc2d3fc",
+      title: "Sub 1 2",
       actions: [
         {
-          type: 'next',
-          label: 'Next (back to top)',
+          type: "next",
+          label: "Next (back to top)",
         },
       ],
-      group: '',
+      group: "",
     },
     {
       questions: [
         {
-          description: '',
-          label: '',
-          id: 'navGroup2',
+          description: "",
+          label: "",
+          id: "navGroup2",
           buttons: [
             {
               navigationType: {
-                type: 'navigateDown',
-                stepId: '1f65b332-c3ca-4f1c-b67b-5e5449d56dbe',
+                type: "navigateDown",
+                stepId: "1f65b332-c3ca-4f1c-b67b-5e5449d56dbe",
               },
-              text: 'Go down',
+              text: "Go down",
             },
           ],
-          type: 'navigationButtonGroup',
-          inputSelectValue: 'navigationButtonGroup',
+          type: "navigationButtonGroup",
+          inputSelectValue: "navigationButtonGroup",
         },
       ],
-      description: '',
+      description: "",
       banner: {
-        iconSrc: '',
-        imageSrc: '',
-        backgroundColor: '',
+        iconSrc: "",
+        imageSrc: "",
+        backgroundColor: "",
       },
-      id: '9958e6df-00eb-4226-b1ce-3dfbe6cee4b3',
-      title: 'Other sub',
+      id: "9958e6df-00eb-4226-b1ce-3dfbe6cee4b3",
+      title: "Other sub",
       actions: [
         {
-          type: 'next',
-          color: 'green',
-          label: 'Go back',
+          type: "next",
+          color: "green",
+          label: "Go back",
         },
       ],
-      group: '',
+      group: "",
     },
     {
-      description: '',
+      description: "",
       banner: {
-        iconSrc: '',
-        imageSrc: '',
-        backgroundColor: '',
+        iconSrc: "",
+        imageSrc: "",
+        backgroundColor: "",
       },
-      id: '1f65b332-c3ca-4f1c-b67b-5e5449d56dbe',
-      title: 'Sub sub',
+      id: "1f65b332-c3ca-4f1c-b67b-5e5449d56dbe",
+      title: "Sub sub",
       actions: [
         {
-          type: 'next',
-          color: 'blue',
-          label: 'Go up',
+          type: "next",
+          color: "blue",
+          label: "Go up",
         },
         {
-          type: 'backToMain',
-          color: 'green',
-          label: 'Go to main form',
+          type: "backToMain",
+          color: "green",
+          label: "Go to main form",
         },
       ],
-      group: '',
+      group: "",
     },
   ],
-  provider: 'TEST',
+  provider: "TEST",
   subform: false,
-  PK: 'FORM#00be0910-2a70-11eb-a9af-ddffd6ddc5a0',
-  description: 'small form for testing purposes',
-  id: '00be0910-2a70-11eb-a9af-ddffd6ddc5a0',
-  name: 'Grupperingstester',
+  PK: "FORM#00be0910-2a70-11eb-a9af-ddffd6ddc5a0",
+  description: "small form for testing purposes",
+  id: "00be0910-2a70-11eb-a9af-ddffd6ddc5a0",
+  name: "Grupperingstester",
 };
 
-formStories.add('Substep Form', () => (
+formStories.add("Substep Form", () => (
   <StoryWrapper>
     <Form
       steps={SubstepsDemoStoryData.steps}

@@ -7,7 +7,7 @@ import {
 } from "../../types/CaseContext";
 import { get, post, put } from "../../helpers/ApiRequest";
 import { convertAnswersToArray } from "../../helpers/CaseDataConverter";
-import { Case } from "../../types/Case";
+import { Case, ApplicationStatusType } from "../../types/Case";
 import {
   getCurrentForm,
   UserInterface,
@@ -17,6 +17,8 @@ import { wrappedDefaultStorage } from "../../services/StorageService";
 import { to } from "../../helpers/Misc";
 import { PasswordStrategy } from "../../services/encryption/PasswordStrategy";
 import { filterAsync } from "../../helpers/Objects";
+
+const { NOT_STARTED } = ApplicationStatusType;
 
 export async function updateCase(
   {
@@ -91,7 +93,7 @@ export async function createCase(
 ): Promise<Action> {
   const body = {
     provider: form.provider,
-    statusType: "notStarted",
+    statusType: NOT_STARTED,
     currentFormId: form.id,
     forms: {
       [form.id]: {
@@ -143,7 +145,7 @@ async function getCasesThatShouldGeneratePin(
   cases: Case[]
 ): Promise<Case[]> {
   const notStartedCases = cases.filter((caseData) =>
-    caseData.status.type.includes("notStarted")
+    caseData.status.type.includes(NOT_STARTED)
   );
   const freshCasesWithCoapplicant = notStartedCases.filter((caseData) => {
     const currentForm = getCurrentForm(caseData);

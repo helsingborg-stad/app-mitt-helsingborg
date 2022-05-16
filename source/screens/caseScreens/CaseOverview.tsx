@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, {
   useCallback,
   useContext,
@@ -9,11 +8,9 @@ import React, {
 import { Animated, Easing, Linking, RefreshControl } from "react-native";
 import styled from "styled-components/native";
 import { useFocusEffect } from "@react-navigation/native";
-import moment from "moment";
 
 import FloatingButton from "../../components/molecules/FloatingButton";
 import icons from "../../helpers/Icons";
-import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
 import { Text, Icon } from "../../components/atoms";
 import {
   Card,
@@ -40,20 +37,9 @@ import {
 } from "../../services/encryption/CaseEncryptionHelper";
 import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
 
-const {
-  CLOSED_PARTIALLY_APPROVED_VIVA,
-  CLOSED_REJECTED_VIVA,
-  ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
-  ACTIVE_COMPLETION_REQUIRED_VIVA,
-  ACTIVE_COMPLETION_SUBMITTED,
-  ACTIVE_SIGNATURE_PENDING,
-  NEW_APPLICATION,
-  NOT_STARTED,
-  ONGOING,
-  SIGNED,
-  CLOSED,
-  ACTIVE,
-} = ApplicationStatusType;
+import statusTypeConstantMapper from "./statusTypeConstantMapper";
+
+const { NEW_APPLICATION, NOT_STARTED, CLOSED, ACTIVE } = ApplicationStatusType;
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -132,37 +118,20 @@ const computeCaseCardComponent = (
     (person) => person.personalNumber === authContext?.user?.personalNumber
   );
 
-  const completions = caseData?.details?.completions?.requested || [];
-  const canShowCompletionDueDate =
-    caseData?.details?.completions?.dueDate &&
-    !caseData?.details?.completions?.isDueDateExpired;
-  const completionDuedate = canShowCompletionDueDate
-    ? moment(caseData?.details?.completions?.dueDate).format("YYYY-MM-DD")
-    : "";
-
   const statusType = caseData?.status?.type || "";
-  const isNotStarted = statusType.includes(NOT_STARTED);
-  const isOngoing = statusType.includes(ONGOING);
-  const isRandomCheckRequired = statusType.includes(
-    ACTIVE_RANDOM_CHECK_REQUIRED_VIVA
-  );
-  const isVivaCompletionRequired = statusType.includes(
-    ACTIVE_COMPLETION_REQUIRED_VIVA
-  );
-  const isCompletionSubmitted = statusType.includes(
-    ACTIVE_COMPLETION_SUBMITTED
-  );
-  const isSigned = statusType.includes(SIGNED);
-  const isClosed = statusType.includes(CLOSED);
-  const isWaitingForSign = statusType.includes(ACTIVE_SIGNATURE_PENDING);
-
-  const shouldShowAppealButton =
-    statusType.includes(CLOSED_PARTIALLY_APPROVED_VIVA) ||
-    statusType.includes(CLOSED_REJECTED_VIVA);
-
-  const unApprovedCompletionDescriptions: string[] = isVivaCompletionRequired
-    ? getUnapprovedCompletionDescriptions(completions)
-    : [];
+  const {
+    isNotStarted,
+    isOngoing,
+    isRandomCheckRequired,
+    isVivaCompletionRequired,
+    isCompletionSubmitted,
+    isSigned,
+    isClosed,
+    isWaitingForSign,
+    isActiveSubmittedRandomCheck,
+    shouldShowAppealButton,
+    activeSubmittedCompletion,
+  } = statusTypeConstantMapper(statusType);
 
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === "coApplicant";
@@ -182,7 +151,10 @@ const computeCaseCardComponent = (
         isSigned ||
         isClosed ||
         isVivaCompletionRequired ||
-        isCompletionSubmitted);
+        isCompletionSubmitted ||
+        isActiveSubmittedRandomCheck ||
+        activeSubmittedCompletion);
+
   const buttonProps: InternalButtonProps = {
     onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
     text: "",
@@ -242,6 +214,11 @@ const computeCaseCardComponent = (
     buttonProps.text = "Komplettera ansökan";
   }
 
+  if (isActiveSubmittedRandomCheck || activeSubmittedCompletion) {
+    buttonProps.text = "Skicka in fler bilder";
+    cardProps.description = caseData.status.description;
+  }
+
   const giveDate = payments?.payment?.givedate
     ? `${
         payments.payment.givedate.split("-")[2]
@@ -281,7 +258,7 @@ const computeCaseCardComponent = (
       title={caseData.caseType.name}
       subtitle={cardProps.subtitle}
       largeSubtitle={applicationPeriodMonth}
-      description={cardProps.description}
+      description={cardProps.description ?? caseData.status.description}
       icon={icons[caseData.caseType.icon]}
       showButton={shouldShowCTAButton}
       showAppealButton={shouldShowAppealButton}
@@ -297,8 +274,6 @@ const computeCaseCardComponent = (
       onAppealButtonClick={openAppealLink}
       onButtonClick={buttonProps.onClick}
       buttonColorScheme={buttonProps.colorSchema || colorSchema}
-      completions={unApprovedCompletionDescriptions}
-      completionDuedate={completionDuedate}
       pin={pinToShow}
     />
   );
@@ -582,9 +557,5 @@ function CaseOverview(props): JSX.Element {
     </ScreenWrapper>
   );
 }
-
-CaseOverview.propTypes = {
-  navigation: PropTypes.any,
-};
 
 export default CaseOverview;
