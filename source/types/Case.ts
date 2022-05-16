@@ -133,6 +133,7 @@ export interface Person {
 
 export interface Status {
   description: string;
+  detailedDescription?: string;
   name: string;
   type: ApplicationStatusType;
 }
