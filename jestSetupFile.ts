@@ -137,7 +137,7 @@ jest.mock("react-native-background-timer", () => true);
 jest.mock("react-native-document-picker", () => ({ default: jest.fn() }));
 
 /**
- * Mock react-native-document-picker
+ * Mock react-native-image-crop-picker
  */
 jest.mock("react-native-image-crop-picker", () => ({
   openPicker: jest.fn(),
