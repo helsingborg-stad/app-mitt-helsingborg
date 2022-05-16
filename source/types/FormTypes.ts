@@ -51,7 +51,8 @@ export type InputFieldType =
   | "imageUploader"
   | "imageViewer"
   | "pdfUploader"
-  | "pdfViewer";
+  | "pdfViewer"
+  | "filePicker";
 
 export type FormInputType =
   | "text"

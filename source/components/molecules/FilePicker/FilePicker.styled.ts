@@ -1,7 +1,5 @@
 import styled from "styled-components/native";
 
-import { Button, Label } from "../../atoms";
-
 import { PrimaryColor, ComplementaryColor } from "../../../styles/themeHelpers";
 
 const Wrapper = styled.View`
@@ -27,9 +25,9 @@ interface PopupContainerProps {
 const PopupContainer = styled.View<PopupContainerProps>`
   position: absolute;
   z-index: 1000;
-  top: 60%;
   left: 5%;
   right: 5%;
+  bottom: 0px;
   padding: 20px;
   width: 90%;
   background-color: ${(props) =>
@@ -41,25 +39,4 @@ const PopupContainer = styled.View<PopupContainerProps>`
   justify-content: space-between;
 `;
 
-const Row = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const PopupLabel = styled(Label)<{ colorSchema: PrimaryColor }>`
-  color: ${(props) => props.theme.colors.primary[props.colorSchema][0]};
-`;
-
-const PopupButton = styled(Button)`
-  border: 0;
-  margin-bottom: 16px;
-`;
-
-export {
-  Wrapper,
-  ButtonContainer,
-  PopupContainer,
-  Row,
-  PopupLabel,
-  PopupButton,
-};
+export { Wrapper, ButtonContainer, PopupContainer };

@@ -21,6 +21,7 @@ import ImageViewer from "../../components/molecules/ImageViewer/ImageViewer";
 import PdfUploader from "../../components/molecules/PdfUploader/PdfUploader";
 import PdfViewer from "../../components/molecules/PdfViewer/PdfViewer";
 import BulletList from "../../components/organisms/BulletList";
+import FilePicker from "../../components/molecules/FilePicker/FilePicker";
 
 import getUnApprovedCompletionsDescriptions from "../../helpers/FormatCompletions";
 import { FormInputType, InputFieldType } from "../../types/FormTypes";
@@ -167,6 +168,11 @@ const inputTypes: Record<inputKeyType, InputTypeProperties> = {
   },
   pdfUploader: {
     component: PdfUploader,
+    changeEvent: "onChange",
+    props: { answers: true },
+  },
+  filePicker: {
+    component: FilePicker,
     changeEvent: "onChange",
     props: { answers: true },
   },

@@ -1,5 +1,6 @@
 import { NativeModules } from "react-native";
 import "react-native-gesture-handler/jestSetup";
+import "@testing-library/jest-dom";
 
 import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-info-mock";
 
@@ -134,6 +135,14 @@ jest.mock("react-native-background-timer", () => true);
  * Mock react-native-document-picker
  */
 jest.mock("react-native-document-picker", () => ({ default: jest.fn() }));
+
+/**
+ * Mock react-native-image-crop-picker
+ */
+jest.mock("react-native-image-crop-picker", () => ({
+  openPicker: jest.fn(),
+  openCamera: jest.fn(),
+}));
 
 /**
  * Mock react-native datetimepicker
