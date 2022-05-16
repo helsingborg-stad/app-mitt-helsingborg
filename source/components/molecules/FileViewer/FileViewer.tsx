@@ -13,13 +13,9 @@ const FileViewer: React.FC<Props> = ({
   answers,
   onChange,
 }) => {
-  const files: File[] = [];
-
-  questionIds.forEach((id) => {
-    if (Array.isArray(answers[id])) {
-      files.push(...answers[id].map((file) => file));
-    }
-  });
+  const files = questionIds
+    .filter((id) => Array.isArray(answers[id]))
+    .flatMap((id) => answers[id]);
 
   return <FileDisplay files={files} onChange={onChange} answers={answers} />;
 };
