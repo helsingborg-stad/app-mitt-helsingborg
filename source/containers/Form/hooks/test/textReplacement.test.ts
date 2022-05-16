@@ -215,6 +215,7 @@ beforeEach(() => {
       type: ApplicationStatusType.ACTIVE_COMPLETION_REQUIRED_VIVA,
       name: "Ansökan behöver kompletteras",
       description: "#MONTH_NAME",
+      detailedDescription: "My new month: #MONTH_NAME",
     },
     details: {
       completions: {
@@ -263,5 +264,24 @@ describe("replaceCaseItemText", () => {
     const result = replaceCaseItemText(mockCase);
 
     expect(result.status.description).toBe(expectedResult);
+  });
+
+  it("replaces text on multiple `to` properties", () => {
+    const result = replaceCaseItemText(mockCase);
+
+    expect(result.status.description).toBe("January");
+    expect(result.status.detailedDescription).toBe("My new month: January");
+  });
+
+  it("does not replace keys if key does not exist when having multiple `to` paths", () => {
+    const expectedDescription = "January";
+    const expectedDetailedDescription = "no key to replace";
+
+    mockCase.status.detailedDescription = expectedDetailedDescription;
+
+    const result = replaceCaseItemText(mockCase);
+
+    expect(result.status.description).toBe(expectedDescription);
+    expect(result.status.detailedDescription).toBe(expectedDetailedDescription);
   });
 });
