@@ -2,6 +2,7 @@ import React from "react";
 import { TouchableHighlight, Linking } from "react-native";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
+import Markdown from "react-native-markdown-display";
 import Icon from "../../atoms/Icon";
 import Button from "../../atoms/Button";
 import Text from "../../atoms/Text";
@@ -41,7 +42,7 @@ const Heading = styled(Text)`
   line-height: 40px;
 `;
 
-const HelpText = styled(Text)`
+const HelpText = styled(Markdown)`
   margin-top: 20px;
   font-size: 16px;
   font-weight: bold;
