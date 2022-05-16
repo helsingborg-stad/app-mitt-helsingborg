@@ -46,8 +46,7 @@ export async function deepCompareEquals(
 }
 
 /**
- * Checks if a variable is an object
  * @param i any variable
  */
-export const isObject = (i: any): i is Record<any, any> =>
+export const isObject = (i: any): i is Record<string, unknown> =>
   !!i && i.constructor === Object;
