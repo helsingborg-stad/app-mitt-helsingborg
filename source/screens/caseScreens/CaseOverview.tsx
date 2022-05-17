@@ -59,6 +59,10 @@ const StyledIcon = styled(Icon)`
   color: ${(props) => props.theme.colors.primary[colorSchema][0]};
 `;
 
+const PaddedContainer = styled.View`
+  padding-top: 16px;
+`;
+
 interface InternalCardProps {
   subtitle: string;
   description?: string;
@@ -501,20 +505,22 @@ function CaseOverview(props): JSX.Element {
 
         {!isLoading && activeCases.length === 0 && closedCases.length === 0 && (
           <>
-            <Card colorSchema="red">
-              <Card.Body colorSchema="red">
-                <Card.Text align="center">
-                  <StyledIcon
-                    name={refreshing ? "refresh" : "arrow-downward"}
-                    size={32}
-                  />
-                </Card.Text>
-                <Card.Title align="center">Här var det tomt!</Card.Title>
-                <Card.Text align="center" colorSchema="red">
-                  Dra för att ladda om sidan om det borde finnas något här.
-                </Card.Text>
-              </Card.Body>
-            </Card>
+            <PaddedContainer>
+              <Card colorSchema="red">
+                <Card.Body colorSchema="red">
+                  <Card.Text align="center">
+                    <StyledIcon
+                      name={refreshing ? "refresh" : "arrow-downward"}
+                      size={32}
+                    />
+                  </Card.Text>
+                  <Card.Title align="center">Här var det tomt!</Card.Title>
+                  <Card.Text align="center" colorSchema="red">
+                    Dra för att ladda om sidan om det borde finnas något här.
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </PaddedContainer>
 
             {newCase && (
               <Card colorSchema="red">
