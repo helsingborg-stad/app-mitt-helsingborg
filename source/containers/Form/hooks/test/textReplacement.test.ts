@@ -222,6 +222,7 @@ beforeEach(() => {
         requested: [],
         completed: true,
         randomCheck: false,
+        dueDate: 1652708743244,
       },
       administrators: [],
       workflowId: "123",
@@ -271,6 +272,17 @@ describe("replaceCaseItemText", () => {
 
     expect(result.status.description).toBe("January");
     expect(result.status.detailedDescription).toBe("My new month: January");
+  });
+
+  it("replaces text on multiple `to` properties with multiple keys", () => {
+    const expectedDescription = "Month: January, duedate: 2022-05-16";
+
+    mockCase.status.detailedDescription =
+      "Month: #MONTH_NAME, duedate: #COMPLETION_DUEDATE";
+
+    const result = replaceCaseItemText(mockCase);
+
+    expect(result.status.detailedDescription).toBe(expectedDescription);
   });
 
   it("does not replace keys if key does not exist when having multiple `to` paths", () => {
