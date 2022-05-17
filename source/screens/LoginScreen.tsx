@@ -199,6 +199,7 @@ const pickerSelectStyles = {
   },
   inputAndroid: {
     color: "black",
+    height: 40,
   },
 };
 
