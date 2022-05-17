@@ -17,6 +17,7 @@ const pickerSelectStyles = StyleSheet.create({
     textAlign: "right",
     color: theme.colors.neutrals[1],
     paddingRight: 10,
+    height: 34,
   },
 });
 
