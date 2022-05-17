@@ -190,7 +190,7 @@ export const replaceText = (
 ) => {
   // This way of doing it might be a bit overkill, but the idea is that this in principle
   // allows for nesting replacement rules and then applying them in order one after the other.
-  let res = text;
+  let res = text ?? "";
   replacementRules.forEach(([template, descriptor]) => {
     res = res.replace(
       template,
