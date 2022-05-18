@@ -128,7 +128,6 @@ const computeCaseCardComponent = (
     isOngoing,
     isRandomCheckRequired,
     isVivaCompletionRequired,
-    isCompletionSubmitted,
     isSigned,
     isClosed,
     isWaitingForSign,
@@ -155,7 +154,6 @@ const computeCaseCardComponent = (
         isSigned ||
         isClosed ||
         isVivaCompletionRequired ||
-        isCompletionSubmitted ||
         isActiveSubmittedRandomCheck ||
         activeSubmittedCompletion);
 
@@ -214,7 +212,7 @@ const computeCaseCardComponent = (
     buttonProps.text = "Granska och signera";
   }
 
-  if (isVivaCompletionRequired || isCompletionSubmitted) {
+  if (isVivaCompletionRequired || activeSubmittedCompletion) {
     buttonProps.text = "Komplettera ansökan";
   }
 

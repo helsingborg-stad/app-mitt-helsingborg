@@ -4,7 +4,6 @@ export enum ApplicationStatusType {
   ACTIVE_ONGOING = "active:ongoing",
   ACTIVE_SIGNATURE_COMPLETED = "active:signature:completed",
   ACTIVE_SIGNATURE_PENDING = "active:signature:pending",
-  ACTIVE_COMPLETION_SUBMITTED = "active:completion:submitted",
   CLOSED = "closed",
   SIGNED = "signed",
   ACTIVE = "active",

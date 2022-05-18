@@ -7,7 +7,6 @@ const {
   ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
   ACTIVE_COMPLETION_REQUIRED_VIVA,
   ACTIVE_SUBMITTED_COMPLETION,
-  ACTIVE_COMPLETION_SUBMITTED,
   ACTIVE_SIGNATURE_PENDING,
   NOT_STARTED,
   ACTIVE_ONGOING,
@@ -26,9 +25,6 @@ export default function statusTypeConstantMapper(
   );
   const isVivaCompletionRequired = statusType.includes(
     ACTIVE_COMPLETION_REQUIRED_VIVA
-  );
-  const isCompletionSubmitted = statusType.includes(
-    ACTIVE_COMPLETION_SUBMITTED
   );
   const isSigned = statusType.includes(SIGNED);
   const isWaitingForSign = statusType.includes(ACTIVE_SIGNATURE_PENDING);
@@ -51,7 +47,6 @@ export default function statusTypeConstantMapper(
     isClosed,
     isRandomCheckRequired,
     isVivaCompletionRequired,
-    isCompletionSubmitted,
     isSigned,
     isWaitingForSign,
     shouldShowAppealButton,
