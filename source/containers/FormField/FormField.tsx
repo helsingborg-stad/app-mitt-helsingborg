@@ -321,12 +321,12 @@ const FormField = (props: FormFieldProps): JSX.Element => {
   if (inputType === "bulletList" || inputType === "fileUploaderList") {
     inputCompProps.values = initialValues;
 
-    if (initialValues.includes("#COMPLETIONS_LIST")) {
+    if (initialValues?.includes("#COMPLETIONS_LIST")) {
       inputCompProps.values = getUnApprovedCompletionsDescriptions(
         details?.completions?.requested ?? []
       );
     }
-    if (initialValues.includes("#completionsUploaded")) {
+    if (initialValues?.includes("#completionsUploaded")) {
       inputCompProps.values = details?.completions?.attachmentUploaded ?? [];
     }
   }
