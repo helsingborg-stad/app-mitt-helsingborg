@@ -19,7 +19,7 @@ import {
   ScreenWrapper,
 } from "../../components/molecules";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
-import { CaseState, caseTypes, CaseDispatch } from "../../store/CaseContext";
+import { CaseState, CaseDispatch } from "../../store/CaseContext";
 import FormContext from "../../store/FormContext";
 import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
@@ -29,7 +29,6 @@ import {
 } from "../../types/CaseContext";
 import { to, wait } from "../../helpers/Misc";
 import { Case, ApplicationStatusType, AnsweredForm } from "../../types/Case";
-import { Form } from "../../types/FormTypes";
 import {
   answersAreEncrypted,
   getPasswordForForm,
@@ -78,7 +77,7 @@ interface InternalButtonProps {
  * @param {function?} extra.dialogState
  */
 const computeCaseCardComponent = (
-  caseData,
+  { caseData, casePasswords, form },
   navigation,
   authContext,
   onShowPinInput
@@ -86,9 +85,7 @@ const computeCaseCardComponent = (
   const currentStep =
     caseData?.forms?.[caseData.currentFormId]?.currentPosition
       ?.currentMainStep || 0;
-  const totalSteps = caseData.form?.stepStructure
-    ? caseData.form.stepStructure.length
-    : 0;
+  const totalSteps = form.stepStructure ? form.stepStructure.length : 0;
 
   const persons = caseData?.persons ?? [];
 
@@ -162,10 +159,10 @@ const computeCaseCardComponent = (
     subtitle: caseData.status.name,
     onClick: () => {
       navigation.navigate("UserEvents", {
-        screen: caseData.caseType.navigateTo,
+        screen: "CaseSummary",
         params: {
           id: caseData.id,
-          name: caseData.caseType.name,
+          name: "Ekonomiskt bistånd",
         },
       });
     },
@@ -176,7 +173,7 @@ const computeCaseCardComponent = (
 
     buttonProps.onClick = () => {
       navigation.navigate("UserEvents", {
-        screen: caseData.caseType.navigateTo,
+        screen: "CaseSummary",
         params: {
           id: caseData.id,
           name: caseData.caseType.name,
@@ -236,7 +233,7 @@ const computeCaseCardComponent = (
     cardProps.description = `${partnerName} loggar in i appen med BankID och anger koden för att granska och signera er ansökan.\n\nKod till ${partnerName}:`;
   }
 
-  const pinToShow = shouldShowPin ? caseData.password : null;
+  const pinToShow = shouldShowPin && casePasswords[caseData.currentFormId];
 
   const openAppealLink = async () => {
     const url =
@@ -252,11 +249,11 @@ const computeCaseCardComponent = (
     <CaseCard
       key={caseData.id}
       colorSchema={colorSchema}
-      title={caseData.caseType.name}
+      title="Ekonomiskt bistånd"
       subtitle={cardProps.subtitle}
       largeSubtitle={applicationPeriodMonth}
       description={cardProps.description ?? caseData.status.description}
-      icon={icons[caseData.caseType.icon]}
+      icon={icons.ICON_EKB}
       showButton={shouldShowCTAButton}
       showAppealButton={shouldShowAppealButton}
       buttonText={buttonProps.text}
@@ -276,35 +273,85 @@ const computeCaseCardComponent = (
   );
 };
 
-interface CaseWithExtra extends Case {
-  caseType: typeof caseTypes[0];
-  form?: Form;
-  password?: string;
-}
-
 /**
  * Case overview screen
  * @param {obj} props
  */
 function CaseOverview(props): JSX.Element {
   const { navigation } = props;
-  const [caseItems, setCaseItems] = useState<CaseWithExtra[]>([]);
+
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [pinModalCase, setPinModalCase] = useState<Case | null>(null);
   const [pinModalError, setPinModalError] = useState<string | null>(null);
   const [pinModalName, setPinModalName] = useState<string | null>(null);
-  const { getCasesByFormIds, fetchCases } = useContext(
+  const { fetchCases, cases } = useContext(
     CaseState
   ) as Required<CaseContextState>;
   const { providePinForCase } = useContext<CaseContextDispatch>(CaseDispatch);
-  const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
+  const { getForm, forms } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
   const authContext = useContext(AuthContext);
 
+  const [casePasswords, setCasePasswords] = useState({});
+
+  useEffect(() => {
+    const tryFetchForms = async () => {
+      const fetchFormPromises = Object.values(cases).map(({ currentFormId }) =>
+        getForm(currentFormId)
+      );
+
+      await Promise.all(fetchFormPromises);
+    };
+
+    if (Object.keys(cases).length > 0) {
+      void tryFetchForms();
+    }
+  }, [cases, getForm]);
+
+  useEffect(() => {
+    const trySetCasePasswords = async () => {
+      try {
+        const activeCases = Object.values(cases).filter((testcase) =>
+          testcase.status.type.includes(ACTIVE)
+        );
+
+        const getPasswordPromises = activeCases.map(async (testCase) => {
+          const formFromCase = testCase.forms[testCase.currentFormId];
+          const hasSymmetricKey = !!formFromCase.encryption.symmetricKeyName;
+
+          const password = hasSymmetricKey
+            ? await getPasswordForForm(formFromCase, authContext.user)
+            : null;
+
+          return {
+            caseId: testCase.id,
+            password,
+          };
+        });
+
+        const resolvedPromises = await Promise.all(getPasswordPromises);
+
+        const passwords = resolvedPromises.reduce(
+          (old, newV) => ({ ...old, [newV.caseId]: newV.password }),
+          {}
+        );
+
+        setCasePasswords((oldValue) => ({ ...oldValue, ...passwords }));
+        setIsLoading(false);
+      } catch {
+        console.log("ERRROR");
+      }
+    };
+
+    if (Object.keys(cases).length > 0) {
+      void trySetCasePasswords();
+    }
+  }, [cases, authContext, getForm]);
+
   const getCasesByStatuses = (statuses: string[]) =>
-    caseItems.filter((caseData) => {
+    Object.values(cases).filter((caseData) => {
       let matchesStatus = false;
       statuses.forEach((status) => {
         matchesStatus =
@@ -418,14 +465,20 @@ function CaseOverview(props): JSX.Element {
     }
   };
   const activeCaseCards = activeCases.map((caseData) =>
-    computeCaseCardComponent(caseData, navigation, authContext, () =>
-      showPinInput(caseData)
+    computeCaseCardComponent(
+      { caseData, casePasswords, form: forms[caseData.currentFormId] ?? {} },
+      navigation,
+      authContext,
+      () => showPinInput(caseData)
     )
   );
 
   const closedCaseCards = closedCases.map((caseData) =>
-    computeCaseCardComponent(caseData, navigation, authContext, () =>
-      showPinInput(caseData)
+    computeCaseCardComponent(
+      { caseData, casePasswords, form: forms[caseData.currentFormId] ?? {} },
+      navigation,
+      authContext,
+      () => showPinInput(caseData)
     )
   );
 

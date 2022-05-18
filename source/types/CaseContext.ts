@@ -16,7 +16,6 @@ export interface State {
   cases: Record<string, Case>;
   error?: unknown;
   getCase: (caseId: string) => Case | undefined;
-  getCasesByFormIds?: (formIds: string[]) => Case[];
   fetchCases?: () => Promise<void>;
 }
 

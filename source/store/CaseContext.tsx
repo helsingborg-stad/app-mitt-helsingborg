@@ -81,22 +81,6 @@ function CaseProvider({
     return state?.cases[caseId];
   }
 
-  /**
-   * This functions retrives cases based on formIds
-   * @param {array} formIds an array of form ids.
-   * @returns {array}
-   */
-  function getCasesByFormIds(formIds: string[]): Case[] {
-    const formCases: Case[] = [];
-    Object.values(state.cases).forEach((c) => {
-      if (formIds.includes(c.currentFormId)) {
-        formCases.push(c);
-      }
-    });
-
-    return formCases;
-  }
-
   async function deleteCase(caseId: string) {
     dispatch(remove(caseId));
   }
@@ -163,7 +147,6 @@ function CaseProvider({
   const providedState: ContextState = {
     ...state,
     getCase,
-    getCasesByFormIds,
     fetchCases,
   };
 
