@@ -17,7 +17,7 @@ export enum ApplicationStatusType {
   NEW_APPLICATION = "newApplication",
   ACTIVE_ONGOING_NEW_APPLICATION = "active:ongoing:newApplication",
   ACTIVE_SUBMITTED_RANDOM_CHECK_VIVA = "active:submitted:randomCheck:viva",
-  ACTIVE_SUBMITTED_COMPLETION = "active:submitted:completion",
+  ACTIVE_SUBMITTED_COMPLETION = "active:submitted:completion:viva",
 }
 
 export type PersonRole = "applicant" | "coApplicant" | "children";
