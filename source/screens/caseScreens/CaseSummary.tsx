@@ -139,7 +139,7 @@ const computeCaseCardComponent = (
   const completions = caseData?.details?.completions?.requested || [];
 
   const applicationPeriodTimestamp =
-    application?.periodenddate ?? period?.endDate;
+    period?.endDate ?? application?.periodenddate;
   const applicationPeriodMonth = applicationPeriodTimestamp
     ? getSwedishMonthNameByTimeStamp(applicationPeriodTimestamp, true)
     : "";
