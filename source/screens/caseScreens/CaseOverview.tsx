@@ -85,7 +85,7 @@ const computeCaseCardComponent = (
   const currentStep =
     caseData?.forms?.[caseData.currentFormId]?.currentPosition
       ?.currentMainStep || 0;
-  const totalSteps = form.stepStructure ? form.stepStructure.length : 0;
+  const totalSteps = form?.stepStructure?.length ?? 0;
 
   const persons = caseData?.persons ?? [];
 
