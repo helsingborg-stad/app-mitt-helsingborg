@@ -314,7 +314,7 @@ const CaseSummary = (props) => {
     if (caseData?.currentFormId) {
       void getFormObject(caseData?.currentFormId);
     }
-  }, [cases, caseData, getForm]);
+  }, [caseData, getForm]);
 
   const updateCaseSignature = useCallback(
     async (caseItem, signatureSuccessful) => {
@@ -358,7 +358,7 @@ const CaseSummary = (props) => {
       }
     };
 
-    updateCaseAfterSignature();
+    void updateCaseAfterSignature();
   }, [updateCaseSignature, authContext.status, caseId, getCase]);
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
