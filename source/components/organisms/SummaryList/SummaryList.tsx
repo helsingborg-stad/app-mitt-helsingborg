@@ -40,6 +40,12 @@ const SumContainer = styled.View<{ colorSchema: string }>`
   background: ${(props) =>
     props.theme.colors.complementary[props.colorSchema][3]};
 `;
+
+const SummarySpacer = styled.View`
+  padding-bottom: 16px;
+  width: 100%;
+`;
+
 export interface SummaryListItem {
   title: string;
   id: string;
@@ -53,7 +59,8 @@ export interface SummaryListItem {
     | "arrayDate"
     | "editableListText"
     | "editableListNumber"
-    | "editableListDate";
+    | "editableListDate"
+    | "spacer";
   category?: string;
   inputId?: string;
   inputSelectValue?: InputType;
@@ -273,6 +280,7 @@ const SummaryList: React.FC<Props> = ({
 
   itemIdmap.forEach((value) => {
     if (Array.isArray(value.answers)) {
+      let lastCategory: string | undefined = "";
       value.answers.forEach((answer, index) => {
         value.items.forEach((item) => {
           reorganizedList.push({
@@ -283,6 +291,21 @@ const SummaryList: React.FC<Props> = ({
             description: answer.description,
             otherassetDescription: answer.otherassetDescription,
           });
+
+          lastCategory = item.category;
+        });
+
+        reorganizedList.push({
+          index,
+          value: "SPACER_VALUE",
+          item: {
+            id: `spacer-${index}`,
+            title: "SPACER",
+            type: "spacer",
+            category: lastCategory,
+          },
+          description: undefined,
+          text: undefined,
         });
       });
     } else if (isObject(value.answers)) {
@@ -404,6 +427,15 @@ const SummaryList: React.FC<Props> = ({
         const numericValue: number = answers[listEntry.item.id];
         addToSum(numericValue);
       }
+    }
+
+    if (["spacer"].includes(listEntry.item.type)) {
+      listItems.push(
+        <SummarySpacer
+          key={`${listEntry.item.id}`}
+          category={listEntry.item.category}
+        />
+      );
     }
   });
 
