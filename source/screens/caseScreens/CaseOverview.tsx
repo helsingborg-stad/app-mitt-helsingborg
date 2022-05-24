@@ -99,12 +99,10 @@ const computeCaseCardComponent = (
 
   const details = caseData?.details ?? {};
   const { workflow = {}, period = {} } = details;
-  const { decision = {}, payments = {}, application = {} } = workflow;
+  const { decision = {}, payments = {} } = workflow;
 
-  const applicationPeriodTimestamp =
-    application?.periodenddate ?? period?.endDate;
-  const applicationPeriodMonth = applicationPeriodTimestamp
-    ? getSwedishMonthNameByTimeStamp(applicationPeriodTimestamp, true)
+  const applicationPeriodMonth = period?.endDate
+    ? getSwedishMonthNameByTimeStamp(period?.endDate, true)
     : "";
 
   const decisions = decision?.decisions?.decision
