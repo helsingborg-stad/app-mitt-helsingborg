@@ -204,6 +204,24 @@ describe("replaceMarkdownTextInSteps", () => {
         doTest(placeholder, expected, undefined, undefined, expected)
     );
   });
+
+  describe("Du/ni", () => {
+    describe("If there's a co-applicant", () => {
+      it.each([["#du/ni", "ni"]])(
+        "Replaces %s with %s",
+        (placeholder, expected) => {
+          doTest(placeholder, expected, {
+            ...fakedPartnerInfo,
+            role: "coApplicant",
+          });
+        }
+      );
+    });
+
+    describe("If there's no co-applicant", () => {
+      it.each([["#du/ni", "du"]])("Replaces %s with %s", doTest);
+    });
+  });
 });
 
 let mockCase: Case;

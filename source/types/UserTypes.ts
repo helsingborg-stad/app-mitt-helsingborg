@@ -16,4 +16,5 @@ export interface PartnerInfo {
   partnerLastname: string;
   partnerName: string;
   partnerPersonalid: string;
+  role?: string;
 }
