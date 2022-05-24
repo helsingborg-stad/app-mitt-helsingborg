@@ -12,6 +12,7 @@ function computePartnerPersonInfo(person: Person): PartnerInfo {
     partnerLastname: person.lastName,
     partnerName: person.firstName,
     partnerPersonalid: person.personalNumber,
+    role: person.role,
   };
 }
 

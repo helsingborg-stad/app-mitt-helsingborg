@@ -86,6 +86,7 @@ const replacementRules = [
   ["#today", "date.currentDate"], // this is the current year of next month
   ["#partnerName", "partner.partnerName"],
   ["#encryptionPin", "encryptionPin"],
+  ["#du/ni", "duNiReplacer"],
 ];
 
 const swedishMonthTable = [
@@ -177,6 +178,10 @@ const computeText = (
   }
   if (strArr[0] === "encryptionPin" && encryptionPin) {
     return encryptionPin;
+  }
+  if (strArr[0] === "duNiReplacer") {
+    if (user && partner?.role === "coApplicant") return "ni";
+    if (user) return "du";
   }
   return "";
 };
