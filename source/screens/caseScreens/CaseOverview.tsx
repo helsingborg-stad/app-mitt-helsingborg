@@ -403,41 +403,6 @@ function CaseOverview(props): JSX.Element {
     }, [fadeAnimation])
   );
 
-  useEffect(() => {
-    const updateItems = async () => {
-      const updateCaseItemsPromises = caseTypes.map(async (caseType) => {
-        const formIds = await getFormIdsByFormTypes(caseType.formTypes);
-        const formCases = getCasesByFormIds(formIds);
-        const updatedFormCaseObjects = formCases.map(async (caseData) => {
-          const form = await getForm(caseData.currentFormId);
-          const formFromCase = caseData.forms[caseData.currentFormId];
-          const hasSymmetricKey = !!formFromCase.encryption.symmetricKeyName;
-          const password = hasSymmetricKey
-            ? await getPasswordForForm(formFromCase, authContext.user)
-            : null;
-          const newCaseData: CaseWithExtra = {
-            ...caseData,
-            caseType,
-            form: form ?? undefined,
-            password: password ?? undefined,
-          };
-          return newCaseData;
-        });
-        return Promise.all(updatedFormCaseObjects);
-      });
-
-      await Promise.all(updateCaseItemsPromises).then((updatedItems) => {
-        const flattenedList = updatedItems.flat();
-        flattenedList.sort((caseA, caseB) => caseB.updatedAt - caseA.updatedAt);
-        setCaseItems(flattenedList);
-      });
-
-      setIsLoading(false);
-    };
-
-    void updateItems();
-  }, [authContext.user, getCasesByFormIds, getForm, getFormIdsByFormTypes]);
-
   const showPinInput = (caseData: Case) => {
     const mainPerson = caseData.persons?.find(
       (person) => person.role === "applicant"
