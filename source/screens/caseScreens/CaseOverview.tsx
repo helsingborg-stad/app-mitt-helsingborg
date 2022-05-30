@@ -23,7 +23,6 @@ import { CaseState, caseTypes, CaseDispatch } from "../../store/CaseContext";
 import FormContext from "../../store/FormContext";
 import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
-import { put } from "../../helpers/ApiRequest";
 import {
   State as CaseContextState,
   Dispatch as CaseContextDispatch,
@@ -292,7 +291,6 @@ function CaseOverview(props): JSX.Element {
   const [caseItems, setCaseItems] = useState<CaseWithExtra[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [pendingCaseSign, setPendingCaseSign] = useState<Case | null>(null);
   const [pinModalCase, setPinModalCase] = useState<Case | null>(null);
   const [pinModalError, setPinModalError] = useState<string | null>(null);
   const [pinModalName, setPinModalName] = useState<string | null>(null);
@@ -392,50 +390,6 @@ function CaseOverview(props): JSX.Element {
 
     void updateItems();
   }, [authContext.user, getCasesByFormIds, getForm, getFormIdsByFormTypes]);
-
-  useEffect(() => {
-    if (pendingCaseSign && authContext.status === "signResolved") {
-      void (async () => {
-        const currentForm =
-          pendingCaseSign.forms[pendingCaseSign.currentFormId];
-
-        const updateCaseRequestBody = {
-          currentFormId: pendingCaseSign.currentFormId,
-          ...currentForm,
-          signature: { success: true },
-        };
-
-        try {
-          const updateCaseResponse = await put(
-            `/cases/${pendingCaseSign.id}`,
-            JSON.stringify(updateCaseRequestBody)
-          );
-
-          if (updateCaseResponse.status !== 200) {
-            throw new Error(
-              `${updateCaseResponse.status} ${updateCaseResponse?.data?.data?.message}`
-            );
-          }
-
-          setPendingCaseSign(null);
-          onRefresh();
-
-          // Show last screen of form
-          navigation.navigate("Form", {
-            caseId: pendingCaseSign.id,
-          });
-        } catch (error) {
-          console.log(`Could not update case with new signature: ${error}`);
-        }
-      })();
-    }
-  }, [
-    pendingCaseSign,
-    authContext.status,
-    setPendingCaseSign,
-    onRefresh,
-    navigation,
-  ]);
 
   const showPinInput = (caseData: Case) => {
     const mainPerson = caseData.persons?.find(
