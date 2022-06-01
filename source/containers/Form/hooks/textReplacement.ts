@@ -180,8 +180,7 @@ const computeText = (
     return encryptionPin;
   }
   if (strArr[0] === "duNiReplacer") {
-    if (user && partner?.role === "coApplicant") return "ni";
-    if (user) return "du";
+    return partner?.role === "coApplicant" ? "ni" : "du";
   }
   return "";
 };
