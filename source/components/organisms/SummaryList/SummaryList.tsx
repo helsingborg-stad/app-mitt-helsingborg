@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
+import { findLastIndex } from "lodash";
 import { isObject } from "../../../helpers/Objects";
 import GroupedList from "../../molecules/GroupedList/GroupedList";
 import Text from "../../atoms/Text/Text";
@@ -41,9 +42,15 @@ const SumContainer = styled.View<{ colorSchema: string }>`
     props.theme.colors.complementary[props.colorSchema][3]};
 `;
 
-const SummarySpacer = styled.View`
-  padding-bottom: 16px;
-  width: 100%;
+const SummarySpacer = styled.View<{
+  colorSchema: string;
+}>`
+  margin-bottom: 16px;
+  height: 4px;
+  width: 32px;
+
+  background: ${(props) =>
+    props.theme.label.colors[props.colorSchema].underline};
 `;
 
 export interface SummaryListItem {
@@ -143,6 +150,8 @@ const SummaryList: React.FC<Props> = ({
   help,
   editable,
 }) => {
+  const validColorSchema = getValidColorSchema(colorSchema);
+
   /**
    * Given an item, and possibly an index in the case of repeater fields, this generates a function that
    * updates the form data from the input.
@@ -280,7 +289,7 @@ const SummaryList: React.FC<Props> = ({
 
   itemIdmap.forEach((value) => {
     if (Array.isArray(value.answers)) {
-      let lastCategory: string | undefined = "";
+      let lastCategory = "";
       value.answers.forEach((answer, index) => {
         value.items.forEach((item) => {
           reorganizedList.push({
@@ -429,17 +438,33 @@ const SummaryList: React.FC<Props> = ({
       }
     }
 
-    if (["spacer"].includes(listEntry.item.type)) {
+    const isSpacer = listEntry.item.type === "spacer";
+
+    if (isSpacer) {
       listItems.push(
         <SummarySpacer
           key={`${listEntry.item.id}`}
           category={listEntry.item.category}
+          colorSchema={validColorSchema}
         />
       );
     }
   });
 
-  const validColorSchema = getValidColorSchema(colorSchema);
+  // Remove last spacer from listItems
+
+  const spacerCount = listItems.filter((item) =>
+    item?.key?.toString().startsWith("spacer-")
+  ).length;
+
+  if (spacerCount > 1) {
+    const lastSpacerIndex = findLastIndex(listItems, (item) =>
+      item?.key?.toString().startsWith("spacer-")
+    );
+
+    listItems.splice(lastSpacerIndex, 1);
+  }
+
   return (
     listItems.length > 0 && (
       <>
