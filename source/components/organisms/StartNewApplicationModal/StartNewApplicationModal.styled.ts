@@ -2,10 +2,11 @@ import styled from "styled-components/native";
 
 import { ThemeType } from "../../../styles/themeHelpers";
 
+import { Button } from "../../atoms";
+
 interface DialogContainerProps {
   theme: ThemeType;
 }
-
 const DialogContainer = styled.View<DialogContainerProps>`
   width: 80%;
   background: ${({ theme }) => theme.colors.neutrals[5]};
@@ -17,8 +18,23 @@ const DialogContainer = styled.View<DialogContainerProps>`
   padding: 0px 16px 16px 16px;
 `;
 
-const CancelButton = styled.TouchableOpacity`
-  color: black;
+interface ContainerProps {
+  border?: boolean;
+}
+const Container = styled.View<ContainerProps>`
+  padding: 22px 8px;
+  width: 100%;
+
+  ${({ border }) =>
+    border &&
+    `
+    border-bottom-width: 1px;
+    border-bottom-color: grey;
+  `}
 `;
 
-export { DialogContainer, CancelButton };
+const StyledButton = styled(Button)`
+  margin-top: 10px;
+`;
+
+export { DialogContainer, Container, StyledButton };

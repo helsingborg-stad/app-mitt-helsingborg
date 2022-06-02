@@ -42,6 +42,7 @@ function loadStories() {
   require("../source/components/organisms/CheckboxList/CheckboxList.stories");
   require("../source/components/organisms/FormList/FormList.stories");
   require("../source/components/organisms/PinInputModal/PinInputModal.stories");
+  require("../source/components/organisms/StartNewApplicationModal/StartNewApplicationModal.stories");
   require("../source/components/organisms/Step/Step.stories");
   require("../source/components/organisms/Step/StepBanner/StepBanner.stories");
   require("../source/components/organisms/Step/StepDescription/StepDescription.stories");
@@ -93,6 +94,7 @@ const stories = [
   "../source/components/organisms/CheckboxList/CheckboxList.stories",
   "../source/components/organisms/FormList/FormList.stories",
   "../source/components/organisms/PinInputModal/PinInputModal.stories",
+  "../source/components/organisms/StartNewApplicationModal/StartNewApplicationModal.stories",
   "../source/components/organisms/Step/Step.stories",
   "../source/components/organisms/Step/StepBanner/StepBanner.stories",
   "../source/components/organisms/Step/StepDescription/StepDescription.stories",
