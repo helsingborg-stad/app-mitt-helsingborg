@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import { findLastIndex } from "lodash";
 import { isObject } from "../../../helpers/Objects";
 import GroupedList from "../../molecules/GroupedList/GroupedList";
 import Text from "../../atoms/Text/Text";
@@ -42,9 +41,7 @@ const SumContainer = styled.View<{ colorSchema: string }>`
     props.theme.colors.complementary[props.colorSchema][3]};
 `;
 
-const SummarySpacer = styled.View<{
-  colorSchema: string;
-}>`
+const SummarySpacer = styled.View<{ colorSchema: string }>`
   margin-bottom: 16px;
   height: 4px;
   width: 32px;
@@ -131,6 +128,27 @@ const doSort = (answers: Answer[], sortField: string): Answer[] =>
   [...answers].sort(
     (a: Answer, b: Answer) => Number(a[sortField]) - Number(b[sortField])
   );
+
+/**
+ * Returns the index of the last element in the array where predicate is true, and -1
+ * otherwise.
+ * @param array The source array to search in
+ * @param predicate find calls predicate once for each element of the array, in descending
+ * order, until it finds one where predicate returns true. If such an element is found,
+ * findLastIndex immediately returns that element index. Otherwise, findLastIndex returns -1.
+ */
+function findLastIndex<T>(
+  array: Array<T>,
+  predicate: (value: T, index: number, obj: T[]) => boolean
+): number {
+  let l = array.length;
+  // eslint-disable-next-line no-plusplus
+  while (l--) {
+    if (predicate(array[l], l, array)) return l;
+  }
+  return -1;
+}
+
 /**
  * Summary list, that is linked and summarizes values from other input components.
  * The things to summarize is specified in the items prop.
@@ -450,8 +468,6 @@ const SummaryList: React.FC<Props> = ({
       );
     }
   });
-
-  // Remove last spacer from listItems
 
   const spacerCount = listItems.filter((item) =>
     item?.key?.toString().startsWith("spacer-")
