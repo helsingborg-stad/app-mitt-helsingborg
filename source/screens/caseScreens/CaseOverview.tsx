@@ -35,6 +35,7 @@ import {
   getPasswordForForm,
 } from "../../services/encryption/CaseEncryptionHelper";
 import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
+import StartNewApplicationModal from "../../components/organisms/StartNewApplicationModal/StartNewApplicationModal";
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 
@@ -155,35 +156,21 @@ const computeCaseCardComponent = (
         activeSubmittedCompletion);
 
   const buttonProps: InternalButtonProps = {
-    onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
+    onClick: () => navigation.onOpenForm(caseData),
     text: "",
     colorSchema: null,
   };
 
   const cardProps: InternalCardProps = {
     subtitle: caseData.status.name,
-    onClick: () => {
-      navigation.navigate("UserEvents", {
-        screen: caseData.caseType.navigateTo,
-        params: {
-          id: caseData.id,
-          name: caseData.caseType.name,
-        },
-      });
-    },
+    onClick: () => navigation.onOpenCaseSummary(caseData),
   };
 
   if (isClosed) {
     buttonProps.text = "Öppna";
 
     buttonProps.onClick = () => {
-      navigation.navigate("UserEvents", {
-        screen: caseData.caseType.navigateTo,
-        params: {
-          id: caseData.id,
-          name: caseData.caseType.name,
-        },
-      });
+      navigation.onOpenCaseSummary(caseData);
     };
   }
 
@@ -284,11 +271,17 @@ interface CaseWithExtra extends Case {
   password?: string;
 }
 
+interface CaseOverviewProps {
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+  };
+}
+
 /**
  * Case overview screen
  * @param {obj} props
  */
-function CaseOverview(props): JSX.Element {
+function CaseOverview(props: CaseOverviewProps): JSX.Element {
   const { navigation } = props;
   const [caseItems, setCaseItems] = useState<CaseWithExtra[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -296,6 +289,9 @@ function CaseOverview(props): JSX.Element {
   const [pinModalCase, setPinModalCase] = useState<Case | null>(null);
   const [pinModalError, setPinModalError] = useState<string | null>(null);
   const [pinModalName, setPinModalName] = useState<string | null>(null);
+  const [showStartNewApplicationModal, setShowNewApplicationModal] =
+    useState(false);
+
   const { getCasesByFormIds, fetchCases } = useContext(
     CaseState
   ) as Required<CaseContextState>;
@@ -419,17 +415,46 @@ function CaseOverview(props): JSX.Element {
       }
     }
   };
+
+  const handleOpenForm = (caseItem: CaseWithExtra, isSignMode?: boolean) => {
+    navigation.navigate("Form", { caseId: caseItem.id, isSignMode });
+  };
+
+  const handleOpenCaseSummary = (caseItem: CaseWithExtra) => {
+    navigation.navigate("UserEvents", {
+      screen: caseItem.caseType.navigateTo,
+      params: {
+        id: caseItem.id,
+        name: caseItem.caseType.name,
+      },
+    });
+  };
+
   const activeCaseCards = activeCases.map((caseData) =>
-    computeCaseCardComponent(caseData, navigation, authContext, () =>
-      showPinInput(caseData)
+    computeCaseCardComponent(
+      caseData,
+      { onOpenForm: handleOpenForm, onOpenCaseSummary: handleOpenCaseSummary },
+      authContext,
+      () => showPinInput(caseData)
     )
   );
 
   const closedCaseCards = closedCases.map((caseData) =>
-    computeCaseCardComponent(caseData, navigation, authContext, () =>
-      showPinInput(caseData)
+    computeCaseCardComponent(
+      caseData,
+      { onOpenForm: handleOpenForm, onOpenCaseSummary: handleOpenCaseSummary },
+      authContext,
+      () => showPinInput(caseData)
     )
   );
+
+  const handleFloatingButtonPressed = () => {
+    setShowNewApplicationModal(true);
+  };
+
+  const handleCloseApplicationModal = () => {
+    setShowNewApplicationModal(false);
+  };
 
   return (
     <ScreenWrapper {...props}>
@@ -501,9 +526,17 @@ function CaseOverview(props): JSX.Element {
         )}
       </Container>
 
+      {showStartNewApplicationModal && (
+        <StartNewApplicationModal
+          visible={showStartNewApplicationModal}
+          onClose={handleCloseApplicationModal}
+          onOpenForm={() => handleOpenForm(newCase)}
+        />
+      )}
+
       {newCase && (
         <FloatingButton
-          onPress={() => navigation.navigate("Form", { caseId: newCase.id })}
+          onPress={handleFloatingButtonPressed}
           text="Ansök om ekonomiskt bistånd"
           iconName="account-balance-wallet"
           position="center"

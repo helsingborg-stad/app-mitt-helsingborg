@@ -16,6 +16,7 @@ function loadStories() {
   require("../source/components/atoms/RadioButton/RadioButton.stories");
   require("../source/components/atoms/Select/Select.stories");
   require("../source/components/atoms/Text/Text.stories");
+  require("../source/components/atoms/TextButton/TextButton.stories");
   require("../source/components/molecules/AddressCard/AddressCard.stories");
   require("../source/components/molecules/BackNavigation/BackNavigation.stories");
   require("../source/components/molecules/CalendarPicker/CalendarPickerForm.stories");
@@ -66,6 +67,7 @@ const stories = [
   "../source/components/atoms/RadioButton/RadioButton.stories",
   "../source/components/atoms/Select/Select.stories",
   "../source/components/atoms/Text/Text.stories",
+  "../source/components/atoms/TextButton/TextButton.stories",
   "../source/components/molecules/AddressCard/AddressCard.stories",
   "../source/components/molecules/BackNavigation/BackNavigation.stories",
   "../source/components/molecules/CalendarPicker/CalendarPickerForm.stories",
