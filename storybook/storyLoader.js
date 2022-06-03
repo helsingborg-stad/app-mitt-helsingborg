@@ -38,6 +38,7 @@ function loadStories() {
   require("../source/components/molecules/RadioGroup/RadioGroup.stories");
   require("../source/components/molecules/RepeaterField/RepeaterField.stories");
   require("../source/components/molecules/ToastNotification/ToastNotifications.stories");
+  require("../source/components/organisms/AddCoApplicantModal/AddCoApplicantModal.stories");
   require("../source/components/organisms/BulletList/BulletList.stories");
   require("../source/components/organisms/CheckboxList/CheckboxList.stories");
   require("../source/components/organisms/FormList/FormList.stories");
@@ -90,6 +91,7 @@ const stories = [
   "../source/components/molecules/RadioGroup/RadioGroup.stories",
   "../source/components/molecules/RepeaterField/RepeaterField.stories",
   "../source/components/molecules/ToastNotification/ToastNotifications.stories",
+  "../source/components/organisms/AddCoApplicantModal/AddCoApplicantModal.stories",
   "../source/components/organisms/BulletList/BulletList.stories",
   "../source/components/organisms/CheckboxList/CheckboxList.stories",
   "../source/components/organisms/FormList/FormList.stories",
