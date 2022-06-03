@@ -36,6 +36,7 @@ import {
 } from "../../services/encryption/CaseEncryptionHelper";
 import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
 import StartNewApplicationModal from "../../components/organisms/StartNewApplicationModal/StartNewApplicationModal";
+import AddCoApplicantModal from "../../components/organisms/AddCoApplicantModal/AddCoApplicantModal";
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 
@@ -291,6 +292,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
   const [pinModalName, setPinModalName] = useState<string | null>(null);
   const [showStartNewApplicationModal, setShowNewApplicationModal] =
     useState(false);
+  const [showAddCoApplicantModal, setShowAddCoApplicantModal] = useState(false);
 
   const { getCasesByFormIds, fetchCases } = useContext(
     CaseState
@@ -456,6 +458,19 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     setShowNewApplicationModal(false);
   };
 
+  const handleCloseAddCoApplicantModal = () => {
+    setShowAddCoApplicantModal(false);
+  };
+
+  const handleOpenAddCoApplicantModal = () => {
+    handleCloseApplicationModal();
+    setShowAddCoApplicantModal(true);
+  };
+
+  const handleAddCoApplicant = async (personalNumber: string) => {
+    console.log("ADDING NEW APPLICANT: ", personalNumber);
+  };
+
   return (
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
@@ -531,6 +546,16 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
           visible={showStartNewApplicationModal}
           onClose={handleCloseApplicationModal}
           onOpenForm={() => handleOpenForm(newCase)}
+          onChangeModal={handleOpenAddCoApplicantModal}
+        />
+      )}
+
+      {showAddCoApplicantModal && (
+        <AddCoApplicantModal
+          visible={showAddCoApplicantModal}
+          onClose={handleCloseAddCoApplicantModal}
+          onAddCoApplicant={handleAddCoApplicant}
+          isLoading={false}
         />
       )}
 
