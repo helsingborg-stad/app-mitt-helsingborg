@@ -13,7 +13,7 @@ import { DialogContainer, Container } from "./AddCoApplicantModal.styled";
 
 interface AddCoApplicantContentProps {
   visible: boolean;
-  isLoading: boolean;
+  isLoading?: boolean;
   errorMessage?: string;
   onClose: () => void;
   onAddCoApplicant: (personalNumber: string) => Promise<void>;
@@ -21,7 +21,7 @@ interface AddCoApplicantContentProps {
 
 const AddCoApplicantContent = ({
   visible,
-  isLoading,
+  isLoading = false,
   errorMessage,
   onClose,
   onAddCoApplicant,
