@@ -9,6 +9,7 @@ import SummaryListItemComponent from "./SummaryListItem";
 import {
   getValidColorSchema,
   PrimaryColor,
+  ThemeType,
 } from "../../../styles/themeHelpers";
 import { Help } from "../../../types/FormTypes";
 import { InputType } from "../../atoms/Input/Input";
@@ -41,7 +42,12 @@ const SumContainer = styled.View<{ colorSchema: string }>`
     props.theme.colors.complementary[props.colorSchema][3]};
 `;
 
-const SummarySpacer = styled.View<{ colorSchema: string }>`
+interface SummarySpacerProps {
+  colorSchema: PrimaryColor;
+  theme: ThemeType;
+}
+
+const SummarySpacer = styled.View<SummarySpacerProps>`
   margin-bottom: 16px;
   height: 4px;
   width: 32px;
@@ -142,7 +148,6 @@ function findLastIndex<T>(
   predicate: (value: T, index: number, obj: T[]) => boolean
 ): number {
   let l = array.length;
-  // eslint-disable-next-line no-plusplus
   while (l--) {
     if (predicate(array[l], l, array)) return l;
   }
