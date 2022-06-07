@@ -16,6 +16,7 @@ const DialogContainer = styled.View<DialogContainerProps>`
   justify-content: space-between;
   border-radius: 10px;
   padding: 0px 16px 16px 16px;
+  height: 340px;
 `;
 
 interface ContainerProps {
