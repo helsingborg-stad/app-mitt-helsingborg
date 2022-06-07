@@ -66,6 +66,8 @@ const AddCoApplicantContent = ({
                 placeholder="ååååmmddxxxx"
                 value={personalNumber}
                 maxLength={12}
+                showErrorMessage={!!errorMessage}
+                error={{ message: errorMessage ?? "", isValid: false }}
               />
             </Container>
             <Container>
@@ -81,9 +83,6 @@ const AddCoApplicantContent = ({
                 >
                   <Text>Nästa</Text>
                 </Button>
-              )}
-              {!!errorMessage && (
-                <Text style={{ color: "red" }}>{errorMessage}</Text>
               )}
             </Container>
             <TextButton label="Avbryt" onPress={onClose} disabled={isLoading} />
