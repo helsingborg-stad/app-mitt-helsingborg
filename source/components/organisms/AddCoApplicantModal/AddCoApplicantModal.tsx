@@ -40,7 +40,6 @@ const AddCoApplicantContent = ({
   return (
     <Modal
       visible={visible}
-      hide={onClose}
       transparent
       presentationStyle="overFullScreen"
       animationType="fade"
