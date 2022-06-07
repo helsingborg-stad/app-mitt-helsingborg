@@ -37,9 +37,9 @@ export function replaceMarkdownText(state: FormReducerState) {
   const partnerPerson = findPersonByRole(persons, "coApplicant");
   const applicantPerson = findPersonByRole(persons, "applicant");
 
-  const computedPartnerInfo: PartnerInfo =
-    partnerInfo ||
-    (partnerPerson ? computePartnerPersonInfo(partnerPerson) : partnerInfo);
+  const computedPartnerInfo: PartnerInfo = partnerPerson
+    ? computePartnerPersonInfo(partnerPerson)
+    : partnerInfo;
 
   const computedApplicant: User = applicantPerson
     ? {
