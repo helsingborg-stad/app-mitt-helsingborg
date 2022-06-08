@@ -8,10 +8,10 @@ import {
   DefaultRouterOptions,
   createNavigatorFactory,
 } from "@react-navigation/native";
-import { Modal } from "react-native";
 import AuthContext from "../store/AuthContext";
 import Card from "../components/molecules/Card/Card";
 import Text from "../components/atoms/Text/Text";
+import { Modal } from "../components/molecules";
 import { BackgroundBlurWrapper } from "../components/atoms/BackgroundBlur";
 import useTouchActivity, {
   UseTouchParameters,
