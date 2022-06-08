@@ -64,7 +64,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Denna appen har tillgång till dina bilder.</string>
+	<string>Appen kan ladda upp dina bilder som underlag för ansökningar och kompletteringar.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
