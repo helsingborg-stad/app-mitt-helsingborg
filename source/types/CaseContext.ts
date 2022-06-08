@@ -54,6 +54,7 @@ export interface Dispatch {
   ) => Promise<Action>;
   deleteCase?: (caseId: string) => void;
   providePinForCase: (caseData: Case, pin: string) => Promise<void>;
+  addCoApplicant: (caseId: string, personalNumber: string) => Promise<void>;
 }
 
 export interface Action {

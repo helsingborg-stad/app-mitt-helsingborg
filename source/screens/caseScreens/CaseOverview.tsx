@@ -64,6 +64,19 @@ const PaddedContainer = styled.View`
   padding-top: 16px;
 `;
 
+enum Modal {
+  PIN_INPUT,
+  START_NEW_APPLICATION,
+  ADD_CO_APPLICANT,
+}
+
+interface ActiveModal {
+  modal?: Modal;
+  error?: string;
+  loading?: boolean;
+  data?: Record<string, unknown>;
+}
+
 interface InternalCardProps {
   subtitle: string;
   description?: string;
@@ -287,17 +300,13 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
   const [caseItems, setCaseItems] = useState<CaseWithExtra[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [pinModalCase, setPinModalCase] = useState<Case | null>(null);
-  const [pinModalError, setPinModalError] = useState<string | null>(null);
-  const [pinModalName, setPinModalName] = useState<string | null>(null);
-  const [showStartNewApplicationModal, setShowNewApplicationModal] =
-    useState(false);
-  const [showAddCoApplicantModal, setShowAddCoApplicantModal] = useState(false);
+  const [activeModal, setActiveModal] = useState<ActiveModal>({});
 
   const { getCasesByFormIds, fetchCases } = useContext(
     CaseState
   ) as Required<CaseContextState>;
-  const { providePinForCase } = useContext<CaseContextDispatch>(CaseDispatch);
+  const { providePinForCase, addCoApplicant } =
+    useContext<CaseContextDispatch>(CaseDispatch);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
@@ -391,38 +400,89 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     void updateItems();
   }, [authContext.user, getCasesByFormIds, getForm, getFormIdsByFormTypes]);
 
-  const showPinInput = (caseData: Case) => {
+  const openForm = (caseItem: CaseWithExtra, isSignMode?: boolean) => {
+    navigation.navigate("Form", { caseId: caseItem.id, isSignMode });
+  };
+
+  const openModal = (
+    modal: Modal,
+    modalConfig: Record<string, unknown> = {}
+  ) => {
+    setActiveModal({ modal, ...modalConfig });
+  };
+
+  const closeOpenModal = () => setActiveModal({});
+
+  const openStartNewApplicationModal = () =>
+    openModal(Modal.START_NEW_APPLICATION);
+
+  const openAddCoApplicantModal = () => openModal(Modal.ADD_CO_APPLICANT);
+
+  const openPinInputModal = (caseData: Case) => {
     const mainPerson = caseData.persons?.find(
       (person) => person.role === "applicant"
     );
-    setPinModalName(mainPerson?.firstName ?? null);
-    setPinModalCase(caseData);
+
+    if (mainPerson?.firstName) {
+      openModal(Modal.PIN_INPUT, {
+        data: {
+          modalName: mainPerson.firstName,
+        },
+      });
+    }
   };
 
-  const onClosePinModal = () => {
-    setPinModalError(null);
-    setPinModalCase(null);
+  const setModalError = (errorMessage: string) => {
+    setActiveModal((oldValue) => ({
+      ...oldValue,
+      error: errorMessage,
+      loading: false,
+    }));
+  };
+
+  const setModalLoading = (loading: boolean) => {
+    setActiveModal((oldValue) => ({
+      ...oldValue,
+      loading,
+      error: "",
+    }));
+  };
+
+  const handleAddCoApplicant = async (
+    caseItem: CaseWithExtra,
+    personalNumber: string
+  ) => {
+    setModalLoading(true);
+
+    const [addCoApplicantError] = await to(
+      addCoApplicant(caseItem.id, personalNumber)
+    );
+    setModalLoading(false);
+
+    if (addCoApplicantError) {
+      const errorMessage = addCoApplicantError?.message ?? "Något gick fel";
+      setModalError(errorMessage);
+    } else {
+      openForm(caseItem);
+    }
   };
 
   const onEnteredPinForCase = async (pin: string) => {
-    if (pinModalCase) {
-      const [provideError] = await to(providePinForCase(pinModalCase, pin));
+    if (activeModal?.data?.case) {
+      const [provideError] = await to(
+        providePinForCase(activeModal?.data?.case as Case, pin)
+      );
       if (provideError) {
         console.warn("provide pin error:", provideError);
-        setPinModalError("Något blev fel");
+        setModalError("Något blev fel");
       } else {
-        setPinModalError(null);
-        setPinModalCase(null);
+        closeOpenModal();
         onRefresh();
       }
     }
   };
 
-  const handleOpenForm = (caseItem: CaseWithExtra, isSignMode?: boolean) => {
-    navigation.navigate("Form", { caseId: caseItem.id, isSignMode });
-  };
-
-  const handleOpenCaseSummary = (caseItem: CaseWithExtra) => {
+  const openCaseSummary = (caseItem: CaseWithExtra) => {
     navigation.navigate("UserEvents", {
       screen: caseItem.caseType.navigateTo,
       params: {
@@ -435,52 +495,25 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
   const activeCaseCards = activeCases.map((caseData) =>
     computeCaseCardComponent(
       caseData,
-      { onOpenForm: handleOpenForm, onOpenCaseSummary: handleOpenCaseSummary },
+      { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
       authContext,
-      () => showPinInput(caseData)
+      () => openPinInputModal(caseData)
     )
   );
 
   const closedCaseCards = closedCases.map((caseData) =>
     computeCaseCardComponent(
       caseData,
-      { onOpenForm: handleOpenForm, onOpenCaseSummary: handleOpenCaseSummary },
+      { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
       authContext,
-      () => showPinInput(caseData)
+      () => openPinInputModal(caseData)
     )
   );
-
-  const handleFloatingButtonPressed = () => {
-    setShowNewApplicationModal(true);
-  };
-
-  const handleCloseApplicationModal = () => {
-    setShowNewApplicationModal(false);
-  };
-
-  const handleCloseAddCoApplicantModal = () => {
-    setShowAddCoApplicantModal(false);
-  };
-
-  const handleOpenAddCoApplicantModal = () => {
-    handleCloseApplicationModal();
-    setShowAddCoApplicantModal(true);
-  };
-
-  const handleAddCoApplicant = async (personalNumber: string) => {
-    console.log("ADDING NEW APPLICANT: ", personalNumber);
-  };
 
   return (
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
-      <PinInputModal
-        name={pinModalName ?? ""}
-        visible={pinModalCase !== null}
-        onClose={onClosePinModal}
-        onPinEntered={onEnteredPinForCase}
-        error={pinModalError ?? undefined}
-      />
+
       <Container
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -541,27 +574,40 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
         )}
       </Container>
 
-      {showStartNewApplicationModal && (
-        <StartNewApplicationModal
-          visible={showStartNewApplicationModal}
-          onClose={handleCloseApplicationModal}
-          onOpenForm={() => handleOpenForm(newCase)}
-          onChangeModal={handleOpenAddCoApplicantModal}
+      {activeModal.modal === Modal.PIN_INPUT && (
+        <PinInputModal
+          name={(activeModal?.data?.modalName as string) ?? ""}
+          visible
+          onClose={closeOpenModal}
+          onPinEntered={onEnteredPinForCase}
+          error={activeModal?.error}
         />
       )}
 
-      {showAddCoApplicantModal && (
+      {activeModal.modal === Modal.START_NEW_APPLICATION && (
+        <StartNewApplicationModal
+          visible
+          onClose={closeOpenModal}
+          onOpenForm={() => openForm(newCase)}
+          onChangeModal={openAddCoApplicantModal}
+        />
+      )}
+
+      {activeModal.modal === Modal.ADD_CO_APPLICANT && (
         <AddCoApplicantModal
-          visible={showAddCoApplicantModal}
-          onClose={handleCloseAddCoApplicantModal}
-          onAddCoApplicant={handleAddCoApplicant}
-          isLoading={false}
+          visible
+          onClose={closeOpenModal}
+          onAddCoApplicant={(personalNumber) =>
+            handleAddCoApplicant(newCase, personalNumber)
+          }
+          isLoading={activeModal.loading}
+          errorMessage={activeModal.error}
         />
       )}
 
       {newCase && (
         <FloatingButton
-          onPress={handleFloatingButtonPressed}
+          onPress={openStartNewApplicationModal}
           text="Ansök om ekonomiskt bistånd"
           iconName="account-balance-wallet"
           position="center"

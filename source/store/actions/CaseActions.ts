@@ -251,3 +251,22 @@ export async function fetchCases(user: UserInterface): Promise<Action> {
     payload: {},
   };
 }
+
+export async function addCaseCoApplicant(
+  caseId: string,
+  personalNumber: string
+): Promise<{ type: ActionTypes.UPDATE_CASE; payload: Case }> {
+  const addCoApplicantResult = await post(
+    `/viva-cases/${caseId}/persons`,
+    JSON.stringify({ casePerson: { personalNumber } })
+  );
+
+  if (addCoApplicantResult?.status !== 200) {
+    throw addCoApplicantResult?.data;
+  }
+
+  return {
+    type: ActionTypes.UPDATE_CASE,
+    payload: addCoApplicantResult.data.data,
+  };
+}

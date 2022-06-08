@@ -19,6 +19,7 @@ import {
   createCase as create,
   deleteCase as remove,
   fetchCases as fetch,
+  addCaseCoApplicant,
 } from "./actions/CaseActions";
 
 import { replaceCaseItemText } from "../containers/Form/hooks/textReplacement";
@@ -127,6 +128,15 @@ function CaseProvider({
     }
   }
 
+  const addCoApplicant = async (caseId: string, personalNumber: string) => {
+    const addCoApplicantResult = await addCaseCoApplicant(
+      caseId,
+      personalNumber
+    );
+
+    dispatch(addCoApplicantResult);
+  };
+
   const fetchCases = useCallback(async () => {
     const fetchData = await fetch(user);
 
@@ -172,6 +182,7 @@ function CaseProvider({
     updateCase,
     deleteCase,
     providePinForCase,
+    addCoApplicant,
   };
 
   return (
