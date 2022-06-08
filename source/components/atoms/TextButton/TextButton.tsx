@@ -7,14 +7,12 @@ interface TextButtonProps {
   disabled?: boolean;
   onPress: () => void;
 }
-const TextButton = ({
-  label,
-  disabled = false,
-  onPress,
-}: TextButtonProps): JSX.Element => (
-  <TextButtonContainer onPress={onPress} disabled={disabled}>
-    <ButtonText disabled={disabled}>{label}</ButtonText>
-  </TextButtonContainer>
-);
+export default function TextButton(props: TextButtonProps): JSX.Element {
+  const { label, disabled, onPress } = props;
 
-export default TextButton;
+  return (
+    <TextButtonContainer onPress={onPress} disabled={disabled}>
+      <ButtonText disabled={disabled}>{label}</ButtonText>
+    </TextButtonContainer>
+  );
+}
