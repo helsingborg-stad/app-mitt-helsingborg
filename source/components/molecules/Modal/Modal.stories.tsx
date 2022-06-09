@@ -18,7 +18,12 @@ const ModalExample = () => {
 
   return (
     <View>
-      <Modal color="purple" visible={visible} hide={toggleModal}>
+      <Modal
+        color="purple"
+        visible={visible}
+        hide={toggleModal}
+        backgroundBlur={false}
+      >
         <Text>Children 1</Text>
         <Text>Children 2</Text>
         <Button onClick={toggleModal}>

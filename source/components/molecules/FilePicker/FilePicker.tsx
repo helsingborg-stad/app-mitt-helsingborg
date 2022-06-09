@@ -1,6 +1,5 @@
 import React from "react";
 import { Text, Icon, Button } from "../../atoms";
-import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import { Modal, useModal } from "../Modal";
 import {
   getValidColorSchema,
@@ -150,30 +149,28 @@ const FilePicker: React.FC<Props> = ({
         transparent
         animationType="fade"
       >
-        <BackgroundBlurWrapper>
-          <PopupContainer colorSchema={validColorSchema}>
-            {fileTypes.map((type, index) => (
-              <React.Fragment key={type}>
-                <PopupLabel
-                  labelText={modalMenuItems[type].label}
-                  showCloseButton={index === 0}
-                  colorSchema={validColorSchema}
-                  onClick={toggleChoiceModal}
-                />
+        <PopupContainer colorSchema={validColorSchema}>
+          {fileTypes.map((type, index) => (
+            <React.Fragment key={type}>
+              <PopupLabel
+                labelText={modalMenuItems[type].label}
+                showCloseButton={index === 0}
+                colorSchema={validColorSchema}
+                onClick={toggleChoiceModal}
+              />
 
-                {modalMenuItems[type].buttons.map((button) => (
-                  <PopupButton
-                    key={button.buttonText}
-                    colorSchema={validColorSchema}
-                    icon={button.icon}
-                    buttonText={button.buttonText}
-                    onClick={button.callback}
-                  />
-                ))}
-              </React.Fragment>
-            ))}
-          </PopupContainer>
-        </BackgroundBlurWrapper>
+              {modalMenuItems[type].buttons.map((button) => (
+                <PopupButton
+                  key={button.buttonText}
+                  colorSchema={validColorSchema}
+                  icon={button.icon}
+                  buttonText={button.buttonText}
+                  onClick={button.callback}
+                />
+              ))}
+            </React.Fragment>
+          ))}
+        </PopupContainer>
       </Modal>
     </>
   );

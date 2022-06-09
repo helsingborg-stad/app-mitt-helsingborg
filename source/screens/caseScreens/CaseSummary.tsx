@@ -427,7 +427,7 @@ const CaseSummary = (props) => {
         )}
       </Container>
 
-      <Modal visible={isModalVisible} hide={toggleModal}>
+      <Modal visible={isModalVisible} hide={toggleModal} backgroundBlur={false}>
         <CloseModalButton
           onClose={toggleModal}
           primary={false}

@@ -8,7 +8,6 @@ import {
 } from "../../../styles/themeHelpers";
 import { Modal } from "../Modal";
 import { Button, Text, Heading } from "../../atoms";
-import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import MarkdownConstructor from "../../../helpers/MarkdownConstructor";
 
 const UnifiedPadding = [12, 24]; // Vertical padding, Horizontal padding
@@ -107,39 +106,35 @@ const InfoModal: React.FC<Props> = ({
       transparent
       presentationStyle="overFullScreen"
       animationType="fade"
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...other}
     >
-      <BackgroundBlurWrapper>
-        <PopupContainer height={Math.min(0.7 * windowHeight, height)}>
-          <Wrapper
-            onLayout={(layoutEvent) => {
-              setHeight(layoutEvent.nativeEvent.layout.height);
-            }}
-          >
-            {heading && (
-              <Header>
-                <Heading>{heading}</Heading>
-              </Header>
-            )}
-            <Form>
-              <MarkdownConstructor
-                rules={markdownRules}
-                rawText={markdownText}
-              />
-            </Form>
-            <Footer>
-              <Button
-                z={0}
-                block
-                onClick={toggleModal}
-                colorSchema={validColorSchema}
-              >
-                <Text>{buttonText || "Stäng"}</Text>
-              </Button>
-            </Footer>
-          </Wrapper>
-        </PopupContainer>
-      </BackgroundBlurWrapper>
+      <PopupContainer height={Math.min(0.7 * windowHeight, height)}>
+        <Wrapper
+          onLayout={(layoutEvent) => {
+            setHeight(layoutEvent.nativeEvent.layout.height);
+          }}
+        >
+          {heading && (
+            <Header>
+              <Heading>{heading}</Heading>
+            </Header>
+          )}
+          <Form>
+            <MarkdownConstructor rules={markdownRules} rawText={markdownText} />
+          </Form>
+          <Footer>
+            <Button
+              z={0}
+              block
+              onClick={toggleModal}
+              colorSchema={validColorSchema}
+            >
+              <Text>{buttonText || "Stäng"}</Text>
+            </Button>
+          </Footer>
+        </Wrapper>
+      </PopupContainer>
     </Modal>
   );
 };

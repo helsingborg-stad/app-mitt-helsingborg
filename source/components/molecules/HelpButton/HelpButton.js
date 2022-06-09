@@ -78,7 +78,7 @@ const HelpButton = (props) => {
 
   return (
     <>
-      <Modal visible={isModalVisible} hide={toggleModal}>
+      <Modal visible={isModalVisible} hide={toggleModal} backgroundBlur={false}>
         <ModalContainer>
           <CloseModal showBackButton={false} onClose={toggleModal} />
           <Container>

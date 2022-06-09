@@ -1,7 +1,5 @@
 import React from "react";
 
-import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
-
 import { Modal } from "../Modal";
 import Body from "./Body";
 import Wrapper from "./Wrapper";
@@ -21,11 +19,9 @@ const Dialog: React.FC<Props> = ({ visible, children }) => (
     animationType="fade"
     statusBarTranslucent
   >
-    <BackgroundBlurWrapper>
-      <Wrapper>
-        <Body>{children}</Body>
-      </Wrapper>
-    </BackgroundBlurWrapper>
+    <Wrapper>
+      <Body>{children}</Body>
+    </Wrapper>
   </Modal>
 );
 

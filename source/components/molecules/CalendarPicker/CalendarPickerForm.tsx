@@ -91,6 +91,7 @@ const CalendarPickerForm: React.FC<PropInterface> = ({
         visible={modalVisible}
         presentationStyle="overFullScreen"
         hide={toggleModal}
+        backgroundBlur={false}
       >
         <CalendarContainer>
           <CalendarStyle>

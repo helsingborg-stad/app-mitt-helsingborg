@@ -5,7 +5,6 @@ import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker";
 import uuid from "react-native-uuid";
 import styled from "styled-components/native";
 import { Text, Button, Icon, Label } from "../../atoms";
-import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import { Modal, useModal } from "../Modal";
 import {
   getValidColorSchema,
@@ -219,46 +218,44 @@ const ImageUploader: React.FC<Props> = ({
         transparent
         animationType="fade"
       >
-        <BackgroundBlurWrapper>
-          <PopupContainer colorSchema={validColorSchema}>
-            <Row>
-              <PopupLabel colorSchema={validColorSchema}>
-                Lägg till bild
-              </PopupLabel>
-              <TouchableOpacity onPress={toggleModal} activeOpacity={1}>
-                <Icon name="clear" />
-              </TouchableOpacity>
-            </Row>
-            <PopupButton
-              colorSchema={validColorSchema}
-              block
-              variant="outlined"
-              onClick={() => {
-                toggleModal();
-                /** There's an issue on iOS with triggering the library before the modal has closed,
-                 * so as a simple fix, we add a timeout (since toggleModal is async) */
-                setTimeout(addImageFromCamera, 700);
-              }}
-            >
-              <Icon name="camera-alt" />
-              <Text>Kamera</Text>
-            </PopupButton>
-            <PopupButton
-              colorSchema={validColorSchema}
-              block
-              variant="outlined"
-              onClick={() => {
-                toggleModal();
-                /** There's an issue on iOS with triggering the library before the modal has closed,
-                 * so as a simple fix, we add a timeout (since toggleModal is async) */
-                setTimeout(addImagesFromLibrary, 700);
-              }}
-            >
-              <Icon name="add-photo-alternate" />
-              <Text>Bildbibliotek</Text>
-            </PopupButton>
-          </PopupContainer>
-        </BackgroundBlurWrapper>
+        <PopupContainer colorSchema={validColorSchema}>
+          <Row>
+            <PopupLabel colorSchema={validColorSchema}>
+              Lägg till bild
+            </PopupLabel>
+            <TouchableOpacity onPress={toggleModal} activeOpacity={1}>
+              <Icon name="clear" />
+            </TouchableOpacity>
+          </Row>
+          <PopupButton
+            colorSchema={validColorSchema}
+            block
+            variant="outlined"
+            onClick={() => {
+              toggleModal();
+              /** There's an issue on iOS with triggering the library before the modal has closed,
+               * so as a simple fix, we add a timeout (since toggleModal is async) */
+              setTimeout(addImageFromCamera, 700);
+            }}
+          >
+            <Icon name="camera-alt" />
+            <Text>Kamera</Text>
+          </PopupButton>
+          <PopupButton
+            colorSchema={validColorSchema}
+            block
+            variant="outlined"
+            onClick={() => {
+              toggleModal();
+              /** There's an issue on iOS with triggering the library before the modal has closed,
+               * so as a simple fix, we add a timeout (since toggleModal is async) */
+              setTimeout(addImagesFromLibrary, 700);
+            }}
+          >
+            <Icon name="add-photo-alternate" />
+            <Text>Bildbibliotek</Text>
+          </PopupButton>
+        </PopupContainer>
       </Modal>
     </>
   );

@@ -12,7 +12,6 @@ import AuthContext from "../store/AuthContext";
 import Card from "../components/molecules/Card/Card";
 import Text from "../components/atoms/Text/Text";
 import { Modal } from "../components/molecules";
-import { BackgroundBlurWrapper } from "../components/atoms/BackgroundBlur";
 import useTouchActivity, {
   UseTouchParameters,
 } from "../hooks/useTouchActivity";
@@ -128,30 +127,28 @@ const CustomNavigator = ({
       presentationStyle="overFullScreen"
       animationType="fade"
     >
-      <BackgroundBlurWrapper>
-        <PopupContainer>
-          <ContentContainer>
-            <Card colorSchema="neutral">
-              <Card.Body>
-                <Card.Title>Är du fortfarande där?</Card.Title>
-                <Card.Text>
-                  Du har varit inaktiv under en längre tid, för att fortsätta
-                  använda appen behöver du göra ett aktivt val.
-                </Card.Text>
-                <Card.Button colorSchema="red" onClick={handleEndUserSession}>
-                  <Text>Nej</Text>
-                </Card.Button>
-                <Card.Button
-                  colorSchema="green"
-                  onClick={handleContinueUserSession}
-                >
-                  <Text>Ja</Text>
-                </Card.Button>
-              </Card.Body>
-            </Card>
-          </ContentContainer>
-        </PopupContainer>
-      </BackgroundBlurWrapper>
+      <PopupContainer>
+        <ContentContainer>
+          <Card colorSchema="neutral">
+            <Card.Body>
+              <Card.Title>Är du fortfarande där?</Card.Title>
+              <Card.Text>
+                Du har varit inaktiv under en längre tid, för att fortsätta
+                använda appen behöver du göra ett aktivt val.
+              </Card.Text>
+              <Card.Button colorSchema="red" onClick={handleEndUserSession}>
+                <Text>Nej</Text>
+              </Card.Button>
+              <Card.Button
+                colorSchema="green"
+                onClick={handleContinueUserSession}
+              >
+                <Text>Ja</Text>
+              </Card.Button>
+            </Card.Body>
+          </Card>
+        </ContentContainer>
+      </PopupContainer>
     </Modal>
   );
 

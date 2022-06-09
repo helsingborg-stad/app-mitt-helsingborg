@@ -354,7 +354,11 @@ const Form: React.FC<Props> = ({
         <StatusBar hidden />
         {stepComponents[formState.currentPosition.currentMainStepIndex]}
       </ScreenWrapper>
-      <Modal visible={formState.currentPosition.level > 0} hide={toggleModal}>
+      <Modal
+        visible={formState.currentPosition.level > 0}
+        backgroundBlur={false}
+        hide={toggleModal}
+      >
         {stepComponents[formState.currentPosition.index]}
       </Modal>
       {hasSigned && !hasUploaded && attachments.length > 0 && (

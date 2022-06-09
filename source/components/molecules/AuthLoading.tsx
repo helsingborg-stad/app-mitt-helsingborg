@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import React, { useEffect, useRef } from "react";
 import { Animated, Easing, View } from "react-native";
 import styled from "styled-components/native";
-import { BackgroundBlurWrapper } from "../atoms/BackgroundBlur";
 import theme from "../../styles/theme";
 import Button from "../atoms/Button/Button";
 import Icon from "../atoms/Icon";
@@ -96,32 +95,30 @@ const AuthLoading = (props) => {
         visible={isLoading}
         hide={() => undefined}
       >
-        <BackgroundBlurWrapper>
-          <Container>
-            <Box>
-              <AuthActivityIndicator
-                size="large"
-                color={theme.colors.primary[colorSchema][1]}
-              />
-              {authenticateOnExternalDevice ? (
-                <InfoText>
-                  Väntar på att BankID ska startas på en annan enhet
-                </InfoText>
-              ) : (
-                <InfoText>Väntar på mobilt BankID</InfoText>
-              )}
-              <AbortButton
-                z={0}
-                colorSchema="neutral"
-                size="large"
-                onClick={cancelSignIn}
-                block
-              >
-                <ButtonText>Avbryt</ButtonText>
-              </AbortButton>
-            </Box>
-          </Container>
-        </BackgroundBlurWrapper>
+        <Container>
+          <Box>
+            <AuthActivityIndicator
+              size="large"
+              color={theme.colors.primary[colorSchema][1]}
+            />
+            {authenticateOnExternalDevice ? (
+              <InfoText>
+                Väntar på att BankID ska startas på en annan enhet
+              </InfoText>
+            ) : (
+              <InfoText>Väntar på mobilt BankID</InfoText>
+            )}
+            <AbortButton
+              z={0}
+              colorSchema="neutral"
+              size="large"
+              onClick={cancelSignIn}
+              block
+            >
+              <ButtonText>Avbryt</ButtonText>
+            </AbortButton>
+          </Box>
+        </Container>
       </Modal>
     </>
   );

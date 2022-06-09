@@ -92,7 +92,7 @@ const PdfItem: React.FC<Props> = ({ pdf, onRemove }) => {
           </Pressable>
         </Container>
       </Flex>
-      <Modal visible={modalVisible} hide={toggleModal}>
+      <Modal visible={modalVisible} hide={toggleModal} backgroundBlur={false}>
         <PdfInModal
           source={{ uri: pdf.uri }}
           width={Dimensions.get("window").width}
