@@ -9,8 +9,6 @@ import { Text, Button, TextButton } from "../../atoms";
 
 import { ValidationHelper } from "../../../helpers";
 
-import { AddCoApplicantParameters } from "../../../types/CaseContext";
-
 import InputFields from "./InputFields";
 
 import {
@@ -19,19 +17,8 @@ import {
   ErrorText,
 } from "./AddCoApplicantModal.styled";
 
-export enum InputField {
-  personalNumber = "personalNumber",
-  fistName = "firstName",
-  lastName = "lastName",
-}
-
-interface AddCoApplicantModalProps {
-  visible: boolean;
-  isLoading?: boolean;
-  errorMessage?: string;
-  onClose: () => void;
-  onAddCoApplicant: (parameters: AddCoApplicantParameters) => Promise<void>;
-}
+import type { Props } from "./AddCoApplicantModal.types";
+import { InputField } from "./AddCoApplicantModal.types";
 
 export default function AddCoApplicantModal({
   visible,
@@ -39,7 +26,7 @@ export default function AddCoApplicantModal({
   errorMessage = "",
   onClose,
   onAddCoApplicant,
-}: AddCoApplicantModalProps): JSX.Element {
+}: Props): JSX.Element {
   const [inputValue, setInputValues] = useState({
     [InputField.personalNumber]: "",
     [InputField.fistName]: "",
