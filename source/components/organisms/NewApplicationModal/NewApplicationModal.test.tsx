@@ -19,6 +19,12 @@ const renderComponent = ({
     />
   );
 
+it("renders without crashing", () => {
+  const component = () => renderComponent({});
+
+  expect(component).not.toThrow();
+});
+
 it("calls the onClose callback when close button is clicked", () => {
   const cancelButtonText = "Avbryt";
   const onCloseMock = jest.fn();
