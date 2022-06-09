@@ -7,6 +7,8 @@ import StoryWrapper from "../../molecules/StoryWrapper";
 
 import AddCoApplicantModal from "./AddCoApplicantModal";
 
+import { AddCoApplicantParameters } from "../../../types/CaseContext";
+
 const Container = styled.View`
   width: 100%;
   height: 100%;
@@ -14,17 +16,17 @@ const Container = styled.View`
 
 const OverviewExamples = () => {
   const [showModal, setShowModal] = useState(false);
-  const [personalNumber, setPersonalNumber] = useState("");
+  const [parameters, setParameters] = useState({});
   const [isLoading, setIsloading] = useState(false);
 
   const toggleShowModal = () => {
-    setPersonalNumber("");
+    setParameters({});
     setShowModal((oldValue) => !oldValue);
   };
 
-  const addApplicant = async (newPersonalNumber: string) => {
+  const addApplicant = async (newParameters: AddCoApplicantParameters) => {
     setIsloading(true);
-    setPersonalNumber(newPersonalNumber);
+    setParameters(newParameters);
     setTimeout(() => {
       setIsloading(false);
       setShowModal(false);
@@ -39,7 +41,7 @@ const OverviewExamples = () => {
         onAddCoApplicant={addApplicant}
         isLoading={isLoading}
       />
-      <Text>Personal number added: {personalNumber}</Text>
+      <Text>Personal number added: {parameters}</Text>
       <Button title="Show modal" onPress={toggleShowModal} />
     </>
   );
