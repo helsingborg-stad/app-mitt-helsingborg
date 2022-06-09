@@ -5,7 +5,7 @@ import { Input } from "../../atoms";
 
 import InputLabel from "./InputFields.styled";
 
-interface InputField {
+export interface InputField {
   testId: string;
   label: string;
   placeholder?: string;
