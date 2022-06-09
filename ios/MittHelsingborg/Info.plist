@@ -60,11 +60,11 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Denna appen har tillgång till kamera för att ta bilder.</string>
+	<string>Appen använder kameran för att ta bilder som kan användas som underlag för ansökningar och kompletteringar.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Denna appen har tillgång till dina bilder.</string>
+	<string>Appen kan ladda upp dina bilder som underlag för ansökningar och kompletteringar.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
