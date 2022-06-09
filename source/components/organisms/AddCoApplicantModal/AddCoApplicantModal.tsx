@@ -71,7 +71,7 @@ const AddCoApplicantContent = ({
   const inputFields = [
     {
       testId: "personal-number-input",
-      label: "Personnummer",
+      label: "Personnummer*",
       placeholder: "ååååmmddxxxx",
       value: inputValue.personalNumber,
       maxLength: 12,
@@ -79,13 +79,13 @@ const AddCoApplicantContent = ({
     },
     {
       testId: "first-name-input",
-      label: "Förnamn",
+      label: "Förnamn*",
       value: inputValue.firstName,
       onChange: setFirstName,
     },
     {
       testId: "last-name-input",
-      label: "Efternamn",
+      label: "Efternamn*",
       value: inputValue.lastName,
       onChange: setLastName,
     },
