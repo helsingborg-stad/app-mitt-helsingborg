@@ -116,7 +116,7 @@ const AddCoApplicantContent = ({
 
               <InputFields fields={inputFields} />
 
-              {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
+              {!!errorMessage && <ErrorText>{errorMessage}</ErrorText>}
             </Container>
             <Container>
               {isLoading && <ActivityIndicator size="large" />}
