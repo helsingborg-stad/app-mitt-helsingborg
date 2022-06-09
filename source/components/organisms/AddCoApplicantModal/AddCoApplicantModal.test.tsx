@@ -32,6 +32,14 @@ const renderComponent = ({
     />
   );
 
+it("renders without crashing", () => {
+  const onCloseMock = jest.fn();
+
+  const component = () => renderComponent({ onClose: onCloseMock });
+
+  expect(component).not.toThrow();
+});
+
 it("calls the onClose callback when close button is clicked", () => {
   const onCloseMock = jest.fn();
 
