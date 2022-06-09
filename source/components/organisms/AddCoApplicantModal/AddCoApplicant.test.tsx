@@ -1,5 +1,6 @@
 import React from "react";
 import { fireEvent, waitFor } from "@testing-library/react-native";
+import { ReactTestInstance } from "react-test-renderer";
 
 import { render } from "../../../../test-utils";
 
@@ -7,7 +8,13 @@ import AddCoApplicantModal from "./AddCoApplicantModal";
 
 const nextButtonText = "Nästa";
 const cancelButtonText = "Avbryt";
-const inputTestId = "personal-number-input";
+const personalNumberTestId = "personal-number-input";
+const firstNameTestId = "first-name-input";
+const lastNameTestId = "last-name-input";
+
+const makeChangeTextEvent = (input: ReactTestInstance, value: string) => {
+  fireEvent.changeText(input, value);
+};
 
 const renderComponent = ({
   onClose = jest.fn(),
@@ -36,7 +43,7 @@ it("calls the onClose callback when close button is clicked", () => {
   expect(onCloseMock).toHaveBeenCalled();
 });
 
-it("disables the next button when no valid personal number is added", () => {
+it("disables the next button when not all valid input is added", () => {
   const invalidPersonalNumber = "123";
   const onAddCoApplicantMock = jest.fn();
 
@@ -44,7 +51,7 @@ it("disables the next button when no valid personal number is added", () => {
     onAddCoApplicant: onAddCoApplicantMock,
   });
 
-  const input = getByTestId(inputTestId);
+  const input = getByTestId(personalNumberTestId);
   fireEvent.changeText(input, invalidPersonalNumber);
 
   const buttonElement = getByText(nextButtonText);
@@ -54,22 +61,30 @@ it("disables the next button when no valid personal number is added", () => {
   expect(buttonElement).toBeDisabled();
 });
 
-it("invokes onAddApplicant callback with valid personal number", async () => {
+it("invokes onAddApplicant callback when valid input is added", async () => {
   const validPersonalNumber = "199009111111";
+  const validFirstName = "Kenth";
+  const validLastName = "Andersson";
+
   const onAddCoApplicantMock = jest.fn().mockResolvedValueOnce(true);
 
   const { getByText, getByTestId } = renderComponent({
     onAddCoApplicant: onAddCoApplicantMock,
   });
 
-  const input = getByTestId(inputTestId);
-  fireEvent.changeText(input, validPersonalNumber);
+  makeChangeTextEvent(getByTestId(personalNumberTestId), validPersonalNumber);
+  makeChangeTextEvent(getByTestId(firstNameTestId), validFirstName);
+  makeChangeTextEvent(getByTestId(lastNameTestId), validLastName);
 
   const buttonElement = getByText(nextButtonText);
   fireEvent.press(buttonElement);
 
   await waitFor(() => {
-    expect(onAddCoApplicantMock).toHaveBeenCalledWith(validPersonalNumber);
+    expect(onAddCoApplicantMock).toHaveBeenCalledWith({
+      personalNumber: validPersonalNumber,
+      lastName: validLastName,
+      firstName: validFirstName,
+    });
   });
 });
 
