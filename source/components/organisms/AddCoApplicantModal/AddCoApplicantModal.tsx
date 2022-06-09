@@ -25,7 +25,7 @@ export enum InputField {
   lastName = "lastName",
 }
 
-interface AddCoApplicantContentProps {
+interface AddCoApplicantModalProps {
   visible: boolean;
   isLoading?: boolean;
   errorMessage?: string;
@@ -33,13 +33,13 @@ interface AddCoApplicantContentProps {
   onAddCoApplicant: (parameters: AddCoApplicantParameters) => Promise<void>;
 }
 
-const AddCoApplicantContent = ({
+export default function AddCoApplicantModal({
   visible,
   isLoading = false,
-  errorMessage,
+  errorMessage = "",
   onClose,
   onAddCoApplicant,
-}: AddCoApplicantContentProps): JSX.Element => {
+}: AddCoApplicantModalProps): JSX.Element {
   const [inputValue, setInputValues] = useState({
     [InputField.personalNumber]: "",
     [InputField.fistName]: "",
@@ -139,6 +139,4 @@ const AddCoApplicantContent = ({
       </BackgroundBlurWrapper>
     </Modal>
   );
-};
-
-export default AddCoApplicantContent;
+}
