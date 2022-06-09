@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, KeyboardTypeOptions } from "react-native";
 
 import Wrapper from "../../molecules/Dialog/Wrapper";
 import { Modal } from "../../molecules/Modal";
@@ -72,6 +72,7 @@ const AddCoApplicantContent = ({
       testId: "personal-number-input",
       label: "Personnummer*",
       placeholder: "ååååmmddxxxx",
+      keyboardType: "number-pad",
       value: inputValue.personalNumber,
       maxLength: 12,
       onChange: setPersonalNumber,
@@ -118,6 +119,7 @@ const AddCoApplicantContent = ({
                     placeholder={input.placeholder}
                     value={input.value}
                     maxLength={input.maxLength}
+                    keyboardType={input.keyboardType as KeyboardTypeOptions}
                   />
                 </React.Fragment>
               ))}
