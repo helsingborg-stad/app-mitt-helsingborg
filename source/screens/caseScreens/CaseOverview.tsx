@@ -36,7 +36,7 @@ import {
   getPasswordForForm,
 } from "../../services/encryption/CaseEncryptionHelper";
 import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
-import StartNewApplicationModal from "../../components/organisms/StartNewApplicationModal/StartNewApplicationModal";
+import NewApplicationModal from "../../components/organisms/NewApplicationModal/NewApplicationModal";
 import AddCoApplicantModal from "../../components/organisms/AddCoApplicantModal/AddCoApplicantModal";
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
@@ -414,8 +414,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
 
   const closeOpenModal = () => setActiveModal({});
 
-  const openStartNewApplicationModal = () =>
-    openModal(Modal.START_NEW_APPLICATION);
+  const openNewApplicationModal = () => openModal(Modal.START_NEW_APPLICATION);
 
   const openAddCoApplicantModal = () => openModal(Modal.ADD_CO_APPLICANT);
 
@@ -585,7 +584,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
       )}
 
       {activeModal.modal === Modal.START_NEW_APPLICATION && (
-        <StartNewApplicationModal
+        <NewApplicationModal
           visible
           onClose={closeOpenModal}
           onOpenForm={() => openForm(newCase)}
@@ -607,7 +606,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
 
       {newCase && (
         <FloatingButton
-          onPress={openStartNewApplicationModal}
+          onPress={openNewApplicationModal}
           text="Ansök om ekonomiskt bistånd"
           iconName="account-balance-wallet"
           position="center"

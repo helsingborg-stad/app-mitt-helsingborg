@@ -5,7 +5,7 @@ import styled from "styled-components/native";
 
 import StoryWrapper from "../../molecules/StoryWrapper";
 
-import StartNewApplicationModal from "./StartNewApplicationModal";
+import NewApplicationModal from "./NewApplicationModal";
 
 const Container = styled.View`
   width: 100%;
@@ -21,7 +21,7 @@ const OverviewExamples = () => {
 
   return (
     <>
-      <StartNewApplicationModal
+      <NewApplicationModal
         visible={showModal}
         onClose={toggleShowModal}
         onOpenForm={toggleShowModal}
@@ -32,7 +32,7 @@ const OverviewExamples = () => {
   );
 };
 
-storiesOf("StartNewApplicationModal", module).add("Default", () => (
+storiesOf("NewApplicationModal", module).add("Default", () => (
   <StoryWrapper>
     <Container>
       <OverviewExamples />

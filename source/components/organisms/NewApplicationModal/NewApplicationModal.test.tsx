@@ -3,7 +3,7 @@ import { fireEvent } from "@testing-library/react-native";
 
 import { render } from "../../../../test-utils";
 
-import StartNewApplicationModal from "./StartNewApplicationModal";
+import NewApplicationModal from "./NewApplicationModal";
 
 const renderComponent = ({
   onClose = jest.fn(),
@@ -11,7 +11,7 @@ const renderComponent = ({
   onChangeModal = jest.fn(),
 }) =>
   render(
-    <StartNewApplicationModal
+    <NewApplicationModal
       onClose={onClose}
       visible
       onOpenForm={onOpenForm}

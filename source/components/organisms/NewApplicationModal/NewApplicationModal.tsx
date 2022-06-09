@@ -10,20 +10,20 @@ import {
   DialogContainer,
   Container,
   StyledButton,
-} from "./StartNewApplicationModal.styled";
+} from "./NewApplicationModal.styled";
 
-interface StartNewApplicationModalProps {
+interface NewApplicationModalProps {
   visible: boolean;
   onClose: () => void;
   onOpenForm: () => void;
   onChangeModal: () => void;
 }
-export default function StartNewApplicationModal({
+export default function NewApplicationModal({
   visible,
   onClose,
   onOpenForm,
   onChangeModal,
-}: StartNewApplicationModalProps): JSX.Element {
+}: NewApplicationModalProps): JSX.Element {
   const buttonGroup = [
     { text: "Söker själv", onClick: onOpenForm },
     { text: "Söker med man, fru eller sambo", onClick: onChangeModal },
