@@ -2,12 +2,9 @@ import React from "react";
 
 import { TextButtonContainer, ButtonText } from "./TextButton.styled";
 
-interface TextButtonProps {
-  label: string;
-  disabled?: boolean;
-  onPress: () => void;
-}
-export default function TextButton(props: TextButtonProps): JSX.Element {
+import type { Props } from "./TextButton.types";
+
+export default function TextButton(props: Props): JSX.Element {
   const { label, disabled, onPress } = props;
 
   return (

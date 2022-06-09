@@ -7,6 +7,15 @@ import TextButton from "./TextButton";
 
 const buttonLabel = "label";
 
+it("renders without crashing", () => {
+  const mockCallback = jest.fn();
+
+  const component = () =>
+    render(<TextButton onPress={mockCallback} label={buttonLabel} />);
+
+  expect(component).not.toThrow();
+});
+
 it("calls the callback function when clicked", () => {
   const mockCallback = jest.fn();
 
