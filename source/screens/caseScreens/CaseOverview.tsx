@@ -26,6 +26,7 @@ import AuthContext from "../../store/AuthContext";
 import {
   State as CaseContextState,
   Dispatch as CaseContextDispatch,
+  AddCoApplicantParameters,
 } from "../../types/CaseContext";
 import { to, wait } from "../../helpers/Misc";
 import { Case, ApplicationStatusType, AnsweredForm } from "../../types/Case";
@@ -450,12 +451,12 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
 
   const handleAddCoApplicant = async (
     caseItem: CaseWithExtra,
-    personalNumber: string
+    parameters: AddCoApplicantParameters
   ) => {
     setModalLoading(true);
 
     const [addCoApplicantError] = await to(
-      addCoApplicant(caseItem.id, personalNumber)
+      addCoApplicant(caseItem.id, parameters)
     );
     setModalLoading(false);
 
@@ -597,8 +598,8 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
         <AddCoApplicantModal
           visible
           onClose={closeOpenModal}
-          onAddCoApplicant={(personalNumber) =>
-            handleAddCoApplicant(newCase, personalNumber)
+          onAddCoApplicant={(parameters) =>
+            handleAddCoApplicant(newCase, parameters)
           }
           isLoading={activeModal.loading}
           errorMessage={activeModal.error}

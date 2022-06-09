@@ -9,6 +9,7 @@ import {
   CaseUpdate,
   ActionTypes,
   Action,
+  AddCoApplicantParameters,
 } from "../types/CaseContext";
 import AuthContext from "./AuthContext";
 import CaseReducer, {
@@ -128,11 +129,11 @@ function CaseProvider({
     }
   }
 
-  const addCoApplicant = async (caseId: string, personalNumber: string) => {
-    const addCoApplicantResult = await addCaseCoApplicant(
-      caseId,
-      personalNumber
-    );
+  const addCoApplicant = async (
+    caseId: string,
+    parameters: AddCoApplicantParameters
+  ) => {
+    const addCoApplicantResult = await addCaseCoApplicant(caseId, parameters);
 
     dispatch(addCoApplicantResult);
   };
