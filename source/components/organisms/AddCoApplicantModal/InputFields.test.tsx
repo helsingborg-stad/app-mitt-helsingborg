@@ -3,12 +3,26 @@ import { fireEvent } from "@testing-library/react-native";
 
 import { render } from "../../../../test-utils";
 
-import InputFields, { InputField } from "./InputFields";
+import InputFields from "./InputFields";
+import type { InputField } from "./InputFields.types";
 
 const inputIdentifiers = [
   { label: "inputLabelOne", testId: "inputTestIdOne" },
   { label: "inputLabelTwo", testId: "inputTestIdTwo" },
 ];
+
+it("renders without crashing", () => {
+  const fields: InputField[] = inputIdentifiers.map(({ label, testId }) => ({
+    label,
+    testId,
+    value: "",
+    onChange: jest.fn(),
+  }));
+
+  const component = () => render(<InputFields fields={fields} />);
+
+  expect(component).not.toThrow();
+});
 
 it("renders provided fields", () => {
   const fields: InputField[] = inputIdentifiers.map(({ label, testId }) => ({

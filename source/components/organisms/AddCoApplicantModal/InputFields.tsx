@@ -5,20 +5,9 @@ import { Input } from "../../atoms";
 
 import InputLabel from "./InputFields.styled";
 
-export interface InputField {
-  testId: string;
-  label: string;
-  placeholder?: string;
-  keyboardType?: string;
-  value: string;
-  maxLength?: number;
-  onChange: (value: string) => void;
-}
+import type { Props } from "./InputFields.types";
 
-interface InputFieldsProps {
-  fields: InputField[];
-}
-export default function InputFields({ fields }: InputFieldsProps): JSX.Element {
+export default function InputFields({ fields }: Props): JSX.Element {
   return (
     <>
       {fields.map((field) => (
