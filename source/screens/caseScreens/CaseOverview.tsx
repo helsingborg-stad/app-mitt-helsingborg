@@ -461,8 +461,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     setModalLoading(false);
 
     if (addCoApplicantError) {
-      const errorMessage = addCoApplicantError?.message ?? "Något gick fel";
-      setModalError(errorMessage);
+      setModalError(addCoApplicantError.message);
     } else {
       openForm(caseItem);
     }

@@ -263,7 +263,9 @@ export async function addCaseCoApplicant(
   );
 
   if (addCoApplicantResult?.status !== 200) {
-    throw new Error(addCoApplicantResult.data.data.message);
+    const errorMessage =
+      addCoApplicantResult?.data?.data?.message ?? "Något gick fel";
+    throw new Error(errorMessage);
   }
 
   return {
