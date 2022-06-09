@@ -46,6 +46,12 @@ export interface UpdateCaseBody extends AnsweredForm {
   signature?: Signature;
 }
 
+export interface AddCoApplicantParameters {
+  personalNumber: string;
+  firstName: string;
+  lastName: string;
+}
+
 export interface Dispatch {
   createCase?: (form: Form, callback: (newCase: Case) => void) => void;
   updateCase: (
@@ -54,7 +60,10 @@ export interface Dispatch {
   ) => Promise<Action>;
   deleteCase?: (caseId: string) => void;
   providePinForCase: (caseData: Case, pin: string) => Promise<void>;
-  addCoApplicant: (caseId: string, personalNumber: string) => Promise<void>;
+  addCoApplicant: (
+    caseId: string,
+    parameters: AddCoApplicantParameters
+  ) => Promise<void>;
 }
 
 export interface Action {
