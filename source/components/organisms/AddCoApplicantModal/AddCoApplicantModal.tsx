@@ -1,24 +1,25 @@
 import React, { useState } from "react";
-import { ActivityIndicator, KeyboardTypeOptions } from "react-native";
+import { ActivityIndicator } from "react-native";
 
 import Wrapper from "../../molecules/Dialog/Wrapper";
 import { Modal } from "../../molecules/Modal";
 
 import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
-import { Text, Button, Input, TextButton } from "../../atoms";
+import { Text, Button, TextButton } from "../../atoms";
 
 import { ValidationHelper } from "../../../helpers";
 
 import { AddCoApplicantParameters } from "../../../types/CaseContext";
 
+import InputFields from "./InputFields";
+
 import {
   DialogContainer,
   Container,
-  InputLabel,
   ErrorText,
 } from "./AddCoApplicantModal.styled";
 
-enum InputField {
+export enum InputField {
   personalNumber = "personalNumber",
   fistName = "firstName",
   lastName = "lastName",
@@ -91,6 +92,11 @@ const AddCoApplicantContent = ({
     },
   ];
 
+  const invalidInput =
+    inputValue.personalNumber.length !== 12 ||
+    !inputValue.firstName ||
+    !inputValue.lastName;
+
   return (
     <Modal
       visible={visible}
@@ -108,21 +114,8 @@ const AddCoApplicantContent = ({
                 sambo
               </Text>
 
-              {inputFields.map((input) => (
-                <React.Fragment key={input.testId}>
-                  <InputLabel strong>{input.label}</InputLabel>
-                  <Input
-                    testID={input.testId}
-                    onChangeText={input.onChange}
-                    onBlur={() => undefined}
-                    onMount={() => undefined}
-                    placeholder={input.placeholder}
-                    value={input.value}
-                    maxLength={input.maxLength}
-                    keyboardType={input.keyboardType as KeyboardTypeOptions}
-                  />
-                </React.Fragment>
-              ))}
+              <InputFields fields={inputFields} />
+
               {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
             </Container>
             <Container>
@@ -133,11 +126,7 @@ const AddCoApplicantContent = ({
                   size="large"
                   fullWidth
                   colorSchema="red"
-                  disabled={
-                    inputValue.personalNumber.length !== 12 ||
-                    !inputValue.firstName ||
-                    !inputValue.lastName
-                  }
+                  disabled={invalidInput}
                   onClick={handleAddCoApplicant}
                 >
                   <Text>Nästa</Text>
