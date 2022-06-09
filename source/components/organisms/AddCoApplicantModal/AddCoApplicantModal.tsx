@@ -11,12 +11,22 @@ import { ValidationHelper } from "../../../helpers";
 
 import { DialogContainer, Container } from "./AddCoApplicantModal.styled";
 
+enum InputField {
+  personalNumber = "personalNumber",
+  fistName = "firstName",
+  lastName = "lastName",
+}
+
 interface AddCoApplicantContentProps {
   visible: boolean;
   isLoading?: boolean;
   errorMessage?: string;
   onClose: () => void;
-  onAddCoApplicant: (personalNumber: string) => Promise<void>;
+  onAddCoApplicant: (parameters: {
+    personalNumber: string;
+    lastName: string;
+    firstName: string;
+  }) => Promise<void>;
 }
 
 const AddCoApplicantContent = ({
@@ -26,16 +36,56 @@ const AddCoApplicantContent = ({
   onClose,
   onAddCoApplicant,
 }: AddCoApplicantContentProps): JSX.Element => {
-  const [personalNumber, setPersonalNumber] = useState("");
+  const [inputValue, setInputValues] = useState({
+    [InputField.personalNumber]: "",
+    [InputField.fistName]: "",
+    [InputField.lastName]: "",
+  });
 
-  const handleInputChange = (value: string) => {
-    const sanitizedValue = ValidationHelper.sanitizePin(value);
-    setPersonalNumber(sanitizedValue);
+  const setInputValue = (key: InputField, value: string) => {
+    setInputValues((oldValues) => ({
+      ...oldValues,
+      [key]: value,
+    }));
   };
+
+  const setPersonalNumber = (value: string) => {
+    const sanitizedValue = ValidationHelper.sanitizePin(value);
+    setInputValue(InputField.personalNumber, sanitizedValue);
+  };
+
+  const setLastName = (value: string) =>
+    setInputValue(InputField.lastName, value);
+
+  const setFirstName = (value: string) =>
+    setInputValue(InputField.fistName, value);
 
   const handleAddCoApplicant = async () => {
-    await onAddCoApplicant(personalNumber);
+    await onAddCoApplicant(inputValue);
   };
+
+  const inputFields = [
+    {
+      testId: "personal-number-input",
+      label: "Personnummer",
+      placeholder: "ååååmmddxxxx",
+      value: inputValue.personalNumber,
+      maxLength: 12,
+      onChange: setPersonalNumber,
+    },
+    {
+      testId: "first-name-input",
+      label: "Förnamn",
+      value: inputValue.firstName,
+      onChange: setFirstName,
+    },
+    {
+      testId: "last-name-input",
+      label: "Efternamn",
+      value: inputValue.lastName,
+      onChange: setLastName,
+    },
+  ];
 
   return (
     <Modal
@@ -49,25 +99,27 @@ const AddCoApplicantContent = ({
         <Wrapper>
           <DialogContainer>
             <Container border>
-              <Text>Ange personnummer för din fru, man eller sambo</Text>
-              <Text
-                style={{ width: "100%", paddingTop: 8, paddingBottom: 4 }}
-                align="left"
-                strong
-              >
-                Personnummer
+              <Text>
+                Ange personnummer, namn och efternamn för din fru, man eller
+                sambo
               </Text>
-              <Input
-                testID="personal-number-input"
-                onChangeText={handleInputChange}
-                onBlur={() => undefined}
-                onMount={() => undefined}
-                placeholder="ååååmmddxxxx"
-                value={personalNumber}
-                maxLength={12}
-                showErrorMessage={!!errorMessage}
-                error={{ message: errorMessage ?? "", isValid: false }}
-              />
+
+              {inputFields.map((input) => (
+                <React.Fragment key={input.testId}>
+                  <Text style={{ paddingTop: 12, paddingBottom: 4 }} strong>
+                    {input.label}
+                  </Text>
+                  <Input
+                    testID={input.testId}
+                    onChangeText={input.onChange}
+                    onBlur={() => undefined}
+                    onMount={() => undefined}
+                    placeholder={input.placeholder}
+                    value={input.value}
+                    maxLength={input.maxLength}
+                  />
+                </React.Fragment>
+              ))}
             </Container>
             <Container>
               {isLoading && <ActivityIndicator size="large" />}
@@ -77,7 +129,11 @@ const AddCoApplicantContent = ({
                   size="large"
                   fullWidth
                   colorSchema="red"
-                  disabled={personalNumber.length !== 12}
+                  disabled={
+                    inputValue.personalNumber.length !== 12 ||
+                    !inputValue.firstName ||
+                    !inputValue.lastName
+                  }
                   onClick={handleAddCoApplicant}
                 >
                   <Text>Nästa</Text>
