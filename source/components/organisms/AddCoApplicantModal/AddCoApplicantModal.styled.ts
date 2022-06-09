@@ -2,8 +2,6 @@ import styled from "styled-components/native";
 
 import { ThemeType } from "../../../styles/themeHelpers";
 
-import { Button } from "../../atoms";
-
 interface DialogContainerProps {
   theme: ThemeType;
 }
@@ -34,8 +32,4 @@ const Container = styled.View<ContainerProps>`
   `}
 `;
 
-const StyledButton = styled(Button)`
-  margin-top: 10px;
-`;
-
-export { DialogContainer, Container, StyledButton };
+export { DialogContainer, Container };
