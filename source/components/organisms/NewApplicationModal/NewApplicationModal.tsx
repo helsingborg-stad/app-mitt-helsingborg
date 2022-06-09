@@ -12,18 +12,14 @@ import {
   StyledButton,
 } from "./NewApplicationModal.styled";
 
-interface NewApplicationModalProps {
-  visible: boolean;
-  onClose: () => void;
-  onOpenForm: () => void;
-  onChangeModal: () => void;
-}
+import type { Props } from "./NewApplicationModal.types";
+
 export default function NewApplicationModal({
   visible,
   onClose,
   onOpenForm,
   onChangeModal,
-}: NewApplicationModalProps): JSX.Element {
+}: Props): JSX.Element {
   const buttonGroup = [
     { text: "Söker själv", onClick: onOpenForm },
     { text: "Söker med man, fru eller sambo", onClick: onChangeModal },
