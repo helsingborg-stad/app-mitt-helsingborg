@@ -15,6 +15,7 @@ import {
   DialogContainer,
   Container,
   InputLabel,
+  ErrorText,
 } from "./AddCoApplicantModal.styled";
 
 enum InputField {
@@ -120,6 +121,7 @@ const AddCoApplicantContent = ({
                   />
                 </React.Fragment>
               ))}
+              {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
             </Container>
             <Container>
               {isLoading && <ActivityIndicator size="large" />}
