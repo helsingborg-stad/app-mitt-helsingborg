@@ -9,7 +9,11 @@ import { Text, Button, Input, TextButton } from "../../atoms";
 
 import { ValidationHelper } from "../../../helpers";
 
-import { DialogContainer, Container } from "./AddCoApplicantModal.styled";
+import {
+  DialogContainer,
+  Container,
+  InputLabel,
+} from "./AddCoApplicantModal.styled";
 
 enum InputField {
   personalNumber = "personalNumber",
@@ -106,9 +110,7 @@ const AddCoApplicantContent = ({
 
               {inputFields.map((input) => (
                 <React.Fragment key={input.testId}>
-                  <Text style={{ paddingTop: 12, paddingBottom: 4 }} strong>
-                    {input.label}
-                  </Text>
+                  <InputLabel strong>{input.label}</InputLabel>
                   <Input
                     testID={input.testId}
                     onChangeText={input.onChange}

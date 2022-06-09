@@ -2,6 +2,8 @@ import styled from "styled-components/native";
 
 import { ThemeType } from "../../../styles/themeHelpers";
 
+import { Text } from "../../atoms";
+
 interface DialogContainerProps {
   theme: ThemeType;
 }
@@ -31,4 +33,8 @@ const Container = styled.View<ContainerProps>`
   `}
 `;
 
-export { DialogContainer, Container };
+const InputLabel = styled(Text)`
+  padding: 12px 0px 4px 0px;
+`;
+
+export { DialogContainer, Container, InputLabel };
