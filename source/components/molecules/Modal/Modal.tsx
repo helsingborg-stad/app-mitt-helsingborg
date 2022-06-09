@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import {
   Modal as ReactNativeModal,
   ModalProps as ReactNativeModalProps,
+  Platform,
 } from "react-native";
 
 interface ModalViewProps {
@@ -19,7 +20,11 @@ export const ModalView = styled.View<ModalViewProps>`
       right: 0;
       z-index: 1000;
       padding: 0px;
-      background-color: rgba(0, 0, 0, 0.75);
+      background-color: ${
+        Platform.OS === "android"
+          ? "rgba(0, 0, 0, 0.55)"
+          : "rgba(0, 0, 0, 0.75)"
+      };
     `}
 `;
 
