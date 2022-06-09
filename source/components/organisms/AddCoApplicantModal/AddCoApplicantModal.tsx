@@ -9,6 +9,8 @@ import { Text, Button, Input, TextButton } from "../../atoms";
 
 import { ValidationHelper } from "../../../helpers";
 
+import { AddCoApplicantParameters } from "../../../types/CaseContext";
+
 import {
   DialogContainer,
   Container,
@@ -26,11 +28,7 @@ interface AddCoApplicantContentProps {
   isLoading?: boolean;
   errorMessage?: string;
   onClose: () => void;
-  onAddCoApplicant: (parameters: {
-    personalNumber: string;
-    lastName: string;
-    firstName: string;
-  }) => Promise<void>;
+  onAddCoApplicant: (parameters: AddCoApplicantParameters) => Promise<void>;
 }
 
 const AddCoApplicantContent = ({
