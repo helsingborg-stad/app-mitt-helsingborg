@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
-import { Modal } from "react-native";
+import { Modal } from "../Modal";
 import Button from "../../atoms/Button";
 import Heading from "../../atoms/Heading";
 import Text from "../../atoms/Text";
@@ -81,10 +81,8 @@ const CloseDialog: React.FC<CloseDialogProps> = ({
 }) => (
   <Modal
     visible={visible ?? false}
-    transparent
     presentationStyle="overFullScreen"
     animationType="fade"
-    statusBarTranslucent
   >
     <PopupContainer>
       <Dialog>

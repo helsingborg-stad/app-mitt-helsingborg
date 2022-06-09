@@ -116,7 +116,7 @@ const Separator = styled.View`
   margin-bottom: 16px;
 `;
 
-const LoginModal = styled(Modal)`
+const LoginModalView = styled(KeyboardAwareScrollView)`
   background-color: ${(props) => props.theme.colors.neutrals[6]};
 `;
 
@@ -386,9 +386,13 @@ function LoginScreen(): JSX.Element {
         </FlexImageBackground>
       </SafeAreaViewTop>
 
-      <LoginModal visible={loginModalVisible} hide={toggleLoginModal}>
+      <Modal
+        visible={loginModalVisible}
+        hide={toggleLoginModal}
+        backgroundBlur={false}
+      >
         <StatusBar barStyle="dark-content" backgroundColor="white" />
-        <KeyboardAwareScrollView
+        <LoginModalView
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ flexGrow: 1 }}
           extraScrollHeight={50}
@@ -461,11 +465,15 @@ function LoginScreen(): JSX.Element {
               </Form>
             )}
           </FlexView>
-        </KeyboardAwareScrollView>
-      </LoginModal>
+        </LoginModalView>
+      </Modal>
 
-      <LoginModal visible={agreementModalVisible} hide={toggleAgreementModal}>
-        <KeyboardAwareScrollView>
+      <Modal
+        visible={agreementModalVisible}
+        hide={toggleAgreementModal}
+        backgroundBlur={false}
+      >
+        <LoginModalView>
           <CloseModalButton
             onClose={toggleAgreementModal}
             primary={false}
@@ -489,8 +497,8 @@ function LoginScreen(): JSX.Element {
               <Text>Återvänd till inloggning</Text>
             </Button>
           </UserAgreementFooter>
-        </KeyboardAwareScrollView>
-      </LoginModal>
+        </LoginModalView>
+      </Modal>
     </FlexView>
   );
 }

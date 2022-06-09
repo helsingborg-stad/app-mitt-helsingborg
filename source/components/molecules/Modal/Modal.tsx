@@ -26,6 +26,7 @@ export const ModalView = styled.View<ModalViewProps>`
           : "rgba(0, 0, 0, 0.75)"
       };
     `}
+  flex: 1;
 `;
 
 interface ModalProps extends ReactNativeModalProps {
@@ -38,15 +39,17 @@ interface ModalProps extends ReactNativeModalProps {
 const Modal = ({
   visible,
   children,
+  statusBarTranslucent = true,
   backgroundBlur = true,
+  transparent = true,
   hide,
   ...other
 }: ModalProps): JSX.Element => (
   <ReactNativeModal
-    statusBarTranslucent={false}
+    statusBarTranslucent={statusBarTranslucent}
     visible={visible}
     animationType="slide"
-    transparent={false}
+    transparent={transparent}
     onRequestClose={hide}
     presentationStyle="pageSheet"
     // eslint-disable-next-line react/jsx-props-no-spreading

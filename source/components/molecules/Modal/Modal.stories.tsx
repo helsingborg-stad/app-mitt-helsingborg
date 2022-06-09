@@ -21,6 +21,7 @@ const ModalExample = () => {
       <Modal
         color="purple"
         visible={visible}
+        transparent={false}
         hide={toggleModal}
         backgroundBlur={false}
       >

@@ -37,10 +37,9 @@ export default function PinInputModal({
     <Modal
       visible={visible}
       hide={handleClosePressed}
-      transparent
       presentationStyle="overFullScreen"
       animationType="fade"
-      statusBarTranslucent
+      statusBarTranslucent={false}
     >
       <Wrapper>
         <DialogContainer>

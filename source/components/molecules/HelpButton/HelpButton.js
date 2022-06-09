@@ -9,9 +9,10 @@ import Text from "../../atoms/Text";
 import BackNavigation from "../BackNavigation/BackNavigation";
 import { Modal, useModal } from "../Modal";
 
-const ModalContainer = styled.View({
-  flexGrow: 1,
-});
+const ModalContainer = styled.View`
+  flex-grow: 1;
+  background: ${(props) => props.theme.colors.neutrals[6]};
+`;
 
 const Container = styled.View`
   padding: 24px;
@@ -78,7 +79,7 @@ const HelpButton = (props) => {
 
   return (
     <>
-      <Modal visible={isModalVisible} hide={toggleModal} backgroundBlur={false}>
+      <Modal visible={isModalVisible} hide={toggleModal}>
         <ModalContainer>
           <CloseModal showBackButton={false} onClose={toggleModal} />
           <Container>
