@@ -110,7 +110,7 @@ function Input(
         <InputAccessoryView nativeID="klar-accessory">
           <AccesoryViewChild>
             <View>
-              <Button title="Klar" onPress={() => Keyboard.dismiss()} />
+              <Button title="Klar" onPress={Keyboard.dismiss} />
             </View>
           </AccesoryViewChild>
         </InputAccessoryView>
