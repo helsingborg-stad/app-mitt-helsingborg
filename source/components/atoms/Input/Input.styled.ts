@@ -3,9 +3,19 @@ import styled from "styled-components/native";
 
 import { Text } from "..";
 
-import { Props } from "./Input.types";
+import { ErrorValidation } from "./Input.types";
 
-const StyledTextInput = styled.TextInput<Props>`
+import { PrimaryColor, ThemeType } from "../../../styles/themeHelpers";
+
+interface StyledInputprops {
+  theme: ThemeType;
+  colorSchema: PrimaryColor;
+  center: boolean;
+  hidden: boolean;
+  transparent: boolean;
+  error: ErrorValidation;
+}
+const StyledTextInput = styled.TextInput<StyledInputprops>`
   width: 100%;
   font-weight: ${({ theme }) => theme.fontWeights[0]};
   background-color: ${({ theme, colorSchema }) =>
