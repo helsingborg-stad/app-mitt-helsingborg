@@ -10,17 +10,17 @@ export interface ErrorValidation {
 }
 
 export type Props = Omit<TextInputProps, "onBlur"> & {
-  onBlur: (value: string) => void;
-  onMount: (value: string) => void;
+  onBlur?: (value: string) => void;
+  onMount?: (value: string) => void;
   center?: boolean;
   transparent?: boolean;
-  colorSchema: PrimaryColor;
+  colorSchema?: PrimaryColor;
   showErrorMessage?: boolean;
   hidden?: boolean;
   error?: ErrorValidation;
   textAlign?: "left" | "center" | "right";
   inputType?: InputFieldType;
-  theme: ThemeType;
+  theme?: ThemeType;
 };
 
 export type KeyboardTypeExtraPropType = Record<InputFieldType, Partial<Props>>;
