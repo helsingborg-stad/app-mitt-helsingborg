@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, forwardRef } from "react";
 import {
   Keyboard,
   Button,
   Platform,
   View,
   InputAccessoryView,
+  TextInput,
 } from "react-native";
 import { useTheme } from "styled-components/native";
 
@@ -48,16 +49,19 @@ const replaceSpace = (str?: string) => {
   return str;
 };
 
-export default function Input({
-  onBlur,
-  onMount,
-  showErrorMessage,
-  value,
-  error,
-  inputType,
-  keyboardType,
-  ...props
-}: Props): JSX.Element {
+function Input(
+  {
+    onBlur,
+    onMount,
+    showErrorMessage,
+    value,
+    error,
+    inputType,
+    keyboardType,
+    ...props
+  }: Props,
+  ref: React.Ref<TextInput>
+): JSX.Element {
   const handleBlur = () => {
     if (onBlur) onBlur(value);
   };
@@ -93,9 +97,9 @@ export default function Input({
         }}
         inputAccessoryViewID="klar-accessory"
         keyboardType={smartKeyboardType}
-        // ref={ref as React.Ref<TextInput>}
         {...smartKeyboardExtraProps}
         {...props}
+        ref={ref}
       />
 
       {showErrorMessage && !!error?.message && (
@@ -114,3 +118,5 @@ export default function Input({
     </>
   );
 }
+
+export default forwardRef(Input);
