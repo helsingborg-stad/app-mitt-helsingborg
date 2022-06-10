@@ -58,6 +58,7 @@ function Input(
     error,
     inputType,
     keyboardType,
+    colorSchema = "blue",
     ...props
   }: Props,
   ref: React.Ref<TextInput>
@@ -97,6 +98,7 @@ function Input(
         }}
         inputAccessoryViewID="klar-accessory"
         keyboardType={smartKeyboardType}
+        colorSchema={colorSchema}
         {...smartKeyboardExtraProps}
         {...props}
         ref={ref}
