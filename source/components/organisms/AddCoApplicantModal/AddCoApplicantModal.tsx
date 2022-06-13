@@ -92,6 +92,7 @@ export default function AddCoApplicantModal({
       presentationStyle="overFullScreen"
       animationType="fade"
       statusBarTranslucent
+      hide={() => undefined}
     >
       <BackgroundBlurWrapper>
         <Wrapper>
