@@ -80,10 +80,10 @@ export default function AddCoApplicantModal({
     },
   ];
 
-  const invalidInput =
-    inputValue.personalNumber.length !== 12 ||
-    !inputValue.firstName ||
-    !inputValue.lastName;
+  const hasValidInput =
+    inputValue.personalNumber.length === 12 &&
+    !!inputValue.firstName &&
+    !!inputValue.lastName;
 
   return (
     <Modal
@@ -115,7 +115,7 @@ export default function AddCoApplicantModal({
                   size="large"
                   fullWidth
                   colorSchema="red"
-                  disabled={invalidInput}
+                  disabled={!hasValidInput}
                   onClick={handleAddCoApplicant}
                 >
                   <Text>Nästa</Text>
