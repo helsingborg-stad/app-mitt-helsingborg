@@ -33,13 +33,9 @@ const Container = styled.View<ContainerProps>`
   `}
 `;
 
-const InputLabel = styled(Text)`
-  padding: 12px 0px 4px 0px;
-`;
-
 const ErrorText = styled(Text)`
   padding-top: 20px;
   color: ${({ theme }: { theme: ThemeType }) => theme.colors.primary.red[1]};
 `;
 
-export { DialogContainer, Container, InputLabel, ErrorText };
+export { DialogContainer, Container, ErrorText };
