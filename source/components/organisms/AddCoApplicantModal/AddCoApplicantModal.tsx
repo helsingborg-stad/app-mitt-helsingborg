@@ -19,6 +19,7 @@ import {
 
 import type { Props } from "./AddCoApplicantModal.types";
 import { InputField } from "./AddCoApplicantModal.types";
+import { AddCoApplicantParameters } from "../../../types/CaseContext";
 
 export default function AddCoApplicantModal({
   visible,
@@ -27,7 +28,7 @@ export default function AddCoApplicantModal({
   onClose,
   onAddCoApplicant,
 }: Props): JSX.Element {
-  const [inputValue, setInputValues] = useState({
+  const [inputValue, setInputValues] = useState<AddCoApplicantParameters>({
     [InputField.personalNumber]: "",
     [InputField.fistName]: "",
     [InputField.lastName]: "",
