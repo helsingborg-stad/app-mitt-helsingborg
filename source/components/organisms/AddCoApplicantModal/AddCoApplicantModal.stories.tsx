@@ -41,7 +41,8 @@ const OverviewExamples = () => {
         onAddCoApplicant={addApplicant}
         isLoading={isLoading}
       />
-      <Text>Personal number added: {parameters}</Text>
+      <Text>Personal number added:</Text>
+      <Text>{JSON.stringify(parameters, null, 2)}</Text>
       <Button title="Show modal" onPress={toggleShowModal} />
     </>
   );
