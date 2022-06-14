@@ -31,6 +31,7 @@ export async function addImageFromCamera(questionId: string): Promise<Image[]> {
       compressImageQuality: 0.8,
       cropping: false,
       includeExif: false,
+      forceJpg: true,
     });
 
     if (rawImage) {
@@ -61,6 +62,7 @@ export async function addImagesFromLibrary(
       writeTempFile: true,
       cropping: false,
       includeExif: false,
+      forceJpg: true,
     });
 
     if (rawImages && rawImages.length > 0) {
