@@ -90,18 +90,16 @@ interface InternalButtonProps {
   onClick: () => void;
 }
 
-/**
- * Returns a case card component depending on it's status
- * @param {obj} caseData
- * @param {obj} navigation
- * @param {obj} authContext
- * @param {function?} extra.dialogState
- */
+interface CaseCardNavigation {
+  onOpenForm: (caseItem: CaseWithExtra, isSignMode?: boolean) => void;
+  onOpenCaseSummary: (caseItem: CaseWithExtra) => void;
+}
+
 const computeCaseCardComponent = (
-  caseData,
-  navigation,
-  authContext,
-  onShowPinInput
+  caseData: CaseWithExtra,
+  navigation: CaseCardNavigation,
+  signedInPersonalNumber: string,
+  onShowPinInput: () => void
 ) => {
   const currentStep =
     caseData?.forms?.[caseData.currentFormId]?.currentPosition
@@ -132,7 +130,7 @@ const computeCaseCardComponent = (
   );
 
   const casePersonData = persons.find(
-    (person) => person.personalNumber === authContext?.user?.personalNumber
+    (person) => person.personalNumber === signedInPersonalNumber
   );
 
   const statusType = caseData?.status?.type || "";
@@ -495,7 +493,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     computeCaseCardComponent(
       caseData,
       { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
-      authContext,
+      authContext?.user?.personalNumber,
       () => openPinInputModal(caseData)
     )
   );
@@ -504,7 +502,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     computeCaseCardComponent(
       caseData,
       { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
-      authContext,
+      authContext?.user?.personalNumber,
       () => openPinInputModal(caseData)
     )
   );
