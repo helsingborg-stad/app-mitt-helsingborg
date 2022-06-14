@@ -26,6 +26,7 @@ import AuthContext from "../../store/AuthContext";
 import {
   State as CaseContextState,
   Dispatch as CaseContextDispatch,
+  AddCoApplicantParameters,
 } from "../../types/CaseContext";
 import { to, wait } from "../../helpers/Misc";
 import { Case, ApplicationStatusType, AnsweredForm } from "../../types/Case";
@@ -35,6 +36,8 @@ import {
   getPasswordForForm,
 } from "../../services/encryption/CaseEncryptionHelper";
 import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
+import NewApplicationModal from "../../components/organisms/NewApplicationModal/NewApplicationModal";
+import AddCoApplicantModal from "../../components/organisms/AddCoApplicantModal/AddCoApplicantModal";
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 
@@ -62,6 +65,19 @@ const PaddedContainer = styled.View`
   padding-top: 16px;
 `;
 
+enum Modal {
+  PIN_INPUT,
+  START_NEW_APPLICATION,
+  ADD_CO_APPLICANT,
+}
+
+interface ActiveModal {
+  modal?: Modal;
+  error?: string;
+  loading?: boolean;
+  data?: Record<string, unknown>;
+}
+
 interface InternalCardProps {
   subtitle: string;
   description?: string;
@@ -74,18 +90,16 @@ interface InternalButtonProps {
   onClick: () => void;
 }
 
-/**
- * Returns a case card component depending on it's status
- * @param {obj} caseData
- * @param {obj} navigation
- * @param {obj} authContext
- * @param {function?} extra.dialogState
- */
+interface CaseCardNavigation {
+  onOpenForm: (caseItem: CaseWithExtra, isSignMode?: boolean) => void;
+  onOpenCaseSummary: (caseItem: CaseWithExtra) => void;
+}
+
 const computeCaseCardComponent = (
-  caseData,
-  navigation,
-  authContext,
-  onShowPinInput
+  caseData: CaseWithExtra,
+  navigation: CaseCardNavigation,
+  signedInPersonalNumber: string,
+  onShowPinInput: () => void
 ) => {
   const currentStep =
     caseData?.forms?.[caseData.currentFormId]?.currentPosition
@@ -116,7 +130,7 @@ const computeCaseCardComponent = (
   );
 
   const casePersonData = persons.find(
-    (person) => person.personalNumber === authContext?.user?.personalNumber
+    (person) => person.personalNumber === signedInPersonalNumber
   );
 
   const statusType = caseData?.status?.type || "";
@@ -155,35 +169,21 @@ const computeCaseCardComponent = (
         activeSubmittedCompletion);
 
   const buttonProps: InternalButtonProps = {
-    onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
+    onClick: () => navigation.onOpenForm(caseData),
     text: "",
     colorSchema: null,
   };
 
   const cardProps: InternalCardProps = {
     subtitle: caseData.status.name,
-    onClick: () => {
-      navigation.navigate("UserEvents", {
-        screen: caseData.caseType.navigateTo,
-        params: {
-          id: caseData.id,
-          name: caseData.caseType.name,
-        },
-      });
-    },
+    onClick: () => navigation.onOpenCaseSummary(caseData),
   };
 
   if (isClosed) {
     buttonProps.text = "Öppna";
 
     buttonProps.onClick = () => {
-      navigation.navigate("UserEvents", {
-        screen: caseData.caseType.navigateTo,
-        params: {
-          id: caseData.id,
-          name: caseData.caseType.name,
-        },
-      });
+      navigation.onOpenCaseSummary(caseData);
     };
   }
 
@@ -204,8 +204,7 @@ const computeCaseCardComponent = (
   }
 
   if (isWaitingForSign && !selfHasSigned) {
-    buttonProps.onClick = () =>
-      navigation.navigate("Form", { caseId: caseData.id, isSignMode: true });
+    buttonProps.onClick = () => navigation.onOpenForm(caseData, true);
     buttonProps.text = "Granska och signera";
   }
 
@@ -284,22 +283,28 @@ interface CaseWithExtra extends Case {
   password?: string;
 }
 
+interface CaseOverviewProps {
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+  };
+}
+
 /**
  * Case overview screen
  * @param {obj} props
  */
-function CaseOverview(props): JSX.Element {
+function CaseOverview(props: CaseOverviewProps): JSX.Element {
   const { navigation } = props;
   const [caseItems, setCaseItems] = useState<CaseWithExtra[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [pinModalCase, setPinModalCase] = useState<Case | null>(null);
-  const [pinModalError, setPinModalError] = useState<string | null>(null);
-  const [pinModalName, setPinModalName] = useState<string | null>(null);
+  const [activeModal, setActiveModal] = useState<ActiveModal>({});
+
   const { getCasesByFormIds, fetchCases } = useContext(
     CaseState
   ) as Required<CaseContextState>;
-  const { providePinForCase } = useContext<CaseContextDispatch>(CaseDispatch);
+  const { providePinForCase, addCoApplicant } =
+    useContext<CaseContextDispatch>(CaseDispatch);
   const { getForm, getFormIdsByFormTypes } = useContext(FormContext);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
@@ -393,54 +398,119 @@ function CaseOverview(props): JSX.Element {
     void updateItems();
   }, [authContext.user, getCasesByFormIds, getForm, getFormIdsByFormTypes]);
 
-  const showPinInput = (caseData: Case) => {
+  const openForm = (caseItem: CaseWithExtra, isSignMode?: boolean) => {
+    navigation.navigate("Form", { caseId: caseItem.id, isSignMode });
+  };
+
+  const openModal = (
+    modal: Modal,
+    modalConfig: Record<string, unknown> = {}
+  ) => {
+    setActiveModal({ modal, ...modalConfig });
+  };
+
+  const closeOpenModal = () => setActiveModal({});
+
+  const openNewApplicationModal = () => openModal(Modal.START_NEW_APPLICATION);
+
+  const openAddCoApplicantModal = () => openModal(Modal.ADD_CO_APPLICANT);
+
+  const openPinInputModal = (caseData: Case) => {
     const mainPerson = caseData.persons?.find(
       (person) => person.role === "applicant"
     );
-    setPinModalName(mainPerson?.firstName ?? null);
-    setPinModalCase(caseData);
+
+    if (mainPerson?.firstName) {
+      openModal(Modal.PIN_INPUT, {
+        data: {
+          partnerName: mainPerson.firstName,
+          case: caseData,
+        },
+      });
+    }
   };
 
-  const onClosePinModal = () => {
-    setPinModalError(null);
-    setPinModalCase(null);
+  const setModalError = (errorMessage: string) => {
+    setActiveModal((oldValue) => ({
+      ...oldValue,
+      error: errorMessage,
+      loading: false,
+    }));
+  };
+
+  const setModalLoading = (loading: boolean) => {
+    setActiveModal((oldValue) => ({
+      ...oldValue,
+      loading,
+      error: "",
+    }));
+  };
+
+  const handleAddCoApplicant = async (
+    caseItem: CaseWithExtra,
+    parameters: AddCoApplicantParameters
+  ) => {
+    setModalLoading(true);
+
+    const [addCoApplicantError] = await to(
+      addCoApplicant(caseItem.id, parameters)
+    );
+    setModalLoading(false);
+
+    if (addCoApplicantError) {
+      setModalError(addCoApplicantError.message);
+    } else {
+      openForm(caseItem);
+    }
   };
 
   const onEnteredPinForCase = async (pin: string) => {
-    if (pinModalCase) {
-      const [provideError] = await to(providePinForCase(pinModalCase, pin));
+    if (activeModal?.data?.case) {
+      const [provideError] = await to(
+        providePinForCase(activeModal?.data?.case as Case, pin)
+      );
       if (provideError) {
         console.warn("provide pin error:", provideError);
-        setPinModalError("Något blev fel");
+        setModalError("Något blev fel");
       } else {
-        setPinModalError(null);
-        setPinModalCase(null);
+        closeOpenModal();
         onRefresh();
       }
     }
   };
+
+  const openCaseSummary = (caseItem: CaseWithExtra) => {
+    navigation.navigate("UserEvents", {
+      screen: caseItem.caseType.navigateTo,
+      params: {
+        id: caseItem.id,
+        name: caseItem.caseType.name,
+      },
+    });
+  };
+
   const activeCaseCards = activeCases.map((caseData) =>
-    computeCaseCardComponent(caseData, navigation, authContext, () =>
-      showPinInput(caseData)
+    computeCaseCardComponent(
+      caseData,
+      { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
+      authContext?.user?.personalNumber,
+      () => openPinInputModal(caseData)
     )
   );
 
   const closedCaseCards = closedCases.map((caseData) =>
-    computeCaseCardComponent(caseData, navigation, authContext, () =>
-      showPinInput(caseData)
+    computeCaseCardComponent(
+      caseData,
+      { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
+      authContext?.user?.personalNumber,
+      () => openPinInputModal(caseData)
     )
   );
 
   return (
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
-      <PinInputModal
-        name={pinModalName ?? ""}
-        visible={pinModalCase !== null}
-        onClose={onClosePinModal}
-        onPinEntered={onEnteredPinForCase}
-        error={pinModalError ?? undefined}
-      />
+
       <Container
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -501,9 +571,40 @@ function CaseOverview(props): JSX.Element {
         )}
       </Container>
 
+      {activeModal.modal === Modal.PIN_INPUT && (
+        <PinInputModal
+          name={(activeModal?.data?.partnerName as string) ?? ""}
+          visible
+          onClose={closeOpenModal}
+          onPinEntered={onEnteredPinForCase}
+          error={activeModal?.error}
+        />
+      )}
+
+      {activeModal.modal === Modal.START_NEW_APPLICATION && (
+        <NewApplicationModal
+          visible
+          onClose={closeOpenModal}
+          onOpenForm={() => openForm(newCase)}
+          onChangeModal={openAddCoApplicantModal}
+        />
+      )}
+
+      {activeModal.modal === Modal.ADD_CO_APPLICANT && (
+        <AddCoApplicantModal
+          visible
+          onClose={closeOpenModal}
+          onAddCoApplicant={(parameters) =>
+            handleAddCoApplicant(newCase, parameters)
+          }
+          isLoading={activeModal.loading}
+          errorMessage={activeModal.error}
+        />
+      )}
+
       {newCase && (
         <FloatingButton
-          onPress={() => navigation.navigate("Form", { caseId: newCase.id })}
+          onPress={openNewApplicationModal}
           text="Ansök om ekonomiskt bistånd"
           iconName="account-balance-wallet"
           position="center"

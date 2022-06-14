@@ -4,6 +4,7 @@ import {
   ActionTypes,
   CaseUpdate,
   UpdateCaseBody,
+  AddCoApplicantParameters,
 } from "../../types/CaseContext";
 import { get, post, put } from "../../helpers/ApiRequest";
 import { convertAnswersToArray } from "../../helpers/CaseDataConverter";
@@ -249,5 +250,26 @@ export async function fetchCases(user: UserInterface): Promise<Action> {
   return {
     type: ActionTypes.FETCH_CASES,
     payload: {},
+  };
+}
+
+export async function addCaseCoApplicant(
+  caseId: string,
+  parameters: AddCoApplicantParameters
+): Promise<{ type: ActionTypes.UPDATE_CASE; payload: Case }> {
+  const addCoApplicantResult = await put(
+    `/viva-cases/${caseId}/persons`,
+    JSON.stringify(parameters)
+  );
+
+  if (addCoApplicantResult?.status !== 200) {
+    const errorMessage =
+      addCoApplicantResult?.data?.data?.message ?? "Något gick fel";
+    throw new Error(errorMessage);
+  }
+
+  return {
+    type: ActionTypes.UPDATE_CASE,
+    payload: addCoApplicantResult.data.data.attributes.caseItem,
   };
 }

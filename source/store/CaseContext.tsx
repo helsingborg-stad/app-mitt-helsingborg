@@ -9,6 +9,7 @@ import {
   CaseUpdate,
   ActionTypes,
   Action,
+  AddCoApplicantParameters,
 } from "../types/CaseContext";
 import AuthContext from "./AuthContext";
 import CaseReducer, {
@@ -19,6 +20,7 @@ import {
   createCase as create,
   deleteCase as remove,
   fetchCases as fetch,
+  addCaseCoApplicant,
 } from "./actions/CaseActions";
 
 import { replaceCaseItemText } from "../containers/Form/hooks/textReplacement";
@@ -127,6 +129,15 @@ function CaseProvider({
     }
   }
 
+  const addCoApplicant = async (
+    caseId: string,
+    parameters: AddCoApplicantParameters
+  ) => {
+    const addCoApplicantResult = await addCaseCoApplicant(caseId, parameters);
+
+    dispatch(addCoApplicantResult);
+  };
+
   const fetchCases = useCallback(async () => {
     const fetchData = await fetch(user);
 
@@ -172,6 +183,7 @@ function CaseProvider({
     updateCase,
     deleteCase,
     providePinForCase,
+    addCoApplicant,
   };
 
   return (
