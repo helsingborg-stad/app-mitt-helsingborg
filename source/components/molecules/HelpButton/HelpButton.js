@@ -10,7 +10,7 @@ import BackNavigation from "../BackNavigation/BackNavigation";
 import { Modal, useModal } from "../Modal";
 
 const ModalContainer = styled.View`
-  flex-grow: 1;
+  flex: 1;
   background: ${(props) => props.theme.colors.neutrals[6]};
 `;
 
