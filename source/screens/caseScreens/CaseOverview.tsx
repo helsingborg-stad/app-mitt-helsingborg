@@ -206,8 +206,7 @@ const computeCaseCardComponent = (
   }
 
   if (isWaitingForSign && !selfHasSigned) {
-    buttonProps.onClick = () =>
-      navigation.navigate("Form", { caseId: caseData.id, isSignMode: true });
+    buttonProps.onClick = () => navigation.onOpenForm(caseData, true);
     buttonProps.text = "Granska och signera";
   }
 
@@ -426,7 +425,8 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     if (mainPerson?.firstName) {
       openModal(Modal.PIN_INPUT, {
         data: {
-          modalName: mainPerson.firstName,
+          partnerName: mainPerson.firstName,
+          case: caseData,
         },
       });
     }
@@ -575,7 +575,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
 
       {activeModal.modal === Modal.PIN_INPUT && (
         <PinInputModal
-          name={(activeModal?.data?.modalName as string) ?? ""}
+          name={(activeModal?.data?.partnerName as string) ?? ""}
           visible
           onClose={closeOpenModal}
           onPinEntered={onEnteredPinForCase}
