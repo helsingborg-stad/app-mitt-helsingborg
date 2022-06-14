@@ -135,8 +135,9 @@ export function splitFilePath(inPath: string | undefined | null): {
   dir: string;
   name: string;
   ext: string;
+  nameWithExt: string;
 } {
-  if (!inPath) return { dir: "", name: "", ext: "" };
+  if (!inPath) return { dir: "", name: "", ext: "", nameWithExt: "" };
 
   const lastSlash = inPath.lastIndexOf("/");
 
@@ -145,6 +146,7 @@ export function splitFilePath(inPath: string | undefined | null): {
   const firstDot = basename.indexOf(".");
   const name = firstDot >= 0 ? basename.substring(0, firstDot) : basename;
   const ext = firstDot >= 0 ? basename.substring(firstDot) : "";
+  const nameWithExt = `${name}${ext}`;
 
-  return { dir, name, ext };
+  return { dir, name, ext, nameWithExt };
 }
