@@ -31,10 +31,7 @@ const FileDisplay: React.FC<Props> = ({ files, answers, onChange }) => {
       const newFiles = answer.filter(({ id }) => id !== file.id);
       onChange(newFiles, file.questionId);
     }
-
-    if (file.uploadedFileName) {
-      void deleteFileFromCloudStorage(file);
-    }
+    void deleteFileFromCloudStorage(file);
   };
 
   const updateImage = (file: File) => {
