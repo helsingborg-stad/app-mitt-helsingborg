@@ -1,24 +1,42 @@
-import { actionTypes } from "../actions/AuthActions";
+import { ActionTypes, DispatchError } from "../actions/AuthActions";
 
 import USER_AUTH_STATE from "../../types/UserAuthTypes";
+import { User } from "../../types/UserTypes";
 
-export const initialState = {
+export interface AuthReducerState {
+  isActive: boolean;
+  userAuthState: USER_AUTH_STATE;
+  user: User | null;
+  error: Error | null;
+  status: string;
+  authenticateOnExternalDevice: boolean;
+  apiStatusMessage: string;
+  orderRef: string | undefined;
+  autoStartToken: string | undefined;
+}
+
+export const initialAuthReducerState: AuthReducerState = {
   isActive: true,
   userAuthState: USER_AUTH_STATE.PENDING,
   user: null,
   error: null,
   status: "idle",
+  orderRef: undefined,
+  autoStartToken: undefined,
   authenticateOnExternalDevice: false,
+  apiStatusMessage: "",
 };
 
-export default function AuthReducer(state, action) {
+export default function AuthReducer(
+  state: AuthReducerState,
+  action: { type: ActionTypes; payload?: unknown }
+): AuthReducerState {
   const { type, payload } = action;
 
   switch (type) {
-    case actionTypes.loginSuccess:
+    case ActionTypes.loginUserSuccess:
       return {
         ...state,
-        ...payload,
         isActive: true,
         userAuthState: USER_AUTH_STATE.SIGNED_IN,
         status: "authResolved",
@@ -26,10 +44,10 @@ export default function AuthReducer(state, action) {
         autoStartToken: undefined,
       };
 
-    case actionTypes.loginFailure:
+    case ActionTypes.loginUserFailure:
       return {
         ...state,
-        ...payload,
+        error: payload as DispatchError,
         isActive: false,
         userAuthState: USER_AUTH_STATE.SIGNED_OUT,
         status: "rejected",
@@ -37,35 +55,36 @@ export default function AuthReducer(state, action) {
         autoStartToken: undefined,
       };
 
-    case actionTypes.refreshSession:
+    case ActionTypes.refreshUserSession:
       return {
         ...state,
         userAuthState: USER_AUTH_STATE.SIGNED_IN,
       };
 
-    case actionTypes.addProfile:
+    case ActionTypes.addUserProfile:
       return {
         ...state,
-        user: payload,
+        user: payload as User,
       };
 
-    case actionTypes.removeProfile:
+    case ActionTypes.removeUserProfile:
       return {
         ...state,
         user: null,
       };
 
-    case actionTypes.authStarted:
+    case ActionTypes.authStarted:
       return {
         ...state,
-        ...payload,
+        orderRef: payload?.orderRef ?? "",
+        autoStartToken: payload.autoStartToken ?? "",
         userAuthState: USER_AUTH_STATE.SIGNED_OUT,
       };
 
-    case actionTypes.authError:
+    case ActionTypes.authError:
       return {
         ...state,
-        ...payload,
+        error: payload as DispatchError,
         userAuthState: USER_AUTH_STATE.SIGNED_OUT,
         user: null,
         status: "rejected",
@@ -73,22 +92,22 @@ export default function AuthReducer(state, action) {
         autoStartToken: undefined,
       };
 
-    case actionTypes.cancelOrder:
+    case ActionTypes.cancelAuthOrder:
       return {
         ...state,
-        ...payload,
         status: "rejected",
         orderRef: undefined,
         autoStartToken: undefined,
       };
 
-    case actionTypes.signStarted:
+    case ActionTypes.signStarted:
       return {
         ...state,
-        ...payload,
+        orderRef: payload?.orderRef ?? "",
+        autoStartToken: payload.autoStartToken ?? "",
       };
 
-    case actionTypes.signSuccess:
+    case ActionTypes.signSuccess:
       return {
         ...state,
         status: "signResolved",
@@ -96,37 +115,37 @@ export default function AuthReducer(state, action) {
         autoStartToken: undefined,
       };
 
-    case actionTypes.signFailure:
+    case ActionTypes.signFailure:
       return {
         ...state,
-        ...payload,
+        error: payload as DispatchError,
         status: "rejected",
         orderRef: undefined,
         autoStartToken: undefined,
       };
 
-    case actionTypes.setStatus:
+    case ActionTypes.setAuthStatus:
       return {
         ...state,
-        status: action.status,
+        status: payload as string,
       };
 
-    case actionTypes.setError:
+    case ActionTypes.setAuthError:
       return {
         ...state,
-        ...payload,
+        error: payload as DispatchError,
       };
 
-    case actionTypes.setAuthenticateOnExternalDevice:
+    case ActionTypes.setAuthOnExternalDevice:
       return {
         ...state,
-        authenticateOnExternalDevice: action.authenticateOnExternalDevice,
+        authenticateOnExternalDevice: payload as boolean,
       };
 
-    case actionTypes.apiStatusMessage:
+    case ActionTypes.apiStatusMessage:
       return {
         ...state,
-        apiStatusMessage: action.apiStatusMessage,
+        apiStatusMessage: payload as string,
       };
 
     default:

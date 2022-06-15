@@ -1,6 +1,5 @@
 import React, { useEffect, useReducer, useContext, useCallback } from "react";
 import { Alert, Linking } from "react-native";
-import PropTypes from "prop-types";
 import env from "react-native-config";
 import USER_AUTH_STATE from "../types/UserAuthTypes";
 import AppContext from "./AppContext";
@@ -9,7 +8,8 @@ import * as authService from "../services/AuthService";
 import getApiStatus from "../services/ApiStatusService";
 
 import AuthReducer, {
-  initialState as defaultInitialState,
+  initialAuthReducerState,
+  AuthReducerState,
 } from "./reducers/AuthReducer";
 import {
   startAuth,
@@ -26,12 +26,57 @@ import {
   setError,
   setAuthenticateOnExternalDevice,
   setApiStatusMessage,
+  DispatchError,
 } from "./actions/AuthActions";
 
-const AuthContext = React.createContext();
+interface UseAuthProviderState extends AuthReducerState {
+  isLoading: boolean;
+  isIdle: boolean;
+  isResolved: boolean;
+  isRejected: boolean;
+  handleLogin: () => void;
+  handleLogout: () => void;
+  handleRefreshSession: () => void;
+  handleAddProfile: () => void;
+  handleAuth: (
+    personalNumber: string,
+    authenticateOnExternalDevice: boolean
+  ) => void;
+  handleCancelOrder: () => void;
+  handleSetStatus: (stsatus: string) => void;
+  isAccessTokenValid: () => Promise<boolean>;
+  handleSign: (
+    personalNumber: string,
+    userVisibleData: string,
+    authenticateOnExternalDevice: boolean
+  ) => Promise<void>;
+  handleSetError: (error: DispatchError) => void;
+}
 
-function AuthProvider({ children, initialState }) {
-  const [state, dispatch] = useReducer(AuthReducer, initialState);
+const initialAuthProviderState: UseAuthProviderState = {
+  ...initialAuthReducerState,
+  isLoading: false,
+  isIdle: false,
+  isResolved: false,
+  isRejected: false,
+  handleLogin: () => true,
+  handleLogout: () => undefined,
+  handleRefreshSession: () => undefined,
+  handleAddProfile: () => undefined,
+  handleAuth: () => undefined,
+  handleCancelOrder: () => undefined,
+  handleSetStatus: () => undefined,
+  isAccessTokenValid: () => Promise.resolve(false),
+  handleSign: () => Promise.resolve(),
+  handleSetError: () => undefined,
+};
+
+const AuthContext = React.createContext(initialAuthProviderState);
+
+function useAuthProviderState(
+  initialState: AuthReducerState
+): UseAuthProviderState {
+  const [authReducerState, dispatch] = useReducer(AuthReducer, initialState);
 
   const { handleSetMode, isDevMode } = useContext(AppContext);
   const { getIsCompatible } = useContext(AppCompabilityContext);
@@ -42,29 +87,36 @@ function AuthProvider({ children, initialState }) {
   useEffect(() => {
     const handleCheckOrderStatus = async () => {
       if (
-        state.status === "pending" &&
-        state.orderRef &&
-        state.autoStartToken
+        authReducerState.status === "pending" &&
+        authReducerState.orderRef &&
+        authReducerState.autoStartToken
       ) {
         dispatch(
           await checkOrderStatus(
-            state.autoStartToken,
-            state.orderRef,
-            state.userAuthState === USER_AUTH_STATE.SIGNED_IN
+            authReducerState.autoStartToken,
+            authReducerState.orderRef,
+            authReducerState.userAuthState === USER_AUTH_STATE.SIGNED_IN
           )
         );
       }
     };
-    handleCheckOrderStatus();
+    void handleCheckOrderStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.status, state.orderRef, state.autoStartToken]);
+  }, [
+    authReducerState.status,
+    authReducerState.orderRef,
+    authReducerState.autoStartToken,
+  ]);
 
   /**
    * This function starts up the authorization process.
    * @param {string} personalNumber Personal identity number
    * @param {bool} authenticateOnExternalDevice Will automatically launch BankID app if set to false
    */
-  async function handleAuth(personalNumber, authenticateOnExternalDevice) {
+  async function handleAuth(
+    personalNumber: string,
+    authenticateOnExternalDevice: boolean
+  ) {
     // Dynamically sets app in dev mode
     if (personalNumber && env.TEST_PERSONAL_NUMBER === personalNumber) {
       handleSetMode("development");
@@ -88,9 +140,9 @@ function AuthProvider({ children, initialState }) {
    * @param {bool} authenticateOnExternalDevice Will automatically launch BankID app if set to false
    */
   async function handleSign(
-    personalNumber,
-    userVisibleData,
-    authenticateOnExternalDevice
+    personalNumber: string,
+    userVisibleData: string,
+    authenticateOnExternalDevice: boolean
   ) {
     if (env.USE_BANKID === "false") {
       dispatch(setStatus("signResolved"));
@@ -111,7 +163,7 @@ function AuthProvider({ children, initialState }) {
    * This function cancels the authorization process.
    */
   async function handleCancelOrder() {
-    dispatch(await cancelOrder(state.orderRef));
+    dispatch(await cancelOrder(authReducerState.orderRef));
   }
 
   /**
@@ -134,7 +186,7 @@ function AuthProvider({ children, initialState }) {
    * Only trigger if the user is authenticated already.
    */
   async function handleRefreshSession() {
-    if (state.userAuthState === USER_AUTH_STATE.SIGNED_IN) {
+    if (authReducerState.userAuthState === USER_AUTH_STATE.SIGNED_IN) {
       dispatch(await refreshSession());
     }
   }
@@ -149,25 +201,25 @@ function AuthProvider({ children, initialState }) {
   /**
    * Sets API status message in state.
    */
-  function handleSetApiStatusMessage(message) {
+  function handleSetApiStatusMessage(message: string) {
     dispatch(setApiStatusMessage(message));
   }
 
   /**
    * Set status.
    */
-  function handleSetStatus(status) {
+  function handleSetStatus(status: string) {
     dispatch(setStatus(status));
   }
 
   /**
    * Set error object
    */
-  function handleSetError(error) {
+  function handleSetError(error: DispatchError) {
     dispatch(setError(error));
   }
 
-  function showUpdateRequiredAlert(updateUrl) {
+  function showUpdateRequiredAlert(updateUrl: string) {
     Alert.alert(
       "Mitt Helsingborg måste uppdateras",
       "Versionen du använder av Mitt Helsingborg är för gammal",
@@ -227,7 +279,7 @@ function AuthProvider({ children, initialState }) {
           await handleAddProfile();
           handleLogin();
         } else {
-          handleLogout();
+          void handleLogout();
         }
 
         if (!isCompatible) {
@@ -237,31 +289,31 @@ function AuthProvider({ children, initialState }) {
           );
         }
       } catch (error) {
-        handleLogout();
+        void handleLogout();
       }
     };
 
-    trySignIn();
+    void trySignIn();
   }, [isAccessTokenValid, isDevMode, getIsCompatible]);
 
   useEffect(() => {
     const tryFetchUser = async () => {
       try {
         if (
-          state.userAuthState === USER_AUTH_STATE.SIGNED_IN &&
-          state.user === null
+          authReducerState.userAuthState === USER_AUTH_STATE.SIGNED_IN &&
+          authReducerState.user === null
         ) {
           await handleAddProfile();
         }
       } catch (error) {
-        handleLogout();
+        void handleLogout();
       }
     };
 
-    tryFetchUser();
-  }, [state.userAuthState, state.user]);
+    void tryFetchUser();
+  }, [authReducerState.userAuthState, authReducerState.user]);
 
-  const contextValues = {
+  return {
     handleLogin,
     handleLogout,
     handleRefreshSession,
@@ -272,28 +324,20 @@ function AuthProvider({ children, initialState }) {
     isAccessTokenValid,
     handleSign,
     handleSetError,
-    isLoading: state.status === "pending",
-    isIdle: state.status === "idle",
+    isLoading: authReducerState.status === "pending",
+    isIdle: authReducerState.status === "idle",
     isResolved:
-      state.status === "authResolved" || state.status === "signResolved",
-    isRejected: state.status === "rejected",
-    ...state,
+      authReducerState.status === "authResolved" ||
+      authReducerState.status === "signResolved",
+    isRejected: authReducerState.status === "rejected",
+    ...authReducerState,
   };
-
-  return (
-    <AuthContext.Provider value={contextValues}>
-      {children}
-    </AuthContext.Provider>
-  );
 }
 
-AuthProvider.propTypes = {
-  children: PropTypes.node,
-  initialState: PropTypes.shape({}),
-};
+const AuthProvider = ({ children }: { children: JSX.Element }): JSX.Element => {
+  const value = useAuthProviderState(initialAuthReducerState);
 
-AuthProvider.defaultProps = {
-  initialState: defaultInitialState,
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export { AuthProvider };

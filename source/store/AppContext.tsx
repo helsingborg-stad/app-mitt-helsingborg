@@ -1,14 +1,20 @@
-import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
 import env from "react-native-config";
 import StorageService, { APP_ENV_KEY } from "../services/StorageService";
 
-const AppContext = React.createContext({});
-interface Provider {
+export interface AppProviderState {
   mode: string;
   handleSetMode(newMode: string): void;
   isDevMode: boolean;
 }
+
+const initialState: AppProviderState = {
+  mode: "",
+  handleSetMode: () => undefined,
+  isDevMode: true,
+};
+
+const AppContext = React.createContext(initialState);
 
 interface AppProviderProps {
   children?: React.ReactNode;
@@ -28,7 +34,7 @@ function AppProvider({ children }: AppProviderProps): JSX.Element {
     }
   };
 
-  const provider: Provider = {
+  const provider: AppProviderState = {
     mode,
     handleSetMode,
     isDevMode: mode === "development",
@@ -40,13 +46,6 @@ function AppProvider({ children }: AppProviderProps): JSX.Element {
 
   return <AppContext.Provider value={provider}>{children}</AppContext.Provider>;
 }
-
-AppProvider.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
-};
 
 export { AppProvider };
 export default AppContext;
