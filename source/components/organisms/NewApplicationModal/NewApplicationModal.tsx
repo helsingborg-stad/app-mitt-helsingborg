@@ -3,7 +3,6 @@ import React from "react";
 import Wrapper from "../../molecules/Dialog/Wrapper";
 import { Modal } from "../../molecules/Modal";
 
-import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import { Text, TextButton } from "../../atoms";
 
 import {
@@ -28,40 +27,35 @@ export default function NewApplicationModal({
   return (
     <Modal
       visible={visible}
-      transparent
       presentationStyle="overFullScreen"
       animationType="fade"
-      statusBarTranslucent
     >
-      <BackgroundBlurWrapper>
-        <Wrapper>
-          <DialogContainer>
-            <Container border>
-              <Text align="center" type="h5">
-                Söker du själv eller ihop med någon?
-              </Text>
-            </Container>
-            <Container border>
-              <Text>
-                Om du har en fru, man eller sambo ska ni söka bistånd
-                tillsammans.
-              </Text>
-            </Container>
-            <Container>
-              {buttonGroup.map(({ text, onClick }) => (
-                <StyledButton
-                  key={text}
-                  onClick={onClick}
-                  value={text}
-                  fullWidth
-                  colorSchema="red"
-                />
-              ))}
-            </Container>
-            <TextButton label="Avbryt" onPress={onClose} />
-          </DialogContainer>
-        </Wrapper>
-      </BackgroundBlurWrapper>
+      <Wrapper>
+        <DialogContainer>
+          <Container border>
+            <Text align="center" type="h5">
+              Söker du själv eller ihop med någon?
+            </Text>
+          </Container>
+          <Container border>
+            <Text>
+              Om du har en fru, man eller sambo ska ni söka bistånd tillsammans.
+            </Text>
+          </Container>
+          <Container>
+            {buttonGroup.map(({ text, onClick }) => (
+              <StyledButton
+                key={text}
+                onClick={onClick}
+                value={text}
+                fullWidth
+                colorSchema="red"
+              />
+            ))}
+          </Container>
+          <TextButton label="Avbryt" onPress={onClose} />
+        </DialogContainer>
+      </Wrapper>
     </Modal>
   );
 }
