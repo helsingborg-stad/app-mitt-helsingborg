@@ -53,12 +53,12 @@ const IconContainer = styled.View`
   elevation: 1;
 `;
 const ImageIcon = styled.Image`
-  width: 126px;
-  height: 178px;
+  width: 120px;
+  height: 170px;
 `;
 const ActivityWrapper = styled.View`
-  width: 126px;
-  height: 178px;
+  width: 120px;
+  height: 170px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
