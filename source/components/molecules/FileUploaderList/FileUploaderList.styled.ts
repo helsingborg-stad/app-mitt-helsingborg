@@ -3,7 +3,6 @@ import { ThemeType, PrimaryColor } from "../../../styles/themeHelpers";
 
 export const Container = styled.View<{ theme: ThemeType }>`
   margin: ${(props) => props.theme.sizes[0]}px;
-  flex: 1;
 `;
 
 export const UploaderLabel = styled.Text<{

@@ -18,7 +18,7 @@ const Flex = styled.View`
   padding-top: 10px;
   padding-right: 20px;
   margin: 0;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 `;
 const DeleteBackground = styled.View`
   position: absolute;
