@@ -23,4 +23,6 @@ export type Props = Omit<TextInputProps, "onBlur"> & {
   theme?: ThemeType;
 };
 
-export type KeyboardTypeExtraPropType = Record<InputFieldType, Partial<Props>>;
+export type KeyboardTypeExtraPropType = Partial<
+  Record<InputFieldType, Partial<Props>>
+>;
