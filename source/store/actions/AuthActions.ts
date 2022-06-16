@@ -4,44 +4,33 @@ import * as authService from "../../services/AuthService";
 
 import { User } from "../../types/UserTypes";
 
-export enum ActionTypes {
-  loginUserSuccess = "LOGIN_SUCCESS",
-  loginUserFailure = "LOGIN_FAILURE",
-  refreshUserSession = "REFRESH_CREDENTIALS",
-  addUserProfile = "ADD_PROFILE",
-  removeUserProfile = "REMOVE_PROFILE",
-  authStarted = "AUTH_STARTED",
-  authError = "AUTH_ERROR",
-  signFailure = "SIGN_FAILURE",
-  cancelAuthOrder = "CANCEL_ORDER",
-  signStarted = "SIGN_STARTED",
-  setAuthStatus = "SET_STATUS",
-  setAuthError = "SET_ERROR",
-  signSuccess = "SIGN_SUCCESS",
-  setAuthOnExternalDevice = "SET_AUTH_ON_EXTERNAL_DEVICE",
-  apiStatusMessage = "API_STATUS_MESSAGE",
-}
+import {
+  ActionTypes,
+  DispatchError,
+  MockAuthSucessDispatch,
+  MockAuthFailureDispatch,
+  LoginSuccessDispatch,
+  SetStatusDispatch,
+  RemoveProfileDispatch,
+  SetErrorDispatch,
+  LoginFailureDispatch,
+  AddProfileDispatch,
+  RefreshSessionSuccessDispatch,
+  RefreshSessionFailureDispatch,
+  StartAuthSuccessDispatch,
+  StartAuthFailureDispatch,
+  StartSignSuccessDispatch,
+  StartSignFailureDispatch,
+  CheckOrderStatusSuccessDispatch,
+  CheckOrderStatusFailureDispatch,
+  CancelOrderDispatch,
+  SetAuthenticateOnExternalDeviceDispatch,
+  SetApiStatusMessageDispatch,
+} from "./AuthActions.types";
 
-export interface DispatchDefault {
-  type: ActionTypes;
-  payload?: Record<string, string> | Error | string | boolean | null;
-}
-
-export type DispatchError = Error | null;
-
-export interface BankIdAuthOrder {
-  orderRef: string;
-  autoStartToken: string;
-}
-
-export interface MockAuthDispatch {
-  type: ActionTypes.loginUserSuccess | ActionTypes.authError;
-  payload?: DispatchError;
-}
-export async function mockedAuth(): Promise<{
-  type: ActionTypes.loginUserSuccess | ActionTypes.authError;
-  payload?: DispatchError;
-}> {
+export async function mockedAuth(): Promise<
+  MockAuthSucessDispatch | MockAuthFailureDispatch
+> {
   try {
     const [, grantTokenError] = await authService.grantAccessToken(
       env.FAKE_TOKEN
@@ -61,19 +50,12 @@ export async function mockedAuth(): Promise<{
   }
 }
 
-export interface LoginSuccessDispatch {
-  type: ActionTypes.loginUserSuccess;
-}
 export function loginSuccess(): LoginSuccessDispatch {
   return {
     type: ActionTypes.loginUserSuccess,
   };
 }
 
-export interface SetStatusDispatch {
-  type: ActionTypes.setAuthStatus;
-  payload: string;
-}
 export function setStatus(status: string): SetStatusDispatch {
   return {
     type: ActionTypes.setAuthStatus,
@@ -81,19 +63,12 @@ export function setStatus(status: string): SetStatusDispatch {
   };
 }
 
-export interface RemoveProfileDispatch {
-  type: ActionTypes.removeUserProfile;
-}
 export function removeProfile(): RemoveProfileDispatch {
   return {
     type: ActionTypes.removeUserProfile,
   };
 }
 
-export interface SetErrorDispatch {
-  type: ActionTypes.setAuthError;
-  payload: DispatchError;
-}
 export function setError(error: DispatchError): SetErrorDispatch {
   return {
     type: ActionTypes.setAuthError,
@@ -101,9 +76,6 @@ export function setError(error: DispatchError): SetErrorDispatch {
   };
 }
 
-export interface LoginFailureDispatch {
-  type: ActionTypes.loginUserFailure;
-}
 export async function loginFailure(): Promise<LoginFailureDispatch> {
   await authService.removeAccessTokenFromStorage();
   return {
@@ -111,10 +83,6 @@ export async function loginFailure(): Promise<LoginFailureDispatch> {
   };
 }
 
-export interface AddProfileDispatch {
-  type: ActionTypes.addUserProfile;
-  payload: User | null;
-}
 export async function addProfile(): Promise<AddProfileDispatch> {
   const decodedToken = await authService.getAccessTokenFromStorage();
   const [userProfile, userError] = (await authService.getUserProfile(
@@ -131,11 +99,9 @@ export async function addProfile(): Promise<AddProfileDispatch> {
   };
 }
 
-export interface RefreshSessionDispatch {
-  type: ActionTypes.authError | ActionTypes.refreshUserSession;
-  payload?: DispatchError;
-}
-export async function refreshSession(): Promise<RefreshSessionDispatch> {
+export async function refreshSession(): Promise<
+  RefreshSessionSuccessDispatch | RefreshSessionFailureDispatch
+> {
   const [, refreshError] = await authService.refreshTokens();
   if (refreshError) {
     return {
@@ -148,14 +114,10 @@ export async function refreshSession(): Promise<RefreshSessionDispatch> {
   };
 }
 
-export interface StartAuthDispatch {
-  type: ActionTypes.authStarted | ActionTypes.authError;
-  payload?: BankIdAuthOrder | DispatchError;
-}
 export async function startAuth(
   personalNumber: string,
   authenticateOnExternalDevice: boolean
-): Promise<StartAuthDispatch> {
+): Promise<StartAuthSuccessDispatch | StartAuthFailureDispatch> {
   try {
     const response = await bankid.auth(personalNumber);
     if (response.success === false) {
@@ -183,15 +145,11 @@ export async function startAuth(
   }
 }
 
-export interface StartSignDispatch {
-  type: ActionTypes.signStarted | ActionTypes.signFailure;
-  payload: BankIdAuthOrder | Error;
-}
 export async function startSign(
   personalNumber: string,
   userVisibleData: string,
   authenticateOnExternalDevice: boolean
-): Promise<StartSignDispatch> {
+): Promise<StartSignSuccessDispatch | StartSignFailureDispatch> {
   try {
     const response = await bankid.sign(personalNumber, userVisibleData);
 
@@ -221,19 +179,11 @@ export async function startSign(
   }
 }
 
-export interface CheckOrderStatusDispatch {
-  type:
-    | ActionTypes.loginUserSuccess
-    | ActionTypes.signSuccess
-    | ActionTypes.loginUserFailure
-    | ActionTypes.signFailure;
-  payload?: DispatchError;
-}
 export async function checkOrderStatus(
   autoStartToken: string,
   orderRef: string,
   isUserAuthenticated: boolean
-): Promise<CheckOrderStatusDispatch> {
+): Promise<CheckOrderStatusSuccessDispatch | CheckOrderStatusFailureDispatch> {
   try {
     // Try to collect a successfull collect response from bankid.
     const response = await bankid.collect(orderRef);
@@ -266,9 +216,6 @@ export async function checkOrderStatus(
   }
 }
 
-export interface CancelOrderDispatch {
-  type: ActionTypes.cancelAuthOrder;
-}
 export async function cancelOrder(
   orderRef: string | undefined
 ): Promise<CancelOrderDispatch> {
@@ -287,10 +234,6 @@ export async function cancelOrder(
   };
 }
 
-export interface SetAuthenticateOnExternalDeviceDispatch {
-  type: ActionTypes.setAuthOnExternalDevice;
-  payload: boolean;
-}
 export function setAuthenticateOnExternalDevice(
   authOnExternalDeviceFlag: boolean
 ): SetAuthenticateOnExternalDeviceDispatch {
@@ -300,10 +243,6 @@ export function setAuthenticateOnExternalDevice(
   };
 }
 
-export interface SetApiStatusMessageDispatch {
-  type: ActionTypes.apiStatusMessage;
-  payload: string;
-}
 export function setApiStatusMessage(
   apiStatusMessage: string
 ): SetApiStatusMessageDispatch {

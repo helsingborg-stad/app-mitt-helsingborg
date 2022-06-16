@@ -1,4 +1,4 @@
-import { ActionTypes, DispatchError } from "../actions/AuthActions";
+import { ActionTypes, DispatchError } from "../actions/AuthActions.types";
 
 import USER_AUTH_STATE from "../../types/UserAuthTypes";
 import { User } from "../../types/UserTypes";

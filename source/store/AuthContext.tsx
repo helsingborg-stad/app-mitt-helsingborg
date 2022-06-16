@@ -26,8 +26,9 @@ import {
   setError,
   setAuthenticateOnExternalDevice,
   setApiStatusMessage,
-  DispatchError,
 } from "./actions/AuthActions";
+
+import { DispatchError } from "./actions/AuthActions.types";
 
 interface UseAuthProviderState extends AuthReducerState {
   isLoading: boolean;
@@ -81,9 +82,6 @@ function useAuthProviderState(
   const { handleSetMode, isDevMode } = useContext(AppContext);
   const { getIsCompatible } = useContext(AppCompabilityContext);
 
-  /**
-   * Starts polling for an order response if status is pending and orderRef and autoStartToken is set in state.
-   */
   useEffect(() => {
     const handleCheckOrderStatus = async () => {
       if (
@@ -108,21 +106,14 @@ function useAuthProviderState(
     authReducerState.autoStartToken,
   ]);
 
-  /**
-   * This function starts up the authorization process.
-   * @param {string} personalNumber Personal identity number
-   * @param {bool} authenticateOnExternalDevice Will automatically launch BankID app if set to false
-   */
   async function handleAuth(
     personalNumber: string,
     authenticateOnExternalDevice: boolean
   ) {
-    // Dynamically sets app in dev mode
     if (personalNumber && env.TEST_PERSONAL_NUMBER === personalNumber) {
       handleSetMode("development");
     }
 
-    // Disable BankId authentication
     if (env.USE_BANKID === "false") {
       dispatch(await mockedAuth());
       return;
@@ -133,12 +124,6 @@ function useAuthProviderState(
     dispatch(await startAuth(personalNumber, authenticateOnExternalDevice));
   }
 
-  /**
-   * This function starts up the sign process.
-   * @param {string} personalNumber Personal Identity Number
-   * @param {string} userVisibleData Message to be shown when signing order
-   * @param {bool} authenticateOnExternalDevice Will automatically launch BankID app if set to false
-   */
   async function handleSign(
     personalNumber: string,
     userVisibleData: string,
@@ -159,62 +144,37 @@ function useAuthProviderState(
     );
   }
 
-  /**
-   * This function cancels the authorization process.
-   */
   async function handleCancelOrder() {
     dispatch(await cancelOrder(authReducerState.orderRef));
   }
 
-  /**
-   * Dispatch action to set authentication state of the user true
-   */
   function handleLogin() {
     dispatch(loginSuccess());
   }
 
-  /**
-   * This function triggers an action to logout the user.
-   */
   async function handleLogout() {
     dispatch(removeProfile());
     dispatch(await loginFailure());
   }
 
-  /**
-   * This function triggers an action to refresh the users session credentials.
-   * Only trigger if the user is authenticated already.
-   */
   async function handleRefreshSession() {
     if (authReducerState.userAuthState === USER_AUTH_STATE.SIGNED_IN) {
       dispatch(await refreshSession());
     }
   }
-  /**
-   * Used to save user profile data to the state.
-   * @param {object} profile a user profile object
-   */
+
   async function handleAddProfile() {
     dispatch(await addProfile());
   }
 
-  /**
-   * Sets API status message in state.
-   */
   function handleSetApiStatusMessage(message: string) {
     dispatch(setApiStatusMessage(message));
   }
 
-  /**
-   * Set status.
-   */
   function handleSetStatus(status: string) {
     dispatch(setStatus(status));
   }
 
-  /**
-   * Set error object
-   */
   function handleSetError(error: DispatchError) {
     dispatch(setError(error));
   }
@@ -232,9 +192,6 @@ function useAuthProviderState(
     );
   }
 
-  /**
-   * This function checks if the current accessToken is valid.
-   */
   const isAccessTokenValid = useCallback(async () => {
     const decodedToken = await authService.getAccessTokenFromStorage();
 
