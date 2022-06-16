@@ -16,7 +16,12 @@ import { addPdfFromLibrary } from "./pdfUpload";
 import PopupButton from "./PopupButton";
 import PopupLabel from "./PopupLabel";
 
-import { Wrapper, ButtonContainer, PopupContainer } from "./FilePicker.styled";
+import {
+  Wrapper,
+  ButtonContainer,
+  PopupContainer,
+  OverflowAvoidingView,
+} from "./FilePicker.styled";
 
 export enum FileType {
   ALL = "all",
@@ -133,7 +138,9 @@ const FilePicker: React.FC<Props> = ({
     <>
       <Wrapper>
         {files !== "" && (
-          <FileDisplay files={files} onChange={onChange} answers={answers} />
+          <OverflowAvoidingView>
+            <FileDisplay files={files} onChange={onChange} answers={answers} />
+          </OverflowAvoidingView>
         )}
         <ButtonContainer>
           <Button colorSchema={validColorSchema} onClick={toggleChoiceModal}>
