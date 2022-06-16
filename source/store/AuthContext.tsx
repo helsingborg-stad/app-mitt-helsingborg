@@ -30,7 +30,7 @@ import {
 
 import { DispatchError } from "./actions/AuthActions.types";
 
-interface UseAuthProviderState extends AuthReducerState {
+interface UseAuthProviderLogicValues extends AuthReducerState {
   isLoading: boolean;
   isIdle: boolean;
   isResolved: boolean;
@@ -54,7 +54,7 @@ interface UseAuthProviderState extends AuthReducerState {
   handleSetError: (error: DispatchError) => void;
 }
 
-const initialAuthProviderState: UseAuthProviderState = {
+const initialAuthProviderState: UseAuthProviderLogicValues = {
   ...initialAuthReducerState,
   isLoading: false,
   isIdle: false,
@@ -74,9 +74,9 @@ const initialAuthProviderState: UseAuthProviderState = {
 
 const AuthContext = React.createContext(initialAuthProviderState);
 
-function useAuthProviderState(
+function useAuthProviderLogic(
   initialState: AuthReducerState
-): UseAuthProviderState {
+): UseAuthProviderLogicValues {
   const [authReducerState, dispatch] = useReducer(AuthReducer, initialState);
 
   const { handleSetMode, isDevMode } = useContext(AppContext);
@@ -292,7 +292,7 @@ function useAuthProviderState(
 }
 
 const AuthProvider = ({ children }: { children: JSX.Element }): JSX.Element => {
-  const value = useAuthProviderState(initialAuthReducerState);
+  const value = useAuthProviderLogic(initialAuthReducerState);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
