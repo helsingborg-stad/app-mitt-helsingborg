@@ -1,7 +1,7 @@
 import { Dimensions } from "react-native";
 import styled from "styled-components/native";
 
-import { Text } from "..";
+import Text from "../Text";
 
 import { ErrorValidation } from "./Input.types";
 
