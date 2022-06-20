@@ -59,11 +59,14 @@ const FormCaseScreen = ({
     [form]
   );
 
-  const initialPosition =
-    initialCase?.forms?.[initialCase.currentFormId]?.currentPosition ||
-    defaultInitialPosition;
-  const initialAnswers =
-    initialCase?.forms?.[initialCase.currentFormId]?.answers || {};
+  const countNext = (m: any, currentRow: number, history: number[]): any => {
+    const nextIndex = m[currentRow].findIndex((a) => a === "next");
+    if (history.includes(nextIndex)) return 1;
+    return nextIndex >= 0
+      ? 2 + countNext(m, nextIndex, [...history, nextIndex])
+      : 2;
+  };
+  const count = countNext(form?.connectivityMatrix ?? [[]], 0, []);
 
   useEffect(() => {
     const setInitialCase = async () => {
@@ -157,6 +160,14 @@ const FormCaseScreen = ({
       </SpinnerContainer>
     );
   }
+
+  const initialPosition =
+    {
+      ...initialCase?.forms?.[initialCase.currentFormId]?.currentPosition,
+      numberOfMainSteps: count % 2 === 0 ? count / 2 : -1,
+    } || defaultInitialPosition;
+  const initialAnswers =
+    initialCase?.forms?.[initialCase.currentFormId]?.answers || {};
 
   return (
     <Form

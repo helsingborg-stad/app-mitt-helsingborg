@@ -9,6 +9,7 @@ export interface FormPosition {
   level: number;
   currentMainStep: number;
   currentMainStepIndex: number;
+  numberOfMainSteps: number;
 }
 
 export interface FormPeriod {

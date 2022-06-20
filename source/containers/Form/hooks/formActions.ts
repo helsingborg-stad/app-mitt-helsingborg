@@ -139,6 +139,7 @@ export function goNext(state: FormReducerState) {
           currentPosition.level === 0
             ? nextIndex
             : currentPosition.currentMainStepIndex,
+        numberOfMainSteps: currentPosition.numberOfMainSteps,
       },
     };
   }

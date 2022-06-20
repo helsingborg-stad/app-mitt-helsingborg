@@ -75,6 +75,7 @@ export const defaultInitialPosition: FormPosition = {
   level: 0,
   currentMainStep: 1,
   currentMainStepIndex: 0,
+  numberOfMainSteps: 0,
 };
 
 export const defaultInitialStatus = {
