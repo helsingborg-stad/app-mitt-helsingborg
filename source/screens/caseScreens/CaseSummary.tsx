@@ -10,11 +10,11 @@ import { View, Animated, Easing, ScrollView } from "react-native";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import { CaseState } from "../../store/CaseContext";
-import FormContext from "../../store/FormContext";
 import icons from "../../helpers/Icons";
 import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
 import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
+import { PrimaryColor } from "../../styles/themeHelpers";
 import { Icon, Text } from "../../components/atoms";
 import {
   Card,
@@ -39,7 +39,6 @@ import {
   Workflow,
   Journal,
   Decision,
-  AnsweredForm,
 } from "../../types/Case";
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
@@ -116,34 +115,33 @@ Card.DetailsTitle = styled(Text)`
 `;
 
 const computeCaseCardComponent = (
-  caseData,
-  form,
-  formName,
-  colorSchema,
-  navigation,
-  toggleModal,
-  authContext
+  caseItem: Case,
+  formName: string,
+  colorSchema: PrimaryColor,
+  navigation: { onOpenForm: (caseId: string, isSignMode?: boolean) => void },
+  toggleModal: () => void,
+  personalNumber: string
 ) => {
   const {
-    currentPosition: { currentMainStep: currentStep },
-  } = caseData?.forms[caseData?.currentFormId];
+    currentPosition: { currentMainStep: currentStep, numberOfMainSteps },
+    answers,
+  } = caseItem?.forms[caseItem?.currentFormId];
 
-  const status = caseData?.status;
-  const persons = caseData.persons ?? [];
-  const details = caseData?.details ?? {};
+  const caseId = caseItem.id;
+  const status = caseItem?.status;
+  const persons = caseItem.persons ?? [];
+  const details = caseItem?.details ?? {};
   const { workflow = {}, period = {} } = details;
   const { decision = {}, payments = {} } = workflow;
 
-  const totalSteps = form?.stepStructure?.length || 0;
-
-  const completions = caseData?.details?.completions?.requested || [];
+  const completions = caseItem?.details?.completions?.requested || [];
 
   const applicationPeriodMonth = period?.endDate
     ? getSwedishMonthNameByTimeStamp(period?.endDate, true)
     : "";
 
   const casePersonData = persons.find(
-    (person) => person.personalNumber === authContext.user.personalNumber
+    (person) => person.personalNumber === personalNumber
   );
 
   const statusType = status?.type ?? "";
@@ -173,9 +171,7 @@ const computeCaseCardComponent = (
     (caseDecision) => ["03", "02"].includes(caseDecision.typecode)
   );
 
-  const currentForm: AnsweredForm = caseData?.forms[caseData.currentFormId];
-
-  const isEncrypted = answersAreEncrypted(currentForm.answers);
+  const isEncrypted = answersAreEncrypted(answers);
   const shouldEnterPin = isEncrypted && isCoApplicant && isWaitingForSign;
 
   const shouldShowCTAButton =
@@ -192,7 +188,7 @@ const computeCaseCardComponent = (
         activeSubmittedCompletion);
 
   const buttonProps = {
-    onClick: () => navigation.navigate("Form", { caseId: caseData.id }),
+    onClick: () => navigation.onOpenForm(caseId),
     text: "",
   };
 
@@ -221,8 +217,7 @@ const computeCaseCardComponent = (
   }
 
   if (isWaitingForSign && !selfHasSigned) {
-    buttonProps.onClick = () =>
-      navigation.navigate("Form", { caseId: caseData.id, isSignMode: true });
+    buttonProps.onClick = () => navigation.onOpenForm(caseId, true);
     buttonProps.text = "Granska och signera";
   }
 
@@ -248,7 +243,7 @@ const computeCaseCardComponent = (
       subtitle={status.name}
       showProgress={isOngoing}
       currentStep={currentStep}
-      totalSteps={totalSteps}
+      totalSteps={numberOfMainSteps}
       description={status.detailedDescription || status.description || ""}
       showPayments={isClosed && !!payments?.payment?.givedate}
       approvedAmount={calculateSum(paymentsArray, "kronor")}
@@ -273,7 +268,6 @@ const computeCaseCardComponent = (
 const CaseSummary = (props) => {
   const authContext = useContext(AuthContext);
   const { cases, getCase } = useContext(CaseState);
-  const { getForm, forms } = useContext(FormContext);
 
   const {
     colorSchema,
@@ -284,10 +278,6 @@ const CaseSummary = (props) => {
   } = props;
 
   const caseData: Case = useMemo(() => cases[caseId] ?? {}, [cases, caseId]);
-  const form = useMemo(
-    () => forms[caseData?.currentFormId] ?? {},
-    [caseData?.currentFormId, forms]
-  );
 
   const details = caseData?.details ?? ({} as VIVACaseDetails);
   const { workflow = {}, administrators } = details;
@@ -303,16 +293,6 @@ const CaseSummary = (props) => {
   const decisions = decision?.decisions?.decision
     ? convertDataToArray(decision.decisions.decision)
     : [];
-
-  useEffect(() => {
-    const getFormObject = async (id: string) => {
-      await getForm(id);
-    };
-
-    if (caseData?.currentFormId) {
-      void getFormObject(caseData?.currentFormId);
-    }
-  }, [cases, caseData, getForm]);
 
   const updateCaseSignature = useCallback(
     async (caseItem, signatureSuccessful) => {
@@ -348,6 +328,10 @@ const CaseSummary = (props) => {
     [navigation]
   );
 
+  const openForm = (id: string, isSignMode?: boolean) => {
+    navigation.navigate("Form", { caseId: id, isSignMode });
+  };
+
   useEffect(() => {
     const updateCaseAfterSignature = async () => {
       if (authContext.status === "signResolved") {
@@ -377,12 +361,11 @@ const CaseSummary = (props) => {
         {Object.keys(caseData).length > 0 &&
           computeCaseCardComponent(
             caseData,
-            form,
             formName,
             colorSchema,
-            navigation,
+            { onOpenForm: openForm },
             toggleModal,
-            authContext
+            authContext.user.personalNumber
           )}
 
         {administrators && (
