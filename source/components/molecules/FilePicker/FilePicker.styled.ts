@@ -39,4 +39,8 @@ const PopupContainer = styled.View<PopupContainerProps>`
   justify-content: space-between;
 `;
 
-export { Wrapper, ButtonContainer, PopupContainer };
+const OverflowAvoidingView = styled.View`
+  flex: 1;
+`;
+
+export { Wrapper, ButtonContainer, PopupContainer, OverflowAvoidingView };
