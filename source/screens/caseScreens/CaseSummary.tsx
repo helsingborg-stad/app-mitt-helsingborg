@@ -356,7 +356,7 @@ const CaseSummary = (props) => {
       }
     };
 
-    updateCaseAfterSignature();
+    void updateCaseAfterSignature();
   }, [updateCaseSignature, authContext.status, caseId, getCase]);
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
