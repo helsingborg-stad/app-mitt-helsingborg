@@ -4,7 +4,7 @@ import uuid from "react-native-uuid";
 
 import { Image } from "../ImageDisplay/ImageDisplay";
 
-import { AllowedFileTypes } from "../../../helpers/FileUpload";
+import { AllowedFileTypes, splitFilePath } from "../../../helpers/FileUpload";
 
 const MAX_IMAGE_SIZE_BYTES = 7 * 1000 * 1000;
 
@@ -12,7 +12,7 @@ function transformRawImage(rawImage: ImageOrVideo, questionId: string): Image {
   return {
     questionId,
     path: rawImage.path,
-    filename: rawImage?.filename,
+    filename: splitFilePath(rawImage.path).nameWithExt ?? rawImage?.filename,
     width: rawImage.width,
     height: rawImage.height,
     size: rawImage.size,
@@ -31,6 +31,7 @@ export async function addImageFromCamera(questionId: string): Promise<Image[]> {
       compressImageQuality: 0.8,
       cropping: false,
       includeExif: false,
+      forceJpg: true,
     });
 
     if (rawImage) {
@@ -61,6 +62,7 @@ export async function addImagesFromLibrary(
       writeTempFile: true,
       cropping: false,
       includeExif: false,
+      forceJpg: true,
     });
 
     if (rawImages && rawImages.length > 0) {
