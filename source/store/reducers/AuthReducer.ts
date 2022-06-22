@@ -18,7 +18,7 @@ export interface AuthReducerState {
   isActive: boolean;
   userAuthState: USER_AUTH_STATE;
   user: User | null;
-  error: Error | null;
+  error: DispatchError;
   status: string;
   authenticateOnExternalDevice: boolean;
   apiStatusMessage: string;
