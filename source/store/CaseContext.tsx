@@ -144,10 +144,6 @@ function CaseProvider({
   }, [user]);
 
   useEffect(() => {
-    if (isSignedIn && user !== null) {
-      void fetchCases();
-    }
-
     if (!isSignedIn) {
       dispatch({
         type: ActionTypes.RESET,

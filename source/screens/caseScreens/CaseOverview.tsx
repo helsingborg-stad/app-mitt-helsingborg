@@ -286,7 +286,6 @@ interface CaseOverviewProps {
  */
 function CaseOverview(props: CaseOverviewProps): JSX.Element {
   const { navigation } = props;
-  const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [activeModal, setActiveModal] = useState<ActiveModal>({});
 
@@ -393,15 +392,12 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
   }, [cases, user, getPasswordAccumulator]);
 
   useEffect(() => {
-    const tryFetchCases = async () => {
-      if (Object.keys(cases).length === 0 && isLoading) {
-        await fetchCases();
-        setIsLoading(false);
-      }
+    const fetchAllCases = async () => {
+      await fetchCases();
     };
 
-    void tryFetchCases();
-  }, [fetchCases, cases, isLoading]);
+    void fetchAllCases();
+  }, [fetchCases]);
 
   const openForm = (caseId: string, isSignMode?: boolean) => {
     navigation.navigate("Form", { caseId, isSignMode });
@@ -527,14 +523,14 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {(showActiveCases || showClosedCases) && !isLoading && (
+        {(showActiveCases || showClosedCases) && (
           <Card.Button colorSchema="red" disabled>
             <Icon name={refreshing ? "refresh" : "arrow-downward"} />
             <Text>Dra för att ladda om sidan</Text>
           </Card.Button>
         )}
 
-        {!isLoading && activeCases.length === 0 && closedCases.length === 0 && (
+        {activeCases.length === 0 && closedCases.length === 0 && (
           <>
             <PaddedContainer>
               <Card colorSchema="red">
