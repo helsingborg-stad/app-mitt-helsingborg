@@ -11,7 +11,7 @@ export interface AppProviderState {
 const initialState: AppProviderState = {
   mode: "",
   handleSetMode: () => undefined,
-  isDevMode: true,
+  isDevMode: false,
 };
 
 const AppContext = React.createContext(initialState);
