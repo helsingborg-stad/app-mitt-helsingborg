@@ -41,10 +41,7 @@ function useForm(initialState: FormReducerState) {
     dispatch({
       type: "REPLACE_MARKDOWN_TEXT",
     });
-    dispatch({
-      type: "COUNT_MAIN_STEPS",
-    });
-  }, [formState.connectivityMatrix]);
+  }, []);
 
   useEffect(() => {
     dispatch({

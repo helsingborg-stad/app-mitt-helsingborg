@@ -101,26 +101,6 @@ function getParentSteps(
     return prev;
   }, []);
 }
-/** computes and sets the number of main steps in the form. Sets it to -1 if it encounters an infinite loop */
-export function computeNumberMainSteps(state: FormReducerState) {
-  const { connectivityMatrix } = state;
-  const countNext = (
-    m: StepperActions[][],
-    currentRow: number,
-    history: number[]
-  ) => {
-    const nextIndex = m[currentRow].findIndex((a) => a === "next");
-    if (history.includes(nextIndex)) return 1;
-    return nextIndex >= 0
-      ? 2 + countNext(m, nextIndex, [...history, nextIndex])
-      : 2;
-  };
-  const count = countNext(connectivityMatrix, 0, []);
-  return {
-    ...state,
-    numberOfMainSteps: count % 2 === 0 ? count / 2 : -1,
-  };
-}
 
 /** Go to the next step in the form. If you are in a nested step with no further next, then this will go up to the parent. */
 export function goNext(state: FormReducerState) {
@@ -130,6 +110,7 @@ export function goNext(state: FormReducerState) {
     return {
       ...state,
       currentPosition: {
+        ...currentPosition,
         index: nextIndex,
         level: currentPosition.level,
         currentMainStep:
@@ -139,7 +120,6 @@ export function goNext(state: FormReducerState) {
           currentPosition.level === 0
             ? nextIndex
             : currentPosition.currentMainStepIndex,
-        numberOfMainSteps: currentPosition.numberOfMainSteps,
       },
     };
   }
@@ -220,6 +200,9 @@ export function goDown(state: FormReducerState, targetStep: number | string) {
       },
     };
   }
+  return {
+    ...state,
+  };
 }
 /**
  * Goes up into a parent step. Will only allow jumping to a connected step.
@@ -241,12 +224,15 @@ export function goUp(state: FormReducerState, targetStep: number | string) {
       },
     };
   }
+  return {
+    ...state,
+  };
 }
 /**
  * Goes back to the main form. Can be thought of as 'closing' the substep modal.
  * @param state current form state
  */
-export function goBackToMainForm(state: FormReducerState) {
+export function goBackToMainForm(state: FormReducerState): FormReducerState {
   const { currentPosition } = state;
   return {
     ...state,
@@ -271,6 +257,7 @@ export function goBackToMainFormAndNext(state: FormReducerState) {
     return {
       ...state,
       currentPosition: {
+        ...currentPosition,
         index: nextIndex,
         level: 0,
         currentMainStep: state.currentPosition.currentMainStep + 1,
@@ -278,6 +265,9 @@ export function goBackToMainFormAndNext(state: FormReducerState) {
       },
     };
   }
+  return {
+    ...state,
+  };
 }
 /**
  * Action to run when starting a form.
