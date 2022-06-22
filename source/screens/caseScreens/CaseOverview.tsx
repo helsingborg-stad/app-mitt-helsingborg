@@ -32,6 +32,7 @@ import { Case, ApplicationStatusType, AnsweredForm } from "../../types/Case";
 import {
   answersAreEncrypted,
   getPasswordForForm,
+  UserInterface,
 } from "../../services/encryption/CaseEncryptionHelper";
 import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
 import NewApplicationModal from "../../components/organisms/NewApplicationModal/NewApplicationModal";
@@ -356,13 +357,17 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
   );
 
   const getPasswordAccumulator = useCallback(
-    async (oldValue, caseItem, user) => {
+    async (
+      oldValue,
+      caseItem,
+      caseUser: UserInterface
+    ): Promise<{ password: string }> => {
       const { currentFormId } = caseItem;
       const form = caseItem.forms[currentFormId];
       const hasSymmetricKey = !!form.encryption.symmetricKeyName;
 
       const encryptionPin = hasSymmetricKey
-        ? await getPasswordForForm(form, user)
+        ? await getPasswordForForm(form, caseUser)
         : undefined;
 
       return { ...oldValue, [currentFormId]: encryptionPin };
@@ -388,14 +393,14 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
   }, [cases, user, getPasswordAccumulator]);
 
   useEffect(() => {
-    const testFunction = async () => {
+    const tryFetchCases = async () => {
       if (Object.keys(cases).length === 0) {
         await fetchCases();
         setIsLoading(false);
       }
     };
 
-    void testFunction();
+    void tryFetchCases();
   }, [fetchCases, cases]);
 
   const openForm = (caseId: string, isSignMode?: boolean) => {
