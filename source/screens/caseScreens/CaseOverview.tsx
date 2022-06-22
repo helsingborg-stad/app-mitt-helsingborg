@@ -394,14 +394,14 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
 
   useEffect(() => {
     const tryFetchCases = async () => {
-      if (Object.keys(cases).length === 0) {
+      if (Object.keys(cases).length === 0 && isLoading) {
         await fetchCases();
         setIsLoading(false);
       }
     };
 
     void tryFetchCases();
-  }, [fetchCases, cases]);
+  }, [fetchCases, cases, isLoading]);
 
   const openForm = (caseId: string, isSignMode?: boolean) => {
     navigation.navigate("Form", { caseId, isSignMode });
