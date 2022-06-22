@@ -18,7 +18,7 @@ export enum ActionTypes {
   apiStatusMessage = "API_STATUS_MESSAGE",
 }
 
-export type DispatchError = Error | null;
+export type DispatchError = Error | null | string;
 
 export interface BankIdAuthOrder {
   orderRef: string;
