@@ -3,7 +3,11 @@ import AuthReducer, {
   AuthReducerState,
 } from "../AuthReducer";
 
-import { ActionTypes, BankIdAuthOrder } from "../../actions/AuthActions.types";
+import {
+  ActionTypes,
+  BankIdAuthOrder,
+  DispatchError,
+} from "../../actions/AuthActions.types";
 
 import USER_AUTH_STATE from "../../../types/UserAuthTypes";
 import { User } from "../../../types/UserTypes";
@@ -11,7 +15,7 @@ import { User } from "../../../types/UserTypes";
 interface TestCase {
   type: ActionTypes;
   newState: AuthReducerState;
-  payload?: Error | null | User | string | BankIdAuthOrder | boolean;
+  payload?: DispatchError | User | BankIdAuthOrder | boolean;
 }
 
 const testError = new Error();
