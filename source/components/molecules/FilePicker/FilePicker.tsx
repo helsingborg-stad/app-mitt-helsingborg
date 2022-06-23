@@ -2,14 +2,9 @@ import React from "react";
 import { Text, Icon, Button } from "../../atoms";
 import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import { Modal, useModal } from "../Modal";
-import {
-  getValidColorSchema,
-  PrimaryColor,
-} from "../../../styles/themeHelpers";
+import { getValidColorSchema } from "../../../styles/themeHelpers";
 import FileDisplay from "../FileDisplay/FileDisplay";
 import { splitFilePath } from "../../../helpers/FileUpload";
-import { Pdf } from "../PdfDisplay/PdfDisplay";
-import { Image } from "../ImageDisplay/ImageDisplay";
 
 import { addImagesFromLibrary, addImageFromCamera } from "./imageUpload";
 import { addPdfFromLibrary } from "./pdfUpload";
@@ -21,32 +16,16 @@ import {
   ButtonContainer,
   PopupContainer,
   OverflowAvoidingView,
+  ErrorText,
 } from "./FilePicker.styled";
 
-export enum FileType {
-  ALL = "all",
-  PDF = "pdf",
-  IMAGES = "images",
-}
+import { FileType, Props, File } from "./FilePicker.types";
 
 const fileTypeMap: Record<FileType, (FileType.PDF | FileType.IMAGES)[]> = {
   [FileType.ALL]: [FileType.PDF, FileType.IMAGES],
   [FileType.PDF]: [FileType.PDF],
   [FileType.IMAGES]: [FileType.IMAGES],
 };
-
-export type File = Image | Pdf;
-
-interface Props {
-  buttonText: string;
-  value: File[] | "";
-  answers: Record<string, File[]>;
-  colorSchema: PrimaryColor;
-  id: string;
-  preferredFileName?: string;
-  fileType: FileType;
-  onChange: (value: File[], id: string) => void;
-}
 
 const FilePicker: React.FC<Props> = ({
   buttonText,
@@ -57,6 +36,7 @@ const FilePicker: React.FC<Props> = ({
   id,
   preferredFileName,
   fileType,
+  error,
 }) => {
   const [choiceModalVisible, toggleChoiceModal] = useModal();
 
@@ -148,6 +128,8 @@ const FilePicker: React.FC<Props> = ({
             <Text>{buttonText || "Ladda upp fil"}</Text>
           </Button>
         </ButtonContainer>
+
+        {error?.isValid === false && <ErrorText>{error.message}</ErrorText>}
       </Wrapper>
 
       <Modal
