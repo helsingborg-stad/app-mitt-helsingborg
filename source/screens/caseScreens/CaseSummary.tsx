@@ -261,10 +261,6 @@ const computeCaseCardComponent = (
   );
 };
 
-/**
- * Case summary screen
- * @param {obj} props
- */
 const CaseSummary = (props) => {
   const authContext = useContext(AuthContext);
   const { cases, getCase } = useContext(CaseState);

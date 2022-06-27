@@ -280,10 +280,6 @@ interface CaseOverviewProps {
   };
 }
 
-/**
- * Case overview screen
- * @param {obj} props
- */
 function CaseOverview(props: CaseOverviewProps): JSX.Element {
   const { navigation } = props;
   const [refreshing, setRefreshing] = useState(false);

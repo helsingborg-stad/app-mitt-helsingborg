@@ -63,6 +63,7 @@ buck-out/
 /ios/*.dSYM.zip
 /ios/*.mobileprovision
 /ios/.build_logs
+/vendor
 
 # Bundle artifact
 *.jsbundle
