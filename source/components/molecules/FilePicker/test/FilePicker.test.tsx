@@ -4,9 +4,11 @@ import { fireEvent, waitFor } from "@testing-library/react-native";
 import { AllowedFileTypes } from "../../../../helpers/FileUpload";
 import { render } from "../../../../../test-utils";
 
-import FilePicker, { FileType } from "../FilePicker";
+import FilePicker from "../FilePicker";
 import * as Pdf from "../pdfUpload";
 import * as Images from "../imageUpload";
+
+import { FileType, ErrorValidation } from "../FilePicker.types";
 
 jest.mock("../pdfUpload");
 jest.mock("../imageUpload");
@@ -16,13 +18,19 @@ const addFileButtonText = "Filer";
 const addImagesFromCameraButtonText = "Kamera";
 const addImagesFromCameraLibraryButtonText = "Bildbibliotek";
 const mockId = "mockId";
+const mockErrorMessageText = "Error message";
 
 interface Props {
   fileType?: FileType;
+  error?: ErrorValidation;
   onChange?: () => Promise<void>;
 }
 const renderComponent = (props = {}) => {
-  const { onChange = jest.fn(), fileType = FileType.ALL }: Props = props;
+  const {
+    fileType = FileType.ALL,
+    error = { isValid: true, message: "" },
+    onChange = jest.fn(),
+  }: Props = props;
 
   return render(
     <FilePicker
@@ -33,6 +41,7 @@ const renderComponent = (props = {}) => {
       fileType={fileType}
       onChange={onChange}
       value={[]}
+      error={error}
     />
   );
 };
@@ -44,6 +53,15 @@ it("renders the component", () => {
   expect(queryByText(addFileButtonText)).toBeNull();
   expect(queryByText(addImagesFromCameraButtonText)).toBeNull();
   expect(queryByText(addImagesFromCameraLibraryButtonText)).toBeNull();
+  expect(queryByText(mockErrorMessageText)).toBeNull();
+});
+
+it("renders the error message when provided", () => {
+  const error = { isValid: false, message: mockErrorMessageText };
+
+  const { queryByText } = renderComponent({ error });
+
+  expect(queryByText(mockErrorMessageText)).not.toBeNull();
 });
 
 it("opens the bottom modal on component button click", () => {
