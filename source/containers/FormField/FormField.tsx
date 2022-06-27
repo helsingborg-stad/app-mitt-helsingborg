@@ -1,6 +1,5 @@
 import React from "react";
-import { View, LayoutAnimation } from "react-native";
-import styled from "styled-components/native";
+import { LayoutAnimation } from "react-native";
 import CheckboxList from "../../components/organisms/CheckboxList";
 import DynamicCardRenderer from "../DynamicCardRenderer/DynamicCardRenderer";
 import { Input, Label, Select, Text } from "../../components/atoms";
@@ -23,6 +22,8 @@ import PdfViewer from "../../components/molecules/PdfViewer/PdfViewer";
 import BulletList from "../../components/organisms/BulletList";
 import FilePicker from "../../components/molecules/FilePicker/FilePicker";
 import FileViewer from "../../components/molecules/FileViewer/FileViewer";
+
+import { FormFieldContainer, LabelContainer } from "./FormField.styled";
 
 import getUnApprovedCompletionsDescriptions from "../../helpers/FormatCompletions";
 import { FormInputType, InputFieldType } from "../../types/FormTypes";
@@ -196,11 +197,6 @@ const inputTypes: Record<inputKeyType, InputTypeProperties> = {
   },
 };
 
-const LabelContainer = styled.View`
-  width: 100%;
-  padding-bottom: 16px;
-`;
-
 interface FormFieldProps {
   label: string;
   labelLine?: boolean;
@@ -350,7 +346,7 @@ const FormField = (props: FormFieldProps): JSX.Element => {
   });
 
   return (
-    <View>
+    <FormFieldContainer>
       <LabelContainer>
         {label ? (
           <Label
@@ -367,7 +363,7 @@ const FormField = (props: FormFieldProps): JSX.Element => {
         ) : null}
         {inputComponent}
       </LabelContainer>
-    </View>
+    </FormFieldContainer>
   );
 };
 
