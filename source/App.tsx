@@ -15,6 +15,8 @@ import { AppCompabilityProvider } from "./store/AppCompabilityContext";
 import { NotificationProvider } from "./store/NotificationContext";
 import theme from "./styles/theme";
 
+import { getMonitoringService } from "./services/MonitoringService";
+
 /**
  * Any setup and init for application goes here:
  * Platform specific handling, global listeners, providers, etc.
@@ -60,4 +62,4 @@ const App = (): JSX.Element => {
   );
 };
 
-export default App;
+export default getMonitoringService().wrap(App);
