@@ -1,7 +1,6 @@
 import { ComponentType } from "react";
 
 import SentryService from "./SentryService";
-import NullService from "./NullService";
 
 export interface MonitoringService {
   init: () => void;
@@ -9,13 +8,19 @@ export interface MonitoringService {
   wrap: (component: ComponentType<unknown>) => ComponentType<unknown>;
 }
 
+const nullMonitoringService: MonitoringService = {
+  init: () => undefined,
+  sendError: () => undefined,
+  wrap: (component) => component,
+};
+
 class MonitoringServiceFactory {
   static getMonitoringService(environment: string): MonitoringService {
-    if (environment === "develop") {
+    if (environment === "production") {
       return SentryService;
     }
 
-    return NullService;
+    return nullMonitoringService;
   }
 }
 
