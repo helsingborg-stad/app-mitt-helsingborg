@@ -1,9 +1,15 @@
 import styled from "styled-components/native";
 
-import { PrimaryColor, ComplementaryColor } from "../../../styles/themeHelpers";
+import { Text } from "../../atoms";
+
+import {
+  PrimaryColor,
+  ComplementaryColor,
+  ThemeType,
+} from "../../../styles/themeHelpers";
 
 const Wrapper = styled.View`
-  padding: 15px 0 0 0;
+  padding: 16px 0 16px 0;
 `;
 const ButtonContainer = styled.View`
   display: flex;
@@ -43,4 +49,16 @@ const OverflowAvoidingView = styled.View`
   flex: 1;
 `;
 
-export { Wrapper, ButtonContainer, PopupContainer, OverflowAvoidingView };
+const ErrorText = styled(Text)`
+  text-align: center;
+  padding-top: 16px;
+  color: ${({ theme }: { theme: ThemeType }) => theme.colors.primary.red[1]};
+`;
+
+export {
+  Wrapper,
+  ButtonContainer,
+  PopupContainer,
+  OverflowAvoidingView,
+  ErrorText,
+};

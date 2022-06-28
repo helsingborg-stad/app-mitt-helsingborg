@@ -362,7 +362,9 @@ export function validateAnswer(
   if (!question) return state;
 
   if (
-    ["text", "number", "date", "checkbox", "select"].includes(question.type)
+    ["text", "number", "date", "checkbox", "select", "filePicker"].includes(
+      question.type
+    )
   ) {
     const { validation } = question;
     if (

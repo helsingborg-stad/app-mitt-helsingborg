@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { storiesOf } from "@storybook/react-native";
 import { ScrollView } from "react-native-gesture-handler";
+
 import StoryWrapper from "../StoryWrapper";
-import FilePicker, { File, FileType } from "./FilePicker";
+import FilePicker from "./FilePicker";
+
+import { FileType } from "./FilePicker.types";
+import type { File } from "./FilePicker.types";
 
 const Component = () => {
   const [values, setValues] = useState<File[]>([]);
