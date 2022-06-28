@@ -54,6 +54,7 @@ const config = {
         "@typescript-eslint/no-floating-promises": ["error"],
         "no-void": ["error", { allowAsStatement: true }],
         "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/consistent-type-imports": "warn",
       },
     },
   ],
