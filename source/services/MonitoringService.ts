@@ -1,4 +1,5 @@
 import { ComponentType } from "react";
+import env from "react-native-config";
 
 import SentryService from "./SentryService";
 
@@ -26,6 +27,6 @@ class MonitoringServiceFactory {
 
 export function getMonitoringService(): MonitoringService {
   return MonitoringServiceFactory.getMonitoringService(
-    (process.env.APP_ENV ?? "develop") as string
+    (env.APP_ENV ?? "develop") as string
   );
 }
