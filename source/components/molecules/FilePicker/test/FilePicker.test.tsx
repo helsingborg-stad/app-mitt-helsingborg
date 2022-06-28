@@ -8,7 +8,8 @@ import FilePicker from "../FilePicker";
 import * as Pdf from "../pdfUpload";
 import * as Images from "../imageUpload";
 
-import { FileType, ErrorValidation } from "../FilePicker.types";
+import { FileType } from "../FilePicker.types";
+import type { ErrorValidation } from "../FilePicker.types";
 
 jest.mock("../pdfUpload");
 jest.mock("../imageUpload");
