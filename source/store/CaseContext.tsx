@@ -149,7 +149,7 @@ function CaseProvider({
         type: ActionTypes.RESET,
       });
     }
-  }, [isSignedIn, user, fetchCases]);
+  }, [isSignedIn]);
 
   const providedState: ContextState = {
     ...state,
