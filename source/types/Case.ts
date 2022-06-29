@@ -1,4 +1,4 @@
-import { EncryptionDetails } from "./Encryption";
+import type { EncryptionDetails } from "./Encryption";
 
 export enum ApplicationStatusType {
   ACTIVE_ONGOING = "active:ongoing",
@@ -53,6 +53,15 @@ export interface Application {
   periodstartdate: string;
 }
 
+export interface CalculationNormpart {
+  type: string;
+  amount: string;
+}
+
+export interface CalculationNorm {
+  normpart: CalculationNormpart[];
+}
+
 export interface Calculation {
   periodstartdate: string;
   periodenddate: string;
@@ -61,6 +70,7 @@ export interface Calculation {
   normsubtotal: string;
   reductionsum: string;
   calculationsum: string;
+  norm: CalculationNorm;
 }
 
 export interface Note {
