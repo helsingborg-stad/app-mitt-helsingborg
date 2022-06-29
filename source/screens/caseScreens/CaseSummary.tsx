@@ -134,7 +134,11 @@ const computeCaseCardComponent = (
   const { workflow = {}, period = {} } = details;
   const { decision = {}, payments = {} } = workflow;
 
-  const completions = caseItem?.details?.completions?.requested || [];
+  const totalSteps = form?.stepStructure?.length || 0;
+
+  const completions = caseData?.details?.completions?.requested || [];
+  const completionsClarification =
+    caseData.details.completions?.description ?? "";
 
   const applicationPeriodMonth = period?.endDate
     ? getSwedishMonthNameByTimeStamp(period?.endDate, true)
@@ -257,6 +261,7 @@ const computeCaseCardComponent = (
       onButtonClick={isClosed ? toggleModal : buttonProps.onClick}
       buttonIconName={isClosed ? "remove-red-eye" : "arrow-forward"}
       completions={unApprovedCompletionDescriptions}
+      completionsClarification={completionsClarification}
     />
   );
 };
