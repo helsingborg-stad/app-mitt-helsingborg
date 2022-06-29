@@ -3,7 +3,7 @@ import env from "react-native-config";
 
 import type { MonitoringService } from "./MonitoringService";
 
-const sentryService: MonitoringService = {
+const sentryMonitoringService: MonitoringService = {
   init: () => {
     Sentry.init({
       dsn: env.SENTRY_DSN,
@@ -18,4 +18,4 @@ const sentryService: MonitoringService = {
   wrap: (component) => Sentry.wrap(component),
 };
 
-export default sentryService;
+export default sentryMonitoringService;

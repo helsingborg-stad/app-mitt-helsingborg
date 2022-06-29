@@ -1,7 +1,7 @@
 import { ComponentType } from "react";
 import env from "react-native-config";
 
-import SentryService from "./SentryService";
+import SentryMonitoringService from "./SentryMonitoringService";
 
 export interface MonitoringService {
   init: () => void;
@@ -18,7 +18,7 @@ const nullMonitoringService: MonitoringService = {
 class MonitoringServiceFactory {
   static getMonitoringService(environment: string): MonitoringService {
     if (environment === "production") {
-      return SentryService;
+      return SentryMonitoringService;
     }
 
     return nullMonitoringService;
