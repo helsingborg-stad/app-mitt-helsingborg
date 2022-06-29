@@ -100,8 +100,10 @@ Card.CalculationRowHeader = styled(Card.CalculationRow)`
 
 interface CalculationRowCellProps {
   flex?: number;
+  justify?: "start" | "flex-end" | "flex-start";
 }
 Card.CalculationRowCell = styled.View<CalculationRowCellProps>`
+  ${({ justify }) => justify && `justify-content: ${justify}`};
   flex: ${({ flex }) => flex ?? 1};
   align-self: stretch;
   padding-left: 8px;
@@ -652,11 +654,9 @@ const CaseSummary = (props) => {
                                   paddingBottom={bottomPadding}
                                 >
                                   <Card.CalculationRowCell flex={2}>
-                                    <Text>{part?.type}</Text>
+                                    <Text align="left">{part?.type}</Text>
                                   </Card.CalculationRowCell>
-                                  <Card.CalculationRowCell
-                                    style={{ justifyContent: "center" }}
-                                  >
+                                  <Card.CalculationRowCell justify="center">
                                     <Text align="right">
                                       {formatAmount(part.amount)}
                                     </Text>
