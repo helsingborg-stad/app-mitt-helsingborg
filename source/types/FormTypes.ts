@@ -133,6 +133,13 @@ export interface Step {
   colorSchema: PrimaryColor | "";
 }
 
+export interface StepStructure {
+  id: string;
+  text: string;
+  children: StepStructure[];
+  group: string;
+}
+
 export interface Form {
   name: string;
   description: string;
@@ -143,4 +150,5 @@ export interface Form {
   formType?: string;
   provider?: string;
   subform?: boolean;
+  stepStructure: StepStructure[];
 }

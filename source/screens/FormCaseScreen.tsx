@@ -1,11 +1,8 @@
-import React, { useContext, useEffect, useState, useMemo } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 
-import Form, {
-  defaultInitialPosition,
-  defaultInitialStatus,
-} from "../containers/Form/Form";
+import Form, { defaultInitialStatus } from "../containers/Form/Form";
 
 import AuthContext from "../store/AuthContext";
 import FormContext from "../store/FormContext";
@@ -49,19 +46,18 @@ const FormCaseScreen = ({
   const { cases } = useContext(CaseState);
   const { updateCase } = useContext(CaseDispatch);
 
-  const initialCase = useMemo(() => cases[caseId] || {}, [cases, caseId]);
-  const form = useMemo(
-    () => forms[currentFormId] || {},
-    [forms, currentFormId]
-  );
-  const formQuestions = useMemo(
-    () => (Object.keys(form).length > 0 ? getFormQuestions(form) : undefined),
-    [form]
-  );
+  const initialCase = cases[caseId] || {};
+  const form = forms[currentFormId] || {};
 
-  const initialPosition =
-    initialCase?.forms?.[initialCase.currentFormId]?.currentPosition ||
-    defaultInitialPosition;
+  const formQuestions = Object.keys(form)?.length
+    ? getFormQuestions(form)
+    : undefined;
+
+  const initialPosition = {
+    ...initialCase?.forms?.[initialCase.currentFormId]?.currentPosition,
+    numberOfMainSteps: form?.stepStructure?.length ?? 0,
+  };
+
   const initialAnswers =
     initialCase?.forms?.[initialCase.currentFormId]?.answers || {};
 

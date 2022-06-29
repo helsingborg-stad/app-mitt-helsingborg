@@ -9,6 +9,7 @@ export interface FormPosition {
   level: number;
   currentMainStep: number;
   currentMainStepIndex: number;
+  numberOfMainSteps: number;
 }
 
 export interface FormPeriod {
@@ -40,10 +41,7 @@ function useForm(initialState: FormReducerState) {
     dispatch({
       type: "REPLACE_MARKDOWN_TEXT",
     });
-    dispatch({
-      type: "COUNT_MAIN_STEPS",
-    });
-  }, [formState.connectivityMatrix]);
+  }, []);
 
   useEffect(() => {
     dispatch({

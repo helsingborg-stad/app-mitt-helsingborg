@@ -75,6 +75,7 @@ export const defaultInitialPosition: FormPosition = {
   level: 0,
   currentMainStep: 1,
   currentMainStepIndex: 0,
+  numberOfMainSteps: 0,
 };
 
 export const defaultInitialStatus = {
@@ -263,6 +264,11 @@ const Form: React.FC<Props> = ({
     }
   };
 
+  const shouldShowBackButton =
+    formState.currentPosition.currentMainStep > 1 &&
+    formState.currentPosition.currentMainStep <
+      formState.currentPosition.numberOfMainSteps;
+
   const showCloseDialog = updateCaseState !== UPDATE_CASE_STATE.IDLE;
   const closeDialogTitle = dialogText[updateCaseState].title;
   const closeDialogBody = dialogText[updateCaseState].body;
@@ -330,12 +336,8 @@ const Form: React.FC<Props> = ({
           onAddAnswer={handleAddAnswer}
           onFieldMount={handleInputChange}
           currentPosition={formState.currentPosition}
-          totalStepNumber={formState.numberOfMainSteps || 0}
-          isBackBtnVisible={
-            formState.currentPosition.currentMainStep > 1 &&
-            formState.currentPosition.currentMainStep <
-              formState.numberOfMainSteps
-          }
+          totalStepNumber={formState.currentPosition.numberOfMainSteps}
+          isBackBtnVisible={shouldShowBackButton}
           attachments={attachments}
           isFormEditable={editable}
           onCloseForm={handleCloseForm}

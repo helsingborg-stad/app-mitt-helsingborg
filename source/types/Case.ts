@@ -114,6 +114,7 @@ export interface FormPosition {
   currentMainStepIndex: number;
   index: number;
   level: number;
+  numberOfMainSteps: number;
 }
 
 export interface AnsweredForm {

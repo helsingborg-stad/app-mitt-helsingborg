@@ -12,7 +12,6 @@ interface FindFormError {
 
 interface FormContextValue {
   forms: Record<string, Form>;
-  getFormIdsByFormTypes?: (formTypes: string[]) => Promise<string[]>;
   findFormsByType?: (formType: string) => Promise<Form[] | FindFormError>;
   getForm: (id: string) => Promise<Form | null>;
   getFormSummaries: () => Promise<Form[]>;
@@ -92,34 +91,9 @@ export function FormProvider({ children }: FormProviderProps): JSX.Element {
     return formsWithSameType;
   };
 
-  const getFormIdsByFormTypes = async (
-    formTypes: string[]
-  ): Promise<string[]> => {
-    const promises = formTypes.map(async (type) => {
-      const formSummary = await findFormsByType(type);
-
-      const asError = formSummary as FindFormError;
-
-      if (asError.error) {
-        console.error(asError.message);
-      } else {
-        const foundForms = formSummary as Form[];
-        const formIds = foundForms.map(({ id }) => id);
-        return formIds;
-      }
-
-      return [];
-    });
-
-    const ids = (await Promise.all(promises)).flat();
-
-    return ids;
-  };
-
   return (
     <FormContext.Provider
       value={{
-        getFormIdsByFormTypes,
         findFormsByType,
         getForm,
         getFormSummaries,
