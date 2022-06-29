@@ -1,5 +1,5 @@
 import React from "react";
-import { LayoutAnimation } from "react-native";
+import { LayoutAnimation, View } from "react-native";
 import CheckboxList from "../../components/organisms/CheckboxList";
 import DynamicCardRenderer from "../DynamicCardRenderer/DynamicCardRenderer";
 import { Input, Label, Select, Text } from "../../components/atoms";
@@ -12,7 +12,8 @@ import {
   RepeaterField,
   RadioGroup,
 } from "../../components/molecules";
-import { getValidColorSchema, PrimaryColor } from "../../styles/themeHelpers";
+import type { PrimaryColor } from "../../styles/themeHelpers";
+import { getValidColorSchema } from "../../styles/themeHelpers";
 import SummaryList from "../../components/organisms/SummaryList/SummaryList";
 import ImageUploader from "../../components/molecules/ImageUploader/ImageUploader";
 import FileUploaderList from "../../components/molecules/FileUploaderList/FileUploaderList";
@@ -26,8 +27,8 @@ import FileViewer from "../../components/molecules/FileViewer/FileViewer";
 import { FormFieldContainer, LabelContainer } from "./FormField.styled";
 
 import getUnApprovedCompletionsDescriptions from "../../helpers/FormatCompletions";
-import { FormInputType, InputFieldType } from "../../types/FormTypes";
-import { Answer, VIVACaseDetails } from "../../types/Case";
+import type { FormInputType, InputFieldType } from "../../types/FormTypes";
+import type { Answer, VIVACaseDetails } from "../../types/Case";
 
 /**
  * Explanation of the properties in this data structure:
@@ -348,7 +349,7 @@ const FormField = (props: FormFieldProps): JSX.Element => {
   return (
     <FormFieldContainer>
       <LabelContainer>
-        {label ? (
+        {!!label && (
           <Label
             colorSchema={validColorSchema}
             underline={labelLine}
@@ -360,9 +361,9 @@ const FormField = (props: FormFieldProps): JSX.Element => {
           >
             {label}
           </Label>
-        ) : null}
-        {inputComponent}
+        )}
       </LabelContainer>
+      <View style={{ flex: 1 }}>{inputComponent}</View>
     </FormFieldContainer>
   );
 };
