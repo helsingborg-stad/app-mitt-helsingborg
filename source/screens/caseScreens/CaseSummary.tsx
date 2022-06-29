@@ -14,7 +14,7 @@ import icons from "../../helpers/Icons";
 import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
 import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
-import { PrimaryColor } from "../../styles/themeHelpers";
+import type { PrimaryColor } from "../../styles/themeHelpers";
 import { Icon, Text } from "../../components/atoms";
 import {
   Card,
@@ -33,7 +33,7 @@ import {
 import AuthContext from "../../store/AuthContext";
 import { put } from "../../helpers/ApiRequest";
 import { answersAreEncrypted } from "../../services/encryption/CaseEncryptionHelper";
-import {
+import type {
   Case,
   VIVACaseDetails,
   Workflow,
