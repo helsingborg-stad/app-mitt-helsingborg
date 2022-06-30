@@ -134,11 +134,9 @@ const computeCaseCardComponent = (
   const { workflow = {}, period = {} } = details;
   const { decision = {}, payments = {} } = workflow;
 
-  const totalSteps = form?.stepStructure?.length || 0;
-
-  const completions = caseData?.details?.completions?.requested || [];
+  const completions = caseItem.details.completions?.requested || [];
   const completionsClarification =
-    caseData.details.completions?.description ?? "";
+    caseItem.details.completions?.description ?? "";
 
   const applicationPeriodMonth = period?.endDate
     ? getSwedishMonthNameByTimeStamp(period?.endDate, true)
