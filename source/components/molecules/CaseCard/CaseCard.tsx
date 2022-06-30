@@ -56,6 +56,7 @@ interface CaseCardProps {
   completions?: string[];
   completionsClarification?: string;
   pin?: string;
+  isRandomCheck: boolean;
 }
 
 function CaseCard({
@@ -87,6 +88,7 @@ function CaseCard({
   completions = [],
   completionsClarification = "",
   pin,
+  isRandomCheck = true,
 }: CaseCardProps): JSX.Element {
   return (
     <Card colorSchema={colorSchema}>
@@ -132,7 +134,7 @@ function CaseCard({
           </Card.Text>
         )}
 
-        {completionsClarification && (
+        {completionsClarification && !isRandomCheck && (
           <CompletionsClarificationOutset>
             <Card.Text strong italic colorSchema="neutral">
               {completionsClarification}
