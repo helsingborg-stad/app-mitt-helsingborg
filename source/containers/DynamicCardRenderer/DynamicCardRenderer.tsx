@@ -1,8 +1,6 @@
-/* eslint-disable default-case */
 import React, { useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Linking } from "react-native";
-import PropTypes, { string } from "prop-types";
 import Card from "../../components/molecules/Card/Card";
 import TextComponent from "../../components/atoms/Text";
 import Icon from "../../components/atoms/Icon";
@@ -12,8 +10,8 @@ import InfoModal from "../../components/molecules/InfoModal";
 import { useModal } from "../../components/molecules/Modal";
 import { replaceText } from "../Form/hooks/textReplacement";
 import AuthContext from "../../store/AuthContext";
-import { PartnerInfo, User } from "../../types/UserTypes";
-/** *** types describing how we should send in the data to render our cards  */
+import type { PartnerInfo, User } from "../../types/UserTypes";
+
 interface Image {
   type: "image";
   image: keyof typeof icons;
@@ -37,6 +35,13 @@ interface Subtitle {
   text: string;
 }
 
+interface Props {
+  colorSchema?: "blue" | "red" | "green" | "purple" | "neutral";
+  backgroundColor?: "blue" | "red" | "green" | "purple" | "neutral";
+  shadow?: boolean;
+  outlined?: boolean;
+  components: CardComponent[];
+}
 interface ButtonBase {
   type: "button";
   text: string;
@@ -44,6 +49,7 @@ interface ButtonBase {
   icon?: string;
   iconPosition?: "left" | "right";
 }
+
 type Button = ButtonBase &
   (
     | { action: "email"; email: string }
@@ -65,9 +71,7 @@ type InfoModalButtonProps = ButtonBase & {
   markdownText: string;
   closeButtonText: string;
 };
-/** *** end of types */
 
-/** The info-button gets its own component, because it involves the useModal hook */
 const InfoModalButton: React.FC<InfoModalButtonProps> = ({
   heading,
   markdownText,
@@ -101,9 +105,8 @@ const InfoModalButton: React.FC<InfoModalButtonProps> = ({
   );
 };
 
-/** Handles the button clicks for action types email, phone, navigate and url */
 const handleClick =
-  (button: CardComponent & { type: "button" }, navigation: any) => () => {
+  (button: CardComponent & { type: "button" }, navigation: unknown) => () => {
     switch (button.action) {
       case "email":
         launchEmail(button.email);
@@ -112,7 +115,9 @@ const handleClick =
         launchPhone(button.phonenumber);
         break;
       case "navigate":
-        if (navigation?.navigate) navigation.navigate(button.screen); // TODO think about sending parameters here
+        if (navigation?.navigate) {
+          navigation.navigate(button.screen); // TODO think about sending parameters here
+        }
         break;
       case "url":
         Linking.openURL(button.url);
@@ -120,19 +125,26 @@ const handleClick =
     }
   };
 
-/** Maps an object to a Card child component */
 const renderCardComponent = (
   component: CardComponent,
-  navigation: any,
+  navigation: unknown,
   index: number,
   user: User,
-  partner?: PartnerInfo
+  partner?: PartnerInfo,
+  completionsClarification?: string
 ) => {
   switch (component.type) {
     case "text":
       return (
         <Card.Text key={`${index}-${component.type}`} italic={component.italic}>
-          {replaceText(component.text, user, undefined, partner)}
+          {replaceText(
+            component.text,
+            user,
+            undefined,
+            partner,
+            undefined,
+            completionsClarification
+          )}
         </Card.Text>
       );
     case "title":
@@ -156,35 +168,27 @@ const renderCardComponent = (
           circle={component.circle}
         />
       );
-  }
+    case "button":
+      // treat info-modal separately since it doesn't fit the same pattern as the other buttons.
+      if (component.action === "infoModal") {
+        return (
+          <InfoModalButton key={`${index}-${component.type}`} {...component} />
+        );
+      }
 
-  // Treat buttons separately, because they have some more complicated behavior
-  if (component.type === "button") {
-    const { icon, iconPosition, text } = component;
-    const onClick: () => void = () => null;
+      const { icon, iconPosition, text } = component;
 
-    // treat info-modal separately since it doesn't fit the same pattern as the other buttons.
-    if (component.action === "infoModal") {
       return (
-        <InfoModalButton key={`${index}-${component.type}`} {...component} />
+        <Card.Button key={`${index}-${component.type}`} onClick={handleClick(component, navigation)}>
+          {icon && iconPosition && iconPosition === "left" && (<Icon name={icon} />)}
+          <TextComponent>{text}</TextComponent>
+          {icon && (!iconPosition || iconPosition === "right") && (<Icon name={icon} />)}
+        </Card.Button>
       );
-    }
-
-    return (
-      <Card.Button
-        key={`${index}-${component.type}`}
-        onClick={handleClick(component, navigation)}
-      >
-        {icon && iconPosition && iconPosition === "left" && (
-          <Icon name={icon} />
-        )}
-        <TextComponent>{text}</TextComponent>
-        {icon && (!iconPosition || iconPosition === "right") && (
-          <Icon name={icon} />
-        )}
-      </Card.Button>
-    );
+    default:
+      return null
   }
+
 };
 
 interface Props {
@@ -195,7 +199,6 @@ interface Props {
   components: CardComponent[];
 }
 
-/** Dynamically renders a card with the sent in children as an array of json objects. */
 const DynamicCardRenderer: React.FC<Props> = ({
   colorSchema,
   backgroundColor,
@@ -226,24 +229,6 @@ const DynamicCardRenderer: React.FC<Props> = ({
     </Card>
   );
 };
-
-DynamicCardRenderer.propTypes = {
-  /** Color schema for all child components */
-  colorSchema: PropTypes.oneOf(["blue", "red", "green", "purple", "neutral"]),
-  /** Card background color */
-  backgroundColor: PropTypes.oneOf([
-    "blue",
-    "red",
-    "green",
-    "purple",
-    "neutral",
-  ]),
-  /** Whether or not to have shadows, giving the card an elevated look */
-  shadow: PropTypes.bool,
-  /** Whether or not to have a solid outline around the card */
-  outlined: PropTypes.bool,
-  /** The child components in the card, as an array of objects */
-  components: PropTypes.array,
 };
 
 export default DynamicCardRenderer;

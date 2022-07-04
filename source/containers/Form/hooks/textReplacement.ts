@@ -4,11 +4,11 @@ import moment from "moment";
 
 import { deepCopy } from "../../../helpers/Objects";
 
-import { Step } from "../../../types/FormTypes";
-import { PartnerInfo, User } from "../../../types/UserTypes";
-import { Case } from "../../../types/Case";
+import type { Step } from "../../../types/FormTypes";
+import type { PartnerInfo, User } from "../../../types/UserTypes";
+import type { Case } from "../../../types/Case";
 
-import { FormPeriod } from "./useForm";
+import type { FormPeriod } from "./useForm";
 
 type CaseItemReplacementRuleType = {
   key: string;
@@ -87,6 +87,7 @@ const replacementRules = [
   ["#partnerName", "partner.partnerName"],
   ["#encryptionPin", "encryptionPin"],
   ["#du/ni", "duNiReplacer"],
+  ["#COMPLETIONS_CLARIFICATION", "completionsClarification"],
 ];
 
 const swedishMonthTable = [
@@ -164,7 +165,8 @@ const computeText = (
   user: User,
   period?: FormPeriod,
   partner?: PartnerInfo,
-  encryptionPin?: string
+  encryptionPin?: string,
+  completionsClarification?: string
 ): string => {
   const strArr = descriptor.split(".");
   if (strArr[0] === "user") {
@@ -182,6 +184,9 @@ const computeText = (
   if (strArr[0] === "duNiReplacer") {
     return partner?.role === "coApplicant" ? "ni" : "du";
   }
+  if (strArr[0] === "completionsClarification" && !!completionsClarification) {
+    return completionsClarification;
+  }
   return "";
 };
 
@@ -190,15 +195,23 @@ export const replaceText = (
   user: User,
   period?: FormPeriod,
   partner?: PartnerInfo,
-  encryptionPin?: string
-) => {
+  encryptionPin?: string,
+  completionsClarification?: string
+): string => {
   // This way of doing it might be a bit overkill, but the idea is that this in principle
   // allows for nesting replacement rules and then applying them in order one after the other.
   let res = text ?? "";
   replacementRules.forEach(([template, descriptor]) => {
     res = res.replace(
       template,
-      computeText(descriptor, user, period, partner, encryptionPin)
+      computeText(
+        descriptor,
+        user,
+        period,
+        partner,
+        encryptionPin,
+        completionsClarification
+      )
     );
   });
   return res;
