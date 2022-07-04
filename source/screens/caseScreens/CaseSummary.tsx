@@ -133,10 +133,13 @@ const computeCaseCardComponent = (
   const details = caseItem?.details ?? {};
   const { workflow = {}, period = {} } = details;
   const { decision = {}, payments = {} } = workflow;
+  const statusType = status?.type ?? "";
 
   const completions = caseItem.details.completions?.requested || [];
+
+  const isRandomCheck = statusType.includes("randomCheck");
   const completionsClarification =
-    caseItem.details.completions?.description ?? "";
+    (!isRandomCheck && caseItem.details.completions?.description) || "";
 
   const applicationPeriodMonth = period?.endDate
     ? getSwedishMonthNameByTimeStamp(period?.endDate, true)
@@ -146,7 +149,6 @@ const computeCaseCardComponent = (
     (person) => person.personalNumber === personalNumber
   );
 
-  const statusType = status?.type ?? "";
   const {
     isNotStarted,
     isOngoing,
@@ -260,7 +262,6 @@ const computeCaseCardComponent = (
       buttonIconName={isClosed ? "remove-red-eye" : "arrow-forward"}
       completions={unApprovedCompletionDescriptions}
       completionsClarification={completionsClarification}
-      isRandomCheck={statusType.includes("randomCheck")}
     />
   );
 };
