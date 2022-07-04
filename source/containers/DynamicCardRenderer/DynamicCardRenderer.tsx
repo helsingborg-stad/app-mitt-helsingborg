@@ -42,6 +42,7 @@ interface Props {
   outlined?: boolean;
   components: CardComponent[];
 }
+
 interface ButtonBase {
   type: "button";
   text: string;
@@ -66,7 +67,6 @@ type Button = ButtonBase &
 
 type CardComponent = Image | Text | Title | Subtitle | Button;
 type InfoModalButtonProps = ButtonBase & {
-  action: "infoModal";
   heading: string;
   markdownText: string;
   closeButtonText: string;
@@ -120,7 +120,9 @@ const handleClick =
         }
         break;
       case "url":
-        Linking.openURL(button.url);
+        Linking.openURL(button.url) as Promise<unknown>;
+        break;
+      default:
         break;
     }
   };
@@ -176,28 +178,25 @@ const renderCardComponent = (
         );
       }
 
-      const { icon, iconPosition, text } = component;
-
       return (
-        <Card.Button key={`${index}-${component.type}`} onClick={handleClick(component, navigation)}>
-          {icon && iconPosition && iconPosition === "left" && (<Icon name={icon} />)}
-          <TextComponent>{text}</TextComponent>
-          {icon && (!iconPosition || iconPosition === "right") && (<Icon name={icon} />)}
+        <Card.Button
+          key={`${index}-${component.type}`}
+          onClick={handleClick(component, navigation)}
+        >
+          {component.icon &&
+            component.iconPosition &&
+            component.iconPosition === "left" && <Icon name={component.icon} />}
+          <TextComponent>{component.text}</TextComponent>
+          {component.icon &&
+            (!component.iconPosition || component.iconPosition === "right") && (
+              <Icon name={component.icon} />
+            )}
         </Card.Button>
       );
     default:
-      return null
+      return null;
   }
-
 };
-
-interface Props {
-  colorSchema?: "blue" | "red" | "green" | "purple" | "neutral";
-  backgroundColor?: "blue" | "red" | "green" | "purple" | "neutral";
-  shadow?: boolean;
-  outlined?: boolean;
-  components: CardComponent[];
-}
 
 const DynamicCardRenderer: React.FC<Props> = ({
   colorSchema,
@@ -206,15 +205,11 @@ const DynamicCardRenderer: React.FC<Props> = ({
   outlined,
   components,
 }) => {
-  let navigation: any = {};
+  let navigation: unknown = {};
 
   const { user } = useContext(AuthContext);
+  navigation = useNavigation();
 
-  try {
-    navigation = useNavigation();
-  } catch (error) {
-    console.log(error);
-  }
   return (
     <Card colorSchema={colorSchema || "neutral"}>
       <Card.Body
@@ -228,7 +223,6 @@ const DynamicCardRenderer: React.FC<Props> = ({
       </Card.Body>
     </Card>
   );
-};
 };
 
 export default DynamicCardRenderer;

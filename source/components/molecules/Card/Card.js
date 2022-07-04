@@ -153,6 +153,8 @@ const Card = ({ children, colorSchema, ...props }) => {
   return <Container {...props}>{childrenWithProps}</Container>;
 };
 
+Card.displayName = "Card";
+
 /**
  * Renders body component and it's children components
  * @param {props} props
@@ -423,12 +425,18 @@ Card.Image.propTypes = {
   ]),
   firstChild: PropTypes.bool,
   lastChild: PropTypes.bool,
+  source: PropTypes.number,
+  style: PropTypes.element,
+  circle: PropTypes.bool,
 };
 
-Card.Text.defaultProps = {
+Card.Image.defaultProps = {
   children: null,
   lastChild: false,
   firstChild: false,
+  source: "",
+  style: null,
+  circle: false,
 };
 
 Card.Progressbar.propTypes = {
@@ -439,13 +447,6 @@ Card.Progressbar.propTypes = {
   firstChild: PropTypes.bool,
   lastChild: PropTypes.bool,
   colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
-};
-
-Card.Progressbar.defaultProps = {
-  children: null,
-  lastChild: false,
-  firstChild: false,
-  colorSchema: "neutral",
 };
 
 Card.Progressbar.defaultProps = {
