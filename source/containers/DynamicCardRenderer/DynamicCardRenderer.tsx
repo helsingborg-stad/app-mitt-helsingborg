@@ -41,6 +41,7 @@ interface Props {
   shadow?: boolean;
   outlined?: boolean;
   components: CardComponent[];
+  completionsClarification: string;
 }
 
 interface ButtonBase {
@@ -204,6 +205,7 @@ const DynamicCardRenderer: React.FC<Props> = ({
   shadow,
   outlined,
   components,
+  completionsClarification,
 }) => {
   let navigation: unknown = {};
 
@@ -218,7 +220,14 @@ const DynamicCardRenderer: React.FC<Props> = ({
         outlined={outlined}
       >
         {components.map((component, index) =>
-          renderCardComponent(component, navigation, index, user)
+          renderCardComponent(
+            component,
+            navigation,
+            index,
+            user,
+            undefined,
+            completionsClarification
+          )
         )}
       </Card.Body>
     </Card>

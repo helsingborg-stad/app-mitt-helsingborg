@@ -17,6 +17,7 @@ type CaseItemReplacementRuleType = {
   timeFormat?: string;
   customTransformer?: (value: unknown) => unknown;
 };
+
 const caseItemReplacementRules: CaseItemReplacementRuleType[] = [
   {
     key: "#MONTH_NAME",
@@ -87,7 +88,7 @@ const replacementRules = [
   ["#partnerName", "partner.partnerName"],
   ["#encryptionPin", "encryptionPin"],
   ["#du/ni", "duNiReplacer"],
-  ["#COMPLETIONS_CLARIFICATION", "completionsClarification"],
+  ["#COMPLETIONS_CLARIFICATION", "completionsClarificationReplacer"],
 ];
 
 const swedishMonthTable = [
@@ -169,22 +170,31 @@ const computeText = (
   completionsClarification?: string
 ): string => {
   const strArr = descriptor.split(".");
+
   if (strArr[0] === "user") {
     return replaceUserInfo(strArr, user);
   }
+
   if (strArr[0] === "partner" && partner) {
     return replaceUserInfo(strArr, partner);
   }
+
   if (strArr[0] === "date") {
     return replaceDates(strArr, period);
   }
+
   if (strArr[0] === "encryptionPin" && encryptionPin) {
     return encryptionPin;
   }
+
   if (strArr[0] === "duNiReplacer") {
     return partner?.role === "coApplicant" ? "ni" : "du";
   }
-  if (strArr[0] === "completionsClarification" && !!completionsClarification) {
+
+  if (
+    strArr[0] === "completionsClarificationReplacer" &&
+    completionsClarification
+  ) {
     return completionsClarification;
   }
   return "";
