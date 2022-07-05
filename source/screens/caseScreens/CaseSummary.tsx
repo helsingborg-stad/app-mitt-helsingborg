@@ -14,7 +14,7 @@ import icons from "../../helpers/Icons";
 import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
 import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
-import { PrimaryColor } from "../../styles/themeHelpers";
+import type { PrimaryColor } from "../../styles/themeHelpers";
 import { Icon, Text } from "../../components/atoms";
 import {
   Card,
@@ -33,7 +33,7 @@ import {
 import AuthContext from "../../store/AuthContext";
 import { put } from "../../helpers/ApiRequest";
 import { answersAreEncrypted } from "../../services/encryption/CaseEncryptionHelper";
-import {
+import type {
   Case,
   VIVACaseDetails,
   Workflow,
@@ -133,8 +133,13 @@ const computeCaseCardComponent = (
   const details = caseItem?.details ?? {};
   const { workflow = {}, period = {} } = details;
   const { decision = {}, payments = {} } = workflow;
+  const statusType = status?.type ?? "";
 
-  const completions = caseItem?.details?.completions?.requested || [];
+  const completions = caseItem.details.completions?.requested || [];
+
+  const isRandomCheck = statusType.includes("randomCheck");
+  const completionsClarification =
+    (!isRandomCheck && caseItem.details.completions?.description) || "";
 
   const applicationPeriodMonth = period?.endDate
     ? getSwedishMonthNameByTimeStamp(period?.endDate, true)
@@ -144,7 +149,6 @@ const computeCaseCardComponent = (
     (person) => person.personalNumber === personalNumber
   );
 
-  const statusType = status?.type ?? "";
   const {
     isNotStarted,
     isOngoing,
@@ -257,14 +261,11 @@ const computeCaseCardComponent = (
       onButtonClick={isClosed ? toggleModal : buttonProps.onClick}
       buttonIconName={isClosed ? "remove-red-eye" : "arrow-forward"}
       completions={unApprovedCompletionDescriptions}
+      completionsClarification={completionsClarification}
     />
   );
 };
 
-/**
- * Case summary screen
- * @param {obj} props
- */
 const CaseSummary = (props) => {
   const authContext = useContext(AuthContext);
   const { cases, getCase } = useContext(CaseState);

@@ -31,16 +31,17 @@ export interface Administrator {
 }
 
 export interface RequestedCompletions {
-  description: string;
-  received: boolean;
+  readonly description: string;
+  readonly received: boolean;
 }
 
 export interface Completions {
-  requested: RequestedCompletions[];
-  attachmentUploaded: string[];
-  randomCheck: boolean;
-  completed: boolean;
-  dueDate: number;
+  readonly requested: RequestedCompletions[];
+  readonly description: string;
+  readonly attachmentUploaded: string[];
+  readonly randomCheck: boolean;
+  readonly completed: boolean;
+  readonly dueDate: number;
 }
 
 export interface Period {
@@ -89,7 +90,7 @@ export interface Workflow {
 
 export interface VIVACaseDetails {
   administrators: Administrator[];
-  completions: Completions;
+  readonly completions: Completions;
   period: Period;
   workflowId: string;
   workflow: Workflow;

@@ -41,9 +41,8 @@ interface BulletProps {
 const Bullet = styled.Text<BulletProps>`
   font-weight: 500;
   margin: 0;
-  color: black;
   font-size: 24px;
-  color: ${({ color }) => color};
+  color: ${({ color }) => color ?? "black"};
 `;
 
 export { Background, BulletsContainer, BulletContainer, BulletText, Bullet };

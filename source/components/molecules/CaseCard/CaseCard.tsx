@@ -1,5 +1,5 @@
 import React from "react";
-import { ImageSourcePropType } from "react-native";
+import type { ImageSourcePropType } from "react-native";
 import styled from "styled-components/native";
 import { Icon, Text } from "../../atoms";
 import { Card, DateTimeCard } from "..";
@@ -20,6 +20,11 @@ Card.PinText = styled(Card.Text)`
   font-weight: ${(props) => props.theme.fontWeights[1]};
   line-height: ${(props) => props.theme.lineHeights[8]};
   margin-top: 12px;
+`;
+
+const CompletionsClarificationOutset = styled.View`
+  padding-top: 8px;
+  padding-bottom: 8px;
 `;
 
 interface CaseCardProps {
@@ -49,10 +54,11 @@ interface CaseCardProps {
   dateTimeCardSize?: "large" | "small";
   buttonColorScheme?: string;
   completions?: string[];
+  completionsClarification?: string;
   pin?: string;
 }
 
-const CaseCard = ({
+function CaseCard({
   title,
   subtitle,
   largeSubtitle,
@@ -79,72 +85,86 @@ const CaseCard = ({
   dateTimeCardSize = "large",
   buttonColorScheme = "red",
   completions = [],
+  completionsClarification = "",
   pin,
-}: CaseCardProps): JSX.Element => (
-  <Card colorSchema={colorSchema}>
-    <Card.Body shadow color="neutral" onPress={onCardClick}>
-      {icon && <Card.Image source={icon} />}
-      <Card.Title colorSchema="neutral">{title}</Card.Title>
-      {largeSubtitle && (
-        <Card.LargeText mt={0.5}>{largeSubtitle}</Card.LargeText>
-      )}
-      {subtitle && <Card.SubTitle>{subtitle}</Card.SubTitle>}
-      {description && <Card.Text>{description}</Card.Text>}
-      {pin && <Card.PinText>{pin}</Card.PinText>}
+}: CaseCardProps): JSX.Element {
+  return (
+    <Card colorSchema={colorSchema}>
+      <Card.Body shadow color="neutral" onPress={onCardClick}>
+        {icon && <Card.Image source={icon} />}
+        <Card.Title colorSchema="neutral">{title}</Card.Title>
+        {largeSubtitle && (
+          <Card.LargeText mt={0.5}>{largeSubtitle}</Card.LargeText>
+        )}
+        {subtitle && <Card.SubTitle>{subtitle}</Card.SubTitle>}
+        {description && <Card.Text>{description}</Card.Text>}
+        {pin && <Card.PinText>{pin}</Card.PinText>}
 
-      {showBookingDate && (
-        <DateTimeCard
-          date={bookingDate}
-          time={bookingTime}
-          size={dateTimeCardSize}
-        />
-      )}
+        {showBookingDate && (
+          <DateTimeCard
+            date={bookingDate}
+            time={bookingTime}
+            size={dateTimeCardSize}
+          />
+        )}
 
-      {showProgress && (
-        <Card.Progressbar
-          currentStep={currentStep}
-          totalStepNumber={totalSteps}
-          mt={1}
-        />
-      )}
+        {showProgress && (
+          <Card.Progressbar
+            currentStep={currentStep}
+            totalStepNumber={totalSteps}
+            mt={1}
+          />
+        )}
 
-      {showPayments && approvedAmount && (
-        <Card.Text mt={1.5} strong colorSchema="neutral">
-          Utbetalning: {approvedAmount}
-        </Card.Text>
-      )}
+        {showPayments && approvedAmount && (
+          <Card.Text mt={1.5} strong colorSchema="neutral">
+            Utbetalning: {approvedAmount}
+          </Card.Text>
+        )}
 
-      {showPayments && givedate && (
-        <Card.Meta colorSchema="neutral">Betalas ut: {givedate}</Card.Meta>
-      )}
+        {showPayments && givedate && (
+          <Card.Meta colorSchema="neutral">Betalas ut: {givedate}</Card.Meta>
+        )}
 
-      {showPayments && declinedAmount && (
-        <Card.Text mt={1} strong colorSchema="neutral">
-          Avslaget: {declinedAmount}
-        </Card.Text>
-      )}
+        {showPayments && declinedAmount && (
+          <Card.Text mt={1} strong colorSchema="neutral">
+            Avslaget: {declinedAmount}
+          </Card.Text>
+        )}
 
-      {completions.length > 0 && <Card.BulletList values={completions} />}
+        {completionsClarification && (
+          <CompletionsClarificationOutset>
+            <Card.Text strong italic colorSchema="neutral">
+              {completionsClarification}
+            </Card.Text>
+          </CompletionsClarificationOutset>
+        )}
+        {completions.length > 0 && <Card.BulletList values={completions} />}
 
-      {showAppealButton && (
-        <Card.Button mt={1} onClick={onAppealButtonClick} colorSchema="neutral">
-          <Text>Så här gör du om du vill överklaga beslutet</Text>
-          <Icon name={buttonIconName || "arrow-forward"} />
-        </Card.Button>
-      )}
+        {showAppealButton && (
+          <Card.Button
+            mt={1}
+            onClick={onAppealButtonClick}
+            colorSchema="neutral"
+          >
+            <Text>Så här gör du om du vill överklaga beslutet</Text>
+            <Icon name={buttonIconName || "arrow-forward"} />
+          </Card.Button>
+        )}
 
-      {showButton && (
-        <Card.Button
-          mt={1}
-          onClick={onButtonClick}
-          colorSchema={buttonColorScheme}
-        >
-          <Text>{buttonText}</Text>
-          <Icon name={buttonIconName || "arrow-forward"} />
-        </Card.Button>
-      )}
-    </Card.Body>
-  </Card>
-);
+        {showButton && (
+          <Card.Button
+            mt={1}
+            onClick={onButtonClick}
+            colorSchema={buttonColorScheme}
+          >
+            <Text>{buttonText}</Text>
+            <Icon name={buttonIconName || "arrow-forward"} />
+          </Card.Button>
+        )}
+      </Card.Body>
+    </Card>
+  );
+}
 
 export default CaseCard;
