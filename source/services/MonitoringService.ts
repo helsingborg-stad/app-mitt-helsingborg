@@ -22,6 +22,6 @@ class MonitoringServiceFactory {
 
 export function getMonitoringService(): MonitoringService {
   return MonitoringServiceFactory.getMonitoringService(
-    (env.APP_ENV ?? "develop") as string
+    (env.APP_ENV ?? "development") as string
   );
 }
