@@ -41,7 +41,7 @@ interface Props {
   shadow?: boolean;
   outlined?: boolean;
   components: CardComponent[];
-  completionsClarification: string;
+  completionsClarification?: string;
 }
 
 interface ButtonBase {
@@ -134,10 +134,11 @@ const renderCardComponent = (
   index: number,
   user: User,
   partner?: PartnerInfo,
-  completionsClarification?: string
+  completionsClarificationMessage?: string
 ) => {
   switch (component.type) {
     case "text":
+      console.log("CASE TEXT:", completionsClarificationMessage);
       return (
         <Card.Text key={`${index}-${component.type}`} italic={component.italic}>
           {replaceText(
@@ -146,7 +147,7 @@ const renderCardComponent = (
             undefined,
             partner,
             undefined,
-            completionsClarification
+            completionsClarificationMessage
           )}
         </Card.Text>
       );

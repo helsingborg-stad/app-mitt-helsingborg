@@ -15,13 +15,14 @@ import {
 import { getPasswordForForm } from "../services/encryption/CaseEncryptionHelper";
 import { to } from "../helpers/Misc";
 
-import {
-  Case,
-  FormPosition,
-  ApplicationStatusType,
-  AnsweredForm,
-} from "../types/Case";
-import { CaseUpdate, Answer, Signature, Action } from "../types/CaseContext";
+import type { Case, FormPosition, AnsweredForm } from "../types/Case";
+import { ApplicationStatusType } from "../types/Case";
+import type {
+  CaseUpdate,
+  Answer,
+  Signature,
+  Action,
+} from "../types/CaseContext";
 
 const SpinnerContainer = styled.View`
   flex: 1;
@@ -170,6 +171,9 @@ const FormCaseScreen = ({
       onUpdateCase={handleUpdateCase}
       editable={!isSignMode}
       encryptionPin={encryptionPin}
+      completionsClarificationMessage={
+        initialCase.details.completions.description
+      }
       {...props}
     />
   );

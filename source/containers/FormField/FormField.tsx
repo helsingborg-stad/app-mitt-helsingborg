@@ -329,10 +329,7 @@ const FormField = (props: FormFieldProps): JSX.Element => {
     }
   }
 
-  if (inputType === "card") {
-    inputCompProps.completionsClarification =
-      details.completions.description ?? "";
-  }
+  inputCompProps.completionsClarification = details.completions.description;
 
   const inputComponent =
     input && input.component ? (

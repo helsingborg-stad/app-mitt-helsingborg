@@ -167,7 +167,7 @@ const computeText = (
   period?: FormPeriod,
   partner?: PartnerInfo,
   encryptionPin?: string,
-  completionsClarification?: string
+  completionsClarificationMessage?: string
 ): string => {
   const strArr = descriptor.split(".");
 
@@ -193,9 +193,9 @@ const computeText = (
 
   if (
     strArr[0] === "completionsClarificationReplacer" &&
-    completionsClarification
+    completionsClarificationMessage
   ) {
-    return completionsClarification;
+    return completionsClarificationMessage;
   }
   return "";
 };
@@ -206,12 +206,12 @@ export const replaceText = (
   period?: FormPeriod,
   partner?: PartnerInfo,
   encryptionPin?: string,
-  completionsClarification?: string
+  completionsClarificationMessage?: string
 ): string => {
   // This way of doing it might be a bit overkill, but the idea is that this in principle
   // allows for nesting replacement rules and then applying them in order one after the other.
   let res = text ?? "";
-  replacementRules.forEach(([template, descriptor]) => {
+  replacementRules.forEach(([template, descriptor], index) => {
     res = res.replace(
       template,
       computeText(
@@ -220,7 +220,7 @@ export const replaceText = (
         period,
         partner,
         encryptionPin,
-        completionsClarification
+        completionsClarificationMessage
       )
     );
   });
@@ -238,13 +238,22 @@ export const replaceMarkdownTextInSteps = (
   user: User,
   period?: FormPeriod,
   partner?: PartnerInfo,
-  encryptionPin?: string
+  encryptionPin?: string,
+  completionsClarificationMessage?: string
 ): Step[] => {
+  console.log("replaceMarkdownTextInSteps:", completionsClarificationMessage);
   const newSteps = steps.map((step) => {
     if (step.questions) {
       step.questions = step.questions.map((qs) => {
         if (qs.text && qs.text !== "") {
-          qs.text = replaceText(qs.text, user, period, partner, encryptionPin);
+          qs.text = replaceText(
+            qs.text,
+            user,
+            period,
+            partner,
+            encryptionPin,
+            completionsClarificationMessage
+          );
         }
 
         if (qs.label && qs.label !== "") {
@@ -253,7 +262,8 @@ export const replaceMarkdownTextInSteps = (
             user,
             period,
             partner,
-            encryptionPin
+            encryptionPin,
+            completionsClarificationMessage
           );
         }
 
@@ -263,7 +273,8 @@ export const replaceMarkdownTextInSteps = (
             user,
             period,
             partner,
-            encryptionPin
+            encryptionPin,
+            completionsClarificationMessage
           );
         }
 
@@ -273,7 +284,8 @@ export const replaceMarkdownTextInSteps = (
             user,
             period,
             partner,
-            encryptionPin
+            encryptionPin,
+            completionsClarificationMessage
           );
         }
 
@@ -285,7 +297,8 @@ export const replaceMarkdownTextInSteps = (
               user,
               period,
               partner,
-              encryptionPin
+              encryptionPin,
+              completionsClarificationMessage
             ),
           }));
         }
@@ -298,7 +311,8 @@ export const replaceMarkdownTextInSteps = (
               user,
               period,
               partner,
-              encryptionPin
+              encryptionPin,
+              completionsClarificationMessage
             ),
           }));
         }
@@ -308,17 +322,38 @@ export const replaceMarkdownTextInSteps = (
             ...input,
             label:
               input.label &&
-              replaceText(input.label, user, period, partner, encryptionPin),
+              replaceText(
+                input.label,
+                user,
+                period,
+                partner,
+                encryptionPin,
+                completionsClarificationMessage
+              ),
             title:
               input.title &&
-              replaceText(input.title, user, period, partner, encryptionPin),
+              replaceText(
+                input.title,
+                user,
+                period,
+                partner,
+                encryptionPin,
+                completionsClarificationMessage
+              ),
           }));
         }
 
         if (qs.components) {
           qs.components = qs.components.map((input) => ({
             ...input,
-            text: replaceText(input.text, user, period, partner, encryptionPin),
+            text: replaceText(
+              input.text,
+              user,
+              period,
+              partner,
+              encryptionPin,
+              completionsClarificationMessage
+            ),
           }));
         }
 
@@ -331,7 +366,8 @@ export const replaceMarkdownTextInSteps = (
         user,
         period,
         partner,
-        encryptionPin
+        encryptionPin,
+        completionsClarificationMessage
       );
     if (step.description)
       step.description = replaceText(
@@ -339,7 +375,8 @@ export const replaceMarkdownTextInSteps = (
         user,
         period,
         partner,
-        encryptionPin
+        encryptionPin,
+        completionsClarificationMessage
       );
     return step;
   });
