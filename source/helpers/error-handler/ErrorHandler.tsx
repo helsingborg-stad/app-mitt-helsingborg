@@ -46,9 +46,9 @@ const boundaryErrorHandler = (
       );
     }
   } else {
-    getMonitoringService().sendError(error);
     // non-fatal errors go here
     // they are probably already logged to console so no need to log them again
+    getMonitoringService().sendError(error);
   }
 };
 
