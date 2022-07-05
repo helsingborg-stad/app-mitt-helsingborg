@@ -15,7 +15,7 @@ class MonitoringServiceFactory {
   }
 }
 
-export function getMonitoringService(): MonitoringService {
+export default function getMonitoringService(): MonitoringService {
   return MonitoringServiceFactory.getMonitoringService(
     (env.APP_ENV ?? "development") as string
   );

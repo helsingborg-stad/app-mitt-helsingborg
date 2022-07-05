@@ -2,7 +2,7 @@ import { AppRegistry, LogBox } from "react-native";
 import { name as appName } from "./app.json";
 import App from "./source/App";
 
-import { getMonitoringService } from "./source/services/MonitoringService";
+import getMonitoringService from "./source/services/monitoring/MonitoringService";
 
 getMonitoringService().init();
 

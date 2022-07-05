@@ -15,7 +15,7 @@ import { AppCompabilityProvider } from "./store/AppCompabilityContext";
 import { NotificationProvider } from "./store/NotificationContext";
 import theme from "./styles/theme";
 
-import { getMonitoringService } from "./services/monitoring/MonitoringService";
+import getMonitoringService from "./services/monitoring/MonitoringService";
 
 /**
  * Any setup and init for application goes here:

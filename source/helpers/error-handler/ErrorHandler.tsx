@@ -2,7 +2,7 @@ import { Alert } from "react-native";
 import Config from "react-native-config";
 import RNRestart from "react-native-restart";
 
-import { getMonitoringService } from "../../services/monitoring/MonitoringService";
+import getMonitoringService from "../../services/monitoring/MonitoringService";
 
 /**
  * Handler for boundary errors.

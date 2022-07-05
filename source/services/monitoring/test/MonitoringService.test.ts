@@ -1,7 +1,7 @@
 import env from "react-native-config";
 import * as Sentry from "@sentry/react-native";
 
-import { getMonitoringService } from "../MonitoringService";
+import getMonitoringService from "../MonitoringService";
 
 jest.mock("@sentry/react-native", () => ({
   init: jest.fn(),
