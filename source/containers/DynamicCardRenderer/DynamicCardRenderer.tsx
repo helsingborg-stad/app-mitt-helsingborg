@@ -138,7 +138,6 @@ const renderCardComponent = (
 ) => {
   switch (component.type) {
     case "text":
-      console.log("CASE TEXT:", completionsClarificationMessage);
       return (
         <Card.Text key={`${index}-${component.type}`} italic={component.italic}>
           {replaceText(
@@ -173,7 +172,6 @@ const renderCardComponent = (
         />
       );
     case "button":
-      // treat info-modal separately since it doesn't fit the same pattern as the other buttons.
       if (component.action === "infoModal") {
         return (
           <InfoModalButton key={`${index}-${component.type}`} {...component} />

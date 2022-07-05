@@ -211,7 +211,7 @@ export const replaceText = (
   // This way of doing it might be a bit overkill, but the idea is that this in principle
   // allows for nesting replacement rules and then applying them in order one after the other.
   let res = text ?? "";
-  replacementRules.forEach(([template, descriptor], index) => {
+  replacementRules.forEach(([template, descriptor]) => {
     res = res.replace(
       template,
       computeText(
@@ -229,9 +229,6 @@ export const replaceText = (
 
 /**
  * Replaces the markdown as specified by a set of markdown rules and logic that we've defined.
- * @param steps the steps of the form
- * @param user the user object
- * @param period A period to use for dates
  */
 export const replaceMarkdownTextInSteps = (
   steps: Step[],
