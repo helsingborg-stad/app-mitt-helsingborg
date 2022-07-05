@@ -1,4 +1,4 @@
-import type { MonitoringService } from "./MonitoringService";
+import type { MonitoringService } from "./MonitoringService.types";
 
 const nullMonitoringService: MonitoringService = {
   init: () => undefined,

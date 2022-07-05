@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/react-native";
 import env from "react-native-config";
 
-import type { MonitoringService } from "./MonitoringService";
+import type { MonitoringService } from "./MonitoringService.types";
 
 const sentryMonitoringService: MonitoringService = {
   init: () => {

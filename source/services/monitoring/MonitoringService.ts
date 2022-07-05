@@ -1,14 +1,9 @@
-import { ComponentType } from "react";
 import env from "react-native-config";
 
 import SentryMonitoringService from "./SentryMonitoringService";
 import NullMonitoringService from "./NullMonitoringService";
 
-export interface MonitoringService {
-  init: () => void;
-  sendError: (Error: Error | string | null) => void;
-  wrap: (component: ComponentType<unknown>) => ComponentType<unknown>;
-}
+import type { MonitoringService } from "./MonitoringService.types";
 
 class MonitoringServiceFactory {
   static getMonitoringService(environment: string): MonitoringService {
