@@ -210,10 +210,8 @@ const DynamicCardRenderer: React.FC<Props> = ({
   components,
   completionsClarification,
 }) => {
-  let navigation: unknown = {};
-
   const { user } = useContext(AuthContext);
-  navigation = useNavigation();
+  const navigation = useNavigation();
 
   return (
     <Card colorSchema={colorSchema || "neutral"}>
