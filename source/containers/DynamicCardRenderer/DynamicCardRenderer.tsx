@@ -171,7 +171,9 @@ const renderCardComponent = (
           circle={component.circle}
         />
       );
-    case "button":
+    case "button": {
+      const { iconPosition: buttonIconPosition = "right" } = component;
+
       if (component.action === "infoModal") {
         return (
           <InfoModalButton key={`${index}-${component.type}`} {...component} />
@@ -183,16 +185,18 @@ const renderCardComponent = (
           key={`${index}-${component.type}`}
           onClick={handleClick(component, navigation)}
         >
-          {component.icon &&
-            component.iconPosition &&
-            component.iconPosition === "left" && <Icon name={component.icon} />}
+          {component.icon && buttonIconPosition === "left" && (
+            <Icon name={component.icon} />
+          )}
+
           <TextComponent>{component.text}</TextComponent>
-          {component.icon &&
-            (!component.iconPosition || component.iconPosition === "right") && (
-              <Icon name={component.icon} />
-            )}
+
+          {component.icon && buttonIconPosition === "right" && (
+            <Icon name={component.icon} />
+          )}
         </Card.Button>
       );
+    }
     default:
       return null;
   }
