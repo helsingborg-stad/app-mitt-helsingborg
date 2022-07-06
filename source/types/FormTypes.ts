@@ -1,5 +1,5 @@
-import { PrimaryColor } from "../styles/themeHelpers";
-import { ValidationObject } from "./Validation";
+import type { PrimaryColor } from "../styles/themeHelpers";
+import type { ValidationObject } from "./Validation";
 
 export interface Help {
   text?: string;
@@ -23,6 +23,7 @@ export interface SummaryItem {
   validation?: ValidationObject;
 }
 export interface ListInput {
+  title: string;
   type: "text" | "number" | "date";
   key: string;
   id?: string;
@@ -69,7 +70,9 @@ export type FormInputType =
   | "bulletList";
 
 export interface Question {
+  title: string;
   label: string;
+  heading: string;
   type: FormInputType;
   id: string;
   description?: string;

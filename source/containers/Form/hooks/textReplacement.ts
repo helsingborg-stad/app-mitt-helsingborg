@@ -4,7 +4,7 @@ import moment from "moment";
 
 import { deepCopy } from "../../../helpers/Objects";
 
-import type { Step } from "../../../types/FormTypes";
+import type { Step, Question } from "../../../types/FormTypes";
 import type { PartnerInfo, User } from "../../../types/UserTypes";
 import type { Case } from "../../../types/Case";
 
@@ -238,145 +238,57 @@ export const replaceMarkdownTextInSteps = (
   encryptionPin?: string,
   completionsClarificationMessage?: string
 ): Step[] => {
-  console.log("replaceMarkdownTextInSteps:", completionsClarificationMessage);
-  const newSteps = steps.map((step) => {
-    if (step.questions) {
-      step.questions = step.questions.map((qs) => {
-        if (qs.text && qs.text !== "") {
-          qs.text = replaceText(
-            qs.text,
-            user,
-            period,
-            partner,
-            encryptionPin,
-            completionsClarificationMessage
-          );
-        }
+  const replaceString = (text: string | undefined): string =>
+    text
+      ? replaceText(
+          text,
+          user,
+          period,
+          partner,
+          encryptionPin,
+          completionsClarificationMessage
+        )
+      : "";
 
-        if (qs.label && qs.label !== "") {
-          qs.label = replaceText(
-            qs.label,
-            user,
-            period,
-            partner,
-            encryptionPin,
-            completionsClarificationMessage
-          );
-        }
+  return steps.map((step) => {
+    const stepTitle = replaceString(step.title);
+    const stepDescription = replaceString(step.description);
 
-        if (qs.title && qs.title !== "") {
-          qs.title = replaceText(
-            qs.title,
-            user,
-            period,
-            partner,
-            encryptionPin,
-            completionsClarificationMessage
-          );
-        }
+    let questionTextReplaced: Question[] = [];
 
-        if (qs.heading && qs.heading !== "") {
-          qs.heading = replaceText(
-            qs.heading,
-            user,
-            period,
-            partner,
-            encryptionPin,
-            completionsClarificationMessage
-          );
-        }
+    questionTextReplaced = (step.questions ?? []).map((question: Question) => ({
+      ...question,
+      text: replaceString(question.text),
+      label: replaceString(question.label),
+      title: replaceString(question.title),
+      heading: replaceString(question.heading),
+      items: (question.items ?? []).map((item) => ({
+        ...item,
+        title: replaceString(item.title),
+      })),
+      categories: (question.categories ?? []).map((category) => ({
+        ...category,
+        title: replaceString(category.description),
+      })),
+      inputs: (question.inputs ?? []).map((input) => ({
+        ...input,
+        label: replaceString(input.label),
+        title: replaceString(input.title),
+      })),
+    }));
 
-        if (qs.items) {
-          qs.items = qs.items.map((item) => ({
-            ...item,
-            title: replaceText(
-              item.title,
-              user,
-              period,
-              partner,
-              encryptionPin,
-              completionsClarificationMessage
-            ),
-          }));
-        }
-
-        if (qs.categories) {
-          qs.categories = qs.categories.map((category) => ({
-            ...category,
-            description: replaceText(
-              category.description,
-              user,
-              period,
-              partner,
-              encryptionPin,
-              completionsClarificationMessage
-            ),
-          }));
-        }
-
-        if (qs.inputs) {
-          qs.inputs = qs.inputs.map((input) => ({
-            ...input,
-            label:
-              input.label &&
-              replaceText(
-                input.label,
-                user,
-                period,
-                partner,
-                encryptionPin,
-                completionsClarificationMessage
-              ),
-            title:
-              input.title &&
-              replaceText(
-                input.title,
-                user,
-                period,
-                partner,
-                encryptionPin,
-                completionsClarificationMessage
-              ),
-          }));
-        }
-
-        if (qs.components) {
-          qs.components = qs.components.map((input) => ({
-            ...input,
-            text: replaceText(
-              input.text,
-              user,
-              period,
-              partner,
-              encryptionPin,
-              completionsClarificationMessage
-            ),
-          }));
-        }
-
-        return qs;
-      });
-    }
-    if (step.title)
-      step.title = replaceText(
-        step.title,
-        user,
-        period,
-        partner,
-        encryptionPin,
-        completionsClarificationMessage
-      );
-    if (step.description)
-      step.description = replaceText(
-        step.description,
-        user,
-        period,
-        partner,
-        encryptionPin,
-        completionsClarificationMessage
-      );
-    return step;
+    return {
+      ...step,
+      title: stepTitle,
+      description: stepDescription,
+      questions: questionTextReplaced,
+    };
   });
-
-  return newSteps;
 };
+
+/*
+        (question: Question) => (
+          {
+            
+          })
+*/
