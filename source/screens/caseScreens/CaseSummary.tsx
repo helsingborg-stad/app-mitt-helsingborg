@@ -39,6 +39,7 @@ import type {
   Workflow,
   Journal,
   Decision,
+  Calculation,
 } from "../../types/Case";
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
@@ -78,7 +79,11 @@ Card.CalculationTable = styled.View`
   padding-bottom: 8px;
 `;
 
-Card.CalculationRow = styled.View`
+interface CalculationRowProps {
+  paddingBottom?: number;
+}
+Card.CalculationRow = styled.View<CalculationRowProps>`
+  padding-bottom: ${({ paddingBottom }) => `${paddingBottom ?? 0}px`};
   flex: 1;
   flex-direction: row;
   justify-content: space-between;
@@ -93,8 +98,13 @@ Card.CalculationRowHeader = styled(Card.CalculationRow)`
   background-color: ${(props) => props.theme.colors.neutrals[5]};
 `;
 
-Card.CalculationRowCell = styled.View`
-  flex: 1;
+interface CalculationRowCellProps {
+  flex?: number;
+  justify?: "start" | "flex-end" | "flex-start";
+}
+Card.CalculationRowCell = styled.View<CalculationRowCellProps>`
+  ${({ justify }) => justify && `justify-content: ${justify}`};
+  flex: ${({ flex }) => flex ?? 1};
   align-self: stretch;
   padding-left: 8px;
   padding-right: 8px;
@@ -284,7 +294,7 @@ const CaseSummary = (props) => {
   const { workflow = {}, administrators } = details;
   const {
     decision = {} as Decision,
-    calculations = {},
+    calculations = {} as Record<string, Calculation>,
     journals = {} as Journal,
   } = workflow as Workflow;
 
@@ -632,21 +642,28 @@ const CaseSummary = (props) => {
 
                         {calculation?.norm?.normpart ? (
                           <>
-                            {calculation?.norm?.normpart?.map(
-                              (normpart, index) => (
+                            {calculation.norm.normpart?.map((part, index) => {
+                              const bottomPadding =
+                                calculation.norm.normpart.length === index + 1
+                                  ? 0
+                                  : 16;
+
+                              return (
                                 <Card.CalculationRow
-                                  key={`${index}-${normpart.type}`}
+                                  key={`${index}-${part.type}`}
+                                  paddingBottom={bottomPadding}
                                 >
-                                  <Card.CalculationRowCell>
-                                    <Text>{normpart?.type}</Text>
+                                  <Card.CalculationRowCell flex={2}>
+                                    <Text align="left">{part?.type}</Text>
                                   </Card.CalculationRowCell>
-                                  <Card.CalculationRowCell />
-                                  <Card.CalculationRowCell>
-                                    <Text>{formatAmount(normpart.amount)}</Text>
+                                  <Card.CalculationRowCell justify="center">
+                                    <Text align="right">
+                                      {formatAmount(part.amount)}
+                                    </Text>
                                   </Card.CalculationRowCell>
                                 </Card.CalculationRow>
-                              )
-                            )}
+                              );
+                            })}
                           </>
                         ) : (
                           <Card.Text italic>
