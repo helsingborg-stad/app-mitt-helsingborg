@@ -285,10 +285,3 @@ export const replaceMarkdownTextInSteps = (
     };
   });
 };
-
-/*
-        (question: Question) => (
-          {
-            
-          })
-*/
