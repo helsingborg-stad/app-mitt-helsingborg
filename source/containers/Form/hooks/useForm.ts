@@ -1,8 +1,8 @@
 import { useReducer, useEffect } from "react";
 import formReducer from "./formReducer";
-import { Question, Step, StepperActions } from "../../../types/FormTypes";
-import { User } from "../../../types/UserTypes";
-import { Person } from "../../../types/Case";
+import type { Question, Step, StepperActions } from "../../../types/FormTypes";
+import type { User } from "../../../types/UserTypes";
+import type { Person } from "../../../types/Case";
 
 export interface FormPosition {
   index: number;
@@ -32,6 +32,7 @@ export interface FormReducerState {
   editable?: boolean;
   persons: Person[];
   encryptionPin: string;
+  completionsClarificationMessage: string;
 }
 
 function useForm(initialState: FormReducerState) {

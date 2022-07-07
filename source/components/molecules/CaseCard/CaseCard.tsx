@@ -132,7 +132,7 @@ function CaseCard({
           </Card.Text>
         )}
 
-        {completionsClarification && (
+        {completionsClarification && !isRandomCheck && (
           <CompletionsClarificationOutset>
             <Card.Text strong italic colorSchema="neutral">
               {completionsClarification}

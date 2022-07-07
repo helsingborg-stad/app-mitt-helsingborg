@@ -22,17 +22,18 @@ import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
 import { CaseState, CaseDispatch } from "../../store/CaseContext";
 import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
-import {
+import type {
   State as CaseContextState,
   Dispatch as CaseContextDispatch,
   AddCoApplicantParameters,
 } from "../../types/CaseContext";
 import { to, wait } from "../../helpers/Misc";
-import { Case, ApplicationStatusType, AnsweredForm } from "../../types/Case";
+import type { Case, AnsweredForm } from "../../types/Case";
+import { ApplicationStatusType } from "../../types/Case";
+import type { UserInterface } from "../../services/encryption/CaseEncryptionHelper";
 import {
   answersAreEncrypted,
   getPasswordForForm,
-  UserInterface,
 } from "../../services/encryption/CaseEncryptionHelper";
 import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
 import NewApplicationModal from "../../components/organisms/NewApplicationModal/NewApplicationModal";
@@ -520,7 +521,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
         }
       >
         {(showActiveCases || showClosedCases) && (
-          <Card.Button colorSchema="red" disabled>
+          <Card.Button colorSchema="red" disabled onClick={() => undefined}>
             <Icon name={refreshing ? "refresh" : "arrow-downward"} />
             <Text>Dra för att ladda om sidan</Text>
           </Card.Button>

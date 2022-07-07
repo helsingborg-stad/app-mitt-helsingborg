@@ -1,36 +1,37 @@
 import React, { useEffect, useState, useContext } from "react";
-import { InteractionManager, StatusBar, ScrollView } from "react-native";
+import type { ScrollView } from "react-native";
+import { InteractionManager, StatusBar } from "react-native";
 import { Modal, useModal } from "../../components/molecules/Modal";
 import ScreenWrapper from "../../components/molecules/ScreenWrapper";
 import Step from "../../components/organisms/Step/Step";
 import { evaluateConditionalExpression } from "../../helpers/conditionParser";
-import { CaseStatus } from "../../types/CaseType";
-import { ActionTypes, Action, Answer } from "../../types/CaseContext";
-import {
+import type { CaseStatus } from "../../types/CaseType";
+import type { Action, Answer } from "../../types/CaseContext";
+import { ActionTypes } from "../../types/CaseContext";
+import type {
   Step as StepType,
   StepperActions,
   Question,
 } from "../../types/FormTypes";
-import { User } from "../../types/UserTypes";
-import {
-  Person,
-  VIVACaseDetails,
-  ApplicationStatusType,
-} from "../../types/Case";
-import useForm, {
+import type { User } from "../../types/UserTypes";
+import type { Person, VIVACaseDetails } from "../../types/Case";
+import { ApplicationStatusType } from "../../types/Case";
+import type {
   FormPeriod,
   FormPosition,
   FormReducerState,
 } from "./hooks/useForm";
+import useForm from "./hooks/useForm";
 import AuthContext from "../../store/AuthContext";
 import { useNotification } from "../../store/NotificationContext";
 import FormUploader from "./FormUploader";
 import { AuthLoading } from "../../components/molecules";
-import { Image } from "../../components/molecules/ImageDisplay/ImageDisplay";
+import type { Image } from "../../components/molecules/ImageDisplay/ImageDisplay";
 import CloseDialog from "../../components/molecules/CloseDialog";
-import { PrimaryColor } from "../../styles/themeHelpers";
+import type { PrimaryColor } from "../../styles/themeHelpers";
 
-import { UPDATE_CASE_STATE, DialogText } from "./types";
+import type { DialogText } from "./types";
+import { UPDATE_CASE_STATE } from "./types";
 
 const { SIGNED, NOT_STARTED } = ApplicationStatusType;
 
@@ -68,6 +69,7 @@ interface Props {
   details: VIVACaseDetails;
   persons: Person[];
   encryptionPin: string;
+  completionsClarificationMessage: string;
 }
 
 export const defaultInitialPosition: FormPosition = {
@@ -106,6 +108,7 @@ const Form: React.FC<Props> = ({
   details,
   persons,
   encryptionPin,
+  completionsClarificationMessage,
 }) => {
   const initialState: FormReducerState = {
     submitted: false,
@@ -122,6 +125,7 @@ const Form: React.FC<Props> = ({
     editable,
     persons,
     encryptionPin,
+    completionsClarificationMessage,
   };
 
   const {

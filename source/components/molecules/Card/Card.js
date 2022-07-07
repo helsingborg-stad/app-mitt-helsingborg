@@ -31,6 +31,7 @@ const Body = styled.TouchableHighlight`
           };`;
       }
     }
+    return "";
   }}
   padding: 24px;
   border-radius: 8px;
@@ -55,6 +56,7 @@ const Body = styled.TouchableHighlight`
           };`;
       }
     }
+    return "";
   }}
 `;
 
@@ -151,6 +153,8 @@ const Card = ({ children, colorSchema, ...props }) => {
   return <Container {...props}>{childrenWithProps}</Container>;
 };
 
+Card.displayName = "Card";
+
 /**
  * Renders body component and it's children components
  * @param {props} props
@@ -211,6 +215,8 @@ Card.Body = ({ children, colorSchema, color, ...props }) => {
   );
 };
 
+Card.Body.displayName = "Card.Body";
+
 /**
  * Renders a title
  * @param {props} props
@@ -220,6 +226,8 @@ Card.Title = ({ children, colorSchema, ...props }) => (
     {children}
   </CardTitle>
 );
+
+Card.Title.displayName = "Card.Title";
 
 /**
  * Renders a card section that wraps a group of components in a row
@@ -241,6 +249,8 @@ Card.Section = ({ children, colorSchema, color, ...props }) => {
   return sectionElement;
 };
 
+Card.Section.displayName = "Card.Section";
+
 /**
  * Renders sub title
  * @param {props} props
@@ -251,13 +261,17 @@ Card.SubTitle = ({ children, colorSchema, ...props }) => (
   </CardSubTitle>
 );
 
+Card.SubTitle.displayName = "Card.SubTitle";
+
 /**
  * Renders text
  * @param {props} props
  */
-Card.Text = ({ children, lastChild, firstChild, ...props }) => (
+Card.Text = ({ children, ...props }) => (
   <CardText {...props}>{children}</CardText>
 );
+
+Card.Text.displayName = "Card.Text";
 
 /**
  * Renders a button
@@ -285,6 +299,8 @@ Card.Button = ({
   </Outset>
 );
 
+Card.Button.displayName = "Card.Button";
+
 /**
  * Renders an image
  * @param {props} props
@@ -295,12 +311,13 @@ Card.Image = ({ firstChild, lastChild, ...props }) => (
   </Outset>
 );
 
+Card.Image.displayName = "Card.Image";
+
 /**
  * Renders a progress bar
  * @param {props} props
  */
 Card.Progressbar = ({
-  children,
   firstChild,
   lastChild,
   colorSchema,
@@ -314,6 +331,8 @@ Card.Progressbar = ({
   </ProgressBarContainer>
 );
 
+Card.Progressbar.displayName = "Card.Progressbar";
+
 /**
  * Renders a bullet list
  * @param {props} props
@@ -324,102 +343,135 @@ Card.BulletList = ({ firstChild, lastChild, values }) => (
   </Outset>
 );
 
+Card.BulletList.displayName = "Card.BulletList";
+
 Card.propTypes = {
-  /** List of every immediate child */
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
-  /** Sets a color schema for the component */
   colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
 };
 
 Card.defaultProps = {
+  children: null,
   colorSchema: "neutral",
 };
 
 Card.Body.propTypes = {
-  /** List of every immediate child */
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
-  /** Sets a color schema for the component */
   colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
+
   /** Sets a color for the body that does not overrides colorSchema  */
   color: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
 };
 
+Card.Body.defaultProps = {
+  children: null,
+  colorSchema: "neutral",
+  color: "neutral",
+};
+
 Card.Title.propTypes = {
-  /** List of every immediate child */
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
-  /** Sets a color schema for the component */
   colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
+};
+
+Card.Title.defaultProps = {
+  children: null,
+  colorSchema: "neutral",
 };
 
 Card.SubTitle.propTypes = {
-  /** List of every immediate child */
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
-  /** Sets a color schema for the component */
   colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
+};
+
+Card.SubTitle.defaultProps = {
+  children: null,
+  colorSchema: "neutral",
 };
 
 Card.Text.propTypes = {
-  /** List of every immediate child */
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
-  /** Equals true if child is first in children array */
   firstChild: PropTypes.bool,
-  /** Equals true if child is last in children array */
   lastChild: PropTypes.bool,
+  italic: PropTypes.bool,
+};
+
+Card.Text.defaultProps = {
+  children: null,
+  lastChild: false,
+  firstChild: false,
+  italic: false,
 };
 
 Card.Image.propTypes = {
-  /** List of every immediate child */
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
-  /** Equals true if child is first in children array */
   firstChild: PropTypes.bool,
-  /** Equals true if child is last in children array */
   lastChild: PropTypes.bool,
+  source: PropTypes.number,
+  style: PropTypes.element,
+  circle: PropTypes.bool,
+};
+
+Card.Image.defaultProps = {
+  children: null,
+  lastChild: false,
+  firstChild: false,
+  source: "",
+  style: null,
+  circle: false,
 };
 
 Card.Progressbar.propTypes = {
-  /** List of every immediate child */
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
-  /** Equals true if child is first in children array */
   firstChild: PropTypes.bool,
-  /** Equals true if child is last in children array */
   lastChild: PropTypes.bool,
-  /** Sets a color schema for the component */
   colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
 };
 
+Card.Progressbar.defaultProps = {
+  children: null,
+  lastChild: false,
+  firstChild: false,
+  colorSchema: "neutral",
+};
+
 Card.Button.propTypes = {
-  /** List of every immediate child */
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
-  /** Sets a color schema for the component */
   colorSchema: PropTypes.oneOf(["neutral", "blue", "red", "purple", "green"]),
-  /** Equals true if child is first in children array */
   firstChild: PropTypes.bool,
-  /** Equals true if child is last in children array */
   lastChild: PropTypes.bool,
+  onClick: PropTypes.func.isRequired,
+};
+
+Card.Button.defaultProps = {
+  children: null,
+  lastChild: false,
+  firstChild: false,
+  colorSchema: "neutral",
 };
 
 export default Card;

@@ -42,7 +42,7 @@ import type { Answer, VIVACaseDetails } from "../../types/Case";
  * props: additional props to send into the generated component
  */
 interface InputTypeProperties {
-  component: React.FunctionComponent<any>;
+  component: React.FunctionComponent<P>;
   changeEvent?: string;
   blurEvent?: string;
   focusEvent?: string;
@@ -53,9 +53,42 @@ interface InputTypeProperties {
   addAnswerEvent?: string;
   props?: Record<string, unknown>;
 }
-type inputKeyType = FormInputType | InputFieldType;
 
-const inputTypes: Record<inputKeyType, InputTypeProperties> = {
+interface FormFieldProps {
+  label: string;
+  labelLine?: boolean;
+  id: string;
+  inputType?: InputKeyType;
+  value:
+    | undefined
+    | number
+    | string
+    | Record<string, unknown>
+    | Record<string, unknown>[];
+  answers: Answer;
+  validationErrors: Record<string, { isValid: boolean; message: string }>;
+  colorSchema: PrimaryColor;
+  help: {
+    text: string;
+    size: number;
+    heading: string;
+    tagline: string;
+    url: string;
+  };
+  details: VIVACaseDetails;
+  inputSelectValue: InputFieldType;
+  initialValues: string[];
+  onAddAnswer: (answer: unknown, fieldId: string) => void;
+  onClick: () => void;
+  onMount: () => void;
+  onFocus: () => void;
+  onBlur: () => void;
+  onChange?: () => void;
+}
+
+type InputKeyType = FormInputType | InputFieldType;
+
+const inputTypes: Record<InputKeyType, InputTypeProperties> = {
   text: {
     component: Input,
     changeEvent: "onChangeText",
@@ -198,38 +231,6 @@ const inputTypes: Record<inputKeyType, InputTypeProperties> = {
   },
 };
 
-interface FormFieldProps {
-  label: string;
-  labelLine?: boolean;
-  id: string;
-  inputType?: FormInputType | InputFieldType;
-  value:
-    | undefined
-    | number
-    | string
-    | Record<string, unknown>
-    | Record<string, unknown>[];
-  answers: Answer;
-  validationErrors: Record<string, { isValid: boolean; message: string }>;
-  colorSchema: PrimaryColor;
-  help: {
-    text: string;
-    size: number;
-    heading: string;
-    tagline: string;
-    url: string;
-  };
-  details: VIVACaseDetails;
-  inputSelectValue: InputFieldType;
-  initialValues: string[];
-  onAddAnswer: (answer: unknown, fieldId: string) => void;
-  onClick: () => void;
-  onMount: () => void;
-  onFocus: () => void;
-  onBlur: () => void;
-  onChange?: () => void;
-}
-
 const FormField = (props: FormFieldProps): JSX.Element => {
   const {
     label,
@@ -327,6 +328,8 @@ const FormField = (props: FormFieldProps): JSX.Element => {
       inputCompProps.values = details?.completions?.attachmentUploaded ?? [];
     }
   }
+
+  inputCompProps.completionsClarification = details.completions.description;
 
   const inputComponent =
     input && input.component ? (
