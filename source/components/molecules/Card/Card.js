@@ -398,7 +398,7 @@ Card.SubTitle.propTypes = {
 
 Card.SubTitle.defaultProps = {
   children: null,
-  colorSchema: "neutral",
+  colorSchema: "red",
 };
 
 Card.Text.propTypes = {
