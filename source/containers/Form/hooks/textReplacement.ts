@@ -4,7 +4,7 @@ import moment from "moment";
 
 import { deepCopy } from "../../../helpers/Objects";
 
-import type { Step, Question } from "../../../types/FormTypes";
+import type { Question, Step } from "../../../types/FormTypes";
 import type { PartnerInfo, User } from "../../../types/UserTypes";
 import type { Case } from "../../../types/Case";
 
@@ -251,24 +251,26 @@ export const replaceMarkdownTextInSteps = (
       : "";
 
   return steps.map((step) => {
-    const stepTitle = replaceString(step.title);
-    const stepDescription = replaceString(step.description);
+    const title = replaceString(step.title);
+    const description = replaceString(step.description);
 
-    let questionTextReplaced: Question[] = [];
-
-    questionTextReplaced = (step.questions ?? []).map((question: Question) => ({
+    const questions: Question[] = (step.questions ?? []).map((question) => ({
       ...question,
       text: replaceString(question.text),
       label: replaceString(question.label),
       title: replaceString(question.title),
       heading: replaceString(question.heading),
+      components: (question.components ?? []).map((component) => ({
+        ...component,
+        text: replaceString(component.text),
+      })),
       items: (question.items ?? []).map((item) => ({
         ...item,
         title: replaceString(item.title),
       })),
       categories: (question.categories ?? []).map((category) => ({
         ...category,
-        title: replaceString(category.description),
+        description: replaceString(category.description),
       })),
       inputs: (question.inputs ?? []).map((input) => ({
         ...input,
@@ -279,9 +281,9 @@ export const replaceMarkdownTextInSteps = (
 
     return {
       ...step,
-      title: stepTitle,
-      description: stepDescription,
-      questions: questionTextReplaced,
+      title,
+      description,
+      questions,
     };
   });
 };
