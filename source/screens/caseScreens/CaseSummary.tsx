@@ -272,7 +272,6 @@ const computeCaseCardComponent = (
       buttonIconName={isClosed ? "remove-red-eye" : "arrow-forward"}
       completions={unApprovedCompletionDescriptions}
       completionsClarification={completionsClarification}
-      isRandomCheck={statusType.includes("randomCheck")}
     />
   );
 };
