@@ -521,7 +521,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
         }
       >
         {(showActiveCases || showClosedCases) && (
-          <Card.Button colorSchema="red" disabled onClick={}>
+          <Card.Button colorSchema="red" disabled onClick={() => undefined}>
             <Icon name={refreshing ? "refresh" : "arrow-downward"} />
             <Text>Dra för att ladda om sidan</Text>
           </Card.Button>
