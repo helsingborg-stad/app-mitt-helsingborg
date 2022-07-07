@@ -329,7 +329,8 @@ const FormField = (props: FormFieldProps): JSX.Element => {
     }
   }
 
-  inputCompProps.completionsClarification = details.completions.description;
+  inputCompProps.completionsClarification =
+    details.completions?.description ?? "";
 
   const inputComponent =
     input && input.component ? (

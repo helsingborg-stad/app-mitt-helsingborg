@@ -172,7 +172,7 @@ const FormCaseScreen = ({
       editable={!isSignMode}
       encryptionPin={encryptionPin}
       completionsClarificationMessage={
-        initialCase.details.completions.description
+        initialCase.details.completions?.description
       }
       {...props}
     />
