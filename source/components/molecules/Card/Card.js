@@ -453,7 +453,7 @@ Card.Progressbar.defaultProps = {
   children: null,
   lastChild: false,
   firstChild: false,
-  colorSchema: "neutral",
+  colorSchema: "red",
 };
 
 Card.Button.propTypes = {
