@@ -1,6 +1,7 @@
-import { PartnerInfo, User } from "../../../../types/UserTypes";
-import { Question, Step } from "../../../../types/FormTypes";
-import { Period, Case, ApplicationStatusType } from "../../../../types/Case";
+import type { PartnerInfo, User } from "../../../../types/UserTypes";
+import type { Question, Step } from "../../../../types/FormTypes";
+import type { Period, Case } from "../../../../types/Case";
+import { ApplicationStatusType } from "../../../../types/Case";
 import {
   replaceMarkdownTextInSteps,
   replaceCaseItemText,
@@ -32,6 +33,8 @@ const basePeriod: Period = {
 };
 
 const baseQuestion: Question = {
+  title: "someTitle",
+  heading: "someHeading",
   id: "question-1",
   label: "Label",
   type: "text",
@@ -98,6 +101,8 @@ const doTest = (
             title: placeholder,
             inputs: [
               {
+                type: "text",
+                key: "someKey",
                 id: "amount",
                 label: placeholder,
                 title: placeholder,
@@ -241,6 +246,8 @@ beforeEach(() => {
         completed: true,
         randomCheck: false,
         dueDate: 1652708743244,
+        attachmentUploaded: [],
+        description: "completions clarification message",
       },
       administrators: [],
       workflowId: "123",
