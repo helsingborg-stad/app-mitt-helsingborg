@@ -372,7 +372,7 @@ Card.Body.propTypes = {
 Card.Body.defaultProps = {
   children: null,
   colorSchema: "neutral",
-  color: "red",
+  color: "neutral",
 };
 
 Card.Title.propTypes = {
