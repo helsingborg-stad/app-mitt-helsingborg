@@ -1,81 +1,34 @@
-import AsyncStorage from "@react-native-community/async-storage";
 import React, { useRef, useState } from "react";
-import { Dimensions, Platform, StatusBar, View } from "react-native";
-import Animated, { divide } from "react-native-reanimated";
-import { interpolateColor, useScrollHandler } from "react-native-redash";
-import styled from "styled-components/native";
-import { Button } from "../../components/atoms";
-import Text from "../../components/atoms/Text";
-import { ONBOARDING_DISABLED } from "../../services/StorageService";
+import { Dimensions, Platform, StatusBar, View, Animated } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
+
+import type { ScrollView } from "react-native";
+import type { Props, Navigation } from "./Onboarding.types";
+
 import Dot from "./Dot";
 import Slide from "./Slide";
+import { Button, Text } from "../../components/atoms";
+
+import { ONBOARDING_DISABLED } from "../../services/StorageService";
+
+import {
+  OnboardingContainer,
+  AnimatedScrollContainer,
+  FooterContainer,
+  AnimatedFooterBackground,
+  FooterContent,
+  FooterPagination,
+  SliderContinueButtonContainer,
+  SkipButtonContainer,
+  ContinueButton,
+  ContinueButtonText,
+} from "./Onboarding.styled";
 
 const SLIDE_BACKGROUND_ANSOKAN = require("../../assets/images/slides/onboarding_02_ansokan_in_3x.png");
 const SLIDE_BACKGROUND_ARENDEN = require("../../assets/images/slides/onboarding_03_arenden_in_3x.png");
 const SLIDE_BACKGROUND_KONTAKT = require("../../assets/images/slides/onboarding_04_kontakt_in_3x.png");
 
 const { width } = Dimensions.get("window");
-
-const OnboardingContainer = styled.View`
-  flex: 1;
-`;
-
-const AnimatedScrollContainer = styled(Animated.View)`
-  flex: 6;
-`;
-
-const FooterContainer = styled.View`
-  height: 90px;
-`;
-
-const AnimatedFooterBackground = styled(Animated.View)`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-`;
-
-const FooterContent = styled.View`
-  flex: 1;
-  flex-direction: row;
-  padding-top: 10px;
-`;
-
-const FooterPagination = styled.View`
-  padding-top: 10px;
-  padding-left: 40px;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-const SliderContinueButtonContainer = styled.View`
-  flex: 1;
-  flex-direction: row;
-  justify-content: flex-end;
-  padding-right: 24px;
-`;
-
-const SkipButtonContainer = styled.View`
-  flex-direction: row;
-  align-items: flex-end;
-  align-self: flex-end;
-  height: 64px;
-  margin-top: 16px;
-  margin-bottom: -16px;
-  margin-right: 16px;
-  z-index: 10;
-`;
-
-const ContinueButton = styled(Button)`
-  background-color: transparent;
-`;
-
-const ContinueButtonText = styled(Text)`
-  color: ${(props) => props.theme.colors.primary[props.colorSchema][0]};
-  font-size: ${(props) => props.theme.fontSizes[3]}px;
-`;
 
 const slides = [
   {
@@ -108,34 +61,57 @@ const disableOnboarding = async () => {
   await AsyncStorage.setItem(ONBOARDING_DISABLED, JSON.stringify(true));
 };
 
-const navigationResetToLoginScreen = (navigation) => {
-  disableOnboarding().then(
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Login" }],
-    })
-  );
+const navigationResetToLoginScreen = async (navigation: Navigation) => {
+  await disableOnboarding();
+  navigation.reset({
+    index: 0,
+    routes: [{ name: "Login" }],
+  });
 };
 
-interface OnboardingPropsInterface {
-  navigation: () => {};
-}
+const Onboarding = ({ navigation }: Props): JSX.Element => {
+  const animatedValue = new Animated.Value(0);
 
-const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
   const [scrollPos, setScrollPos] = useState(0);
-  const scroll = useRef<Animated.ScrollView>(null);
-  const { scrollHandler, x } = useScrollHandler();
+  const scroll = useRef<ScrollView>(null);
   const lastScrollPos = width * (slides.length - 2);
   const currentIndex = Math.round(scrollPos / width);
-  const backgroundColor = interpolateColor(x, {
+
+  const backgroundColor = animatedValue.interpolate({
     inputRange: slides.map((_, i) => i * width),
     outputRange: slides.map((slide) => slide.color),
   });
 
+  const animatedStyle = {
+    backgroundColor,
+  };
+
+  const scrollToPosition = (position: number) => {
+    if (scroll.current) {
+      scroll.current.scrollTo({
+        x: position,
+        animated: true,
+      });
+    }
+  };
+
+  const handleButtonClick = () => {
+    if (scrollPos <= lastScrollPos) {
+      if (Platform.OS === "android") {
+        // Fix for Android bug where onMomentumScrollEnd not called when setting scroll with scrollTo.
+        setScrollPos(scrollPos + width);
+      }
+
+      scrollToPosition(width + scrollPos);
+    } else {
+      void navigationResetToLoginScreen(navigation);
+    }
+  };
+
   return (
     <OnboardingContainer>
       <StatusBar hidden />
-      <AnimatedScrollContainer backgroundColor={backgroundColor}>
+      <AnimatedScrollContainer style={animatedStyle}>
         <SkipButtonContainer>
           {scrollPos <= lastScrollPos && (
             <Button
@@ -159,23 +135,25 @@ const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
           onMomentumScrollEnd={(event) => {
             setScrollPos(event.nativeEvent.contentOffset.x);
           }}
-          {...scrollHandler}
+          onScroll={(event) => {
+            animatedValue.setValue(event.nativeEvent.contentOffset.x);
+          }}
         >
-          {slides.map(({ headingColor, title, content, picture }, index) => (
-            <Slide key={index} {...{ headingColor, title, content, picture }} />
+          {slides.map(({ headingColor, title, content, picture }) => (
+            <Slide key={title} {...{ headingColor, title, content, picture }} />
           ))}
         </Animated.ScrollView>
       </AnimatedScrollContainer>
       <FooterContainer>
-        <AnimatedFooterBackground backgroundColor={backgroundColor} />
+        <AnimatedFooterBackground style={animatedStyle} />
         <FooterContent>
           <View>
             <FooterPagination>
-              {slides.map((_, index) => (
+              {slides.map((slide, index) => (
                 <Dot
-                  key={index}
-                  currentIndex={divide(x, width)}
-                  {...{ index }}
+                  key={slide.color}
+                  currentIndex={Animated.divide(animatedValue, width)}
+                  index={index}
                 />
               ))}
             </FooterPagination>
@@ -185,20 +163,7 @@ const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
               <ContinueButton
                 z={0}
                 colorSchema={slides[currentIndex].colorSchema}
-                onClick={() => {
-                  if (scrollPos <= lastScrollPos) {
-                    if (Platform.OS === "android") {
-                      // Fix for Android bug where onMomentumScrollEnd not called when setting scroll with scrollTo.
-                      setScrollPos(scrollPos + width);
-                    }
-
-                    scroll.current
-                      .getNode()
-                      .scrollTo({ x: width + scrollPos, animated: true });
-                  } else {
-                    navigationResetToLoginScreen(navigation);
-                  }
-                }}
+                onClick={handleButtonClick}
               >
                 <ContinueButtonText
                   colorSchema={slides[currentIndex].colorSchema}
@@ -210,20 +175,7 @@ const Onboarding = ({ navigation }: OnboardingPropsInterface) => {
               <Button
                 z={0}
                 colorSchema={slides[currentIndex].colorSchema}
-                onClick={() => {
-                  if (scrollPos <= lastScrollPos) {
-                    if (Platform.OS === "android") {
-                      // Fix for Android bug where onMomentumScrollEnd not called when setting scroll with scrollTo.
-                      setScrollPos(scrollPos + width);
-                    }
-
-                    scroll.current
-                      .getNode()
-                      .scrollTo({ x: width + scrollPos, animated: true });
-                  } else {
-                    navigationResetToLoginScreen(navigation);
-                  }
-                }}
+                onClick={handleButtonClick}
               >
                 <Text>Logga in</Text>
               </Button>
