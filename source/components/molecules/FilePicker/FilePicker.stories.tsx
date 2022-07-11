@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import { ScrollView } from "react-native";
 import { storiesOf } from "@storybook/react-native";
-import { ScrollView } from "react-native-gesture-handler";
 
 import StoryWrapper from "../StoryWrapper";
 import FilePicker from "./FilePicker";
