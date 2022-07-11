@@ -411,8 +411,6 @@ PODS:
     - RNNotifee/NotifeeCore (= 5.2.1)
   - RNNotifee/NotifeeCore (5.2.1):
     - React-Core
-  - RNReanimated (1.13.4):
-    - React-Core
   - RNScreens (3.13.1):
     - React-Core
     - React-RCTImage
@@ -506,7 +504,6 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
-  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -633,8 +630,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-crop-picker"
   RNNotifee:
     :path: "../node_modules/@notifee/react-native"
-  RNReanimated:
-    :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNSentry:
@@ -709,7 +704,6 @@ SPEC CHECKSUMS:
   RNGestureHandler: 4f4986408310a43f1606c391f38f76e0d6e790d5
   RNImageCropPicker: 44e2807bc410741f35d4c45b6586aedfe3da39d2
   RNNotifee: aa2db7658fd17b5c44ea96b7062bcade3787a10e
-  RNReanimated: c1b56d030d1616239861534d9adb531f8cffab68
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
   RNSentry: fc5a7ed36b2298b6b98699b3d6357ccc4d407722
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
