@@ -40,19 +40,6 @@ jest.mock("@react-native-community/async-storage", () =>
 );
 
 /**
- * Mock react-native-reanimated
- */
-jest.mock("react-native-reanimated", () => {
-  const Reanimated = jest.requireActual("react-native-reanimated/mock");
-
-  // The mock for `call` immediately calls the callback which is incorrect
-  // So we override it with a no-op
-  Reanimated.default.call = () => {};
-
-  return Reanimated;
-});
-
-/**
  * Mock NativeAnimatedHelper
  */
 jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper");
