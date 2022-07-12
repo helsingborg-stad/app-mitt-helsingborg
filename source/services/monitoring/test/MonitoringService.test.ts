@@ -9,19 +9,8 @@ jest.mock("@sentry/react-native", () => ({
 
 const dsnMock = "test";
 
-it("returns a null service in development environment", () => {
-  env.APP_ENV = "develop";
-  const sentrySpy = jest.spyOn(Sentry, "init");
-
-  const service = getMonitoringService();
-  service.init();
-
-  expect(sentrySpy).not.toHaveBeenCalled();
-});
-
-it("returns sentry service in production environment", () => {
-  env.APP_ENV = "production";
-  env.SENTRY_DSN = dsnMock;
+it("returns a monitoring service", () => {
+  env.SENTRY_DSN = "test";
 
   const sentrySpy = jest.spyOn(Sentry, "init");
 
