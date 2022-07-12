@@ -55,6 +55,7 @@ export default function PinInputModal({
               onChangeText={setPin}
               onBlur={() => undefined}
               onMount={() => undefined}
+              keyboardType="number-pad"
             />
             {error && <ErrorText>{error}</ErrorText>}
             <ButtonContainer>
