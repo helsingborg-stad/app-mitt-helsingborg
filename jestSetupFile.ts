@@ -1,5 +1,4 @@
 import { NativeModules } from "react-native";
-import "react-native-gesture-handler/jestSetup";
 import "@testing-library/jest-dom";
 
 import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-info-mock";
@@ -38,19 +37,6 @@ jest.mock("@react-native-community/async-storage", () =>
     "@react-native-community/async-storage/jest/async-storage-mock"
   )
 );
-
-/**
- * Mock react-native-reanimated
- */
-jest.mock("react-native-reanimated", () => {
-  const Reanimated = jest.requireActual("react-native-reanimated/mock");
-
-  // The mock for `call` immediately calls the callback which is incorrect
-  // So we override it with a no-op
-  Reanimated.default.call = () => {};
-
-  return Reanimated;
-});
 
 /**
  * Mock NativeAnimatedHelper
