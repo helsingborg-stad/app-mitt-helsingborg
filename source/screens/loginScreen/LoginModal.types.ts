@@ -1,4 +1,4 @@
-export interface LoginModalProps {
+export interface Props {
   visible: boolean;
   isLoading: boolean;
   isIdle: boolean;

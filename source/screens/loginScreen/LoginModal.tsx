@@ -23,7 +23,7 @@ import {
   Title,
 } from "./LoginModal.styled";
 
-import type { LoginModalProps } from "./LoginModal.types";
+import type { Props } from "./LoginModal.types";
 
 const { sanitizePin, validatePin } = ValidationHelper;
 
@@ -36,7 +36,7 @@ function LoginModal({
   toggle,
   handleAuth,
   handleCancelOrder,
-}: LoginModalProps): JSX.Element {
+}: Props): JSX.Element {
   const [personalNumber, setPersonalNumber] = useState("");
 
   const handlePersonalNumber = (value: string) => {
