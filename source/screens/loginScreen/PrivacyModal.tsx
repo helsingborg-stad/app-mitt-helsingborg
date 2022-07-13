@@ -7,6 +7,7 @@ import userAgreementText from "../../assets/text/userAgreementText";
 import Button from "../../components/atoms/Button";
 import Text from "../../components/atoms/Text";
 import MarkdownConstructor from "../../helpers/MarkdownConstructor";
+
 import {
   CloseModalButton,
   Modal,
@@ -14,13 +15,12 @@ import {
   UserAgreementForm,
 } from "./PrivacyModal.styled";
 
+import type { PrivacyModalProps } from "./PrivacyModal.types";
+
 function PrivacyModal({
   visible,
   toggle,
-}: {
-  visible: boolean;
-  toggle: () => void;
-}): JSX.Element | null {
+}: PrivacyModalProps): JSX.Element | null {
   /**
    * Setup for markdown formatter used to render user agreement text.
    */

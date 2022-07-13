@@ -23,6 +23,8 @@ import {
   Title,
 } from "./LoginModal.styled";
 
+import type { LoginModalProps } from "./LoginModal.types";
+
 const { sanitizePin, validatePin } = ValidationHelper;
 
 function LoginModal({
@@ -34,33 +36,14 @@ function LoginModal({
   toggle,
   handleAuth,
   handleCancelOrder,
-}: {
-  visible: boolean;
-  isLoading: boolean;
-  isIdle: boolean;
-  isResolved: boolean;
-  isRejected: boolean;
-  toggle: () => void;
-  handleAuth: (
-    personalNumber: string,
-    authenticateOnExternalDevice: boolean
-  ) => void;
-  handleCancelOrder: () => void;
-}): JSX.Element {
+}: LoginModalProps): JSX.Element {
   const [personalNumber, setPersonalNumber] = useState("");
 
-  /**
-   * Handles the personal number input field changes and updates state.
-   */
   const handlePersonalNumber = (value: string) => {
     setPersonalNumber(sanitizePin(value));
   };
 
-  /**
-   * Handles the submission of the login form.
-   */
   const handleLogin = async (authenticateOnExternalDevice = false) => {
-    // Validate personal number if authentication is chosen to be triggered on an external device
     if (authenticateOnExternalDevice) {
       if (personalNumber.length <= 0) {
         return;
@@ -74,7 +57,6 @@ function LoginModal({
       await handleAuth(personalNumber, true);
       return;
     }
-    // Send empty personal number to use the personal number from users BankID app
     await handleAuth(undefined, false);
   };
 
