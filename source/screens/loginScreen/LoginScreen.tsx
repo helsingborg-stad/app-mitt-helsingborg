@@ -10,7 +10,7 @@ import { Button, Text } from "../../components/atoms";
 import { AuthLoading } from "../../components/molecules";
 import { useModal } from "../../components/molecules/Modal";
 
-import { PrivacyModal } from "../../components/organisms";
+import { PrivacyModal, LoginModal } from "../../components/organisms";
 
 import { getUserFriendlyAppVersion } from "../../helpers/Misc";
 
@@ -20,7 +20,6 @@ import AppContext from "../../store/AppContext";
 import AuthContext from "../../store/AuthContext";
 import { useNotification } from "../../store/NotificationContext";
 
-import LoginModal from "./LoginModal";
 import ApiStatusMessage from "./ApiStatusMessage";
 
 import {

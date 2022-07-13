@@ -1,10 +1,10 @@
 import styled from "styled-components/native";
 
-import { Modal as ModalBase, BackNavigation } from "../../components/molecules";
+import { Modal as ModalBase, BackNavigation } from "../../molecules";
 
-import { Heading, Input, Text } from "../../components/atoms";
+import { Heading, Input, Text } from "../../atoms";
 
-import type { ThemeType } from "../../styles/themeHelpers";
+import type { ThemeType } from "../../../styles/themeHelpers";
 
 const UnifiedPadding = [24, 48];
 

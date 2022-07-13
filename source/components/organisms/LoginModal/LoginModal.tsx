@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Alert, Linking, StatusBar } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import { Button, Text } from "../../components/atoms";
+import { Button, Text } from "../../atoms";
 
-import AuthLoading from "../../components/molecules/AuthLoading";
+import AuthLoading from "../../molecules/AuthLoading";
 
-import { ValidationHelper } from "../../helpers";
+import { ValidationHelper } from "../../../helpers";
 
 import {
   CloseModalButton,
