@@ -40,14 +40,14 @@ function ProfileScreen({ navigation }: Props): JSX.Element {
 
   const personalInfoFields = [
     {
-      heading: "Personuppgifter",
+      header: "Personuppgifter",
       fields: [
         makeField("NAMN", `${user?.firstName || ""} ${user?.lastName || ""}`),
         makeField("PERSONNUMMER", user?.personalNumber),
       ],
     },
     {
-      heading: "Adress",
+      header: "Adress",
       fields: [
         makeField("GATUADRESS", user?.address?.street),
         makeField("POSTNUMMER", user?.address?.postalCode),
@@ -60,9 +60,9 @@ function ProfileScreen({ navigation }: Props): JSX.Element {
     <ProfileScreenWrapper>
       <Header title="Min profil" themeColor="purple" />
       <Container>
-        {personalInfoFields.map(({ heading, fields }) => (
-          <ProfileInfoContainer key={heading}>
-            <ProfileInfoHeading type="h5">{heading}</ProfileInfoHeading>
+        {personalInfoFields.map(({ header, fields }) => (
+          <ProfileInfoContainer key={header}>
+            <ProfileInfoHeading type="h5">{header}</ProfileInfoHeading>
             {fields.map(({ fieldLabel, fieldValue }) => (
               <React.Fragment key={fieldLabel}>
                 <ProfileLabel underline={false}>{fieldLabel}</ProfileLabel>
