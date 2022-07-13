@@ -15,9 +15,6 @@ function ApiStatusMessage({ message }: Props): JSX.Element {
         size={48}
         color={theme.colors.primary.red[2]}
       />
-      <Text strong type="h5" style={{ color: theme.colors.primary.red[0] }}>
-        Oh no!
-      </Text>
       <Text
         strong
         style={{

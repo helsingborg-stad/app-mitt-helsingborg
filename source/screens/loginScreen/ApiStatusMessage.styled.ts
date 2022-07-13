@@ -8,7 +8,7 @@ interface ApiStatusMessageContainerProps {
 const ApiStatusMessageContainer = styled.View<ApiStatusMessageContainerProps>`
   position: relative;
   top: -160px;
-  min-height: 220px;
+  min-height: 160px;
   align-self: center;
   justify-content: space-evenly;
   width: 80%;
