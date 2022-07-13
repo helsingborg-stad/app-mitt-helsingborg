@@ -5,7 +5,7 @@ import RNPickerSelect from "react-native-picker-select";
 import { SLIDES } from "../../assets/images";
 import backgroundImage from "../../assets/images/illustrations/onboarding_05_logga-in_2x.png";
 
-import { Button, Icon, Text } from "../../components/atoms";
+import { Button, Text } from "../../components/atoms";
 import AuthLoading from "../../components/molecules/AuthLoading";
 import { useModal } from "../../components/molecules/Modal";
 
@@ -19,9 +19,9 @@ import { useNotification } from "../../store/NotificationContext";
 
 import LoginModal from "./LoginModal";
 import PrivacyModal from "./PrivacyModal";
+import ApiStatusMessage from "./ApiStatusMessage";
 
 import {
-  ApiStatusMessageContainer,
   ContentText,
   FlexImageBackground,
   FlexView,
@@ -41,6 +41,8 @@ import {
   VersionLabelContainer,
 } from "./LoginScreen.styled";
 import theme from "../../styles/theme";
+
+import type { Endpoint } from "../../services/EnvironmentConfigurationService";
 
 function LoginScreen(): JSX.Element {
   const {
@@ -69,7 +71,7 @@ function LoginScreen(): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
-  const onEnvironmentSelectionChange = (value) => {
+  const onEnvironmentSelectionChange = (value: Endpoint) => {
     EnvironmentConfigurationService.getInstance().activeEndpoint = value;
   };
 
@@ -99,29 +101,7 @@ function LoginScreen(): JSX.Element {
           </Header>
 
           {!!apiStatusMessage && (
-            <ApiStatusMessageContainer>
-              <Icon
-                name="error-outline"
-                size={48}
-                color={theme.colors.primary.red[2]}
-              />
-              <Text
-                strong
-                type="h5"
-                style={{ color: theme.colors.primary.red[0] }}
-              >
-                Oh no!
-              </Text>
-              <Text
-                strong
-                style={{
-                  color: theme.colors.primary.red[0],
-                  textAlign: "center",
-                }}
-              >
-                {apiStatusMessage}
-              </Text>
-            </ApiStatusMessageContainer>
+            <ApiStatusMessage message={apiStatusMessage} />
           )}
 
           {(isLoading || isResolved) && (

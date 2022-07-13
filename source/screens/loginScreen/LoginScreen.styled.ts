@@ -4,8 +4,11 @@ import styled from "styled-components/native";
 import Heading from "../../components/atoms/Heading";
 import Text from "../../components/atoms/Text";
 
-import type { ApiStatusMessageContainerProps } from "./LoginScreen.types";
 import type { ThemeType } from "../../styles/themeHelpers";
+
+interface DefaultStyledProps {
+  theme: ThemeType;
+}
 
 const UnifiedPadding = [24, 48];
 
@@ -36,10 +39,7 @@ const Form = styled.View`
   align-items: center;
 `;
 
-interface FooterProps {
-  theme: ThemeType;
-}
-const Footer = styled.View<FooterProps>`
+const Footer = styled.View<DefaultStyledProps>`
   flex: 1;
   max-height: 130px;
   padding: ${UnifiedPadding[0]}px ${UnifiedPadding[1]}px ${UnifiedPadding[0]}px
@@ -73,22 +73,22 @@ const ContentText = styled(Text)`
   line-height: 30px;
 `;
 
-const Separator = styled.View`
+const Separator = styled.View<DefaultStyledProps>`
   border-radius: 40px;
   height: 2px;
   width: 25px;
-  background-color: ${(props) => props.theme.colors.complementary.red[0]};
+  background-color: ${({ theme }) => theme.colors.complementary.red[0]};
   margin-bottom: 16px;
 `;
 
 const FooterText = styled(Text)`
   font-style: italic;
-  color: ${(props) => props.theme.colors.neutrals[2]};
+  color: ${({ theme }) => theme.colors.neutrals[2]};
   text-align: center;
 `;
 
 const Link = styled(Text)`
-  font-size: ${(props) => props.theme.fontSizes[3]}px;
+  font-size: ${({ theme }) => theme.fontSizes[3]}px;
   text-align: center;
   margin-top: 16px;
   font-weight: normal;
@@ -96,9 +96,9 @@ const Link = styled(Text)`
 
 const ParagraphLink = styled(Text)`
   font-style: italic;
-  font-size: ${(props) => props.theme.fontSizes[2]}px;
+  font-size: ${({ theme }) => theme.fontSizes[2]}px;
   font-weight: bold;
-  color: ${(props) => props.theme.colors.neutrals[1]};
+  color: ${({ theme }) => theme.colors.neutrals[1]};
 `;
 
 const VersionLabelContainer = styled.View`
@@ -109,25 +109,8 @@ const VersionLabelContainer = styled.View`
 
 const VersionLabel = styled(Text)`
   padding: 2px 5px;
-  background-color: ${(props) => props.theme.colors.neutrals[6]};
+  background-color: ${({ theme }) => theme.colors.neutrals[6]};
   align-self: flex-start;
-`;
-
-const ApiStatusMessageContainer = styled.View<ApiStatusMessageContainerProps>`
-  position: relative;
-  top: -160px;
-  min-height: 220px;
-  align-self: center;
-  justify-content: space-evenly;
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: ${({ theme: themeProp }) =>
-    themeProp.colors.complementary.red[3]};
-  border: ${({ theme: themeProp }) =>
-    `2px solid ${themeProp.colors.complementary.red[0]}`};
-  padding: 0px 24px;
 `;
 
 const pickerSelectStyles = {
@@ -148,7 +131,6 @@ const pickerSelectStyles = {
 };
 
 export {
-  ApiStatusMessageContainer,
   ContentText,
   FlexImageBackground,
   FlexView,
