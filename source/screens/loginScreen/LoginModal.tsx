@@ -25,8 +25,7 @@ import {
 
 import type { Props } from "./LoginModal.types";
 
-const localDeviceHyperlink =
-  "https://support.bankid.com/sv/bankid/mobilt-bankid";
+const bankIdSupportUrl = "https://support.bankid.com/sv/bankid/mobilt-bankid";
 
 const { sanitizePin, validatePin } = ValidationHelper;
 
@@ -54,8 +53,8 @@ function LoginModal({
     }
   };
 
-  const handleLoginLocalDevice = () => {
-    void Linking.openURL(localDeviceHyperlink);
+  const handleOpenExternalLink = () => {
+    void Linking.openURL(bankIdSupportUrl);
   };
 
   return (
@@ -117,10 +116,7 @@ function LoginModal({
               >
                 <Text>Logga in</Text>
               </Button>
-              <Link
-                href={localDeviceHyperlink}
-                onPress={handleLoginLocalDevice}
-              >
+              <Link href={bankIdSupportUrl} onPress={handleOpenExternalLink}>
                 Läs mer om hur du skaffar Mobilt BankID
               </Link>
             </Form>
