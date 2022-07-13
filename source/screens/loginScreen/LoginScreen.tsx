@@ -4,17 +4,22 @@ import RNPickerSelect from "react-native-picker-select";
 
 import { SLIDES } from "../../assets/images";
 import backgroundImage from "../../assets/images/illustrations/onboarding_05_logga-in_2x.png";
+
 import { Button, Icon, Text } from "../../components/atoms";
 import AuthLoading from "../../components/molecules/AuthLoading";
 import { useModal } from "../../components/molecules/Modal";
+
 import { getUserFriendlyAppVersion } from "../../helpers/Misc";
+
 import EnvironmentConfigurationService from "../../services/EnvironmentConfigurationService";
+
 import AppContext from "../../store/AppContext";
 import AuthContext from "../../store/AuthContext";
 import { useNotification } from "../../store/NotificationContext";
-import theme from "../../styles/theme";
+
 import LoginModal from "./LoginModal";
 import PrivacyModal from "./PrivacyModal";
+
 import {
   ApiStatusMessageContainer,
   ContentText,
@@ -35,6 +40,7 @@ import {
   VersionLabel,
   VersionLabelContainer,
 } from "./LoginScreen.styled";
+import theme from "../../styles/theme";
 
 function LoginScreen(): JSX.Element {
   const {
@@ -55,9 +61,6 @@ function LoginScreen(): JSX.Element {
 
   const { isDevMode } = useContext(AppContext);
 
-  /**
-   * Effect for showing notification if an error occurs
-   */
   useEffect(() => {
     if (isRejected && error?.message) {
       showNotification("Ett fel inträffade", error.message, "info", 5000);
@@ -68,6 +71,10 @@ function LoginScreen(): JSX.Element {
 
   const onEnvironmentSelectionChange = (value) => {
     EnvironmentConfigurationService.getInstance().activeEndpoint = value;
+  };
+
+  const handleLogin = async () => {
+    await handleAuth(undefined, false);
   };
 
   return (
@@ -135,7 +142,7 @@ function LoginScreen(): JSX.Element {
                 z={0}
                 size="large"
                 block
-                onClick={() => handleLogin()}
+                onClick={handleLogin}
                 colorSchema="red"
               >
                 <Text>Logga in med Mobilt BankID</Text>

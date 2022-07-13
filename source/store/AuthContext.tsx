@@ -38,7 +38,7 @@ interface UseAuthProviderLogicValues extends AuthReducerState {
   handleRefreshSession: () => void;
   handleAddProfile: () => void;
   handleAuth: (
-    personalNumber: string,
+    personalNumber: string | undefined,
     authenticateOnExternalDevice: boolean
   ) => void;
   handleCancelOrder: () => void;

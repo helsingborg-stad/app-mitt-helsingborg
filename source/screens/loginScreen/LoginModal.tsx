@@ -43,21 +43,13 @@ function LoginModal({
     setPersonalNumber(sanitizePin(value));
   };
 
-  const handleLogin = async (authenticateOnExternalDevice = false) => {
-    if (authenticateOnExternalDevice) {
-      if (personalNumber.length <= 0) {
-        return;
-      }
-
-      if (!validatePin(personalNumber)) {
-        Alert.alert("Felaktigt personnummer. Ange format: ååååmmddxxxx.");
-        return;
-      }
-
-      await handleAuth(personalNumber, true);
+  const handleLogin = async () => {
+    if (!validatePin(personalNumber)) {
+      Alert.alert("Felaktigt personnummer. Ange format: ååååmmddxxxx.");
       return;
     }
-    await handleAuth(undefined, false);
+
+    await handleAuth(personalNumber, true);
   };
 
   return (
@@ -106,7 +98,7 @@ function LoginModal({
                 onChangeText={handlePersonalNumber}
                 keyboardType="number-pad"
                 maxLength={12}
-                onSubmitEditing={() => handleLogin(true)}
+                onSubmitEditing={handleLogin}
                 center
               />
               <Button
@@ -114,9 +106,7 @@ function LoginModal({
                 disabled={personalNumber.length !== 12}
                 size="large"
                 block
-                onClick={() => {
-                  void handleLogin(true);
-                }}
+                onClick={handleLogin}
                 colorSchema="red"
               >
                 <Text>Logga in</Text>
