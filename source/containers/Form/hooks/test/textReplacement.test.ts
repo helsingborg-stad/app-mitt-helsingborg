@@ -18,6 +18,7 @@ const mockedUserData: User = {
   firstName: "Kaj-Bertil",
   lastName: "Efternamnsson",
   mobilePhone: "",
+  personalNumber: "196801231232",
 };
 
 const baseStep: Step = {
@@ -185,6 +186,7 @@ describe("replaceMarkdownTextInSteps", () => {
     it.each([
       ["#firstName", "Kaj-Bertil"],
       ["#lastName", "Efternamnsson"],
+      ["#personalNumber", "196801231232"],
     ])("Replaces %s with %s", doTest);
   });
 

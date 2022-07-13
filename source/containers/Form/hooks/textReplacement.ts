@@ -76,6 +76,7 @@ export const replaceCaseItemText = (caseItem: Case): Case => {
 const replacementRules = [
   ["#firstName", "user.firstName"],
   ["#lastName", "user.lastName"],
+  ["#personalNumber", "user.personalNumber"],
   ["#date-1", "date.nextMonth.first"], // Who named this???? pls fixs
   ["#date-2", "date.nextMonth.last"],
   ["#month-1", "date.previousMonth.currentMonth-1"],
