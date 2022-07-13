@@ -7,7 +7,7 @@ import backgroundImage from "../../assets/images/illustrations/onboarding_05_log
 
 import { Button, Text } from "../../components/atoms";
 
-import { AuthLoading } from "../../components/molecules";
+import { AuthLoading, ApiStatusMessage } from "../../components/molecules";
 import { useModal } from "../../components/molecules/Modal";
 
 import { PrivacyModal, LoginModal } from "../../components/organisms";
@@ -19,8 +19,6 @@ import EnvironmentConfigurationService from "../../services/EnvironmentConfigura
 import AppContext from "../../store/AppContext";
 import AuthContext from "../../store/AuthContext";
 import { useNotification } from "../../store/NotificationContext";
-
-import ApiStatusMessage from "./ApiStatusMessage";
 
 import {
   ContentText,
