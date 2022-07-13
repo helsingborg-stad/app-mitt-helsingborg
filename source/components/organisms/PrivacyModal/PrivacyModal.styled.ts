@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-import { Modal as ModalBase, BackNavigation } from "../../components/molecules";
+import { Modal as ModalBase, BackNavigation } from "../../molecules";
 
 const UnifiedPadding = [24, 48];
 

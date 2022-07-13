@@ -3,10 +3,11 @@ import { View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import type { RenderRules } from "react-native-markdown-display";
 
-import userAgreementText from "../../assets/text/userAgreementText";
-import Button from "../../components/atoms/Button";
-import Text from "../../components/atoms/Text";
-import MarkdownConstructor from "../../helpers/MarkdownConstructor";
+import userAgreementText from "../../../assets/text/userAgreementText";
+
+import { Button, Text } from "../../atoms";
+
+import MarkdownConstructor from "../../../helpers/MarkdownConstructor";
 
 import {
   CloseModalButton,

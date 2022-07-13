@@ -6,8 +6,11 @@ import { SLIDES } from "../../assets/images";
 import backgroundImage from "../../assets/images/illustrations/onboarding_05_logga-in_2x.png";
 
 import { Button, Text } from "../../components/atoms";
-import AuthLoading from "../../components/molecules/AuthLoading";
+
+import { AuthLoading } from "../../components/molecules";
 import { useModal } from "../../components/molecules/Modal";
+
+import { PrivacyModal } from "../../components/organisms";
 
 import { getUserFriendlyAppVersion } from "../../helpers/Misc";
 
@@ -18,7 +21,6 @@ import AuthContext from "../../store/AuthContext";
 import { useNotification } from "../../store/NotificationContext";
 
 import LoginModal from "./LoginModal";
-import PrivacyModal from "./PrivacyModal";
 import ApiStatusMessage from "./ApiStatusMessage";
 
 import {
