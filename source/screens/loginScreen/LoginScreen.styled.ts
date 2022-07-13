@@ -1,4 +1,3 @@
-import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
@@ -6,12 +5,13 @@ import Heading from "../../components/atoms/Heading";
 import Text from "../../components/atoms/Text";
 
 import type { ApiStatusMessageContainerProps } from "./LoginScreen.types";
+import type { ThemeType } from "../../styles/themeHelpers";
 
 const UnifiedPadding = [24, 48];
 
 const SafeAreaViewTop = styled(SafeAreaView)`
   flex: 1;
-  background-color: ${(props) => props.theme.colors.neutrals[6]};
+  background-color: ${({ theme }) => theme.colors.neutrals[6]};
 `;
 
 const FlexView = styled.View`
@@ -20,7 +20,6 @@ const FlexView = styled.View`
 
 const FlexImageBackground = styled.ImageBackground`
   flex: 1;
-  resize-mode: cover;
   justify-content: center;
 `;
 
@@ -37,14 +36,17 @@ const Form = styled.View`
   align-items: center;
 `;
 
-const Footer = styled.View`
+interface FooterProps {
+  theme: ThemeType;
+}
+const Footer = styled.View<FooterProps>`
   flex: 1;
   max-height: 130px;
   padding: ${UnifiedPadding[0]}px ${UnifiedPadding[1]}px ${UnifiedPadding[0]}px
     ${UnifiedPadding[1]}px;
-  border-top-color: ${(props) => props.theme.border.default};
+  border-top-color: ${({ theme }) => theme.border.default};
   border-top-width: 1px;
-  background-color: ${(props) => props.theme.colors.neutrals[5]};
+  background-color: ${({ theme }) => theme.colors.neutrals[5]};
 `;
 
 const Logo = styled.Image`
@@ -54,20 +56,20 @@ const Logo = styled.Image`
 `;
 
 const Title = styled(Heading)`
-  font-size: ${(props) => props.theme.fontSizes[3]}px;
-  color: ${(props) => props.theme.colors.primary.red[0]};
-  font-weight: ${(props) => props.theme.fontWeights[1]};
+  font-size: ${({ theme }) => theme.fontSizes[3]}px;
+  color: ${({ theme }) => theme.colors.primary.red[0]};
+  font-weight: ${({ theme }) => theme.fontWeights[1]};
 `;
 
 const LoginHeading = styled(Heading)`
-  font-size: ${(props) => props.theme.fontSizes[13]}px;
-  font-weight: ${(props) => props.theme.fontWeights[1]};
+  font-size: ${({ theme }) => theme.fontSizes[13]}px;
+  font-weight: ${({ theme }) => theme.fontWeights[1]};
   line-height: 60px;
-  color: ${(props) => props.theme.colors.neutrals[0]};
+  color: ${({ theme }) => theme.colors.neutrals[0]};
 `;
 
 const ContentText = styled(Text)`
-  font-size: ${(props) => props.theme.fontSizes[4]}px;
+  font-size: ${({ theme }) => theme.fontSizes[4]}px;
   line-height: 30px;
 `;
 
@@ -99,7 +101,7 @@ const ParagraphLink = styled(Text)`
   color: ${(props) => props.theme.colors.neutrals[1]};
 `;
 
-const VersionLabelContainer = styled(View)`
+const VersionLabelContainer = styled.View`
   position: relative;
   top: 10px;
   left: 10px;
@@ -125,7 +127,7 @@ const ApiStatusMessageContainer = styled.View<ApiStatusMessageContainerProps>`
     themeProp.colors.complementary.red[3]};
   border: ${({ theme: themeProp }) =>
     `2px solid ${themeProp.colors.complementary.red[0]}`};
-  padding: 0px 24px 0px 24px;
+  padding: 0px 24px;
 `;
 
 const pickerSelectStyles = {
