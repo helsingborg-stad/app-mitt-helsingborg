@@ -25,6 +25,9 @@ import {
 
 import type { Props } from "./LoginModal.types";
 
+const localDeviceHyperlink =
+  "https://support.bankid.com/sv/bankid/mobilt-bankid";
+
 const { sanitizePin, validatePin } = ValidationHelper;
 
 function LoginModal({
@@ -43,13 +46,16 @@ function LoginModal({
     setPersonalNumber(sanitizePin(value));
   };
 
-  const handleLogin = async () => {
+  const handleLoginExternalDevice = async () => {
     if (!validatePin(personalNumber)) {
       Alert.alert("Felaktigt personnummer. Ange format: ååååmmddxxxx.");
-      return;
+    } else {
+      await handleAuth(personalNumber, true);
     }
+  };
 
-    await handleAuth(personalNumber, true);
+  const handleLoginLocalDevice = () => {
+    void Linking.openURL(localDeviceHyperlink);
   };
 
   return (
@@ -98,7 +104,7 @@ function LoginModal({
                 onChangeText={handlePersonalNumber}
                 keyboardType="number-pad"
                 maxLength={12}
-                onSubmitEditing={handleLogin}
+                onSubmitEditing={handleLoginExternalDevice}
                 center
               />
               <Button
@@ -106,18 +112,14 @@ function LoginModal({
                 disabled={personalNumber.length !== 12}
                 size="large"
                 block
-                onClick={handleLogin}
+                onClick={handleLoginExternalDevice}
                 colorSchema="red"
               >
                 <Text>Logga in</Text>
               </Button>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <Link
-                onPress={() => {
-                  void Linking.openURL(
-                    "https://support.bankid.com/sv/bankid/mobilt-bankid"
-                  );
-                }}
+                href={localDeviceHyperlink}
+                onPress={handleLoginLocalDevice}
               >
                 Läs mer om hur du skaffar Mobilt BankID
               </Link>
