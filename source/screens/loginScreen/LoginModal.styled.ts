@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 
 import { Modal as ModalBase, BackNavigation } from "../../components/molecules";
+
 import { Heading, Input, Text } from "../../components/atoms";
 
 const UnifiedPadding = [24, 48];
