@@ -4,6 +4,7 @@ import styled from "styled-components/native";
 
 import Heading from "../../components/atoms/Heading";
 import Text from "../../components/atoms/Text";
+
 import type { ApiStatusMessageContainerProps } from "./LoginScreen.types";
 
 const UnifiedPadding = [24, 48];
