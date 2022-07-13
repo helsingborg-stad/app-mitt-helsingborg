@@ -1,11 +1,10 @@
 import React, { useContext, useEffect } from "react";
 import { StatusBar } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
+
 import { SLIDES } from "../../assets/images";
 import backgroundImage from "../../assets/images/illustrations/onboarding_05_logga-in_2x.png";
-import Button from "../../components/atoms/Button";
-import Icon from "../../components/atoms/Icon";
-import Text from "../../components/atoms/Text";
+import { Button, Icon, Text } from "../../components/atoms";
 import AuthLoading from "../../components/molecules/AuthLoading";
 import { useModal } from "../../components/molecules/Modal";
 import { getUserFriendlyAppVersion } from "../../helpers/Misc";
@@ -15,6 +14,7 @@ import AuthContext from "../../store/AuthContext";
 import { useNotification } from "../../store/NotificationContext";
 import theme from "../../styles/theme";
 import LoginModal from "./LoginModal";
+import PrivacyModal from "./PrivacyModal";
 import {
   ApiStatusMessageContainer,
   ContentText,
@@ -35,7 +35,6 @@ import {
   VersionLabel,
   VersionLabelContainer,
 } from "./LoginScreen.styled";
-import PrivacyModal from "./PrivacyModal";
 
 function LoginScreen(): JSX.Element {
   const {
