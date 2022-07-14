@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Linking, StatusBar } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Alert, Linking, StatusBar, KeyboardAvoidingView } from "react-native";
 
 import { Button, Text } from "../../atoms";
 
@@ -60,11 +59,7 @@ function LoginModal({
   return (
     <Modal visible={visible} hide={toggle}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
-      <KeyboardAwareScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1 }}
-        extraScrollHeight={50}
-      >
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
         <CloseModalButton
           onClose={toggle}
           primary={false}
@@ -122,7 +117,7 @@ function LoginModal({
             </Form>
           )}
         </FlexView>
-      </KeyboardAwareScrollView>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
