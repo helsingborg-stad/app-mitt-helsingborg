@@ -97,7 +97,6 @@ const StepBackNavigation = styled(BackNavigation)`
 
 const StepLayout = styled.View`
   flex: 1;
-  min-height: ${Dimensions.get("window").height - 256}px;
   flex-direction: column;
 `;
 
@@ -107,7 +106,6 @@ const StepBody = styled.View`
 
 const StepFieldListWrapper = styled.View`
   margin: 24px;
-  flex: 1;
 `;
 
 function Step({
@@ -231,7 +229,7 @@ function Step({
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={avoidingBehavior}
-      keyboardVerticalOffset={-200}
+      keyboardVerticalOffset={-100}
     >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <StepContentContainer>
