@@ -92,6 +92,7 @@ function LoginModal({
             <Form>
               <Label strong>PERSONNUMMER</Label>
               <LoginInput
+                testID="loginInput"
                 colorSchema="neutral"
                 placeholder="ååååmmddxxxx"
                 value={personalNumber}
@@ -102,6 +103,7 @@ function LoginModal({
                 center
               />
               <Button
+                testID="loginButton"
                 z={0}
                 disabled={personalNumber.length !== 12}
                 size="large"
