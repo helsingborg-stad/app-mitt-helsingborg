@@ -333,7 +333,7 @@ const SummaryList: React.FC<Props> = ({
           index,
           value: "SPACER_VALUE",
           item: {
-            id: `spacer-${index}`,
+            id: `spacer-${index}-${value.items[0].id}-${value.items[0].inputId}`,
             title: "SPACER",
             type: "spacer",
             category: lastCategory,
