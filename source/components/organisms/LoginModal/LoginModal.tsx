@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Linking, StatusBar, KeyboardAvoidingView } from "react-native";
+import { Linking, StatusBar, KeyboardAvoidingView } from "react-native";
 
 import { Button, Text } from "../../atoms";
 
@@ -26,7 +26,7 @@ import type { Props } from "./LoginModal.types";
 
 const bankIdSupportUrl = "https://support.bankid.com/sv/bankid/mobilt-bankid";
 
-const { sanitizePin, validatePin } = ValidationHelper;
+const { sanitizePin } = ValidationHelper;
 
 function LoginModal({
   visible,
@@ -45,11 +45,7 @@ function LoginModal({
   };
 
   const handleLoginExternalDevice = async () => {
-    if (!validatePin(personalNumber)) {
-      Alert.alert("Felaktigt personnummer. Ange format: ååååmmddxxxx.");
-    } else {
-      await handleAuth(personalNumber, true);
-    }
+    await handleAuth(personalNumber, true);
   };
 
   const handleOpenExternalLink = () => {
