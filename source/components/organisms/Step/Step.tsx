@@ -1,7 +1,11 @@
-import React, { useState, useRef } from "react";
-import { Dimensions, Platform } from "react-native";
+import React, { useState } from "react";
+import {
+  Dimensions,
+  Platform,
+  ScrollView,
+  KeyboardAvoidingView,
+} from "react-native";
 import PropTypes from "prop-types";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styled from "styled-components/native";
 import FormField from "../../../containers/FormField";
 import Progressbar from "../../atoms/Progressbar/Progressbar";
@@ -12,7 +16,7 @@ import StepDescription from "./StepDescription/StepDescription";
 import StepFooter from "./StepFooter/StepFooter";
 
 import { ApplicationStatusType } from "../../../types/Case";
-import { PrimaryColor } from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
 
 const {
   NEW_APPLICATION,
@@ -82,17 +86,13 @@ const statusTemplateMap: Record<string, DIALOG_TEMPLATE> = {
 const getDialogTemplate = (status: string): DIALOG_TEMPLATE =>
   statusTemplateMap[status] ?? DIALOG_TEMPLATE.MAIN_STEP;
 
-const StepContainer = styled.View`
+const StepContentContainer = styled.View`
   flex: 1;
-  background: ${(props) => props.theme.colors.neutrals[7]};
+  min-height: ${Dimensions.get("window").height}px;
 `;
 
 const StepBackNavigation = styled(BackNavigation)`
   padding: 24px 24px 0px 24px;
-`;
-
-const StepContentContainer = styled.View`
-  flex: 1;
 `;
 
 const StepLayout = styled.View`
@@ -102,11 +102,12 @@ const StepLayout = styled.View`
 `;
 
 const StepBody = styled.View`
-  flex-grow: 1;
+  flex: 1;
 `;
 
 const StepFieldListWrapper = styled.View`
   margin: 24px;
+  flex: 1;
 `;
 
 function Step({
@@ -219,52 +220,20 @@ function Step({
         formNavigation.back();
       };
 
-  const [returnScrollY, setReturnScrollY] = useState(0);
-  const scrollRef = useRef();
-
-  const handleFocus = (e, isSelect = false) => {
-    const scrollResponder = scrollRef.current.getScrollResponder();
-
-    e.target.measure((x, y, width, height, pageX, pageY) => {
-      let keyboardHeight = 0;
-
-      if (scrollResponder.keyboardWillOpenTo) {
-        keyboardHeight =
-          scrollResponder.keyboardWillOpenTo.startCoordinates.height;
-      }
-
-      const newReturnScrollY = pageY + height;
-
-      setReturnScrollY(newReturnScrollY);
-
-      if (isSelect) {
-        const scrollToY = newReturnScrollY + keyboardHeight;
-
-        scrollResponder.props.scrollToPosition(0, scrollToY);
-      }
-    });
-  };
-
   const showCloseFormButton = !actions.some(
     ({ type = "" }) => type === "close"
   );
   const dialogText = getDialogText(dialogTemplate);
 
+  const avoidingBehavior = Platform.OS === "ios" ? "position" : "padding";
+
   return (
-    <StepContainer>
-      <KeyboardAwareScrollView
-        keyboardShouldPersistTaps="always"
-        contentContainerStyle={{ flexGrow: 1 }}
-        resetScrollToCoords={{ x: 0, y: returnScrollY }}
-        innerRef={(r) => (scrollRef.current = r)}
-        enableAutomaticScroll
-      >
-        <CloseDialog
-          visible={dialogIsVisible}
-          title={dialogText.title}
-          body={dialogText.body}
-          buttons={dialogButtons}
-        />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={avoidingBehavior}
+      keyboardVerticalOffset={-200}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <StepContentContainer>
           {banner &&
             banner.constructor === Object &&
@@ -309,12 +278,6 @@ function Step({
                       id={field.id}
                       formNavigation={formNavigation}
                       editable={!field.disabled && isFormEditable}
-                      onFocus={(e, isSelect) => {
-                        if (Platform.OS === "android") {
-                          return;
-                        }
-                        handleFocus(e, isSelect);
-                      }}
                       onAddAnswer={onAddAnswer}
                       details={details}
                       {...field}
@@ -339,7 +302,14 @@ function Step({
             ) : null}
           </StepLayout>
         </StepContentContainer>
-      </KeyboardAwareScrollView>
+      </ScrollView>
+
+      <CloseDialog
+        visible={dialogIsVisible}
+        title={dialogText.title}
+        body={dialogText.body}
+        buttons={dialogButtons}
+      />
 
       <StepBackNavigation
         showBackButton={isBackBtnVisible && isFormEditable}
@@ -356,7 +326,7 @@ function Step({
         }}
         colorSchema={colorSchema || "blue"}
       />
-    </StepContainer>
+    </KeyboardAvoidingView>
   );
 }
 
