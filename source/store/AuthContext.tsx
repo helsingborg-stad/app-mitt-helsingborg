@@ -7,10 +7,8 @@ import AppCompabilityContext from "./AppCompabilityContext";
 import * as authService from "../services/AuthService";
 import getApiStatus from "../services/ApiStatusService";
 
-import AuthReducer, {
-  initialAuthReducerState,
-  AuthReducerState,
-} from "./reducers/AuthReducer";
+import type { AuthReducerState } from "./reducers/AuthReducer";
+import AuthReducer, { initialAuthReducerState } from "./reducers/AuthReducer";
 import {
   startAuth,
   cancelOrder,
@@ -28,7 +26,7 @@ import {
   setApiStatusMessage,
 } from "./actions/AuthActions";
 
-import { DispatchError } from "./actions/AuthActions.types";
+import type { DispatchError } from "./actions/AuthActions.types";
 
 interface UseAuthProviderLogicValues extends AuthReducerState {
   isLoading: boolean;
@@ -54,7 +52,7 @@ interface UseAuthProviderLogicValues extends AuthReducerState {
   handleSetError: (error: DispatchError) => void;
 }
 
-const initialAuthProviderState: UseAuthProviderLogicValues = {
+export const initialAuthProviderState: UseAuthProviderLogicValues = {
   ...initialAuthReducerState,
   isLoading: false,
   isIdle: false,
