@@ -1,6 +1,5 @@
 import React from "react";
-import { View } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { View, ScrollView } from "react-native";
 import type { RenderRules } from "react-native-markdown-display";
 
 import userAgreementText from "../../../assets/text/userAgreementText";
@@ -40,7 +39,7 @@ function PrivacyModal({
 
   return visible ? (
     <Modal visible={visible} hide={toggle}>
-      <KeyboardAwareScrollView>
+      <ScrollView>
         <CloseModalButton
           onClose={toggle}
           primary={false}
@@ -59,7 +58,7 @@ function PrivacyModal({
             <Text>Återvänd till inloggning</Text>
           </Button>
         </UserAgreementFooter>
-      </KeyboardAwareScrollView>
+      </ScrollView>
     </Modal>
   ) : null;
 }
