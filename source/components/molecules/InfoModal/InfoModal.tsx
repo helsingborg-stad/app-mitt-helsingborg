@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import { View, Dimensions } from "react-native";
-import {
-  PrimaryColor,
-  getValidColorSchema,
-} from "../../../styles/themeHelpers";
+
 import { Modal } from "../Modal";
+
 import { Button, Text, Heading } from "../../atoms";
 import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
+
 import MarkdownConstructor from "../../../helpers/MarkdownConstructor";
+
+import { getValidColorSchema } from "../../../styles/themeHelpers";
+
+import type { PrimaryColor } from "../../../styles/themeHelpers";
 
 const UnifiedPadding = [12, 24]; // Vertical padding, Horizontal padding
 
