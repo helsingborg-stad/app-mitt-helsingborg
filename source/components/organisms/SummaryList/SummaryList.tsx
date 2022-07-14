@@ -1,18 +1,20 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import { isObject } from "../../../helpers/Objects";
-import GroupedList from "../../molecules/GroupedList/GroupedList";
-import Text from "../../atoms/Text/Text";
-import Heading from "../../atoms/Heading";
+
+import { GroupedList } from "../../molecules";
+
+import { Text, Heading } from "../../atoms";
+
 import SummaryListItemComponent from "./SummaryListItem";
-import {
-  getValidColorSchema,
-  PrimaryColor,
-  ThemeType,
-} from "../../../styles/themeHelpers";
-import { Help } from "../../../types/FormTypes";
-import { InputType } from "../../atoms/Input/Input";
+
+import { isObject } from "../../../helpers/Objects";
+
+import { getValidColorSchema } from "../../../styles/themeHelpers";
+
+import type { PrimaryColor, ThemeType } from "../../../styles/themeHelpers";
+import type { InputType } from "../../atoms/Input/Input";
+import type { Help } from "../../../types/FormTypes";
 
 const SumLabel = styled(Heading)<{ colorSchema: string }>`
   margin-top: 5px;
@@ -362,6 +364,8 @@ const SummaryList: React.FC<Props> = ({
   });
 
   reorganizedList.forEach((listEntry) => {
+    const summaryListItemKey = `${listEntry.item.id}-${listEntry.item.inputId}-${listEntry.index}`;
+
     if (ArrayType.includes(listEntry.item.type)) {
       // in this case we have some answers from a repeater field, and need to loop over and show each one
       const validationError = validationErrors?.[listEntry.item.id]?.[
@@ -383,7 +387,7 @@ const SummaryList: React.FC<Props> = ({
             listEntry.description ||
             listEntry.otherassetDescription
           }
-          key={`${listEntry.item.inputId}-${listEntry.index}`}
+          key={summaryListItemKey}
           value={listEntry.value ?? ""}
           changeFromInput={changeFromInput(listEntry.item, listEntry.index)}
           onBlur={onItemBlur(listEntry.item, listEntry.index)}
@@ -410,7 +414,7 @@ const SummaryList: React.FC<Props> = ({
       listItems.push(
         <SummaryListItemComponent
           item={listEntry.item}
-          key={`${listEntry.item.id}`}
+          key={summaryListItemKey}
           value={answers[listEntry.item.id][listEntry.item.inputId]}
           changeFromInput={changeFromInput(listEntry.item)}
           onBlur={onItemBlur(listEntry.item)}
