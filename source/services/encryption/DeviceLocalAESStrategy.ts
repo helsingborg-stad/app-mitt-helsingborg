@@ -1,11 +1,11 @@
 import { NativeModules } from "react-native";
 import { ALGO_SALT, ALGO_ROUNDS, ALGO_LENGTH } from "./constants";
-import {
+import type {
   EncryptionContext,
   EncryptionDependencies,
-  EncryptionPossibility,
   IEncryptionStrategy,
 } from "./EncryptionStrategy";
+import { EncryptionPossibility } from "./EncryptionStrategy";
 
 const { Aes } = NativeModules;
 
@@ -32,11 +32,11 @@ async function createAesParams(): Promise<DeviceLocalAESParams> {
 export const DeviceLocalAESStrategy: IEncryptionStrategy<DeviceLocalAESParams> =
   {
     encrypt(params: DeviceLocalAESParams, payload: string): Promise<string> {
-      return Aes.encrypt(payload, params.key, params.iv);
+      return Aes.encrypt(payload, params.key, params.iv, "aes-256-cbc");
     },
 
     decrypt(params: DeviceLocalAESParams, payload: string): Promise<string> {
-      return Aes.decrypt(payload, params.key, params.iv);
+      return Aes.decrypt(payload, params.key, params.iv, "aes-256-cbc");
     },
 
     async getPossibilityToEncrypt(): Promise<EncryptionPossibility> {

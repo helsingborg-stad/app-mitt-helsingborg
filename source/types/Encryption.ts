@@ -19,7 +19,7 @@ export type SerializedCryptoNumber = string;
 export type PossiblySerializedCryptoNumber =
   | CryptoNumber
   | SerializedCryptoNumber;
-
+export type CiperAlgorithm = "aes-256-cbc";
 export interface AesModule {
   pbkdf2: (
     password: string,
@@ -27,8 +27,18 @@ export interface AesModule {
     cost: number,
     lengthInBits: number
   ) => Promise<string>;
-  encrypt: (text: string, key: string, iv: string) => Promise<string>;
-  decrypt: (ciphertext: string, key: string, iv: string) => Promise<string>;
+  encrypt: (
+    text: string,
+    key: string,
+    iv: string,
+    algorithm: CiperAlgorithm
+  ) => Promise<string>;
+  decrypt: (
+    ciphertext: string,
+    key: string,
+    iv: string,
+    algorithm: CiperAlgorithm
+  ) => Promise<string>;
   hmac256: (ciphertext: string, key: string) => Promise<string>;
   randomKey: (lengthInBytes: number) => Promise<string>;
   sha1: (text: string) => Promise<string>;
