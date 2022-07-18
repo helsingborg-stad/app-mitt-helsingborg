@@ -23,7 +23,7 @@ Icon.propTypes = {
 Icon.defaultProps = {
   size: 24,
   name: "3d-rotation",
-  color: " #000000",
+  color: "#000000",
 };
 
 export default Icon;
