@@ -1,12 +1,14 @@
 import { NativeModules } from "react-native";
+
+import { ALGO_SALT, ALGO_ROUNDS, ALGO_LENGTH, ALGO_IV } from "./constants";
 import { EncryptionErrorStatus } from "../../types/Encryption";
 import { EncryptionException } from "./CaseEncryptionHelper";
-import { ALGO_SALT, ALGO_ROUNDS, ALGO_LENGTH, ALGO_IV } from "./constants";
-import { DeviceLocalAESParams } from "./DeviceLocalAESStrategy";
-import {
+import { EncryptionPossibility } from "./EncryptionStrategy";
+
+import type { DeviceLocalAESParams } from "./DeviceLocalAESStrategy";
+import type {
   EncryptionContext,
   EncryptionDependencies,
-  EncryptionPossibility,
   IEncryptionStrategy,
 } from "./EncryptionStrategy";
 
@@ -56,12 +58,12 @@ export interface IPasswordStrategy extends IEncryptionStrategy<PasswordParams> {
 export const PasswordStrategy: IPasswordStrategy = {
   async encrypt(params: PasswordParams, payload: string): Promise<string> {
     const aesParams = await generateAESParamsFromPassword(params.password);
-    return Aes.encrypt(payload, aesParams.key, aesParams.iv);
+    return Aes.encrypt(payload, aesParams.key, aesParams.iv, "aes-256-cbc");
   },
 
   async decrypt(params: PasswordParams, payload: string): Promise<string> {
     const aesParams = await generateAESParamsFromPassword(params.password);
-    return Aes.decrypt(payload, aesParams.key, aesParams.iv);
+    return Aes.decrypt(payload, aesParams.key, aesParams.iv, "aes-256-cbc");
   },
 
   async getPossibilityToEncrypt(
