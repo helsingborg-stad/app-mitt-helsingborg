@@ -223,7 +223,7 @@ function Step({
   );
   const dialogText = getDialogText(dialogTemplate);
 
-  const avoidingBehavior = Platform.OS === "ios" ? "position" : "padding";
+  const avoidingBehavior = Platform.OS === "ios" ? "position" : "height";
 
   return (
     <KeyboardAvoidingView
