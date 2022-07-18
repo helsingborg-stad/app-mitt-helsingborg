@@ -1,6 +1,5 @@
 import React from "react";
-import { View, ScrollView } from "react-native";
-import type { RenderRules } from "react-native-markdown-display";
+import { ScrollView } from "react-native";
 
 import userAgreementText from "../../../assets/text/userAgreementText";
 
@@ -21,22 +20,6 @@ function PrivacyModal({
   visible,
   toggle,
 }: PrivacyModalProps): JSX.Element | null {
-  /**
-   * Setup for markdown formatter used to render user agreement text.
-   */
-  const userAgreementMarkdownRules: RenderRules = {
-    text: (node) => (
-      <Text style={{ fontSize: 16 }} key={node.key}>
-        {node.content}
-      </Text>
-    ),
-    bullet_list: (node, children, _parent, styles) => (
-      <View key={node.key} style={[styles.list, styles.listUnordered]}>
-        {children}
-      </View>
-    ),
-  };
-
   return visible ? (
     <Modal visible={visible} hide={toggle}>
       <ScrollView>
@@ -48,11 +31,9 @@ function PrivacyModal({
           isSubstep={false}
         />
         <UserAgreementForm>
-          <MarkdownConstructor
-            rules={userAgreementMarkdownRules}
-            rawText={userAgreementText}
-          />
+          <MarkdownConstructor rawText={userAgreementText} />
         </UserAgreementForm>
+
         <UserAgreementFooter>
           <Button z={0} block onClick={toggle} colorSchema="red">
             <Text>Återvänd till inloggning</Text>
