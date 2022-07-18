@@ -43,6 +43,7 @@ function loadStories() {
   require("../source/components/organisms/BulletList/BulletList.stories");
   require("../source/components/organisms/CheckboxList/CheckboxList.stories");
   require("../source/components/organisms/FormList/FormList.stories");
+  require("../source/components/organisms/LoginModal/LoginModal.stories");
   require("../source/components/organisms/NewApplicationModal/NewApplicationModal.stories");
   require("../source/components/organisms/PinInputModal/PinInputModal.stories");
   require("../source/components/organisms/PrivacyModal/PrivacyModal.stories");
@@ -98,6 +99,7 @@ const stories = [
   "../source/components/organisms/BulletList/BulletList.stories",
   "../source/components/organisms/CheckboxList/CheckboxList.stories",
   "../source/components/organisms/FormList/FormList.stories",
+  "../source/components/organisms/LoginModal/LoginModal.stories",
   "../source/components/organisms/NewApplicationModal/NewApplicationModal.stories",
   "../source/components/organisms/PinInputModal/PinInputModal.stories",
   "../source/components/organisms/PrivacyModal/PrivacyModal.stories",
