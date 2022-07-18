@@ -22,6 +22,7 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 ios/Pods/
+ios/.xcode.env.local
 
 # Android/IntelliJ
 #
@@ -59,6 +60,7 @@ buck-out/
 */fastlane/Preview.html
 */fastlane/screenshots
 */fastlane/.env
+**/fastlane/test_output
 /ios/*.cer
 /ios/*.dSYM.zip
 /ios/*.mobileprovision
