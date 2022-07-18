@@ -17,9 +17,9 @@ function ApiStatusMessage({ message }: Props): JSX.Element {
       />
       <Text
         strong
+        align="center"
         style={{
           color: theme.colors.primary.red[0],
-          textAlign: "center",
         }}
       >
         {message}
