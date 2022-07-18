@@ -1,7 +1,7 @@
 import stringify from "json-stable-stringify";
 import { NativeModules } from "react-native";
 
-import clone from "just-clone";
+import _cloneDeep from "lodash.clonedeep";
 
 const { Aes } = NativeModules;
 
@@ -17,7 +17,7 @@ export function deepCopyViaJson<T>(original: T): T {
  * @returns The copied object
  */
 export function deepCopy<T extends Record<any, any>>(original: T): T {
-  return clone(original);
+  return _cloneDeep(original);
 }
 
 export function filterAsync<T>(
