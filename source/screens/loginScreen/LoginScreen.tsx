@@ -38,6 +38,7 @@ import {
   Title,
   VersionLabel,
   VersionLabelContainer,
+  ApiStatusMessagePosition,
 } from "./LoginScreen.styled";
 import theme from "../../styles/theme";
 
@@ -100,7 +101,9 @@ function LoginScreen(): JSX.Element {
           </Header>
 
           {!!apiStatusMessage && (
-            <ApiStatusMessage message={apiStatusMessage} />
+            <ApiStatusMessagePosition>
+              <ApiStatusMessage message={apiStatusMessage} />
+            </ApiStatusMessagePosition>
           )}
 
           {(isLoading || isResolved) && (

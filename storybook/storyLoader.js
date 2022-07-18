@@ -18,6 +18,7 @@ function loadStories() {
   require("../source/components/atoms/Text/Text.stories");
   require("../source/components/atoms/TextButton/TextButton.stories");
   require("../source/components/molecules/AddressCard/AddressCard.stories");
+  require("../source/components/molecules/ApiStatusMessage/ApiStatusMessage.stories");
   require("../source/components/molecules/BackNavigation/BackNavigation.stories");
   require("../source/components/molecules/CalendarPicker/CalendarPickerForm.stories");
   require("../source/components/molecules/Card/Card.stories");
@@ -71,6 +72,7 @@ const stories = [
   "../source/components/atoms/Text/Text.stories",
   "../source/components/atoms/TextButton/TextButton.stories",
   "../source/components/molecules/AddressCard/AddressCard.stories",
+  "../source/components/molecules/ApiStatusMessage/ApiStatusMessage.stories",
   "../source/components/molecules/BackNavigation/BackNavigation.stories",
   "../source/components/molecules/CalendarPicker/CalendarPickerForm.stories",
   "../source/components/molecules/Card/Card.stories",
