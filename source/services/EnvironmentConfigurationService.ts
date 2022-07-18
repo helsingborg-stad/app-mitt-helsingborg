@@ -1,9 +1,10 @@
-import env, { NativeConfig } from "react-native-config";
+import type { NativeConfig } from "react-native-config";
+import env from "react-native-config";
 
 const URL_SUFFIX = "_MITTHELSINGBORG_IO";
 const API_SUFFIX = "_MITTHELSINGBORG_IO_APIKEY";
 
-interface Endpoint {
+export interface Endpoint {
   name: string;
   baseUrl: string;
   apiKey: string;

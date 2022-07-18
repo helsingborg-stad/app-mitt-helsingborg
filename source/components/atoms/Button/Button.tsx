@@ -5,7 +5,7 @@ import SHADOW from "../../../styles/shadow";
 import Text from "../Text";
 import Icon from "../Icon";
 
-import { ThemeType } from "../../../styles/themeHelpers";
+import type { ThemeType } from "../../../styles/themeHelpers";
 
 /** Button styles */
 const Styles = { elevation: SHADOW };
@@ -186,6 +186,7 @@ const Button = (props) => {
     disabled,
     variant,
     fullWidth,
+    testID,
     ...other
   } = props;
 
@@ -239,6 +240,7 @@ const Button = (props) => {
         onPress={onClick}
         block={block}
         elevation={elevation}
+        testID={testID}
       >
         <ButtonBase
           colorSchema={colorSchema}
