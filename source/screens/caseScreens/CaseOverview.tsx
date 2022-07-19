@@ -230,7 +230,6 @@ const computeCaseCardComponent = (
   }
 
   const shouldShowPin = isWaitingForSign && !isCoApplicant;
-
   if (shouldShowPin) {
     const partner = persons.find((person) => person.role === "coApplicant");
     const partnerName = partner?.firstName;
@@ -469,7 +468,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
       );
       if (provideError) {
         console.warn("provide pin error:", provideError);
-        setModalError("Något blev fel");
+        setModalError("Fel kod - försök igen");
       } else {
         closeOpenModal();
         onRefresh();
