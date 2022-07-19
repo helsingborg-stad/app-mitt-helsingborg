@@ -81,7 +81,6 @@ interface FormFieldProps {
   onAddAnswer: (answer: unknown, fieldId: string) => void;
   onClick: () => void;
   onMount: () => void;
-  onFocus: () => void;
   onBlur: () => void;
   onChange?: () => void;
 }
@@ -93,7 +92,6 @@ const inputTypes: Record<InputKeyType, InputTypeProperties> = {
     component: Input,
     changeEvent: "onChangeText",
     blurEvent: "onBlur",
-    focusEvent: "onFocus",
     props: {
       showErrorMessage: true,
     },
@@ -102,7 +100,6 @@ const inputTypes: Record<InputKeyType, InputTypeProperties> = {
     component: Input,
     blurEvent: "onBlur",
     changeEvent: "onChangeText",
-    focusEvent: "onFocus",
     props: {
       showErrorMessage: true,
       keyboardType: "numeric",
@@ -120,7 +117,6 @@ const inputTypes: Record<InputKeyType, InputTypeProperties> = {
   date: {
     component: CalendarPicker,
     changeEvent: "onSelect",
-    focusEvent: "onFocus",
     initialValue: undefined,
     props: {
       showErrorMessage: true,
@@ -130,7 +126,6 @@ const inputTypes: Record<InputKeyType, InputTypeProperties> = {
   checkbox: {
     component: CheckboxField,
     changeEvent: "onChange",
-    focusEvent: "onFocus",
     blurEvent: "onBlur",
     helpInComponent: true,
     helpProp: "help",
@@ -140,7 +135,6 @@ const inputTypes: Record<InputKeyType, InputTypeProperties> = {
   editableList: {
     component: EditableList,
     changeEvent: "onInputChange",
-    focusEvent: "onFocus",
     blurEvent: "onBlur",
     helpInComponent: true,
     helpProp: "help",
@@ -163,7 +157,6 @@ const inputTypes: Record<InputKeyType, InputTypeProperties> = {
   select: {
     component: Select,
     changeEvent: "onValueChange",
-    focusEvent: "onFocus",
     blurEvent: "onBlur",
     props: {},
   },
@@ -175,7 +168,6 @@ const inputTypes: Record<InputKeyType, InputTypeProperties> = {
   summaryList: {
     component: SummaryList,
     changeEvent: "onChange",
-    focusEvent: "onFocus",
     blurEvent: "onBlur",
     helpInComponent: true,
     helpProp: "help",
@@ -183,7 +175,6 @@ const inputTypes: Record<InputKeyType, InputTypeProperties> = {
   },
   repeaterField: {
     component: RepeaterField,
-    focusEvent: "onFocus",
     blurEvent: "onBlur",
     changeEvent: "onChange",
     addAnswerEvent: "onAddAnswer",
@@ -240,7 +231,6 @@ const FormField = (props: FormFieldProps): JSX.Element => {
     id,
     onChange = () => true,
     onBlur,
-    onFocus,
     onMount,
     onAddAnswer,
     value,
@@ -270,12 +260,6 @@ const FormField = (props: FormFieldProps): JSX.Element => {
     if (onMount) onMount({ [fieldId]: value }, fieldId);
   };
 
-  const onInputFocus = (e, isSelect = false) => {
-    if (onFocus) {
-      onFocus(e, isSelect);
-    }
-  };
-
   const onInputAddAnswer = (values, fieldId = id) => {
     const answerValues = { [fieldId]: values };
     if (onAddAnswer) onAddAnswer(answerValues, fieldId);
@@ -302,8 +286,6 @@ const FormField = (props: FormFieldProps): JSX.Element => {
     inputCompProps.validationErrors = validationErrors;
   if (input && input.changeEvent) inputCompProps[input.changeEvent] = saveInput;
   if (input && input.blurEvent) inputCompProps[input.blurEvent] = onInputBlur;
-  if (input && input.focusEvent)
-    inputCompProps[input.focusEvent] = onInputFocus;
   if (input && input.helpInComponent)
     inputCompProps[input.helpProp || "help"] = help;
   if (input && input.onMountEvent)

@@ -54,7 +54,6 @@
     "react-native-fs": "^2.19.0",
     "react-native-image-crop-picker": "^0.37.3",
     "react-native-image-pan-zoom": "^2.1.12",
-    "react-native-keyboard-aware-scroll-view": "^0.9.3",
     "react-native-markdown-display": "^7.0.0-alpha.2",
     "react-native-network-info": "^5.2.1",
     "react-native-pager-view": "^5.4.15",
