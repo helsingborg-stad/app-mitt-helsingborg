@@ -130,6 +130,11 @@ const pickerSelectStyles = {
   },
 };
 
+const ApiStatusMessagePosition = styled.View`
+  position: relative;
+  top: -160px;
+`;
+
 export {
   ContentText,
   FlexImageBackground,
@@ -148,4 +153,5 @@ export {
   Title,
   VersionLabel,
   VersionLabelContainer,
+  ApiStatusMessagePosition,
 };
