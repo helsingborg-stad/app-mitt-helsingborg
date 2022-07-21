@@ -17,6 +17,5 @@ export { default as RepeaterField } from "./RepeaterField";
 export { default as RadioGroup } from "./RadioGroup";
 export { default as InfoModal } from "./InfoModal";
 export { default as FloatingButton } from "./FloatingButton";
-export { default as AddressCard } from "./AddressCard";
 export { default as BackNavigation } from "./BackNavigation";
 export { default as ApiStatusMessage } from "./ApiStatusMessage/ApiStatusMessage";
