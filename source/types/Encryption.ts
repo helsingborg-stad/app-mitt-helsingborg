@@ -14,12 +14,10 @@ export enum EncryptionErrorStatus {
 }
 export type EncryptionExceptionStatus = EncryptionErrorStatus | null;
 
-export type CryptoNumber = number;
-export type SerializedCryptoNumber = string;
-export type PossiblySerializedCryptoNumber =
-  | CryptoNumber
-  | SerializedCryptoNumber;
-export type CiperAlgorithm = "aes-256-cbc";
+type CryptoNumber = number;
+type SerializedCryptoNumber = string;
+type PossiblySerializedCryptoNumber = CryptoNumber | SerializedCryptoNumber;
+type CiperAlgorithm = "aes-256-cbc";
 export interface AesModule {
   pbkdf2: (
     password: string,
