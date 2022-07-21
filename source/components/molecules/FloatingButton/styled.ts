@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
-import { ThemeType } from "../../../styles/themeHelpers";
+import type { ThemeType } from "../../../styles/themeHelpers";
 
-import { StyledProps } from "./types";
+import type { StyledProps } from "./types";
 
 const ButtonContainer = styled.TouchableHighlight<StyledProps>`
   padding: 12px 20px;

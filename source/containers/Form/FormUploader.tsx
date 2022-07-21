@@ -3,14 +3,16 @@ import { ActivityIndicator } from "react-native";
 import styled, { withTheme } from "styled-components";
 import Config from "react-native-config";
 import { Button, Heading, Icon, Text } from "../../components/atoms";
-import { Image } from "../../components/molecules/ImageDisplay/ImageDisplay";
-import { Pdf } from "../../components/molecules/PdfDisplay/PdfDisplay";
-import useQueue, { Options } from "../../hooks/useQueue";
+import type { Image } from "../../components/molecules/ImageDisplay/ImageDisplay";
+import type { Pdf } from "../../components/molecules/PdfDisplay/PdfDisplay";
+import type { Options } from "../../hooks/useQueue";
+import useQueue from "../../hooks/useQueue";
 import Dialog from "../../components/molecules/Dialog/Dialog";
+import type {
+  AllowedFileTypes} from "../../helpers/FileUpload";
 import {
   getBlob,
-  uploadFile,
-  AllowedFileTypes,
+  uploadFile
 } from "../../helpers/FileUpload";
 
 const DialogActivityIndicator = styled(ActivityIndicator)`

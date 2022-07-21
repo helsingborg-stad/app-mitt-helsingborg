@@ -7,7 +7,7 @@ import moment from "moment";
 import "moment/locale/sv";
 import Input from "../../atoms/Input";
 import { colorPalette } from "../../../styles/palette";
-import { PrimaryColor } from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
 import Button from "../../atoms/Button";
 import Text from "../../atoms/Text";
 import { Modal, useModal } from "../Modal";

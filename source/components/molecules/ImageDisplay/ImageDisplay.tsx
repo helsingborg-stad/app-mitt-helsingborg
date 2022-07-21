@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
-import { Image as CropPickerImage } from "react-native-image-crop-picker";
+import type { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
+import type { Image as CropPickerImage } from "react-native-image-crop-picker";
 import styled from "styled-components/native";
 import HorizontalScrollIndicator from "../../atoms/HorizontalScrollIndicator";
 import ImageItem from "./ImageItem";
 import { remove } from "../../../helpers/ApiRequest";
-import { AllowedFileTypes } from "../../../helpers/FileUpload";
+import type { AllowedFileTypes } from "../../../helpers/FileUpload";
 
 const Wrapper = styled.View`
   padding-left: 0;

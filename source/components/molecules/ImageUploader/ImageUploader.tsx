@@ -1,18 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Alert, TouchableOpacity } from "react-native";
-import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker";
+import type { ImageOrVideo } from "react-native-image-crop-picker";
+import ImagePicker from "react-native-image-crop-picker";
 import uuid from "react-native-uuid";
 import styled from "styled-components/native";
 import { Text, Button, Icon, Label } from "../../atoms";
 import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import { Modal, useModal } from "../Modal";
+import type {
+  PrimaryColor} from "../../../styles/themeHelpers";
 import {
-  getValidColorSchema,
-  PrimaryColor,
+  getValidColorSchema
 } from "../../../styles/themeHelpers";
-import ImageDisplay, { Image } from "../ImageDisplay/ImageDisplay";
-import { AllowedFileTypes, splitFilePath } from "../../../helpers/FileUpload";
+import type { Image } from "../ImageDisplay/ImageDisplay";
+import ImageDisplay from "../ImageDisplay/ImageDisplay";
+import type { AllowedFileTypes} from "../../../helpers/FileUpload";
+import { splitFilePath } from "../../../helpers/FileUpload";
 
 const Wrapper = styled.View`
   padding-left: 0;

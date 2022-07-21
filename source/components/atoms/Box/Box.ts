@@ -1,6 +1,5 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import styled, { css } from 'styled-components/native';
+import styled from 'styled-components/native';
 
 const Box = styled.View`
   height: ${props => props.height || 'auto'};

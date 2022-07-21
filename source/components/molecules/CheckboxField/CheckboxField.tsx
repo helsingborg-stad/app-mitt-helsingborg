@@ -6,9 +6,10 @@ import HelpButton from "../HelpButton/HelpButton";
 import Text from "../../atoms/Text/Text";
 import Checkbox from "../../atoms/Checkbox/Checkbox";
 import theme from "../../../styles/theme";
+import type {
+  PrimaryColor} from "../../../styles/themeHelpers";
 import {
-  getValidColorSchema,
-  PrimaryColor,
+  getValidColorSchema
 } from "../../../styles/themeHelpers";
 
 // TODO: MOVE TO THEME.

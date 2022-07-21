@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
+import type { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 import styled from "styled-components/native";
-import { DocumentPickerResponse } from "react-native-document-picker";
+import type { DocumentPickerResponse } from "react-native-document-picker";
 import HorizontalScrollIndicator from "../../atoms/HorizontalScrollIndicator";
 import PdfItem from "./PdfItem";
-import { AllowedFileTypes } from "../../../helpers/FileUpload";
+import type { AllowedFileTypes } from "../../../helpers/FileUpload";
 
 const Wrapper = styled.View`
   padding-left: 0;

@@ -2,10 +2,9 @@ import env from "react-native-config";
 import bankid from "../../services/BankidService";
 import * as authService from "../../services/AuthService";
 
-import { User } from "../../types/UserTypes";
+import type { User } from "../../types/UserTypes";
 
-import {
-  ActionTypes,
+import type {
   DispatchError,
   MockAuthSucessDispatch,
   MockAuthFailureDispatch,
@@ -25,7 +24,9 @@ import {
   CheckOrderStatusFailureDispatch,
   CancelOrderDispatch,
   SetAuthenticateOnExternalDeviceDispatch,
-  SetApiStatusMessageDispatch,
+  SetApiStatusMessageDispatch} from "./AuthActions.types";
+import {
+  ActionTypes
 } from "./AuthActions.types";
 
 export async function mockedAuth(): Promise<

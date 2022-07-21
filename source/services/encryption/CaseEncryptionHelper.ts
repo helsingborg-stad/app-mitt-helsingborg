@@ -1,21 +1,22 @@
-import { IStorage } from "./CaseEncryptionService";
-import {
+import type { IStorage } from "./CaseEncryptionService";
+import type {
   Answer,
   AnsweredForm,
   Case,
   EncryptedAnswersWrapper,
   PossiblyEncryptedAnswers,
 } from "../../types/Case";
-import {
+import type {
   EncryptionDetails,
-  EncryptionErrorStatus,
   EncryptionExceptionInterface,
-  EncryptionExceptionStatus,
+  EncryptionExceptionStatus} from "../../types/Encryption";
+import {
+  EncryptionErrorStatus,
   EncryptionType,
 } from "../../types/Encryption";
 import { wrappedDefaultStorage } from "../StorageService";
 import { DeviceLocalAESStrategy } from "./DeviceLocalAESStrategy";
-import { IEncryptionStrategy } from "./EncryptionStrategy";
+import type { IEncryptionStrategy } from "./EncryptionStrategy";
 import { PasswordStrategy } from "./PasswordStrategy";
 
 type StrategyMap = {

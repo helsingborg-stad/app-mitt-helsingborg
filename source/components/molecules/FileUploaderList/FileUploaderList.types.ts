@@ -1,6 +1,6 @@
-import { PrimaryColor } from "../../../styles/themeHelpers";
-import { Answers } from "../../../types/AnswerTypes";
-import { File } from "../FilePicker/FilePicker";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
+import type { Answers } from "../../../types/AnswerTypes";
+import type { File } from "../FilePicker/FilePicker";
 
 export interface FileUploaderProps {
   id: string;

@@ -1,8 +1,8 @@
-import { TextInputProps } from "react-native";
+import type { TextInputProps } from "react-native";
 
-import { PrimaryColor, ThemeType } from "../../../styles/themeHelpers";
+import type { PrimaryColor, ThemeType } from "../../../styles/themeHelpers";
 
-import { InputFieldType } from "../../../types/FormTypes";
+import type { InputFieldType } from "../../../types/FormTypes";
 
 export interface ErrorValidation {
   isValid: boolean;

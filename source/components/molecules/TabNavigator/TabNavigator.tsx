@@ -1,5 +1,5 @@
 import React from "react";
-import { ViewStyle } from "react-native";
+import type { ViewStyle } from "react-native";
 import styled from "styled-components/native";
 import {
   NavigationHelpersContext,
@@ -7,7 +7,7 @@ import {
   TabRouter,
 } from "@react-navigation/native";
 import TabNavigatorItem from "./TabNavigatorItem";
-import { ThemeType, PrimaryColor } from "../../../styles/themeHelpers";
+import type { ThemeType, PrimaryColor } from "../../../styles/themeHelpers";
 
 interface BarWrapperProps {
   theme: ThemeType;

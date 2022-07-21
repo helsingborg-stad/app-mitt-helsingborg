@@ -5,7 +5,7 @@ import { Icon } from "../../atoms";
 
 import { Row, StyledLabel } from "./PopupLabel.styled";
 
-import { PrimaryColor } from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
 
 interface Props {
   labelText: string;

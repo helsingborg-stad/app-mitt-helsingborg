@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 import Text from '../Text/Text';
 import Button from '../Button';
-import { Help } from '../../../types/FormTypes';
+import type { Help } from '../../../types/FormTypes';
 import HelpButton from '../../molecules/HelpButton';
 
 interface FieldsetContainerProps {

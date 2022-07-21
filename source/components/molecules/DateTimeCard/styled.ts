@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { ThemeType } from "../../../styles/themeHelpers";
+import type { ThemeType } from "../../../styles/themeHelpers";
 
 const Container = styled.View<{ align: string; theme: ThemeType }>`
   margin-top: 10px;

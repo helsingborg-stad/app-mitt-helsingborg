@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { View, TouchableHighlight } from 'react-native';
 import styled from 'styled-components/native';
-import { Notification } from '../../../store/NotificationContext';
+import type { Notification } from '../../../store/NotificationContext';
 import Text from '../../atoms/Text/Text';
 import Icon from '../../atoms/Icon/Icon';
 import theme from '../../../styles/theme';

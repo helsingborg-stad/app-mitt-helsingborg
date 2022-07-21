@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Descriptor, EventArg, TabActions, TabNavigationState } from '@react-navigation/native';
-import { TouchableOpacity, LayoutAnimation } from 'react-native';
+import type { Descriptor, EventArg, TabNavigationState } from '@react-navigation/native';
+import { TabActions } from '@react-navigation/native';
+import { LayoutAnimation } from 'react-native';
 import PropTypes from 'prop-types';
 import Text from '../../atoms/Text';
-import { PrimaryColor } from '../../../styles/themeHelpers';
+import type { PrimaryColor } from '../../../styles/themeHelpers';
 
 const FlexWrapper = styled.TouchableOpacity`
   flex: 1;

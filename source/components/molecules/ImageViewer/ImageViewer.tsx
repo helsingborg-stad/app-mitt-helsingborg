@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ImageDisplay, { Image } from '../ImageDisplay/ImageDisplay';
+import type { Image } from '../ImageDisplay/ImageDisplay';
+import ImageDisplay from '../ImageDisplay/ImageDisplay';
 
 interface Props {
   questionIds: string[];

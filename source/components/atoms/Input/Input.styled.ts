@@ -3,9 +3,9 @@ import styled from "styled-components/native";
 
 import Text from "../Text";
 
-import { ErrorValidation } from "./Input.types";
+import type { ErrorValidation } from "./Input.types";
 
-import { PrimaryColor, ThemeType } from "../../../styles/themeHelpers";
+import type { PrimaryColor, ThemeType } from "../../../styles/themeHelpers";
 
 interface StyledInputprops {
   theme: ThemeType;

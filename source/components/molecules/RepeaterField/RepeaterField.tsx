@@ -5,11 +5,12 @@ import { LayoutAnimation } from "react-native";
 import { Button, Icon, Text } from "../../atoms";
 import RepeaterFieldListItem from "./RepeaterFieldListItem";
 import Fieldset from "../../atoms/Fieldset/Fieldset";
+import type {
+  PrimaryColor} from "../../../styles/themeHelpers";
 import {
-  getValidColorSchema,
-  PrimaryColor,
+  getValidColorSchema
 } from "../../../styles/themeHelpers";
-import { InputFieldType } from "../../../types/FormTypes";
+import type { InputFieldType } from "../../../types/FormTypes";
 
 const AddButton = styled(Button)`
   margin-top: 30px;

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Image, ViewStyle } from 'react-native';
+import type { ViewStyle } from 'react-native';
+import { Image } from 'react-native';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import icons from '../../../../helpers/Icons';
-import {PrimaryColor} from '../../../../styles/themeHelpers';
+import type {PrimaryColor} from '../../../../styles/themeHelpers';
 
 const BannerWrapper = styled.View<{ colorSchema: PrimaryColor; image?: boolean }>`
   margin: 0;

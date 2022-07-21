@@ -1,4 +1,5 @@
-import { Text as RNText, TextProps } from 'react-native';
+import type { TextProps } from 'react-native';
+import { Text as RNText } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 

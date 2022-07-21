@@ -5,7 +5,7 @@ import MIcon from "../../atoms/Icon";
 
 import { ButtonContainer, ButtonText } from "./styled";
 
-import { FloatingButtonProps } from "./types";
+import type { FloatingButtonProps } from "./types";
 
 const FloatingButton = ({
   onPress,

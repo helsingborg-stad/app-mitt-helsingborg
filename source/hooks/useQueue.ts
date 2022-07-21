@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { FilterFn } from '../types/ArrayTypes';
+import type { FilterFn } from '../types/ArrayTypes';
 
 export type Options<T> = {
   filters?: {

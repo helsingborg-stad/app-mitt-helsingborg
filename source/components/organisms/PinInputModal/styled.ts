@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import Body from "../../molecules/Dialog/Body";
 import { Text } from "../../atoms";
-import { ThemeType } from "../../../styles/themeHelpers";
+import type { ThemeType } from "../../../styles/themeHelpers";
 
 export const DialogContainer = styled(Body)`
   padding: 32px;

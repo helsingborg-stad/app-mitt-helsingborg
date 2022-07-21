@@ -1,6 +1,6 @@
-import { EncryptionDetails } from "../../types/Encryption";
-import { UserInterface } from "./CaseEncryptionHelper";
-import { IStorage } from "./CaseEncryptionService";
+import type { EncryptionDetails } from "../../types/Encryption";
+import type { UserInterface } from "./CaseEncryptionHelper";
+import type { IStorage } from "./CaseEncryptionService";
 
 export interface EncryptionContext {
   user?: UserInterface;

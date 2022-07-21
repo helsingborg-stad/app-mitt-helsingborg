@@ -1,21 +1,23 @@
-import {
+import type {
   Answer,
   AnsweredForm,
   Case,
   EncryptedAnswersWrapper,
   PossiblyEncryptedAnswers,
 } from "../../../types/Case";
+import type {
+  EncryptionDetails} from "../../../types/Encryption";
 import {
-  EncryptionDetails,
   EncryptionErrorStatus,
   EncryptionType,
 } from "../../../types/Encryption";
+import type {
+  UserInterface} from "../CaseEncryptionHelper";
 import {
   answersAreEncrypted,
   getEncryptionFromCase,
   getEncryptionStrategyByType,
   EncryptionException,
-  UserInterface,
   getCurrentForm,
   getEncryptionFromForm,
   getValidEncryptionForForm,
@@ -27,22 +29,25 @@ import {
   makeCaseWithNewForm,
   getPasswordForForm,
 } from "../CaseEncryptionHelper";
+import type {
+  DeviceLocalAESParams} from "../DeviceLocalAESStrategy";
 import {
-  DeviceLocalAESParams,
   DeviceLocalAESStrategy,
 } from "../DeviceLocalAESStrategy";
-import {
-  CaseEncryptionService,
+import type {
   ICaseEncryptionService,
-  IStorage,
+  IStorage} from "../CaseEncryptionService";
+import {
+  CaseEncryptionService
 } from "../CaseEncryptionService";
+import type {
+  PasswordParams} from "../PasswordStrategy";
 import {
   generateRandomPin,
-  PasswordParams,
   PasswordStrategy,
 } from "../PasswordStrategy";
 import { to } from "../../../helpers/Misc";
-import {
+import type {
   EncryptionContext,
   EncryptionDependencies,
 } from "../EncryptionStrategy";

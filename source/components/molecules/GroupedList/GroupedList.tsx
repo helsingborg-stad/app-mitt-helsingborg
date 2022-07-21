@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { View, LayoutAnimation } from "react-native";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import { SummaryListItem } from "../../organisms/SummaryList/SummaryList";
-import { Help } from "../../../types/FormTypes";
+import type { SummaryListItem } from "../../organisms/SummaryList/SummaryList";
+import type { Help } from "../../../types/FormTypes";
 import Text from "../../atoms/Text";
 import Fieldset, { FieldsetButton } from "../../atoms/Fieldset/Fieldset";
 import theme from "../../../styles/theme";
+import type {
+  PrimaryColor} from "../../../styles/themeHelpers";
 import {
-  getValidColorSchema,
-  PrimaryColor,
+  getValidColorSchema
 } from "../../../styles/themeHelpers";
 import { Heading } from "../../atoms";
 

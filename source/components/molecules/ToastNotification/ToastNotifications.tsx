@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Notification } from '../../../store/NotificationContext';
+import type { Notification } from '../../../store/NotificationContext';
 import Toast from './Toast';
 
 interface Props {

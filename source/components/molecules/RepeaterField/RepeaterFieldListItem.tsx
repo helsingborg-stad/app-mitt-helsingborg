@@ -7,12 +7,13 @@ import { Text, Input } from "../../atoms";
 import Button from "../../atoms/Button";
 import Label from "../../atoms/Label";
 import Select from "../../atoms/Select";
-import { InputRow } from "./RepeaterField";
+import type { InputRow } from "./RepeaterField";
 import CalendarPicker from "../CalendarPicker/CalendarPickerForm";
 import theme from "../../../styles/theme";
+import type {
+  PrimaryColor} from "../../../styles/themeHelpers";
 import {
-  getValidColorSchema,
-  PrimaryColor,
+  getValidColorSchema
 } from "../../../styles/themeHelpers";
 
 const Base = styled.View`

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
-import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
-import NavigationButtonField, {
+import type { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import type {
   Props as ButtonProps,
 } from '../NavigationButtonField/NavigationButtonField';
-import { PrimaryColor } from '../../../styles/themeHelpers';
+import NavigationButtonField from '../NavigationButtonField/NavigationButtonField';
+import type { PrimaryColor } from '../../../styles/themeHelpers';
 import { HorizontalScrollIndicator } from '../../atoms';
 
 const ScrollContainer = styled.ScrollView`
