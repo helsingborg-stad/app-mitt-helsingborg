@@ -10,7 +10,7 @@ const config = {
       jsx: true,
     },
   },
-  plugins: ["unused-imports", "jest"],
+  plugins: ["unused-imports", "import", "jest"],
   env: {
     es2021: true,
     browser: true,
@@ -31,6 +31,7 @@ const config = {
     "eslint:recommended",
     "airbnb",
     "airbnb/hooks",
+    "plugin:import/recommended",
     "plugin:jest/recommended",
     "plugin:jest/style",
     "plugin:react/recommended",
@@ -44,7 +45,11 @@ const config = {
       parserOptions: {
         project: "./tsconfig.json",
       },
-      extends: ["plugin:@typescript-eslint/recommended", "prettier"],
+      extends: [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:import/typescript",
+        "prettier",
+      ],
       rules: {
         "no-use-before-define": "off",
         "@typescript-eslint/no-use-before-define": ["error"],
@@ -71,6 +76,7 @@ const config = {
         tsx: "never",
       },
     ],
+    "import/no-unused-modules": [1, { unusedExports: true }],
     "react/jsx-filename-extension": [2, { extensions: [".jsx", ".tsx"] }],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "no-unused-vars": "off",
