@@ -23,7 +23,6 @@ function loadStories() {
   require("../source/components/molecules/Card/Card.stories");
   require("../source/components/molecules/CaseCard/CaseCard.stories");
   require("../source/components/molecules/CheckboxField/CheckboxField.stories");
-  require("../source/components/molecules/DateTimeCard/DateTimeCard.stories");
   require("../source/components/molecules/EditableList/EditableList.stories");
   require("../source/components/molecules/FilePicker/FilePicker.stories");
   require("../source/components/molecules/FileUploaderList/FileUploaderList.stories");
@@ -78,7 +77,6 @@ const stories = [
   "../source/components/molecules/Card/Card.stories",
   "../source/components/molecules/CaseCard/CaseCard.stories",
   "../source/components/molecules/CheckboxField/CheckboxField.stories",
-  "../source/components/molecules/DateTimeCard/DateTimeCard.stories",
   "../source/components/molecules/EditableList/EditableList.stories",
   "../source/components/molecules/FilePicker/FilePicker.stories",
   "../source/components/molecules/FileUploaderList/FileUploaderList.stories",
