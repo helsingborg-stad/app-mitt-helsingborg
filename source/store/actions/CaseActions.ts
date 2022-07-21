@@ -3,19 +3,15 @@ import type {
   Action,
   CaseUpdate,
   UpdateCaseBody,
-  AddCoApplicantParameters} from "../../types/CaseContext";
-import {
-  ActionTypes
+  AddCoApplicantParameters,
 } from "../../types/CaseContext";
+import { ActionTypes } from "../../types/CaseContext";
 import { get, post, put } from "../../helpers/ApiRequest";
 import { convertAnswersToArray } from "../../helpers/CaseDataConverter";
-import type { Case} from "../../types/Case";
+import type { Case } from "../../types/Case";
 import { ApplicationStatusType } from "../../types/Case";
-import type {
-  UserInterface} from "../../services/encryption/CaseEncryptionHelper";
-import {
-  getCurrentForm
-} from "../../services/encryption/CaseEncryptionHelper";
+import type { UserInterface } from "../../services/encryption/CaseEncryptionHelper";
+import { getCurrentForm } from "../../services/encryption/CaseEncryptionHelper";
 import { CaseEncryptionService } from "../../services/encryption";
 import { wrappedDefaultStorage } from "../../services/StorageService";
 import { to } from "../../helpers/Misc";

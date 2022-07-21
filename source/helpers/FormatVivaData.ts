@@ -3,16 +3,16 @@
  * @param {string} value
  */
 const formatAmount = (value, negative = false) => {
-  if (!value || typeof value !== 'string') {
-    return '';
+  if (!value || typeof value !== "string") {
+    return "";
   }
 
-  if (value === '0') {
+  if (value === "0") {
     return `${value} kr`;
   }
 
   if (negative) {
-    return `-${value.replace('-', '')} kr`;
+    return `-${value.replace("-", "")} kr`;
   }
 
   return `${value} kr`;
@@ -29,7 +29,7 @@ const convertDataToArray = (data) => (Array.isArray(data) ? data : [data]);
  * Returns sum of multiple amounts with Swedish currency
  * @param {Object|string[]} amounts
  */
-const calculateSum = (amounts, suffix = 'kr') =>
+const calculateSum = (amounts, suffix = "kr") =>
   `${convertDataToArray(amounts).reduce(
     (acc, obj) => acc + parseInt(obj.approved || obj.amount),
     0
@@ -40,16 +40,16 @@ const calculateSum = (amounts, suffix = 'kr') =>
  * @param {string} norm
  */
 const translateNormAcronym = (norm) => {
-  if (typeof norm !== 'string') {
+  if (typeof norm !== "string") {
     return norm;
   }
   switch (norm.toLowerCase()) {
-    case 'h':
-      return 'Heltid';
-    case 'd':
-      return 'Deltid';
-    case 'u':
-      return 'Umgängesbarn';
+    case "h":
+      return "Heltid";
+    case "d":
+      return "Deltid";
+    case "u":
+      return "Umgängesbarn";
     default:
       return norm;
   }

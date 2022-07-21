@@ -1,15 +1,11 @@
-import type {
-  AuthReducerState} from "../AuthReducer";
-import AuthReducer, {
-  initialAuthReducerState
-} from "../AuthReducer";
+import type { AuthReducerState } from "../AuthReducer";
+import AuthReducer, { initialAuthReducerState } from "../AuthReducer";
 
 import type {
   BankIdAuthOrder,
-  DispatchError} from "../../actions/AuthActions.types";
-import {
-  ActionTypes
+  DispatchError,
 } from "../../actions/AuthActions.types";
+import { ActionTypes } from "../../actions/AuthActions.types";
 
 import USER_AUTH_STATE from "../../../types/UserAuthTypes";
 import type { User } from "../../../types/UserTypes";

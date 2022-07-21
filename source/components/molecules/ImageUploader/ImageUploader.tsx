@@ -8,14 +8,11 @@ import styled from "styled-components/native";
 import { Text, Button, Icon, Label } from "../../atoms";
 import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import { Modal, useModal } from "../Modal";
-import type {
-  PrimaryColor} from "../../../styles/themeHelpers";
-import {
-  getValidColorSchema
-} from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
+import { getValidColorSchema } from "../../../styles/themeHelpers";
 import type { Image } from "../ImageDisplay/ImageDisplay";
 import ImageDisplay from "../ImageDisplay/ImageDisplay";
-import type { AllowedFileTypes} from "../../../helpers/FileUpload";
+import type { AllowedFileTypes } from "../../../helpers/FileUpload";
 import { splitFilePath } from "../../../helpers/FileUpload";
 
 const Wrapper = styled.View`

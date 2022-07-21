@@ -1,10 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled, { withTheme } from 'styled-components/native';
-import icons from '../../../helpers/Icons';
-import Text from '../../atoms/Text';
-import Icon from '../../atoms/Icon';
-import Button from '../../atoms/Button/Button';
+import React from "react";
+import PropTypes from "prop-types";
+import styled, { withTheme } from "styled-components/native";
+import icons from "../../../helpers/Icons";
+import Text from "../../atoms/Text";
+import Icon from "../../atoms/Icon";
+import Button from "../../atoms/Button/Button";
 
 const HighlightedItem = styled(Button)`
   padding: 0px;
@@ -59,7 +59,10 @@ const CaseTypeListItem = (props) => {
   const { title, color, onClick, icon, children } = props;
 
   const background =
-    (color && Object.prototype.hasOwnProperty.call(icon, color) && icon[color][1]) || 'transparent';
+    (color &&
+      Object.prototype.hasOwnProperty.call(icon, color) &&
+      icon[color][1]) ||
+    "transparent";
 
   return (
     <HighlightedItem onClick={onClick} block>
@@ -83,7 +86,7 @@ const CaseTypeListItem = (props) => {
 export default withTheme(CaseTypeListItem);
 
 CaseTypeListItem.propTypes = {
-  color: PropTypes.oneOf(['blue', 'purple', 'red', 'green']),
+  color: PropTypes.oneOf(["blue", "purple", "red", "green"]),
   icon: PropTypes.string,
   title: PropTypes.string,
   onClick: PropTypes.func,

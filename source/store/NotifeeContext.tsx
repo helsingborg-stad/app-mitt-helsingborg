@@ -1,6 +1,5 @@
 import React, { useEffect, createContext } from "react";
-import type {
-  TimestampTrigger} from "@notifee/react-native";
+import type { TimestampTrigger } from "@notifee/react-native";
 import notifee, {
   EventType,
   TriggerType,

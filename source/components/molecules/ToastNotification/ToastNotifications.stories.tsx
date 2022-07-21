@@ -1,11 +1,11 @@
-import React from 'react';
-import { View } from 'react-native';
-import { storiesOf } from '@storybook/react-native';
-import styled from 'styled-components/native';
-import StoryWrapper from '../StoryWrapper';
-import Button from '../../atoms/Button/Button';
-import Text from '../../atoms/Text';
-import { useNotification } from '../../../store/NotificationContext';
+import React from "react";
+import { View } from "react-native";
+import { storiesOf } from "@storybook/react-native";
+import styled from "styled-components/native";
+import StoryWrapper from "../StoryWrapper";
+import Button from "../../atoms/Button/Button";
+import Text from "../../atoms/Text";
+import { useNotification } from "../../../store/NotificationContext";
 
 const NotificationButton = styled(Button)`
   margin-top: 24px;
@@ -19,7 +19,11 @@ const NotificationsExample = () => {
         colorSchema="green"
         block
         onClick={() => {
-          showNotification('This is a success notification!', 'meep', 'success');
+          showNotification(
+            "This is a success notification!",
+            "meep",
+            "success"
+          );
         }}
       >
         <Text>Show success notification</Text>
@@ -28,7 +32,7 @@ const NotificationsExample = () => {
         colorSchema="purple"
         block
         onClick={() => {
-          showNotification('This is an info notification!', 'foo', 'info');
+          showNotification("This is an info notification!", "foo", "info");
         }}
       >
         <Text>Show info notification</Text>
@@ -38,9 +42,9 @@ const NotificationsExample = () => {
         block
         onClick={() => {
           showNotification(
-            'This is a warning!',
-            'it will stay only a very short time',
-            'warning',
+            "This is a warning!",
+            "it will stay only a very short time",
+            "warning",
             1500
           );
         }}
@@ -51,7 +55,12 @@ const NotificationsExample = () => {
         colorSchema="red"
         block
         onClick={() => {
-          showNotification('This is an error notification!', 'It will stay for ever', 'error', 0);
+          showNotification(
+            "This is an error notification!",
+            "It will stay for ever",
+            "error",
+            0
+          );
         }}
       >
         <Text>Show error notification</Text>
@@ -60,7 +69,12 @@ const NotificationsExample = () => {
         colorSchema="neutral"
         block
         onClick={() => {
-          showNotification('This is a notification', 'Message here!', 'neutral', 1500);
+          showNotification(
+            "This is a notification",
+            "Message here!",
+            "neutral",
+            1500
+          );
         }}
       >
         <Text>Show neutral notification</Text>
@@ -69,7 +83,7 @@ const NotificationsExample = () => {
   );
 };
 
-storiesOf('Notifications', module).add('default', () => (
+storiesOf("Notifications", module).add("default", () => (
   <StoryWrapper>
     <NotificationsExample />
   </StoryWrapper>

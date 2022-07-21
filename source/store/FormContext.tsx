@@ -1,4 +1,4 @@
-import type { ReactNode} from "react";
+import type { ReactNode } from "react";
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import type { Form } from "../types/FormTypes";

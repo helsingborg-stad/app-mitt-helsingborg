@@ -1,1 +1,1 @@
-export { default } from './Progressbar';
+export { default } from "./Progressbar";

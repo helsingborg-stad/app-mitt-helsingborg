@@ -1,11 +1,11 @@
-import { storiesOf } from '@storybook/react-native';
-import React, { useState } from 'react';
-import styled from 'styled-components/native';
-import StoryWrapper from '../../molecules/StoryWrapper';
-import Text from '../Text';
-import Checkbox from './Checkbox';
+import { storiesOf } from "@storybook/react-native";
+import React, { useState } from "react";
+import styled from "styled-components/native";
+import StoryWrapper from "../../molecules/StoryWrapper";
+import Text from "../Text";
+import Checkbox from "./Checkbox";
 
-storiesOf('Checkbox', module).add('Default', (props) => (
+storiesOf("Checkbox", module).add("Default", (props) => (
   <StoryWrapper {...props}>
     <Checkboxes />
   </StoryWrapper>
@@ -31,7 +31,7 @@ const Checkboxes = (injectProps) => {
     <FlexContainer>
       <FlexRow>
         <Checkbox
-          onChange={handleChange('box1')}
+          onChange={handleChange("box1")}
           checked={checkboxValues.box1}
           color="blue"
           size="small"
@@ -41,7 +41,7 @@ const Checkboxes = (injectProps) => {
       </FlexRow>
       <FlexRow>
         <Checkbox
-          onChange={handleChange('box2')}
+          onChange={handleChange("box2")}
           checked={checkboxValues.box2}
           color="green"
           size="small"
@@ -51,7 +51,7 @@ const Checkboxes = (injectProps) => {
       </FlexRow>
       <FlexRow>
         <Checkbox
-          onChange={handleChange('box3')}
+          onChange={handleChange("box3")}
           checked={checkboxValues.box3}
           color="red"
           size="small"
@@ -61,7 +61,7 @@ const Checkboxes = (injectProps) => {
       </FlexRow>
       <FlexRow>
         <Checkbox
-          onChange={handleChange('box3')}
+          onChange={handleChange("box3")}
           checked={checkboxValues.box3}
           color="neutral"
           size="small"
@@ -71,7 +71,7 @@ const Checkboxes = (injectProps) => {
       </FlexRow>
       <FlexRow>
         <Checkbox
-          onChange={handleChange('box4')}
+          onChange={handleChange("box4")}
           checked={checkboxValues.box4}
           color="purple"
           size="medium"
@@ -81,7 +81,7 @@ const Checkboxes = (injectProps) => {
       </FlexRow>
       <FlexRow>
         <Checkbox
-          onChange={handleChange('box5')}
+          onChange={handleChange("box5")}
           checked={checkboxValues.box5}
           color="green"
           size="large"
@@ -91,7 +91,7 @@ const Checkboxes = (injectProps) => {
       </FlexRow>
       <FlexRow>
         <Checkbox
-          onChange={handleChange('box6')}
+          onChange={handleChange("box6")}
           checked={checkboxValues.box6}
           color="blue"
           size="large"
@@ -101,7 +101,7 @@ const Checkboxes = (injectProps) => {
       </FlexRow>
       <FlexRow>
         <Checkbox
-          onChange={handleChange('box7')}
+          onChange={handleChange("box7")}
           checked={checkboxValues.box7}
           color="blue"
           size="medium"

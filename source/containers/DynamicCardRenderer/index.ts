@@ -1,1 +1,1 @@
-export { default } from './DynamicCardRenderer';
+export { default } from "./DynamicCardRenderer";

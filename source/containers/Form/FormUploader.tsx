@@ -8,12 +8,8 @@ import type { Pdf } from "../../components/molecules/PdfDisplay/PdfDisplay";
 import type { Options } from "../../hooks/useQueue";
 import useQueue from "../../hooks/useQueue";
 import Dialog from "../../components/molecules/Dialog/Dialog";
-import type {
-  AllowedFileTypes} from "../../helpers/FileUpload";
-import {
-  getBlob,
-  uploadFile
-} from "../../helpers/FileUpload";
+import type { AllowedFileTypes } from "../../helpers/FileUpload";
+import { getBlob, uploadFile } from "../../helpers/FileUpload";
 
 const DialogActivityIndicator = styled(ActivityIndicator)`
   margin-bottom: 16px;

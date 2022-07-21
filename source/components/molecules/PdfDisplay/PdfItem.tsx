@@ -1,12 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
-import type {
-  GestureResponderEvent} from "react-native";
-import {
-  TouchableOpacity,
-  Dimensions,
-  Pressable,
-} from "react-native";
+import type { GestureResponderEvent } from "react-native";
+import { TouchableOpacity, Dimensions, Pressable } from "react-native";
 import PdfView from "react-native-pdf";
 import { Icon, Button, Text } from "../../atoms";
 import { Modal, useModal } from "../Modal";

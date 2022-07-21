@@ -1,13 +1,13 @@
-import React from 'react';
-import { View } from 'react-native';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Heading from '../../atoms/Heading';
-import Text from '../../atoms/Text';
-import Icon from '../../atoms/Icon';
-import HeaderNav from './HeaderNav';
-import Button from '../../atoms/Button/Button';
+import React from "react";
+import { View } from "react-native";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Heading from "../../atoms/Heading";
+import Text from "../../atoms/Text";
+import Icon from "../../atoms/Icon";
+import HeaderNav from "./HeaderNav";
+import Button from "../../atoms/Button/Button";
 
 const BackButton = styled(Button)`
   padding: 0;
@@ -47,7 +47,7 @@ const Separator = styled.View`
 
 const Header = ({ message, title, themeColor, navItems, backButton }) => (
   <HeaderContainer>
-    <SafeAreaView edges={['top', 'right', 'left']} />
+    <SafeAreaView edges={["top", "right", "left"]} />
     <HeaderContent>
       {backButton && (
         <BackButton z={0} onClick={backButton.onClick}>
@@ -85,6 +85,6 @@ Header.propTypes = {
 };
 
 Header.defaultProps = {
-  themeColor: 'purple',
+  themeColor: "purple",
   backButton: undefined,
 };

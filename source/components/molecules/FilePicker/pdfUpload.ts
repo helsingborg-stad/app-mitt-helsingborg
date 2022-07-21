@@ -3,7 +3,7 @@ import uuid from "react-native-uuid";
 
 import type { Pdf } from "../PdfDisplay/PdfDisplay";
 
-import type { AllowedFileTypes} from "../../../helpers/FileUpload";
+import type { AllowedFileTypes } from "../../../helpers/FileUpload";
 import { splitFilePath } from "../../../helpers/FileUpload";
 
 const uriScheme = {

@@ -8,10 +8,9 @@ import type {
   Dispatch,
   CaseUpdate,
   Action,
-  AddCoApplicantParameters} from "../types/CaseContext";
-import {
-  ActionTypes
+  AddCoApplicantParameters,
 } from "../types/CaseContext";
+import { ActionTypes } from "../types/CaseContext";
 import AuthContext from "./AuthContext";
 import CaseReducer, {
   initialState as defaultInitialState,

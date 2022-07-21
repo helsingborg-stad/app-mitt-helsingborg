@@ -10,11 +10,8 @@ import Select from "../../atoms/Select";
 import type { InputRow } from "./RepeaterField";
 import CalendarPicker from "../CalendarPicker/CalendarPickerForm";
 import theme from "../../../styles/theme";
-import type {
-  PrimaryColor} from "../../../styles/themeHelpers";
-import {
-  getValidColorSchema
-} from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
+import { getValidColorSchema } from "../../../styles/themeHelpers";
 
 const Base = styled.View`
   padding: 0px;

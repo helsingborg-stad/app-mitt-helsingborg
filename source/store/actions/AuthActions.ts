@@ -24,10 +24,9 @@ import type {
   CheckOrderStatusFailureDispatch,
   CancelOrderDispatch,
   SetAuthenticateOnExternalDeviceDispatch,
-  SetApiStatusMessageDispatch} from "./AuthActions.types";
-import {
-  ActionTypes
+  SetApiStatusMessageDispatch,
 } from "./AuthActions.types";
+import { ActionTypes } from "./AuthActions.types";
 
 export async function mockedAuth(): Promise<
   MockAuthSucessDispatch | MockAuthFailureDispatch

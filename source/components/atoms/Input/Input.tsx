@@ -1,12 +1,11 @@
 import React, { useEffect, forwardRef } from "react";
-import type {
-  TextInput} from "react-native";
+import type { TextInput } from "react-native";
 import {
   Keyboard,
   Button,
   Platform,
   View,
-  InputAccessoryView
+  InputAccessoryView,
 } from "react-native";
 import { useTheme } from "styled-components/native";
 

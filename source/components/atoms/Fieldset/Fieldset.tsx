@@ -1,10 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import Text from '../Text/Text';
-import Button from '../Button';
-import type { Help } from '../../../types/FormTypes';
-import HelpButton from '../../molecules/HelpButton';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import Text from "../Text/Text";
+import Button from "../Button";
+import type { Help } from "../../../types/FormTypes";
+import HelpButton from "../../molecules/HelpButton";
 
 interface FieldsetContainerProps {
   colorSchema: string;
@@ -67,7 +67,8 @@ interface FieldsetLegendBorderProps {
 }
 
 const FieldsetLegendBorder = styled.View<FieldsetLegendBorderProps>`
-  border-bottom-color: ${(props) => props.theme.fieldset[props.colorSchema].legendBorder}
+  border-bottom-color: ${(props) =>
+    props.theme.fieldset[props.colorSchema].legendBorder}
   border-bottom-width: 2px;
   align-self: flex-start;
 `;
@@ -92,7 +93,9 @@ const Fieldset: React.FC<FieldsetProps> = ({
     <FieldsetHeader>
       <FieldsetHeaderSection justifyContent="flex-start">
         <FieldsetLegendBorder colorSchema={colorSchema}>
-          <FieldsetLegend colorSchema={colorSchema}>{legend.toUpperCase()}</FieldsetLegend>
+          <FieldsetLegend colorSchema={colorSchema}>
+            {legend.toUpperCase()}
+          </FieldsetLegend>
         </FieldsetLegendBorder>
       </FieldsetHeaderSection>
       <FieldsetHeaderSection justifyContent="flex-end">
@@ -123,7 +126,7 @@ Fieldset.propTypes = {
 };
 
 Fieldset.defaultProps = {
-  colorSchema: 'blue',
+  colorSchema: "blue",
 };
 
 export default Fieldset;

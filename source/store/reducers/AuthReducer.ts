@@ -7,10 +7,9 @@ import type {
   SetStatusDispatch,
   SetErrorDispatch,
   SetAuthenticateOnExternalDeviceDispatch,
-  SetApiStatusMessageDispatch} from "../actions/AuthActions.types";
-import {
-  ActionTypes
+  SetApiStatusMessageDispatch,
 } from "../actions/AuthActions.types";
+import { ActionTypes } from "../actions/AuthActions.types";
 
 import USER_AUTH_STATE from "../../types/UserAuthTypes";
 import type { User } from "../../types/UserTypes";

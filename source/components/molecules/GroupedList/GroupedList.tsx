@@ -7,11 +7,8 @@ import type { Help } from "../../../types/FormTypes";
 import Text from "../../atoms/Text";
 import Fieldset, { FieldsetButton } from "../../atoms/Fieldset/Fieldset";
 import theme from "../../../styles/theme";
-import type {
-  PrimaryColor} from "../../../styles/themeHelpers";
-import {
-  getValidColorSchema
-} from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
+import { getValidColorSchema } from "../../../styles/themeHelpers";
 import { Heading } from "../../atoms";
 
 const ListBody = styled.View`

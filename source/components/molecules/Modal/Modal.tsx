@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Modal as ReactNativeModal } from 'react-native';
+import React from "react";
+import PropTypes from "prop-types";
+import { Modal as ReactNativeModal } from "react-native";
 
 const Modal = ({ visible, hide, children, ...other }) => (
   <ReactNativeModal

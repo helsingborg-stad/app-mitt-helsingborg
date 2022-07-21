@@ -9,11 +9,9 @@ import type {
 import type {
   EncryptionDetails,
   EncryptionExceptionInterface,
-  EncryptionExceptionStatus} from "../../types/Encryption";
-import {
-  EncryptionErrorStatus,
-  EncryptionType,
+  EncryptionExceptionStatus,
 } from "../../types/Encryption";
+import { EncryptionErrorStatus, EncryptionType } from "../../types/Encryption";
 import { wrappedDefaultStorage } from "../StorageService";
 import { DeviceLocalAESStrategy } from "./DeviceLocalAESStrategy";
 import type { IEncryptionStrategy } from "./EncryptionStrategy";

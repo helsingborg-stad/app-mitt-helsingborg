@@ -1,9 +1,7 @@
 import { storiesOf } from "@storybook/react-native";
 import React, { useState } from "react";
 import styled from "styled-components/native";
-import type {
-  DocumentPickerResponse,
-} from "react-native-document-picker";
+import type { DocumentPickerResponse } from "react-native-document-picker";
 import DocumentPicker from "react-native-document-picker";
 import PdfView from "react-native-pdf";
 import { Button, Text } from "../components/atoms";

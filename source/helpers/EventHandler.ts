@@ -1,4 +1,4 @@
-export const EVENT_USER_MESSAGE = 'user_input';
+export const EVENT_USER_MESSAGE = "user_input";
 
 const EventHandler = {
   events: {},

@@ -1,10 +1,10 @@
-import { storiesOf } from '@storybook/react-native';
-import React from 'react';
-import StoryWrapper from '../StoryWrapper';
-import InfoModal from './InfoModal';
-import { Button, Label, Text } from '../../atoms';
-import { useModal } from '../Modal';
-import userAgreementText from '../../../assets/text/userAgreementText';
+import { storiesOf } from "@storybook/react-native";
+import React from "react";
+import StoryWrapper from "../StoryWrapper";
+import InfoModal from "./InfoModal";
+import { Button, Label, Text } from "../../atoms";
+import { useModal } from "../Modal";
+import userAgreementText from "../../../assets/text/userAgreementText";
 
 const InfoModals = () => {
   const [visible1, toggleModal1] = useModal();
@@ -35,7 +35,7 @@ const InfoModals = () => {
   ];
 };
 
-storiesOf('Info Modal', module).add('Default', (props) => (
+storiesOf("Info Modal", module).add("Default", (props) => (
   <StoryWrapper {...props} style={{ marginLeft: 30 }}>
     <InfoModals />
   </StoryWrapper>

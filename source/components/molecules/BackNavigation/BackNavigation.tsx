@@ -1,15 +1,15 @@
-import React from 'react';
-import { View } from 'react-native';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import Icon from '../../atoms/Icon/Icon';
+import React from "react";
+import { View } from "react-native";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import Icon from "../../atoms/Icon/Icon";
 
 const BackNavigationWrapper = styled.View({
-  position: 'absolute',
-  flexDirection: 'row',
+  position: "absolute",
+  flexDirection: "row",
   padding: 0,
   margin: 0,
-  justifyContent: 'space-between',
+  justifyContent: "space-between",
   top: 0,
   left: 0,
   right: 0,
@@ -17,19 +17,19 @@ const BackNavigationWrapper = styled.View({
 });
 
 const BackNavigationSingleWrapper = styled.View(() => ({
-  position: 'absolute',
-  flexDirection: 'row',
+  position: "absolute",
+  flexDirection: "row",
   padding: 0,
   margin: 0,
-  justifyContent: 'flex-end',
+  justifyContent: "flex-end",
   top: 0,
   zIndex: 999,
   right: 0,
 }));
 
 const BackButton = styled.View((props) => ({
-  alignItems: 'center',
-  justifyContent: 'center',
+  alignItems: "center",
+  justifyContent: "center",
   borderRadius: 30,
   padding: 0,
   margin: 0,
@@ -43,9 +43,9 @@ const BackButtonIcon = styled(Icon).attrs(({ theme, colorSchema }) => ({
 }))``;
 
 const CloseButton = styled.TouchableOpacity((props) => ({
-  alignItems: 'center',
+  alignItems: "center",
   borderRadius: 30,
-  justifyContent: 'center',
+  justifyContent: "center",
   padding: 0,
   margin: 0,
   height: 32,
@@ -75,7 +75,10 @@ const BackNavigation = ({
   !isSubstep ? (
     <BackNavigationWrapper style={style}>
       {showBackButton ? (
-        <BackButton colorSchema={colorSchema} onStartShouldSetResponder={onBack}>
+        <BackButton
+          colorSchema={colorSchema}
+          onStartShouldSetResponder={onBack}
+        >
           <BackButtonIcon name="keyboard-backspace" colorSchema={colorSchema} />
         </BackButton>
       ) : (
@@ -83,8 +86,16 @@ const BackNavigation = ({
       )}
 
       {showCloseButton ? (
-        <CloseButton primary={primary} colorSchema={colorSchema} onPress={onClose}>
-          <CloseButtonIcon colorSchema={colorSchema} primary={primary} name="close" />
+        <CloseButton
+          primary={primary}
+          colorSchema={colorSchema}
+          onPress={onClose}
+        >
+          <CloseButtonIcon
+            colorSchema={colorSchema}
+            primary={primary}
+            name="close"
+          />
         </CloseButton>
       ) : null}
     </BackNavigationWrapper>
@@ -97,14 +108,18 @@ const BackNavigation = ({
           onBack();
         }}
       >
-        <CloseButtonIcon colorSchema={colorSchema} primary={primary} name="close" />
+        <CloseButtonIcon
+          colorSchema={colorSchema}
+          primary={primary}
+          name="close"
+        />
       </CloseButton>
     </BackNavigationSingleWrapper>
   );
 
 BackNavigation.propTypes = {
   style: PropTypes.array,
-  colorSchema: PropTypes.oneOf(['blue', 'red', 'purple', 'green', 'neutral']),
+  colorSchema: PropTypes.oneOf(["blue", "red", "purple", "green", "neutral"]),
   onBack: PropTypes.func,
   onClose: PropTypes.func,
   showBackButton: PropTypes.bool,
@@ -114,7 +129,7 @@ BackNavigation.propTypes = {
 };
 
 BackNavigation.defaultProps = {
-  colorSchema: 'blue',
+  colorSchema: "blue",
   style: [],
   showBackButton: true,
   showCloseButton: true,

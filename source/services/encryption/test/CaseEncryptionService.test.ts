@@ -5,14 +5,12 @@ import type {
   EncryptedAnswersWrapper,
   PossiblyEncryptedAnswers,
 } from "../../../types/Case";
-import type {
-  EncryptionDetails} from "../../../types/Encryption";
+import type { EncryptionDetails } from "../../../types/Encryption";
 import {
   EncryptionErrorStatus,
   EncryptionType,
 } from "../../../types/Encryption";
-import type {
-  UserInterface} from "../CaseEncryptionHelper";
+import type { UserInterface } from "../CaseEncryptionHelper";
 import {
   answersAreEncrypted,
   getEncryptionFromCase,
@@ -29,23 +27,15 @@ import {
   makeCaseWithNewForm,
   getPasswordForForm,
 } from "../CaseEncryptionHelper";
-import type {
-  DeviceLocalAESParams} from "../DeviceLocalAESStrategy";
-import {
-  DeviceLocalAESStrategy,
-} from "../DeviceLocalAESStrategy";
+import type { DeviceLocalAESParams } from "../DeviceLocalAESStrategy";
+import { DeviceLocalAESStrategy } from "../DeviceLocalAESStrategy";
 import type {
   ICaseEncryptionService,
-  IStorage} from "../CaseEncryptionService";
-import {
-  CaseEncryptionService
+  IStorage,
 } from "../CaseEncryptionService";
-import type {
-  PasswordParams} from "../PasswordStrategy";
-import {
-  generateRandomPin,
-  PasswordStrategy,
-} from "../PasswordStrategy";
+import { CaseEncryptionService } from "../CaseEncryptionService";
+import type { PasswordParams } from "../PasswordStrategy";
+import { generateRandomPin, PasswordStrategy } from "../PasswordStrategy";
 import { to } from "../../../helpers/Misc";
 import type {
   EncryptionContext,

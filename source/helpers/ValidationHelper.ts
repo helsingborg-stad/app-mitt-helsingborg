@@ -1,4 +1,4 @@
-import validator from 'validator';
+import validator from "validator";
 
 /**
  * Checks if a string is a valid personal identity number
@@ -18,13 +18,18 @@ export const validatePin = (pin) => {
  */
 export const sanitizePin = (pin) => {
   // Remove non digits
-  let sanitizedPin = pin.replace(/\D/g, '');
+  let sanitizedPin = pin.replace(/\D/g, "");
   const pinInt = parseInt(sanitizedPin);
 
   sanitizedPin =
-    sanitizedPin.length === 2 && pinInt > 19 && pinInt !== 20 ? `19${sanitizedPin}` : sanitizedPin;
+    sanitizedPin.length === 2 && pinInt > 19 && pinInt !== 20
+      ? `19${sanitizedPin}`
+      : sanitizedPin;
 
-  sanitizedPin = sanitizedPin.length === 2 && pinInt < 19 ? `20${sanitizedPin}` : sanitizedPin;
+  sanitizedPin =
+    sanitizedPin.length === 2 && pinInt < 19
+      ? `20${sanitizedPin}`
+      : sanitizedPin;
 
   return sanitizedPin;
 };
@@ -51,29 +56,35 @@ export const validateInput = (value, rules) =>
        * so that the isEmpty rule can be applied correctly.
        */
       if (value === false || value === undefined || value === null) {
-        valueToValidate = '';
+        valueToValidate = "";
       }
       /**
        * Retrieve the validation method defined in the rule from the validator.js package and execute.
        * An array of args will be created if multiple args defined. Single arg will be passed as is.
        */
       const ruleArgs = rule.args || [];
-      const validationMethodArgs = rule.arg || Object.keys(ruleArgs).map((key) => ruleArgs[key]);
+      const validationMethodArgs =
+        rule.arg || Object.keys(ruleArgs).map((key) => ruleArgs[key]);
       const validationMethod =
-        typeof rule.method === 'string' ? validator[rule.method] : rule.method;
+        typeof rule.method === "string" ? validator[rule.method] : rule.method;
       /** For any other rule than the isEmpty, an empty value should be treated as valid. */
-      if (validationMethod !== validator.isEmpty && valid === true && valueToValidate === '') {
-        return [true, ''];
+      if (
+        validationMethod !== validator.isEmpty &&
+        valid === true &&
+        valueToValidate === ""
+      ) {
+        return [true, ""];
       }
 
       const isValidationRuleMeet =
-        validationMethod(valueToValidate, validationMethodArgs) === rule.validWhen;
+        validationMethod(valueToValidate, validationMethodArgs) ===
+        rule.validWhen;
 
       /**
        * Only return true if the current and previous rule is met
        */
       if (valid === true && isValidationRuleMeet) {
-        return [true, ''];
+        return [true, ""];
       }
       /**
        * Only change the  true if the current and previous rule is met
@@ -83,5 +94,5 @@ export const validateInput = (value, rules) =>
       }
       return valueArray;
     },
-    [true, '']
+    [true, ""]
   );

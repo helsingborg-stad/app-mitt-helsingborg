@@ -1,31 +1,38 @@
-import React from 'react';
-import { storiesOf } from '@storybook/react-native';
-import StoryWrapper from '../../../molecules/StoryWrapper';
-import StepDescription from './StepDescription';
+import React from "react";
+import { storiesOf } from "@storybook/react-native";
+import StoryWrapper from "../../../molecules/StoryWrapper";
+import StepDescription from "./StepDescription";
 
 const lorem =
-  'Step Desciprtion Text: Etiam porta sem malesuada magna mollis euismod. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.Donec sed odio dui.Morbi leo risus, porta ac consectetur ac, vestibulum at eros.Etiam porta sem malesuada magna mollis euismod.Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.Curabitur blandit tempus porttitor.';
+  "Step Desciprtion Text: Etiam porta sem malesuada magna mollis euismod. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.Donec sed odio dui.Morbi leo risus, porta ac consectetur ac, vestibulum at eros.Etiam porta sem malesuada magna mollis euismod.Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.Curabitur blandit tempus porttitor.";
 
 const customTheme = {
   step: {
     text: {
       colors: {
-        primary: 'red',
-        secondary: 'blue',
+        primary: "red",
+        secondary: "blue",
       },
     },
   },
 };
-storiesOf('StepDescription', module)
-  .add('Default', () => (
+storiesOf("StepDescription", module)
+  .add("Default", () => (
     <StoryWrapper>
       <StepDescription heading="Step Description Component" />
     </StoryWrapper>
   ))
-  .add('Tagline', () => (
+  .add("Tagline", () => (
     <StoryWrapper>
-      <StepDescription tagline="Blue tagline" heading="Step Description Heading" />
-      <StepDescription tagline="Red tagline" colorSchema="red" heading="Step Description Heading" />
+      <StepDescription
+        tagline="Blue tagline"
+        heading="Step Description Heading"
+      />
+      <StepDescription
+        tagline="Red tagline"
+        colorSchema="red"
+        heading="Step Description Heading"
+      />
       <StepDescription
         tagline="Purple tagline"
         colorSchema="purple"
@@ -40,12 +47,12 @@ storiesOf('StepDescription', module)
       />
     </StoryWrapper>
   ))
-  .add('Desciprtive Text', () => (
+  .add("Desciprtive Text", () => (
     <StoryWrapper>
       <StepDescription text={lorem} heading="Step Description Heading" />
     </StoryWrapper>
   ))
-  .add('Tagline && Desciprtive Text', () => (
+  .add("Tagline && Desciprtive Text", () => (
     <StoryWrapper>
       <StepDescription
         tagline="Step Description Tagline"
@@ -56,7 +63,7 @@ storiesOf('StepDescription', module)
       />
     </StoryWrapper>
   ))
-  .add('Custom Theming', () => (
+  .add("Custom Theming", () => (
     <StoryWrapper>
       <StepDescription
         theme={customTheme}

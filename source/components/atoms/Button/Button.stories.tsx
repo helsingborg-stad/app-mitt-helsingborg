@@ -1,10 +1,10 @@
-import { storiesOf } from '@storybook/react-native';
-import React from 'react';
-import styled from 'styled-components/native';
-import StoryWrapper from '../../molecules/StoryWrapper';
-import Icon from '../Icon';
-import Text from '../Text';
-import Button from './Button';
+import { storiesOf } from "@storybook/react-native";
+import React from "react";
+import styled from "styled-components/native";
+import StoryWrapper from "../../molecules/StoryWrapper";
+import Icon from "../Icon";
+import Text from "../Text";
+import Button from "./Button";
 
 const Flex = styled.View`
   padding: 8px;
@@ -14,18 +14,18 @@ const FlexContainer = styled.View`
   flex: 1;
 `;
 
-storiesOf('Button', module)
-  .add('Contained Buttons', (props) => (
+storiesOf("Button", module)
+  .add("Contained Buttons", (props) => (
     <StoryWrapper {...props}>
       <ButtonColors />
     </StoryWrapper>
   ))
-  .add('Outlined Buttons', (props) => (
+  .add("Outlined Buttons", (props) => (
     <StoryWrapper {...props}>
       <ButtonColors variant="outlined" />
     </StoryWrapper>
   ))
-  .add('Link Buttons', (props) => (
+  .add("Link Buttons", (props) => (
     <StoryWrapper {...props}>
       <FlexContainer>
         <Flex>
@@ -59,18 +59,18 @@ storiesOf('Button', module)
       </FlexContainer>
     </StoryWrapper>
   ))
-  .add('Sizes', (props) => (
+  .add("Sizes", (props) => (
     <StoryWrapper {...props}>
       <ButtonSizes />
     </StoryWrapper>
   ))
-  .add('Block', (props) => (
+  .add("Block", (props) => (
     <StoryWrapper {...props}>
       <ButtonColors block />
       <ButtonColors block variant="outlined" />
     </StoryWrapper>
   ))
-  .add('Icon', (props) => (
+  .add("Icon", (props) => (
     <StoryWrapper {...props}>
       <FlexContainer>
         <Flex>
@@ -110,7 +110,7 @@ storiesOf('Button', module)
       </FlexContainer>
     </StoryWrapper>
   ))
-  .add('Elevation', (props) => (
+  .add("Elevation", (props) => (
     <StoryWrapper {...props}>
       <FlexContainer>
         <Flex>

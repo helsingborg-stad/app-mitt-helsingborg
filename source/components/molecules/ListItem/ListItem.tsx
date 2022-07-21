@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled, { withTheme } from 'styled-components/native';
-import Text from '../../atoms/Text';
-import Icon from '../../atoms/Icon';
-import Button from '../../atoms/Button/Button';
+import React from "react";
+import PropTypes from "prop-types";
+import styled, { withTheme } from "styled-components/native";
+import Text from "../../atoms/Text";
+import Icon from "../../atoms/Icon";
+import Button from "../../atoms/Button/Button";
 
 const DefaultItem = styled.TouchableHighlight`
   border-bottom-width: 1px;
@@ -71,9 +71,12 @@ const ListItem = (props) => {
   } = props;
 
   const background =
-    (highlighted && color && Object.prototype.hasOwnProperty.call(icon, color) && icon[color][1]) ||
+    (highlighted &&
+      color &&
+      Object.prototype.hasOwnProperty.call(icon, color) &&
+      icon[color][1]) ||
     (highlighted && !color && icon.lightest) ||
-    'transparent';
+    "transparent";
 
   const renderContent = () => (
     <Flex>
@@ -94,8 +97,8 @@ const ListItem = (props) => {
       )}
 
       <Content>
-        {title && title.trim() !== '' ? <Title small>{title}</Title> : null}
-        {text && text.trim() !== '' ? <Text>{text}</Text> : null}
+        {title && title.trim() !== "" ? <Title small>{title}</Title> : null}
+        {text && text.trim() !== "" ? <Text>{text}</Text> : null}
       </Content>
       <Chevron name="chevron-right" />
     </Flex>
@@ -118,7 +121,7 @@ const ListItem = (props) => {
 export default withTheme(ListItem);
 
 ListItem.propTypes = {
-  color: PropTypes.oneOf(['blue', 'purple', 'red', 'green']),
+  color: PropTypes.oneOf(["blue", "purple", "red", "green"]),
   highlighted: PropTypes.bool,
   iconName: PropTypes.string,
   title: PropTypes.string,
