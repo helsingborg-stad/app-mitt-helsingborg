@@ -22,7 +22,7 @@ export interface SummaryItem {
   loadPrevious?: string[];
   validation?: ValidationObject;
 }
-export interface ListInput {
+interface ListInput {
   title: string;
   type: "text" | "number" | "date";
   key: string;
@@ -91,7 +91,7 @@ export interface Question {
   components?: Components[];
 }
 
-export type ActionType =
+type ActionType =
   | "start"
   | "next"
   | "submit"
@@ -108,7 +108,7 @@ export interface Action {
   signMessage?: string;
 }
 
-export interface Components {
+interface Components {
   type: string;
   text: string;
   italic?: boolean;
@@ -117,7 +117,7 @@ export interface Components {
   markdownText?: string;
 }
 
-export interface Banner {
+interface Banner {
   iconSrc?: string;
   imageSrc?: string;
   backgroundColor?: string;
@@ -136,7 +136,7 @@ export interface Step {
   colorSchema: PrimaryColor | "";
 }
 
-export interface StepStructure {
+interface StepStructure {
   id: string;
   text: string;
   children: StepStructure[];
