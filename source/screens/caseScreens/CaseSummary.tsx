@@ -32,11 +32,7 @@ import {
 } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
 import { put } from "../../helpers/ApiRequest";
-import type { UserInterface } from "../../services/encryption/CaseEncryptionHelper";
-import {
-  answersAreEncrypted,
-  getPasswordForForm,
-} from "../../services/encryption/CaseEncryptionHelper";
+import { answersAreEncrypted } from "../../services/encryption/CaseEncryptionHelper";
 import type {
   Case,
   VIVACaseDetails,
@@ -47,6 +43,7 @@ import type {
 } from "../../types/Case";
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
+import useGetFormPasswords from "./useGetFormPasswords";
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -294,10 +291,6 @@ const CaseSummary = (props) => {
   const authContext = useContext(AuthContext);
   const { cases, getCase } = useContext(CaseState);
 
-  const [passwords, setPasswords] = useState<
-    Record<string, string | undefined>
-  >({});
-
   const {
     colorSchema,
     navigation,
@@ -372,41 +365,7 @@ const CaseSummary = (props) => {
     void updateCaseAfterSignature();
   }, [updateCaseSignature, authContext.status, caseId, getCase]);
 
-  const getPasswordAccumulator = useCallback(
-    async (
-      oldValue,
-      caseItem,
-      caseUser: UserInterface
-    ): Promise<{ password: string }> => {
-      const { currentFormId } = caseItem;
-      const form = caseItem.forms[currentFormId];
-      const hasSymmetricKey = !!form.encryption.symmetricKeyName;
-
-      const encryptionPin = hasSymmetricKey
-        ? await getPasswordForForm(form, caseUser)
-        : undefined;
-
-      return { ...oldValue, [currentFormId]: encryptionPin };
-    },
-    []
-  );
-
-  useEffect(() => {
-    const tryGetPassword = async () => {
-      if (Object.keys(cases).length > 0) {
-        const getPasswordsPromise = Object.values(cases).reduce(
-          (oldValue, newValue) =>
-            getPasswordAccumulator(oldValue, newValue, authContext.user),
-          Promise.resolve({})
-        );
-
-        const formPasswords = await getPasswordsPromise;
-        setPasswords(formPasswords);
-      }
-    };
-
-    void tryGetPassword();
-  }, [cases, authContext.user, getPasswordAccumulator]);
+  const passwords = useGetFormPasswords(cases, authContext.user);
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
