@@ -20,10 +20,10 @@ export enum ApplicationStatusType {
   ACTIVE_SUBMITTED_COMPLETION = "active:submitted:completion:viva",
 }
 
-export type PersonRole = "applicant" | "coApplicant" | "children";
+type PersonRole = "applicant" | "coApplicant" | "children";
 export type PossiblyEncryptedAnswers = Answer[] | EncryptedAnswersWrapper;
 
-export interface Administrator {
+interface Administrator {
   email: string;
   name: string;
   phone?: string;
@@ -35,7 +35,7 @@ export interface RequestedCompletions {
   readonly received: boolean;
 }
 
-export interface Completions {
+interface Completions {
   readonly requested: RequestedCompletions[];
   readonly description: string;
   readonly attachmentUploaded: string[];
@@ -49,16 +49,16 @@ export interface Period {
   startDate: number;
 }
 
-export interface Application {
+interface Application {
   periodstartdate: string;
 }
 
-export interface CalculationNormpart {
+interface CalculationNormpart {
   type: string;
   amount: string;
 }
 
-export interface CalculationNorm {
+interface CalculationNorm {
   normpart: CalculationNormpart[];
 }
 
@@ -73,7 +73,7 @@ export interface Calculation {
   norm: CalculationNorm;
 }
 
-export interface Note {
+interface Note {
   label: string;
   text: string;
 }
@@ -106,7 +106,7 @@ export interface VIVACaseDetails {
   workflow: Workflow;
 }
 
-export interface AnswerField {
+interface AnswerField {
   id: string;
   tags?: string[];
 }
