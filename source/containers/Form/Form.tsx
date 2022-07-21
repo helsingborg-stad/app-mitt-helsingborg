@@ -5,7 +5,7 @@ import { Modal, useModal } from "../../components/molecules/Modal";
 import ScreenWrapper from "../../components/molecules/ScreenWrapper";
 import Step from "../../components/organisms/Step/Step";
 import { evaluateConditionalExpression } from "../../helpers/conditionParser";
-import type { CaseStatus } from "../../types/CaseType";
+import type { Status, Person, VIVACaseDetails } from "../../types/Case";
 import type { Action, Answer } from "../../types/CaseContext";
 import { ActionTypes } from "../../types/CaseContext";
 import type {
@@ -14,7 +14,6 @@ import type {
   Question,
 } from "../../types/FormTypes";
 import type { User } from "../../types/UserTypes";
-import type { Person, VIVACaseDetails } from "../../types/Case";
 import { ApplicationStatusType } from "../../types/Case";
 import type {
   FormPeriod,
@@ -56,7 +55,7 @@ interface Props {
   connectivityMatrix: StepperActions[][];
   user: User;
   initialAnswers: Record<string, unknown>;
-  status: CaseStatus;
+  status: Status;
   onClose: () => void;
   onSubmit: () => void;
   onUpdateCase: (

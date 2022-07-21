@@ -5,7 +5,7 @@ import AuthContext from "../../../../store/AuthContext";
 import { Button, Text } from "../../../atoms";
 import type { Action, Question } from "../../../../types/FormTypes";
 import { ApplicationStatusType } from "../../../../types/Case";
-import type { CaseStatus } from "../../../../types/CaseType";
+import type { Status } from "../../../../types/Case";
 import type { FormPosition } from "../../../../containers/Form/hooks/useForm";
 import { useNotification } from "../../../../store/NotificationContext";
 import { evaluateConditionalExpression } from "../../../../helpers/conditionParser";
@@ -30,7 +30,7 @@ const ButtonWrapper = styled.View`
 
 interface Props {
   actions: Action[];
-  caseStatus: CaseStatus;
+  caseStatus: Status;
   answers: Record<string, any>;
   allQuestions: Question[];
   formNavigation: {
