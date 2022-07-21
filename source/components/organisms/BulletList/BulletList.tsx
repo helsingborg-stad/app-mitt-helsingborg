@@ -1,7 +1,10 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "styled-components/native";
 
-import { ThemeType, ComplementaryColor } from "../../../styles/themeHelpers";
+import type {
+  ThemeType,
+  ComplementaryColor,
+} from "../../../styles/themeHelpers";
 
 import {
   Background,

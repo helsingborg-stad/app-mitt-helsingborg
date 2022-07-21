@@ -1,1 +1,1 @@
-export { default } from './TabNavigator';
+export { default } from "./TabNavigator";

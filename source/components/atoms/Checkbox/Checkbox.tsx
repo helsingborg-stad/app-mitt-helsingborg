@@ -1,10 +1,8 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import styled, { ThemeContext } from "styled-components/native";
-import {
-  getValidColorSchema,
-  PrimaryColor,
-} from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
+import { getValidColorSchema } from "../../../styles/themeHelpers";
 import Icon from "../Icon";
 
 interface BoxProps {

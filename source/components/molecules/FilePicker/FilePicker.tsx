@@ -19,7 +19,8 @@ import {
   ErrorText,
 } from "./FilePicker.styled";
 
-import { FileType, Props, File } from "./FilePicker.types";
+import type { Props, File } from "./FilePicker.types";
+import { FileType } from "./FilePicker.types";
 
 const fileTypeMap: Record<FileType, (FileType.PDF | FileType.IMAGES)[]> = {
   [FileType.ALL]: [FileType.PDF, FileType.IMAGES],

@@ -1,1 +1,1 @@
-export { default } from './StepBanner';
+export { default } from "./StepBanner";

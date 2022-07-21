@@ -1,15 +1,13 @@
 /* eslint-disable max-classes-per-file */
-import { AnsweredForm, Case } from "../../types/Case";
-import {
-  EncryptionDetails,
-  EncryptionErrorStatus,
-  EncryptionType,
-} from "../../types/Encryption";
-import { EncryptionContext, EncryptionPossibility } from "./EncryptionStrategy";
+import type { AnsweredForm, Case } from "../../types/Case";
+import type { EncryptionDetails } from "../../types/Encryption";
+import { EncryptionErrorStatus, EncryptionType } from "../../types/Encryption";
+import type { EncryptionContext } from "./EncryptionStrategy";
+import { EncryptionPossibility } from "./EncryptionStrategy";
+import type { UserInterface } from "./CaseEncryptionHelper";
 import {
   getEncryptionStrategyByType,
   EncryptionException,
-  UserInterface,
   getValidEncryptionForForm,
   getCurrentForm,
   getDataToEncryptFromForm,

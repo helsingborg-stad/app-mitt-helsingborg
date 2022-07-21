@@ -1,4 +1,4 @@
-import { FormReducerState } from "./useForm";
+import type { FormReducerState } from "./useForm";
 import {
   replaceMarkdownText,
   goNext,

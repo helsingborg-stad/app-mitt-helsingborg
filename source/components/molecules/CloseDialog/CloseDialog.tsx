@@ -5,7 +5,7 @@ import Button from "../../atoms/Button";
 import Heading from "../../atoms/Heading";
 import Text from "../../atoms/Text";
 import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
-import { PrimaryColor } from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
 
 const PopupContainer = styled.View`
   flex: 1;

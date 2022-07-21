@@ -1,10 +1,12 @@
 import { Alert } from "react-native";
-import ImagePicker, { ImageOrVideo } from "react-native-image-crop-picker";
+import type { ImageOrVideo } from "react-native-image-crop-picker";
+import ImagePicker from "react-native-image-crop-picker";
 import uuid from "react-native-uuid";
 
-import { Image } from "../ImageDisplay/ImageDisplay";
+import type { Image } from "../ImageDisplay/ImageDisplay";
 
-import { AllowedFileTypes, splitFilePath } from "../../../helpers/FileUpload";
+import type { AllowedFileTypes } from "../../../helpers/FileUpload";
+import { splitFilePath } from "../../../helpers/FileUpload";
 
 const MAX_IMAGE_SIZE_BYTES = 7 * 1000 * 1000;
 

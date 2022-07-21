@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 import { Text } from "../../atoms";
 import StoryWrapper from "../StoryWrapper";
 import FileUploaderList from "./FileUploaderList";
-import { File } from "../FilePicker/FilePicker";
+import type { File } from "../FilePicker/FilePicker";
 
 const FlexContainer = styled.ScrollView`
   background-color: #fff;

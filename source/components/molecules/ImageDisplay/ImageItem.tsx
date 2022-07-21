@@ -4,15 +4,11 @@ import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import ImageZoom from "react-native-image-pan-zoom";
 import { readFile } from "react-native-fs";
-import {
-  TouchableOpacity,
-  Dimensions,
-  Image as RNImage,
-  GestureResponderEvent,
-} from "react-native";
+import type { GestureResponderEvent } from "react-native";
+import { TouchableOpacity, Dimensions, Image as RNImage } from "react-native";
 import { Icon, Button, Text } from "../../atoms";
 import { Modal, useModal } from "../Modal";
-import { Image } from "./ImageDisplay";
+import type { Image } from "./ImageDisplay";
 import { downloadFile } from "../../../helpers/FileUpload";
 
 const DefaultItem = styled.TouchableOpacity`

@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { PanResponder } from 'react-native';
-import useInterval from './useInterval';
+import { useState } from "react";
+import { PanResponder } from "react-native";
+import useInterval from "./useInterval";
 
 export type UseTouchParameters = {
   inactivityTime: number;
@@ -33,7 +33,11 @@ export default function useTouchActivity({
     const now = Date.now();
     if (now - latestTouchTime > inactivityTime && isActive) {
       setIsActive(false);
-    } else if (isActive && refreshSession && now - latestRefreshTime > refreshInterval) {
+    } else if (
+      isActive &&
+      refreshSession &&
+      now - latestRefreshTime > refreshInterval
+    ) {
       refreshSession();
       setLatestRefreshTime(now);
     }
@@ -67,5 +71,11 @@ export default function useTouchActivity({
     setIsActive(isActive);
   };
 
-  return { panResponder, isActive, updateIsActive, updateLatestTouchTime, updateLatestRefreshTime };
+  return {
+    panResponder,
+    isActive,
+    updateIsActive,
+    updateLatestTouchTime,
+    updateLatestRefreshTime,
+  };
 }

@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components/native';
-import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
-import NavigationButtonField, {
-  Props as ButtonProps,
-} from '../NavigationButtonField/NavigationButtonField';
-import { PrimaryColor } from '../../../styles/themeHelpers';
-import { HorizontalScrollIndicator } from '../../atoms';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
+import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
+import type { Props as ButtonProps } from "../NavigationButtonField/NavigationButtonField";
+import NavigationButtonField from "../NavigationButtonField/NavigationButtonField";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
+import { HorizontalScrollIndicator } from "../../atoms";
 
 const ScrollContainer = styled.ScrollView`
   padding-bottom: 16px;
@@ -33,13 +32,15 @@ const NavigationButtonGroup: React.FC<Props> = ({
   formNavigation,
   colorSchema,
 }) => {
-  const [horizontalScrollPercentage, setHorizontalScrollPercentage] = useState(0);
+  const [horizontalScrollPercentage, setHorizontalScrollPercentage] =
+    useState(0);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (horizontal) {
       setHorizontalScrollPercentage(
         event.nativeEvent.contentOffset.x /
-          (event.nativeEvent.contentSize.width - event.nativeEvent.layoutMeasurement.width)
+          (event.nativeEvent.contentSize.width -
+            event.nativeEvent.layoutMeasurement.width)
       );
     }
   };
@@ -58,7 +59,9 @@ const NavigationButtonGroup: React.FC<Props> = ({
           />
         ))}
       </ScrollContainer>
-      {horizontal && <HorizontalScrollIndicator percentage={horizontalScrollPercentage} />}
+      {horizontal && (
+        <HorizontalScrollIndicator percentage={horizontalScrollPercentage} />
+      )}
     </>
   );
 };
@@ -67,7 +70,7 @@ NavigationButtonGroup.propTypes = {
   horizontal: PropTypes.bool,
   buttons: PropTypes.array,
   formNavigation: PropTypes.any,
-  colorSchema: PropTypes.oneOf(['blue', 'red', 'green', 'purple', 'neutral']),
+  colorSchema: PropTypes.oneOf(["blue", "red", "green", "purple", "neutral"]),
 };
 
 export default NavigationButtonGroup;

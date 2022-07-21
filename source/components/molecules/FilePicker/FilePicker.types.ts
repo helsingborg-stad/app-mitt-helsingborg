@@ -1,7 +1,7 @@
-import { Pdf } from "../PdfDisplay/PdfDisplay";
-import { Image } from "../ImageDisplay/ImageDisplay";
+import type { Pdf } from "../PdfDisplay/PdfDisplay";
+import type { Image } from "../ImageDisplay/ImageDisplay";
 
-import { PrimaryColor } from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
 
 export enum FileType {
   ALL = "all",

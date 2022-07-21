@@ -1,16 +1,14 @@
-import AuthReducer, {
-  initialAuthReducerState,
-  AuthReducerState,
-} from "../AuthReducer";
+import type { AuthReducerState } from "../AuthReducer";
+import AuthReducer, { initialAuthReducerState } from "../AuthReducer";
 
-import {
-  ActionTypes,
+import type {
   BankIdAuthOrder,
   DispatchError,
 } from "../../actions/AuthActions.types";
+import { ActionTypes } from "../../actions/AuthActions.types";
 
 import USER_AUTH_STATE from "../../../types/UserAuthTypes";
-import { User } from "../../../types/UserTypes";
+import type { User } from "../../../types/UserTypes";
 
 interface TestCase {
   type: ActionTypes;

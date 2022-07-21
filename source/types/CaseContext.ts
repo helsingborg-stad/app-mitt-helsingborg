@@ -1,7 +1,7 @@
-import { UserInterface } from "../services/encryption/CaseEncryptionHelper";
-import { FormPosition, Case, AnsweredForm } from "./Case";
-import { EncryptionDetails } from "./Encryption";
-import { Form, Question } from "./FormTypes";
+import type { UserInterface } from "../services/encryption/CaseEncryptionHelper";
+import type { FormPosition, Case, AnsweredForm } from "./Case";
+import type { EncryptionDetails } from "./Encryption";
+import type { Form, Question } from "./FormTypes";
 
 export enum ActionTypes {
   UPDATE_CASE = "UPDATE_CASE",

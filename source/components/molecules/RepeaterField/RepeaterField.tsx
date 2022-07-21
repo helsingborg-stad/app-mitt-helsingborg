@@ -5,11 +5,9 @@ import { LayoutAnimation } from "react-native";
 import { Button, Icon, Text } from "../../atoms";
 import RepeaterFieldListItem from "./RepeaterFieldListItem";
 import Fieldset from "../../atoms/Fieldset/Fieldset";
-import {
-  getValidColorSchema,
-  PrimaryColor,
-} from "../../../styles/themeHelpers";
-import { InputFieldType } from "../../../types/FormTypes";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
+import { getValidColorSchema } from "../../../styles/themeHelpers";
+import type { InputFieldType } from "../../../types/FormTypes";
 
 const AddButton = styled(Button)`
   margin-top: 30px;

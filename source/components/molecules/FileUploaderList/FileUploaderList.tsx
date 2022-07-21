@@ -1,8 +1,9 @@
 import React from "react";
 import sanitize from "sanitize-filename";
-import { Answers } from "../../../types/AnswerTypes";
-import FilePicker, { File } from "../FilePicker/FilePicker";
-import {
+import type { Answers } from "../../../types/AnswerTypes";
+import type { File } from "../FilePicker/FilePicker";
+import FilePicker from "../FilePicker/FilePicker";
+import type {
   FileUploaderInternalItem,
   FileUploaderProps,
 } from "./FileUploaderList.types";

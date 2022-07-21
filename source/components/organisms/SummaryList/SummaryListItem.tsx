@@ -4,13 +4,11 @@ import React, { useRef } from "react";
 import { Platform } from "react-native";
 import styled from "styled-components/native";
 import { colorPalette } from "../../../styles/palette";
-import {
-  getValidColorSchema,
-  PrimaryColor,
-} from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
+import { getValidColorSchema } from "../../../styles/themeHelpers";
 import { Icon, Input, Text } from "../../atoms";
 import CalendarPicker from "../../molecules/CalendarPicker/CalendarPickerForm";
-import { SummaryListItem as SummaryListItemType } from "./SummaryList";
+import type { SummaryListItem as SummaryListItemType } from "./SummaryList";
 
 interface ItemWrapperProps {
   error?: { isValid: boolean; message: string };

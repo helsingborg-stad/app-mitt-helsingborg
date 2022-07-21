@@ -4,12 +4,12 @@ import DocumentPicker from "react-native-document-picker";
 import uuid from "react-native-uuid";
 
 import { Text, Button, Icon } from "../../atoms";
-import {
-  getValidColorSchema,
-  PrimaryColor,
-} from "../../../styles/themeHelpers";
-import PdfDisplay, { Pdf, UploadedPdf } from "../PdfDisplay/PdfDisplay";
-import { AllowedFileTypes, splitFilePath } from "../../../helpers/FileUpload";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
+import { getValidColorSchema } from "../../../styles/themeHelpers";
+import type { Pdf, UploadedPdf } from "../PdfDisplay/PdfDisplay";
+import PdfDisplay from "../PdfDisplay/PdfDisplay";
+import type { AllowedFileTypes } from "../../../helpers/FileUpload";
+import { splitFilePath } from "../../../helpers/FileUpload";
 
 const uriScheme = {
   file: "file://",

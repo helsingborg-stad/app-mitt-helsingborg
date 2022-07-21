@@ -1,4 +1,4 @@
-import { AddCoApplicantParameters } from "../../../types/CaseContext";
+import type { AddCoApplicantParameters } from "../../../types/CaseContext";
 
 export interface Props {
   visible: boolean;

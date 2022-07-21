@@ -1,5 +1,5 @@
 import React from "react";
-import { KeyboardTypeOptions } from "react-native";
+import type { KeyboardTypeOptions } from "react-native";
 
 import { Input } from "../../atoms";
 

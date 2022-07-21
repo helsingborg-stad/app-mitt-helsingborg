@@ -1,95 +1,128 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled, { css } from 'styled-components/native';
+import PropTypes from "prop-types";
+import styled from "styled-components/native";
 
 const Box = styled.View`
-  height: ${props => props.height || 'auto'};
-  width: ${props => props.width || 'auto'};
+  height: ${(props) => props.height || "auto"};
+  width: ${(props) => props.width || "auto"};
 
-  border-radius: ${props => props.borderRadius || '0'};
+  border-radius: ${(props) => props.borderRadius || "0"};
   border-style: solid;
 
-  ${({ borderColor }) => borderColor && `
+  ${({ borderColor }) =>
+    borderColor &&
+    `
     border-color: ${borderColor};
   `}
 
-  ${({ borderWidth }) => borderWidth && `
+  ${({ borderWidth }) =>
+    borderWidth &&
+    `
     border-width: ${borderWidth};
   `}
 
-  ${({ theme, colorSchema }) => colorSchema && theme && `
+  ${({ theme, colorSchema }) =>
+    colorSchema &&
+    theme &&
+    `
     background: ${theme.colors.complementary[colorSchema][0]};
   `}
 
-  ${({ bg }) => bg && `
+  ${({ bg }) =>
+    bg &&
+    `
     background: ${bg};
   `}
 
-  ${props => props.p && `
+  ${(props) =>
+    props.p &&
+    `
     padding: ${props.p};
   `}
 
-  ${props => props.py && `
+  ${(props) =>
+    props.py &&
+    `
     padding-top: ${props.py};
     padding-bottom: ${props.py};
   `}
 
-  ${props => props.px && `
+  ${(props) =>
+    props.px &&
+    `
     padding-top: ${props.px};
     padding-bottom: ${props.px};
   `}
 
-  ${props => props.pt && `
+  ${(props) =>
+    props.pt &&
+    `
     padding-top: ${props.pt};
   `}
 
-  ${props => props.pr && `
+  ${(props) =>
+    props.pr &&
+    `
     padding-right: ${props.pr};
   `}
 
-  ${props => props.pb && `
+  ${(props) =>
+    props.pb &&
+    `
     padding-bottom: ${props.pb};
   `}
 
-  ${props => props.pl && `
+  ${(props) =>
+    props.pl &&
+    `
     padding-left: ${props.pl};
   `}
 
-  ${props => props.m && `
+  ${(props) =>
+    props.m &&
+    `
    margin: ${props.m};
   `}
 
-  ${props => props.my && `
+  ${(props) =>
+    props.my &&
+    `
     margin-top: ${props.my};
     margin-bottom: ${props.my};
   `}
 
-  ${props => props.mx && `
+  ${(props) =>
+    props.mx &&
+    `
     margin-top: ${props.mx};
     margin-bottom: ${props.mx};
   `}
 
-  ${props => props.mt && `
+  ${(props) =>
+    props.mt &&
+    `
     margin-top: ${props.mt};
   `}
 
-  ${props => props.mr && `
+  ${(props) =>
+    props.mr &&
+    `
     margin-right: ${props.mr};
   `}
 
-  ${props => props.mb && `
+  ${(props) =>
+    props.mb &&
+    `
     margin-bottom: ${props.mb};
   `}
 
-  ${props => props.ml && `
+  ${(props) =>
+    props.ml &&
+    `
     margin-left: ${props.ml};
   `}
 `;
 
-
-
 Box.propTypes = {
-
   /**
    * The width of the box.
    */
@@ -183,7 +216,7 @@ Box.propTypes = {
   /**
    * The color schema of the box. can be blue, purple, green or red.
    */
-  colorSchema: PropTypes.oneOf(['blue', 'green', 'purple', 'red']),
+  colorSchema: PropTypes.oneOf(["blue", "green", "purple", "red"]),
 
   /**
    * The width of the box border.
@@ -199,7 +232,7 @@ Box.propTypes = {
   /**
    * The color of the border.
    */
-  borderColor: PropTypes.string
+  borderColor: PropTypes.string,
 };
 
 export default Box;

@@ -1,11 +1,11 @@
 import React, { useEffect, forwardRef } from "react";
+import type { TextInput } from "react-native";
 import {
   Keyboard,
   Button,
   Platform,
   View,
   InputAccessoryView,
-  TextInput,
 } from "react-native";
 import { useTheme } from "styled-components/native";
 
@@ -15,7 +15,7 @@ import {
   AccesoryViewChild,
 } from "./Input.styled";
 
-import { Props, KeyboardTypeExtraPropType } from "./Input.types";
+import type { Props, KeyboardTypeExtraPropType } from "./Input.types";
 
 const keyboardTypes = {
   text: "default",

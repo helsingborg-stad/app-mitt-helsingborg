@@ -1,6 +1,7 @@
-import React, { ReactNode, useState, useCallback } from "react";
+import type { ReactNode } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Form } from "../types/FormTypes";
+import type { Form } from "../types/FormTypes";
 import { get } from "../helpers/ApiRequest";
 import FormTypes from "../assets/formTypes";
 

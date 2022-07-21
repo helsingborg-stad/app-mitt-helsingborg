@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import env from "react-native-config";
 import styled from "styled-components/native";
+import type { DefaultRouterOptions } from "@react-navigation/native";
 import {
   NavigationHelpersContext,
   useNavigationBuilder,
   StackRouter,
-  DefaultRouterOptions,
   createNavigatorFactory,
 } from "@react-navigation/native";
 import { Modal } from "react-native";
@@ -13,9 +13,8 @@ import AuthContext from "../store/AuthContext";
 import Card from "../components/molecules/Card/Card";
 import Text from "../components/atoms/Text/Text";
 import { BackgroundBlurWrapper } from "../components/atoms/BackgroundBlur";
-import useTouchActivity, {
-  UseTouchParameters,
-} from "../hooks/useTouchActivity";
+import type { UseTouchParameters } from "../hooks/useTouchActivity";
+import useTouchActivity from "../hooks/useTouchActivity";
 
 import AuthStack from "./AuthStack";
 import BottomBarNavigator from "./BottomBarNavigator";

@@ -1,16 +1,16 @@
 import React, { useContext, useReducer, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Case } from "../types/Case";
-import { Form } from "../types/FormTypes";
+import type { Case } from "../types/Case";
+import type { Form } from "../types/FormTypes";
 import USER_AUTH_STATE from "../types/UserAuthTypes";
-import {
+import type {
   State as ContextState,
   Dispatch,
   CaseUpdate,
-  ActionTypes,
   Action,
   AddCoApplicantParameters,
 } from "../types/CaseContext";
+import { ActionTypes } from "../types/CaseContext";
 import AuthContext from "./AuthContext";
 import CaseReducer, {
   initialState as defaultInitialState,

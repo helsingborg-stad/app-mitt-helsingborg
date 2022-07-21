@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 
 import { Text } from "../../atoms";
 
-import {
+import type {
   PrimaryColor,
   ComplementaryColor,
   ThemeType,

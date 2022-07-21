@@ -1,5 +1,6 @@
 import React from "react";
-import { ViewStyle, StyleSheet } from "react-native";
+import type { ViewStyle } from "react-native";
+import { StyleSheet } from "react-native";
 import styled from "styled-components/native";
 import RNPickerSelect from "react-native-picker-select";
 import theme from "../../../styles/theme";

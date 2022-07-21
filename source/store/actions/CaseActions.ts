@@ -1,18 +1,17 @@
-import { Form } from "../../types/FormTypes";
-import {
+import type { Form } from "../../types/FormTypes";
+import type {
   Action,
-  ActionTypes,
   CaseUpdate,
   UpdateCaseBody,
   AddCoApplicantParameters,
 } from "../../types/CaseContext";
+import { ActionTypes } from "../../types/CaseContext";
 import { get, post, put } from "../../helpers/ApiRequest";
 import { convertAnswersToArray } from "../../helpers/CaseDataConverter";
-import { Case, ApplicationStatusType } from "../../types/Case";
-import {
-  getCurrentForm,
-  UserInterface,
-} from "../../services/encryption/CaseEncryptionHelper";
+import type { Case } from "../../types/Case";
+import { ApplicationStatusType } from "../../types/Case";
+import type { UserInterface } from "../../services/encryption/CaseEncryptionHelper";
+import { getCurrentForm } from "../../services/encryption/CaseEncryptionHelper";
 import { CaseEncryptionService } from "../../services/encryption";
 import { wrappedDefaultStorage } from "../../services/StorageService";
 import { to } from "../../helpers/Misc";

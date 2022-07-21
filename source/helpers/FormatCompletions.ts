@@ -1,4 +1,4 @@
-import { RequestedCompletions } from "../types/Case";
+import type { RequestedCompletions } from "../types/Case";
 
 const getUnapprovedCompletionDescriptions = (
   completions: RequestedCompletions[]

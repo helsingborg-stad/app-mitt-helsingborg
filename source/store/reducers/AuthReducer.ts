@@ -1,5 +1,4 @@
-import {
-  ActionTypes,
+import type {
   DispatchError,
   CheckOrderStatusFailureDispatch,
   AddProfileDispatch,
@@ -10,9 +9,10 @@ import {
   SetAuthenticateOnExternalDeviceDispatch,
   SetApiStatusMessageDispatch,
 } from "../actions/AuthActions.types";
+import { ActionTypes } from "../actions/AuthActions.types";
 
 import USER_AUTH_STATE from "../../types/UserAuthTypes";
-import { User } from "../../types/UserTypes";
+import type { User } from "../../types/UserTypes";
 
 export interface AuthReducerState {
   isActive: boolean;

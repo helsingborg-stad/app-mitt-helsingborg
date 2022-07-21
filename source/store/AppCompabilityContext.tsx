@@ -23,8 +23,10 @@ export const useAppCompabilityHook = (
 } => {
   const { isDevMode } = useContext(AppContext);
 
-  const isCompatibleRef =
-    useRef<{ isCompatible: boolean; updateUrl: string }>();
+  const isCompatibleRef = useRef<{
+    isCompatible: boolean;
+    updateUrl: string;
+  }>();
 
   const getIsCompatibleValues = async () => {
     const { status, updateUrl } = await fetchVersionStatus();

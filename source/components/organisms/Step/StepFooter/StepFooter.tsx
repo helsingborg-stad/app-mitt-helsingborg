@@ -3,10 +3,10 @@ import styled from "styled-components/native";
 import PropTypes from "prop-types";
 import AuthContext from "../../../../store/AuthContext";
 import { Button, Text } from "../../../atoms";
-import { Action, Question } from "../../../../types/FormTypes";
+import type { Action, Question } from "../../../../types/FormTypes";
 import { ApplicationStatusType } from "../../../../types/Case";
-import { CaseStatus } from "../../../../types/CaseType";
-import { FormPosition } from "../../../../containers/Form/hooks/useForm";
+import type { CaseStatus } from "../../../../types/CaseType";
+import type { FormPosition } from "../../../../containers/Form/hooks/useForm";
 import { useNotification } from "../../../../store/NotificationContext";
 import { evaluateConditionalExpression } from "../../../../helpers/conditionParser";
 

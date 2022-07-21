@@ -1,6 +1,7 @@
 import { deepCopy } from "../../helpers/Objects";
-import { Case } from "../../types/Case";
-import { Action, ActionTypes, State } from "../../types/CaseContext";
+import type { Case } from "../../types/Case";
+import type { Action, State } from "../../types/CaseContext";
+import { ActionTypes } from "../../types/CaseContext";
 
 export const initialState: State = {
   cases: {},

@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components/native';
-import { Text, Heading } from '../components/atoms';
-import { Header, ScreenWrapper } from '../components/molecules';
+import React from "react";
+import styled from "styled-components/native";
+import { Text, Heading } from "../components/atoms";
+import { Header, ScreenWrapper } from "../components/molecules";
 
 const AboutScreenWrapper = styled(ScreenWrapper)`
   flex: 1;
@@ -25,13 +25,13 @@ const AboutScreen = () => (
     <Container>
       <Heading type="h1">Hej! 👋</Heading>
       <Paragraph>
-        Just nu utvecklar Helsingborgs stad appen Mitt Helsingborg, för att testa att göra
-        självservice enklare och mer personligt.
+        Just nu utvecklar Helsingborgs stad appen Mitt Helsingborg, för att
+        testa att göra självservice enklare och mer personligt.
       </Paragraph>
       <Paragraph>
-        I första steget jobbar vi på att göra det lättare att ansöka om ekonomiskt bistånd, men på
-        sikt ska du kunna hitta fler tjänster, mer information och personlig service från kommunen
-        här.
+        I första steget jobbar vi på att göra det lättare att ansöka om
+        ekonomiskt bistånd, men på sikt ska du kunna hitta fler tjänster, mer
+        information och personlig service från kommunen här.
       </Paragraph>
     </Container>
   </AboutScreenWrapper>

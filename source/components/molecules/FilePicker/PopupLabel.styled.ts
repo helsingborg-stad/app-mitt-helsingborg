@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 
 import { Label } from "../../atoms";
 
-import { PrimaryColor } from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../styles/themeHelpers";
 
 const Row = styled.View`
   flex-direction: row;

@@ -5,7 +5,7 @@ import { Heading, Text } from "../../atoms";
 import { ListItem } from "../../molecules";
 import FormContext from "../../../store/FormContext";
 
-import { Form } from "../../../types/FormTypes";
+import type { Form } from "../../../types/FormTypes";
 
 const List = styled.ScrollView`
   margin-top: 24px;

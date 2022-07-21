@@ -7,7 +7,7 @@ import StoryWrapper from "../../molecules/StoryWrapper";
 
 import AddCoApplicantModal from "./AddCoApplicantModal";
 
-import { AddCoApplicantParameters } from "../../../types/CaseContext";
+import type { AddCoApplicantParameters } from "../../../types/CaseContext";
 
 const Container = styled.View`
   width: 100%;

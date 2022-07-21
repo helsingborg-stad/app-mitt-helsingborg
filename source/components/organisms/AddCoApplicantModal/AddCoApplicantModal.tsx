@@ -19,7 +19,7 @@ import {
 
 import type { Props } from "./AddCoApplicantModal.types";
 import { InputField } from "./AddCoApplicantModal.types";
-import { AddCoApplicantParameters } from "../../../types/CaseContext";
+import type { AddCoApplicantParameters } from "../../../types/CaseContext";
 
 export default function AddCoApplicantModal({
   visible,

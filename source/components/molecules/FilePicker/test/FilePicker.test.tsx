@@ -1,7 +1,7 @@
 import React from "react";
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
-import { AllowedFileTypes } from "../../../../helpers/FileUpload";
+import type { AllowedFileTypes } from "../../../../helpers/FileUpload";
 import { render } from "../../../../../test-utils";
 
 import FilePicker from "../FilePicker";
