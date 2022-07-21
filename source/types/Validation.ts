@@ -1,4 +1,4 @@
-export type ValidatorMethod =
+type ValidatorMethod =
   | "isEmpty"
   | "isEmail"
   | "isUrl"
@@ -12,7 +12,7 @@ export type ValidatorMethod =
   | "isLength"
   | "isInt";
 
-export interface ValidationRule {
+interface ValidationRule {
   method: ValidatorMethod;
   validWhen: boolean;
   args?: {
