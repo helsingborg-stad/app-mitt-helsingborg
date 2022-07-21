@@ -32,7 +32,11 @@ import {
 } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
 import { put } from "../../helpers/ApiRequest";
-import { answersAreEncrypted } from "../../services/encryption/CaseEncryptionHelper";
+import type { UserInterface } from "../../services/encryption/CaseEncryptionHelper";
+import {
+  answersAreEncrypted,
+  getPasswordForForm,
+} from "../../services/encryption/CaseEncryptionHelper";
 import type {
   Case,
   VIVACaseDetails,
@@ -130,7 +134,8 @@ const computeCaseCardComponent = (
   colorSchema: PrimaryColor,
   navigation: { onOpenForm: (caseId: string, isSignMode?: boolean) => void },
   toggleModal: () => void,
-  personalNumber: string
+  personalNumber: string,
+  formPassword: string | undefined
 ) => {
   const {
     currentPosition: { currentMainStep: currentStep, numberOfMainSteps },
@@ -250,6 +255,14 @@ const computeCaseCardComponent = (
       ? getUnapprovedCompletionDescriptions(completions)
       : [];
 
+  const shouldShowPin = isWaitingForSign && !isCoApplicant;
+
+  if (shouldShowPin) {
+    const partner = persons.find((person) => person.role === "coApplicant");
+    const partnerName = partner?.firstName;
+    status.description = `${partnerName} loggar in i appen med BankID och anger koden för att granska och signera er ansökan.\n\nKod till ${partnerName}:`;
+  }
+
   return (
     <CaseCard
       colorSchema={colorSchema}
@@ -272,6 +285,7 @@ const computeCaseCardComponent = (
       buttonIconName={isClosed ? "remove-red-eye" : "arrow-forward"}
       completions={unApprovedCompletionDescriptions}
       completionsClarification={completionsClarification}
+      pin={formPassword}
     />
   );
 };
@@ -279,6 +293,10 @@ const computeCaseCardComponent = (
 const CaseSummary = (props) => {
   const authContext = useContext(AuthContext);
   const { cases, getCase } = useContext(CaseState);
+
+  const [passwords, setPasswords] = useState<
+    Record<string, string | undefined>
+  >({});
 
   const {
     colorSchema,
@@ -354,6 +372,42 @@ const CaseSummary = (props) => {
     void updateCaseAfterSignature();
   }, [updateCaseSignature, authContext.status, caseId, getCase]);
 
+  const getPasswordAccumulator = useCallback(
+    async (
+      oldValue,
+      caseItem,
+      caseUser: UserInterface
+    ): Promise<{ password: string }> => {
+      const { currentFormId } = caseItem;
+      const form = caseItem.forms[currentFormId];
+      const hasSymmetricKey = !!form.encryption.symmetricKeyName;
+
+      const encryptionPin = hasSymmetricKey
+        ? await getPasswordForForm(form, caseUser)
+        : undefined;
+
+      return { ...oldValue, [currentFormId]: encryptionPin };
+    },
+    []
+  );
+
+  useEffect(() => {
+    const tryGetPassword = async () => {
+      if (Object.keys(cases).length > 0) {
+        const getPasswordsPromise = Object.values(cases).reduce(
+          (oldValue, newValue) =>
+            getPasswordAccumulator(oldValue, newValue, authContext.user),
+          Promise.resolve({})
+        );
+
+        const formPasswords = await getPasswordsPromise;
+        setPasswords(formPasswords);
+      }
+    };
+
+    void tryGetPassword();
+  }, [cases, authContext.user, getPasswordAccumulator]);
+
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -376,7 +430,8 @@ const CaseSummary = (props) => {
             colorSchema,
             { onOpenForm: openForm },
             toggleModal,
-            authContext.user.personalNumber
+            authContext.user.personalNumber,
+            passwords[caseData.currentFormId] ?? undefined
           )}
 
         {administrators && (
