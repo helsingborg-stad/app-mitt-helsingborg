@@ -30,16 +30,13 @@ import type {
 import { to, wait } from "../../helpers/Misc";
 import type { Case, AnsweredForm } from "../../types/Case";
 import { ApplicationStatusType } from "../../types/Case";
-import type { UserInterface } from "../../services/encryption/CaseEncryptionHelper";
-import {
-  answersAreEncrypted,
-  getPasswordForForm,
-} from "../../services/encryption/CaseEncryptionHelper";
+import { answersAreEncrypted } from "../../services/encryption/CaseEncryptionHelper";
 import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
 import NewApplicationModal from "../../components/organisms/NewApplicationModal/NewApplicationModal";
 import AddCoApplicantModal from "../../components/organisms/AddCoApplicantModal/AddCoApplicantModal";
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
+import useGetFormPasswords from "./useGetFormPasswords";
 
 const { NEW_APPLICATION, NOT_STARTED, CLOSED, ACTIVE } = ApplicationStatusType;
 
@@ -294,9 +291,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
 
   const { user } = useContext(AuthContext);
 
-  const [passwords, setPasswords] = useState<
-    Record<string, string | undefined>
-  >({});
+  const passwords = useGetFormPasswords(cases, user);
 
   const getCasesByStatuses = (statuses: string[]): Case[] =>
     Object.values(cases).filter((caseData) => {
@@ -350,42 +345,6 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
       }).start();
     }, [fadeAnimation])
   );
-
-  const getPasswordAccumulator = useCallback(
-    async (
-      oldValue,
-      caseItem,
-      caseUser: UserInterface
-    ): Promise<{ password: string }> => {
-      const { currentFormId } = caseItem;
-      const form = caseItem.forms[currentFormId];
-      const hasSymmetricKey = !!form.encryption.symmetricKeyName;
-
-      const encryptionPin = hasSymmetricKey
-        ? await getPasswordForForm(form, caseUser)
-        : undefined;
-
-      return { ...oldValue, [currentFormId]: encryptionPin };
-    },
-    []
-  );
-
-  useEffect(() => {
-    const tryGetPassword = async () => {
-      if (Object.keys(cases).length > 0) {
-        const getPasswordsPromise = Object.values(cases).reduce(
-          (oldValue, newValue) =>
-            getPasswordAccumulator(oldValue, newValue, user),
-          Promise.resolve({})
-        );
-
-        const formPasswords = await getPasswordsPromise;
-        setPasswords(formPasswords);
-      }
-    };
-
-    void tryGetPassword();
-  }, [cases, user, getPasswordAccumulator]);
 
   useEffect(() => {
     const fetchAllCases = async () => {
