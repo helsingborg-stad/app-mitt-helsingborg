@@ -1,6 +1,11 @@
 import { css } from "styled-components/native";
 
-const SHADOW = {};
+import type { FlattenSimpleInterpolation } from "styled-components";
+
+interface Shadow {
+  [key: number]: FlattenSimpleInterpolation;
+}
+const SHADOW: Shadow = {};
 
 SHADOW[4] = css`
   shadow-color: #000;
