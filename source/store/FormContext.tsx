@@ -28,8 +28,6 @@ interface FormMap {
 
 const FormContext = React.createContext<FormContextValue>({});
 
-export const FormConsumer = FormContext.Consumer;
-
 export function FormProvider({ children }: FormProviderProps): JSX.Element {
   const [forms, setForms] = useState<FormMap>({});
   const [formSummaries, setFormSummaries] = useState([]);
