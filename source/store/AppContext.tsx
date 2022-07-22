@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import env from "react-native-config";
 import StorageService, { APP_ENV_KEY } from "../services/StorageService";
 
-export interface AppProviderState {
+interface AppProviderState {
   mode: string;
   handleSetMode(newMode: string): void;
   isDevMode: boolean;
