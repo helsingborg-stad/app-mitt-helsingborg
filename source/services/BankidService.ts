@@ -7,6 +7,8 @@ import {
 import { post } from "../helpers/ApiRequest";
 import getIPv4Address from "../helpers/NetworkInfo";
 
+import type { CollectResponse, AuthResponse } from "./BankIdService.types";
+
 async function getIPForBankID() {
   const ip = await getIPv4Address();
   return ip ?? "0.0.0.0";
@@ -18,7 +20,9 @@ async function getIPForBankID() {
  */
 async function collect(orderRef) {
   try {
-    const response = await post("auth/bankid/collect", { orderRef });
+    const response = await post<CollectResponse>("auth/bankid/collect", {
+      orderRef,
+    });
     if (response.status === 502) {
       // Status 502 is a connection timeout error,
       // may happen when the connection was pending for too long,
@@ -60,7 +64,7 @@ async function auth(ssn) {
   const endUserIp = await getIPForBankID();
   console.log("ip", endUserIp);
   try {
-    const response = await post("auth/bankid/auth", {
+    const response = await post<AuthResponse>("auth/bankid/auth", {
       personalNumber: ssn,
       endUserIp,
     });
@@ -97,7 +101,7 @@ async function sign(personalNumber, userVisibleData) {
   };
 
   try {
-    const { data } = await post("auth/bankid/sign", requestBody);
+    const { data } = await post<AuthResponse>("auth/bankid/sign", requestBody);
     return { success: true, data: data.data.attributes };
   } catch (error) {
     console.error("BankID Sign Error:", error);

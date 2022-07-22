@@ -40,7 +40,7 @@ const ImageDisplay: React.FC<Props> = ({ images, answers, onChange }) => {
     useState(0);
 
   const deleteImageFromCloudStorage = async (image: Image) => {
-    remove(`users/me/attachments/${image.uploadedFileName}`);
+    void remove(`users/me/attachments/${image.uploadedFileName}`);
   };
   const removeImage = (image: Image) => {
     const answer: Image[] = answers[image.questionId];

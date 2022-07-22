@@ -8,6 +8,14 @@ import { name } from "../../package.json";
 import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
 import { getUserFriendlyAppVersion } from "./Misc";
 
+import type {
+  RequestMethod,
+  RequestHeaders,
+  RequestParams,
+  RequestBody,
+  RequestResponseType,
+} from "./ApiRequest.types";
+
 /**
  * Axios request
  * User ID will overwrite bearer token in header.
@@ -17,7 +25,13 @@ import { getUserFriendlyAppVersion } from "./Misc";
  * @param {obj} data
  * @param {obj} headers
  */
-const request = async (endpoint, method, data, headers, params) => {
+const request = async (
+  endpoint: string,
+  method: RequestMethod,
+  data: RequestBody,
+  headers: Record<string, unknown> = {},
+  params: Record<string, unknown> = {}
+) => {
   const url = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
   const { apiKey } =
@@ -52,19 +66,29 @@ const request = async (endpoint, method, data, headers, params) => {
   }
 };
 
-const get = (endpoint = "", headers, params) =>
+const get = <T>(
+  endpoint: string,
+  headers?: RequestHeaders,
+  params?: RequestParams
+): RequestResponseType<T> =>
   request(endpoint, "get", undefined, headers, params);
 
-const post = (endpoint = "", body, headers) =>
-  request(endpoint, "post", body, headers);
+const post = <T>(
+  endpoint: string,
+  body: RequestBody,
+  headers?: RequestHeaders
+): RequestResponseType<T> => request(endpoint, "post", body, headers);
 
-const remove = (endpoint = "", body, headers) =>
-  request(endpoint, "delete", body, headers);
+const remove = <T>(
+  endpoint: string,
+  body?: RequestBody,
+  headers?: RequestHeaders
+): RequestResponseType<T> => request(endpoint, "delete", body, headers);
 
-const put = (endpoint = "", body, headers) =>
-  request(endpoint, "put", body, headers);
+const put = <T>(
+  endpoint: string,
+  body: RequestBody,
+  headers?: RequestHeaders
+): RequestResponseType<T> => request(endpoint, "put", body, headers);
 
-const patch = (endpoint = "", body, headers) =>
-  request(endpoint, "patch", body, headers);
-
-export { get, post, remove, put, patch };
+export { get, post, remove, put };

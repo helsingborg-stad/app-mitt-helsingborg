@@ -327,7 +327,7 @@ const CaseSummary = (props) => {
       };
 
       try {
-        const updateCaseResponse = await put(
+        const updateCaseResponse = await put<{ message?: string }>(
           `/cases/${caseItem.id}`,
           JSON.stringify(updateCaseRequestBody)
         );

@@ -6,6 +6,11 @@ import StorageService, {
 import { post, get } from "../helpers/ApiRequest";
 import { getMessage } from "../helpers/MessageHelper";
 
+import type {
+  AuthTokenResponse,
+  GetUserProfileResponse,
+} from "./AuthService.types";
+
 /**
  * This function retrives the accessToken from AsyncStorage and decodes it.
  */
@@ -65,7 +70,7 @@ export async function removeAccessTokenFromStorage() {
  */
 export async function grantAccessToken(authorizationCode) {
   try {
-    const response = await post("/auth/token", {
+    const response = await post<AuthTokenResponse>("/auth/token", {
       grant_type: "authorization_code",
       code: authorizationCode,
     });
@@ -73,6 +78,7 @@ export async function grantAccessToken(authorizationCode) {
     if (response.status !== 200) {
       throw new Error(response?.data?.data?.message);
     }
+
     const { accessToken, refreshToken } = response.data.data.attributes;
     const decodedAccessToken = await saveTokensToStorage(
       accessToken,
@@ -88,7 +94,7 @@ export async function grantAccessToken(authorizationCode) {
 export async function refreshTokens() {
   try {
     const oldRefreshToken = await StorageService.getData(REFRESH_TOKEN_KEY);
-    const response = await post("/auth/token", {
+    const response = await post<AuthTokenResponse>("/auth/token", {
       grant_type: "refresh_token",
       refresh_token: oldRefreshToken,
     });
@@ -141,7 +147,7 @@ export async function getUserProfile(accessToken) {
       const response = await poll(
         () => {
           timesRun += 1;
-          return get(`/users/me`, {
+          return get<GetUserProfileResponse>(`/users/me`, {
             Authorization: accessToken,
           });
         },

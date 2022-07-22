@@ -1,7 +1,9 @@
 import { get } from "../helpers/ApiRequest";
 
+import type { ApiStatusResponse } from "./ApiStatusService.types";
+
 const getApiStatus = async (): Promise<string> => {
-  const response = await get("/status");
+  const response = await get<ApiStatusResponse>("/status");
 
   if (response.status !== 200) {
     return "Tjänsten är för närvarande otillgänglig. Försök igen senare.";

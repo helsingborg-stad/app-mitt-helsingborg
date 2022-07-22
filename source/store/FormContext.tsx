@@ -30,14 +30,14 @@ const FormContext = React.createContext<FormContextValue>({});
 
 export function FormProvider({ children }: FormProviderProps): JSX.Element {
   const [forms, setForms] = useState<FormMap>({});
-  const [formSummaries, setFormSummaries] = useState([]);
+  const [formSummaries, setFormSummaries] = useState<Form[]>([]);
 
   const getFormSummaries = useCallback(async (): Promise<Form[]> => {
     if (formSummaries.length > 0) {
       return formSummaries;
     }
     try {
-      const response = await get("/forms");
+      const response = await get<{ forms: Form[] }>("/forms");
       if (response.data.data.forms) {
         setFormSummaries(response.data.data.forms);
         return response.data.data.forms;
@@ -55,7 +55,7 @@ export function FormProvider({ children }: FormProviderProps): JSX.Element {
       }
 
       try {
-        const res = await get(`/forms/${id}`);
+        const res = await get<Form>(`/forms/${id}`);
         if (res && res.data) {
           const newForm = res.data.data;
           setForms((oldForms) => ({ ...oldForms, [newForm.id]: newForm }));

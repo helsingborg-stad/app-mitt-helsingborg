@@ -18,6 +18,8 @@ import { to } from "../../helpers/Misc";
 import { PasswordStrategy } from "../../services/encryption/PasswordStrategy";
 import { filterAsync } from "../../helpers/Objects";
 
+import type { CasesResponse, UpdateCaseResponse } from "./CaseActions.types";
+
 const { NOT_STARTED } = ApplicationStatusType;
 
 export async function updateCase(
@@ -60,23 +62,23 @@ export async function updateCase(
   }
 
   try {
-    const res = await put(
+    const res = await put<UpdateCaseResponse>(
       `/cases/${caseId}`,
       JSON.stringify(updateCaseRequestBody)
     );
-    const { id, attributes } = res.data.data;
-    const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
+    const updatedCaseResponse = res.data.data.attributes;
+
     if (callback) {
-      await callback(flatUpdatedCase);
+      await callback(updatedCaseResponse);
     }
 
-    flatUpdatedCase.forms[formId] = await encryptionService.decryptForm(
-      flatUpdatedCase.forms[formId]
+    updatedCaseResponse.forms[formId] = await encryptionService.decryptForm(
+      updatedCaseResponse.forms[formId]
     );
 
     return {
       type: ActionTypes.UPDATE_CASE,
-      payload: flatUpdatedCase,
+      payload: updatedCaseResponse,
     };
   } catch (error) {
     console.log(`Update current case error: ${error}`);
@@ -111,18 +113,17 @@ export async function createCase(
   };
 
   try {
-    const response = await post("/cases", JSON.stringify(body));
-    const newCase = response.data.data;
-    const flattenedNewCase = {
-      id: newCase.id,
-      ...newCase.attributes,
-    };
+    const response = await post<UpdateCaseResponse>(
+      "/cases",
+      JSON.stringify(body)
+    );
 
-    callback(flattenedNewCase);
+    const newCase = response.data.data.attributes;
+    callback(newCase);
 
     return {
       type: ActionTypes.CREATE_CASE,
-      payload: flattenedNewCase,
+      payload: newCase,
     };
   } catch (error) {
     console.log("create case api error", error);
@@ -198,7 +199,7 @@ async function setupPinForCases(user: UserInterface, cases: Case[]) {
 
 export async function fetchCases(user: UserInterface): Promise<Action> {
   try {
-    const response = await get("/cases");
+    const response = await get<CasesResponse>("/cases");
     const rawCases: Case[] = response?.data?.data?.attributes?.cases;
 
     if (rawCases) {
