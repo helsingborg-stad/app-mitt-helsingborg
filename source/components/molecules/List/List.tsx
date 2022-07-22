@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import { FieldLabel, Text } from "../../atoms";
-import theme from "../../../styles/theme";
+import { theme } from "../../../styles";
 import HelpButton from "../HelpButton/HelpButton";
 
 const ListWrapper = styled.View`

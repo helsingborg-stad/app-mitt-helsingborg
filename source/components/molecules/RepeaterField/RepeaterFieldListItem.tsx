@@ -9,7 +9,7 @@ import Label from "../../atoms/Label";
 import Select from "../../atoms/Select";
 import type { InputRow } from "./RepeaterField";
 import CalendarPicker from "../CalendarPicker/CalendarPickerForm";
-import theme from "../../../styles/theme";
+import { theme } from "../../../styles";
 import type { PrimaryColor } from "../../../styles/themeHelpers";
 import { getValidColorSchema } from "../../../styles/themeHelpers";
 

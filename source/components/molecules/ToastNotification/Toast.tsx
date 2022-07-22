@@ -5,7 +5,7 @@ import styled from "styled-components/native";
 import type { Notification } from "../../../store/NotificationContext";
 import Text from "../../atoms/Text/Text";
 import Icon from "../../atoms/Icon/Icon";
-import theme from "../../../styles/theme";
+import { theme } from "../../../styles";
 
 const severityStyles = {
   neutral: {

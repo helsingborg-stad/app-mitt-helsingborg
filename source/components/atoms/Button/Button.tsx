@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components/native";
-import SHADOW from "../../../styles/shadow";
+import { shadow } from "../../../styles";
 import Text from "../Text";
 import Icon from "../Icon";
 
 import type { ThemeType } from "../../../styles/themeHelpers";
 
 /** Button styles */
-const Styles = { elevation: SHADOW };
+const Styles = { elevation: shadow };
 
 /* Styles common to all buttons */
 Styles.buttonbase = css`
@@ -162,7 +162,7 @@ const ButtonWrapper = styled.View`
 
 interface ButtonTouchableProps {
   block?: boolean;
-  elevation: keyof typeof SHADOW;
+  elevation: keyof typeof shadow;
   theme: ThemeType;
   fullWidth?: boolean;
 }
@@ -292,7 +292,7 @@ Button.propTypes = {
    * If true, the button will be disabled.
    */
   disabled: PropTypes.bool,
-  z: PropTypes.oneOf(Object.keys(SHADOW).map((number) => parseInt(number, 10))),
+  z: PropTypes.oneOf(Object.keys(shadow).map((number) => parseInt(number, 10))),
 
   /**
    * If true, the button will take maximum width within its container.

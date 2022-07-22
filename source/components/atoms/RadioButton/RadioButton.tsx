@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { TouchableHighlight, LayoutAnimation, View } from "react-native";
 import styled, { ThemeContext } from "styled-components";
 import { getValidColorSchema } from "../../../styles/theme";
-import SHADOW from "../../../styles/shadow";
+import { shadow } from "../../../styles";
 
 const TouchableArea = styled(TouchableHighlight)<{
   size: "small" | "medium" | "large";
@@ -31,7 +31,7 @@ const RadioButtonBorder = styled(View)<{
     theme.radiobutton[size].border.borderWidth}px;
   margin: 0;
   padding: 0;
-  ${(props) => SHADOW[props.z]}
+  ${(props) => shadow[props.z]}
 `;
 
 const RadioButtonFill = styled(View)<{

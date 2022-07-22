@@ -40,7 +40,7 @@ import {
   VersionLabelContainer,
   ApiStatusMessagePosition,
 } from "./LoginScreen.styled";
-import theme from "../../styles/theme";
+import { theme } from "../../styles";
 
 import type { Endpoint } from "../../services/EnvironmentConfigurationService";
 

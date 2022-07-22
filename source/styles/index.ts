@@ -1,4 +1,4 @@
-import SHADOW from "./shadow";
-import THEME from "./theme";
+import shadow from "./shadow";
+import theme from "./theme";
 
-export { SHADOW, THEME };
+export { shadow, theme };
