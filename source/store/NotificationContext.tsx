@@ -15,7 +15,7 @@ type ReducerAction =
   | { type: "REMOVE"; payload: { id: number } }
   | { type: "REMOVE_ALL" };
 
-export const notificationReducer = (
+const notificationReducer = (
   state: Notification[],
   action: ReducerAction
 ): Notification[] => {
@@ -52,18 +52,23 @@ interface NotificationContextType {
   clearAll: () => void;
 }
 const defaultVal = {
-  showNotification: (m: string, s: string, severity: Severity) => {},
-  removeNotification: (id: number) => {},
-  clearAll: () => {},
+  showNotification: () => undefined,
+  removeNotification: () => undefined,
+  clearAll: () => undefined,
 };
 
 const NotificationContext =
   React.createContext<NotificationContextType>(defaultVal);
 
 /** Custom hook that just gives access to the showNotification method, for ease of use.  */
-export const useNotification = () => {
+export const useNotification = (): ((
+  mainText: string,
+  secondaryText: string,
+  severity: Severity,
+  autoHideDuration?: number | undefined
+) => void) => {
   const { showNotification } = useContext(NotificationContext);
-  return useCallback(showNotification, []);
+  return useCallback(showNotification, [showNotification]);
 };
 
 export const NotificationProvider: React.FC<Props> = ({ children }: Props) => {
@@ -102,4 +107,3 @@ export const NotificationProvider: React.FC<Props> = ({ children }: Props) => {
     </NotificationContext.Provider>
   );
 };
-export default NotificationContext;
