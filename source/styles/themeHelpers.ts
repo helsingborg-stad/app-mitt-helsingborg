@@ -4,6 +4,8 @@ export type PrimaryColor = keyof typeof theme.colors.primary;
 export type ComplementaryColor = keyof typeof theme.colors.complementary;
 export type ThemeType = typeof theme;
 
+export type Variant = "primary" | "complementary" | "neutrals";
+
 function isPrimaryColor(color: string): color is PrimaryColor {
   return Object.keys(theme.colors.primary).includes(color);
 }

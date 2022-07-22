@@ -1,7 +1,9 @@
 // theming for styled components goes in this file.
 import { colorPalette, deprecatedPalette } from "./palette";
 
-const calculateSizeScale = (size, scale) => scale * size;
+import type { PrimaryColor, Variant } from "./themeHelpers";
+
+const calculateSizeScale = (size: number, scale: number) => scale * size;
 
 const setTypography = () => {
   const defaultSize = 12;
@@ -118,7 +120,7 @@ const theme = {
         color: baseTheme.colors.neutrals[0],
       },
       tagline: {
-        ...baseTheme.typography.p,
+        ...baseTheme.typography.text,
         color: baseTheme.colors.neutrals[4],
       },
     },
@@ -134,8 +136,6 @@ const theme = {
   // DEPRECATED THEME SETTINGS
   // TODO: Replace deprecated color palette with new color palette
   // TODO: Replace old theme structure with a more solid one.
-  title: deprecatedPalette.black,
-  anchor: deprecatedPalette.green.dark,
   login: {
     background: deprecatedPalette.bg.default,
   },
@@ -687,7 +687,10 @@ const theme = {
  * @param {string} colorSchema The schema to check
  * @param {string} variant The type of colors we want to check (complementary, primary, etc)
  */
-export const getValidColorSchema = (colorSchema, variant = "primary") =>
+export const getValidColorSchema = (
+  colorSchema: PrimaryColor,
+  variant: Variant = "primary"
+): PrimaryColor =>
   Object.keys(theme.colors[variant]).includes(colorSchema)
     ? colorSchema
     : "blue";
