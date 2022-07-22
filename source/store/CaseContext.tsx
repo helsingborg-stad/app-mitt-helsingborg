@@ -35,19 +35,6 @@ import { wrappedDefaultStorage } from "../services/StorageService";
 const CaseState = React.createContext<ContextState>(defaultInitialState);
 const CaseDispatch = React.createContext<Dispatch>({});
 
-/**
- * An array that defines the different types of cases there is in the application.
- * Note: Not sure if this is the right place to save these params, but will do for know.
- * */
-export const caseTypes = [
-  {
-    name: "Ekonomiskt Bistånd",
-    formTypes: ["EKB-recurring", "EKB-completion", "EKB-new"],
-    icon: "ICON_EKB",
-    navigateTo: "CaseSummary",
-  },
-];
-
 interface CaseProviderProps {
   initialState: ContextState;
   children?: React.ReactNode;
