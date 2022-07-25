@@ -13,14 +13,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### tag_version
-
-```sh
-[bundle exec] fastlane tag_version
-```
-
-Tag the current ref with the version based on branch name or env input
-
 ### print_changelog
 
 ```sh
@@ -28,6 +20,14 @@ Tag the current ref with the version based on branch name or env input
 ```
 
 Print the changelog
+
+### tag_version
+
+```sh
+[bundle exec] fastlane tag_version
+```
+
+Tag the current ref with the version based on branch name or env input
 
 ----
 
@@ -42,13 +42,13 @@ Print the changelog
 
 Build an ad-hoc ipa
 
-### ios beta
+### ios build
 
 ```sh
-[bundle exec] fastlane ios beta
+[bundle exec] fastlane ios build
 ```
 
-Push a new beta build to TestFlight
+Build and upload to Testflight
 
 ----
 
