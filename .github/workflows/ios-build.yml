@@ -95,8 +95,8 @@ jobs:
 
       - name: Install cert and profile
         env:
-          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64_v20220725 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD_v20220725 }}
         run: |
           # create variables
           CERT_PATH=build_certificate.p12
@@ -142,7 +142,7 @@ jobs:
         run: |
           export CERT_KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
           cd ios
-          fastlane beta --verbose
+          fastlane ios build --verbose
 
       - name: Save build log
         if: ${{ always() }}

@@ -13,7 +13,7 @@ end
 def build(adhoc: false)
   # fetch the latest certificates and provisioning profile
   # todo: use match to automatically sync certs and profiles
-  get_certificates(generate_apple_certs: false)
+  get_certificates(generate_apple_certs: true)
   get_provisioning_profile(adhoc: adhoc)
 
   # set version number and build number
