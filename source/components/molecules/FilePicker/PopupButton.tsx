@@ -2,7 +2,7 @@ import React from "react";
 
 import { Text, Icon } from "../../atoms";
 
-import type { PrimaryColor } from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../theme/themeHelpers";
 
 import StyledButton from "./PopupButton.styled";
 

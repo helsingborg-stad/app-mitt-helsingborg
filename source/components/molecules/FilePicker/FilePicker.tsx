@@ -2,7 +2,7 @@ import React from "react";
 import { Text, Icon, Button } from "../../atoms";
 import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import { Modal, useModal } from "../Modal";
-import { getValidColorSchema } from "../../../styles/themeHelpers";
+import { getValidColorSchema } from "../../../theme/themeHelpers";
 import FileDisplay from "../FileDisplay/FileDisplay";
 import { splitFilePath } from "../../../helpers/FileUpload";
 

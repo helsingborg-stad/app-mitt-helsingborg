@@ -1,6 +1,6 @@
 import type { TextInputProps } from "react-native";
 
-import type { PrimaryColor, ThemeType } from "../../../styles/themeHelpers";
+import type { PrimaryColor, ThemeType } from "../../../theme/themeHelpers";
 
 import type { InputFieldType } from "../../../types/FormTypes";
 

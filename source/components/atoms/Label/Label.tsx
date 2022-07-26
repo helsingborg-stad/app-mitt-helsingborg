@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import type { StyleProp, TextStyle } from "react-native";
 import HelpButton from "../../molecules/HelpButton";
 import Text from "../Text";
-import theme from "../../../styles/theme";
-import type { PrimaryColor } from "../../../styles/themeHelpers";
-import { getValidColorSchema } from "../../../styles/themeHelpers";
+import theme from "../../../theme/theme";
+import type { PrimaryColor } from "../../../theme/themeHelpers";
+import { getValidColorSchema } from "../../../theme/themeHelpers";
 
 const LabelText = styled(Text)<{
   size: "small" | "medium" | "large";

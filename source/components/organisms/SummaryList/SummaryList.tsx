@@ -10,9 +10,9 @@ import SummaryListItemComponent from "./SummaryListItem";
 
 import { isObject } from "../../../helpers/Objects";
 
-import { getValidColorSchema } from "../../../styles/themeHelpers";
+import { getValidColorSchema } from "../../../theme/themeHelpers";
 
-import type { PrimaryColor, ThemeType } from "../../../styles/themeHelpers";
+import type { PrimaryColor, ThemeType } from "../../../theme/themeHelpers";
 import type { InputType } from "../../atoms/Input/Input";
 import type { Help } from "../../../types/FormTypes";
 

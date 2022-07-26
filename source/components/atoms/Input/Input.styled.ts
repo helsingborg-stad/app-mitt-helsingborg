@@ -5,7 +5,7 @@ import Text from "../Text";
 
 import type { ErrorValidation } from "./Input.types";
 
-import type { PrimaryColor, ThemeType } from "../../../styles/themeHelpers";
+import type { PrimaryColor, ThemeType } from "../../../theme/themeHelpers";
 
 interface StyledInputprops {
   theme: ThemeType;

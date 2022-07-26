@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 import Heading from "../../components/atoms/Heading";
 import Text from "../../components/atoms/Text";
 
-import type { ThemeType } from "../../styles/themeHelpers";
+import type { ThemeType } from "../../theme/themeHelpers";
 
 interface DefaultStyledProps {
   theme: ThemeType;

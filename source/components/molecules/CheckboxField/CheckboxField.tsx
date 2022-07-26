@@ -5,9 +5,9 @@ import { TouchableHighlight } from "react-native";
 import HelpButton from "../HelpButton/HelpButton";
 import Text from "../../atoms/Text/Text";
 import Checkbox from "../../atoms/Checkbox/Checkbox";
-import theme from "../../../styles/theme";
-import type { PrimaryColor } from "../../../styles/themeHelpers";
-import { getValidColorSchema } from "../../../styles/themeHelpers";
+import theme from "../../../theme/theme";
+import type { PrimaryColor } from "../../../theme/themeHelpers";
+import { getValidColorSchema } from "../../../theme/themeHelpers";
 
 // TODO: MOVE TO THEME.
 const sizes = {

@@ -2,7 +2,7 @@ import type {
   PrimaryColor,
   ComplementaryColor,
   ThemeType,
-} from "../../../styles/themeHelpers";
+} from "../../../theme/themeHelpers";
 
 export interface DefaultStyledProps {
   theme: ThemeType;

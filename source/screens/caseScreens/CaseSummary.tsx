@@ -14,7 +14,7 @@ import icons from "../../helpers/Icons";
 import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
 import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
-import type { PrimaryColor } from "../../styles/themeHelpers";
+import type { PrimaryColor } from "../../theme/themeHelpers";
 import { Icon, Text } from "../../components/atoms";
 import {
   Card,

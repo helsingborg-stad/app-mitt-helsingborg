@@ -4,7 +4,7 @@ import { ThemeContext } from "styled-components/native";
 import type {
   ThemeType,
   ComplementaryColor,
-} from "../../../styles/themeHelpers";
+} from "../../../theme/themeHelpers";
 
 import {
   Background,

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import { Button, Text, Heading, Progressbar } from "../../atoms";
 import BulletList from "../../organisms/BulletList";
-import { colorPalette } from "../../../styles/palette";
+import { colorPalette } from "../../../theme/palette";
 
 const Container = styled.View`
   display: flex;

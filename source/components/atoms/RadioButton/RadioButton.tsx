@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { TouchableHighlight, LayoutAnimation, View } from "react-native";
 import styled, { ThemeContext } from "styled-components";
-import { getValidColorSchema } from "../../../styles/theme";
-import SHADOW from "../../../styles/shadow";
+import { getValidColorSchema } from "../../../theme/theme";
+import SHADOW from "../../../theme/shadow";
 
 const TouchableArea = styled(TouchableHighlight)<{
   size: "small" | "medium" | "large";

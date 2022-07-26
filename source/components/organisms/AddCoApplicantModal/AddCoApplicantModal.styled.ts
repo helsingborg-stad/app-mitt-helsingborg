@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-import type { ThemeType } from "../../../styles/themeHelpers";
+import type { ThemeType } from "../../../theme/themeHelpers";
 
 import { Text } from "../../atoms";
 

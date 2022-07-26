@@ -3,7 +3,7 @@ import React from "react";
 import { Icon, Text } from "../../atoms";
 
 import ApiStatusMessageContainer from "./ApiStatusMessage.styled";
-import theme from "../../../styles/theme";
+import theme from "../../../theme/theme";
 
 import type { Props } from "./ApiStatusMessage.types";
 

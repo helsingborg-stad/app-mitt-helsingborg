@@ -4,7 +4,7 @@ import styled, { ThemeContext } from "styled-components";
 import { View, TouchableHighlight } from "react-native";
 import RadioButton from "../../atoms/RadioButton/RadioButton";
 import Text from "../../atoms/Text/Text";
-import { getValidColorSchema } from "../../../styles/theme";
+import { getValidColorSchema } from "../../../theme/theme";
 
 const TouchableWrapper = styled(TouchableHighlight)`
   border-radius: 4px;

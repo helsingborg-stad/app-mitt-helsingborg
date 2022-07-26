@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { Checkbox } from "../../atoms";
-import type { ComplementaryColor } from "../../../styles/themeHelpers";
+import type { ComplementaryColor } from "../../../theme/themeHelpers";
 import { BoxTextWrapper, CheckboxFieldText } from "./CheckboxList.styled";
 
 interface CheckboxListProps {

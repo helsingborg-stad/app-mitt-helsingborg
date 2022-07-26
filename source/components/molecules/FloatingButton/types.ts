@@ -1,4 +1,4 @@
-import type { ThemeType } from "../../../styles/themeHelpers";
+import type { ThemeType } from "../../../theme/themeHelpers";
 
 interface CommonProps {
   colorSchema?: "red" | "neutral";

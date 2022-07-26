@@ -27,7 +27,7 @@ import FormUploader from "./FormUploader";
 import { AuthLoading } from "../../components/molecules";
 import type { Image } from "../../components/molecules/ImageDisplay/ImageDisplay";
 import CloseDialog from "../../components/molecules/CloseDialog";
-import type { PrimaryColor } from "../../styles/themeHelpers";
+import type { PrimaryColor } from "../../theme/themeHelpers";
 
 import type { DialogText } from "./types";
 import { UPDATE_CASE_STATE } from "./types";

@@ -16,7 +16,7 @@ import StepDescription from "./StepDescription/StepDescription";
 import StepFooter from "./StepFooter/StepFooter";
 
 import { ApplicationStatusType } from "../../../types/Case";
-import type { PrimaryColor } from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../theme/themeHelpers";
 
 const {
   NEW_APPLICATION,

@@ -7,7 +7,7 @@ import {
   TabRouter,
 } from "@react-navigation/native";
 import TabNavigatorItem from "./TabNavigatorItem";
-import type { ThemeType, PrimaryColor } from "../../../styles/themeHelpers";
+import type { ThemeType, PrimaryColor } from "../../../theme/themeHelpers";
 
 interface BarWrapperProps {
   theme: ThemeType;

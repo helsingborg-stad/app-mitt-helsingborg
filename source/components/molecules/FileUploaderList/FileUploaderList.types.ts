@@ -1,4 +1,4 @@
-import type { PrimaryColor } from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../theme/themeHelpers";
 import type { Answers } from "../../../types/AnswerTypes";
 import type { File } from "../FilePicker/FilePicker";
 

@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import type { Props as ButtonProps } from "../NavigationButtonField/NavigationButtonField";
 import NavigationButtonField from "../NavigationButtonField/NavigationButtonField";
-import type { PrimaryColor } from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../theme/themeHelpers";
 import { HorizontalScrollIndicator } from "../../atoms";
 
 const ScrollContainer = styled.ScrollView`

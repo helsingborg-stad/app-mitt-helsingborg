@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components/native";
-import SHADOW from "../../../styles/shadow";
+import SHADOW from "../../../theme/shadow";
 import Text from "../Text";
 import Icon from "../Icon";
 
-import type { ThemeType } from "../../../styles/themeHelpers";
+import type { ThemeType } from "../../../theme/themeHelpers";
 
 /** Button styles */
 const Styles = { elevation: SHADOW };

@@ -2,7 +2,7 @@ import React from "react";
 import { Card } from "..";
 import { Icon, Text } from "../../atoms";
 import { TitleText, AddressText, StyledButton, AddressWrapper } from "./styled";
-import { colorPalette } from "../../../styles/palette";
+import { colorPalette } from "../../../theme/palette";
 
 interface AddressCardProps {
   addressLines: string[];

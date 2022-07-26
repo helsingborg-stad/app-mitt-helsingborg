@@ -6,7 +6,7 @@ import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 
 import MarkdownConstructor from "../../../helpers/MarkdownConstructor";
 
-import { getValidColorSchema } from "../../../styles/themeHelpers";
+import { getValidColorSchema } from "../../../theme/themeHelpers";
 import {
   PopupContainer,
   Wrapper,

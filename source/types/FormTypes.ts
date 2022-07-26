@@ -1,4 +1,4 @@
-import type { PrimaryColor } from "../styles/themeHelpers";
+import type { PrimaryColor } from "../theme/themeHelpers";
 import type { ValidationObject } from "./Validation";
 
 export interface Help {

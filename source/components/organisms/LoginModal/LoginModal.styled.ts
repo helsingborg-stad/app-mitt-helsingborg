@@ -4,7 +4,7 @@ import { Modal as ModalBase, BackNavigation } from "../../molecules";
 
 import { Heading, Input, Text } from "../../atoms";
 
-import type { ThemeType } from "../../../styles/themeHelpers";
+import type { ThemeType } from "../../../theme/themeHelpers";
 
 const UnifiedPadding = [24, 48];
 

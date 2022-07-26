@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components/native";
 import FieldLabel from "./Label";
 import StoryWrapper from "../../molecules/StoryWrapper";
-import theme from "../../../styles/theme";
+import theme from "../../../theme/theme";
 
 const Background = styled.View`
   background-color: ${theme.background.darker};

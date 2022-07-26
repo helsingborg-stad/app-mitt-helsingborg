@@ -9,7 +9,7 @@ import { TabActions } from "@react-navigation/native";
 import { LayoutAnimation } from "react-native";
 import PropTypes from "prop-types";
 import Text from "../../atoms/Text";
-import type { PrimaryColor } from "../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../theme/themeHelpers";
 
 const FlexWrapper = styled.TouchableOpacity`
   flex: 1;

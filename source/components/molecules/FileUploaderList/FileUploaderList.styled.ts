@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import type { ThemeType, PrimaryColor } from "../../../styles/themeHelpers";
+import type { ThemeType, PrimaryColor } from "../../../theme/themeHelpers";
 
 export const Container = styled.View<{ theme: ThemeType }>`
   margin: ${(props) => props.theme.sizes[0]}px;

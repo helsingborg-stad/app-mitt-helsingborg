@@ -13,7 +13,7 @@ import { CaseProvider } from "./store/CaseContext";
 import { FormProvider } from "./store/FormContext";
 import { AppCompabilityProvider } from "./store/AppCompabilityContext";
 import { NotificationProvider } from "./store/NotificationContext";
-import theme from "./styles/theme";
+import theme from "./theme/theme";
 
 import getMonitoringService from "./services/monitoring/MonitoringService";
 

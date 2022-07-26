@@ -4,7 +4,7 @@ import { Image } from "react-native";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
 import icons from "../../../../helpers/Icons";
-import type { PrimaryColor } from "../../../../styles/themeHelpers";
+import type { PrimaryColor } from "../../../../theme/themeHelpers";
 
 const BannerWrapper = styled.View<{
   colorSchema: PrimaryColor;

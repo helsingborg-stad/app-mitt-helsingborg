@@ -4,7 +4,7 @@ import { ThemeProvider } from "styled-components/native";
 import { render } from "@testing-library/react-native";
 import "@testing-library/jest-native/extend-expect";
 
-import theme from "./source/styles/theme";
+import theme from "./source/theme/theme";
 
 const RenderWrapper = ({ children }) => (
   <ThemeProvider theme={theme}>{children}</ThemeProvider>

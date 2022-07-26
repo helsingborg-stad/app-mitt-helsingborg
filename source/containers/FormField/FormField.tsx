@@ -12,8 +12,8 @@ import {
   RepeaterField,
   RadioGroup,
 } from "../../components/molecules";
-import type { PrimaryColor } from "../../styles/themeHelpers";
-import { getValidColorSchema } from "../../styles/themeHelpers";
+import type { PrimaryColor } from "../../theme/themeHelpers";
+import { getValidColorSchema } from "../../theme/themeHelpers";
 import SummaryList from "../../components/organisms/SummaryList/SummaryList";
 import ImageUploader from "../../components/molecules/ImageUploader/ImageUploader";
 import FileUploaderList from "../../components/molecules/FileUploaderList/FileUploaderList";

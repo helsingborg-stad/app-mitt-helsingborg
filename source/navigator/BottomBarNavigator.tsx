@@ -7,7 +7,7 @@ import styled from "styled-components/native";
 import { Icon } from "../components/atoms";
 import TabNavigator from "../components/molecules/TabNavigator";
 import { AboutScreen, ProfileScreen } from "../screens";
-import theme from "../styles/theme";
+import theme from "../theme/theme";
 import CaseNavigator from "./CaseNavigator";
 
 const TabBarImage = styled.Image`

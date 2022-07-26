@@ -3,7 +3,7 @@ import type { ViewStyle } from "react-native";
 import { StyleSheet } from "react-native";
 import styled from "styled-components/native";
 import RNPickerSelect from "react-native-picker-select";
-import theme from "../../../styles/theme";
+import theme from "../../../theme/theme";
 import Text from "../Text";
 
 const pickerSelectStyles = StyleSheet.create({

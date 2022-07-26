@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { Animated, Easing, View } from "react-native";
 import styled from "styled-components/native";
 import { BackgroundBlurWrapper } from "../atoms/BackgroundBlur";
-import theme from "../../styles/theme";
+import theme from "../../theme/theme";
 import Button from "../atoms/Button/Button";
 import Icon from "../atoms/Icon";
 import Text from "../atoms/Text";

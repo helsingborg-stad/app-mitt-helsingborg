@@ -6,7 +6,7 @@ import type {
   PrimaryColor,
   ComplementaryColor,
   ThemeType,
-} from "../../../styles/themeHelpers";
+} from "../../../theme/themeHelpers";
 
 const Wrapper = styled.View`
   padding: 16px 0 16px 0;
