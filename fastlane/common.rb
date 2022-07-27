@@ -41,8 +41,20 @@ def get_semver_from_branch(head_ref, with_meta: false)
   nil
 end
 
+def latest_release_tag
+  `git describe --tags --abbrev=0 --match "*.*.*" HEAD~1`.chomp
+end
+
+def commit_changelog(from_tag)
+  changelog_from_git_commits(
+    pretty: '%h %as %s',
+    between: [from_tag, 'HEAD']
+  )
+end
+
 def changelog
-  "HEAD: #{git_head_identifier}"
+  commits = commit_changelog(latest_release_tag)
+  "HEAD: #{git_head_identifier}\n\n#{commits}"
 end
 
 def package_json_path
