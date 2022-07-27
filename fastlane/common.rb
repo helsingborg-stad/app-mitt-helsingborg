@@ -45,6 +45,20 @@ def changelog
   "HEAD: #{git_head_identifier}"
 end
 
+def package_json_path
+  path = '../../package.json'
+  return path if File.exist?(path)
+
+  throw 'unable to find package.json'
+end
+
+def update_package_version(version_string)
+  path = package_json_path
+  contents = IO.read(path)
+  new_contents = contents.gsub(/"version": ".*"/, "\"version\": \"#{version_string}\"")
+  IO.write(path, new_contents)
+end
+
 desc 'Print the changelog'
 lane :print_changelog do
   puts "changelog:\n#{changelog}"

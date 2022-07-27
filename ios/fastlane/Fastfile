@@ -191,6 +191,7 @@ def update_app_version_numbers
   # set version number
   current_version_string = xcode_project_version || get_project_xcode_version
   increment_version_number(version_number: version_string)
+  update_package_version(version_string)
 
   puts "build_number #{current_build_number} => #{build_number}"
   puts "version_number #{current_version_string} => #{version_string}"
