@@ -1,380 +1,241 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
+# frozen_string_literal: true
 
-# official semver regex from https://semver.org/, modified to optionally accept a branch name with forward slash before the semver
-$semver_regex = /^(?:.+?\/)?v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
-  
-default_platform(:ios)
+import '../../fastlane/common.rb'
 
-
-def get_changelog()
-  
-  Dir.chdir("..") do
-
-    branch_name = git_branch
-    commit = last_git_commit
-    
-    matched_env_msg = nil
-    ci_matched_env = ENV["CI_MATCHED_ENV"]
-    
-    if ci_matched_env != nil && !ci_matched_env.empty?
-      matched_env_msg = " using \"#{ci_matched_env}\" environment"
-    end
-
-    changelog_msg = "(automatically built from #{commit[:abbreviated_commit_hash]} on #{branch_name}#{matched_env_msg})"
-    
-
-    return changelog_msg
-
-  end
-
-end
-
-
-def extract_version_number_from_name(ref_name, with_meta=false)
-
-  if m = ref_name.match($semver_regex)
-    version_string = with_meta ? (ref_name.split('/')[1] || ref_name) : m.captures[0, 3].join(".")
-    puts "extracted semantic version number from branch/ref name \"#{ref_name}\" = #{m.captures.join(" ")}"
-    puts "formatted = #{version_string}"
-    return version_string
-  end
-
-  return nil
-
-end
-
-
-def get_semver_from_branch(with_meta=false)
-
-  branch = git_branch
-  puts "branch=\"#{branch}\""
-
-  version_string = extract_version_number_from_name(branch, with_meta)
-
-  if version_string != nil && !version_string.empty?
-    return version_string
-  else
-    head_ref = ENV["GIT_HEAD_REF"]
-    
-    if head_ref != nil && !head_ref.empty?
-      puts "head_ref=\"#{head_ref}\""
-      version_string = extract_version_number_from_name(head_ref, with_meta)
-
-      if version_string != nil && !version_string.empty?
-        return version_string
-      else
-        puts "unable to determine semantic version from either head ref \"#{head_ref}\" or branch name \"#{branch}\""
-      end
-    else
-      puts "unable to determine semantic version from branch name \"#{branch}\""
-    end
-  end
-
-  return nil
-
-end
-
-
-desc "Tag the current ref with the version based on branch name or env input"
-lane :tag_version do
-
-  tag_to_set = ENV["GIT_TAG_TO_SET"]
-
-  puts "GIT_TAG_TO_SET is #{tag_to_set}"
-
-  if tag_to_set == nil || tag_to_set.length == 0
-    tag_to_set = get_semver_from_branch(with_meta=true)
-  end
-
-  if tag_to_set == nil || tag_to_set.length == 0
-    UI.user_error! "unable to determine git tag to set"
-  end
-
-  puts "tagging current as \"#{tag_to_set}\""
-
-  if git_tag_exists(tag: tag_to_set)
-    UI.important "warning: tag already exists and will be overwritten! see output below:"
-    sh "git rev-list -n 1 \"tags/#{tag_to_set}\""
-  end
-
-  add_git_tag(
-    tag: tag_to_set, 
-    message: "(automatic release tag)",
-    force: true
+def get_project_xcode_version
+  get_version_number(
+    xcodeproj: ENV['MAIN_PROJECT'],
+    target: ENV['GYM_SCHEME']
   )
-  push_git_tags(force: true)
-
 end
 
+# Build the app with correct distribution signing
+def build(adhoc: false)
+  # fetch the latest certificates and provisioning profile
+  # todo: use match to automatically sync certs and profiles
+  get_certificates(generate_apple_certs: true)
+  get_provisioning_profile(adhoc: adhoc)
 
-desc "Print the changelog"
-lane :print_changelog do
+  # set version number and build number
+  update_app_version_numbers
 
-  puts "changelog:\n#{get_changelog()}"
+  # set xcode project to use the correct certificate and profile
+  update_code_signing_settings(
+    use_automatic_signing: false,
+    code_sign_identity: 'iPhone Distribution',
+    profile_name: lane_context[SharedValues::SIGH_NAME]
+  )
 
-end
+  # install pods
+  cocoapods
 
+  # check for pod cache (derived data)
+  scheme = ENV['GYM_SCHEME']
+  build_configuration = 'Release'
 
-platform :ios do
+  Dir.chdir('..') do
+    ios_derived_data_path = File.expand_path('.local_derived_data')
+    cache_dir = File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/BuildProductsPath/#{build_configuration}-iphoneos")
 
-  def get_project_xcode_version()
-    return get_version_number(
-      xcodeproj: ENV["MAIN_PROJECT"],
-      target: ENV["GYM_SCHEME"]
-    )
-  end
+    puts "derived data dir = #{ios_derived_data_path}"
+    puts "cache dir = #{cache_dir}"
 
-  # Build the app with correct distribution signing
-  def build(adhoc: false)
-    
-    # fetch the latest certificates and provisioning profile
-    # todo: use match to automatically sync certs and profiles
-    get_certificates(generate_apple_certs: false)
-    get_provisioning_profile(adhoc: adhoc)
+    if File.exist?(cache_dir)
 
-    # set version number and build number
-    update_app_version_numbers
+      # build with pod cache
+      puts 'using cached derived data'
 
-    # set xcode project to use the correct certificate and profile
-    update_code_signing_settings(
-      use_automatic_signing: false,
-      code_sign_identity: "iPhone Distribution",
-      profile_name: lane_context[SharedValues::SIGH_NAME]
-    )
-    
-    # install pods
-    cocoapods
-
-    # check for pod cache (derived data)
-    scheme = ENV["GYM_SCHEME"]
-    build_configuration = "Release"
-
-    Dir.chdir("..") do
-      
-      ios_derived_data_path = File.expand_path(".local_derived_data")
-      cache_dir = File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/BuildProductsPath/#{build_configuration}-iphoneos")
-
-      puts "derived data dir = #{ios_derived_data_path}"
-      puts "cache dir = #{cache_dir}"
-
-      if(File.exist?(cache_dir))
-
-        # build with pod cache
-        puts "using cached derived data"
-
-        fastlane_require 'xcodeproj'
-        project = Xcodeproj::Project.open(ENV["MAIN_PROJECT"])
-        target = project.targets.select { |target| target.name == scheme }.first
-        phase = target.shell_script_build_phases.select { |phase| phase.name && phase.name.include?('Copy Pods Resources') }.first
-        if (!phase.shell_script.start_with?('BUILT_PRODUCTS_DIR'))
-          phase.shell_script = "BUILT_PRODUCTS_DIR=#{cache_dir} #{phase.shell_script}"
-          project.save()
-        end
-
-        gym(
-          silent: false,
-          export_method: adhoc ? "ad-hoc" : "app-store",
-          suppress_xcode_output: true,
-          include_symbols: true,
-          include_bitcode: true,
-          project: "ios/#{ENV["MAIN_PROJECT"]}",
-          scheme: scheme,
-          buildlog_path: "ios/.build_logs",
-          configuration: build_configuration,
-          output_directory: "ios",
-          xcargs: [
-              "PODS_CONFIGURATION_BUILD_DIR=#{cache_dir}",
-              "FRAMEWORK_SEARCH_PATHS='#{cache_dir} $(inherited)'",
-              "LIBRARY_SEARCH_PATHS='#{cache_dir} $(inherited)'",
-              "SWIFT_INCLUDE_PATHS=#{cache_dir}"
-          ].join(" ")
-        )
-
-      else
-        
-        # full build
-        puts "performing full build (no derived data cache)"
-
-        build_app(
-          silent: false,
-          export_method: adhoc ? "ad-hoc" : "app-store",
-          suppress_xcode_output: true,
-          include_symbols: true,
-          include_bitcode: true,
-          buildlog_path: "ios/.build_logs",
-          workspace: "ios/#{ENV["MAIN_WORKSPACE"]}",
-          derived_data_path: ios_derived_data_path,
-          configuration: build_configuration,
-          output_directory: "ios",
-        )
-
-        # remove misc artifacts to reduce cache size
-        require 'fileutils'
-        dirs = [
-          File.expand_path("#{ios_derived_data_path}/info.plist"),
-          File.expand_path("#{ios_derived_data_path}/Logs"),
-          File.expand_path("#{ios_derived_data_path}/SourcePackages"),
-          File.expand_path("#{ios_derived_data_path}/ModuleCache.noindex"),
-          File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/IntermediateBuildFilesPath/#{scheme}.build"),
-          File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/IntermediateBuildFilesPath/XCBuildData"),
-          File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/BuildProductsPath/SwiftSupport"),
-          File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/PrecompiledHeaders")
-        ]
-        dirs.each { |dir| FileUtils.rm_rf(dir) }
+      fastlane_require 'xcodeproj'
+      project = Xcodeproj::Project.open(ENV['MAIN_PROJECT'])
+      target = project.targets.select { |target| target.name == scheme }.first
+      phase = target.shell_script_build_phases.select do |phase|
+        phase.name && phase.name.include?('Copy Pods Resources')
+      end.first
+      unless phase.shell_script.start_with?('BUILT_PRODUCTS_DIR')
+        phase.shell_script = "BUILT_PRODUCTS_DIR=#{cache_dir} #{phase.shell_script}"
+        project.save
       end
-    end
-  end
 
-  def parse_latest_testflight_build_number(version_string)
-    latest_build_number = latest_testflight_build_number(version: version_string, initial_build_number: 0)
-    begin
-      return Integer(latest_build_number)
-    rescue
-      UI.important "unable to parse latest testflight build number (#{latest_build_number}) - defaulting to 0"
-      return 0
-    end
-  end
-
-  # Update app version number and build number based on branch name following semantic versioning (falls back to highest of latest testflight vs xcode project version)
-  def update_app_version_numbers()
-    
-    version_string = ENV["FORCED_VERSION_NUMBER_STRING"]
-    xcode_project_version = nil
-    
-    if version_string != nil && version_string.length > 0
-
-      puts "using forced version \"#{version_string}\""
+      gym(
+        silent: false,
+        export_method: adhoc ? 'ad-hoc' : 'app-store',
+        suppress_xcode_output: true,
+        include_symbols: true,
+        include_bitcode: true,
+        project: "ios/#{ENV['MAIN_PROJECT']}",
+        scheme: scheme,
+        buildlog_path: 'ios/.build_logs',
+        configuration: build_configuration,
+        output_directory: 'ios',
+        xcargs: [
+          "PODS_CONFIGURATION_BUILD_DIR=#{cache_dir}",
+          "FRAMEWORK_SEARCH_PATHS='#{cache_dir} $(inherited)'",
+          "LIBRARY_SEARCH_PATHS='#{cache_dir} $(inherited)'",
+          "SWIFT_INCLUDE_PATHS=#{cache_dir}"
+        ].join(' ')
+      )
 
     else
 
-      version_string = get_semver_from_branch
+      # full build
+      puts 'performing full build (no derived data cache)'
 
-      if version_string == nil
+      build_app(
+        silent: false,
+        export_method: adhoc ? 'ad-hoc' : 'app-store',
+        suppress_xcode_output: true,
+        include_symbols: true,
+        include_bitcode: true,
+        buildlog_path: 'ios/.build_logs',
+        workspace: "ios/#{ENV['MAIN_WORKSPACE']}",
+        derived_data_path: ios_derived_data_path,
+        configuration: build_configuration,
+        output_directory: 'ios'
+      )
 
-        app_store_build_number(live: false)
-        latest_app_store_version = lane_context[SharedValues::LATEST_VERSION]
-        xcode_project_version = get_project_xcode_version
+      # remove misc artifacts to reduce cache size
+      require 'fileutils'
+      dirs = [
+        File.expand_path("#{ios_derived_data_path}/info.plist"),
+        File.expand_path("#{ios_derived_data_path}/Logs"),
+        File.expand_path("#{ios_derived_data_path}/SourcePackages"),
+        File.expand_path("#{ios_derived_data_path}/ModuleCache.noindex"),
+        File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/IntermediateBuildFilesPath/#{scheme}.build"),
+        File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/IntermediateBuildFilesPath/XCBuildData"),
+        File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/BuildProductsPath/SwiftSupport"),
+        File.expand_path("#{ios_derived_data_path}/Build/Intermediates.noindex/ArchiveIntermediates/#{scheme}/PrecompiledHeaders")
+      ]
+      dirs.each { |dir| FileUtils.rm_rf(dir) }
+    end
+  end
+end
 
-        # use largest version (note ascii comparison - not sure if accurate enough)
-        version_string = latest_app_store_version > xcode_project_version ? latest_app_store_version : xcode_project_version
-        puts "using version #{version_string} (latest app store = #{latest_app_store_version}, project version = #{xcode_project_version})"
+def parse_latest_testflight_build_number(version_string)
+  latest_build_number = latest_testflight_build_number(version: version_string, initial_build_number: 0)
+  begin
+    Integer(latest_build_number)
+  rescue StandardError
+    UI.important "unable to parse latest testflight build number (#{latest_build_number}) - defaulting to 0"
+    0
+  end
+end
 
-      end
+# Update app version number and build number based on branch name following semantic versioning (falls back to highest of latest testflight vs xcode project version)
+def update_app_version_numbers
+  version_string = ENV['FORCED_VERSION_NUMBER_STRING']
+  xcode_project_version = nil
+
+  if !version_string.nil? && version_string.length > 0
+
+    puts "using forced version \"#{version_string}\""
+
+  else
+
+    version_string = get_semver_from_branch(ENV['GIT_HEAD_REF'])
+
+    if version_string.nil?
+
+      app_store_build_number(live: false)
+      latest_app_store_version = lane_context[SharedValues::LATEST_VERSION]
+      xcode_project_version = get_project_xcode_version
+
+      # use largest version (note ascii comparison - not sure if accurate enough)
+      version_string = latest_app_store_version > xcode_project_version ? latest_app_store_version : xcode_project_version
+      puts "using version #{version_string} (latest app store = #{latest_app_store_version}, project version = #{xcode_project_version})"
 
     end
 
-    # increment build number
-    forced_build_number = ENV["FORCED_BUILD_NUMBER"]
-    unless forced_build_number == nil || forced_build_number.empty?
-      puts "using forced build number \"#{forced_build_number}\""
-      build_number = forced_build_number
-      increment_build_number(build_number: build_number)
-    else
-      current_build_number = parse_latest_testflight_build_number(version_string)
+  end
 
-      if current_build_number == 0
-        if m = version_string.match($semver_regex)
-          # if no existing number was found we need to check variations of the same version
-          # since Apple handles 1, 1.0, and 1.0.0 independently, but they share build number
-          puts "build number is 0 - checking version variations in case there's a match"
+  # increment build number
+  forced_build_number = ENV['FORCED_BUILD_NUMBER']
+  if forced_build_number.nil? || forced_build_number.empty?
+    current_build_number = parse_latest_testflight_build_number(version_string)
 
-          major = m.captures[0]
-          minor = m.captures[1]
-          patch = m.captures[2]
+    if current_build_number == 0
+      if m = version_string.match($semver_regex)
+        # if no existing number was found we need to check variations of the same version
+        # since Apple handles 1, 1.0, and 1.0.0 independently, but they share build number
+        puts "build number is 0 - checking version variations in case there's a match"
 
-          puts "major=#{major} minor=#{minor} patch=#{patch}"
-          if patch == "0"
-            variation = "#{major}.#{minor}"
+        major = m.captures[0]
+        minor = m.captures[1]
+        patch = m.captures[2]
+
+        puts "major=#{major} minor=#{minor} patch=#{patch}"
+        if patch == '0'
+          variation = "#{major}.#{minor}"
+          current_build_number = latest_testflight_build_number(version: variation, initial_build_number: 0)
+          puts "variation \"#{variation}\" = #{current_build_number}"
+
+          if current_build_number == 0 && minor == '0'
+            variation = major
             current_build_number = latest_testflight_build_number(version: variation, initial_build_number: 0)
             puts "variation \"#{variation}\" = #{current_build_number}"
-            
-            if current_build_number == 0 && minor == "0"
-              variation = major
-              current_build_number = latest_testflight_build_number(version: variation, initial_build_number: 0)
-              puts "variation \"#{variation}\" = #{current_build_number}"
-            end
           end
-        else
-          UI.important "build number is 0 and version is not semantically correct - unable to check version variations (build number may be incorrect)"
         end
-        
+      else
+        UI.important 'build number is 0 and version is not semantically correct - unable to check version variations (build number may be incorrect)'
       end
 
-      build_number = current_build_number + 1
-      increment_build_number(build_number: build_number)
     end
 
-    # set version number
-    current_version_string = xcode_project_version || get_project_xcode_version
-    increment_version_number(version_number: version_string)
-
-
-    puts "build_number #{current_build_number} => #{build_number}"
-    puts "version_number #{current_version_string} => #{version_string}"
+    build_number = current_build_number + 1
+    increment_build_number(build_number: build_number)
+  else
+    puts "using forced build number \"#{forced_build_number}\""
+    build_number = forced_build_number
+    increment_build_number(build_number: build_number)
   end
 
-  before_all do |lane, options|
-    xcversion(version: "~> 13.2")
+  # set version number
+  current_version_string = xcode_project_version || get_project_xcode_version
+  increment_version_number(version_number: version_string)
+
+  puts "build_number #{current_build_number} => #{build_number}"
+  puts "version_number #{current_version_string} => #{version_string}"
+end
+
+platform :ios do
+  before_all do |_lane, _options|
+    xcversion(version: '~> 13.4')
 
     app_store_connect_api_key(
-      key_content: ENV["CONNECT_API_KEY_CONTENT"],
+      key_content: ENV['CONNECT_API_KEY_CONTENT'],
       in_house: false
     )
   end
 
-
-  desc "Build an ad-hoc ipa"
+  desc 'Build an ad-hoc ipa'
   lane :build_adhoc do
     build(adhoc: true)
   end
 
-
-  desc "Push a new beta build to TestFlight"
-  lane :beta do
-
-    # run the build lane
+  desc 'Build and upload to Testflight'
+  lane :build do
     build(adhoc: false)
 
-    changelog = get_changelog()
-      
-    puts "changelog=#{changelog}"
+    changelog_to_use = changelog
+    puts "changelog=#{changelog_to_use}"
 
     # upload
-    if ENV["PERFORM_LONG_UPLOAD"] == "true"
-
-      puts "performing long upload (will wait for processing and notify testers)"
+    if ENV['PERFORM_LONG_UPLOAD'] == 'true'
+      puts 'performing long upload (will wait for processing and notify testers)'
       upload_to_testflight(
         skip_submission: false,
         notify_external_testers: true,
-        changelog: changelog,
+        changelog: changelog_to_use,
         skip_waiting_for_build_processing: false,
-        groups: "CD Builds"
+        groups: 'CD Builds'
       )
-
     else
-
-      puts "performing short upload (will only wait for changelog processing and will not notify testers)"
+      puts 'performing short upload (will only wait for changelog processing and will not notify testers)'
       upload_to_testflight(
         skip_submission: true,
         notify_external_testers: false,
-        changelog: changelog,
-      
-        # note: skipping this sacrifices some flexibility in post-processing but reduces CI minutes and costs significantly
+        changelog: changelog_to_use,
         skip_waiting_for_build_processing: true
       )
-
     end
-
   end
-
 end
