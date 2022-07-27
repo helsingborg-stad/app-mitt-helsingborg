@@ -2,7 +2,7 @@ import React from "react";
 import type { ImageSourcePropType } from "react-native";
 import styled from "styled-components/native";
 import { Icon, Text } from "../../atoms";
-import { Card, DateTimeCard } from "..";
+import { Card } from "..";
 
 Card.LargeText = styled(Card.Text)`
   font-size: ${(props) => props.theme.fontSizes[4]}px;
@@ -48,10 +48,6 @@ interface CaseCardProps {
   approvedAmount?: string | number;
   declinedAmount?: string | number;
   givedate?: string;
-  showBookingDate?: boolean;
-  bookingDate?: string;
-  bookingTime?: string;
-  dateTimeCardSize?: "large" | "small";
   buttonColorScheme?: string;
   completions?: string[];
   completionsClarification?: string;
@@ -79,10 +75,6 @@ function CaseCard({
   approvedAmount,
   declinedAmount,
   givedate,
-  showBookingDate = false,
-  bookingDate,
-  bookingTime,
-  dateTimeCardSize = "large",
   buttonColorScheme = "red",
   completions = [],
   completionsClarification = "",
@@ -99,14 +91,6 @@ function CaseCard({
         {subtitle && <Card.SubTitle>{subtitle}</Card.SubTitle>}
         {description && <Card.Text>{description}</Card.Text>}
         {pin && <Card.PinText>{pin}</Card.PinText>}
-
-        {showBookingDate && (
-          <DateTimeCard
-            date={bookingDate}
-            time={bookingTime}
-            size={dateTimeCardSize}
-          />
-        )}
 
         {showProgress && (
           <Card.Progressbar

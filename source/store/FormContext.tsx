@@ -3,17 +3,9 @@ import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import type { Form } from "../types/FormTypes";
 import { get } from "../helpers/ApiRequest";
-import FormTypes from "../assets/formTypes";
-
-interface FindFormError {
-  error: boolean;
-  message: string;
-  status: number;
-}
 
 interface FormContextValue {
   forms: Record<string, Form>;
-  findFormsByType?: (formType: string) => Promise<Form[] | FindFormError>;
   getForm: (id: string) => Promise<Form | null>;
   getFormSummaries: () => Promise<Form[]>;
 }
@@ -27,8 +19,6 @@ interface FormMap {
 }
 
 const FormContext = React.createContext<FormContextValue>({});
-
-export const FormConsumer = FormContext.Consumer;
 
 export function FormProvider({ children }: FormProviderProps): JSX.Element {
   const [forms, setForms] = useState<FormMap>({});
@@ -73,29 +63,9 @@ export function FormProvider({ children }: FormProviderProps): JSX.Element {
     [forms]
   );
 
-  const findFormsByType = async (
-    formType: string
-  ): Promise<Form[] | FindFormError> => {
-    const summaries = await getFormSummaries();
-    if (!FormTypes.includes(formType)) {
-      return {
-        error: true,
-        message: `This form type is not currently supported. We support the following form types: ${FormTypes}.`,
-        status: 404,
-      } as FindFormError;
-    }
-    summaries.sort((f1, f2) => f2.updatedAt - f1.updatedAt);
-    const formsWithSameType = summaries.filter(
-      (f) => !f.subform && f.formType === formType
-    );
-
-    return formsWithSameType;
-  };
-
   return (
     <FormContext.Provider
       value={{
-        findFormsByType,
         getForm,
         getFormSummaries,
         forms,

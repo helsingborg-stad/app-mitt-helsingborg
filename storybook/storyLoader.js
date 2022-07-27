@@ -16,14 +16,12 @@ function loadStories() {
   require("../source/components/atoms/Select/Select.stories");
   require("../source/components/atoms/Text/Text.stories");
   require("../source/components/atoms/TextButton/TextButton.stories");
-  require("../source/components/molecules/AddressCard/AddressCard.stories");
   require("../source/components/molecules/ApiStatusMessage/ApiStatusMessage.stories");
   require("../source/components/molecules/BackNavigation/BackNavigation.stories");
   require("../source/components/molecules/CalendarPicker/CalendarPickerForm.stories");
   require("../source/components/molecules/Card/Card.stories");
   require("../source/components/molecules/CaseCard/CaseCard.stories");
   require("../source/components/molecules/CheckboxField/CheckboxField.stories");
-  require("../source/components/molecules/DateTimeCard/DateTimeCard.stories");
   require("../source/components/molecules/EditableList/EditableList.stories");
   require("../source/components/molecules/FilePicker/FilePicker.stories");
   require("../source/components/molecules/FileUploaderList/FileUploaderList.stories");
@@ -71,14 +69,12 @@ const stories = [
   "../source/components/atoms/Select/Select.stories",
   "../source/components/atoms/Text/Text.stories",
   "../source/components/atoms/TextButton/TextButton.stories",
-  "../source/components/molecules/AddressCard/AddressCard.stories",
   "../source/components/molecules/ApiStatusMessage/ApiStatusMessage.stories",
   "../source/components/molecules/BackNavigation/BackNavigation.stories",
   "../source/components/molecules/CalendarPicker/CalendarPickerForm.stories",
   "../source/components/molecules/Card/Card.stories",
   "../source/components/molecules/CaseCard/CaseCard.stories",
   "../source/components/molecules/CheckboxField/CheckboxField.stories",
-  "../source/components/molecules/DateTimeCard/DateTimeCard.stories",
   "../source/components/molecules/EditableList/EditableList.stories",
   "../source/components/molecules/FilePicker/FilePicker.stories",
   "../source/components/molecules/FileUploaderList/FileUploaderList.stories",
