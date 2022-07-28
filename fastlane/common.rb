@@ -53,8 +53,7 @@ def commit_changelog(from_tag)
 end
 
 def changelog
-  commits = commit_changelog(latest_release_tag)
-  "HEAD: #{git_head_identifier}\n\n#{commits}"
+  "HEAD: #{git_head_identifier}\n\n#{commit_changelog(latest_release_tag)}"
 end
 
 def package_json_path
