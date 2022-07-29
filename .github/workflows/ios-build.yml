@@ -34,8 +34,10 @@ jobs:
 
     steps:
       # checkout the repo
-      - name: Checkout
-        uses: actions/checkout@v2
+      # fetch-depth: 0 is required to fetch all tags to generate changelog
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       ######################
       # Set .env file vars (development/production)

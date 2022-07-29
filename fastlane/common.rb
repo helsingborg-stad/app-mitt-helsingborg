@@ -3,8 +3,8 @@
 def git_head_identifier
   branch_name = git_branch
   commit = last_git_commit
-  ci_matched_env = ENV['CI_MATCHED_ENV'] || '(unknown env)'
-  "#{ci_matched_env} #{branch_name} #{commit[:abbreviated_commit_hash]}"
+  ci_matched_env = ENV['CI_MATCHED_ENV'] || '(unknown)'
+  "env:#{ci_matched_env} branch:#{branch_name} commit:#{commit[:abbreviated_commit_hash]}"
 end
 
 def semver_regex
@@ -41,8 +41,20 @@ def get_semver_from_branch(head_ref, with_meta: false)
   nil
 end
 
+def latest_release_tag
+  `git describe --tags --abbrev=0 --match "*.*.*" HEAD~1`.chomp
+end
+
+def commit_changelog(from_tag)
+  changelog_from_git_commits(
+    pretty: '%h %as %s',
+    between: [from_tag, 'HEAD']
+  )
+end
+
 def changelog
-  "HEAD: #{git_head_identifier}"
+  tag = latest_release_tag
+  "HEAD: #{git_head_identifier}\n\nChanges since #{tag}:\n#{commit_changelog(tag)}"
 end
 
 def package_json_path
