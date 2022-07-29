@@ -1,4 +1,4 @@
-# Workflow for tagging a branch with semver
+# Workflow for printing the changelog (debugging)
 
 name: (debug) Print changelog
 
