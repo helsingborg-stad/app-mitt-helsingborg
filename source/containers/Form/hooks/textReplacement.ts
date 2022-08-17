@@ -27,7 +27,7 @@ const caseItemReplacementRules: CaseItemReplacementRuleType[] = [
   },
   {
     key: "#COMPLETION_DUEDATE",
-    from: "details.completions.dueDate",
+    from: "details.workflow.application.completionduedate",
     to: ["status.description", "status.detailedDescription"],
   },
   {
