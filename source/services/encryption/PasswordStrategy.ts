@@ -104,7 +104,7 @@ export const PasswordStrategy: IPasswordStrategy = {
     dependencies: EncryptionStrategyDependencies
   ): Promise<PasswordParams | null> {
     const paramsId = this.getParamsID(context);
-    const params = await dependencies.storage.getData(paramsId);
+    const params = await dependencies.getData(paramsId);
 
     if (!params) {
       return null;
@@ -122,7 +122,7 @@ export const PasswordStrategy: IPasswordStrategy = {
     const params: PasswordParams = {
       password: pin,
     };
-    await dependencies.storage.saveData(paramsId, JSON.stringify(params));
+    await dependencies.saveData(paramsId, JSON.stringify(params));
     return pin;
   },
 
@@ -160,6 +160,6 @@ export const PasswordStrategy: IPasswordStrategy = {
     const params: PasswordParams = {
       password,
     };
-    await dependencies.storage.saveData(paramsId, JSON.stringify(params));
+    await dependencies.saveData(paramsId, JSON.stringify(params));
   },
 };

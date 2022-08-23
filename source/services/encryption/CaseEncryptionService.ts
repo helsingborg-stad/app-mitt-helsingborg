@@ -2,7 +2,10 @@
 import type { AnsweredForm, Case } from "../../types/Case";
 import type { EncryptionDetails } from "../../types/Encryption";
 import { EncryptionErrorStatus, EncryptionType } from "../../types/Encryption";
-import type { EncryptionContext } from "./EncryptionStrategy";
+import type {
+  EncryptionContext,
+  EncryptionStrategyDependencies,
+} from "./EncryptionStrategy";
 import { EncryptionPossibility } from "./EncryptionStrategy";
 import type { UserInterface } from "./CaseEncryptionHelper";
 import {
@@ -19,14 +22,9 @@ import {
   makeFormWithDecryptedData,
 } from "./CaseEncryptionHelper";
 
-export interface IStorage {
-  getData(key: string): Promise<string | null>;
-  saveData(key: string, payload: string): Promise<void>;
-}
-
 interface ICaseEncryptionServiceStatic {
   new (
-    storage: IStorage,
+    dependencies: EncryptionStrategyDependencies,
     getUserFunc: () => Promise<UserInterface>
   ): ICaseEncryptionService;
 }
@@ -43,11 +41,14 @@ export const CaseEncryptionService: ICaseEncryptionServiceStatic = class CaseEnc
 {
   getUserFunc: () => Promise<UserInterface>;
 
-  #storage: IStorage;
+  dependencies: EncryptionStrategyDependencies;
 
-  constructor(storage: IStorage, getUserFunc: () => Promise<UserInterface>) {
+  constructor(
+    dependencies: EncryptionStrategyDependencies,
+    getUserFunc: () => Promise<UserInterface>
+  ) {
     this.getUserFunc = getUserFunc;
-    this.#storage = storage;
+    this.dependencies = dependencies;
   }
 
   async buildEncryptionContextByDetails(
@@ -92,9 +93,7 @@ export const CaseEncryptionService: ICaseEncryptionServiceStatic = class CaseEnc
 
     const encryptionPossibility = await strategy.getPossibilityToEncrypt(
       encryptionContext,
-      {
-        storage: this.#storage,
-      }
+      this.dependencies
     );
 
     if (encryptionPossibility === EncryptionPossibility.REQUIRES_PARAMS) {
@@ -111,9 +110,10 @@ export const CaseEncryptionService: ICaseEncryptionServiceStatic = class CaseEnc
       );
     }
 
-    const encryptParams = await strategy.getParams(encryptionContext, {
-      storage: this.#storage,
-    });
+    const encryptParams = await strategy.getParams(
+      encryptionContext,
+      this.dependencies
+    );
 
     const encryptedData = await strategy.encrypt(encryptParams, dataToEncrypt);
 
@@ -142,14 +142,14 @@ export const CaseEncryptionService: ICaseEncryptionServiceStatic = class CaseEnc
       );
     }
 
-    if (!this.#storage) {
+    if (!this.dependencies) {
       throw new EncryptionException(
         EncryptionErrorStatus.INVALID_STORAGE,
         "storage service is not valid"
       );
     }
 
-    const decryptParamsPayload = await this.#storage.getData(storageKey);
+    const decryptParamsPayload = await this.dependencies.getData(storageKey);
 
     if (!decryptParamsPayload) {
       throw new EncryptionException(

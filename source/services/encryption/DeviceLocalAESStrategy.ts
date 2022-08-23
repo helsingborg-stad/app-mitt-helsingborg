@@ -59,14 +59,11 @@ export const DeviceLocalAESStrategy: IEncryptionStrategy<DeviceLocalAESParams> =
       dependencies: EncryptionStrategyDependencies
     ): Promise<DeviceLocalAESParams | null> {
       const paramsId = this.getParamsID(context);
-      const params = await dependencies.storage.getData(paramsId);
+      const params = await dependencies.getData(paramsId);
 
       if (!params) {
         const newParams = await createAesParams();
-        await dependencies.storage.saveData(
-          paramsId,
-          JSON.stringify(newParams)
-        );
+        await dependencies.saveData(paramsId, JSON.stringify(newParams));
         return newParams;
       }
       return JSON.parse(params);

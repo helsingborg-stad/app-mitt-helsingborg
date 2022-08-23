@@ -29,10 +29,7 @@ import {
 } from "../CaseEncryptionHelper";
 import type { DeviceLocalAESParams } from "../DeviceLocalAESStrategy";
 import { DeviceLocalAESStrategy } from "../DeviceLocalAESStrategy";
-import type {
-  ICaseEncryptionService,
-  IStorage,
-} from "../CaseEncryptionService";
+import type { ICaseEncryptionService } from "../CaseEncryptionService";
 import { CaseEncryptionService } from "../CaseEncryptionService";
 import type { PasswordParams } from "../PasswordStrategy";
 import { generateRandomPin, PasswordStrategy } from "../PasswordStrategy";
@@ -55,6 +52,7 @@ function makeMockCase(
           currentMainStep: 0,
           currentMainStepIndex: 0,
           level: 0,
+          numberOfMainSteps: 0,
         },
         answers,
         encryption,
@@ -103,7 +101,7 @@ const CASE_ENCRYPTED_PARTNER = makeMockCase(
   { type: EncryptionType.PASSWORD, symmetricKeyName: CASE_PARAMS_KEY_PARTNER }
 );
 
-class MockStorage implements IStorage {
+class MockEncryptionDependencies implements EncryptionStrategyDependencies {
   dataMap: Record<string, string> = {};
 
   async getData(key: string): Promise<string | null> {
@@ -126,8 +124,10 @@ class MockStorage implements IStorage {
 const MOCK_GET_USER = () =>
   Promise.resolve<UserInterface>({ personalNumber: "198602282389" });
 
-function makeEncryptionService(storage: IStorage): ICaseEncryptionService {
-  return new CaseEncryptionService(storage, MOCK_GET_USER);
+function makeEncryptionService(
+  dependencies: EncryptionStrategyDependencies
+): ICaseEncryptionService {
+  return new CaseEncryptionService(dependencies, MOCK_GET_USER);
 }
 
 describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
@@ -355,15 +355,15 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
   test("getPasswordForForm", async () => {
     const formPartner = getCurrentForm(CASE_DECRYPTED_PARTNER);
     const user = await MOCK_GET_USER();
-    const storage = new MockStorage();
+    const dependencies = new MockEncryptionDependencies();
 
-    const firstTry = await getPasswordForForm(formPartner, user, storage);
+    const firstTry = await getPasswordForForm(formPartner, user, dependencies);
     const generatedPassword =
       await PasswordStrategy.generateAndSaveBasicPinPassword(
         { encryptionDetails: formPartner.encryption, user },
-        { storage }
+        dependencies
       );
-    const secondTry = await getPasswordForForm(formPartner, user, storage);
+    const secondTry = await getPasswordForForm(formPartner, user, dependencies);
 
     expect(firstTry).toBeNull();
     expect(secondTry).toBe(generatedPassword);
@@ -372,7 +372,7 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
   test("getPasswordForForm throws", async () => {
     const formSolo = getCurrentForm(CASE_DECRYPTED_SOLO);
     const user = await MOCK_GET_USER();
-    const storage = new MockStorage();
+    const storage = new MockEncryptionDependencies();
 
     const func = () => getPasswordForForm(formSolo, user, storage);
 
@@ -390,7 +390,9 @@ describe("CaseEncryptionService", () => {
     ["solo", CASE_DECRYPTED_SOLO],
     ["partner", CASE_DECRYPTED_PARTNER],
   ])("ignores already decrypted case (%s)", async (_, caseData: Case) => {
-    const encryptionService = makeEncryptionService(new MockStorage());
+    const encryptionService = makeEncryptionService(
+      new MockEncryptionDependencies()
+    );
 
     const newCase = await encryptionService.decrypt(caseData);
 
@@ -415,9 +417,9 @@ describe("CaseEncryptionService", () => {
       caseData: Case,
       mockStorageData: Record<string, string>
     ) => {
-      const mockStorage = new MockStorage();
-      mockStorage.set(mockStorageData);
-      const encryptionService = makeEncryptionService(mockStorage);
+      const mockDependencies = new MockEncryptionDependencies();
+      mockDependencies.set(mockStorageData);
+      const encryptionService = makeEncryptionService(mockDependencies);
 
       const newCase = await encryptionService.encrypt(caseData);
       const newEncryption = getEncryptionFromCase(newCase);
@@ -451,9 +453,9 @@ describe("CaseEncryptionService", () => {
       expectedCaseData: Case,
       mockStorageData: Record<string, string>
     ) => {
-      const mockStorage = new MockStorage();
-      mockStorage.set(mockStorageData);
-      const encryptionService = makeEncryptionService(mockStorage);
+      const mockDependencies = new MockEncryptionDependencies();
+      mockDependencies.set(mockStorageData);
+      const encryptionService = makeEncryptionService(mockDependencies);
 
       const newCase = await encryptionService.encrypt(caseData);
 
@@ -486,9 +488,9 @@ describe("CaseEncryptionService", () => {
       expectedCaseData: Case,
       mockStorageData: Record<string, string>
     ) => {
-      const mockStorage = new MockStorage();
-      mockStorage.set(mockStorageData);
-      const encryptionService = makeEncryptionService(mockStorage);
+      const mockDependencies = new MockEncryptionDependencies();
+      mockDependencies.set(mockStorageData);
+      const encryptionService = makeEncryptionService(mockDependencies);
 
       const newCase = await encryptionService.decrypt(caseData);
 
@@ -521,9 +523,9 @@ describe("CaseEncryptionService", () => {
       expectedForm: AnsweredForm,
       mockStorageData: Record<string, string>
     ) => {
-      const mockStorage = new MockStorage();
-      mockStorage.set(mockStorageData);
-      const encryptionService = makeEncryptionService(mockStorage);
+      const mockDependencies = new MockEncryptionDependencies();
+      mockDependencies.set(mockStorageData);
+      const encryptionService = makeEncryptionService(mockDependencies);
 
       const newForm = await encryptionService.encryptForm(form);
 
@@ -556,9 +558,9 @@ describe("CaseEncryptionService", () => {
       expectedForm: AnsweredForm,
       mockStorageData: Record<string, string>
     ) => {
-      const mockStorage = new MockStorage();
-      mockStorage.set(mockStorageData);
-      const encryptionService = makeEncryptionService(mockStorage);
+      const mockDependencies = new MockEncryptionDependencies();
+      mockDependencies.set(mockStorageData);
+      const encryptionService = makeEncryptionService(mockDependencies);
 
       const newForm = await encryptionService.decryptForm(form);
 
@@ -570,13 +572,13 @@ describe("CaseEncryptionService", () => {
 describe("CaseEncryptionService (DeviceLocalAES specific)", () => {
   it("creates a new key if missing", async () => {
     const saveFunc = jest.fn();
-    const mockStorage: IStorage = {
+    const mockDependencies: EncryptionStrategyDependencies = {
       async getData(_): Promise<string | null> {
         return null;
       },
       saveData: saveFunc,
     };
-    const encryptionService = makeEncryptionService(mockStorage);
+    const encryptionService = makeEncryptionService(mockDependencies);
 
     await encryptionService.encrypt(CASE_DECRYPTED_SOLO);
 
@@ -586,14 +588,14 @@ describe("CaseEncryptionService (DeviceLocalAES specific)", () => {
   it("uses cached key if it exists", async () => {
     const getFunc = jest.fn();
     const saveFunc = jest.fn();
-    const mockStorage: IStorage = {
+    const mockDependencies: EncryptionStrategyDependencies = {
       async getData(_): Promise<string | null> {
         getFunc();
         return JSON.stringify(CASE_PARAMS_SOLO);
       },
       saveData: saveFunc,
     };
-    const encryptionService = makeEncryptionService(mockStorage);
+    const encryptionService = makeEncryptionService(mockDependencies);
 
     await encryptionService.encrypt(CASE_DECRYPTED_SOLO);
 
@@ -604,7 +606,9 @@ describe("CaseEncryptionService (DeviceLocalAES specific)", () => {
 
 describe("CaseEncryptionService (Password specific)", () => {
   it("throws REQUIRES_PARAMS when missing password (encrypt)", async () => {
-    const encryptionService = makeEncryptionService(new MockStorage());
+    const encryptionService = makeEncryptionService(
+      new MockEncryptionDependencies()
+    );
 
     const func = async () => {
       await encryptionService.encrypt(CASE_DECRYPTED_PARTNER);
@@ -619,7 +623,9 @@ describe("CaseEncryptionService (Password specific)", () => {
   });
 
   it("throws REQUIRES_PARAMS when missing password (decrypt)", async () => {
-    const encryptionService = makeEncryptionService(new MockStorage());
+    const encryptionService = makeEncryptionService(
+      new MockEncryptionDependencies()
+    );
 
     const func = async () => {
       await encryptionService.decrypt(CASE_ENCRYPTED_PARTNER);
@@ -647,7 +653,7 @@ describe("CaseEncryptionService (Password specific)", () => {
 
   it("generates and saves a password", async () => {
     const saveFunc = jest.fn();
-    const mockStorage: IStorage = {
+    const mockDependencies: EncryptionStrategyDependencies = {
       async getData(_): Promise<string | null> {
         return null;
       },
@@ -658,7 +664,7 @@ describe("CaseEncryptionService (Password specific)", () => {
       {
         encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED_PARTNER),
       },
-      { storage: mockStorage }
+      mockDependencies
     );
 
     expect(typeof password).toBe("string");
@@ -670,14 +676,14 @@ describe("CaseEncryptionService (Password specific)", () => {
   });
 
   it("encrypts after generating a password", async () => {
-    const mockStorage = new MockStorage();
-    const encryptionService = makeEncryptionService(mockStorage);
+    const mockDependencies = new MockEncryptionDependencies();
+    const encryptionService = makeEncryptionService(mockDependencies);
 
     await PasswordStrategy.generateAndSaveBasicPinPassword(
       {
         encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED_PARTNER),
       },
-      { storage: mockStorage }
+      mockDependencies
     );
     const newCase = await encryptionService.encrypt(CASE_DECRYPTED_PARTNER);
     const { answers, encryption } = getCurrentForm(newCase);
@@ -687,25 +693,22 @@ describe("CaseEncryptionService (Password specific)", () => {
   });
 
   it("can retrieve existing password", async () => {
-    const mockStorage = new MockStorage();
+    const mockDependencies = new MockEncryptionDependencies();
     const context: EncryptionContext = {
       encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED_PARTNER),
-    };
-    const dependencies: EncryptionStrategyDependencies = {
-      storage: mockStorage,
     };
 
     const firstPassword = await PasswordStrategy.getPassword(
       context,
-      dependencies
+      mockDependencies
     );
     await PasswordStrategy.generateAndSaveBasicPinPassword(
       context,
-      dependencies
+      mockDependencies
     );
     const secondPassword = await PasswordStrategy.getPassword(
       context,
-      dependencies
+      mockDependencies
     );
 
     expect(firstPassword).toBeNull();
@@ -713,25 +716,22 @@ describe("CaseEncryptionService (Password specific)", () => {
   });
 
   it("can check if password exists", async () => {
-    const mockStorage = new MockStorage();
+    const mockDependencies = new MockEncryptionDependencies();
     const context: EncryptionContext = {
       encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED_PARTNER),
-    };
-    const dependencies: EncryptionStrategyDependencies = {
-      storage: mockStorage,
     };
 
     const firstCheck = await PasswordStrategy.hasPassword(
       context,
-      dependencies
+      mockDependencies
     );
     await PasswordStrategy.generateAndSaveBasicPinPassword(
       context,
-      dependencies
+      mockDependencies
     );
     const secondCheck = await PasswordStrategy.hasPassword(
       context,
-      dependencies
+      mockDependencies
     );
 
     expect(firstCheck).toBe(false);
@@ -739,17 +739,22 @@ describe("CaseEncryptionService (Password specific)", () => {
   });
 
   it("can provide a password to use", async () => {
-    const mockStorage = new MockStorage();
+    const mockDependencies = new MockEncryptionDependencies();
     const context: EncryptionContext = {
       encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED_PARTNER),
     };
-    const dependencies: EncryptionStrategyDependencies = {
-      storage: mockStorage,
-    };
+
     const testPassword = "test password";
 
-    await PasswordStrategy.providePassword(testPassword, context, dependencies);
-    const password = await PasswordStrategy.getPassword(context, dependencies);
+    await PasswordStrategy.providePassword(
+      testPassword,
+      context,
+      mockDependencies
+    );
+    const password = await PasswordStrategy.getPassword(
+      context,
+      mockDependencies
+    );
 
     expect(password).toBe(testPassword);
   });
@@ -757,23 +762,23 @@ describe("CaseEncryptionService (Password specific)", () => {
 
 describe("CaseEncryptionService (simulated scenarios)", () => {
   test("partner resets app", async () => {
-    const mockStorage = new MockStorage();
-    await mockStorage.saveData(
+    const mockdependencies = new MockEncryptionDependencies();
+    await mockdependencies.saveData(
       CASE_PARAMS_KEY_PARTNER,
       JSON.stringify(CASE_PARAMS_PARTNER)
     );
-    const encryptionService = makeEncryptionService(mockStorage);
+    const encryptionService = makeEncryptionService(mockdependencies);
     const firstDecrypt = await encryptionService.decrypt(
       CASE_ENCRYPTED_PARTNER
     );
 
-    mockStorage.clear();
+    mockdependencies.clear();
 
     const [decryptError] = await to(
       encryptionService.decrypt(CASE_ENCRYPTED_PARTNER)
     );
 
-    await mockStorage.saveData(
+    await mockdependencies.saveData(
       CASE_PARAMS_KEY_PARTNER,
       JSON.stringify(CASE_PARAMS_PARTNER)
     );
