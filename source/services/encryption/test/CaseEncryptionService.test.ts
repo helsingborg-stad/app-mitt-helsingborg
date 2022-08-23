@@ -39,7 +39,7 @@ import { generateRandomPin, PasswordStrategy } from "../PasswordStrategy";
 import { to } from "../../../helpers/Misc";
 import type {
   EncryptionContext,
-  EncryptionDependencies,
+  EncryptionStrategyDependencies,
 } from "../EncryptionStrategy";
 
 function makeMockCase(
@@ -691,7 +691,9 @@ describe("CaseEncryptionService (Password specific)", () => {
     const context: EncryptionContext = {
       encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED_PARTNER),
     };
-    const dependencies: EncryptionDependencies = { storage: mockStorage };
+    const dependencies: EncryptionStrategyDependencies = {
+      storage: mockStorage,
+    };
 
     const firstPassword = await PasswordStrategy.getPassword(
       context,
@@ -715,7 +717,9 @@ describe("CaseEncryptionService (Password specific)", () => {
     const context: EncryptionContext = {
       encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED_PARTNER),
     };
-    const dependencies: EncryptionDependencies = { storage: mockStorage };
+    const dependencies: EncryptionStrategyDependencies = {
+      storage: mockStorage,
+    };
 
     const firstCheck = await PasswordStrategy.hasPassword(
       context,
@@ -739,7 +743,9 @@ describe("CaseEncryptionService (Password specific)", () => {
     const context: EncryptionContext = {
       encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED_PARTNER),
     };
-    const dependencies: EncryptionDependencies = { storage: mockStorage };
+    const dependencies: EncryptionStrategyDependencies = {
+      storage: mockStorage,
+    };
     const testPassword = "test password";
 
     await PasswordStrategy.providePassword(testPassword, context, dependencies);

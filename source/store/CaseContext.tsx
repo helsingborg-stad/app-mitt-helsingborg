@@ -30,7 +30,7 @@ import {
   getDataToDecryptFromForm,
   getEncryptionFromCase,
 } from "../services/encryption/CaseEncryptionHelper";
-import { wrappedDefaultStorage } from "../services/StorageService";
+import { wrappedDefaultStorage } from "../services/storage/StorageService";
 
 const CaseState = React.createContext<ContextState>(defaultInitialState);
 const CaseDispatch = React.createContext<Dispatch>({});

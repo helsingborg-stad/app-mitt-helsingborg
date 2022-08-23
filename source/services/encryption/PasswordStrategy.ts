@@ -8,7 +8,7 @@ import { EncryptionPossibility } from "./EncryptionStrategy";
 import type { DeviceLocalAESParams } from "./DeviceLocalAESStrategy";
 import type {
   EncryptionContext,
-  EncryptionDependencies,
+  EncryptionStrategyDependencies,
   IEncryptionStrategy,
 } from "./EncryptionStrategy";
 
@@ -38,20 +38,20 @@ export async function generateRandomPin(): Promise<string> {
 export interface IPasswordStrategy extends IEncryptionStrategy<PasswordParams> {
   generateAndSaveBasicPinPassword(
     context: EncryptionContext,
-    dependencies: EncryptionDependencies
+    dependencies: EncryptionStrategyDependencies
   ): Promise<string>;
   providePassword(
     password: string,
     context: EncryptionContext,
-    dependencies: EncryptionDependencies
+    dependencies: EncryptionStrategyDependencies
   ): Promise<void>;
   getPassword(
     context: EncryptionContext,
-    dependencies: EncryptionDependencies
+    dependencies: EncryptionStrategyDependencies
   ): Promise<string | null>;
   hasPassword(
     context: EncryptionContext,
-    dependencies: EncryptionDependencies
+    dependencies: EncryptionStrategyDependencies
   ): Promise<boolean>;
 }
 
@@ -68,7 +68,7 @@ export const PasswordStrategy: IPasswordStrategy = {
 
   async getPossibilityToEncrypt(
     context: EncryptionContext,
-    dependencies: EncryptionDependencies
+    dependencies: EncryptionStrategyDependencies
   ): Promise<EncryptionPossibility> {
     const params = await this.getParams(context, dependencies);
     if (params !== null) {
@@ -80,7 +80,7 @@ export const PasswordStrategy: IPasswordStrategy = {
 
   async canDecrypt(
     context: EncryptionContext,
-    dependencies: EncryptionDependencies
+    dependencies: EncryptionStrategyDependencies
   ): Promise<boolean> {
     const params = await this.getParams(context, dependencies);
     return params !== null;
@@ -101,7 +101,7 @@ export const PasswordStrategy: IPasswordStrategy = {
 
   async getParams(
     context: EncryptionContext,
-    dependencies: EncryptionDependencies
+    dependencies: EncryptionStrategyDependencies
   ): Promise<PasswordParams | null> {
     const paramsId = this.getParamsID(context);
     const params = await dependencies.storage.getData(paramsId);
@@ -115,7 +115,7 @@ export const PasswordStrategy: IPasswordStrategy = {
 
   async generateAndSaveBasicPinPassword(
     context: EncryptionContext,
-    dependencies: EncryptionDependencies
+    dependencies: EncryptionStrategyDependencies
   ): Promise<string> {
     const pin = await generateRandomPin();
     const paramsId = this.getParamsID(context);
@@ -128,7 +128,7 @@ export const PasswordStrategy: IPasswordStrategy = {
 
   async getPassword(
     context: EncryptionContext,
-    dependencies: EncryptionDependencies
+    dependencies: EncryptionStrategyDependencies
   ): Promise<string | null> {
     const params = await this.getParams(context, dependencies);
     return params?.password ?? null;
@@ -136,7 +136,7 @@ export const PasswordStrategy: IPasswordStrategy = {
 
   async hasPassword(
     context: EncryptionContext,
-    dependencies: EncryptionDependencies
+    dependencies: EncryptionStrategyDependencies
   ): Promise<boolean> {
     const password = await this.getPassword(context, dependencies);
     return password !== null;
@@ -145,7 +145,7 @@ export const PasswordStrategy: IPasswordStrategy = {
   async providePassword(
     password: string,
     context: EncryptionContext,
-    dependencies: EncryptionDependencies
+    dependencies: EncryptionStrategyDependencies
   ): Promise<void> {
     const paramsId = this.getParamsID(context);
     const existingParams = await this.getParams(context, dependencies);

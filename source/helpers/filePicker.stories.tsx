@@ -4,9 +4,11 @@ import styled from "styled-components/native";
 import type { DocumentPickerResponse } from "react-native-document-picker";
 import DocumentPicker from "react-native-document-picker";
 import PdfView from "react-native-pdf";
+
 import { Button, Text } from "../components/atoms";
 import StoryWrapper from "../components/molecules/StoryWrapper";
-import { wrappedDefaultStorage } from "../services/StorageService";
+
+import { wrappedDefaultStorage } from "../services/storage/StorageService";
 
 const ButtonRow = styled.View`
   display: flex;

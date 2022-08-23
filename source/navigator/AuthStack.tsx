@@ -4,7 +4,7 @@ import LoginScreen from "../screens/loginScreen/LoginScreen";
 import Onboarding from "../screens/onboarding";
 import StorageService, {
   ONBOARDING_DISABLED,
-} from "../services/StorageService";
+} from "../services/storage/StorageService";
 
 const Stack = createNativeStackNavigator();
 

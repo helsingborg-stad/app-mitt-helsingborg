@@ -1,14 +1,17 @@
-import FormList from "app/components/organisms/FormList/FormList";
-import AuthContext from "app/store/AuthContext";
-import { CaseDispatch } from "app/store/CaseContext";
 import PropTypes from "prop-types";
 import React, { useContext } from "react";
 import styled from "styled-components/native";
 import env from "react-native-config";
+
+import { CaseDispatch } from "../store/CaseContext";
+import AuthContext from "../store/AuthContext";
+
+import FormList from "../components/organisms/FormList/FormList";
 import { Button, Text } from "../components/atoms";
 import Header from "../components/molecules/Header";
 import ScreenWrapper from "../components/molecules/ScreenWrapper";
-import StorageService from "../services/StorageService";
+
+import StorageService from "../services/storage/StorageService";
 
 const Container = styled.ScrollView`
   flex: 1;

@@ -1,7 +1,9 @@
 import axios from "axios";
 import ReactNativeBlobUtil from "react-native-blob-util";
 
-import StorageService, { ACCESS_TOKEN_KEY } from "../services/StorageService";
+import StorageService, {
+  ACCESS_TOKEN_KEY,
+} from "../services/storage/StorageService";
 import { buildServiceUrl } from "./UrlHelper";
 import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
 
