@@ -6,7 +6,6 @@
 
 import { Component } from "react";
 import AsyncStorage from "@react-native-community/async-storage";
-// import type { IStorage } from "../encryption";
 
 export interface IStorage {
   getData(key: string): Promise<string | null>;
