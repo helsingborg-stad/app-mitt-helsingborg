@@ -13,6 +13,7 @@ import {
   convertAnswerArrayToObject,
 } from "../helpers/CaseDataConverter";
 import { getPasswordForForm } from "../services/encryption/CaseEncryptionHelper";
+import { wrappedDefaultStorage } from "../services/storage/StorageService";
 import { to } from "../helpers/Misc";
 
 import type { Case, FormPosition, AnsweredForm } from "../types/Case";
@@ -89,7 +90,11 @@ const FormCaseScreen = ({
             initCase?.forms?.[initCase.currentFormId].encryption ?? {};
 
           const [, pinCode] = await to(
-            getPasswordForForm({ encryption } as AnsweredForm, user)
+            getPasswordForForm(
+              { encryption } as AnsweredForm,
+              user,
+              wrappedDefaultStorage
+            )
           );
 
           const pinCodeToUse = (pinCode ?? "") as string;

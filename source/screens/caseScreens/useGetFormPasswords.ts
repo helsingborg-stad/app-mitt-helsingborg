@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 
 import { getPasswordForForm } from "../../services/encryption/CaseEncryptionHelper";
+import { wrappedDefaultStorage } from "../../services/storage/StorageService";
 
 import type { Case } from "../../types/Case";
 import type { User } from "../../types/UserTypes";
@@ -24,7 +25,7 @@ function useGetFormPasswords(
       const hasSymmetricKey = !!form.encryption.symmetricKeyName;
 
       const encryptionPin = hasSymmetricKey
-        ? await getPasswordForForm(form, caseUser)
+        ? await getPasswordForForm(form, caseUser, wrappedDefaultStorage)
         : undefined;
 
       return { ...oldValue, [currentFormId]: encryptionPin };
