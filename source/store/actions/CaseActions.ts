@@ -170,7 +170,7 @@ async function getCasesThatShouldGeneratePin(
           user,
           encryptionDetails: currentForm.encryption,
         },
-        { storage: wrappedDefaultStorage }
+        wrappedDefaultStorage
       );
 
       return !hasPassword;
@@ -188,9 +188,7 @@ async function setupPinForCases(user: UserInterface, cases: Case[]) {
         encryptionDetails: currentForm.encryption,
         user,
       },
-      {
-        storage: wrappedDefaultStorage,
-      }
+      wrappedDefaultStorage
     );
     console.log(`generated pin ${pin} for case ${caseData.id}`);
   });
