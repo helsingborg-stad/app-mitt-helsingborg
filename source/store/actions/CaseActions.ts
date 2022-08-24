@@ -13,7 +13,7 @@ import { ApplicationStatusType } from "../../types/Case";
 import type { UserInterface } from "../../services/encryption/CaseEncryptionHelper";
 import { getCurrentForm } from "../../services/encryption/CaseEncryptionHelper";
 import { CaseEncryptionService } from "../../services/encryption";
-import { wrappedDefaultStorage } from "../../services/StorageService";
+import { wrappedDefaultStorage } from "../../services/storage/StorageService";
 import { to } from "../../helpers/Misc";
 import { PasswordStrategy } from "../../services/encryption/PasswordStrategy";
 import { filterAsync } from "../../helpers/Objects";

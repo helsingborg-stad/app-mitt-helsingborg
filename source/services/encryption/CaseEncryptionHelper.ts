@@ -1,4 +1,3 @@
-import type { IStorage } from "./CaseEncryptionService";
 import type {
   Answer,
   AnsweredForm,
@@ -12,9 +11,11 @@ import type {
   EncryptionExceptionStatus,
 } from "../../types/Encryption";
 import { EncryptionErrorStatus, EncryptionType } from "../../types/Encryption";
-import { wrappedDefaultStorage } from "../StorageService";
 import { DeviceLocalAESStrategy } from "./DeviceLocalAESStrategy";
-import type { IEncryptionStrategy } from "./EncryptionStrategy";
+import type {
+  EncryptionStrategyDependencies,
+  IEncryptionStrategy,
+} from "./EncryptionStrategy";
 import { PasswordStrategy } from "./PasswordStrategy";
 
 type StrategyMap = {
@@ -204,13 +205,13 @@ export function makeCaseWithNewForm(caseData: Case, form: AnsweredForm): Case {
 export function getPasswordForForm(
   form: AnsweredForm,
   user: UserInterface,
-  storage: IStorage = wrappedDefaultStorage
+  dependencies: EncryptionStrategyDependencies
 ): Promise<string | null> {
   return PasswordStrategy.getPassword(
     {
       encryptionDetails: form.encryption,
       user,
     },
-    { storage }
+    dependencies
   );
 }

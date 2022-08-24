@@ -1,6 +1,5 @@
 import type { EncryptionDetails } from "../../types/Encryption";
 import type { UserInterface } from "./CaseEncryptionHelper";
-import type { IStorage } from "./CaseEncryptionService";
 
 export interface EncryptionContext {
   user?: UserInterface;
@@ -8,8 +7,9 @@ export interface EncryptionContext {
   extra?: Record<string, unknown>;
 }
 
-export interface EncryptionDependencies {
-  storage: IStorage;
+export interface EncryptionStrategyDependencies {
+  getData(key: string): Promise<string | null>;
+  saveData(key: string, payload: string): Promise<void>;
 }
 
 export enum EncryptionPossibility {
@@ -22,15 +22,15 @@ export interface IEncryptionStrategy<TParams> {
   decrypt(params: TParams, payload: string): Promise<string>;
   getPossibilityToEncrypt(
     context: EncryptionContext,
-    dependencies: EncryptionDependencies
+    dependencies: EncryptionStrategyDependencies
   ): Promise<EncryptionPossibility>;
   canDecrypt(
     context: EncryptionContext,
-    dependencies: EncryptionDependencies
+    dependencies: EncryptionStrategyDependencies
   ): Promise<boolean>;
   getParamsID(context: EncryptionContext): string;
   getParams(
     context: EncryptionContext,
-    dependencies: EncryptionDependencies
+    dependencies: EncryptionStrategyDependencies
   ): Promise<TParams | null>;
 }

@@ -6,7 +6,11 @@
 
 import { Component } from "react";
 import AsyncStorage from "@react-native-community/async-storage";
-import type { IStorage } from "./encryption";
+
+interface IStorage {
+  getData(key: string): Promise<string | null>;
+  saveData(key: string, payload: string): Promise<void>;
+}
 
 // Storage key definitions
 export const ONBOARDING_DISABLED = "@app:onboarding_disabled";

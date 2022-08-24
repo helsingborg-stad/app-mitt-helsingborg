@@ -9,7 +9,7 @@ import Dot from "./Dot";
 import Slide from "./Slide";
 import { Button, Text } from "../../components/atoms";
 
-import { ONBOARDING_DISABLED } from "../../services/StorageService";
+import { ONBOARDING_DISABLED } from "../../services/storage/StorageService";
 
 import {
   OnboardingContainer,

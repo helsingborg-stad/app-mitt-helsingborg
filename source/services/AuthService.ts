@@ -2,7 +2,7 @@ import JwtDecode from "jwt-decode";
 import StorageService, {
   ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
-} from "./StorageService";
+} from "./storage/StorageService";
 import { post, get } from "../helpers/ApiRequest";
 import { getMessage } from "../helpers/MessageHelper";
 

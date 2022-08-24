@@ -2,7 +2,7 @@ import { NativeModules } from "react-native";
 import { ALGO_SALT, ALGO_ROUNDS, ALGO_LENGTH } from "./constants";
 import type {
   EncryptionContext,
-  EncryptionDependencies,
+  EncryptionStrategyDependencies,
   IEncryptionStrategy,
 } from "./EncryptionStrategy";
 import { EncryptionPossibility } from "./EncryptionStrategy";
@@ -45,7 +45,7 @@ export const DeviceLocalAESStrategy: IEncryptionStrategy<DeviceLocalAESParams> =
 
     async canDecrypt(
       context: EncryptionContext,
-      dependencies: EncryptionDependencies
+      dependencies: EncryptionStrategyDependencies
     ): Promise<boolean> {
       return this.getParams(context, dependencies) !== null;
     },
@@ -56,17 +56,14 @@ export const DeviceLocalAESStrategy: IEncryptionStrategy<DeviceLocalAESParams> =
 
     async getParams(
       context: EncryptionContext,
-      dependencies: EncryptionDependencies
+      dependencies: EncryptionStrategyDependencies
     ): Promise<DeviceLocalAESParams | null> {
       const paramsId = this.getParamsID(context);
-      const params = await dependencies.storage.getData(paramsId);
+      const params = await dependencies.getData(paramsId);
 
       if (!params) {
         const newParams = await createAesParams();
-        await dependencies.storage.saveData(
-          paramsId,
-          JSON.stringify(newParams)
-        );
+        await dependencies.saveData(paramsId, JSON.stringify(newParams));
         return newParams;
       }
       return JSON.parse(params);
