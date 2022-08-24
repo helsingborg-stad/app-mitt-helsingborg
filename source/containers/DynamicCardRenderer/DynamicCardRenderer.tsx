@@ -1,15 +1,21 @@
 import React, { useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Linking } from "react-native";
+
 import Card from "../../components/molecules/Card/Card";
-import TextComponent from "../../components/atoms/Text";
-import Icon from "../../components/atoms/Icon";
-import icons from "../../helpers/Icons";
-import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
 import InfoModal from "../../components/molecules/InfoModal";
 import { useModal } from "../../components/molecules/Modal";
+
+import TextComponent from "../../components/atoms/Text";
+import Icon from "../../components/atoms/Icon";
+
+import icons from "../../helpers/Icons";
+import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
+import MarkdownConstructor from "../../helpers/MarkdownConstructor";
+
 import { replaceText } from "../Form/hooks/textReplacement";
 import AuthContext from "../../store/AuthContext";
+
 import type { PartnerInfo, User } from "../../types/UserTypes";
 
 interface Image {
@@ -137,19 +143,22 @@ const renderCardComponent = (
   completionsClarificationMessage?: string
 ) => {
   switch (component.type) {
-    case "text":
+    case "text": {
+      const replacedText = replaceText(
+        component.text,
+        user,
+        undefined,
+        partner,
+        undefined,
+        completionsClarificationMessage
+      );
+
       return (
         <Card.Text key={`${index}-${component.type}`} italic={component.italic}>
-          {replaceText(
-            component.text,
-            user,
-            undefined,
-            partner,
-            undefined,
-            completionsClarificationMessage
-          )}
+          <MarkdownConstructor rawText={replacedText} />
         </Card.Text>
       );
+    }
     case "title":
       return (
         <Card.Title key={`${index}-${component.type}`}>
