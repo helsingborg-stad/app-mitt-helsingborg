@@ -35,7 +35,7 @@ export async function generateRandomPin(): Promise<string> {
   return pin;
 }
 
-export interface IPasswordStrategy extends IEncryptionStrategy<PasswordParams> {
+interface IPasswordStrategy extends IEncryptionStrategy<PasswordParams> {
   generateAndSaveBasicPinPassword(
     context: EncryptionContext,
     dependencies: EncryptionStrategyDependencies
