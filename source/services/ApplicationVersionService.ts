@@ -16,7 +16,9 @@ const getApplicationVersionStatus =
     const response = await get("/version");
 
     if (response.status !== 200) {
-      console.error("Failed fetching application version status");
+      console.error(
+        `Failed fetching application version status: ${response.message}`
+      );
       return defaultResponse;
     }
 
