@@ -77,9 +77,11 @@ jobs:
         env:
           JSON_KEY_FILE_CONTENTS: ${{ secrets.ANDROID_JSON_KEY_FILE_CONTENTS }}
           ANDROID_KEYSTORE_PROPERTIES_BASE64: ${{ secrets.ANDROID_KEYSTORE_PROPERTIES_BASE64 }}
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: |
           echo $JSON_KEY_FILE_CONTENTS > android/google-play-api-key.json
           echo $ANDROID_KEYSTORE_PROPERTIES_BASE64 | base64 -d > android/keystore.properties
+          echo $ANDROID_KEYSTORE_BASE64 | base64 -d > android/app/mitt-helsingborg-upload-key.keystore
 
       - name: Build
         timeout-minutes: 60
