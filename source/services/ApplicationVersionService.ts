@@ -17,7 +17,9 @@ const getApplicationVersionStatus =
 
     if (response.status !== 200) {
       console.error(
-        `Failed fetching application version status: ${response.message}`
+        `Failed fetching application version,  status: ${
+          response?.status || "N/A"
+        }, message: ${response.message}`
       );
       return defaultResponse;
     }
