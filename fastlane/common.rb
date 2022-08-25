@@ -59,7 +59,7 @@ end
 
 def github_repo_url
   git_remote_output = `git remote -v`.chomp
-  if (m = git_remote_output.match(%r{https?://(\S*)(?>\.git)? }))
+  if (m = git_remote_output.match(%r{https?://(\S*).git }))
     return m.captures[0]
   end
 

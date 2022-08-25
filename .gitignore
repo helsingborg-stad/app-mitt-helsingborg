@@ -63,6 +63,8 @@ buck-out/
 /ios/*.dSYM.zip
 /ios/*.mobileprovision
 /ios/.build_logs
+/android/fastlane/metadata/android/*/changelogs
+/android/google-play-api-key.json
 /vendor
 
 # Bundle artifact
