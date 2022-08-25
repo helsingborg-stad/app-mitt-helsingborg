@@ -1,0 +1,63 @@
+# frozen_string_literal: true
+
+import '../../fastlane/common.rb'
+
+def android_version_name
+  version_string = ENV['FORCED_VERSION_NUMBER_STRING']
+  if !version_string.nil? && version_string.length > 0
+    puts "using forced version \"#{version_string}\""
+    return version_string
+  end
+
+  version_string = get_semver_from_branch(ENV['GIT_HEAD_REF'])
+  unless version_string.nil?
+    puts "using branch semver \"#{version_string}\""
+    return version_string
+  end
+
+  tag = latest_release_tag
+  if (m = tag.match(semver_regex))
+    puts "using latest release tag #{tag} and incrementing"
+    return [m.captures[0], m.captures[1], Integer(m.captures[2]) + 1].join('.')
+  end
+
+  UI.user_error!('unable to determine Android version name')
+end
+
+def android_version_code
+  prod_build_no = google_play_track_version_codes(track: 'production')
+  dev_build_no = google_play_track_version_codes(track: 'internal')
+  merged = prod_build_no + dev_build_no
+  merged.max + 1
+end
+
+def android_set_changelog
+  FileUtils.mkpath 'metadata/android/sv-SE/changelogs'
+  File.write('metadata/android/sv-SE/changelogs/default.txt', changelog_github)
+end
+
+platform :android do
+  desc 'Build and upload to Google Play'
+  lane :build do
+    version_code = android_version_code
+    version_name = android_version_name
+
+    gradle(
+      task: 'bundle',
+      build_type: 'Release',
+      properties: {
+        'android.injected.version.code' => version_code,
+        'android.injected.version.name' => version_name
+      },
+      print_command_output: false
+    )
+
+    android_set_changelog
+
+    supply(
+      track: 'internal',
+      version_name: "#{version_name} (#{version_code})",
+      aab: 'app/build/outputs/bundle/release/app-release.aab'
+    )
+  end
+end

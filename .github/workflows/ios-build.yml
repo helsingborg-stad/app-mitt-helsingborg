@@ -18,7 +18,7 @@ on:
 # prevents multiple build workflows from running
 # (in-progress and queued will be cancelled in favor of pending)
 concurrency:
-  group: ${{ github.ref }}
+  group: build-ios-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
