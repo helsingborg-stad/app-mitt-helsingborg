@@ -48,8 +48,7 @@ platform :android do
       properties: {
         'android.injected.version.code' => version_code,
         'android.injected.version.name' => version_name
-      },
-      print_command_output: false
+      }
     )
 
     android_set_changelog

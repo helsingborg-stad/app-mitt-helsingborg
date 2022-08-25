@@ -130,9 +130,12 @@ before_all do |_lane, _options|
   puts "FORCED_VERSION_NUMBER_STRING: #{ENV['FORCED_VERSION_NUMBER_STRING']}"
   puts "FORCED_BUILD_NUMBER: #{ENV['FORCED_BUILD_NUMBER']}"
   puts "GIT_HEAD_REF: #{ENV['GIT_HEAD_REF']}"
+  puts "GIT_TAG_TO_SET: #{ENV['GIT_TAG_TO_SET']}"
+  puts '(iOS only)'
   puts "GYM_SCHEME: #{ENV['GYM_SCHEME']}"
   puts "MAIN_PROJECT: #{ENV['MAIN_PROJECT']}"
   puts "MAIN_WORKSPACE: #{ENV['MAIN_WORKSPACE']}"
   puts "PERFORM_LONG_UPLOAD: #{ENV['PERFORM_LONG_UPLOAD']}"
-  puts "GIT_TAG_TO_SET: #{ENV['GIT_TAG_TO_SET']}"
+  puts '(Android only)'
+  puts "JSON_KEY_FILE: #{ENV['JSON_KEY_FILE']}"
 end
