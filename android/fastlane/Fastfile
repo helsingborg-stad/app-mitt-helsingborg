@@ -33,7 +33,9 @@ end
 
 def android_set_changelog
   FileUtils.mkpath 'metadata/android/sv-SE/changelogs'
-  File.write('metadata/android/sv-SE/changelogs/default.txt', changelog_github)
+  changes = changelog_github
+  File.write('metadata/android/sv-SE/changelogs/default.txt', changes)
+  puts "wrote changelog:\n#{changes}"
 end
 
 platform :android do
