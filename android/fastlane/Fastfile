@@ -55,6 +55,10 @@ platform :android do
 
     android_set_changelog
 
+    puts "pwd: #{Dir.pwd}"
+    puts 'metadata:'
+    puts Dir['metadata/**/*.*']
+
     supply(
       track: 'internal',
       version_name: "#{version_name} (#{version_code})",
