@@ -57,6 +57,21 @@ def changelog
   "HEAD: #{git_head_identifier}\n\nChanges since #{tag}:\n#{commit_changelog(tag)}"
 end
 
+def github_repo_url
+  git_remote_output = `git remote -v`.chomp
+  if (m = git_remote_output.match(%r{https?://(\S*)(?>\.git)? }))
+    return m.captures[0]
+  end
+
+  UI.user_error!("unable to extract remote from output: #{git_remote_output}")
+end
+
+def changelog_github
+  tag = latest_release_tag
+  changelog_url = "https://#{github_repo_url}/compare/#{tag}...#{last_git_commit[:commit_hash]}"
+  "HEAD: #{git_head_identifier}\n\nLink to changes since #{tag}:\n#{changelog_url}"
+end
+
 def package_json_path
   path = '../../package.json'
   return path if File.exist?(path)
@@ -74,6 +89,11 @@ end
 desc 'Print the changelog'
 lane :print_changelog do
   puts "changelog:\n#{changelog}"
+end
+
+desc 'Print the changelog with a GitHub link to changes'
+lane :print_changelog_github do
+  puts "changelog:\n#{changelog_github}"
 end
 
 desc 'Tag the current ref with the version based on branch name or env input'
