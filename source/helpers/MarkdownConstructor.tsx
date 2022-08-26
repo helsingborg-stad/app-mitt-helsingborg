@@ -40,6 +40,12 @@ const markDownStyles = {
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
+  bullet_list: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+  },
 };
 
 const MarkdownConstructor = (props) => {
