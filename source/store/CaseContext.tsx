@@ -108,7 +108,7 @@ function CaseProvider({
           encryptionDetails: getEncryptionFromCase(caseData),
           user,
         },
-        { storage: wrappedDefaultStorage }
+        wrappedDefaultStorage
       );
     }
   }
