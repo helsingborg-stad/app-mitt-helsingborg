@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useRef } from "react";
 import Markdown from "react-native-markdown-display";
 import Text from "../components/atoms/Text";
 
@@ -9,8 +9,12 @@ import Text from "../components/atoms/Text";
  * Using own custom implementation of Text (...atoms/Text).
  *
  */
-const markdownRules = {
-  text: (node) => <Text key={node.key}>{node.content}</Text>,
+const markdownRules = (italic: boolean) => ({
+  text: (node) => (
+    <Text italic={italic} key={node.key}>
+      {node.content}
+    </Text>
+  ),
   strong: (node, children, _parent, _styles) => (
     <Text key={node.key}>
       {React.Children.map(children, (child, _index) =>
@@ -18,7 +22,7 @@ const markdownRules = {
       )}
     </Text>
   ),
-};
+});
 
 /**
  * Override markdown styles.
@@ -42,11 +46,15 @@ const markDownStyles = {
   },
 };
 
-const MarkdownConstructor = (props) => {
-  const { rawText } = props;
+interface Props {
+  rawText: string;
+  italic: boolean;
+}
+const MarkdownConstructor = ({ rawText, italic }: Props): JSX.Element => {
+  const rules = useRef(markdownRules(italic));
 
   return (
-    <Markdown rules={markdownRules} style={markDownStyles}>
+    <Markdown rules={rules.current} style={markDownStyles}>
       {rawText}
     </Markdown>
   );

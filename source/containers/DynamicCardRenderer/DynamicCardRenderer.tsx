@@ -154,9 +154,11 @@ const renderCardComponent = (
       );
 
       return (
-        <Card.Text key={`${index}-${component.type}`} italic={component.italic}>
-          <MarkdownConstructor rawText={replacedText} />
-        </Card.Text>
+        <MarkdownConstructor
+          key={`${index}-${component.type}`}
+          rawText={replacedText}
+          italic={component.italic ?? false}
+        />
       );
     }
     case "title":
