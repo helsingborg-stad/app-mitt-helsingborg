@@ -226,11 +226,13 @@ const computeCaseCardComponent = (
     cardProps.onClick = undefined;
   }
 
-  const shouldShowPin = isWaitingForSign && !isCoApplicant;
+  // const shouldShowPin = isWaitingForSign && !isCoApplicant;
+  const shouldShowPin = !(isSigned || isRandomCheckRequired);
+
   if (shouldShowPin) {
     const partner = persons.find((person) => person.role === "coApplicant");
     const partnerName = partner?.firstName;
-    cardProps.description = `${partnerName} loggar in i appen med BankID och anger koden för att granska och signera er ansökan.\n\nKod till ${partnerName}:`;
+    cardProps.description = `${caseItem.status.description}\n\n${partnerName} loggar in i appen med BankID och anger koden för att granska och signera er ansökan.\n\nKod till ${partnerName}:`;
   }
 
   const openAppealLink = async () => {
@@ -266,7 +268,7 @@ const computeCaseCardComponent = (
       onAppealButtonClick={openAppealLink}
       onButtonClick={buttonProps.onClick}
       buttonColorScheme={buttonProps.colorSchema || colorSchema}
-      pin={formPassword}
+      pin={shouldShowPin ? formPassword : ""}
     />
   );
 };
