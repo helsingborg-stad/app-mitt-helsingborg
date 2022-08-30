@@ -5,9 +5,8 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import { View, Animated, Easing } from "react-native";
+import { View, Animated, Easing, Alert } from "react-native";
 import PropTypes from "prop-types";
-import styled from "styled-components/native";
 import { CaseState } from "../../store/CaseContext";
 import icons from "../../helpers/Icons";
 import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
@@ -35,17 +34,13 @@ import type {
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import useGetFormPasswords from "./useGetFormPasswords";
 
-const Container = styled.ScrollView`
-  flex: 1;
-  padding-left: 16px;
-  padding-right: 16px;
-`;
+import CloseDialog from "../../components/molecules/CloseDialog";
 
-const SummaryHeading = styled(Text)`
-  margin-left: 4px;
-  margin-top: 30px;
-  margin-bottom: 16px;
-`;
+import {
+  Container,
+  SummaryHeading,
+  RemoveCaseButtonContainer,
+} from "./CaseSummary.styled";
 
 const computeCaseCardComponent = (
   caseItem: Case,
@@ -299,6 +294,22 @@ const CaseSummary = (props) => {
     }).start();
   }, [fadeAnimation]);
 
+  const handleRemoveCaseButtonClick = () => {
+    console.log("ALERT");
+    Alert.alert(
+      "Vill du ta bort din ansökan",
+      "När en ansökan tagits bort kan en ny ansökan för perioden skapas",
+      [
+        {
+          text: "Avbryt",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        { text: "Ta bort", onPress: () => console.log("OK Pressed") },
+      ]
+    );
+  };
+
   return (
     <ScreenWrapper {...props}>
       <Container as={Animated.ScrollView} style={{ opacity: fadeAnimation }}>
@@ -364,11 +375,33 @@ const CaseSummary = (props) => {
         notes={journals?.journal?.notes?.note ?? []}
       />
 
-      <View>
-        <Button colorSchema="red" fullWidth>
+      <CloseDialog
+        visible
+        title="Vill du ta bort din ansökan?"
+        body="När en ansökan tagits bort kan en ny ansökan för perioden skapas"
+        buttons={[
+          {
+            text: "Avbryt",
+            color: "neutral",
+            clickHandler: () => console.log("TESTING"),
+          },
+          {
+            text: "Ja",
+            color: "red",
+            clickHandler: () => console.log("TESTING"),
+          },
+        ]}
+      />
+
+      <RemoveCaseButtonContainer>
+        <Button
+          onClick={handleRemoveCaseButtonClick}
+          colorSchema="red"
+          fullWidth
+        >
           <Text>Ta bort ansökan</Text>
         </Button>
-      </View>
+      </RemoveCaseButtonContainer>
     </ScreenWrapper>
   );
 };
