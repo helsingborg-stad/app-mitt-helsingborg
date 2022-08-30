@@ -73,7 +73,7 @@ export interface Calculation {
   norm: CalculationNorm;
 }
 
-interface Note {
+export interface Note {
   label: string;
   text: string;
 }
