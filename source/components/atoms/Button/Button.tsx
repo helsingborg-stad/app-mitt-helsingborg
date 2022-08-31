@@ -298,6 +298,8 @@ Button.propTypes = {
    * If true, the button will take maximum width within its container.
    */
   fullWidth: PropTypes.bool,
+
+  children: PropTypes.object,
 };
 
 Button.defaultProps = {
