@@ -30,9 +30,11 @@ function CaseCalculationsModal({
   isVisible,
   notes,
   toggleModal,
-}: Props): JSX.Element {
+}: Props): JSX.Element | null {
   const [isCalculationDetailsVisible, setCalculationDetailsVisibility] =
     useState(false);
+
+  if (!isVisible) return null;
 
   return (
     <Modal visible={isVisible} hide={toggleModal}>
@@ -64,7 +66,7 @@ function CaseCalculationsModal({
           <Card colorSchema="red">
             <Card.Body color="neutral">
               <Card.Title colorSchema="neutral">Beräkning</Card.Title>
-              {calculation.periodstartdate && calculation.periodenddate && (
+              {calculation?.periodstartdate && calculation?.periodenddate && (
                 <Card.Text>{`Period: ${calculation.periodstartdate} - ${calculation.periodenddate} `}</Card.Text>
               )}
               <CalculationRow>
