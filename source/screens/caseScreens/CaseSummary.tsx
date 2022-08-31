@@ -4,10 +4,10 @@ import React, {
   useRef,
   useCallback,
   useMemo,
+  useState,
 } from "react";
-import { View, Animated, Easing, Alert } from "react-native";
-import PropTypes from "prop-types";
-import { CaseState } from "../../store/CaseContext";
+import { View, Animated, Easing } from "react-native";
+import { CaseState, CaseDispatch } from "../../store/CaseContext";
 import icons from "../../helpers/Icons";
 import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
@@ -20,8 +20,10 @@ import { useModal } from "../../components/molecules/Modal";
 import Button from "../../components/atoms/Button";
 import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
-import { put } from "../../helpers/ApiRequest";
+import { put, remove } from "../../helpers/ApiRequest";
 import { answersAreEncrypted } from "../../services/encryption/CaseEncryptionHelper";
+import { ApplicationStatusType } from "../../types/Case";
+
 import type {
   Case,
   VIVACaseDetails,
@@ -36,11 +38,16 @@ import useGetFormPasswords from "./useGetFormPasswords";
 
 import CloseDialog from "../../components/molecules/CloseDialog";
 
+import type { Props } from "./CaseSummary.types";
+
 import {
   Container,
   SummaryHeading,
   RemoveCaseButtonContainer,
 } from "./CaseSummary.styled";
+
+const { ACTIVE_SIGNATURE_PENDING } = ApplicationStatusType;
+const SCREEN_TRANSITION_DELAY = 1500;
 
 const computeCaseCardComponent = (
   caseItem: Case,
@@ -204,12 +211,23 @@ const computeCaseCardComponent = (
   );
 };
 
-const CaseSummary = (props) => {
+enum RemoveCaseState {
+  Default,
+  Loading,
+  Error,
+}
+
+const CaseSummary = (props: Props): JSX.Element => {
+  const [removeCaseState, setRemoveCaseState] = useState(
+    RemoveCaseState.Default
+  );
+
   const authContext = useContext(AuthContext);
   const { cases, getCase } = useContext(CaseState);
+  const { deleteCase } = useContext(CaseDispatch);
 
   const {
-    colorSchema,
+    colorSchema = "red",
     navigation,
     route: {
       params: { id: caseId, name: formName },
@@ -227,10 +245,76 @@ const CaseSummary = (props) => {
   } = workflow as Workflow;
 
   const [isModalVisible, toggleModal] = useModal();
+  const [showRemoveCaseModal, toggleRemoveCaseModal] = useModal();
 
   const decisions = decision?.decisions?.decision
     ? convertDataToArray(decision.decisions.decision)
     : [];
+
+  const canRemoveCase = [ACTIVE_SIGNATURE_PENDING].includes(
+    caseData.status.type
+  );
+
+  const removeCase = async () => {
+    setRemoveCaseState(RemoveCaseState.Loading);
+
+    const result = await remove(`cases/${caseId}`, undefined, undefined);
+
+    if (!result.data.data.code) {
+      deleteCase(caseId);
+
+      setTimeout(() => {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "App" }],
+        });
+      }, SCREEN_TRANSITION_DELAY);
+    } else {
+      setRemoveCaseState(RemoveCaseState.Error);
+    }
+  };
+
+  const getModalButtonsSet = (
+    text: string,
+    color: PrimaryColor,
+    clickHandler: () => void
+  ) => ({
+    text,
+    color,
+    clickHandler,
+  });
+
+  const closeModal = () => {
+    toggleRemoveCaseModal();
+    setRemoveCaseState(RemoveCaseState.Default);
+  };
+
+  const modalButtonSet = {
+    [RemoveCaseState.Default]: [
+      getModalButtonsSet("Avbryt", "neutral", closeModal),
+      getModalButtonsSet("Ja", "red", removeCase),
+    ],
+    [RemoveCaseState.Loading]: [],
+    [RemoveCaseState.Error]: [
+      getModalButtonsSet("Avbryt", "neutral", closeModal),
+      getModalButtonsSet("Försök igen", "red", removeCase),
+    ],
+  };
+
+  const modalText: Record<RemoveCaseState, { title: string; body: string }> = {
+    [RemoveCaseState.Default]: {
+      title: "Vill du ta bort din ansökan?",
+      body: "När en ansökan tagits bort kan en ny ansökan för perioden skapas",
+    },
+    [RemoveCaseState.Loading]: {
+      title: "Ditt ärende tas bort",
+      body: "Vänligen vänta ...",
+    },
+    [RemoveCaseState.Error]: {
+      title: "Ett fel har inträffat",
+      body: "Försök igen eller prova vid ett annat tillfälle om problemet uppstår",
+    },
+  };
 
   const updateCaseSignature = useCallback(
     async (caseItem, signatureSuccessful) => {
@@ -266,7 +350,7 @@ const CaseSummary = (props) => {
     [navigation]
   );
 
-  const openForm = (id: string, isSignMode?: boolean) => {
+  const openForm = (id: string, isSignMode = false) => {
     navigation.navigate("Form", { caseId: id, isSignMode });
   };
 
@@ -295,19 +379,7 @@ const CaseSummary = (props) => {
   }, [fadeAnimation]);
 
   const handleRemoveCaseButtonClick = () => {
-    console.log("ALERT");
-    Alert.alert(
-      "Vill du ta bort din ansökan",
-      "När en ansökan tagits bort kan en ny ansökan för perioden skapas",
-      [
-        {
-          text: "Avbryt",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        { text: "Ta bort", onPress: () => console.log("OK Pressed") },
-      ]
-    );
+    toggleRemoveCaseModal();
   };
 
   return (
@@ -376,46 +448,25 @@ const CaseSummary = (props) => {
       />
 
       <CloseDialog
-        visible
-        title="Vill du ta bort din ansökan?"
-        body="När en ansökan tagits bort kan en ny ansökan för perioden skapas"
-        buttons={[
-          {
-            text: "Avbryt",
-            color: "neutral",
-            clickHandler: () => console.log("TESTING"),
-          },
-          {
-            text: "Ja",
-            color: "red",
-            clickHandler: () => console.log("TESTING"),
-          },
-        ]}
+        visible={showRemoveCaseModal}
+        title={modalText[removeCaseState].title}
+        body={modalText[removeCaseState].body}
+        buttons={modalButtonSet[removeCaseState]}
       />
 
       <RemoveCaseButtonContainer>
-        <Button
-          onClick={handleRemoveCaseButtonClick}
-          colorSchema="red"
-          fullWidth
-        >
-          <Text>Ta bort ansökan</Text>
-        </Button>
+        {canRemoveCase && (
+          <Button
+            onClick={handleRemoveCaseButtonClick}
+            colorSchema="red"
+            fullWidth
+          >
+            <Text>Ta bort ansökan</Text>
+          </Button>
+        )}
       </RemoveCaseButtonContainer>
     </ScreenWrapper>
   );
-};
-
-CaseSummary.propTypes = {
-  colorSchema: PropTypes.string,
-  route: PropTypes.object,
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-  }),
-};
-
-CaseSummary.defaultProps = {
-  colorSchema: "red",
 };
 
 export default CaseSummary;
