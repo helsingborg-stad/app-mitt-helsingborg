@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform, UIManager } from "react-native";
+import { Platform, UIManager, I18nManager } from "react-native";
 import Config from "react-native-config";
 import { setJSExceptionHandler } from "react-native-exception-handler";
 import { ThemeProvider } from "styled-components/native";
@@ -22,6 +22,14 @@ import getMonitoringService from "./services/monitoring/MonitoringService";
  * Platform specific handling, global listeners, providers, etc.
  */
 const App = (): JSX.Element => {
+  try {
+    I18nManager.allowRTL(false);
+    I18nManager.forceRTL(false);
+  } catch (error) {
+    console.warn(`Unable to disable RTL: ${error}`);
+    getMonitoringService().sendError(error as Error);
+  }
+
   /**
    * Setup error boundary handler.
    * Set ENABLE_DEV_ERROR_BOUNDARY=true in .env file to enable error boundary in dev mode (non release build of app).

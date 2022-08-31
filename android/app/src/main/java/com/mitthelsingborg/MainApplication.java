@@ -13,33 +13,34 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import com.facebook.react.modules.i18nmanager.I18nUtil;
+
 public class MainApplication extends Application implements ReactApplication {
 
-  private final ReactNativeHost mReactNativeHost =
-      new ReactNativeHost(this) {
-        @Override
-        public boolean getUseDeveloperSupport() {
-          return BuildConfig.DEBUG;
-        }
+  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+    @Override
+    public boolean getUseDeveloperSupport() {
+      return BuildConfig.DEBUG;
+    }
 
-        @Override
-        protected List<ReactPackage> getPackages() {
-          @SuppressWarnings("UnnecessaryLocalVariable")
-          List<ReactPackage> packages = new PackageList(this).getPackages();
-          // Packages that cannot be autolinked yet can be added manually here, for example:
-          // packages.add(new MyReactNativePackage());
-            packages.add(new BasicNetworkInfoPackage());
-          return packages;
-        }
+    @Override
+    protected List<ReactPackage> getPackages() {
+      @SuppressWarnings("UnnecessaryLocalVariable")
+      List<ReactPackage> packages = new PackageList(this).getPackages();
+      // Packages that cannot be autolinked yet can be added manually here, for
+      // example:
+      // packages.add(new MyReactNativePackage());
+      packages.add(new BasicNetworkInfoPackage());
+      return packages;
+    }
 
-        @Override
-        protected String getJSMainModuleName() {
-          return "index";
-        }
-      };
+    @Override
+    protected String getJSMainModuleName() {
+      return "index";
+    }
+  };
 
-  private final ReactNativeHost mNewArchitectureNativeHost =
-    new MainApplicationReactNativeHost(this);
+  private final ReactNativeHost mNewArchitectureNativeHost = new MainApplicationReactNativeHost(this);
 
   @Override
   public ReactNativeHost getReactNativeHost() {
@@ -53,6 +54,12 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+
+    // FORCE LTR
+    I18nUtil sharedI18nUtilInstance = I18nUtil.getInstance();
+    sharedI18nUtilInstance.allowRTL(getApplicationContext(), false);
+    sharedI18nUtilInstance.forceRTL(getApplicationContext(), false);
+
     // If you opted-in for the New Architecture, we enable the TurboModule system
     ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
     SoLoader.init(this, /* native exopackage */ false);
@@ -60,7 +67,8 @@ public class MainApplication extends Application implements ReactApplication {
   }
 
   /**
-   * Loads Flipper in React Native templates. Call this in the onCreate method with something like
+   * Loads Flipper in React Native templates. Call this in the onCreate method
+   * with something like
    * initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
    *
    * @param context
@@ -71,9 +79,9 @@ public class MainApplication extends Application implements ReactApplication {
     if (BuildConfig.DEBUG) {
       try {
         /*
-         We use reflection here to pick up the class that initializes Flipper,
-        since Flipper library is not available in release mode
-        */
+         * We use reflection here to pick up the class that initializes Flipper,
+         * since Flipper library is not available in release mode
+         */
         Class<?> aClass = Class.forName("com.mitthelsingborg.ReactNativeFlipper");
         aClass
             .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
