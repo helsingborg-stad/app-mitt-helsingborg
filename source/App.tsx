@@ -25,8 +25,9 @@ const App = (): JSX.Element => {
   try {
     I18nManager.allowRTL(false);
     I18nManager.forceRTL(false);
-  } catch (e) {
-    console.warn(`Unable to disable RTL: ${e}`);
+  } catch (error) {
+    console.warn(`Unable to disable RTL: ${error}`);
+    getMonitoringService().sendError(error as Error);
   }
 
   /**
