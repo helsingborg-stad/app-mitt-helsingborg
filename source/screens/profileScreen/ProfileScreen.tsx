@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 
-import { Button, Text, Icon } from "../../components/atoms";
+import { Text, Icon } from "../../components/atoms";
 import { Header } from "../../components/molecules";
 
 import AuthContext from "../../store/AuthContext";
@@ -10,7 +10,7 @@ import {
   ProfileScreenWrapper,
   Container,
   BottomContainer,
-  SignOutButton,
+  MarginButton,
   ProfileInfoContainer,
   ProfileInfoHeading,
   ProfileInfoText,
@@ -31,6 +31,10 @@ function ProfileScreen({ navigation }: Props): JSX.Element {
 
   const handleNavigateToDevFeatureScreen = () => {
     navigate("DevFeatures");
+  };
+
+  const handleNavigateToDebugInfoScreen = () => {
+    navigate("DebugInfo");
   };
 
   const makeField = (fieldLabel: string, fieldValue?: string) => ({
@@ -81,16 +85,26 @@ function ProfileScreen({ navigation }: Props): JSX.Element {
         </ProfileInfoText>
 
         <BottomContainer>
-          <SignOutButton
+          <MarginButton
             block
             colorSchema="blue"
             onClick={handleLogoutButtonClick}
           >
             <Text>Logga ut</Text>
-          </SignOutButton>
+          </MarginButton>
+
+          <MarginButton
+            block
+            variant="outlined"
+            colorSchema="neutral"
+            onClick={handleNavigateToDebugInfoScreen}
+          >
+            <Text>Felsökningsinformation</Text>
+            <Icon name="info" />
+          </MarginButton>
 
           {isDevMode && (
-            <Button
+            <MarginButton
               block
               variant="outlined"
               colorSchema="neutral"
@@ -98,7 +112,7 @@ function ProfileScreen({ navigation }: Props): JSX.Element {
             >
               <Text>Utvecklarfunktioner</Text>
               <Icon name="construction" />
-            </Button>
+            </MarginButton>
           )}
         </BottomContainer>
       </Container>

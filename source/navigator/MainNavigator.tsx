@@ -18,7 +18,12 @@ import useTouchActivity from "../hooks/useTouchActivity";
 
 import AuthStack from "./AuthStack";
 import BottomBarNavigator from "./BottomBarNavigator";
-import { SplashScreen, FormCaseScreen, DevFeaturesScreen } from "../screens";
+import {
+  SplashScreen,
+  FormCaseScreen,
+  DevFeaturesScreen,
+  DebugInfoScreen,
+} from "../screens";
 
 import USER_AUTH_STATE from "../types/UserAuthTypes";
 
@@ -198,6 +203,13 @@ const MainNavigator = (): JSX.Element => {
             <MainCustomNavigator.Screen
               name="DevFeatures"
               component={DevFeaturesScreen}
+              options={{
+                gestureEnabled: false,
+              }}
+            />
+            <MainCustomNavigator.Screen
+              name="DebugInfo"
+              component={DebugInfoScreen}
               options={{
                 gestureEnabled: false,
               }}

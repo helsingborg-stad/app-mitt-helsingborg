@@ -38,6 +38,12 @@ export default class StorageService extends Component {
     });
   }
 
+  static async getAll(): Promise<[string, string][]> {
+    const allKeys: string[] = await AsyncStorage.getAllKeys();
+    const allPairs: [string, string][] = await AsyncStorage.multiGet(allKeys);
+    return allPairs;
+  }
+
   /**
    * Save key value pair to storage.
    *
