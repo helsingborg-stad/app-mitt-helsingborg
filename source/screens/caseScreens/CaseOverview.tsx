@@ -226,7 +226,6 @@ const computeCaseCardComponent = (
     cardProps.onClick = undefined;
   }
 
-  // const shouldShowPin = isWaitingForSign && !isCoApplicant;
   const shouldShowPin = !(isSigned || isRandomCheckRequired);
 
   if (shouldShowPin) {
