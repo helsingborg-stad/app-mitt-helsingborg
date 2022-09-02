@@ -4,6 +4,8 @@ import { BackNavigation } from "../../molecules";
 
 import { Text } from "../../atoms";
 
+import type { ThemeType } from "../../../theme/themeHelpers";
+
 const CloseModalButton = styled(BackNavigation)`
   padding: 24px 24px 0px 24px;
 `;
@@ -26,15 +28,19 @@ const ModalFooter = styled.View`
   align-items: center;
 `;
 
-const CalculationTable = styled.View`
+interface CalculationTableProps {
+  theme: ThemeType;
+}
+const CalculationTable = styled.View<CalculationTableProps>`
   flex: 1;
-  border: 1px solid ${(props) => props.theme.colors.complementary.neutral[1]};
+  border: 1px solid ${({ theme }) => theme.colors.complementary.neutral[1]};
   border-radius: 5px;
   padding-bottom: 8px;
 `;
 
 interface CalculationRowProps {
   paddingBottom?: number;
+  theme: ThemeType;
 }
 const CalculationRow = styled.View<CalculationRowProps>`
   padding-bottom: ${({ paddingBottom }) => `${paddingBottom ?? 0}px`};
@@ -49,7 +55,7 @@ const CalculationRowHeader = styled(CalculationRow)`
   border-radius: 5px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
-  background-color: ${(props) => props.theme.colors.neutrals[5]};
+  background-color: ${({ theme }) => theme.colors.neutrals[5]};
 `;
 
 interface CalculationRowCellProps {
