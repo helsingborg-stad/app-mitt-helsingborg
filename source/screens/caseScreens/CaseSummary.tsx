@@ -4,7 +4,6 @@ import React, {
   useRef,
   useCallback,
   useMemo,
-  useState,
 } from "react";
 import { View, Animated, Easing } from "react-native";
 import { CaseState, CaseDispatch } from "../../store/CaseContext";
@@ -15,7 +14,10 @@ import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions
 import type { PrimaryColor } from "../../theme/themeHelpers";
 import { Icon, Text } from "../../components/atoms";
 import { Card, ScreenWrapper, CaseCard } from "../../components/molecules";
-import { CaseCalculationModal } from "../../components/organisms";
+import {
+  CaseCalculationModal,
+  RemoveCaseModal,
+} from "../../components/organisms";
 import { useModal } from "../../components/molecules/Modal";
 import Button from "../../components/atoms/Button";
 import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
@@ -36,8 +38,6 @@ import type {
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import useGetFormPasswords from "./useGetFormPasswords";
 
-import CloseDialog from "../../components/molecules/CloseDialog";
-
 import type { Props } from "./CaseSummary.types";
 
 import {
@@ -47,7 +47,7 @@ import {
 } from "./CaseSummary.styled";
 
 const { ACTIVE_SIGNATURE_PENDING } = ApplicationStatusType;
-const SCREEN_TRANSITION_DELAY = 1500;
+const SCREEN_TRANSITION_DELAY = 1000;
 
 const computeCaseCardComponent = (
   caseItem: Case,
@@ -211,17 +211,7 @@ const computeCaseCardComponent = (
   );
 };
 
-enum RemoveCaseState {
-  Default,
-  Loading,
-  Error,
-}
-
 const CaseSummary = (props: Props): JSX.Element => {
-  const [removeCaseState, setRemoveCaseState] = useState(
-    RemoveCaseState.Default
-  );
-
   const authContext = useContext(AuthContext);
   const { cases, getCase } = useContext(CaseState);
   const { deleteCase } = useContext(CaseDispatch);
@@ -256,64 +246,21 @@ const CaseSummary = (props: Props): JSX.Element => {
   );
 
   const removeCase = async () => {
-    setRemoveCaseState(RemoveCaseState.Loading);
-
     const result = await remove(`cases/${caseId}`, undefined, undefined);
 
     if (!result.data.data.code) {
       deleteCase(caseId);
 
       setTimeout(() => {
+        toggleRemoveCaseModal();
         navigation.reset({
           index: 0,
           routes: [{ name: "App" }],
         });
       }, SCREEN_TRANSITION_DELAY);
     } else {
-      setRemoveCaseState(RemoveCaseState.Error);
+      throw new Error("Could not delete case");
     }
-  };
-
-  const getModalButtonSet = (
-    text: string,
-    color: PrimaryColor,
-    clickHandler: () => void
-  ) => ({
-    text,
-    color,
-    clickHandler,
-  });
-
-  const closeModal = () => {
-    toggleRemoveCaseModal();
-    setRemoveCaseState(RemoveCaseState.Default);
-  };
-
-  const modalButtonSet = {
-    [RemoveCaseState.Default]: [
-      getModalButtonSet("Avbryt", "neutral", closeModal),
-      getModalButtonSet("Ja", "red", removeCase),
-    ],
-    [RemoveCaseState.Loading]: [],
-    [RemoveCaseState.Error]: [
-      getModalButtonSet("Avbryt", "neutral", closeModal),
-      getModalButtonSet("Försök igen", "red", removeCase),
-    ],
-  };
-
-  const modalText: Record<RemoveCaseState, { title: string; body: string }> = {
-    [RemoveCaseState.Default]: {
-      title: "Vill du ta bort din ansökan?",
-      body: "När en ansökan tagits bort kan en ny ansökan för perioden skapas",
-    },
-    [RemoveCaseState.Loading]: {
-      title: "Ditt ärende tas bort",
-      body: "Vänligen vänta ...",
-    },
-    [RemoveCaseState.Error]: {
-      title: "Ett fel har inträffat",
-      body: "Försök igen eller prova vid ett annat tillfälle om problemet uppstår",
-    },
   };
 
   const updateCaseSignature = useCallback(
@@ -447,11 +394,10 @@ const CaseSummary = (props: Props): JSX.Element => {
         notes={journals?.journal?.notes?.note ?? []}
       />
 
-      <CloseDialog
+      <RemoveCaseModal
         visible={showRemoveCaseModal}
-        title={modalText[removeCaseState].title}
-        body={modalText[removeCaseState].body}
-        buttons={modalButtonSet[removeCaseState]}
+        onCloseModal={toggleRemoveCaseModal}
+        onRemoveCase={removeCase}
       />
 
       <RemoveCaseButtonContainer>
