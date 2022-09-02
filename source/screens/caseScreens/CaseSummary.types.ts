@@ -9,7 +9,7 @@ interface Route {
 
 interface ResetParams {
   index: number;
-  routes: [{ name: string }];
+  routes: { name: string }[];
 }
 
 interface Navigation {
