@@ -274,7 +274,7 @@ const CaseSummary = (props: Props): JSX.Element => {
     }
   };
 
-  const getModalButtonsSet = (
+  const getModalButtonSet = (
     text: string,
     color: PrimaryColor,
     clickHandler: () => void
@@ -291,13 +291,13 @@ const CaseSummary = (props: Props): JSX.Element => {
 
   const modalButtonSet = {
     [RemoveCaseState.Default]: [
-      getModalButtonsSet("Avbryt", "neutral", closeModal),
-      getModalButtonsSet("Ja", "red", removeCase),
+      getModalButtonSet("Avbryt", "neutral", closeModal),
+      getModalButtonSet("Ja", "red", removeCase),
     ],
     [RemoveCaseState.Loading]: [],
     [RemoveCaseState.Error]: [
-      getModalButtonsSet("Avbryt", "neutral", closeModal),
-      getModalButtonsSet("Försök igen", "red", removeCase),
+      getModalButtonSet("Avbryt", "neutral", closeModal),
+      getModalButtonSet("Försök igen", "red", removeCase),
     ],
   };
 
