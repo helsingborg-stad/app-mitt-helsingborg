@@ -1,38 +1,31 @@
 import React, {
   useContext,
   useEffect,
-  useState,
   useRef,
   useCallback,
   useMemo,
 } from "react";
-import { View, Animated, Easing, ScrollView } from "react-native";
-import PropTypes from "prop-types";
-import styled from "styled-components/native";
-import { CaseState } from "../../store/CaseContext";
+import { View, Animated, Easing } from "react-native";
+import { CaseState, CaseDispatch } from "../../store/CaseContext";
 import icons from "../../helpers/Icons";
 import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
 import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
 import type { PrimaryColor } from "../../theme/themeHelpers";
 import { Icon, Text } from "../../components/atoms";
+import { Card, ScreenWrapper, CaseCard } from "../../components/molecules";
 import {
-  Card,
-  HelpButton,
-  ScreenWrapper,
-  CaseCard,
-} from "../../components/molecules";
-import { Modal, useModal } from "../../components/molecules/Modal";
-import BackNavigation from "../../components/molecules/BackNavigation";
+  CaseCalculationModal,
+  RemoveCaseModal,
+} from "../../components/organisms";
+import { useModal } from "../../components/molecules/Modal";
 import Button from "../../components/atoms/Button";
-import {
-  formatAmount,
-  convertDataToArray,
-  calculateSum,
-} from "../../helpers/FormatVivaData";
+import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
-import { put } from "../../helpers/ApiRequest";
+import { put, remove } from "../../helpers/ApiRequest";
 import { answersAreEncrypted } from "../../services/encryption/CaseEncryptionHelper";
+import { ApplicationStatusType } from "../../types/Case";
+
 import type {
   Case,
   VIVACaseDetails,
@@ -45,85 +38,16 @@ import type {
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import useGetFormPasswords from "./useGetFormPasswords";
 
-const Container = styled.ScrollView`
-  flex: 1;
-  padding-left: 16px;
-  padding-right: 16px;
-`;
+import type { Props } from "./CaseSummary.types";
 
-const SummaryHeading = styled(Text)`
-  margin-left: 4px;
-  margin-top: 30px;
-  margin-bottom: 16px;
-`;
+import {
+  Container,
+  SummaryHeading,
+  RemoveCaseButtonContainer,
+} from "./CaseSummary.styled";
 
-const CloseModalButton = styled(BackNavigation)`
-  padding: 24px 24px 0px 24px;
-`;
-
-const ModalContent = styled.View`
-  margin: 16px;
-  margin-top: 32px;
-`;
-
-const ModalFooter = styled.View`
-  margin: 16px;
-  margin-bottom: 32px;
-  justify-content: center;
-  align-items: center;
-`;
-
-Card.CalculationTable = styled.View`
-  flex: 1;
-  border: 1px solid ${(props) => props.theme.colors.complementary.neutral[1]};
-  border-radius: 5px;
-  padding-bottom: 8px;
-`;
-
-interface CalculationRowProps {
-  paddingBottom?: number;
-}
-Card.CalculationRow = styled.View<CalculationRowProps>`
-  padding-bottom: ${({ paddingBottom }) => `${paddingBottom ?? 0}px`};
-  flex: 1;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-Card.CalculationRowHeader = styled(Card.CalculationRow)`
-  padding: 4px 0px;
-  margin-bottom: 8px;
-  border-radius: 5px;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-  background-color: ${(props) => props.theme.colors.neutrals[5]};
-`;
-
-interface CalculationRowCellProps {
-  flex?: number;
-  justify?: "start" | "flex-end" | "flex-start";
-}
-Card.CalculationRowCell = styled.View<CalculationRowCellProps>`
-  ${({ justify }) => justify && `justify-content: ${justify}`};
-  flex: ${({ flex }) => flex ?? 1};
-  align-self: stretch;
-  padding-left: 8px;
-  padding-right: 8px;
-`;
-
-Card.Separator = styled.View`
-  height: 2px;
-  width: 100%;
-  border-radius: 50px;
-  margin-top: 16px;
-  margin-bottom: 16px;
-  background-color: ${(props) => props.theme.colors.complementary.neutral[1]};
-`;
-
-Card.DetailsTitle = styled(Text)`
-  margin-top: 16px;
-  margin-bottom: 16px;
-`;
+const { ACTIVE_SIGNATURE_PENDING } = ApplicationStatusType;
+const SCREEN_TRANSITION_DELAY = 1000;
 
 const computeCaseCardComponent = (
   caseItem: Case,
@@ -287,12 +211,13 @@ const computeCaseCardComponent = (
   );
 };
 
-const CaseSummary = (props) => {
+const CaseSummary = (props: Props): JSX.Element => {
   const authContext = useContext(AuthContext);
   const { cases, getCase } = useContext(CaseState);
+  const { deleteCase } = useContext(CaseDispatch);
 
   const {
-    colorSchema,
+    colorSchema = "red",
     navigation,
     route: {
       params: { id: caseId, name: formName },
@@ -300,6 +225,10 @@ const CaseSummary = (props) => {
   } = props;
 
   const caseData: Case = useMemo(() => cases[caseId] ?? {}, [cases, caseId]);
+  const person = caseData.persons.find(
+    ({ personalNumber }) => personalNumber === authContext.user?.personalNumber
+  );
+  const isApplicant = person?.role === "applicant";
 
   const details = caseData?.details ?? ({} as VIVACaseDetails);
   const { workflow = {}, administrators } = details;
@@ -310,11 +239,32 @@ const CaseSummary = (props) => {
   } = workflow as Workflow;
 
   const [isModalVisible, toggleModal] = useModal();
-  const [isCalculationDetailsVisible, setCalculationDetailsVisibility] =
-    useState(false);
+  const [showRemoveCaseModal, toggleRemoveCaseModal] = useModal();
+
   const decisions = decision?.decisions?.decision
     ? convertDataToArray(decision.decisions.decision)
     : [];
+
+  const canRemoveCase =
+    [ACTIVE_SIGNATURE_PENDING].includes(caseData.status.type) && isApplicant;
+
+  const removeCase = async () => {
+    const result = await remove(`cases/${caseId}`, undefined, undefined);
+
+    if (!result.data.data.code) {
+      deleteCase(caseId);
+
+      setTimeout(() => {
+        toggleRemoveCaseModal();
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "App" }],
+        });
+      }, SCREEN_TRANSITION_DELAY);
+    } else {
+      throw new Error("Could not delete case");
+    }
+  };
 
   const updateCaseSignature = useCallback(
     async (caseItem, signatureSuccessful) => {
@@ -350,7 +300,7 @@ const CaseSummary = (props) => {
     [navigation]
   );
 
-  const openForm = (id: string, isSignMode?: boolean) => {
+  const openForm = (id: string, isSignMode = false) => {
     navigation.navigate("Form", { caseId: id, isSignMode });
   };
 
@@ -377,6 +327,10 @@ const CaseSummary = (props) => {
       useNativeDriver: true,
     }).start();
   }, [fadeAnimation]);
+
+  const handleRemoveCaseButtonClick = () => {
+    toggleRemoveCaseModal();
+  };
 
   return (
     <ScreenWrapper {...props}>
@@ -435,339 +389,33 @@ const CaseSummary = (props) => {
         )}
       </Container>
 
-      <Modal visible={isModalVisible} hide={toggleModal}>
-        <CloseModalButton
-          onClose={toggleModal}
-          primary={false}
-          showBackButton={false}
-          colorSchema="red"
-        />
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: "space-between",
-          }}
-        >
-          <ModalContent>
-            <SummaryHeading type="h5">Beslut</SummaryHeading>
+      <CaseCalculationModal
+        isVisible={isModalVisible}
+        toggleModal={toggleModal}
+        calculation={calculations.calculation}
+        decisions={decisions}
+        notes={journals?.journal?.notes?.note ?? []}
+      />
 
-            {decisions.map((caseDecision, index) => (
-              <Card key={index} colorSchema="red">
-                <Card.Body color="neutral" shadow>
-                  <Card.Title colorSchema="neutral">
-                    {caseDecision.type}
-                  </Card.Title>
-                  <Card.Text>{caseDecision.explanation}</Card.Text>
-                </Card.Body>
-              </Card>
-            ))}
+      <RemoveCaseModal
+        visible={showRemoveCaseModal}
+        onCloseModal={toggleRemoveCaseModal}
+        onRemoveCase={removeCase}
+      />
 
-            {Object.keys(calculations).map((key) => {
-              const calculation = calculations[key];
-              return (
-                <Card key={key} colorSchema="red">
-                  <Card.Body color="neutral">
-                    <Card.Title colorSchema="neutral">Beräkning</Card.Title>
-                    {calculation.periodstartdate &&
-                      calculation.periodenddate && (
-                        <Card.Text>{`Period: ${calculation.periodstartdate} - ${calculation.periodenddate} `}</Card.Text>
-                      )}
-                    <Card.CalculationRow>
-                      <Card.Text strong>Inkomster</Card.Text>
-                      <Card.Text>
-                        {formatAmount(calculation.incomesum)}
-                      </Card.Text>
-                    </Card.CalculationRow>
-                    <Card.CalculationRow>
-                      <Card.Text strong>Utgifter</Card.Text>
-                      <Card.Text>
-                        {formatAmount(calculation.costsum, true)}
-                      </Card.Text>
-                    </Card.CalculationRow>
-                    <Card.CalculationRow>
-                      <Card.Text strong>Belopp enligt norm</Card.Text>
-                      <Card.Text>
-                        {formatAmount(calculation.normsubtotal, true)}
-                      </Card.Text>
-                    </Card.CalculationRow>
-                    <Card.CalculationRow>
-                      <Card.Text strong>Reducering</Card.Text>
-                      <Card.Text>
-                        <Card.Text>
-                          {formatAmount(calculation.reductionsum)}
-                        </Card.Text>
-                      </Card.Text>
-                    </Card.CalculationRow>
-                    <Card.CalculationRow>
-                      <Card.Text strong>Summa</Card.Text>
-                      <Card.Text strong>
-                        {formatAmount(calculation.calculationsum)}
-                      </Card.Text>
-                    </Card.CalculationRow>
-
-                    <Card.Button
-                      colorSchema="neutral"
-                      onClick={() =>
-                        setCalculationDetailsVisibility(
-                          !isCalculationDetailsVisible
-                        )
-                      }
-                    >
-                      <Text>Detaljer</Text>
-                      <Icon
-                        name={
-                          isCalculationDetailsVisible
-                            ? "keyboard-arrow-up"
-                            : "keyboard-arrow-down"
-                        }
-                      />
-                    </Card.Button>
-                    {isCalculationDetailsVisible && (
-                      <>
-                        <Card.DetailsTitle type="h6">
-                          Personer som påverkar normen
-                        </Card.DetailsTitle>
-                        {calculation?.calculationpersons?.calculationperson &&
-                          convertDataToArray(
-                            calculation?.calculationpersons?.calculationperson
-                          ).map((person, index) => (
-                            <Card
-                              key={`${index}-${person?.name}`}
-                              colorSchema="neutral"
-                            >
-                              <Card.Title colorSchema="neutral" strong>
-                                {person?.name}
-                              </Card.Title>
-                              <Card.SubTitle colorSchema="neutral" strong>
-                                {person?.pnumber}
-                              </Card.SubTitle>
-                              <Card.Text>
-                                Norm beräknad på {person?.days} dagar
-                              </Card.Text>
-                            </Card>
-                          ))}
-
-                        <Text strong type="h6">
-                          Detaljerad beräkning
-                        </Text>
-
-                        <Card.DetailsTitle type="h5">
-                          Inkomster
-                        </Card.DetailsTitle>
-                        {calculation?.incomes?.income ? (
-                          <>
-                            <Card.CalculationTable>
-                              <Card.CalculationRowHeader>
-                                <Card.CalculationRowCell>
-                                  <Text strong>Inkomst</Text>
-                                </Card.CalculationRowCell>
-                                <Card.CalculationRowCell>
-                                  <Text strong>Summa</Text>
-                                </Card.CalculationRowCell>
-                                <Card.CalculationRowCell />
-                              </Card.CalculationRowHeader>
-
-                              {convertDataToArray(
-                                calculation?.incomes?.income
-                              ).map((income, index) => (
-                                <Card.CalculationRow
-                                  key={`${index}-${income?.type}`}
-                                >
-                                  <Card.CalculationRowCell>
-                                    <Text>{income?.type}</Text>
-                                  </Card.CalculationRowCell>
-                                  <Card.CalculationRowCell>
-                                    <Text>{income?.amount} kr</Text>
-                                  </Card.CalculationRowCell>
-                                  <Card.CalculationRowCell>
-                                    {income.note ? (
-                                      <HelpButton
-                                        text={income.note}
-                                        heading={income.type}
-                                        tagline=""
-                                        icon="info"
-                                      />
-                                    ) : null}
-                                  </Card.CalculationRowCell>
-                                </Card.CalculationRow>
-                              ))}
-                            </Card.CalculationTable>
-                          </>
-                        ) : (
-                          <Card.Text italic>
-                            Det finns inga registrerade inkomster.
-                          </Card.Text>
-                        )}
-
-                        <Card.DetailsTitle type="h5">
-                          Utgifter
-                        </Card.DetailsTitle>
-                        {calculation?.costs?.cost ? (
-                          <>
-                            <Card.CalculationTable>
-                              <Card.CalculationRowHeader>
-                                <Card.CalculationRowCell />
-                                <Card.CalculationRowCell>
-                                  <Text strong>Ansökt</Text>
-                                </Card.CalculationRowCell>
-                                <Card.CalculationRowCell>
-                                  <Text strong>Godkänt</Text>
-                                </Card.CalculationRowCell>
-                                <Card.CalculationRowCell />
-                              </Card.CalculationRowHeader>
-                              {convertDataToArray(calculation?.costs?.cost).map(
-                                (cost, index) => (
-                                  <Card.CalculationRow
-                                    key={`${index}-${cost.type}`}
-                                  >
-                                    <Card.CalculationRowCell>
-                                      <Text>{cost?.type}</Text>
-                                    </Card.CalculationRowCell>
-                                    <Card.CalculationRowCell>
-                                      <Text>{formatAmount(cost.actual)}</Text>
-                                    </Card.CalculationRowCell>
-                                    <Card.CalculationRowCell>
-                                      <Text>{formatAmount(cost.approved)}</Text>
-                                    </Card.CalculationRowCell>
-                                    <Card.CalculationRowCell>
-                                      {cost.note ? (
-                                        <HelpButton
-                                          text={cost.note}
-                                          heading={cost.type}
-                                          tagline=""
-                                          icon="info"
-                                        />
-                                      ) : null}
-                                    </Card.CalculationRowCell>
-                                  </Card.CalculationRow>
-                                )
-                              )}
-                            </Card.CalculationTable>
-                          </>
-                        ) : (
-                          <Card.Text italic>
-                            Det finns inga registrerade utgifter.
-                          </Card.Text>
-                        )}
-
-                        <Card.DetailsTitle type="h5">
-                          Belopp enligt norm
-                        </Card.DetailsTitle>
-
-                        {calculation?.norm?.normpart ? (
-                          <>
-                            {calculation.norm.normpart?.map((part, index) => {
-                              const bottomPadding =
-                                calculation.norm.normpart.length === index + 1
-                                  ? 0
-                                  : 16;
-
-                              return (
-                                <Card.CalculationRow
-                                  key={`${index}-${part.type}`}
-                                  paddingBottom={bottomPadding}
-                                >
-                                  <Card.CalculationRowCell flex={2}>
-                                    <Text align="left">{part?.type}</Text>
-                                  </Card.CalculationRowCell>
-                                  <Card.CalculationRowCell justify="center">
-                                    <Text align="right">
-                                      {formatAmount(part.amount)}
-                                    </Text>
-                                  </Card.CalculationRowCell>
-                                </Card.CalculationRow>
-                              );
-                            })}
-                          </>
-                        ) : (
-                          <Card.Text italic>
-                            Det finns inga registrerade normer.
-                          </Card.Text>
-                        )}
-
-                        <Card.DetailsTitle type="h5">
-                          Reducering
-                        </Card.DetailsTitle>
-                        {calculation?.reductions?.reduction ? (
-                          <>
-                            {convertDataToArray(
-                              calculation?.reductions?.reduction
-                            ).map((reduction, index) => (
-                              <Card.CalculationRow
-                                key={`${index}-${reduction.type}`}
-                              >
-                                <Card.CalculationRowCell>
-                                  <Text>{reduction?.type}</Text>
-                                </Card.CalculationRowCell>
-                                <Card.CalculationRowCell>
-                                  <Text>
-                                    {reduction?.days}{" "}
-                                    {reduction?.days > 1 ? "dagar" : "dag"}
-                                  </Text>
-                                </Card.CalculationRowCell>
-                                <Card.CalculationRowCell>
-                                  <Text>{reduction?.note}</Text>
-                                </Card.CalculationRowCell>
-                                <Card.CalculationRowCell>
-                                  <Text>{formatAmount(reduction.amount)}</Text>
-                                </Card.CalculationRowCell>
-                              </Card.CalculationRow>
-                            ))}
-                          </>
-                        ) : (
-                          <Card.Text italic>
-                            Det finns inga registrerade reduceringar.
-                          </Card.Text>
-                        )}
-
-                        <Card.CalculationRow>
-                          <Card.Text strong>Summa</Card.Text>
-                          <Card.Text strong>
-                            {formatAmount(calculation.calculationsum)}
-                          </Card.Text>
-                        </Card.CalculationRow>
-                      </>
-                    )}
-                  </Card.Body>
-                </Card>
-              );
-            })}
-
-            {journals?.journal?.notes?.note?.length > 0 && (
-              <Card>
-                <Card.Body color="neutral">
-                  <Card.Title colorSchema="neutral">Anteckningar</Card.Title>
-                  {journals.journal.notes.note.map((note) => (
-                    <View key={`journal-${note.label}`}>
-                      <Text type="h3">{note.label}</Text>
-                      <Card.Text>{note.text}</Card.Text>
-                    </View>
-                  ))}
-                </Card.Body>
-              </Card>
-            )}
-          </ModalContent>
-          <ModalFooter>
-            <Button z={0} block onClick={toggleModal} colorSchema="neutral">
-              <Text>Stäng</Text>
-            </Button>
-          </ModalFooter>
-        </ScrollView>
-      </Modal>
+      <RemoveCaseButtonContainer>
+        {canRemoveCase && (
+          <Button
+            onClick={handleRemoveCaseButtonClick}
+            colorSchema="red"
+            fullWidth
+          >
+            <Text>Ta bort ansökan</Text>
+          </Button>
+        )}
+      </RemoveCaseButtonContainer>
     </ScreenWrapper>
   );
-};
-
-CaseSummary.propTypes = {
-  colorSchema: PropTypes.string,
-  route: PropTypes.object,
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-  }),
-};
-
-CaseSummary.defaultProps = {
-  colorSchema: "red",
 };
 
 export default CaseSummary;
