@@ -20,8 +20,9 @@ const BottomContainer = styled.View`
   padding-bottom: 16px;
 `;
 
-const SignOutButton = styled(Button)`
-  margin-bottom: 16px;
+const MarginButton = styled(Button)`
+  margin-top: 8px;
+  margin-bottom: 8px;
 `;
 
 const ProfileInfoContainer = styled.View`
@@ -52,7 +53,7 @@ export {
   ProfileScreenWrapper,
   Container,
   BottomContainer,
-  SignOutButton,
+  MarginButton,
   ProfileInfoContainer,
   ProfileInfoHeading,
   ProfileInfoText,
