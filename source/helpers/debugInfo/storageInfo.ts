@@ -1,4 +1,5 @@
 import StorageService from "../../services/storage/StorageService";
+
 import type {
   DebugInfoCategoryGetter,
   DebugInfoEntry,
@@ -10,7 +11,7 @@ const storageInfo: DebugInfoCategoryGetter = {
     const storagePairs = await StorageService.getAll();
     return storagePairs.map<DebugInfoEntry>(([name, value]) => ({
       name,
-      value,
+      value: value ?? "<null>",
     }));
   },
 };

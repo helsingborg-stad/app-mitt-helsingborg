@@ -38,9 +38,11 @@ export default class StorageService extends Component {
     });
   }
 
-  static async getAll(): Promise<[string, string][]> {
+  static async getAll(): Promise<[string, string | null][]> {
     const allKeys: string[] = await AsyncStorage.getAllKeys();
-    const allPairs: [string, string][] = await AsyncStorage.multiGet(allKeys);
+    const allPairs: [string, string | null][] = await AsyncStorage.multiGet(
+      allKeys
+    );
     return allPairs;
   }
 

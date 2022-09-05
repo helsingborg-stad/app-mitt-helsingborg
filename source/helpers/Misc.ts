@@ -3,6 +3,8 @@ import Config from "react-native-config";
 import DeviceInfo from "react-native-device-info";
 import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
 
+export const BYTES_PER_GIGABYTE = 1000000000;
+
 export function wait(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -67,8 +69,6 @@ export async function to<T>(
     return [error as Error, undefined];
   }
 }
-
-export const BYTES_PER_GIGABYTE = 1000000000;
 
 export function roundToPrecision(value: number, decimals: number): number {
   const modifier = 10 ** decimals;

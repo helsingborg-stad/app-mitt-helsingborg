@@ -1,11 +1,13 @@
 import DeviceInfo from "react-native-device-info";
+
+import getIPv4Address from "../NetworkInfo";
 import {
   getUserFriendlyAppVersion,
   roundToPrecision,
   BYTES_PER_GIGABYTE,
   getPhoneLocale,
 } from "../Misc";
-import getIPv4Address from "../NetworkInfo";
+
 import type { DebugInfoCategoryGetter } from "./debugInfo.types";
 
 const systemInfo: DebugInfoCategoryGetter = {

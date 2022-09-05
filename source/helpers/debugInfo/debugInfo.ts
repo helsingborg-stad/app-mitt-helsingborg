@@ -1,9 +1,10 @@
+import storageInfo from "./storageInfo";
+import systemInfo from "./systemInfo";
+
 import type {
   DebugInfoCategory,
   DebugInfoCategoryGetter,
 } from "./debugInfo.types";
-import storageInfo from "./storageInfo";
-import systemInfo from "./systemInfo";
 
 const debugInfoCategories: DebugInfoCategoryGetter[] = [
   systemInfo,
