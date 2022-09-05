@@ -62,7 +62,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Appen använder kameran för att ta bilder som kan användas som underlag för ansökningar och kompletteringar.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Appen kan ladda upp dina bilder som underlag för ansökningar och kompletteringar.</string>
 	<key>UIAppFonts</key>
@@ -83,24 +83,6 @@
 		<string>Octicons.ttf</string>
 		<string>Zocial.ttf</string>
 		<string>Fontisto.ttf</string>
-		<string>Roboto-Black.ttf</string>
-		<string>Roboto-BlackItalic.ttf</string>
-		<string>Roboto-Bold.ttf</string>
-		<string>Roboto-BoldItalic.ttf</string>
-		<string>Roboto-Italic.ttf</string>
-		<string>Roboto-Light.ttf</string>
-		<string>Roboto-LightItalic.ttf</string>
-		<string>Roboto-Medium.ttf</string>
-		<string>Roboto-MediumItalic.ttf</string>
-		<string>Roboto-Regular.ttf</string>
-		<string>Roboto-Thin.ttf</string>
-		<string>Roboto-ThinItalic.ttf</string>
-		<string>RobotoCondensed-Bold.ttf</string>
-		<string>RobotoCondensed-BoldItalic.ttf</string>
-		<string>RobotoCondensed-Italic.ttf</string>
-		<string>RobotoCondensed-Light.ttf</string>
-		<string>RobotoCondensed-LightItalic.ttf</string>
-		<string>RobotoCondensed-Regular.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
