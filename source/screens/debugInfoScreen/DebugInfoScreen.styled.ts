@@ -12,7 +12,8 @@ export const MarginedText = styled.Text`
 
 export const Container = styled.ScrollView`
   flex: 1;
-  margin: 16px 16px 40px 16px;
+  margin: 16px 0px 40px 0px;
+  padding: 0px 16px;
 `;
 
 export const MarginButton = styled(Button)`
