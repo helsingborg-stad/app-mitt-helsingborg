@@ -153,3 +153,8 @@ jest.mock("react-native-device-info", () => ({
   getVersion: () => "1.2.3",
   getBuildNumber: () => "1337",
 }));
+
+jest.mock("@sentry/react-native");
+jest.mock("@react-native-clipboard/clipboard", () => ({
+  setString: jest.fn(),
+}));

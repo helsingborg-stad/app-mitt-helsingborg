@@ -1,51 +1,25 @@
 import React from "react";
 
-import Clipboard from "@react-native-clipboard/clipboard";
 import Header from "../../components/molecules/Header";
-import { Text } from "../../components/atoms";
-import { useNotification } from "../../store/NotificationContext";
 
+import getDebugInfo from "../../helpers/debugInfo/debugInfo";
+import { Text } from "../../components/atoms";
 import useAsync from "../../hooks/useAsync";
 import {
-  DebInfoScreenWrapper,
+  DebugInfoScreenWrapper,
   Container,
   MarginedText,
-  InfoContainer,
-  CategoryContainer,
-  CategoryTitle,
-  CategoryErrorText,
-  CategoryEntry,
-  CategoryEntryName,
-  CategoryEntryValue,
   MarginButton,
 } from "./DebugInfoScreen.styled";
-import getDebugInfo from "../../helpers/debugInfo/debugInfo";
 
-interface Props {
-  navigation: {
-    navigate: (to: string) => void;
-  };
-}
+import type { Props } from "./DebugInfoScreen.types";
+import DebugInfo from "../../components/organisms/DebugInfo";
 
 export default function DebugInfoScreen({ navigation }: Props): JSX.Element {
-  const showNotification = useNotification();
-
   const [isLoading, debugInfo, error] = useAsync(getDebugInfo);
 
-  const copyDebugInfoToClipboard = () => {
-    const asString = JSON.stringify(debugInfo);
-    Clipboard.setString(asString);
-
-    showNotification(
-      "Felsökning",
-      "Informationen har kopierats till urklippet.",
-      "success",
-      4000
-    );
-  };
-
   return (
-    <DebInfoScreenWrapper>
+    <DebugInfoScreenWrapper>
       <Header title="Felsökning" />
       <Container>
         <MarginedText>
@@ -65,38 +39,7 @@ export default function DebugInfoScreen({ navigation }: Props): JSX.Element {
           </>
         )}
 
-        {debugInfo && (
-          <>
-            <InfoContainer>
-              {debugInfo.map((category) => (
-                <CategoryContainer key={category.name}>
-                  <CategoryTitle>{category.name}</CategoryTitle>
-                  {category.errorMessage && (
-                    <CategoryErrorText>
-                      {category.errorMessage}
-                    </CategoryErrorText>
-                  )}
-                  {category.entries &&
-                    category.entries.map((entry) => (
-                      <CategoryEntry key={`${category.name}-${entry.name}`}>
-                        <CategoryEntryName>{entry.name}</CategoryEntryName>
-                        <CategoryEntryValue>{entry.value}</CategoryEntryValue>
-                      </CategoryEntry>
-                    ))}
-                </CategoryContainer>
-              ))}
-            </InfoContainer>
-
-            <MarginButton
-              block
-              variant="outlined"
-              colorSchema="neutral"
-              onClick={copyDebugInfoToClipboard}
-            >
-              <Text>Kopiera till urklipp</Text>
-            </MarginButton>
-          </>
-        )}
+        <DebugInfo debugInfo={debugInfo} />
 
         <MarginButton
           block
@@ -109,6 +52,6 @@ export default function DebugInfoScreen({ navigation }: Props): JSX.Element {
           <Text>Tillbaka</Text>
         </MarginButton>
       </Container>
-    </DebInfoScreenWrapper>
+    </DebugInfoScreenWrapper>
   );
 }

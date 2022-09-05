@@ -116,7 +116,7 @@
       "./jestSetupFile.ts"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native(-.*)?|@react-native(-community)?|@react-native-picker|@react-navigation)/)"
+      "node_modules/(?!((jest-)?react-native(-.*)?|@react-native(-community)?|@react-native-picker|@react-navigation|@sentry)/)"
     ],
     "transform": {
       "^.+\\.[t|j]sx?$": "babel-jest"
