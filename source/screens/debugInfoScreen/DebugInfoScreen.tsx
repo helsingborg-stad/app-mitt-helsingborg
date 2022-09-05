@@ -18,6 +18,10 @@ import DebugInfo from "../../components/organisms/DebugInfo";
 export default function DebugInfoScreen({ navigation }: Props): JSX.Element {
   const [isLoading, debugInfo, error] = useAsync(getDebugInfo);
 
+  const handleBack = () => {
+    navigation.navigate("App");
+  };
+
   return (
     <DebugInfoScreenWrapper>
       <Header title="Felsökning" />
@@ -45,9 +49,7 @@ export default function DebugInfoScreen({ navigation }: Props): JSX.Element {
           block
           variant="contained"
           colorSchema="neutral"
-          onClick={async () => {
-            navigation.navigate("App");
-          }}
+          onClick={handleBack}
         >
           <Text>Tillbaka</Text>
         </MarginButton>

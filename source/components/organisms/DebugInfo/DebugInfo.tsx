@@ -3,6 +3,7 @@ import React from "react";
 
 import { useNotification } from "../../../store/NotificationContext";
 import { Text } from "../../atoms";
+
 import {
   CategoryContainer,
   CategoryEntry,
@@ -17,7 +18,7 @@ import {
 
 import type { Props } from "./DebugInfo.types";
 
-export default function DebugInfo({ debugInfo }: Props): JSX.Element {
+export default function DebugInfo({ debugInfo }: Props): JSX.Element | null {
   const showNotification = useNotification();
 
   const copyDebugInfoToClipboard = () => {
@@ -32,6 +33,8 @@ export default function DebugInfo({ debugInfo }: Props): JSX.Element {
     );
   };
 
+  if (!debugInfo) return null;
+
   return (
     <Container>
       <InfoContainer>
@@ -41,13 +44,12 @@ export default function DebugInfo({ debugInfo }: Props): JSX.Element {
             {category.errorMessage && (
               <CategoryErrorText>{category.errorMessage}</CategoryErrorText>
             )}
-            {category.entries &&
-              category.entries.map((entry) => (
-                <CategoryEntry key={`${category.name}-${entry.name}`}>
-                  <CategoryEntryName>{entry.name}</CategoryEntryName>
-                  <CategoryEntryValue>{entry.value}</CategoryEntryValue>
-                </CategoryEntry>
-              ))}
+            {category?.entries?.map((entry) => (
+              <CategoryEntry key={`${category.name}-${entry.name}`}>
+                <CategoryEntryName>{entry.name}</CategoryEntryName>
+                <CategoryEntryValue>{entry.value}</CategoryEntryValue>
+              </CategoryEntry>
+            ))}
           </CategoryContainer>
         ))}
       </InfoContainer>

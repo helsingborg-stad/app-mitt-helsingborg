@@ -7,8 +7,7 @@ export const DebugInfoScreenWrapper = styled(ScreenWrapper)`
 `;
 
 export const MarginedText = styled.Text`
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin: 8px 0px;
 `;
 
 export const Container = styled.ScrollView`

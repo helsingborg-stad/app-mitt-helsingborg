@@ -9,9 +9,7 @@ export const Container = styled.ScrollView`
 `;
 
 export const InfoContainer = styled.View`
-  margin-top: 16px;
-  margin-left: 24px;
-  margin-right: 24px;
+  margin: 16px 24px 0px 24px;
 `;
 
 export const CategoryContainer = styled.View`
@@ -29,8 +27,7 @@ export const CategoryErrorText = styled.Text<{ theme: ThemeType }>`
 
 export const CategoryEntry = styled.View`
   flex-direction: row;
-  margin-top: 2px;
-  margin-bottom: 2px;
+  margin: 2px 0px;
 `;
 
 export const CategoryEntryName = styled.Text`
@@ -44,6 +41,5 @@ export const CategoryEntryValue = styled.Text`
 `;
 
 export const MarginButton = styled(Button)`
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin: 8px 0px;
 `;
