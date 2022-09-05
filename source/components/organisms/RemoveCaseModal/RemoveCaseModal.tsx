@@ -34,6 +34,11 @@ function RemoveCaseModal({
     }
   };
 
+  const handleCloseModal = () => {
+    setState(RemoveCaseState.Default);
+    onCloseModal();
+  };
+
   const modalContent: Record<RemoveCaseState, ModalContent> = {
     [RemoveCaseState.Default]: {
       text: {
@@ -41,7 +46,7 @@ function RemoveCaseModal({
         body: "När en ansökan tagits bort kan en ny ansökan för perioden skapas",
       },
       buttons: [
-        getModalButtonSet("Avbryt", "neutral", onCloseModal),
+        getModalButtonSet("Avbryt", "neutral", handleCloseModal),
         getModalButtonSet("Ja", "red", handleRemoveCase),
       ],
     },
@@ -58,7 +63,7 @@ function RemoveCaseModal({
         body: "Försök igen eller prova vid ett annat tillfälle om problemet uppstår",
       },
       buttons: [
-        getModalButtonSet("Avbryt", "neutral", onCloseModal),
+        getModalButtonSet("Avbryt", "neutral", handleCloseModal),
         getModalButtonSet("Försök igen", "red", handleRemoveCase),
       ],
     },
