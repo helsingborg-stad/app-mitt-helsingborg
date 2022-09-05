@@ -225,6 +225,10 @@ const CaseSummary = (props: Props): JSX.Element => {
   } = props;
 
   const caseData: Case = useMemo(() => cases[caseId] ?? {}, [cases, caseId]);
+  const person = caseData.persons.find(
+    ({ personalNumber }) => personalNumber === authContext.user?.personalNumber
+  );
+  const isApplicant = person?.role === "applicant";
 
   const details = caseData?.details ?? ({} as VIVACaseDetails);
   const { workflow = {}, administrators } = details;
@@ -241,9 +245,8 @@ const CaseSummary = (props: Props): JSX.Element => {
     ? convertDataToArray(decision.decisions.decision)
     : [];
 
-  const canRemoveCase = [ACTIVE_SIGNATURE_PENDING].includes(
-    caseData.status.type
-  );
+  const canRemoveCase =
+    [ACTIVE_SIGNATURE_PENDING].includes(caseData.status.type) && isApplicant;
 
   const removeCase = async () => {
     const result = await remove(`cases/${caseId}`, undefined, undefined);
