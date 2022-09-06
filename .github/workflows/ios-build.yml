@@ -116,12 +116,12 @@ jobs:
           security import $CERT_PATH -P $P12_PASSWORD -A -t cert -f pkcs12 -k $CERT_KEYCHAIN_PATH
           security list-keychain -d user -s $CERT_KEYCHAIN_PATH
 
-      - name: Minor checks
-        run: |
-          ls -lah . ios/ node_modules/react-native/scripts/
-          ls .env
-          git diff yarn.lock
-          yarn list
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "2.7.6"
+
+      - name: Install Fastlane
+        run: cd ios && bundle install && cd ..
 
       - name: Build
         timeout-minutes: 60
@@ -144,7 +144,7 @@ jobs:
         run: |
           export CERT_KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
           cd ios
-          fastlane ios build --verbose
+          bundle exec fastlane ios build
 
       - name: Save build log
         if: ${{ always() }}

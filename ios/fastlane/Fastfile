@@ -27,7 +27,10 @@ def build(adhoc: false)
   )
 
   # install pods
-  cocoapods
+  cocoapods(
+    verbose: true,
+    try_repo_update_on_error: true
+  )
 
   # check for pod cache (derived data)
   scheme = ENV['GYM_SCHEME']
