@@ -178,10 +178,11 @@ const computeCaseCardComponent = (
 
   const shouldShowPin = isWaitingForSign && !isCoApplicant;
 
+  let description = status.detailedDescription || status.description;
   if (shouldShowPin) {
     const partner = persons.find((person) => person.role === "coApplicant");
     const partnerName = partner?.firstName;
-    status.description = `${caseItem.status.description}\n\n${partnerName} loggar in i appen med BankID och anger koden för att granska och signera er ansökan.\n\nKod till ${partnerName}:`;
+    description = `${caseItem.status.description}\n\n${partnerName} loggar in i appen med BankID och anger koden för att granska och signera er ansökan.\n\nKod till ${partnerName}:`;
   }
 
   return (
@@ -192,7 +193,7 @@ const computeCaseCardComponent = (
       showProgress={isOngoing}
       currentStep={currentStep}
       totalSteps={numberOfMainSteps}
-      description={status.detailedDescription || status.description || ""}
+      description={description || ""}
       showPayments={isClosed && !!payments?.payment?.givedate}
       approvedAmount={calculateSum(paymentsArray, "kronor")}
       givedate={giveDate}
@@ -344,7 +345,7 @@ const CaseSummary = (props: Props): JSX.Element => {
             { onOpenForm: openForm },
             toggleModal,
             authContext.user.personalNumber,
-            passwords[caseData.currentFormId] ?? undefined
+            passwords[caseData.id] ?? undefined
           )}
 
         {administrators && (

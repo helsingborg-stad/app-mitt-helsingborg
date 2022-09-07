@@ -17,10 +17,10 @@ function useGetFormPasswords(
   const getPasswordAccumulator = useCallback(
     async (
       oldValue,
-      caseItem,
+      caseItem: Case,
       caseUser: User
     ): Promise<{ password: string }> => {
-      const { currentFormId } = caseItem;
+      const { currentFormId, id } = caseItem;
       const form = caseItem.forms[currentFormId];
       const hasSymmetricKey = !!form.encryption.symmetricKeyName;
 
@@ -28,7 +28,7 @@ function useGetFormPasswords(
         ? await getPasswordForForm(form, caseUser, wrappedDefaultStorage)
         : undefined;
 
-      return { ...oldValue, [currentFormId]: encryptionPin };
+      return { ...oldValue, [id]: encryptionPin };
     },
     []
   );

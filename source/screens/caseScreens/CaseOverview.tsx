@@ -450,7 +450,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     computeCaseCardComponent(
       {
         caseItem: caseData,
-        formPassword: passwords[caseData.currentFormId] ?? undefined,
+        formPassword: passwords[caseData.id] ?? undefined,
       },
       { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
       user?.personalNumber,
@@ -462,7 +462,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     computeCaseCardComponent(
       {
         caseItem: caseData,
-        formPassword: passwords[caseData.currentFormId] ?? undefined,
+        formPassword: passwords[caseData.id] ?? undefined,
       },
       { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
       user?.personalNumber,
