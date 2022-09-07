@@ -181,7 +181,7 @@ const computeCaseCardComponent = (
   if (shouldShowPin) {
     const partner = persons.find((person) => person.role === "coApplicant");
     const partnerName = partner?.firstName;
-    status.description = `${partnerName} loggar in i appen med BankID och anger koden för att granska och signera er ansökan.\n\nKod till ${partnerName}:`;
+    status.description = `${caseItem.status.description}\n\n${partnerName} loggar in i appen med BankID och anger koden för att granska och signera er ansökan.\n\nKod till ${partnerName}:`;
   }
 
   return (
@@ -206,7 +206,7 @@ const computeCaseCardComponent = (
       buttonIconName={isClosed ? "remove-red-eye" : "arrow-forward"}
       completions={unApprovedCompletionDescriptions}
       completionsClarification={completionsClarification}
-      pin={formPassword}
+      pin={shouldShowPin ? formPassword : undefined}
     />
   );
 };

@@ -226,7 +226,7 @@ const computeCaseCardComponent = (
     cardProps.onClick = undefined;
   }
 
-  const shouldShowPin = !(isSigned || isRandomCheckRequired);
+  const shouldShowPin = isWaitingForSign && !isCoApplicant;
 
   if (shouldShowPin) {
     const partner = persons.find((person) => person.role === "coApplicant");
@@ -267,7 +267,7 @@ const computeCaseCardComponent = (
       onAppealButtonClick={openAppealLink}
       onButtonClick={buttonProps.onClick}
       buttonColorScheme={buttonProps.colorSchema || colorSchema}
-      pin={shouldShowPin ? formPassword : ""}
+      pin={shouldShowPin ? formPassword : undefined}
     />
   );
 };
