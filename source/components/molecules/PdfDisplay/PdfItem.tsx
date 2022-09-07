@@ -1,24 +1,20 @@
 import React from "react";
 import styled from "styled-components/native";
 import type { GestureResponderEvent } from "react-native";
-import { TouchableOpacity, Dimensions, Pressable } from "react-native";
+import { TouchableOpacity, Dimensions } from "react-native";
 import PdfView from "react-native-pdf";
 import { Icon, Button, Text } from "../../atoms";
 import { Modal, useModal } from "../Modal";
 import type { Pdf } from "./PdfDisplay";
 
 const MAX_PDF_WIDTH = 120;
+const MAX_PDF_HEIGHT = 170;
 
-const DefaultItem = styled.TouchableOpacity`
-  margin-right: 20px;
-`;
 const Flex = styled.View`
   flex-direction: column;
   align-items: center;
-  padding: 0;
   padding-top: 10px;
-  margin: 0;
-  margin-bottom: 20px;
+  margin: 0px 20px 20px 0px;
 `;
 const DeleteBackground = styled.View`
   position: absolute;
@@ -30,12 +26,10 @@ const DeleteBackground = styled.View`
   z-index: 1;
   border-radius: 20px;
 `;
-const Container = styled.View`
-  margin: 2px;
+const Container = styled.TouchableOpacity`
   flex: 1;
   justify-content: center;
   align-items: center;
-  margin-top: 15px;
   margin: 2px;
   elevation: 2;
   shadow-offset: 0px 2px;
@@ -71,37 +65,30 @@ const PdfItem: React.FC<Props> = ({ pdf, onRemove }) => {
   };
 
   return (
-    <React.Fragment key={pdf.path}>
-      <DefaultItem>
-        <Flex>
-          <DeleteBackground>
-            <TouchableOpacity onPress={handleRemove} activeOpacity={0.1}>
-              <Icon name="clear" color="#00213F" />
-            </TouchableOpacity>
-          </DeleteBackground>
-          <Container>
-            <Pressable onPress={toggleModal}>
-              <PdfView
-                source={{ uri: pdf.uri }}
-                style={{
-                  flex: 1,
-                  width: MAX_PDF_WIDTH,
-                  height: 170,
-                  backgroundColor: "white",
-                }}
-                singlePage
-              />
-            </Pressable>
-          </Container>
-          <Text
-            align="center"
-            numberOfLines={1}
-            style={{ width: MAX_PDF_WIDTH }}
-          >
-            {pdf.displayName}
-          </Text>
-        </Flex>
-      </DefaultItem>
+    <Flex key={pdf.path}>
+      <DeleteBackground>
+        <TouchableOpacity onPress={handleRemove} activeOpacity={0.1}>
+          <Icon name="clear" color="#00213F" />
+        </TouchableOpacity>
+      </DeleteBackground>
+
+      <Container onPress={toggleModal}>
+        <PdfView
+          pointerEvents="none"
+          source={{ uri: pdf.uri }}
+          style={{
+            width: MAX_PDF_WIDTH,
+            height: MAX_PDF_HEIGHT,
+            backgroundColor: "white",
+          }}
+          singlePage
+        />
+      </Container>
+
+      <Text align="center" numberOfLines={1} style={{ width: MAX_PDF_WIDTH }}>
+        {pdf.displayName}
+      </Text>
+
       <Modal visible={modalVisible} hide={toggleModal}>
         <PdfInModal
           source={{ uri: pdf.uri }}
@@ -114,7 +101,7 @@ const PdfItem: React.FC<Props> = ({ pdf, onRemove }) => {
           </Button>
         </ButtonWrapper>
       </Modal>
-    </React.Fragment>
+    </Flex>
   );
 };
 
