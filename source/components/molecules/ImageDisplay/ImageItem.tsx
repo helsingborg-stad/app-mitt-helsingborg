@@ -11,6 +11,7 @@ import type { Image } from "./ImageDisplay";
 import { downloadFile } from "../../../helpers/FileUpload";
 
 const MAX_IMAGE_WIDTH = 120;
+const MAX_IMAGE_HEIGHT = 170;
 
 const DefaultItem = styled.TouchableOpacity`
   margin-bottom: 20px;
@@ -49,11 +50,11 @@ const IconContainer = styled.View`
 `;
 const ImageIcon = styled.Image`
   width: ${MAX_IMAGE_WIDTH}px;
-  height: 170px;
+  height: ${MAX_IMAGE_HEIGHT}px;
 `;
 const ActivityWrapper = styled.View`
   width: ${MAX_IMAGE_WIDTH}px;
-  height: 170px;
+  height: ${MAX_IMAGE_HEIGHT}px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
