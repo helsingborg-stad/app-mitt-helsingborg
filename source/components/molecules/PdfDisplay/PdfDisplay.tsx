@@ -29,6 +29,7 @@ export interface Pdf extends DocumentPickerResponse {
   fileType: AllowedFileTypes;
   path: string;
   filename?: string;
+  displayName: string;
   id: string;
 }
 

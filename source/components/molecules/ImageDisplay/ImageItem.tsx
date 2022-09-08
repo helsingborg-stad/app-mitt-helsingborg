@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
@@ -11,22 +10,24 @@ import { Modal, useModal } from "../Modal";
 import type { Image } from "./ImageDisplay";
 import { downloadFile } from "../../../helpers/FileUpload";
 
+const MAX_IMAGE_WIDTH = 120;
+const MAX_IMAGE_HEIGHT = 170;
+
 const DefaultItem = styled.TouchableOpacity`
   margin-bottom: 20px;
+  margin-right: 20px;
 `;
 const Flex = styled.View`
   flex-direction: column;
   align-items: center;
   padding: 0;
   padding-top: 10px;
-  padding-right: 20px;
-  margin: 0;
 `;
 
 const DeleteBackground = styled.View`
   position: absolute;
-  top: 2px;
-  right: 7px;
+  top: 10px;
+  right: 2px;
   padding: 4px;
   elevation: 3;
   background: #eeeeee;
@@ -34,27 +35,26 @@ const DeleteBackground = styled.View`
   border-radius: 20px;
 `;
 const ButtonWrapper = styled.View`
-  padding: 5px;
   flex-direction: row;
+  margin-bottom: 40px;
   justify-content: center;
 `;
 const IconContainer = styled.View`
-  margin: 2px
+  margin: 2px;
   elevation: 2;
   shadow-offset: 0px 2px;
   shadow-color: black;
   shadow-opacity: 0.4;
   shadow-radius: 5px;
   border: 1px solid transparent;
-  elevation: 1;
 `;
 const ImageIcon = styled.Image`
-  width: 120px;
-  height: 170px;
+  width: ${MAX_IMAGE_WIDTH}px;
+  height: ${MAX_IMAGE_HEIGHT}px;
 `;
 const ActivityWrapper = styled.View`
-  width: 120px;
-  height: 170px;
+  width: ${MAX_IMAGE_WIDTH}px;
+  height: ${MAX_IMAGE_HEIGHT}px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -153,6 +153,13 @@ const ImageItem: React.FC<Props> = ({ image, onRemove, onChange }) => {
               )}
           </IconContainer>
         </Flex>
+        <Text
+          align="center"
+          numberOfLines={1}
+          style={{ width: MAX_IMAGE_WIDTH }}
+        >
+          {image.displayName}
+        </Text>
       </DefaultItem>
       <Modal visible={modalVisible} hide={toggleModal}>
         {(fileStatus === "localFileAvailable" ||

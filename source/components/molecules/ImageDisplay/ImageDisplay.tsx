@@ -26,6 +26,7 @@ export interface Image extends CropPickerImage {
   index?: number;
   questionId: string;
   fileType: AllowedFileTypes;
+  displayName: string;
   id: string;
 }
 

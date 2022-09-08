@@ -11,10 +11,14 @@ import { splitFilePath } from "../../../helpers/FileUpload";
 const MAX_IMAGE_SIZE_BYTES = 7 * 1000 * 1000;
 
 function transformRawImage(rawImage: ImageOrVideo, questionId: string): Image {
+  const filename =
+    splitFilePath(rawImage.path).nameWithExt ?? rawImage?.filename;
+
   return {
     questionId,
     path: rawImage.path,
-    filename: splitFilePath(rawImage.path).nameWithExt ?? rawImage?.filename,
+    filename,
+    displayName: filename,
     width: rawImage.width,
     height: rawImage.height,
     size: rawImage.size,

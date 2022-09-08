@@ -28,10 +28,13 @@ export async function addPdfFromLibrary(questionId: string): Promise<Pdf[]> {
       const split = splitFilePath(pdf?.name);
       const filePath = removeUriScheme(pdf.fileCopyUri ?? pdf.uri);
 
+      const filename = `${split.name}${split.ext}`;
+
       return {
         ...pdf,
         questionId,
-        filename: `${split.name}${split.ext}`,
+        filename,
+        displayName: filename,
         fileType: "pdf" as AllowedFileTypes,
         path: filePath,
         id: uuid.v4() as string,
