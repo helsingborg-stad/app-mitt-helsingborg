@@ -26,8 +26,8 @@ const Flex = styled.View`
 
 const DeleteBackground = styled.View`
   position: absolute;
-  top: 10px;
-  right: 2px;
+  top: -4px;
+  right: -12px;
   padding: 4px;
   elevation: 3;
   background: #eeeeee;
