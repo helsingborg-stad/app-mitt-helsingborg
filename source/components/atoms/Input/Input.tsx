@@ -1,4 +1,4 @@
-import React, { useEffect, forwardRef } from "react";
+import React, { useEffect, forwardRef, useRef } from "react";
 import type { TextInput } from "react-native";
 import {
   Keyboard,
@@ -7,6 +7,8 @@ import {
   View,
   InputAccessoryView,
 } from "react-native";
+
+import uuid from "react-native-uuid";
 import { useTheme } from "styled-components/native";
 
 import {
@@ -63,6 +65,8 @@ function Input(
   }: Props,
   ref: React.Ref<TextInput>
 ): JSX.Element {
+  const uniqueNativeId = useRef<string>(uuid.v4());
+
   const handleBlur = () => {
     if (onBlur) onBlur(value);
   };
@@ -78,10 +82,10 @@ function Input(
   useEffect(handleMount, []);
 
   const showAccessoryDoneButton =
-    Platform.OS === "ios" && inputType !== "email" && inputType !== "text";
+    Platform.OS === "ios" && !["email", "text"].includes(inputType ?? "");
 
   return (
-    <>
+    <View>
       <StyledTextInput
         value={replaceSpace(value)}
         multiline /** Temporary fix to make field scrollable inside scrollview */
@@ -96,7 +100,7 @@ function Input(
         onSubmitEditing={() => {
           Keyboard.dismiss();
         }}
-        inputAccessoryViewID="klar-accessory"
+        inputAccessoryViewID={uniqueNativeId.current}
         keyboardType={smartKeyboardType}
         colorSchema={colorSchema}
         {...smartKeyboardExtraProps}
@@ -109,7 +113,7 @@ function Input(
       )}
 
       {showAccessoryDoneButton && (
-        <InputAccessoryView nativeID="klar-accessory">
+        <InputAccessoryView nativeID={uniqueNativeId.current}>
           <AccesoryViewChild>
             <View>
               <Button title="Klar" onPress={Keyboard.dismiss} />
@@ -117,7 +121,7 @@ function Input(
           </AccesoryViewChild>
         </InputAccessoryView>
       )}
-    </>
+    </View>
   );
 }
 
