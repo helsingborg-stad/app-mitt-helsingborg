@@ -7,7 +7,6 @@ import {
   View,
   InputAccessoryView,
 } from "react-native";
-
 import uuid from "react-native-uuid";
 import { useTheme } from "styled-components/native";
 
