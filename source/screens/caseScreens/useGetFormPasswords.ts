@@ -6,49 +6,63 @@ import { wrappedDefaultStorage } from "../../services/storage/StorageService";
 import type { Case } from "../../types/Case";
 import type { User } from "../../types/UserTypes";
 
-type Password = Record<string, string | undefined>;
+type Password = string | null;
+interface PasswordPair {
+  id: string;
+  password: Password;
+}
 
 function useGetFormPasswords(
   cases: Record<string, Case>,
   user: User | null
-): Password {
-  const [passwords, setPasswords] = useState<Password>({});
+): Record<string, Password> {
+  const [passwords, setPasswords] = useState({});
 
-  const getPasswordAccumulator = useCallback(
+  const getPasswordIdPair = useCallback(
     async (
-      oldValue,
       caseItem: Case,
       caseUser: User
-    ): Promise<{ password: string }> => {
+    ): Promise<{ id: string; password: Password }> => {
       const { currentFormId, id } = caseItem;
       const form = caseItem.forms[currentFormId];
-      const hasSymmetricKey = !!form.encryption.symmetricKeyName;
+      const hasSymmetricKey = !!form.encryption?.symmetricKeyName;
 
       const encryptionPin = hasSymmetricKey
         ? await getPasswordForForm(form, caseUser, wrappedDefaultStorage)
-        : undefined;
+        : null;
 
-      return { ...oldValue, [id]: encryptionPin };
+      return { id, password: encryptionPin };
     },
     []
   );
 
+  const formatPasswords = (
+    previousValue: { id: string; password: Password },
+    newValue: { id: string; password: Password }
+  ) => ({
+    ...previousValue,
+    [newValue.id]: newValue.password,
+  });
+
   useEffect(() => {
     const tryGetPassword = async () => {
       if (Object.keys(cases).length > 0 && user !== null) {
-        const getPasswordsPromise = Object.values(cases).reduce(
-          (oldValue, newValue) =>
-            getPasswordAccumulator(oldValue, newValue, user),
-          Promise.resolve({})
+        const passwordPairPromises = Object.values(cases).map((caseItem) =>
+          getPasswordIdPair(caseItem, user)
         );
 
-        const formPasswords = await getPasswordsPromise;
-        setPasswords(formPasswords as Password);
+        const passwordPairs = await Promise.all(passwordPairPromises);
+        const formPasswords = passwordPairs.reduce(
+          formatPasswords,
+          {} as PasswordPair
+        );
+
+        setPasswords(formPasswords);
       }
     };
 
     void tryGetPassword();
-  }, [cases, user, getPasswordAccumulator]);
+  }, [cases, user, getPasswordIdPair]);
 
   return passwords;
 }
