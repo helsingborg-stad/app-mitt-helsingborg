@@ -11,6 +11,7 @@ import uuid from "react-native-uuid";
 import { useTheme } from "styled-components/native";
 
 import {
+  InputContainer,
   StyledTextInput,
   StyledErrorText,
   AccesoryViewChild,
@@ -84,7 +85,7 @@ function Input(
     Platform.OS === "ios" && !["email", "text"].includes(inputType ?? "");
 
   return (
-    <View>
+    <InputContainer>
       <StyledTextInput
         value={replaceSpace(value)}
         multiline /** Temporary fix to make field scrollable inside scrollview */
@@ -120,7 +121,7 @@ function Input(
           </AccesoryViewChild>
         </InputAccessoryView>
       )}
-    </View>
+    </InputContainer>
   );
 }
 

@@ -7,6 +7,10 @@ import type { ErrorValidation } from "./Input.types";
 
 import type { PrimaryColor, ThemeType } from "../../../theme/themeHelpers";
 
+const InputContainer = styled.View`
+  width: 100%;
+`;
+
 interface StyledInputprops {
   theme: ThemeType;
   colorSchema: PrimaryColor;
@@ -50,4 +54,4 @@ const AccesoryViewChild = styled.View`
   padding-right: 16px;
 `;
 
-export { StyledTextInput, StyledErrorText, AccesoryViewChild };
+export { InputContainer, StyledTextInput, StyledErrorText, AccesoryViewChild };
