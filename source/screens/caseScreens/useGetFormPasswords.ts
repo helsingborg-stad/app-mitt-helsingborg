@@ -16,13 +16,10 @@ function useGetFormPasswords(
   cases: Record<string, Case>,
   user: User | null
 ): Record<string, Password> {
-  const [passwords, setPasswords] = useState({});
+  const [passwords, setPasswords] = useState<Record<string, Password>>({});
 
   const getPasswordIdPair = useCallback(
-    async (
-      caseItem: Case,
-      caseUser: User
-    ): Promise<{ id: string; password: Password }> => {
+    async (caseItem: Case, caseUser: User): Promise<PasswordPair> => {
       const { currentFormId, id } = caseItem;
       const form = caseItem.forms[currentFormId];
       const hasSymmetricKey = !!form.encryption?.symmetricKeyName;
@@ -37,8 +34,8 @@ function useGetFormPasswords(
   );
 
   const formatPasswords = (
-    previousValue: { id: string; password: Password },
-    newValue: { id: string; password: Password }
+    previousValue: Record<string, Password>,
+    newValue: PasswordPair
   ) => ({
     ...previousValue,
     [newValue.id]: newValue.password,
@@ -52,10 +49,7 @@ function useGetFormPasswords(
         );
 
         const passwordPairs = await Promise.all(passwordPairPromises);
-        const formPasswords = passwordPairs.reduce(
-          formatPasswords,
-          {} as PasswordPair
-        );
+        const formPasswords = passwordPairs.reduce(formatPasswords, {});
 
         setPasswords(formPasswords);
       }
