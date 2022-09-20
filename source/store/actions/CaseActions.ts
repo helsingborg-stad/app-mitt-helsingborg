@@ -18,7 +18,7 @@ import { to } from "../../helpers/Misc";
 import { PasswordStrategy } from "../../services/encryption/PasswordStrategy";
 import { filterAsync } from "../../helpers/Objects";
 
-const { NOT_STARTED } = ApplicationStatusType;
+const { NOT_STARTED, NEW_APPLICATION } = ApplicationStatusType;
 
 export async function updateCase(
   {
@@ -144,22 +144,19 @@ async function getCasesThatShouldGeneratePin(
   user: UserInterface,
   cases: Case[]
 ): Promise<Case[]> {
-  const notStartedCases = cases.filter((caseData) =>
-    caseData.status.type.includes(NOT_STARTED)
+  const notStartedCases = cases.filter(
+    (caseData) =>
+      [NOT_STARTED, NEW_APPLICATION].filter((statusType) =>
+        caseData.status.type.includes(statusType)
+      ).length > 0
   );
-  const freshCasesWithCoapplicant = notStartedCases.filter((caseData) => {
-    const currentForm = getCurrentForm(caseData);
-    return !!currentForm.encryption.symmetricKeyName;
-  });
 
-  const casesWhereUserIsMainApplicant = freshCasesWithCoapplicant.filter(
-    (caseData) => {
-      const selfPerson = caseData.persons.find(
-        (person) => person.personalNumber === user.personalNumber
-      );
-      return selfPerson?.role === "applicant";
-    }
-  );
+  const casesWhereUserIsMainApplicant = notStartedCases.filter((caseData) => {
+    const selfPerson = caseData.persons.find(
+      (person) => person.personalNumber === user.personalNumber
+    );
+    return selfPerson?.role === "applicant";
+  });
 
   const casesWithoutGeneratedPin = await filterAsync(
     casesWhereUserIsMainApplicant,
@@ -204,6 +201,7 @@ export async function fetchCases(user: UserInterface): Promise<Action> {
         wrappedDefaultStorage,
         async () => user
       );
+
       const readyCases: Case[] = await Promise.all(
         rawCases.map(async (caseData: Case) => {
           const [decryptError, decryptedCase] = await to(

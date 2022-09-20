@@ -15,7 +15,6 @@ import {
   answersAreEncrypted,
   getEncryptionFromCase,
   getEncryptionStrategyByType,
-  EncryptionException,
   getCurrentForm,
   getEncryptionFromForm,
   getValidEncryptionForForm,
@@ -27,8 +26,7 @@ import {
   makeCaseWithNewForm,
   getPasswordForForm,
 } from "../CaseEncryptionHelper";
-import type { DeviceLocalAESParams } from "../DeviceLocalAESStrategy";
-import { DeviceLocalAESStrategy } from "../DeviceLocalAESStrategy";
+import EncryptionException from "../EncryptionException";
 import type { ICaseEncryptionService } from "../CaseEncryptionService";
 import { CaseEncryptionService } from "../CaseEncryptionService";
 import type { PasswordParams } from "../PasswordStrategy";
@@ -62,44 +60,24 @@ function makeMockCase(
   return partial as Case;
 }
 
-const CASE_DECRYPTED_SOLO = makeMockCase(
+const CASE_PARAMS_KEY = "__test__key";
+
+const CASE_DECRYPTED = makeMockCase(
   [{ field: { id: "test" }, value: "hello" }],
-  { type: EncryptionType.DECRYPTED }
+  { type: EncryptionType.DECRYPTED, symmetricKeyName: CASE_PARAMS_KEY }
 );
 
-const CASE_ENCRYPTED_SOLO = makeMockCase(
-  {
-    encryptedAnswers:
-      "4a9d9fa7f96c39f7777aace0c487131fcd25abfd836f108f5e1539bb6cf6927e57c8022e70cb8c3b43ade413f90b1eb2",
-  },
-  { type: EncryptionType.PRIVATE_AES_KEY }
-);
-
-const CASE_PARAMS_KEY_SOLO = "198602282389DeviceLocalKey";
-
-const CASE_PARAMS_SOLO: DeviceLocalAESParams = {
-  key: "eba252021f5c4c4e1761b88af2668cd5e0a4961ce03b66701d0823012ede269a",
-  iv: "61d33a398cdcbba45f479d01950974bc",
-};
-
-const CASE_PARAMS_KEY_PARTNER = "symmetricTest";
-
-const CASE_PARAMS_PARTNER: PasswordParams = {
-  password: "hello12345",
-};
-
-const CASE_DECRYPTED_PARTNER = makeMockCase(
-  [{ field: { id: "test" }, value: "hello" }],
-  { type: EncryptionType.DECRYPTED, symmetricKeyName: CASE_PARAMS_KEY_PARTNER }
-);
-
-const CASE_ENCRYPTED_PARTNER = makeMockCase(
+const CASE_ENCRYPTED = makeMockCase(
   {
     encryptedAnswers:
       "c4588599049e72caa7d87ad66bc180403fe39956eb5b50eb5e2f6fbf57663906bdeb54ddb5598d325d31ee946a0ef403",
   },
-  { type: EncryptionType.PASSWORD, symmetricKeyName: CASE_PARAMS_KEY_PARTNER }
+  { type: EncryptionType.PASSWORD, symmetricKeyName: CASE_PARAMS_KEY }
 );
+
+const CASE_PARAMS: PasswordParams = {
+  password: "hello12345",
+};
 
 class MockEncryptionDependencies implements EncryptionStrategyDependencies {
   dataMap: Record<string, string> = {};
@@ -132,23 +110,21 @@ function makeEncryptionService(
 
 describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
   test("getCurrentForm", () => {
-    const form = getCurrentForm(CASE_DECRYPTED_SOLO);
+    const form = getCurrentForm(CASE_DECRYPTED);
 
-    expect(form).toEqual(
-      CASE_DECRYPTED_SOLO.forms[CASE_DECRYPTED_SOLO.currentFormId]
-    );
+    expect(form).toEqual(CASE_DECRYPTED.forms[CASE_DECRYPTED.currentFormId]);
   });
 
   test("answersAreEncrypted", () => {
-    const decryptedAnswers = getCurrentForm(CASE_DECRYPTED_SOLO).answers;
-    const encryptedAnswers = getCurrentForm(CASE_ENCRYPTED_SOLO).answers;
+    const decryptedAnswers = getCurrentForm(CASE_DECRYPTED).answers;
+    const encryptedAnswers = getCurrentForm(CASE_ENCRYPTED).answers;
 
     expect(answersAreEncrypted(decryptedAnswers)).toBe(false);
     expect(answersAreEncrypted(encryptedAnswers)).toBe(true);
   });
 
   test("getEncryptionFromForm", () => {
-    const currentForm = getCurrentForm(CASE_DECRYPTED_SOLO);
+    const currentForm = getCurrentForm(CASE_DECRYPTED);
 
     const encryption = getEncryptionFromForm(currentForm);
 
@@ -156,9 +132,9 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
   });
 
   test("getEncryptionFromCase", () => {
-    const encryption = getEncryptionFromCase(CASE_ENCRYPTED_SOLO);
+    const encryption = getEncryptionFromCase(CASE_ENCRYPTED);
 
-    expect(encryption).toEqual(getCurrentForm(CASE_ENCRYPTED_SOLO).encryption);
+    expect(encryption).toEqual(getCurrentForm(CASE_ENCRYPTED).encryption);
   });
 
   test.each([
@@ -180,36 +156,28 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
     );
   });
 
-  test.each([
-    [
-      "solo ->",
-      EncryptionType.PRIVATE_AES_KEY,
-      getCurrentForm(CASE_DECRYPTED_SOLO),
-    ],
-    [
-      "partner ->",
-      EncryptionType.PASSWORD,
-      getCurrentForm(CASE_DECRYPTED_PARTNER),
-    ],
-  ])("getValidEncryptionForForm (%s %s)", (_, expectedType, form) => {
-    const currentEncryption = getEncryptionFromForm(form);
-    const encryption = getValidEncryptionForForm(form);
-    const expectedEncryption: EncryptionDetails = {
-      ...currentEncryption,
-      type: expectedType,
-    };
+  test.each([[EncryptionType.PASSWORD, getCurrentForm(CASE_DECRYPTED)]])(
+    "getValidEncryptionForForm (%s)",
+    (expectedType, form) => {
+      const currentEncryption = getEncryptionFromForm(form);
+      const encryption = getValidEncryptionForForm(form);
+      const expectedEncryption: EncryptionDetails = {
+        ...currentEncryption,
+        type: expectedType,
+      };
 
-    expect(encryption).toEqual(expectedEncryption);
-  });
+      expect(encryption).toEqual(expectedEncryption);
+    }
+  );
 
-  test.each([
-    [EncryptionType.PRIVATE_AES_KEY, DeviceLocalAESStrategy],
-    [EncryptionType.PASSWORD, PasswordStrategy],
-  ])("getEncryptionStrategyByType (%s)", (encryptionType, expectedStrategy) => {
-    const strategy = getEncryptionStrategyByType(encryptionType);
+  test.each([[EncryptionType.PASSWORD, PasswordStrategy]])(
+    "getEncryptionStrategyByType (%s)",
+    (encryptionType, expectedStrategy) => {
+      const strategy = getEncryptionStrategyByType(encryptionType);
 
-    expect(strategy).toEqual(expectedStrategy);
-  });
+      expect(strategy).toEqual(expectedStrategy);
+    }
+  );
 
   test("getEncryptionStrategyByType throws (invalid type)", () => {
     const func = () => getEncryptionStrategyByType(EncryptionType.DECRYPTED);
@@ -223,26 +191,8 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
   });
 
   test.each([
-    [
-      "solo/decrypted",
-      getCurrentForm(CASE_DECRYPTED_SOLO),
-      DeviceLocalAESStrategy,
-    ],
-    [
-      "solo/encrypted",
-      getCurrentForm(CASE_ENCRYPTED_SOLO),
-      DeviceLocalAESStrategy,
-    ],
-    [
-      "partner/decrypted",
-      getCurrentForm(CASE_DECRYPTED_PARTNER),
-      PasswordStrategy,
-    ],
-    [
-      "partner/encrypted",
-      getCurrentForm(CASE_ENCRYPTED_PARTNER),
-      PasswordStrategy,
-    ],
+    ["decrypted", getCurrentForm(CASE_DECRYPTED), PasswordStrategy],
+    ["encrypted", getCurrentForm(CASE_ENCRYPTED), PasswordStrategy],
   ])("getEncryptionStrategyFromForm (%s)", (_, form, expectedStrategy) => {
     const strategy = getEncryptionStrategyFromForm(form);
 
@@ -250,18 +200,18 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
   });
 
   test("getDataToEncryptFromForm", () => {
-    const form = getCurrentForm(CASE_DECRYPTED_SOLO);
+    const form = getCurrentForm(CASE_DECRYPTED);
     const dataToEncrypt = getDataToEncryptFromForm(form);
     const parsed = JSON.parse(dataToEncrypt);
 
     const expectedData =
-      CASE_DECRYPTED_SOLO.forms[CASE_DECRYPTED_SOLO.currentFormId].answers;
+      CASE_DECRYPTED.forms[CASE_DECRYPTED.currentFormId].answers;
 
     expect(parsed).toEqual(expectedData);
   });
 
   test("getDataToEncryptFromForm throws (encrypted answers)", () => {
-    const form = getCurrentForm(CASE_ENCRYPTED_SOLO);
+    const form = getCurrentForm(CASE_ENCRYPTED);
     const func = () => getDataToEncryptFromForm(form);
 
     expect(func).toThrow(EncryptionException);
@@ -273,18 +223,17 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
   });
 
   test("getDataToDecryptFromForm", () => {
-    const form = getCurrentForm(CASE_ENCRYPTED_SOLO);
+    const form = getCurrentForm(CASE_ENCRYPTED);
     const dataToDecrypt = getDataToDecryptFromForm(form);
 
-    const { answers } =
-      CASE_ENCRYPTED_SOLO.forms[CASE_ENCRYPTED_SOLO.currentFormId];
+    const { answers } = CASE_ENCRYPTED.forms[CASE_ENCRYPTED.currentFormId];
     const expectedData = (answers as EncryptedAnswersWrapper).encryptedAnswers;
 
     expect(dataToDecrypt).toEqual(expectedData);
   });
 
   test("getDataToDecryptFromForm throws (decrypted answers)", () => {
-    const form = getCurrentForm(CASE_DECRYPTED_SOLO);
+    const form = getCurrentForm(CASE_DECRYPTED);
     const func = () => getDataToDecryptFromForm(form);
 
     expect(func).toThrow(EncryptionException);
@@ -296,11 +245,11 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
   });
 
   test("makeFormWithEncryptedData", () => {
-    const form = getCurrentForm(CASE_DECRYPTED_SOLO);
+    const form = getCurrentForm(CASE_DECRYPTED);
     const mockEncryptedData = "this is encrypted data";
 
     const newForm = makeFormWithEncryptedData(form, mockEncryptedData, {
-      type: EncryptionType.PRIVATE_AES_KEY,
+      type: EncryptionType.PASSWORD,
     });
 
     const { answers } = newForm;
@@ -311,7 +260,7 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
   });
 
   test("makeFormWithDecryptedData", () => {
-    const form = getCurrentForm(CASE_DECRYPTED_SOLO);
+    const form = getCurrentForm(CASE_DECRYPTED);
     const mockAnswers: Answer[] = [
       { field: { id: "test" }, value: "test value" },
     ];
@@ -325,7 +274,7 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
   });
 
   test("makeFormWithDecryptedData throws", () => {
-    const form = getCurrentForm(CASE_DECRYPTED_SOLO);
+    const form = getCurrentForm(CASE_DECRYPTED);
     const invalidAnswers = "not valid";
     const mockDecryptedData = JSON.stringify(invalidAnswers);
 
@@ -347,72 +296,54 @@ describe("CaseEncryptionService (CaseEncryptionHelper)", () => {
       answers: { encryptedAnswers: "lorem ipsum dolar sitem" },
     }) as AnsweredForm;
 
-    const newCase = makeCaseWithNewForm(CASE_DECRYPTED_SOLO, mockForm);
+    const newCase = makeCaseWithNewForm(CASE_DECRYPTED, mockForm);
 
     expect(getCurrentForm(newCase)).toEqual(mockForm);
   });
 
   test("getPasswordForForm", async () => {
-    const formPartner = getCurrentForm(CASE_DECRYPTED_PARTNER);
+    const form = getCurrentForm(CASE_DECRYPTED);
     const user = await MOCK_GET_USER();
     const dependencies = new MockEncryptionDependencies();
 
-    const firstTry = await getPasswordForForm(formPartner, user, dependencies);
+    const firstTry = await getPasswordForForm(form, user, dependencies);
     const generatedPassword =
       await PasswordStrategy.generateAndSaveBasicPinPassword(
-        { encryptionDetails: formPartner.encryption, user },
+        { encryptionDetails: form.encryption, user },
         dependencies
       );
-    const secondTry = await getPasswordForForm(formPartner, user, dependencies);
+    const secondTry = await getPasswordForForm(form, user, dependencies);
 
     expect(firstTry).toBeNull();
     expect(secondTry).toBe(generatedPassword);
   });
-
-  test("getPasswordForForm throws", async () => {
-    const formSolo = getCurrentForm(CASE_DECRYPTED_SOLO);
-    const user = await MOCK_GET_USER();
-    const storage = new MockEncryptionDependencies();
-
-    const func = () => getPasswordForForm(formSolo, user, storage);
-
-    await expect(func).rejects.toThrow(EncryptionException);
-    await expect(func).rejects.toThrow(
-      expect.objectContaining(<Partial<EncryptionException>>{
-        status: EncryptionErrorStatus.INVALID_INPUT,
-      })
-    );
-  });
 });
 
 describe("CaseEncryptionService", () => {
+  test.each([[CASE_DECRYPTED]])(
+    "ignores already decrypted case",
+    async (caseData: Case) => {
+      const encryptionService = makeEncryptionService(
+        new MockEncryptionDependencies()
+      );
+
+      const newCase = await encryptionService.decrypt(caseData);
+
+      expect(newCase).toEqual(caseData);
+    }
+  );
+
   test.each([
-    ["solo", CASE_DECRYPTED_SOLO],
-    ["partner", CASE_DECRYPTED_PARTNER],
-  ])("ignores already decrypted case (%s)", async (_, caseData: Case) => {
-    const encryptionService = makeEncryptionService(
-      new MockEncryptionDependencies()
-    );
-
-    const newCase = await encryptionService.decrypt(caseData);
-
-    expect(newCase).toEqual(caseData);
-  });
-
-  test.each([
-    ["solo ->", EncryptionType.PRIVATE_AES_KEY, CASE_DECRYPTED_SOLO, {}],
     [
-      "partner ->",
       EncryptionType.PASSWORD,
-      CASE_DECRYPTED_PARTNER,
+      CASE_DECRYPTED,
       {
-        [CASE_PARAMS_KEY_PARTNER]: JSON.stringify(CASE_PARAMS_PARTNER),
+        [CASE_PARAMS_KEY]: JSON.stringify(CASE_PARAMS),
       },
     ],
   ])(
-    "uses the correct encryption type (%s %s)",
+    "uses the correct encryption type (%s)",
     async (
-      _,
       expectedType: EncryptionType,
       caseData: Case,
       mockStorageData: Record<string, string>
@@ -430,25 +361,15 @@ describe("CaseEncryptionService", () => {
 
   test.each([
     [
-      "solo (DeviceLocalAES)",
-      CASE_DECRYPTED_SOLO,
-      CASE_ENCRYPTED_SOLO,
+      CASE_DECRYPTED,
+      CASE_ENCRYPTED,
       {
-        [CASE_PARAMS_KEY_SOLO]: JSON.stringify(CASE_PARAMS_SOLO),
-      },
-    ],
-    [
-      "partner (Password)",
-      CASE_DECRYPTED_PARTNER,
-      CASE_ENCRYPTED_PARTNER,
-      {
-        [CASE_PARAMS_KEY_PARTNER]: JSON.stringify(CASE_PARAMS_PARTNER),
+        [CASE_PARAMS_KEY]: JSON.stringify(CASE_PARAMS),
       },
     ],
   ])(
-    "encrypts %s",
+    "encrypts",
     async (
-      _,
       caseData: Case,
       expectedCaseData: Case,
       mockStorageData: Record<string, string>
@@ -465,25 +386,15 @@ describe("CaseEncryptionService", () => {
 
   test.each([
     [
-      "solo (DeviceLocalAES)",
-      CASE_ENCRYPTED_SOLO,
-      CASE_DECRYPTED_SOLO,
+      CASE_ENCRYPTED,
+      CASE_DECRYPTED,
       {
-        [CASE_PARAMS_KEY_SOLO]: JSON.stringify(CASE_PARAMS_SOLO),
-      },
-    ],
-    [
-      "partner (Password)",
-      CASE_ENCRYPTED_PARTNER,
-      CASE_DECRYPTED_PARTNER,
-      {
-        [CASE_PARAMS_KEY_PARTNER]: JSON.stringify(CASE_PARAMS_PARTNER),
+        [CASE_PARAMS_KEY]: JSON.stringify(CASE_PARAMS),
       },
     ],
   ])(
-    "decrypts %s",
+    "decrypts",
     async (
-      _,
       caseData: Case,
       expectedCaseData: Case,
       mockStorageData: Record<string, string>
@@ -500,25 +411,15 @@ describe("CaseEncryptionService", () => {
 
   test.each([
     [
-      "solo (DeviceLocalAES)",
-      getCurrentForm(CASE_DECRYPTED_SOLO),
-      getCurrentForm(CASE_ENCRYPTED_SOLO),
+      getCurrentForm(CASE_DECRYPTED),
+      getCurrentForm(CASE_ENCRYPTED),
       {
-        [CASE_PARAMS_KEY_SOLO]: JSON.stringify(CASE_PARAMS_SOLO),
-      },
-    ],
-    [
-      "partner (Password)",
-      getCurrentForm(CASE_DECRYPTED_PARTNER),
-      getCurrentForm(CASE_ENCRYPTED_PARTNER),
-      {
-        [CASE_PARAMS_KEY_PARTNER]: JSON.stringify(CASE_PARAMS_PARTNER),
+        [CASE_PARAMS_KEY]: JSON.stringify(CASE_PARAMS),
       },
     ],
   ])(
-    "encrypts form %s",
+    "encrypts form",
     async (
-      _,
       form: AnsweredForm,
       expectedForm: AnsweredForm,
       mockStorageData: Record<string, string>
@@ -535,25 +436,15 @@ describe("CaseEncryptionService", () => {
 
   test.each([
     [
-      "solo (DeviceLocalAES)",
-      getCurrentForm(CASE_ENCRYPTED_SOLO),
-      getCurrentForm(CASE_DECRYPTED_SOLO),
+      getCurrentForm(CASE_ENCRYPTED),
+      getCurrentForm(CASE_DECRYPTED),
       {
-        [CASE_PARAMS_KEY_SOLO]: JSON.stringify(CASE_PARAMS_SOLO),
-      },
-    ],
-    [
-      "partner (Password)",
-      getCurrentForm(CASE_ENCRYPTED_PARTNER),
-      getCurrentForm(CASE_DECRYPTED_PARTNER),
-      {
-        [CASE_PARAMS_KEY_PARTNER]: JSON.stringify(CASE_PARAMS_PARTNER),
+        [CASE_PARAMS_KEY]: JSON.stringify(CASE_PARAMS),
       },
     ],
   ])(
-    "decrypts form %s",
+    "decrypts form",
     async (
-      _,
       form: AnsweredForm,
       expectedForm: AnsweredForm,
       mockStorageData: Record<string, string>
@@ -569,41 +460,6 @@ describe("CaseEncryptionService", () => {
   );
 });
 
-describe("CaseEncryptionService (DeviceLocalAES specific)", () => {
-  it("creates a new key if missing", async () => {
-    const saveFunc = jest.fn();
-    const mockDependencies: EncryptionStrategyDependencies = {
-      async getData(_): Promise<string | null> {
-        return null;
-      },
-      saveData: saveFunc,
-    };
-    const encryptionService = makeEncryptionService(mockDependencies);
-
-    await encryptionService.encrypt(CASE_DECRYPTED_SOLO);
-
-    expect(saveFunc).toHaveBeenCalled();
-  });
-
-  it("uses cached key if it exists", async () => {
-    const getFunc = jest.fn();
-    const saveFunc = jest.fn();
-    const mockDependencies: EncryptionStrategyDependencies = {
-      async getData(_): Promise<string | null> {
-        getFunc();
-        return JSON.stringify(CASE_PARAMS_SOLO);
-      },
-      saveData: saveFunc,
-    };
-    const encryptionService = makeEncryptionService(mockDependencies);
-
-    await encryptionService.encrypt(CASE_DECRYPTED_SOLO);
-
-    expect(getFunc).toHaveBeenCalled();
-    expect(saveFunc).not.toHaveBeenCalled();
-  });
-});
-
 describe("CaseEncryptionService (Password specific)", () => {
   it("throws REQUIRES_PARAMS when missing password (encrypt)", async () => {
     const encryptionService = makeEncryptionService(
@@ -611,7 +467,7 @@ describe("CaseEncryptionService (Password specific)", () => {
     );
 
     const func = async () => {
-      await encryptionService.encrypt(CASE_DECRYPTED_PARTNER);
+      await encryptionService.encrypt(CASE_DECRYPTED);
     };
 
     await expect(func).rejects.toThrow(EncryptionException);
@@ -628,7 +484,7 @@ describe("CaseEncryptionService (Password specific)", () => {
     );
 
     const func = async () => {
-      await encryptionService.decrypt(CASE_ENCRYPTED_PARTNER);
+      await encryptionService.decrypt(CASE_ENCRYPTED);
     };
 
     await expect(func).rejects.toThrow(EncryptionException);
@@ -662,7 +518,7 @@ describe("CaseEncryptionService (Password specific)", () => {
 
     const password = await PasswordStrategy.generateAndSaveBasicPinPassword(
       {
-        encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED_PARTNER),
+        encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED),
       },
       mockDependencies
     );
@@ -670,7 +526,7 @@ describe("CaseEncryptionService (Password specific)", () => {
     expect(typeof password).toBe("string");
     expect(password.length).toBeGreaterThan(0);
     expect(saveFunc).toHaveBeenCalledWith(
-      CASE_PARAMS_KEY_PARTNER,
+      CASE_PARAMS_KEY,
       expect.stringContaining(password)
     );
   });
@@ -681,11 +537,11 @@ describe("CaseEncryptionService (Password specific)", () => {
 
     await PasswordStrategy.generateAndSaveBasicPinPassword(
       {
-        encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED_PARTNER),
+        encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED),
       },
       mockDependencies
     );
-    const newCase = await encryptionService.encrypt(CASE_DECRYPTED_PARTNER);
+    const newCase = await encryptionService.encrypt(CASE_DECRYPTED);
     const { answers, encryption } = getCurrentForm(newCase);
 
     expect(answersAreEncrypted(answers)).toBe(true);
@@ -695,7 +551,7 @@ describe("CaseEncryptionService (Password specific)", () => {
   it("can retrieve existing password", async () => {
     const mockDependencies = new MockEncryptionDependencies();
     const context: EncryptionContext = {
-      encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED_PARTNER),
+      encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED),
     };
 
     const firstPassword = await PasswordStrategy.getPassword(
@@ -718,7 +574,7 @@ describe("CaseEncryptionService (Password specific)", () => {
   it("can check if password exists", async () => {
     const mockDependencies = new MockEncryptionDependencies();
     const context: EncryptionContext = {
-      encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED_PARTNER),
+      encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED),
     };
 
     const firstCheck = await PasswordStrategy.hasPassword(
@@ -741,7 +597,7 @@ describe("CaseEncryptionService (Password specific)", () => {
   it("can provide a password to use", async () => {
     const mockDependencies = new MockEncryptionDependencies();
     const context: EncryptionContext = {
-      encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED_PARTNER),
+      encryptionDetails: getEncryptionFromCase(CASE_DECRYPTED),
     };
 
     const testPassword = "test password";
@@ -764,27 +620,21 @@ describe("CaseEncryptionService (simulated scenarios)", () => {
   test("partner resets app", async () => {
     const mockdependencies = new MockEncryptionDependencies();
     await mockdependencies.saveData(
-      CASE_PARAMS_KEY_PARTNER,
-      JSON.stringify(CASE_PARAMS_PARTNER)
+      CASE_PARAMS_KEY,
+      JSON.stringify(CASE_PARAMS)
     );
     const encryptionService = makeEncryptionService(mockdependencies);
-    const firstDecrypt = await encryptionService.decrypt(
-      CASE_ENCRYPTED_PARTNER
-    );
+    const firstDecrypt = await encryptionService.decrypt(CASE_ENCRYPTED);
 
     mockdependencies.clear();
 
-    const [decryptError] = await to(
-      encryptionService.decrypt(CASE_ENCRYPTED_PARTNER)
-    );
+    const [decryptError] = await to(encryptionService.decrypt(CASE_ENCRYPTED));
 
     await mockdependencies.saveData(
-      CASE_PARAMS_KEY_PARTNER,
-      JSON.stringify(CASE_PARAMS_PARTNER)
+      CASE_PARAMS_KEY,
+      JSON.stringify(CASE_PARAMS)
     );
-    const secondDecrypt = await encryptionService.decrypt(
-      CASE_ENCRYPTED_PARTNER
-    );
+    const secondDecrypt = await encryptionService.decrypt(CASE_ENCRYPTED);
 
     expect(firstDecrypt).toEqual(secondDecrypt);
     expect(decryptError).toBeDefined();

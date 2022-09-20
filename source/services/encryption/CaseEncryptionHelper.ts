@@ -5,13 +5,9 @@ import type {
   EncryptedAnswersWrapper,
   PossiblyEncryptedAnswers,
 } from "../../types/Case";
-import type {
-  EncryptionDetails,
-  EncryptionExceptionInterface,
-  EncryptionExceptionStatus,
-} from "../../types/Encryption";
+import type { EncryptionDetails } from "../../types/Encryption";
 import { EncryptionErrorStatus, EncryptionType } from "../../types/Encryption";
-import { DeviceLocalAESStrategy } from "./DeviceLocalAESStrategy";
+import EncryptionException from "./EncryptionException";
 import type {
   EncryptionStrategyDependencies,
   IEncryptionStrategy,
@@ -24,25 +20,7 @@ type StrategyMap = {
 export interface UserInterface {
   personalNumber: string;
 }
-export class EncryptionException
-  extends Error
-  implements EncryptionExceptionInterface
-{
-  status: EncryptionExceptionStatus = null;
-
-  constructor(status: EncryptionExceptionStatus, message: string) {
-    super(message);
-
-    // See https://github.com/Microsoft/TypeScript-wiki/blob/main/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work
-    Object.setPrototypeOf(this, EncryptionException.prototype);
-
-    this.name = "EncryptionException";
-    this.status = status;
-  }
-}
-
 const strategyMap: StrategyMap = {
-  privateAesKey: DeviceLocalAESStrategy,
   password: PasswordStrategy,
 };
 
@@ -91,16 +69,9 @@ export function getValidEncryptionForForm(
     return current;
   }
 
-  if (current.symmetricKeyName) {
-    return {
-      ...current,
-      type: EncryptionType.PASSWORD,
-    };
-  }
-
   return {
     ...current,
-    type: EncryptionType.PRIVATE_AES_KEY,
+    type: EncryptionType.PASSWORD,
   };
 }
 

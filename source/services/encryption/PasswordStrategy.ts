@@ -2,10 +2,9 @@ import { NativeModules } from "react-native";
 
 import { ALGO_SALT, ALGO_ROUNDS, ALGO_LENGTH, ALGO_IV } from "./constants";
 import { EncryptionErrorStatus } from "../../types/Encryption";
-import { EncryptionException } from "./CaseEncryptionHelper";
+import EncryptionException from "./EncryptionException";
 import { EncryptionPossibility } from "./EncryptionStrategy";
 
-import type { DeviceLocalAESParams } from "./DeviceLocalAESStrategy";
 import type {
   EncryptionContext,
   EncryptionStrategyDependencies,
@@ -18,9 +17,14 @@ export interface PasswordParams {
   password: string;
 }
 
+interface AESParams {
+  key: string;
+  iv: string;
+}
+
 async function generateAESParamsFromPassword(
   password: string
-): Promise<DeviceLocalAESParams> {
+): Promise<AESParams> {
   const key = await Aes.pbkdf2(password, ALGO_SALT, ALGO_ROUNDS, ALGO_LENGTH);
   const iv = ALGO_IV;
 
