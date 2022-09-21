@@ -332,6 +332,8 @@ const FormField = (props: FormFieldProps): JSX.Element => {
     },
   });
 
+  const requiredSymbol = props?.validation?.isRequired ? " *" : "";
+
   return (
     <FormFieldContainer>
       <LabelContainer>
@@ -345,7 +347,7 @@ const FormField = (props: FormFieldProps): JSX.Element => {
                 : {}
             }
           >
-            {label}
+            {`${label}${requiredSymbol}`}
           </Label>
         )}
       </LabelContainer>
