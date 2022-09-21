@@ -332,7 +332,7 @@ const FormField = (props: FormFieldProps): JSX.Element => {
     },
   });
 
-  const requiredSymbol = props?.validation?.isRequired ? "*" : "";
+  const requiredSymbol = props?.validation?.isRequired ? " *" : "";
 
   return (
     <FormFieldContainer>
