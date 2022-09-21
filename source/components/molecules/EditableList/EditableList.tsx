@@ -281,44 +281,54 @@ function EditableList({
       )}
     >
       <EditableListBody>
-        {inputs.map((input, index) => [
-          <EditableListItem
-            colorSchema={colorSchema}
-            editable={editable && !input.disabled}
-            key={`${input.key}-${index}`}
-            error={error ? error[input.key] : undefined}
-            activeOpacity={1.0}
-            onPress={() => handleListItemPress(index)}
-          >
-            <EditableListItemLabelWrapper
-              alignAtStart={input.type === "select"}
+        {inputs.map((input, index) => {
+          const requiredSymbol = input.validation.isRequired ? " *" : "";
+          return [
+            <EditableListItem
+              colorSchema={colorSchema}
+              editable={editable && !input.disabled}
+              key={`${input.key}-${index}`}
+              error={error ? error[input.key] : undefined}
+              activeOpacity={1.0}
+              onPress={() => handleListItemPress(index)}
             >
-              <EditableListItemLabel editable={editable}>
-                {input.label}
-              </EditableListItemLabel>
-            </EditableListItemLabelWrapper>
-            <EditableListItemInputWrapper>
-              <InputComponent
-                {...{ input, colorSchema, onChange, onInputBlur, value, state }}
-                editable={editable && !input.disabled}
-                ref={(element) => {
-                  inputRefs.current[index] = element;
-                }}
-                onInputFocus={(event, isSelect) =>
-                  onInputFocus(event, index, isSelect)
-                }
-                onClose={(event, isSelect) =>
-                  onInputScrollTo(event, index, isSelect)
-                }
-              />
-            </EditableListItemInputWrapper>
-          </EditableListItem>,
-          isInputValid(input) && (
-            <StyledErrorText>
-              {error[input.key].validationMessage}
-            </StyledErrorText>
-          ),
-        ])}
+              <EditableListItemLabelWrapper
+                alignAtStart={input.type === "select"}
+              >
+                <EditableListItemLabel editable={editable}>
+                  {`${input.label}${requiredSymbol}`}
+                </EditableListItemLabel>
+              </EditableListItemLabelWrapper>
+              <EditableListItemInputWrapper>
+                <InputComponent
+                  {...{
+                    input,
+                    colorSchema,
+                    onChange,
+                    onInputBlur,
+                    value,
+                    state,
+                  }}
+                  editable={editable && !input.disabled}
+                  ref={(element) => {
+                    inputRefs.current[index] = element;
+                  }}
+                  onInputFocus={(event, isSelect) =>
+                    onInputFocus(event, index, isSelect)
+                  }
+                  onClose={(event, isSelect) =>
+                    onInputScrollTo(event, index, isSelect)
+                  }
+                />
+              </EditableListItemInputWrapper>
+            </EditableListItem>,
+            isInputValid(input) && (
+              <StyledErrorText>
+                {error[input.key].validationMessage}
+              </StyledErrorText>
+            ),
+          ];
+        })}
       </EditableListBody>
     </Fieldset>
   );
