@@ -259,6 +259,8 @@ const RepeaterFieldListItem: React.FC<Props> = ({
           : undefined;
         const showErrorMessage = !error?.[input.id]?.isValid;
 
+        const requiredSymbol = input?.validation?.isRequired ? " *" : "";
+
         return (
           <RepeaterItem
             colorSchema={validColorSchema}
@@ -281,7 +283,7 @@ const RepeaterFieldListItem: React.FC<Props> = ({
             <InputLabelWrapper>
               <InputLabel
                 colorSchema={validColorSchema}
-              >{`${input.title}`}</InputLabel>
+              >{`${input.title}${requiredSymbol}`}</InputLabel>
             </InputLabelWrapper>
             <InputWrapper colorSchema={validColorSchema}>
               <InputComponent
