@@ -65,7 +65,7 @@ function Input(
   }: Props,
   ref: React.Ref<TextInput>
 ): JSX.Element {
-  const uniqueNativeId = useRef<string>(uuid.v4());
+  const uniqueNativeId = useRef(uuid.v4() as string);
 
   const handleBlur = () => {
     if (onBlur) onBlur(value);
