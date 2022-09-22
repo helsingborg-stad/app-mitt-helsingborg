@@ -509,12 +509,7 @@ export function validateAllStepAnswers(
   // Validate all question inputs.
   state.validations = {};
   currentStepQuestions.forEach((question: any) => {
-    const { type, items } = question;
-    let itemsToValidate = [question];
-
-    if (type === "summaryList") {
-      itemsToValidate = items?.length > 0 ? items : [];
-    }
+    const itemsToValidate = [question];
 
     if (itemsToValidate.length > 0) {
       itemsToValidate.forEach((validationItem) => {
