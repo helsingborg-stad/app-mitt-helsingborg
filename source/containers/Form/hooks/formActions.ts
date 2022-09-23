@@ -355,9 +355,15 @@ export function validateAnswer(
   if (!question) return state;
 
   if (
-    ["text", "number", "date", "checkbox", "select", "filePicker"].includes(
-      question.type
-    )
+    [
+      "text",
+      "number",
+      "date",
+      "checkbox",
+      "select",
+      "filePicker",
+      "radioGroup",
+    ].includes(question.type)
   ) {
     const { validation } = question;
     if (
