@@ -509,27 +509,11 @@ export function validateAllStepAnswers(
   // Validate all question inputs.
   state.validations = {};
   currentStepQuestions.forEach((question: any) => {
-    const itemsToValidate = [question];
+    const answer = state.formAnswers[question.id] || "";
+    dirtyFields[question.id] = true;
 
-    if (itemsToValidate.length > 0) {
-      itemsToValidate.forEach((validationItem) => {
-        const answer = state.formAnswers[validationItem.id] || "";
-        dirtyFields[validationItem.id] = true;
-
-        if (
-          shouldValidateAnswer(
-            validationItem,
-            state.formAnswers,
-            state.allQuestions
-          )
-        ) {
-          state = validateAnswer(
-            state,
-            { [validationItem.id]: answer },
-            validationItem.id
-          );
-        }
-      });
+    if (shouldValidateAnswer(question, state.formAnswers, state.allQuestions)) {
+      state = validateAnswer(state, { [question.id]: answer }, question.id);
     }
   });
 
