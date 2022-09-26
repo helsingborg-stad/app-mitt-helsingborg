@@ -9,14 +9,15 @@ import type { User } from "../../types/UserTypes";
 jest.mock("../../services/encryption/CaseEncryptionHelper");
 jest.mock("../../services/storage/StorageService");
 
-function createTestCase(caseId: string, symmetricKeyName: string | null) {
+function createTestCase(caseId: string, encryptionKeyId: string | null) {
   return {
     currentFormId: "formId",
     id: caseId,
     forms: {
       formId: {
         encryption: {
-          symmetricKeyName,
+          encryptionKeyId,
+          symmetricKeyName: encryptionKeyId,
         },
       },
     },
@@ -52,27 +53,6 @@ it("returns form passwords for single case", async () => {
   expect(result.current).toEqual(expectedResult);
 });
 
-it("returns null as password when symmetricKeyName is missing", async () => {
-  jest
-    .spyOn(caseEncryptionHelper, "getPasswordForForm")
-    .mockResolvedValueOnce("password1");
-
-  const expectedResult = {
-    caseId: null,
-  };
-  const caseItems = {
-    caseId: createTestCase("caseId", null),
-  };
-
-  const { result, waitForNextUpdate } = renderHook(() =>
-    useGetFormPassword(caseItems, user)
-  );
-
-  await waitForNextUpdate();
-
-  expect(result.current).toEqual(expectedResult);
-});
-
 it("returns passwords for multiple cases", async () => {
   jest
     .spyOn(caseEncryptionHelper, "getPasswordForForm")
@@ -86,29 +66,6 @@ it("returns passwords for multiple cases", async () => {
   const caseItems = {
     caseId1: createTestCase("caseId1", "keyName1"),
     caseId2: createTestCase("caseId2", "keyName2"),
-  };
-
-  const { result, waitForNextUpdate } = renderHook(() =>
-    useGetFormPassword(caseItems, user)
-  );
-
-  await waitForNextUpdate();
-
-  expect(result.current).toEqual(expectedResult);
-});
-
-it("returns passwords only for cases with symmetricKeyName", async () => {
-  jest
-    .spyOn(caseEncryptionHelper, "getPasswordForForm")
-    .mockResolvedValueOnce("password1");
-
-  const expectedResult = {
-    caseId1: "password1",
-    caseId2: null,
-  };
-  const caseItems = {
-    caseId1: createTestCase("caseId1", "keyName1"),
-    caseId2: createTestCase("caseId2", null),
   };
 
   const { result, waitForNextUpdate } = renderHook(() =>

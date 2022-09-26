@@ -91,7 +91,9 @@ export const PasswordStrategy: IPasswordStrategy = {
   },
 
   getParamsID(context: EncryptionContext): string {
-    const paramsID = context.encryptionDetails?.symmetricKeyName;
+    const paramsID =
+      context.encryptionDetails?.encryptionKeyId ??
+      context.encryptionDetails?.symmetricKeyName;
 
     if (!paramsID) {
       throw new EncryptionException(
