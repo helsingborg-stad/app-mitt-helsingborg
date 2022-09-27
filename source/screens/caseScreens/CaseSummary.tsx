@@ -23,7 +23,6 @@ import Button from "../../components/atoms/Button";
 import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
 import { put, remove } from "../../helpers/ApiRequest";
-import { answersAreEncrypted } from "../../services/encryption/CaseEncryptionHelper";
 import { ApplicationStatusType } from "../../types/Case";
 
 import type {
@@ -111,21 +110,16 @@ const computeCaseCardComponent = (
     (caseDecision) => ["03", "02"].includes(caseDecision.typecode)
   );
 
-  const isEncrypted = answersAreEncrypted(answers);
-  const shouldEnterPin = isEncrypted && isCoApplicant && isWaitingForSign;
-
-  const shouldShowCTAButton =
-    (!isEncrypted || shouldEnterPin) &&
-    (isCoApplicant
-      ? isWaitingForSign && !selfHasSigned
-      : isOngoing ||
-        isNotStarted ||
-        isRandomCheckRequired ||
-        isSigned ||
-        isClosed ||
-        isVivaCompletionRequired ||
-        isActiveSubmittedRandomCheck ||
-        activeSubmittedCompletion);
+  const shouldShowCTAButton = isCoApplicant
+    ? isWaitingForSign && !selfHasSigned
+    : isOngoing ||
+      isNotStarted ||
+      isRandomCheckRequired ||
+      isSigned ||
+      isClosed ||
+      isVivaCompletionRequired ||
+      isActiveSubmittedRandomCheck ||
+      activeSubmittedCompletion;
 
   const buttonProps = {
     onClick: () => navigation.onOpenForm(caseId),

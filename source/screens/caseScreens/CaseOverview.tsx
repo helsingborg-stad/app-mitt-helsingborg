@@ -149,21 +149,18 @@ const computeCaseCardComponent = (
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === "coApplicant";
 
-  const isEncrypted = answersAreEncrypted(currentForm.answers);
-  const shouldEnterPin = isEncrypted && isCoApplicant && isWaitingForSign;
+  const shouldEnterPin = answersAreEncrypted(currentForm.answers);
 
-  const shouldShowCTAButton =
-    (!isEncrypted || shouldEnterPin) &&
-    (isCoApplicant
-      ? isWaitingForSign && !selfHasSigned
-      : isOngoing ||
-        isNotStarted ||
-        isRandomCheckRequired ||
-        isSigned ||
-        isClosed ||
-        isVivaCompletionRequired ||
-        isActiveSubmittedRandomCheck ||
-        activeSubmittedCompletion);
+  const shouldShowCTAButton = isCoApplicant
+    ? isWaitingForSign && !selfHasSigned
+    : isOngoing ||
+      isNotStarted ||
+      isRandomCheckRequired ||
+      isSigned ||
+      isClosed ||
+      isVivaCompletionRequired ||
+      isActiveSubmittedRandomCheck ||
+      activeSubmittedCompletion;
 
   const buttonProps: InternalButtonProps = {
     onClick: () => navigation.onOpenForm(caseId),

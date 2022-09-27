@@ -10,7 +10,6 @@ import { EncryptionPossibility } from "./EncryptionStrategy";
 import type { UserInterface } from "./CaseEncryptionHelper";
 import {
   getEncryptionStrategyByType,
-  EncryptionException,
   getValidEncryptionForForm,
   getCurrentForm,
   getDataToEncryptFromForm,
@@ -21,6 +20,7 @@ import {
   getEncryptionStrategyFromForm,
   makeFormWithDecryptedData,
 } from "./CaseEncryptionHelper";
+import EncryptionException from "./EncryptionException";
 
 interface ICaseEncryptionServiceStatic {
   new (

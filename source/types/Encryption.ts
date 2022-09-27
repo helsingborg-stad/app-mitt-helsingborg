@@ -1,7 +1,5 @@
 export enum EncryptionType {
   DECRYPTED = "decrypted",
-  PRIVATE_AES_KEY = "privateAesKey",
-  SYMMETRIC_KEY = "symmetricKey",
   PASSWORD = "password",
 }
 
