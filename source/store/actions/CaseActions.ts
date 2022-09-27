@@ -1,3 +1,4 @@
+import uuid from "react-native-uuid";
 import type { Form } from "../../types/FormTypes";
 import type {
   Action,
@@ -87,10 +88,26 @@ export async function updateCase(
   }
 }
 
+async function setupPinForCases(user: UserInterface, cases: Case[]) {
+  return cases.map(async (caseData) => {
+    const currentForm = getCurrentForm(caseData);
+    const pin = await PasswordStrategy.generateAndSaveBasicPinPassword(
+      {
+        encryptionDetails: currentForm.encryption,
+        user,
+      },
+      wrappedDefaultStorage
+    );
+    console.log(`generated pin ${pin} for case ${caseData.id}`);
+  });
+}
+
 export async function createCase(
+  user: UserInterface,
   form: Form,
   callback: (newCase: Case) => void
 ): Promise<Action> {
+  const keyId = uuid.v4();
   const body = {
     provider: form.provider,
     statusType: NOT_STARTED,
@@ -104,7 +121,11 @@ export async function createCase(
           currentMainStep: 1,
           currentMainStepIndex: 0,
         },
-        encryption: { type: "decrypted" },
+        encryption: {
+          type: "decrypted",
+          symmetricKeyName: keyId,
+          encryptionKeyId: keyId,
+        },
       },
     },
     details: {},
@@ -117,6 +138,8 @@ export async function createCase(
       id: newCase.id,
       ...newCase.attributes,
     };
+
+    await setupPinForCases(user, [flattenedNewCase]);
 
     callback(flattenedNewCase);
 
@@ -175,20 +198,6 @@ async function getCasesThatShouldGeneratePin(
   );
 
   return casesWithoutGeneratedPin;
-}
-
-async function setupPinForCases(user: UserInterface, cases: Case[]) {
-  return cases.map(async (caseData) => {
-    const currentForm = getCurrentForm(caseData);
-    const pin = await PasswordStrategy.generateAndSaveBasicPinPassword(
-      {
-        encryptionDetails: currentForm.encryption,
-        user,
-      },
-      wrappedDefaultStorage
-    );
-    console.log(`generated pin ${pin} for case ${caseData.id}`);
-  });
 }
 
 export async function fetchCases(user: UserInterface): Promise<Action> {

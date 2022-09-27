@@ -63,7 +63,7 @@ function CaseProvider({
   const isSignedIn = userAuthState === USER_AUTH_STATE.SIGNED_IN;
 
   async function createCase(form: Form, callback: (newCase: Case) => void) {
-    dispatch(await create(form, callback));
+    dispatch(await create(user, form, callback));
   }
 
   async function updateCase(
