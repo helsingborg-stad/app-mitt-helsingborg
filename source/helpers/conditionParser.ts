@@ -30,7 +30,7 @@ const evaluateSummaryList = (
 };
 
 /** Evaluates an answer value to a boolean. False if the value is empty or false, otherwise true. */
-export const evaluateAnswer = (
+const evaluateAnswer = (
   questionId: string,
   answers: Record<string, any>,
   questions: Question[]
