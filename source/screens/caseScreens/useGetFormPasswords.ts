@@ -22,12 +22,11 @@ function useGetFormPasswords(
     async (caseItem: Case, caseUser: User): Promise<PasswordPair> => {
       const { currentFormId, id } = caseItem;
       const form = caseItem.forms[currentFormId];
-      const hasSymmetricKey = !!form.encryption?.symmetricKeyName;
-
-      const encryptionPin = hasSymmetricKey
-        ? await getPasswordForForm(form, caseUser, wrappedDefaultStorage)
-        : null;
-
+      const encryptionPin = await getPasswordForForm(
+        form,
+        caseUser,
+        wrappedDefaultStorage
+      );
       return { id, password: encryptionPin };
     },
     []

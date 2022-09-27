@@ -51,6 +51,7 @@ declare module "react-native" {
 export interface EncryptionDetails {
   type: EncryptionType;
   symmetricKeyName?: string;
+  encryptionKeyId?: string;
   primes?: {
     P: PossiblySerializedCryptoNumber;
     G: PossiblySerializedCryptoNumber;
