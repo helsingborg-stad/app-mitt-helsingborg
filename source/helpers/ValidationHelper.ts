@@ -1,5 +1,4 @@
 import validator from "validator";
-
 /**
  * Checks if a string is a valid personal identity number
  * @param {string} pin Personal identity number
@@ -34,6 +33,29 @@ export const sanitizePin = (pin) => {
   return sanitizedPin;
 };
 
+function sanitizeRuleArguments(
+  args?: unknown
+): unknown[] | Record<string, unknown> {
+  if (args === undefined) {
+    return {};
+  }
+
+  if (Array.isArray(args)) {
+    return args;
+  }
+
+  if (typeof args === "object") {
+    const argsAsRecord = args as Record<string, unknown>;
+    if (typeof argsAsRecord.options === "object") {
+      return argsAsRecord.options as Record<string, unknown>;
+    }
+
+    return Object.values(argsAsRecord);
+  }
+
+  return [args];
+}
+
 /**
  * Use library validator.js to validate inputs.
  *
@@ -58,13 +80,8 @@ export const validateInput = (value, rules) =>
       if (value === false || value === undefined || value === null) {
         valueToValidate = "";
       }
-      /**
-       * Retrieve the validation method defined in the rule from the validator.js package and execute.
-       * An array of args will be created if multiple args defined. Single arg will be passed as is.
-       */
-      const ruleArgs = rule.args || [];
-      const validationMethodArgs =
-        rule.arg || Object.keys(ruleArgs).map((key) => ruleArgs[key]);
+
+      const validationMethodArgs = sanitizeRuleArguments(rule.args);
       const validationMethod =
         typeof rule.method === "string" ? validator[rule.method] : rule.method;
       /** For any other rule than the isEmpty, an empty value should be treated as valid. */
