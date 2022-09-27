@@ -88,8 +88,8 @@ export async function updateCase(
   }
 }
 
-async function setupPinForCases(user: UserInterface, cases: Case[]) {
-  return cases.map(async (caseData) => {
+function setupPinForCases(user: UserInterface, cases: Case[]) {
+  const promises = cases.map(async (caseData) => {
     const currentForm = getCurrentForm(caseData);
     const pin = await PasswordStrategy.generateAndSaveBasicPinPassword(
       {
@@ -100,6 +100,8 @@ async function setupPinForCases(user: UserInterface, cases: Case[]) {
     );
     console.log(`generated pin ${pin} for case ${caseData.id}`);
   });
+
+  return Promise.all(promises);
 }
 
 export async function createCase(
