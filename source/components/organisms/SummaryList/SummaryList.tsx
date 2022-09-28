@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
 
@@ -8,7 +8,7 @@ import { Text, Heading } from "../../atoms";
 
 import SummaryListItemComponent from "./SummaryListItem";
 
-import { isObject } from "../../../helpers/Objects";
+import { isObject, deepCopy } from "../../../helpers/Objects";
 
 import { getValidColorSchema } from "../../../theme/themeHelpers";
 
@@ -177,6 +177,22 @@ const SummaryList: React.FC<Props> = ({
 }) => {
   const validColorSchema = getValidColorSchema(colorSchema);
 
+  const sortedAnswers = useMemo(() => {
+    const answersCopy = deepCopy(answers);
+    items.forEach((item) => {
+      if (ArrayType.includes(item.type)) {
+        const category = categories?.find(
+          (categoryItem) => item.category === categoryItem.category
+        );
+        const sortField = category?.sortField;
+        if (sortField && Array.isArray(answersCopy[item.id])) {
+          answersCopy[item.id] = doSort(answersCopy[item.id], sortField);
+        }
+      }
+    });
+    return answersCopy;
+  }, [answers, categories, items]);
+
   /**
    * Given an item, and possibly an index in the case of repeater fields, this generates a function that
    * updates the form data from the input.
@@ -192,7 +208,7 @@ const SummaryList: React.FC<Props> = ({
         item.inputId
       ) {
         const oldAnswer: Record<string, string | number | boolean>[] =
-          answers[item.id];
+          sortedAnswers[item.id];
         oldAnswer[index][item.inputId] = value;
         onChange(oldAnswer, item.id);
       } else if (
@@ -202,7 +218,7 @@ const SummaryList: React.FC<Props> = ({
         item.inputId
       ) {
         const oldAnswer: Record<string, string | number | boolean> =
-          answers[item.id];
+          sortedAnswers[item.id];
         oldAnswer[item.inputId] = value;
         onChange(oldAnswer, item.id);
       } else {
@@ -225,7 +241,7 @@ const SummaryList: React.FC<Props> = ({
         typeof index !== "undefined" &&
         item.inputId
       ) {
-        if (onBlur) onBlur(answers[item.id], item.id);
+        if (onBlur) onBlur(sortedAnswers[item.id], item.id);
       } else if (onBlur) onBlur(value, item.id);
     };
   /**
@@ -236,7 +252,9 @@ const SummaryList: React.FC<Props> = ({
    */
   const removeListItem = (item: SummaryListItem, index?: number) => () => {
     if (typeof index !== "undefined") {
-      const oldAnswer: Record<string, string | number>[] = answers[item.id];
+      const oldAnswer: Record<string, string | number>[] = {
+        ...sortedAnswers[item.id],
+      };
       oldAnswer.splice(index, 1);
       onChange(oldAnswer, item.id);
     } else if (
@@ -245,7 +263,9 @@ const SummaryList: React.FC<Props> = ({
       ) &&
       item.inputId
     ) {
-      const oldAnswer: Record<string, string | number> = answers[item.id];
+      const oldAnswer: Record<string, string | number> = {
+        ...sortedAnswers[item.id],
+      };
       oldAnswer[item.inputId] = undefined;
       onChange(oldAnswer, item.id);
     } else {
@@ -271,7 +291,7 @@ const SummaryList: React.FC<Props> = ({
   }>[] = [];
 
   const itemsWithAnswers = items.filter((item) => {
-    const answer = answers[item.id];
+    const answer = sortedAnswers[item.id];
 
     if (typeof answer !== "undefined") {
       if (item.type === "checkbox") return answer;
@@ -285,27 +305,12 @@ const SummaryList: React.FC<Props> = ({
     if (!itemIdmap.has(item.id)) {
       itemIdmap.set(item.id, {
         items: [item],
-        answers: answers[item.id] ?? "",
+        answers: sortedAnswers[item.id] ?? "",
       });
     } else {
       itemIdmap.get(item.id)?.items.push(item);
     }
   });
-
-  useEffect(() => {
-    items.forEach((item) => {
-      if (ArrayType.includes(item.type)) {
-        const category = categories?.find(
-          (categoryItem) => item.category === categoryItem.category
-        );
-        const sortField = category?.sortField;
-        if (sortField && Array.isArray(answers[item.id])) {
-          // eslint-disable-next-line no-param-reassign
-          answers[item.id] = doSort(answers[item.id], sortField);
-        }
-      }
-    });
-  }, [items, answers, categories]);
 
   /**
    * Join answer with its component
@@ -326,7 +331,7 @@ const SummaryList: React.FC<Props> = ({
             otherassetDescription: answer.otherassetDescription,
           });
 
-          lastCategory = item.category;
+          lastCategory = item.category as string;
         });
 
         reorganizedList.push({
@@ -409,13 +414,13 @@ const SummaryList: React.FC<Props> = ({
         listEntry.item.type
       ) &&
       listEntry.item.inputId &&
-      answers?.[listEntry.item.id]?.[listEntry.item.inputId]
+      sortedAnswers?.[listEntry.item.id]?.[listEntry.item.inputId]
     ) {
       listItems.push(
         <SummaryListItemComponent
           item={listEntry.item}
           key={summaryListItemKey}
-          value={answers[listEntry.item.id][listEntry.item.inputId]}
+          value={sortedAnswers[listEntry.item.id][listEntry.item.inputId]}
           changeFromInput={changeFromInput(listEntry.item)}
           onBlur={onItemBlur(listEntry.item)}
           removeItem={removeListItem(listEntry.item)}
@@ -431,7 +436,7 @@ const SummaryList: React.FC<Props> = ({
       );
       if (listEntry.item.type === "editableListNumber") {
         const numericValue: number =
-          answers[listEntry.item.id][listEntry.item.inputId];
+          sortedAnswers[listEntry.item.id][listEntry.item.inputId];
         addToSum(numericValue);
       }
     }
@@ -440,7 +445,7 @@ const SummaryList: React.FC<Props> = ({
         <SummaryListItemComponent
           item={listEntry.item}
           key={`${listEntry.item.id}`}
-          value={answers[listEntry.item.id]}
+          value={sortedAnswers[listEntry.item.id]}
           changeFromInput={changeFromInput(listEntry.item)}
           onBlur={onItemBlur(listEntry.item)}
           removeItem={removeListItem(listEntry.item)}
@@ -460,7 +465,7 @@ const SummaryList: React.FC<Props> = ({
         />
       );
       if (listEntry.item.type === "number") {
-        const numericValue: number = answers[listEntry.item.id];
+        const numericValue: number = sortedAnswers[listEntry.item.id];
         addToSum(numericValue);
       }
     }
