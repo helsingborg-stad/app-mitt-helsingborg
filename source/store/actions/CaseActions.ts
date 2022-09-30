@@ -19,7 +19,14 @@ import { to } from "../../helpers/Misc";
 import { PasswordStrategy } from "../../services/encryption/PasswordStrategy";
 import { filterAsync } from "../../helpers/Objects";
 
-const { NOT_STARTED, NEW_APPLICATION } = ApplicationStatusType;
+const {
+  NOT_STARTED,
+  NEW_APPLICATION,
+  ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
+  ACTIVE_SUBMITTED_RANDOM_CHECK_VIVA,
+  ACTIVE_COMPLETION_REQUIRED_VIVA,
+  ACTIVE_SUBMITTED_COMPLETION,
+} = ApplicationStatusType;
 
 export async function updateCase(
   {
@@ -169,14 +176,20 @@ async function getCasesThatShouldGeneratePin(
   user: UserInterface,
   cases: Case[]
 ): Promise<Case[]> {
-  const notStartedCases = cases.filter(
+  const casesNeedingPin = cases.filter(
     (caseData) =>
-      [NOT_STARTED, NEW_APPLICATION].filter((statusType) =>
-        caseData.status.type.includes(statusType)
-      ).length > 0
+      [
+        NOT_STARTED,
+        NEW_APPLICATION,
+        ACTIVE_RANDOM_CHECK_REQUIRED_VIVA,
+        ACTIVE_SUBMITTED_RANDOM_CHECK_VIVA,
+        ACTIVE_COMPLETION_REQUIRED_VIVA,
+        ACTIVE_SUBMITTED_COMPLETION,
+      ].filter((statusType) => caseData.status.type.includes(statusType))
+        .length > 0
   );
 
-  const casesWhereUserIsMainApplicant = notStartedCases.filter((caseData) => {
+  const casesWhereUserIsMainApplicant = casesNeedingPin.filter((caseData) => {
     const selfPerson = caseData.persons.find(
       (person) => person.personalNumber === user.personalNumber
     );
