@@ -31,7 +31,7 @@ import type {
   Workflow,
   Journal,
   Decision,
-  Calculation,
+  Calculations,
 } from "../../types/Case";
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
@@ -229,7 +229,7 @@ const CaseSummary = (props: Props): JSX.Element => {
   const { workflow = {}, administrators } = details;
   const {
     decision = {} as Decision,
-    calculations = {} as Record<string, Calculation>,
+    calculations = {} as Calculations,
     journals = {} as Journal,
   } = workflow as Workflow;
 
@@ -387,7 +387,7 @@ const CaseSummary = (props: Props): JSX.Element => {
       <CaseCalculationsModal
         isVisible={isModalVisible}
         toggleModal={toggleModal}
-        calculation={calculations.calculation}
+        calculation={calculations?.calculation}
         decisions={decisions}
         notes={journals?.journal?.notes?.note ?? []}
       />
