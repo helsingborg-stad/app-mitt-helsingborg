@@ -116,6 +116,11 @@ jobs:
           security import $CERT_PATH -P $P12_PASSWORD -A -t cert -f pkcs12 -k $CERT_KEYCHAIN_PATH
           security list-keychain -d user -s $CERT_KEYCHAIN_PATH
 
+      - name: Setup Sentry
+        env:
+          SENTRY_PROPERTIES: ${{ secrets.SENTRY_PROPERTIES_BASE64 }}
+        run: ./scripts/setup-sentry-properties.sh
+
       - name: Minor checks
         run: |
           ls -lah . ios/ node_modules/react-native/scripts/

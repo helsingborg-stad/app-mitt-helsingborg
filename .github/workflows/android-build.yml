@@ -83,6 +83,11 @@ jobs:
           echo $ANDROID_KEYSTORE_PROPERTIES_BASE64 | base64 -d > android/keystore.properties
           echo $ANDROID_KEYSTORE_BASE64 | base64 -d > android/app/mitt-helsingborg-upload-key.keystore
 
+      - name: Setup Sentry
+        env:
+          SENTRY_PROPERTIES: ${{ secrets.SENTRY_PROPERTIES_BASE64 }}
+        run: ./scripts/setup-sentry-properties.sh
+
       - name: Build
         timeout-minutes: 60
         env:

@@ -83,3 +83,6 @@ coverage/
 
 # Android Keystore
 keystore.properties
+
+android/sentry.properties
+ios/sentry.properties
