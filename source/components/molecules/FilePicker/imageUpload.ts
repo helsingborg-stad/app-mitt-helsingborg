@@ -20,6 +20,8 @@ const NO_IMAGE_UPLOAD_PERMISSION_CODES = [
   "E_NO_LIBRARY_PERMISSION",
 ];
 
+const SKIP_WARNING_CODES = ["E_PICKER_CANCELLED"];
+
 const MAX_IMAGE_SIZE_BYTES = 7 * 1000 * 1000;
 
 function showToBigFileAlert() {
@@ -80,8 +82,8 @@ function transformRawImage(rawImage: ImageOrVideo, questionId: string): Image {
 function handleUploadError(error: ImageUploadError) {
   if (NO_IMAGE_UPLOAD_PERMISSION_CODES.includes(error.code)) {
     showPermissionsAlert();
-  } else {
-    console.warn(error);
+  } else if (!SKIP_WARNING_CODES.includes(error.code)) {
+    console.error(error);
   }
 }
 
