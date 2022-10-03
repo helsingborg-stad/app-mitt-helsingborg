@@ -38,7 +38,7 @@ function CaseCalculationsModal({
 
   const calculationPeriodStartDate = calculation?.periodstartdate ?? "";
   const calculationPeriodEndDate = calculation?.periodenddate ?? "";
-  const calculationIncomeSum = calculation.incomesum ?? "";
+  const calculationIncomeSum = calculation?.incomesum ?? "";
 
   const calculationCostSum = formatAmount(calculation?.costsum, true);
   const calculationNormSubTotal = formatAmount(calculation?.normsubtotal, true);
