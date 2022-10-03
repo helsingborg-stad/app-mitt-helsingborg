@@ -81,7 +81,7 @@ function handleUploadError(error: ImageUploadError) {
   if (NO_IMAGE_UPLOAD_PERMISSION_CODES.includes(error.code)) {
     showPermissionsAlert();
   } else {
-    console.error(error);
+    console.warn(error);
   }
 }
 
