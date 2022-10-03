@@ -15,7 +15,7 @@ import type { PrimaryColor } from "../../theme/themeHelpers";
 import { Icon, Text } from "../../components/atoms";
 import { Card, ScreenWrapper, CaseCard } from "../../components/molecules";
 import {
-  CaseCalculationModal,
+  CaseCalculationsModal,
   RemoveCaseModal,
 } from "../../components/organisms";
 import { useModal } from "../../components/molecules/Modal";
@@ -384,7 +384,7 @@ const CaseSummary = (props: Props): JSX.Element => {
         )}
       </Container>
 
-      <CaseCalculationModal
+      <CaseCalculationsModal
         isVisible={isModalVisible}
         toggleModal={toggleModal}
         calculation={calculations.calculation}
