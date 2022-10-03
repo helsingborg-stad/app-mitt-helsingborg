@@ -62,6 +62,51 @@ interface CalculationNorm {
   normpart: CalculationNormpart[];
 }
 
+interface CalculationPerson {
+  name: string | null;
+  pnumber: string | null;
+  norm: string | null;
+  days: string | null;
+  home: string | null;
+  daycare: string | null;
+}
+
+interface CalculationPersons {
+  calculationperson: CalculationPerson[] | CalculationPerson;
+}
+
+interface Cost {
+  type: string | null;
+  actual: string | null;
+  approved: string | null;
+  note: string | null;
+}
+
+interface Costs {
+  cost: Cost | Cost[];
+}
+
+interface Income {
+  type: string;
+  amount: string;
+  note: Note;
+}
+
+interface Incomes {
+  income: Income | Income[];
+}
+
+interface Reduction {
+  type: string;
+  days: string;
+  note: Note;
+  amount: string;
+}
+
+interface Reductions {
+  reduction: Reduction | Reduction[];
+}
+
 export interface Calculation {
   periodstartdate: string;
   periodenddate: string;
@@ -71,6 +116,14 @@ export interface Calculation {
   reductionsum: string;
   calculationsum: string;
   norm: CalculationNorm;
+  calculationpersons: CalculationPersons;
+  costs: Costs;
+  incomes: Incomes;
+  reductions: Reductions;
+}
+
+export interface Calculations {
+  calculation: Calculation;
 }
 
 export interface Note {
@@ -93,7 +146,7 @@ export interface Decision {
 
 export interface Workflow {
   application: Application;
-  calculations: Record<string, Calculation>;
+  calculations: Calculations;
   journals: Journal;
   decision: Decision;
 }
