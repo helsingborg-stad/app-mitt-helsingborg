@@ -1,4 +1,4 @@
-import { Alert, Linking } from "react-native";
+import { Alert, Linking, Platform } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 import uuid from "react-native-uuid";
 
@@ -29,6 +29,16 @@ function showToBigFileAlert() {
   );
 }
 
+async function goToDeviceSettings() {
+  if (Platform.OS === "android") {
+    await Linking.openSettings();
+  }
+
+  if (Platform.OS === "ios") {
+    await Linking.openURL("app-settings:MittHelsingborg");
+  }
+}
+
 function showPermissionsAlert() {
   Alert.alert(
     "Tillåtelse",
@@ -40,7 +50,7 @@ function showPermissionsAlert() {
       },
       {
         text: "Inställningar",
-        onPress: () => Linking.openURL("app-settings:MittHelsingborg"),
+        onPress: goToDeviceSettings,
         style: "default",
       },
     ]
