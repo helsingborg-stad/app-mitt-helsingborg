@@ -1,14 +1,57 @@
-import { Alert } from "react-native";
-import type { ImageOrVideo } from "react-native-image-crop-picker";
+import { Alert, Linking } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 import uuid from "react-native-uuid";
 
-import type { Image } from "../ImageDisplay/ImageDisplay";
-
-import type { AllowedFileTypes } from "../../../helpers/FileUpload";
+import type {
+  ImageOrVideo,
+  PickerErrorCode,
+} from "react-native-image-crop-picker";
 import { splitFilePath } from "../../../helpers/FileUpload";
 
+import type { AllowedFileTypes } from "../../../helpers/FileUpload";
+import type { Image } from "../ImageDisplay/ImageDisplay";
+
+interface ImageUploadError {
+  code: PickerErrorCode;
+}
+
+const NO_IMAGE_UPLOAD_PERMISSION_CODES: PickerErrorCode[] = [
+  "E_NO_CAMERA_PERMISSION",
+  "E_NO_LIBRARY_PERMISSION",
+];
+
+const SKIP_WARNING_CODES: PickerErrorCode[] = ["E_PICKER_CANCELLED"];
+
 const MAX_IMAGE_SIZE_BYTES = 7 * 1000 * 1000;
+
+function showTooBigFileAlert() {
+  Alert.alert(
+    "Ogiltiga bilder",
+    "Några av de angivna bilder är för stora. Varje bild får max vara 7 Mb."
+  );
+}
+
+async function goToDeviceSettings() {
+  await Linking.openSettings();
+}
+
+function showPermissionsAlert() {
+  Alert.alert(
+    "Tillåtelse",
+    "Mitt Helsingborg behöver din tillåtelse för att kunna lägga till bilder och filer från din enhet. Gå till inställningar för att ge tillåtelse.",
+    [
+      {
+        text: "Avbryt",
+        style: "cancel",
+      },
+      {
+        text: "Inställningar",
+        onPress: goToDeviceSettings,
+        style: "default",
+      },
+    ]
+  );
+}
 
 function transformRawImage(rawImage: ImageOrVideo, questionId: string): Image {
   const filename =
@@ -30,6 +73,14 @@ function transformRawImage(rawImage: ImageOrVideo, questionId: string): Image {
   };
 }
 
+function handleUploadError(error: ImageUploadError) {
+  if (NO_IMAGE_UPLOAD_PERMISSION_CODES.includes(error.code)) {
+    showPermissionsAlert();
+  } else if (!SKIP_WARNING_CODES.includes(error.code)) {
+    console.error(error);
+  }
+}
+
 export async function addImageFromCamera(questionId: string): Promise<Image[]> {
   try {
     const rawImage = await ImagePicker.openCamera({
@@ -42,16 +93,13 @@ export async function addImageFromCamera(questionId: string): Promise<Image[]> {
 
     if (rawImage) {
       if (rawImage.size > MAX_IMAGE_SIZE_BYTES) {
-        Alert.alert(
-          "Ogiltig bild",
-          "Bilden som angivits är för stor. Den får max vara 7 Mb."
-        );
+        showTooBigFileAlert();
       } else {
         return [rawImage].map((image) => transformRawImage(image, questionId));
       }
     }
   } catch (error) {
-    if (error?.code !== "E_PICKER_CANCELLED") console.error(error);
+    handleUploadError(error as ImageUploadError);
   }
   return [];
 }
@@ -88,7 +136,7 @@ export async function addImagesFromLibrary(
       );
     }
   } catch (error) {
-    if (error?.code !== "E_PICKER_CANCELLED") console.error(error);
+    handleUploadError(error as ImageUploadError);
   }
 
   return [];
