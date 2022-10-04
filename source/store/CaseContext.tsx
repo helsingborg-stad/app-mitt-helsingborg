@@ -123,6 +123,8 @@ function CaseProvider({
   };
 
   const fetchCases = useCallback(async () => {
+    if (!user) return;
+
     const fetchData = await fetch(user);
 
     const rawPayload = fetchData.payload as Record<string, Case>;
