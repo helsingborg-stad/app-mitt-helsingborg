@@ -15,12 +15,12 @@ interface ImageUploadError {
   code: PickerErrorCode;
 }
 
-const NO_IMAGE_UPLOAD_PERMISSION_CODES = [
+const NO_IMAGE_UPLOAD_PERMISSION_CODES: PickerErrorCode[] = [
   "E_NO_CAMERA_PERMISSION",
   "E_NO_LIBRARY_PERMISSION",
 ];
 
-const SKIP_WARNING_CODES = ["E_PICKER_CANCELLED"];
+const SKIP_WARNING_CODES: PickerErrorCode[] = ["E_PICKER_CANCELLED"];
 
 const MAX_IMAGE_SIZE_BYTES = 7 * 1000 * 1000;
 
