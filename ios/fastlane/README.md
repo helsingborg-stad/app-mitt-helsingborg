@@ -21,6 +21,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Print the changelog
 
+### print_changelog_github
+
+```sh
+[bundle exec] fastlane print_changelog_github
+```
+
+Print the changelog with a GitHub link to changes
+
 ### tag_version
 
 ```sh
