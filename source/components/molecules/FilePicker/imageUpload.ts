@@ -1,4 +1,4 @@
-import { Alert, Linking, Platform } from "react-native";
+import { Alert, Linking } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 import uuid from "react-native-uuid";
 
@@ -32,13 +32,7 @@ function showTooBigFileAlert() {
 }
 
 async function goToDeviceSettings() {
-  if (Platform.OS === "android") {
-    await Linking.openSettings();
-  }
-
-  if (Platform.OS === "ios") {
-    await Linking.openURL("app-settings:MittHelsingborg");
-  }
+  await Linking.openSettings();
 }
 
 function showPermissionsAlert() {
