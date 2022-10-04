@@ -2,6 +2,7 @@ import stringify from "json-stable-stringify";
 import { NativeModules } from "react-native";
 
 import clone from "just-clone";
+import _set from "lodash.set";
 
 const { Aes } = NativeModules;
 
@@ -50,3 +51,9 @@ export async function deepCompareEquals(
  */
 export const isObject = (i: any): i is Record<string, unknown> =>
   !!i && i.constructor === Object;
+
+export const setObjectPathValue = (
+  object: object,
+  propertyPath: string,
+  value: unknown = undefined
+): object => _set(object, propertyPath, value);
