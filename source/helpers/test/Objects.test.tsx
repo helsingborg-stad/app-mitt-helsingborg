@@ -3,6 +3,7 @@ import {
   deepCopyViaJson,
   filterAsync,
   deepCopy,
+  setObjectPathValue,
 } from "../Objects";
 
 describe("Object helper functions", () => {
@@ -96,4 +97,32 @@ describe("Deep copy", () => {
     expect(data.deep.nested.things).toBe(true);
     expect(data.deep.nested.arr).not.toContain("4");
   });
+});
+
+describe("setObjectPathValue", () => {
+  test.each([
+    {
+      path: "a",
+      pathValue: 1,
+      expectedResult: { a: 1 },
+    },
+    {
+      path: "a.b.c",
+      pathValue: 2,
+      expectedResult: { a: { b: { c: 2 } } },
+    },
+    {
+      path: "a",
+      expectedResult: { a: undefined },
+    },
+  ])(
+    "sets object path $path with value $pathValue",
+    ({ path, pathValue, expectedResult }) => {
+      const testObject = {};
+
+      setObjectPathValue(testObject, path, pathValue);
+
+      expect(testObject).toEqual(expectedResult);
+    }
+  );
 });
