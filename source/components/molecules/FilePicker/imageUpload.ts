@@ -24,7 +24,7 @@ const SKIP_WARNING_CODES: PickerErrorCode[] = ["E_PICKER_CANCELLED"];
 
 const MAX_IMAGE_SIZE_BYTES = 7 * 1000 * 1000;
 
-function showToBigFileAlert() {
+function showTooBigFileAlert() {
   Alert.alert(
     "Ogiltiga bilder",
     "Några av de angivna bilder är för stora. Varje bild får max vara 7 Mb."
@@ -99,7 +99,7 @@ export async function addImageFromCamera(questionId: string): Promise<Image[]> {
 
     if (rawImage) {
       if (rawImage.size > MAX_IMAGE_SIZE_BYTES) {
-        showToBigFileAlert();
+        showTooBigFileAlert();
       } else {
         return [rawImage].map((image) => transformRawImage(image, questionId));
       }
