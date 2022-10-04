@@ -59,7 +59,6 @@ const computeCaseCardComponent = (
 ) => {
   const {
     currentPosition: { currentMainStep: currentStep, numberOfMainSteps },
-    answers,
   } = caseItem?.forms[caseItem?.currentFormId];
 
   const caseId = caseItem.id;
