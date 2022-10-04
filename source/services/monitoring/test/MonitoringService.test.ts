@@ -20,5 +20,6 @@ it("returns a monitoring service", () => {
   expect(sentrySpy).toHaveBeenCalledWith({
     dsn: dsnMock,
     tracesSampleRate: 0.75,
+    beforeSend: expect.any(Function),
   });
 });
