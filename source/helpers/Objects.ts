@@ -52,8 +52,8 @@ export async function deepCompareEquals(
 export const isObject = (i: any): i is Record<string, unknown> =>
   !!i && i.constructor === Object;
 
-export const setObjectPathValue = (
-  object: object,
+export const setObjectPathValue = <T extends object>(
+  object: T,
   propertyPath: string,
   value: unknown = undefined
-): object => _set(object, propertyPath, value);
+): T => _set(object, propertyPath, value);
