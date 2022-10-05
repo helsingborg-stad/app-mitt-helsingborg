@@ -23,7 +23,7 @@ const sentryMonitoringService: MonitoringService = {
         let filteredEvent: Sentry.Event = {};
 
         forbiddenSentryEventProperties.forEach((path: string) => {
-          filteredEvent = unsetObjectPathValue<Sentry.Event>(event, path);
+          filteredEvent = unsetObjectPathValue(event, path);
         });
 
         return filteredEvent;
