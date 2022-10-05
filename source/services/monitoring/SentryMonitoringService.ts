@@ -5,7 +5,7 @@ import { deepCopy, setObjectPathValue } from "../../helpers/Objects";
 
 import type { MonitoringService } from "./MonitoringService.types";
 
-const disallowedSentryEventPaths = [
+const forbiddenSentryEventProperties = [
   "contexts.device.name",
   "user.ip_address",
   "user.email",
@@ -22,7 +22,7 @@ const sentryMonitoringService: MonitoringService = {
       beforeSend: (event) => {
         let eventCopy = deepCopy(event);
 
-        disallowedSentryEventPaths.forEach((path: string) => {
+        forbiddenSentryEventProperties.forEach((path: string) => {
           eventCopy = setObjectPathValue(eventCopy, path, undefined);
         });
 
