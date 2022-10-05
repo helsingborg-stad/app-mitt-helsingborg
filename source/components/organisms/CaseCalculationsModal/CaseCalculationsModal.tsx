@@ -51,7 +51,9 @@ function CaseCalculationsModal({
   );
   const calculationCosts = convertDataToArray(calculation?.costs?.cost);
   const calculationNorm = convertDataToArray(calculation?.norm?.normpart);
-  const calculationReductions = convertDataToArray(calculation?.reductions);
+  const calculationReductions = convertDataToArray(
+    calculation?.reductions?.reduction
+  );
 
   return (
     <Modal visible={isVisible} hide={toggleModal}>
