@@ -23,7 +23,8 @@ const formatAmount = (value, negative = false) => {
  * (VIVA nonconsecutively returns arrays and objects)
  * @param {Object|string[]} data
  */
-const convertDataToArray = (data) => (Array.isArray(data) ? data : [data]);
+const convertDataToArray = (data) =>
+  Array.isArray(data) ? data : [data].filter(Boolean);
 
 /**
  * Returns sum of multiple amounts with Swedish currency

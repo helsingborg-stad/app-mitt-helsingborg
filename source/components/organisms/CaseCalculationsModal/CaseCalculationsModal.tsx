@@ -36,6 +36,25 @@ function CaseCalculationsModal({
 
   if (!isVisible) return null;
 
+  const calculationPeriodStartDate = calculation?.periodstartdate ?? "";
+  const calculationPeriodEndDate = calculation?.periodenddate ?? "";
+  const calculationIncomeSum = calculation?.incomesum ?? "";
+
+  const calculationCostSum = formatAmount(calculation?.costsum, true);
+  const calculationNormSubTotal = formatAmount(calculation?.normsubtotal, true);
+  const calculationReductionSum = formatAmount(calculation?.reductionsum);
+  const calculationCalculationSum = formatAmount(calculation?.calculationsum);
+
+  const calculationIncome = convertDataToArray(calculation?.incomes?.income);
+  const calculationPersons = convertDataToArray(
+    calculation?.calculationpersons?.calculationperson
+  );
+  const calculationCosts = convertDataToArray(calculation?.costs?.cost);
+  const calculationNorm = convertDataToArray(calculation?.norm?.normpart);
+  const calculationReductions = convertDataToArray(
+    calculation?.reductions?.reduction
+  );
+
   return (
     <Modal visible={isVisible} hide={toggleModal}>
       <CloseModalButton
@@ -66,36 +85,30 @@ function CaseCalculationsModal({
           <Card colorSchema="red">
             <Card.Body color="neutral">
               <Card.Title colorSchema="neutral">Beräkning</Card.Title>
-              {calculation?.periodstartdate && calculation?.periodenddate && (
-                <Card.Text>{`Period: ${calculation.periodstartdate} - ${calculation.periodenddate} `}</Card.Text>
+              {calculationPeriodStartDate && calculationPeriodEndDate && (
+                <Card.Text>{`Period: ${calculationPeriodStartDate} - ${calculationPeriodEndDate} `}</Card.Text>
               )}
               <CalculationRow>
                 <Card.Text strong>Inkomster</Card.Text>
-                <Card.Text>{formatAmount(calculation.incomesum)}</Card.Text>
+                <Card.Text>{formatAmount(calculationIncomeSum)}</Card.Text>
               </CalculationRow>
               <CalculationRow>
                 <Card.Text strong>Utgifter</Card.Text>
-                <Card.Text>{formatAmount(calculation.costsum, true)}</Card.Text>
+                <Card.Text>{calculationCostSum}</Card.Text>
               </CalculationRow>
               <CalculationRow>
                 <Card.Text strong>Belopp enligt norm</Card.Text>
-                <Card.Text>
-                  {formatAmount(calculation.normsubtotal, true)}
-                </Card.Text>
+                <Card.Text>{calculationNormSubTotal}</Card.Text>
               </CalculationRow>
               <CalculationRow>
                 <Card.Text strong>Reducering</Card.Text>
                 <Card.Text>
-                  <Card.Text>
-                    {formatAmount(calculation.reductionsum)}
-                  </Card.Text>
+                  <Card.Text>{calculationReductionSum}</Card.Text>
                 </Card.Text>
               </CalculationRow>
               <CalculationRow>
                 <Card.Text strong>Summa</Card.Text>
-                <Card.Text strong>
-                  {formatAmount(calculation.calculationsum)}
-                </Card.Text>
+                <Card.Text strong>{calculationCalculationSum}</Card.Text>
               </CalculationRow>
 
               <Card.Button
@@ -118,32 +131,26 @@ function CaseCalculationsModal({
                   <DetailsTitle type="h6">
                     Personer som påverkar normen
                   </DetailsTitle>
-                  {calculation?.calculationpersons?.calculationperson &&
-                    convertDataToArray(
-                      calculation?.calculationpersons?.calculationperson
-                    ).map((person, index) => (
-                      <Card
-                        key={`${index}-${person?.name}`}
-                        colorSchema="neutral"
-                      >
-                        <Card.Title colorSchema="neutral" strong>
-                          {person?.name}
-                        </Card.Title>
-                        <Card.SubTitle colorSchema="neutral" strong>
-                          {person?.pnumber}
-                        </Card.SubTitle>
-                        <Card.Text>
-                          Norm beräknad på {person?.days} dagar
-                        </Card.Text>
-                      </Card>
-                    ))}
+                  {calculationPersons.map((person) => (
+                    <Card key={person.name} colorSchema="neutral">
+                      <Card.Title colorSchema="neutral" strong>
+                        {person.name}
+                      </Card.Title>
+                      <Card.SubTitle colorSchema="neutral" strong>
+                        {person.pnumber}
+                      </Card.SubTitle>
+                      <Card.Text>
+                        Norm beräknad på {person.days} dagar
+                      </Card.Text>
+                    </Card>
+                  ))}
 
                   <Text strong type="h6">
                     Detaljerad beräkning
                   </Text>
 
                   <DetailsTitle type="h5">Inkomster</DetailsTitle>
-                  {calculation?.incomes?.income ? (
+                  {calculationIncome.length > 0 ? (
                     <>
                       <CalculationTable>
                         <CalculationRowHeader>
@@ -156,28 +163,26 @@ function CaseCalculationsModal({
                           <CalculationRowCell />
                         </CalculationRowHeader>
 
-                        {convertDataToArray(calculation?.incomes?.income).map(
-                          (income, index) => (
-                            <CalculationRow key={`${index}-${income?.type}`}>
-                              <CalculationRowCell>
-                                <Text>{income?.type}</Text>
-                              </CalculationRowCell>
-                              <CalculationRowCell>
-                                <Text>{income?.amount} kr</Text>
-                              </CalculationRowCell>
-                              <CalculationRowCell>
-                                {income.note ? (
-                                  <HelpButton
-                                    text={income.note}
-                                    heading={income.type}
-                                    tagline=""
-                                    icon="info"
-                                  />
-                                ) : null}
-                              </CalculationRowCell>
-                            </CalculationRow>
-                          )
-                        )}
+                        {calculationIncome.map((income) => (
+                          <CalculationRow key={income.type}>
+                            <CalculationRowCell>
+                              <Text>{income.type}</Text>
+                            </CalculationRowCell>
+                            <CalculationRowCell>
+                              <Text>{income.amount} kr</Text>
+                            </CalculationRowCell>
+                            <CalculationRowCell>
+                              {income.note ? (
+                                <HelpButton
+                                  text={income.note}
+                                  heading={income.type}
+                                  tagline=""
+                                  icon="info"
+                                />
+                              ) : null}
+                            </CalculationRowCell>
+                          </CalculationRow>
+                        ))}
                       </CalculationTable>
                     </>
                   ) : (
@@ -187,7 +192,7 @@ function CaseCalculationsModal({
                   )}
 
                   <DetailsTitle type="h5">Utgifter</DetailsTitle>
-                  {calculation?.costs?.cost ? (
+                  {calculationCosts.length > 0 ? (
                     <>
                       <CalculationTable>
                         <CalculationRowHeader>
@@ -200,31 +205,29 @@ function CaseCalculationsModal({
                           </CalculationRowCell>
                           <CalculationRowCell />
                         </CalculationRowHeader>
-                        {convertDataToArray(calculation?.costs?.cost).map(
-                          (cost, index) => (
-                            <CalculationRow key={`${index}-${cost.type}`}>
-                              <CalculationRowCell>
-                                <Text>{cost?.type}</Text>
-                              </CalculationRowCell>
-                              <CalculationRowCell>
-                                <Text>{formatAmount(cost.actual)}</Text>
-                              </CalculationRowCell>
-                              <CalculationRowCell>
-                                <Text>{formatAmount(cost.approved)}</Text>
-                              </CalculationRowCell>
-                              <CalculationRowCell>
-                                {cost.note ? (
-                                  <HelpButton
-                                    text={cost.note}
-                                    heading={cost.type}
-                                    tagline=""
-                                    icon="info"
-                                  />
-                                ) : null}
-                              </CalculationRowCell>
-                            </CalculationRow>
-                          )
-                        )}
+                        {calculationCosts.map((cost) => (
+                          <CalculationRow key={cost.type}>
+                            <CalculationRowCell>
+                              <Text>{cost.type}</Text>
+                            </CalculationRowCell>
+                            <CalculationRowCell>
+                              <Text>{formatAmount(cost.actual)}</Text>
+                            </CalculationRowCell>
+                            <CalculationRowCell>
+                              <Text>{formatAmount(cost.approved)}</Text>
+                            </CalculationRowCell>
+                            <CalculationRowCell>
+                              {cost.note ? (
+                                <HelpButton
+                                  text={cost.note}
+                                  heading={cost.type}
+                                  tagline=""
+                                  icon="info"
+                                />
+                              ) : null}
+                            </CalculationRowCell>
+                          </CalculationRow>
+                        ))}
                       </CalculationTable>
                     </>
                   ) : (
@@ -235,9 +238,9 @@ function CaseCalculationsModal({
 
                   <DetailsTitle type="h5">Belopp enligt norm</DetailsTitle>
 
-                  {calculation?.norm?.normpart ? (
+                  {calculationNorm.length > 0 ? (
                     <>
-                      {calculation.norm.normpart?.map((part, index) => {
+                      {calculationNorm.map((part, index) => {
                         const bottomPadding =
                           calculation.norm.normpart.length === index + 1
                             ? 0
@@ -245,7 +248,7 @@ function CaseCalculationsModal({
 
                         return (
                           <CalculationRow
-                            key={`${index}-${part.type}`}
+                            key={part.type}
                             paddingBottom={bottomPadding}
                           >
                             <CalculationRowCell flex={2}>
@@ -267,19 +270,17 @@ function CaseCalculationsModal({
                   )}
 
                   <DetailsTitle type="h5">Reducering</DetailsTitle>
-                  {calculation?.reductions?.reduction ? (
+                  {calculationReductions.length > 0 ? (
                     <>
-                      {convertDataToArray(
-                        calculation?.reductions?.reduction
-                      ).map((reduction, index) => (
-                        <CalculationRow key={`${index}-${reduction.type}`}>
+                      {calculationReductions.map((reduction) => (
+                        <CalculationRow key={reduction.type}>
                           <CalculationRowCell>
-                            <Text>{reduction?.type}</Text>
+                            <Text>{reduction.type}</Text>
                           </CalculationRowCell>
                           <CalculationRowCell>
                             <Text>
-                              {reduction?.days}{" "}
-                              {reduction?.days > 1 ? "dagar" : "dag"}
+                              {reduction.days}{" "}
+                              {reduction.days > 1 ? "dagar" : "dag"}
                             </Text>
                           </CalculationRowCell>
                           <CalculationRowCell>
@@ -299,9 +300,7 @@ function CaseCalculationsModal({
 
                   <CalculationRow>
                     <Card.Text strong>Summa</Card.Text>
-                    <Card.Text strong>
-                      {formatAmount(calculation.calculationsum)}
-                    </Card.Text>
+                    <Card.Text strong>{calculationCalculationSum}</Card.Text>
                   </CalculationRow>
                 </>
               )}
