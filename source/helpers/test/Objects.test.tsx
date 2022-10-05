@@ -116,6 +116,11 @@ describe("setObjectPathValue", () => {
       object: { b: 1 },
       expectedResult: { b: 1 },
     },
+    {
+      path: "a.b.c.d",
+      object: { a: {} },
+      expectedResult: { a: {} },
+    },
   ])("unsets object path $path", ({ path, object, expectedResult }) => {
     const result = unsetObjectPathValue(object, path);
 
