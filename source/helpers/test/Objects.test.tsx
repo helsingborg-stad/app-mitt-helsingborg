@@ -3,7 +3,7 @@ import {
   deepCopyViaJson,
   filterAsync,
   deepCopy,
-  setObjectPathValue,
+  unsetObjectPathValue,
 } from "../Objects";
 
 describe("Object helper functions", () => {
@@ -103,26 +103,22 @@ describe("setObjectPathValue", () => {
   test.each([
     {
       path: "a",
-      pathValue: 1,
-      expectedResult: { a: 1 },
+      object: { a: 1 },
+      expectedResult: {},
     },
     {
       path: "a.b.c",
-      pathValue: 2,
-      expectedResult: { a: { b: { c: 2 } } },
+      object: { a: { b: { c: 2 } } },
+      expectedResult: { a: { b: {} } },
     },
     {
       path: "a",
-      expectedResult: { a: undefined },
+      object: { b: 1 },
+      expectedResult: { b: 1 },
     },
-  ])(
-    "sets object path $path with value $pathValue",
-    ({ path, pathValue, expectedResult }) => {
-      const testObject = {};
+  ])("unsets object path $path", ({ path, object, expectedResult }) => {
+    const result = unsetObjectPathValue(object, path);
 
-      setObjectPathValue(testObject, path, pathValue);
-
-      expect(testObject).toEqual(expectedResult);
-    }
-  );
+    expect(result).toEqual(expectedResult);
+  });
 });

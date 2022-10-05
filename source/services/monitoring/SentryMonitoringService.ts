@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/react-native";
 import env from "react-native-config";
 
-import { deepCopy, setObjectPathValue } from "../../helpers/Objects";
+import { unsetObjectPathValue } from "../../helpers/Objects";
 
 import type { MonitoringService } from "./MonitoringService.types";
 
@@ -20,13 +20,13 @@ const sentryMonitoringService: MonitoringService = {
       // Recommended is to adjust this value in production.
       tracesSampleRate: 0.75,
       beforeSend: (event) => {
-        let eventCopy = deepCopy(event);
+        let filteredEvent: Sentry.Event = {};
 
         forbiddenSentryEventProperties.forEach((path: string) => {
-          eventCopy = setObjectPathValue(eventCopy, path, undefined);
+          filteredEvent = unsetObjectPathValue<Sentry.Event>(event, path);
         });
 
-        return eventCopy;
+        return filteredEvent;
       },
     });
   },
