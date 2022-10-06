@@ -7,7 +7,7 @@ type BankIDMessageKey =
   | "unknownError"
   | "technicalError"
   | "userNotFound"
-  | "unkownError",
+  | "unkownError";
 
 const messages: Record<BankIDMessageKey, string> = {
   /** BankID recommended user messages * */
