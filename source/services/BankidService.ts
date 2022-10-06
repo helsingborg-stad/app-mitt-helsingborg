@@ -16,18 +16,15 @@ async function getIPForBankID() {
  * Function for polling the status in a BankID authentication process.
  * @param {string} orderRef A valid BankID order reference
  */
-async function collect(orderRef: string) {
+async function collect(
+  orderRef: string
+): Promise<{ success: boolean; data: string }> {
   try {
     const response = await post("auth/bankid/collect", { orderRef });
     const bankIDStatus = response?.data?.data?.attributes?.status;
+    const hintCode =
+      response?.data?.data?.attributes?.hintCode ?? "unkownError";
 
-    if (response.status === 502) {
-      // Status 502 is a connection timeout error,
-      // may happen when the connection was pending for too long,
-      // and the remote server or a proxy closed it
-      // let's reconnect
-      return await collect(orderRef);
-    }
     if (response.status === 404) {
       return { success: false, data: getMessage("userCancel") };
     }
@@ -37,7 +34,7 @@ async function collect(orderRef: string) {
       return await collect(orderRef);
     }
     if (response.status === 200 && bankIDStatus === "failed") {
-      return { success: false, data: getMessage(response.data.data.hintCode) };
+      return { success: false, data: getMessage(hintCode) };
     }
     return { success: true, data: response.data.data };
   } catch (error) {
