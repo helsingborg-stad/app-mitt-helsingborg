@@ -4,7 +4,7 @@ import StorageService, {
   REFRESH_TOKEN_KEY,
 } from "./storage/StorageService";
 import { post, get } from "../helpers/ApiRequest";
-import { getMessage } from "../helpers/MessageHelper";
+import getMessage from "../helpers/MessageHelper";
 
 /**
  * This function retrives the accessToken from AsyncStorage and decodes it.
