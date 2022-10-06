@@ -1,4 +1,4 @@
-import { getMessage } from "../helpers/MessageHelper";
+import getMessage from "../helpers/MessageHelper";
 import {
   buildBankIdClientUrl,
   canOpenUrl,
@@ -16,9 +16,11 @@ async function getIPForBankID() {
  * Function for polling the status in a BankID authentication process.
  * @param {string} orderRef A valid BankID order reference
  */
-async function collect(orderRef) {
+async function collect(orderRef: string) {
   try {
     const response = await post("auth/bankid/collect", { orderRef });
+    const bankIDStatus = response?.data?.data?.attributes?.status;
+
     if (response.status === 502) {
       // Status 502 is a connection timeout error,
       // may happen when the connection was pending for too long,
@@ -29,20 +31,12 @@ async function collect(orderRef) {
     if (response.status === 404) {
       return { success: false, data: getMessage("userCancel") };
     }
-    if (
-      response.status === 200 &&
-      response.data &&
-      response.data.data.attributes.status === "pending"
-    ) {
+    if (response.status === 200 && bankIDStatus === "pending") {
       // Reconnect in one 1050 ms
       await new Promise((resolve) => setTimeout(resolve, 1050));
       return await collect(orderRef);
     }
-    if (
-      response.status === 200 &&
-      response.data &&
-      response.data.data.attributes.status === "failed"
-    ) {
+    if (response.status === 200 && bankIDStatus === "failed") {
       return { success: false, data: getMessage(response.data.data.hintCode) };
     }
     return { success: true, data: response.data.data };
