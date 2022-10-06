@@ -6,7 +6,8 @@ type BankIDMessageKey =
   | "userSign"
   | "unknownError"
   | "technicalError"
-  | "userNotFound";
+  | "userNotFound"
+  | "unkownError",
 
 const messages: Record<BankIDMessageKey, string> = {
   /** BankID recommended user messages * */
@@ -24,6 +25,7 @@ const messages: Record<BankIDMessageKey, string> = {
   unknownError: "Okänt fel. Försök igen.",
   userNotFound:
     "Du har tyvärr inte åtkomst till tjänsten. För vidare hjälp ring kontaktcenter på 042-10 50 00.",
+  unkownError: "Okänt fel. Försök igen.",
 };
 
 /**
