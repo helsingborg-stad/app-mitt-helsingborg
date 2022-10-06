@@ -36,7 +36,7 @@ async function collect(
     if (response.status === 200 && bankIDStatus === "failed") {
       return { success: false, data: getMessage(hintCode) };
     }
-    return { success: true, data: response.data.data };
+    return { success: true, data: response?.data?.data };
   } catch (error) {
     console.error(`BankID Collect Error: ${error}`);
     return { success: false, data: getMessage("unkownError") };
