@@ -95,7 +95,6 @@ function LoginModal({
                 onChangeText={handlePersonalNumber}
                 keyboardType="number-pad"
                 maxLength={12}
-                onSubmitEditing={handleLoginExternalDevice}
                 center
               />
               <Button
