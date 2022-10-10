@@ -157,7 +157,7 @@ export async function getUserProfile(accessToken) {
         throw new Error(getMessage("userNotFound"));
       }
 
-      throw new Error(getMessage("unkownError"));
+      throw new Error(getMessage("unknownError"));
     }
   } catch (error) {
     return [null, error];

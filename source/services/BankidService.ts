@@ -23,7 +23,7 @@ async function collect(
     const response = await post("auth/bankid/collect", { orderRef });
     const bankIDStatus = response?.data?.data?.attributes?.status;
     const hintCode =
-      response?.data?.data?.attributes?.hintCode ?? "unkownError";
+      response?.data?.data?.attributes?.hintCode ?? "unknownError";
 
     if (response.status === 404) {
       return { success: false, data: getMessage("userCancel") };
@@ -39,7 +39,7 @@ async function collect(
     return { success: true, data: response?.data?.data };
   } catch (error) {
     console.error(`BankID Collect Error: ${error}`);
-    return { success: false, data: getMessage("unkownError") };
+    return { success: false, data: getMessage("unknownError") };
   }
 }
 
