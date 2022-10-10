@@ -1,4 +1,14 @@
-const messages = {
+type BankIDMessageKey =
+  | "userCancel"
+  | "startFailed"
+  | "expiredTransaction"
+  | "certificateErr"
+  | "userSign"
+  | "unknownError"
+  | "technicalError"
+  | "userNotFound";
+
+const messages: Record<BankIDMessageKey, string> = {
   /** BankID recommended user messages * */
   userCancel: "Åtgärden avbruten.",
   certificateErr:
@@ -22,6 +32,7 @@ const messages = {
  * @param {String} key  Key for the message
  * @return {String}     Value of the message
  */
-const getMessage = (key) => messages[key] || messages.unknownError;
+const getMessage = (key: BankIDMessageKey): string =>
+  messages[key] || messages.unknownError;
 
-export { getMessage };
+export default getMessage;
