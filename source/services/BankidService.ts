@@ -25,8 +25,8 @@ async function collect(
     const hintCode =
       response?.data?.data?.attributes?.hintCode ?? "unknownError";
 
-    if (response.status === 404) {
-      return { success: false, data: getMessage("userCancel") };
+    if (response.status === 400) {
+      return { success: false, data: "" };
     }
     if (response.status === 200 && bankIDStatus === "pending") {
       // Reconnect in one 1050 ms
