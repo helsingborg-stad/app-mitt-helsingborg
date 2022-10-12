@@ -21,13 +21,13 @@ type CaseItemReplacementRuleType = {
 const caseItemReplacementRules: CaseItemReplacementRuleType[] = [
   {
     key: "#MONTH_NAME",
-    from: "details.workflow.application.periodstartdate",
+    from: "details.period.startDate",
     to: ["status.description", "status.detailedDescription"],
     timeFormat: "MMMM",
   },
   {
     key: "#COMPLETION_DUEDATE",
-    from: "details.workflow.application.completionduedate",
+    from: "details.completions.dueDate",
     to: ["status.description", "status.detailedDescription"],
   },
   {
