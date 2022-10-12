@@ -10,7 +10,6 @@ const {
   ACTIVE_SIGNATURE_PENDING,
   NOT_STARTED,
   ACTIVE_ONGOING,
-  SIGNED,
   CLOSED,
 } = ApplicationStatusType;
 
@@ -26,7 +25,6 @@ export default function statusTypeConstantMapper(
   const isVivaCompletionRequired = statusType.includes(
     ACTIVE_COMPLETION_REQUIRED_VIVA
   );
-  const isSigned = statusType.includes(SIGNED);
   const isWaitingForSign = statusType.includes(ACTIVE_SIGNATURE_PENDING);
 
   const shouldShowAppealButton =
@@ -47,7 +45,6 @@ export default function statusTypeConstantMapper(
     isClosed,
     isRandomCheckRequired,
     isVivaCompletionRequired,
-    isSigned,
     isWaitingForSign,
     shouldShowAppealButton,
     isActiveSubmittedRandomCheck,
