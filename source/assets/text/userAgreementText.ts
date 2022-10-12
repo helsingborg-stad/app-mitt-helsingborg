@@ -50,7 +50,7 @@ Om du vill komma i kontakt med Stadens dataskyddsombud ring 042-10 50 00 (växel
 
 
 
-Om du vill klaga på vår behandling av dina personuppgifter kan du vända dig till Datainspektionen, [http://www.datainspektionen.se/](http://www.datainspektionen.se/)
+Om du vill klaga på vår behandling av dina personuppgifter kan du vända dig till Integritetsskyddsmyndigheten, [http://www.imy.se](http://www.imy.se)
 `;
 
 export default userAgreementText;
