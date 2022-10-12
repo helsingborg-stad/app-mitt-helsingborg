@@ -302,7 +302,7 @@ describe("replaceCaseItemText", () => {
   });
 
   it("replaces text on multiple `to` properties with multiple keys", () => {
-    const expectedDescription = `Month: January, duedate: ${mockCase.details.workflow.application.completionduedate}`;
+    const expectedDescription = "Month: January, duedate: 2022-05-16";
 
     mockCase.status.detailedDescription =
       "Month: #MONTH_NAME, duedate: #COMPLETION_DUEDATE";
