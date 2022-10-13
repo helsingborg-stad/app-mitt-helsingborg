@@ -1,7 +1,7 @@
 import { ThemeContext } from "styled-components";
 import React, { useContext } from "react";
 
-import RadioButton from "../../atoms/RadioButton/RadioButton";
+import { RadioButton } from "../../atoms";
 import { getValidColorSchema } from "../../../theme/theme";
 import Text from "../../atoms/Text/Text";
 
