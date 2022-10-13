@@ -1,6 +1,6 @@
 import type { PrimaryColor } from "../../../theme/themeHelpers";
 
-type Size = "small" | "medium" | "large";
+export type Size = "small" | "medium" | "large";
 
 export interface Props {
   checked?: boolean;

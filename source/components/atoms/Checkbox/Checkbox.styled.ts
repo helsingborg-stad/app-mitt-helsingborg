@@ -3,12 +3,13 @@ import styled from "styled-components/native";
 import Icon from "../Icon";
 
 import type { PrimaryColor, ThemeType } from "../../../theme/themeHelpers";
+import type { Size } from "./Checkbox.types";
 
 interface BoxProps {
   checked: boolean;
   colorSchema: PrimaryColor;
   backgroundColor: string;
-  size: "small" | "medium" | "large";
+  size: Size;
   theme: ThemeType;
 }
 const CheckboxBox = styled.TouchableHighlight<BoxProps>`
