@@ -138,7 +138,6 @@ const computeCaseCardComponent = (
     isOngoing,
     isRandomCheckRequired,
     isVivaCompletionRequired,
-    isSigned,
     isClosed,
     isWaitingForSign,
     isActiveSubmittedRandomCheck,
@@ -156,7 +155,6 @@ const computeCaseCardComponent = (
     : isOngoing ||
       isNotStarted ||
       isRandomCheckRequired ||
-      isSigned ||
       isClosed ||
       isVivaCompletionRequired ||
       isActiveSubmittedRandomCheck ||
@@ -191,10 +189,6 @@ const computeCaseCardComponent = (
 
   if (isRandomCheckRequired) {
     buttonProps.text = "Starta stickprov";
-  }
-
-  if (isSigned) {
-    buttonProps.text = "Ladda upp filer och dokument";
   }
 
   if (isWaitingForSign && !selfHasSigned) {

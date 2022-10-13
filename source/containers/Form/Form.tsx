@@ -221,7 +221,6 @@ const Form: React.FC<Props> = ({
     if (!hasSigned && authStatus === "signResolved") {
       setHasSigned(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authStatus]);
 
   formNavigation.close = () => {
