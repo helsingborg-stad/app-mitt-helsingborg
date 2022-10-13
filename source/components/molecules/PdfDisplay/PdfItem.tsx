@@ -10,6 +10,10 @@ import type { Pdf } from "./PdfDisplay";
 const MAX_PDF_WIDTH = 120;
 const MAX_PDF_HEIGHT = 170;
 
+const DefaultItem = styled.View`
+  padding-top: 6px;
+`;
+
 const Flex = styled.View`
   flex-direction: column;
   align-items: center;
@@ -65,43 +69,45 @@ const PdfItem: React.FC<Props> = ({ pdf, onRemove }) => {
   };
 
   return (
-    <Flex key={pdf.path}>
-      <DeleteBackground>
-        <TouchableOpacity onPress={handleRemove} activeOpacity={0.1}>
-          <Icon name="clear" color="#00213F" />
-        </TouchableOpacity>
-      </DeleteBackground>
+    <DefaultItem>
+      <Flex key={pdf.path}>
+        <DeleteBackground>
+          <TouchableOpacity onPress={handleRemove} activeOpacity={0.1}>
+            <Icon name="clear" color="#00213F" />
+          </TouchableOpacity>
+        </DeleteBackground>
 
-      <Container onPress={toggleModal}>
-        <PdfView
-          pointerEvents="none"
-          source={{ uri: pdf.uri }}
-          style={{
-            width: MAX_PDF_WIDTH,
-            height: MAX_PDF_HEIGHT,
-            backgroundColor: "white",
-          }}
-          singlePage
-        />
-      </Container>
+        <Container onPress={toggleModal}>
+          <PdfView
+            pointerEvents="none"
+            source={{ uri: pdf.uri }}
+            style={{
+              width: MAX_PDF_WIDTH,
+              height: MAX_PDF_HEIGHT,
+              backgroundColor: "white",
+            }}
+            singlePage
+          />
+        </Container>
 
-      <Text align="center" numberOfLines={1} style={{ width: MAX_PDF_WIDTH }}>
-        {pdf.displayName}
-      </Text>
+        <Text align="center" numberOfLines={1} style={{ width: MAX_PDF_WIDTH }}>
+          {pdf.displayName}
+        </Text>
 
-      <Modal visible={modalVisible} hide={toggleModal}>
-        <PdfInModal
-          source={{ uri: pdf.uri }}
-          width={Dimensions.get("window").width}
-          height={Dimensions.get("window").height * 0.89}
-        />
-        <ButtonWrapper>
-          <Button colorSchema="red" onClick={toggleModal}>
-            <Text>Stäng</Text>
-          </Button>
-        </ButtonWrapper>
-      </Modal>
-    </Flex>
+        <Modal visible={modalVisible} hide={toggleModal}>
+          <PdfInModal
+            source={{ uri: pdf.uri }}
+            width={Dimensions.get("window").width}
+            height={Dimensions.get("window").height * 0.89}
+          />
+          <ButtonWrapper>
+            <Button colorSchema="red" onClick={toggleModal}>
+              <Text>Stäng</Text>
+            </Button>
+          </ButtonWrapper>
+        </Modal>
+      </Flex>
+    </DefaultItem>
   );
 };
 
