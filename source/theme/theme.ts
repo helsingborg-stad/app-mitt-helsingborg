@@ -1,7 +1,7 @@
 // theming for styled components goes in this file.
 import { colorPalette, deprecatedPalette } from "./palette";
 
-const calculateSizeScale = (size, scale) => scale * size;
+const calculateSizeScale = (size: number, scale: number) => scale * size;
 
 const setTypography = () => {
   const defaultSize = 12;
