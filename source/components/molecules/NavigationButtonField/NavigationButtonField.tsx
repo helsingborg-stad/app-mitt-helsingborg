@@ -2,11 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import { Button, Icon, Text } from "../../atoms";
-import Box from "../../atoms/Box/Box";
 
-const ButtonFieldWrapper = styled(Box).attrs({
-  m: "2px",
-})``;
+const ButtonFieldWrapper = styled.View`
+  height: auto;
+  width: auto;
+  border-radius: 0;
+  border-style: solid;
+  margin: 2px;
+`;
 
 export type NavigationActionType =
   | { type: "navigateDown"; stepId: string }
