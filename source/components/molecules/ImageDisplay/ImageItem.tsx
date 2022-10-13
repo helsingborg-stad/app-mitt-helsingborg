@@ -16,6 +16,7 @@ const MAX_IMAGE_HEIGHT = 170;
 const DefaultItem = styled.TouchableOpacity`
   margin-bottom: 20px;
   margin-right: 20px;
+  padding-top: 6px;
 `;
 const Flex = styled.View`
   flex-direction: column;
