@@ -13,9 +13,14 @@ import { downloadFile } from "../../../helpers/FileUpload";
 const MAX_IMAGE_WIDTH = 120;
 const MAX_IMAGE_HEIGHT = 170;
 
+const SafeArea = styled.SafeAreaView`
+  flex: 1;
+`;
+
 const DefaultItem = styled.TouchableOpacity`
   margin-bottom: 20px;
   margin-right: 20px;
+  padding-top: 6px;
 `;
 const Flex = styled.View`
   flex-direction: column;
@@ -164,31 +169,33 @@ const ImageItem: React.FC<Props> = ({ image, onRemove, onChange }) => {
       <Modal visible={modalVisible} hide={toggleModal}>
         {(fileStatus === "localFileAvailable" ||
           fileStatus === "downloadedFileAvailable") && (
-          <ImageZoom
-            cropWidth={Dimensions.get("window").width}
-            cropHeight={Dimensions.get("window").height * 0.89}
-            imageWidth={image.width}
-            imageHeight={image.height}
-            panToMove
-            enableCenterFocus={false}
-            centerOn={{
-              x: 0,
-              y: 0,
-              scale: Dimensions.get("window").width / image.width,
-              duration: 10,
-            }}
-            minScale={Dimensions.get("window").width / image.width}
-          >
-            <RNImage
-              style={{ width: image.width, height: image.height }}
-              source={{
-                uri:
-                  fileStatus === "localFileAvailable"
-                    ? image.path
-                    : downloadedFilePath,
+          <SafeArea>
+            <ImageZoom
+              cropWidth={Dimensions.get("window").width}
+              cropHeight={Dimensions.get("window").height * 0.89}
+              imageWidth={image.width}
+              imageHeight={image.height}
+              panToMove
+              enableCenterFocus={false}
+              centerOn={{
+                x: 0,
+                y: 0,
+                scale: Dimensions.get("window").width / image.width,
+                duration: 10,
               }}
-            />
-          </ImageZoom>
+              minScale={Dimensions.get("window").width / image.width}
+            >
+              <RNImage
+                style={{ width: image.width, height: image.height }}
+                source={{
+                  uri:
+                    fileStatus === "localFileAvailable"
+                      ? image.path
+                      : downloadedFilePath,
+                }}
+              />
+            </ImageZoom>
+          </SafeArea>
         )}
         {(fileStatus === "downloading" || fileStatus === "checkLocalFile") && (
           <ActivityWrapperModal
