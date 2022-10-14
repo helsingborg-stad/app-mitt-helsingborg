@@ -11,7 +11,7 @@ const List = styled.ScrollView`
   margin-top: 24px;
 `;
 
-const ListHeading = styled(Text)`
+const ListHeading = styled(Text).attrs({ type: "h5" })`
   margin-left: 4px;
   margin-bottom: 8px;
 `;
@@ -43,7 +43,7 @@ const FormList = ({
 
   return (
     <List>
-      <ListHeading type="h5">{heading}</ListHeading>
+      <ListHeading>{heading}</ListHeading>
       {formSummaries.length > 0 ? (
         formSummaries.map((form) => (
           <ListItem

@@ -46,7 +46,7 @@ const Container = styled.ScrollView`
   padding-right: 16px;
 `;
 
-const ListHeading = styled(Text)`
+const ListHeading = styled(Text).attrs({ type: "h5" })`
   margin-left: 4px;
   margin-top: 24px;
   margin-bottom: 8px;
@@ -510,7 +510,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
 
         {showActiveCases && (
           <>
-            <ListHeading type="h5">Aktiva</ListHeading>
+            <ListHeading>Aktiva</ListHeading>
             <Animated.View style={{ opacity: fadeAnimation }}>
               {activeCaseCards}
             </Animated.View>
@@ -519,7 +519,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
 
         {showClosedCases && (
           <Animated.View style={{ opacity: fadeAnimation }}>
-            <ListHeading type="h5">Avslutade</ListHeading>
+            <ListHeading>Avslutade</ListHeading>
             {closedCaseCards}
           </Animated.View>
         )}

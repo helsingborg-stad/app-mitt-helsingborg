@@ -66,7 +66,7 @@ function ProfileScreen({ navigation }: Props): JSX.Element {
       <Container>
         {personalInfoFields.map(({ header, fields }) => (
           <ProfileInfoContainer key={header}>
-            <ProfileInfoHeading type="h5">{header}</ProfileInfoHeading>
+            <ProfileInfoHeading>{header}</ProfileInfoHeading>
 
             {fields.map(({ fieldLabel, fieldValue }) => (
               <React.Fragment key={fieldLabel}>
