@@ -29,7 +29,7 @@ const ProfileInfoContainer = styled.View`
   margin: 16px 0px;
 `;
 
-const ProfileInfoHeading = styled(Text).attrs({ type: "h5 " })`
+const ProfileInfoHeading = styled(Text).attrs({ type: "h5" })`
   color: ${(props) => props.theme.text.darkest};
   margin-top: 16px;
   margin-bottom: 0px;
