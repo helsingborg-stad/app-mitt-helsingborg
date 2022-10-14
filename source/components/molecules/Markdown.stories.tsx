@@ -1,11 +1,11 @@
-/* eslint-disable no-shadow */
 import { storiesOf } from "@storybook/react-native";
 import React from "react";
 import { View } from "react-native";
+
 import MarkdownConstructor from "../../helpers/MarkdownConstructor";
+
 import StoryWrapper from "./StoryWrapper";
-import Text from "../atoms/Text";
-import Heading from "../atoms/Heading";
+import { Text } from "../atoms";
 
 const rules = {
   text: (node, _children, _parent, _styles) => (
@@ -84,16 +84,16 @@ const url = `[Helsingborg.se](https://www.helsingborg.se)`;
 
 storiesOf("Text", module).add("Markdown", () => (
   <StoryWrapper>
-    <Heading type="h3">Mixed</Heading>
+    <Text type="h3">Mixed</Text>
     <MarkdownConstructor style={styles} rules={rules} rawText={mixed} />
 
-    <Heading type="h3">Linebreak</Heading>
+    <Text type="h3">Linebreak</Text>
     <MarkdownConstructor style={styles} rules={rules} rawText={linebreak} />
 
-    <Heading type="h3">List</Heading>
+    <Text type="h3">List</Text>
     <MarkdownConstructor style={styles} rules={rules} rawText={list} />
 
-    <Heading type="h3">URL</Heading>
+    <Text type="h3">URL</Text>
     <MarkdownConstructor style={styles} rules={rules} rawText={url} />
   </StoryWrapper>
 ));

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import { Button, Text, Heading, Progressbar } from "../../atoms";
+import { Button, Text, Progressbar } from "../../atoms";
 import BulletList from "../../organisms/BulletList";
 import { colorPalette } from "../../../theme/palette";
 
@@ -77,7 +77,7 @@ const BodyContainer = styled.View`
   flex-grow: 1;
 `;
 
-const CardTitle = styled(Heading)`
+const CardTitle = styled(Text).attrs({ type: "h2" })`
   color: ${(props) =>
     props.colorSchema === "neutral"
       ? props.theme.colors.neutrals[1]

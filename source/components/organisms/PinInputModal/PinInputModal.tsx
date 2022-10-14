@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import Button from "../../atoms/Button";
-import { Heading, Input, Text } from "../../atoms";
+import { Input, Text } from "../../atoms";
 import Wrapper from "../../molecules/Dialog/Wrapper";
 import { Modal } from "../../molecules/Modal";
 import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
@@ -46,7 +46,7 @@ export default function PinInputModal({
       <BackgroundBlurWrapper>
         <Wrapper>
           <DialogContainer>
-            <Heading type="h4">Ange kod</Heading>
+            <Text type="h4">Ange kod</Text>
             <Text align="center" style={{ marginBottom: 10 }}>
               Ange koden som {name} har fått vid signering
             </Text>

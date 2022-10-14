@@ -4,12 +4,11 @@ import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import type { SummaryListItem } from "../../organisms/SummaryList/SummaryList";
 import type { Help } from "../../../types/FormTypes";
-import Text from "../../atoms/Text";
 import Fieldset, { FieldsetButton } from "../../atoms/Fieldset/Fieldset";
 import theme from "../../../theme/theme";
 import type { PrimaryColor } from "../../../theme/themeHelpers";
 import { getValidColorSchema } from "../../../theme/themeHelpers";
-import { Heading } from "../../atoms";
+import { Text } from "../../atoms";
 
 const ListBody = styled.View`
   padding-top: 12px;
@@ -17,7 +16,7 @@ const ListBody = styled.View`
   height: auto;
 `;
 
-const ListBodyFieldLabel = styled(Heading)<{ colorSchema: string }>`
+const ListBodyFieldLabel = styled(Text)<{ colorSchema: string }>`
   margin-top: 5px;
   margin-left: 3px;
   font-weight: ${(props) => props.theme.fontWeights[1]};

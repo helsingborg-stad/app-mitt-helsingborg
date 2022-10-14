@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Modal } from "../Modal";
-import { Button, Text, Heading } from "../../atoms";
+import { Button, Text } from "../../atoms";
 import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 
 import MarkdownConstructor from "../../../helpers/MarkdownConstructor";
@@ -42,7 +42,7 @@ const InfoModal: React.FC<Props> = (props) => {
           <PopupContainer>
             {heading && (
               <Header>
-                <Heading>{heading}</Heading>
+                <Text type="h2">{heading}</Text>
               </Header>
             )}
             <Form

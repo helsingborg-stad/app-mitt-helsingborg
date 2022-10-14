@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import { Text, Heading } from "../../../atoms";
+import { Text } from "../../../atoms";
 
 const StepDescriptionWrapper = styled.View`
   padding-left: 24px;
@@ -53,7 +53,7 @@ function StepDescription({
               `${currentStep} / ${totalStepNumber}`}
           </StepDescriptionTagline>
         )}
-        <Heading>{heading}</Heading>
+        <Text type="h2">{heading}</Text>
         {text.length !== 0 && <StepDescriptionText>{text}</StepDescriptionText>}
       </StepDescriptionContent>
     </StepDescriptionWrapper>

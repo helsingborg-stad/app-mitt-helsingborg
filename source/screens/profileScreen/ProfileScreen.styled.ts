@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 
 import { ScreenWrapper } from "../../components/molecules";
-import { Button, Text, Heading, Label } from "../../components/atoms";
+import { Button, Text, Label } from "../../components/atoms";
 
 const ProfileScreenWrapper = styled(ScreenWrapper)`
   padding: 0;
@@ -29,7 +29,7 @@ const ProfileInfoContainer = styled.View`
   margin: 16px 0px;
 `;
 
-const ProfileInfoHeading = styled(Heading)`
+const ProfileInfoHeading = styled(Text)`
   color: ${(props) => props.theme.text.darkest};
   margin-top: 16px;
   margin-bottom: 0px;

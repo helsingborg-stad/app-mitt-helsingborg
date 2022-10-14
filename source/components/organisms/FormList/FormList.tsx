@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import { Heading, Text } from "../../atoms";
+import { Text } from "../../atoms";
 import { ListItem } from "../../molecules";
 import FormContext from "../../../store/FormContext";
 
@@ -11,7 +11,7 @@ const List = styled.ScrollView`
   margin-top: 24px;
 `;
 
-const ListHeading = styled(Heading)`
+const ListHeading = styled(Text)`
   margin-left: 4px;
   margin-bottom: 8px;
 `;

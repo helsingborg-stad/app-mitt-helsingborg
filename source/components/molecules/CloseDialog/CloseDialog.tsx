@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components/native";
 import { Modal } from "react-native";
 import Button from "../../atoms/Button";
-import Heading from "../../atoms/Heading";
 import Text from "../../atoms/Text";
 import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import type { PrimaryColor } from "../../../theme/themeHelpers";
@@ -27,7 +26,7 @@ const Content = styled.View`
   padding: 12px;
 `;
 
-const Title = styled(Heading)`
+const Title = styled(Text).attrs({ type: "h2" })`
   color: ${(props) => props.theme.colors.neutrals[1]};
   font-size: ${(props) => props.theme.fontSizes[4]}px;
   margin: 0px;

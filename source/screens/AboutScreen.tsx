@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
-import { Text, Heading } from "../components/atoms";
+import { Text } from "../components/atoms";
 import { Header, ScreenWrapper } from "../components/molecules";
 
 const AboutScreenWrapper = styled(ScreenWrapper)`
@@ -23,7 +23,7 @@ const AboutScreen = () => (
   <AboutScreenWrapper>
     <Header title="Om Appen" themeColor="purple" />
     <Container>
-      <Heading type="h1">Hej! 👋</Heading>
+      <Text type="h1">Hej! 👋</Text>
       <Paragraph>
         Just nu utvecklar Helsingborgs stad appen Mitt Helsingborg, för att
         testa att göra självservice enklare och mer personligt.

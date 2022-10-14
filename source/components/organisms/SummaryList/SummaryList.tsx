@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 
 import { GroupedList } from "../../molecules";
 
-import { Text, Heading } from "../../atoms";
+import { Text } from "../../atoms";
 
 import SummaryListItemComponent from "./SummaryListItem";
 
@@ -16,7 +16,7 @@ import type { PrimaryColor, ThemeType } from "../../../theme/themeHelpers";
 import type { InputType } from "../../atoms/Input/Input";
 import type { Help } from "../../../types/FormTypes";
 
-const SumLabel = styled(Heading)<{ colorSchema: string }>`
+const SumLabel = styled(Text).attrs({ type: "h2" })<{ colorSchema: string }>`
   margin-top: 5px;
   margin-left: 3px;
   font-weight: ${(props) => props.theme.fontWeights[1]};

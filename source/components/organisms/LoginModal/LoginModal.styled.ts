@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 
 import { Modal as ModalBase, BackNavigation } from "../../molecules";
 
-import { Heading, Input, Text } from "../../atoms";
+import { Input, Text } from "../../atoms";
 
 import type { ThemeType } from "../../../theme/themeHelpers";
 
@@ -25,13 +25,13 @@ const Form = styled.View`
   align-items: center;
 `;
 
-const Title = styled(Heading)`
+const Title = styled(Text).attrs({ type: "h2" })`
   font-size: ${({ theme }) => theme.fontSizes[3]}px;
   color: ${({ theme }) => theme.colors.primary.red[0]};
   font-weight: ${({ theme }) => theme.fontWeights[1]};
 `;
 
-const ModalHeading = styled(Heading)`
+const ModalHeading = styled(Text).attrs({ type: "h2" })`
   font-size: ${({ theme }) => theme.fontSizes[9]}px;
   font-weight: ${({ theme }) => theme.fontWeights[1]};
   line-height: 44px;

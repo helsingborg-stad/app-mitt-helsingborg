@@ -3,7 +3,6 @@ import { View } from "react-native";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Heading from "../../atoms/Heading";
 import Text from "../../atoms/Text";
 import Icon from "../../atoms/Icon";
 import HeaderNav from "./HeaderNav";
@@ -24,7 +23,7 @@ const HeaderContainer = styled.View`
   border-bottom-width: 1px;
 `;
 
-const HeaderHeading = styled(Heading)`
+const HeaderHeading = styled(Text)`
   margin-top: 0px;
   margin-bottom: 0px;
   color: ${(props) => props.theme.text.darkest};

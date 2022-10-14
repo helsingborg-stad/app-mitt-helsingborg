@@ -8,7 +8,6 @@ function loadStories() {
   require("../source/components/atoms/Button/Button.stories");
   require("../source/components/atoms/Checkbox/Checkbox.stories");
   require("../source/components/atoms/Fieldset/Fieldset.stories");
-  require("../source/components/atoms/Heading/Heading.stories");
   require("../source/components/atoms/Input/Input.stories");
   require("../source/components/atoms/Label/Label.stories");
   require("../source/components/atoms/Progressbar/Progressbar.stories");
@@ -61,7 +60,6 @@ const stories = [
   "../source/components/atoms/Button/Button.stories",
   "../source/components/atoms/Checkbox/Checkbox.stories",
   "../source/components/atoms/Fieldset/Fieldset.stories",
-  "../source/components/atoms/Heading/Heading.stories",
   "../source/components/atoms/Input/Input.stories",
   "../source/components/atoms/Label/Label.stories",
   "../source/components/atoms/Progressbar/Progressbar.stories",

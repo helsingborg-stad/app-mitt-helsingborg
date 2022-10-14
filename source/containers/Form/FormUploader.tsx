@@ -2,7 +2,7 @@ import React, { useEffect, useCallback } from "react";
 import { ActivityIndicator } from "react-native";
 import styled, { withTheme } from "styled-components";
 import Config from "react-native-config";
-import { Button, Heading, Icon, Text } from "../../components/atoms";
+import { Button, Icon, Text } from "../../components/atoms";
 import type { Image } from "../../components/molecules/ImageDisplay/ImageDisplay";
 import type { Pdf } from "../../components/molecules/PdfDisplay/PdfDisplay";
 import type { Options } from "../../hooks/useQueue";
@@ -154,9 +154,9 @@ const FormUploader: React.FunctionComponent<Props> = ({
             size="large"
             color={theme?.colors?.primary?.blue[1] ?? "#003359"}
           />
-          <Heading align="center" type="h2">
+          <Text align="center" type="h2">
             Laddar upp filer...
-          </Heading>
+          </Text>
           <Text align="center">
             ({resolved.length} av {count})
           </Text>
@@ -167,9 +167,9 @@ const FormUploader: React.FunctionComponent<Props> = ({
       {!isPending && rejected.length > 0 && (
         <>
           <DialogIcon size={48} name="close" />
-          <Heading align="center" type="h2">
+          <Text align="center" type="h2">
             Någonting gick fel
-          </Heading>
+          </Text>
           <Text align="center">
             Säkerställ att du har internet uppkoppling och försök igen. Om
             problemet kvarstår, kontakta din handläggare.

@@ -1,7 +1,6 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
-import Heading from "../../components/atoms/Heading";
 import Text from "../../components/atoms/Text";
 
 import type { ThemeType } from "../../theme/themeHelpers";
@@ -55,13 +54,13 @@ const Logo = styled.Image`
   margin-bottom: 24px;
 `;
 
-const Title = styled(Heading)`
+const Title = styled(Text).attrs({ type: "h2" })`
   font-size: ${({ theme }) => theme.fontSizes[3]}px;
   color: ${({ theme }) => theme.colors.primary.red[0]};
   font-weight: ${({ theme }) => theme.fontWeights[1]};
 `;
 
-const LoginHeading = styled(Heading)`
+const LoginHeading = styled(Text).attrs({ type: "h2" })`
   font-size: ${({ theme }) => theme.fontSizes[13]}px;
   font-weight: ${({ theme }) => theme.fontWeights[1]};
   line-height: 60px;
