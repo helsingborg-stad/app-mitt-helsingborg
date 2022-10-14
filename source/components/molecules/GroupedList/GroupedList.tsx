@@ -16,7 +16,9 @@ const ListBody = styled.View`
   height: auto;
 `;
 
-const ListBodyFieldLabel = styled(Text)<{ colorSchema: string }>`
+const ListBodyFieldLabel = styled(Text).attrs({ type: "h2" })<{
+  colorSchema: string;
+}>`
   margin-top: 5px;
   margin-left: 3px;
   font-weight: ${(props) => props.theme.fontWeights[1]};
