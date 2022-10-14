@@ -3,10 +3,10 @@ import { View } from "react-native";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Text from "../../atoms/Text";
-import Icon from "../../atoms/Icon";
+
+import { Text, Icon, Button } from "../../atoms";
+
 import HeaderNav from "./HeaderNav";
-import Button from "../../atoms/Button/Button";
 
 const BackButton = styled(Button)`
   padding: 0;
@@ -23,7 +23,7 @@ const HeaderContainer = styled.View`
   border-bottom-width: 1px;
 `;
 
-const HeaderHeading = styled(Text)`
+const HeaderHeading = styled(Text).attrs({ type: "h1" })`
   margin-top: 0px;
   margin-bottom: 0px;
   color: ${(props) => props.theme.text.darkest};
@@ -55,11 +55,7 @@ const Header = ({ message, title, themeColor, navItems, backButton }) => (
         </BackButton>
       )}
       {message && <Text>{message}</Text>}
-      {title && (
-        <HeaderHeading type="h1" color={themeColor}>
-          {title}
-        </HeaderHeading>
-      )}
+      {title && <HeaderHeading color={themeColor}>{title}</HeaderHeading>}
     </HeaderContent>
     {navItems && (
       <View>
