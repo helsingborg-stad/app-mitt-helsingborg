@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import { FieldLabel, Text } from "../../atoms";
+import { Text } from "../../atoms";
 import theme from "../../../theme/theme";
 import HelpButton from "../HelpButton/HelpButton";
 
@@ -45,10 +45,6 @@ const ListBody = styled.View`
   padding-left: 20px;
   padding-right: 20px;
   height: auto;
-`;
-
-const ListBodyFieldLabel = styled(FieldLabel)`
-  margin-top: 40px;
 `;
 
 interface Props {
