@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
-import HorizontalScrollIndicator from "../../atoms/HorizontalScrollIndicator";
+import { HorizontalScrollIndicator } from "../../atoms";
 import ImageItem from "../ImageDisplay/ImageItem";
 import PdfItem from "../PdfDisplay/PdfItem";
 import { remove } from "../../../helpers/ApiRequest";
