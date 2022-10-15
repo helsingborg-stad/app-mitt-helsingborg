@@ -1,10 +1,12 @@
 import React from "react";
-import type { ViewStyle } from "react-native";
 import { StyleSheet } from "react-native";
-import styled from "styled-components/native";
 import RNPickerSelect from "react-native-picker-select";
+
+import { Wrapper, StyledErrorText } from "./Select.styled";
+
 import theme from "../../../theme/theme";
-import Text from "../Text";
+
+import type { Props } from "./Select.types";
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
@@ -22,31 +24,6 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-const Wrapper = styled.View`
-  margin-bottom: 30px;
-`;
-
-const StyledErrorText = styled(Text)`
-  font-size: ${({ theme }) => theme.fontSizes[3]}px;
-  color: ${({ theme }) => theme.textInput.errorTextColor};
-  font-weight: ${({ theme }) => theme.fontWeights[0]};
-  padding-top: 8px;
-`;
-
-interface SelectProps {
-  items: { label: string; value: string }[];
-  onValueChange: (value: string | null, index?: number) => void;
-  placeholder?: string;
-  value: string;
-  editable?: boolean;
-  style?: ViewStyle;
-  onBlur: (value: string | null) => void;
-  onOpen: (event: unknown, isSelect: boolean) => void;
-  onClose: (event: unknown, isSelect: boolean) => void;
-  showErrorMessage?: boolean;
-  error?: { isValid: boolean; message: string };
-}
-
 function Select(
   {
     items,
@@ -60,7 +37,7 @@ function Select(
     showErrorMessage = true,
     error,
     style,
-  }: SelectProps,
+  }: Props,
   ref: React.LegacyRef<RNPickerSelect>
 ) {
   const currentItem = items.find((item) => item.value === value);
@@ -109,4 +86,4 @@ function Select(
   );
 }
 
-export default React.forwardRef<RNPickerSelect, SelectProps>(Select);
+export default React.forwardRef<RNPickerSelect, Props>(Select);

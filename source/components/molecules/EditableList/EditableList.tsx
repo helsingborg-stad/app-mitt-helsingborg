@@ -3,8 +3,7 @@ import React, { useRef, useState } from "react";
 import { LayoutAnimation, Platform } from "react-native";
 import styled from "styled-components/native";
 import { deepCopy } from "../../../helpers/Objects";
-import { Button, Fieldset, Input, Text } from "../../atoms";
-import Select from "../../atoms/Select";
+import { Button, Fieldset, Input, Text, Select } from "../../atoms";
 import CalendarPicker from "../CalendarPicker/CalendarPickerForm";
 
 const EditableListBody = styled.View`
