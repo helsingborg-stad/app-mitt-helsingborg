@@ -16,6 +16,7 @@ const StartSegment = styled.View<{ selected?: boolean; theme: ThemeType }>`
   background-color: ${({ selected, theme }) =>
     selected ? theme.colors.neutrals[2] : theme.colors.neutrals[4]};
 `;
+
 const EndSegment = styled.View<{ selected?: boolean; theme: ThemeType }>`
   height: 3px;
   width: 12px;
@@ -24,6 +25,7 @@ const EndSegment = styled.View<{ selected?: boolean; theme: ThemeType }>`
   background-color: ${({ selected, theme }) =>
     selected ? theme.colors.neutrals[2] : theme.colors.neutrals[4]};
 `;
+
 const MiddleSegment = styled.View<{ selected?: boolean; theme: ThemeType }>`
   height: 3px;
   width: 12px;
