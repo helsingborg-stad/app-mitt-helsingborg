@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import type { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 import styled from "styled-components/native";
 import type { DocumentPickerResponse } from "react-native-document-picker";
-import HorizontalScrollIndicator from "../../atoms/HorizontalScrollIndicator";
+import { HorizontalScrollIndicator } from "../../atoms";
 import PdfItem from "./PdfItem";
 import type { AllowedFileTypes } from "../../../helpers/FileUpload";
 

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import type { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 import type { Image as CropPickerImage } from "react-native-image-crop-picker";
 import styled from "styled-components/native";
-import HorizontalScrollIndicator from "../../atoms/HorizontalScrollIndicator";
+import { HorizontalScrollIndicator } from "../../atoms";
 import ImageItem from "./ImageItem";
 import { remove } from "../../../helpers/ApiRequest";
 import type { AllowedFileTypes } from "../../../helpers/FileUpload";
