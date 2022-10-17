@@ -2,14 +2,19 @@ import React, { useState } from "react";
 import { View, LayoutAnimation } from "react-native";
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
-import type { SummaryListItem } from "../../organisms/SummaryList/SummaryList";
-import type { Help } from "../../../types/FormTypes";
-import Text from "../../atoms/Text";
-import Fieldset, { FieldsetButton } from "../../atoms/Fieldset/Fieldset";
+
+import { Heading, Fieldset, Text, Button } from "../../atoms";
+
 import theme from "../../../theme/theme";
-import type { PrimaryColor } from "../../../theme/themeHelpers";
 import { getValidColorSchema } from "../../../theme/themeHelpers";
-import { Heading } from "../../atoms";
+
+import type { SummaryListItem } from "../../organisms/SummaryList/SummaryList";
+import type { PrimaryColor } from "../../../theme/themeHelpers";
+import type { Help } from "../../../types/FormTypes";
+
+const FieldsetButton = styled(Button)`
+  margin-left: 26px;
+`;
 
 const ListBody = styled.View`
   padding-top: 12px;
