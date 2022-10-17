@@ -4,7 +4,6 @@
 // https://github.com/elderfo/react-native-storybook-loader.git
 
 function loadStories() {
-  require("../source/components/atoms/Box/Box.stories");
   require("../source/components/atoms/Button/Button.stories");
   require("../source/components/atoms/Checkbox/Checkbox.stories");
   require("../source/components/atoms/Fieldset/Fieldset.stories");
@@ -57,7 +56,6 @@ function loadStories() {
 }
 
 const stories = [
-  "../source/components/atoms/Box/Box.stories",
   "../source/components/atoms/Button/Button.stories",
   "../source/components/atoms/Checkbox/Checkbox.stories",
   "../source/components/atoms/Fieldset/Fieldset.stories",
