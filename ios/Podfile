@@ -34,6 +34,9 @@ target 'MittHelsingborg' do
     react_native_post_install(installer)
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
 
+    # Fix for "signing for X requires a development team"
+    # Taken from https://github.com/CocoaPods/CocoaPods/issues/11402#issuecomment-1188774894
+
     # Get main project development team id
     dev_team = ''
     project = installer.aggregate_targets[0].user_project
