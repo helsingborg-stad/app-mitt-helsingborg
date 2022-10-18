@@ -3,10 +3,7 @@
 import React, { useRef } from "react";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
-import { Text, Input } from "../../atoms";
-import Button from "../../atoms/Button";
-import Label from "../../atoms/Label";
-import Select from "../../atoms/Select";
+import { Text, Input, Button, Label, Select } from "../../atoms";
 import type { InputRow } from "./RepeaterField";
 import CalendarPicker from "../CalendarPicker/CalendarPickerForm";
 import theme from "../../../theme/theme";
