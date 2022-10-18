@@ -15,23 +15,19 @@ storiesOf("Field Label", module).add("default", () => (
       Small light label
     </FieldLabel>
     <FieldLabel
-      color="red"
       size="small"
       underline={false}
       help={{ text: "Some help text" }}
     >
-      Small red label without line
+      Small label without line
     </FieldLabel>
-    <FieldLabel color="green">Normal green Label</FieldLabel>
-    <FieldLabel color="orange" help={{ text: "Some help text" }}>
-      Normal orange Label
-    </FieldLabel>
+    <FieldLabel colorSchema="green">Normal green underline</FieldLabel>
     <FieldLabel size="large" help={{ text: "Some help text" }}>
-      Large label
+      Large label blue underline
     </FieldLabel>
     <Background>
-      <FieldLabel color="blue">Normal blue Label</FieldLabel>
-      <FieldLabel color="dark" size="large" help={{ text: "Some help text" }}>
+      <FieldLabel>Normal blue Label</FieldLabel>
+      <FieldLabel size="large" help={{ text: "Some help text" }}>
         Large dark label
       </FieldLabel>
     </Background>

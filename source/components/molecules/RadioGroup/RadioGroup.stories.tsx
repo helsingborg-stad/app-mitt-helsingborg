@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/react-native";
 import { ScrollView } from "react-native";
 import StoryWrapper from "../StoryWrapper";
 import RadioGroup from "./RadioGroup";
-import Label from "../../atoms/Label";
+import { Label } from "../../atoms";
 
 storiesOf("RadioGroup", module).add("Default", (props) => (
   <StoryWrapper {...props}>
