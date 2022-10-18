@@ -1,10 +1,13 @@
 import React from "react";
 import styled from "styled-components/native";
-import type { GestureResponderEvent } from "react-native";
 import { TouchableOpacity, Dimensions } from "react-native";
 import PdfView from "react-native-pdf";
+import type { GestureResponderEvent } from "react-native";
+
 import { Icon, Button, Text } from "../../atoms";
+
 import { Modal, useModal } from "../Modal";
+
 import type { Pdf } from "./PdfDisplay";
 
 const MAX_PDF_WIDTH = 120;
@@ -30,6 +33,7 @@ const DeleteBackground = styled.View`
   z-index: 1;
   border-radius: 20px;
 `;
+
 const Container = styled.TouchableOpacity`
   flex: 1;
   justify-content: center;
@@ -40,7 +44,9 @@ const Container = styled.TouchableOpacity`
   shadow-color: black;
   shadow-opacity: 0.4;
   shadow-radius: 5px;
-  border: 1px solid transparent;
+  height: ${MAX_PDF_HEIGHT}px;
+  width: ${MAX_PDF_WIDTH}px;
+  background: #fff;
 `;
 
 const PdfInModal = styled(PdfView)<{ width: number; height: number }>`
@@ -77,17 +83,8 @@ const PdfItem: React.FC<Props> = ({ pdf, onRemove }) => {
           </TouchableOpacity>
         </DeleteBackground>
 
-        <Container onPress={toggleModal}>
-          <PdfView
-            pointerEvents="none"
-            source={{ uri: pdf.uri }}
-            style={{
-              width: MAX_PDF_WIDTH,
-              height: MAX_PDF_HEIGHT,
-              backgroundColor: "white",
-            }}
-            singlePage
-          />
+        <Container disabled>
+          <Icon size={32} name="picture-as-pdf" color="#F40F02" />
         </Container>
 
         <Text align="center" numberOfLines={1} style={{ width: MAX_PDF_WIDTH }}>
