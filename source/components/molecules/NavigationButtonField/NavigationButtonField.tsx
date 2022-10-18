@@ -40,7 +40,7 @@ const NavigationButtonField: React.FC<Props> = ({
   return (
     <ButtonFieldWrapper>
       <Button variant="outlined" onClick={onClick} colorSchema={colorSchema}>
-        <Icon color="red" name={iconName || "add"} />
+        <Icon name={iconName || "add"} />
         {text && <Text>{text}</Text>}
       </Button>
     </ButtonFieldWrapper>
