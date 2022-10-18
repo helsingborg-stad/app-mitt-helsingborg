@@ -8,7 +8,7 @@ import {
 import PropTypes from "prop-types";
 import styled from "styled-components/native";
 import FormField from "../../../containers/FormField";
-import Progressbar from "../../atoms/Progressbar/Progressbar";
+import { Progressbar } from "../../atoms";
 import BackNavigation from "../../molecules/BackNavigation/BackNavigation";
 import CloseDialog from "../../molecules/CloseDialog/CloseDialog";
 import Banner from "./StepBanner/StepBanner";

@@ -7,23 +7,6 @@ import Progressbar from "./Progressbar";
 import Button from "../Button/Button";
 import Text from "../Text/Text";
 
-storiesOf("Progressbar", module)
-  .add("Default", (props) => (
-    <StoryWrapper {...props}>
-      <ProgressBar />
-    </StoryWrapper>
-  ))
-  .add("Rounded", (props) => (
-    <StoryWrapper {...props}>
-      <Progressbar rounded currentStep={3} totalStepNumber={6} />
-    </StoryWrapper>
-  ))
-  .add("Color schemas", (props) => (
-    <StoryWrapper {...props}>
-      <ColorSchemas />
-    </StoryWrapper>
-  ));
-
 const Title = styled(Text)`
   padding-top: 8px;
   padding-bottom: 8px;
@@ -64,3 +47,20 @@ const ColorSchemas = () => (
     <Progressbar colorSchema="purple" currentStep={1} totalStepNumber={2} />
   </>
 );
+
+storiesOf("Progressbar", module)
+  .add("Default", () => (
+    <StoryWrapper>
+      <ProgressBar />
+    </StoryWrapper>
+  ))
+  .add("Rounded", () => (
+    <StoryWrapper>
+      <Progressbar rounded currentStep={3} totalStepNumber={6} />
+    </StoryWrapper>
+  ))
+  .add("Color schemas", () => (
+    <StoryWrapper>
+      <ColorSchemas />
+    </StoryWrapper>
+  ));
