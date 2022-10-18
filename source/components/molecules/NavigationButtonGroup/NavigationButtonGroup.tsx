@@ -1,30 +1,13 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components/native";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
-import type { Props as ButtonProps } from "../NavigationButtonField/NavigationButtonField";
+
 import NavigationButtonField from "../NavigationButtonField/NavigationButtonField";
-import type { PrimaryColor } from "../../../theme/themeHelpers";
+
 import { HorizontalScrollIndicator } from "../../atoms";
 
-const ScrollContainer = styled.ScrollView`
-  padding-bottom: 16px;
-  ${(props) =>
-    props.horizontal &&
-    `margin-right: -24px;
-    margin-left: -24px;`}
-`;
-interface Props {
-  buttons: ButtonProps[];
-  horizontal: boolean;
-  formNavigation: {
-    next: () => void;
-    back: () => void;
-    down: (targetStepId: string) => void;
-    up: () => void;
-  };
-  colorSchema?: PrimaryColor;
-}
+import ScrollContainer from "./NavigationButtonGroup.styled";
+
+import type { Props } from "./NavigationButtonGroup.types";
 
 const NavigationButtonGroup: React.FC<Props> = ({
   buttons,
@@ -51,11 +34,14 @@ const NavigationButtonGroup: React.FC<Props> = ({
         onScroll={handleScroll}
         showsHorizontalScrollIndicator={false}
       >
-        {buttons.map((button, index) => (
+        {buttons.map((button) => (
           <NavigationButtonField
-            {...{ colorSchema, ...button }}
+            key={`button${button.navigationType.stepId}`}
+            iconName={button.iconName}
+            text={button.text}
+            colorSchema={colorSchema}
+            navigationType={button.navigationType}
             formNavigation={formNavigation}
-            key={`button${index}`}
           />
         ))}
       </ScrollContainer>
@@ -64,13 +50,6 @@ const NavigationButtonGroup: React.FC<Props> = ({
       )}
     </>
   );
-};
-
-NavigationButtonGroup.propTypes = {
-  horizontal: PropTypes.bool,
-  buttons: PropTypes.array,
-  formNavigation: PropTypes.any,
-  colorSchema: PropTypes.oneOf(["blue", "red", "green", "purple", "neutral"]),
 };
 
 export default NavigationButtonGroup;

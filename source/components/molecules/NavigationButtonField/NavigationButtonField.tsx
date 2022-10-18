@@ -1,35 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components/native";
 import { Button, Icon, Text } from "../../atoms";
 
-const ButtonFieldWrapper = styled.View`
-  height: auto;
-  width: auto;
-  border-radius: 0;
-  border-style: solid;
-  margin: 2px;
-`;
+import ButtonFieldWrapper from "./NavigationButtonField.styled";
 
-export type NavigationActionType =
-  | { type: "navigateDown"; stepId: string }
-  | { type: "navigateUp" }
-  | { type: "navigateNext" }
-  | { type: "navigateBack" };
-
-export interface Props {
-  iconName?: string;
-  text?: string;
-  colorSchema?: string;
-  navigationType: NavigationActionType;
-  formNavigation: {
-    next: () => void;
-    back: () => void;
-    down: (targetStepId: string) => void;
-    up: () => void;
-    createSnapshot: () => void;
-  };
-}
+import type { Props } from "./NavigationButtonField.types";
 
 // TODO: Move navigation logic to a smart container component,
 // this dumb component do not need to know about how formNavigation is handled.
@@ -39,7 +13,7 @@ const NavigationButtonField: React.FC<Props> = ({
   text,
   navigationType,
   formNavigation,
-  colorSchema,
+  colorSchema = "blue",
 }) => {
   const onClick = () => {
     // This logic could be broken out and placed elsewhere.
@@ -66,40 +40,11 @@ const NavigationButtonField: React.FC<Props> = ({
   return (
     <ButtonFieldWrapper>
       <Button variant="outlined" onClick={onClick} colorSchema={colorSchema}>
-        {iconName.length ? <Icon name={iconName} /> : null}
+        <Icon color="red" name={iconName || "add"} />
         {text && <Text>{text}</Text>}
       </Button>
     </ButtonFieldWrapper>
   );
-};
-
-NavigationButtonField.propTypes = {
-  /**
-   * Name of the icon to be displayed
-   */
-  iconName: PropTypes.string,
-  /**
-   * Text string for button
-   */
-  text: PropTypes.string,
-  /**
-   * Function is triggered when button is clicked
-   */
-  navigationType: PropTypes.any,
-  /**
-   * Color schema of the button
-   */
-  colorSchema: PropTypes.oneOf(["blue", "red", "purple", "green"]),
-  /**
-   * Object with navigation event for a form.
-   */
-  formNavigation: PropTypes.any,
-};
-
-NavigationButtonField.defaultProps = {
-  iconName: "add",
-  text: "",
-  colorSchema: "blue",
 };
 
 export default NavigationButtonField;
