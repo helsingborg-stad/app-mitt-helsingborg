@@ -14,7 +14,7 @@ export enum ApplicationStatusType {
   ACTIVE_ONGOING_COMPLETION = "active:ongoing:completion",
   CLOSED_PARTIALLY_APPROVED_VIVA = "closed:partiallyApproved:viva",
   CLOSED_REJECTED_VIVA = "closed:rejected:viva",
-  NEW_APPLICATION = "newApplication",
+  NEW_APPLICATION = "newApplication:viva",
   ACTIVE_ONGOING_NEW_APPLICATION = "active:ongoing:newApplication",
   ACTIVE_SUBMITTED_RANDOM_CHECK_VIVA = "active:submitted:randomCheck:viva",
   ACTIVE_SUBMITTED_COMPLETION = "active:submitted:completion:viva",
