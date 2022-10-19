@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
+import styled from "styled-components/native";
 import { LayoutAnimation } from "react-native";
 import { Button, Icon, Text } from "../../atoms";
 import RepeaterFieldListItem from "./RepeaterFieldListItem";
@@ -10,7 +10,6 @@ import { getValidColorSchema } from "../../../theme/themeHelpers";
 import type { InputFieldType } from "../../../types/FormTypes";
 
 const AddButton = styled(Button)`
-  margin-top: 30px;
   background: ${(props) => props.theme.colors.neutrals[7]};
   border: 0;
 `;

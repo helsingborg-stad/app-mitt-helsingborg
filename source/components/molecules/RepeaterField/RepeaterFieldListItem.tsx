@@ -3,11 +3,10 @@
 import React, { useRef } from "react";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
-import { Text, Input, Button, Label, Select } from "../../atoms";
+import { Input, Label, Select } from "../../atoms";
 import type { InputRow } from "./RepeaterField";
 import CalendarPicker from "../CalendarPicker/CalendarPickerForm";
-import theme from "../../../theme/theme";
-import type { PrimaryColor } from "../../../theme/themeHelpers";
+import type { PrimaryColor, ThemeType } from "../../../theme/themeHelpers";
 import { getValidColorSchema } from "../../../theme/themeHelpers";
 
 const Base = styled.View`
@@ -15,6 +14,14 @@ const Base = styled.View`
   margin-bottom: 5px;
   flex-direction: column;
   border-radius: 6px;
+  padding-bottom: 30px;
+`;
+
+const TopContainer = styled.View`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 4px;
 `;
 
 const RepeaterItem = styled.TouchableOpacity<{
@@ -38,12 +45,9 @@ const RepeaterItem = styled.TouchableOpacity<{
 `;
 
 const ItemLabel = styled(Label)<{ colorSchema: string }>`
-  margin-top: 20px;
-  margin-left: 10px;
   font-size: 12px;
-  margin-bottom: 0px;
-  padding-bottom: 0px;
   color: ${(props) => props.theme.repeater[props.colorSchema].inputText};
+  padding: 8px 0 0 0;
 `;
 
 const InputLabelWrapper = styled.View`
@@ -82,18 +86,18 @@ const SelectInput = styled(Select)`
   margin-bottom: 0px;
 `;
 
-const DeleteButton = styled(Button)<{ color: string }>`
-  margin-top: 10px;
-  margin-bottom: 10px;
-  background: ${(props) => theme.repeater[props.color].deleteButton};
+const DeleteButtonText = styled.Text<{ theme: ThemeType; color: PrimaryColor }>`
+  text-transform: uppercase;
+  font-size: 10px;
+  color: ${({ theme, color }) => theme.repeater[color].deleteButtonText};
+  font-weight: 700;
 `;
 
-const DeleteButtonText = styled(Text)<{ color: string }>`
-  color: ${(props) => theme.repeater[props.color].deleteButtonText};
-  text-transform: uppercase;
-  font-weight: 900;
-  font-size: 12px;
-  line-height: 18px;
+const DeleteButton = styled.TouchableOpacity`
+  background-color: #eee;
+  padding: 6px;
+  border-radius: 5px;
+  justify-content: center;
 `;
 
 interface InputComponentProps {
@@ -244,9 +248,14 @@ const RepeaterFieldListItem: React.FC<Props> = ({
 
   return (
     <Base>
-      <ItemLabel colorSchema={validColorSchema} underline={false}>
-        {heading || "Item"}
-      </ItemLabel>
+      <TopContainer>
+        <ItemLabel colorSchema={validColorSchema} underline={false}>
+          {heading || "Item"}
+        </ItemLabel>
+        <DeleteButton onPress={removeItem}>
+          <DeleteButtonText color={validColorSchema}>TA BORT</DeleteButtonText>
+        </DeleteButton>
+      </TopContainer>
       {inputs.map((input, index) => {
         const errorDetails = error?.[input.id]
           ? {
@@ -300,15 +309,6 @@ const RepeaterFieldListItem: React.FC<Props> = ({
           </RepeaterItem>
         );
       })}
-      <DeleteButton
-        z={0}
-        colorSchema="neutral"
-        color={validColorSchema}
-        block
-        onClick={removeItem}
-      >
-        <DeleteButtonText color={validColorSchema}>Ta bort</DeleteButtonText>
-      </DeleteButton>
     </Base>
   );
 };
