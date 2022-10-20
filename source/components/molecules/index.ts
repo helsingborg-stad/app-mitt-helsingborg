@@ -14,6 +14,7 @@ export { Modal } from "./Modal";
 export { default as NavigationButtonField } from "./NavigationButtonField";
 export { default as NavigationButtonGroup } from "./NavigationButtonGroup";
 export { default as RepeaterField } from "./RepeaterField";
+export { default as RepeaterFieldListItem } from "./RepeaterFieldListItem";
 export { default as RadioGroup } from "./RadioGroup";
 export { default as InfoModal } from "./InfoModal";
 export { default as FloatingButton } from "./FloatingButton";
