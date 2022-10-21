@@ -7,7 +7,11 @@ import type {
   FileUploaderInternalItem,
   FileUploaderProps,
 } from "./FileUploaderList.types";
-import { Container, UploaderLabel } from "./FileUploaderList.styled";
+import {
+  Container,
+  UploaderLabel,
+  UploaderLabelContainer,
+} from "./FileUploaderList.styled";
 
 function makeInternalItem(
   text: string,
@@ -46,9 +50,11 @@ export default function FileUploaderList({
     <>
       {items.map((entry) => (
         <Container key={entry.id}>
-          <UploaderLabel colorSchema={colorSchema}>
-            • {entry.text}
-          </UploaderLabel>
+          <UploaderLabelContainer>
+            <UploaderLabel colorSchema={colorSchema}>
+              {entry.text}
+            </UploaderLabel>
+          </UploaderLabelContainer>
           <FilePicker
             colorSchema={colorSchema}
             buttonText="Ladda upp fil"
