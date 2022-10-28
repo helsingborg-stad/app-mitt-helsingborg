@@ -51,7 +51,6 @@ export type InputFieldType =
   | "repeaterField"
   | "imageUploader"
   | "imageViewer"
-  | "pdfUploader"
   | "pdfViewer"
   | "filePicker"
   | "fileViewer";

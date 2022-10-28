@@ -18,7 +18,6 @@ import SummaryList from "../../components/organisms/SummaryList/SummaryList";
 import ImageUploader from "../../components/molecules/ImageUploader/ImageUploader";
 import FileUploaderList from "../../components/molecules/FileUploaderList/FileUploaderList";
 import ImageViewer from "../../components/molecules/ImageViewer/ImageViewer";
-import PdfUploader from "../../components/molecules/PdfUploader/PdfUploader";
 import PdfViewer from "../../components/molecules/PdfViewer/PdfViewer";
 import BulletList from "../../components/organisms/BulletList";
 import FilePicker from "../../components/molecules/FilePicker/FilePicker";
@@ -193,11 +192,6 @@ const inputTypes: Record<InputKeyType, InputTypeProperties> = {
     changeEvent: "onChange",
     props: { answers: true },
   },
-  pdfUploader: {
-    component: PdfUploader,
-    changeEvent: "onChange",
-    props: { answers: true },
-  },
   filePicker: {
     component: FilePicker,
     changeEvent: "onChange",
@@ -294,7 +288,7 @@ const FormField = (props: FormFieldProps): JSX.Element => {
   if (inputType === "repeaterField" && !!input?.addAnswerEvent)
     inputCompProps[input.addAnswerEvent] = onInputAddAnswer;
 
-  if (["pdfUploader", "imageUploader", "filePicker"].includes(inputType)) {
+  if (["imageUploader", "filePicker"].includes(inputType)) {
     inputCompProps.preferredFileName = label;
   }
 
