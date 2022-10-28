@@ -15,7 +15,6 @@ import {
 import type { PrimaryColor } from "../../theme/themeHelpers";
 import { getValidColorSchema } from "../../theme/themeHelpers";
 import SummaryList from "../../components/organisms/SummaryList/SummaryList";
-import ImageUploader from "../../components/molecules/ImageUploader/ImageUploader";
 import FileUploaderList from "../../components/molecules/FileUploaderList/FileUploaderList";
 import ImageViewer from "../../components/molecules/ImageViewer/ImageViewer";
 import PdfViewer from "../../components/molecules/PdfViewer/PdfViewer";
@@ -182,11 +181,6 @@ const inputTypes: Record<InputKeyType, InputTypeProperties> = {
   card: {
     component: DynamicCardRenderer,
   },
-  imageUploader: {
-    component: ImageUploader,
-    changeEvent: "onChange",
-    props: { answers: true },
-  },
   imageViewer: {
     component: ImageViewer,
     changeEvent: "onChange",
@@ -288,7 +282,7 @@ const FormField = (props: FormFieldProps): JSX.Element => {
   if (inputType === "repeaterField" && !!input?.addAnswerEvent)
     inputCompProps[input.addAnswerEvent] = onInputAddAnswer;
 
-  if (["imageUploader", "filePicker"].includes(inputType)) {
+  if (inputType === "filePicker") {
     inputCompProps.preferredFileName = label;
   }
 

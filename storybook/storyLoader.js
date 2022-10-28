@@ -28,7 +28,6 @@ function loadStories() {
   require("../source/components/molecules/GroupedList/GroupedList.stories");
   require("../source/components/molecules/Header/Header.stories");
   require("../source/components/molecules/HelpButton/HelpButton.stories");
-  require("../source/components/molecules/ImageUploader/ImageUploader.stories");
   require("../source/components/molecules/InfoModal/InfoModal.stories");
   require("../source/components/molecules/Markdown.stories");
   require("../source/components/molecules/Modal/Modal.stories");
@@ -80,7 +79,6 @@ const stories = [
   "../source/components/molecules/GroupedList/GroupedList.stories",
   "../source/components/molecules/Header/Header.stories",
   "../source/components/molecules/HelpButton/HelpButton.stories",
-  "../source/components/molecules/ImageUploader/ImageUploader.stories",
   "../source/components/molecules/InfoModal/InfoModal.stories",
   "../source/components/molecules/Markdown.stories",
   "../source/components/molecules/Modal/Modal.stories",
