@@ -49,9 +49,7 @@ export type InputFieldType =
   | "navigationButtonGroup"
   | "summaryList"
   | "repeaterField"
-  | "imageUploader"
   | "imageViewer"
-  | "pdfUploader"
   | "pdfViewer"
   | "filePicker"
   | "fileViewer";
@@ -66,7 +64,6 @@ export type FormInputType =
   | "checkbox"
   | "summaryList"
   | "repeaterField"
-  | "imageUploader"
   | "bulletList";
 
 export interface Question {
