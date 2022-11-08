@@ -22,3 +22,4 @@ export { default as BackNavigation } from "./BackNavigation";
 export { default as ApiStatusMessage } from "./ApiStatusMessage/ApiStatusMessage";
 export { default as CloseDialog } from "./CloseDialog/CloseDialog";
 export { default as ImageItem } from "./ImageItem";
+export { default as PdfItem } from "./PdfItem";

@@ -1,4 +1,4 @@
-import type { Pdf } from "../PdfDisplay/PdfDisplay";
+import type { Pdf } from "../PdfItem/PdfItem.types";
 import type { Image } from "../ImageItem/ImageItem.types";
 import type { PrimaryColor } from "../../../theme/themeHelpers";
 

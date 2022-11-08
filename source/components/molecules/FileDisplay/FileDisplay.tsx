@@ -1,19 +1,17 @@
 import React, { useState } from "react";
 import type { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 
-import { ImageItem } from "..";
+import { ImageItem, PdfItem } from "..";
 
 import { HorizontalScrollIndicator } from "../../atoms";
-
-import PdfItem from "../PdfDisplay/PdfItem";
 
 import { remove } from "../../../helpers/ApiRequest";
 
 import { Wrapper, Container } from "./FileDisplay.styled";
 
-import type { Pdf } from "../PdfDisplay/PdfDisplay";
+import type { Pdf } from "../PdfItem/PdfItem.types";
 import type { Image } from "../ImageItem/ImageItem.types";
-import type { File } from "../FilePicker/FilePicker";
+import type { File } from "../FilePicker/FilePicker.types";
 
 interface Props {
   files: File[];
