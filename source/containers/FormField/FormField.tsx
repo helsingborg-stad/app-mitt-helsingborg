@@ -16,7 +16,6 @@ import type { PrimaryColor } from "../../theme/themeHelpers";
 import { getValidColorSchema } from "../../theme/themeHelpers";
 import SummaryList from "../../components/organisms/SummaryList/SummaryList";
 import FileUploaderList from "../../components/molecules/FileUploaderList/FileUploaderList";
-import ImageViewer from "../../components/molecules/ImageViewer/ImageViewer";
 import PdfViewer from "../../components/molecules/PdfViewer/PdfViewer";
 import BulletList from "../../components/organisms/BulletList";
 import FilePicker from "../../components/molecules/FilePicker/FilePicker";
@@ -180,11 +179,6 @@ const inputTypes: Record<InputKeyType, InputTypeProperties> = {
   },
   card: {
     component: DynamicCardRenderer,
-  },
-  imageViewer: {
-    component: ImageViewer,
-    changeEvent: "onChange",
-    props: { answers: true },
   },
   filePicker: {
     component: FilePicker,
