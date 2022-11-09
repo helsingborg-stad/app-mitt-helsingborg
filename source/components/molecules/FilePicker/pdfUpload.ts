@@ -1,10 +1,10 @@
 import DocumentPicker from "react-native-document-picker";
 import uuid from "react-native-uuid";
 
-import type { Pdf } from "../PdfDisplay/PdfDisplay";
-
-import type { AllowedFileTypes } from "../../../helpers/FileUpload";
 import { splitFilePath } from "../../../helpers/FileUpload";
+
+import type { Pdf } from "../PdfItem/PdfItem.types";
+import type { AllowedFileTypes } from "../../../helpers/FileUpload";
 
 const uriScheme = {
   file: "file://",

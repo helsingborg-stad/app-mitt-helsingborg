@@ -1,6 +1,5 @@
-import type { Pdf } from "../PdfDisplay/PdfDisplay";
-import type { Image } from "../ImageDisplay/ImageDisplay";
-
+import type { Pdf } from "../PdfItem/PdfItem.types";
+import type { Image } from "../ImageItem/ImageItem.types";
 import type { PrimaryColor } from "../../../theme/themeHelpers";
 
 export enum FileType {

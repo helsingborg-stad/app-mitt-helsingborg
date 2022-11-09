@@ -49,8 +49,6 @@ export type InputFieldType =
   | "navigationButtonGroup"
   | "summaryList"
   | "repeaterField"
-  | "imageViewer"
-  | "pdfViewer"
   | "filePicker"
   | "fileViewer";
 

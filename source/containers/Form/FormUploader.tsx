@@ -2,14 +2,19 @@ import React, { useEffect, useCallback } from "react";
 import { ActivityIndicator } from "react-native";
 import styled, { withTheme } from "styled-components";
 import Config from "react-native-config";
+
 import { Button, Heading, Icon, Text } from "../../components/atoms";
-import type { Image } from "../../components/molecules/ImageDisplay/ImageDisplay";
-import type { Pdf } from "../../components/molecules/PdfDisplay/PdfDisplay";
-import type { Options } from "../../hooks/useQueue";
-import useQueue from "../../hooks/useQueue";
+
 import Dialog from "../../components/molecules/Dialog/Dialog";
-import type { AllowedFileTypes } from "../../helpers/FileUpload";
+
+import useQueue from "../../hooks/useQueue";
+
 import { getBlob, uploadFile } from "../../helpers/FileUpload";
+
+import type { AllowedFileTypes } from "../../helpers/FileUpload";
+import type { Image } from "../../components/molecules/ImageItem/ImageItem.types";
+import type { Pdf } from "../../components/molecules/PdfItem/PdfItem.types";
+import type { Options } from "../../hooks/useQueue";
 
 const DialogActivityIndicator = styled(ActivityIndicator)`
   margin-bottom: 16px;

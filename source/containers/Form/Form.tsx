@@ -25,7 +25,7 @@ import AuthContext from "../../store/AuthContext";
 import { useNotification } from "../../store/NotificationContext";
 import FormUploader from "./FormUploader";
 import { AuthLoading } from "../../components/molecules";
-import type { Image } from "../../components/molecules/ImageDisplay/ImageDisplay";
+import type { Image } from "../../components/molecules/ImageItem/ImageItem.types";
 import CloseDialog from "../../components/molecules/CloseDialog";
 import type { PrimaryColor } from "../../theme/themeHelpers";
 

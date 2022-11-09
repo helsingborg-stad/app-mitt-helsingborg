@@ -9,7 +9,7 @@ import type {
 import { splitFilePath } from "../../../helpers/FileUpload";
 
 import type { AllowedFileTypes } from "../../../helpers/FileUpload";
-import type { Image } from "../ImageDisplay/ImageDisplay";
+import type { Image } from "../ImageItem/ImageItem.types";
 
 interface ImageUploadError {
   code: PickerErrorCode;
