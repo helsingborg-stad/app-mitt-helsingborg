@@ -4,25 +4,33 @@ import React, {
   useRef,
   useCallback,
   useMemo,
+  useState,
 } from "react";
 import { View, Animated, Easing } from "react-native";
-import { CaseState, CaseDispatch } from "../../store/CaseContext";
-import icons from "../../helpers/Icons";
-import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
-import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
-import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
-import type { PrimaryColor } from "../../theme/themeHelpers";
-import { Icon, Text } from "../../components/atoms";
-import { Card, ScreenWrapper, CaseCard } from "../../components/molecules";
+
 import {
   CaseCalculationsModal,
   RemoveCaseModal,
+  CaseActionsBottomModal,
 } from "../../components/organisms";
+
+import { Card, ScreenWrapper, CaseCard } from "../../components/molecules";
 import { useModal } from "../../components/molecules/Modal";
-import Button from "../../components/atoms/Button";
-import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
+
+import { Icon, Text } from "../../components/atoms";
+import MoreButton from "../../components/atoms/MoreButton/MoreButton";
+
+import { CaseState, CaseDispatch } from "../../store/CaseContext";
 import AuthContext from "../../store/AuthContext";
+
+import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
+import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
+import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
+import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
 import { put, remove } from "../../helpers/ApiRequest";
+import icons from "../../helpers/Icons";
+
+import type { PrimaryColor } from "../../theme/themeHelpers";
 import { ApplicationStatusType } from "../../types/Case";
 
 import type {
@@ -39,11 +47,7 @@ import useGetFormPasswords from "./useGetFormPasswords";
 
 import type { Props } from "./CaseSummary.types";
 
-import {
-  Container,
-  SummaryHeading,
-  RemoveCaseButtonContainer,
-} from "./CaseSummary.styled";
+import { Container, SummaryHeading } from "./CaseSummary.styled";
 
 const { ACTIVE_SIGNATURE_PENDING } = ApplicationStatusType;
 const SCREEN_TRANSITION_DELAY = 1000;
@@ -204,6 +208,8 @@ const CaseSummary = (props: Props): JSX.Element => {
   const { cases, getCase } = useContext(CaseState);
   const { deleteCase } = useContext(CaseDispatch);
 
+  const [modalVisible, setModalVisible] = useState(false);
+
   const {
     colorSchema = "red",
     navigation,
@@ -320,6 +326,12 @@ const CaseSummary = (props: Props): JSX.Element => {
     toggleRemoveCaseModal();
   };
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <MoreButton onPress={() => setModalVisible(true)} />,
+    });
+  }, [navigation]);
+
   return (
     <ScreenWrapper {...props}>
       <Container as={Animated.ScrollView} style={{ opacity: fadeAnimation }}>
@@ -391,17 +403,16 @@ const CaseSummary = (props: Props): JSX.Element => {
         onRemoveCase={removeCase}
       />
 
-      <RemoveCaseButtonContainer>
-        {canRemoveCase && (
-          <Button
-            onClick={handleRemoveCaseButtonClick}
-            colorSchema="red"
-            fullWidth
-          >
-            <Text>Ta bort ansökan</Text>
-          </Button>
-        )}
-      </RemoveCaseButtonContainer>
+      <CaseActionsBottomModal
+        isVisible={modalVisible}
+        isDownloadPdfDisabled={false}
+        isRemoveCaseDisabled={false}
+        onCloseModal={() => setModalVisible(false)}
+        onRemoveCase={() => {
+          setModalVisible(false);
+          setTimeout(handleRemoveCaseButtonClick, 600);
+        }}
+      />
     </ScreenWrapper>
   );
 };

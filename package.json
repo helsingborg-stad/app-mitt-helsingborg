@@ -56,6 +56,7 @@
     "react-native-image-crop-picker": "^0.37.3",
     "react-native-image-pan-zoom": "^2.1.12",
     "react-native-markdown-display": "^7.0.0-alpha.2",
+    "react-native-modal": "^13.0.1",
     "react-native-network-info": "^5.2.1",
     "react-native-pager-view": "^5.4.15",
     "react-native-pdf": "^6.6.0",

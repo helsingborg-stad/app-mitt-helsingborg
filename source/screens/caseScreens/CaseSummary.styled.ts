@@ -6,6 +6,7 @@ const Container = styled.ScrollView`
   flex: 1;
   padding-left: 16px;
   padding-right: 16px;
+  background: #eee;
 `;
 
 const SummaryHeading = styled(Text)`
@@ -14,8 +15,11 @@ const SummaryHeading = styled(Text)`
   margin-bottom: 16px;
 `;
 
-const RemoveCaseButtonContainer = styled.View`
+const ButtonContainer = styled.View`
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-gap: 16px;
 `;
 
-export { Container, SummaryHeading, RemoveCaseButtonContainer };
+export { Container, SummaryHeading, ButtonContainer };
