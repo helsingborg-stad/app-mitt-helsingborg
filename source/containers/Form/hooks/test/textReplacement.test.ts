@@ -29,8 +29,8 @@ const baseStep: Step = {
 };
 
 const basePeriod: Period = {
-  endDate: new Date("2021-01-01").getTime(),
   startDate: new Date("2020-12-01").getTime(),
+  endDate: new Date("2021-01-01").getTime(),
 };
 
 const baseQuestion: Question = {
@@ -170,6 +170,7 @@ describe("replaceMarkdownTextInSteps", () => {
     it.each([
       ["#date-1", "1/2"],
       ["#date-2", "28/2"],
+      ["#today-45", "17/11"],
     ])("Replaces %s with %s", doTest);
   });
 

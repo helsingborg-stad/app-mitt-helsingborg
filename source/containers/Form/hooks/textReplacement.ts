@@ -53,9 +53,9 @@ const REPLACEMENT_RULES = [
   ["#month+1", "date.previousMonth.currentMonth+1"],
   ["#month+2", "date.previousMonth.currentMonth+2"],
   ["#month", "date.previousMonth.currentMonth"],
-  ["#today-45", "date.previousMonth.currentMonth-45"],
-  ["#year", "date.currentYear"], // this is the current year of next month
-  ["#today", "date.currentDate"], // this is the current date of next month
+  ["#year", "date.currentYear"],
+  ["#today-45", "date.currentDate.minus-45"],
+  ["#today", "date.currentDate"],
   ["#encryptionPin", "encryptionPin"],
   ["#du/ni", "duNiReplacer"],
   ["#COMPLETIONS_CLARIFICATION", "completionsClarificationReplacer"],
@@ -98,18 +98,24 @@ function replaceDate(
   period?: FormPeriod
 ): string {
   const currentDate = new Date();
-  const activeDate = period ? new Date(period.endDate) : currentDate;
+  const activeDateByPeriodEndDate = period
+    ? new Date(period.endDate)
+    : currentDate;
 
   const [calendarType, position] = descriptorDateParts;
 
   if (calendarType === "nextMonth") {
-    const month = activeDate.getMonth() + 2;
+    const activeMonth = activeDateByPeriodEndDate.getMonth() + 2;
     if (position === "first") {
-      return `1/${month}`;
+      return `1/${activeMonth}`;
     }
     if (position === "last") {
-      const days = new Date(activeDate.getFullYear(), month, 0).getDate();
-      return `${days}/${month}`;
+      const days = new Date(
+        activeDateByPeriodEndDate.getFullYear(),
+        activeMonth,
+        0
+      ).getDate();
+      return `${days}/${activeMonth}`;
     }
   }
 
@@ -118,11 +124,15 @@ function replaceDate(
   }
 
   if (calendarType === "currentDate") {
+    if (position === "minus-45") {
+      currentDate.setDate(currentDate.getDate() - 45);
+      return `${currentDate.getDate()}/${currentDate.getMonth() + 1}`;
+    }
     return `${currentDate.getDate()}`;
   }
 
   if (calendarType === "previousMonth") {
-    const currentMonth = activeDate.getMonth();
+    const currentMonth = activeDateByPeriodEndDate.getMonth();
 
     switch (position) {
       case "currentMonth":
@@ -146,19 +156,17 @@ function replaceDate(
 function replaceUserInfo(
   descriptorUserParts: string[],
   userType: User | PartnerInfo
-): User | PartnerInfo {
+): string {
   const result = descriptorUserParts.reduce(
     (prev: unknown, current: string) => {
-      console.log("current", current);
       if (prev[current]) {
         return prev[current];
       }
       return "";
     },
     { ...userType }
-  );
+  ) as string;
 
-  // console.log(result);
   return result;
 }
 
@@ -173,11 +181,11 @@ function computeText(
   const [descriptorFirstPart, ...descriptorRestParts] = descriptor.split(".");
 
   if (descriptorFirstPart === "user") {
-    return replaceUserInfo(descriptorRestParts, user) ?? "";
+    return replaceUserInfo(descriptorRestParts, user);
   }
 
   if (descriptorFirstPart === "partner" && partner) {
-    return replaceUserInfo(descriptorRestParts, partner) ?? "";
+    return replaceUserInfo(descriptorRestParts, partner);
   }
 
   if (descriptorFirstPart === "date") {
@@ -212,9 +220,9 @@ function replaceText(
 ): string {
   // This allows for nesting replacement rules and then applying them in order one after the other.
   let res = text ?? "";
-  REPLACEMENT_RULES.forEach(([template, descriptor]) => {
+  REPLACEMENT_RULES.forEach(([replacementParameter, descriptor]) => {
     res = res.replace(
-      template,
+      replacementParameter,
       computeText(
         descriptor,
         user,
