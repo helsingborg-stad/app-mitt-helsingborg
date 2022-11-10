@@ -1,3 +1,4 @@
+import type { AxiosError, AxiosResponse, Method, AxiosPromise } from "axios";
 import axios from "axios";
 import { Platform } from "react-native";
 import DeviceInfo from "react-native-device-info";
@@ -10,16 +11,29 @@ import { name } from "../../package.json";
 import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
 import { getUserFriendlyAppVersion } from "./Misc";
 
-/**
- * Axios request
- * User ID will overwrite bearer token in header.
- *
- * @param {string} endpoint
- * @param {string} method
- * @param {obj} data
- * @param {obj} headers
- */
-const request = async (endpoint, method, data, headers, params) => {
+interface RequestError {
+  message: string;
+}
+
+interface RequestResult<T> {
+  data: T;
+}
+
+type RequestReturnType<T> = Promise<
+  AxiosResponse<RequestResult<T>, unknown> | RequestError
+>;
+
+function isRequestError(maybeError: unknown): maybeError is RequestError {
+  return (maybeError as RequestError)?.message?.length > 0;
+}
+
+async function request<TResponse>(
+  endpoint: string,
+  method: Method,
+  data?: unknown,
+  headers?: Record<string, string>,
+  params?: unknown
+): RequestReturnType<TResponse> {
   const url = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
   const { apiKey } =
@@ -41,32 +55,59 @@ const request = async (endpoint, method, data, headers, params) => {
 
   try {
     // Do request
-    const req = await axios({
+    const req = axios({
       url,
       method,
       headers: newHeaders,
       data,
       params,
-    });
-    return req;
+    }) as AxiosPromise<RequestResult<TResponse>>;
+    const response = await req;
+    return response;
   } catch (error) {
-    return { message: error.message, ...error.response };
+    const axiosError = error as AxiosError;
+    return { message: axiosError.message, ...axiosError.response };
   }
-};
+}
 
-const get = (endpoint = "", headers, params) =>
-  request(endpoint, "get", undefined, headers, params);
+function get<TResponse = unknown>(
+  endpoint: string,
+  headers?: Record<string, string>,
+  params?: unknown
+): RequestReturnType<TResponse> {
+  return request<TResponse>(endpoint, "get", undefined, headers, params);
+}
 
-const post = (endpoint = "", body, headers) =>
-  request(endpoint, "post", body, headers);
+function post<TResponse = unknown>(
+  endpoint: string,
+  body: unknown,
+  headers?: Record<string, string>
+): RequestReturnType<TResponse> {
+  return request<TResponse>(endpoint, "post", body, headers);
+}
 
-const remove = (endpoint = "", body, headers) =>
-  request(endpoint, "delete", body, headers);
+function remove<TResponse = unknown>(
+  endpoint: string,
+  body?: unknown,
+  headers?: Record<string, string>
+): RequestReturnType<TResponse> {
+  return request<TResponse>(endpoint, "delete", body, headers);
+}
 
-const put = (endpoint = "", body, headers) =>
-  request(endpoint, "put", body, headers);
+function put<TResponse = unknown>(
+  endpoint: string,
+  body?: unknown,
+  headers?: Record<string, string>
+): RequestReturnType<TResponse> {
+  return request<TResponse>(endpoint, "put", body, headers);
+}
 
-const patch = (endpoint = "", body, headers) =>
-  request(endpoint, "patch", body, headers);
+function patch<TResponse = unknown>(
+  endpoint: string,
+  body?: unknown,
+  headers?: Record<string, string>
+): RequestReturnType<TResponse> {
+  return request<TResponse>(endpoint, "patch", body, headers);
+}
 
-export { get, post, remove, put, patch };
+export { isRequestError, get, post, remove, put, patch };
