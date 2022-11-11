@@ -9,22 +9,22 @@ import reactNativeBlobUtilFileStorageUtil from "./fileStorageUtils/reactNativeBl
 import apiRemoteUtil from "./remoteUtils/apiRemoteUtil";
 
 export class FileStorageService implements IFileStorageService {
-  #fileStorageUtil: FileStorageUtil;
+  private fileStorageUtil: FileStorageUtil;
 
-  #remoteUtil: RemoteUtil;
+  private remoteUtil: RemoteUtil;
 
   constructor(fileStorageUtil: FileStorageUtil, remoteUtil: RemoteUtil) {
-    this.#fileStorageUtil = fileStorageUtil;
-    this.#remoteUtil = remoteUtil;
+    this.fileStorageUtil = fileStorageUtil;
+    this.remoteUtil = remoteUtil;
   }
 
-  isFileLocallyAvailable(id: string): Promise<boolean> {
+  private isFileLocallyAvailable(id: string): Promise<boolean> {
     const filePath = this.getFilePath(id);
-    return this.#fileStorageUtil.exists(filePath);
+    return this.fileStorageUtil.exists(filePath);
   }
 
   async getDownloadUrl(remoteId: string): Promise<string> {
-    return this.#remoteUtil.getDownloadUrl(remoteId);
+    return this.remoteUtil.getDownloadUrl(remoteId);
   }
 
   async downloadFileToCache(
@@ -33,7 +33,7 @@ export class FileStorageService implements IFileStorageService {
   ): Promise<string> {
     const desiredFilePath = this.getFilePath(localId);
     const downloadUrl = await this.getDownloadUrl(remoteId);
-    await this.#fileStorageUtil.downloadFileToCache(
+    await this.fileStorageUtil.downloadFileToCache(
       downloadUrl,
       desiredFilePath
     );
@@ -41,7 +41,7 @@ export class FileStorageService implements IFileStorageService {
   }
 
   getFilePath(id: string): string {
-    return path.join(this.#fileStorageUtil.getDocumentRoot(), id);
+    return path.join(this.fileStorageUtil.getDocumentRoot(), id);
   }
 
   async ensureFile(localId: string, remoteId: string): Promise<void> {
@@ -57,13 +57,13 @@ export class FileStorageService implements IFileStorageService {
   async copyFileToCache(filePath: string): Promise<string> {
     const newId = uuid.v4() as string;
     const newFilePath = this.getFilePath(newId);
-    await this.#fileStorageUtil.copyFile(filePath, newFilePath);
+    await this.fileStorageUtil.copyFile(filePath, newFilePath);
     return newId;
   }
 
   async removeFile(fileId: string): Promise<void> {
     const filePath = this.getFilePath(fileId);
-    return this.#fileStorageUtil.removeFile(filePath);
+    return this.fileStorageUtil.removeFile(filePath);
   }
 }
 
