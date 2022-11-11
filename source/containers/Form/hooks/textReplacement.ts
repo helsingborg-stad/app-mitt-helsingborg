@@ -200,7 +200,7 @@ function computeText(
   return "";
 }
 
-function replaceText(
+export function replaceText(
   text: string,
   user: User,
   period?: FormPeriod,
