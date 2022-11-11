@@ -1,5 +1,4 @@
 import uuid from "react-native-uuid";
-import path from "path";
 import type {
   IFileStorageService,
   FileStorageUtil,
@@ -41,7 +40,7 @@ export class FileStorageService implements IFileStorageService {
   }
 
   getFilePath(id: string): string {
-    return path.join(this.fileStorageUtil.getDocumentRoot(), id);
+    return `${this.fileStorageUtil.getDocumentRoot()}/${id}`;
   }
 
   async ensureFile(localId: string, remoteId: string): Promise<void> {
