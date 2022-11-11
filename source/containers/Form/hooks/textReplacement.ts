@@ -157,17 +157,7 @@ function replaceUserInfo(
   descriptorUserParts: string[],
   userType: User | PartnerInfo
 ): string {
-  const result = descriptorUserParts.reduce(
-    (prev: unknown, current: string) => {
-      if (prev[current]) {
-        return prev[current];
-      }
-      return "";
-    },
-    { ...userType }
-  ) as string;
-
-  return result;
+  return _get(userType, descriptorUserParts.join("."), "");
 }
 
 function computeText(
