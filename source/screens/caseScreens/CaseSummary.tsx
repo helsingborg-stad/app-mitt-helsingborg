@@ -11,7 +11,8 @@ import { View, Animated, Easing } from "react-native";
 import {
   CaseCalculationsModal,
   RemoveCaseModal,
-  CaseActionsBottomModal,
+  TransparentBottomModal,
+  PdfModal,
 } from "../../components/organisms";
 
 import { Card, ScreenWrapper, CaseCard } from "../../components/molecules";
@@ -41,6 +42,7 @@ import type {
   Decision,
   Calculations,
 } from "../../types/Case";
+import type { TransparentModalButton } from "../../components/organisms/TransparentBottomModal/TransparentBottomModal.types";
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import useGetFormPasswords from "./useGetFormPasswords";
@@ -49,8 +51,9 @@ import type { Props } from "./CaseSummary.types";
 
 import { Container, SummaryHeading } from "./CaseSummary.styled";
 
-const { ACTIVE_SIGNATURE_PENDING } = ApplicationStatusType;
+const { ACTIVE_SIGNATURE_PENDING, CLOSED } = ApplicationStatusType;
 const SCREEN_TRANSITION_DELAY = 1000;
+const MODAL_TRANSITION_DELAY = 600;
 
 const computeCaseCardComponent = (
   caseItem: Case,
@@ -208,7 +211,8 @@ const CaseSummary = (props: Props): JSX.Element => {
   const { cases, getCase } = useContext(CaseState);
   const { deleteCase } = useContext(CaseDispatch);
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const [showBottomModal, setShowBottomModal] = useState(false);
+  const [openPdf, setOpenPdf] = useState(false);
 
   const {
     colorSchema = "red",
@@ -241,6 +245,9 @@ const CaseSummary = (props: Props): JSX.Element => {
 
   const canRemoveCase =
     [ACTIVE_SIGNATURE_PENDING].includes(caseData.status.type) && isApplicant;
+
+  const canShowPdf =
+    caseData.status.type.includes(CLOSED) && !!caseData?.pdf?.B;
 
   const removeCase = async () => {
     const result = await remove(`cases/${caseId}`, undefined, undefined);
@@ -327,10 +334,47 @@ const CaseSummary = (props: Props): JSX.Element => {
   };
 
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => <MoreButton onPress={() => setModalVisible(true)} />,
-    });
-  }, [navigation]);
+    if (canShowPdf || canRemoveCase) {
+      navigation.setOptions({
+        headerRight: () => (
+          <MoreButton onPress={() => setShowBottomModal(true)} />
+        ),
+      });
+    }
+  }, [navigation, canShowPdf, canRemoveCase]);
+
+  const togglePdf = () => {
+    setOpenPdf((oldValue) => !oldValue);
+  };
+
+  const closeBottomModal = () => {
+    setShowBottomModal(false);
+  };
+
+  const addModalButton = (
+    title: string,
+    callback: () => void
+  ): TransparentModalButton => ({
+    title,
+    onPress: () => {
+      setShowBottomModal(false);
+      setTimeout(callback, MODAL_TRANSITION_DELAY);
+    },
+  });
+
+  const bottomModalButtons: TransparentModalButton[] = [];
+
+  if (canShowPdf) {
+    bottomModalButtons.push(
+      addModalButton("Visa avslutad ansökan som PDF", togglePdf)
+    );
+  }
+
+  if (canRemoveCase) {
+    bottomModalButtons.push(
+      addModalButton("Ta bort ansökan", handleRemoveCaseButtonClick)
+    );
+  }
 
   return (
     <ScreenWrapper {...props}>
@@ -403,15 +447,16 @@ const CaseSummary = (props: Props): JSX.Element => {
         onRemoveCase={removeCase}
       />
 
-      <CaseActionsBottomModal
-        isVisible={modalVisible}
-        isDownloadPdfDisabled={false}
-        isRemoveCaseDisabled={false}
-        onCloseModal={() => setModalVisible(false)}
-        onRemoveCase={() => {
-          setModalVisible(false);
-          setTimeout(handleRemoveCaseButtonClick, 600);
-        }}
+      <TransparentBottomModal
+        isVisible={showBottomModal}
+        onCloseModal={closeBottomModal}
+        modalButtons={bottomModalButtons}
+      />
+
+      <PdfModal
+        isVisible={openPdf}
+        toggleModal={togglePdf}
+        uri={`data:application/pdf;base64,${caseData.pdf?.B}`}
       />
     </ScreenWrapper>
   );

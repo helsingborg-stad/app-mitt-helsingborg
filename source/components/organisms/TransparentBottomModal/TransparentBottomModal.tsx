@@ -10,31 +10,15 @@ import {
   ModalButtonText,
   Divider,
   modalStyle,
-} from "./CaseActionsBottomModal.styled";
+} from "./TransparentBottomModal.styled";
 
-import type { Props } from "./CaseActionsBottomModal.types";
+import type { Props } from "./TransparentBottomModal.types";
 
-function CaseActionsBottomModal({
-  isDownloadPdfDisabled,
-  isRemoveCaseDisabled,
+function TransparentBottomModal({
   isVisible,
+  modalButtons,
   onCloseModal,
-  onDownloadPdf,
-  onRemoveCase,
 }: Props): JSX.Element {
-  const actionButtons = [
-    {
-      text: "Hämta avslutad ansökan som PDF",
-      onPress: onDownloadPdf,
-      isDisabled: isDownloadPdfDisabled,
-    },
-    {
-      text: "Ta bort ansökan",
-      onPress: onRemoveCase,
-      isDisabled: isRemoveCaseDisabled,
-    },
-  ];
-
   return (
     <Modal
       isVisible={isVisible}
@@ -48,12 +32,13 @@ function CaseActionsBottomModal({
           <ModalHeaderText>Hantera ansökan</ModalHeaderText>
         </ModalHeaderTextContainer>
         <Divider />
-        {actionButtons.map(({ onPress, text, isDisabled }, index) => (
+
+        {modalButtons.map(({ title, onPress }, index) => (
           <>
-            <ModalButton key={text} onPress={onPress} disabled={isDisabled}>
-              <ModalButtonText>{text}</ModalButtonText>
+            <ModalButton key={title} onPress={onPress}>
+              <ModalButtonText>{title}</ModalButtonText>
             </ModalButton>
-            {index !== actionButtons.length - 1 && <Divider />}
+            {index !== modalButtons.length - 1 && <Divider />}
           </>
         ))}
       </ModalContentContainer>
@@ -62,7 +47,6 @@ function CaseActionsBottomModal({
         activeOpacity={0.8}
         underlayColor="#eee"
         onPress={onCloseModal}
-        disabled={isRemoveCaseDisabled}
       >
         <ModalButtonText bold>Avbryt</ModalButtonText>
       </ModalCloseButton>
@@ -70,4 +54,4 @@ function CaseActionsBottomModal({
   );
 }
 
-export default CaseActionsBottomModal;
+export default TransparentBottomModal;

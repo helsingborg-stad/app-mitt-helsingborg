@@ -2,9 +2,11 @@ import React from "react";
 import { TouchableOpacity, Dimensions } from "react-native";
 import type { GestureResponderEvent } from "react-native";
 
-import { Icon, Button, Text } from "../../atoms";
+import { PdfModal } from "../../organisms";
 
 import { Modal, useModal } from "../Modal";
+
+import { Icon, Button, Text } from "../../atoms";
 
 import {
   DefaultItem,
@@ -43,18 +45,11 @@ const PdfItem: React.FC<Props> = ({ pdf, onRemove }) => {
           {pdf.displayName}
         </Text>
 
-        <Modal visible={modalVisible} hide={toggleModal}>
-          <PdfInModal
-            source={{ uri: pdf.uri }}
-            width={Dimensions.get("window").width}
-            height={Dimensions.get("window").height * 0.89}
-          />
-          <ButtonWrapper>
-            <Button colorSchema="red" onClick={toggleModal}>
-              <Text>Stäng</Text>
-            </Button>
-          </ButtonWrapper>
-        </Modal>
+        <PdfModal
+          isVisible={modalVisible}
+          uri={pdf.uri}
+          toggleModal={toggleModal}
+        />
       </Flex>
     </DefaultItem>
   );
