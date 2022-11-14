@@ -16,7 +16,7 @@ const mockedUserData: User = {
   civilStatus: "",
   email: "",
   firstName: "Kaj-Bertil",
-  lastName: "Efternamnsson",
+  lastName: "Svensson",
   mobilePhone: "",
   personalNumber: "196801231232",
 };
@@ -29,8 +29,8 @@ const baseStep: Step = {
 };
 
 const basePeriod: Period = {
-  endDate: new Date("2021-01-01").getTime(),
   startDate: new Date("2020-12-01").getTime(),
+  endDate: new Date("2021-01-01").getTime(),
 };
 
 const baseQuestion: Question = {
@@ -77,12 +77,10 @@ const doTest = (
             ],
             items: [
               {
-                inputId: "amount",
                 id: "unemploymentAllowance",
                 category: "benefits",
                 title: placeholder,
                 type: "checkbox",
-                inputSelectValue: "checkbox",
               },
             ],
             components: [
@@ -172,6 +170,7 @@ describe("replaceMarkdownTextInSteps", () => {
     it.each([
       ["#date-1", "1/2"],
       ["#date-2", "28/2"],
+      ["#today-45", "17/11"],
     ])("Replaces %s with %s", doTest);
   });
 
@@ -185,7 +184,7 @@ describe("replaceMarkdownTextInSteps", () => {
   describe("User", () => {
     it.each([
       ["#firstName", "Kaj-Bertil"],
-      ["#lastName", "Efternamnsson"],
+      ["#lastName", "Svensson"],
       ["#personalNumber", "196801231232"],
     ])("Replaces %s with %s", doTest);
   });
@@ -256,7 +255,6 @@ beforeEach(() => {
       workflow: {
         application: {
           periodstartdate: "2021-01-04",
-          completionduedate: "2021-01-05",
         },
       },
       period: {
@@ -272,7 +270,7 @@ beforeEach(() => {
     persons: [],
     provider: "",
     updatedAt: 0,
-  };
+  } as unknown as Case;
 });
 
 describe("replaceCaseItemText", () => {
