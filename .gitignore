@@ -22,6 +22,7 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 ios/Pods/
+ios/.xcode.env.local
 
 # Android/IntelliJ
 #
@@ -30,6 +31,7 @@ ios/Pods/
 local.properties
 *.iml
 android/app/release
+.cxx/
 
 # node.js
 #
@@ -55,10 +57,11 @@ buck-out/
 # For more information about the recommended setup visit:
 # https://docs.fastlane.tools/best-practices/source-control/
 
-*/fastlane/report.xml
-*/fastlane/Preview.html
-*/fastlane/screenshots
-*/fastlane/.env
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
+**/fastlane/.env
 /ios/*.cer
 /ios/*.dSYM.zip
 /ios/*.mobileprovision
