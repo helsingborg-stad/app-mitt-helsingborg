@@ -7,6 +7,7 @@ const PdfInModal = styled(PdfView)<{ width: number; height: number }>`
   width: ${({ width }) => width}px;
   height: ${({ height }) => height}px;
 `;
+
 const ButtonWrapper = styled.View`
   padding-bottom: 40px;
   flex-direction: row;
