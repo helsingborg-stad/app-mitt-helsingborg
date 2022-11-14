@@ -31,8 +31,8 @@ async function request<TResponse>(
   endpoint: string,
   method: Method,
   data?: unknown,
-  headers?: Record<string, string>,
-  params?: unknown
+  headers: Record<string, string> = {},
+  params: Record<string, unknown> = {}
 ): RequestReturnType<TResponse> {
   const url = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
@@ -73,7 +73,7 @@ async function request<TResponse>(
 function get<TResponse = unknown>(
   endpoint: string,
   headers?: Record<string, string>,
-  params?: unknown
+  params?: Record<string, unknown>
 ): RequestReturnType<TResponse> {
   return request<TResponse>(endpoint, "get", undefined, headers, params);
 }
