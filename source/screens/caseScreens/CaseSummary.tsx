@@ -334,7 +334,7 @@ const CaseSummary = (props: Props): JSX.Element => {
   };
 
   useEffect(() => {
-    if (canShowPdf || canRemoveCase) {
+    if (canRemoveCase) {
       navigation.setOptions({
         headerRight: () => (
           <MoreButton onPress={() => setShowBottomModal(true)} />
@@ -363,12 +363,6 @@ const CaseSummary = (props: Props): JSX.Element => {
   });
 
   const bottomModalButtons: TransparentModalButton[] = [];
-
-  if (canShowPdf) {
-    bottomModalButtons.push(
-      addModalButton("Visa avslutad ansökan som PDF", togglePdf)
-    );
-  }
 
   if (canRemoveCase) {
     bottomModalButtons.push(
