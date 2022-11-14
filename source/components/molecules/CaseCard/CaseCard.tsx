@@ -52,6 +52,8 @@ interface CaseCardProps {
   completions?: string[];
   completionsClarification?: string;
   pin?: string;
+  showDownloadPdfButton: boolean;
+  onOpenPdf: () => void;
 }
 
 function CaseCard({
@@ -79,6 +81,8 @@ function CaseCard({
   completions = [],
   completionsClarification = "",
   pin,
+  showDownloadPdfButton,
+  onOpenPdf,
 }: CaseCardProps): JSX.Element {
   return (
     <Card colorSchema={colorSchema}>
@@ -144,6 +148,13 @@ function CaseCard({
           >
             <Text>{buttonText}</Text>
             <Icon name={buttonIconName || "arrow-forward"} />
+          </Card.Button>
+        )}
+
+        {showDownloadPdfButton && (
+          <Card.Button mt={1} onClick={onOpenPdf} colorSchema="neutral">
+            <Text>Visa inskickade svar</Text>
+            <Icon name="picture-as-pdf" />
           </Card.Button>
         )}
       </Card.Body>

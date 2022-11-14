@@ -62,7 +62,8 @@ const computeCaseCardComponent = (
   navigation: { onOpenForm: (caseId: string, isSignMode?: boolean) => void },
   toggleModal: () => void,
   personalNumber: string,
-  formPassword: string | undefined
+  formPassword: string | undefined,
+  onOpenPdf: () => void
 ) => {
   const {
     currentPosition: { currentMainStep: currentStep, numberOfMainSteps },
@@ -72,6 +73,7 @@ const computeCaseCardComponent = (
   const status = caseItem?.status;
   const persons = caseItem.persons ?? [];
   const details = caseItem?.details ?? {};
+  const pdf = caseItem?.pdf?.B ?? "";
   const { workflow = {}, period = {} } = details;
   const { decision = {}, payments = {} } = workflow;
   const statusType = status?.type ?? "";
@@ -85,6 +87,8 @@ const computeCaseCardComponent = (
   const applicationPeriodMonth = period?.endDate
     ? getSwedishMonthNameByTimeStamp(period?.endDate, true)
     : "";
+
+  const canShowPdf = statusType.includes(CLOSED) && !!pdf;
 
   const casePersonData = persons.find(
     (person) => person.personalNumber === personalNumber
@@ -201,6 +205,8 @@ const computeCaseCardComponent = (
       buttonIconName={isClosed ? "remove-red-eye" : "arrow-forward"}
       completions={unApprovedCompletionDescriptions}
       completionsClarification={completionsClarification}
+      showDownloadPdfButton={canShowPdf}
+      onOpenPdf={onOpenPdf}
       pin={shouldShowPin ? formPassword : undefined}
     />
   );
@@ -245,9 +251,6 @@ const CaseSummary = (props: Props): JSX.Element => {
 
   const canRemoveCase =
     [ACTIVE_SIGNATURE_PENDING].includes(caseData.status.type) && isApplicant;
-
-  const canShowPdf =
-    caseData.status.type.includes(CLOSED) && !!caseData?.pdf?.B;
 
   const removeCase = async () => {
     const result = await remove(`cases/${caseId}`, undefined, undefined);
@@ -341,7 +344,7 @@ const CaseSummary = (props: Props): JSX.Element => {
         ),
       });
     }
-  }, [navigation, canShowPdf, canRemoveCase]);
+  }, [navigation, canRemoveCase]);
 
   const togglePdf = () => {
     setOpenPdf((oldValue) => !oldValue);
@@ -382,7 +385,8 @@ const CaseSummary = (props: Props): JSX.Element => {
             { onOpenForm: openForm },
             toggleModal,
             authContext.user.personalNumber,
-            passwords[caseData.id] ?? undefined
+            passwords[caseData.id] ?? undefined,
+            togglePdf
           )}
 
         {administrators && (
