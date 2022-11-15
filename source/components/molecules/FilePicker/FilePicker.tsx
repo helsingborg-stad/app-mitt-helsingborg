@@ -4,7 +4,6 @@ import { BackgroundBlurWrapper } from "../../atoms/BackgroundBlur";
 import { Modal, useModal } from "../Modal";
 import { getValidColorSchema } from "../../../theme/themeHelpers";
 import FileDisplay from "../FileDisplay/FileDisplay";
-import { splitFilePath } from "../../../helpers/FileUpload";
 
 import { addImagesFromLibrary, addImageFromCamera } from "./imageUpload";
 import { addPdfFromLibrary } from "./pdfUpload";
@@ -46,11 +45,10 @@ const FilePicker: React.FC<Props> = ({
   const renameFileWithSuffix = (
     file: File,
     baseName: string,
-    ext: string,
     suffix: string
-  ) => ({
+  ): File => ({
     ...file,
-    filename: `${baseName}_${suffix}${ext}`,
+    deviceFileName: `${baseName}_${suffix}`,
   });
 
   const addFilesToState = (newFiles: File[]) => {
@@ -58,12 +56,7 @@ const FilePicker: React.FC<Props> = ({
 
     if (preferredFileName) {
       updatedFiles = updatedFiles.map((file, index) =>
-        renameFileWithSuffix(
-          file,
-          preferredFileName,
-          splitFilePath(file.filename).ext,
-          index.toString()
-        )
+        renameFileWithSuffix(file, preferredFileName, index.toString())
       );
     }
 
@@ -73,7 +66,7 @@ const FilePicker: React.FC<Props> = ({
     return updatedFiles;
   };
 
-  const uploadFile = async (callback: (id: string) => Promise<File[]>) => {
+  const addFile = async (callback: (id: string) => Promise<File[]>) => {
     const selectedFiles = await callback(id);
 
     if (selectedFiles.length > 0) {
@@ -82,9 +75,9 @@ const FilePicker: React.FC<Props> = ({
     }
   };
 
-  const handleUploadPdf = () => uploadFile(addPdfFromLibrary);
-  const handleUploadImageFromCamera = () => uploadFile(addImageFromCamera);
-  const handleUploadImageFromLibrary = () => uploadFile(addImagesFromLibrary);
+  const handleUploadPdf = () => addFile(addPdfFromLibrary);
+  const handleUploadImageFromCamera = () => addFile(addImageFromCamera);
+  const handleUploadImageFromLibrary = () => addFile(addImagesFromLibrary);
 
   const modalMenuItems = {
     [FileType.PDF]: {

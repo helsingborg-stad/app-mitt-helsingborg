@@ -1,7 +1,7 @@
 import React from "react";
 
 import FileDisplay from "../FileDisplay/FileDisplay";
-import type { File } from "../FilePicker/FilePicker";
+import type { File } from "../FilePicker/FilePicker.types";
 
 interface Props {
   questionIds: string[];

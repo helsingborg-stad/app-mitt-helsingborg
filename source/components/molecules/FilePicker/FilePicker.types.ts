@@ -1,5 +1,3 @@
-import type { Pdf } from "../PdfItem/PdfItem.types";
-import type { Image } from "../ImageItem/ImageItem.types";
 import type { PrimaryColor } from "../../../theme/themeHelpers";
 
 export enum FileType {
@@ -8,7 +6,12 @@ export enum FileType {
   IMAGES = "images",
 }
 
-export type File = Image | Pdf;
+export interface File {
+  deviceFileName: string;
+  mime: string;
+  id: string;
+  questionId: string;
+}
 
 export interface ErrorValidation {
   isValid: boolean;

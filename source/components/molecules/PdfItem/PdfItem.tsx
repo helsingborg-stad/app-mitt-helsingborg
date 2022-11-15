@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, Dimensions } from "react-native";
 import type { GestureResponderEvent } from "react-native";
 
@@ -17,9 +17,16 @@ import {
 } from "./PdfItem.styled";
 
 import type { Props } from "./PdfItem.types";
+import defaultFileStorageService from "../../../services/storage/fileStorage/FileStorageService";
 
-const PdfItem: React.FC<Props> = ({ pdf, onRemove }) => {
+const PdfItem: React.FC<Props> = ({ file, onRemove }) => {
   const [modalVisible, toggleModal] = useModal();
+  const [filePath, setFilePath] = useState<string | null>(null);
+
+  useEffect(() => {
+    const path = defaultFileStorageService.getFilePath(file.id);
+    setFilePath(path);
+  }, [file.id]);
 
   const handleRemove = (event: GestureResponderEvent) => {
     event.stopPropagation();
@@ -28,7 +35,7 @@ const PdfItem: React.FC<Props> = ({ pdf, onRemove }) => {
 
   return (
     <DefaultItem>
-      <Flex key={pdf.path}>
+      <Flex key={file.id}>
         <DeleteBackground>
           <TouchableOpacity onPress={handleRemove} activeOpacity={0.1}>
             <Icon name="clear" color="#00213F" />
@@ -40,12 +47,12 @@ const PdfItem: React.FC<Props> = ({ pdf, onRemove }) => {
         </Container>
 
         <Text align="center" numberOfLines={1} style={{ width: MAX_PDF_WIDTH }}>
-          {pdf.displayName}
+          {file.deviceFileName}
         </Text>
 
         <Modal visible={modalVisible} hide={toggleModal}>
           <PdfInModal
-            source={{ uri: pdf.uri }}
+            source={{ uri: filePath }}
             width={Dimensions.get("window").width}
             height={Dimensions.get("window").height * 0.89}
           />
