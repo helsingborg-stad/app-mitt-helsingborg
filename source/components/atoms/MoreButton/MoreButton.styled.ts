@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-const IconContainer = styled.TouchableOpacity`
+const MoreButtonContainer = styled.TouchableOpacity`
   width: 30px;
   height: 30px;
   border-radius: 20px;
@@ -10,4 +10,4 @@ const IconContainer = styled.TouchableOpacity`
   justify-content: center;
 `;
 
-export default IconContainer;
+export default MoreButtonContainer;

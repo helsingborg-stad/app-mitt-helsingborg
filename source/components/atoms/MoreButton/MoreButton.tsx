@@ -2,13 +2,15 @@ import React from "react";
 
 import { Icon } from "..";
 
-import IconContainer from "./MoreButton.styled";
+import MoreButtonContainer from "./MoreButton.styled";
 
-function MoreButton({ onPress }) {
+import type { Props } from "./MoreButton.types";
+
+function MoreButton({ onPress }: Props): JSX.Element {
   return (
-    <IconContainer onPress={onPress}>
+    <MoreButtonContainer onPress={onPress}>
       <Icon name="more-horiz" />
-    </IconContainer>
+    </MoreButtonContainer>
   );
 }
 

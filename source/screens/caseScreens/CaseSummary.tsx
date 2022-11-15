@@ -18,8 +18,7 @@ import {
 import { Card, ScreenWrapper, CaseCard } from "../../components/molecules";
 import { useModal } from "../../components/molecules/Modal";
 
-import { Icon, Text } from "../../components/atoms";
-import MoreButton from "../../components/atoms/MoreButton/MoreButton";
+import { Icon, Text, MoreButton } from "../../components/atoms";
 
 import { CaseState, CaseDispatch } from "../../store/CaseContext";
 import AuthContext from "../../store/AuthContext";
@@ -217,7 +216,7 @@ const CaseSummary = (props: Props): JSX.Element => {
   const { cases, getCase } = useContext(CaseState);
   const { deleteCase } = useContext(CaseDispatch);
 
-  const [showBottomModal, setShowBottomModal] = useState(false);
+  const [isBottomModalVisible, setIsBottomModalVisible] = useState(false);
   const [openPdf, setOpenPdf] = useState(false);
 
   const {
@@ -336,22 +335,24 @@ const CaseSummary = (props: Props): JSX.Element => {
     toggleRemoveCaseModal();
   };
 
+  const showBottomModal = useCallback(() => {
+    setIsBottomModalVisible(true);
+  }, []);
+
+  const hideBottomModal = () => {
+    setIsBottomModalVisible(false);
+  };
+
   useEffect(() => {
     if (canRemoveCase) {
       navigation.setOptions({
-        headerRight: () => (
-          <MoreButton onPress={() => setShowBottomModal(true)} />
-        ),
+        headerRight: () => <MoreButton onPress={showBottomModal} />,
       });
     }
-  }, [navigation, canRemoveCase]);
+  }, [navigation, canRemoveCase, showBottomModal]);
 
   const togglePdf = () => {
     setOpenPdf((oldValue) => !oldValue);
-  };
-
-  const closeBottomModal = () => {
-    setShowBottomModal(false);
   };
 
   const addModalButton = (
@@ -360,7 +361,7 @@ const CaseSummary = (props: Props): JSX.Element => {
   ): TransparentModalButton => ({
     title,
     onPress: () => {
-      setShowBottomModal(false);
+      setIsBottomModalVisible(false);
       setTimeout(callback, MODAL_TRANSITION_DELAY);
     },
   });
@@ -446,8 +447,8 @@ const CaseSummary = (props: Props): JSX.Element => {
       />
 
       <TransparentBottomModal
-        isVisible={showBottomModal}
-        onCloseModal={closeBottomModal}
+        isVisible={isBottomModalVisible}
+        onCloseModal={hideBottomModal}
         modalButtons={bottomModalButtons}
       />
 

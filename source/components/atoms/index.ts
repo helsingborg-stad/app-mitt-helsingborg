@@ -11,3 +11,4 @@ export { default as Progressbar } from "./Progressbar";
 export { default as HorizontalScrollIndicator } from "./HorizontalScrollIndicator";
 export { default as TextButton } from "./TextButton";
 export { default as RadioButton } from "./RadioButton";
+export { default as MoreButton } from "./MoreButton";
