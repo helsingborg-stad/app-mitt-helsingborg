@@ -28,13 +28,12 @@ const ModalButtonText = styled.Text<{ bold?: boolean }>`
   font-weight: ${({ bold }) => (bold ? "bold" : "normal")};
 `;
 
-const ModalButtonBase = css<{ disabled?: boolean }>`
+const ModalButtonBase = css`
   width: 100%;
   align-items: center;
   justify-content: center;
   min-height: 32px;
   padding: 16px 0px;
-  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 `;
 
 const ModalButton = styled.TouchableOpacity`
@@ -55,14 +54,6 @@ const Divider = styled.View`
   border-bottom-color: lightgrey;
 `;
 
-const CloseButtonContainer = styled.View`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  padding-bottom: 16px;
-`;
-
 const modalStyle = StyleSheet.create({
   modal: {
     justifyContent: "flex-end",
@@ -79,7 +70,6 @@ export {
   ModalContentContainer,
   ModalHeaderTextContainer,
   ModalHeaderText,
-  CloseButtonContainer,
   ModalButton,
   ModalCloseButton,
   ModalButtonText,
