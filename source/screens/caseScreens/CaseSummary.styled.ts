@@ -15,11 +15,4 @@ const SummaryHeading = styled(Text)`
   margin-bottom: 16px;
 `;
 
-const ButtonContainer = styled.View`
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  flex-gap: 16px;
-`;
-
-export { Container, SummaryHeading, ButtonContainer };
+export { Container, SummaryHeading };

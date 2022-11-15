@@ -366,13 +366,9 @@ const CaseSummary = (props: Props): JSX.Element => {
     },
   });
 
-  const bottomModalButtons: TransparentModalButton[] = [];
-
-  if (canRemoveCase) {
-    bottomModalButtons.push(
-      addModalButton("Ta bort ansökan", handleRemoveCaseButtonClick)
-    );
-  }
+  const bottomModalButtons: TransparentModalButton[] = canRemoveCase
+    ? [addModalButton("Ta bort", handleRemoveCaseButtonClick)]
+    : [];
 
   return (
     <ScreenWrapper {...props}>

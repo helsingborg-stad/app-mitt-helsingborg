@@ -281,7 +281,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
   const { navigation } = props;
   const [refreshing, setRefreshing] = useState(false);
   const [activeModal, setActiveModal] = useState<ActiveModal>({});
-  const [showPdfForCase, setShowPdfForCase] = useState<string>(null);
+  const [showPdfForCase, setShowPdfForCase] = useState<string>("");
 
   const { fetchCases, cases } = useContext(
     CaseState
@@ -472,6 +472,10 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     )
   );
 
+  const hidePdfModal = () => {
+    setShowPdfForCase("");
+  };
+
   return (
     <ScreenWrapper {...props}>
       <Header title="Mina ärenden" />
@@ -548,7 +552,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
 
       <PdfModal
         isVisible={!!showPdfForCase}
-        toggleModal={() => setShowPdfForCase("")}
+        toggleModal={hidePdfModal}
         uri={`data:application/pdf;base64,${cases[showPdfForCase]?.pdf?.B}`}
       />
 
