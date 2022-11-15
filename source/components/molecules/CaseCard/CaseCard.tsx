@@ -153,7 +153,7 @@ function CaseCard({
 
         {showDownloadPdfButton && (
           <Card.Button mt={1} onClick={onOpenPdf} colorSchema="neutral">
-            <Text>Visa inskickade svar</Text>
+            <Text>Visa inskickad ansökan</Text>
             <Icon name="picture-as-pdf" />
           </Card.Button>
         )}
