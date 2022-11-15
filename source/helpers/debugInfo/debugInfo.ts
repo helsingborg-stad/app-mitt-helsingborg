@@ -1,3 +1,4 @@
+import fileStorageInfo from "./fileStorageInfo";
 import storageInfo from "./storageInfo";
 import systemInfo from "./systemInfo";
 
@@ -9,6 +10,7 @@ import type {
 const debugInfoCategories: DebugInfoCategoryGetter[] = [
   systemInfo,
   storageInfo,
+  fileStorageInfo,
 ];
 
 async function getInfo(

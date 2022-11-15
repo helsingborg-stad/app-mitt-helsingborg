@@ -4,6 +4,8 @@ export interface FileStorageUtil {
   downloadFileToCache(url: string, cachePath: string): Promise<void>;
   copyFile(sourcePath: string, destinationPath: string): Promise<boolean>;
   removeFile(filePath: string): Promise<void>;
+  ls(dir: string): Promise<string[]>;
+  isDir(maybeDir: string): Promise<boolean>;
 }
 
 export interface RemoteUtil {
@@ -15,4 +17,5 @@ export interface IFileStorageService {
   ensureFile(localId: string, remoteId: string): Promise<void>;
   copyFileToCache(filePath: string): Promise<string>;
   removeFile(fileId: string): Promise<void>;
+  getFileList(): Promise<string[]>;
 }
