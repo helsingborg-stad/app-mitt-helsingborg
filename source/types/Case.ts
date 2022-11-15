@@ -8,6 +8,7 @@ export enum ApplicationStatusType {
   SIGNED = "signed",
   ACTIVE = "active",
   NOT_STARTED = "notStarted",
+  APPROVED = "approved",
   ACTIVE_RANDOM_CHECK_REQUIRED_VIVA = "active:randomCheckRequired:viva",
   ACTIVE_ONGOING_RANDOM_CHECK = "active:ongoing:randomCheck",
   ACTIVE_COMPLETION_REQUIRED_VIVA = "active:completionRequired:viva",

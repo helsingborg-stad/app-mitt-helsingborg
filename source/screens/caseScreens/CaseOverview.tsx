@@ -40,7 +40,8 @@ import PdfModal from "../../components/organisms/PdfModal/PdfModal";
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import useGetFormPasswords from "./useGetFormPasswords";
 
-const { NEW_APPLICATION, NOT_STARTED, CLOSED, ACTIVE } = ApplicationStatusType;
+const { NEW_APPLICATION, NOT_STARTED, CLOSED, ACTIVE, APPROVED } =
+  ApplicationStatusType;
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -149,7 +150,7 @@ const computeCaseCardComponent = (
     activeSubmittedCompletion,
   } = statusTypeConstantMapper(statusType);
 
-  const canShowPdf = statusType.includes(CLOSED) && !!pdf;
+  const canShowPdf = !statusType.toLowerCase().includes(APPROVED) && !!pdf;
 
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === "coApplicant";

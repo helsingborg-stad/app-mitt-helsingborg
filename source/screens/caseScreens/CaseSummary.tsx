@@ -50,7 +50,7 @@ import type { Props } from "./CaseSummary.types";
 
 import { Container, SummaryHeading } from "./CaseSummary.styled";
 
-const { ACTIVE_SIGNATURE_PENDING, CLOSED } = ApplicationStatusType;
+const { ACTIVE_SIGNATURE_PENDING, APPROVED } = ApplicationStatusType;
 const SCREEN_TRANSITION_DELAY = 1000;
 const MODAL_TRANSITION_DELAY = 600;
 
@@ -87,7 +87,7 @@ const computeCaseCardComponent = (
     ? getSwedishMonthNameByTimeStamp(period?.endDate, true)
     : "";
 
-  const canShowPdf = statusType.includes(CLOSED) && !!pdf;
+  const canShowPdf = !statusType.toLowerCase().includes(APPROVED) && !!pdf;
 
   const casePersonData = persons.find(
     (person) => person.personalNumber === personalNumber
