@@ -166,7 +166,7 @@ interface AnswerField {
 
 export interface Answer {
   field: AnswerField;
-  value: string | boolean;
+  value: string | boolean | Record<string, string | number>[];
 }
 
 export interface EncryptedAnswersWrapper {
