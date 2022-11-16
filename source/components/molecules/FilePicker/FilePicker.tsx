@@ -48,7 +48,7 @@ const FilePicker: React.FC<Props> = ({
     suffix: string
   ): File => ({
     ...file,
-    deviceFileName: `${baseName}_${suffix}`,
+    externalDisplayName: `${baseName}_${suffix}`,
   });
 
   const addFilesToState = (newFiles: File[]) => {

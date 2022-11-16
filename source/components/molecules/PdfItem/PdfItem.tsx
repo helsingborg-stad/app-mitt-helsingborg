@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { TouchableOpacity, Dimensions } from "react-native";
 import type { GestureResponderEvent } from "react-native";
 
@@ -21,12 +21,8 @@ import defaultFileStorageService from "../../../services/storage/fileStorage/Fil
 
 const PdfItem: React.FC<Props> = ({ file, onRemove }) => {
   const [modalVisible, toggleModal] = useModal();
-  const [filePath, setFilePath] = useState<string | null>(null);
 
-  useEffect(() => {
-    const path = defaultFileStorageService.getFilePath(file.id);
-    setFilePath(path);
-  }, [file.id]);
+  const filePath = defaultFileStorageService.getFilePath(file.id);
 
   const handleRemove = (event: GestureResponderEvent) => {
     event.stopPropagation();

@@ -23,6 +23,7 @@ async function createCacheFile(
   return {
     id: newId,
     deviceFileName: pick.name,
+    externalDisplayName: pick.name,
     mime: pick.type ?? "application/pdf",
     questionId,
   };

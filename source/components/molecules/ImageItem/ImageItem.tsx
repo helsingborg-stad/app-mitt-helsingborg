@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ImageZoom from "react-native-image-pan-zoom";
 import type { GestureResponderEvent } from "react-native";
 import { TouchableOpacity, Dimensions, Image as RNImage } from "react-native";
@@ -23,12 +23,8 @@ import defaultFileStorageService from "../../../services/storage/fileStorage/Fil
 
 function ImageItem({ file, onRemove }: Props): JSX.Element {
   const [modalVisible, toggleModal] = useModal();
-  const [filePath, setFilePath] = useState<string | null>(null);
 
-  useEffect(() => {
-    const path = defaultFileStorageService.getFilePath(file.id);
-    setFilePath(path);
-  }, [file.id]);
+  const filePath = defaultFileStorageService.getFilePath(file.id);
 
   const handleRemove = (event: GestureResponderEvent) => {
     event.stopPropagation();

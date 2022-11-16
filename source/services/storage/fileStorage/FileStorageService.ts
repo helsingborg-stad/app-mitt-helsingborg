@@ -55,11 +55,13 @@ export class FileStorageService implements IFileStorageService {
       (maybe) => !subdirs.includes(maybe)
     );
 
-    const subdirContents = await Promise.all(
-      subdirs.map((subdir) => this.listFilesRecursive(subdir))
-    );
+    const subdirContents = (
+      await Promise.all(
+        subdirs.map((subdir) => this.listFilesRecursive(subdir))
+      )
+    ).flat();
 
-    return [...files, ...subdirContents.flat()];
+    return [...files, ...subdirContents];
   }
 
   getFilePath(id: string): string {

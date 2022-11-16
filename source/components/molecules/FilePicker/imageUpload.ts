@@ -66,9 +66,11 @@ async function createCacheFile(
 ): Promise<File> {
   const path = pick.path ?? pick.sourceURL;
   const newId = await defaultFileStorageService.copyFileToCache(path);
+  const name = pick.filename ?? splitFilePath(path).name;
   return {
     id: newId,
-    deviceFileName: pick.filename ?? splitFilePath(path).name,
+    deviceFileName: name,
+    externalDisplayName: name,
     mime: pick.mime,
     questionId,
   };
@@ -90,7 +92,7 @@ export async function addImageFromCamera(questionId: string): Promise<File[]> {
       } else {
         const createCacheFileWithQuestionId = (file: ImageOrVideo) =>
           createCacheFile(file, questionId);
-        return await Promise.all([rawImage].map(createCacheFileWithQuestionId));
+        return Promise.all([rawImage].map(createCacheFileWithQuestionId));
       }
     }
   } catch (error) {
@@ -128,9 +130,7 @@ export async function addImagesFromLibrary(
 
       const createCacheFileWithQuestionId = (file: ImageOrVideo) =>
         createCacheFile(file, questionId);
-      return await Promise.all(
-        filteredImages.map(createCacheFileWithQuestionId)
-      );
+      return Promise.all(filteredImages.map(createCacheFileWithQuestionId));
     }
   } catch (error) {
     handleUploadError(error as ImageUploadError);

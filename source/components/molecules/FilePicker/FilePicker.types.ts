@@ -7,6 +7,7 @@ export enum FileType {
 }
 
 export interface File {
+  externalDisplayName: string;
   deviceFileName: string;
   mime: string;
   id: string;
