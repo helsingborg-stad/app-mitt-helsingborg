@@ -61,9 +61,20 @@ const REPLACEMENT_RULES = [
   ["#COMPLETIONS_CLARIFICATION", "completionsClarificationReplacer"],
 ];
 
-const SWEDISH_MONTH_NAME_TABLE = Array.from({ length: 12 }, (_, i) =>
-  new Date(0, i + 1, 0).toLocaleDateString("sv-SE", { month: "long" })
-);
+const SWEDISH_MONTH_NAME_TABLE = [
+  "januari",
+  "februari",
+  "mars",
+  "april",
+  "maj",
+  "juni",
+  "juli",
+  "augusti",
+  "september",
+  "oktober",
+  "november",
+  "december",
+];
 
 export function replaceCaseItemText(caseItem: Case): Case {
   const caseItemCopy = deepCopy(caseItem);
