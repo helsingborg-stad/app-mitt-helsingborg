@@ -31,6 +31,7 @@ import type { PrimaryColor } from "../../theme/themeHelpers";
 
 import type { DialogText } from "./types";
 import { UPDATE_CASE_STATE } from "./types";
+import type { File } from "../../components/molecules/FilePicker/FilePicker.types";
 
 const { SIGNED, NOT_STARTED } = ApplicationStatusType;
 
@@ -155,15 +156,13 @@ const Form: React.FC<Props> = ({
 
   const answers: Record<string, Image | any> = formState.formAnswers;
 
-  const attachments: Image[] = Object.values(answers)
-    .filter((item) => Array.isArray(item) && item.length > 0 && item[0]?.path)
-    .map((attachmentsArr) =>
-      attachmentsArr.map((attachmentAnswer, index) => ({
-        ...attachmentAnswer,
-        index,
-      }))
-    )
-    .flat();
+  function answerIsAttachment(answer: unknown): answer is File {
+    return (answer as File)?.mime?.length > 0;
+  }
+  const attachments = Object.values(answers)
+    .filter(Array.isArray)
+    .flat()
+    .filter(answerIsAttachment);
 
   const [hasSigned, setHasSigned] = useState(status.type.includes(SIGNED));
 

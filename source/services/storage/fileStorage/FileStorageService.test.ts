@@ -23,6 +23,12 @@ const MOCK_FILE_SYSTEM_WITH_DIRS = [
   `${MOCK_FILE_ROOT}/subdir`,
   `${MOCK_FILE_ROOT}/subdir/another`,
 ];
+const MOCK_FILE_CONTENTS = [
+  "Lorem ipsum dolor sit amet, consectetur adipisicing elit. ",
+  "Rerum cupiditate perspiciatis aperiam alias modi numquam, ",
+  "voluptas error quod nesciunt! Consequuntur voluptate nemo ",
+  "fugiat et ducimus facere voluptatibus rerum, totam reprehenderit.",
+].join("");
 
 function createMockFileStorageService(): {
   MOCK_STORAGE_SERVICE: IFileStorageService;
@@ -60,6 +66,9 @@ function createMockFileStorageService(): {
         .map((path) => path.substring(dir.length + 1))
         .filter(Boolean);
       return related.filter((path) => !path.includes("/"));
+    },
+    async readFile(_path): Promise<string> {
+      return MOCK_FILE_CONTENTS;
     },
   };
 
@@ -149,5 +158,13 @@ describe("FileStorageService", () => {
     const result = await MOCK_STORAGE_SERVICE.getFileList();
 
     expect(result).toEqual(MOCK_FILE_SYSTEM);
+  });
+
+  it("reads file contents", async () => {
+    const { MOCK_STORAGE_SERVICE } = createMockFileStorageService();
+
+    const result = await MOCK_STORAGE_SERVICE.getFileContents(MOCK_FILE_ID);
+
+    expect(result).toBe(MOCK_FILE_CONTENTS);
   });
 });

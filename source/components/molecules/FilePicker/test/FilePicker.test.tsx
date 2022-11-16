@@ -1,7 +1,6 @@
 import React from "react";
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
-import type { AllowedFileTypes } from "../../../../helpers/FileUpload";
 import { render } from "../../../../../test-utils";
 
 import FilePicker from "../FilePicker";
@@ -9,7 +8,7 @@ import * as Pdf from "../pdfUpload";
 import * as Images from "../imageUpload";
 
 import { FileType } from "../FilePicker.types";
-import type { ErrorValidation } from "../FilePicker.types";
+import type { ErrorValidation, File } from "../FilePicker.types";
 
 jest.mock("../pdfUpload");
 jest.mock("../imageUpload");
@@ -149,17 +148,13 @@ it("calls the onChange callback with correct parameters", async () => {
   expect.assertions(2);
 
   const onChangeMock = jest.fn();
-  const mockUploadedPdfFile = {
+  const mockUploadedPdfFile: File = {
     questionId: mockId,
-    fileCopyUri: "string",
-    name: "string",
-    size: 1,
-    type: "string",
-    fileType: "pdf" as AllowedFileTypes,
-    path: "string",
-    filename: "string",
+    mime: "application/pdf",
     id: "string",
-    uri: "string",
+    deviceFileName: "string",
+    externalDisplayName: "string",
+    uploadedId: "string",
   };
   jest
     .spyOn(Pdf, "addPdfFromLibrary")
