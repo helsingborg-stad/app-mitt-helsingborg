@@ -1,4 +1,5 @@
 import uuid from "react-native-uuid";
+import { filterAsync } from "../../../helpers/Objects";
 import type {
   IFileStorageService,
   FileStorageUtil,
@@ -22,11 +23,11 @@ export class FileStorageService implements IFileStorageService {
     return this.fileStorageUtil.exists(filePath);
   }
 
-  async getDownloadUrl(remoteId: string): Promise<string> {
+  private async getDownloadUrl(remoteId: string): Promise<string> {
     return this.remoteUtil.getDownloadUrl(remoteId);
   }
 
-  async downloadFileToCache(
+  private async downloadFileToCache(
     localId: string,
     remoteId: string
   ): Promise<string> {
@@ -37,6 +38,30 @@ export class FileStorageService implements IFileStorageService {
       desiredFilePath
     );
     return desiredFilePath;
+  }
+
+  private async listFilesRecursive(dir: string): Promise<string[]> {
+    const filesAndDirs = await this.fileStorageUtil.ls(dir);
+    const absoluteFilesAndDirs = filesAndDirs.map(
+      (fileOrDir) => `${dir}/${fileOrDir}`
+    );
+
+    const subdirs = await filterAsync(
+      absoluteFilesAndDirs,
+      this.fileStorageUtil.isDir
+    );
+
+    const files = absoluteFilesAndDirs.filter(
+      (maybe) => !subdirs.includes(maybe)
+    );
+
+    const subdirContents = (
+      await Promise.all(
+        subdirs.map((subdir) => this.listFilesRecursive(subdir))
+      )
+    ).flat();
+
+    return [...files, ...subdirContents];
   }
 
   getFilePath(id: string): string {
@@ -63,6 +88,10 @@ export class FileStorageService implements IFileStorageService {
   async removeFile(fileId: string): Promise<void> {
     const filePath = this.getFilePath(fileId);
     return this.fileStorageUtil.removeFile(filePath);
+  }
+
+  getFileList(): Promise<string[]> {
+    return this.listFilesRecursive(this.fileStorageUtil.getDocumentRoot());
   }
 }
 

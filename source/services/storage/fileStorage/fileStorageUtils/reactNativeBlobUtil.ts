@@ -26,6 +26,14 @@ const reactNativeBlobUtilFileStorageUtil: FileStorageUtil = {
   removeFile(filePath: string): Promise<void> {
     return ReactNativeBlobUtil.fs.unlink(filePath);
   },
+
+  ls(dir: string): Promise<string[]> {
+    return ReactNativeBlobUtil.fs.ls(dir);
+  },
+
+  isDir(maybeDir: string): Promise<boolean> {
+    return ReactNativeBlobUtil.fs.isDir(maybeDir);
+  },
 };
 
 export default reactNativeBlobUtilFileStorageUtil;

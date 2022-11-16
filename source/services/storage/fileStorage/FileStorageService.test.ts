@@ -4,11 +4,25 @@ import type {
   RemoteUtil,
 } from "./FileStorageService.types";
 import { FileStorageService } from "./FileStorageService";
+import { splitFilePath } from "../../../helpers/FileUpload";
 
 const MOCK_FILE_ROOT = "/my/local/device/dir";
 const MOCK_FILE_ID = "myLocalId";
 const MOCK_DOWNLOAD_ROOT = "https://www.example.com";
 const MOCK_FILE_PATH = `${MOCK_FILE_ROOT}/${MOCK_FILE_ID}`;
+const MOCK_FILE_SYSTEM = [
+  `${MOCK_FILE_ROOT}/a.txt`,
+  `${MOCK_FILE_ROOT}/b.txt`,
+  `${MOCK_FILE_ROOT}/subdir/x.jpg`,
+  `${MOCK_FILE_ROOT}/subdir/y.jpg`,
+  `${MOCK_FILE_ROOT}/subdir/z.png`,
+  `${MOCK_FILE_ROOT}/subdir/another/1.pdf`,
+];
+const MOCK_FILE_SYSTEM_WITH_DIRS = [
+  ...MOCK_FILE_SYSTEM,
+  `${MOCK_FILE_ROOT}/subdir`,
+  `${MOCK_FILE_ROOT}/subdir/another`,
+];
 
 function createMockFileStorageService(): {
   MOCK_STORAGE_SERVICE: IFileStorageService;
@@ -35,6 +49,17 @@ function createMockFileStorageService(): {
     },
     async removeFile(filePath: string): Promise<void> {
       MOCK_CACHE = MOCK_CACHE.filter((i) => i !== filePath);
+    },
+    async isDir(maybeDir: string): Promise<boolean> {
+      return splitFilePath(maybeDir).ext.length === 0;
+    },
+    async ls(dir: string): Promise<string[]> {
+      const related = MOCK_FILE_SYSTEM_WITH_DIRS.filter((path) =>
+        path.startsWith(dir)
+      )
+        .map((path) => path.substring(dir.length + 1))
+        .filter(Boolean);
+      return related.filter((path) => !path.includes("/"));
     },
   };
 
@@ -116,5 +141,13 @@ describe("FileStorageService", () => {
     await MOCK_STORAGE_SERVICE.ensureFile(MOCK_FILE_ID, "");
 
     expect(spy).not.toHaveBeenCalled();
+  });
+
+  it("lists all files", async () => {
+    const { MOCK_STORAGE_SERVICE } = createMockFileStorageService();
+
+    const result = await MOCK_STORAGE_SERVICE.getFileList();
+
+    expect(result).toEqual(MOCK_FILE_SYSTEM);
   });
 });

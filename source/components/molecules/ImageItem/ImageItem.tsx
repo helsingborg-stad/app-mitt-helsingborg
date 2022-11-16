@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ImageZoom from "react-native-image-pan-zoom";
-import { readFile } from "react-native-fs";
 import type { GestureResponderEvent } from "react-native";
 import { TouchableOpacity, Dimensions, Image as RNImage } from "react-native";
 
 import { Icon, Button, Text } from "../../atoms";
 
 import { Modal, useModal } from "../Modal";
-
-import { downloadFile } from "../../../helpers/FileUpload";
 
 import {
   SafeArea,
@@ -18,50 +15,16 @@ import {
   ButtonWrapper,
   IconContainer,
   ImageIcon,
-  ActivityWrapper,
-  ActivityWrapperModal,
-  ActivityIndicator,
   MAX_IMAGE_WIDTH,
 } from "./ImageItem.styled";
 
-import type { FileStatus, Props } from "./ImageItem.types";
+import type { Props } from "./ImageItem.types";
+import defaultFileStorageService from "../../../services/storage/fileStorage/FileStorageService";
 
-const ImageItem: React.FC<Props> = ({ image, onRemove, onChange }) => {
+function ImageItem({ file, onRemove }: Props): JSX.Element {
   const [modalVisible, toggleModal] = useModal();
-  const [fileStatus, setFileStatus] = useState<FileStatus>("checkLocalFile");
-  const [downloadedFilePath, setDownloadedFilePath] = useState("");
 
-  useEffect(() => {
-    const downloadImage = async () => {
-      const downloadPath = await downloadFile({
-        endpoint: "users/me/attachments",
-        filename: image.uploadedFileName,
-      });
-      setDownloadedFilePath(downloadPath);
-      setFileStatus("downloadedFileAvailable");
-      image.path = downloadPath;
-      if (onChange) {
-        // update answer object with path to the newly downloaded file
-        onChange(image);
-      }
-    };
-    const checkStatus = async () => {
-      if (fileStatus === "checkLocalFile") {
-        try {
-          // check if the file exists in cache, by trying to read it.
-          await readFile(image.path, "base64");
-          setFileStatus("localFileAvailable");
-        } catch (fileNotFound) {
-          // if we don't find the file, set status to 'downloading',
-          // and start downloading
-          setFileStatus("downloading");
-          downloadImage();
-        }
-      }
-    };
-
-    checkStatus();
-  }, [fileStatus, image, onChange]);
+  const filePath = defaultFileStorageService.getFilePath(file.id);
 
   const handleRemove = (event: GestureResponderEvent) => {
     event.stopPropagation();
@@ -69,7 +32,7 @@ const ImageItem: React.FC<Props> = ({ image, onRemove, onChange }) => {
   };
 
   return (
-    <React.Fragment key={image.id}>
+    <React.Fragment key={file.id}>
       <DefaultItem onPress={toggleModal} activeOpacity={0.1}>
         <Flex>
           <DeleteBackground>
@@ -78,23 +41,7 @@ const ImageItem: React.FC<Props> = ({ image, onRemove, onChange }) => {
             </TouchableOpacity>
           </DeleteBackground>
           <IconContainer>
-            {fileStatus === "checkLocalFile" && (
-              <ActivityWrapper>
-                <ActivityIndicator size="large" color="#555555" />
-              </ActivityWrapper>
-            )}
-            {fileStatus === "localFileAvailable" && (
-              <ImageIcon source={{ uri: image.path }} />
-            )}
-            {fileStatus === "downloading" && (
-              <ActivityWrapper>
-                <ActivityIndicator size="large" color="gray" />
-              </ActivityWrapper>
-            )}
-            {fileStatus === "downloadedFileAvailable" &&
-              downloadedFilePath !== "" && (
-                <ImageIcon source={{ uri: downloadedFilePath }} />
-              )}
+            <ImageIcon source={{ uri: filePath }} />
           </IconContainer>
         </Flex>
         <Text
@@ -102,48 +49,27 @@ const ImageItem: React.FC<Props> = ({ image, onRemove, onChange }) => {
           numberOfLines={1}
           style={{ width: MAX_IMAGE_WIDTH }}
         >
-          {image.displayName}
+          {file.deviceFileName}
         </Text>
       </DefaultItem>
       <Modal visible={modalVisible} hide={toggleModal}>
-        {(fileStatus === "localFileAvailable" ||
-          fileStatus === "downloadedFileAvailable") && (
-          <SafeArea>
-            <ImageZoom
-              cropWidth={Dimensions.get("window").width}
-              cropHeight={Dimensions.get("window").height * 0.89}
-              imageWidth={image.width}
-              imageHeight={image.height}
-              panToMove
-              enableCenterFocus={false}
-              centerOn={{
-                x: 0,
-                y: 0,
-                scale: Dimensions.get("window").width / image.width,
-                duration: 10,
-              }}
-              minScale={Dimensions.get("window").width / image.width}
-            >
-              <RNImage
-                style={{ width: image.width, height: image.height }}
-                source={{
-                  uri:
-                    fileStatus === "localFileAvailable"
-                      ? image.path
-                      : downloadedFilePath,
-                }}
-              />
-            </ImageZoom>
-          </SafeArea>
-        )}
-        {(fileStatus === "downloading" || fileStatus === "checkLocalFile") && (
-          <ActivityWrapperModal
-            width={Dimensions.get("window").width}
-            height={Dimensions.get("window").height * 0.89}
+        <SafeArea>
+          <ImageZoom
+            cropWidth={Dimensions.get("window").width}
+            cropHeight={Dimensions.get("window").height * 0.89}
+            panToMove
+            enableCenterFocus={false}
+            centerOn={{
+              x: 0,
+              y: 0,
+              scale: 1.0,
+              duration: 10,
+            }}
+            minScale={1.0}
           >
-            <ActivityIndicator size="large" color="gray" />
-          </ActivityWrapperModal>
-        )}
+            {filePath && <RNImage source={{ uri: filePath }} />}
+          </ImageZoom>
+        </SafeArea>
         <ButtonWrapper>
           <Button colorSchema="red" onClick={toggleModal}>
             <Text>Stäng</Text>
@@ -152,6 +78,6 @@ const ImageItem: React.FC<Props> = ({ image, onRemove, onChange }) => {
       </Modal>
     </React.Fragment>
   );
-};
+}
 
 export default ImageItem;

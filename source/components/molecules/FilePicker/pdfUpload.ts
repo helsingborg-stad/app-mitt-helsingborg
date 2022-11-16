@@ -1,10 +1,8 @@
 import DocumentPicker from "react-native-document-picker";
-import uuid from "react-native-uuid";
+import type { DocumentPickerResponse } from "react-native-document-picker";
 
-import { splitFilePath } from "../../../helpers/FileUpload";
-
-import type { Pdf } from "../PdfItem/PdfItem.types";
-import type { AllowedFileTypes } from "../../../helpers/FileUpload";
+import defaultFileStorageService from "../../../services/storage/fileStorage/FileStorageService";
+import type { File } from "./FilePicker.types";
 
 const uriScheme = {
   file: "file://",
@@ -16,34 +14,35 @@ export function removeUriScheme(path: string): string {
     : path;
 }
 
-export async function addPdfFromLibrary(questionId: string): Promise<Pdf[]> {
+async function createCacheFile(
+  pick: DocumentPickerResponse,
+  questionId: string
+): Promise<File> {
+  const path = removeUriScheme(pick.fileCopyUri ?? pick.uri);
+  const newId = await defaultFileStorageService.copyFileToCache(path);
+  return {
+    id: newId,
+    deviceFileName: pick.name,
+    externalDisplayName: pick.name,
+    mime: pick.type ?? "application/pdf",
+    questionId,
+  };
+}
+
+export async function addPdfFromLibrary(questionId: string): Promise<File[]> {
   try {
-    const newFiles = await DocumentPicker.pick({
+    const picks = await DocumentPicker.pick({
       type: DocumentPicker.types.pdf,
       allowMultiSelection: true,
       copyTo: "cachesDirectory",
     });
 
-    const filesWithQuestionId = newFiles.map((pdf) => {
-      const split = splitFilePath(pdf?.name);
-      const filePath = removeUriScheme(pdf.fileCopyUri ?? pdf.uri);
+    const createCacheFileWithQuestionId = (file: DocumentPickerResponse) =>
+      createCacheFile(file, questionId);
 
-      const filename = `${split.name}${split.ext}`;
-
-      return {
-        ...pdf,
-        questionId,
-        filename,
-        displayName: filename,
-        fileType: "pdf" as AllowedFileTypes,
-        path: filePath,
-        id: uuid.v4() as string,
-      } as Pdf;
-    });
-
-    return filesWithQuestionId;
+    return Promise.all(picks.map(createCacheFileWithQuestionId));
   } catch (error) {
-    if (!DocumentPicker.isCancel(error as Error)) {
+    if (!DocumentPicker.isCancel(error)) {
       console.error("Error while adding pdf from library:", error);
     }
   }

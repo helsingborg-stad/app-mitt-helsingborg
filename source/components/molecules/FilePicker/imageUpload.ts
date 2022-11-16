@@ -1,6 +1,5 @@
 import { Alert, Linking } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
-import uuid from "react-native-uuid";
 
 import type {
   ImageOrVideo,
@@ -8,8 +7,8 @@ import type {
 } from "react-native-image-crop-picker";
 import { splitFilePath } from "../../../helpers/FileUpload";
 
-import type { AllowedFileTypes } from "../../../helpers/FileUpload";
-import type { Image } from "../ImageItem/ImageItem.types";
+import type { File } from "./FilePicker.types";
+import defaultFileStorageService from "../../../services/storage/fileStorage/FileStorageService";
 
 interface ImageUploadError {
   code: PickerErrorCode;
@@ -53,26 +52,6 @@ function showPermissionsAlert() {
   );
 }
 
-function transformRawImage(rawImage: ImageOrVideo, questionId: string): Image {
-  const filename =
-    splitFilePath(rawImage.path).nameWithExt ?? rawImage?.filename;
-
-  return {
-    questionId,
-    path: rawImage.path,
-    filename,
-    displayName: filename,
-    width: rawImage.width,
-    height: rawImage.height,
-    size: rawImage.size,
-    fileType: (rawImage.path as string).split(".").pop() as AllowedFileTypes,
-    id: uuid.v4() as string,
-    mime:
-      rawImage?.filename?.split(".")?.pop() ??
-      (rawImage.path?.split(".")?.pop() as string),
-  };
-}
-
 function handleUploadError(error: ImageUploadError) {
   if (NO_IMAGE_UPLOAD_PERMISSION_CODES.includes(error.code)) {
     showPermissionsAlert();
@@ -81,7 +60,23 @@ function handleUploadError(error: ImageUploadError) {
   }
 }
 
-export async function addImageFromCamera(questionId: string): Promise<Image[]> {
+async function createCacheFile(
+  pick: ImageOrVideo,
+  questionId: string
+): Promise<File> {
+  const path = pick.path ?? pick.sourceURL;
+  const newId = await defaultFileStorageService.copyFileToCache(path);
+  const name = pick.filename ?? splitFilePath(path).name;
+  return {
+    id: newId,
+    deviceFileName: name,
+    externalDisplayName: name,
+    mime: pick.mime,
+    questionId,
+  };
+}
+
+export async function addImageFromCamera(questionId: string): Promise<File[]> {
   try {
     const rawImage = await ImagePicker.openCamera({
       includeBase64: false,
@@ -95,7 +90,9 @@ export async function addImageFromCamera(questionId: string): Promise<Image[]> {
       if (rawImage.size > MAX_IMAGE_SIZE_BYTES) {
         showTooBigFileAlert();
       } else {
-        return [rawImage].map((image) => transformRawImage(image, questionId));
+        const createCacheFileWithQuestionId = (file: ImageOrVideo) =>
+          createCacheFile(file, questionId);
+        return Promise.all([rawImage].map(createCacheFileWithQuestionId));
       }
     }
   } catch (error) {
@@ -106,7 +103,7 @@ export async function addImageFromCamera(questionId: string): Promise<Image[]> {
 
 export async function addImagesFromLibrary(
   questionId: string
-): Promise<Image[]> {
+): Promise<File[]> {
   try {
     const rawImages = await ImagePicker.openPicker({
       multiple: true,
@@ -131,9 +128,9 @@ export async function addImagesFromLibrary(
         );
       }
 
-      return filteredImages.map((image) =>
-        transformRawImage(image, questionId)
-      );
+      const createCacheFileWithQuestionId = (file: ImageOrVideo) =>
+        createCacheFile(file, questionId);
+      return Promise.all(filteredImages.map(createCacheFileWithQuestionId));
     }
   } catch (error) {
     handleUploadError(error as ImageUploadError);

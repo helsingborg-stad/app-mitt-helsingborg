@@ -5,13 +5,10 @@ import { ImageItem, PdfItem } from "..";
 
 import { HorizontalScrollIndicator } from "../../atoms";
 
-import { remove } from "../../../helpers/ApiRequest";
-
 import { Wrapper, Container } from "./FileDisplay.styled";
 
-import type { Pdf } from "../PdfItem/PdfItem.types";
-import type { Image } from "../ImageItem/ImageItem.types";
 import type { File } from "../FilePicker/FilePicker.types";
+import defaultFileStorageService from "../../../services/storage/fileStorage/FileStorageService";
 
 interface Props {
   files: File[];
@@ -23,29 +20,14 @@ const FileDisplay: React.FC<Props> = ({ files, answers, onChange }) => {
   const [horizontalScrollPercentage, setHorizontalScrollPercentage] =
     useState(0);
 
-  const deleteFileFromCloudStorage = async (fileName: string) => {
-    void remove(`users/me/attachments/${fileName}`);
-  };
-
   const removeFile = (file: File) => {
+    void defaultFileStorageService.removeFile(file.id);
+
     const answer = answers[file.questionId];
     if (answer && Array.isArray(answer)) {
       const newFiles = answer.filter(({ id }) => id !== file.id);
       onChange(newFiles, file.questionId);
     }
-
-    if (file.uploadedFileName) {
-      void deleteFileFromCloudStorage(file.uploadedFileName);
-    }
-  };
-
-  const updateImage = (file: File) => {
-    const answer = answers[file.questionId];
-    const index = answer.findIndex(
-      ({ uploadedFileName }) => uploadedFileName === file.uploadedFileName
-    );
-    answer[index] = file;
-    onChange(answer, file.questionId);
   };
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -65,23 +47,22 @@ const FileDisplay: React.FC<Props> = ({ files, answers, onChange }) => {
       >
         {files.map((file) => (
           <React.Fragment key={`fragment-${file.id}`}>
-            {["jpg", "jpeg", "png"].includes(file.fileType.toLowerCase()) && (
+            {file.mime.toLowerCase().startsWith("image/") && (
               <ImageItem
-                key={`image-${file.filename}-${file.id}`}
-                image={file as Image}
+                key={`image-${file.id}`}
+                file={file}
                 onRemove={() => {
                   removeFile(file);
                 }}
-                onChange={() => updateImage(file as Image)}
               />
             )}
-            {file.fileType.toLowerCase() === "pdf" && (
+            {file.mime.toLowerCase() === "application/pdf" && (
               <PdfItem
                 onRemove={() => {
                   removeFile(file);
                 }}
-                pdf={file as Pdf}
-                key={`pdf-${file.filename}-${file.id}`}
+                file={file}
+                key={`pdf-${file.id}`}
               />
             )}
           </React.Fragment>
