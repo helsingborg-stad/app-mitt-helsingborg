@@ -17,6 +17,7 @@ import {
   CaseCard,
   Header,
   ScreenWrapper,
+  CloseDialog,
 } from "../../components/molecules";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
 import { CaseState, CaseDispatch } from "../../store/CaseContext";
@@ -28,7 +29,7 @@ import type {
   AddCoApplicantParameters,
 } from "../../types/CaseContext";
 import { to, wait } from "../../helpers/Misc";
-import type { Case, AnsweredForm } from "../../types/Case";
+import type { Case, AnsweredForm, Answer } from "../../types/Case";
 import { ApplicationStatusType } from "../../types/Case";
 import { answersAreEncrypted } from "../../services/encryption/CaseEncryptionHelper";
 import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
@@ -37,6 +38,7 @@ import AddCoApplicantModal from "../../components/organisms/AddCoApplicantModal/
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import useGetFormPasswords from "./useGetFormPasswords";
+import useSetupForm from "./useSetupForm";
 
 const { NEW_APPLICATION, NOT_STARTED, CLOSED, ACTIVE } = ApplicationStatusType;
 
@@ -66,6 +68,7 @@ enum Modal {
   PIN_INPUT,
   START_NEW_APPLICATION,
   ADD_CO_APPLICANT,
+  SETUP_LOADING_FORM_MODAL,
 }
 
 interface ActiveModal {
@@ -284,6 +287,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
   const { user } = useContext(AuthContext);
 
   const passwords = useGetFormPasswords(cases, user);
+  const [setupForm] = useSetupForm();
 
   const getCasesByStatuses = (statuses: string[]): Case[] =>
     Object.values(cases).filter((caseData) => {
@@ -346,10 +350,6 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     void fetchAllCases();
   }, [fetchCases]);
 
-  const openForm = (caseId: string, isSignMode?: boolean) => {
-    navigation.navigate("Form", { caseId, isSignMode });
-  };
-
   const openModal = (
     modal: Modal,
     modalConfig: Record<string, unknown> = {}
@@ -376,6 +376,19 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
         },
       });
     }
+  };
+
+  const openForm = async (caseId: string, isSignMode?: boolean) => {
+    openModal(Modal.SETUP_LOADING_FORM_MODAL);
+
+    await setupForm(
+      cases[caseId].forms[cases[caseId].currentFormId].answers as Answer[],
+      cases[caseId].currentFormId
+    );
+
+    closeOpenModal();
+
+    navigation.navigate("Form", { caseId, isSignMode });
   };
 
   const setModalError = (errorMessage: string) => {
@@ -408,7 +421,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     if (addCoApplicantError) {
       setModalError(addCoApplicantError.message);
     } else {
-      openForm(caseItem.id);
+      await openForm(caseItem.id);
     }
   };
 
@@ -553,6 +566,14 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
           }
           isLoading={activeModal.loading}
           errorMessage={activeModal.error}
+        />
+      )}
+
+      {activeModal.modal === Modal.SETUP_LOADING_FORM_MODAL && (
+        <CloseDialog
+          visible
+          title="Förbereder formulär"
+          body="Vänligen vänta ..."
         />
       )}
 
