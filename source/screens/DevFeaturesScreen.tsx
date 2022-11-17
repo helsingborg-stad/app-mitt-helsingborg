@@ -45,11 +45,11 @@ const DeveloperScreen = (props: any): JSX.Element => {
         <FormList
           heading="Ansökningsformulär"
           onClickCallback={async (form) => {
-            if (createCase !== undefined && form) {
+            if (createCase && form) {
               createCase(form, async ({ id, forms, currentFormId }) => {
                 await setupForm(
                   forms[currentFormId].answers as Answer[],
-                  form?.id as string
+                  form.id as string
                 );
                 navigation.navigate("Form", { caseId: id });
               });
