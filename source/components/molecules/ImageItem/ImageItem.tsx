@@ -1,14 +1,18 @@
 import React from "react";
-import ImageZoom from "react-native-image-pan-zoom";
-import type { GestureResponderEvent } from "react-native";
-import { TouchableOpacity, Dimensions, Image as RNImage } from "react-native";
+import {
+  TouchableOpacity,
+  Dimensions,
+  Image as RNImage,
+  Platform,
+} from "react-native";
 
+import type { GestureResponderEvent } from "react-native";
 import { Icon, Button, Text } from "../../atoms";
 
 import { Modal, useModal } from "../Modal";
 
 import {
-  SafeArea,
+  ModalView,
   DefaultItem,
   Flex,
   DeleteBackground,
@@ -24,7 +28,11 @@ import defaultFileStorageService from "../../../services/storage/fileStorage/Fil
 function ImageItem({ file, onRemove }: Props): JSX.Element {
   const [modalVisible, toggleModal] = useModal();
 
-  const filePath = defaultFileStorageService.getFilePath(file.id);
+  const filePathBase = defaultFileStorageService.getFilePath(file.id);
+  const filePath =
+    Platform.OS === "android" ? `file:${filePathBase}` : filePathBase;
+
+  const imageResizeMode = Platform.OS === "android" ? "stretch" : "cover";
 
   const handleRemove = (event: GestureResponderEvent) => {
     event.stopPropagation();
@@ -53,23 +61,18 @@ function ImageItem({ file, onRemove }: Props): JSX.Element {
         </Text>
       </DefaultItem>
       <Modal visible={modalVisible} hide={toggleModal}>
-        <SafeArea>
-          <ImageZoom
-            cropWidth={Dimensions.get("window").width}
-            cropHeight={Dimensions.get("window").height * 0.89}
-            panToMove
-            enableCenterFocus={false}
-            centerOn={{
-              x: 0,
-              y: 0,
-              scale: 1.0,
-              duration: 10,
-            }}
-            minScale={1.0}
-          >
-            {filePath && <RNImage source={{ uri: filePath }} />}
-          </ImageZoom>
-        </SafeArea>
+        <ModalView>
+          {filePathBase && (
+            <RNImage
+              resizeMode={imageResizeMode}
+              source={{ uri: filePath }}
+              style={{
+                width: Dimensions.get("window").width,
+                height: Dimensions.get("window").height * 0.8,
+              }}
+            />
+          )}
+        </ModalView>
         <ButtonWrapper>
           <Button colorSchema="red" onClick={toggleModal}>
             <Text>Stäng</Text>
