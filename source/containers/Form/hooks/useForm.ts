@@ -16,6 +16,7 @@ export interface FormPeriod {
   startDate: number;
   endDate: number;
 }
+
 export interface FormReducerState {
   submitted: boolean;
   currentPosition: FormPosition;
@@ -23,31 +24,27 @@ export interface FormReducerState {
   allQuestions: Question[];
   user: User;
   connectivityMatrix: StepperActions[][];
-  formAnswers: Record<string, any>;
-  formAnswerSnapshot: Record<string, any>;
-  validations: Record<string, any>;
-  dirtyFields: Record<string, any>;
-  numberOfMainSteps?: number;
-  period?: FormPeriod;
-  editable?: boolean;
+  formAnswers: Record<string, unknown>;
+  formAnswerSnapshot: Record<string, unknown>;
+  validations: Record<string, unknown>;
+  dirtyFields: Record<string, unknown>;
+  numberOfMainSteps?: number | undefined;
+  period?: FormPeriod | undefined;
+  editable?: boolean | undefined;
   persons: Person[];
   encryptionPin: string;
   completionsClarificationMessage: string;
 }
 
-function useForm(initialState: FormReducerState) {
+function useForm(initialState: FormReducerState): Record<string, unknown> {
   const [formState, dispatch] = useReducer(formReducer, initialState);
 
   useEffect(() => {
-    dispatch({
-      type: "REPLACE_MARKDOWN_TEXT",
-    });
+    dispatch({ type: "REPLACE_MARKDOWN_TEXT" });
   }, []);
 
   useEffect(() => {
-    dispatch({
-      type: "GET_ALL_QUESTIONS",
-    });
+    dispatch({ type: "GET_ALL_QUESTIONS" });
   }, [formState.steps]);
 
   const validateStepAnswers = (
@@ -56,84 +53,15 @@ function useForm(initialState: FormReducerState) {
   ) => {
     dispatch({
       type: "VALIDATE_ALL_STEP_ANSWERS",
-      payload: { onErrorCallback, onValidCallback },
+      payload: {
+        onErrorCallback,
+        onValidCallback,
+      },
     });
   };
 
-  const createSnapshot = () =>
-    dispatch({
-      type: "CREATE_SNAPSHOT",
-    });
-
-  const deleteSnapshot = () =>
-    dispatch({
-      type: "DELETE_SNAPSHOT",
-    });
-
-  const restoreSnapshot = () =>
-    dispatch({
-      type: "RESTORE_SNAPSHOT",
-    });
-
-  const goToNextStep = () =>
-    dispatch({
-      type: "GO_NEXT",
-    });
-
-  /**
-   * Function for going back in the form
-   */
-  const goToPreviousStep = () =>
-    dispatch({
-      type: "GO_BACK",
-    });
-
-  /**
-   * Function for going back in the form
-   */
-  const goIntoStep = (targetStep: number | string) =>
-    dispatch({
-      type: "GO_DOWN",
-      payload: { targetStep },
-    });
-
-  /**
-   * Function for going back in the form
-   */
-  const goOutToStep = (targetStep: number | string) =>
-    dispatch({
-      type: "GO_UP",
-      payload: { targetStep },
-    });
-
-  /** Goes back to the main form. 'Closes' the substep modal. */
-  const goToMainForm = () => {
-    dispatch({ type: "GO_TO_MAIN_FORM" });
-  };
-
-  const goToMainFormAndNext = () => {
-    dispatch({ type: "GO_TO_MAIN_FORM_AND_NEXT" });
-  };
-  const isLastStep = () => false; // Need to think and fix this. //formState.steps.length === formState.counter;
-
-  /**
-   * Function for passing state and step values to the callback function that is passed down
-   * to handle a form start action.
-   * @param {func} callback callback function to be called on when a start action is triggerd
-   */
-  const startForm = (callback: () => void) => {
-    dispatch({
-      type: "START_FORM",
-      payload: { callback },
-    });
-  };
-
-  /**
-   * Function for handling a on submit action in the form.
-   * @param {func} callback callback function to be called on form submit.
-   */
   const handleSubmit = (
-    callback: (formAnswers: Record<string, any>) => void
+    callback: (formAnswers: Record<string, unknown>) => void
   ) => {
     dispatch({
       type: "SUBMIT_FORM",
@@ -141,34 +69,16 @@ function useForm(initialState: FormReducerState) {
     });
   };
 
-  const handleSkip = () =>
-    /** TO BE IMPLEMENTED */
-    null;
-
-  /**
-   * Function for passing state and step values to the callback function that is passed down
-   * to handle a form close action.
-   * @param {func} callback callback function to be called on when a close action is triggered
-   */
-  // const closeForm = (callback: (s: { state: FormReducerState }, isLastStep: boolean) => any) =>
-  //   callback({ state: formState }, isLastStep());
-
-  function closeForm() {}
-  /**
-   * Function to trigger when a form field looses focus.
-   */
-  const handleBlur = (answer: Record<string, any>, questionId: string) => {
+  const handleBlur = (answer: Record<string, unknown>, questionId: string) => {
     dispatch({ type: "DIRTY_FIELD", payload: { answer, id: questionId } });
     dispatch({
       type: "VALIDATE_ANSWER",
       payload: { answer, id: questionId, checkIfDirty: true },
     });
   };
-  /**
-   * Function for updating answer.
-   */
+
   const handleInputChange = (
-    answer: Record<string, any>,
+    answer: Record<string, unknown>,
     questionId: string
   ) => {
     dispatch({ type: "UPDATE_ANSWER", payload: answer });
@@ -178,7 +88,10 @@ function useForm(initialState: FormReducerState) {
     });
   };
 
-  const handleAddAnswer = (answer: Record<string, any>, questionId: string) => {
+  const handleAddAnswer = (
+    answer: Record<string, unknown>,
+    questionId: string
+  ) => {
     dispatch({
       type: "VALIDATE_ANSWER",
       payload: { answer, id: questionId, checkIfDirty: true },
@@ -186,18 +99,26 @@ function useForm(initialState: FormReducerState) {
   };
 
   const formNavigation = {
-    next: goToNextStep,
-    back: goToPreviousStep,
-    up: goOutToStep,
-    down: goIntoStep,
-    start: startForm,
-    close: closeForm,
-    goToMainForm,
-    goToMainFormAndNext,
-    isLastStep,
-    createSnapshot,
-    restoreSnapshot,
-    deleteSnapshot,
+    next: () => dispatch({ type: "GO_NEXT" }),
+    back: () => dispatch({ type: "GO_BACK" }),
+
+    up: (targetStep: number | string) =>
+      dispatch({ type: "GO_UP", payload: { targetStep } }),
+
+    down: (targetStep: number | string) =>
+      dispatch({ type: "GO_DOWN", payload: { targetStep } }),
+
+    start: (callback: () => void) =>
+      dispatch({ type: "START_FORM", payload: { callback } }),
+
+    goToMainForm: () => dispatch({ type: "GO_TO_MAIN_FORM" }),
+    goToMainFormAndNext: () => dispatch({ type: "GO_TO_MAIN_FORM_AND_NEXT" }),
+    createSnapshot: () => dispatch({ type: "CREATE_SNAPSHOT" }),
+    deleteSnapshot: () => dispatch({ type: "DELETE_SNAPSHOT" }),
+    restoreSnapshot: () => dispatch({ type: "RESTORE_SNAPSHOT" }),
+
+    close: () => undefined,
+    isLastStep: () => false,
   };
 
   return {

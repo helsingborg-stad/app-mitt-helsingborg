@@ -3,18 +3,22 @@ import { ActivityIndicator } from "react-native";
 import styled, { withTheme } from "styled-components";
 import Config from "react-native-config";
 
-import { Button, Heading, Icon, Text } from "../../components/atoms";
-
-import Dialog from "../../components/molecules/Dialog/Dialog";
-
 import useQueue from "../../hooks/useQueue";
+import Dialog from "../../components/molecules/Dialog/Dialog";
+import { Button, Heading, Icon, Text } from "../../components/atoms";
+import { uploadFile } from "../../helpers/FileUpload";
+import defaultFileStorageService from "../../services/storage/fileStorage/FileStorageService";
 
-import { getBlob, uploadFile } from "../../helpers/FileUpload";
-
-import type { AllowedFileTypes } from "../../helpers/FileUpload";
-import type { Image } from "../../components/molecules/ImageItem/ImageItem.types";
-import type { Pdf } from "../../components/molecules/PdfItem/PdfItem.types";
 import type { Options } from "../../hooks/useQueue";
+import type { ThemeType } from "../../theme/themeHelpers";
+import type { File } from "../../components/molecules/FilePicker/FilePicker.types";
+
+interface Props {
+  answers: Record<string, File>;
+  onChange: (value: Record<string, unknown>, id?: string) => void;
+  onResolved?: () => void;
+  theme?: ThemeType;
+}
 
 const DialogActivityIndicator = styled(ActivityIndicator)`
   margin-bottom: 16px;
@@ -31,58 +35,31 @@ const DialogIcon = styled(Icon)`
   color: ${(props) => props.theme.colors.primary.blue[1]};
 `;
 
-function byFileTypes(file: Image | Pdf, fileTypes: AllowedFileTypes[]) {
-  return fileTypes.includes(file.fileType);
+function answerIsAttachment(answer: unknown): answer is File {
+  return (answer as File)?.mime?.length > 0;
 }
 
-function isArrayCondition(item: unknown): boolean {
-  return Array.isArray(item) && item.length > 0;
+function getAttachmentAnswers(answers: Record<string, unknown | File[]>) {
+  return Object.values(answers)
+    .filter(Array.isArray)
+    .flat()
+    .filter(answerIsAttachment);
 }
 
-function makeArrayByCondition<TOutType>(
-  answers: Record<string, Image[] | Pdf[] | any>,
-  fileTypes: AllowedFileTypes[]
-): TOutType[] {
-  const answerArray = Object.values(answers);
-  const answerArrayValues = answerArray.filter(isArrayCondition).flat();
-
-  return answerArrayValues
-    .filter((file) => byFileTypes(file, fileTypes))
-    .map((arrayItem: TOutType, index: number) => ({
-      ...arrayItem,
-      index,
-    }));
-}
-
-export interface Props {
-  caseStatus: any;
-  answers: Record<string, Image[] | Pdf[] | any>;
-  onChange: (value: Record<string, any>, id?: string) => void;
-  onResolved?: () => void;
-  theme?: any;
-}
-const FormUploader: React.FunctionComponent<Props> = ({
+function FormUploader({
   answers,
   onChange,
   onResolved,
   theme,
-}) => {
-  const attachments = makeArrayByCondition<Image>(answers, [
-    "jpg",
-    "jpeg",
-    "png",
-  ]);
-  const pdfs = makeArrayByCondition<Pdf>(answers, ["pdf"]);
+}: Props): JSX.Element {
+  const attachments = getAttachmentAnswers(answers);
 
-  const upload = async (file: Image | Pdf) => {
-    const data: Blob = await getBlob(file.path);
-    const filename =
-      file.filename ?? ((file.path as string).split("/").pop() as string);
+  const upload = async (file: File) => {
+    const data = await defaultFileStorageService.getFileContents(file.id);
 
     const uploadResponse = await uploadFile({
       endpoint: "users/me/attachments",
-      fileName: filename,
-      fileType: file.fileType,
+      mime: file.mime,
       data,
     });
 
@@ -90,14 +67,13 @@ const FormUploader: React.FunctionComponent<Props> = ({
       throw uploadResponse?.message;
     }
 
-    file.uploadedFileName = uploadResponse.uploadedFileName;
-    file.url = uploadResponse.url;
+    file.uploadedId = uploadResponse.id;
 
     return file;
   };
 
   const handleUploadFile = useCallback(
-    async (file: Image | Pdf) => {
+    async (file: File) => {
       try {
         const uploadedFile = await upload(file);
         const updatedQuestion = [...answers[file.questionId]];
@@ -129,16 +105,16 @@ const FormUploader: React.FunctionComponent<Props> = ({
     [answers, onChange]
   );
 
-  const options: Options<Image> = {
+  const options: Options<File> = {
     filters: {
-      queue: ({ uploadedFileName }) => !uploadedFileName,
-      resolved: ({ uploadedFileName }) => uploadedFileName,
+      queue: ({ uploadedId }) => !uploadedId,
+      resolved: ({ uploadedId }) => uploadedId,
     },
   };
 
   const [{ resolved, rejected, isPending, count }, { retry }] = useQueue(
     handleUploadFile,
-    [...attachments, ...pdfs],
+    [...attachments],
     options
   );
 
@@ -184,10 +160,6 @@ const FormUploader: React.FunctionComponent<Props> = ({
       )}
     </Dialog>
   );
-};
-
-FormUploader.defaultProps = {
-  answers: {},
-};
+}
 
 export default withTheme(FormUploader);

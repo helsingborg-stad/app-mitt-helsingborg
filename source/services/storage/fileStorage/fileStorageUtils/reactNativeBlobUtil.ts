@@ -34,6 +34,10 @@ const reactNativeBlobUtilFileStorageUtil: FileStorageUtil = {
   isDir(maybeDir: string): Promise<boolean> {
     return ReactNativeBlobUtil.fs.isDir(maybeDir);
   },
+
+  readFile(path): Promise<string> {
+    return ReactNativeBlobUtil.fs.readFile(path, "base64");
+  },
 };
 
 export default reactNativeBlobUtilFileStorageUtil;

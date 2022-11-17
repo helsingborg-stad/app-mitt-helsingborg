@@ -6,6 +6,7 @@ export interface FileStorageUtil {
   removeFile(filePath: string): Promise<void>;
   ls(dir: string): Promise<string[]>;
   isDir(maybeDir: string): Promise<boolean>;
+  readFile(path: string): Promise<string>;
 }
 
 export interface RemoteUtil {
@@ -14,8 +15,9 @@ export interface RemoteUtil {
 
 export interface IFileStorageService {
   getFilePath(id: string): string;
+  getFileContents(id: string): Promise<string>;
   ensureFile(localId: string, remoteId: string): Promise<void>;
   copyFileToCache(filePath: string): Promise<string>;
-  removeFile(fileId: string): Promise<void>;
+  removeFile(id: string): Promise<void>;
   getFileList(): Promise<string[]>;
 }

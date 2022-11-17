@@ -85,13 +85,18 @@ export class FileStorageService implements IFileStorageService {
     return newId;
   }
 
-  async removeFile(fileId: string): Promise<void> {
-    const filePath = this.getFilePath(fileId);
+  async removeFile(id: string): Promise<void> {
+    const filePath = this.getFilePath(id);
     return this.fileStorageUtil.removeFile(filePath);
   }
 
   getFileList(): Promise<string[]> {
     return this.listFilesRecursive(this.fileStorageUtil.getDocumentRoot());
+  }
+
+  getFileContents(id: string): Promise<string> {
+    const filePath = this.getFilePath(id);
+    return this.fileStorageUtil.readFile(filePath);
   }
 }
 
