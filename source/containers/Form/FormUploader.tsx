@@ -112,6 +112,11 @@ function FormUploader({
     },
   };
 
+  const deleteLocalAttachments = () =>
+    Promise.all(
+      attachments.map(({ id }) => defaultFileStorageService.removeFile(id))
+    );
+
   const [{ resolved, rejected, isPending, count }, { retry }] = useQueue(
     handleUploadFile,
     [...attachments],
@@ -120,6 +125,7 @@ function FormUploader({
 
   const handleResolvedImage = () => {
     if (!isPending && resolved.length === count && onResolved) {
+      void deleteLocalAttachments();
       onResolved();
     }
   };
