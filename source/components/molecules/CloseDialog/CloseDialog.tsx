@@ -67,7 +67,7 @@ interface CloseDialogProps {
   visible?: boolean;
   title: string;
   body: string;
-  buttons: Array<{
+  buttons?: Array<{
     text: string;
     color?: PrimaryColor;
     clickHandler: () => void;
@@ -78,7 +78,7 @@ const CloseDialog: React.FC<CloseDialogProps> = ({
   visible,
   title,
   body,
-  buttons,
+  buttons = [],
 }) => (
   <Modal
     visible={visible ?? false}

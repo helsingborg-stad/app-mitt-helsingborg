@@ -13,7 +13,12 @@ import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
 import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
 import type { PrimaryColor } from "../../theme/themeHelpers";
 import { Icon, Text } from "../../components/atoms";
-import { Card, ScreenWrapper, CaseCard } from "../../components/molecules";
+import {
+  Card,
+  ScreenWrapper,
+  CaseCard,
+  CloseDialog,
+} from "../../components/molecules";
 import {
   CaseCalculationsModal,
   RemoveCaseModal,
@@ -32,10 +37,12 @@ import type {
   Journal,
   Decision,
   Calculations,
+  Answer,
 } from "../../types/Case";
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import useGetFormPasswords from "./useGetFormPasswords";
+import useSetupForm from "./useSetupForm";
 
 import type { Props } from "./CaseSummary.types";
 
@@ -228,6 +235,10 @@ const CaseSummary = (props: Props): JSX.Element => {
 
   const [isModalVisible, toggleModal] = useModal();
   const [showRemoveCaseModal, toggleRemoveCaseModal] = useModal();
+  const [showLoadingModal, toggleLoadingModal] = useModal();
+
+  const [setupForm] = useSetupForm();
+  const passwords = useGetFormPasswords(cases, authContext.user);
 
   const decisions = decision?.decisions?.decision
     ? convertDataToArray(decision.decisions.decision)
@@ -288,7 +299,15 @@ const CaseSummary = (props: Props): JSX.Element => {
     [navigation]
   );
 
-  const openForm = (id: string, isSignMode = false) => {
+  const openForm = async (id: string, isSignMode = false) => {
+    toggleLoadingModal();
+
+    await setupForm(
+      cases[id].forms[cases[id].currentFormId].answers as Answer[],
+      cases[id].currentFormId
+    );
+
+    toggleLoadingModal();
     navigation.navigate("Form", { caseId: id, isSignMode });
   };
 
@@ -302,8 +321,6 @@ const CaseSummary = (props: Props): JSX.Element => {
 
     void updateCaseAfterSignature();
   }, [updateCaseSignature, authContext.status, caseId, getCase]);
-
-  const passwords = useGetFormPasswords(cases, authContext.user);
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
@@ -390,6 +407,14 @@ const CaseSummary = (props: Props): JSX.Element => {
         onCloseModal={toggleRemoveCaseModal}
         onRemoveCase={removeCase}
       />
+
+      {showLoadingModal && (
+        <CloseDialog
+          visible
+          title="Förbereder formulär"
+          body="Vänligen vänta ..."
+        />
+      )}
 
       <RemoveCaseButtonContainer>
         {canRemoveCase && (

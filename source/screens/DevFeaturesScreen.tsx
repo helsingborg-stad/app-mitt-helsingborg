@@ -13,6 +13,10 @@ import ScreenWrapper from "../components/molecules/ScreenWrapper";
 
 import StorageService from "../services/storage/StorageService";
 
+import useSetupForm from "./caseScreens/useSetupForm";
+
+import type { Answer } from "../types/Case";
+
 const Container = styled.ScrollView`
   flex: 1;
   padding-left: 16px;
@@ -29,6 +33,8 @@ const DeveloperScreen = (props: any): JSX.Element => {
   const { createCase } = useContext(CaseDispatch);
   const authContext = useContext(AuthContext);
 
+  const [setupForm] = useSetupForm();
+
   const colorSchema = "neutral";
 
   return (
@@ -39,8 +45,12 @@ const DeveloperScreen = (props: any): JSX.Element => {
         <FormList
           heading="Ansökningsformulär"
           onClickCallback={async (form) => {
-            if (createCase !== undefined) {
-              createCase(form, async ({ id }) => {
+            if (createCase && form) {
+              createCase(form, async ({ id, forms, currentFormId }) => {
+                await setupForm(
+                  forms[currentFormId].answers as Answer[],
+                  form.id as string
+                );
                 navigation.navigate("Form", { caseId: id });
               });
             }

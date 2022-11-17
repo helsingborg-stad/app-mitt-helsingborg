@@ -1,6 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ActivityIndicator } from "react-native";
-import styled from "styled-components/native";
+import React, { useContext, useEffect, useState, useMemo } from "react";
 
 import Form, { defaultInitialStatus } from "../containers/Form/Form";
 
@@ -16,20 +14,9 @@ import { getPasswordForForm } from "../services/encryption/CaseEncryptionHelper"
 import { wrappedDefaultStorage } from "../services/storage/StorageService";
 import { to } from "../helpers/Misc";
 
-import type { Case, FormPosition, AnsweredForm } from "../types/Case";
+import type { Case, FormPosition, AnsweredForm, Answer } from "../types/Case";
 import { ApplicationStatusType } from "../types/Case";
-import type {
-  CaseUpdate,
-  Answer,
-  Signature,
-  Action,
-} from "../types/CaseContext";
-
-const SpinnerContainer = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
+import type { CaseUpdate, Signature, Action } from "../types/CaseContext";
 
 interface FormCaseScreenProps {
   route: { params: { caseId: string; isSignMode: boolean } };
@@ -40,16 +27,25 @@ const FormCaseScreen = ({
   navigation,
   ...props
 }: FormCaseScreenProps): JSX.Element => {
-  const [currentFormId, setCurrentFormId] = useState("");
   const [encryptionPin, setEncryptionPin] = useState("");
   const { caseId, isSignMode } = route?.params || {};
   const { user } = useContext(AuthContext);
-  const { getForm, forms } = useContext(FormContext);
+  const { forms } = useContext(FormContext);
   const { cases } = useContext(CaseState);
   const { updateCase } = useContext(CaseDispatch);
 
-  const initialCase = cases[caseId] || {};
-  const form = forms[currentFormId] || {};
+  const initialCase = useMemo(() => cases[caseId] || {}, [cases, caseId]);
+  const form = forms[initialCase?.currentFormId] || {};
+
+  const initialAnswers = useMemo(() => {
+    const answers = initialCase?.forms?.[initialCase?.currentFormId]?.answers;
+
+    if (Array.isArray(answers)) {
+      return convertAnswerArrayToObject(answers);
+    }
+
+    return answers;
+  }, [initialCase]);
 
   const formQuestions = Object.keys(form)?.length
     ? getFormQuestions(form)
@@ -60,54 +56,26 @@ const FormCaseScreen = ({
     numberOfMainSteps: form?.stepStructure?.length ?? 0,
   };
 
-  const initialAnswers =
-    initialCase?.forms?.[initialCase.currentFormId]?.answers || {};
-
   useEffect(() => {
-    const setInitialCase = async () => {
-      if (caseId) {
-        const initCase = cases[caseId];
+    const setupEncryptionPin = async () => {
+      const encryption =
+        initialCase?.forms?.[initialCase?.currentFormId].encryption ?? {};
 
-        if (initCase !== undefined) {
-          // Beware, dragons! Since we pass by reference, it seems like the answers
-          // can be converted to object form already, thus we do this check.
-          if (
-            Array.isArray(initCase?.forms?.[initCase.currentFormId]?.answers)
-          ) {
-            const answerArray =
-              initCase?.forms?.[initCase.currentFormId]?.answers || [];
-            const answersObject = convertAnswerArrayToObject(answerArray);
-            initCase.forms = {
-              ...initCase.forms,
-              [initCase.currentFormId]: {
-                ...initCase.forms[initCase.currentFormId],
-                answers: answersObject,
-              },
-            };
-          }
+      const [, pinCode] = await to(
+        getPasswordForForm(
+          { encryption } as AnsweredForm,
+          user,
+          wrappedDefaultStorage
+        )
+      );
 
-          const encryption =
-            initCase?.forms?.[initCase.currentFormId].encryption ?? {};
+      const pinCodeToUse = (pinCode ?? "") as string;
 
-          const [, pinCode] = await to(
-            getPasswordForForm(
-              { encryption } as AnsweredForm,
-              user,
-              wrappedDefaultStorage
-            )
-          );
-
-          const pinCodeToUse = (pinCode ?? "") as string;
-
-          setEncryptionPin(pinCodeToUse);
-          void getForm(initCase.currentFormId);
-          setCurrentFormId(initCase.currentFormId);
-        }
-      }
+      setEncryptionPin(pinCodeToUse);
     };
 
-    void setInitialCase();
-  }, [getForm, caseId, cases, user]);
+    void setupEncryptionPin();
+  }, [initialCase, user]);
 
   const handleCloseForm = () => {
     navigation.reset({
@@ -151,14 +119,6 @@ const FormCaseScreen = ({
   const handleSubmitForm = () => {
     handleCloseForm();
   };
-
-  if (!form?.steps) {
-    return (
-      <SpinnerContainer>
-        <ActivityIndicator size="large" color="slategray" />
-      </SpinnerContainer>
-    );
-  }
 
   return (
     <Form
