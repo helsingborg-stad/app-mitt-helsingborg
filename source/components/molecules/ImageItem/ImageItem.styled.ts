@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 const MAX_IMAGE_WIDTH = 120;
 const MAX_IMAGE_HEIGHT = 170;
 
-const SafeArea = styled.SafeAreaView`
+const ModalView = styled.View`
   flex: 1;
 `;
 
@@ -74,7 +74,7 @@ const ActivityIndicator = styled.ActivityIndicator`
 `;
 
 export {
-  SafeArea,
+  ModalView,
   DefaultItem,
   Flex,
   DeleteBackground,
