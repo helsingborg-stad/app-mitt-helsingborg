@@ -42,7 +42,7 @@ import type {
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import useGetFormPasswords from "./useGetFormPasswords";
-import useSetupForm from "./useSetupForm";
+import useSetupForm from "../../containers/Form/hooks/useSetupForm";
 
 import type { Props } from "./CaseSummary.types";
 

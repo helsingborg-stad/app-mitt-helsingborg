@@ -1,23 +1,20 @@
 import { useContext, useCallback } from "react";
 
-import FormContext from "../../store/FormContext";
+import FormContext from "../../../store/FormContext";
 
-import fileStorageService from "../../services/storage/fileStorage/FileStorageService";
+import fileStorageService from "../../../services/storage/fileStorage/FileStorageService";
 
-import type { Answer } from "../../types/Case";
+import type { Answer } from "../../../types/Case";
+import { isUploadedAttachment } from "../Form.helpers";
 
 const setUpAttachments = async (answers: Answer[]): Promise<void> => {
-  const answerValues = answers.flatMap(
-    ({ value }) => (Array.isArray(value) && value) || []
-  );
-
-  const ensureAttachmentsFor = answerValues.filter(
-    ({ id, uploadedId }) => id && uploadedId
-  );
+  const answerValues = answers
+    .flatMap(({ value }) => (Array.isArray(value) && value) || [])
+    .filter(isUploadedAttachment);
 
   await Promise.all(
-    ensureAttachmentsFor.map(({ id, uploadedId }) =>
-      fileStorageService.ensureFile(id as string, uploadedId as string)
+    answerValues.map(({ id, uploadedId }) =>
+      fileStorageService.ensureFile(id, uploadedId)
     )
   );
 };

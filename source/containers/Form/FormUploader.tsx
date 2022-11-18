@@ -12,6 +12,7 @@ import defaultFileStorageService from "../../services/storage/fileStorage/FileSt
 import type { Options } from "../../hooks/useQueue";
 import type { ThemeType } from "../../theme/themeHelpers";
 import type { File } from "../../components/molecules/FilePicker/FilePicker.types";
+import { getAttachmentAnswers } from "./Form.helpers";
 
 interface Props {
   answers: Record<string, File>;
@@ -34,17 +35,6 @@ const DialogIcon = styled(Icon)`
   margin-top: 16px;
   color: ${(props) => props.theme.colors.primary.blue[1]};
 `;
-
-function answerIsAttachment(answer: unknown): answer is File {
-  return (answer as File)?.mime?.length > 0;
-}
-
-function getAttachmentAnswers(answers: Record<string, unknown | File[]>) {
-  return Object.values(answers)
-    .filter(Array.isArray)
-    .flat()
-    .filter(answerIsAttachment);
-}
 
 function FormUploader({
   answers,

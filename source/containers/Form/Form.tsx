@@ -5,6 +5,7 @@ import { Modal, useModal } from "../../components/molecules/Modal";
 import ScreenWrapper from "../../components/molecules/ScreenWrapper";
 import Step from "../../components/organisms/Step/Step";
 import { evaluateConditionalExpression } from "../../helpers/conditionParser";
+import { getAttachmentAnswers } from "./Form.helpers";
 import type { Status, Person, VIVACaseDetails } from "../../types/Case";
 import type { Action, Answer } from "../../types/CaseContext";
 import { ActionTypes } from "../../types/CaseContext";
@@ -25,13 +26,11 @@ import AuthContext from "../../store/AuthContext";
 import { useNotification } from "../../store/NotificationContext";
 import FormUploader from "./FormUploader";
 import { AuthLoading } from "../../components/molecules";
-import type { Image } from "../../components/molecules/ImageItem/ImageItem.types";
 import CloseDialog from "../../components/molecules/CloseDialog";
 import type { PrimaryColor } from "../../theme/themeHelpers";
 
 import type { DialogText } from "./types";
 import { UPDATE_CASE_STATE } from "./types";
-import type { File } from "../../components/molecules/FilePicker/FilePicker.types";
 
 const { SIGNED, NOT_STARTED } = ApplicationStatusType;
 
@@ -154,23 +153,11 @@ const Form: React.FC<Props> = ({
     UPDATE_CASE_STATE.IDLE
   );
 
-  const answers: Record<string, Image | any> = formState.formAnswers;
-
-  function answerIsAttachment(answer: unknown): answer is File {
-    return (answer as File)?.mime?.length > 0;
-  }
-  const attachments = Object.values(answers)
-    .filter(Array.isArray)
-    .flat()
-    .filter(answerIsAttachment);
-
   const [hasSigned, setHasSigned] = useState(status.type.includes(SIGNED));
+  const [hasUploaded, setHasUploaded] = useState(false);
 
-  const [hasUploaded, setHasUploaded] = useState(
-    attachments?.length &&
-      attachments.filter(({ uploadedFileName }) => uploadedFileName).length ===
-        attachments.length
-  );
+  const answers: Record<string, unknown> = formState.formAnswers;
+  const attachments = getAttachmentAnswers(answers);
 
   const showNotification = useNotification();
 

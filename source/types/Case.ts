@@ -1,3 +1,4 @@
+import type { File } from "../components/molecules/FilePicker/FilePicker.types";
 import type { EncryptionDetails } from "./Encryption";
 
 export enum ApplicationStatusType {
@@ -166,7 +167,7 @@ interface AnswerField {
 
 export interface Answer {
   field: AnswerField;
-  value: string | boolean | Record<string, string | number>[];
+  value: string | boolean | File[];
 }
 
 export interface EncryptedAnswersWrapper {

@@ -13,7 +13,7 @@ import ScreenWrapper from "../components/molecules/ScreenWrapper";
 
 import StorageService from "../services/storage/StorageService";
 
-import useSetupForm from "./caseScreens/useSetupForm";
+import useSetupForm from "../containers/Form/hooks/useSetupForm";
 
 import type { Answer } from "../types/Case";
 import defaultFileStorageService from "../services/storage/fileStorage/FileStorageService";

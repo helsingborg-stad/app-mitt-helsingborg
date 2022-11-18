@@ -38,7 +38,7 @@ import AddCoApplicantModal from "../../components/organisms/AddCoApplicantModal/
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import useGetFormPasswords from "./useGetFormPasswords";
-import useSetupForm from "./useSetupForm";
+import useSetupForm from "../../containers/Form/hooks/useSetupForm";
 
 const { NEW_APPLICATION, NOT_STARTED, CLOSED, ACTIVE } = ApplicationStatusType;
 
