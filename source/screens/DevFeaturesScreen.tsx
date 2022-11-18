@@ -16,6 +16,8 @@ import StorageService from "../services/storage/StorageService";
 import useSetupForm from "./caseScreens/useSetupForm";
 
 import type { Answer } from "../types/Case";
+import defaultFileStorageService from "../services/storage/fileStorage/FileStorageService";
+import { splitFilePath } from "../helpers/FileUpload";
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -36,6 +38,14 @@ const DeveloperScreen = (props: any): JSX.Element => {
   const [setupForm] = useSetupForm();
 
   const colorSchema = "neutral";
+
+  const deleteLocalFiles = async () => {
+    const files = await defaultFileStorageService.getFileList();
+    const fileIds = files.map((file) => splitFilePath(file).name);
+    return Promise.all(
+      fileIds.map((id) => defaultFileStorageService.removeFile(id))
+    );
+  };
 
   return (
     <ScreenWrapper>
@@ -64,6 +74,7 @@ const DeveloperScreen = (props: any): JSX.Element => {
             colorSchema={colorSchema}
             onClick={async () => {
               void StorageService.clearData();
+              void deleteLocalFiles();
               await authContext.handleLogout();
             }}
           >
