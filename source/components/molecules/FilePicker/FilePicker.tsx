@@ -46,10 +46,14 @@ const FilePicker: React.FC<Props> = ({
     file: File,
     baseName: string,
     suffix: string
-  ): File => ({
-    ...file,
-    externalDisplayName: `${baseName}_${suffix}`,
-  });
+  ): File => {
+    const [, fileExtension] = file.mime.split("/");
+
+    return {
+      ...file,
+      externalDisplayName: `${baseName}_${suffix}.${fileExtension}`,
+    };
+  };
 
   const addFilesToState = (newFiles: File[]) => {
     let updatedFiles = files === "" ? [...newFiles] : [...files, ...newFiles];
