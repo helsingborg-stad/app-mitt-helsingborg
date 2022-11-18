@@ -4,33 +4,51 @@ import React, {
   useRef,
   useCallback,
   useMemo,
+  useState,
 } from "react";
 import { View, Animated, Easing } from "react-native";
-import { CaseState, CaseDispatch } from "../../store/CaseContext";
-import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
-import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
-import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
-import type { PrimaryColor } from "../../theme/themeHelpers";
-import { Icon, Text } from "../../components/atoms";
+
+import {
+  CaseCalculationsModal,
+  RemoveCaseModal,
+  PdfModal,
+} from "../../components/organisms";
+
 import {
   Card,
   ScreenWrapper,
   CaseCard,
   CloseDialog,
 } from "../../components/molecules";
-import {
-  CaseCalculationsModal,
-  RemoveCaseModal,
-} from "../../components/organisms";
 import { useModal } from "../../components/molecules/Modal";
-import Button from "../../components/atoms/Button";
-import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
+
+import { Icon, Text, Button } from "../../components/atoms";
+
+import { CaseState, CaseDispatch } from "../../store/CaseContext";
 import AuthContext from "../../store/AuthContext";
+
+import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
+import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
+import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
+import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
 import { put, remove } from "../../helpers/ApiRequest";
+
+import useSetupForm from "../../containers/Form/hooks/useSetupForm";
+import statusTypeConstantMapper from "./statusTypeConstantMapper";
+import useGetFormPasswords from "./useGetFormPasswords";
+
 import { ApplicationStatusType } from "../../types/Case";
 
 import ICON from "../../assets/images/icons";
 
+import {
+  Container,
+  SummaryHeading,
+  RemoveCaseButtonContainer,
+} from "./CaseSummary.styled";
+
+import type { PrimaryColor } from "../../theme/themeHelpers";
+import type { Props } from "./CaseSummary.types";
 import type {
   Case,
   VIVACaseDetails,
@@ -41,20 +59,9 @@ import type {
   Answer,
 } from "../../types/Case";
 
-import statusTypeConstantMapper from "./statusTypeConstantMapper";
-import useGetFormPasswords from "./useGetFormPasswords";
-import useSetupForm from "../../containers/Form/hooks/useSetupForm";
-
-import type { Props } from "./CaseSummary.types";
-
-import {
-  Container,
-  SummaryHeading,
-  RemoveCaseButtonContainer,
-} from "./CaseSummary.styled";
-
-const { ACTIVE_SIGNATURE_PENDING } = ApplicationStatusType;
+const { ACTIVE_SIGNATURE_PENDING, APPROVED } = ApplicationStatusType;
 const SCREEN_TRANSITION_DELAY = 1000;
+const BASE64_FILE_PREFIX = "data:application/pdf;base64,";
 
 const computeCaseCardComponent = (
   caseItem: Case,
@@ -63,7 +70,8 @@ const computeCaseCardComponent = (
   navigation: { onOpenForm: (caseId: string, isSignMode?: boolean) => void },
   toggleModal: () => void,
   personalNumber: string,
-  formPassword: string | undefined
+  formPassword: string | undefined,
+  onOpenPdf: () => void
 ) => {
   const {
     currentPosition: { currentMainStep: currentStep, numberOfMainSteps },
@@ -73,6 +81,7 @@ const computeCaseCardComponent = (
   const status = caseItem?.status;
   const persons = caseItem.persons ?? [];
   const details = caseItem?.details ?? {};
+  const pdf = caseItem?.pdf?.B ?? "";
   const { workflow = {}, period = {} } = details;
   const { decision = {}, payments = {} } = workflow;
   const statusType = status?.type ?? "";
@@ -87,6 +96,7 @@ const computeCaseCardComponent = (
     ? getSwedishMonthNameByTimeStamp(period?.endDate, true)
     : "";
 
+  const canShowPdf = !statusType.toLowerCase().includes(APPROVED) && !!pdf;
   const casePersonData = persons.find(
     (person) => person.personalNumber === personalNumber
   );
@@ -203,6 +213,8 @@ const computeCaseCardComponent = (
       completions={unApprovedCompletionDescriptions}
       completionsClarification={completionsClarification}
       pin={shouldShowPin ? formPassword : undefined}
+      showDownloadPdfButton={canShowPdf}
+      onOpenPdf={onOpenPdf}
     />
   );
 };
@@ -211,6 +223,8 @@ const CaseSummary = (props: Props): JSX.Element => {
   const authContext = useContext(AuthContext);
   const { cases, getCase } = useContext(CaseState);
   const { deleteCase } = useContext(CaseDispatch);
+
+  const [openPdf, setOpenPdf] = useState(false);
 
   const {
     colorSchema = "red",
@@ -338,6 +352,10 @@ const CaseSummary = (props: Props): JSX.Element => {
     toggleRemoveCaseModal();
   };
 
+  const togglePdf = () => {
+    setOpenPdf((oldValue) => !oldValue);
+  };
+
   return (
     <ScreenWrapper {...props}>
       <Container as={Animated.ScrollView} style={{ opacity: fadeAnimation }}>
@@ -350,7 +368,8 @@ const CaseSummary = (props: Props): JSX.Element => {
             { onOpenForm: openForm },
             toggleModal,
             authContext.user.personalNumber,
-            passwords[caseData.id] ?? undefined
+            passwords[caseData.id] ?? undefined,
+            togglePdf
           )}
 
         {administrators && (
@@ -416,6 +435,12 @@ const CaseSummary = (props: Props): JSX.Element => {
           body="Vänligen vänta ..."
         />
       )}
+
+      <PdfModal
+        isVisible={openPdf}
+        toggleModal={togglePdf}
+        uri={`${BASE64_FILE_PREFIX}${caseData.pdf?.B}`}
+      />
 
       <RemoveCaseButtonContainer>
         {canRemoveCase && (
