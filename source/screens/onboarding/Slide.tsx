@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import { Platform, Dimensions, View, Image } from "react-native";
 
-const COAT_OF_ARMS_IMAGE = require("../../assets/images/slides/logo_3.png");
+import ILLUSTRATION from "../../assets/images/illustrations";
 
 const Heading = styled.Text`
   font-size: 18px;
@@ -78,7 +78,7 @@ const Slide = ({
 }: SliderPropsInterface) => (
   <SliderContainer>
     <View>
-      <CoatOfArms source={COAT_OF_ARMS_IMAGE} />
+      <CoatOfArms source={ILLUSTRATION.STADSVAPEN} />
       <Heading headingColor={headingColor}>Mitt Helsingborg</Heading>
       <HorizontalRule />
     </View>
