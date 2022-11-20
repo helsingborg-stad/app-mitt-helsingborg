@@ -2,9 +2,8 @@ import React from "react";
 import { storiesOf } from "@storybook/react-native";
 import StoryWrapper from "../../molecules/StoryWrapper";
 import Step from "./Step";
-
-// const ICON_INCOME = require('source/assets/images/icons/icn_inkomster_1x.png');
 import ILLUSTRATION from "../../../assets/images/illustrations";
+import ICON from "../../../assets/images/icons";
 
 storiesOf("Step", module)
   .add("Default", () => (
@@ -42,7 +41,7 @@ storiesOf("Step", module)
       <Step
         banner={{
           imageSrc: ILLUSTRATION.INKOMSTER_MARGIN_2,
-          iconSrc: ICON_INCOME,
+          iconSrc: ICON.ICON_INCOME,
         }}
         isBackBtnVisible={false}
         currentPosition={{
