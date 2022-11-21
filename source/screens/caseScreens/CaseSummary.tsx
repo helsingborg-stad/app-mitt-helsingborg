@@ -36,6 +36,7 @@ import { put, remove } from "../../helpers/ApiRequest";
 import useSetupForm from "../../containers/Form/hooks/useSetupForm";
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import useGetFormPasswords from "./useGetFormPasswords";
+import { isPdfAvailable, pdfToBase64String } from "./pdf.helper";
 
 import { ApplicationStatusType } from "../../types/Case";
 
@@ -57,11 +58,11 @@ import type {
   Decision,
   Calculations,
   Answer,
+  PDF,
 } from "../../types/Case";
 
 const { ACTIVE_SIGNATURE_PENDING, APPROVED } = ApplicationStatusType;
 const SCREEN_TRANSITION_DELAY = 1000;
-const BASE64_FILE_PREFIX = "data:application/pdf;base64,";
 
 const computeCaseCardComponent = (
   caseItem: Case,
@@ -81,7 +82,6 @@ const computeCaseCardComponent = (
   const status = caseItem?.status;
   const persons = caseItem.persons ?? [];
   const details = caseItem?.details ?? {};
-  const pdf = caseItem?.pdf?.B ?? "";
   const { workflow = {}, period = {} } = details;
   const { decision = {}, payments = {} } = workflow;
   const statusType = status?.type ?? "";
@@ -96,7 +96,9 @@ const computeCaseCardComponent = (
     ? getSwedishMonthNameByTimeStamp(period?.endDate, true)
     : "";
 
-  const canShowPdf = !statusType.toLowerCase().includes(APPROVED) && !!pdf;
+  const canShowPdf =
+    !statusType.toLowerCase().includes(APPROVED) &&
+    isPdfAvailable(caseItem?.pdf);
   const casePersonData = persons.find(
     (person) => person.personalNumber === personalNumber
   );
@@ -439,7 +441,7 @@ const CaseSummary = (props: Props): JSX.Element => {
       <PdfModal
         isVisible={openPdf}
         toggleModal={togglePdf}
-        uri={`${BASE64_FILE_PREFIX}${caseData.pdf?.B}`}
+        uri={pdfToBase64String(caseData.pdf as PDF)}
       />
 
       <RemoveCaseButtonContainer>
