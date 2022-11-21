@@ -204,6 +204,11 @@ export interface Status {
   type: ApplicationStatusType;
 }
 
+export interface PDF {
+  data: number[];
+  type: string;
+}
+
 export interface Case {
   createdAt: number;
   currentFormId: string;
@@ -213,7 +218,7 @@ export interface Case {
     [formId: string]: AnsweredForm;
   };
   id: string;
-  pdf?: Buffer;
+  pdf?: PDF;
   pdfGenerated?: boolean;
   persons: Person[];
   PK: string;
