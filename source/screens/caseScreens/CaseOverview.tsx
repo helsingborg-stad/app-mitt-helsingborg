@@ -34,14 +34,17 @@ import { answersAreEncrypted } from "../../services/encryption/CaseEncryptionHel
 import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
 import NewApplicationModal from "../../components/organisms/NewApplicationModal/NewApplicationModal";
 import AddCoApplicantModal from "../../components/organisms/AddCoApplicantModal/AddCoApplicantModal";
+import PdfModal from "../../components/organisms/PdfModal/PdfModal";
 
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import useGetFormPasswords from "./useGetFormPasswords";
 import useSetupForm from "../../containers/Form/hooks/useSetupForm";
+import { isPdfAvailable, pdfToBase64String } from "./pdf.helper";
 
 import ICON from "../../assets/images/icons";
 
-const { NEW_APPLICATION, NOT_STARTED, CLOSED, ACTIVE } = ApplicationStatusType;
+const { NEW_APPLICATION, NOT_STARTED, CLOSED, ACTIVE, APPROVED } =
+  ApplicationStatusType;
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -103,7 +106,8 @@ const computeCaseCardComponent = (
   }: { caseItem: Case; formPassword: string | undefined },
   navigation: CaseCardNavigation,
   signedInPersonalNumber: string,
-  onShowPinInput: () => void
+  onShowPinInput: () => void,
+  onOpenPdf: () => void
 ) => {
   const currentForm: AnsweredForm = caseItem?.forms[caseItem.currentFormId];
 
@@ -149,6 +153,9 @@ const computeCaseCardComponent = (
     activeSubmittedCompletion,
   } = statusTypeConstantMapper(statusType);
 
+  const canShowPdf =
+    !statusType.toLowerCase().includes(APPROVED) &&
+    isPdfAvailable(caseItem.pdf);
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === "coApplicant";
 
@@ -263,6 +270,8 @@ const computeCaseCardComponent = (
       onButtonClick={buttonProps.onClick}
       buttonColorScheme={buttonProps.colorSchema || colorSchema}
       pin={shouldShowPin ? formPassword : undefined}
+      showDownloadPdfButton={canShowPdf}
+      onOpenPdf={onOpenPdf}
     />
   );
 };
@@ -277,6 +286,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
   const { navigation } = props;
   const [refreshing, setRefreshing] = useState(false);
   const [activeModal, setActiveModal] = useState<ActiveModal>({});
+  const [showPdfForCase, setShowPdfForCase] = useState<string>("");
 
   const { fetchCases, cases } = useContext(
     CaseState
@@ -459,7 +469,8 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
       },
       { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
       user?.personalNumber,
-      () => openPinInputModal(caseData)
+      () => openPinInputModal(caseData),
+      () => setShowPdfForCase(caseData.id)
     )
   );
 
@@ -471,9 +482,14 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
       },
       { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
       user?.personalNumber,
-      () => openPinInputModal(caseData)
+      () => openPinInputModal(caseData),
+      () => setShowPdfForCase(caseData.id)
     )
   );
+
+  const hidePdfModal = () => {
+    setShowPdfForCase("");
+  };
 
   return (
     <ScreenWrapper {...props}>
@@ -548,6 +564,12 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
           error={activeModal?.error}
         />
       )}
+
+      <PdfModal
+        isVisible={!!showPdfForCase}
+        toggleModal={hidePdfModal}
+        uri={pdfToBase64String(cases[showPdfForCase]?.pdf)}
+      />
 
       {activeModal.modal === Modal.START_NEW_APPLICATION && (
         <NewApplicationModal

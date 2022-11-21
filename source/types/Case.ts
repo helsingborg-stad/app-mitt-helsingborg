@@ -9,6 +9,7 @@ export enum ApplicationStatusType {
   SIGNED = "signed",
   ACTIVE = "active",
   NOT_STARTED = "notStarted",
+  APPROVED = "approved",
   ACTIVE_RANDOM_CHECK_REQUIRED_VIVA = "active:randomCheckRequired:viva",
   ACTIVE_ONGOING_RANDOM_CHECK = "active:ongoing:randomCheck",
   ACTIVE_COMPLETION_REQUIRED_VIVA = "active:completionRequired:viva",
@@ -203,6 +204,11 @@ export interface Status {
   type: ApplicationStatusType;
 }
 
+export interface PDF {
+  data: number[];
+  type: string;
+}
+
 export interface Case {
   createdAt: number;
   currentFormId: string;
@@ -212,7 +218,7 @@ export interface Case {
     [formId: string]: AnsweredForm;
   };
   id: string;
-  pdf?: Buffer;
+  pdf?: PDF;
   pdfGenerated?: boolean;
   persons: Person[];
   PK: string;
