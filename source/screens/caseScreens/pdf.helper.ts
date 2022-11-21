@@ -8,6 +8,9 @@ export function isPdfAvailable(pdf: PDF | undefined): boolean {
   return (pdf?.data?.length ?? 0) > 0;
 }
 
-export function pdfToBase64String(pdf: PDF): string {
-  return `${BASE64_FILE_PREFIX}${Buffer.from(pdf.data).toString("base64")}`;
+export function pdfToBase64String(pdf: PDF | undefined): string {
+  return (
+    `${BASE64_FILE_PREFIX}${Buffer.from(pdf?.data ?? []).toString("base64")}` ??
+    ""
+  );
 }
