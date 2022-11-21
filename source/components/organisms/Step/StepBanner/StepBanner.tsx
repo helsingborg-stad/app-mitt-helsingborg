@@ -1,9 +1,10 @@
 import React from "react";
-import type { ViewStyle } from "react-native";
 import { Image } from "react-native";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
-import icons from "../../../../helpers/Icons";
+import type { ViewStyle } from "react-native";
+import ICON from "../../../../assets/images/icons";
+
 import type { PrimaryColor } from "../../../../theme/themeHelpers";
 
 const BannerWrapper = styled.View<{
@@ -39,9 +40,9 @@ const StepBanner: React.FC<Props> = ({ style, imageSrc, colorSchema }) => (
     image={!!imageSrc && imageSrc !== ""}
     colorSchema={colorSchema}
   >
-    {Object.prototype.hasOwnProperty.call(icons, imageSrc) ? (
+    {Object.prototype.hasOwnProperty.call(ICON, imageSrc) ? (
       <BannerImageWrapper>
-        <BannerImage resizeMode="contain" source={icons[imageSrc]} />
+        <BannerImage resizeMode="contain" source={ICON[imageSrc]} />
       </BannerImageWrapper>
     ) : null}
   </BannerWrapper>

@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 import { Text } from "../../atoms";
 import StoryWrapper from "../StoryWrapper";
 import CaseCard from "./CaseCard";
-import icons from "../../../helpers/Icons";
+import ICON from "../../../assets/images/icons";
 
 const FlexContainer = styled.ScrollView`
   background-color: #fff;
@@ -26,7 +26,7 @@ const OverviewExamples = () => (
       title="Ekonomiskt Bistånd"
       subtitle="Öppen"
       largeSubtitle="Juni"
-      icon={icons.ICON_EKB}
+      icon={ICON.ICON_EKB}
       showButton
       buttonText="Starta ansökan"
     />
@@ -37,7 +37,7 @@ const OverviewExamples = () => (
       title="Ekonomiskt Bistånd"
       subtitle="Pågående"
       largeSubtitle="Juni"
-      icon={icons.ICON_EKB}
+      icon={ICON.ICON_EKB}
       showButton
       buttonText="Fortsätt"
       showProgress
@@ -51,7 +51,7 @@ const OverviewExamples = () => (
       title="Ekonomiskt Bistånd"
       subtitle="Inskickad"
       largeSubtitle="Juni"
-      icon={icons.ICON_EKB}
+      icon={ICON.ICON_EKB}
       showButton={false}
     />
 
@@ -61,7 +61,7 @@ const OverviewExamples = () => (
       title="Ekonomiskt Bistånd"
       subtitle="Godkänd"
       largeSubtitle="Juni"
-      icon={icons.ICON_EKB}
+      icon={ICON.ICON_EKB}
       showButton={false}
       showPayments
       givedate="2021-08-01"
@@ -74,7 +74,7 @@ const OverviewExamples = () => (
       title="Ekonomiskt Bistånd"
       subtitle="Delvis godkänd"
       largeSubtitle="Juni"
-      icon={icons.ICON_EKB}
+      icon={ICON.ICON_EKB}
       showButton={false}
       showPayments
       givedate="2021-08-01"
@@ -88,7 +88,7 @@ const OverviewExamples = () => (
       title="Ekonomiskt Bistånd"
       subtitle="Avslagen"
       largeSubtitle="Juni"
-      icon={icons.ICON_EKB}
+      icon={ICON.ICON_EKB}
       showButton={false}
       showPayments
       declinedAmount="1234 kr"
@@ -100,7 +100,7 @@ const OverviewExamples = () => (
       title="Ekonomiskt Bistånd"
       subtitle="Väntar på signering"
       largeSubtitle="Juni"
-      icon={icons.ICON_EKB}
+      icon={ICON.ICON_EKB}
       showButton={false}
       description="Din pinkod är:"
       pin="1234"

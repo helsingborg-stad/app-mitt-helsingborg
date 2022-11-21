@@ -9,18 +9,19 @@ import { useModal } from "../../components/molecules/Modal";
 import TextComponent from "../../components/atoms/Text";
 import Icon from "../../components/atoms/Icon";
 
-import icons from "../../helpers/Icons";
 import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
 import MarkdownConstructor from "../../helpers/MarkdownConstructor";
 
 import { replaceText } from "../Form/hooks/textReplacement";
 import AuthContext from "../../store/AuthContext";
 
+import ICON from "../../assets/images/icons";
+
 import type { PartnerInfo, User } from "../../types/UserTypes";
 
 interface Image {
   type: "image";
-  image: keyof typeof icons;
+  image: keyof typeof ICON;
   circle?: boolean;
   style?: React.CSSProperties;
 }
@@ -177,7 +178,7 @@ const renderCardComponent = (
       return (
         <Card.Image
           key={`${index}-${component.type}`}
-          source={icons[component.image]}
+          source={ICON[component.image]}
           style={component.style}
           circle={component.circle}
         />

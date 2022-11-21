@@ -2,8 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { StatusBar } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 
-import { SLIDES } from "../../assets/images";
-import backgroundImage from "../../assets/images/illustrations/onboarding_05_logga-in_2x.png";
+import ILLUSTRATION from "../../assets/images/illustrations";
 
 import { Button, Text } from "../../components/atoms";
 
@@ -82,7 +81,7 @@ function LoginScreen(): JSX.Element {
   return (
     <FlexView>
       <SafeAreaViewTop edges={["top", "right", "left"]}>
-        <FlexImageBackground source={backgroundImage}>
+        <FlexImageBackground source={ILLUSTRATION.ONBOARDING_LOGGA_IN_2}>
           <VersionLabelContainer>
             <VersionLabel>{getUserFriendlyAppVersion()}</VersionLabel>
           </VersionLabelContainer>
@@ -91,7 +90,7 @@ function LoginScreen(): JSX.Element {
             backgroundColor={theme.colors.neutrals[6]}
           />
           <Header>
-            <Logo source={SLIDES.STADSVAPEN_PNG} resizeMode="contain" />
+            <Logo source={ILLUSTRATION.STADSVAPEN} resizeMode="contain" />
             <Title>Mitt Helsingborg</Title>
             <Separator />
             <LoginHeading>Välkommen!</LoginHeading>

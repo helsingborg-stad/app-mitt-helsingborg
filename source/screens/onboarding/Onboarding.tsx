@@ -24,9 +24,7 @@ import {
   ContinueButtonText,
 } from "./Onboarding.styled";
 
-const SLIDE_BACKGROUND_ANSOKAN = require("../../assets/images/slides/onboarding_02_ansokan_in_3x.png");
-const SLIDE_BACKGROUND_ARENDEN = require("../../assets/images/slides/onboarding_03_arenden_in_3x.png");
-const SLIDE_BACKGROUND_KONTAKT = require("../../assets/images/slides/onboarding_04_kontakt_in_3x.png");
+import SLIDE from "../../assets/images/slides";
 
 const { width } = Dimensions.get("window");
 
@@ -37,7 +35,7 @@ const slides = [
     content: "",
     colorSchema: "blue",
     color: "#E4EBF0",
-    picture: SLIDE_BACKGROUND_ANSOKAN,
+    picture: SLIDE.ONBOARDING_ANSOKAN,
   },
   {
     headingColor: "#770000",
@@ -45,7 +43,7 @@ const slides = [
     content: "",
     colorSchema: "red",
     color: "#F5E4E3",
-    picture: SLIDE_BACKGROUND_ARENDEN,
+    picture: SLIDE.ONBOARDING_ARENDEN,
   },
   {
     headingColor: "#4B0034",
@@ -53,7 +51,7 @@ const slides = [
     content: "",
     colorSchema: "purple",
     color: "#E8DAE4",
-    picture: SLIDE_BACKGROUND_KONTAKT,
+    picture: SLIDE.ONBOARDING_KONTAKT,
   },
 ];
 

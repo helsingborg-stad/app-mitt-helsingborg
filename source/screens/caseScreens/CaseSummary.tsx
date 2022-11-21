@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import { View, Animated, Easing } from "react-native";
 import { CaseState, CaseDispatch } from "../../store/CaseContext";
-import icons from "../../helpers/Icons";
 import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
 import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
@@ -29,6 +28,8 @@ import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
 import AuthContext from "../../store/AuthContext";
 import { put, remove } from "../../helpers/ApiRequest";
 import { ApplicationStatusType } from "../../types/Case";
+
+import ICON from "../../assets/images/icons";
 
 import type {
   Case,
@@ -362,7 +363,7 @@ const CaseSummary = (props: Props): JSX.Element => {
                     <Card.Image
                       style={{ width: 50, height: 50 }}
                       circle
-                      source={icons.ICON_CONTACT_PERSON}
+                      source={ICON.ICON_CONTACT_PERSON}
                     />
                     {title && <Card.SubTitle>{title}</Card.SubTitle>}
                     {name && (

@@ -10,7 +10,6 @@ import styled from "styled-components/native";
 import { useFocusEffect } from "@react-navigation/native";
 
 import FloatingButton from "../../components/molecules/FloatingButton";
-import icons from "../../helpers/Icons";
 import { Text, Icon } from "../../components/atoms";
 import {
   Card,
@@ -39,6 +38,8 @@ import AddCoApplicantModal from "../../components/organisms/AddCoApplicantModal/
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import useGetFormPasswords from "./useGetFormPasswords";
 import useSetupForm from "../../containers/Form/hooks/useSetupForm";
+
+import ICON from "../../assets/images/icons";
 
 const { NEW_APPLICATION, NOT_STARTED, CLOSED, ACTIVE } = ApplicationStatusType;
 
@@ -246,7 +247,7 @@ const computeCaseCardComponent = (
       subtitle={cardProps.subtitle}
       largeSubtitle={applicationPeriodMonth}
       description={cardProps.description ?? caseItem.status.description}
-      icon={icons.ICON_EKB}
+      icon={ICON.ICON_EKB}
       showButton={shouldShowCTAButton}
       showAppealButton={shouldShowAppealButton}
       buttonText={buttonProps.text}

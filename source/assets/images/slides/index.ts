@@ -1,6 +1,9 @@
-import SLIDE_001_PNG from "./illu_001.png";
-import SLIDE_002_PNG from "./illu_002.png";
-import SLIDE_003_PNG from "./illu_003.png";
-import STADSVAPEN_PNG from "./stadsvapen.png";
+import ONBOARDING_ANSOKAN from "./onboarding_02_ansokan_in_3x.png";
+import ONBOARDING_ARENDEN from "./onboarding_03_arenden_in_3x.png";
+import ONBOARDING_KONTAKT from "./onboarding_04_kontakt_in_3x.png";
 
-export { SLIDE_001_PNG, SLIDE_002_PNG, SLIDE_003_PNG, STADSVAPEN_PNG };
+export default {
+  ONBOARDING_ANSOKAN,
+  ONBOARDING_ARENDEN,
+  ONBOARDING_KONTAKT,
+};
