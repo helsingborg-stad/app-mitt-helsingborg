@@ -39,6 +39,7 @@ function CaseCalculationsModal({
   const calculationPeriodStartDate = calculation?.periodstartdate ?? "";
   const calculationPeriodEndDate = calculation?.periodenddate ?? "";
   const calculationIncomeSum = calculation?.incomesum ?? "";
+  const calculationNote = calculation.note ?? "";
 
   const calculationCostSum = formatAmount(calculation?.costsum, true);
   const calculationNormSubTotal = formatAmount(calculation?.normsubtotal, true);
@@ -297,6 +298,14 @@ function CaseCalculationsModal({
                       Det finns inga registrerade reduceringar.
                     </Card.Text>
                   )}
+
+                  <DetailsTitle type="h5">Notering</DetailsTitle>
+                  <CalculationRow paddingBottom={16}>
+                    <Card.Text italic={!calculationNote}>
+                      {calculationNote ||
+                        "Det finns ingen registrerad notering."}
+                    </Card.Text>
+                  </CalculationRow>
 
                   <CalculationRow>
                     <Card.Text strong>Summa</Card.Text>
