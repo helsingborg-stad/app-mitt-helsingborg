@@ -39,6 +39,7 @@ import PdfModal from "../../components/organisms/PdfModal/PdfModal";
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import useGetFormPasswords from "./useGetFormPasswords";
 import useSetupForm from "../../containers/Form/hooks/useSetupForm";
+import { isPdfAvailable, pdfToBase64String } from "./pdf.helper";
 
 import ICON from "../../assets/images/icons";
 
@@ -115,7 +116,6 @@ const computeCaseCardComponent = (
 
   const persons = caseItem?.persons ?? [];
   const caseId = caseItem.id;
-  const pdf = caseItem?.pdf?.B ?? "";
 
   const details = caseItem?.details ?? {};
   const { workflow = {}, period = {} } = details;
@@ -153,7 +153,9 @@ const computeCaseCardComponent = (
     activeSubmittedCompletion,
   } = statusTypeConstantMapper(statusType);
 
-  const canShowPdf = !statusType.toLowerCase().includes(APPROVED) && !!pdf;
+  const canShowPdf =
+    !statusType.toLowerCase().includes(APPROVED) &&
+    isPdfAvailable(caseItem.pdf);
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === "coApplicant";
 
@@ -566,7 +568,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
       <PdfModal
         isVisible={!!showPdfForCase}
         toggleModal={hidePdfModal}
-        uri={`${BASE64_FILE_PREFIX}${cases[showPdfForCase]?.pdf?.B}`}
+        uri={pdfToBase64String(cases[showPdfForCase]?.pdf)}
       />
 
       {activeModal.modal === Modal.START_NEW_APPLICATION && (
