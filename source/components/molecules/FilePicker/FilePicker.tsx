@@ -27,6 +27,12 @@ const fileTypeMap: Record<FileType, (FileType.PDF | FileType.IMAGES)[]> = {
   [FileType.IMAGES]: [FileType.IMAGES],
 };
 
+const mimeExtensionMap: Record<string, string> = {
+  "application/pdf": ".pdf",
+  "image/jpeg": ".jpg",
+  "image/png": ".png",
+};
+
 const FilePicker: React.FC<Props> = ({
   buttonText,
   value: files,
@@ -47,11 +53,11 @@ const FilePicker: React.FC<Props> = ({
     baseName: string,
     suffix: string
   ): File => {
-    const [, fileExtension] = file.mime.split("/");
+    const fileExtension = mimeExtensionMap[file.mime] ?? "";
 
     return {
       ...file,
-      externalDisplayName: `${baseName}_${suffix}.${fileExtension}`,
+      externalDisplayName: `${baseName}_${suffix}${fileExtension}`,
     };
   };
 
