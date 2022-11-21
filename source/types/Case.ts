@@ -122,6 +122,7 @@ export interface Calculation {
   costs: Costs;
   incomes: Incomes;
   reductions: Reductions;
+  note?: string;
 }
 
 export interface Calculations {
