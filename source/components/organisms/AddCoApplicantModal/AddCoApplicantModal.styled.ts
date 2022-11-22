@@ -4,6 +4,10 @@ import type { ThemeType } from "../../../theme/themeHelpers";
 
 import { Text } from "../../atoms";
 
+const AvoidingViewContainer = styled.KeyboardAvoidingView`
+  flex: 1;
+`;
+
 interface DialogContainerProps {
   theme: ThemeType;
 }
@@ -38,4 +42,4 @@ const ErrorText = styled(Text)`
   color: ${({ theme }: { theme: ThemeType }) => theme.colors.primary.red[1]};
 `;
 
-export { DialogContainer, Container, ErrorText };
+export { AvoidingViewContainer, DialogContainer, Container, ErrorText };
