@@ -270,6 +270,7 @@ export function replaceMarkdownTextInSteps(
       components: (question.components ?? []).map((component) => ({
         ...component,
         text: replaceString(component.text),
+        markdownText: replaceString(component.markdownText),
       })),
       items: (question.items ?? []).map((item) => ({
         ...item,
