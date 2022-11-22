@@ -1,23 +1,27 @@
 import uuid from "react-native-uuid";
-import type { Form } from "../../types/FormTypes";
+
+import { allSettled, isRejectedSettledPromise } from "../../helpers/promise";
+import { get, isRequestError, post, put } from "../../helpers/ApiRequest";
+import { convertAnswersToArray } from "../../helpers/CaseDataConverter";
+import { filterAsync } from "../../helpers/Objects";
+import { to } from "../../helpers/Misc";
+
+import { getCurrentForm } from "../../services/encryption/CaseEncryptionHelper";
+import { PasswordStrategy } from "../../services/encryption/PasswordStrategy";
+import { wrappedDefaultStorage } from "../../services/storage/StorageService";
+import { CaseEncryptionService } from "../../services/encryption";
+import { ApplicationStatusType } from "../../types/Case";
+import { ActionTypes } from "../../types/CaseContext";
+
+import type { UserInterface } from "../../services/encryption/CaseEncryptionHelper";
+import type { Case } from "../../types/Case";
 import type {
   Action,
+  AddCoApplicantParameters,
   CaseUpdate,
   UpdateCaseBody,
-  AddCoApplicantParameters,
 } from "../../types/CaseContext";
-import { ActionTypes } from "../../types/CaseContext";
-import { get, post, put } from "../../helpers/ApiRequest";
-import { convertAnswersToArray } from "../../helpers/CaseDataConverter";
-import type { Case } from "../../types/Case";
-import { ApplicationStatusType } from "../../types/Case";
-import type { UserInterface } from "../../services/encryption/CaseEncryptionHelper";
-import { getCurrentForm } from "../../services/encryption/CaseEncryptionHelper";
-import { CaseEncryptionService } from "../../services/encryption";
-import { wrappedDefaultStorage } from "../../services/storage/StorageService";
-import { to } from "../../helpers/Misc";
-import { PasswordStrategy } from "../../services/encryption/PasswordStrategy";
-import { filterAsync } from "../../helpers/Objects";
+import type { Form } from "../../types/FormTypes";
 
 const {
   NOT_STARTED,
@@ -27,73 +31,6 @@ const {
   ACTIVE_COMPLETION_REQUIRED_VIVA,
   ACTIVE_SUBMITTED_COMPLETION,
 } = ApplicationStatusType;
-
-export async function updateCase(
-  {
-    user,
-    caseId,
-    formId,
-    answerObject,
-    signature,
-    currentPosition,
-    formQuestions,
-    encryptAnswers = true,
-    encryption,
-  }: CaseUpdate,
-  callback: (updatedCase: Case) => Promise<Action>
-): Promise<Action> {
-  const encryptionService = new CaseEncryptionService(
-    wrappedDefaultStorage,
-    async () => user
-  );
-  let updateCaseRequestBody: UpdateCaseBody = {
-    answers: convertAnswersToArray(answerObject, formQuestions),
-    currentPosition,
-    currentFormId: formId,
-    encryption,
-  };
-
-  if (encryptAnswers) {
-    const encryptedForm = await encryptionService.encryptForm(
-      updateCaseRequestBody
-    );
-    updateCaseRequestBody = {
-      ...updateCaseRequestBody,
-      ...encryptedForm,
-    };
-  }
-
-  if (signature?.success) {
-    updateCaseRequestBody.signature = signature;
-  }
-
-  try {
-    const res = await put(
-      `/cases/${caseId}`,
-      JSON.stringify(updateCaseRequestBody)
-    );
-    const { id, attributes } = res.data.data;
-    const flatUpdatedCase = { id, updatedAt: Date.now(), ...attributes };
-    if (callback) {
-      await callback(flatUpdatedCase);
-    }
-
-    flatUpdatedCase.forms[formId] = await encryptionService.decryptForm(
-      flatUpdatedCase.forms[formId]
-    );
-
-    return {
-      type: ActionTypes.UPDATE_CASE,
-      payload: flatUpdatedCase,
-    };
-  } catch (error) {
-    console.log(`Update current case error: ${error}`);
-    return {
-      type: ActionTypes.API_ERROR,
-      payload: error as Error,
-    };
-  }
-}
 
 function setupPinForCases(user: UserInterface, cases: Case[]) {
   const promises = cases.map(async (caseData) => {
@@ -109,67 +46,6 @@ function setupPinForCases(user: UserInterface, cases: Case[]) {
   });
 
   return Promise.all(promises);
-}
-
-export async function createCase(
-  user: UserInterface,
-  form: Form,
-  callback: (newCase: Case) => void
-): Promise<Action> {
-  const keyId = uuid.v4();
-  const body = {
-    provider: form.provider,
-    statusType: NOT_STARTED,
-    currentFormId: form.id,
-    forms: {
-      [form.id]: {
-        answers: [],
-        currentPosition: {
-          index: 0,
-          level: 0,
-          currentMainStep: 1,
-          currentMainStepIndex: 0,
-        },
-        encryption: {
-          type: "decrypted",
-          symmetricKeyName: keyId,
-          encryptionKeyId: keyId,
-        },
-      },
-    },
-    details: {},
-  };
-
-  try {
-    const response = await post("/cases", JSON.stringify(body));
-    const newCase = response.data.data;
-    const flattenedNewCase = {
-      id: newCase.id,
-      ...newCase.attributes,
-    };
-
-    await setupPinForCases(user, [flattenedNewCase]);
-
-    callback(flattenedNewCase);
-
-    return {
-      type: ActionTypes.CREATE_CASE,
-      payload: flattenedNewCase,
-    };
-  } catch (error) {
-    console.log("create case api error", error);
-    return {
-      type: ActionTypes.API_ERROR,
-      payload: error as Error,
-    };
-  }
-}
-
-export function deleteCase(caseId: string): Action {
-  return {
-    type: ActionTypes.DELETE_CASE,
-    payload: caseId,
-  };
 }
 
 async function getCasesThatShouldGeneratePin(
@@ -215,9 +91,196 @@ async function getCasesThatShouldGeneratePin(
   return casesWithoutGeneratedPin;
 }
 
+function shouldCaseBeSubmitted(caseData: Case): boolean {
+  return caseData.status.type.includes(
+    ApplicationStatusType.ACTIVE_SIGNATURE_COMPLETED
+  );
+}
+
+async function putCaseUpdate(
+  user: UserInterface,
+  id: string,
+  updateCaseRequestBody: UpdateCaseBody
+) {
+  const encryptionService = new CaseEncryptionService(
+    wrappedDefaultStorage,
+    async () => user
+  );
+
+  const res = await put<{ id: string; attributes: Case }>(
+    `/cases/${id}`,
+    JSON.stringify(updateCaseRequestBody)
+  );
+
+  if (isRequestError(res)) {
+    throw new Error(res.message);
+  }
+
+  const { attributes } = res.data.data;
+  const flatUpdatedCase = { ...attributes };
+
+  flatUpdatedCase.forms[updateCaseRequestBody.currentFormId] =
+    await encryptionService.decryptForm(
+      flatUpdatedCase.forms[updateCaseRequestBody.currentFormId]
+    );
+
+  return flatUpdatedCase;
+}
+
+async function submitCase(user: UserInterface, caseData: Case): Promise<Case> {
+  console.log("(re)submitting", caseData.id);
+  const currentForm = caseData.forms[caseData.currentFormId];
+  const formId = caseData.currentFormId;
+
+  const updateCaseRequestBody: UpdateCaseBody = {
+    answers: currentForm.answers,
+    currentFormId: formId,
+    currentPosition: currentForm.currentPosition,
+    encryption: currentForm.encryption,
+  };
+
+  return putCaseUpdate(user, caseData.id, updateCaseRequestBody);
+}
+
+export async function updateCase(
+  {
+    user,
+    caseId,
+    formId,
+    answerObject,
+    signature,
+    currentPosition,
+    formQuestions,
+    encryptAnswers = true,
+    encryption,
+  }: CaseUpdate,
+  callback: (updatedCase: Case) => Promise<Action>
+): Promise<Action> {
+  const encryptionService = new CaseEncryptionService(
+    wrappedDefaultStorage,
+    async () => user
+  );
+  let updateCaseRequestBody: UpdateCaseBody = {
+    answers: convertAnswersToArray(answerObject, formQuestions),
+    currentPosition,
+    currentFormId: formId,
+    encryption,
+  };
+
+  if (encryptAnswers) {
+    const encryptedForm = await encryptionService.encryptForm(
+      updateCaseRequestBody
+    );
+    updateCaseRequestBody = {
+      ...updateCaseRequestBody,
+      ...encryptedForm,
+    };
+  }
+
+  if (signature?.success) {
+    updateCaseRequestBody.signature = signature;
+  }
+
+  try {
+    const flatUpdatedCase = await putCaseUpdate(
+      user,
+      caseId,
+      updateCaseRequestBody
+    );
+    if (callback) {
+      await callback(flatUpdatedCase);
+    }
+
+    return {
+      type: ActionTypes.UPDATE_CASE,
+      payload: flatUpdatedCase,
+    };
+  } catch (error) {
+    console.error(`Update current case error: ${error}`);
+    return {
+      type: ActionTypes.API_ERROR,
+      payload: error as Error,
+    };
+  }
+}
+
+export async function createCase(
+  user: UserInterface,
+  form: Form,
+  callback: (newCase: Case) => void
+): Promise<Action> {
+  const keyId = uuid.v4();
+  const body = {
+    provider: form.provider,
+    statusType: NOT_STARTED,
+    currentFormId: form.id,
+    forms: {
+      [form.id]: {
+        answers: [],
+        currentPosition: {
+          index: 0,
+          level: 0,
+          currentMainStep: 1,
+          currentMainStepIndex: 0,
+        },
+        encryption: {
+          type: "decrypted",
+          symmetricKeyName: keyId,
+          encryptionKeyId: keyId,
+        },
+      },
+    },
+    details: {},
+  };
+
+  try {
+    const response = await post<{ attributes: Case; id: string }>(
+      "/cases",
+      JSON.stringify(body)
+    );
+
+    if (isRequestError(response)) {
+      throw new Error(response.message);
+    }
+
+    const newCase = response.data.data;
+    const flattenedNewCase: Case = {
+      ...newCase.attributes,
+      id: newCase.id,
+    };
+
+    await setupPinForCases(user, [flattenedNewCase]);
+
+    callback(flattenedNewCase);
+
+    return {
+      type: ActionTypes.CREATE_CASE,
+      payload: flattenedNewCase,
+    };
+  } catch (error) {
+    console.log("create case api error", error);
+    return {
+      type: ActionTypes.API_ERROR,
+      payload: error as Error,
+    };
+  }
+}
+
+export function deleteCase(caseId: string): Action {
+  return {
+    type: ActionTypes.DELETE_CASE,
+    payload: caseId,
+  };
+}
+
 export async function fetchCases(user: UserInterface): Promise<Action> {
   try {
-    const response = await get("/cases");
+    const response = await get<{ attributes: { cases: Case[] } }>("/cases");
+
+    if (isRequestError(response)) {
+      throw new Error(response.message);
+    }
+
     const rawCases: Case[] = response?.data?.data?.attributes?.cases;
 
     if (rawCases) {
@@ -246,6 +309,18 @@ export async function fetchCases(user: UserInterface): Promise<Action> {
         readyCases
       );
       await setupPinForCases(user, casesToGeneratePinFor);
+
+      const casesToSubmit = readyCases.filter(shouldCaseBeSubmitted);
+      const submitCaseWithUser = (caseData: Case) => submitCase(user, caseData);
+      const submitResults = await allSettled(
+        casesToSubmit.map(submitCaseWithUser)
+      );
+      const failedToSubmit = submitResults.filter(isRejectedSettledPromise);
+      if (failedToSubmit.length > 0) {
+        console.warn(`failed to (re)submit ${failedToSubmit.length} cases`);
+        failedToSubmit.forEach(({ reason }) => console.error(reason));
+      }
+
       const casesMappedById = readyCases.reduce<Record<string, Case>>(
         (mappedCases, caseData) => ({
           ...mappedCases,
@@ -276,12 +351,16 @@ export async function addCaseCoApplicant(
   caseId: string,
   parameters: AddCoApplicantParameters
 ): Promise<{ type: ActionTypes.UPDATE_CASE; payload: Case }> {
-  const addCoApplicantResult = await put(
-    `/viva-cases/${caseId}/persons`,
-    JSON.stringify(parameters)
-  );
+  const addCoApplicantResult = await put<{
+    message: string;
+    attributes: { caseItem: Case };
+  }>(`/viva-cases/${caseId}/persons`, JSON.stringify(parameters));
 
-  if (addCoApplicantResult?.status !== 200) {
+  if (isRequestError(addCoApplicantResult)) {
+    throw new Error(addCoApplicantResult.message);
+  }
+
+  if (addCoApplicantResult.status !== 200) {
     const errorMessage =
       addCoApplicantResult?.data?.data?.message || "Något gick fel";
     throw new Error(errorMessage);
