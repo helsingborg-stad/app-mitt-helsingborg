@@ -1,24 +1,22 @@
-/* eslint-disable global-require */
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import React from "react";
 import { StatusBar } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import styled from "styled-components/native";
-import { Icon } from "../components/atoms";
+
 import TabNavigator from "../components/molecules/TabNavigator";
+
+import { Icon } from "../components/atoms";
+
 import { AboutScreen, ProfileScreen } from "../screens";
-import theme from "../theme/theme";
+
 import CaseNavigator from "./CaseNavigator";
 
-const TabBarImage = styled.Image`
-  width: 25px;
-  height: 25px;
-`;
+import ICON from "../assets/images/icons";
 
-const SafeAreaViewContainer = styled(SafeAreaView)`
-  flex: 1;
-  background-color: ${(props) => props.theme.colors.neutrals[5]};
-`;
+import theme from "../theme/theme";
+import {
+  TabBarImage,
+  SafeAreaViewContainer,
+} from "./BottomBarNavigator.styled";
 
 const Tab = createMaterialTopTabNavigator();
 const BottomBarStack = (): JSX.Element => (
@@ -36,11 +34,9 @@ const BottomBarStack = (): JSX.Element => (
         component={CaseNavigator}
         options={{
           title: "Ärende",
-          tabBarIcon: () => (
-            <TabBarImage source={require("../images/task_3x.png")} />
-          ),
+          tabBarIcon: () => <TabBarImage source={ICON.ICON_TASK} />,
           tabBarIconInactive: () => (
-            <TabBarImage source={require("../images/task_3x_gray.png")} />
+            <TabBarImage source={ICON.ICON_TASK_GRAY} />
           ),
           tabBarLabel: "Ärende",
         }}
@@ -56,11 +52,9 @@ const BottomBarStack = (): JSX.Element => (
         component={ProfileScreen}
         options={{
           title: "Profil",
-          tabBarIcon: () => (
-            <TabBarImage source={require("../images/profile_3x.png")} />
-          ),
+          tabBarIcon: () => <TabBarImage source={ICON.ICON_PROFILE} />,
           tabBarIconInactive: () => (
-            <TabBarImage source={require("../images/profile_3x_gray.png")} />
+            <TabBarImage source={ICON.ICON_PROFILE_GRAY} />
           ),
           tabBarLabel: "Profil",
         }}
