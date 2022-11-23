@@ -246,7 +246,6 @@ export async function createCase(
     const newCase = response.data.data;
     const flattenedNewCase: Case = {
       ...newCase.attributes,
-      id: newCase.id,
     };
 
     await setupPinForCases(user, [flattenedNewCase]);
