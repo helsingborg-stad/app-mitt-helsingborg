@@ -32,7 +32,7 @@ const {
   ACTIVE_SUBMITTED_COMPLETION,
 } = ApplicationStatusType;
 
-function setupPinForCases(user: UserInterface, cases: Case[]) {
+function setupPinForCases(user: UserInterface, cases: Case[]): Promise<void[]> {
   const promises = cases.map(async (caseData) => {
     const currentForm = getCurrentForm(caseData);
     const pin = await PasswordStrategy.generateAndSaveBasicPinPassword(
@@ -107,16 +107,16 @@ async function putCaseUpdate(
     async () => user
   );
 
-  const res = await put<{ id: string; attributes: Case }>(
+  const updateResponse = await put<{ id: string; attributes: Case }>(
     `/cases/${id}`,
     JSON.stringify(updateCaseRequestBody)
   );
 
-  if (isRequestError(res)) {
-    throw new Error(res.message);
+  if (isRequestError(updateResponse)) {
+    throw new Error(updateResponse.message);
   }
 
-  const { attributes } = res.data.data;
+  const { attributes } = updateResponse.data.data;
   const flatUpdatedCase = { ...attributes };
 
   flatUpdatedCase.forms[updateCaseRequestBody.currentFormId] =
@@ -127,7 +127,7 @@ async function putCaseUpdate(
   return flatUpdatedCase;
 }
 
-async function submitCase(user: UserInterface, caseData: Case): Promise<Case> {
+function submitCase(user: UserInterface, caseData: Case): Promise<Case> {
   console.log("(re)submitting", caseData.id);
   const currentForm = caseData.forms[caseData.currentFormId];
   const formId = caseData.currentFormId;
@@ -243,18 +243,15 @@ export async function createCase(
       throw new Error(response.message);
     }
 
-    const newCase = response.data.data;
-    const flattenedNewCase: Case = {
-      ...newCase.attributes,
-    };
+    const newCase = response.data.data.attributes;
 
-    await setupPinForCases(user, [flattenedNewCase]);
+    await setupPinForCases(user, [newCase]);
 
-    callback(flattenedNewCase);
+    callback(newCase);
 
     return {
       type: ActionTypes.CREATE_CASE,
-      payload: flattenedNewCase,
+      payload: newCase,
     };
   } catch (error) {
     console.log("create case api error", error);

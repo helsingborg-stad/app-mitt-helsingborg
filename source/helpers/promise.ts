@@ -7,14 +7,18 @@ export interface RejectedSettledPromise {
   reason: Error;
 }
 
-function toResolvedSettledPromise<T>(value: T): ResolvedSettledPromise<T> {
+export function toResolvedSettledPromise<T>(
+  value: T
+): ResolvedSettledPromise<T> {
   return {
     status: "fulfilled",
     value,
   };
 }
 
-function toRejectedSettledPromise(reason: unknown): RejectedSettledPromise {
+export function toRejectedSettledPromise(
+  reason: unknown
+): RejectedSettledPromise {
   return {
     status: "rejected",
     reason: reason as Error,
@@ -24,8 +28,8 @@ function toRejectedSettledPromise(reason: unknown): RejectedSettledPromise {
 export function allSettled<T>(
   promises: Promise<T>[]
 ): Promise<(ResolvedSettledPromise<T> | RejectedSettledPromise)[]> {
-  const settlePromises = promises.map((p) =>
-    p.then(toResolvedSettledPromise).catch(toRejectedSettledPromise)
+  const settlePromises = promises.map((promise) =>
+    promise.then(toResolvedSettledPromise).catch(toRejectedSettledPromise)
   );
 
   return Promise.all(settlePromises);
