@@ -17,7 +17,13 @@ import ICON_CASE_SUCCESS_1 from "./icn_application_success_1_3x.png";
 import ICON_CASE_SUCCESS_2 from "./icn_application_success_2_3x.png";
 import ICON_CASE_SUCCESS_3 from "./icn_application_success_3_3x.png";
 
+import ICON_PROFILE_GRAY from "./profile_3x_gray.png";
+import ICON_PROFILE from "./profile_3x.png";
+import ICON_TASK_GRAY from "./task_3x_gray.png";
+import ICON_TASK from "./task_3x.png";
+
 export default {
+  // Formbuilder icons
   ILLU_INCOME,
   ILLU_ADD_INCOME,
   ILLU_EXPENSES,
@@ -36,4 +42,10 @@ export default {
   ICON_CASE_SUCCESS_1,
   ICON_CASE_SUCCESS_2,
   ICON_CASE_SUCCESS_3,
+
+  // Navigator icons
+  ICON_PROFILE_GRAY,
+  ICON_PROFILE,
+  ICON_TASK_GRAY,
+  ICON_TASK,
 };
