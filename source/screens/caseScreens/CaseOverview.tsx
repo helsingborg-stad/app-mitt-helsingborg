@@ -225,7 +225,7 @@ const computeCaseCardComponent = (
   if (shouldEnterPin) {
     buttonProps.onClick = onShowPinInput;
     buttonProps.text = "Ange pinkod";
-    cardProps.onClick = undefined;
+    cardProps.onClick = () => navigation.onOpenCaseSummary(caseId);
   }
 
   const shouldShowPin = isWaitingForSign && !isCoApplicant;
