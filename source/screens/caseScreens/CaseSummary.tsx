@@ -32,6 +32,7 @@ import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
 import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
 import { put, remove } from "../../helpers/ApiRequest";
+import { canCaseBeRemoved } from "../../helpers/Case";
 
 import useSetupForm from "../../containers/Form/hooks/useSetupForm";
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
@@ -61,7 +62,7 @@ import type {
   PDF,
 } from "../../types/Case";
 
-const { ACTIVE_SIGNATURE_PENDING, APPROVED } = ApplicationStatusType;
+const { APPROVED } = ApplicationStatusType;
 const SCREEN_TRANSITION_DELAY = 1000;
 
 const computeCaseCardComponent = (
@@ -261,8 +262,7 @@ const CaseSummary = (props: Props): JSX.Element => {
     ? convertDataToArray(decision.decisions.decision)
     : [];
 
-  const canRemoveCase =
-    [ACTIVE_SIGNATURE_PENDING].includes(caseData.status.type) && isApplicant;
+  const canRemoveCase = canCaseBeRemoved(caseData) && isApplicant;
 
   const removeCase = async () => {
     const result = await remove(`cases/${caseId}`, undefined, undefined);
