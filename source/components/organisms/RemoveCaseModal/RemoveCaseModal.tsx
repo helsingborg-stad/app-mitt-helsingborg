@@ -52,7 +52,7 @@ function RemoveCaseModal({
     },
     [RemoveCaseState.Loading]: {
       text: {
-        title: "Ditt ärende rensas",
+        title: "Din ansökan tas bort",
         body: "Vänligen vänta ...",
       },
       buttons: [],
