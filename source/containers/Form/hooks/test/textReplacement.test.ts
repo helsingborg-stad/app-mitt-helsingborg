@@ -88,6 +88,7 @@ const doTest = (
                 text: placeholder,
                 type: "text",
                 heading: "some sort of heading",
+                markdownText: placeholder,
               },
             ],
           },
@@ -127,6 +128,7 @@ const doTest = (
 
   expect(res[0]?.questions?.[1].items?.[0].title).toBe(expected);
   expect(res[0]?.questions?.[1].components?.[0].text).toBe(expected);
+  expect(res[0]?.questions?.[1].components?.[0].markdownText).toBe(expected);
   expect(res[0]?.questions?.[2].inputs?.[0].label).toBe(expected);
   expect(res[0]?.questions?.[2].inputs?.[0].title).toBe(expected);
   expect(res[0]?.questions?.[2].text).toBe(expected);
