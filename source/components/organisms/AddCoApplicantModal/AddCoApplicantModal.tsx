@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 
 import Wrapper from "../../molecules/Dialog/Wrapper";
 import { Modal } from "../../molecules/Modal";
@@ -12,6 +12,7 @@ import { ValidationHelper } from "../../../helpers";
 import InputFields from "./InputFields";
 
 import {
+  AvoidingViewContainer,
   DialogContainer,
   Container,
   ErrorText,
@@ -94,38 +95,46 @@ export default function AddCoApplicantModal({
       statusBarTranslucent
       hide={() => undefined}
     >
-      <BackgroundBlurWrapper>
-        <Wrapper>
-          <DialogContainer>
-            <Container border>
-              <Text>
-                Ange personnummer, namn och efternamn för din fru, man eller
-                sambo
-              </Text>
+      <AvoidingViewContainer behavior="padding">
+        <View style={{ flex: 1 }}>
+          <BackgroundBlurWrapper>
+            <Wrapper>
+              <DialogContainer>
+                <Container border>
+                  <Text>
+                    Ange personnummer, namn och efternamn för din fru, man eller
+                    sambo
+                  </Text>
 
-              <InputFields fields={inputFields} />
+                  <InputFields fields={inputFields} />
 
-              {!!errorMessage && <ErrorText>{errorMessage}</ErrorText>}
-            </Container>
-            <Container>
-              {isLoading && <ActivityIndicator size="large" />}
+                  {!!errorMessage && <ErrorText>{errorMessage}</ErrorText>}
+                </Container>
+                <Container>
+                  {isLoading && <ActivityIndicator size="large" />}
 
-              {!isLoading && (
-                <Button
-                  size="large"
-                  fullWidth
-                  colorSchema="red"
-                  disabled={!hasValidInput}
-                  onClick={handleAddCoApplicant}
-                >
-                  <Text>Nästa</Text>
-                </Button>
-              )}
-            </Container>
-            <TextButton label="Avbryt" onPress={onClose} disabled={isLoading} />
-          </DialogContainer>
-        </Wrapper>
-      </BackgroundBlurWrapper>
+                  {!isLoading && (
+                    <Button
+                      size="large"
+                      fullWidth
+                      colorSchema="red"
+                      disabled={!hasValidInput}
+                      onClick={handleAddCoApplicant}
+                    >
+                      <Text>Nästa</Text>
+                    </Button>
+                  )}
+                </Container>
+                <TextButton
+                  label="Avbryt"
+                  onPress={onClose}
+                  disabled={isLoading}
+                />
+              </DialogContainer>
+            </Wrapper>
+          </BackgroundBlurWrapper>
+        </View>
+      </AvoidingViewContainer>
     </Modal>
   );
 }
