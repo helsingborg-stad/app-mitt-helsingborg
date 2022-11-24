@@ -55,7 +55,7 @@ export async function saveTokensToStorage(accessToken, refreshToken) {
  * This function removes the accessToken from AsyncStorage.
  * @param {string} accessToken json web token;
  */
-export async function removeAccessTokenFromStorage() {
+export async function removeAccessTokenFromStorage(): Promise<void> {
   await StorageService.removeData(ACCESS_TOKEN_KEY);
 }
 
