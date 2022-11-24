@@ -1,36 +1,44 @@
 import React, { useEffect, useState, useContext } from "react";
 import type { ScrollView } from "react-native";
 import { InteractionManager, StatusBar } from "react-native";
-import { Modal, useModal } from "../../components/molecules/Modal";
-import ScreenWrapper from "../../components/molecules/ScreenWrapper";
+
 import Step from "../../components/organisms/Step/Step";
+
+import { Modal, useModal } from "../../components/molecules/Modal";
+import {
+  ScreenWrapper,
+  AuthLoading,
+  CloseDialog,
+} from "../../components/molecules";
+
+import { useNotification } from "../../store/NotificationContext";
+import AuthContext from "../../store/AuthContext";
+
 import { evaluateConditionalExpression } from "../../helpers/conditionParser";
 import { getAttachmentAnswers } from "./Form.helpers";
+
+import FormUploader from "./FormUploader";
+import useForm from "./hooks/useForm";
+
+import { ApplicationStatusType } from "../../types/Case";
+import { ActionTypes } from "../../types/CaseContext";
+
 import type { Status, Person, VIVACaseDetails } from "../../types/Case";
 import type { Action, Answer } from "../../types/CaseContext";
-import { ActionTypes } from "../../types/CaseContext";
+import type { PrimaryColor } from "../../theme/themeHelpers";
+import type { User } from "../../types/UserTypes";
+import { UPDATE_CASE_STATE } from "./types";
+import type { DialogText } from "./types";
 import type {
   Step as StepType,
   StepperActions,
   Question,
 } from "../../types/FormTypes";
-import type { User } from "../../types/UserTypes";
-import { ApplicationStatusType } from "../../types/Case";
 import type {
   FormPeriod,
   FormPosition,
   FormReducerState,
 } from "./hooks/useForm";
-import useForm from "./hooks/useForm";
-import AuthContext from "../../store/AuthContext";
-import { useNotification } from "../../store/NotificationContext";
-import FormUploader from "./FormUploader";
-import { AuthLoading } from "../../components/molecules";
-import CloseDialog from "../../components/molecules/CloseDialog";
-import type { PrimaryColor } from "../../theme/themeHelpers";
-
-import type { DialogText } from "./types";
-import { UPDATE_CASE_STATE } from "./types";
 
 const { SIGNED, NOT_STARTED } = ApplicationStatusType;
 

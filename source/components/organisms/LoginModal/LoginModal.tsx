@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Linking, StatusBar, KeyboardAvoidingView } from "react-native";
 
-import { Button, Text } from "../../atoms";
+import { AuthLoading } from "../../molecules";
 
-import AuthLoading from "../../molecules/AuthLoading";
+import { Button, Text } from "../../atoms";
 
 import { ValidationHelper } from "../../../helpers";
 
