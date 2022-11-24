@@ -305,11 +305,11 @@ const CaseSummary = (props: Props): JSX.Element => {
 
   const updateCaseSignature = useCallback(
     async (caseItem, signatureSuccessful) => {
-      const currentForm = caseItem.forms[caseItem.currentFormId];
+      const caseForm = caseItem.forms[caseItem.currentFormId];
 
       const updateCaseRequestBody = {
         currentFormId: caseItem.currentFormId,
-        ...currentForm,
+        ...caseForm,
         signature: { success: signatureSuccessful },
       };
 
