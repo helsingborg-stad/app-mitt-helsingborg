@@ -1,32 +1,32 @@
 import React, { useContext, useEffect, useState, useMemo } from "react";
 
-import Form, { defaultInitialStatus } from "../containers/Form/Form";
+import Form, { defaultInitialStatus } from "../../containers/Form/Form";
 
-import AuthContext from "../store/AuthContext";
-import FormContext from "../store/FormContext";
-import { CaseDispatch, CaseState } from "../store/CaseContext";
+import { CaseDispatch, CaseState } from "../../store/CaseContext";
+import AuthContext from "../../store/AuthContext";
+import FormContext from "../../store/FormContext";
 
 import {
   getFormQuestions,
   convertAnswerArrayToObject,
-} from "../helpers/CaseDataConverter";
-import { getPasswordForForm } from "../services/encryption/CaseEncryptionHelper";
-import { wrappedDefaultStorage } from "../services/storage/StorageService";
-import { to } from "../helpers/Misc";
+} from "../../helpers/CaseDataConverter";
+import { to } from "../../helpers/Misc";
 
-import type { Case, FormPosition, AnsweredForm, Answer } from "../types/Case";
-import { ApplicationStatusType } from "../types/Case";
-import type { CaseUpdate, Signature, Action } from "../types/CaseContext";
+import { getPasswordForForm } from "../../services/encryption/CaseEncryptionHelper";
+import { wrappedDefaultStorage } from "../../services/storage/StorageService";
 
-interface FormCaseScreenProps {
-  route: { params: { caseId: string; isSignMode: boolean } };
-  navigation: any;
-}
-const FormCaseScreen = ({
-  route,
-  navigation,
-  ...props
-}: FormCaseScreenProps): JSX.Element => {
+import type { CaseUpdate, Signature, Action } from "../../types/CaseContext";
+import { ApplicationStatusType } from "../../types/Case";
+import type { Props } from "./FormCaseScreen.types";
+import type { User } from "../../types/UserTypes";
+import type {
+  Case,
+  FormPosition,
+  AnsweredForm,
+  Answer,
+} from "../../types/Case";
+
+const FormCaseScreen = ({ route, navigation }: Props): JSX.Element => {
   const [encryptionPin, setEncryptionPin] = useState("");
   const { caseId, isSignMode } = route?.params || {};
   const { user } = useContext(AuthContext);
@@ -64,7 +64,7 @@ const FormCaseScreen = ({
       const [, pinCode] = await to(
         getPasswordForForm(
           { encryption } as AnsweredForm,
-          user,
+          user as User,
           wrappedDefaultStorage
         )
       );
@@ -125,7 +125,7 @@ const FormCaseScreen = ({
       steps={form.steps}
       connectivityMatrix={form.connectivityMatrix}
       initialPosition={initialPosition}
-      user={user}
+      user={user as User}
       onClose={handleCloseForm}
       onSubmit={handleSubmitForm}
       initialAnswers={initialAnswers}
@@ -139,7 +139,6 @@ const FormCaseScreen = ({
       completionsClarificationMessage={
         initialCase.details.completions?.description
       }
-      {...props}
     />
   );
 };
