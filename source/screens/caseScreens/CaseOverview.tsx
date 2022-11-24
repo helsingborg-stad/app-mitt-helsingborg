@@ -1,3 +1,6 @@
+import { Animated, Easing, Linking, RefreshControl } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import styled from "styled-components/native";
 import React, {
   useCallback,
   useContext,
@@ -5,43 +8,44 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Animated, Easing, Linking, RefreshControl } from "react-native";
-import styled from "styled-components/native";
-import { useFocusEffect } from "@react-navigation/native";
 
+import { answersAreEncrypted } from "../../services/encryption/CaseEncryptionHelper";
+import { calculateSum, convertDataToArray } from "../../helpers/FormatVivaData";
+import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
+import useSetupForm from "../../containers/Form/hooks/useSetupForm";
+import { isRequestError, remove } from "../../helpers/ApiRequest";
+import statusTypeConstantMapper from "./statusTypeConstantMapper";
+import { CaseDispatch, CaseState } from "../../store/CaseContext";
+import { isPdfAvailable, pdfToBase64String } from "./pdf.helper";
+import useGetFormPasswords from "./useGetFormPasswords";
+import { canCaseBeRemoved } from "../../helpers/Case";
+import AuthContext from "../../store/AuthContext";
+import { to, wait } from "../../helpers/Misc";
+
+import AddCoApplicantModal from "../../components/organisms/AddCoApplicantModal/AddCoApplicantModal";
+import NewApplicationModal from "../../components/organisms/NewApplicationModal/NewApplicationModal";
+import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
 import FloatingButton from "../../components/molecules/FloatingButton";
-import { Text, Icon } from "../../components/atoms";
+import PdfModal from "../../components/organisms/PdfModal/PdfModal";
+import { RemoveCaseModal } from "../../components/organisms";
+import { Icon, Text } from "../../components/atoms";
 import {
   Card,
   CaseCard,
+  CloseDialog,
   Header,
   ScreenWrapper,
-  CloseDialog,
 } from "../../components/molecules";
-import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
-import { CaseState, CaseDispatch } from "../../store/CaseContext";
-import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
-import AuthContext from "../../store/AuthContext";
-import type {
-  State as CaseContextState,
-  Dispatch as CaseContextDispatch,
-  AddCoApplicantParameters,
-} from "../../types/CaseContext";
-import { to, wait } from "../../helpers/Misc";
-import type { Case, AnsweredForm, Answer } from "../../types/Case";
+
 import { ApplicationStatusType } from "../../types/Case";
-import { answersAreEncrypted } from "../../services/encryption/CaseEncryptionHelper";
-import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
-import NewApplicationModal from "../../components/organisms/NewApplicationModal/NewApplicationModal";
-import AddCoApplicantModal from "../../components/organisms/AddCoApplicantModal/AddCoApplicantModal";
-import PdfModal from "../../components/organisms/PdfModal/PdfModal";
-
-import statusTypeConstantMapper from "./statusTypeConstantMapper";
-import useGetFormPasswords from "./useGetFormPasswords";
-import useSetupForm from "../../containers/Form/hooks/useSetupForm";
-import { isPdfAvailable, pdfToBase64String } from "./pdf.helper";
-
 import ICON from "../../assets/images/icons";
+
+import type { Answer, AnsweredForm, Case } from "../../types/Case";
+import type {
+  AddCoApplicantParameters,
+  Dispatch as CaseContextDispatch,
+  State as CaseContextState,
+} from "../../types/CaseContext";
 
 const { NEW_APPLICATION, NOT_STARTED, CLOSED, ACTIVE, APPROVED } =
   ApplicationStatusType;
@@ -73,6 +77,7 @@ enum Modal {
   START_NEW_APPLICATION,
   ADD_CO_APPLICANT,
   SETUP_LOADING_FORM_MODAL,
+  REMOVE_CASE,
 }
 
 interface ActiveModal {
@@ -107,7 +112,8 @@ const computeCaseCardComponent = (
   navigation: CaseCardNavigation,
   signedInPersonalNumber: string,
   onShowPinInput: () => void,
-  onOpenPdf: () => void
+  onOpenPdf: () => void,
+  onHandleRemoveCase: () => void
 ) => {
   const currentForm: AnsweredForm = caseItem?.forms[caseItem.currentFormId];
 
@@ -246,6 +252,17 @@ const computeCaseCardComponent = (
     await Linking.openURL(url);
   };
 
+  const canRemoveCase = canCaseBeRemoved(caseItem) && !isCoApplicant;
+  const isEncryptionBroken = canRemoveCase && shouldEnterPin;
+
+  if (isEncryptionBroken) {
+    cardProps.subtitle = "Något har gått fel";
+    cardProps.description = "Tyvärr behöver du göra om ansökan för månaden.";
+    cardProps.onClick = () => navigation.onOpenCaseSummary(caseId);
+    buttonProps.text = "Gör om ansökan";
+    buttonProps.onClick = onHandleRemoveCase;
+  }
+
   return (
     <CaseCard
       key={caseId}
@@ -261,7 +278,7 @@ const computeCaseCardComponent = (
       currentStep={currentStep}
       totalSteps={totalSteps}
       showPayments={isClosed}
-      showProgress={isOngoing}
+      showProgress={isOngoing && !isEncryptionBroken}
       approvedAmount={calculateSum(paymentsArray)}
       declinedAmount={calculateSum(partiallyApprovedDecisionsAndRejected)}
       givedate={giveDate}
@@ -291,7 +308,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
   const { fetchCases, cases } = useContext(
     CaseState
   ) as Required<CaseContextState>;
-  const { providePinForCase, addCoApplicant } =
+  const { providePinForCase, addCoApplicant, deleteCase } =
     useContext<CaseContextDispatch>(CaseDispatch);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
 
@@ -461,6 +478,29 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     });
   };
 
+  const handleRemoveCase = (caseId: string) => {
+    openModal(Modal.REMOVE_CASE, { data: { caseId } });
+  };
+
+  const removeCase = async (caseId: string) => {
+    const result = await remove(`cases/${caseId}`);
+
+    if (!isRequestError(result)) {
+      if (deleteCase) {
+        deleteCase(caseId);
+      }
+
+      const REFRESH_DELAY = 2000;
+
+      await fetchCases();
+      await wait(REFRESH_DELAY);
+      onRefresh();
+      closeOpenModal();
+    } else {
+      throw new Error("Could not remove case");
+    }
+  };
+
   const activeCaseCards = activeCases.map((caseData) =>
     computeCaseCardComponent(
       {
@@ -470,7 +510,8 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
       { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
       user?.personalNumber,
       () => openPinInputModal(caseData),
-      () => setShowPdfForCase(caseData.id)
+      () => setShowPdfForCase(caseData.id),
+      () => handleRemoveCase(caseData.id)
     )
   );
 
@@ -483,7 +524,8 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
       { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
       user?.personalNumber,
       () => openPinInputModal(caseData),
-      () => setShowPdfForCase(caseData.id)
+      () => setShowPdfForCase(caseData.id),
+      () => undefined
     )
   );
 
@@ -570,6 +612,16 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
         toggleModal={hidePdfModal}
         uri={pdfToBase64String(cases[showPdfForCase]?.pdf)}
       />
+
+      {activeModal.modal === Modal.REMOVE_CASE && (
+        <RemoveCaseModal
+          visible
+          onCloseModal={closeOpenModal}
+          onRemoveCase={() =>
+            removeCase((activeModal.data?.caseId as string) ?? "")
+          }
+        />
+      )}
 
       {activeModal.modal === Modal.START_NEW_APPLICATION && (
         <NewApplicationModal

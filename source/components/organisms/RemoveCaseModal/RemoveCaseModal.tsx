@@ -42,8 +42,8 @@ function RemoveCaseModal({
   const modalContent: Record<RemoveCaseState, ModalContent> = {
     [RemoveCaseState.Default]: {
       text: {
-        title: "Vill du ta bort din ansökan?",
-        body: "När en ansökan tagits bort kan en ny ansökan för perioden skapas",
+        title: "Vill du göra om denna ansökan?",
+        body: "Din tidigare ansökan tas bort och en ny ansökan skapas upp.",
       },
       buttons: [
         getModalButtonSet("Avbryt", "neutral", handleCloseModal),
@@ -52,7 +52,7 @@ function RemoveCaseModal({
     },
     [RemoveCaseState.Loading]: {
       text: {
-        title: "Ditt ärende tas bort",
+        title: "Din ansökan tas bort",
         body: "Vänligen vänta ...",
       },
       buttons: [],
