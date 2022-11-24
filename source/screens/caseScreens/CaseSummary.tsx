@@ -1,3 +1,4 @@
+import { View, Animated, Easing } from "react-native";
 import React, {
   useContext,
   useEffect,
@@ -6,7 +7,6 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { View, Animated, Easing } from "react-native";
 
 import {
   CaseCalculationsModal,
@@ -36,8 +36,9 @@ import { canCaseBeRemoved } from "../../helpers/Case";
 
 import useSetupForm from "../../containers/Form/hooks/useSetupForm";
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
-import useGetFormPasswords from "./useGetFormPasswords";
 import { isPdfAvailable, pdfToBase64String } from "./pdf.helper";
+import { answersAreEncrypted } from "../../services/encryption";
+import useGetFormPasswords from "./useGetFormPasswords";
 
 import { ApplicationStatusType } from "../../types/Case";
 
@@ -60,6 +61,7 @@ import type {
   Calculations,
   Answer,
   PDF,
+  AnsweredForm,
 } from "../../types/Case";
 
 const { APPROVED } = ApplicationStatusType;
@@ -73,7 +75,8 @@ const computeCaseCardComponent = (
   toggleModal: () => void,
   personalNumber: string,
   formPassword: string | undefined,
-  onOpenPdf: () => void
+  onOpenPdf: () => void,
+  onHandleRemoveCase: () => void
 ) => {
   const {
     currentPosition: { currentMainStep: currentStep, numberOfMainSteps },
@@ -177,7 +180,7 @@ const computeCaseCardComponent = (
     ? `${
         payments.payment.givedate.split("-")[2]
       } ${getSwedishMonthNameByTimeStamp(payments.payment.givedate, true)}`
-    : null;
+    : undefined;
 
   const unApprovedCompletionDescriptions: string[] =
     statusType.includes("completion") || statusType.includes("randomCheck")
@@ -193,12 +196,27 @@ const computeCaseCardComponent = (
     description = `${caseItem.status.description}\n\n${partnerName} loggar in i appen med BankID och anger koden för att granska och signera er ansökan.\n\nKod till ${partnerName}:`;
   }
 
+  let subtitle = status.name;
+
+  const currentForm: AnsweredForm = caseItem.forms[caseItem.currentFormId];
+  const shouldEnterPin = answersAreEncrypted(currentForm.answers);
+  const canRemoveCase = canCaseBeRemoved(caseItem) && !isCoApplicant;
+  const isEncryptionBroken = canRemoveCase && shouldEnterPin;
+
+  if (isEncryptionBroken) {
+    subtitle = "Något har gått fel";
+    description =
+      "Fel med en ansökan kan uppstå om du har installerat om appen eller bytt telefon. Tyvärr behöver du göra om ansökan för månaden.";
+    buttonProps.text = "Gör om ansökan";
+    buttonProps.onClick = onHandleRemoveCase;
+  }
+
   return (
     <CaseCard
       colorSchema={colorSchema}
       title={applicationPeriodMonth || formName}
-      subtitle={status.name}
-      showProgress={isOngoing}
+      subtitle={subtitle}
+      showProgress={isOngoing && !isEncryptionBroken}
       currentStep={currentStep}
       totalSteps={numberOfMainSteps}
       description={description || ""}
@@ -263,6 +281,9 @@ const CaseSummary = (props: Props): JSX.Element => {
     : [];
 
   const canRemoveCase = canCaseBeRemoved(caseData) && isApplicant;
+  const currentForm: AnsweredForm = caseData.forms[caseData.currentFormId];
+  const shouldEnterPin = answersAreEncrypted(currentForm.answers);
+  const isEncryptionBroken = canRemoveCase && shouldEnterPin;
 
   const removeCase = async () => {
     const result = await remove(`cases/${caseId}`, undefined, undefined);
@@ -371,7 +392,8 @@ const CaseSummary = (props: Props): JSX.Element => {
             toggleModal,
             authContext.user.personalNumber,
             passwords[caseData.id] ?? undefined,
-            togglePdf
+            togglePdf,
+            handleRemoveCaseButtonClick
           )}
 
         {administrators && (
@@ -445,7 +467,7 @@ const CaseSummary = (props: Props): JSX.Element => {
       />
 
       <RemoveCaseButtonContainer>
-        {canRemoveCase && (
+        {canRemoveCase && !isEncryptionBroken && (
           <Button
             onClick={handleRemoveCaseButtonClick}
             colorSchema="red"
