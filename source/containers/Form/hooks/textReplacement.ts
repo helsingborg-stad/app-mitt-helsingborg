@@ -110,7 +110,7 @@ function replaceDate(
 ): string {
   const currentDate = new Date();
   const activeDateByPeriodEndDate = period
-    ? new Date(period.endDate)
+    ? new Date(period.endDate || period.startDate)
     : currentDate;
 
   const [calendarType, position] = descriptorDateParts;
