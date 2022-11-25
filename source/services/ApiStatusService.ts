@@ -1,5 +1,6 @@
 import { get, isRequestError } from "../helpers/ApiRequest";
 import type { Messages } from "../types/StatusMessages";
+import { Type } from "../types/StatusMessages";
 
 interface StatusMessagesResponse {
   messages: Messages[];
@@ -19,7 +20,7 @@ async function getApiStatus(): Promise<Messages[]> {
           title: "Hoppsan!",
           text: "Tjänsten är för närvarande otillgänglig. Försök igen senare.",
         },
-        type: "info",
+        type: Type.Info,
       },
     ];
   }
