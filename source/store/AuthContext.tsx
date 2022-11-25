@@ -229,17 +229,16 @@ function useAuthProviderLogic(
 
     const trySignIn = async () => {
       try {
-        const apiStatusMessages: Messages[] = isDevMode
-          ? await getApiStatus()
-          : [];
-
+        const apiStatusMessages = await getApiStatus();
         const { isCompatible, updateUrl } = await getIsCompatible();
 
         handleSetApiStatusMessages(apiStatusMessages);
         const isValidJWTToken = await isAccessTokenValid();
+        const isMaintenance = apiStatusMessages.some(
+          ({ type }) => type === Type.Maintenance
+        );
 
-        const canLogin = isValidJWTToken && !apiStatusMessages && isCompatible;
-
+        const canLogin = isValidJWTToken && !isMaintenance && isCompatible;
         if (canLogin) {
           await handleAddProfile();
           handleLogin();
