@@ -289,11 +289,11 @@ function useAuthProviderLogic(
   };
 }
 
-const AuthProvider = ({ children }: { children: JSX.Element }): JSX.Element => {
+function AuthProvider({ children }: { children: JSX.Element }): JSX.Element {
   const value = useAuthProviderLogic(initialAuthReducerState);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
+}
 
 export { AuthProvider };
 export default AuthContext;
