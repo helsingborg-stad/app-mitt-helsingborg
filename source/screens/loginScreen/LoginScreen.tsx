@@ -6,11 +6,13 @@ import ILLUSTRATION from "../../assets/images/illustrations";
 
 import { Button, Text } from "../../components/atoms";
 
-import { AuthLoading, ApiStatusMessage } from "../../components/molecules";
+import { AuthLoading } from "../../components/molecules";
 import { useModal } from "../../components/molecules/Modal";
-
-import { PrivacyModal, LoginModal } from "../../components/organisms";
-
+import {
+  PrivacyModal,
+  LoginModal,
+  ApiStatusMessages,
+} from "../../components/organisms";
 import { getUserFriendlyAppVersion } from "../../helpers/Misc";
 
 import EnvironmentConfigurationService from "../../services/EnvironmentConfigurationService";
@@ -53,8 +55,9 @@ function LoginScreen(): JSX.Element {
     isResolved,
     error,
     handleSetError,
-    apiStatusMessage,
+    apiStatusMessages,
   } = useContext(AuthContext);
+
   const showNotification = useNotification();
 
   const [loginModalVisible, toggleLoginModal] = useModal();
@@ -99,9 +102,9 @@ function LoginScreen(): JSX.Element {
             </ContentText>
           </Header>
 
-          {!!apiStatusMessage && (
+          {apiStatusMessages && (
             <ApiStatusMessagePosition>
-              <ApiStatusMessage message={apiStatusMessage} />
+              <ApiStatusMessages messages={apiStatusMessages} />
             </ApiStatusMessagePosition>
           )}
 
@@ -117,7 +120,7 @@ function LoginScreen(): JSX.Element {
             </Form>
           )}
 
-          {(isIdle || isRejected) && !apiStatusMessage && (
+          {(isIdle || isRejected) && !apiStatusMessages && (
             <Form>
               <Button
                 z={0}
@@ -132,7 +135,7 @@ function LoginScreen(): JSX.Element {
               <Link onPress={toggleLoginModal}>Fler alternativ</Link>
             </Form>
           )}
-          {isDevMode && !apiStatusMessage && (
+          {isDevMode && !apiStatusMessages && (
             <RNPickerSelect
               onValueChange={onEnvironmentSelectionChange}
               placeholder={{}}
@@ -147,7 +150,7 @@ function LoginScreen(): JSX.Element {
             />
           )}
 
-          {!apiStatusMessage && (
+          {!apiStatusMessages && (
             <Footer>
               <FooterText>
                 När du använder appen Mitt Helsingborg behandlar Helsingborgs
