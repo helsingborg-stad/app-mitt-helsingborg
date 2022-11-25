@@ -75,8 +75,8 @@ function LoginScreen(): JSX.Element {
     EnvironmentConfigurationService.getInstance().activeEndpoint = value;
   };
 
-  const handleLogin = async () => {
-    await handleAuth(undefined, false);
+  const handleLogin = () => {
+    handleAuth(undefined, false);
   };
 
   const isApiStatusMessageVisible = apiStatusMessages.length > 0;
@@ -102,7 +102,7 @@ function LoginScreen(): JSX.Element {
             </ContentText>
           </Header>
 
-          {isApiStatusMessageVisible && !isMaintenance && (
+          {isApiStatusMessageVisible && (
             <ApiStatusMessagePosition>
               <ApiStatusMessages messages={apiStatusMessages} />
             </ApiStatusMessagePosition>

@@ -36,7 +36,6 @@ interface UseAuthProviderLogicValues extends AuthReducerState {
   isIdle: boolean;
   isResolved: boolean;
   isRejected: boolean;
-  isMaintenance: boolean;
   handleLogin: () => void;
   handleLogout: () => void;
   handleRefreshSession: () => void;
@@ -62,7 +61,6 @@ export const initialAuthProviderState: UseAuthProviderLogicValues = {
   isIdle: false,
   isResolved: false,
   isRejected: false,
-  isMaintenance: false,
   handleLogin: () => true,
   handleLogout: () => undefined,
   handleRefreshSession: () => undefined,
@@ -237,14 +235,16 @@ function useAuthProviderLogic(
     const trySignIn = async () => {
       try {
         const apiStatusMessages = await getApiStatus();
-        const { isCompatible, updateUrl } = await getIsCompatible();
-
         handleSetApiStatusMessages(apiStatusMessages);
-        const isValidJWTToken = await isAccessTokenValid();
+
         const isMaintenance =
           apiStatusMessages.some(({ type }) => type === Type.Maintenance) &&
           !isDevMode;
+
         handleSetMaintenance(isMaintenance);
+
+        const { isCompatible, updateUrl } = await getIsCompatible();
+        const isValidJWTToken = await isAccessTokenValid();
 
         const canLogin = isValidJWTToken && !isMaintenance && isCompatible;
         if (canLogin) {

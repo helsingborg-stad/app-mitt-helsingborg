@@ -8,6 +8,7 @@ import type {
   SetErrorDispatch,
   SetAuthenticateOnExternalDeviceDispatch,
   SetApiStatusMessagesDispatch,
+  SetMaintenanceDispatch,
 } from "../actions/AuthActions.types";
 import { ActionTypes } from "../actions/AuthActions.types";
 
@@ -17,6 +18,7 @@ import type { Messages } from "../../types/StatusMessages";
 
 export interface AuthReducerState {
   isActive: boolean;
+  isMaintenance: boolean;
   userAuthState: USER_AUTH_STATE;
   user: User | null;
   error: DispatchError;
@@ -29,6 +31,7 @@ export interface AuthReducerState {
 
 export const initialAuthReducerState: AuthReducerState = {
   isActive: true,
+  isMaintenance: false,
   userAuthState: USER_AUTH_STATE.PENDING,
   user: null,
   error: null,
@@ -177,6 +180,14 @@ export default function AuthReducer(
       return {
         ...state,
         apiStatusMessages: payload,
+      };
+    }
+
+    case ActionTypes.setMaintenance: {
+      const { payload } = action as SetMaintenanceDispatch;
+      return {
+        ...state,
+        isMaintenance: payload,
       };
     }
 
