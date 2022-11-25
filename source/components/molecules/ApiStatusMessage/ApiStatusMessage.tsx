@@ -13,7 +13,7 @@ function ApiStatusMessage({ message, type }: Props): JSX.Element {
 
   return (
     <MessageContainer>
-      <Icon size={48} name={iconName} />
+      <Icon size={32} name={iconName} />
       <MessageText strong align="center" color={color}>
         {message.title}
       </MessageText>

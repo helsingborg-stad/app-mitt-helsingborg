@@ -10,36 +10,31 @@ import type {
 } from "./ApiStatusMessage.types";
 
 const ApiStatusMessageBase = styled.View<ApiStatusMessageContainerProps>`
-  min-height: 160px;
   align-self: center;
   justify-content: space-evenly;
-  width: 80%;
+  width: 85%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 8px 24px;
-  margin-top: 10px;
+  padding: 10px 28px;
+  border-style: solid;
+  border-width: 2px;
+  margin-top: 15px;
 `;
 
 const InfoContainer = styled(ApiStatusMessageBase)`
-  background: ${({ theme: propTheme }) =>
-    propTheme.colors.complementary.neutral[3]};
-  border: ${({ theme: propTheme }) =>
-    `2px solid ${propTheme.colors.complementary.neutral[1]}`};
+  background: ${({ theme: { colors } }) => colors.complementary.neutral[3]};
+  border-color: ${({ theme: { colors } }) => colors.complementary.neutral[0]};
 `;
 
 const WarningContainer = styled(ApiStatusMessageBase)`
-  background: ${({ theme: propTheme }) =>
-    propTheme.colors.complementary.red[3]};
-  border: ${({ theme: propTheme }) =>
-    `2px solid ${propTheme.colors.complementary.red[0]}`};
+  background: ${({ theme: { colors } }) => colors.complementary.red[3]};
+  border-color: ${({ theme: { colors } }) => colors.complementary.red[0]};
 `;
 
 const MaintneceContainer = styled(ApiStatusMessageBase)`
-  background: ${({ theme: propTheme }) =>
-    propTheme.colors.complementary.blue[3]};
-  border: ${({ theme: propTheme }) =>
-    `2px solid ${propTheme.colors.complementary.blue[1]}`};
+  background: ${({ theme: { colors } }) => colors.complementary.blue[3]};
+  border-color: ${({ theme: { colors } }) => colors.complementary.blue[0]};
 `;
 
 export const styleTypeMap: StyleMap = {
@@ -52,7 +47,7 @@ export const styleTypeMap: StyleMap = {
     color: theme.colors.primary.red[2],
   },
   [Type.Maintenance]: {
-    iconName: "sync",
+    iconName: "info-outline",
     color: theme.colors.primary.blue[2],
   },
 };
