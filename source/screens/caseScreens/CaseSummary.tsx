@@ -269,7 +269,7 @@ const CaseSummary = (props: Props): JSX.Element => {
   const [showRemoveCaseModal, toggleRemoveCaseModal] = useModal();
 
   const [showSetupFormModal, setShowSetupFormModal] = useState(false);
-  const [setupFormError, setSetupFormError] = useState("");
+  const [hasSetupFormError, setSetupFormError] = useState(false);
 
   const [setupForm] = useSetupForm();
   const passwords = useGetFormPasswords(cases, authContext.user);
@@ -340,7 +340,7 @@ const CaseSummary = (props: Props): JSX.Element => {
   };
 
   const openForm = async (id: string, isSignMode = false) => {
-    setSetupFormError("");
+    setSetupFormError(false);
     setShowSetupFormModal(true);
 
     try {
@@ -352,7 +352,7 @@ const CaseSummary = (props: Props): JSX.Element => {
       closeSetupFormModal();
       navigation.navigate("Form", { caseId: id, isSignMode });
     } catch (error) {
-      setSetupFormError(error?.message);
+      setSetupFormError(true);
     }
   };
 
@@ -468,7 +468,7 @@ const CaseSummary = (props: Props): JSX.Element => {
           visible
           onCloseModal={closeSetupFormModal}
           onRetryOpenForm={onRetryOpenForm}
-          errorMessage={setupFormError}
+          hasError={hasSetupFormError}
         />
       )}
 

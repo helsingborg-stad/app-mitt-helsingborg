@@ -2,7 +2,7 @@ import type { PrimaryColor } from "../../../theme/themeHelpers";
 
 export interface Props {
   visible: boolean;
-  errorMessage: string;
+  hasError: boolean;
   onRetryOpenForm: () => void;
   onCloseModal: () => void;
 }

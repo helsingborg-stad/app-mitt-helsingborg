@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 
 import { CloseDialog } from "../../molecules";
 
@@ -17,31 +17,30 @@ const getModalButtonSet = (
 
 function SetupFormModal({
   visible,
-  errorMessage,
+  hasError,
   onCloseModal,
   onRetryOpenForm,
 }: Props): JSX.Element | null {
-  const { text, buttons } = useMemo(() => {
-    if (errorMessage) {
-      return {
-        text: {
-          title: "Ett fel har uppstått ",
-          body: "Vill du försöka igen?",
-        },
-        buttons: [
-          getModalButtonSet("Avbryt", "neutral", onCloseModal),
-          getModalButtonSet("Ja", "red", onRetryOpenForm),
-        ],
-      };
-    }
-    return {
-      text: {
-        title: "Förbereder formulär",
-        body: "Vänligen vänta ...",
-      },
-      buttons: [],
-    };
-  }, [errorMessage, onCloseModal, onRetryOpenForm]);
+  const defaultContent = {
+    text: {
+      title: "Förbereder formulär",
+      body: "Vänligen vänta ...",
+    },
+    buttons: [],
+  };
+
+  const errorContent = {
+    text: {
+      title: "Ett fel har uppstått ",
+      body: "Vill du försöka igen?",
+    },
+    buttons: [
+      getModalButtonSet("Avbryt", "neutral", onCloseModal),
+      getModalButtonSet("Ja", "red", onRetryOpenForm),
+    ],
+  };
+
+  const { text, buttons } = hasError ? errorContent : defaultContent;
 
   if (!visible) return null;
 

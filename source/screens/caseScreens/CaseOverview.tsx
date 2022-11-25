@@ -657,7 +657,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
       {activeModal.modal === Modal.SETUP_LOADING_FORM_MODAL && (
         <SetupFormModal
           onRetryOpenForm={retryOpenForm}
-          errorMessage={activeModal?.error ?? ""}
+          hasError={!!activeModal?.error}
           onCloseModal={closeOpenModal}
           visible
         />
