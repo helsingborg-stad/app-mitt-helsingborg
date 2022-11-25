@@ -24,7 +24,7 @@ import {
   setStatus,
   setError,
   setAuthenticateOnExternalDevice,
-  setApiStatusMessage,
+  setApiStatusMessages,
 } from "./actions/AuthActions";
 
 import type { DispatchError } from "./actions/AuthActions.types";
@@ -166,8 +166,8 @@ function useAuthProviderLogic(
     dispatch(await addProfile());
   }
 
-  function handleSetApiStatusMessage(message: string) {
-    dispatch(setApiStatusMessage(message));
+  function handleSetApiStatusMessages(messages: Messages[]) {
+    dispatch(setApiStatusMessages(messages));
   }
 
   function handleSetStatus(status: string) {
@@ -226,7 +226,7 @@ function useAuthProviderLogic(
 
         const { isCompatible, updateUrl } = await getIsCompatible();
 
-        handleSetApiStatusMessage(apiStatusMessage);
+        handleSetApiStatusMessages(apiStatusMessages);
         const isValidJWTToken = await isAccessTokenValid();
 
         const canLogin = isValidJWTToken && !apiStatusMessage && isCompatible;
