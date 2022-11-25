@@ -28,6 +28,7 @@ import {
 } from "./actions/AuthActions";
 
 import type { DispatchError } from "./actions/AuthActions.types";
+import { Type } from "../types/StatusMessages";
 
 interface UseAuthProviderLogicValues extends AuthReducerState {
   isLoading: boolean;
