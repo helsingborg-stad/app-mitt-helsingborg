@@ -216,6 +216,16 @@ function useAuthProviderLogic(
   }, [handleSetMode]);
 
   useEffect(() => {
+    const upgradeAppMessages: Messages[] = [
+      {
+        message: {
+          title: "Uppdatering krävs",
+          text: "Du har en för gammal version av appen. För att kunna ta del av Mitt Helsingborg och dess funktioner måste appen uppdateras. Besök din butik för appar för att göra detta.",
+        },
+        type: Type.Maintenance,
+      },
+    ];
+
     const trySignIn = async () => {
       try {
         let apiStatusMessage = "";
@@ -240,15 +250,7 @@ function useAuthProviderLogic(
 
         if (!isCompatible) {
           showUpdateRequiredAlert(updateUrl);
-          handleSetApiStatusMessages([
-            {
-              message: {
-                title: "Uppdatering krävs",
-                text: "Du har en för gammal version av appen. För att kunna ta del av Mitt Helsingborg och dess funktioner måste appen uppdateras. Besök din butik för appar för att göra detta.",
-              },
-              type: "info",
-            },
-          ]);
+          handleSetApiStatusMessages(upgradeAppMessages);
         }
       } catch (error) {
         void handleLogout();
