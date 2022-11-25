@@ -17,7 +17,6 @@ import { getUserFriendlyAppVersion } from "../../helpers/Misc";
 
 import EnvironmentConfigurationService from "../../services/EnvironmentConfigurationService";
 
-import AppContext from "../../store/AppContext";
 import AuthContext from "../../store/AuthContext";
 import { useNotification } from "../../store/NotificationContext";
 
@@ -53,6 +52,7 @@ function LoginScreen(): JSX.Element {
     isIdle,
     isRejected,
     isResolved,
+    isMaintenance,
     error,
     handleSetError,
     apiStatusMessages,
@@ -62,8 +62,6 @@ function LoginScreen(): JSX.Element {
 
   const [loginModalVisible, toggleLoginModal] = useModal();
   const [agreementModalVisible, toggleAgreementModal] = useModal();
-
-  const { isDevMode } = useContext(AppContext);
 
   useEffect(() => {
     if (isRejected && error?.message) {
@@ -104,13 +102,13 @@ function LoginScreen(): JSX.Element {
             </ContentText>
           </Header>
 
-          {isApiStatusMessageVisible && (
+          {isApiStatusMessageVisible && !isMaintenance && (
             <ApiStatusMessagePosition>
               <ApiStatusMessages messages={apiStatusMessages} />
             </ApiStatusMessagePosition>
           )}
 
-          {(isLoading || isResolved) && (
+          {(isLoading || isResolved) && !isMaintenance && (
             <Form>
               <AuthLoading
                 colorSchema="red"
@@ -122,7 +120,7 @@ function LoginScreen(): JSX.Element {
             </Form>
           )}
 
-          {(isIdle || isRejected) && !isApiStatusMessageVisible && (
+          {(isIdle || isRejected) && !isMaintenance && (
             <Form>
               <Button
                 z={0}
@@ -138,7 +136,7 @@ function LoginScreen(): JSX.Element {
             </Form>
           )}
 
-          {isDevMode && !isApiStatusMessageVisible && (
+          {!isMaintenance && (
             <RNPickerSelect
               onValueChange={onEnvironmentSelectionChange}
               placeholder={{}}
@@ -153,18 +151,16 @@ function LoginScreen(): JSX.Element {
             />
           )}
 
-          {!isApiStatusMessageVisible && (
-            <Footer>
-              <FooterText>
-                När du använder appen Mitt Helsingborg behandlar Helsingborgs
-                stad dina{" "}
-                <ParagraphLink onPress={toggleAgreementModal}>
-                  personuppgifter
-                </ParagraphLink>
-                .
-              </FooterText>
-            </Footer>
-          )}
+          <Footer>
+            <FooterText>
+              När du använder appen Mitt Helsingborg behandlar Helsingborgs stad
+              dina{" "}
+              <ParagraphLink onPress={toggleAgreementModal}>
+                personuppgifter
+              </ParagraphLink>
+              .
+            </FooterText>
+          </Footer>
         </FlexImageBackground>
       </SafeAreaViewTop>
 
