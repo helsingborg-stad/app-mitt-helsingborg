@@ -1,13 +1,30 @@
-import { get } from "../helpers/ApiRequest";
+import { get, isRequestError } from "../helpers/ApiRequest";
+import type { Messages } from "../types/StatusMessages";
 
-const getApiStatus = async (): Promise<string> => {
-  const response = await get("/status");
+interface StatusMessagesResponse {
+  messages: Messages[];
+}
 
-  if (response.status !== 200) {
-    return "Tjänsten är för närvarande otillgänglig. Försök igen senare.";
+async function getApiStatus(): Promise<Messages[]> {
+  const response = await get<StatusMessagesResponse>("/status/messages");
+
+  if (isRequestError(response)) {
+    throw new Error(response.message);
   }
 
-  return response?.data?.data?.message || "";
-};
+  if (!response) {
+    return [
+      {
+        message: {
+          title: "Hoppsan!",
+          text: "Tjänsten är för närvarande otillgänglig. Försök igen senare.",
+        },
+        type: "info",
+      },
+    ];
+  }
+
+  return response?.data?.data?.messages ?? [];
+}
 
 export default getApiStatus;
