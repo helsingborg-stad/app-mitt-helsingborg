@@ -340,8 +340,8 @@ const CaseSummary = (props: Props): JSX.Element => {
   };
 
   const openForm = async (id: string, isSignMode = false) => {
-    setShowSetupFormModal(true);
     setSetupFormError("");
+    setShowSetupFormModal(true);
 
     try {
       await setupForm(
@@ -353,8 +353,11 @@ const CaseSummary = (props: Props): JSX.Element => {
       navigation.navigate("Form", { caseId: id, isSignMode });
     } catch (error) {
       setSetupFormError(error?.message);
-      console.log("ERROR: ", error);
     }
+  };
+
+  const onRetryOpenForm = async () => {
+    await openForm(caseId);
   };
 
   useEffect(() => {
@@ -464,7 +467,7 @@ const CaseSummary = (props: Props): JSX.Element => {
         <SetupFormModal
           visible
           onCloseModal={closeSetupFormModal}
-          onRetryOpenForm={openForm}
+          onRetryOpenForm={onRetryOpenForm}
           errorMessage={setupFormError}
         />
       )}
