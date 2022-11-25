@@ -1,6 +1,6 @@
 import React from "react";
 import { ApiStatusMessage } from "../../molecules";
-import { MessagesContainer } from "./ApiStatusMessages.styled";
+import MessagesContainer from "./ApiStatusMessages.styled";
 import type { Props } from "./ApiStatusMessages.types";
 
 function ApiStatusMessages({ messages }: Props): JSX.Element {

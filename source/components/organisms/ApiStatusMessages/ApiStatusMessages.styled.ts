@@ -7,4 +7,4 @@ const MessagesContainer = styled.View`
   width: 100%;
 `;
 
-export { MessagesContainer };
+export default MessagesContainer;
