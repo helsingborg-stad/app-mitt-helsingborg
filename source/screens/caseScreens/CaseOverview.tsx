@@ -39,7 +39,7 @@ import {
 import { ApplicationStatusType } from "../../types/Case";
 import ICON from "../../assets/images/icons";
 
-import type { /* Answer, */ AnsweredForm, Case } from "../../types/Case";
+import type { Answer, AnsweredForm, Case } from "../../types/Case";
 import type {
   AddCoApplicantParameters,
   Dispatch as CaseContextDispatch,
