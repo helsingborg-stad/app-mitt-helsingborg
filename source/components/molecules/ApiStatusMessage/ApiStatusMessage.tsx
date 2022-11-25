@@ -1,30 +1,26 @@
 import React from "react";
 
-import { Icon, Text } from "../../atoms";
-
-import ApiStatusMessageContainer from "./ApiStatusMessage.styled";
-import theme from "../../../theme/theme";
-
+import { Icon } from "../../atoms";
 import type { Props } from "./ApiStatusMessage.types";
+import ContainerMap, {
+  MessageText,
+  styleTypeMap,
+} from "./ApiStatusMessage.styled";
 
-function ApiStatusMessage({ message }: Props): JSX.Element {
+function ApiStatusMessage({ message, type }: Props): JSX.Element {
+  const MessageContainer = ContainerMap[type];
+  const { iconName, color } = styleTypeMap[type];
+
   return (
-    <ApiStatusMessageContainer>
-      <Icon
-        name="error-outline"
-        size={48}
-        color={theme.colors.primary.red[2]}
-      />
-      <Text
-        strong
-        align="center"
-        style={{
-          color: theme.colors.primary.red[0],
-        }}
-      >
-        {message}
-      </Text>
-    </ApiStatusMessageContainer>
+    <MessageContainer>
+      <Icon size={48} name={iconName} />
+      <MessageText strong align="center" color={color}>
+        {message.title}
+      </MessageText>
+      <MessageText align="center" color={color}>
+        {message.text}
+      </MessageText>
+    </MessageContainer>
   );
 }
 
