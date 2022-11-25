@@ -20,12 +20,12 @@ async function getApiStatus(): Promise<Messages[]> {
           title: "Hoppsan!",
           text: "Tjänsten är för närvarande otillgänglig. Försök igen senare.",
         },
-        type: Type.Info,
+        type: Type.Warning,
       },
     ];
   }
 
-  return response?.data?.data?.messages ?? [];
+  return response.data.data.messages ?? [];
 }
 
 export default getApiStatus;
