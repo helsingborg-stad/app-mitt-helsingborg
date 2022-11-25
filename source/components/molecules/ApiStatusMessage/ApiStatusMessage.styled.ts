@@ -18,6 +18,7 @@ const ApiStatusMessageBase = styled.View<ApiStatusMessageContainerProps>`
   flex-direction: column;
   align-items: center;
   padding: 8px 24px;
+  margin-top: 10px;
 `;
 
 const InfoContainer = styled(ApiStatusMessageBase)`
