@@ -6,3 +6,4 @@ export { default as CaseCalculationsModal } from "./CaseCalculationsModal/CaseCa
 export { default as RemoveCaseModal } from "./RemoveCaseModal/RemoveCaseModal";
 export { default as PdfModal } from "./PdfModal";
 export { default as ApiStatusMessages } from "./ApiStatusMessages";
+export { default as SetupFormModal } from "./SetupFormModal";
