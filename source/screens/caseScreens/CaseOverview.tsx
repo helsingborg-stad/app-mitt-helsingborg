@@ -9,16 +9,15 @@ import React, {
   useState,
 } from "react";
 
-import { answersAreEncrypted } from "../../services/encryption/CaseEncryptionHelper";
 import { calculateSum, convertDataToArray } from "../../helpers/FormatVivaData";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
+import { canCaseBeRemoved, shouldCaseEnterPin } from "../../helpers/Case";
 import useSetupForm from "../../containers/Form/hooks/useSetupForm";
 import { isRequestError, remove } from "../../helpers/ApiRequest";
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import { CaseDispatch, CaseState } from "../../store/CaseContext";
 import { isPdfAvailable, pdfToBase64String } from "./pdf.helper";
 import useGetFormPasswords from "./useGetFormPasswords";
-import { canCaseBeRemoved } from "../../helpers/Case";
 import AuthContext from "../../store/AuthContext";
 import { to, wait } from "../../helpers/Misc";
 
@@ -165,7 +164,7 @@ const computeCaseCardComponent = (
   const selfHasSigned = casePersonData?.hasSigned;
   const isCoApplicant = casePersonData?.role === "coApplicant";
 
-  const shouldEnterPin = answersAreEncrypted(currentForm.answers);
+  const shouldEnterPin = shouldCaseEnterPin(caseItem);
 
   const shouldShowCTAButton = isCoApplicant
     ? isWaitingForSign && !selfHasSigned
