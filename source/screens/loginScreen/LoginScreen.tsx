@@ -81,6 +81,8 @@ function LoginScreen(): JSX.Element {
     await handleAuth(undefined, false);
   };
 
+  const isApiStatusMessageVisible = apiStatusMessages.length > 0;
+
   return (
     <FlexView>
       <SafeAreaViewTop edges={["top", "right", "left"]}>
@@ -102,7 +104,7 @@ function LoginScreen(): JSX.Element {
             </ContentText>
           </Header>
 
-          {apiStatusMessages && (
+          {isApiStatusMessageVisible && (
             <ApiStatusMessagePosition>
               <ApiStatusMessages messages={apiStatusMessages} />
             </ApiStatusMessagePosition>
@@ -120,7 +122,7 @@ function LoginScreen(): JSX.Element {
             </Form>
           )}
 
-          {(isIdle || isRejected) && !apiStatusMessages && (
+          {(isIdle || isRejected) && !isApiStatusMessageVisible && (
             <Form>
               <Button
                 z={0}
@@ -135,7 +137,8 @@ function LoginScreen(): JSX.Element {
               <Link onPress={toggleLoginModal}>Fler alternativ</Link>
             </Form>
           )}
-          {isDevMode && !apiStatusMessages && (
+
+          {isDevMode && !isApiStatusMessageVisible && (
             <RNPickerSelect
               onValueChange={onEnvironmentSelectionChange}
               placeholder={{}}
@@ -150,7 +153,7 @@ function LoginScreen(): JSX.Element {
             />
           )}
 
-          {!apiStatusMessages && (
+          {!isApiStatusMessageVisible && (
             <Footer>
               <FooterText>
                 När du använder appen Mitt Helsingborg behandlar Helsingborgs
