@@ -239,9 +239,15 @@ function useAuthProviderLogic(
 
         if (!isCompatible) {
           showUpdateRequiredAlert(updateUrl);
-          handleSetApiStatusMessage(
-            "Du har en för gammal version av appen. För att kunna ta del av Mitt Helsingborg och dess funktioner måste appen uppdateras. Besök din butik för appar för att göra detta."
-          );
+          handleSetApiStatusMessages([
+            {
+              message: {
+                title: "Uppdatering krävs",
+                text: "Du har en för gammal version av appen. För att kunna ta del av Mitt Helsingborg och dess funktioner måste appen uppdateras. Besök din butik för appar för att göra detta.",
+              },
+              type: "info",
+            },
+          ]);
         }
       } catch (error) {
         void handleLogout();
