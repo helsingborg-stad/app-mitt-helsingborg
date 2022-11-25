@@ -17,6 +17,7 @@ export enum ActionTypes {
   signSuccess = "SIGN_SUCCESS",
   setAuthOnExternalDevice = "SET_AUTH_ON_EXTERNAL_DEVICE",
   apiStatusMessages = "API_STATUS_MESSAGES",
+  setMaintenance = "SET_MAINTENANCE",
 }
 
 export type DispatchError = Error | null | string;
@@ -107,4 +108,9 @@ export interface SetAuthenticateOnExternalDeviceDispatch {
 export interface SetApiStatusMessagesDispatch {
   type: ActionTypes.apiStatusMessages;
   payload: Messages[];
+}
+
+export interface SetMaintenanceDispatch {
+  type: ActionTypes.setMaintenance;
+  payload: boolean;
 }

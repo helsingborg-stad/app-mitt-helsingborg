@@ -25,6 +25,7 @@ import {
   setError,
   setAuthenticateOnExternalDevice,
   setApiStatusMessages,
+  setMaintenance,
 } from "./actions/AuthActions";
 
 import type { DispatchError } from "./actions/AuthActions.types";
@@ -35,6 +36,7 @@ interface UseAuthProviderLogicValues extends AuthReducerState {
   isIdle: boolean;
   isResolved: boolean;
   isRejected: boolean;
+  isMaintenance: boolean;
   handleLogin: () => void;
   handleLogout: () => void;
   handleRefreshSession: () => void;
@@ -60,6 +62,7 @@ export const initialAuthProviderState: UseAuthProviderLogicValues = {
   isIdle: false,
   isResolved: false,
   isRejected: false,
+  isMaintenance: false,
   handleLogin: () => true,
   handleLogout: () => undefined,
   handleRefreshSession: () => undefined,
@@ -179,6 +182,10 @@ function useAuthProviderLogic(
     dispatch(setError(error));
   }
 
+  function handleSetMaintenance(isMaintenance: boolean) {
+    dispatch(setMaintenance(isMaintenance));
+  }
+
   function showUpdateRequiredAlert(updateUrl: string) {
     Alert.alert(
       "Mitt Helsingborg måste uppdateras",
@@ -234,9 +241,10 @@ function useAuthProviderLogic(
 
         handleSetApiStatusMessages(apiStatusMessages);
         const isValidJWTToken = await isAccessTokenValid();
-        const isMaintenance = apiStatusMessages.some(
-          ({ type }) => type === Type.Maintenance
-        );
+        const isMaintenance =
+          apiStatusMessages.some(({ type }) => type === Type.Maintenance) &&
+          !isDevMode;
+        handleSetMaintenance(isMaintenance);
 
         const canLogin = isValidJWTToken && !isMaintenance && isCompatible;
         if (canLogin) {

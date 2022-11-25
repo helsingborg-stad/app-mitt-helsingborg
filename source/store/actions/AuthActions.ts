@@ -26,6 +26,7 @@ import type {
   CancelOrderDispatch,
   SetAuthenticateOnExternalDeviceDispatch,
   SetApiStatusMessagesDispatch,
+  SetMaintenanceDispatch,
 } from "./AuthActions.types";
 import { ActionTypes } from "./AuthActions.types";
 
@@ -250,5 +251,12 @@ export function setApiStatusMessages(
   return {
     type: ActionTypes.apiStatusMessages,
     payload: apiStatusMessages,
+  };
+}
+
+export function setMaintenance(isMaintenance: boolean): SetMaintenanceDispatch {
+  return {
+    type: ActionTypes.setMaintenance,
+    payload: isMaintenance,
   };
 }
