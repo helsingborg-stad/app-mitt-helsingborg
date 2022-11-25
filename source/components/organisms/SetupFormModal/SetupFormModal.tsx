@@ -2,7 +2,7 @@ import React from "react";
 
 import { CloseDialog } from "../../molecules";
 
-import type { ButtonSet, Props } from "./SetupFormModal.types";
+import type { ButtonSet, Props, ModalContent } from "./SetupFormModal.types";
 import type { PrimaryColor } from "../../../theme/themeHelpers";
 
 const getModalButtonSet = (
@@ -21,7 +21,7 @@ function SetupFormModal({
   onCloseModal,
   onRetryOpenForm,
 }: Props): JSX.Element | null {
-  const defaultContent = {
+  const defaultContent: ModalContent = {
     text: {
       title: "Förbereder formulär",
       body: "Vänligen vänta ...",
@@ -29,7 +29,7 @@ function SetupFormModal({
     buttons: [],
   };
 
-  const errorContent = {
+  const errorContent: ModalContent = {
     text: {
       title: "Ett fel har uppstått ",
       body: "Vill du försöka igen?",
