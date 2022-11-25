@@ -3,6 +3,7 @@ import bankid from "../../services/BankidService";
 import * as authService from "../../services/AuthService";
 
 import type { User } from "../../types/UserTypes";
+import type { Messages } from "../../types/StatusMessages";
 
 import type {
   DispatchError,
@@ -24,7 +25,7 @@ import type {
   CheckOrderStatusFailureDispatch,
   CancelOrderDispatch,
   SetAuthenticateOnExternalDeviceDispatch,
-  SetApiStatusMessageDispatch,
+  SetApiStatusMessagesDispatch,
 } from "./AuthActions.types";
 import { ActionTypes } from "./AuthActions.types";
 
@@ -243,11 +244,11 @@ export function setAuthenticateOnExternalDevice(
   };
 }
 
-export function setApiStatusMessage(
-  apiStatusMessage: string
-): SetApiStatusMessageDispatch {
+export function setApiStatusMessages(
+  apiStatusMessages: Messages[]
+): SetApiStatusMessagesDispatch {
   return {
-    type: ActionTypes.apiStatusMessage,
-    payload: apiStatusMessage,
+    type: ActionTypes.apiStatusMessages,
+    payload: apiStatusMessages,
   };
 }
