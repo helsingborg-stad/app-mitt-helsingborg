@@ -32,7 +32,7 @@ const WarningContainer = styled(ApiStatusMessageBase)`
   border-color: ${({ theme: { colors } }) => colors.complementary.red[0]};
 `;
 
-const MaintneceContainer = styled(ApiStatusMessageBase)`
+const MaintenanceContainer = styled(ApiStatusMessageBase)`
   background: ${({ theme: { colors } }) => colors.complementary.blue[3]};
   border-color: ${({ theme: { colors } }) => colors.complementary.blue[0]};
 `;
@@ -61,5 +61,5 @@ export const MessageText = styled(Text)<MessageTextProps>`
 export default {
   [Type.Info]: InfoContainer,
   [Type.Warning]: WarningContainer,
-  [Type.Maintenance]: MaintneceContainer,
+  [Type.Maintenance]: MaintenanceContainer,
 };
