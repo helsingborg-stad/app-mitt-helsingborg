@@ -132,7 +132,7 @@ const pickerSelectStyles = {
 
 const ApiStatusMessagePosition = styled.View`
   position: relative;
-  bottom: 60px;
+  bottom: 24px;
 `;
 
 export {

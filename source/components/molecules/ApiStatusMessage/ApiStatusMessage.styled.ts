@@ -54,6 +54,8 @@ export const styleTypeMap: StyleMap = {
 
 export const MessageText = styled(Text)<MessageTextProps>`
   color: ${({ color }) => color};
+  line-height: 16px;
+  padding-top: 6px;
 `;
 
 export default {
