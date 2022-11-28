@@ -17,6 +17,7 @@ import { getUserFriendlyAppVersion } from "../../helpers/Misc";
 
 import EnvironmentConfigurationService from "../../services/EnvironmentConfigurationService";
 
+import AppContext from "../../store/AppContext";
 import AuthContext from "../../store/AuthContext";
 import { useNotification } from "../../store/NotificationContext";
 
@@ -62,6 +63,7 @@ function LoginScreen(): JSX.Element {
 
   const [loginModalVisible, toggleLoginModal] = useModal();
   const [agreementModalVisible, toggleAgreementModal] = useModal();
+  const { isDevMode } = useContext(AppContext);
 
   useEffect(() => {
     if (isRejected && error?.message) {
@@ -136,7 +138,7 @@ function LoginScreen(): JSX.Element {
             </Form>
           )}
 
-          {!isMaintenance && (
+          {isDevMode && (
             <RNPickerSelect
               onValueChange={onEnvironmentSelectionChange}
               placeholder={{}}
