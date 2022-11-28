@@ -7,27 +7,31 @@ import type {
   SetStatusDispatch,
   SetErrorDispatch,
   SetAuthenticateOnExternalDeviceDispatch,
-  SetApiStatusMessageDispatch,
+  SetApiStatusMessagesDispatch,
+  SetMaintenanceDispatch,
 } from "../actions/AuthActions.types";
 import { ActionTypes } from "../actions/AuthActions.types";
 
 import USER_AUTH_STATE from "../../types/UserAuthTypes";
 import type { User } from "../../types/UserTypes";
+import type { Messages } from "../../types/StatusMessages";
 
 export interface AuthReducerState {
   isActive: boolean;
+  isMaintenance: boolean;
   userAuthState: USER_AUTH_STATE;
   user: User | null;
   error: DispatchError;
   status: string;
-  authenticateOnExternalDevice: boolean;
-  apiStatusMessage: string;
   orderRef: string | undefined;
   autoStartToken: string | undefined;
+  authenticateOnExternalDevice: boolean;
+  apiStatusMessages: Messages[];
 }
 
 export const initialAuthReducerState: AuthReducerState = {
   isActive: true,
+  isMaintenance: false,
   userAuthState: USER_AUTH_STATE.PENDING,
   user: null,
   error: null,
@@ -35,7 +39,7 @@ export const initialAuthReducerState: AuthReducerState = {
   orderRef: undefined,
   autoStartToken: undefined,
   authenticateOnExternalDevice: false,
-  apiStatusMessage: "",
+  apiStatusMessages: [],
 };
 
 export default function AuthReducer(
@@ -171,11 +175,19 @@ export default function AuthReducer(
       };
     }
 
-    case ActionTypes.apiStatusMessage: {
-      const { payload } = action as SetApiStatusMessageDispatch;
+    case ActionTypes.apiStatusMessages: {
+      const { payload } = action as SetApiStatusMessagesDispatch;
       return {
         ...state,
-        apiStatusMessage: payload,
+        apiStatusMessages: payload,
+      };
+    }
+
+    case ActionTypes.setMaintenance: {
+      const { payload } = action as SetMaintenanceDispatch;
+      return {
+        ...state,
+        isMaintenance: payload,
       };
     }
 

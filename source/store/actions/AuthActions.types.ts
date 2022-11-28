@@ -1,4 +1,5 @@
 import type { User } from "../../types/UserTypes";
+import type { Messages } from "../../types/StatusMessages";
 
 export enum ActionTypes {
   loginUserSuccess = "LOGIN_SUCCESS",
@@ -15,7 +16,8 @@ export enum ActionTypes {
   setAuthError = "SET_ERROR",
   signSuccess = "SIGN_SUCCESS",
   setAuthOnExternalDevice = "SET_AUTH_ON_EXTERNAL_DEVICE",
-  apiStatusMessage = "API_STATUS_MESSAGE",
+  apiStatusMessages = "API_STATUS_MESSAGES",
+  setMaintenance = "SET_MAINTENANCE",
 }
 
 export type DispatchError = Error | null | string;
@@ -103,7 +105,12 @@ export interface SetAuthenticateOnExternalDeviceDispatch {
   payload: boolean;
 }
 
-export interface SetApiStatusMessageDispatch {
-  type: ActionTypes.apiStatusMessage;
-  payload: string;
+export interface SetApiStatusMessagesDispatch {
+  type: ActionTypes.apiStatusMessages;
+  payload: Messages[];
+}
+
+export interface SetMaintenanceDispatch {
+  type: ActionTypes.setMaintenance;
+  payload: boolean;
 }

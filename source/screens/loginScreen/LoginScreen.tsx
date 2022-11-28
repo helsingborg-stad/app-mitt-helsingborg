@@ -6,11 +6,13 @@ import ILLUSTRATION from "../../assets/images/illustrations";
 
 import { Button, Text } from "../../components/atoms";
 
-import { AuthLoading, ApiStatusMessage } from "../../components/molecules";
+import { AuthLoading } from "../../components/molecules";
 import { useModal } from "../../components/molecules/Modal";
-
-import { PrivacyModal, LoginModal } from "../../components/organisms";
-
+import {
+  PrivacyModal,
+  LoginModal,
+  ApiStatusMessages,
+} from "../../components/organisms";
 import { getUserFriendlyAppVersion } from "../../helpers/Misc";
 
 import EnvironmentConfigurationService from "../../services/EnvironmentConfigurationService";
@@ -51,15 +53,16 @@ function LoginScreen(): JSX.Element {
     isIdle,
     isRejected,
     isResolved,
+    isMaintenance,
     error,
     handleSetError,
-    apiStatusMessage,
+    apiStatusMessages,
   } = useContext(AuthContext);
+
   const showNotification = useNotification();
 
   const [loginModalVisible, toggleLoginModal] = useModal();
   const [agreementModalVisible, toggleAgreementModal] = useModal();
-
   const { isDevMode } = useContext(AppContext);
 
   useEffect(() => {
@@ -74,9 +77,11 @@ function LoginScreen(): JSX.Element {
     EnvironmentConfigurationService.getInstance().activeEndpoint = value;
   };
 
-  const handleLogin = async () => {
-    await handleAuth(undefined, false);
+  const handleLogin = () => {
+    handleAuth(undefined, false);
   };
+
+  const isApiStatusMessageVisible = apiStatusMessages.length > 0;
 
   return (
     <FlexView>
@@ -99,13 +104,13 @@ function LoginScreen(): JSX.Element {
             </ContentText>
           </Header>
 
-          {!!apiStatusMessage && (
+          {isApiStatusMessageVisible && (
             <ApiStatusMessagePosition>
-              <ApiStatusMessage message={apiStatusMessage} />
+              <ApiStatusMessages messages={apiStatusMessages} />
             </ApiStatusMessagePosition>
           )}
 
-          {(isLoading || isResolved) && (
+          {(isLoading || isResolved) && !isMaintenance && (
             <Form>
               <AuthLoading
                 colorSchema="red"
@@ -117,7 +122,7 @@ function LoginScreen(): JSX.Element {
             </Form>
           )}
 
-          {(isIdle || isRejected) && !apiStatusMessage && (
+          {(isIdle || isRejected) && !isMaintenance && (
             <Form>
               <Button
                 z={0}
@@ -132,7 +137,8 @@ function LoginScreen(): JSX.Element {
               <Link onPress={toggleLoginModal}>Fler alternativ</Link>
             </Form>
           )}
-          {isDevMode && !apiStatusMessage && (
+
+          {isDevMode && (
             <RNPickerSelect
               onValueChange={onEnvironmentSelectionChange}
               placeholder={{}}
@@ -147,18 +153,16 @@ function LoginScreen(): JSX.Element {
             />
           )}
 
-          {!apiStatusMessage && (
-            <Footer>
-              <FooterText>
-                När du använder appen Mitt Helsingborg behandlar Helsingborgs
-                stad dina{" "}
-                <ParagraphLink onPress={toggleAgreementModal}>
-                  personuppgifter
-                </ParagraphLink>
-                .
-              </FooterText>
-            </Footer>
-          )}
+          <Footer>
+            <FooterText>
+              När du använder appen Mitt Helsingborg behandlar Helsingborgs stad
+              dina{" "}
+              <ParagraphLink onPress={toggleAgreementModal}>
+                personuppgifter
+              </ParagraphLink>
+              .
+            </FooterText>
+          </Footer>
         </FlexImageBackground>
       </SafeAreaViewTop>
 

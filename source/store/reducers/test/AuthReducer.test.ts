@@ -25,6 +25,7 @@ const testUser: User = {
   firstName: "firstName",
   lastName: "lastName",
   mobilePhone: "123123123213",
+  personalNumber: "197601011234",
 };
 const testBankIdOrder: BankIdAuthOrder = {
   autoStartToken: "autoStartToken",
@@ -32,7 +33,15 @@ const testBankIdOrder: BankIdAuthOrder = {
 };
 const testAuthStatus = "new status";
 
-const testStatusMessage = "new status message";
+const testStatusMessages = [
+  {
+    message: {
+      title: "title",
+      text: "text",
+    },
+    type: "info",
+  },
+];
 
 test.each([
   {
@@ -154,11 +163,11 @@ test.each([
     },
   },
   {
-    type: ActionTypes.apiStatusMessage,
-    payload: testStatusMessage,
+    type: ActionTypes.apiStatusMessages,
+    payload: testStatusMessages,
     newState: {
       ...initialAuthReducerState,
-      apiStatusMessage: testStatusMessage,
+      apiStatusMessages: testStatusMessages,
     },
   },
   {

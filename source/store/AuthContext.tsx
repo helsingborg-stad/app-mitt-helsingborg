@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useContext, useCallback } from "react";
 import { Alert, Linking } from "react-native";
 import env from "react-native-config";
+import type { Messages } from "../types/StatusMessages";
 import USER_AUTH_STATE from "../types/UserAuthTypes";
 import AppContext from "./AppContext";
 import AppCompabilityContext from "./AppCompabilityContext";
@@ -23,10 +24,12 @@ import {
   setStatus,
   setError,
   setAuthenticateOnExternalDevice,
-  setApiStatusMessage,
+  setApiStatusMessages,
+  setMaintenance,
 } from "./actions/AuthActions";
 
 import type { DispatchError } from "./actions/AuthActions.types";
+import { Type } from "../types/StatusMessages";
 
 interface UseAuthProviderLogicValues extends AuthReducerState {
   isLoading: boolean;
@@ -165,8 +168,8 @@ function useAuthProviderLogic(
     dispatch(await addProfile());
   }
 
-  function handleSetApiStatusMessage(message: string) {
-    dispatch(setApiStatusMessage(message));
+  function handleSetApiStatusMessages(messages: Messages[]) {
+    dispatch(setApiStatusMessages(messages));
   }
 
   function handleSetStatus(status: string) {
@@ -175,6 +178,10 @@ function useAuthProviderLogic(
 
   function handleSetError(error: DispatchError) {
     dispatch(setError(error));
+  }
+
+  function handleSetMaintenance(isMaintenance: boolean) {
+    dispatch(setMaintenance(isMaintenance));
   }
 
   function showUpdateRequiredAlert(updateUrl: string) {
@@ -215,21 +222,31 @@ function useAuthProviderLogic(
   }, [handleSetMode]);
 
   useEffect(() => {
+    const upgradeAppMessages: Messages[] = [
+      {
+        message: {
+          title: "Uppdatering krävs",
+          text: "Du har en för gammal version av appen. För att kunna ta del av Mitt Helsingborg och dess funktioner måste appen uppdateras. Besök din butik för appar för att göra detta.",
+        },
+        type: Type.Maintenance,
+      },
+    ];
+
     const trySignIn = async () => {
       try {
-        let apiStatusMessage = "";
+        const apiStatusMessages = await getApiStatus();
+        handleSetApiStatusMessages(apiStatusMessages);
 
-        if (!isDevMode) {
-          apiStatusMessage = await getApiStatus();
-        }
+        const isMaintenance =
+          apiStatusMessages.some(({ type }) => type === Type.Maintenance) &&
+          !isDevMode;
+
+        handleSetMaintenance(isMaintenance);
 
         const { isCompatible, updateUrl } = await getIsCompatible();
-
-        handleSetApiStatusMessage(apiStatusMessage);
         const isValidJWTToken = await isAccessTokenValid();
 
-        const canLogin = isValidJWTToken && !apiStatusMessage && isCompatible;
-
+        const canLogin = isValidJWTToken && !isMaintenance && isCompatible;
         if (canLogin) {
           await handleAddProfile();
           handleLogin();
@@ -239,9 +256,7 @@ function useAuthProviderLogic(
 
         if (!isCompatible) {
           showUpdateRequiredAlert(updateUrl);
-          handleSetApiStatusMessage(
-            "Du har en för gammal version av appen. För att kunna ta del av Mitt Helsingborg och dess funktioner måste appen uppdateras. Besök din butik för appar för att göra detta."
-          );
+          handleSetApiStatusMessages(upgradeAppMessages);
         }
       } catch (error) {
         void handleLogout();
@@ -289,11 +304,11 @@ function useAuthProviderLogic(
   };
 }
 
-const AuthProvider = ({ children }: { children: JSX.Element }): JSX.Element => {
+function AuthProvider({ children }: { children: JSX.Element }): JSX.Element {
   const value = useAuthProviderLogic(initialAuthReducerState);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
+}
 
 export { AuthProvider };
 export default AuthContext;
