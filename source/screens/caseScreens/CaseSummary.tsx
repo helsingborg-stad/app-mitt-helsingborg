@@ -12,14 +12,10 @@ import {
   CaseCalculationsModal,
   RemoveCaseModal,
   PdfModal,
+  SetupFormModal,
 } from "../../components/organisms";
 
-import {
-  Card,
-  ScreenWrapper,
-  CaseCard,
-  CloseDialog,
-} from "../../components/molecules";
+import { Card, ScreenWrapper, CaseCard } from "../../components/molecules";
 import { useModal } from "../../components/molecules/Modal";
 
 import { Icon, Text, Button } from "../../components/atoms";
@@ -271,7 +267,9 @@ const CaseSummary = (props: Props): JSX.Element => {
 
   const [isModalVisible, toggleModal] = useModal();
   const [showRemoveCaseModal, toggleRemoveCaseModal] = useModal();
-  const [showLoadingModal, toggleLoadingModal] = useModal();
+
+  const [showSetupFormModal, setShowSetupFormModal] = useState(false);
+  const [hasSetupFormError, setSetupFormError] = useState(false);
 
   const [setupForm] = useSetupForm();
   const passwords = useGetFormPasswords(cases, authContext.user);
@@ -337,16 +335,29 @@ const CaseSummary = (props: Props): JSX.Element => {
     [navigation]
   );
 
+  const closeSetupFormModal = () => {
+    setShowSetupFormModal(false);
+  };
+
   const openForm = async (id: string, isSignMode = false) => {
-    toggleLoadingModal();
+    setSetupFormError(false);
+    setShowSetupFormModal(true);
 
-    await setupForm(
-      cases[id].forms[cases[id].currentFormId].answers as Answer[],
-      cases[id].currentFormId
-    );
+    try {
+      await setupForm(
+        cases[id].forms[cases[id].currentFormId].answers as Answer[],
+        cases[id].currentFormId
+      );
 
-    toggleLoadingModal();
-    navigation.navigate("Form", { caseId: id, isSignMode });
+      closeSetupFormModal();
+      navigation.navigate("Form", { caseId: id, isSignMode });
+    } catch (error) {
+      setSetupFormError(true);
+    }
+  };
+
+  const onRetryOpenForm = async () => {
+    await openForm(caseId);
   };
 
   useEffect(() => {
@@ -452,11 +463,12 @@ const CaseSummary = (props: Props): JSX.Element => {
         onRemoveCase={removeCase}
       />
 
-      {showLoadingModal && (
-        <CloseDialog
+      {showSetupFormModal && (
+        <SetupFormModal
           visible
-          title="Förbereder formulär"
-          body="Vänligen vänta ..."
+          onCloseModal={closeSetupFormModal}
+          onRetryOpenForm={onRetryOpenForm}
+          hasError={hasSetupFormError}
         />
       )}
 

@@ -23,6 +23,7 @@ import { to, wait } from "../../helpers/Misc";
 
 import AddCoApplicantModal from "../../components/organisms/AddCoApplicantModal/AddCoApplicantModal";
 import NewApplicationModal from "../../components/organisms/NewApplicationModal/NewApplicationModal";
+import SetupFormModal from "../../components/organisms/SetupFormModal/SetupFormModal";
 import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
 import FloatingButton from "../../components/molecules/FloatingButton";
 import PdfModal from "../../components/organisms/PdfModal/PdfModal";
@@ -31,7 +32,6 @@ import { Icon, Text } from "../../components/atoms";
 import {
   Card,
   CaseCard,
-  CloseDialog,
   Header,
   ScreenWrapper,
 } from "../../components/molecules";
@@ -405,19 +405,6 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     }
   };
 
-  const openForm = async (caseId: string, isSignMode?: boolean) => {
-    openModal(Modal.SETUP_LOADING_FORM_MODAL);
-
-    await setupForm(
-      cases[caseId].forms[cases[caseId].currentFormId].answers as Answer[],
-      cases[caseId].currentFormId
-    );
-
-    closeOpenModal();
-
-    navigation.navigate("Form", { caseId, isSignMode });
-  };
-
   const setModalError = (errorMessage: string) => {
     setActiveModal((oldValue) => ({
       ...oldValue,
@@ -432,6 +419,30 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
       loading,
       error: "",
     }));
+  };
+
+  const openForm = async (caseId: string, isSignMode?: boolean) => {
+    openModal(Modal.SETUP_LOADING_FORM_MODAL, { data: { retryId: caseId } });
+
+    try {
+      await setupForm(
+        cases[caseId].forms[cases[caseId].currentFormId].answers as Answer[],
+        cases[caseId].currentFormId
+      );
+
+      closeOpenModal();
+
+      navigation.navigate("Form", { caseId, isSignMode });
+    } catch (error) {
+      setModalError(error?.message ?? "");
+    }
+  };
+
+  const retryOpenForm = () => {
+    if (activeModal?.data?.retryId) {
+      return openForm(activeModal.data.retryId as string);
+    }
+    return null;
   };
 
   const handleAddCoApplicant = async (
@@ -644,10 +655,11 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
       )}
 
       {activeModal.modal === Modal.SETUP_LOADING_FORM_MODAL && (
-        <CloseDialog
+        <SetupFormModal
+          onRetryOpenForm={retryOpenForm}
+          hasError={!!activeModal?.error}
+          onCloseModal={closeOpenModal}
           visible
-          title="Förbereder formulär"
-          body="Vänligen vänta ..."
         />
       )}
 
