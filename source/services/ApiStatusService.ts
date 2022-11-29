@@ -3,7 +3,9 @@ import type { Messages } from "../types/StatusMessages";
 import { Type } from "../types/StatusMessages";
 
 interface StatusMessagesResponse {
-  messages: Messages[];
+  attributes: {
+    messages: Messages[];
+  };
 }
 
 async function getApiStatus(): Promise<Messages[]> {
@@ -25,7 +27,7 @@ async function getApiStatus(): Promise<Messages[]> {
     ];
   }
 
-  return response.data.data.messages ?? [];
+  return response.data.data.attributes.messages ?? [];
 }
 
 export default getApiStatus;
