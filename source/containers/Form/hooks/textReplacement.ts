@@ -137,7 +137,9 @@ function replaceDate(
   if (calendarType === "currentDate") {
     if (position === "minus-45") {
       currentDate.setDate(currentDate.getDate() - 45);
-      return `${currentDate.getDate()}/${currentDate.getMonth() + 1}`;
+      const monthDate = currentDate.getDate();
+      const monthName = SWEDISH_MONTH_NAME_TABLE[currentDate.getMonth()];
+      return `${monthDate} ${monthName}`;
     }
     return `${currentDate.getDate()}`;
   }
