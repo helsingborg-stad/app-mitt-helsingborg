@@ -172,7 +172,7 @@ describe("replaceMarkdownTextInSteps", () => {
     it.each([
       ["#date-1", "1/2"],
       ["#date-2", "28/2"],
-      ["#today-45", "17/11"],
+      ["#today-45", "17 november"],
     ])("Replaces %s with %s", doTest);
   });
 
