@@ -76,7 +76,7 @@ const computeCaseCardComponent = (
 ) => {
   const {
     currentPosition: { currentMainStep: currentStep, numberOfMainSteps },
-  } = caseItem?.forms[caseItem?.currentFormId];
+  } = caseItem.forms[caseItem.currentFormId];
 
   const caseId = caseItem.id;
   const status = caseItem?.status;
@@ -86,7 +86,7 @@ const computeCaseCardComponent = (
   const { decision = {}, payments = {} } = workflow;
   const statusType = status?.type ?? "";
 
-  const completions = caseItem.details.completions?.requested || [];
+  const requestedCompletions = caseItem.details.completions.requested;
 
   const isRandomCheck = statusType.includes("randomCheck");
   const completionsClarification =
@@ -178,10 +178,16 @@ const computeCaseCardComponent = (
       } ${getSwedishMonthNameByTimeStamp(payments.payment.givedate, true)}`
     : undefined;
 
-  const unApprovedCompletionDescriptions: string[] =
-    statusType.includes("completion") || statusType.includes("randomCheck")
-      ? getUnapprovedCompletionDescriptions(completions)
-      : [];
+  const isStatusCompletion = [
+    "completion",
+    "active:randomCheck",
+    "ongoing:randomCheck",
+    "submitted:randomCheck",
+  ].some((type) => statusType.includes(type));
+
+  const unApprovedCompletionDescriptions = isStatusCompletion
+    ? getUnapprovedCompletionDescriptions(requestedCompletions)
+    : [];
 
   const shouldShowPin = isWaitingForSign && !isCoApplicant;
 
@@ -391,7 +397,7 @@ const CaseSummary = (props: Props): JSX.Element => {
   };
 
   return (
-    <ScreenWrapper {...props}>
+    <ScreenWrapper>
       <Container as={Animated.ScrollView} style={{ opacity: fadeAnimation }}>
         <SummaryHeading type="h5">Aktuell period</SummaryHeading>
         {Object.keys(caseData).length > 0 &&
