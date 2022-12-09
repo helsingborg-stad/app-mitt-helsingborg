@@ -86,7 +86,7 @@ const computeCaseCardComponent = (
   const { decision = {}, payments = {} } = workflow;
   const statusType = status?.type ?? "";
 
-  const requestedCompletions = caseItem.details.completions.requested;
+  const requestedCompletions = caseItem.details.completions?.requested || [];
 
   const isRandomCheck = statusType.includes("randomCheck");
   const completionsClarification =
