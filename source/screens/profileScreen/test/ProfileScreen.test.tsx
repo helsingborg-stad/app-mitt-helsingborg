@@ -43,6 +43,7 @@ interface RenderComponentProps {
   signoutCallback?: () => void;
   navigateCallback?: () => void;
 }
+
 const renderComponent = (props: RenderComponentProps = {}) => {
   const {
     devMode = true,
@@ -90,18 +91,6 @@ it("renders all personal info fields", () => {
     {
       fieldLabel: "PERSONNUMMER",
       fieldValue: personalNumber,
-    },
-    {
-      fieldLabel: "GATUADRESS",
-      fieldValue: street,
-    },
-    {
-      fieldLabel: "POSTNUMMER",
-      fieldValue: postalCode,
-    },
-    {
-      fieldLabel: "ORT",
-      fieldValue: city,
     },
   ];
 

@@ -50,14 +50,6 @@ function ProfileScreen({ navigation }: Props): JSX.Element {
         makeField("PERSONNUMMER", user?.personalNumber),
       ],
     },
-    {
-      header: "Adress",
-      fields: [
-        makeField("GATUADRESS", user?.address?.street),
-        makeField("POSTNUMMER", user?.address?.postalCode),
-        makeField("ORT", user?.address?.city),
-      ],
-    },
   ];
 
   return (
