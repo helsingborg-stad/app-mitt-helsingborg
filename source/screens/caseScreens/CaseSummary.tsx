@@ -25,7 +25,7 @@ import AuthContext from "../../store/AuthContext";
 
 import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
 import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
-import { launchPhone, launchEmail } from "../../helpers/LaunchExternalApp";
+import { launchPhone } from "../../helpers/LaunchExternalApp";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
 import { put, remove } from "../../helpers/ApiRequest";
 import { canCaseBeRemoved } from "../../helpers/Case";
@@ -437,15 +437,6 @@ const CaseSummary = (props: Props): JSX.Element => {
                     >
                       <Icon name="phone" />
                       <Text>{phone}</Text>
-                    </Card.Button>
-                  )}
-                  {email && (
-                    <Card.Button
-                      colorSchema="neutral"
-                      onClick={() => launchEmail(email)}
-                    >
-                      <Icon name="email" />
-                      <Text>{email}</Text>
                     </Card.Button>
                   )}
                 </Card.Body>
