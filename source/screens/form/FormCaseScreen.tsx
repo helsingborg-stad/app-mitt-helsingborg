@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState, useMemo } from "react";
+import { ActivityIndicator } from "react-native";
 
 import Form, { defaultInitialStatus } from "../../containers/Form/Form";
 
@@ -16,6 +17,7 @@ import { getPasswordForForm } from "../../services/encryption/CaseEncryptionHelp
 import { wrappedDefaultStorage } from "../../services/storage/StorageService";
 
 import type { CaseUpdate, Signature, Action } from "../../types/CaseContext";
+// eslint-disable-next-line unused-imports/no-unused-imports
 import { ApplicationStatusType } from "../../types/Case";
 import type { Props } from "./FormCaseScreen.types";
 import type { User } from "../../types/UserTypes";
@@ -26,8 +28,12 @@ import type {
   Answer,
 } from "../../types/Case";
 
+const FROM_LOADING_TO_FORM_DELAY = 500;
+
 const FormCaseScreen = ({ route, navigation }: Props): JSX.Element => {
   const [encryptionPin, setEncryptionPin] = useState("");
+  const [loadingEncryptionPin, setLoadinEncryptionpin] = useState(true);
+
   const { caseId, isSignMode } = route?.params || {};
   const { user } = useContext(AuthContext);
   const { forms } = useContext(FormContext);
@@ -72,6 +78,10 @@ const FormCaseScreen = ({ route, navigation }: Props): JSX.Element => {
       const pinCodeToUse = (pinCode ?? "") as string;
 
       setEncryptionPin(pinCodeToUse);
+      setTimeout(
+        () => setLoadinEncryptionpin(false),
+        FROM_LOADING_TO_FORM_DELAY
+      );
     };
 
     void setupEncryptionPin();
@@ -119,6 +129,15 @@ const FormCaseScreen = ({ route, navigation }: Props): JSX.Element => {
   const handleSubmitForm = () => {
     handleCloseForm();
   };
+
+  if (loadingEncryptionPin) {
+    return (
+      <ActivityIndicator
+        style={{ flex: 1, justifyContent: "center" }}
+        size="large"
+      />
+    );
+  }
 
   return (
     <Form
