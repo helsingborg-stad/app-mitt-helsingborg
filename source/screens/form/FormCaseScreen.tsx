@@ -17,7 +17,6 @@ import { getPasswordForForm } from "../../services/encryption/CaseEncryptionHelp
 import { wrappedDefaultStorage } from "../../services/storage/StorageService";
 
 import type { CaseUpdate, Signature, Action } from "../../types/CaseContext";
-// eslint-disable-next-line unused-imports/no-unused-imports
 import { ApplicationStatusType } from "../../types/Case";
 import type { Props } from "./FormCaseScreen.types";
 import type { User } from "../../types/UserTypes";
