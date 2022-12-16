@@ -31,7 +31,7 @@ const FROM_LOADING_TO_FORM_DELAY = 500;
 
 const FormCaseScreen = ({ route, navigation }: Props): JSX.Element => {
   const [encryptionPin, setEncryptionPin] = useState("");
-  const [loadingEncryptionPin, setLoadinEncryptionpin] = useState(true);
+  const [loadingEncryptionPin, setLoadingEncryptionPin] = useState(true);
 
   const { caseId, isSignMode } = route?.params || {};
   const { user } = useContext(AuthContext);
@@ -78,7 +78,7 @@ const FormCaseScreen = ({ route, navigation }: Props): JSX.Element => {
 
       setEncryptionPin(pinCodeToUse);
       setTimeout(
-        () => setLoadinEncryptionpin(false),
+        () => setLoadingEncryptionPin(false),
         FROM_LOADING_TO_FORM_DELAY
       );
     };
