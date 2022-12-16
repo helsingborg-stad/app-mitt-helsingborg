@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState, useMemo } from "react";
+import { ActivityIndicator } from "react-native";
 
 import Form, { defaultInitialStatus } from "../../containers/Form/Form";
 
@@ -26,8 +27,12 @@ import type {
   Answer,
 } from "../../types/Case";
 
+const FROM_LOADING_TO_FORM_DELAY = 500;
+
 const FormCaseScreen = ({ route, navigation }: Props): JSX.Element => {
   const [encryptionPin, setEncryptionPin] = useState("");
+  const [loadingEncryptionPin, setLoadingEncryptionPin] = useState(true);
+
   const { caseId, isSignMode } = route?.params || {};
   const { user } = useContext(AuthContext);
   const { forms } = useContext(FormContext);
@@ -72,6 +77,10 @@ const FormCaseScreen = ({ route, navigation }: Props): JSX.Element => {
       const pinCodeToUse = (pinCode ?? "") as string;
 
       setEncryptionPin(pinCodeToUse);
+      setTimeout(
+        () => setLoadingEncryptionPin(false),
+        FROM_LOADING_TO_FORM_DELAY
+      );
     };
 
     void setupEncryptionPin();
@@ -119,6 +128,15 @@ const FormCaseScreen = ({ route, navigation }: Props): JSX.Element => {
   const handleSubmitForm = () => {
     handleCloseForm();
   };
+
+  if (loadingEncryptionPin) {
+    return (
+      <ActivityIndicator
+        style={{ flex: 1, justifyContent: "center" }}
+        size="large"
+      />
+    );
+  }
 
   return (
     <Form
