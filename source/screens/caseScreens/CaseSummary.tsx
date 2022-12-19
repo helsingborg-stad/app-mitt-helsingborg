@@ -229,7 +229,11 @@ const computeCaseCardComponent = (
         partiallyApprovedDecisionsAndRejected,
         "kronor"
       )}
-      showButton={isClosed || shouldShowCTAButton}
+      showButton={
+        isClosed ||
+        shouldShowCTAButton ||
+        (isEncryptionBroken && !isCoApplicant)
+      }
       buttonText={buttonProps.text}
       onButtonClick={isClosed ? toggleModal : buttonProps.onClick}
       buttonIconName={isClosed ? "remove-red-eye" : "arrow-forward"}
