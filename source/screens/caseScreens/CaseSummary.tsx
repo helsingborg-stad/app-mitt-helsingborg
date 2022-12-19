@@ -128,16 +128,6 @@ const computeCaseCardComponent = (
     (caseDecision) => ["03", "02"].includes(caseDecision.typecode)
   );
 
-  const shouldShowCTAButton = isCoApplicant
-    ? isWaitingForSign && !selfHasSigned
-    : isOngoing ||
-      isNotStarted ||
-      isRandomCheckRequired ||
-      isClosed ||
-      isVivaCompletionRequired ||
-      isActiveSubmittedRandomCheck ||
-      activeSubmittedCompletion;
-
   const buttonProps = {
     onClick: () => navigation.onOpenForm(caseId),
     text: "",
@@ -213,6 +203,17 @@ const computeCaseCardComponent = (
     buttonProps.onClick = onHandleRemoveCase;
   }
 
+  const shouldShowCTAButton = isCoApplicant
+    ? (isWaitingForSign && !selfHasSigned) || isClosed
+    : isOngoing ||
+      isNotStarted ||
+      isRandomCheckRequired ||
+      isClosed ||
+      isVivaCompletionRequired ||
+      isActiveSubmittedRandomCheck ||
+      activeSubmittedCompletion ||
+      (isEncryptionBroken && !isCoApplicant);
+
   return (
     <CaseCard
       colorSchema={colorSchema}
@@ -229,11 +230,7 @@ const computeCaseCardComponent = (
         partiallyApprovedDecisionsAndRejected,
         "kronor"
       )}
-      showButton={
-        isClosed ||
-        shouldShowCTAButton ||
-        (isEncryptionBroken && !isCoApplicant)
-      }
+      showButton={shouldShowCTAButton}
       buttonText={buttonProps.text}
       onButtonClick={isClosed ? toggleModal : buttonProps.onClick}
       buttonIconName={isClosed ? "remove-red-eye" : "arrow-forward"}

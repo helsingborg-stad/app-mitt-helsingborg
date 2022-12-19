@@ -166,16 +166,6 @@ const computeCaseCardComponent = (
 
   const shouldEnterPin = shouldCaseEnterPin(caseItem);
 
-  const shouldShowCTAButton = isCoApplicant
-    ? isWaitingForSign && !selfHasSigned
-    : isOngoing ||
-      isNotStarted ||
-      isRandomCheckRequired ||
-      isClosed ||
-      isVivaCompletionRequired ||
-      isActiveSubmittedRandomCheck ||
-      activeSubmittedCompletion;
-
   const buttonProps: InternalButtonProps = {
     onClick: () => navigation.onOpenForm(caseId),
     text: "",
@@ -262,6 +252,17 @@ const computeCaseCardComponent = (
     buttonProps.onClick = onHandleRemoveCase;
   }
 
+  const shouldShowCTAButton = isCoApplicant
+    ? isWaitingForSign && !selfHasSigned
+    : isOngoing ||
+      isNotStarted ||
+      isRandomCheckRequired ||
+      isClosed ||
+      isVivaCompletionRequired ||
+      isActiveSubmittedRandomCheck ||
+      activeSubmittedCompletion ||
+      (isEncryptionBroken && !isCoApplicant);
+
   return (
     <CaseCard
       key={caseId}
@@ -271,7 +272,7 @@ const computeCaseCardComponent = (
       largeSubtitle={applicationPeriodMonth}
       description={cardProps.description ?? caseItem.status.description}
       icon={ICON.ICON_EKB}
-      showButton={shouldShowCTAButton || (isEncryptionBroken && !isCoApplicant)}
+      showButton={shouldShowCTAButton}
       showAppealButton={shouldShowAppealButton}
       buttonText={buttonProps.text}
       currentStep={currentStep}
