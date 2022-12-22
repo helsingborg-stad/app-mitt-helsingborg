@@ -14,7 +14,7 @@ const EditableListBody = styled.View`
 interface EditableListItemProps {
   theme: ThemeType;
   editable: boolean;
-  error: ValidationObject;
+  error?: ValidationObject;
   colorSchema: PrimaryColor;
 }
 const EditableListItem = styled.TouchableOpacity<EditableListItemProps>`
