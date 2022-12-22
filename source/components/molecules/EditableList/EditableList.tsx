@@ -57,7 +57,7 @@ function EditableList({
     setEditable(!editable);
   };
 
-  const onChange = (key, text) => {
+  const onChange = (key: string, text: string) => {
     const updatedState = deepCopy(state);
     updatedState[key] = text;
     onInputChange(updatedState);
@@ -67,23 +67,28 @@ function EditableList({
     if (onBlur) onBlur(state);
   };
 
-  const onInputFocus = (event, index, isSelect = false) => {
+  const onInputFocus = (
+    event: unknown = undefined,
+    index: number,
+    isSelect = false
+  ) => {
     if (onFocus) {
       const target = inputRefs.current[index].inputRef;
       onFocus(event || { target }, isSelect);
     }
   };
-  const onInputScrollTo = (event, index, isSelect = false) =>
+  const onInputScrollTo = (event: any, index: number, isSelect = false) =>
     onInputFocus(event, index, isSelect);
 
-  const handleListItemPress = (index) => {
+  const handleListItemPress = (index: number) => {
     if (editable && inputRefs.current?.[index]?.focus)
       inputRefs.current[index].focus();
     else if (editable && inputRefs.current?.[index]?.togglePicker)
       inputRefs.current[index].togglePicker();
   };
 
-  const isInputValid = (input) => error && error[input.key]?.isValid === false;
+  const isInputValid = (input: Input) =>
+    error && error[input.key]?.isValid === false;
 
   return (
     <Fieldset
@@ -126,22 +131,20 @@ function EditableList({
               </EditableListItemLabelWrapper>
               <EditableListItemInputWrapper>
                 <InputComponent
-                  {...{
-                    input,
-                    colorSchema,
-                    onChange,
-                    onInputBlur,
-                    value,
-                    state,
-                  }}
-                  editable={editable && !input.disabled}
                   ref={(element) => {
                     inputRefs.current[index] = element;
                   }}
-                  onInputFocus={(event, isSelect) =>
+                  input={input}
+                  colorSchema={colorSchema}
+                  onChange={onChange}
+                  onInputBlur={onInputBlur}
+                  value={value}
+                  state={state}
+                  editable={editable && !input.disabled}
+                  onInputFocus={(event, isSelect: boolean) =>
                     onInputFocus(event, index, isSelect)
                   }
-                  onClose={(event, isSelect) =>
+                  onClose={(event, isSelect: boolean) =>
                     onInputScrollTo(event, index, isSelect)
                   }
                 />
