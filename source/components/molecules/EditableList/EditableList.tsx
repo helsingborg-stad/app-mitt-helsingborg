@@ -112,7 +112,7 @@ function EditableList({
             <EditableListItem
               colorSchema={colorSchema}
               editable={editable && !input.disabled}
-              key={`${input.key}-${index}`}
+              key={`${input.key}-${input.inputSelectValue}`}
               error={error ? error[input.key] : undefined}
               activeOpacity={1.0}
               onPress={() => handleListItemPress(index)}
