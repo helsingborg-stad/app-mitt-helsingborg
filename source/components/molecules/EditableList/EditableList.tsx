@@ -17,15 +17,20 @@ import {
   StyledErrorText,
 } from "./EditableList.styled";
 
-const getInitialState = (inputs, value) => {
+import type { Props, Input, Answer } from "./EditableList.types";
+
+const getInitialState = (inputs: Input[], value: Answer): Answer => {
   if (value && typeof value === "object") {
     return inputs.reduce(
-      (prev, current) => ({ ...prev, [current.key]: value[current.key] }),
-      {}
+      (prev, currentInput) => ({
+        ...prev,
+        [currentInput.key]: value[currentInput.key],
+      }),
+      {} as Answer
     );
   }
   return inputs.reduce(
-    (prev, current) => ({ ...prev, [current.key]: current.value }),
+    (prev, current) => ({ ...prev, [current.key]: current.inputSelectValue }),
     {}
   );
 };
@@ -125,18 +130,18 @@ InputComponent.propTypes = {
  * A Molecule Component to use for rendering a list with the possibility of editing the list values.
  */
 function EditableList({
-  colorSchema,
+  colorSchema = "blue",
   title,
-  inputs,
+  inputs = [],
   value,
   onInputChange,
   onBlur,
-  inputIsEditable,
-  startEditable,
+  inputIsEditable = true,
+  startEditable = false,
   help,
   error,
   onFocus,
-}) {
+}: Props): JSX.Element {
   const [editable, setEditable] = useState(startEditable);
   const [state, setState] = useState(getInitialState(inputs, value));
   const inputRefs = useRef([]);
