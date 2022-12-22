@@ -159,45 +159,4 @@ function EditableList({
     </Fieldset>
   );
 }
-
-EditableList.propTypes = {
-  value: PropTypes.object,
-  onInputChange: PropTypes.func.isRequired,
-  onBlur: PropTypes.func,
-  title: PropTypes.string.isRequired,
-  inputs: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-    })
-  ),
-  inputIsEditable: PropTypes.bool,
-  startEditable: PropTypes.bool,
-  /** Validation error object */
-  error: PropTypes.object,
-  /**
-   * Show a help button
-   */
-  help: PropTypes.shape({
-    text: PropTypes.string,
-    size: PropTypes.number,
-    heading: PropTypes.string,
-    tagline: PropTypes.string,
-    url: PropTypes.string,
-  }),
-  /**
-   * The color schema/theme of the component, default is blue.
-   */
-  colorSchema: PropTypes.oneOf(["blue", "green", "red", "purple"]),
-  onFocus: PropTypes.func,
-};
-
-EditableList.defaultProps = {
-  inputIsEditable: true,
-  startEditable: false,
-  inputs: [],
-  colorSchema: "blue",
-};
-
 export default EditableList;
