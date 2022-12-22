@@ -15,6 +15,7 @@ import {
   EditableListItemSelect,
   FieldsetButton,
   StyledErrorText,
+  configureNextLayoutAnimation,
 } from "./EditableList.styled";
 
 import type { Props, Input, Answer } from "./EditableList.types";
@@ -147,19 +148,7 @@ function EditableList({
   const inputRefs = useRef([]);
 
   const changeEditable = () => {
-    LayoutAnimation.configureNext({
-      duration: 250,
-      create: {
-        duration: 250,
-        type: LayoutAnimation.Types.easeInEaseOut,
-        property: LayoutAnimation.Properties.opacity,
-      },
-      update: {
-        duration: 250,
-        type: LayoutAnimation.Types.easeInEaseOut,
-        property: LayoutAnimation.Properties.opacity,
-      },
-    });
+    configureNextLayoutAnimation();
     setEditable(!editable);
   };
 
