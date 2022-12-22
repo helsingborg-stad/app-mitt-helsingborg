@@ -1,8 +1,9 @@
-import PropTypes from "prop-types";
 import React, { useRef, useState } from "react";
-import { LayoutAnimation } from "react-native";
-import { deepCopy } from "../../../helpers/Objects";
+
 import { Fieldset, Text } from "../../atoms";
+
+import { deepCopy } from "../../../helpers/Objects";
+
 import InputComponent from "./InputComponent";
 
 import {
@@ -11,8 +12,6 @@ import {
   EditableListItemLabelWrapper,
   EditableListItemLabel,
   EditableListItemInputWrapper,
-  EditableListItemInput,
-  EditableListItemSelect,
   FieldsetButton,
   StyledErrorText,
   configureNextLayoutAnimation,
