@@ -3,6 +3,7 @@ import type { ValidationObject } from "./Validation";
 
 export interface Help {
   text?: string;
+  size?: number;
   heading?: string;
   tagline?: string;
   url?: string;
