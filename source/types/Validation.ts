@@ -12,7 +12,7 @@ type ValidatorMethod =
   | "isLength"
   | "isInt";
 
-interface ValidationRule {
+export interface ValidationRule {
   method: ValidatorMethod;
   validWhen: boolean;
   args?: {
@@ -23,7 +23,7 @@ interface ValidationRule {
 }
 
 export interface ValidationObject {
-  isRequired: boolean;
-  rules: ValidationRule[];
   isValid: boolean;
+  rules: ValidationRule[];
+  validationMessage: string;
 }
