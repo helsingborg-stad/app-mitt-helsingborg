@@ -1,89 +1,21 @@
 import PropTypes from "prop-types";
 import React, { useRef, useState } from "react";
-import { LayoutAnimation, Platform } from "react-native";
-import styled from "styled-components/native";
+import { LayoutAnimation } from "react-native";
 import { deepCopy } from "../../../helpers/Objects";
-import { Button, Fieldset, Input, Text, Select } from "../../atoms";
+import { Fieldset, Text } from "../../atoms";
 import CalendarPicker from "../CalendarPicker/CalendarPickerForm";
 
-const EditableListBody = styled.View`
-  padding-top: 33px;
-  height: auto;
-`;
-
-const EditableListItem = styled.TouchableOpacity`
-  font-size: ${(props) => props.theme.fontSizes[4]}px;
-  flex-direction: row;
-  height: auto;
-  background-color: transparent;
-  border-radius: 4.5px;
-  margin-bottom: 14px;
-  ${({ theme, error }) =>
-    !(error?.isValid || !error) &&
-    `border: solid 1px ${theme.colors.primary.red[0]}`}
-  ${(props) =>
-    props.editable &&
-    `background-color: ${
-      props.theme.colors.complementary[props.colorSchema][2]
-    };`};
-  ${({ editable }) => editable && Platform.OS === "ios" && `padding: 16px;`};
-`;
-
-const EditableListItemLabelWrapper = styled.View`
-  flex: 4;
-  justify-content: ${(props) => (props.alignAtStart ? "flex-start" : "center")};
-`;
-
-const EditableListItemLabel = styled.Text`
-  font-weight: ${(props) => props.theme.fontWeights[1]};
-  color: ${(props) => props.theme.colors.neutrals[1]};
-  ${(props) =>
-    props.editable &&
-    Platform.OS === "android" &&
-    `
-    margin: 16px;
-    margin-right: 0;
-    `};
-`;
-
-const EditableListItemInputWrapper = styled.View`
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
-  flex: 5;
-`;
-
-const EditableListItemInput = styled(Input)`
-  text-align: right;
-  min-width: 80%;
-  font-weight: 500;
-  padding: 0px;
-  color: ${(props) => props.theme.colors.neutrals[1]};
-  ${(props) =>
-    props.editable &&
-    Platform.OS === "android" &&
-    `
-    margin: 16px;
-    margin-left: 0;
-      `};
-`;
-
-const EditableListItemSelect = styled(Select)`
-  min-width: 80%;
-  font-weight: 500;
-  margin-bottom: 0px;
-  ${(props) =>
-    props.editable &&
-    Platform.OS === "android" &&
-    `
-    margin: 16px;
-    margin-left: 0;
-  `};
-`;
-
-const FieldsetButton = styled(Button)`
-  margin-left: 26px;
-`;
+import {
+  EditableListBody,
+  EditableListItem,
+  EditableListItemLabelWrapper,
+  EditableListItemLabel,
+  EditableListItemInputWrapper,
+  EditableListItemInput,
+  EditableListItemSelect,
+  FieldsetButton,
+  StyledErrorText,
+} from "./EditableList.styled";
 
 const getInitialState = (inputs, value) => {
   if (value && typeof value === "object") {
@@ -97,11 +29,6 @@ const getInitialState = (inputs, value) => {
     {}
   );
 };
-
-const StyledErrorText = styled(Text)`
-  padding-bottom: 20px;
-  color: ${(props) => props.theme.textInput.errorTextColor};
-`;
 
 /** Switch between different input types */
 const InputComponent = React.forwardRef(

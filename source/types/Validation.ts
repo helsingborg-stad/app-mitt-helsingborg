@@ -25,4 +25,5 @@ interface ValidationRule {
 export interface ValidationObject {
   isRequired: boolean;
   rules: ValidationRule[];
+  isValid: boolean;
 }
