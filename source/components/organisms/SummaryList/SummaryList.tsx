@@ -244,34 +244,6 @@ const SummaryList: React.FC<Props> = ({
         if (onBlur) onBlur(sortedAnswers[item.id], item.id);
       } else if (onBlur) onBlur(value, item.id);
     };
-  /**
-   * Given an item, and index in the case of repeater fields, this generates the function for clearing the associated data
-   * in the form state.
-   * @param item The list item
-   * @param index The index, when summarizing a repeater field with multiple answers
-   */
-  const removeListItem = (item: SummaryListItem, index?: number) => () => {
-    if (typeof index !== "undefined") {
-      const oldAnswer: Record<string, string | number>[] = {
-        ...sortedAnswers[item.id],
-      };
-      oldAnswer.splice(index, 1);
-      onChange(oldAnswer, item.id);
-    } else if (
-      ["editableListText", "editableListNumber", "editableListDate"].includes(
-        item.type
-      ) &&
-      item.inputId
-    ) {
-      const oldAnswer: Record<string, string | number> = {
-        ...sortedAnswers[item.id],
-      };
-      oldAnswer[item.inputId] = undefined;
-      onChange(oldAnswer, item.id);
-    } else {
-      onChange(undefined, item.id);
-    }
-  };
 
   // Code for computing sum of all numeric values shown in the list
   let sum = 0;
@@ -396,7 +368,6 @@ const SummaryList: React.FC<Props> = ({
           value={listEntry.value ?? ""}
           changeFromInput={changeFromInput(listEntry.item, listEntry.index)}
           onBlur={onItemBlur(listEntry.item, listEntry.index)}
-          removeItem={removeListItem(listEntry.item, listEntry.index)}
           colorSchema={colorSchema}
           validationError={validationError}
           category={listEntry.item.category}
@@ -423,7 +394,6 @@ const SummaryList: React.FC<Props> = ({
           value={sortedAnswers[listEntry.item.id][listEntry.item.inputId]}
           changeFromInput={changeFromInput(listEntry.item)}
           onBlur={onItemBlur(listEntry.item)}
-          removeItem={removeListItem(listEntry.item)}
           colorSchema={colorSchema}
           validationError={
             validationErrors?.[listEntry.item.id]?.[listEntry.item.inputId]
@@ -448,7 +418,6 @@ const SummaryList: React.FC<Props> = ({
           value={sortedAnswers[listEntry.item.id]}
           changeFromInput={changeFromInput(listEntry.item)}
           onBlur={onItemBlur(listEntry.item)}
-          removeItem={removeListItem(listEntry.item)}
           colorSchema={colorSchema}
           validationError={
             validationErrors
