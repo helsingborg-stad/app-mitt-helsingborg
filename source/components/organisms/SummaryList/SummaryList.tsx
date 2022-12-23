@@ -54,22 +54,20 @@ function findLastIndex<T>(
  * The things to summarize is specified in the items prop.
  * The things are grouped into categories, as specified by the categories props.
  */
-const SummaryList = (props: Props): JSX.Element | null => {
-  const {
-    heading,
-    items = [],
-    categories = [],
-    onBlur,
-    colorSchema,
-    answers,
-    validationErrors,
-    showSum = true,
-    startEditable,
-    help,
-    editable,
-    onChange = () => undefined,
-  } = props;
-
+const SummaryList = ({
+  heading,
+  items = [],
+  categories = [],
+  onBlur,
+  colorSchema,
+  answers,
+  validationErrors,
+  showSum = true,
+  startEditable,
+  help,
+  editable,
+  onChange = () => undefined,
+}: Props): JSX.Element | null => {
   const validColorSchema = getValidColorSchema(colorSchema);
 
   const sortedAnswers = useMemo(() => {
