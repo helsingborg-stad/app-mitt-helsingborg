@@ -10,7 +10,6 @@ import {
 
 import type { Props } from "./InputComponent.types";
 
-/** Switch between different input types */
 const InputComponent = React.forwardRef<TextInput, Props>(
   (
     {
@@ -26,11 +25,14 @@ const InputComponent = React.forwardRef<TextInput, Props>(
     },
     ref
   ) => {
-    const handleOnSelectClose = (isSelect: boolean) => {
+    const handleOnSelectClose = (event: unknown, isSelect: boolean) => {
       if (onClose) {
-        onClose(isSelect);
+        onClose(event, isSelect);
       }
     };
+
+    const inputValue =
+      value && value !== "" ? value[input.key] : state[input.key];
 
     switch (input.type) {
       case "number":
@@ -40,38 +42,40 @@ const InputComponent = React.forwardRef<TextInput, Props>(
             editable={editable}
             onChangeText={(text) => onChange(input.key, text)}
             onBlur={onInputBlur}
-            onFocus={onInputFocus}
-            value={value && value !== "" ? value[input.key] : state[input.key]}
+            onFocus={(event) => onInputFocus(event, false)}
+            value={inputValue as string}
             keyboardType="numeric"
             transparent
-            inputType={input.inputSelectValue}
+            inputType={input.type}
             ref={ref}
           />
         );
       case "date":
         return (
           <CalendarPicker
-            value={value && value !== "" ? value[input.key] : state[input.key]}
+            value={inputValue as number}
             onSelect={(date) => onChange(input.key, date)}
-            onBlur={onInputBlur}
-            onFocus={onInputFocus}
             editable={editable}
             transparent
+            colorSchema={colorSchema}
           />
         );
-      case "select":
+      case "select": {
         return (
           <EditableListItemSelect
             onBlur={onInputBlur}
             onOpen={onInputFocus}
             onClose={handleOnSelectClose}
-            onValueChange={(value) => onChange(input.key, value)}
-            value={value && value !== "" ? value[input.key] : state[input.key]}
+            onValueChange={(newValue) =>
+              newValue !== null && onChange(input.key, newValue)
+            }
+            value={inputValue as string}
             editable={editable}
             items={input?.items || []}
             ref={ref}
           />
         );
+      }
       default:
         return (
           <EditableListItemInput
@@ -79,10 +83,10 @@ const InputComponent = React.forwardRef<TextInput, Props>(
             editable={editable}
             onChangeText={(text) => onChange(input.key, text)}
             onBlur={onInputBlur}
-            onFocus={onInputFocus}
-            value={value && value !== "" ? value[input.key] : state[input.key]}
+            onFocus={(event) => onInputFocus(event, false)}
+            value={inputValue as string}
             transparent
-            inputType={input.inputSelectValue}
+            inputType={input.type}
             ref={ref}
           />
         );

@@ -54,10 +54,10 @@ function EditableList({
 
   const changeEditable = () => {
     configureNextLayoutAnimation();
-    setEditable(!editable);
+    setEditable((oldValue) => !oldValue);
   };
 
-  const onChange = (key: string, text: string) => {
+  const onChange = (key: string, text: string | number) => {
     const updatedState = deepCopy(state);
     updatedState[key] = text;
     onInputChange(updatedState);
@@ -141,10 +141,10 @@ function EditableList({
                   value={value}
                   state={state}
                   editable={editable && !input.disabled}
-                  onInputFocus={(event, isSelect: boolean) =>
+                  onInputFocus={(event: unknown, isSelect: boolean) =>
                     onInputFocus(event, index, isSelect)
                   }
-                  onClose={(event, isSelect: boolean) =>
+                  onClose={(event: unknown, isSelect: boolean) =>
                     onInputScrollTo(event, index, isSelect)
                   }
                 />

@@ -1,4 +1,3 @@
-import type { LayoutChangeEvent } from "react-native";
 import type { PrimaryColor } from "../../../theme/themeHelpers";
 
 import type {
@@ -12,19 +11,35 @@ interface InputValidation {
   rules: ValidationRule[];
 }
 
+type InputType =
+  | "text"
+  | "email"
+  | "postalCode"
+  | "personalNumber"
+  | "phone"
+  | "number"
+  | "date"
+  | "select";
+
+interface SelectItem {
+  label: string;
+  value: string;
+}
+
 export interface Input {
   label: string;
   key: string;
-  type: string;
+  type: InputType;
   validation: InputValidation;
   disabled: boolean;
   inputSelectValue: string;
   loadPrevious: string[];
   tags: string[];
   title: string;
+  items: SelectItem[];
 }
 
-export type Answer = Record<string, string>;
+export type Answer = Record<string, string | number>;
 
 export interface Props {
   colorSchema: PrimaryColor;
@@ -37,5 +52,5 @@ export interface Props {
   error: Record<string, ValidationObject>;
   onInputChange: (state: Answer) => void;
   onBlur: (state: Answer) => void;
-  onFocus: (event: LayoutChangeEvent, isSelect: boolean) => void;
+  onFocus: (event: unknown, isSelect: boolean) => void;
 }

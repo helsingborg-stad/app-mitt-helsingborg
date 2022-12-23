@@ -8,15 +8,8 @@ export interface Props {
   editable: boolean;
   value: Answer;
   state: Answer;
-  onChange: (key: string, text: string) => void;
+  onChange: (key: string, text: string | number) => void;
   onInputBlur: () => void;
-  onInputFocus: () => void;
-  onClose: () => void;
+  onInputFocus: (event: unknown, isSelect: boolean) => void;
+  onClose: (event: unknown, isSelect: boolean) => void;
 }
-
-// onInputFocus={(event, isSelect: boolean) =>
-//   onInputFocus(event, index, isSelect)
-// }
-// onClose={(isSelect: boolean) =>
-//   onInputScrollTo(index, isSelect)
-// }
