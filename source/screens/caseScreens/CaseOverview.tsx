@@ -166,16 +166,6 @@ const computeCaseCardComponent = (
 
   const shouldEnterPin = shouldCaseEnterPin(caseItem);
 
-  const shouldShowCTAButton = isCoApplicant
-    ? isWaitingForSign && !selfHasSigned
-    : isOngoing ||
-      isNotStarted ||
-      isRandomCheckRequired ||
-      isClosed ||
-      isVivaCompletionRequired ||
-      isActiveSubmittedRandomCheck ||
-      activeSubmittedCompletion;
-
   const buttonProps: InternalButtonProps = {
     onClick: () => navigation.onOpenForm(caseId),
     text: "",
@@ -261,6 +251,17 @@ const computeCaseCardComponent = (
     buttonProps.text = "Gör om ansökan";
     buttonProps.onClick = onHandleRemoveCase;
   }
+
+  const shouldShowCTAButton = isCoApplicant
+    ? isWaitingForSign && !selfHasSigned
+    : isOngoing ||
+      isNotStarted ||
+      isRandomCheckRequired ||
+      isClosed ||
+      isVivaCompletionRequired ||
+      isActiveSubmittedRandomCheck ||
+      activeSubmittedCompletion ||
+      (isEncryptionBroken && !isCoApplicant);
 
   return (
     <CaseCard
