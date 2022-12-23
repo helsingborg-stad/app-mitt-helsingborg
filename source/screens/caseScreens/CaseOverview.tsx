@@ -116,8 +116,8 @@ const computeCaseCardComponent = (
 ) => {
   const currentForm: AnsweredForm = caseItem?.forms[caseItem.currentFormId];
 
-  const currentStep = currentForm.currentPosition?.currentMainStep ?? 0;
-  const totalSteps = currentForm.currentPosition?.numberOfMainSteps ?? 0;
+  const currentStep = currentForm?.currentPosition?.currentMainStep ?? 0;
+  const totalSteps = currentForm?.currentPosition?.numberOfMainSteps ?? 0;
 
   const persons = caseItem?.persons ?? [];
   const caseId = caseItem.id;
