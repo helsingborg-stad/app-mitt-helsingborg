@@ -8,7 +8,7 @@ import { Heading, Fieldset, Text, Button } from "../../atoms";
 import theme from "../../../theme/theme";
 import { getValidColorSchema } from "../../../theme/themeHelpers";
 
-import type { SummaryListItem } from "../../organisms/SummaryList/SummaryList";
+import type { SummaryListItem } from "../../organisms/SummaryList/SummaryList.types";
 import type { PrimaryColor } from "../../../theme/themeHelpers";
 import type { Help } from "../../../types/FormTypes";
 

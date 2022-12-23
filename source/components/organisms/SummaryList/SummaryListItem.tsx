@@ -7,7 +7,7 @@ import type { PrimaryColor } from "../../../theme/themeHelpers";
 import { getValidColorSchema } from "../../../theme/themeHelpers";
 import { Input, Text } from "../../atoms";
 import CalendarPicker from "../../molecules/CalendarPicker/CalendarPickerForm";
-import type { SummaryListItem as SummaryListItemType } from "./SummaryList";
+import type { SummaryListItem as SummaryListItemType } from "./SummaryList.types";
 
 interface ItemWrapperProps {
   error?: { isValid: boolean; message: string };
