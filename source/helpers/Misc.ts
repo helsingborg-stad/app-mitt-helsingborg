@@ -1,7 +1,7 @@
 import { Dimensions, Platform, NativeModules } from "react-native";
 import Config from "react-native-config";
 import DeviceInfo from "react-native-device-info";
-import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
+import { EnvironmentServiceLocator } from "../services/environment";
 
 export const BYTES_PER_GIGABYTE = 1000000000;
 
@@ -42,9 +42,8 @@ export function getAPIEnvironmentIdentifierFromUrl(
 }
 
 export function getAPIEnvironmentIdentifier(): string | null {
-  const { baseUrl } =
-    EnvironmentConfigurationService.getInstance().activeEndpoint;
-  return getAPIEnvironmentIdentifierFromUrl(baseUrl);
+  const { url } = EnvironmentServiceLocator.get().getActive();
+  return getAPIEnvironmentIdentifierFromUrl(url);
 }
 
 export function getUserFriendlyAppVersion(): string {

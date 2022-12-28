@@ -1,6 +1,6 @@
 import env from "react-native-config";
 import { Linking, Platform } from "react-native";
-import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
+import { EnvironmentServiceLocator } from "../services/environment";
 /**
  * Open requested URL
  *
@@ -51,14 +51,13 @@ export const buildServiceUrl = async (
   endpoint = "",
   params = {}
 ): Promise<string> => {
-  const { baseUrl } =
-    EnvironmentConfigurationService.getInstance().activeEndpoint;
+  const { url } = EnvironmentServiceLocator.get().getActive();
   // Build query url
   const queryString = encodeQueryData(params);
   // Trim slashes
   const sanitizedEndpoint = endpoint.replace(/^\/|\/$/g, "");
   // Build url
-  const completeUrl = `${baseUrl}/${sanitizedEndpoint}?${queryString}`;
+  const completeUrl = `${url}/${sanitizedEndpoint}?${queryString}`;
 
   return completeUrl;
 };
