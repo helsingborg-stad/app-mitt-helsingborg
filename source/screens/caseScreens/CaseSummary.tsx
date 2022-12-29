@@ -417,7 +417,7 @@ const CaseSummary = (props: Props): JSX.Element => {
         {administrators && (
           <View>
             <SummaryHeading type="h5">Mina kontaktpersoner</SummaryHeading>
-            {administrators.map(({ name, title, phone, email }) => (
+            {administrators.map(({ name, title, phone }) => (
               <Card key={`${name}`} colorSchema={colorSchema}>
                 <Card.Body shadow color="neutral">
                   <Card.Section>
