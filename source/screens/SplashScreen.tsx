@@ -8,7 +8,7 @@ const SplashContainer = styled.View`
   align-items: center;
 `;
 
-const SplashScreen = () => (
+const SplashScreen = (): JSX.Element => (
   <SplashContainer>
     <ActivityIndicator size="large" color="slategray" />
   </SplashContainer>
