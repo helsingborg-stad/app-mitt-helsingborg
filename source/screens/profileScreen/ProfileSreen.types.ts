@@ -1,4 +1,4 @@
-export interface Navigation {
+interface Navigation {
   navigate: (screen: string) => void;
 }
 
