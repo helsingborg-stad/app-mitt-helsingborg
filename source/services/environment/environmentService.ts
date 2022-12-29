@@ -1,4 +1,5 @@
 import env from "react-native-config";
+import type { IStorage } from "../storage/StorageService";
 
 import type {
   EnvironmentConfig,
@@ -6,18 +7,27 @@ import type {
   RawEnvironmentConfigMap,
 } from "./environmentService.types";
 
+export const ENVIRONMENT_CONFIG_STORAGE_KEY =
+  "_DefaultEnvironmentService_environments";
+
 export default class DefaultEnvironmentService implements EnvironmentService {
-  envSource: Record<string, string> = {};
+  private environmentVariablesSource: Record<string, string>;
 
-  environments: Record<string, EnvironmentConfig> = {};
+  private storageService: IStorage;
 
-  activeEnvironment: EnvironmentConfig | null = null;
+  private environments: Record<string, EnvironmentConfig> = {};
 
-  constructor(envSource: Record<string, string> = env) {
-    this.envSource = envSource;
+  private activeEnvironment: EnvironmentConfig | null = null;
+
+  constructor(
+    storageService: IStorage,
+    envSource: Record<string, string> = env
+  ) {
+    this.environmentVariablesSource = envSource;
+    this.storageService = storageService;
   }
 
-  parse(raw: RawEnvironmentConfigMap): void {
+  async parse(raw: RawEnvironmentConfigMap): Promise<void> {
     const entries = Object.entries(raw);
 
     this.environments = entries.reduce(
@@ -30,6 +40,22 @@ export default class DefaultEnvironmentService implements EnvironmentService {
       }),
       {} as Record<string, EnvironmentConfig>
     );
+
+    await this.storageService.saveData(
+      ENVIRONMENT_CONFIG_STORAGE_KEY,
+      JSON.stringify(raw)
+    );
+  }
+
+  async parseFromStorage(): Promise<void> {
+    const stringified = await this.storageService.getData(
+      ENVIRONMENT_CONFIG_STORAGE_KEY
+    );
+
+    if (stringified) {
+      const raw: RawEnvironmentConfigMap = JSON.parse(stringified);
+      await this.parse(raw);
+    }
   }
 
   getEnvironments(): Record<string, EnvironmentConfig> {
@@ -55,8 +81,9 @@ export default class DefaultEnvironmentService implements EnvironmentService {
 
   getActive(): EnvironmentConfig {
     if (this.activeEnvironment === null) {
-      const fallbackUrl = this.envSource.MITTHELSINGBORG_IO;
-      const fallbackApiKey = this.envSource.MITTHELSINGBORG_IO_APIKEY;
+      const fallbackUrl = this.environmentVariablesSource.MITTHELSINGBORG_IO;
+      const fallbackApiKey =
+        this.environmentVariablesSource.MITTHELSINGBORG_IO_APIKEY;
 
       if (!fallbackUrl || !fallbackApiKey) {
         throw new Error(

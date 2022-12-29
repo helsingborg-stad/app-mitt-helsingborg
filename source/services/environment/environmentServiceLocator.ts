@@ -1,7 +1,7 @@
 import type { EnvironmentService } from "./environmentService.types";
 
 export default class EnvironmentServiceLocator {
-  static service: EnvironmentService | null = null;
+  private static service: EnvironmentService | null = null;
 
   static register(service: EnvironmentService): void {
     this.service = service;

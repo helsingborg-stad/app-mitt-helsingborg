@@ -7,6 +7,7 @@ export interface EnvironmentConfig {
 
 export interface EnvironmentService {
   parse(raw: RawEnvironmentConfigMap): void;
+  parseFromStorage(): Promise<void>;
   getEnvironments(): Record<string, EnvironmentConfig>;
   setActive(environmentName: string): void;
   getActive(): EnvironmentConfig;

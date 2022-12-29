@@ -12,21 +12,12 @@ jest.mock("react-native-config", () => ({
 
   // No base URL to prevent actual API calls
   // Targeting axios calls when mocking only requires endpoint
-  MITTHELSINGBORG_IO: "",
-  MITTHELSINGBORG_IO_APIKEY: "",
   FAKE_PERSONAL_NUMBER: "201111111111",
   FAKE_TOKEN:
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
 
-  API_ENVS: "SANDBOX,DEVELOP,RELEASE,PRODUCTION",
-  SANDBOX_MITTHELSINGBORG_IO: "https://sandbox.example.com",
-  SANDBOX_MITTHELSINGBORG_IO_APIKEY: "12345",
-  DEVELOP_MITTHELSINGBORG_IO: "https://dev.api.example.com",
-  DEVELOP_MITTHELSINGBORG_IO_APIKEY: "12345",
-  RELEASE_MITTHELSINGBORG_IO: "https://release.api.example.com",
-  RELEASE_MITTHELSINGBORG_IO_APIKEY: "12345",
-  PRODUCTION_MITTHELSINGBORG_IO: "https://api.example.com",
-  PRODUCTION_MITTHELSINGBORG_IO_APIKEY: "12345",
+  MITTHELSINGBORG_IO: "https://example.com",
+  MITTHELSINGBORG_IO_APIKEY: "12345",
 }));
 
 /**

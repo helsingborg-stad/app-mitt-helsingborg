@@ -1,7 +1,7 @@
 import { Component } from "react";
 import AsyncStorage from "@react-native-community/async-storage";
 
-interface IStorage {
+export interface IStorage {
   getData(key: string): Promise<string | null>;
   saveData(key: string, payload: string): Promise<void>;
 }

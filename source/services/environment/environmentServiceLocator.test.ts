@@ -17,6 +17,9 @@ const MOCK_SERVICE: EnvironmentService = {
   getActive(): EnvironmentConfig {
     return { apiKey: "", url: "" };
   },
+  async parseFromStorage() {
+    //
+  },
 };
 
 const MOCK_SERVICE_2: EnvironmentService = Object.create(MOCK_SERVICE);
@@ -44,6 +47,15 @@ describe("Environment Service Locator", () => {
   it("throws when no service is registered", () => {
     const func = () => EnvironmentServiceLocator.get();
 
-    expect(func).toThrow();
+    expect(func).toThrow("No EnvironmentService registered");
+  });
+
+  it("should allow clearing the service", () => {
+    EnvironmentServiceLocator.register(MOCK_SERVICE);
+    EnvironmentServiceLocator.clear();
+
+    const func = () => EnvironmentServiceLocator.get();
+
+    expect(func).toThrow("No EnvironmentService registered");
   });
 });

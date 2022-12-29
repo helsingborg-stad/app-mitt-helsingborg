@@ -32,7 +32,11 @@ export const canOpenUrl = (url: string): Promise<boolean> =>
  * Build query URL
  * @param {obj} queryParams
  */
-const encodeQueryData = (queryParams: Record<string, string>) => {
+const encodeQueryData = (
+  queryParams:
+    | { [s: string]: string | number | boolean }
+    | ArrayLike<string | number | boolean>
+) => {
   const data: string[] = [];
   const entries = Object.entries(queryParams);
   entries.forEach(([key, value]) => {
@@ -42,11 +46,6 @@ const encodeQueryData = (queryParams: Record<string, string>) => {
   return data.join("&");
 };
 
-/**
- * Builds a service request url
- * @param {string} endpoint
- * @param {obj} params
- */
 export const buildServiceUrl = async (
   endpoint = "",
   params = {}
