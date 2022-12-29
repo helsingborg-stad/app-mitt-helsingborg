@@ -19,7 +19,7 @@ const Paragraph = styled(Text)`
   line-height: 24px;
 `;
 
-const AboutScreen = () => (
+const AboutScreen = (): JSX.Element => (
   <AboutScreenWrapper>
     <Header title="Om Appen" themeColor="purple" />
     <Container>
