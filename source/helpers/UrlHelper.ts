@@ -6,7 +6,7 @@ import EnvironmentConfigurationService from "../services/EnvironmentConfiguratio
  *
  * @param {String} url
  */
-export const openUrl = (url) =>
+export const openUrl = (url: string): Promise<boolean> =>
   Linking.openURL(url)
     .then(() => true)
     .catch(() => false);
@@ -15,7 +15,7 @@ export const openUrl = (url) =>
  * Test if URL can be opened
  * @param {string} url
  */
-export const canOpenUrl = (url) =>
+export const canOpenUrl = (url: string): Promise<boolean> =>
   Linking.canOpenURL(url)
     .then((supported) => {
       if (supported) {
@@ -32,8 +32,8 @@ export const canOpenUrl = (url) =>
  * Build query URL
  * @param {obj} queryParams
  */
-const encodeQueryData = (queryParams) => {
-  const data = [];
+const encodeQueryData = (queryParams: Record<string, string>) => {
+  const data: string[] = [];
   const entries = Object.entries(queryParams);
   entries.forEach(([key, value]) => {
     data.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
@@ -47,7 +47,10 @@ const encodeQueryData = (queryParams) => {
  * @param {string} endpoint
  * @param {obj} params
  */
-export const buildServiceUrl = async (endpoint = "", params = {}) => {
+export const buildServiceUrl = async (
+  endpoint = "",
+  params = {}
+): Promise<string> => {
   const { baseUrl } =
     EnvironmentConfigurationService.getInstance().activeEndpoint;
   // Build query url
@@ -64,7 +67,7 @@ export const buildServiceUrl = async (endpoint = "", params = {}) => {
  * Builds the BankID client URL
  * @param {string} autoStartToken
  */
-export const buildBankIdClientUrl = (autoStartToken) => {
+export const buildBankIdClientUrl = (autoStartToken: string): string => {
   let url = "bankid:///";
   let queryString = `?autostarttoken=${autoStartToken}&redirect=null`;
 
