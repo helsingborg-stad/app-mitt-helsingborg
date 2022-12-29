@@ -10,14 +10,14 @@ export type Options<T> = {
   };
 };
 
-export interface State<T> {
+interface State<T> {
   rejected: T[];
   resolved: T[];
   isPending: boolean;
   count: number;
 }
 
-export interface Actions {
+interface Actions {
   retry: () => void;
 }
 
@@ -48,13 +48,13 @@ function useQueue<T>(
     setQueue(updatedQueue);
   };
 
-  const onResolved = (resolvedItem) => {
+  const onResolved = (resolvedItem: T) => {
     const updatedResolved = [...resolved];
     updatedResolved.push(resolvedItem);
     setResolved(updatedResolved);
   };
 
-  const onRejected = (rejectedItem) => {
+  const onRejected = (rejectedItem: T) => {
     const updatedRejected = [...rejected];
     updatedRejected.push(rejectedItem);
     setRejected(updatedRejected);
@@ -75,12 +75,14 @@ function useQueue<T>(
     const updatedQueue = [...queue];
     const attachment = updatedQueue.shift();
 
-    callback(attachment)
-      .then(onResolved)
-      .catch(onRejected)
-      .then(() => {
-        setQueue(updatedQueue);
-      });
+    if (attachment) {
+      void callback(attachment)
+        .then(onResolved)
+        .catch(onRejected)
+        .then(() => {
+          setQueue(updatedQueue);
+        });
+    }
   };
 
   useEffect(setPendingState, [queue]);
