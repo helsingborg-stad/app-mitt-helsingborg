@@ -48,11 +48,8 @@ const FormList = ({
         formSummaries.map((form) => (
           <ListItem
             key={form.id}
-            highlighted
             title={form.name}
             text={`${form.description}`}
-            iconName={null}
-            imageSrc={null}
             onClick={async () => {
               const f = await getForm(form.id);
               onClickCallback(f);
