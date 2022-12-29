@@ -4,7 +4,7 @@ import validator from "validator";
  * @param {string} pin Personal identity number
  * @return {boolean} Return true if PIN is valid, else return false
  */
-export const validatePin = (pin) => {
+export const validatePin = (pin: string): boolean => {
   const pinRegex = /^[0-9]{12}$/;
 
   return pinRegex.test(pin);
@@ -15,10 +15,10 @@ export const validatePin = (pin) => {
  * @param {string} pin Personal identity number
  * @return {string} Personal identity number
  */
-export const sanitizePin = (pin) => {
+export const sanitizePin = (pin: string): string => {
   // Remove non digits
   let sanitizedPin = pin.replace(/\D/g, "");
-  const pinInt = parseInt(sanitizedPin);
+  const pinInt = parseInt(sanitizedPin, 10);
 
   sanitizedPin =
     sanitizedPin.length === 2 && pinInt > 19 && pinInt !== 20
