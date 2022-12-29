@@ -14,7 +14,14 @@ const EnhancedSafeAreaView = styled.SafeAreaView`
   margin-bottom: 18px;
 `;
 
-const StoryWrapper = (props) => {
+interface Props {
+  style: Record<string, string | number>;
+  kind?: string;
+  name?: string;
+  children: React.ReactChild | React.ReactChildren;
+}
+
+const StoryWrapper = (props: Props): JSX.Element => {
   const { style, kind, name, children } = props;
 
   return (
@@ -36,7 +43,7 @@ StoryWrapper.propTypes = {
   ]),
   kind: PropTypes.string,
   name: PropTypes.string,
-  style: PropTypes.array,
+  style: PropTypes.oneOfType([PropTypes.object]),
 };
 
 export default StoryWrapper;
