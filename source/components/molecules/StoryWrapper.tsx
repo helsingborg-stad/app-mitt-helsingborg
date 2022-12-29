@@ -15,7 +15,7 @@ const EnhancedSafeAreaView = styled.SafeAreaView`
 `;
 
 interface Props {
-  style: Record<string, string | number>;
+  style?: Record<string, string | number>;
   kind?: string;
   name?: string;
   children: React.ReactChild | React.ReactChildren;
