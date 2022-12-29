@@ -2,7 +2,7 @@
  * Returns negative amount with Swedish currency
  * @param {string} value
  */
-const formatAmount = (value, negative = false) => {
+const formatAmount = (value: unknown, negative = false): string => {
   if (!value || typeof value !== "string") {
     return "";
   }
@@ -30,30 +30,10 @@ const convertDataToArray = (data) =>
  * Returns sum of multiple amounts with Swedish currency
  * @param {Object|string[]} amounts
  */
-const calculateSum = (amounts, suffix = "kr") =>
+const calculateSum = (amounts, suffix = "kr"): string =>
   `${convertDataToArray(amounts).reduce(
-    (acc, obj) => acc + parseInt(obj.approved || obj.amount),
+    (acc, obj) => acc + parseInt(obj.approved || obj.amount, 10),
     0
   )} ${suffix}`;
 
-/**
- * Translate norm acronym to readable strings
- * @param {string} norm
- */
-const translateNormAcronym = (norm) => {
-  if (typeof norm !== "string") {
-    return norm;
-  }
-  switch (norm.toLowerCase()) {
-    case "h":
-      return "Heltid";
-    case "d":
-      return "Deltid";
-    case "u":
-      return "Umgängesbarn";
-    default:
-      return norm;
-  }
-};
-
-export { formatAmount, calculateSum, convertDataToArray, translateNormAcronym };
+export { formatAmount, calculateSum, convertDataToArray };
