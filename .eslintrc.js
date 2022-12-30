@@ -78,6 +78,7 @@ const config = {
       },
     ],
     "import/no-unused-modules": [1, { unusedExports: true }],
+    "import/prefer-default-export": "off",
     "react/jsx-filename-extension": [2, { extensions: [".jsx", ".tsx"] }],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "no-unused-vars": "off",

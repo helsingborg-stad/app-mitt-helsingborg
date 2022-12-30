@@ -5,7 +5,7 @@ import StorageService, {
   ACCESS_TOKEN_KEY,
 } from "../services/storage/StorageService";
 import { buildServiceUrl } from "./UrlHelper";
-import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
+import { EnvironmentServiceLocator } from "../services/environment";
 
 interface FileUploadParams {
   endpoint: string;
@@ -29,8 +29,7 @@ export const uploadFile = async ({
 }: FileUploadParams): Promise<UploadFileResponse> => {
   const requestUrl = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
-  const { apiKey } =
-    EnvironmentConfigurationService.getInstance().activeEndpoint;
+  const { apiKey } = EnvironmentServiceLocator.get().getActive();
 
   const bearer = token || "";
 

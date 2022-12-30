@@ -8,8 +8,8 @@ import StorageService, {
 } from "../services/storage/StorageService";
 import { buildServiceUrl } from "./UrlHelper";
 import { name } from "../../package.json";
-import EnvironmentConfigurationService from "../services/EnvironmentConfigurationService";
 import { getUserFriendlyAppVersion } from "./Misc";
+import { EnvironmentServiceLocator } from "../services/environment";
 
 interface RequestError {
   message: string;
@@ -36,8 +36,7 @@ async function request<TResponse>(
 ): RequestReturnType<TResponse> {
   const url = await buildServiceUrl(endpoint);
   const token = await StorageService.getData(ACCESS_TOKEN_KEY);
-  const { apiKey } =
-    EnvironmentConfigurationService.getInstance().activeEndpoint;
+  const { apiKey } = EnvironmentServiceLocator.get().getActive();
 
   const friendlyVersion = getUserFriendlyAppVersion();
   const applicationVersion = DeviceInfo.getVersion();

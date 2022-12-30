@@ -1,8 +1,18 @@
 import { AppRegistry, LogBox } from "react-native";
-import { name as appName } from "./app.json";
-import App from "./source/App";
+import env from "react-native-config";
 
+import { name as appName } from "./app.json";
+import {
+  EnvironmentServiceLocator,
+  DefaultEnvironmentService,
+} from "./source/services/environment";
+import App from "./source/App";
 import getMonitoringService from "./source/services/monitoring/MonitoringService";
+import { wrappedDefaultStorage } from "./source/services/storage/StorageService";
+
+EnvironmentServiceLocator.register(
+  new DefaultEnvironmentService(wrappedDefaultStorage, env)
+);
 
 getMonitoringService().init();
 
