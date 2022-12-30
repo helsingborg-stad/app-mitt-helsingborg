@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unused-modules */
 import * as React from "react";
 import { View } from "react-native";
 import type { Item } from "react-native-picker-select";
