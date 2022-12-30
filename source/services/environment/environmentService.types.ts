@@ -1,14 +1,17 @@
 export type RawEnvironmentConfigMap = Record<string, [string, string]>;
 
 export interface EnvironmentConfig {
+  name: string;
   url: string;
   apiKey: string;
 }
 
+export type EnvironmentConfigMap = Record<string, EnvironmentConfig>;
+
 export interface EnvironmentService {
-  parse(raw: RawEnvironmentConfigMap): void;
+  parse(raw: RawEnvironmentConfigMap): Promise<void>;
   parseFromStorage(): Promise<void>;
-  getEnvironments(): Record<string, EnvironmentConfig>;
-  setActive(environmentName: string): void;
+  getEnvironmentMap(): EnvironmentConfigMap;
+  setActive(environmentName: string): Promise<void>;
   getActive(): EnvironmentConfig;
 }

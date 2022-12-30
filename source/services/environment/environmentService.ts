@@ -3,19 +3,22 @@ import type { IStorage } from "../storage/StorageService";
 
 import type {
   EnvironmentConfig,
+  EnvironmentConfigMap,
   EnvironmentService,
   RawEnvironmentConfigMap,
 } from "./environmentService.types";
 
 export const ENVIRONMENT_CONFIG_STORAGE_KEY =
-  "_DefaultEnvironmentService_environments";
+  "@DefaultEnvironmentService:environments";
+export const ACTIVE_ENVIRONMENT_STORAGE_KEY =
+  "@DefaultEnvironmentService:active";
 
 export default class DefaultEnvironmentService implements EnvironmentService {
   private environmentVariablesSource: Record<string, string>;
 
   private storageService: IStorage;
 
-  private environments: Record<string, EnvironmentConfig> = {};
+  private environments: EnvironmentConfigMap = {};
 
   private activeEnvironment: EnvironmentConfig | null = null;
 
@@ -27,6 +30,17 @@ export default class DefaultEnvironmentService implements EnvironmentService {
     this.storageService = storageService;
   }
 
+  async loadActiveFromStorage(): Promise<void> {
+    const active = await this.storageService.getData(
+      ACTIVE_ENVIRONMENT_STORAGE_KEY
+    );
+
+    if (active) {
+      console.log("(EnvironmentService) loaded active from storage:", active);
+      await this.setActive(active);
+    }
+  }
+
   async parse(raw: RawEnvironmentConfigMap): Promise<void> {
     const entries = Object.entries(raw);
 
@@ -34,17 +48,20 @@ export default class DefaultEnvironmentService implements EnvironmentService {
       (accumulated, [name, [url, apiKey]]) => ({
         ...accumulated,
         [name]: {
+          name,
           url,
           apiKey,
         },
       }),
-      {} as Record<string, EnvironmentConfig>
+      {} as EnvironmentConfigMap
     );
 
     await this.storageService.saveData(
       ENVIRONMENT_CONFIG_STORAGE_KEY,
       JSON.stringify(raw)
     );
+
+    await this.loadActiveFromStorage();
   }
 
   async parseFromStorage(): Promise<void> {
@@ -58,11 +75,11 @@ export default class DefaultEnvironmentService implements EnvironmentService {
     }
   }
 
-  getEnvironments(): Record<string, EnvironmentConfig> {
+  getEnvironmentMap(): EnvironmentConfigMap {
     return this.environments;
   }
 
-  setActive(environmentName: string): void {
+  async setActive(environmentName: string): Promise<void> {
     const environmentNames = Object.keys(this.environments);
     const environmentExists = environmentNames.includes(environmentName);
     if (!environmentExists) {
@@ -74,9 +91,15 @@ export default class DefaultEnvironmentService implements EnvironmentService {
     }
 
     console.log(
-      `(EnvironmentService) active environment set to '${environmentName}'`
+      "(EnvironmentService) active environment set to:",
+      environmentName
     );
     this.activeEnvironment = this.environments[environmentName];
+
+    await this.storageService.saveData(
+      ACTIVE_ENVIRONMENT_STORAGE_KEY,
+      environmentName
+    );
   }
 
   getActive(): EnvironmentConfig {
@@ -92,6 +115,7 @@ export default class DefaultEnvironmentService implements EnvironmentService {
       }
 
       return {
+        name: "default",
         url: fallbackUrl,
         apiKey: fallbackApiKey,
       };

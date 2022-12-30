@@ -5,7 +5,7 @@ import type {
 } from "./environmentService.types";
 
 const MOCK_SERVICE: EnvironmentService = {
-  getEnvironments() {
+  getEnvironmentMap() {
     return {};
   },
   parse() {

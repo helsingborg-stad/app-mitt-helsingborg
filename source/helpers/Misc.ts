@@ -49,3 +49,16 @@ export function getPhoneLocale(): string {
     NativeModules.SettingsManager.settings.AppleLanguages[0]
   );
 }
+
+export function arraysAreEqual<T>(arr1: T[], arr2: T[]): boolean {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+
+  const bothAreSame = arr1.reduce(
+    (isSame, value, index) => isSame && value === arr2[index],
+    true
+  );
+
+  return bothAreSame;
+}

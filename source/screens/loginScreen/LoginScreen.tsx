@@ -1,10 +1,9 @@
 import React, { useContext, useEffect } from "react";
 import { StatusBar } from "react-native";
-import RNPickerSelect from "react-native-picker-select";
 
 import ILLUSTRATION from "../../assets/images/illustrations";
 
-import { Button, Text } from "../../components/atoms";
+import { Button, EnvironmentPicker, Text } from "../../components/atoms";
 
 import { AuthLoading } from "../../components/molecules";
 import { useModal } from "../../components/molecules/Modal";
@@ -14,8 +13,6 @@ import {
   ApiStatusMessages,
 } from "../../components/organisms";
 import { getUserFriendlyAppVersion } from "../../helpers/Misc";
-
-import EnvironmentConfigurationService from "../../services/EnvironmentConfigurationService";
 
 import AppContext from "../../store/AppContext";
 import AuthContext from "../../store/AuthContext";
@@ -33,7 +30,6 @@ import {
   LoginHeading,
   Logo,
   ParagraphLink,
-  pickerSelectStyles,
   SafeAreaViewTop,
   Separator,
   Title,
@@ -42,8 +38,6 @@ import {
   ApiStatusMessagePosition,
 } from "./LoginScreen.styled";
 import theme from "../../theme/theme";
-
-import type { Endpoint } from "../../services/EnvironmentConfigurationService";
 
 function LoginScreen(): JSX.Element {
   const {
@@ -72,10 +66,6 @@ function LoginScreen(): JSX.Element {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
-
-  const onEnvironmentSelectionChange = (value: Endpoint) => {
-    EnvironmentConfigurationService.getInstance().activeEndpoint = value;
-  };
 
   const handleLogin = () => {
     handleAuth(undefined, false);
@@ -138,20 +128,7 @@ function LoginScreen(): JSX.Element {
             </Form>
           )}
 
-          {isDevMode && (
-            <RNPickerSelect
-              onValueChange={onEnvironmentSelectionChange}
-              placeholder={{}}
-              items={
-                EnvironmentConfigurationService.getInstance().environmentOptions
-              }
-              itemKey={
-                EnvironmentConfigurationService.getInstance().activeEndpoint
-                  .name
-              }
-              style={pickerSelectStyles}
-            />
-          )}
+          {isDevMode && <EnvironmentPicker />}
 
           <Footer>
             <FooterText>
