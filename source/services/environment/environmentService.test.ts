@@ -7,12 +7,11 @@ import type { EnvironmentConfigMap } from "./environmentService.types";
 import type { IStorage } from "../storage/StorageService";
 
 const MOCK_RAW_CONFIG_TEXT =
-  '{"sandbox":["https://example.com/","abc123"],"develop":["https://example.com/dev","0000"]}';
-const MOCK_RAW_CONFIG = JSON.parse(MOCK_RAW_CONFIG_TEXT);
+  '{"sandbox":["https://example.com/sandbox","abc123"],"develop":["https://example.com/dev","0000"]}';
 const MOCK_CONFIG: EnvironmentConfigMap = {
   sandbox: {
     name: "sandbox",
-    url: "https://example.com/",
+    url: "https://example.com/sandbox",
     apiKey: "abc123",
   },
   develop: {
@@ -20,6 +19,14 @@ const MOCK_CONFIG: EnvironmentConfigMap = {
     url: "https://example.com/dev",
     apiKey: "0000",
   },
+};
+
+const MOCK_FALLBACK_URL = "http://example.com/fallback";
+const MOCK_FALLBACK_APIKEY = "12345";
+const MOCK_FALLBACK_CONFIG = {
+  name: "default",
+  url: MOCK_FALLBACK_URL,
+  apiKey: MOCK_FALLBACK_APIKEY,
 };
 
 const MOCK_STORAGE: IStorage = {
@@ -38,7 +45,7 @@ describe("EnvironmentService", () => {
     );
     const service = EnvironmentServiceLocator.get();
 
-    await service.parse(MOCK_RAW_CONFIG);
+    await service.parse(MOCK_RAW_CONFIG_TEXT);
     const result = service.getEnvironmentMap();
 
     expect(result).toEqual(MOCK_CONFIG);
@@ -52,7 +59,7 @@ describe("EnvironmentService", () => {
     );
     const service = EnvironmentServiceLocator.get();
 
-    await service.parse(MOCK_RAW_CONFIG);
+    await service.parse(MOCK_RAW_CONFIG_TEXT);
 
     expect(saveFunc).toHaveBeenCalledWith(
       ENVIRONMENT_CONFIG_STORAGE_KEY,
@@ -83,7 +90,7 @@ describe("EnvironmentService", () => {
       new DefaultEnvironmentService(MOCK_STORAGE)
     );
     const service = EnvironmentServiceLocator.get();
-    await service.parse(MOCK_RAW_CONFIG);
+    await service.parse(MOCK_RAW_CONFIG_TEXT);
 
     await service.setActive("sandbox");
     const result = service.getActive();
@@ -96,7 +103,7 @@ describe("EnvironmentService", () => {
       new DefaultEnvironmentService(MOCK_STORAGE)
     );
     const service = EnvironmentServiceLocator.get();
-    await service.parse(MOCK_RAW_CONFIG);
+    await service.parse(MOCK_RAW_CONFIG_TEXT);
 
     const func = () => service.setActive("invalid");
 
@@ -105,25 +112,80 @@ describe("EnvironmentService", () => {
     );
   });
 
-  it("uses fallback when no active environment is set", () => {
-    const expectedUrl = "http://example.com/fallback";
-    const expectedApiKey = "12345";
-
+  it("uses first (alphabetical) environment if no active is explicitely set", async () => {
     EnvironmentServiceLocator.register(
-      new DefaultEnvironmentService(MOCK_STORAGE, {
-        MITTHELSINGBORG_IO: expectedUrl,
-        MITTHELSINGBORG_IO_APIKEY: expectedApiKey,
-      })
+      new DefaultEnvironmentService(MOCK_STORAGE)
     );
     const service = EnvironmentServiceLocator.get();
+    await service.parse(MOCK_RAW_CONFIG_TEXT);
 
     const result = service.getActive();
 
+    expect(result).toEqual(MOCK_CONFIG.develop);
+  });
+
+  it("keeps the same active environment by name if available after parse", async () => {
+    EnvironmentServiceLocator.register(
+      new DefaultEnvironmentService(MOCK_STORAGE)
+    );
+
+    const service = EnvironmentServiceLocator.get();
+    await service.parse(MOCK_RAW_CONFIG_TEXT);
+    await service.setActive("develop");
+    await service.parse('{"develop":["a","b"]}');
+    const result = service.getActive();
+
     expect(result).toEqual({
-      name: "default",
-      url: expectedUrl,
-      apiKey: expectedApiKey,
+      name: "develop",
+      url: "a",
+      apiKey: "b",
     });
+  });
+
+  it("uses fallback when active environment is set to blank value", async () => {
+    const saveSpy = jest.spyOn(MOCK_STORAGE, "saveData");
+    EnvironmentServiceLocator.register(
+      new DefaultEnvironmentService(MOCK_STORAGE, {
+        MITTHELSINGBORG_IO: MOCK_FALLBACK_URL,
+        MITTHELSINGBORG_IO_APIKEY: MOCK_FALLBACK_APIKEY,
+      })
+    );
+    const service = EnvironmentServiceLocator.get();
+    await service.parse(MOCK_RAW_CONFIG_TEXT);
+    await service.setActive("sandbox");
+    const result1 = service.getActive();
+    await service.setActive("");
+    const result2 = service.getActive();
+
+    expect(result1).not.toEqual(MOCK_FALLBACK_CONFIG);
+    expect(result2).toEqual(MOCK_FALLBACK_CONFIG);
+    expect(saveSpy).toHaveBeenLastCalledWith(
+      ACTIVE_ENVIRONMENT_STORAGE_KEY,
+      ""
+    );
+  });
+
+  it("clears configs and active when parsing empty input", async () => {
+    EnvironmentServiceLocator.register(
+      new DefaultEnvironmentService(MOCK_STORAGE, {
+        MITTHELSINGBORG_IO: MOCK_FALLBACK_URL,
+        MITTHELSINGBORG_IO_APIKEY: MOCK_FALLBACK_APIKEY,
+      })
+    );
+
+    const service = EnvironmentServiceLocator.get();
+    await service.parse(MOCK_RAW_CONFIG_TEXT);
+    await service.setActive("sandbox");
+    const map1 = service.getEnvironmentMap();
+    const active1 = service.getActive();
+    await service.parse("");
+    const map2 = service.getEnvironmentMap();
+    const active2 = service.getActive();
+
+    expect(map1).toEqual(MOCK_CONFIG);
+    expect(map2).toEqual({});
+    expect(active1).toEqual(MOCK_CONFIG.sandbox);
+    expect(active2).toEqual(MOCK_FALLBACK_CONFIG);
   });
 
   it("throws if no active environment is set and no fallback is found", () => {
@@ -136,6 +198,23 @@ describe("EnvironmentService", () => {
 
     expect(func).toThrow(
       "No active environment set and no fallback environment found"
+    );
+  });
+
+  it("throws if an invalid environment name is provided", async () => {
+    EnvironmentServiceLocator.register(
+      new DefaultEnvironmentService(MOCK_STORAGE, {
+        MITTHELSINGBORG_IO: MOCK_FALLBACK_URL,
+        MITTHELSINGBORG_IO_APIKEY: MOCK_FALLBACK_APIKEY,
+      })
+    );
+
+    const service = EnvironmentServiceLocator.get();
+
+    const func = () => service.setActive("invalid");
+
+    await expect(func).rejects.toThrow(
+      "Environment 'invalid' does not exist in list: "
     );
   });
 });

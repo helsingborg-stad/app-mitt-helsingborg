@@ -17,6 +17,7 @@ import theme from "./theme/theme";
 
 import getMonitoringService from "./services/monitoring/MonitoringService";
 import { EnvironmentServiceLocator } from "./services/environment";
+import { EnvironmentProvider } from "./store/EnvironmentContext";
 
 /**
  * Any setup and init for application goes here:
@@ -54,23 +55,25 @@ const App = (): JSX.Element => {
     Config.IS_STORYBOOK === "true" ? <StorybookUIRoot /> : <Navigator />;
 
   return (
-    <SafeAreaProvider>
-      <AppProvider>
-        <AppCompabilityProvider>
-          <AuthProvider>
-            <CaseProvider>
-              <FormProvider>
-                <ThemeProvider theme={theme}>
-                  <NotificationProvider>
-                    <RootComponent />
-                  </NotificationProvider>
-                </ThemeProvider>
-              </FormProvider>
-            </CaseProvider>
-          </AuthProvider>
-        </AppCompabilityProvider>
-      </AppProvider>
-    </SafeAreaProvider>
+    <EnvironmentProvider>
+      <SafeAreaProvider>
+        <AppProvider>
+          <AppCompabilityProvider>
+            <AuthProvider>
+              <CaseProvider>
+                <FormProvider>
+                  <ThemeProvider theme={theme}>
+                    <NotificationProvider>
+                      <RootComponent />
+                    </NotificationProvider>
+                  </ThemeProvider>
+                </FormProvider>
+              </CaseProvider>
+            </AuthProvider>
+          </AppCompabilityProvider>
+        </AppProvider>
+      </SafeAreaProvider>
+    </EnvironmentProvider>
   );
 };
 

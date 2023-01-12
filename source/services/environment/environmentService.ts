@@ -1,11 +1,15 @@
 import env from "react-native-config";
 import type { IStorage } from "../storage/StorageService";
+import {
+  deserializeEnvironmentConfigMap,
+  serializeEnvironmentConfigMap,
+} from "./environmentConfigMapSerializer";
 
 import type {
   EnvironmentConfig,
   EnvironmentConfigMap,
   EnvironmentService,
-  RawEnvironmentConfigMap,
+  SerializedEnvironmentConfigMap,
 } from "./environmentService.types";
 
 export const ENVIRONMENT_CONFIG_STORAGE_KEY =
@@ -30,48 +34,48 @@ export default class DefaultEnvironmentService implements EnvironmentService {
     this.storageService = storageService;
   }
 
+  getActiveEnvironmentName(): Promise<string | null> {
+    return this.storageService.getData(ACTIVE_ENVIRONMENT_STORAGE_KEY);
+  }
+
   async loadActiveFromStorage(): Promise<void> {
-    const active = await this.storageService.getData(
-      ACTIVE_ENVIRONMENT_STORAGE_KEY
-    );
+    const active = await this.getActiveEnvironmentName();
 
     if (active) {
-      console.log("(EnvironmentService) loaded active from storage:", active);
       await this.setActive(active);
     }
   }
 
-  async parse(raw: RawEnvironmentConfigMap): Promise<void> {
-    const entries = Object.entries(raw);
-
-    this.environments = entries.reduce(
-      (accumulated, [name, [url, apiKey]]) => ({
-        ...accumulated,
-        [name]: {
-          name,
-          url,
-          apiKey,
-        },
-      }),
-      {} as EnvironmentConfigMap
-    );
+  async parse(raw: SerializedEnvironmentConfigMap): Promise<void> {
+    if (raw?.length > 0) {
+      this.environments = deserializeEnvironmentConfigMap(raw);
+    } else {
+      this.environments = {};
+    }
 
     await this.storageService.saveData(
       ENVIRONMENT_CONFIG_STORAGE_KEY,
-      JSON.stringify(raw)
+      serializeEnvironmentConfigMap(this.environments)
     );
 
-    await this.loadActiveFromStorage();
+    const activeEnvironmentName = await this.getActiveEnvironmentName();
+    const activeEnvironmentExists =
+      !!activeEnvironmentName &&
+      Object.keys(this.environments).includes(activeEnvironmentName);
+
+    if (!activeEnvironmentExists) {
+      const firstActiveName = Object.keys(this.environments).sort()[0] ?? "";
+      await this.setActive(firstActiveName);
+    }
   }
 
   async parseFromStorage(): Promise<void> {
-    const stringified = await this.storageService.getData(
+    const serialized = await this.storageService.getData(
       ENVIRONMENT_CONFIG_STORAGE_KEY
     );
 
-    if (stringified) {
-      const raw: RawEnvironmentConfigMap = JSON.parse(stringified);
-      await this.parse(raw);
+    if (serialized) {
+      await this.parse(serialized);
     }
   }
 
@@ -80,21 +84,25 @@ export default class DefaultEnvironmentService implements EnvironmentService {
   }
 
   async setActive(environmentName: string): Promise<void> {
-    const environmentNames = Object.keys(this.environments);
-    const environmentExists = environmentNames.includes(environmentName);
-    if (!environmentExists) {
-      throw new Error(
-        `Environment '${environmentName}' does not exist in list: ${environmentNames.join(
-          ", "
-        )}`
+    if (environmentName?.length === 0) {
+      this.activeEnvironment = null;
+    } else {
+      const environmentNames = Object.keys(this.environments);
+      const environmentExists = environmentNames.includes(environmentName);
+      if (!environmentExists) {
+        throw new Error(
+          `Environment '${environmentName}' does not exist in list: ${environmentNames.join(
+            ", "
+          )}`
+        );
+      }
+
+      this.activeEnvironment = this.environments[environmentName];
+      console.log(
+        "(EnvironmentService) Active environment set to",
+        environmentName
       );
     }
-
-    console.log(
-      "(EnvironmentService) active environment set to:",
-      environmentName
-    );
-    this.activeEnvironment = this.environments[environmentName];
 
     await this.storageService.saveData(
       ACTIVE_ENVIRONMENT_STORAGE_KEY,

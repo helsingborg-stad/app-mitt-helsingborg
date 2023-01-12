@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, TouchableOpacity, View } from "react-native";
 
 import ILLUSTRATION from "../../assets/images/illustrations";
 
-import { Button, EnvironmentPicker, Text } from "../../components/atoms";
+import { Button, EnvironmentPicker, Icon, Text } from "../../components/atoms";
 
 import { AuthLoading } from "../../components/molecules";
 import { useModal } from "../../components/molecules/Modal";
@@ -36,8 +36,10 @@ import {
   VersionLabel,
   VersionLabelContainer,
   ApiStatusMessagePosition,
+  SettingsButtonContainer,
 } from "./LoginScreen.styled";
 import theme from "../../theme/theme";
+import { AppSettingsModal } from "../../components/organisms/AppSettingsModal";
 
 function LoginScreen(): JSX.Element {
   const {
@@ -57,6 +59,7 @@ function LoginScreen(): JSX.Element {
 
   const [loginModalVisible, toggleLoginModal] = useModal();
   const [agreementModalVisible, toggleAgreementModal] = useModal();
+  const [settingsModalVisible, toggleSettingsModal] = useModal();
   const { isDevMode } = useContext(AppContext);
 
   useEffect(() => {
@@ -80,6 +83,15 @@ function LoginScreen(): JSX.Element {
           <VersionLabelContainer>
             <VersionLabel>{getUserFriendlyAppVersion()}</VersionLabel>
           </VersionLabelContainer>
+
+          <SettingsButtonContainer>
+            <TouchableOpacity activeOpacity={0.6} onPress={toggleSettingsModal}>
+              <View>
+                <Icon name="settings" />
+              </View>
+            </TouchableOpacity>
+          </SettingsButtonContainer>
+
           <StatusBar
             barStyle="dark-content"
             backgroundColor={theme.colors.neutrals[6]}
@@ -157,6 +169,11 @@ function LoginScreen(): JSX.Element {
       <PrivacyModal
         visible={agreementModalVisible}
         toggle={toggleAgreementModal}
+      />
+
+      <AppSettingsModal
+        visible={settingsModalVisible}
+        toggle={toggleSettingsModal}
       />
     </FlexView>
   );

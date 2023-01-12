@@ -8,14 +8,14 @@ const MOCK_SERVICE: EnvironmentService = {
   getEnvironmentMap() {
     return {};
   },
-  parse() {
+  async parse() {
     //
   },
-  setActive() {
+  async setActive() {
     //
   },
   getActive(): EnvironmentConfig {
-    return { apiKey: "", url: "" };
+    return { name: "", apiKey: "", url: "" };
   },
   async parseFromStorage() {
     //
