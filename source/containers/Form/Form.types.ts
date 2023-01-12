@@ -1,10 +1,10 @@
-import type { User } from "@sentry/react-native";
-import type { Status, Answer, VIVACaseDetails, Person } from "app/types/Case";
 import type {
   StepperActions,
   Action,
   Step as StepType,
-} from "app/types/FormTypes";
+} from "../../types/FormTypes";
+import type { Status, Answer, VIVACaseDetails, Person } from "../../types/Case";
+import type { User } from "../../types/UserTypes";
 import type { FormPosition, FormPeriod } from "./hooks/useForm";
 
 export const enum UPDATE_CASE_STATE {
