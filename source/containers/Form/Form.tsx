@@ -3,42 +3,25 @@ import type { ScrollView } from "react-native";
 import { InteractionManager, StatusBar } from "react-native";
 
 import Step from "../../components/organisms/Step/Step";
-
 import { Modal, useModal } from "../../components/molecules/Modal";
 import {
   ScreenWrapper,
   AuthLoading,
   CloseDialog,
 } from "../../components/molecules";
-
 import { useNotification } from "../../store/NotificationContext";
 import AuthContext from "../../store/AuthContext";
-
 import { evaluateConditionalExpression } from "../../helpers/conditionParser";
-import { getAttachmentAnswers } from "./Form.helpers";
-
-import FormUploader from "./FormUploader";
-import useForm from "./hooks/useForm";
-
 import { ApplicationStatusType } from "../../types/Case";
 import { ActionTypes } from "../../types/CaseContext";
-
-import type { Status, Person, VIVACaseDetails } from "../../types/Case";
-import type { Action, Answer } from "../../types/CaseContext";
 import type { PrimaryColor } from "../../theme/themeHelpers";
-import type { User } from "../../types/UserTypes";
-import { UPDATE_CASE_STATE } from "./types";
-import type { DialogText } from "./types";
-import type {
-  Step as StepType,
-  StepperActions,
-  Question,
-} from "../../types/FormTypes";
-import type {
-  FormPeriod,
-  FormPosition,
-  FormReducerState,
-} from "./hooks/useForm";
+import type { Step as StepType, Question } from "../../types/FormTypes";
+import type { FormPosition, FormReducerState } from "./hooks/useForm";
+import type { DialogText, FormProps } from "./Form.types";
+import { UPDATE_CASE_STATE } from "./Form.types";
+import { getAttachmentAnswers } from "./Form.helpers";
+import FormUploader from "./FormUploader";
+import useForm from "./hooks/useForm";
 
 const { SIGNED, NOT_STARTED } = ApplicationStatusType;
 
@@ -56,28 +39,6 @@ const dialogText: Record<UPDATE_CASE_STATE, DialogText> = {
     body: "",
   },
 };
-
-interface Props {
-  initialPosition?: FormPosition;
-  steps: StepType[];
-  connectivityMatrix: StepperActions[][];
-  user: User;
-  initialAnswers: Record<string, unknown>;
-  status: Status;
-  onClose: () => void;
-  onSubmit: () => void;
-  onUpdateCase: (
-    data: Record<string, Answer>,
-    signature: { success: boolean } | undefined,
-    currentPosition: FormPosition
-  ) => Promise<Action | void>;
-  period?: FormPeriod;
-  editable: boolean;
-  details: VIVACaseDetails;
-  persons: Person[];
-  encryptionPin: string;
-  completionsClarificationMessage: string;
-}
 
 export const defaultInitialPosition: FormPosition = {
   index: 0,
@@ -100,7 +61,7 @@ const CLOSE_FORM_DELAY = 1000;
  * is a tool to help you solve the problem of allowing end-users to interact with the
  * data and modify the data in your application.
  */
-const Form: React.FC<Props> = ({
+const Form: React.FC<FormProps> = ({
   initialPosition,
   steps,
   connectivityMatrix,
