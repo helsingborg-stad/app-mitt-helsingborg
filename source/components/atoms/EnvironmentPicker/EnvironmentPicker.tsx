@@ -14,7 +14,8 @@ export default function EnvironmentPicker(): JSX.Element {
 
   useEffect(() => {
     setItems(
-      Object.entries(environments).map<Item>(([label, value]) => ({
+      Object.entries(environments ?? []).map<Item>(([label, value]) => ({
+        key: label,
         label,
         value,
       }))
@@ -32,7 +33,7 @@ export default function EnvironmentPicker(): JSX.Element {
           onValueChange={onChange}
           placeholder={{}}
           items={items}
-          itemKey={activeEnvironment.url}
+          itemKey={activeEnvironment.name}
           style={pickerStyles}
         />
       ) : null}

@@ -63,10 +63,10 @@ export default class DefaultEnvironmentService implements EnvironmentService {
       !!activeEnvironmentName &&
       Object.keys(this.environments).includes(activeEnvironmentName);
 
-    if (!activeEnvironmentExists) {
-      const firstActiveName = Object.keys(this.environments).sort()[0] ?? "";
-      await this.setActive(firstActiveName);
-    }
+    const firstActiveName = Object.keys(this.environments).sort()[0] ?? "";
+    await this.setActive(
+      activeEnvironmentExists ? activeEnvironmentName : firstActiveName
+    );
   }
 
   async parseFromStorage(): Promise<void> {

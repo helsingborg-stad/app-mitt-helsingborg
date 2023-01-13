@@ -79,10 +79,12 @@ describe("EnvironmentService", () => {
     const service = EnvironmentServiceLocator.get();
 
     await service.parseFromStorage();
+    const active = service.getActive();
 
     expect(getFunc).toHaveBeenCalledTimes(2);
     expect(getFunc).toHaveBeenCalledWith(ENVIRONMENT_CONFIG_STORAGE_KEY);
     expect(getFunc).toHaveBeenCalledWith(ACTIVE_ENVIRONMENT_STORAGE_KEY);
+    expect(active).toEqual(MOCK_CONFIG.sandbox);
   });
 
   it("returns the set active environment", async () => {

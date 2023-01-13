@@ -34,6 +34,7 @@ export default function useEnvironmentService({
   const setActive = useCallback(
     (environment: string) =>
       service.setActive(environment).then(() => {
+        console.log("(environment) active environment set to:", environment);
         setActiveEnvironment(service.getActive());
       }),
     [service]
@@ -58,12 +59,31 @@ export default function useEnvironmentService({
     const currentActiveEnvironment = service.getActive();
     if (!isEqual(activeEnvironment, currentActiveEnvironment)) {
       setActiveEnvironment(currentActiveEnvironment);
+      console.log(
+        "(environment) active environment set to:",
+        currentActiveEnvironment.name
+      );
     }
   }, [service, activeEnvironment]);
 
   useEffect(() => {
     setSerializedEnvironmentConfig(serializeEnvironmentConfigMap(environments));
   }, [environments]);
+
+  useEffect(() => {
+    void service.parseFromStorage().then(() => {
+      console.log("(environment) loaded config from storage");
+      const currentEnvironments = service.getEnvironmentMap();
+      setEnvironments(currentEnvironments);
+
+      const currentActiveEnvironment = service.getActive();
+      setActiveEnvironment(currentActiveEnvironment);
+      console.log(
+        "(environment) active environment set to:",
+        currentActiveEnvironment.name
+      );
+    });
+  }, [service]);
 
   return {
     environments,

@@ -16,7 +16,6 @@ import { NotificationProvider } from "./store/NotificationContext";
 import theme from "./theme/theme";
 
 import getMonitoringService from "./services/monitoring/MonitoringService";
-import { EnvironmentServiceLocator } from "./services/environment";
 import { EnvironmentProvider } from "./store/EnvironmentContext";
 
 /**
@@ -24,9 +23,6 @@ import { EnvironmentProvider } from "./store/EnvironmentContext";
  * Platform specific handling, global listeners, providers, etc.
  */
 const App = (): JSX.Element => {
-  const environmentService = EnvironmentServiceLocator.get();
-  void environmentService.parseFromStorage();
-
   try {
     I18nManager.allowRTL(false);
     I18nManager.forceRTL(false);
