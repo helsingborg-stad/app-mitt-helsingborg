@@ -3,12 +3,11 @@ import PropTypes from "prop-types";
 import React, { useRef } from "react";
 import { Platform } from "react-native";
 import styled from "styled-components/native";
-import { colorPalette } from "../../../theme/palette";
 import type { PrimaryColor } from "../../../theme/themeHelpers";
 import { getValidColorSchema } from "../../../theme/themeHelpers";
-import { Icon, Input, Text } from "../../atoms";
+import { Input, Text } from "../../atoms";
 import CalendarPicker from "../../molecules/CalendarPicker/CalendarPickerForm";
-import type { SummaryListItem as SummaryListItemType } from "./SummaryList";
+import type { SummaryListItem as SummaryListItemType } from "./SummaryList.types";
 
 interface ItemWrapperProps {
   error?: { isValid: boolean; message: string };
@@ -92,18 +91,6 @@ const SmallText = styled(Text)`
     margin: 16px;
     margin-right: 0px;
   `}
-`;
-
-const DeleteButton = styled(Icon)`
-  padding-left: 5px;
-  margin-bottom: 8px;
-  margin-top: 8px;
-  color: ${(props) => props.theme.colors.neutrals[4]};
-`;
-
-const DeleteButtonHighligth = styled.TouchableHighlight`
-  padding: 0px;
-  margin: 0px;
 `;
 
 const ValidationErrorMessage = styled(Text)`
@@ -237,11 +224,9 @@ interface Props {
   item: SummaryListItemType;
   value: string | number | boolean;
   userDescriptionLabel?: string;
-  index?: number;
   editable?: boolean;
   changeFromInput: (value: string | number | boolean) => void;
   onBlur?: (value: Record<string, any> | string | number | boolean) => void;
-  removeItem: () => void;
   colorSchema: PrimaryColor;
   validationError?: { isValid: boolean; message: string };
   fieldStyle?: string;
@@ -251,11 +236,9 @@ const SummaryListItem: React.FC<Props> = ({
   item,
   value,
   userDescriptionLabel,
-  index,
   changeFromInput,
   onBlur,
   editable,
-  removeItem,
   colorSchema,
   validationError,
   fieldStyle,
@@ -321,15 +304,6 @@ const SummaryListItem: React.FC<Props> = ({
             />
           </InputWrapper>
         </ItemWrapper>
-        {editable && (
-          <DeleteButtonHighligth
-            activeOpacity={0.6}
-            underlayColor={colorPalette.complementary[validColorSchema][1]}
-            onPress={removeItem}
-          >
-            <DeleteButton name="clear" />
-          </DeleteButtonHighligth>
-        )}
       </Row>
       {validationError?.isValid === false && (
         <ValidationErrorMessage>
@@ -347,10 +321,6 @@ SummaryListItem.propTypes = {
   value: PropTypes.any,
   changeFromInput: PropTypes.func,
   onBlur: PropTypes.func,
-  /**
-   * The function to remove the row and clear the associated input
-   */
-  removeItem: PropTypes.func,
   /**
    * Default is blue
    */
