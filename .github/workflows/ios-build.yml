@@ -12,8 +12,6 @@ on:
         description: Force Version Number String
       forcedBuildNumber:
         description: Force Build Number
-      forcedEnvironment:
-        description: Force environment used for .env file content
 
 # prevents multiple build workflows from running
 # (in-progress and queued will be cancelled in favor of pending)
@@ -40,30 +38,19 @@ jobs:
           fetch-depth: 0
 
       ######################
-      # Set .env file vars (development/production)
-      # ENV_VARS content has to be encoded as base64 in order to preserve newlines
+      # set .env file
+      # content has to be encoded as base64 in order to preserve newlines
       # use "cat .env | base64 | pbcopy" to get pasteable content for GitHub secrets
       ######################
-      - name: Set env vars (production)
-        if: ${{ github.event.inputs.forcedEnvironment == 'production' || (github.event.inputs.forcedEnvironment == null && github.ref == 'master') }}
-        env:
-          DOTENV_CONTENTS_BASE64: ${{ secrets.PRODUCTION_DOTENV_CONTENTS_BASE64 }}
-        run: |
-          echo "using production environment"
-          echo $DOTENV_CONTENTS_BASE64 | base64 -d > .env
-          echo "CI_MATCHED_ENV=production" >> $GITHUB_ENV
 
-      - name: Set env vars (development)
+      - name: Set env vars
         env:
-          DOTENV_CONTENTS_BASE64: ${{ secrets.DEVELOP_DOTENV_CONTENTS_BASE64 }}
+          DOTENV_CONTENTS_BASE64: ${{ secrets.DOTENV_CONTENTS_BASE64 }}
         run: |
-          if [[ ! -f ".env" ]]; then
-            echo "fallback to development environment"
-            echo $DOTENV_CONTENTS_BASE64 | base64 -d > .env
-            echo "CI_MATCHED_ENV=develop" >> $GITHUB_ENV
-          fi
+          echo $DOTENV_CONTENTS_BASE64 | base64 -d > .env
+
       ######################
-      # END Set .env file vars (development/production)
+      # END set .env file
       ######################
 
       - name: Get yarn cache directory path
@@ -116,20 +103,10 @@ jobs:
           security import $CERT_PATH -P $P12_PASSWORD -A -t cert -f pkcs12 -k $CERT_KEYCHAIN_PATH
           security list-keychain -d user -s $CERT_KEYCHAIN_PATH
 
-      - name: Setup Sentry (prod)
-        if: ${{ github.event.inputs.forcedEnvironment == 'production' || (github.event.inputs.forcedEnvironment == null && github.ref == 'master') }}
+      - name: Setup Sentry
         env:
-          SENTRY_PROPERTIES: ${{ secrets.PRODUCTION_SENTRY_PROPERTIES_BASE64 }}
+          SENTRY_PROPERTIES: ${{ secrets.SENTRY_PROPERTIES_BASE64 }}
         run: |
-          echo "using production sentry"
-          ./scripts/setup-sentry-properties.sh
-
-      - name: Setup Sentry (dev)
-        if: ${{ github.event.inputs.forcedEnvironment != 'production' && github.ref != 'master' }}
-        env:
-          SENTRY_PROPERTIES: ${{ secrets.DEVELOP_SENTRY_PROPERTIES_BASE64 }}
-        run: |
-          echo "using development sentry"
           ./scripts/setup-sentry-properties.sh
 
       - name: Minor checks
@@ -145,7 +122,6 @@ jobs:
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
           APP_IDENTIFIER: ${{ secrets.APP_IDENTIFIER }}
-          CI_MATCHED_ENV: ${{ env.CI_MATCHED_ENV }}
           CONNECT_API_KEY_CONTENT: ${{ secrets.CONNECT_API_KEY_CONTENT }}
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           FORCED_VERSION_NUMBER_STRING: ${{ github.event.inputs.forcedVersion }}

@@ -192,6 +192,8 @@ npx react-native run-android --variant=release
 
 This project uses GitHub actions in combination with Fastlane to automatically build and upload builds (currently iOS only).
 
+CI builds are built as production-ready by default. For testing CI builds you can specify custom environments in-app (see [Backend selector](#backend-selector)).
+
 ## General
 
 A distinct process (e.g. "build an iOS app") is denoted as a "workflow". Each workflow is a separate yaml file in `.github/workflows`. Most workflows can be manually run from the [actions tab](https://github.com/helsingborg-stad/app-mitt-helsingborg/actions) if you have access. Previous workflow runs with logs and artifacts can also be found there.
@@ -215,25 +217,14 @@ The workflow sets up dependencies and variables and then calls a specific Fastla
 
 Variables used by the workflow and Fastlane are documented [in the Fastlane example.env](ios/fastlane/example.env). The other variables used by the build workflow are:
 
-| Variable                          | Contents                                                                                                                                                                                                                               |
-| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
-| BUILD_CERTIFICATE_BASE64          | Base64 representation of the Apple distribution certificate `.p12` file. Generate with `cat cert.p12 \| base64`.                                                                                                                       |
-| CACHE_KEY_PREFIX                  | Used to change the id for the caching of node modules and cocoapods. Changing this will essentially invalidate the cache. The actual value is not important but it's a good praxis to use the current date, to avoid future conflicts. |
-| CERT_KEYCHAIN_PASSWORD            | Password used for the ephemeral keychain used to store the certificate. This variable is mostly unimportant as the keychain is not persistent.                                                                                         |     |
-| DEVELOP_DOTENV_CONTENTS_BASE64    | Contents of the `.env` file used for development builds. See [example.env](.example.env). Generate with `cat .env \| base64`.                                                                                                          |
-| P12_PASSWORD                      | Password to unlock the contents of `BUILD_CERTIFICATE_BASE64` (the password entered during the certificate export).                                                                                                                    |
-| PRODUCTION_DOTENV_CONTENTS_BASE64 | Contents of the `.env` file used for production builds. See [example.env](.example.env). Generate with `cat .env \| base64`.                                                                                                           |
-
-- BUILD_CERTIFICATE_BASE64
-- CACHE_KEY_PREFIX
-- CERT_KEYCHAIN_PASSWORD
-- DEVELOP_DOTENV_CONTENTS_BASE64
-- P12_PASSWORD
-- PRODUCTION_DOTENV_CONTENTS_BASE64
-
-### Production build
-
-An iOS production can be done by manually running the build workflow using a release branch and settings the "forced environment" to `production`.
+| Variable                 | Contents                                                                                                                                                                                                                               |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| BUILD_CERTIFICATE_BASE64 | Base64 representation of the Apple distribution certificate `.p12` file. Generate with `cat cert.p12 \| base64`.                                                                                                                       |
+| P12_PASSWORD             | Password to unlock the contents of `BUILD_CERTIFICATE_BASE64` (the password entered during the certificate export).                                                                                                                    |
+| CACHE_KEY_PREFIX         | Used to change the id for the caching of node modules and cocoapods. Changing this will essentially invalidate the cache. The actual value is not important but it's a good praxis to use the current date, to avoid future conflicts. |
+| CERT_KEYCHAIN_PASSWORD   | Password used for the ephemeral keychain used to store the certificate. This variable is mostly unimportant as the keychain is not persistent.                                                                                         |
+| DOTENV_CONTENTS_BASE64   | Contents of the `.env` file. See [example.env](.example.env). Generate with `cat .env \| base64`.                                                                                                                                      |
+| SENTRY_PROPERTIES_BASE64 | Contents of the `sentry.properties` file (see [Sentry](#Sentry)).                                                                                                                                                                      |
 
 ## Other workflows
 
