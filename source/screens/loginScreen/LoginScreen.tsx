@@ -140,7 +140,7 @@ function LoginScreen(): JSX.Element {
             </Form>
           )}
 
-          {isDevMode && <EnvironmentPicker />}
+          <EnvironmentPicker />
 
           <Footer>
             <FooterText>
