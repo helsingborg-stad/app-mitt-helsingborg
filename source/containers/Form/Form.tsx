@@ -41,7 +41,7 @@ const dialogText: Record<UPDATE_CASE_STATE, DialogText> = {
   },
 };
 
-export const defaultInitialPosition: FormPosition = {
+const defaultInitialPosition: FormPosition = {
   index: 0,
   level: 0,
   currentMainStep: 1,
@@ -57,11 +57,6 @@ export const defaultInitialStatus = {
 
 const CLOSE_FORM_DELAY = 1000;
 
-/**
- * The Container Component Form allows you to create, process and reuse forms. The Form component
- * is a tool to help you solve the problem of allowing end-users to interact with the
- * data and modify the data in your application.
- */
 const Form: React.FC<FormProps> = ({
   initialPosition,
   steps,
@@ -78,7 +73,7 @@ const Form: React.FC<FormProps> = ({
   persons,
   encryptionPin,
   completionsClarificationMessage,
-}) => {
+}): JSX.Element => {
   const initialState: FormReducerState = {
     submitted: false,
     currentPosition: initialPosition || defaultInitialPosition,
