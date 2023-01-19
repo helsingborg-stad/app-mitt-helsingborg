@@ -242,8 +242,6 @@ const Form: React.FC<FormProps> = ({
 
   const processHiddenValue = useCallback(
     (value: Record<string, unknown>, id: string) => {
-      console.log("id", id);
-
       const step: StepType = formState.steps[
         formState.currentPosition.index
       ] as unknown as StepType;
