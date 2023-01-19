@@ -14,7 +14,6 @@ import {
 } from "../../components/organisms";
 import { getUserFriendlyAppVersion } from "../../helpers/Misc";
 
-import AppContext from "../../store/AppContext";
 import AuthContext from "../../store/AuthContext";
 import { useNotification } from "../../store/NotificationContext";
 
@@ -60,7 +59,6 @@ function LoginScreen(): JSX.Element {
   const [loginModalVisible, toggleLoginModal] = useModal();
   const [agreementModalVisible, toggleAgreementModal] = useModal();
   const [settingsModalVisible, toggleSettingsModal] = useModal();
-  const { isDevMode } = useContext(AppContext);
 
   useEffect(() => {
     if (isRejected && error?.message) {

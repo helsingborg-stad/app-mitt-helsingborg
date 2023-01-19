@@ -9,8 +9,8 @@ export function environmentConfigMapToRawEnvironmentConfigMap(
 ): RawEnvironmentConfigMap {
   const environmentEntries = Object.entries(input);
   return environmentEntries.reduce(
-    (acc, [environmentName, environmentConfig]) => ({
-      ...acc,
+    (accumulated, [environmentName, environmentConfig]) => ({
+      ...accumulated,
       [environmentName]: [environmentConfig.url, environmentConfig.apiKey],
     }),
     {} as RawEnvironmentConfigMap
