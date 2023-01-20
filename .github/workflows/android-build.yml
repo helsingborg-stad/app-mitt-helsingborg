@@ -7,8 +7,6 @@ on:
         description: Force Version Number String
       forcedBuildNumber:
         description: Force Build Number
-      forcedEnvironment:
-        description: Force environment used for .env file content
 
 # prevents multiple build workflows from running
 # (in-progress and queued will be cancelled in favor of pending)
