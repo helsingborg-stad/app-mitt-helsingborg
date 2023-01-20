@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, TouchableOpacity, View } from "react-native";
 
 import ILLUSTRATION from "../../assets/images/illustrations";
 
-import { Button, EnvironmentPicker, Text } from "../../components/atoms";
+import { Button, EnvironmentPicker, Icon, Text } from "../../components/atoms";
 
 import { AuthLoading } from "../../components/molecules";
 import { useModal } from "../../components/molecules/Modal";
@@ -14,7 +14,6 @@ import {
 } from "../../components/organisms";
 import { getUserFriendlyAppVersion } from "../../helpers/Misc";
 
-import AppContext from "../../store/AppContext";
 import AuthContext from "../../store/AuthContext";
 import { useNotification } from "../../store/NotificationContext";
 
@@ -36,8 +35,10 @@ import {
   VersionLabel,
   VersionLabelContainer,
   ApiStatusMessagePosition,
+  SettingsButtonContainer,
 } from "./LoginScreen.styled";
 import theme from "../../theme/theme";
+import { AppSettingsModal } from "../../components/organisms/AppSettingsModal";
 
 function LoginScreen(): JSX.Element {
   const {
@@ -57,7 +58,7 @@ function LoginScreen(): JSX.Element {
 
   const [loginModalVisible, toggleLoginModal] = useModal();
   const [agreementModalVisible, toggleAgreementModal] = useModal();
-  const { isDevMode } = useContext(AppContext);
+  const [settingsModalVisible, toggleSettingsModal] = useModal();
 
   useEffect(() => {
     if (isRejected && error?.message) {
@@ -80,6 +81,15 @@ function LoginScreen(): JSX.Element {
           <VersionLabelContainer>
             <VersionLabel>{getUserFriendlyAppVersion()}</VersionLabel>
           </VersionLabelContainer>
+
+          <SettingsButtonContainer>
+            <TouchableOpacity activeOpacity={0.6} onPress={toggleSettingsModal}>
+              <View>
+                <Icon name="settings" />
+              </View>
+            </TouchableOpacity>
+          </SettingsButtonContainer>
+
           <StatusBar
             barStyle="dark-content"
             backgroundColor={theme.colors.neutrals[6]}
@@ -128,7 +138,7 @@ function LoginScreen(): JSX.Element {
             </Form>
           )}
 
-          {isDevMode && <EnvironmentPicker />}
+          <EnvironmentPicker />
 
           <Footer>
             <FooterText>
@@ -157,6 +167,11 @@ function LoginScreen(): JSX.Element {
       <PrivacyModal
         visible={agreementModalVisible}
         toggle={toggleAgreementModal}
+      />
+
+      <AppSettingsModal
+        visible={settingsModalVisible}
+        toggle={toggleSettingsModal}
       />
     </FlexView>
   );

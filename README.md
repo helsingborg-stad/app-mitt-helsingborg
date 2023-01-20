@@ -44,7 +44,6 @@
   - [General](#general)
   - [iOS build (TestFlight)](#ios-build-testflight)
     - [Environment variables (secrets)](#environment-variables-secrets)
-    - [Production build](#production-build)
   - [Other workflows](#other-workflows)
 - [Sentry](#sentry)
 - [Roadmap](#roadmap)
@@ -103,45 +102,36 @@ yarn android
 
 ## Setup environment variables
 
+The app uses dotenv (`.env`) files to read environment variables during build-time.
+Copy `example.env` to `.env` replace the values to get started.
+
 ### Backend selector
 
-Using the file `.env` in the root of the project, various parameters could be used to
-change the behaviour of the app. One of these options is the possibility of building the
-app with an interactive backend picker. This feature offers a dropdown available on the
-login screen that allows the user to choose amongst a number of predefined backends in
-order to troubleshoot or test.
+Set `MITTHELSINGBORG_IO` to an MH-compatible url (see [helsingborg-io-sls-api](https://github.com/helsingborg-stad/helsingborg-io-sls-api)) and
+set `MITTHELSINGBORG_IO_APIKEY` to the API key required to authorize against it. This will be used as the default environment when using the app.
 
-To configure this feature, first put the app build into development mode by adding
-the `APP_ENV` variable to the settings file. Like so:
+After starting the app, at the Login Screen, you can optionally provide additional environment(s) to override the default environment.
+To do so click the gear icon in the top-right corner and enter a value for the "App Konfiguration".
 
-```
-APP_ENV=development
-```
+The format of the configuration is:
 
-Next you need to specify the displayname of each backend with the `API_ENVS` parameter.
-The below list offers four different targets that will be listed in the app in order of
-appearance:
-
-```
-API_ENVS=SANDBOX,DEVELOP,RELEASE,PRODUCTION
+```json
+{ "envName": ["apiUrl", "apiKey"] }
 ```
 
-NOTE that if the `APP_ENV` variable is set to production, only the first environment in
-the `API_ENVS` list will be used and no picker will be available in the app.
+For example, to provide two environments, `develop` and `release`, enter:
 
-For each backend, add two additional keys representing the URL and the APIkey of each:
+```json
+{
+  "develop": ["https://myapi.com/dev", "123"],
+  "release": ["https://myapi.com/release", "abc"]
+}
+```
 
-```
-{NAME}_MITTHELSINGBORG_IO=***
-{NAME}_MITTHELSINGBORG_IO_APIKEY=***
-```
+If multiple endpoints are specified like the example, a dropdown-picker will be shown on the Login Screen
+where you can choose which environment to use.
 
-For example:
-
-```
-SANDBOX_MITTHELSINGBORG_IO=***
-SANDBOX_MITTHELSINGBORG_IO_APIKEY=***
-```
+If only one environment is specified then it will be used instead of the default environment specified in the `.env` file.
 
 ### Component library (Storybook)
 
@@ -214,13 +204,10 @@ Fastlane is used through ruby files that are run in a Fastlane context with `fas
 ## iOS build (TestFlight)
 
 The workflow file for iOS builds is `./github/workflows/ios-build.yml`. It can be run manually, and runs automatically for any push to branches
-matching `release/**` (e.g. `release/1.4.0`). It automatically deduces the version and build number to set based on the branch name,
-or fallbacks to incrementing the latest from TestFlight.
+matching `release/**` (e.g. `release/1.4.0`). It automatically tries to determine the version and build number to set based on the branch name,
+and defaults to incrementing the latest from TestFlight.
 
-Version number, build number, and environment can optionally be forced for manual runs.
-
-Environment is either "development" or "production", and controls which set of app environment variables are used (notably different sets of
-backend API urls and keys).
+Version number and build number can optionally be forced for manual runs.
 
 The workflow sets up dependencies and variables and then calls a specific Fastlane lane defined in `ios/fastlane/Fastfile`.
 

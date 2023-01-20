@@ -107,6 +107,12 @@ const VersionLabelContainer = styled.View`
   left: 10px;
 `;
 
+const SettingsButtonContainer = styled.View`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+`;
+
 const VersionLabel = styled(Text)`
   padding: 2px 5px;
   background-color: ${({ theme }) => theme.colors.neutrals[6]};
@@ -153,5 +159,6 @@ export {
   Title,
   VersionLabel,
   VersionLabelContainer,
+  SettingsButtonContainer,
   ApiStatusMessagePosition,
 };

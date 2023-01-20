@@ -1,19 +1,26 @@
 import * as React from "react";
+import { useState, useEffect, useContext } from "react";
 import { View } from "react-native";
 import type { Item } from "react-native-picker-select";
 import RNPickerSelect from "react-native-picker-select";
-import useEnvironmentService from "../../../hooks/useEnvironmentService";
 import type { EnvironmentConfig } from "../../../services/environment/environmentService.types";
+import { EnvironmentContext } from "../../../store/EnvironmentContext";
 import { pickerStyles } from "./EnvironmentPicker.styled";
 
 export default function EnvironmentPicker(): JSX.Element {
   const { environments, activeEnvironment, setActive } =
-    useEnvironmentService();
+    useContext(EnvironmentContext);
+  const [items, setItems] = useState<Item[]>([]);
 
-  const items = Object.entries(environments).map<Item>(([label, value]) => ({
-    label,
-    value,
-  }));
+  useEffect(() => {
+    setItems(
+      Object.entries(environments ?? []).map<Item>(([label, value]) => ({
+        key: label,
+        label,
+        value,
+      }))
+    );
+  }, [environments]);
 
   const onChange = (value: EnvironmentConfig) => {
     setActive(value.name);
@@ -26,7 +33,7 @@ export default function EnvironmentPicker(): JSX.Element {
           onValueChange={onChange}
           placeholder={{}}
           items={items}
-          itemKey={activeEnvironment.url}
+          itemKey={activeEnvironment.name}
           style={pickerStyles}
         />
       ) : null}

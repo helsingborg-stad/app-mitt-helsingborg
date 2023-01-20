@@ -299,7 +299,7 @@ Button.propTypes = {
    */
   fullWidth: PropTypes.bool,
 
-  children: PropTypes.object,
+  children: PropTypes.any,
 };
 
 Button.defaultProps = {

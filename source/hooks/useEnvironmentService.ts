@@ -3,49 +3,93 @@ import isEqual from "lodash.isequal";
 import type {
   EnvironmentConfig,
   EnvironmentConfigMap,
+  EnvironmentService,
 } from "../services/environment/environmentService.types";
-import { EnvironmentServiceLocator } from "../services/environment";
+import { serializeEnvironmentConfigMap } from "../services/environment";
 
-interface EnvironmentServiceHook {
-  environments: EnvironmentConfigMap;
-  activeEnvironment: EnvironmentConfig;
-  setActive(environment: string): void;
+interface UseEnvironmentServiceProps {
+  service: EnvironmentService;
 }
 
-export default function useEnvironmentService(): EnvironmentServiceHook {
-  const service = EnvironmentServiceLocator.get();
+export interface EnvironmentServiceHook {
+  environments: EnvironmentConfigMap;
+  serializedEnvironmentConfig: string;
+  activeEnvironment: EnvironmentConfig;
+  setActive(environment: string): void;
+  parse(raw: string): Promise<void>;
+}
 
+export default function useEnvironmentService({
+  service,
+}: UseEnvironmentServiceProps): EnvironmentServiceHook {
   const [environments, setEnvironments] = useState<EnvironmentConfigMap>(
     service.getEnvironmentMap()
   );
   const [activeEnvironment, setActiveEnvironment] = useState<EnvironmentConfig>(
     service.getActive()
   );
+  const [serializedEnvironmentConfig, setSerializedEnvironmentConfig] =
+    useState(serializeEnvironmentConfigMap(environments));
 
   const setActive = useCallback(
-    (environment: string) => {
-      void service.setActive(environment);
-    },
+    (environment: string) =>
+      service.setActive(environment).then(() => {
+        console.log("(environment) active environment set to:", environment);
+        setActiveEnvironment(service.getActive());
+      }),
+    [service]
+  );
+
+  const parse = useCallback(
+    (raw: string) =>
+      service.parse(raw).then(() => {
+        setEnvironments(service.getEnvironmentMap());
+      }),
     [service]
   );
 
   useEffect(() => {
     const currentEnvironments = service.getEnvironmentMap();
     if (!isEqual(environments, currentEnvironments)) {
-      console.log("updating environments to", currentEnvironments);
       setEnvironments(currentEnvironments);
     }
+  }, [service, environments]);
 
+  useEffect(() => {
     const currentActiveEnvironment = service.getActive();
     if (!isEqual(activeEnvironment, currentActiveEnvironment)) {
-      console.log("updating active environment to", currentActiveEnvironment);
       setActiveEnvironment(currentActiveEnvironment);
+      console.log(
+        "(environment) active environment set to:",
+        currentActiveEnvironment.name
+      );
     }
-  }, [service, activeEnvironment, environments]);
+  }, [service, activeEnvironment]);
+
+  useEffect(() => {
+    setSerializedEnvironmentConfig(serializeEnvironmentConfigMap(environments));
+  }, [environments]);
+
+  useEffect(() => {
+    void service.parseFromStorage().then(() => {
+      console.log("(environment) loaded config from storage");
+      const currentEnvironments = service.getEnvironmentMap();
+      setEnvironments(currentEnvironments);
+
+      const currentActiveEnvironment = service.getActive();
+      setActiveEnvironment(currentActiveEnvironment);
+      console.log(
+        "(environment) active environment set to:",
+        currentActiveEnvironment.name
+      );
+    });
+  }, [service]);
 
   return {
     environments,
+    serializedEnvironmentConfig,
     activeEnvironment,
+    parse,
     setActive,
   };
 }
