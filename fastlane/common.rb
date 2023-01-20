@@ -3,8 +3,7 @@
 def git_head_identifier
   branch_name = git_branch
   commit = last_git_commit
-  ci_matched_env = ENV['CI_MATCHED_ENV'] || '(unknown)'
-  "env:#{ci_matched_env} branch:#{branch_name} commit:#{commit[:abbreviated_commit_hash]}"
+  "branch:#{branch_name} commit:#{commit[:abbreviated_commit_hash]}"
 end
 
 def semver_regex
@@ -126,7 +125,6 @@ end
 
 before_all do |_lane, _options|
   puts "branch: #{git_branch}"
-  puts "CI_MATCHED_ENV: #{ENV['CI_MATCHED_ENV']}"
   puts "FORCED_VERSION_NUMBER_STRING: #{ENV['FORCED_VERSION_NUMBER_STRING']}"
   puts "FORCED_BUILD_NUMBER: #{ENV['FORCED_BUILD_NUMBER']}"
   puts "GIT_HEAD_REF: #{ENV['GIT_HEAD_REF']}"
