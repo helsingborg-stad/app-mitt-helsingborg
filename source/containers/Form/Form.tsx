@@ -1,44 +1,28 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import type { ScrollView } from "react-native";
 import { InteractionManager, StatusBar } from "react-native";
 
 import Step from "../../components/organisms/Step/Step";
-
 import { Modal, useModal } from "../../components/molecules/Modal";
 import {
   ScreenWrapper,
   AuthLoading,
   CloseDialog,
 } from "../../components/molecules";
-
 import { useNotification } from "../../store/NotificationContext";
 import AuthContext from "../../store/AuthContext";
-
 import { evaluateConditionalExpression } from "../../helpers/conditionParser";
-import { getAttachmentAnswers } from "./Form.helpers";
-
-import FormUploader from "./FormUploader";
-import useForm from "./hooks/useForm";
-
 import { ApplicationStatusType } from "../../types/Case";
 import { ActionTypes } from "../../types/CaseContext";
-
-import type { Status, Person, VIVACaseDetails } from "../../types/Case";
-import type { Action, Answer } from "../../types/CaseContext";
 import type { PrimaryColor } from "../../theme/themeHelpers";
-import type { User } from "../../types/UserTypes";
-import { UPDATE_CASE_STATE } from "./types";
-import type { DialogText } from "./types";
-import type {
-  Step as StepType,
-  StepperActions,
-  Question,
-} from "../../types/FormTypes";
-import type {
-  FormPeriod,
-  FormPosition,
-  FormReducerState,
-} from "./hooks/useForm";
+import type { Step as StepType, Question } from "../../types/FormTypes";
+import type { FormPosition, FormReducerState } from "./hooks/useForm";
+import type { DialogText, FormProps } from "./Form.types";
+import { UPDATE_CASE_STATE } from "./Form.types";
+import { getAttachmentAnswers } from "./Form.helpers";
+import FormUploader from "./FormUploader";
+import useForm from "./hooks/useForm";
+import { replaceText } from "./hooks/textReplacement";
 
 const { SIGNED, NOT_STARTED } = ApplicationStatusType;
 
@@ -57,29 +41,7 @@ const dialogText: Record<UPDATE_CASE_STATE, DialogText> = {
   },
 };
 
-interface Props {
-  initialPosition?: FormPosition;
-  steps: StepType[];
-  connectivityMatrix: StepperActions[][];
-  user: User;
-  initialAnswers: Record<string, unknown>;
-  status: Status;
-  onClose: () => void;
-  onSubmit: () => void;
-  onUpdateCase: (
-    data: Record<string, Answer>,
-    signature: { success: boolean } | undefined,
-    currentPosition: FormPosition
-  ) => Promise<Action | void>;
-  period?: FormPeriod;
-  editable: boolean;
-  details: VIVACaseDetails;
-  persons: Person[];
-  encryptionPin: string;
-  completionsClarificationMessage: string;
-}
-
-export const defaultInitialPosition: FormPosition = {
+const defaultInitialPosition: FormPosition = {
   index: 0,
   level: 0,
   currentMainStep: 1,
@@ -95,12 +57,7 @@ export const defaultInitialStatus = {
 
 const CLOSE_FORM_DELAY = 1000;
 
-/**
- * The Container Component Form allows you to create, process and reuse forms. The Form component
- * is a tool to help you solve the problem of allowing end-users to interact with the
- * data and modify the data in your application.
- */
-const Form: React.FC<Props> = ({
+const Form: React.FC<FormProps> = ({
   initialPosition,
   steps,
   connectivityMatrix,
@@ -116,7 +73,7 @@ const Form: React.FC<Props> = ({
   persons,
   encryptionPin,
   completionsClarificationMessage,
-}) => {
+}): JSX.Element => {
   const initialState: FormReducerState = {
     submitted: false,
     currentPosition: initialPosition || defaultInitialPosition,
@@ -283,6 +240,49 @@ const Form: React.FC<Props> = ({
         ]
       : [];
 
+  const processHiddenValue = useCallback(
+    (value: Record<string, unknown>, id: string) => {
+      const step: StepType = formState.steps[
+        formState.currentPosition.index
+      ] as unknown as StepType;
+
+      const questionById: Question | undefined = (step.questions ?? []).find(
+        (question) => question.id === id
+      );
+
+      const questionByInputs = (step.questions ?? [])
+        .map((question) => question.inputs)
+        .filter((inputs) => inputs && inputs.length > 0)
+        .flat()
+        .find((input) => input?.id === id);
+
+      const isQuestionHidden = questionById?.type === "hidden";
+      const isQuestionInputsHidden = questionByInputs?.type === "hidden";
+
+      const valueKeys = Object.keys(value);
+      const isHidden = isQuestionHidden || isQuestionInputsHidden;
+      const newValue = isHidden
+        ? {
+            ...value,
+            [valueKeys[0]]: replaceText(
+              value[valueKeys[0]] as string,
+              user,
+              period
+            ),
+          }
+        : value;
+
+      return handleInputChange(newValue);
+    },
+    [
+      formState.currentPosition.index,
+      formState.steps,
+      handleInputChange,
+      period,
+      user,
+    ]
+  );
+
   const stepComponents = formState.steps.map(
     ({
       id,
@@ -327,10 +327,10 @@ const Form: React.FC<Props> = ({
           actions={actions}
           formNavigation={formNavigation}
           onSubmit={() => handleSubmit(onSubmit)}
-          onFieldChange={handleInputChange}
+          onFieldChange={processHiddenValue}
           onFieldBlur={handleBlur}
           onAddAnswer={handleAddAnswer}
-          onFieldMount={handleInputChange}
+          onFieldMount={processHiddenValue}
           currentPosition={formState.currentPosition}
           totalStepNumber={formState.currentPosition.numberOfMainSteps}
           isBackBtnVisible={shouldShowBackButton}
