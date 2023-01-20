@@ -1,6 +1,6 @@
 {
   "name": "MittHelsingborg",
-  "version": "1.7.2",
+  "version": "1.8.0",
   "private": true,
   "scripts": {
     "android": "./scripts/add-commit-hash-to-env.sh && react-native run-android",
