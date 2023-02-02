@@ -160,6 +160,7 @@ export interface VIVACaseDetails {
   period: Period;
   workflowId: string;
   workflow: Workflow;
+  readonly vivaCaseId: string;
 }
 
 interface AnswerField {

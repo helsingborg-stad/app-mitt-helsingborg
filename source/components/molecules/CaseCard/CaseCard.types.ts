@@ -23,6 +23,7 @@ export interface Props {
   completionsClarification?: string;
   pin?: string;
   showDownloadPdfButton: boolean;
+  vivaCaseId: string;
   onCardClick?: () => void;
   onButtonClick?: () => void;
   onAppealButtonClick?: () => void;
