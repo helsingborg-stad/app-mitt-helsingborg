@@ -289,6 +289,7 @@ const computeCaseCardComponent = (
       pin={shouldShowPin ? formPassword : undefined}
       showDownloadPdfButton={canShowPdf}
       onOpenPdf={onOpenPdf}
+      vivaCaseId=""
     />
   );
 };

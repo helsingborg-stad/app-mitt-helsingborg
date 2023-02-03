@@ -29,15 +29,23 @@ function CaseCard({
   completionsClarification = "",
   pin,
   showDownloadPdfButton,
+  vivaCaseId,
   onCardClick,
   onButtonClick,
   onAppealButtonClick,
   onOpenPdf,
 }: Props): JSX.Element {
+  function showVivaCaseId(id: string): JSX.Element | null {
+    return id ? (
+      <Card.SubTitle colorSchema="neutral">Ärende-ID: {id}</Card.SubTitle>
+    ) : null;
+  }
+
   return (
     <Card colorSchema={colorSchema}>
       <Card.Body shadow color="neutral" onPress={onCardClick}>
         {icon && <Card.Image source={icon} />}
+        {showVivaCaseId(vivaCaseId)}
         <Card.Title colorSchema="neutral">{title}</Card.Title>
         {largeSubtitle && (
           <Card.LargeText mt={0.5}>{largeSubtitle}</Card.LargeText>
