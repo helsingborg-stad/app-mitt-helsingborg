@@ -4,6 +4,7 @@ import ILLU_EXPENSES from "../illustrations/illu_utgifter_margins_1x.png";
 import ICON_TELL from "./icn_beratta_1x.png";
 import ICON_INCOME from "./icn_inkomster_1x.png";
 import ICON_EKB from "./icn_utgifter_3x.png";
+import ICON_EKB_GRAY from "./icn_utgifter_3x_gray.png";
 import ICON_EKB_OUTLINE from "./icn_utgifter_outline_3x.png";
 import ICON_SUMMARY from "./icn_sammanstallning_1x.png";
 import ICON_HEALTHCARE from "./icn_sjukvard_1x.png";
@@ -30,6 +31,7 @@ export default {
   ICON_TELL,
   ICON_INCOME,
   ICON_EKB,
+  ICON_EKB_GRAY,
   ICON_EKB_OUTLINE,
   ICON_SUMMARY,
   ICON_HEALTHCARE,

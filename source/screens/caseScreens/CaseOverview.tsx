@@ -45,6 +45,7 @@ import type {
   Dispatch as CaseContextDispatch,
   State as CaseContextState,
 } from "../../types/CaseContext";
+import { VivaPeriodCard } from "../../components/molecules/VivaPeriodCard/vivaPeriodCard";
 
 const { NEW_APPLICATION, NOT_STARTED, CLOSED, ACTIVE, APPROVED } =
   ApplicationStatusType;
@@ -596,6 +597,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
           <>
             <ListHeading type="h5">Aktiva</ListHeading>
             <Animated.View style={{ opacity: fadeAnimation }}>
+              <VivaPeriodCard />
               {activeCaseCards}
             </Animated.View>
           </>
