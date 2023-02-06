@@ -16,6 +16,7 @@ import useSetupForm from "../../containers/Form/hooks/useSetupForm";
 import { isRequestError, remove } from "../../helpers/ApiRequest";
 import statusTypeConstantMapper from "./statusTypeConstantMapper";
 import { CaseDispatch, CaseState } from "../../store/CaseContext";
+import { VivaPeriodContext } from "../../store/VivaPeriodContext";
 import { isPdfAvailable, pdfToBase64String } from "./pdf.helper";
 import useGetFormPasswords from "./useGetFormPasswords";
 import AuthContext from "../../store/AuthContext";
@@ -23,6 +24,7 @@ import { to, wait } from "../../helpers/Misc";
 
 import AddCoApplicantModal from "../../components/organisms/AddCoApplicantModal/AddCoApplicantModal";
 import NewApplicationModal from "../../components/organisms/NewApplicationModal/NewApplicationModal";
+import { VivaPeriodCard } from "../../components/molecules/VivaPeriodCard/vivaPeriodCard";
 import SetupFormModal from "../../components/organisms/SetupFormModal/SetupFormModal";
 import PinInputModal from "../../components/organisms/PinInputModal/PinInputModal";
 import FloatingButton from "../../components/molecules/FloatingButton";
@@ -305,6 +307,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
   const [refreshing, setRefreshing] = useState(false);
   const [activeModal, setActiveModal] = useState<ActiveModal>({});
   const [showPdfForCase, setShowPdfForCase] = useState<string>("");
+  const { message: vivaPeriodMessage } = useContext(VivaPeriodContext);
 
   const { fetchCases, cases } = useContext(
     CaseState
@@ -332,7 +335,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
   const closedCases = getCasesByStatuses([CLOSED]);
   const newCase = getCasesByStatuses([NEW_APPLICATION])[0];
 
-  const showActiveCases = activeCases.length > 0;
+  const showActiveCases = activeCases.length > 0 || !!vivaPeriodMessage;
   const showClosedCases = closedCases.length > 0;
 
   const onFailedToFetchCases = (error: Error) => {
@@ -561,7 +564,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
           </Card.Button>
         )}
 
-        {activeCases.length === 0 && closedCases.length === 0 && (
+        {!showActiveCases && closedCases.length === 0 && (
           <>
             <PaddedContainer>
               <Card colorSchema="red">
@@ -596,6 +599,7 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
           <>
             <ListHeading type="h5">Aktiva</ListHeading>
             <Animated.View style={{ opacity: fadeAnimation }}>
+              <VivaPeriodCard />
               {activeCaseCards}
             </Animated.View>
           </>
