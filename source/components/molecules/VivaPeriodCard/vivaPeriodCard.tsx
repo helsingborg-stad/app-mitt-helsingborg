@@ -12,7 +12,7 @@ export function VivaPeriodCard(): JSX.Element | null {
   const { message: vivaPeriodStatusMessage } = useContext(VivaPeriodContext);
 
   const nextMonthName = useMemo(
-    () => moment().add(1, "M").locale("se").format("MMMM"),
+    () => moment().add(1, "M").locale("sv").format("MMMM"),
     []
   );
 
