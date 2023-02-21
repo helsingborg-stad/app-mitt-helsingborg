@@ -18,6 +18,7 @@ import theme from "./theme/theme";
 import getMonitoringService from "./services/monitoring/MonitoringService";
 import { EnvironmentProvider } from "./store/EnvironmentContext";
 import { VivaPeriodProvider } from "./store/VivaPeriodContext";
+import { VivaStatusProvider } from "./store/VivaStatusContext";
 
 /**
  * Any setup and init for application goes here:
@@ -58,15 +59,17 @@ const App = (): JSX.Element => {
           <AppCompabilityProvider>
             <AuthProvider>
               <VivaPeriodProvider>
-                <CaseProvider>
-                  <FormProvider>
-                    <ThemeProvider theme={theme}>
-                      <NotificationProvider>
-                        <RootComponent />
-                      </NotificationProvider>
-                    </ThemeProvider>
-                  </FormProvider>
-                </CaseProvider>
+                <VivaStatusProvider>
+                  <CaseProvider>
+                    <FormProvider>
+                      <ThemeProvider theme={theme}>
+                        <NotificationProvider>
+                          <RootComponent />
+                        </NotificationProvider>
+                      </ThemeProvider>
+                    </FormProvider>
+                  </CaseProvider>
+                </VivaStatusProvider>
               </VivaPeriodProvider>
             </AuthProvider>
           </AppCompabilityProvider>
