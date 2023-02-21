@@ -12,7 +12,7 @@ const VivaStatusContext = React.createContext<VivaStatusContext>(
 );
 
 interface VivaStatusProviderProps {
-  children: React.ReactNode | React.ReactNode[];
+  children: React.ReactNode;
 }
 
 export function VivaStatusProvider({

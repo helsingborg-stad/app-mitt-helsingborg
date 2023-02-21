@@ -14,7 +14,7 @@ const vivaInfo: DebugInfoCategoryGetter = {
       },
       {
         name: "Delkoder",
-        value: vivaStatusService.parts.map((part) => part.code).join(", "),
+        value: vivaStatusService.parts.map(({ code }) => code).join(", "),
       },
     ];
   },

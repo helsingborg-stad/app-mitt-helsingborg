@@ -35,7 +35,6 @@ export default class DefaultApiService implements ApiService {
 
     const userAgent = `${name}/${applicationVersion}/${Platform.OS}/${Platform.Version}/${friendlyVersion}`;
 
-    // Merge custom headers
     const newHeaders = {
       Authorization: token || "",
       "Content-Type": "application/json",
@@ -45,7 +44,6 @@ export default class DefaultApiService implements ApiService {
     };
 
     try {
-      // Do request
       const req = axios({
         url,
         method,
