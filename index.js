@@ -9,12 +9,20 @@ import {
 import App from "./source/App";
 import getMonitoringService from "./source/services/monitoring/MonitoringService";
 import { wrappedDefaultStorage } from "./source/services/storage/StorageService";
+import { ServiceLocator } from "./source/services/serviceLocator";
 
-EnvironmentServiceLocator.register(
-  new DefaultEnvironmentService(wrappedDefaultStorage, env)
-);
+import DefaultVivaStatusService from "./source/services/vivaStatus/vivaStatusService";
+import DefaultApiService from "./source/services/apiService/apiService";
+
+const envService = new DefaultEnvironmentService(wrappedDefaultStorage, env);
+EnvironmentServiceLocator.register(envService);
 
 getMonitoringService().init();
+
+const serviceLocator = ServiceLocator.getInstance();
+serviceLocator.register("api", new DefaultApiService());
+serviceLocator.register("environment", envService);
+serviceLocator.register("vivaStatus", new DefaultVivaStatusService());
 
 // TODO: Fix tab navigation and remove ignore warning.
 LogBox.ignoreLogs([
