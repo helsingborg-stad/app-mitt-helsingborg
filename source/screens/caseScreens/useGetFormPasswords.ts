@@ -24,10 +24,10 @@ function useGetFormPasswords(
       const { currentFormId, id } = caseItem;
       const form = caseItem.forms[currentFormId];
 
-      if (
-        !form.encryption.encryptionKeyId &&
-        !form.encryption.symmetricKeyName
-      ) {
+      const isMissingEncryptionParams =
+        !form.encryption.encryptionKeyId && !form.encryption.symmetricKeyName;
+
+      if (isMissingEncryptionParams) {
         console.warn(
           `case ${id} missing encryption params - possibly older case`
         );
