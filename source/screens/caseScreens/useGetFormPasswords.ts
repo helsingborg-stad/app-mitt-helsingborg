@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 
 import { getPasswordForForm } from "../../services/encryption/CaseEncryptionHelper";
+import getMonitoringService from "../../services/monitoring/MonitoringService";
 import { wrappedDefaultStorage } from "../../services/storage/StorageService";
 
 import type { Case } from "../../types/Case";
@@ -22,6 +23,20 @@ function useGetFormPasswords(
     async (caseItem: Case, caseUser: User): Promise<PasswordPair> => {
       const { currentFormId, id } = caseItem;
       const form = caseItem.forms[currentFormId];
+
+      if (
+        !form.encryption.encryptionKeyId &&
+        !form.encryption.symmetricKeyName
+      ) {
+        console.warn(
+          `case ${id} missing encryption params - possibly older case`
+        );
+        getMonitoringService().sendError(
+          new Error(`case missing encryption params - possibly older case`)
+        );
+        return { id, password: null };
+      }
+
       const encryptionPin = await getPasswordForForm(
         form,
         caseUser,
