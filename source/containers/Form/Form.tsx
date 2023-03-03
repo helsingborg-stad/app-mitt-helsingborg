@@ -153,19 +153,20 @@ const Form: React.FC<FormProps> = ({
   );
 
   useEffect(() => {
-    if (!isInForeground) {
-      if (wasJustInForeground.current) {
-        void updateCase()
-          .then(() => {
-            console.log("updated case in background");
-          })
-          .catch((updateCaseError) => {
-            console.error(
-              "failed to update case in background:",
-              updateCaseError?.message ?? updateCaseError
-            );
-          });
-      }
+    const didJustChangeFromForegroundToBackground =
+      !isInForeground && wasJustInForeground.current;
+
+    if (didJustChangeFromForegroundToBackground) {
+      void updateCase()
+        .then(() => {
+          console.log("updated case in background");
+        })
+        .catch((updateCaseError) => {
+          console.error(
+            "failed to update case in background:",
+            updateCaseError?.message ?? updateCaseError
+          );
+        });
     }
 
     wasJustInForeground.current = isInForeground;
