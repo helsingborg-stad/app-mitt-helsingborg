@@ -40,6 +40,9 @@ const RepeaterItem = styled.TouchableOpacity<RepeaterItemProps>`
     theme.repeater[colorSchema].inputBackground};
   padding: 10px;
   ${({ hidden }) => (hidden ? "display: none" : null)}
+
+  justify-content: space-between;
+  align-items: center;
 `;
 
 interface ItemLabelProps extends DefaultProps {
@@ -52,7 +55,6 @@ const ItemLabel = styled(Label)<ItemLabelProps>`
 `;
 
 const InputLabelWrapper = styled.View`
-  flex: 4;
   justify-content: center;
 `;
 
@@ -72,16 +74,15 @@ const InputWrapper = styled.View<InputWrapperProps>`
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
-  flex: 5;
   ${({ hidden }) => (hidden ? "display: none" : null)};
+  flex-shrink: 1;
+  padding-left: 10px;
 `;
 
 interface ItemInputProps extends DefaultProps {
   colorSchema: PrimaryColor;
 }
 const ItemInput = styled(Input)<ItemInputProps>`
-  text-align: right;
-  min-width: 80%;
   font-weight: 500;
   color: ${({ theme, colorSchema }) => theme.repeater[colorSchema].inputText};
   padding: 5px;

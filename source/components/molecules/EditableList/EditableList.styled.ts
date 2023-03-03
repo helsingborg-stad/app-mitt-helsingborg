@@ -21,7 +21,6 @@ const EditableListItem = styled.TouchableOpacity<EditableListItemProps>`
   font-size: ${({ theme }) => theme.fontSizes[4]}px;
   flex-direction: row;
   height: auto;
-  background-color: transparent;
   border-radius: 4.5px;
   margin-bottom: 14px;
   ${({ theme, error }) =>
@@ -31,13 +30,15 @@ const EditableListItem = styled.TouchableOpacity<EditableListItemProps>`
     editable &&
     `background-color: ${theme.colors.complementary[colorSchema][2]};`};
   ${({ editable }) => editable && Platform.OS === "ios" && `padding: 16px;`};
+  ${({ editable }) => editable && `padding-right: 16px;`}
+  justify-content: space-between;
+  align-items: center;
 `;
 
 interface EditableListItemLabelWrapperProps {
   alignAtStart: boolean;
 }
 const EditableListItemLabelWrapper = styled.View<EditableListItemLabelWrapperProps>`
-  flex: 4;
   justify-content: ${(props) => (props.alignAtStart ? "flex-start" : "center")};
 `;
 
@@ -53,43 +54,25 @@ const EditableListItemLabel = styled.Text<EditableListItemLabelProps>`
     Platform.OS === "android" &&
     `
     margin: 16px;
-    margin-right: 0;
+    margin-right: 0px;
     `};
 `;
 
 const EditableListItemInputWrapper = styled.View`
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
-  flex: 5;
+  flex-shrink: 1;
 `;
 
 const EditableListItemInput = styled(Input)`
-  text-align: right;
-  min-width: 80%;
   font-weight: 500;
   padding: 0px;
   color: ${(props) => props.theme.colors.neutrals[1]};
-  ${(props) =>
-    props.editable &&
-    Platform.OS === "android" &&
-    `
-    margin: 16px;
-    margin-left: 0;
-      `};
 `;
 
 const EditableListItemSelect = styled(Select)`
-  min-width: 80%;
+  min-width: 50%;
   font-weight: 500;
   margin-bottom: 0px;
-  ${({ editable }) =>
-    editable &&
-    Platform.OS === "android" &&
-    `
-    margin: 16px;
-    margin-left: 0;
-  `};
+  flex: 1;
 `;
 
 const FieldsetButton = styled(Button)`

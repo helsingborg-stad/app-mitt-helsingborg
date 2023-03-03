@@ -6,6 +6,20 @@ const Wrapper = styled.View`
   margin-bottom: 30px;
 `;
 
+const InputRowWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
+const InputRowTextWrapper = styled.View`
+  flex-shrink: 1;
+`;
+
+const InputRowIconWrapper = styled.View`
+  margin-left: 5px;
+`;
+
 const StyledErrorText = styled(Text)`
   font-size: ${({ theme }) => theme.fontSizes[3]}px;
   color: ${({ theme }) => theme.textInput.errorTextColor};
@@ -13,4 +27,10 @@ const StyledErrorText = styled(Text)`
   padding-top: 8px;
 `;
 
-export { Wrapper, StyledErrorText };
+export {
+  Wrapper,
+  InputRowWrapper,
+  InputRowTextWrapper,
+  InputRowIconWrapper,
+  StyledErrorText,
+};

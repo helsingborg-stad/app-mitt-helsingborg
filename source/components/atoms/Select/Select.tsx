@@ -1,8 +1,15 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
+import Icon from "react-native-vector-icons/Entypo";
 
-import { Wrapper, StyledErrorText } from "./Select.styled";
+import {
+  Wrapper,
+  InputRowWrapper,
+  InputRowTextWrapper,
+  InputRowIconWrapper,
+  StyledErrorText,
+} from "./Select.styled";
 
 import theme from "../../../theme/theme";
 
@@ -13,14 +20,13 @@ const pickerSelectStyles = StyleSheet.create({
     paddingHorizontal: 10,
     textAlign: "right",
     color: theme.colors.neutrals[1],
-    paddingRight: 10,
+    paddingRight: 0,
   },
   inputAndroid: {
     paddingHorizontal: 10,
     textAlign: "right",
     color: theme.colors.neutrals[1],
-    paddingRight: 10,
-    height: 34,
+    paddingRight: 0,
   },
 });
 
@@ -65,23 +71,29 @@ function Select(
 
   return (
     <Wrapper style={style}>
-      <RNPickerSelect
-        style={pickerSelectStyles}
-        placeholder={{ label: placeholder, value: null }}
-        disabled={!editable}
-        value={currentItem?.value || null}
-        onValueChange={handleValueChange}
-        items={items}
-        ref={ref}
-        doneText="Klar"
-        onOpen={handleOpen}
-        onClose={handleClose}
-      />
+      <InputRowWrapper>
+        <InputRowTextWrapper>
+          <RNPickerSelect
+            style={pickerSelectStyles}
+            placeholder={{ label: placeholder, value: null }}
+            disabled={!editable}
+            value={currentItem?.value || null}
+            onValueChange={handleValueChange}
+            items={items}
+            ref={ref}
+            doneText="Klar"
+            onOpen={handleOpen}
+            onClose={handleClose}
+            useNativeAndroidPickerStyle={false}
+          />
+        </InputRowTextWrapper>
+        <InputRowIconWrapper>
+          <Icon name="select-arrows" />
+        </InputRowIconWrapper>
+      </InputRowWrapper>
       {showErrorMessage && error ? (
         <StyledErrorText>{error?.message}</StyledErrorText>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </Wrapper>
   );
 }

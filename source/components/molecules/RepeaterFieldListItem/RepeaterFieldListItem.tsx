@@ -45,7 +45,6 @@ const InputComponent = React.forwardRef(
           input.type === "hidden" ? input?.value?.toString() : value.toString();
         return (
           <ItemInput
-            textAlign="right"
             colorSchema={colorSchema}
             value={inputValue}
             onChangeText={onChange}
