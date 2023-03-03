@@ -2,7 +2,7 @@ import { useReducer, useEffect } from "react";
 import formReducer from "./formReducer";
 import type { Question, Step, StepperActions } from "../../../types/FormTypes";
 import type { User } from "../../../types/UserTypes";
-import type { Person } from "../../../types/Case";
+import type { Answer, Person } from "../../../types/Case";
 
 export interface FormPosition {
   index: number;
@@ -24,7 +24,7 @@ export interface FormReducerState {
   allQuestions: Question[];
   user: User;
   connectivityMatrix: StepperActions[][];
-  formAnswers: Record<string, unknown>;
+  formAnswers: Record<string, Answer>;
   formAnswerSnapshot: Record<string, unknown>;
   validations: Record<string, unknown>;
   dirtyFields: Record<string, unknown>;
@@ -36,7 +36,41 @@ export interface FormReducerState {
   completionsClarificationMessage: string;
 }
 
-function useForm(initialState: FormReducerState): Record<string, unknown> {
+interface FormHook {
+  formState: FormReducerState;
+  formNavigation: {
+    next: () => void;
+    back: () => void;
+    up: (targetStep: number | string) => void;
+    down: (targetStep: number | string) => void;
+    start: (callback: () => void) => void;
+    goToMainForm: () => void;
+    goToMainFormAndNext: () => void;
+    createSnapshot: () => void;
+    deleteSnapshot: () => void;
+    restoreSnapshot: () => void;
+    close: () => void;
+    isLastStep: () => boolean;
+  };
+  handleInputChange: (
+    answer: Record<string, Answer>,
+    questionId: string
+  ) => void;
+  handleBlur: (answer: Record<string, unknown>, questionId: string) => void;
+  handleSubmit: (
+    callback: (formAnswers: Record<string, unknown>) => void
+  ) => void;
+  handleAddAnswer: (
+    answer: Record<string, unknown>,
+    questionId: string
+  ) => void;
+  validateStepAnswers: (
+    onErrorCallback: () => void,
+    onValidCallback: () => void
+  ) => void;
+}
+
+function useForm(initialState: FormReducerState): FormHook {
   const [formState, dispatch] = useReducer(formReducer, initialState);
 
   useEffect(() => {

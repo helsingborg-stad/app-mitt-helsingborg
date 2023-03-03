@@ -1,28 +1,40 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
-import type { ScrollView } from "react-native";
+import React, {
+  useEffect,
+  useState,
+  useContext,
+  useCallback,
+  useRef,
+} from "react";
 import { InteractionManager, StatusBar } from "react-native";
 
-import Step from "../../components/organisms/Step/Step";
-import { Modal, useModal } from "../../components/molecules/Modal";
+import type { ScrollView } from "react-native";
+
 import {
   ScreenWrapper,
   AuthLoading,
   CloseDialog,
 } from "../../components/molecules";
-import { useNotification } from "../../store/NotificationContext";
+import Step from "../../components/organisms/Step/Step";
+import { Modal, useModal } from "../../components/molecules/Modal";
+
 import AuthContext from "../../store/AuthContext";
-import { evaluateConditionalExpression } from "../../helpers/conditionParser";
-import { ApplicationStatusType } from "../../types/Case";
-import { ActionTypes } from "../../types/CaseContext";
-import type { PrimaryColor } from "../../theme/themeHelpers";
-import type { Step as StepType, Question } from "../../types/FormTypes";
-import type { FormPosition, FormReducerState } from "./hooks/useForm";
-import type { DialogText, FormProps } from "./Form.types";
-import { UPDATE_CASE_STATE } from "./Form.types";
-import { getAttachmentAnswers } from "./Form.helpers";
+import { useNotification } from "../../store/NotificationContext";
+
 import FormUploader from "./FormUploader";
+import { getAttachmentAnswers } from "./Form.helpers";
+import { evaluateConditionalExpression } from "../../helpers/conditionParser";
+
 import useForm from "./hooks/useForm";
+import useAppState from "../../hooks/useAppState";
 import { replaceText } from "./hooks/textReplacement";
+
+import { UPDATE_CASE_STATE } from "./Form.types";
+import { ActionTypes } from "../../types/CaseContext";
+import { ApplicationStatusType } from "../../types/Case";
+import type { DialogText, FormProps } from "./Form.types";
+import type { PrimaryColor } from "../../theme/themeHelpers";
+import type { FormPosition, FormReducerState } from "./hooks/useForm";
+import type { Step as StepType, Question } from "../../types/FormTypes";
 
 const { SIGNED, NOT_STARTED } = ApplicationStatusType;
 
@@ -121,7 +133,7 @@ const Form: React.FC<FormProps> = ({
   const [hasSigned, setHasSigned] = useState(status.type.includes(SIGNED));
   const [hasUploaded, setHasUploaded] = useState(false);
 
-  const answers: Record<string, unknown> = formState.formAnswers;
+  const answers = formState.formAnswers;
   const attachments = getAttachmentAnswers(answers);
 
   const showNotification = useNotification();
@@ -131,6 +143,33 @@ const Form: React.FC<FormProps> = ({
     formNavigation.next();
     await onUpdateCase(answers, signature, formState.currentPosition);
   };
+
+  const { isInForeground } = useAppState();
+  const wasJustInForeground = useRef(true);
+
+  const updateCase = useCallback(
+    () => onUpdateCase(answers, undefined, formState.currentPosition),
+    [answers, formState.currentPosition, onUpdateCase]
+  );
+
+  useEffect(() => {
+    if (!isInForeground) {
+      if (wasJustInForeground.current) {
+        void updateCase()
+          .then(() => {
+            console.log("updated case in background");
+          })
+          .catch((updateCaseError) => {
+            console.error(
+              "failed to update case in background:",
+              updateCaseError?.message ?? updateCaseError
+            );
+          });
+      }
+    }
+
+    wasJustInForeground.current = isInForeground;
+  }, [isInForeground, updateCase]);
 
   /**
    * Effect for signing a case.

@@ -23,7 +23,7 @@ export interface FormProps {
   steps: StepType[];
   connectivityMatrix: StepperActions[][];
   user: User;
-  initialAnswers: Record<string, unknown>;
+  initialAnswers: Record<string, Answer>;
   status: Status;
   onClose: () => void;
   onSubmit: () => void;
