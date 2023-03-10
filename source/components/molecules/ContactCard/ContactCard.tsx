@@ -14,7 +14,7 @@ export default function ContactCard({
   description,
 }: ContactCardProps): JSX.Element {
   return (
-    <Card key={`${name}`} colorSchema="red">
+    <Card key={name} colorSchema="red">
       <Card.Body shadow color="neutral">
         <Card.Section>
           <Card.Image
