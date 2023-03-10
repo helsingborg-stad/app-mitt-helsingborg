@@ -155,7 +155,6 @@ export interface Workflow {
 }
 
 export interface VIVACaseDetails {
-  administrators: Administrator[];
   readonly completions: Completions;
   period: Period;
   workflowId: string;
@@ -211,6 +210,11 @@ export interface PDF {
   type: string;
 }
 
+export interface Contact {
+  name: string;
+  description: string;
+}
+
 export interface Case {
   createdAt: number;
   currentFormId: string;
@@ -229,4 +233,5 @@ export interface Case {
   provider: string;
   status: Status;
   updatedAt: number;
+  contacts: Contact[];
 }

@@ -252,7 +252,6 @@ beforeEach(() => {
         attachmentUploaded: [],
         description: "completions clarification message",
       },
-      administrators: [],
       workflowId: "123",
       workflow: {
         application: {
@@ -270,6 +269,7 @@ beforeEach(() => {
     expirationTime: 0,
     forms: {},
     persons: [],
+    contacts: [],
     provider: "",
     updatedAt: 0,
   } as unknown as Case;
