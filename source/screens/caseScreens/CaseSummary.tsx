@@ -15,17 +15,17 @@ import {
   SetupFormModal,
 } from "../../components/organisms";
 
-import { Card, ScreenWrapper, CaseCard } from "../../components/molecules";
+import { ScreenWrapper, CaseCard } from "../../components/molecules";
+import ContactCard from "../../components/molecules/ContactCard";
 import { useModal } from "../../components/molecules/Modal";
 
-import { Icon, Text, Button } from "../../components/atoms";
+import { Text, Button } from "../../components/atoms";
 
 import { CaseState, CaseDispatch } from "../../store/CaseContext";
 import AuthContext from "../../store/AuthContext";
 
 import getUnapprovedCompletionDescriptions from "../../helpers/FormatCompletions";
 import { convertDataToArray, calculateSum } from "../../helpers/FormatVivaData";
-import { launchPhone } from "../../helpers/LaunchExternalApp";
 import { getSwedishMonthNameByTimeStamp } from "../../helpers/DateHelpers";
 import { put, remove } from "../../helpers/ApiRequest";
 import { canCaseBeRemoved } from "../../helpers/Case";
@@ -37,8 +37,6 @@ import { answersAreEncrypted } from "../../services/encryption";
 import useGetFormPasswords from "./useGetFormPasswords";
 
 import { ApplicationStatusType } from "../../types/Case";
-
-import ICON from "../../assets/images/icons";
 
 import {
   Container,
@@ -266,7 +264,8 @@ const CaseSummary = (props: Props): JSX.Element => {
   const isApplicant = person?.role === "applicant";
 
   const details = caseData?.details ?? ({} as VIVACaseDetails);
-  const { workflow = {}, administrators } = details;
+  const contacts = caseData?.contacts ?? [];
+  const { workflow = {} } = details;
   const {
     decision = {} as Decision,
     calculations = {} as Calculations,
@@ -415,34 +414,11 @@ const CaseSummary = (props: Props): JSX.Element => {
             handleRemoveCaseButtonClick
           )}
 
-        {administrators && (
+        {contacts.length > 0 && (
           <View>
-            <SummaryHeading type="h5">Mina kontaktpersoner</SummaryHeading>
-            {administrators.map(({ name, title, phone }) => (
-              <Card key={`${name}`} colorSchema={colorSchema}>
-                <Card.Body shadow color="neutral">
-                  <Card.Section>
-                    <Card.Image
-                      style={{ width: 50, height: 50 }}
-                      circle
-                      source={ICON.ICON_CONTACT_PERSON}
-                    />
-                    {title && <Card.SubTitle>{title}</Card.SubTitle>}
-                    {name && (
-                      <Card.Title colorSchema="neutral">{name}</Card.Title>
-                    )}
-                  </Card.Section>
-                  {phone && (
-                    <Card.Button
-                      colorSchema="neutral"
-                      onClick={() => launchPhone(phone)}
-                    >
-                      <Icon name="phone" />
-                      <Text>{phone}</Text>
-                    </Card.Button>
-                  )}
-                </Card.Body>
-              </Card>
+            <SummaryHeading type="h5">Kontakt</SummaryHeading>
+            {contacts.map(({ name, description }) => (
+              <ContactCard key={name} name={name} description={description} />
             ))}
           </View>
         )}

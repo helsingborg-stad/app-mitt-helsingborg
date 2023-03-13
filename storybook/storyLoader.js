@@ -20,6 +20,7 @@ function loadStories() {
   require("../source/components/molecules/CalendarPicker/CalendarPickerForm.stories");
   require("../source/components/molecules/Card/Card.stories");
   require("../source/components/molecules/CaseCard/CaseCard.stories");
+  require("../source/components/molecules/ContactCard/ContactCard.stories");
   require("../source/components/molecules/CheckboxField/CheckboxField.stories");
   require("../source/components/molecules/EditableList/EditableList.stories");
   require("../source/components/molecules/FilePicker/FilePicker.stories");
@@ -71,6 +72,7 @@ const stories = [
   "../source/components/molecules/CalendarPicker/CalendarPickerForm.stories",
   "../source/components/molecules/Card/Card.stories",
   "../source/components/molecules/CaseCard/CaseCard.stories",
+  "../source/components/molecules/ContactCard/ContactCard.stories",
   "../source/components/molecules/CheckboxField/CheckboxField.stories",
   "../source/components/molecules/EditableList/EditableList.stories",
   "../source/components/molecules/FilePicker/FilePicker.stories",
