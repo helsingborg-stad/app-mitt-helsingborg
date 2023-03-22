@@ -144,34 +144,6 @@ const Form: React.FC<FormProps> = ({
     await onUpdateCase(answers, signature, formState.currentPosition);
   };
 
-  const { isInForeground } = useAppState();
-  const wasJustInForeground = useRef(true);
-
-  const updateCase = useCallback(
-    () => onUpdateCase(answers, undefined, formState.currentPosition),
-    [answers, formState.currentPosition, onUpdateCase]
-  );
-
-  useEffect(() => {
-    const didJustChangeFromForegroundToBackground =
-      !isInForeground && wasJustInForeground.current;
-
-    if (didJustChangeFromForegroundToBackground) {
-      void updateCase()
-        .then(() => {
-          console.log("updated case in background");
-        })
-        .catch((updateCaseError) => {
-          console.error(
-            "failed to update case in background:",
-            updateCaseError?.message ?? updateCaseError
-          );
-        });
-    }
-
-    wasJustInForeground.current = isInForeground;
-  }, [isInForeground, updateCase]);
-
   /**
    * Effect for signing a case.
    * If the case has attachments, signing is handled after they are uploaded.
@@ -219,8 +191,45 @@ const Form: React.FC<FormProps> = ({
   };
 
   const mainStep = formState.currentPosition.currentMainStepIndex;
+  const isLastMainStep =
+    formState.currentPosition.level === 0 &&
+    formState.currentPosition.currentMainStep ===
+      formState.currentPosition.numberOfMainSteps;
+
   const [, toggleModal] = useModal();
-  const [scrollViewRef, setRef] = useState<ScrollView>(null);
+  const [scrollViewRef, setRef] = useState<ScrollView | null>(null);
+
+  const { isInForeground } = useAppState();
+  const wasJustInForeground = useRef(true);
+
+  const updateCase = useCallback(
+    () => onUpdateCase(answers, undefined, formState.currentPosition),
+    [answers, formState.currentPosition, onUpdateCase]
+  );
+
+  useEffect(() => {
+    const didJustChangeFromForegroundToBackground =
+      !isInForeground && wasJustInForeground.current;
+
+    if (
+      didJustChangeFromForegroundToBackground &&
+      !isLastMainStep &&
+      editable
+    ) {
+      void updateCase()
+        .then(() => {
+          console.log("updated case in background");
+        })
+        .catch((updateCaseError) => {
+          console.error(
+            "failed to update case in background:",
+            updateCaseError?.message ?? updateCaseError
+          );
+        });
+    }
+
+    wasJustInForeground.current = isInForeground;
+  }, [editable, isInForeground, isLastMainStep, updateCase]);
 
   useEffect(() => {
     if (scrollViewRef && scrollViewRef?.scrollTo) {
@@ -232,10 +241,6 @@ const Form: React.FC<FormProps> = ({
 
   const handleCloseForm = async () => {
     setUpdateCaseState(UPDATE_CASE_STATE.UPDATING);
-
-    const isLastMainStep =
-      formState.currentPosition.level === 0 &&
-      formState.currentPosition.currentMainStep === formState.totalStepNumber;
 
     if (!isLastMainStep && editable) {
       const result = await onUpdateCase(
