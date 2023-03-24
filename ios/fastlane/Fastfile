@@ -199,7 +199,7 @@ end
 
 platform :ios do
   before_all do |_lane, _options|
-    xcversion(version: '~> 13.4')
+    xcversion(version: '~> 14.2')
 
     app_store_connect_api_key(
       key_content: ENV['CONNECT_API_KEY_CONTENT'],
