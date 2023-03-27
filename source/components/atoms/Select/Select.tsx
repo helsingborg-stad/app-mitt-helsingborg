@@ -3,6 +3,8 @@ import { StyleSheet } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import Icon from "react-native-vector-icons/Entypo";
 
+import type { PickerStyle } from "react-native-picker-select";
+
 import {
   Wrapper,
   InputRowWrapper,
@@ -15,18 +17,21 @@ import theme from "../../../theme/theme";
 
 import type { Props } from "./Select.types";
 
-const pickerSelectStyles = StyleSheet.create({
+const pickerSelectStyles: PickerStyle = StyleSheet.create({
   inputIOS: {
     paddingHorizontal: 10,
     textAlign: "right",
     color: theme.colors.neutrals[1],
-    paddingRight: 0,
+    paddingRight: 15,
   },
   inputAndroid: {
     paddingHorizontal: 10,
     textAlign: "right",
     color: theme.colors.neutrals[1],
-    paddingRight: 0,
+    paddingRight: 15,
+  },
+  iconContainer: {
+    height: "100%",
   },
 });
 
@@ -81,15 +86,17 @@ function Select(
             onValueChange={handleValueChange}
             items={items}
             ref={ref}
+            Icon={() => (
+              <InputRowIconWrapper>
+                <Icon name="select-arrows" />
+              </InputRowIconWrapper>
+            )}
             doneText="Klar"
             onOpen={handleOpen}
             onClose={handleClose}
             useNativeAndroidPickerStyle={false}
           />
         </InputRowTextWrapper>
-        <InputRowIconWrapper>
-          <Icon name="select-arrows" />
-        </InputRowIconWrapper>
       </InputRowWrapper>
       {showErrorMessage && error ? (
         <StyledErrorText>{error?.message}</StyledErrorText>

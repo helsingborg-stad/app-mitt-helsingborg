@@ -13,11 +13,14 @@ const InputRowWrapper = styled.View`
 `;
 
 const InputRowTextWrapper = styled.View`
-  flex-shrink: 1;
+  flex-grow: 1;
 `;
 
 const InputRowIconWrapper = styled.View`
   margin-left: 5px;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 `;
 
 const StyledErrorText = styled(Text)`
