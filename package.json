@@ -14,7 +14,7 @@
     "rebuild-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
     "clean": "react-native-clean-project",
     "prestorybook": "rnstl",
-    "postinstall": "node scripts/react-native-blob-util_warning.js; ./scripts/add-commit-hash-to-env.sh"
+    "postinstall": "patch-package; node scripts/react-native-blob-util_warning.js; ./scripts/add-commit-hash-to-env.sh"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
@@ -41,6 +41,8 @@
     "lodash.isequal": "^4.5.0",
     "lodash.set": "^4.3.2",
     "moment": "^2.29.3",
+    "patch-package": "^7.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "prop-types": "^15.8.1",
     "punycode": "^2.1.1",
     "react": "17.0.2",
