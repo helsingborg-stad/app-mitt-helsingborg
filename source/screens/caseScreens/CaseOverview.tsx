@@ -517,7 +517,10 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
   };
 
   const activeCaseCards = activeCases
-    .sort((caseA, caseB) => caseB.createdAt - caseA.createdAt)
+    .sort(
+      (caseA, caseB) =>
+        caseB.details.period.endDate - caseA.details.period.endDate
+    )
     .map((caseData) =>
       computeCaseCardComponent(
         {
@@ -533,7 +536,10 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     );
 
   const closedCaseCards = closedCases
-    .sort((caseA, caseB) => caseB.createdAt - caseA.createdAt)
+    .sort(
+      (caseA, caseB) =>
+        caseB.details.period.endDate - caseA.details.period.endDate
+    )
     .map((caseData) =>
       computeCaseCardComponent(
         {
