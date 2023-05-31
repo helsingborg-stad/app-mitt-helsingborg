@@ -516,33 +516,43 @@ function CaseOverview(props: CaseOverviewProps): JSX.Element {
     }
   };
 
-  const activeCaseCards = activeCases.map((caseData) =>
-    computeCaseCardComponent(
-      {
-        caseItem: caseData,
-        formPassword: passwords[caseData.id] ?? undefined,
-      },
-      { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
-      user?.personalNumber,
-      () => openPinInputModal(caseData),
-      () => setShowPdfForCase(caseData.id),
-      () => handleRemoveCase(caseData.id)
+  const activeCaseCards = activeCases
+    .sort(
+      (caseA, caseB) =>
+        caseB.details.period.endDate - caseA.details.period.endDate
     )
-  );
+    .map((caseData) =>
+      computeCaseCardComponent(
+        {
+          caseItem: caseData,
+          formPassword: passwords[caseData.id] ?? undefined,
+        },
+        { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
+        user?.personalNumber,
+        () => openPinInputModal(caseData),
+        () => setShowPdfForCase(caseData.id),
+        () => handleRemoveCase(caseData.id)
+      )
+    );
 
-  const closedCaseCards = closedCases.map((caseData) =>
-    computeCaseCardComponent(
-      {
-        caseItem: caseData,
-        formPassword: passwords[caseData.id] ?? undefined,
-      },
-      { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
-      user?.personalNumber,
-      () => openPinInputModal(caseData),
-      () => setShowPdfForCase(caseData.id),
-      () => undefined
+  const closedCaseCards = closedCases
+    .sort(
+      (caseA, caseB) =>
+        caseB.details.period.endDate - caseA.details.period.endDate
     )
-  );
+    .map((caseData) =>
+      computeCaseCardComponent(
+        {
+          caseItem: caseData,
+          formPassword: passwords[caseData.id] ?? undefined,
+        },
+        { onOpenForm: openForm, onOpenCaseSummary: openCaseSummary },
+        user?.personalNumber,
+        () => openPinInputModal(caseData),
+        () => setShowPdfForCase(caseData.id),
+        () => undefined
+      )
+    );
 
   const hidePdfModal = () => {
     setShowPdfForCase("");
